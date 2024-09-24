@@ -353,8 +353,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     <name>MMAboutPage</name>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
-        <source>About Mergin Maps</source>
-        <translation>A Mergin Maps alkalmazásról</translation>
+        <source>About</source>
+        <translation>Névjegy</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
@@ -389,8 +389,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
-        <source>It is better to work together, join the workspace and explore Mergin Maps!</source>
-        <translation>Jobb együtt dolgozni valakivel, csatlakozzon munkaterülethez és fedezze fel a Mergin Maps világát!</translation>
+        <source>Join the workspace and explore together!</source>
+        <translation>Csatlakozzon egy munkaterülethez és fedezzük fel együtt!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
@@ -422,8 +422,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
-        <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Elfogadom a Mergin Maps%1Általános Szerződési Feltételeit%3 és %2Adatvédelmi szabályzatát%3</translation>
+        <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Elfogadom az %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
 </context>
 <context>
@@ -583,8 +583,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
-        <source>This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>Ez a művelet törölni fogja a Mergin Maps fiókját. Ha ön egy munkaterület tulajdonosa, akkor szükséges, hogy a tulajdonjogát valaki másnak átadja, vagy törölje a munkaterületet.</translation>
+        <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
+        <translation>Ez a művelet törölni fogja a fiókját. Ha ön egy munkaterület tulajdonosa, akkor szükséges, hogy a tulajdonjogát valaki másnak átadja, vagy törölje a munkaterületet.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
@@ -659,8 +659,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
-        <source>Tip from Mergin Maps</source>
-        <translation>Tipp a Mergin Maps-től</translation>
+        <source>A tip from us</source>
+        <translation>Egy tipp tőlünk</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
@@ -1427,8 +1427,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
-        <translation>A projekt szinkronizálásához be kell jelentkeznie Mergin Maps fiókjába.</translation>
+        <source>You need to be signed in to your account in order to synchronise the project.</source>
+        <translation>A projekt szinkronizálásához be kell jelentkeznie a fiókjába.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
@@ -1524,8 +1524,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
-        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>iOS rendszer esetén ez a funkció nem érhető el. A hardverszállító biztosíthat egy egyéni alkalmazást, ami csatlakozik a vevőhöz, és beállítja a pozíciót.  A Mergin alkalmazás továbbra is úgy fogja észlelni, mintha ez a telefon/táblagép belső GPS-e lenne.</translation>
+        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
+        <translation>iOS rendszer esetén ez a funkció nem érhető el. A hardverszállító biztosíthat egy egyéni alkalmazást, ami csatlakozik a vevőhöz, és beállítja a pozíciót. Az alkalmazás továbbra is úgy fogja észlelni, mintha ez a telefon/táblagép belső GPS-e lenne.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
@@ -1547,13 +1547,13 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Mergin Maps can track your position on this project.</source>
-        <translation>A Mergin Maps nyomon tudja követni a pozícióját ebben a projektben.</translation>
+        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
+        <translation>Nyomkövetés még zárolt képernyő esetén is. A rekordok egy külön rétegben lesznek elmentve. A véglegesített útvonalak úgy lesznek szinkronizálva, mint bármelyik másik réteg.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Nyomkövetés még zárolt képernyő esetén is. A rekordok egy külön rétegben lesznek elmentve. A véglegesített útvonalak úgy lesznek szinkronizálva, mint bármelyik másik réteg.</translation>
+        <source>The app can track your position on this project.</source>
+        <translation>Az alkalmazás nyomon tudja követni a pozícióját ebben a projektben.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
@@ -1695,8 +1695,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
-        <source>Click here to visit Mergin Maps dashboard</source>
-        <translation>Kattintson ide a Mergin Maps irányítópultjának megtekintéséhez</translation>
+        <source>Click here to access the dashboard</source>
+        <translation>Kattintson ide az irányítópult eléréséhez</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
@@ -1769,8 +1769,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
-        <source>Get started with Mergin Maps</source>
-        <translation>Kezdje el a Mergin Maps segítségével</translation>
+        <source>Let&apos;s get started</source>
+        <translation>Kezdjük is el</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
@@ -2398,8 +2398,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
-        <source>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation>Nagyon sokat foglalkoztunk azzal, hogy a Mergin Maps alkalmazást még jobbá tegyük! Ez a frissítés új megjelenést és jobb navigációt kölcsönöz, így gyorsabban megtalálhatja, amire szüksége van. Nézzen körül!</translation>
+        <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
+        <translation>Nagyon sokat foglalkoztunk azzal, hogy az alkalmazást még jobbá tegyük! Ez a frissítés új megjelenést és jobb navigációt kölcsönöz, így gyorsabban megtalálhatja, amire szüksége van. Nézzen körül!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>
