@@ -140,10 +140,8 @@ void MeasurementMapTool::onMapSettingsChanged( InputMapSettings *newMapSettings 
 {
   if ( newMapSettings )
   {
-    // Connect to the extentChanged signal of mapSettings
     connect( newMapSettings, &InputMapSettings::extentChanged, this, &MeasurementMapTool::updateDistance );
 
-    // Initialize mDistanceArea with the new map settings
     mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
     mDistanceArea.setSourceCrs( newMapSettings->destinationCrs(), newMapSettings->transformContext() );
   }
