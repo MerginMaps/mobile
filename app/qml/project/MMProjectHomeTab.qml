@@ -61,7 +61,7 @@ Item {
       topMargin: root.spacing
     }
     title: qsTr("Your attention is required")
-    description: qsTr("Click here to visit Mergin Maps dashboard")
+    description: qsTr("Click here to access the dashboard")
     imageSource: __style.warnLogoImage
 
     color: __style.nightColor
