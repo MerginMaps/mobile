@@ -353,8 +353,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <name>MMAboutPage</name>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
-        <source>About Mergin Maps</source>
-        <translation>Über Mergin Maps</translation>
+        <source>About</source>
+        <translation>Über</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
@@ -389,8 +389,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
-        <source>It is better to work together, join the workspace and explore Mergin Maps!</source>
-        <translation>Es ist besser, zusammenzuarbeiten. Treten Sie dem Arbeitsbereich bei und erkunden Sie Mergin Maps!</translation>
+        <source>Join the workspace and explore together!</source>
+        <translation>Treten Sie dem Arbeitsbereich bei und entdecken Sie gemeinsam</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
@@ -422,8 +422,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
-        <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Ich akzeptiere die %1Nutzungsbedingungen%3 und %2Datenschutzrichtlinien%3 von Mergin Maps.</translation>
+        <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 von Mergin zu.</translation>
     </message>
 </context>
 <context>
@@ -584,8 +584,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
-        <source>This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>Diese Aktion löscht ihr Mergin Maps Benutzerkonto. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie die Eigentumsrechte an einen anderen Benutzer übertragen, oder den Arbeitsbereich schließen.</translation>
+        <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
+        <translation>Diese Aktion löscht Ihren Account. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie diesen zuerst an jemand anderen übertragen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
@@ -660,8 +660,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
-        <source>Tip from Mergin Maps</source>
-        <translation>Tipp von Mergin Maps</translation>
+        <source>A tip from us</source>
+        <translation>Ein Tipp von uns</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
@@ -1428,8 +1428,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
-        <translation> Sie müssen bei Ihrem Mergin Maps Konto angemeldet sein, um das Projekt zu synchronisieren.</translation>
+        <source>You need to be signed in to your account in order to synchronise the project.</source>
+        <translation>Sie müssen bei Ihrem Mergin Maps Konto angemeldet sein, um das Projekt zu synchronisieren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
@@ -1525,8 +1525,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
-        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>Diese Funktion ist auf iOS nicht verfügbar. Ihr Hardware-Hersteller könnte eine spezielle App bereitstellen, die sich mit dem Empfänger verbindet und die Position einstellt. Mergin Maps wird dennoch annehmen, dass es sich um das interne GPS Ihres Handys/Tablets handelt.</translation>
+        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
+        <translation>Diese Funktion ist auf iOS nicht verfügbar. Ihr Hardware-Hersteller könnte eine spezielle App bereitstellen, die sich mit dem Empfänger verbindet und die Position bereitstellt. Mergin Maps wird dennoch annehmen, dass es sich um das interne GPS Ihres Handys/Tablets handelt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
@@ -1548,13 +1548,13 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Mergin Maps can track your position on this project.</source>
-        <translation>Mergin Maps kann Ihre Position in diesem Projekt aufzeichnen.</translation>
+        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
+        <translation>Verfolgen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Verfolgen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
+        <source>The app can track your position on this project.</source>
+        <translation>Mergin Maps kann Ihre Position in diesem Projekt aufzeichnen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
@@ -1696,7 +1696,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
-        <source>Click here to visit Mergin Maps dashboard</source>
+        <source>Click here to access the dashboard</source>
         <translation>Klicken Sie hier um zum Mergin Maps Dashboard zu gelangen</translation>
     </message>
     <message>
@@ -1770,8 +1770,8 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
-        <source>Get started with Mergin Maps</source>
-        <translation>Legen Sie los mit Mergin Maps</translation>
+        <source>Let&apos;s get started</source>
+        <translation>Lassen Sie uns anfangen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
@@ -2398,7 +2398,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
-        <source>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
+        <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
         <translation>Wir waren fleißig und haben Mergin Maps noch besser gemacht! Dieses Update bringt ein frisches Design und verbesserte Navigation mit sich. Finden Sie schneller was Sie benötigen. Schauen Sie sich um!</translation>
     </message>
     <message>
