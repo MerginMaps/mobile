@@ -441,7 +441,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="141"/>
         <source>Storage</source>
-        <translation>Armazenar</translation>
+        <translation>Armazenamento</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="170"/>
