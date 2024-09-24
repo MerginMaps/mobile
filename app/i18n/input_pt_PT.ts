@@ -304,7 +304,7 @@ Não será adicionado ao projeto.</translation>
     <message>
         <location filename="../inpututils.cpp" line="1466"/>
         <source>used dp scale: %1</source>
-        <translation>Escal dp usada: %1</translation>
+        <translation>Escala dp usada: %1</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1995"/>
