@@ -45,5 +45,4 @@ void FeaturesProxyModel::setFeaturesSourceModel( FeaturesModel *sourceModel )
   setSourceModel( mModel );
   mModel->setupSorting();
   connect( mModel, &FeaturesModel::fetchingResultsChanged, this, [ = ]( bool pending ) { if ( !pending ) updateSorting(); } );
-  connect( mModel, &FeaturesModel::layerChanged, this, &FeaturesProxyModel::updateSorting );
 }
