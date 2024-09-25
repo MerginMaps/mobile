@@ -352,8 +352,8 @@ Won&apos;t be added to the project.</source>
     <name>MMAboutPage</name>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
-        <source>About Mergin Maps</source>
-        <translation>O Mergin Maps aplikaciji</translation>
+        <source>About</source>
+        <translation>O programu</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
@@ -388,8 +388,8 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
-        <source>It is better to work together, join the workspace and explore Mergin Maps!</source>
-        <translation>Bolje je raditi zajedno, pridružite se radnom prostoru i istražite Mergin Maps!</translation>
+        <source>Join the workspace and explore together!</source>
+        <translation>Pridružite se radnom prostoru i istražujte zajedno!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
@@ -421,8 +421,8 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
-        <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Prihvaćam Mergin Maps %1uvjete korištenja%3 %2politiku privatnosti%3</translation>
+        <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Prihvaćam %1uvjete korištenja%3 i %2politiku privatnosti%3</translation>
     </message>
 </context>
 <context>
@@ -582,7 +582,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
-        <source>This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
+        <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
         <translation>Ova radnja će izbrisati vaš Mergin Maps račun. Ako ste vlasnik radnog prostora, trebate prenijeti vlasništvo na nekog drugog ili zatvoriti radni prostor.</translation>
     </message>
     <message>
@@ -658,8 +658,8 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
-        <source>Tip from Mergin Maps</source>
-        <translation>Savjet od Mergin Maps</translation>
+        <source>A tip from us</source>
+        <translation>Naš savjet</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
@@ -1426,7 +1426,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
+        <source>You need to be signed in to your account in order to synchronise the project.</source>
         <translation>Potrebna je prijava s Vašim Mergin računom kako bi sinkronizirali projekt.</translation>
     </message>
     <message>
@@ -1523,7 +1523,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
-        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
+        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>Ova funkcionalnost nije moguća na iOS-u. Proizvođač vašeg uređaja vjerojatno izdaje i posebnu aplikaciju za povezivanje na uređaj i određivanje pozicije. Mergin Maps aplikaciji će na takav način uređaj biti vidljiv kao ugrađeni GPS Vašeg pametnog telefona/tableta.</translation>
     </message>
     <message>
@@ -1546,13 +1546,13 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Mergin Maps can track your position on this project.</source>
-        <translation>Mergin Maps može pratiti poziciju u ovom projektu</translation>
+        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
+        <translation>Pratite svoje rute čak i kada je ekran isključen. Vaši su zapisi pohranjeni u zasebnom sloju. Konačni zapisi sinkroniziraju se kao i svi drugi objekti.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Pratite svoje rute čak i kada je ekran isključen. Vaši su zapisi pohranjeni u zasebnom sloju. Konačni zapisi sinkroniziraju se kao i svi drugi objekti.</translation>
+        <source>The app can track your position on this project.</source>
+        <translation>Mergin Maps može pratiti poziciju u ovom projektu</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
@@ -1694,7 +1694,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
-        <source>Click here to visit Mergin Maps dashboard</source>
+        <source>Click here to access the dashboard</source>
         <translation>Kliknite ovdje za posjet Mergin Maps radnoj ploči</translation>
     </message>
     <message>
@@ -1768,8 +1768,8 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
-        <source>Get started with Mergin Maps</source>
-        <translation>Započnite s Mergin Maps</translation>
+        <source>Let&apos;s get started</source>
+        <translation>Krenimo!</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
@@ -2397,7 +2397,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
-        <source>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
+        <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
         <translation>Bili smo zaokupljeni izradom još bolje Mergin Maps aplikacije! Ovo ažuriranje donosi nov izgled i poboljšanu navigaciju, što omogućuje brže pronalaženje onoga što Vam je potrebno. Istražite novosti!</translation>
     </message>
     <message>
