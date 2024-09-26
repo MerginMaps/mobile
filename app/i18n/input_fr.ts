@@ -1525,7 +1525,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>Cette fonction n&apos;est pas disponible sur iOS. Votre fournisseur de matériels peut vous proposer une application personnalisée qui se connecte au récepteur GPS et mesure la géolocalisation. L&apos;application permettra de faire croire que la géolocalisation est toujours mesurée par le GPS interne de l&apos;appareil.</translation>
+        <translation>Cette fonction n&apos;est pas disponible sur iOS. Votre fournisseur de matériels peut vous proposer une application personnalisée qui se connecte au récepteur GPS et mesure la position. L&apos;application permettra de faire croire que la position est toujours mesurée par le GPS interne de l&apos;appareil.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
