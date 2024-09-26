@@ -1553,7 +1553,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>The app can track your position on this project.</source>
-        <translation>L&apos;application peut suivre votre géolocalisation sur ce projet.</translation>
+        <translation>L&apos;application peut suivre votre position sur ce projet.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
