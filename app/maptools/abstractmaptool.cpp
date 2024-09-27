@@ -26,6 +26,9 @@ void AbstractMapTool::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
     return;
+  else
+    disconnect( mMapSettings, nullptr, this, nullptr );
+
   mMapSettings = newMapSettings;
   emit mapSettingsChanged( mMapSettings );
 }

@@ -581,6 +581,11 @@ class InputUtils: public QObject
      */
     static QVector<QString> qgisProfilerLog();
 
+    /**
+     * Calculates the Euclidean distance between two pixel points
+     */
+    static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

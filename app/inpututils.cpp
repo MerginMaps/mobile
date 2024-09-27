@@ -2216,3 +2216,8 @@ bool InputUtils::openLink( const QString &homePath, const QString &link )
 
   return true;
 }
+
+double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
+{
+  return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
+}

@@ -64,7 +64,7 @@ class MeasurementMapTool : public AbstractMapTool
      * Repeats measurement process.
      * Clears all recorded points and rebuilds the geometry.
      */
-    Q_INVOKABLE void reset();
+    Q_INVOKABLE void resetMeasurement();
 
     // Getter and Setters
     double lengthWithGuideline() const;

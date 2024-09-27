@@ -108,6 +108,6 @@ Item {
   {
     guidelineController.allowed = true
     crosshair.visible = true
-    mapTool.reset()
+    mapTool.resetMeasurement()
   }
 }

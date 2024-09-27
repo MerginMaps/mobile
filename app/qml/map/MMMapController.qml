@@ -597,7 +597,7 @@ Item {
           }
 
           visible: {
-            if ( root.mapExtentOffset > 0 && (root.state === "stakeout") ) return false
+            if ( root.mapExtentOffset > 0 && root.state !== "stakeout" ) return false
 
             if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
               // for external receivers we want to show gps panel and accuracy button

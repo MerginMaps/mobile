@@ -186,7 +186,14 @@ Button {
       width: Math.min( paintedChildrenWidth, maxWidth )
       height: Math.max( buttonContent.paintedHeight, buttonIconRight.height )
 
-      spacing: ( root.size === MMButton.Sizes.Small ) ? 2 : ( buttonIconRight.visible || buttonIconLeft.visible ? __style.spacing12 : 0 )
+      spacing: {
+        if ( ( root.size === MMButton.Sizes.Small ) )
+          return 2;
+        else if ( ( buttonIconRight.visible || buttonIconLeft.visible ) )
+          return __style.spacing12;
+        else
+          return 0;
+      }
 
       MMIcon {
         id: buttonIconLeft

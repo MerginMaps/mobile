@@ -13,11 +13,6 @@ MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{ parent }
 {
   connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::onMapSettingsChanged );
-
-  if ( mapSettings() )
-  {
-    onMapSettingsChanged( mapSettings() );
-  }
 }
 
 MeasurementMapTool::~MeasurementMapTool() = default;
@@ -58,17 +53,17 @@ void MeasurementMapTool::updateDistance()
 
 void MeasurementMapTool::checkCanCloseShape()
 {
-  if ( mRecordedGeometry.isEmpty() || mPoints.count() < 3 )
+  if ( mRecordedGeometry.isEmpty() || mPoints.count() < 3 || !mapSettings() )
   {
     setCanCloseShape( false );
     return;
   }
-
-  if ( mPoints.count() >= 3 )
+  else
   {
+
     QgsPoint firstPoint = mPoints.first();
     QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
-    double distanceToFirstPoint = std::hypot( mCrosshairPoint.x() - firstPointScreen.x(), mCrosshairPoint.y() - firstPointScreen.y() );
+    double distanceToFirstPoint = InputUtils::pixelDistanceBetween( mCrosshairPoint, firstPointScreen );
     setCanCloseShape( distanceToFirstPoint <= CLOSE_THRESHOLD );
   }
 }
@@ -95,7 +90,7 @@ void MeasurementMapTool::closeShape()
   setCloseShapeDone( true );
 }
 
-void MeasurementMapTool::reset()
+void MeasurementMapTool::resetMeasurement()
 {
   mPoints.clear();
 
