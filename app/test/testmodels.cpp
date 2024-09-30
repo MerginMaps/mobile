@@ -75,10 +75,10 @@ void TestModels::testFeaturesProxyModel()
   conf.setSortExpression( QStringLiteral( "Name" ) );
   layer->setAttributeTableConfig( conf );
 
+  proxy.setFeaturesSourceModel( &model );
   model.setLayer( layer );
   model.reloadFeatures();
 
-  proxy.setFeaturesSourceModel( &model );
 
   spy.wait();
 
