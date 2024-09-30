@@ -94,6 +94,8 @@ class MeasurementMapTool : public AbstractMapTool
     QgsGeometry existingVertices() const;
     void setExistingVertices( const QgsGeometry &vertices );
 
+    void setMapSettings( InputMapSettings *newMapSettings ) override;
+
   signals:
     void lengthWithGuidelineChanged( const double &lengthWithGuideline );
     void perimeterChanged( const double &perimeter );
@@ -111,9 +113,6 @@ class MeasurementMapTool : public AbstractMapTool
 
   public slots:
     void updateDistance();
-
-  private slots:
-    void onMapSettingsChanged( InputMapSettings *newMapSettings );
 
   private:
     QVector<QgsPoint> mPoints;

@@ -12,7 +12,7 @@
 MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{ parent }
 {
-  connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::onMapSettingsChanged );
+  connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::setMapSettings );
 }
 
 MeasurementMapTool::~MeasurementMapTool() = default;
@@ -131,14 +131,25 @@ void MeasurementMapTool::rebuildGeometry()
   setRecordedGeometry( geometry );
 }
 
-void MeasurementMapTool::onMapSettingsChanged( InputMapSettings *newMapSettings )
+void MeasurementMapTool::setMapSettings( InputMapSettings *newMapSettings )
 {
-  if ( newMapSettings )
+  InputMapSettings *currentMapSettings = mapSettings();
+
+  if ( currentMapSettings )
   {
-    connect( newMapSettings, &InputMapSettings::extentChanged, this, &MeasurementMapTool::updateDistance );
+    disconnect( currentMapSettings );
+  }
+
+  AbstractMapTool::setMapSettings( newMapSettings );
+
+  InputMapSettings *updatedMapSettings = mapSettings();
+
+  if ( updatedMapSettings )
+  {
+    connect( updatedMapSettings, &InputMapSettings::extentChanged, this, &MeasurementMapTool::updateDistance );
 
     mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-    mDistanceArea.setSourceCrs( newMapSettings->destinationCrs(), newMapSettings->transformContext() );
+    mDistanceArea.setSourceCrs( updatedMapSettings->destinationCrs(), updatedMapSettings->transformContext() );
   }
 }
 

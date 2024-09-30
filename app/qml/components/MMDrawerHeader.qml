@@ -41,13 +41,18 @@ Rectangle {
   }
 
   Text {
-    // If the close button is visible, we need to properly center the text
-    property real margin: internal.closeBtnRealWidth + internal.headerSpacing + __style.pageMargins
+    property real leftMarginShift: {
+      return Math.max( internal.closeBtnRealWidth, topLeftButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+    }
+
+    property real rightMarginShift: {
+      return Math.max( internal.closeBtnRealWidth, topLeftButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+    }
 
     anchors {
       fill: parent
-      leftMargin: margin
-      rightMargin: margin
+      leftMargin: leftMarginShift
+      rightMargin: rightMarginShift
     }
 
     text: root.title

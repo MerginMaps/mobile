@@ -91,7 +91,7 @@ Item {
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
 
-    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline )
+    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, __activeProject.qgsProject )
     canCloseShape: mapTool.canCloseShape
 
     onCloseShapeClicked: closeShape()

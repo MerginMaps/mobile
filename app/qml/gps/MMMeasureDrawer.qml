@@ -30,8 +30,8 @@ MMDrawer {
   property bool closeShapeDone: mapCanvas.mapToolComponent?.mapTool?.closeShapeDone ?? false
   property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
 
-  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0, 1 )
-  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.area ?? 0, 1 )
+  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0, 1, __activeProject.qgsProject )
+  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.area ?? 0, 1, __activeProject.qgsProject )
 
   signal measureFinished()
   signal measureDone()

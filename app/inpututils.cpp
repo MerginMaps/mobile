@@ -168,13 +168,13 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit, QgsProject *activeProject )
 {
   Qgis::DistanceUnit distUnit = destUnit;
 
   if ( distUnit == Qgis::DistanceUnit::Unknown )
   {
-    distUnit = QgsProject::instance()->distanceUnits();
+    distUnit = activeProject->distanceUnits();
   }
 
   if ( distUnit == Qgis::DistanceUnit::Unknown )
@@ -189,13 +189,13 @@ QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
 }
 
-QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit )
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit, QgsProject *activeProject )
 {
   Qgis::AreaUnit areaUnit = destUnit;
 
   if ( areaUnit == Qgis::AreaUnit::Unknown )
   {
-    areaUnit = QgsProject::instance()->areaUnits();
+    areaUnit = activeProject->areaUnits();
   }
 
   if ( areaUnit == Qgis::AreaUnit::Unknown )
