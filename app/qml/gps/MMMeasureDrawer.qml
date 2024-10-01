@@ -27,11 +27,12 @@ MMDrawer {
   readonly property alias panelHeight: root.height
 
   property bool canCloseShape: mapCanvas.mapToolComponent?.mapTool?.canCloseShape ?? false
-  property bool closeShapeDone: mapCanvas.mapToolComponent?.mapTool?.closeShapeDone ?? false
   property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
+  property bool canFinalizeMeasurement: mapCanvas.mapToolComponent?.mapTool?.canFinalizeMeasurement ?? false
+  property bool measurementFinalized: mapCanvas.mapToolComponent?.mapTool?.measurementFinalized ?? false
 
-  property string perimeter: __inputUtils.formatDistanceInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0, 1, __activeProject.qgsProject )
-  property string area: __inputUtils.formatAreaInProjectUnit( mapCanvas.mapToolComponent?.mapTool?.area ?? 0, 1, __activeProject.qgsProject )
+  property string perimeter: mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0
+  property string area: mapCanvas.mapToolComponent?.mapTool?.area ?? 0
 
   signal measureFinished()
   signal measureDone()
@@ -54,11 +55,11 @@ MMDrawer {
 
   drawerHeader.topLeftItemContent: MMButton {
     type: MMButton.Types.Primary
-    text: closeShapeDone ? qsTr( "Repeat" ) : qsTr( "Undo" )
-    iconSourceLeft: closeShapeDone ? __style.syncIcon : __style.undoIcon
+    text: measurementFinalized ? qsTr( "Repeat" ) : qsTr( "Undo" )
+    iconSourceLeft: measurementFinalized ? __style.syncIcon : __style.undoIcon
     bgndColor: __style.lightGreenColor
     size: MMButton.Sizes.Small
-    enabled: closeShapeDone || canUndo
+    enabled: measurementFinalized || canUndo
 
     anchors {
       left: parent.left
@@ -66,7 +67,7 @@ MMDrawer {
       verticalCenter: parent.verticalCenter
     }
 
-    onClicked: closeShapeDone ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
+    onClicked: measurementFinalized ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
   }
 
   drawerContent: Column {
@@ -81,35 +82,36 @@ MMDrawer {
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
-        title: closeShapeDone ? qsTr( "Perimeter" ) : qsTr( "Length" )
-        value: root.perimeter
+        title: measurementFinalized ? qsTr( "Perimeter" ) : qsTr( "Length" )
+        value: __inputUtils.formatDistanceInProjectUnit( root.perimeter, 1, __activeProject.qgsProject )
       }
 
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
         title: qsTr( "Area" )
-        value: root.area
+        value: __inputUtils.formatAreaInProjectUnit( root.area, 1, __activeProject.qgsProject )
         alignmentRight: true
-        visible: closeShapeDone
+        visible: measurementFinalized && root.area > 0
       }
     }
 
     Row {
       width: parent.width
       spacing: __style.margin12
-      visible: !root.closeShapeDone
+      visible: !root.measurementFinalized
 
       MMButton {
         text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.closeShape() : root.mapCanvas.mapToolComponent.mapTool.addPoint()
+        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.finalizeMeasurement( true ) : root.mapCanvas.mapToolComponent.mapTool.addPoint()
       }
 
       MMButton {
         type: MMButton.Types.Secondary
         text: qsTr( "Done" )
         iconSourceLeft: __style.doneCircleIcon
+        enabled: root.canFinalizeMeasurement
         onClicked: root.measureDone()
       }
     }

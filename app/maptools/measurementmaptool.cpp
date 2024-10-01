@@ -53,41 +53,49 @@ void MeasurementMapTool::updateDistance()
 
 void MeasurementMapTool::checkCanCloseShape()
 {
-  if ( mRecordedGeometry.isEmpty() || mPoints.count() < 3 || !mapSettings() )
+  bool canFinalize = !mRecordedGeometry.isEmpty() && mapSettings() && mPoints.count() >= 2;
+  setCanFinalizeMeasurement( canFinalize );
+
+  if ( !canFinalize || mPoints.count() < 3 )
   {
     setCanCloseShape( false );
     return;
   }
-  else
-  {
 
-    QgsPoint firstPoint = mPoints.first();
-    QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
-    double distanceToFirstPoint = InputUtils::pixelDistanceBetween( mCrosshairPoint, firstPointScreen );
-    setCanCloseShape( distanceToFirstPoint <= CLOSE_THRESHOLD );
-  }
+  QgsPoint firstPoint = mPoints.first();
+  QPointF firstPointScreen = mapSettings()->coordinateToScreen( firstPoint );
+  double distanceToFirstPoint = InputUtils::pixelDistanceBetween( mCrosshairPoint, firstPointScreen );
+  setCanCloseShape( distanceToFirstPoint <= CLOSE_THRESHOLD );
 }
 
-void MeasurementMapTool::closeShape()
+void MeasurementMapTool::finalizeMeasurement( bool closeShapeClicked )
 {
-  if ( mPoints.count() < 3 )
+  if ( mPoints.count() < 2 )
     return;
 
   QList<QgsPointXY> pointList;
   for ( const QgsPoint &point : mPoints )
     pointList.append( QgsPointXY( point.x(), point.y() ) );
 
-  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
-  setRecordedGeometry( polygonGeometry );
+  QgsGeometry geometry;
+  double perimeter = 0.0;
 
-  double area = mDistanceArea.measureArea( polygonGeometry );
-  setArea( area );
+  if ( closeShapeClicked && mCanCloseShape && mPoints.count() >= 3 )
+  {
+    geometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
+    perimeter = mDistanceArea.measurePerimeter( geometry );
+    setArea( mDistanceArea.measureArea( geometry ) );
+    setCanCloseShape( false );
+  }
+  else
+  {
+    geometry = QgsGeometry::fromPolylineXY( pointList );
+    perimeter = mDistanceArea.measureLength( geometry );
+  }
 
-  double perimeter = mDistanceArea.measurePerimeter( polygonGeometry );
+  setRecordedGeometry( geometry );
   setPerimeter( perimeter );
-
-  setCanCloseShape( false );
-  setCloseShapeDone( true );
+  setMeasurementFinalized( true );
 }
 
 void MeasurementMapTool::resetMeasurement()
@@ -95,9 +103,10 @@ void MeasurementMapTool::resetMeasurement()
   mPoints.clear();
 
   setPerimeter( 0.0 );
+  setArea( 0.0 );
   setLengthWithGuideline( 0.0 );
   setCanCloseShape( false );
-  setCloseShapeDone( false );
+  setMeasurementFinalized( false );
 
   rebuildGeometry();
 }
@@ -220,18 +229,32 @@ void MeasurementMapTool::setCanCloseShape( bool newCanCloseShape )
   emit canCloseShapeChanged( mCanCloseShape );
 }
 
-bool MeasurementMapTool::closeShapeDone() const
+bool MeasurementMapTool::canFinalizeMeasurement() const
 {
-  return mCloseShapeDone;
+  return mCanFinalizeMeasurement;
 }
 
-void MeasurementMapTool::setCloseShapeDone( bool newCloseShapeDone )
+void MeasurementMapTool::setCanFinalizeMeasurement( bool canFinalize )
 {
-  if ( mCloseShapeDone == newCloseShapeDone )
+  if ( mCanFinalizeMeasurement != canFinalize )
+  {
+    mCanFinalizeMeasurement = canFinalize;
+    emit canFinalizeMeasurementChanged( canFinalize );
+  }
+}
+
+bool MeasurementMapTool::measurementFinalized() const
+{
+  return mMeasurementFinalized;
+}
+
+void MeasurementMapTool::setMeasurementFinalized( bool newMeasurementFinalized )
+{
+  if ( mMeasurementFinalized == newMeasurementFinalized )
     return;
 
-  mCloseShapeDone = newCloseShapeDone;
-  emit closeShapeDoneChanged( mCloseShapeDone );
+  mMeasurementFinalized = newMeasurementFinalized;
+  emit measurementFinalizedChanged( mMeasurementFinalized );
 }
 
 void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )

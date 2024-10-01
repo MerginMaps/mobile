@@ -777,8 +777,7 @@ ApplicationWindow {
     id: finishMeasurementDialog
 
     onFinishMeasurementRequested: {
-      measurePanelLoader.active = false
-      map.finishMeasure()
+      map.mapToolComponent.finalizeMeasurement( false )
     }
   }
 

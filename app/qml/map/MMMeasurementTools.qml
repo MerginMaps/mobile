@@ -94,14 +94,14 @@ Item {
     text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, __activeProject.qgsProject )
     canCloseShape: mapTool.canCloseShape
 
-    onCloseShapeClicked: closeShape()
+    onCloseShapeClicked: finalizeMeasurement( true )
   }
 
-  function closeShape()
+  function finalizeMeasurement( closeShapeClicked )
   {
     guidelineController.allowed = false
     crosshair.visible = false
-    mapTool.closeShape()
+    mapTool.finalizeMeasurement( closeShapeClicked )
   }
 
   function repeatMeasure()
