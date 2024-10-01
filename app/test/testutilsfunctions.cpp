@@ -858,66 +858,66 @@ void TestUtilsFunctions::testParsePositionUpdates()
 
 void TestUtilsFunctions::testFormatDistanceInDistanceUnit()
 {
-  QString dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 2, Qgis::DistanceUnit::Meters );
+  QString dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 2, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "1222.23 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 1, Qgis::DistanceUnit::Meters );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 1, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "1222.2 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 0, Qgis::DistanceUnit::Meters );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1222.234, 0, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "1222 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 700.22, 1, Qgis::DistanceUnit::Meters );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 700.22, 1, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "700.2 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 0.22, 0, Qgis::DistanceUnit::Meters );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 0.22, 0, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "0 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( -0.22, 0, Qgis::DistanceUnit::Meters );
+  dist2str =  mUtils->formatDistanceInProjectUnit( -0.22, 0, Qgis::DistanceUnit::Meters, QgsProject::instance() );
   QVERIFY( dist2str == "-0 m" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 1.222234, 2, Qgis::DistanceUnit::Kilometers );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 1.222234, 2, Qgis::DistanceUnit::Kilometers, QgsProject::instance() );
   QVERIFY( dist2str == "0.00 km" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 6000, 1, Qgis::DistanceUnit::Feet );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 6000, 1, Qgis::DistanceUnit::Feet, QgsProject::instance() );
   QVERIFY( dist2str == "19685.0 ft" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 5, 1, Qgis::DistanceUnit::Feet );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 5, 1, Qgis::DistanceUnit::Feet, QgsProject::instance() );
   QVERIFY( dist2str == "16.4 ft" );
 
-  dist2str =  mUtils->formatDistanceInProjectUnit( 7000, 1, Qgis::DistanceUnit::Feet );
+  dist2str =  mUtils->formatDistanceInProjectUnit( 7000, 1, Qgis::DistanceUnit::Feet, QgsProject::instance() );
   QVERIFY( dist2str == "22965.9 ft" );
 }
 
 void TestUtilsFunctions::testFormatAreaInProjectUnit()
 {
-  QString area2str = mUtils->formatAreaInProjectUnit( 1500.234, 2, Qgis::AreaUnit::SquareMeters );
+  QString area2str = mUtils->formatAreaInProjectUnit( 1500.234, 2, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "1500.23 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 1500.234, 1, Qgis::AreaUnit::SquareMeters );
+  area2str = mUtils->formatAreaInProjectUnit( 1500.234, 1, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "1500.2 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 1500.234, 0, Qgis::AreaUnit::SquareMeters );
+  area2str = mUtils->formatAreaInProjectUnit( 1500.234, 0, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "1500 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 500.22, 1, Qgis::AreaUnit::SquareMeters );
+  area2str = mUtils->formatAreaInProjectUnit( 500.22, 1, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "500.2 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 0.22, 0, Qgis::AreaUnit::SquareMeters );
+  area2str = mUtils->formatAreaInProjectUnit( 0.22, 0, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "0 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( -0.22, 0, Qgis::AreaUnit::SquareMeters );
+  area2str = mUtils->formatAreaInProjectUnit( -0.22, 0, Qgis::AreaUnit::SquareMeters, QgsProject::instance() );
   QVERIFY( area2str == "-0 m²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 1.222234, 2, Qgis::AreaUnit::SquareKilometers );
+  area2str = mUtils->formatAreaInProjectUnit( 1.222234, 2, Qgis::AreaUnit::SquareKilometers, QgsProject::instance() );
   QVERIFY( area2str == "0.00 km²" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 6000, 1, Qgis::AreaUnit::Acres );
+  area2str = mUtils->formatAreaInProjectUnit( 6000, 1, Qgis::AreaUnit::Acres, QgsProject::instance() );
   QVERIFY( area2str == "1.5 ac" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 5, 1, Qgis::AreaUnit::Acres );
+  area2str = mUtils->formatAreaInProjectUnit( 5, 1, Qgis::AreaUnit::Acres, QgsProject::instance() );
   QVERIFY( area2str == "0.0 ac" );
 
-  area2str = mUtils->formatAreaInProjectUnit( 7000, 1, Qgis::AreaUnit::Acres );
+  area2str = mUtils->formatAreaInProjectUnit( 7000, 1, Qgis::AreaUnit::Acres, QgsProject::instance() );
   QVERIFY( area2str == "1.7 ac" );
 }
