@@ -83,20 +83,6 @@ MMComponents.MMPage {
       anchors.centerIn: parent
       running: featuresModel.fetchingResults
     }
-
-    MMComponents.MMButton {
-      id: addButton
-
-      width: parent.width
-      anchors.bottom: parent.bottom
-      anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
-
-      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
-
-      text: qsTr("Add feature")
-
-      onClicked: root.addFeatureClicked( root.selectedLayer )
-    }
   }
 
   Component.onCompleted: {
