@@ -25,13 +25,7 @@ InputMapSettings *AbstractMapTool::mapSettings() const
 void AbstractMapTool::setMapSettings( InputMapSettings *newMapSettings )
 {
   if ( mMapSettings == newMapSettings )
-  {
     return;
-  }
-  else
-  {
-    disconnect( mMapSettings );
-  }
 
   mMapSettings = newMapSettings;
   emit mapSettingsChanged( mMapSettings );
