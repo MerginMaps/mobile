@@ -113,7 +113,7 @@ set(COVERAGE
     CACHE BOOL "Compile with coverage flags"
 )
 set(USE_MM_SERVER_API_KEY
-    TRUE
+    FALSE
     CACHE
       BOOL
       "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it."
