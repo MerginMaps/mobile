@@ -59,6 +59,12 @@ class MeasurementMapTool : public AbstractMapTool
      * If there are at least 3 points, forms a polygon from recorded points so far.
      * Updates recorded geometry and calculates area and perimeter of formed polygon.
     */
+
+    /**
+     * Finalizes measurement by forming a polygon if "Close shape" button was clicked
+     * and there are at least 3 points; otherwise, if "Done" button was clicked, forms a polyline.
+     * Updates recorded geometry, calculates perimeter, and calculates the area if it's a polygon.
+    */
     Q_INVOKABLE void finalizeMeasurement( bool closeShapeClicked );
 
     /**
