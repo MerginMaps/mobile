@@ -21,6 +21,7 @@ MMComponents.MMPage {
 
   property var selectedLayer: null
   property bool hasToolbar: false
+  property bool layerIsReadOnly: featuresModel.layer?.readOnly ?? false
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
@@ -82,6 +83,20 @@ MMComponents.MMPage {
     MMComponents.MMBusyIndicator {
       anchors.centerIn: parent
       running: featuresModel.fetchingResults
+    }
+
+    MMComponents.MMButton {
+      id: addButton
+
+      width: parent.width
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
+
+      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer ) && !root.layerIsReadOnly
+
+      text: qsTr("Add feature")
+
+      onClicked: root.addFeatureClicked( root.selectedLayer )
     }
   }
 
