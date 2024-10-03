@@ -29,6 +29,7 @@
 #include "snaputils.h"
 #include "maptools/splittingmaptool.h"
 #include "maptools/recordingmaptool.h"
+#include "maptools/measurementmaptool.h"
 
 #include "featurelayerpair.h"
 #include "streamingintervaltype.h"
@@ -274,6 +275,87 @@ void TestMapTools::testRecording()
 
   delete project;
   delete recordTool;
+}
+
+void TestMapTools::testMeasuring()
+{
+  MeasurementMapTool *measurementTool = new MeasurementMapTool();
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  setupMapSettings( ms, project, QgsRectangle( -10, -10, 10, 10 ), QSize( 600, 600 ) );
+
+  measurementTool->setMapSettings( ms );
+
+  QgsDistanceArea distanceArea;
+  distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  distanceArea.setSourceCrs( ms->destinationCrs(), ms->transformContext() );
+
+  QPointF crosshairPoint1 = ms->coordinateToScreen( QgsPoint( 0, 0 ) );
+  measurementTool->setCrosshairPoint( crosshairPoint1 );
+  measurementTool->addPoint();
+
+  measurementTool->updateDistance();
+  QCOMPARE( measurementTool->lengthWithGuideline(), 0.0 );
+
+  QPointF crosshairPoint2 = ms->coordinateToScreen( QgsPoint( 0, 1 ) );
+  measurementTool->setCrosshairPoint( crosshairPoint2 );
+  measurementTool->addPoint();
+
+  measurementTool->updateDistance();
+
+  QList<QgsPointXY> points;
+  points.append( QgsPointXY( 0, 0 ) );
+  points.append( QgsPointXY( 0, 1 ) );
+
+  QgsGeometry lineGeometry = QgsGeometry::fromPolylineXY( points );
+  double expectedPerimeter = distanceArea.measureLength( lineGeometry );
+  QCOMPARE( measurementTool->perimeter(), expectedPerimeter );
+
+  QPointF crosshairPoint3 = ms->coordinateToScreen( QgsPoint( 1, 1 ) );
+  measurementTool->setCrosshairPoint( crosshairPoint3 );
+  measurementTool->addPoint();
+
+  measurementTool->updateDistance();
+  points.append( QgsPointXY( 1, 1 ) );
+  lineGeometry = QgsGeometry::fromPolylineXY( points );
+  expectedPerimeter = distanceArea.measureLength( lineGeometry );
+  QCOMPARE( measurementTool->perimeter(), expectedPerimeter );
+
+  measurementTool->finalizeMeasurement( false );
+
+  QVERIFY( measurementTool->recordedGeometry().wkbType() == Qgis::WkbType::LineString );
+
+  measurementTool->resetMeasurement();
+
+  measurementTool->setCrosshairPoint( crosshairPoint1 );
+  measurementTool->addPoint();
+
+  measurementTool->setCrosshairPoint( crosshairPoint2 );
+  measurementTool->addPoint();
+
+  measurementTool->setCrosshairPoint( crosshairPoint3 );
+  measurementTool->addPoint();
+
+  measurementTool->setCrosshairPoint( crosshairPoint1 );
+  measurementTool->updateDistance();
+
+  QVERIFY( measurementTool->canCloseShape() );
+
+  measurementTool->finalizeMeasurement( true );
+
+  QVERIFY( measurementTool->recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
+
+  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << points );
+  double expectedArea = distanceArea.measureArea( polygonGeometry );
+  QCOMPARE( measurementTool->area(), expectedArea );
+
+  delete project;
+  delete measurementTool;
 }
 
 void TestMapTools::testExistingVertices()
