@@ -69,7 +69,7 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Az eszköze nem támogatja a nyomkövetést, csak Android 8.0 verzió felet érhető el</translation>
+        <translation>Az eszköze nem támogatja a nyomkövetést, csak Android 8.0 verzió felett érhető el</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
