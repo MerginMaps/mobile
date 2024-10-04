@@ -21,7 +21,7 @@ MMComponents.MMPage {
 
   property var selectedLayer: null
   property bool hasToolbar: false
-  property bool layerIsReadOnly: featuresModel.layer?.readOnly ?? false
+  property bool layerIsReadOnly: selectedLayer?.readOnly ?? false
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
