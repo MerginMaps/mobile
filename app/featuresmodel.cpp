@@ -180,10 +180,8 @@ QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) cons
 
 QVariant FeaturesModel::sortValue( const FeatureLayerPair &featurePair ) const
 {
-  QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( featurePair.layer() ) );
-  context.setFeature( featurePair.feature() );
-  QgsExpression expr( mSortExpression );
-  QVariant result = expr.evaluate( &context );
+  mExpressionContext.setFeature( featurePair.feature() );
+  QVariant result = mSortExpression.evaluate( &mExpressionContext );
   return result;
 }
 
@@ -363,6 +361,7 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     }
 
     mLayer = newLayer;
+    mExpressionContext = mLayer->createExpressionContext();
     setupSorting();
     emit layerChanged( mLayer );
 
@@ -387,13 +386,15 @@ QgsVectorLayer *FeaturesModel::layer() const
 
 void FeaturesModel::setupSorting()
 {
-  mSortExpression = mLayer ? mLayer->attributeTableConfig().sortExpression() : QString();
+  mSortExpressionString = mLayer ? mLayer->attributeTableConfig().sortExpression() : QString();
   mSortOrder = mLayer ? mLayer->attributeTableConfig().sortOrder() : Qt::AscendingOrder;
+  mSortExpression = QgsExpression( mSortExpressionString );
+  mSortExpression.prepare( &mExpressionContext );
 }
 
 bool FeaturesModel::sortingEnabled() const
 {
-  return !mSortExpression.isEmpty();
+  return !mSortExpressionString.isEmpty();
 }
 
 Qt::SortOrder FeaturesModel::sortOrder() const

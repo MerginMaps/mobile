@@ -211,5 +211,7 @@ void ValueRelationFeaturesModel::setConfig( const QVariantMap &newConfig )
 void ValueRelationFeaturesModel::setupSorting()
 {
   const bool orderByValue = mConfig.value( QStringLiteral( "OrderByValue" ) ).toBool();
-  mSortExpression = orderByValue ? mTitleField : QString();
+  mSortExpressionString = orderByValue ? mTitleField : QString();
+  mSortExpression = QgsExpression( mSortExpressionString );
+  mSortExpression.prepare( &mExpressionContext );
 }

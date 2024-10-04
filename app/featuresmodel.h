@@ -149,7 +149,9 @@ class FeaturesModel : public QAbstractListModel
 
     virtual QVariant featureTitle( const FeatureLayerPair &featurePair ) const;
 
-    QString mSortExpression;
+    QString mSortExpressionString;
+    mutable QgsExpression mSortExpression;
+    mutable QgsExpressionContext mExpressionContext;
     Qt::SortOrder mSortOrder = Qt::AscendingOrder;
 
   private slots:
