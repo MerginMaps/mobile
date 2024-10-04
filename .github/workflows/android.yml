@@ -272,7 +272,7 @@ jobs:
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
 
       - name: build AAB
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || github.ref_name == 'enhancement/measurementTool' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
