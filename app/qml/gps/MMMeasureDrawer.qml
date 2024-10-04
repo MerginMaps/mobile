@@ -51,7 +51,7 @@ MMDrawer {
     PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
   }
 
-  drawerHeader.title: qsTr( "Measurement" )
+  drawerHeader.title: qsTr( "Measure" )
 
   drawerHeader.topLeftItemContent: MMButton {
     type: MMButton.Types.Primary
