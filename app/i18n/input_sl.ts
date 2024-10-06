@@ -1286,7 +1286,7 @@ V projekt ne bo dodano.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="523"/>
         <source>streaming</source>
-        <translation>sledenje</translation>
+        <translation>streaming</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="599"/>
