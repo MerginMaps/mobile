@@ -1200,7 +1200,7 @@ V projekt ne bo dodano.</translation>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="18"/>
         <source>(no-entries)</source>
-        <translation>(no-entries)</translation>
+        <translation>(ni-zapisov)</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="25"/>
