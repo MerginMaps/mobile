@@ -633,8 +633,6 @@ ApplicationWindow {
       width: window.width
       mapCanvas: map
 
-      onMeasureDone: finishMeasurementDialog.open()
-
       onMeasureFinished: {
         measurePanelLoader.active = false
         map.finishMeasure()
@@ -770,14 +768,6 @@ ApplicationWindow {
     onSingInRequested: {
       stateManager.state = "projects"
       projectController.showLogin()
-    }
-  }
-
-  MMFinishMeasurementDialog {
-    id: finishMeasurementDialog
-
-    onFinishMeasurementRequested: {
-      map.mapToolComponent.finalizeMeasurement( false )
     }
   }
 

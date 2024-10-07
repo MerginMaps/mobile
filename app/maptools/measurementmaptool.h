@@ -36,7 +36,7 @@ class MeasurementMapTool : public AbstractMapTool
 
     Q_PROPERTY( bool canUndo READ canUndo WRITE setCanUndo NOTIFY canUndoChanged )
     Q_PROPERTY( bool canCloseShape READ canCloseShape WRITE setCanCloseShape NOTIFY canCloseShapeChanged )
-    Q_PROPERTY( bool canFinalizeMeasurement READ canFinalizeMeasurement WRITE setCanFinalizeMeasurement NOTIFY canFinalizeMeasurementChanged )
+    Q_PROPERTY( bool isValidGeometry READ isValidGeometry WRITE setIsValidGeometry NOTIFY isValidGeometryChanged )
     Q_PROPERTY( bool measurementFinalized READ measurementFinalized WRITE setMeasurementFinalized NOTIFY measurementFinalizedChanged )
 
   public:
@@ -54,11 +54,6 @@ class MeasurementMapTool : public AbstractMapTool
      *  Updates recordedGeometry afterwards
      */
     Q_INVOKABLE void removePoint();
-
-    /**
-     * If there are at least 3 points, forms a polygon from recorded points so far.
-     * Updates recorded geometry and calculates area and perimeter of formed polygon.
-    */
 
     /**
      * Finalizes measurement by forming a polygon if "Close shape" button was clicked
@@ -92,8 +87,8 @@ class MeasurementMapTool : public AbstractMapTool
     bool canCloseShape() const;
     void setCanCloseShape( bool newCanCloseShape );
 
-    bool canFinalizeMeasurement() const;
-    void setCanFinalizeMeasurement( bool canFinalize );
+    bool isValidGeometry() const;
+    void setIsValidGeometry( bool canFinalize );
 
     bool measurementFinalized() const;
     void setMeasurementFinalized( bool newMeasurementFinalized );
@@ -104,7 +99,8 @@ class MeasurementMapTool : public AbstractMapTool
     QgsGeometry existingVertices() const;
     void setExistingVertices( const QgsGeometry &vertices );
 
-    void setMapSettings( InputMapSettings *newMapSettings ) override;
+    void resetMapSettings();
+    void updateMapSettings( InputMapSettings *newMapSettings );
 
   signals:
     void lengthWithGuidelineChanged( const double &lengthWithGuideline );
@@ -116,7 +112,7 @@ class MeasurementMapTool : public AbstractMapTool
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void existingVerticesChanged( const QgsGeometry &vertices );
     void crosshairPointChanged( const QPointF &crosshairPoint );
-    void canFinalizeMeasurementChanged( bool canFinalize );
+    void isValidGeometryChanged( bool canFinalize );
 
   protected:
     void rebuildGeometry();
@@ -136,7 +132,7 @@ class MeasurementMapTool : public AbstractMapTool
     double mArea = 0;
     bool mCanUndo = false;
     bool mCanCloseShape = false;
-    bool mCanFinalizeMeasurement = false;
+    bool mIsValidGeometry = false;
     bool mMeasurementFinalized = false;
 };
 

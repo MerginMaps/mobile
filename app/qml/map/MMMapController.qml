@@ -1151,7 +1151,6 @@ Item {
   }
 
   function measure() {
-    internal.extentBeforeStakeout = mapCanvas.mapSettings.extent
     state = "measure"
   }
 
@@ -1173,7 +1172,6 @@ Item {
 
   function finishMeasure() {
     state = "view"
-    mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
   }
 
   function centerToPair( pair ) {

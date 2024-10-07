@@ -27,10 +27,10 @@ class AbstractMapTool : public QObject
     virtual ~AbstractMapTool();
 
     InputMapSettings *mapSettings() const;
-    virtual void setMapSettings( InputMapSettings *newMapSettings );
+    void setMapSettings( InputMapSettings *newMapSettings );
 
   signals:
-
+    void onAboutToChangeMapSettings();
     void mapSettingsChanged( InputMapSettings *mapSettings );
 
   private:

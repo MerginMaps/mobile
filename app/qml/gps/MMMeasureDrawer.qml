@@ -35,7 +35,6 @@ MMDrawer {
   property string area: mapCanvas.mapToolComponent?.mapTool?.area ?? 0
 
   signal measureFinished()
-  signal measureDone()
 
   Component.onCompleted: root.open()
 
@@ -112,7 +111,7 @@ MMDrawer {
         text: qsTr( "Done" )
         iconSourceLeft: __style.doneCircleIcon
         enabled: root.canFinalizeMeasurement
-        onClicked: root.measureDone()
+        onClicked: root.mapCanvas.mapToolComponent.finalizeMeasurement( false )
       }
     }
   }

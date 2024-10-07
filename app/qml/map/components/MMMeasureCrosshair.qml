@@ -56,7 +56,7 @@ Item {
     }
 
     Rectangle {
-      y: crosshair.crosshairForeground.y + crosshair.crosshairForeground.height
+      y: crosshair.crosshairForeground.y + crosshair.crosshairForeground.height + 2 * __dp
       x: crosshair.crosshairForeground.x - ( ( width - crosshair.crosshairForeground.width ) / 2 )
 
       width: Math.max( root.outerSize - 10 * __dp , row.width )

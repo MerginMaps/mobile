@@ -12,31 +12,36 @@
 MeasurementMapTool::MeasurementMapTool( QObject *parent )
   : AbstractMapTool{ parent }
 {
-  connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::setMapSettings );
+  connect( this, &AbstractMapTool::onAboutToChangeMapSettings, this, &MeasurementMapTool::resetMapSettings );
+  connect( this, &AbstractMapTool::mapSettingsChanged, this, &MeasurementMapTool::updateMapSettings );
 }
 
 MeasurementMapTool::~MeasurementMapTool() = default;
 
 void MeasurementMapTool::addPoint()
 {
-  QgsPoint transformedPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
-  mPoints.push_back( transformedPoint );
-  rebuildGeometry();
+  if ( mapSettings() )
+  {
+    QgsPoint transformedPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
+    mPoints.push_back( transformedPoint );
+    rebuildGeometry();
+  }
 }
 
 void MeasurementMapTool::removePoint()
 {
-  if ( !mPoints.isEmpty() )
+  if ( !mPoints.isEmpty() && mapSettings() )
   {
     mPoints.pop_back();
     checkCanCloseShape();
     rebuildGeometry();
+    updateDistance();
   }
 }
 
 void MeasurementMapTool::updateDistance()
 {
-  if ( mPoints.isEmpty() )
+  if ( mPoints.isEmpty() || !mapSettings() )
   {
     setLengthWithGuideline( 0.0 );
     return;
@@ -47,16 +52,13 @@ void MeasurementMapTool::updateDistance()
   QgsPoint lastPoint = mPoints.last();
   QgsPoint transformedCrosshairPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
 
-  double calculatedLength = mDistanceArea.measureLength( mRecordedGeometry ) + mDistanceArea.measureLine( transformedCrosshairPoint, lastPoint );
+  double calculatedLength = mPerimeter + mDistanceArea.measureLine( transformedCrosshairPoint, lastPoint );
   setLengthWithGuideline( calculatedLength );
 }
 
 void MeasurementMapTool::checkCanCloseShape()
 {
-  bool canFinalize = !mRecordedGeometry.isEmpty() && mapSettings() && mPoints.count() >= 2;
-  setCanFinalizeMeasurement( canFinalize );
-
-  if ( !canFinalize || mPoints.count() < 3 )
+  if ( !mRecordedGeometry.isEmpty() && mapSettings() && mPoints.count() < 3 )
   {
     setCanCloseShape( false );
     return;
@@ -70,7 +72,7 @@ void MeasurementMapTool::checkCanCloseShape()
 
 void MeasurementMapTool::finalizeMeasurement( bool closeShapeClicked )
 {
-  if ( mPoints.count() < 2 )
+  if ( mPoints.count() < 2 || !mapSettings() )
     return;
 
   QList<QgsPointXY> pointList;
@@ -80,7 +82,7 @@ void MeasurementMapTool::finalizeMeasurement( bool closeShapeClicked )
   QgsGeometry geometry;
   double perimeter = 0.0;
 
-  if ( closeShapeClicked && mCanCloseShape && mPoints.count() >= 3 )
+  if ( closeShapeClicked && mCanCloseShape )
   {
     geometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
     perimeter = mDistanceArea.measurePerimeter( geometry );
@@ -113,6 +115,9 @@ void MeasurementMapTool::resetMeasurement()
 
 void MeasurementMapTool::rebuildGeometry()
 {
+  if ( !mapSettings() )
+    return;
+
   QgsGeometry geometry;
 
   QgsMultiPoint *existingVertices = new QgsMultiPoint();
@@ -136,11 +141,15 @@ void MeasurementMapTool::rebuildGeometry()
     setCanUndo( false );
   }
 
+  // If we have more two or more points, "Done" button will be enabled
+  bool hasValidGeometry = !mRecordedGeometry.isEmpty() && mPoints.count() >= 2;
+  setIsValidGeometry( hasValidGeometry );
+
   emit existingVerticesChanged( mExistingVertices );
   setRecordedGeometry( geometry );
 }
 
-void MeasurementMapTool::setMapSettings( InputMapSettings *newMapSettings )
+void MeasurementMapTool::resetMapSettings()
 {
   InputMapSettings *currentMapSettings = mapSettings();
 
@@ -148,7 +157,10 @@ void MeasurementMapTool::setMapSettings( InputMapSettings *newMapSettings )
   {
     disconnect( currentMapSettings );
   }
+}
 
+void MeasurementMapTool::updateMapSettings( InputMapSettings *newMapSettings )
+{
   AbstractMapTool::setMapSettings( newMapSettings );
 
   InputMapSettings *updatedMapSettings = mapSettings();
@@ -229,17 +241,17 @@ void MeasurementMapTool::setCanCloseShape( bool newCanCloseShape )
   emit canCloseShapeChanged( mCanCloseShape );
 }
 
-bool MeasurementMapTool::canFinalizeMeasurement() const
+bool MeasurementMapTool::isValidGeometry() const
 {
-  return mCanFinalizeMeasurement;
+  return mIsValidGeometry;
 }
 
-void MeasurementMapTool::setCanFinalizeMeasurement( bool canFinalize )
+void MeasurementMapTool::setIsValidGeometry( bool hasValidGeometry )
 {
-  if ( mCanFinalizeMeasurement != canFinalize )
+  if ( mIsValidGeometry != hasValidGeometry )
   {
-    mCanFinalizeMeasurement = canFinalize;
-    emit canFinalizeMeasurementChanged( canFinalize );
+    mIsValidGeometry = hasValidGeometry;
+    emit isValidGeometryChanged( hasValidGeometry );
   }
 }
 
