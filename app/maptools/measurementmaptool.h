@@ -88,7 +88,7 @@ class MeasurementMapTool : public AbstractMapTool
     void setCanCloseShape( bool newCanCloseShape );
 
     bool isValidGeometry() const;
-    void setIsValidGeometry( bool canFinalize );
+    void setIsValidGeometry( bool hasValidGeometry );
 
     bool measurementFinalized() const;
     void setMeasurementFinalized( bool newMeasurementFinalized );
