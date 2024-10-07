@@ -76,15 +76,11 @@ MMFormComboboxBaseEditor {
       valueRole: "FeatureId"
       textRole: "FeatureTitle"
 
-      list.model: MM.FeaturesProxyModel {
-        id: vrDropdownProxyModel
+      list.model: MM.ValueRelationFeaturesModel {
+        id: vrDropdownModel
 
-        featuresSourceModel: MM.ValueRelationFeaturesModel {
-          id: vrDropdownModel
-
-          config: root._fieldConfig
-          pair: root._fieldFeatureLayerPair
-        }
+        config: root._fieldConfig
+        pair: root._fieldFeatureLayerPair
       }
 
       onSearchTextChanged: ( searchText ) => vrDropdownModel.searchExpression = searchText

@@ -40,6 +40,12 @@ void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request
       request.setExpressionContext( filterContext );
     }
   }
+
+  if ( mConfig.value( QStringLiteral( "OrderByValue" ) ).toBool() )
+  {
+    // replace any existing order by clause with our value field
+    request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( mTitleField ) } ) );
+  }
 }
 
 void ValueRelationFeaturesModel::setup()
@@ -206,12 +212,4 @@ void ValueRelationFeaturesModel::setConfig( const QVariantMap &newConfig )
   emit configChanged( mConfig );
 
   setup();
-}
-
-void ValueRelationFeaturesModel::setupSorting()
-{
-  const bool orderByValue = mConfig.value( QStringLiteral( "OrderByValue" ) ).toBool();
-  mSortExpressionString = orderByValue ? mTitleField : QString();
-  mSortExpression = QgsExpression( mSortExpressionString );
-  mSortExpression.prepare( &mExpressionContext );
 }

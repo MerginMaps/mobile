@@ -10,7 +10,6 @@
 #include "testmodels.h"
 #include "testutils.h"
 #include "featuresmodel.h"
-#include "featuresproxymodel.h"
 #include "valuerelationfeaturesmodel.h"
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -58,10 +57,9 @@ void TestModels::testFeaturesModel()
   QCOMPARE( title, QStringLiteral( "First" ) );
 }
 
-void TestModels::testFeaturesProxyModel()
+void TestModels::testFeaturesModelSorted()
 {
   FeaturesModel model;
-  FeaturesProxyModel proxy;
 
   QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
 
@@ -75,62 +73,58 @@ void TestModels::testFeaturesProxyModel()
   conf.setSortExpression( QStringLiteral( "Name" ) );
   layer->setAttributeTableConfig( conf );
 
-  proxy.setFeaturesSourceModel( &model );
   model.setLayer( layer );
   model.reloadFeatures();
 
 
   spy.wait();
 
-  QCOMPARE( proxy.rowCount(), layer->dataProvider()->featureCount() );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::SortValue ), QLatin1String( "A1" ) );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::SortValue ), QLatin1String( "A2" ) );
-  QCOMPARE( proxy.data( proxy.index( 2, 0 ), FeaturesModel::SortValue ), QLatin1String( "B1" ) );
-  QCOMPARE( proxy.data( proxy.index( 3, 0 ), FeaturesModel::SortValue ), QLatin1String( "B2" ) );
-  QCOMPARE( proxy.data( proxy.index( 4, 0 ), FeaturesModel::SortValue ), QLatin1String( "C1" ) );
-  QCOMPARE( proxy.data( proxy.index( 5, 0 ), FeaturesModel::SortValue ), QLatin1String( "C2" ) );
-  QCOMPARE( proxy.data( proxy.index( 6, 0 ), FeaturesModel::SortValue ), QLatin1String( "D1" ) );
-  QCOMPARE( proxy.data( proxy.index( 7, 0 ), FeaturesModel::SortValue ), QLatin1String( "D2" ) );
-  QCOMPARE( proxy.data( proxy.index( 8, 0 ), FeaturesModel::SortValue ), QLatin1String( "VERYBIG" ) );
+  QCOMPARE( model.rowCount(), layer->dataProvider()->featureCount() );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
+  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B1" ) );
+  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B2" ) );
+  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C1" ) );
+  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C2" ) );
+  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
+  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
+  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "VERYBIG" ) );
 
-  // filter the fModel (this is not proxy model filtering)
-  // and reverse sort order
+  // filter the model and reverse sort order
   conf.setSortOrder( Qt::DescendingOrder );
   layer->setAttributeTableConfig( conf );
-  model.setupSorting();
 
   model.setSearchExpression( QStringLiteral( "D" ) );
 
 
   spy.wait();
 
-  QCOMPARE( proxy.rowCount(), 2 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::SortValue ), QLatin1String( "D2" ) );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::SortValue ), QLatin1String( "D1" ) );
+  QCOMPARE( model.rowCount(), 2 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
 
   // disable sorting and filtering
   // should get all items with default ordering
   conf.setSortExpression( QString() );
   layer->setAttributeTableConfig( conf );
-  model.setupSorting();
 
   model.setSearchExpression( QString() );
 
   spy.wait();
 
-  QCOMPARE( proxy.rowCount(), layer->dataProvider()->featureCount() );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::FeatureId ), 1 );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::FeatureId ), 2 );
-  QCOMPARE( proxy.data( proxy.index( 2, 0 ), FeaturesModel::FeatureId ), 3 );
-  QCOMPARE( proxy.data( proxy.index( 3, 0 ), FeaturesModel::FeatureId ), 4 );
-  QCOMPARE( proxy.data( proxy.index( 4, 0 ), FeaturesModel::FeatureId ), 5 );
-  QCOMPARE( proxy.data( proxy.index( 5, 0 ), FeaturesModel::FeatureId ), 6 );
-  QCOMPARE( proxy.data( proxy.index( 6, 0 ), FeaturesModel::FeatureId ), 7 );
-  QCOMPARE( proxy.data( proxy.index( 7, 0 ), FeaturesModel::FeatureId ), 8 );
-  QCOMPARE( proxy.data( proxy.index( 8, 0 ), FeaturesModel::FeatureId ), 100000000 );
+  QCOMPARE( model.rowCount(), layer->dataProvider()->featureCount() );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureId ), 1 );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureId ), 2 );
+  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureId ), 3 );
+  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureId ), 4 );
+  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureId ), 5 );
+  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureId ), 6 );
+  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureId ), 7 );
+  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureId ), 8 );
+  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
 }
 
-void TestModels::testFeaturesProxyModelWithValueRelation()
+void TestModels::testValueRelationFeaturesModel()
 {
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QString projectName = "proj.qgz";
@@ -151,8 +145,6 @@ void TestModels::testFeaturesProxyModelWithValueRelation()
   FeatureLayerPair pair( f, mainLayer );
 
   ValueRelationFeaturesModel model;
-  FeaturesProxyModel proxy;
-  proxy.setFeaturesSourceModel( &model );
 
   QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
 
@@ -171,78 +163,86 @@ void TestModels::testFeaturesProxyModelWithValueRelation()
   QCOMPARE( model.rowCount(), 9 );
   QCOMPARE( model.layer()->id(), subsubLayer->id() );
 
-  QCOMPARE( proxy.rowCount(), 9 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::FeatureId ), 1 );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::FeatureId ), 2 );
-  QCOMPARE( proxy.data( proxy.index( 2, 0 ), FeaturesModel::FeatureId ), 3 );
-  QCOMPARE( proxy.data( proxy.index( 3, 0 ), FeaturesModel::FeatureId ), 4 );
-  QCOMPARE( proxy.data( proxy.index( 4, 0 ), FeaturesModel::FeatureId ), 5 );
-  QCOMPARE( proxy.data( proxy.index( 5, 0 ), FeaturesModel::FeatureId ), 6 );
-  QCOMPARE( proxy.data( proxy.index( 6, 0 ), FeaturesModel::FeatureId ), 7 );
-  QCOMPARE( proxy.data( proxy.index( 7, 0 ), FeaturesModel::FeatureId ), 8 );
-  QCOMPARE( proxy.data( proxy.index( 8, 0 ), FeaturesModel::FeatureId ), 100000000 );
+  QCOMPARE( model.rowCount(), 9 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureId ), 1 );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureId ), 2 );
+  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureId ), 3 );
+  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureId ), 4 );
+  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureId ), 5 );
+  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureId ), 6 );
+  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureId ), 7 );
+  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureId ), 8 );
+  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
 
   // enable order by value for the value relation
   model.reset();
   config[ QStringLiteral( "OrderByValue" ) ] = true;
   model.setConfig( config );
-  model.setupSorting();
   model.setPair( pair );
 
   spy.wait();
 
-  QCOMPARE( proxy.rowCount(), 9 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::SortValue ), QLatin1String( "A1" ) );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::SortValue ), QLatin1String( "A2" ) );
-  QCOMPARE( proxy.data( proxy.index( 2, 0 ), FeaturesModel::SortValue ), QLatin1String( "B1" ) );
-  QCOMPARE( proxy.data( proxy.index( 3, 0 ), FeaturesModel::SortValue ), QLatin1String( "B2" ) );
-  QCOMPARE( proxy.data( proxy.index( 4, 0 ), FeaturesModel::SortValue ), QLatin1String( "C1" ) );
-  QCOMPARE( proxy.data( proxy.index( 5, 0 ), FeaturesModel::SortValue ), QLatin1String( "C2" ) );
-  QCOMPARE( proxy.data( proxy.index( 6, 0 ), FeaturesModel::SortValue ), QLatin1String( "D1" ) );
-  QCOMPARE( proxy.data( proxy.index( 7, 0 ), FeaturesModel::SortValue ), QLatin1String( "D2" ) );
-  QCOMPARE( proxy.data( proxy.index( 8, 0 ), FeaturesModel::SortValue ), QLatin1String( "VERYBIG" ) );
+  QCOMPARE( model.rowCount(), 9 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
+  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B1" ) );
+  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B2" ) );
+  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C1" ) );
+  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C2" ) );
+  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
+  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
+  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "VERYBIG" ) );
 
-  // add a search expression to base model
+  // add a search expression to model
   model.setSearchExpression( QStringLiteral( "D" ) );
 
   spy.wait();
   QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( proxy.rowCount(), 2 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::SortValue ), QLatin1String( "D1" ) );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::SortValue ), QLatin1String( "D2" ) );
+  QCOMPARE( model.rowCount(), 2 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
 
-  // add a filter expression to the base model
+  // add a filter expression to the model
   config[ QStringLiteral( "FilterExpression" ) ] = "subFk = 1";
   model.setConfig( config );
-  model.setupSorting();
   model.setSearchExpression( QString() );
 
   spy.wait();
 
   QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::SortValue ), QLatin1String( "A1" ) );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::SortValue ), QLatin1String( "A2" ) );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
 
-  // remove filters and sorting
+  // remove sorting
   model.reset();
   config.remove( QStringLiteral( "OrderByValue" ) );
-  config.remove( QStringLiteral( "FilterExpression" ) );
   model.setConfig( config );
-  model.setupSorting();
   model.setPair( pair );
 
   spy.wait();
 
-  QCOMPARE( proxy.rowCount(), 9 );
-  QCOMPARE( proxy.data( proxy.index( 0, 0 ), FeaturesModel::FeatureId ), 1 );
-  QCOMPARE( proxy.data( proxy.index( 1, 0 ), FeaturesModel::FeatureId ), 2 );
-  QCOMPARE( proxy.data( proxy.index( 2, 0 ), FeaturesModel::FeatureId ), 3 );
-  QCOMPARE( proxy.data( proxy.index( 3, 0 ), FeaturesModel::FeatureId ), 4 );
-  QCOMPARE( proxy.data( proxy.index( 4, 0 ), FeaturesModel::FeatureId ), 5 );
-  QCOMPARE( proxy.data( proxy.index( 5, 0 ), FeaturesModel::FeatureId ), 6 );
-  QCOMPARE( proxy.data( proxy.index( 6, 0 ), FeaturesModel::FeatureId ), 7 );
-  QCOMPARE( proxy.data( proxy.index( 7, 0 ), FeaturesModel::FeatureId ), 8 );
-  QCOMPARE( proxy.data( proxy.index( 8, 0 ), FeaturesModel::FeatureId ), 100000000 );
+  QCOMPARE( model.rowCount(), 2 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
+
+  // remove filters
+  model.reset();
+  config.remove( QStringLiteral( "FilterExpression" ) );
+  model.setConfig( config );
+  model.setPair( pair );
+
+  spy.wait();
+
+  QCOMPARE( model.rowCount(), 9 );
+  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureId ), 1 );
+  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureId ), 2 );
+  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureId ), 3 );
+  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureId ), 4 );
+  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureId ), 5 );
+  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureId ), 6 );
+  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureId ), 7 );
+  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureId ), 8 );
+  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
 }
 
 void TestModels::testProjectsModel()
