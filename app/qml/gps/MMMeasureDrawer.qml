@@ -28,7 +28,7 @@ MMDrawer {
 
   property bool canCloseShape: mapCanvas.mapToolComponent?.mapTool?.canCloseShape ?? false
   property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
-  property bool canFinalizeMeasurement: mapCanvas.mapToolComponent?.mapTool?.canFinalizeMeasurement ?? false
+  property bool isValidGeometry: mapCanvas.mapToolComponent?.mapTool?.isValidGeometry ?? false
   property bool measurementFinalized: mapCanvas.mapToolComponent?.mapTool?.measurementFinalized ?? false
 
   property string perimeter: mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0
@@ -110,7 +110,7 @@ MMDrawer {
         type: MMButton.Types.Secondary
         text: qsTr( "Done" )
         iconSourceLeft: __style.doneCircleIcon
-        enabled: root.canFinalizeMeasurement
+        enabled: root.isValidGeometry
         onClicked: root.mapCanvas.mapToolComponent.finalizeMeasurement( false )
       }
     }
