@@ -21,6 +21,7 @@ MMComponents.MMPage {
 
   property var selectedLayer: null
   property bool hasToolbar: false
+  property bool layerIsReadOnly: selectedLayer?.readOnly ?? false
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
@@ -91,7 +92,7 @@ MMComponents.MMPage {
       anchors.bottom: parent.bottom
       anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
 
-      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer )
+      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer ) && !root.layerIsReadOnly
 
       text: qsTr("Add feature")
 
