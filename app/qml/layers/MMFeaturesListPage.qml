@@ -58,6 +58,7 @@ MMComponents.MMPage {
       model: MM.FeaturesModel {
         id: featuresModel
 
+        useAttributeTableSortOrder: true
         layer: root.selectedLayer
       }
 

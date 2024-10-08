@@ -69,6 +69,7 @@ void TestModels::testFeaturesModelSorted()
   QVERIFY( layer && layer->isValid() );
 
   // enable sorting
+  model.mUseAttributeTableSortOrder = true;
   QgsAttributeTableConfig conf = layer->attributeTableConfig();
   conf.setSortExpression( QStringLiteral( "Name" ) );
   layer->setAttributeTableConfig( conf );
@@ -105,8 +106,7 @@ void TestModels::testFeaturesModelSorted()
 
   // disable sorting and filtering
   // should get all items with default ordering
-  conf.setSortExpression( QString() );
-  layer->setAttributeTableConfig( conf );
+  model.mUseAttributeTableSortOrder = false;
 
   model.setSearchExpression( QString() );
 

@@ -251,7 +251,7 @@ void FeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
     request.setFilterExpression( buildSearchExpression() );
   }
 
-  if ( mLayer && !mLayer->attributeTableConfig().sortExpression().isEmpty() )
+  if ( mUseAttributeTableSortOrder && mLayer && !mLayer->attributeTableConfig().sortExpression().isEmpty() )
   {
     // get a context with global, project and layer scopes
     // QGIS docs are not very clear, but this context is also used for evaluation of the request's 'order by' expressions too
