@@ -16,6 +16,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.app.PendingIntent;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -65,7 +66,7 @@ public class PositionTrackingService extends Service implements LocationListener
         File file = new File( getFilesDir(), "tracking_updates.txt" );
 
         sendStatusUpdateMessage( "Tracking file path:" + file.getAbsolutePath() );
-        
+
         try {
             // Open the FileOutputStream in append mode
             positionUpdatesStream = new FileOutputStream(file, true);
@@ -166,7 +167,12 @@ public class PositionTrackingService extends Service implements LocationListener
 
         Notification notification = notificationBuilder.build();
 
-        startForeground( SERVICE_ID, notification );
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ) { // Android >= 14
+            startForeground( SERVICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION );
+        }
+        else {
+            startForeground( SERVICE_ID, notification );
+        }
 
         sendStatusUpdateMessage( "Position tracking: Started the foreground service!" );
 
