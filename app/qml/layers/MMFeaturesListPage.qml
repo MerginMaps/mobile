@@ -56,14 +56,11 @@ MMComponents.MMPage {
         topMargin: __style.spacing20
       }
 
-      model: MM.FeaturesProxyModel {
-        id: featuresProxyModel
+      model: MM.FeaturesModel {
+        id: featuresModel
 
-        featuresSourceModel: MM.FeaturesModel {
-          id: featuresModel
-
-          layer: root.selectedLayer
-        }
+        useAttributeTableSortOrder: true
+        layer: root.selectedLayer
       }
 
       clip: true
