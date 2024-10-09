@@ -46,7 +46,12 @@ public class PositionTrackingBroadcastMiddleware {
         intentFilter.addAction( TRACKING_ALIVE_STATUS_ACTION );
 
         // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
-        context.registerReceiver( serviceMessageReceiver, intentFilter );
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ) { // Android >= 14
+            context.( serviceMessageReceiver, intentFilter, Context.RECEIVER_EXPORTED );
+        }
+        else {
+            context.registerReceiver( serviceMessageReceiver, intentFilter );
+        }
     }
 
     public void unregisterBroadcastReceiver( Context context ) {
