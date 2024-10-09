@@ -10,6 +10,7 @@
 package uk.co.lutraconsulting;
 
 import android.util.Log;
+import android.os.Build;
 
 import android.content.Intent;
 import android.content.Context;
@@ -46,7 +47,12 @@ public class PositionTrackingBroadcastMiddleware {
         intentFilter.addAction( TRACKING_ALIVE_STATUS_ACTION );
 
         // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
-        context.registerReceiver( serviceMessageReceiver, intentFilter );
+        if ( Build.VERSION.SDK_INT >= 34 ) { // Android 14 ( Upside Down Cake )
+            context.registerReceiver( serviceMessageReceiver, intentFilter, Context.RECEIVER_EXPORTED );
+        }
+        else {
+            context.registerReceiver( serviceMessageReceiver, intentFilter );
+        }
     }
 
     public void unregisterBroadcastReceiver( Context context ) {
