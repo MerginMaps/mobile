@@ -167,7 +167,7 @@ public class PositionTrackingService extends Service implements LocationListener
 
         Notification notification = notificationBuilder.build();
 
-        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ) { // Android >= 14
+        if ( Build.VERSION.SDK_INT >= 34) { // Android 14 ( Upside Down Cake )
             startForeground( SERVICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION );
         }
         else {
