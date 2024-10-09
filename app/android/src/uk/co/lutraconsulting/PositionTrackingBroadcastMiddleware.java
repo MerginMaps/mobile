@@ -47,7 +47,7 @@ public class PositionTrackingBroadcastMiddleware {
 
         // Set this as the receiver of POSITION_UPDATE and STATUS_MESSAGE intent actions
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ) { // Android >= 14
-            context.( serviceMessageReceiver, intentFilter, Context.RECEIVER_EXPORTED );
+            context.registerReceiver( serviceMessageReceiver, intentFilter, Context.RECEIVER_EXPORTED );
         }
         else {
             context.registerReceiver( serviceMessageReceiver, intentFilter );
