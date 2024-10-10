@@ -7,29 +7,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "abstractmaptool.h"
+import QtQuick
 
-AbstractMapTool::AbstractMapTool( QObject *parent )
-  : QObject{parent}
-{
+import "../components"
 
-}
+MMDrawerDialog {
+  id: root
 
-AbstractMapTool::~AbstractMapTool() = default;
+  signal finishMeasurementRequested()
 
-InputMapSettings *AbstractMapTool::mapSettings() const
-{
-  return mMapSettings;
-}
+  imageSource: __style.neutralMMSymbolImage
+  title: qsTr( "Do you wish to finish the measurement?" )
+  description: qsTr( "Your measured segment will be lost." )
+  primaryButton.text: qsTr( "Yes" )
+  secondaryButton.text: qsTr( "No" )
 
-void AbstractMapTool::setMapSettings( InputMapSettings *newMapSettings )
-{
-  if ( mMapSettings == newMapSettings )
-    return;
+  onPrimaryButtonClicked: {
+    root.finishMeasurementRequested()
+    close()
+  }
 
-  emit onAboutToChangeMapSettings();
-
-  mMapSettings = newMapSettings;
-
-  emit mapSettingsChanged( mMapSettings );
+  onSecondaryButtonClicked: close()
 }

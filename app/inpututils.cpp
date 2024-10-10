@@ -168,13 +168,13 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit, QgsProject *activeProject )
 {
   Qgis::DistanceUnit distUnit = destUnit;
 
   if ( distUnit == Qgis::DistanceUnit::Unknown )
   {
-    distUnit = QgsProject::instance()->distanceUnits();
+    distUnit = activeProject->distanceUnits();
   }
 
   if ( distUnit == Qgis::DistanceUnit::Unknown )
@@ -187,6 +187,28 @@ QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, 
   QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+}
+
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit, QgsProject *activeProject )
+{
+  Qgis::AreaUnit areaUnit = destUnit;
+
+  if ( areaUnit == Qgis::AreaUnit::Unknown )
+  {
+    areaUnit = activeProject->areaUnits();
+  }
+
+  if ( areaUnit == Qgis::AreaUnit::Unknown )
+  {
+    return QString::number( areaInSquareMeters, 'f', precision );
+  }
+
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::AreaUnit::SquareMeters, areaUnit );
+  double area = areaInSquareMeters * factor;
+
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( areaUnit );
+
+  return QString( "%1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
@@ -2193,4 +2215,9 @@ bool InputUtils::openLink( const QString &homePath, const QString &link )
   }
 
   return true;
+}
+
+double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
+{
+  return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
 }

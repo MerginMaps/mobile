@@ -75,7 +75,9 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown );
+    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown, QgsProject *activeProject = QgsProject::instance() );
+    Q_INVOKABLE QString formatAreaInProjectUnit( const double areaInSquareMeters, int precision = 1, Qgis::AreaUnit destUnit = Qgis::AreaUnit::Unknown, QgsProject *activeProject = QgsProject::instance() );
+
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
@@ -578,6 +580,11 @@ class InputUtils: public QObject
      * Returns QGIS profiler data
      */
     static QVector<QString> qgisProfilerLog();
+
+    /**
+     * Calculates the Euclidean distance between two pixel points
+     */
+    static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

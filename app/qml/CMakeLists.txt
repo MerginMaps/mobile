@@ -77,6 +77,7 @@ set(MM_QML
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
+    dialogs/MMFinishMeasurementDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
@@ -116,6 +117,7 @@ set(MM_QML
     gps/MMGpsDataDrawer.qml
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
+    gps/MMMeasureDrawer.qml
     gps/components/MMGpsDataText.qml
     inputs/MMComboboxInput.qml
     inputs/MMPasswordInput.qml
@@ -135,8 +137,10 @@ set(MM_QML
     map/MMSplittingTools.qml
     map/MMStakeoutTools.qml
     map/MMRecordingTools.qml
+    map/MMMeasurementTools.qml
     map/components/MMHidingBox.qml
     map/components/MMCrosshair.qml
+    map/components/MMMeasureCrosshair.qml
     map/components/MMMapHidingLabel.qml
     map/components/MMMapButton.qml
     map/components/MMMapLabel.qml
