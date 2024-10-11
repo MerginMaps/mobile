@@ -75,8 +75,11 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown, QgsProject *activeProject = QgsProject::instance() );
-    Q_INVOKABLE QString formatAreaInProjectUnit( const double areaInSquareMeters, int precision = 1, Qgis::AreaUnit destUnit = Qgis::AreaUnit::Unknown, QgsProject *activeProject = QgsProject::instance() );
+    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision, QgsProject *activeProject );
+    Q_INVOKABLE QString formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *activeProject );
+
+    static QString formatDistanceHelper( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit );
+    static QString formatAreaHelper( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit );
 
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 

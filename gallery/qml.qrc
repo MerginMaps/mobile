@@ -155,6 +155,5 @@
         <file>../app/qml/dialogs/MMDiscardGeometryChangesDialog.qml</file>
         <file>../app/qml/dialogs/MMProviderRemoveReceiverDialog.qml</file>
         <file>../app/qml/dialogs/components/MMDialogAdditionalText.qml</file>
-        <file>../app/qml/dialogs/MMFinishMeasurementDialog.qml</file>
     </qresource>
 </RCC>

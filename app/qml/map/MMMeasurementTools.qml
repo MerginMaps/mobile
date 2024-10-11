@@ -93,7 +93,7 @@ Item {
     mapSettings: root.map.mapSettings
     visible: !mapTool.measurementFinalized
 
-    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, __activeProject.qgsProject )
+    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, 1, __activeProject.qgsProject )
     canCloseShape: mapTool.canCloseShape
 
     onCloseShapeClicked: root.mapTool.finalizeMeasurement( true )

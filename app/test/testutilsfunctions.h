@@ -48,7 +48,7 @@ class TestUtilsFunctions: public QObject
     void testInvalidGeometryWarning();
     void testAttribution();
     void testParsePositionUpdates();
-    void testFormatDistanceInDistanceUnit();
+    void testFormatDistanceInProjectUnit();
     void testFormatAreaInProjectUnit();
 
   private:
