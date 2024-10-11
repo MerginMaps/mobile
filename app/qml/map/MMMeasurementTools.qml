@@ -37,6 +37,7 @@ Item {
   MM.GuidelineController {
     id: guidelineController
 
+    allowed: !mapTool.measurementFinalized
     mapSettings: root.map.mapSettings
     crosshairPosition: crosshair.screenPoint
     realGeometry: mapTool.recordedGeometry
@@ -90,24 +91,11 @@ Item {
     anchors.fill: parent
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
+    visible: !mapTool.measurementFinalized
 
     text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, __activeProject.qgsProject )
     canCloseShape: mapTool.canCloseShape
 
-    onCloseShapeClicked: finalizeMeasurement( true )
-  }
-
-  function finalizeMeasurement( closeShapeClicked )
-  {
-    guidelineController.allowed = false
-    crosshair.visible = false
-    mapTool.finalizeMeasurement( closeShapeClicked )
-  }
-
-  function repeatMeasure()
-  {
-    guidelineController.allowed = true
-    crosshair.visible = true
-    mapTool.resetMeasurement()
+    onCloseShapeClicked: root.mapTool.finalizeMeasurement( true )
   }
 }

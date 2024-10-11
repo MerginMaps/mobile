@@ -36,7 +36,7 @@ Item {
   property bool centeredToGPS: false
 
   property var mapToolComponent: {
-    state === "measure" ? measurementToolsLoader.item : null
+    measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
   }
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null

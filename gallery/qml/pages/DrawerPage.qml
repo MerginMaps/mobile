@@ -194,14 +194,6 @@ Page {
           welcomeToNewDesignDialog.open()
         }
       }
-
-      Button {
-        text: "finishMeasurementDialog"
-
-        onClicked: {
-          finishMeasurementDialog.open()
-        }
-      }
     }
   }
 
@@ -374,9 +366,5 @@ Page {
 
   MMWelcomeToNewDesignDialog {
     id: welcomeToNewDesignDialog
-  }
-
-  MMFinishMeasurementDialog {
-    id: finishMeasurementDialog
   }
 }

@@ -22,17 +22,17 @@ import "./components" as MMGpsComponents
 MMDrawer {
   id: root
 
-  property var mapCanvas
+  property var mapTool
 
   readonly property alias panelHeight: root.height
 
-  property bool canCloseShape: mapCanvas.mapToolComponent?.mapTool?.canCloseShape ?? false
-  property bool canUndo: mapCanvas.mapToolComponent?.mapTool?.canUndo ?? false
-  property bool isValidGeometry: mapCanvas.mapToolComponent?.mapTool?.isValidGeometry ?? false
-  property bool measurementFinalized: mapCanvas.mapToolComponent?.mapTool?.measurementFinalized ?? false
+  property bool canCloseShape: mapTool?.canCloseShape ?? false
+  property bool canUndo: mapTool?.canUndo ?? false
+  property bool isValidGeometry: mapTool?.isValidGeometry ?? false
+  property bool measurementFinalized: mapTool?.measurementFinalized ?? false
 
-  property string perimeter: mapCanvas.mapToolComponent?.mapTool?.perimeter ?? 0
-  property string area: mapCanvas.mapToolComponent?.mapTool?.area ?? 0
+  property string perimeter: mapTool?.perimeter ?? 0
+  property string area: mapTool?.area ?? 0
 
   signal measureFinished()
 
@@ -66,7 +66,7 @@ MMDrawer {
       verticalCenter: parent.verticalCenter
     }
 
-    onClicked: measurementFinalized ? root.mapCanvas.mapToolComponent.repeatMeasure() : root.mapCanvas.mapToolComponent.mapTool.removePoint()
+    onClicked: measurementFinalized ? root.mapTool.resetMeasurement() : root.mapTool.removePoint()
   }
 
   drawerContent: Column {
@@ -103,7 +103,7 @@ MMDrawer {
       MMButton {
         text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
-        onClicked: canCloseShape ? root.mapCanvas.mapToolComponent.finalizeMeasurement( true ) : root.mapCanvas.mapToolComponent.mapTool.addPoint()
+        onClicked: canCloseShape ? root.mapTool.finalizeMeasurement( true ) : root.mapTool.addPoint()
       }
 
       MMButton {
@@ -111,7 +111,7 @@ MMDrawer {
         text: qsTr( "Done" )
         iconSourceLeft: __style.doneCircleIcon
         enabled: root.isValidGeometry
-        onClicked: root.mapCanvas.mapToolComponent.finalizeMeasurement( false )
+        onClicked: root.mapTool.finalizeMeasurement( false )
       }
     }
   }

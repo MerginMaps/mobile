@@ -338,10 +338,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Measure")
         iconSource: __style.measurementToolIcon
-        onClicked: {
-          stateManager.state = "map"
-          map.measure()
-        }
+        onClicked: map.measure()
       }
 
       MMToolbarButton {
@@ -631,7 +628,7 @@ ApplicationWindow {
       id: measurePanel
 
       width: window.width
-      mapCanvas: map
+      mapTool: map.mapToolComponent
 
       onMeasureFinished: {
         measurePanelLoader.active = false

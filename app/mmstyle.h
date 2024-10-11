@@ -279,7 +279,9 @@ class MMStyle: public QObject
 
     // Page
     Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double spacing2 READ number2 CONSTANT )
     Q_PROPERTY( double spacing5 READ number5 CONSTANT )
+    Q_PROPERTY( double spacing10 READ number10 CONSTANT )
     Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
     Q_PROPERTY( double spacing20 READ number20 CONSTANT )
     Q_PROPERTY( double spacing30 READ number30 CONSTANT )

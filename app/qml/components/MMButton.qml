@@ -188,7 +188,7 @@ Button {
 
       spacing: {
         if ( ( root.size === MMButton.Sizes.Small ) )
-          return 2;
+          return __style.spacing2;
         else if ( ( buttonIconRight.visible || buttonIconLeft.visible ) )
           return __style.spacing12;
         else

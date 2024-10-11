@@ -29,6 +29,7 @@ Item {
     property real innerDotSize: 10 * __dp
 
     property alias crosshairForeground: crosshairForeground
+    property alias snapUtils: snapUtils
 
     MM.SnapUtils {
       id: snapUtils
