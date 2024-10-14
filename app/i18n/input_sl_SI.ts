@@ -353,8 +353,8 @@ V projekt ne bo dodano.</translation>
     <name>MMAboutPage</name>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
-        <source>About Mergin Maps</source>
-        <translation>O Mergin Maps</translation>
+        <source>About</source>
+        <translation>O programu</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
@@ -389,8 +389,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
-        <source>It is better to work together, join the workspace and explore Mergin Maps!</source>
-        <translation>Bolje je delati skupaj, pridruži se delovnemu prostoru in začni raziskovati Mergin Maps!</translation>
+        <source>Join the workspace and explore together!</source>
+        <translation>Pridruži se delovnemu prostoru in raziščimo skupaj!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
@@ -422,8 +422,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
-        <source>I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Sprejemam Mergin Maps %1Pogoje uporabe%3 in %2Politiko zasebnosti%3</translation>
+        <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Sprejemam %1pravila in pogoje%3 ter %2politiko zasebnosti%3</translation>
     </message>
 </context>
 <context>
@@ -583,8 +583,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
-        <source>This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>To dejanje bo izbrisalo tvoj Mergin Maps račun . Če si lastnik delovnega prostora, moraš lastništvo prenesti na nekoga drugega ali zapreti delovni prostor.</translation>
+        <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
+        <translation>To dejanje bo izbrisalo tvoj račun . Če si lastnik delovnega prostora, moraš lastništvo prenesti na nekoga drugega ali zapreti delovni prostor.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
@@ -659,8 +659,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
-        <source>Tip from Mergin Maps</source>
-        <translation>Nasvet od Mergin Maps</translation>
+        <source>A tip from us</source>
+        <translation>Nasvet od nas</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
@@ -1427,8 +1427,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
-        <source>You need to be signed in to your Mergin Maps account in order to synchronise the project.</source>
-        <translation>Za sinhronizacijo projekta moraš biti prijavljen v svoj Mergin Maps račun.</translation>
+        <source>You need to be signed in to your account in order to synchronise the project.</source>
+        <translation>Za sinhronizacijo projekta moraš biti prijavljen v svoj račun.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
@@ -1524,8 +1524,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
-        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>Ta funkcija ni na voljo za iOS. Vaš prodajalec strojne opreme lahko zagotovi posebno aplikacijo, ki se poveže s sprejemnikom in nastavi lokacijo. Mergin Maps bo še vedno upošteval, da je to notranji GPS vašega telefona/tablice.</translation>
+        <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
+        <translation>Ta funkcija ni na voljo za iOS. Vaš prodajalec strojne opreme lahko zagotovi posebno aplikacijo, ki se poveže s sprejemnikom in nastavi lokacijo. Aplikacija bo še vedno upoštevala, da je to notranji GPS vašega telefona/tablice.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
@@ -1547,13 +1547,13 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Mergin Maps can track your position on this project.</source>
-        <translation>Mergin Maps lahko v tem projektu sledi tvojemu položaju. </translation>
+        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
+        <translation>Snema tvoje poti tudi ob izklopljenem zaslonu. Posnete poti so shranjene v ločenem sloju. Končane poti se sinhronizirajo enako kot drugi podatki.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
-        <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Snema tvoje poti tudi ob izklopljenem zaslonu. Posnete poti so shranjene v ločenem sloju. Končane poti se sinhronizirajo enako kot drugi podatki.</translation>
+        <source>The app can track your position on this project.</source>
+        <translation>Aplikacija lahko v tem projektu sledi tvojemu položaju. </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
@@ -1695,8 +1695,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
-        <source>Click here to visit Mergin Maps dashboard</source>
-        <translation>Klikni tukaj za Mergin Maps nadzorno ploščo</translation>
+        <source>Click here to access the dashboard</source>
+        <translation>Klikni tukaj za dostop do nadzorne plošče</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
@@ -1769,8 +1769,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
-        <source>Get started with Mergin Maps</source>
-        <translation>Začni delo z Mergin Maps</translation>
+        <source>Let&apos;s get started</source>
+        <translation>Začnimo!</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
@@ -2398,8 +2398,8 @@ V projekt ne bo dodano.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
-        <source>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation>We&apos;ve been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</translation>
+        <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
+        <translation>Zelo smo se potrudili, da bi aplikacijo še izboljšali! Ta posodobitev prinaša svež videz in izboljšano navigacijo, zaradi česar boš hitreje našeš, kar potrebuješ. Razišči naokrog!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>

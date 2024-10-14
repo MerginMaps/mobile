@@ -141,7 +141,6 @@ QVariant FeaturesModel::data( const QModelIndex &index, int role ) const
     case LayerName: return pair.layer() ? pair.layer()->name() : QString();
     case LayerIcon: return pair.layer() ? InputUtils::loadIconFromLayer( pair.layer() ) : QString();
     case Qt::DisplayRole: return featureTitle( pair );
-    case SortValue: return sortValue( pair );
   }
 
   return QVariant();
@@ -176,15 +175,6 @@ QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) cons
     return featurePair.feature().id();
 
   return title;
-}
-
-QVariant FeaturesModel::sortValue( const FeatureLayerPair &featurePair ) const
-{
-  QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( featurePair.layer() ) );
-  context.setFeature( featurePair.feature() );
-  QgsExpression expr( mSortExpression );
-  QVariant result = expr.evaluate( &context );
-  return result;
 }
 
 QString FeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
@@ -261,6 +251,20 @@ void FeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
     request.setFilterExpression( buildSearchExpression() );
   }
 
+  if ( mUseAttributeTableSortOrder && mLayer && !mLayer->attributeTableConfig().sortExpression().isEmpty() )
+  {
+    // get a context with global, project and layer scopes
+    // QGIS docs are not very clear, but this context is also used for evaluation of the request's 'order by' expressions too
+    QgsExpressionContext context = mLayer->createExpressionContext();
+    request.setExpressionContext( context );
+    request.setOrderBy( QgsFeatureRequest::OrderBy(
+    {
+      QgsFeatureRequest::OrderByClause(
+      mLayer->attributeTableConfig().sortExpression(),
+      mLayer->attributeTableConfig().sortOrder() == Qt::AscendingOrder )
+    } ) );
+  }
+
   request.setLimit( FEATURES_LIMIT );
 }
 
@@ -290,7 +294,6 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[SearchResult] = QStringLiteral( "SearchResult" ).toLatin1();
   roleNames[LayerName] = QStringLiteral( "LayerName" ).toLatin1();
   roleNames[LayerIcon] = QStringLiteral( "LayerIcon" ).toLatin1();
-  roleNames[SortValue] = QStringLiteral( "SortValue" ).toLatin1();
   return roleNames;
 }
 
@@ -363,7 +366,6 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
     }
 
     mLayer = newLayer;
-    setupSorting();
     emit layerChanged( mLayer );
 
     if ( mLayer )
@@ -383,20 +385,4 @@ void FeaturesModel::setLayer( QgsVectorLayer *newLayer )
 QgsVectorLayer *FeaturesModel::layer() const
 {
   return mLayer;
-}
-
-void FeaturesModel::setupSorting()
-{
-  mSortExpression = mLayer ? mLayer->attributeTableConfig().sortExpression() : QString();
-  mSortOrder = mLayer ? mLayer->attributeTableConfig().sortOrder() : Qt::AscendingOrder;
-}
-
-bool FeaturesModel::sortingEnabled() const
-{
-  return !mSortExpression.isEmpty();
-}
-
-Qt::SortOrder FeaturesModel::sortOrder() const
-{
-  return mSortOrder;
 }

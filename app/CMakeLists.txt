@@ -53,7 +53,6 @@ set(MM_SRCS
     compass.cpp
     featurelayerpair.cpp
     featuresmodel.cpp
-    featuresproxymodel.cpp
     fieldsmodel.cpp
     guidelinecontroller.cpp
     identifykit.cpp
@@ -138,7 +137,6 @@ set(MM_HDRS
     enumhelper.h
     featurelayerpair.h
     featuresmodel.h
-    featuresproxymodel.h
     fieldsmodel.h
     guidelinecontroller.h
     identifykit.h
