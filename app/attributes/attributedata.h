@@ -57,8 +57,10 @@ class FormItem
       int parentTabId,
       FormItem::FormItemType type,
       const QString &name,
+      const QgsExpression &nameExpression,
       bool showName,
       bool isEditable,
+      const QgsExpression &editableExpression,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsExpression &visibilityExpression,
@@ -71,8 +73,10 @@ class FormItem
       const QString &groupName,
       int parentTabId,
       const QString &name,
+      const QgsExpression &nameExpression,
       bool showName,
       bool isEditable,
+      const QgsExpression &editableExpression,
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsExpression &visibilityExpression
@@ -110,7 +114,6 @@ class FormItem
 
     FormItem::FormItemType type() const;
     QString name() const;
-    bool isEditable() const;
     QString editorWidgetType() const;
     QVariantMap editorWidgetConfig() const;
     int fieldIndex() const;
@@ -121,6 +124,9 @@ class FormItem
     FieldValidator::ValidationStatus validationStatus() const;
     void setValidationStatus( FieldValidator::ValidationStatus status );
 
+    bool isEditable() const;
+    void setEditable( bool editable );
+
     bool isVisible() const;
     void setVisible( bool visible );
 
@@ -129,6 +135,8 @@ class FormItem
     int parentTabId() const;
 
     QgsExpression visibilityExpression() const;
+    QgsExpression nameExpression() const;
+    QgsExpression editableExpression() const;
 
     bool visible() const;
 
@@ -156,13 +164,15 @@ class FormItem
     const FormItem::FormItemType mType;
     const QString mName;
     const bool mShowName = true; // "Show label" in Widget Display group in QGIS widget settings
-    const bool mIsEditable;
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;
     const QgsExpression mVisibilityExpression;
+    const QgsExpression mNameExpression;
+    const QgsExpression mEditableExpression;
 
     QString mValidationMessage;
     FieldValidator::ValidationStatus mValidationStatus = FieldValidator::Valid;
+    bool mIsEditable = true;
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
     QVariant mRawValue;
@@ -176,7 +186,9 @@ class  TabItem
     TabItem( const int &id,
              const QString &name,
              const QVector<QUuid> &formItems,
-             const QgsExpression &visibilityExpression
+             const QgsExpression &visibilityExpression,
+             const QgsExpression &nameExpression,
+             const QgsExpression &editableExpression
            );
 
     QString name() const;
@@ -188,12 +200,16 @@ class  TabItem
     int tabIndex() const;
 
     QgsExpression visibilityExpression() const;
+    QgsExpression nameExpression() const;
+    QgsExpression editableExpression() const;
 
   private:
     const int mTabIndex;
     const QString mName;
     const QVector<QUuid> mFormItems;
     const QgsExpression mVisibilityExpression;
+    const QgsExpression mNameExpression;
+    const QgsExpression mEditableExpression;
     bool mVisible = false;
 };
 

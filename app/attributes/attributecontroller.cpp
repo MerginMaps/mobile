@@ -232,9 +232,22 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
+        //Alias|name expression
+        QgsEditFormConfig editFormConfig = layer->editFormConfig();
+        QString fieldName = field.name();
+        QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
+        QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
+        QString nameExpressionString = nameProperty.expressionString();
+        QgsExpression nameExpression( nameExpressionString );
+
+        //Editable expression
+        QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
+        QString editableExpressionString = editableProperty.expressionString();
+        QgsExpression editableExpression( editableExpressionString );
+
         if ( !expression.isEmpty() )
         {
-          expressions << field.constraints().constraintExpression();
+          expressions << field.constraints().constraintExpression() << nameExpression << editableExpression;
         }
 
         bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
@@ -249,8 +262,10 @@ void AttributeController::flatten(
               groupName,
               parentTabRow,
               layer->attributeDisplayName( fieldIndex ),
+              nameExpression,
               editorField->showLabel(),
               !isReadOnly,
+              editableExpression,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               parentVisibilityExpressions // field doesn't have visibility expression itself

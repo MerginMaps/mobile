@@ -22,8 +22,10 @@ FormItem::FormItem( const QUuid &id,
                     const int parentTabId,
                     FormItem::FormItemType type,
                     const QString &name,
+                    const QgsExpression &nameExpression,
                     bool showName,
                     bool isEditable,
+                    const QgsExpression &editableExpression,
                     const QgsEditorWidgetSetup &editorWidgetSetup,
                     int fieldIndex,
                     const QgsExpression &visibilityExpression,
@@ -35,8 +37,10 @@ FormItem::FormItem( const QUuid &id,
   , mParentTabId( parentTabId )
   , mType( type )
   , mName( name )
+  , mNameExpression( nameExpression ) //mNameExpression
   , mShowName( showName )
   , mIsEditable( isEditable )
+  , mEditableExpression( editableExpression )
   , mEditorWidgetSetup( editorWidgetSetup )
   , mFieldIndex( fieldIndex )
   , mVisibilityExpression( visibilityExpression )
@@ -48,8 +52,8 @@ FormItem *FormItem::createFieldItem( const QUuid &id,
                                      const QgsField &field,
                                      const QString &groupName,
                                      int parentTabId,
-                                     const QString &name, bool showName,
-                                     bool isEditable,
+                                     const QString &name, const QgsExpression &nameExpression, bool showName,
+                                     bool isEditable, const QgsExpression &editableExpression,
                                      const QgsEditorWidgetSetup
                                      &editorWidgetSetup,
                                      int fieldIndex,
@@ -63,8 +67,10 @@ FormItem *FormItem::createFieldItem( const QUuid &id,
            parentTabId,
            FormItem::Field,
            name,
+           nameExpression,
            showName,
            isEditable,
+           editableExpression,
            editorWidgetSetup,
            fieldIndex,
            visibilityExpression,
@@ -88,8 +94,10 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
     parentTabId,
     FormItem::Relation,
     name,
+    QgsExpression(),
     showName,
     true,
+    QgsExpression(),
     QgsEditorWidgetSetup(),
     -1,
     visibilityExpression,
@@ -119,8 +127,10 @@ FormItem *FormItem::createSpacerItem(
            parentTabId,
            FormItem::Spacer,
            name,
+           QgsExpression(),
            false, // label is never shown for spacer
            false,
+           QgsExpression(),
            config,
            -1,
            visibilityExpression,
@@ -153,8 +163,10 @@ FormItem *FormItem::createRichTextItem(
     parentTabId,
     FormItem::RichText,
     name,
+    QgsExpression(),
     showName,
     false,
+    QgsExpression(),
     config,
     -1,
     visibilityExpression,
@@ -228,6 +240,11 @@ void FormItem::setVisible( bool visible )
   mVisible = visible;
 }
 
+void FormItem::setEditable( bool editable )
+{
+  mIsEditable = editable;
+}
+
 QUuid FormItem::id() const
 {
   return mId;
@@ -241,6 +258,16 @@ int FormItem::parentTabId() const
 QgsExpression FormItem::visibilityExpression() const
 {
   return mVisibilityExpression;
+}
+
+QgsExpression FormItem::nameExpression() const
+{
+  return mNameExpression;
+}
+
+QgsExpression FormItem::editableExpression() const
+{
+  return mEditableExpression;
 }
 
 bool FormItem::visible() const
@@ -292,11 +319,15 @@ void FormItem::setRawValue( const QVariant &rawValue )
 TabItem::TabItem( const int &id,
                   const QString &name,
                   const QVector<QUuid> &formItems,
-                  const QgsExpression &visibilityExpression )
+                  const QgsExpression &visibilityExpression,
+                  const QgsExpression &aliasExpression,
+                  const QgsExpression &editableExpression )
   : mTabIndex( id )
   , mName( name )
   , mFormItems( formItems )
   , mVisibilityExpression( visibilityExpression )
+  , mNameExpression( aliasExpression )
+  , mEditableExpression( editableExpression )
 {
 }
 
@@ -323,6 +354,16 @@ int TabItem::tabIndex() const
 QgsExpression TabItem::visibilityExpression() const
 {
   return mVisibilityExpression;
+}
+
+QgsExpression TabItem::nameExpression() const
+{
+  return mNameExpression;
+}
+
+QgsExpression TabItem::editableExpression() const
+{
+  return mEditableExpression;
 }
 
 const QVector<QUuid> TabItem::formItems() const
