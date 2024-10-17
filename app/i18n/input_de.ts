@@ -484,7 +484,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Sie müssen Bluetooth aktivieren, um den neuen GPS-Empfänger zu verbinden.</translation>
+        <translation>Sie müssen Bluetooth aktivieren, um einen neuen GPS-Empfänger zu verbinden.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
