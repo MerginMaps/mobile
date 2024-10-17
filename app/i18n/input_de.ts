@@ -1404,7 +1404,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="21"/>
         <source>This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration.</source>
-        <translation>Dieses Projekt ist derzeit nicht in der Cloud hochgeladen. Laden Sie es hoch, um die Synchronisation und Zusammenarbeit zu aktivieren.</translation>
+        <translation>Dieses Projekt ist derzeit nicht in der Cloud hochgeladen. Laden Sie es hoch, um die Synchronisierung und Zusammenarbeit zu aktivieren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="22"/>
