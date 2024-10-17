@@ -2051,7 +2051,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
         <source>Manage GPS receivers</source>
-        <translation>GPS Empfänger verwalten</translation>
+        <translation>GPS-Empfänger verwalten</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
