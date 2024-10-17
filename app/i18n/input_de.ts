@@ -2101,12 +2101,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in meters</source>
-        <translation>Intervall Schwelle, in Metern</translation>
+        <translation>Intervall-Schwelle, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Intervall Schwelle, in Sekunden</translation>
+        <translation>Intervall-Schwelle, in Sekunden</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="146"/>
