@@ -2096,7 +2096,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>Im Aufzeichnungs-Modus wird in jedem Intervall ein Punk zum Objekt hinzugefügt</translation>
+        <translation>Im Aufzeichnungs-Modus wird nach jedem Intervall ein Punkt zum Objekt hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
