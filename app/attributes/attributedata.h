@@ -113,7 +113,10 @@ class FormItem
     );
 
     FormItem::FormItemType type() const;
+
     QString name() const;
+    void setName( QString name );
+
     QString editorWidgetType() const;
     QVariantMap editorWidgetConfig() const;
     int fieldIndex() const;
@@ -162,7 +165,6 @@ class FormItem
     const QString mGroupName; //empty for no group, group/tab name if widget is in container
     const int mParentTabId;
     const FormItem::FormItemType mType;
-    const QString mName;
     const bool mShowName = true; // "Show label" in Widget Display group in QGIS widget settings
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;
@@ -170,6 +172,7 @@ class FormItem
     const QgsExpression mNameExpression;
     const QgsExpression mEditableExpression;
 
+    QString mName;
     QString mValidationMessage;
     FieldValidator::ValidationStatus mValidationStatus = FieldValidator::Valid;
     bool mIsEditable = true;
@@ -186,9 +189,7 @@ class  TabItem
     TabItem( const int &id,
              const QString &name,
              const QVector<QUuid> &formItems,
-             const QgsExpression &visibilityExpression,
-             const QgsExpression &nameExpression,
-             const QgsExpression &editableExpression
+             const QgsExpression &visibilityExpression
            );
 
     QString name() const;
@@ -200,16 +201,12 @@ class  TabItem
     int tabIndex() const;
 
     QgsExpression visibilityExpression() const;
-    QgsExpression nameExpression() const;
-    QgsExpression editableExpression() const;
 
   private:
     const int mTabIndex;
     const QString mName;
     const QVector<QUuid> mFormItems;
     const QgsExpression mVisibilityExpression;
-    const QgsExpression mNameExpression;
-    const QgsExpression mEditableExpression;
     bool mVisible = false;
 };
 

@@ -187,6 +187,11 @@ QString FormItem::name() const
   return mName;
 }
 
+void FormItem::setName( QString name )
+{
+  mName = name;
+}
+
 bool FormItem::isEditable() const
 {
   return mIsEditable;
@@ -319,15 +324,11 @@ void FormItem::setRawValue( const QVariant &rawValue )
 TabItem::TabItem( const int &id,
                   const QString &name,
                   const QVector<QUuid> &formItems,
-                  const QgsExpression &visibilityExpression,
-                  const QgsExpression &aliasExpression,
-                  const QgsExpression &editableExpression )
+                  const QgsExpression &visibilityExpression )
   : mTabIndex( id )
   , mName( name )
   , mFormItems( formItems )
   , mVisibilityExpression( visibilityExpression )
-  , mNameExpression( aliasExpression )
-  , mEditableExpression( editableExpression )
 {
 }
 
@@ -354,16 +355,6 @@ int TabItem::tabIndex() const
 QgsExpression TabItem::visibilityExpression() const
 {
   return mVisibilityExpression;
-}
-
-QgsExpression TabItem::nameExpression() const
-{
-  return mNameExpression;
-}
-
-QgsExpression TabItem::editableExpression() const
-{
-  return mEditableExpression;
 }
 
 const QVector<QUuid> TabItem::formItems() const

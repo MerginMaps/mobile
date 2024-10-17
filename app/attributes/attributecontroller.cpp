@@ -919,6 +919,56 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
+  // Evaluate form items editability
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      bool editable = item->isEditable();
+      QgsExpression exp = item->editableExpression();
+      exp.prepare( &expressionContext );
+
+      if ( exp.isValid() )
+      {
+        editable = exp.evaluate( &expressionContext ).toInt();
+      }
+
+      if ( item->isEditable() != editable )
+      {
+        item->setEditable( editable );
+        changedFormItems << item->id();
+      }
+
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate form items alias/name
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QString name = item->name();
+      QgsExpression exp = item->nameExpression();
+      exp.prepare( &expressionContext );
+
+      if ( exp.isValid() )
+      {
+        name = exp.evaluate( &expressionContext ).toString();
+      }
+
+      if ( item->name() != name )
+      {
+        item->setName( name );
+        changedFormItems << item->id();
+      }
+
+      ++formItemsIterator;
+    }
+  }
+
   // Evaluate form items value state - hard/soft constraints, value validity
   {
     bool containsValidationError = false;
