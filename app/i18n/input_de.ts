@@ -2136,7 +2136,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Auto-lock position</source>
-        <translation>Auto-Sperren Position</translation>
+        <translation>Position auto-sperren </translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
