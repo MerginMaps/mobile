@@ -92,7 +92,7 @@
     <message>
         <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation>Die Speicherberechtigung wurde dauerhaft verweigert. Erlauben Sie dies in den Einstellungen, um Bilder aus der Galerie zu laden</translation>
+        <translation>Die Speicherberechtigung wurde dauerhaft verweigert. Geben Sie diese in den Einstellungen, um Bilder aus der Galerie laden zu können.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="267"/>
