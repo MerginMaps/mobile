@@ -2860,7 +2860,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="330"/>
         <source>Local changes</source>
-        <translation>Änderungen</translation>
+        <translation>Lokale Änderungen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="339"/>
