@@ -69,7 +69,7 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Ihr Gerät unterstützt kein Tracking - die Mindestanforderung ist Android 8.0.</translation>
+        <translation>Ihr Gerät unterstützt kein Tracking - erst ab Android 8.0.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
