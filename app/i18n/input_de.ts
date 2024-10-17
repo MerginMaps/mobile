@@ -2784,7 +2784,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/geoposition.cpp" line="155"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Geschätzter Fixpunkt (Koppelnavigation)</translation>
+        <translation>Geschätzter Fix (Koppelnavigation)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="158"/>
