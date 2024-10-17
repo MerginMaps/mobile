@@ -2071,7 +2071,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
         <source>Streaming mode</source>
-        <translation>Aufzeichnungs Modus</translation>
+        <translation>Aufzeichnungs-Modus</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="114"/>
