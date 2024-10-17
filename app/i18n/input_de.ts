@@ -2126,7 +2126,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Automatically sync changes</source>
-        <translation>Änderungen werden automatisch synchronisiert</translation>
+        <translation>Änderungen werden automatisch synchronisiert.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
