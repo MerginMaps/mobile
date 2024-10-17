@@ -79,7 +79,7 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation>Bitte aktivieren Sie die Standortbestimmung ihres Gerätes, bevor Sie das Tracking starten</translation>
+        <translation>Bitte aktivieren Sie die Standortbestimmung ihres Gerätes, bevor Sie das Tracking starten.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
