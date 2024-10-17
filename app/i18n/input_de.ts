@@ -277,7 +277,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../inpututils.cpp" line="1462"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>Bildschirm DPI: %1x%2
+        <translation>Bildschirm-DPI: %1x%2
 </translation>
     </message>
     <message>
