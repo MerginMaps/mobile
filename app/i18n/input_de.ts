@@ -2238,7 +2238,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
@@ -2246,7 +2246,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
-        <translation>Rückgängig</translation>
+        <translation>Rückgängig machen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
