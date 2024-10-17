@@ -390,7 +390,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
         <source>Join the workspace and explore together!</source>
-        <translation>Treten Sie dem Arbeitsbereich bei und entdecken Sie gemeinsam</translation>
+        <translation>Treten Sie dem Arbeitsbereich bei und nehmen Sie gemeinsam auf!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
