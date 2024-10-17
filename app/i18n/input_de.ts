@@ -2485,7 +2485,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
-        <translation>Bitte geben Sie Ihre Branche an</translation>
+        <translation>Bitte geben Sie Ihre Branche an.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
