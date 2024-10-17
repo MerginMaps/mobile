@@ -33,12 +33,12 @@
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (fused)</source>
-        <translation>Intern (fused)</translation>
+        <translation>Intern (fusioniert)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (gps)</source>
-        <translation>Intern (gps)</translation>
+        <translation>Intern (GPS)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="214"/>
