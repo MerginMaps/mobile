@@ -2233,7 +2233,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Bitte stellen Sie sicher, dass die geteilte Linie Ihr Feature kreuzt. Das Feature muss eine gültige Geometrie haben, damit es geteilt werden kann.</translation>
+        <translation>Bitte stellen Sie sicher, dass die Teilungs-Linie Ihr Objekt schneidet. Das Objekt muss eine gültige Geometrie haben, damit es geteilt werden kann.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
