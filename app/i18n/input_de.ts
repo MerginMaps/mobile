@@ -1629,7 +1629,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
-        <translation>Server wird nicht unterstützt. Bitte kontaktieren Sie Ihren Server Administrator</translation>
+        <translation>Server wird nicht unterstützt. Bitte kontaktieren Sie Ihren Server Administrator.</translation>
     </message>
 </context>
 <context>
