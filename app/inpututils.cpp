@@ -168,25 +168,48 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, QgsProject *activeProject )
 {
-  Qgis::DistanceUnit distUnit = destUnit;
+  if ( !activeProject )
+    return QString();
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  return InputUtils::formatDistanceHelper( distanceInMeters, precision, activeProject->distanceUnits() );
+}
+
+QString InputUtils::formatDistanceHelper( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+{
+  if ( destUnit == Qgis::DistanceUnit::Unknown )
   {
-    distUnit = QgsProject::instance()->distanceUnits();
+    destUnit = Qgis::DistanceUnit::Meters;
   }
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
-  {
-    return QString::number( distanceInMeters, 'f', precision );
-  }
-
-  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, destUnit );
   double distance = distanceInMeters * factor;
-  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
 
   return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+}
+
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *activeProject )
+{
+  if ( !activeProject )
+    return QString();
+
+  return InputUtils::formatAreaHelper( areaInSquareMeters, precision, activeProject->areaUnits() );
+}
+
+QString InputUtils::formatAreaHelper( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit )
+{
+  if ( destUnit == Qgis::AreaUnit::Unknown )
+  {
+    destUnit = Qgis::AreaUnit::SquareMeters;
+  }
+
+  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::AreaUnit::SquareMeters, destUnit );
+  double area = areaInSquareMeters * factor;
+  QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
+
+  return QString( "%1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
@@ -2193,4 +2216,9 @@ bool InputUtils::openLink( const QString &homePath, const QString &link )
   }
 
   return true;
+}
+
+double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
+{
+  return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
 }

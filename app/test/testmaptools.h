@@ -29,6 +29,7 @@ class TestMapTools : public QObject
     void testSnapping();
     void testSplitting();
     void testRecording();
+    void testMeasuring();
 
     void testExistingVertices();
     void testMidSegmentVertices();
