@@ -1962,7 +1962,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation>Möchten Sie das Foto löschen oder die Verknüpfung aufheben? Durch das Löschen wird das Foto vollständig aus Ihrem Projekt entfernt, während durch das Aufheben der Verknüpfung das Foto in Ihrem Projekt verbleibt, aber nicht mehr mit dem spezifischen Objekt verknüpft ist.</translation>
+        <translation>Möchten Sie das Foto löschen oder die Verknüpfung aufheben? Durch das Löschen wird das Foto vollständig aus Ihrem Projekt entfernt. Durch das Aufheben der Verknüpfung verbleibt das Foto in Ihrem Projekt, ist aber nicht mehr mit dem spezifischen Objekt verknüpft.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
