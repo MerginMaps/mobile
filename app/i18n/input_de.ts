@@ -2564,12 +2564,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
-        <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen</translation>
+        <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
-        <translation>Arbeitsbereich %1 ist bereits vorhanden</translation>
+        <translation>Arbeitsbereich %1 ist bereits vorhanden.</translation>
     </message>
 </context>
 <context>
