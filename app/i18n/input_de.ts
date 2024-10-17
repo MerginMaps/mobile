@@ -385,7 +385,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="61"/>
         <source>You have been invited to a workspace</source>
-        <translation>Sie wurden zu einem Arbeitsbereich eingeladen</translation>
+        <translation>Sie wurden zu einem Arbeitsbereich eingeladen.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
