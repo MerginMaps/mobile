@@ -2845,7 +2845,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="299"/>
         <source>Zoom to project</source>
-        <translation>Gesamtansicht</translation>
+        <translation>Auf Projekt zoomen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="308"/>
