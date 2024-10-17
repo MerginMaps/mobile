@@ -2210,12 +2210,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="117"/>
         <source>I want to subscribe to the newsletter</source>
-        <translation>Ich möchte mich für den Newsletter anmelden</translation>
+        <translation>Ich möchte mich für den Newsletter anmelden.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="142"/>
         <source>Already have an account?</source>
-        <translation>Ich habe bereits ein Benutzerkonto</translation>
+        <translation>Ich habe bereits ein Benutzerkonto.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="148"/>
