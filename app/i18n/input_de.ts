@@ -107,7 +107,7 @@
     <message>
         <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>Wir benötigen eine Kameraerlaubnis, um ein Foto zu machen</translation>
+        <translation>Wir benötigen eine Kameraerlaubnis, um ein Foto zu machen.</translation>
     </message>
 </context>
 <context>
