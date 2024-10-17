@@ -1542,7 +1542,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="23"/>
         <source>Position tracking</source>
-        <translation>Positions Tracking</translation>
+        <translation>Positions-Tracking</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
