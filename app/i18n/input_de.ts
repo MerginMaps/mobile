@@ -1026,7 +1026,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>Manage GPS receivers</source>
-        <translation>GPS Empfänger verwalten</translation>
+        <translation>GPS-Empfänger verwalten</translation>
     </message>
 </context>
 <context>
