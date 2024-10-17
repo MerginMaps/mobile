@@ -1049,7 +1049,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>QGIS website</source>
-        <translation>QGIS Webseite</translation>
+        <translation>QGIS-Webseite</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
