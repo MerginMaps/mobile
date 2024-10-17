@@ -1547,7 +1547,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Verfolgen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
+        <translation>Nehmen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm auf. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
