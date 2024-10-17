@@ -2582,7 +2582,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation>Änderungen konnten nicht übernommen werden</translation>
+        <translation>Änderungen konnten nicht übernommen werden.</translation>
     </message>
 </context>
 <context>
@@ -2595,7 +2595,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
         <source>GPS receiver of this device</source>
-        <translation>GPS Empfänger dieses Gerätes</translation>
+        <translation>GPS-Empfänger dieses Gerätes</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
