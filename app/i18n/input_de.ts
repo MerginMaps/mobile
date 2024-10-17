@@ -2081,7 +2081,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="115"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Wählen Sie eine Intervall Typ zur automatischen Aufzeichnung</translation>
+        <translation>Wählen Sie eine Intervall-Typ für die automatische Aufzeichnung.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
