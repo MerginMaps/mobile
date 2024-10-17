@@ -423,7 +423,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 von Mergin zu.</translation>
+        <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 zu.</translation>
     </message>
 </context>
 <context>
