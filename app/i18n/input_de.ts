@@ -2091,7 +2091,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="132"/>
         <source>Threshold interval</source>
-        <translation>Intervall Schwelle</translation>
+        <translation>Intervall-Schwelle</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
