@@ -2794,7 +2794,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../main.cpp" line="537"/>
         <source>Report submitted. Please contact us on %1</source>
-        <translation>Bericht gesendet. Kontaktiere uns unter %1</translation>
+        <translation>Bericht gesendet. Kontaktieren Sie  uns unter %1.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="542"/>
