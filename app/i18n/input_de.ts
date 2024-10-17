@@ -1463,7 +1463,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
         <source>Your server will soon be out of date</source>
-        <translation>Ihr Server wird in Kürze veraltet veraltet sein</translation>
+        <translation>Ihr Server wird in Kürze veraltet sein.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
