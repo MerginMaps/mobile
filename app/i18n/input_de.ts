@@ -849,7 +849,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
         <source>Failed to process the image</source>
-        <translation>Das Bild konnte nicht verarbeitet werden</translation>
+        <translation>Das Bild konnte nicht verarbeitet werden.</translation>
     </message>
 </context>
 <context>
