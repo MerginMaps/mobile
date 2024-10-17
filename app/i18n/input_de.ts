@@ -1280,7 +1280,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
         <source>Create line to split the selected feature</source>
-        <translation>Linie erstellen, um das ausgewählte Feature zu teilen</translation>
+        <translation>Linie erstellen, um das ausgewählte Feature zu teilen.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="523"/>
