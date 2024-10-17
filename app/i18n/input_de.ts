@@ -981,7 +981,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="205"/>
         <source>Fix quality</source>
-        <translation>Fixierungstyp</translation>
+        <translation>Fix-Typ</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
