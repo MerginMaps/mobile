@@ -2648,7 +2648,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Aufzeichnung konnte nicht gestartet werden, bitte kontaktieren Sie den Support</translation>
+        <translation>Tracking konnte nicht gestartet werden, bitte kontaktieren Sie den Support.</translation>
     </message>
 </context>
 <context>
@@ -2656,7 +2656,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation>Der Projekt Name enthält ungültige Zeichen</translation>
+        <translation>Der Projektname enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
