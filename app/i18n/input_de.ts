@@ -1736,7 +1736,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="24"/>
         <source>You have reached a maximum number of projects</source>
-        <translation>Sie haben die maximale Anzahl an Projekten erreicht</translation>
+        <translation>Sie haben die maximale Anzahl an Projekten erreicht.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="26"/>
