@@ -2630,7 +2630,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation>Bluetooth Gerät</translation>
+        <translation>Bluetooth-Gerät</translation>
     </message>
 </context>
 <context>
@@ -2638,7 +2638,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="154"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>Konnten den Aufzeichnungs-Layer für das Projekt nicht finden</translation>
+        <translation>Konnten den Aufzeichnungs-Layer für das Projekt nicht finden.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="163"/>
