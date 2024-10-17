@@ -1519,7 +1519,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="146"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
-        <translation>Eine Verbindung zu externen Empfängern über Bluetooth wird nicht unterstützt</translation>
+        <translation>Eine Verbindung zu externen Empfängern über Bluetooth wird nicht unterstützt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
