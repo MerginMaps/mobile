@@ -2519,17 +2519,17 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="841"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>Passwort nicht sicher genug. Es muss%1 mindestens 8 Zeichen haben%1 Kleinbuchstaben enthalten%1 Großbuchstaben enthalten%1 Zahlen oder Sonderzeichen enthalten</translation>
+        <translation>Passwort nicht sicher genug. Es muss%1 mindestens 8 Zeichen haben%1 Klein- und Großbuchstaben enthalten%1 und Zahlen oder Sonderzeichen enthalten.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="854"/>
         <source>Passwords do not match</source>
-        <translation>Passwörter nicht identisch</translation>
+        <translation>Passwörter sind nicht identisch.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="861"/>
         <source>Please accept Terms and Privacy Policy</source>
-        <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen</translation>
+        <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="891"/>
