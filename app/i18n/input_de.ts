@@ -127,7 +127,7 @@
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation>Keine Verbindung, Verbindungsaufbau wird wiederholt in (%1)</translation>
+        <translation>Keine Verbindung. Der Verbindungsaufbau wird in (%1) wiederholt.</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
