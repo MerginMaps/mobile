@@ -926,7 +926,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="93"/>
         <source>Longitude</source>
-        <translation>Longitude</translation>
+        <translation>Längengrad</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="96"/>
