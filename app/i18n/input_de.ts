@@ -2046,7 +2046,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold, in meters</source>
-        <translation>GPS Genauigkeitsschwellenwert, in Metern</translation>
+        <translation>GPS-Genauigkeitsschwellenwert, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
