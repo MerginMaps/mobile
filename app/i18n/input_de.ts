@@ -1275,7 +1275,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="101"/>
         <source>Mark the geometry on the map and click record</source>
-        <translation>Setzen Sie einen Punkt auf der Karte und klicken Sie danach auf &quot;Erfassen&quot;</translation>
+        <translation>Setzen Sie einen Punkt auf der Karte und klicken Sie danach auf &quot;Erfassen&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
