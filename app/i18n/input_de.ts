@@ -346,7 +346,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation>Es konnte keine QGIS Projektdatei gefunden werden.</translation>
+        <translation>Es konnte keine QGIS-Projektdatei gefunden werden.</translation>
     </message>
 </context>
 <context>
