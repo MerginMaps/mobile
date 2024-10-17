@@ -44,7 +44,7 @@
         <location filename="../position/providers/androidpositionprovider.cpp" line="214"/>
         <location filename="../position/providers/androidpositionprovider.cpp" line="228"/>
         <source>No location permissions</source>
-        <translation> Keine Standortberechtigungen</translation>
+        <translation>Keine Standortberechtigungen</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="230"/>
@@ -154,7 +154,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="165"/>
+        <location filename="../featuresmodel.cpp" line="164"/>
         <source>Unknown title</source>
         <translation>Unbekannter Titel</translation>
     </message>
@@ -738,7 +738,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
         <source>Add feature</source>
         <translation>Objekt hinzufügen</translation>
     </message>
@@ -2794,12 +2794,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Unbekannter Fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="539"/>
+        <location filename="../main.cpp" line="537"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Bericht gesendet. Kontaktiere uns unter %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="544"/>
+        <location filename="../main.cpp" line="542"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Bericht konnte nicht gesendet werden. Bitte Internetverbindung überprüfen.</translation>
     </message>
