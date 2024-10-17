@@ -1262,7 +1262,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="202"/>
         <source>Server address</source>
-        <translation>Server Adresse</translation>
+        <translation>Server-Adresse</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="218"/>
