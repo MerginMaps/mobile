@@ -33,6 +33,7 @@ MMDrawer {
 
   property string perimeter: mapTool?.perimeter ?? 0
   property string area: mapTool?.area ?? 0
+  property bool isPolygon: root.area > 0
 
   signal measureFinished()
 
@@ -81,7 +82,7 @@ MMDrawer {
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
-        title: measurementFinalized ? qsTr( "Perimeter" ) : qsTr( "Length" )
+        title: measurementFinalized && root.isPolygon ? qsTr( "Perimeter" ) : qsTr( "Length" ) //Perimeter only if its a polygon
         value: __inputUtils.formatDistanceInProjectUnit( root.perimeter, 1, __activeProject.qgsProject )
       }
 
@@ -91,7 +92,7 @@ MMDrawer {
         title: qsTr( "Area" )
         value: __inputUtils.formatAreaInProjectUnit( root.area, 1, __activeProject.qgsProject )
         alignmentRight: true
-        visible: measurementFinalized && root.area > 0
+        visible: measurementFinalized && root.isPolygon
       }
     }
 
