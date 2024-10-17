@@ -1802,7 +1802,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="23"/>
         <source>Unfortunately, your project could not be opened, please refer to our documentation to understand common problems.</source>
-        <translation>Leider konnte Ihr Projekt nicht geöffnet werden. Bitte ziehen Sie unsere Dokumentation zu Rate, um häufige Probleme zu verstehen.</translation>
+        <translation>Leider konnte Ihr Projekt nicht geöffnet werden. Bitte ziehen Sie unsere Dokumentation zu Rate, um häufige Probleme verstehen zu lernen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="26"/>
