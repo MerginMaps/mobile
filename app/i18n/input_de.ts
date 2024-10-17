@@ -2121,7 +2121,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
-        <translation>Jedes Feld bietet die Option, den gleichen Wert für das nächste Objekt wiederzuverwenden</translation>
+        <translation>Jedes Feld bietet die Option, denselben Wert wieder für das nächste Objekt zu verwenden.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
