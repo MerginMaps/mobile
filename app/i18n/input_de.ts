@@ -806,7 +806,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/form/MMFormPage.qml" line="107"/>
         <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
-        <translation>Bearbeite Objekt</translation>
+        <translation>Objekt bearbeiten </translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="223"/>
