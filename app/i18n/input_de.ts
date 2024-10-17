@@ -2638,12 +2638,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="154"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>Konnten den Aufzeichnungs-Layer für das Projekt nicht finden.</translation>
+        <translation>Konnte den Tracking-Layer für das Projekt nicht finden.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="163"/>
         <source>Tracking layer not found or invalid</source>
-        <translation>Aufzeichnungs-Layer wurde nicht gefunden oder ist ungültig</translation>
+        <translation>Tracking-Layer wurde nicht gefunden oder ist ungültig.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
