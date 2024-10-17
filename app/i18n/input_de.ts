@@ -1972,7 +1972,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
         <source>Unlink photo</source>
-        <translation>Unlink Foto</translation>
+        <translation>Foto-Verknüpfung aufheben</translation>
     </message>
 </context>
 <context>
