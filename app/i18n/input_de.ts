@@ -691,7 +691,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden Ihre Änderungen an der Geometrie verworfen. Wenn Sie die Änderungen stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden Ihre Änderungen an der Geometrie verworfen. Wenn Sie die Änderungen stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann in der Symbolleiste auf &apos;Fertig&apos;.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
