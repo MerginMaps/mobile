@@ -1690,7 +1690,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="63"/>
         <source>Your attention is required</source>
-        <translation>Ihre Aufmerksamkeit ist erforderlich</translation>
+        <translation>Ihre Aufmerksamkeit ist erforderlich.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
