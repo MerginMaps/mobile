@@ -1137,7 +1137,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation>Sichtbar auf der Karte</translation>
+        <translation>Auf der Karte sichtbar </translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
