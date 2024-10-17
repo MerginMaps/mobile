@@ -925,19 +925,23 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
-      bool editable = item->isEditable();
       QgsExpression exp = item->editableExpression();
-      exp.prepare( &expressionContext );
 
-      if ( exp.isValid() )
+      if ( !exp.expression().isEmpty() )
       {
-        editable = exp.evaluate( &expressionContext ).toInt();
-      }
+        bool editable = item->isEditable();
+        exp.prepare( &expressionContext );
 
-      if ( item->isEditable() != editable )
-      {
-        item->setEditable( editable );
-        changedFormItems << item->id();
+        if ( exp.isValid() )
+        {
+          editable = exp.evaluate( &expressionContext ).toInt();
+        }
+
+        if ( item->isEditable() != editable )
+        {
+          item->setEditable( editable );
+          changedFormItems << item->id();
+        }
       }
 
       ++formItemsIterator;
@@ -950,19 +954,23 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
-      QString name = item->name();
       QgsExpression exp = item->nameExpression();
-      exp.prepare( &expressionContext );
 
-      if ( exp.isValid() )
+      if ( !exp.expression().isEmpty() )
       {
-        name = exp.evaluate( &expressionContext ).toString();
-      }
+        QString name = item->name();
+        exp.prepare( &expressionContext );
 
-      if ( item->name() != name )
-      {
-        item->setName( name );
-        changedFormItems << item->id();
+        if ( exp.isValid() )
+        {
+          name = exp.evaluate( &expressionContext ).toString();
+        }
+
+        if ( item->name() != name )
+        {
+          item->setName( name );
+          changedFormItems << item->id();
+        }
       }
 
       ++formItemsIterator;
