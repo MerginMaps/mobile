@@ -2669,7 +2669,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Pending changes to synchronise</source>
-        <translation>Anstehende Änderungen für die Synchronisation</translation>
+        <translation>Zur Synchronisierung anstehende Änderungen </translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="107"/>
