@@ -2131,7 +2131,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
         <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Jedes Mal, wenn Sie Änderungen speichern, wird die App automatisch synchronisieren</translation>
+        <translation>Jedes Mal, wenn Sie Änderungen speichern, wird die App diese automatisch synchronisieren.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
