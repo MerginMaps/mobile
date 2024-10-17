@@ -336,7 +336,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="210"/>
         <source>Download failed, remove and retry</source>
-        <translation>Download fehlgeschlagen, Datei entfernen und erneut versuchen</translation>
+        <translation>Download fehlgeschlagen. Datei entfernen und erneut versuchen.</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="230"/>
