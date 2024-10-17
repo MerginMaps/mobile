@@ -844,7 +844,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
         <source>Could not create directory %1.</source>
-        <translation>Ordner %1 konnte nicht erstellt werden</translation>
+        <translation>Ordner %1 konnte nicht erstellt werden.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
