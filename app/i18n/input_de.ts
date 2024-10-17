@@ -97,7 +97,7 @@
     <message>
         <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
-        <translation>Mergin Maps benötigt Speicherberechtigung um Bilder aus der Gallerie zu laden</translation>
+        <translation>Mergin Maps benötigt Speicherberechtigung, um Bilder aus der Gallerie zu laden.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="285"/>
