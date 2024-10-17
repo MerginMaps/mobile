@@ -1915,12 +1915,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="24"/>
         <source>Yes, I want to remove</source>
-        <translation>Ja, ich will entfernen</translation>
+        <translation>Ja, ich will ihn entfernen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="25"/>
         <source>No, thanks</source>
-        <translation>Nein, Danke</translation>
+        <translation>Nein, Danke.</translation>
     </message>
 </context>
 <context>
