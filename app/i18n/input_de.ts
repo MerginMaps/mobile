@@ -986,7 +986,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
         <source>Satellites (in use/view)</source>
-        <translation>Satelliten (in Verwendung/Ansicht)</translation>
+        <translation>Satelliten (in Verwendung/Blick)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="238"/>
