@@ -1928,7 +1928,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
-        <translation>Rückgängig</translation>
+        <translation>Rückgängig machen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
