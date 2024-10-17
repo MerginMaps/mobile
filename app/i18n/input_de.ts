@@ -2916,7 +2916,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="826"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
-        <translation>Bei der Synchronisierung ist ein Problem aufgetreten. Wir werden es erneut versuchen. Klicken Sie hier, um mehr zu erfahren</translation>
+        <translation>Bei der Synchronisierung ist ein Problem aufgetreten. Wir werden es erneut versuchen. Klicken Sie hier, um mehr zu erfahren.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="973"/>
