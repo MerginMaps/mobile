@@ -2504,12 +2504,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="820"/>
         <source>Username must have at least 4 characters</source>
-        <translation>Der Benutzername muss mindestens 4 Zeichen haben</translation>
+        <translation>Der Benutzername muss mindestens 4 Zeichen haben.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="827"/>
         <source>Username contains invalid characters</source>
-        <translation>Der Benutzername enthält ungültige Zeichen</translation>
+        <translation>Der Benutzername enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="834"/>
