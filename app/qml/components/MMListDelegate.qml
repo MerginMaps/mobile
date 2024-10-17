@@ -43,6 +43,8 @@ Item {
   implicitWidth: ListView?.view?.width ?? 0 // in case ListView is injected as attached property (usually it is)
   implicitHeight: contentLayout.implicitHeight
 
+  opacity: visible ? 1 : 0 // hide invisible items without creating a binding loop
+
   MouseArea {
     anchors.fill: contentLayout
     onClicked: function( mouse ) {
@@ -118,9 +120,5 @@ Item {
       visible: root.hasLine
       color: __style.greyColor
     }
-  }
-
-  Component.onCompleted: {
-    root.height = visible ? contentLayout.implicitHeight : 0.1
   }
 }
