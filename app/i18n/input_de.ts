@@ -2769,17 +2769,17 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/geoposition.cpp" line="146"/>
         <source>PPS fix</source>
-        <translation>PPS Fix</translation>
+        <translation>PPS-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="149"/>
         <source>RTK fix</source>
-        <translation>RTK Fix</translation>
+        <translation>RTK-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="152"/>
         <source>RTK float</source>
-        <translation>RTK Float</translation>
+        <translation>RTK-Float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="155"/>
