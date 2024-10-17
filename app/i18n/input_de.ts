@@ -2116,7 +2116,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
         <source>Reuse last entered value</source>
-        <translation>Letzten Wert wiederverwenden</translation>
+        <translation>Zuletzt eingegebenen Wert wiederverwenden</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
