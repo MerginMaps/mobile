@@ -2480,7 +2480,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
-        <translation>Erstellen Ihres Arbeitsbereichs: Teilen Sie uns Ihre Branche mit.</translation>
+        <translation>Erstellung Ihres Arbeitsbereichs: Teilen Sie uns Ihre Branche mit.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
