@@ -1728,7 +1728,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="83"/>
         <source>QGIS log</source>
-        <translation>QGIS log</translation>
+        <translation>QGIS-Protokoll</translation>
     </message>
 </context>
 <context>
