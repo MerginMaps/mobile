@@ -821,7 +821,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
+        <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder.</translation>
     </message>
 </context>
 <context>
