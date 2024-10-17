@@ -1774,7 +1774,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
-        <translation>Erster Schritt ist ein neues Projekt zu erstellen</translation>
+        <translation>Im ersten Schritt erstellen wir ein neues Projekt.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
