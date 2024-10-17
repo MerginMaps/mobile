@@ -377,7 +377,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationController.qml" line="35"/>
         <source>You have pending workspace invitations.&lt;br&gt;Please %1accept or reject%2 them.</source>
-        <translation>Sie haben eine ausstehende Einladung zu einem Arbeitsbereich&lt;br&gt; Bitte %1akzeptieren oder ablehnen%2.</translation>
+        <translation>Sie haben eine ausstehende Einladung zu einem Arbeitsbereich&lt;br&gt;. Bitte %1akzeptieren oder ablehnen%2.</translation>
     </message>
 </context>
 <context>
