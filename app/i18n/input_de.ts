@@ -1910,7 +1910,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
-        <translation>Wollen Sie den Empfänger von der Liste der letzten Empfänger entfernen?</translation>
+        <translation>Wollen Sie den Empfänger von der Liste der zuletzt genutzten Empfänger entfernen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="24"/>
