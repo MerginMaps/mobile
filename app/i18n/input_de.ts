@@ -2307,7 +2307,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="68"/>
         <source>Using</source>
-        <translation>in Verwendung</translation>
+        <translation>In Verwendung</translation>
     </message>
 </context>
 <context>
