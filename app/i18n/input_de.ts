@@ -102,7 +102,7 @@
     <message>
         <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation>Keine Kameraerlaubnis erteilt, bitte in Einstellungen genehmigen.</translation>
+        <translation>Keine Kameraerlaubnis erteilt, bitte in den Einstellungen genehmigen.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="289"/>
