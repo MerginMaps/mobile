@@ -1593,7 +1593,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="21"/>
         <source>PROJ Error</source>
-        <translation>PROJ Fehler</translation>
+        <translation>PROJ-Fehler</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="24"/>
