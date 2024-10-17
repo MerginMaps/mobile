@@ -2284,7 +2284,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>k. A.</translation>
     </message>
 </context>
 <context>
@@ -2292,7 +2292,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="25"/>
         <source>You have reached a data limit</source>
-        <translation>Sie haben ein Datenlimit erreicht</translation>
+        <translation>Sie haben ein Datenlimit erreicht.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="28"/>
