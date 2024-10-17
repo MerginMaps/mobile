@@ -359,7 +359,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
         <source>We are bringing the benefits of open source GIS to businesses without compromises</source>
-        <translation>Wir bringen die Vorteile von Open Source GIS ohne Kompromisse in Unternehmen</translation>
+        <translation>Wir bringen die Vorteile von Open Source-GIS ohne Kompromisse in Unternehmen.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="85"/>
