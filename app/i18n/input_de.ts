@@ -2881,7 +2881,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="819"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal</translation>
+        <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="823"/>
