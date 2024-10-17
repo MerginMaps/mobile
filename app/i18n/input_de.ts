@@ -1864,7 +1864,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="44"/>
         <source>Once you have made some changes, they will appear here.</source>
-        <translation>Sobald Sie einige Änderungen vorgenommen haben, werden sie hier erscheinen</translation>
+        <translation>Sobald Sie einige Änderungen vorgenommen haben, werden sie hier erscheinen.</translation>
     </message>
 </context>
 <context>
