@@ -341,7 +341,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="230"/>
         <source>Found multiple QGIS project files</source>
-        <translation>Mehrere QGIS Projektdateien gefunden</translation>
+        <translation>Mehrere QGIS-Projektdateien gefunden</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
