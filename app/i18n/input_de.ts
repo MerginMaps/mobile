@@ -584,7 +584,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
         <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>Diese Aktion löscht Ihren Account. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie diesen zuerst an jemand anderen übertragen.</translation>
+        <translation>Diese Aktion löscht Ihren Account. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie diesen zuerst an jemand anderen übertragen oder den Arbeitsbereich schließen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
