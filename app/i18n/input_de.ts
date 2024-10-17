@@ -164,7 +164,7 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Vor dem Hinzufügen eines neuen Feldes bitte den Namen des vorhergehenden Feldes eingeben</translation>
+        <translation>Vor dem Hinzufügen eines neuen Feldes bitte den Namen des vorhergehenden Feldes eingeben.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
