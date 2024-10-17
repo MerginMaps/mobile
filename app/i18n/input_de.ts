@@ -1859,7 +1859,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
         <source>There are currently no local changes</source>
-        <translation>Es gibt momentan keine lokalen Änderungen</translation>
+        <translation>Es gibt momentan keine lokalen Änderungen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="44"/>
