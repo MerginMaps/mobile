@@ -1147,17 +1147,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
         <source>Attribution</source>
-        <translation>Attribution</translation>
+        <translation>Attribuierung</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="240"/>
         <source>Features</source>
-        <translation>Features</translation>
+        <translation>Objekte</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="255"/>
         <source>Layer info</source>
-        <translation>Layer Info</translation>
+        <translation>Layer-Info</translation>
     </message>
 </context>
 <context>
@@ -1222,7 +1222,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="38"/>
         <source>Log in</source>
-        <translation>Log in</translation>
+        <translation>Log-in</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="87"/>
