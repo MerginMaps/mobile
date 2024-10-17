@@ -571,7 +571,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="36"/>
         <source>See what changed since you were last here.</source>
-        <translation>Änderungen seit Ihrem letzten Besuch anzeigen</translation>
+        <translation>Sehen Sie, was sich seit Ihrem letzten Besuch geändert hat.</translation>
     </message>
 </context>
 <context>
