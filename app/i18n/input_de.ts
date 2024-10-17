@@ -1754,7 +1754,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="149"/>
         <source>The project can not be opened</source>
-        <translation>Das Projekt kann nicht geöffnet werden</translation>
+        <translation>Das Projekt kann nicht geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
