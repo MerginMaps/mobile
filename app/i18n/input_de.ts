@@ -2804,7 +2804,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
-        <translation>Synchronisation abgebrochen</translation>
+        <translation>Synchronisierung abgebrochen</translation>
     </message>
 </context>
 <context>
