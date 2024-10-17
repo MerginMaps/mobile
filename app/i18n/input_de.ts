@@ -720,8 +720,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Möchten Sie das Projekt herunterladen
- %1 ?</translation>
+        <translation>Möchten Sie das Projekt %1 herunterladen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="26"/>
