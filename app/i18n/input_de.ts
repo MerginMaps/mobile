@@ -49,7 +49,7 @@
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="230"/>
         <source>Fused location not available</source>
-        <translation>Fused Standort ist nicht verfügbar</translation>
+        <translation>Fusionierter Standort ist nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
