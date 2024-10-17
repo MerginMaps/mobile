@@ -137,7 +137,7 @@
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
         <source>Could not connect to device, not paired</source>
-        <translation>Die Verbindung zum Gerät konnte nicht hergestellt werden, da es nicht gepaart ist.</translation>
+        <translation>Die Verbindung zum Gerät konnte nicht hergestellt werden, da es nicht gekoppelt ist.</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
