@@ -2066,7 +2066,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
         <source>GPS antenna height, in meters</source>
-        <translation>GPS Antennenhöhe, in Metern</translation>
+        <translation>GPS-Antennenhöhe, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
