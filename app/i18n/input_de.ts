@@ -1849,7 +1849,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Your local changes</source>
-        <translation>Änderungen</translation>
+        <translation>Ihre lokalen Änderungen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
