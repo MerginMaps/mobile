@@ -787,7 +787,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="19"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Das Speichern der Änderungen schlug fehl. Dies sollte normalerweise nicht passieren. Bitte die App neustarten und nochmal probieren - wenn dies auch nicht hilft, kontaktieren Sie den Support.</translation>
+        <translation>Das Speichern der Änderungen schlug fehl. Dies sollte normalerweise nicht passieren. Bitte die App neu starten und noch einmal probieren - wenn dies auch nicht hilft, kontaktieren Sie bitte den Support.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
