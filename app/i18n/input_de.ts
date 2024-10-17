@@ -2764,7 +2764,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>DGPS fix</source>
-        <translation>DGPS Fix</translation>
+        <translation>DGPS-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="146"/>
