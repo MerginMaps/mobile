@@ -1705,7 +1705,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="85"/>
         <source>Create your workspace by clicking here</source>
-        <translation>Klicken Sie hier um einen Arbeitsbereich zu erstellen</translation>
+        <translation>Klicken Sie hier, um einen Arbeitsbereich zu erstellen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
