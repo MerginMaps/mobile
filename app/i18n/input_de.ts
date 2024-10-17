@@ -2855,7 +2855,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="319"/>
         <source>Position tracking</source>
-        <translation>Positions Tracking</translation>
+        <translation>Positions-Tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="330"/>
