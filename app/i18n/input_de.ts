@@ -1422,7 +1422,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="20"/>
         <source>Sign in to your account</source>
-        <translation>Melden Sie sich bei Ihrem Konto an</translation>
+        <translation>Melden Sie sich bei Ihrem Konto an.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
