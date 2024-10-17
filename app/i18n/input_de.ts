@@ -2830,7 +2830,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="276"/>
         <source>No editable layers found.</source>
-        <translation>Keine zu bearbeitenden Layer gefunden!</translation>
+        <translation>Keine bearbeitbaren Layer gefunden!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="282"/>
