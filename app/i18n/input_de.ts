@@ -1710,7 +1710,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Currently open</source>
-        <translation>derzeit geöffnet</translation>
+        <translation>Derzeit geöffnet</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
