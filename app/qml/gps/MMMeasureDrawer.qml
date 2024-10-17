@@ -33,7 +33,7 @@ MMDrawer {
 
   property string perimeter: mapTool?.perimeter ?? 0
   property string area: mapTool?.area ?? 0
-  property bool isPolygon: root.area > 0
+  property bool isPolygon: area > 0
 
   signal measureFinished()
 
