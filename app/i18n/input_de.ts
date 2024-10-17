@@ -1119,7 +1119,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
         <source>Please specify the source</source>
-        <translation>Bitte geben Sie eine Quelle an</translation>
+        <translation>Bitte geben Sie eine Quelle an.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
