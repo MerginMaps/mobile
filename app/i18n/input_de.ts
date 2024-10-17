@@ -1552,7 +1552,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>The app can track your position on this project.</source>
-        <translation>Mergin Maps kann Ihre Position in diesem Projekt aufzeichnen.</translation>
+        <translation>Mergin Maps kann Ihre Positionen in diesem Projekt aufzeichnen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
