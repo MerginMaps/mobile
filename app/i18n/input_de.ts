@@ -132,7 +132,7 @@
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
         <source>Bluetooth permission disabled</source>
-        <translation>Bluetooth Berechtigung deaktiviert</translation>
+        <translation>Bluetooth-Berechtigung deaktiviert</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
