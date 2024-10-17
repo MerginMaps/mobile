@@ -1427,12 +1427,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
         <source>You need to be signed in to your account in order to synchronise the project.</source>
-        <translation>Sie müssen bei Ihrem Mergin Maps Konto angemeldet sein, um das Projekt zu synchronisieren.</translation>
+        <translation>Sie müssen bei Ihrem Mergin Maps-Konto angemeldet sein, um das Projekt zu synchronisieren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
         <source>Yes, I want to sign in</source>
-        <translation>Ja, ich möchte mich anmelden</translation>
+        <translation>Ja, ich möchte mich anmelden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="23"/>
