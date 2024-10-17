@@ -1695,7 +1695,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
         <source>Click here to access the dashboard</source>
-        <translation>Klicken Sie hier um zum Mergin Maps Dashboard zu gelangen</translation>
+        <translation>Klicken Sie hier um zum Mergin Maps-Dashboard zu gelangen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
