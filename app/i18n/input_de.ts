@@ -2600,7 +2600,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
         <source>Internal (fused)</source>
-        <translation>Intern (fused)</translation>
+        <translation>Intern (fusioniert)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="42"/>
