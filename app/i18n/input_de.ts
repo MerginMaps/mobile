@@ -2036,12 +2036,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
         <source>GPS accuracy threshold</source>
-        <translation>GPS Genauigkeitsschwellenwert</translation>
+        <translation>GPS-Genauigkeitsschwellenwert</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
-        <translation>Bestimmt, wann der Genauigkeitsindikator gelb wird</translation>
+        <translation>Bestimmt, wann der Genauigkeitsindikator gelb wird.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
