@@ -2871,7 +2871,7 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../qml/main.qml" line="534"/>
         <location filename="../qml/main.qml" line="542"/>
         <source>not tracking</source>
-        <translation>keine Aufzeichnung</translation>
+        <translation>kein Tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="735"/>
