@@ -184,12 +184,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Erforderliches PROJ Datum-Shift-Grid fehlt: %1. Für das zuletzt heruntergeladene Projekt bitte Mergin Maps-Neustart durchführen.</translation>
+        <translation>Erforderliches PROJ Datum-Shift-Grid fehlt: %1. Für das zuletzt heruntergeladene Projekt bitte einen Mergin Maps-Neustart durchführen.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Fehler bei benutzerdefinierter PROJ Operation. Für das zuletzt heruntergeladene Projekt bitte Mergin Maps-Neustart durchführen.</translation>
+        <translation>Fehler bei benutzerdefinierter PROJ-Operation. Für das zuletzt heruntergeladene Projekt bitte einen Mergin Maps-Neustart durchführen.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
