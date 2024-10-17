@@ -746,7 +746,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
         <source>Search for features...</source>
-        <translation>nach Objekten suchen...</translation>
+        <translation>Nach Objekten suchen...</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
