@@ -893,7 +893,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="23"/>
         <source>Yes, I want to save</source>
-        <translation>Ja, ich möchte speichern</translation>
+        <translation>Ja, ich möchte speichern.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
