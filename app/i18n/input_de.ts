@@ -25,7 +25,7 @@
     <message>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
-        <translation>Dem Layer ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Aufnahme und Speicher Funktionen verhalten sich undefiniert.</translation>
+        <translation>Dem Layer ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Aufnahme- und Speicherfunktionen verhalten sich undefiniert!</translation>
     </message>
 </context>
 <context>
