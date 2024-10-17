@@ -2061,7 +2061,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
-        <translation>Enthält die Stabhöhe und die Höhe der GPS-Empfängerantenne</translation>
+        <translation>Ist die Stabhöhe + die Höhe der GPS-Empfängerantenne</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
