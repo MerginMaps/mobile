@@ -2514,7 +2514,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="834"/>
         <source>Please enter a valid email</source>
-        <translation>Bitte eine gültige E-Mail-Adresse eingeben</translation>
+        <translation>Bitte eine gültige E-Mail-Adresse eingeben.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="841"/>
