@@ -2320,7 +2320,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
         <source>Move around your designated object to record its geometry. You can stop this anytime.</source>
-        <translation>Bewegen Sie sich um das festgelegte Objekt, um seine Geometrie aufzuzeichnen. Sie können dies jederzeit beenden.</translation>
+        <translation>Umrunden Sie das festgelegte Objekt, um seine Geometrie aufzuzeichnen. Sie können dies jederzeit beenden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
@@ -2371,7 +2371,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
