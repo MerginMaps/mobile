@@ -2004,7 +2004,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
         <source>Changelog could not be loaded</source>
-        <translation>Änderungen können nicht geladen werden</translation>
+        <translation>Änderungen können nicht geladen werden.</translation>
     </message>
 </context>
 <context>
