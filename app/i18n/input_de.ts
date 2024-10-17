@@ -2615,7 +2615,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="54"/>
         <source>Internal (gps)</source>
-        <translation>Intern (gps)</translation>
+        <translation>Intern (GPS)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="55"/>
@@ -2625,7 +2625,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation>Bluetooth Gerät</translation>
+        <translation>Bluetooth-Gerät</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
