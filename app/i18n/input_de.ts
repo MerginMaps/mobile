@@ -1383,7 +1383,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="27"/>
         <source>Learn more about %1how to setup themes%2.</source>
-        <translation>Finden Sie heraus wie man %1 Kartenthemen erstellen %2 kann</translation>
+        <translation>Finden Sie heraus wie man %1 Kartenthemen erstellen %2 kann.</translation>
     </message>
 </context>
 <context>
