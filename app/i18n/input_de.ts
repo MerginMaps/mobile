@@ -1450,12 +1450,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
         <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
-        <translation>Sie dürfen Ihre Änderungen in diesem Projekt nicht synchronisieren. Wenden Sie sich an den Projekt Eigentümer, um Ihnen die richtige Berechtigung zuzuweisen. Wenn Sie der Projekt Eigentümer sind, melden Sie sich beim Dashboard an.</translation>
+        <translation>Sie dürfen Ihre Änderungen in diesem Projekt nicht synchronisieren. Wenden Sie sich an den Projekt-Eigentümer, damit er Ihnen die richtige Berechtigung zuweist. Wenn Sie der Projekt-Eigentümer sind, melden Sie sich beim Dashboard an.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
