@@ -2397,12 +2397,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
         <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation>Wir waren fleißig und haben Mergin Maps noch besser gemacht! Dieses Update bringt ein frisches Design und verbesserte Navigation mit sich. Finden Sie schneller was Sie benötigen. Schauen Sie sich um!</translation>
+        <translation>Wir waren fleißig und haben Mergin Maps noch besser gemacht! Dieses Update bringt ein frisches Design und eine verbesserte Navigation mit sich. Finden Sie nun schneller, was Sie benötigen. Schauen Sie sich um!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>
         <source>Let&apos;s start!</source>
-        <translation>Lassen Sie uns anfangen</translation>
+        <translation>Lassen Sie uns anfangen!</translation>
     </message>
 </context>
 <context>
