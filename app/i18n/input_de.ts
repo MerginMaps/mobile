@@ -1016,7 +1016,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
         <source>GPS antenna height</source>
-        <translation>GPS Antennen Höhe</translation>
+        <translation>GPS-Antennenhöhe</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
