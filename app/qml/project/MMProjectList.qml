@@ -234,7 +234,7 @@ Item {
     }
 
     image: __style.positiveMMSymbolImage
-    title: qsTr( "Get started with Mergin Maps")
+    title: qsTr( "Let's get started")
     description: qsTr( "First step is to create your brand new project." )
   }
 

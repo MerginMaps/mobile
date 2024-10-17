@@ -22,7 +22,7 @@ MMComponents.MMDrawerDialog {
 
   title: qsTr("Position tracking")
   imageSource: root.trackingActive ? __style.positionTrackingRunningImage : __style.positionTrackingStartImage
-  description: root.trackingActive ? qsTr( "Mergin Maps can track your position on this project." ) : qsTr( "Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature." )
+  description: root.trackingActive ? qsTr( "The app can track your position on this project." ) : qsTr( "Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature." )
   primaryButton.text: root.trackingActive ? qsTr( "Stop tracking" ) : qsTr( "Start tracking" )
   primaryButton.type: root.trackingActive ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
 

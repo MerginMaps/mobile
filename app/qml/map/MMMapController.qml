@@ -98,6 +98,8 @@ Item {
 
     switch ( state ) {
       case "record": {
+        root.showInfoTextMessage( qsTr( "Mark the geometry on the map and click record" ) )
+
         if ( __appSettings.autolockPosition ) { // center to GPS
           if ( gpsStateGroup.state === "unavailable" ) {
             __notificationModel.addError( "GPS currently unavailable." )

@@ -59,15 +59,24 @@
         <string>hr_HR</string>
         <string>hu</string>
         <string>it</string>
+        <string>id_ID</string>
         <string>pl</string>
         <string>pt_PT</string>
         <string>pt_BR</string>
         <string>sk</string>
         <string>sk_SK</string>
+        <string>vi_VN</string>
 		<string>ja_JP</string>
 		<string>ar</string>
 		<string>ar_IQ</string>
 		<string>ar_EG</string>
+		<string>zh_CN</string>
+		<string>zh-Hans</string>
+		<string>zh</string>
+		<string>fi</string>
+		<string>sl</string>
+		<string>sl_SI</string>
+		<string>fi_FI</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

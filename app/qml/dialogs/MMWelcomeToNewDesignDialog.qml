@@ -18,7 +18,7 @@ MMDrawerDialog {
 
   imageSource: __style.positiveMMSymbolImage
   title: qsTr( "New Look & Feel" )
-  description: qsTr( "We've been busy making Mergin Maps even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!" )
+  description: qsTr( "We've been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!" )
   primaryButton.text: qsTr("Let's start!")
 
   onPrimaryButtonClicked: {

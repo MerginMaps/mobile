@@ -23,8 +23,8 @@ class TestModels : public QObject
     void cleanup(); // will be called after every testfunction.
 
     void testFeaturesModel();
-    void testFeaturesProxyModel();
-    void testFeaturesProxyModelWithValueRelation();
+    void testFeaturesModelSorted();
+    void testValueRelationFeaturesModel();
     void testProjectsModel();
     void testProjectsProxyModel();
 
