@@ -232,7 +232,7 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
-        //Alias|name expression
+        // Retrieving field name/alias expression
         QgsEditFormConfig editFormConfig = layer->editFormConfig();
         QString fieldName = field.name();
         QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
@@ -240,7 +240,7 @@ void AttributeController::flatten(
         QString nameExpressionString = nameProperty.expressionString();
         QgsExpression nameExpression( nameExpressionString );
 
-        //Editable expression
+        // Retrieving field editability expression
         QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
         QString editableExpressionString = editableProperty.expressionString();
         QgsExpression editableExpression( editableExpressionString );
