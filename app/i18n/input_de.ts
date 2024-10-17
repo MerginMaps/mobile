@@ -1769,7 +1769,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Let&apos;s get started</source>
-        <translation>Lassen Sie uns anfangen.</translation>
+        <translation>Lassen Sie uns anfangen!</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
