@@ -2228,7 +2228,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
         <source>We could not split the feature</source>
-        <translation>Das Feature konnte nicht geteilt werden</translation>
+        <translation>Das Feature konnte nicht geteilt werden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
