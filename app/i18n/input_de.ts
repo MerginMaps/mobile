@@ -946,7 +946,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>k. A.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="112"/>
