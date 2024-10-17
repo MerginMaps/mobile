@@ -2141,7 +2141,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
         <source>Each time you start recording, the app centers to GPS</source>
-        <translation>Bei jedem Start der Aufnahme, zentriert sich die App auf die GPS-Position</translation>
+        <translation>Bei jedem Start der Aufnahme, zentriert sich die App auf die GPS-Position.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
