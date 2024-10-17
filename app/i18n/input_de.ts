@@ -541,7 +541,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>Wir konnten keine Verbindung mit dem angegebenen Gerät herstellen.
-        Bitte stellen Sie sicher, dass Ihr Gerät eingeschaltet ist und eine Verbindung hergestellt werden kann.%1 %2Hier erfahren Sie mehr%3.</translation>
+        Bitte stellen Sie sicher, dass Ihr Gerät eingeschaltet ist und eine Verbindung hergestellt werden kann.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
