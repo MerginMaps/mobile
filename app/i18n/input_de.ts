@@ -1054,7 +1054,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Application store</source>
-        <translation>App Store</translation>
+        <translation>App-Store</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
