@@ -24,12 +24,14 @@ MMHidingBox {
     root.visible = false
   }
 
-  height: __style.row40
+  height: text.lineCount * __style.row40
   timerInterval: 10000
   fadeOutDuration: 1000
 
   // Text
   Text {
+    id: text
+
     height: parent.height
     width: parent.width - 2 * __style.pageMargins
     anchors.verticalCenter: parent.verticalCenter
@@ -40,6 +42,8 @@ MMHidingBox {
     font: __style.t3
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
+    maximumLineCount: 3
+    wrapMode: Text.WordWrap
     elide: Text.ElideRight
   }
 }
