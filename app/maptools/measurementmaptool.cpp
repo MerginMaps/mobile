@@ -169,7 +169,7 @@ void MeasurementMapTool::updateMapSettings( InputMapSettings *newMapSettings )
   {
     connect( updatedMapSettings, &InputMapSettings::extentChanged, this, &MeasurementMapTool::updateDistance );
 
-    mDistanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+    mDistanceArea.setEllipsoid( updatedMapSettings->project()->ellipsoid() );
     mDistanceArea.setSourceCrs( updatedMapSettings->destinationCrs(), updatedMapSettings->transformContext() );
   }
 }
