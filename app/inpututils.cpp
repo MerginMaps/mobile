@@ -187,7 +187,7 @@ QString InputUtils::formatDistanceHelper( const double distanceInMeters, int pre
   const double distance = distanceInMeters * factor;
   const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
 
-  return QString( "%L1 %2" ).arg( distance, 0, 'f', precision ).arg( abbreviation );
+  return QString( "%L1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *project )
@@ -209,7 +209,7 @@ QString InputUtils::formatAreaHelper( const double areaInSquareMeters, int preci
   const double area = areaInSquareMeters * factor;
   const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
 
-  return QString( "%L1 %2" ).arg( area, 0, 'f', precision ).arg( abbreviation );
+  return QString( "%L1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
