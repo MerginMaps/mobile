@@ -292,7 +292,7 @@ void TestMapTools::testMeasuring()
   measurementTool->setMapSettings( ms );
 
   QgsDistanceArea distanceArea;
-  distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
+  distanceArea.setEllipsoid( ms->project()->ellipsoid() );
   distanceArea.setSourceCrs( ms->destinationCrs(), ms->transformContext() );
 
   QPointF crosshairPoint1 = ms->coordinateToScreen( QgsPoint( 0, 0 ) );
