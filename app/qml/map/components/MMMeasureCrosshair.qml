@@ -99,10 +99,8 @@ Item {
 
     MouseArea {
       anchors.fill: parent
-      onClicked: {
-        if ( root.canCloseShape )
-          root.closeShapeClicked()
-      }
+      enabled: root.canCloseShape
+      onClicked: root.closeShapeClicked()
     }
   }
 }

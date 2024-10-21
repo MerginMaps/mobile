@@ -23,6 +23,10 @@ void MeasurementMapTool::addPoint()
   if ( mapSettings() )
   {
     QgsPoint transformedPoint = mapSettings()->screenToCoordinate( mCrosshairPoint );
+
+    if ( !mPoints.empty() && transformedPoint == mPoints.back() )
+      return;
+
     mPoints.push_back( transformedPoint );
     rebuildGeometry();
   }
