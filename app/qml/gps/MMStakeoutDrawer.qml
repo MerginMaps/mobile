@@ -97,7 +97,6 @@ MMDrawer {
 
     Row {
       width: parent.width
-      spacing: __style.margi8
 
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
@@ -110,7 +109,7 @@ MMDrawer {
         width: ( parent.width + parent.spacing ) / 2
 
         title: qsTr( "Distance" )
-        value: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2 ) : qsTr( "N/A" )
+        value: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2, __activeProject.qgsProject ) : qsTr( "N/A" )
         alignmentRight: true
       }
     }

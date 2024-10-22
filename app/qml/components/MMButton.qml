@@ -15,8 +15,10 @@ Button {
   id: root
 
   enum Types { Primary, Secondary, Tertiary }
+  enum Sizes { Small, Regular }
 
   property int type: MMButton.Types.Primary
+  property int size: MMButton.Sizes.Regular
 
   property color fontColor: {
     if ( type === MMButton.Types.Primary ) return __style.forestColor
@@ -161,10 +163,10 @@ Button {
   state: "default"
 
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
-  implicitWidth: row.paintedChildrenWidth + 2 * __style.margin20
+  implicitWidth: row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
 
-  topPadding: root.type === MMButton.Types.Tertiary ? 0 : 11 * __dp
-  bottomPadding: root.type === MMButton.Types.Tertiary ? 0 : 11 * __dp
+  topPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
+  bottomPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
   rightPadding: 0
   leftPadding: 0
 
@@ -177,14 +179,21 @@ Button {
       id: row
 
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
-      property real maxWidth: parent.width - 2 * __style.margin20
+      property real maxWidth: parent.width - 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
 
       x: ( parent.width - width ) / 2
 
       width: Math.min( paintedChildrenWidth, maxWidth )
       height: Math.max( buttonContent.paintedHeight, buttonIconRight.height )
 
-      spacing: buttonIconRight.visible || buttonIconLeft.visible ? __style.spacing12 : 0
+      spacing: {
+        if ( ( root.size === MMButton.Sizes.Small ) )
+          return __style.spacing2;
+        else if ( ( buttonIconRight.visible || buttonIconLeft.visible ) )
+          return __style.spacing12;
+        else
+          return 0;
+      }
 
       MMIcon {
         id: buttonIconLeft

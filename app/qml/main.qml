@@ -158,6 +158,10 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
+      else if ( measurePanelLoader.active )
+      {
+        return measurePanelLoader.item.panelHeight - mapToolbar.height
+      }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
         // if feature preview panel is opened
@@ -217,6 +221,11 @@ ApplicationWindow {
       stakeoutPanelLoader.active = true
       stakeoutPanelLoader.focus = true
       stakeoutPanelLoader.item.targetPair = pair
+    }
+
+    onMeasureStarted: function( pair ) {
+      measurePanelLoader.active = true
+      measurePanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -324,6 +333,12 @@ ApplicationWindow {
         onClicked: {
           trackingPanelLoader.active = true
         }
+      }
+
+      MMToolbarButton {
+        text: qsTr("Measure")
+        iconSource: __style.measurementToolIcon
+        onClicked: map.measure()
       }
 
       MMToolbarButton {
@@ -593,6 +608,32 @@ ApplicationWindow {
       }
 
       onPanelHeightUpdated: map.updatePosition()
+    }
+  }
+
+  Loader {
+    id: measurePanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: measurePanelComponent
+  }
+
+  Component {
+    id: measurePanelComponent
+
+    MMMeasureDrawer {
+      id: measurePanel
+
+      width: window.width
+      mapTool: map.mapToolComponent
+
+      onMeasureFinished: {
+        measurePanelLoader.active = false
+        map.finishMeasure()
+      }
     }
   }
 
