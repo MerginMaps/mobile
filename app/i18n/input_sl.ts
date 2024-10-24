@@ -912,7 +912,7 @@ V projekt ne bo dodano.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="63"/>
         <source>Source</source>
-        <translation>vir</translation>
+        <translation>Vir</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
@@ -1125,7 +1125,7 @@ V projekt ne bo dodano.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
         <source>Source</source>
-        <translation>vir</translation>
+        <translation>Vir</translation>
     </message>
 </context>
 <context>
