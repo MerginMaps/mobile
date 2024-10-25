@@ -318,20 +318,21 @@ QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, 
 
 bool InputUtils::canExtentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
-    QPointF screenPoint;
+  QPointF screenPoint;
 
-    if ( !mapSettings || geom.isNull() || !geom.constGet() )
-        // return screenPoint;
-        return false;
-
-    QgsRectangle geomBbox = geom.boundingBox();
-    QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-
-    if (currentExtent.width() > geomBbox.width()
-        && currentExtent.height() > geomBbox.height()) {
-        return true;
-    }
+  if ( !mapSettings || geom.isNull() || !geom.constGet() )
+    // return screenPoint;
     return false;
+
+  QgsRectangle geomBbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
+
+  if ( currentExtent.width() > geomBbox.width()
+       && currentExtent.height() > geomBbox.height() )
+  {
+    return true;
+  }
+  return false;
 }
 
 
