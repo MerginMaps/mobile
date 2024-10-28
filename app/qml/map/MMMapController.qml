@@ -1182,7 +1182,7 @@ Item {
     if ( identifyHighlight.geometry === null )
       return
 
-    if (! __inputUtils.canExtentContainGeometry( identifyHighlight.geometry, mapCanvas.mapSettings )){
+    if ( !__inputUtils.canExtentContainGeometry( identifyHighlight.geometry, mapCanvas.mapSettings ) ){
       return
     }
 
