@@ -321,7 +321,6 @@ bool InputUtils::canExtentContainGeometry( const QgsGeometry &geom, InputMapSett
   QPointF screenPoint;
 
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
-    // return screenPoint;
     return false;
 
   QgsRectangle geomBbox = geom.boundingBox();
