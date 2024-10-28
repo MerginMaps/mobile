@@ -35,6 +35,10 @@ Item {
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
+  property var mapToolComponent: {
+    measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
+  }
+
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -59,6 +63,8 @@ Item {
 
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
+
+  signal measureStarted()
 
   signal localChangesPanelRequested()
 
@@ -85,6 +91,9 @@ Item {
     },
     State {
       name: "stakeout"
+    },
+    State {
+      name: "measure"
     },
     State {
       name: "inactive" // ignores touch input
@@ -140,6 +149,13 @@ Item {
       case "stakeout": {
         root.hideHighlight()
         root.stakeoutStarted( internal.stakeoutTarget )
+        break
+      }
+
+      case "measure": {
+        root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
+        root.hideHighlight()
+        root.measureStarted()
         break
       }
 
@@ -381,6 +397,17 @@ Item {
     sourceComponent: splittingToolsComponent
   }
 
+  Loader {
+    id: measurementToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "measure"
+
+    sourceComponent: measurementToolsComponent
+  }
+
   // map available content within safe area
   Item {
     anchors {
@@ -497,10 +524,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" )
+        if ( root.state === "stakeout" || root.state === "measure" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -963,6 +990,18 @@ Item {
   }
 
   Component {
+    id: measurementToolsComponent
+
+    MMMeasurementTools {
+      anchors.fill: parent
+
+      map: mapCanvas
+      positionMarkerComponent: positionMarker
+      onFinishMeasurement: root.finishMeasure()
+    }
+  }
+
+  Component {
     id: splittingToolsComponent
 
     MMSplittingTools {
@@ -1111,6 +1150,10 @@ Item {
     state = "stakeout"
   }
 
+  function measure() {
+    state = "measure"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1125,6 +1168,10 @@ Item {
     root.highlightPair( internal.stakeoutTarget )
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
     root.centeredToGPS = internal.centeredToGPSBeforeStakeout
+  }
+
+  function finishMeasure() {
+    state = "view"
   }
 
   function centerToPair( pair ) {

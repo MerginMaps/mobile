@@ -168,6 +168,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl streamingIcon READ streamingIcon CONSTANT )
     Q_PROPERTY( QUrl redrawGeometryIcon READ redrawGeometryIcon CONSTANT )
     Q_PROPERTY( QUrl cloudIcon READ cloudIcon CONSTANT )
+    Q_PROPERTY( QUrl measurementToolIcon READ measurementToolIcon CONSTANT )
+    Q_PROPERTY( QUrl closeShapeIcon READ closeShapeIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -215,6 +217,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
     Q_PROPERTY( QUrl negativeMMSymbolImage READ negativeMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
+    Q_PROPERTY( QUrl neutralMMSymbolImage READ neutralMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl closeAccountImage READ closeAccountImage CONSTANT )
     Q_PROPERTY( QUrl attentionImage READ attentionImage CONSTANT )
     Q_PROPERTY( QUrl blueInfoImage READ blueInfoImage CONSTANT )
@@ -276,7 +279,9 @@ class MMStyle: public QObject
 
     // Page
     Q_PROPERTY( double pageMargins READ number20 CONSTANT ) // distance between screen edge and components
+    Q_PROPERTY( double spacing2 READ number2 CONSTANT )
     Q_PROPERTY( double spacing5 READ number5 CONSTANT )
+    Q_PROPERTY( double spacing10 READ number10 CONSTANT )
     Q_PROPERTY( double spacing12 READ number12 CONSTANT ) // distance between page header, page content and page footer
     Q_PROPERTY( double spacing20 READ number20 CONSTANT )
     Q_PROPERTY( double spacing30 READ number30 CONSTANT )
@@ -422,6 +427,8 @@ class MMStyle: public QObject
     QUrl moreVerticalIcon() {return QUrl( "qrc:/MoreVertical.svg" );}
     QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
     QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
+    QUrl measurementToolIcon() {return QUrl( "qrc:/Measure.svg" );}
+    QUrl closeShapeIcon() {return QUrl( "qrc:/CloseShape.svg" );}
     QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
     QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
     QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
@@ -498,6 +505,7 @@ class MMStyle: public QObject
     QUrl externalGpsRedImage() {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
     QUrl negativeMMSymbolImage() {return QUrl( "qrc:/images/NegativeMMSymbol.svg" );}
     QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
+    QUrl neutralMMSymbolImage() {return QUrl( "qrc:/images/NeutralMMSymbol.svg" );}
     QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
     QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
     QUrl blueInfoImage() {return QUrl( "qrc:/images/BlueInfo.svg" );}
