@@ -247,7 +247,7 @@ void AttributeController::flatten(
 
         if ( !expression.isEmpty() )
         {
-          expressions << field.constraints().constraintExpression() << nameExpression << editableExpression;
+          expressions << field.constraints().constraintExpression();
         }
 
         bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
