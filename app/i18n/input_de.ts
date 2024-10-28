@@ -25,7 +25,7 @@
     <message>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
-        <translation>Dem Layer ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Aufnahme und Speicher Funktionen verhalten sich undefiniert.</translation>
+        <translation>Dem Layer ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Aufnahme- und Speicherfunktionen verhalten sich undefiniert!</translation>
     </message>
 </context>
 <context>
@@ -33,23 +33,23 @@
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (fused)</source>
-        <translation>Intern (fused)</translation>
+        <translation>Intern (fusioniert)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (gps)</source>
-        <translation>Intern (gps)</translation>
+        <translation>Intern (GPS)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="214"/>
         <location filename="../position/providers/androidpositionprovider.cpp" line="228"/>
         <source>No location permissions</source>
-        <translation> Keine Standortberechtigungen</translation>
+        <translation>Keine Standortberechtigungen</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="230"/>
         <source>Fused location not available</source>
-        <translation>Fused Standort ist nicht verfügbar</translation>
+        <translation>Fusionierter Standort ist nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
@@ -64,27 +64,27 @@
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation>Es ist eine Fehler aufgetreten und Tracking konnte nicht gestartet werden, kontaktieren Sie den Support</translation>
+        <translation>Es ist ein Fehler aufgetreten und das Tracking konnte nicht gestartet werden. Kontaktieren Sie bitte den Support.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Ihr Gerät unterstützt kein Tracking. Mindestanforderung ist Android 8.0</translation>
+        <translation>Ihr Gerät unterstützt kein Tracking - erst ab Android 8.0.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Bitte aktivieren Sie die Berechtigung zur Standortbestimmung, bevor Sie das Tracking starten</translation>
+        <translation>Bitte aktivieren Sie die Berechtigung zur Standortbestimmung, bevor Sie das Tracking starten.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation>Bitte aktivieren Sie die Standortbestimmung ihres Gerätes, bevor Sie das Tracking starten</translation>
+        <translation>Bitte aktivieren Sie die Standortbestimmung ihres Gerätes, bevor Sie das Tracking starten.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
         <source>Enable notifications to see tracking in the notifications tray</source>
-        <translation>Aktivieren Sie Benachrichtigungen, um den Tracking-Status im Benachrichtigungsfeld zu sehen.</translation>
+        <translation>Aktivieren Sie *Benachrichtigungen*, um den Tracking-Status im Benachrichtigungsfeld zu sehen.</translation>
     </message>
 </context>
 <context>
@@ -92,22 +92,22 @@
     <message>
         <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation>Die Speicherberechtigung wurde dauerhaft verweigert. Erlauben Sie dies in den Einstellungen, um Bilder aus der Galerie zu laden</translation>
+        <translation>Die Speicherberechtigung wurde dauerhaft verweigert. Geben Sie diese in den Einstellungen, um Bilder aus der Galerie laden zu können.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
-        <translation>Mergin Maps benötigt Speicherberechtigung um Bilder aus der Gallerie zu laden</translation>
+        <translation>Mergin Maps benötigt Speicherberechtigung, um Bilder aus der Gallerie zu laden.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation>Keine Kameraerlaubnis erteilt, bitte in Einstellungen genehmigen</translation>
+        <translation>Keine Kameraerlaubnis erteilt, bitte in den Einstellungen genehmigen.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>Wir benötigen eine Kameraerlaubnis, um ein Foto zu machen</translation>
+        <translation>Wir benötigen eine Kameraerlaubnis, um ein Foto zu machen.</translation>
     </message>
 </context>
 <context>
@@ -127,17 +127,17 @@
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation>Keine Verbindung, Verbindungsaufbau wird wiederholt in (%1)</translation>
+        <translation>Keine Verbindung. Der Verbindungsaufbau wird in (%1) wiederholt.</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
         <source>Bluetooth permission disabled</source>
-        <translation>Bluetooth Berechtigung deaktiviert</translation>
+        <translation>Bluetooth-Berechtigung deaktiviert</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
         <source>Could not connect to device, not paired</source>
-        <translation>Die Verbindung zum Gerät konnte nicht hergestellt werden, da es nicht gepaart ist.</translation>
+        <translation>Die Verbindung zum Gerät konnte nicht hergestellt werden, da es nicht gekoppelt ist.</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
@@ -154,7 +154,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="165"/>
+        <location filename="../featuresmodel.cpp" line="164"/>
         <source>Unknown title</source>
         <translation>Unbekannter Titel</translation>
     </message>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Vor dem Hinzufügen eines neuen Feldes bitte den Namen des vorhergehenden Feldes eingeben</translation>
+        <translation>Vor dem Hinzufügen eines neuen Feldes bitte den Namen des vorhergehenden Feldes eingeben.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
@@ -184,12 +184,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Erforderliche PROJ Datum-Shift-Grids fehlen: %1. Für das zuletzt heruntergeladene Projekt bitte Mergin Maps-Neustart durchführen.</translation>
+        <translation>Erforderliches PROJ Datum-Shift-Grid fehlt: %1. Für das zuletzt heruntergeladene Projekt bitte einen Mergin Maps-Neustart durchführen.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Fehler bei benutzerdefinierter PROJ Operation. Für das zuletzt heruntergeladene Projekt bitte Mergin Maps-Neustart durchführen.</translation>
+        <translation>Fehler bei benutzerdefinierter PROJ-Operation. Für das zuletzt heruntergeladene Projekt bitte einen Mergin Maps-Neustart durchführen.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
@@ -200,119 +200,119 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="213"/>
+        <location filename="../inpututils.cpp" line="236"/>
         <source>just now</source>
         <translation>gerade jetzt</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="218"/>
+        <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minutes ago</source>
         <translation>vor %1 Minuten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="218"/>
+        <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minute ago</source>
         <translation>vor %1 Minute</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
+        <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hours ago</source>
         <translation>vor %1 Stunden</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="223"/>
+        <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hour ago</source>
         <translation>vor %1 Stunde</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="227"/>
-        <location filename="../inpututils.cpp" line="232"/>
+        <location filename="../inpututils.cpp" line="250"/>
+        <location filename="../inpututils.cpp" line="255"/>
         <source>%1 days ago</source>
         <translation>vor %1 Tagen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="227"/>
-        <location filename="../inpututils.cpp" line="232"/>
+        <location filename="../inpututils.cpp" line="250"/>
+        <location filename="../inpututils.cpp" line="255"/>
         <source>%1 day ago</source>
         <translation>vor %1 Tag</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="260"/>
         <source>%1 weeks ago</source>
         <translation>vor %1 Wochen</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="260"/>
         <source>%1 week ago</source>
         <translation>vor %1 Woche</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="265"/>
         <source>%1 months ago</source>
         <translation>vor %1 Monaten</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="265"/>
         <source>%1 month ago</source>
         <translation>vor %1 Monat</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="270"/>
         <source>%1 years ago</source>
         <translation>vor %1 Jahren</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="270"/>
         <source>%1 year ago</source>
         <translation>vor %1 Jahr</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1461"/>
+        <location filename="../inpututils.cpp" line="1484"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>Bildschirmauflösung: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1462"/>
+        <location filename="../inpututils.cpp" line="1485"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>Bildschirm DPI: %1x%2
+        <translation>Bildschirm-DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1463"/>
+        <location filename="../inpututils.cpp" line="1486"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>Bildschirmgröße: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1464"/>
+        <location filename="../inpututils.cpp" line="1487"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Gemeldetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1465"/>
+        <location filename="../inpututils.cpp" line="1488"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Berechnetes Gerätepixelverhältnis: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1466"/>
+        <location filename="../inpututils.cpp" line="1489"/>
         <source>used dp scale: %1</source>
         <translation>verwendete DP-Skala: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1995"/>
+        <location filename="../inpututils.cpp" line="2018"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Sie müssen mindestens %1 Punkt(e) zu jedem Teil hinzufügen.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1999"/>
+        <location filename="../inpututils.cpp" line="2022"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Sie müssen mindestens %1 Punkt(e) hinzufügen.</translation>
     </message>
@@ -336,17 +336,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="210"/>
         <source>Download failed, remove and retry</source>
-        <translation>Download fehlgeschlagen, Datei entfernen und erneut versuchen</translation>
+        <translation>Download fehlgeschlagen. Datei entfernen und erneut versuchen.</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="230"/>
         <source>Found multiple QGIS project files</source>
-        <translation>Mehrere QGIS Projektdateien gefunden</translation>
+        <translation>Mehrere QGIS-Projektdateien gefunden</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation>Es konnte keine QGIS Projektdatei gefunden werden.</translation>
+        <translation>Es konnte keine QGIS-Projektdatei gefunden werden.</translation>
     </message>
 </context>
 <context>
@@ -359,7 +359,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
         <source>We are bringing the benefits of open source GIS to businesses without compromises</source>
-        <translation>Wir bringen die Vorteile von Open Source GIS ohne Kompromisse in Unternehmen</translation>
+        <translation>Wir bringen die Vorteile von Open Source-GIS ohne Kompromisse in Unternehmen.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="85"/>
@@ -377,7 +377,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationController.qml" line="35"/>
         <source>You have pending workspace invitations.&lt;br&gt;Please %1accept or reject%2 them.</source>
-        <translation>Sie haben eine ausstehende Einladung zu einem Arbeitsbereich&lt;br&gt; Bitte %1akzeptieren oder ablehnen%2.</translation>
+        <translation>Sie haben eine ausstehende Einladung zu einem Arbeitsbereich&lt;br&gt;. Bitte %1akzeptieren oder ablehnen%2.</translation>
     </message>
 </context>
 <context>
@@ -385,12 +385,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="61"/>
         <source>You have been invited to a workspace</source>
-        <translation>Sie wurden zu einem Arbeitsbereich eingeladen</translation>
+        <translation>Sie wurden zu einem Arbeitsbereich eingeladen.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
         <source>Join the workspace and explore together!</source>
-        <translation>Treten Sie dem Arbeitsbereich bei und entdecken Sie gemeinsam</translation>
+        <translation>Treten Sie dem Arbeitsbereich bei und nehmen Sie gemeinsam auf!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
@@ -423,7 +423,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 von Mergin zu.</translation>
+        <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 zu.</translation>
     </message>
 </context>
 <context>
@@ -484,7 +484,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Sie müssen Bluetooth aktivieren, um den neuen GPS-Empfänger zu verbinden.</translation>
+        <translation>Sie müssen Bluetooth aktivieren, um einen neuen GPS-Empfänger zu verbinden.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
@@ -540,8 +540,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
-        <translation>Wir konnten keine Verbindung mit dem angegebenen Gerät herstellen.
-        Bitte stellen Sie sicher, dass Ihr Gerät eingeschaltet ist und eine Verbindung hergestellt werden kann.%1 %2Hier erfahren Sie mehr%3.</translation>
+        <translation>Wir konnten keine Verbindung mit dem angegebenen Gerät herstellen. Bitte stellen Sie sicher, dass Ihr Gerät eingeschaltet ist und eine Verbindung hergestellt werden kann.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
@@ -572,7 +571,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="36"/>
         <source>See what changed since you were last here.</source>
-        <translation>Änderungen seit Ihrem letzten Besuch anzeigen</translation>
+        <translation>Sehen Sie, was sich seit Ihrem letzten Besuch geändert hat.</translation>
     </message>
 </context>
 <context>
@@ -585,7 +584,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
         <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>Diese Aktion löscht Ihren Account. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie diesen zuerst an jemand anderen übertragen.</translation>
+        <translation>Diese Aktion löscht Ihren Account. Sollten Sie Eigentümer eines Arbeitsbereiches sein, müssen Sie diesen zuerst an jemand anderen übertragen oder den Arbeitsbereich schließen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
@@ -692,12 +691,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden Ihre Änderungen an der Geometrie verworfen. Wenn Sie die Änderungen stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden Ihre Änderungen an der Geometrie verworfen. Wenn Sie die Änderungen stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann in der Symbolleiste auf &apos;Fertig&apos;.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden neuen Geometrien verworfen und kein Feature gespeichert. Wenn Sie die Geometrie stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann auf &apos;Fertig&apos; in der Symbolleiste.</translation>
+        <translation>Wenn Sie auf &apos;Ja&apos; klicken, werden neuen Geometrien verworfen und kein Feature gespeichert. Wenn Sie die Geometrie stattdessen speichern möchten, klicken Sie auf &apos;Nein&apos; und dann in der Symbolleiste auf &apos;Fertig&apos;.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
@@ -721,8 +720,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Möchten Sie das Projekt herunterladen
- %1 ?</translation>
+        <translation>Möchten Sie das Projekt %1 herunterladen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="26"/>
@@ -738,7 +736,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="96"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
         <source>Add feature</source>
         <translation>Objekt hinzufügen</translation>
     </message>
@@ -748,7 +746,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
         <source>Search for features...</source>
-        <translation>nach Objekten suchen...</translation>
+        <translation>Nach Objekten suchen...</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
@@ -789,7 +787,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="19"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Das Speichern der Änderungen schlug fehl. Dies sollte normalerweise nicht passieren. Bitte die App neustarten und nochmal probieren - wenn dies auch nicht hilft, kontaktieren Sie den Support.</translation>
+        <translation>Das Speichern der Änderungen schlug fehl. Dies sollte normalerweise nicht passieren. Bitte die App neu starten und noch einmal probieren - wenn dies auch nicht hilft, kontaktieren Sie bitte den Support.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
@@ -808,7 +806,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/form/MMFormPage.qml" line="107"/>
         <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
-        <translation>Bearbeite Objekt</translation>
+        <translation>Objekt bearbeiten </translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="223"/>
@@ -823,7 +821,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder</translation>
+        <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder.</translation>
     </message>
 </context>
 <context>
@@ -846,12 +844,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
         <source>Could not create directory %1.</source>
-        <translation>Ordner %1 konnte nicht erstellt werden</translation>
+        <translation>Ordner %1 konnte nicht erstellt werden.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
         <source>Failed to process the image</source>
-        <translation>Das Bild konnte nicht verarbeitet werden</translation>
+        <translation>Das Bild konnte nicht verarbeitet werden.</translation>
     </message>
 </context>
 <context>
@@ -895,7 +893,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="23"/>
         <source>Yes, I want to save</source>
-        <translation>Ja, ich möchte speichern</translation>
+        <translation>Ja, ich möchte speichern.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
@@ -908,12 +906,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
         <source>GPS info</source>
-        <translation>GPS info</translation>
+        <translation>GPS-Info</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="63"/>
         <source>Source</source>
-        <translation>GPS Gerät</translation>
+        <translation>GPS-Gerät</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
@@ -928,7 +926,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="93"/>
         <source>Longitude</source>
-        <translation>Longitude</translation>
+        <translation>Längengrad</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="96"/>
@@ -948,12 +946,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>k. A.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="112"/>
         <source>Latitude</source>
-        <translation>Latitude</translation>
+        <translation>Breitengrad</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="131"/>
@@ -983,12 +981,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="205"/>
         <source>Fix quality</source>
-        <translation>Fixierungstyp</translation>
+        <translation>Fix-Typ</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
         <source>Satellites (in use/view)</source>
-        <translation>Satelliten (in Verwendung/Ansicht)</translation>
+        <translation>Satelliten (in Verwendung/Blick)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="238"/>
@@ -1018,7 +1016,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
         <source>GPS antenna height</source>
-        <translation>GPS Antennen Höhe</translation>
+        <translation>GPS-Antennenhöhe</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
@@ -1028,7 +1026,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>Manage GPS receivers</source>
-        <translation>GPS Empfänger verwalten</translation>
+        <translation>GPS-Empfänger verwalten</translation>
     </message>
 </context>
 <context>
@@ -1051,12 +1049,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>QGIS website</source>
-        <translation>QGIS Webseite</translation>
+        <translation>QGIS-Webseite</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Application store</source>
-        <translation>App Store</translation>
+        <translation>App-Store</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
@@ -1121,7 +1119,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
         <source>Please specify the source</source>
-        <translation>Bitte geben Sie eine Quelle an</translation>
+        <translation>Bitte geben Sie eine Quelle an.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
@@ -1139,7 +1137,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation>Sichtbar auf der Karte</translation>
+        <translation>Auf der Karte sichtbar </translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
@@ -1149,17 +1147,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
         <source>Attribution</source>
-        <translation>Attribution</translation>
+        <translation>Attribuierung</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="240"/>
         <source>Features</source>
-        <translation>Features</translation>
+        <translation>Objekte</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="255"/>
         <source>Layer info</source>
-        <translation>Layer Info</translation>
+        <translation>Layer-Info</translation>
     </message>
 </context>
 <context>
@@ -1224,7 +1222,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="38"/>
         <source>Log in</source>
-        <translation>Log in</translation>
+        <translation>Log-in</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="87"/>
@@ -1244,7 +1242,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="113"/>
         <source>Sign in</source>
-        <translation>Login</translation>
+        <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
@@ -1264,7 +1262,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="202"/>
         <source>Server address</source>
-        <translation>Server Adresse</translation>
+        <translation>Server-Adresse</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="218"/>
@@ -1275,97 +1273,102 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="101"/>
+        <location filename="../qml/map/MMMapController.qml" line="110"/>
         <source>Mark the geometry on the map and click record</source>
-        <translation>Setzen Sie einen Punkt auf der Karte und klicken Sie danach auf &quot;Erfassen&quot;</translation>
+        <translation>Setzen Sie einen Punkt auf der Karte und klicken Sie danach auf &quot;Erfassen&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="130"/>
+        <location filename="../qml/map/MMMapController.qml" line="139"/>
         <source>Create line to split the selected feature</source>
-        <translation>Linie erstellen, um das ausgewählte Feature zu teilen</translation>
+        <translation>Linie erstellen, um das ausgewählte Feature zu teilen.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="523"/>
+        <location filename="../qml/map/MMMapController.qml" line="156"/>
+        <source>Add points to measure distance, close the shape to measure area</source>
+        <translation>Fügen Sie Punkte für die Streckenmessung hinzu. Für die Flächenmessung setzen Sie den Endpunkt auf den Anfangspunkt, um das Polygon zu schließen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="550"/>
         <source>streaming</source>
         <translation>fortlaufende Aufzeichnung</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="599"/>
+        <location filename="../qml/map/MMMapController.qml" line="626"/>
         <source>Connecting to %1</source>
         <translation>Verbindet mit %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="613"/>
+        <location filename="../qml/map/MMMapController.qml" line="640"/>
         <source>Connected, no position</source>
         <translation>Verbunden, keine Position</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="617"/>
+        <location filename="../qml/map/MMMapController.qml" line="644"/>
         <source>Unknown accuracy</source>
         <translation>Unbekannte Genauigkeit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="759"/>
+        <location filename="../qml/map/MMMapController.qml" line="786"/>
         <source>GPS currently unavailable</source>
         <translation>GPS derzeit nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="774"/>
+        <location filename="../qml/map/MMMapController.qml" line="801"/>
         <source>Choose Active Layer</source>
         <translation>Aktiven Layer wählen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="801"/>
+        <location filename="../qml/map/MMMapController.qml" line="828"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Konnte keinen editierbaren Layer im Projekt finden.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="802"/>
+        <location filename="../qml/map/MMMapController.qml" line="829"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Sehen Sie, wie Sie das Digitalisieren in Ihrem Projekt aktivieren können.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="819"/>
+        <location filename="../qml/map/MMMapController.qml" line="846"/>
         <source>More options</source>
         <translation>Mehr Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="824"/>
+        <location filename="../qml/map/MMMapController.qml" line="851"/>
         <source>Split geometry</source>
         <translation>Geometrie teilen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="836"/>
+        <location filename="../qml/map/MMMapController.qml" line="863"/>
         <source>Redraw geometry</source>
         <translation>Geometrie neu zeichnen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="848"/>
+        <location filename="../qml/map/MMMapController.qml" line="875"/>
         <source>Streaming mode</source>
         <translation>Fortlaufende Aufzeichnung</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="854"/>
+        <location filename="../qml/map/MMMapController.qml" line="881"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="1019"/>
         <source>Splitting done successfully</source>
         <translation>Aufteilung erfolgreich durchgeführt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1071"/>
+        <location filename="../qml/map/MMMapController.qml" line="1110"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Wähle einen Punkt aus, um mit der Bearbeitung der Geometrie zu beginnen.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1084"/>
+        <location filename="../qml/map/MMMapController.qml" line="1123"/>
         <source>Record new geometry for the feature</source>
         <translation>Neue Geometrie für das Feature erfassen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1166"/>
+        <location filename="../qml/map/MMMapController.qml" line="1213"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS derzeit nicht verfügbar.</translation>
     </message>
@@ -1385,7 +1388,63 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="27"/>
         <source>Learn more about %1how to setup themes%2.</source>
-        <translation>Finden Sie heraus wie man %1 Kartenthemen erstellen %2 kann</translation>
+        <translation>Finden Sie heraus wie man %1 Kartenthemen erstellen %2 kann.</translation>
+    </message>
+</context>
+<context>
+    <name>MMMeasureCrosshair</name>
+    <message>
+        <location filename="../qml/map/components/MMMeasureCrosshair.qml" line="93"/>
+        <source>Close shape</source>
+        <translation>Polygon schließen</translation>
+    </message>
+</context>
+<context>
+    <name>MMMeasureDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="54"/>
+        <source>Measure</source>
+        <translation>Messen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
+        <source>Repeat</source>
+        <translation>Wiederholen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
+        <source>Undo</source>
+        <translation>Rückgängig machen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <source>Perimeter</source>
+        <translation>Umfang</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <source>Length</source>
+        <translation>Länge</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="92"/>
+        <source>Area</source>
+        <translation>Fläche</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <source>Close shape</source>
+        <translation>Polygon schließen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <source>Add point</source>
+        <translation>Punkt hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="112"/>
+        <source>Done</source>
+        <translation>Fertig</translation>
     </message>
 </context>
 <context>
@@ -1406,7 +1465,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="21"/>
         <source>This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration.</source>
-        <translation>Dieses Projekt ist derzeit nicht in der Cloud hochgeladen. Laden Sie es hoch, um die Synchronisation und Zusammenarbeit zu aktivieren.</translation>
+        <translation>Dieses Projekt ist derzeit nicht in der Cloud hochgeladen. Laden Sie es hoch, um die Synchronisierung und Zusammenarbeit zu aktivieren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="22"/>
@@ -1424,17 +1483,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="20"/>
         <source>Sign in to your account</source>
-        <translation>Melden Sie sich bei Ihrem Konto an</translation>
+        <translation>Melden Sie sich bei Ihrem Konto an.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
         <source>You need to be signed in to your account in order to synchronise the project.</source>
-        <translation>Sie müssen bei Ihrem Mergin Maps Konto angemeldet sein, um das Projekt zu synchronisieren.</translation>
+        <translation>Sie müssen bei Ihrem Mergin Maps-Konto angemeldet sein, um das Projekt synchronisieren zu können.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
         <source>Yes, I want to sign in</source>
-        <translation>Ja, ich möchte mich anmelden</translation>
+        <translation>Ja, ich möchte mich anmelden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="23"/>
@@ -1452,12 +1511,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
         <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
-        <translation>Sie dürfen Ihre Änderungen in diesem Projekt nicht synchronisieren. Wenden Sie sich an den Projekt Eigentümer, um Ihnen die richtige Berechtigung zuzuweisen. Wenn Sie der Projekt Eigentümer sind, melden Sie sich beim Dashboard an.</translation>
+        <translation>Sie dürfen Ihre Änderungen in diesem Projekt nicht synchronisieren. Wenden Sie sich an den Projekt-Eigentümer, damit er Ihnen die richtige Berechtigung zuweist. Wenn Sie der Projekt-Eigentümer sind, melden Sie sich beim Dashboard an.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
@@ -1465,7 +1524,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
         <source>Your server will soon be out of date</source>
-        <translation>Ihr Server wird in Kürze veraltet veraltet sein</translation>
+        <translation>Ihr Server wird in Kürze veraltet sein.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
@@ -1521,12 +1580,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="146"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
-        <translation>Eine Verbindung zu externen Empfängern über Bluetooth wird nicht unterstützt</translation>
+        <translation>Eine Verbindung zu externen Empfängern über Bluetooth wird nicht unterstützt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>Diese Funktion ist auf iOS nicht verfügbar. Ihr Hardware-Hersteller könnte eine spezielle App bereitstellen, die sich mit dem Empfänger verbindet und die Position bereitstellt. Mergin Maps wird dennoch annehmen, dass es sich um das interne GPS Ihres Handys/Tablets handelt.</translation>
+        <translation>Diese Funktion ist auf iOS nicht verfügbar. Ihr Hardware-Hersteller könnte eine spezielle App bereitstellen, die sich mit dem Empfänger verbindet und die Position bereitstellt. Mergin Maps wird dann dennoch annehmen, dass es sich um das interne GPS Ihres Handys/Tablets handelt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
@@ -1536,7 +1595,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
         <source>Manage GPS receivers</source>
-        <translation>GPS Empfänger verwalten</translation>
+        <translation>GPS-Empfänger verwalten</translation>
     </message>
 </context>
 <context>
@@ -1544,17 +1603,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="23"/>
         <source>Position tracking</source>
-        <translation>Positions Tracking</translation>
+        <translation>Positions-Aufzeichnung</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Verfolgen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
+        <translation>Nehmen Sie Ihre Routen auch bei ausgeschaltetem Bildschirm auf. Ihre Aufzeichnungen werden in einem separaten Layer gespeichert. Fertiggestellte Strecken werden wie alle anderen Objekte synchronisiert.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>The app can track your position on this project.</source>
-        <translation>Mergin Maps kann Ihre Position in diesem Projekt aufzeichnen.</translation>
+        <translation>Mergin Maps kann Ihre Positionen in diesem Projekt aufzeichnen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
@@ -1595,7 +1654,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="21"/>
         <source>PROJ Error</source>
-        <translation>PROJ Fehler</translation>
+        <translation>PROJ-Fehler</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="24"/>
@@ -1631,7 +1690,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
-        <translation>Server wird nicht unterstützt. Bitte kontaktieren Sie Ihren Server Administrator</translation>
+        <translation>Server wird nicht unterstützt. Bitte kontaktieren Sie Ihren Server Administrator.</translation>
     </message>
 </context>
 <context>
@@ -1644,7 +1703,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
-        <translation>Bitte App nicht schließen</translation>
+        <translation>Bitte App nicht schließen.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
@@ -1692,12 +1751,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="63"/>
         <source>Your attention is required</source>
-        <translation>Ihre Aufmerksamkeit ist erforderlich</translation>
+        <translation>Ihre Aufmerksamkeit ist erforderlich.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
         <source>Click here to access the dashboard</source>
-        <translation>Klicken Sie hier um zum Mergin Maps Dashboard zu gelangen</translation>
+        <translation>Klicken Sie hier um zum Mergin Maps-Dashboard zu gelangen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
@@ -1707,12 +1766,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="85"/>
         <source>Create your workspace by clicking here</source>
-        <translation>Klicken Sie hier um einen Arbeitsbereich zu erstellen</translation>
+        <translation>Klicken Sie hier, um einen Arbeitsbereich zu erstellen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Currently open</source>
-        <translation>derzeit geöffnet</translation>
+        <translation>Derzeit geöffnet</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
@@ -1730,7 +1789,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="83"/>
         <source>QGIS log</source>
-        <translation>QGIS log</translation>
+        <translation>QGIS-Protokoll</translation>
     </message>
 </context>
 <context>
@@ -1738,7 +1797,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="24"/>
         <source>You have reached a maximum number of projects</source>
-        <translation>Sie haben die maximale Anzahl an Projekten erreicht</translation>
+        <translation>Sie haben die maximale Anzahl an Projekten erreicht.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="26"/>
@@ -1756,7 +1815,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="149"/>
         <source>The project can not be opened</source>
-        <translation>Das Projekt kann nicht geöffnet werden</translation>
+        <translation>Das Projekt kann nicht geöffnet werden.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
@@ -1771,12 +1830,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Let&apos;s get started</source>
-        <translation>Lassen Sie uns anfangen</translation>
+        <translation>Lassen Sie uns anfangen!</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
-        <translation>Erster Schritt ist ein neues Projekt zu erstellen</translation>
+        <translation>Im ersten Schritt erstellen wir ein neues Projekt.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
@@ -1804,7 +1863,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="23"/>
         <source>Unfortunately, your project could not be opened, please refer to our documentation to understand common problems.</source>
-        <translation>Leider konnte Ihr Projekt nicht geöffnet werden. Bitte ziehen Sie unsere Dokumentation zu Rate, um häufige Probleme zu verstehen.</translation>
+        <translation>Leider konnte Ihr Projekt nicht geöffnet werden. Bitte ziehen Sie unsere Dokumentation zurate, um häufige Probleme verstehen zu lernen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="26"/>
@@ -1851,7 +1910,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Your local changes</source>
-        <translation>Änderungen</translation>
+        <translation>Ihre lokalen Änderungen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
@@ -1861,12 +1920,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
         <source>There are currently no local changes</source>
-        <translation>Es gibt momentan keine lokalen Änderungen</translation>
+        <translation>Es gibt momentan keine lokalen Änderungen.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="44"/>
         <source>Once you have made some changes, they will appear here.</source>
-        <translation>Sobald Sie einige Änderungen vorgenommen haben, werden sie hier erscheinen</translation>
+        <translation>Sobald Sie einige Änderungen vorgenommen haben, werden sie hier erscheinen.</translation>
     </message>
 </context>
 <context>
@@ -1912,17 +1971,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
-        <translation>Wollen Sie den Empfänger von der Liste der letzten Empfänger entfernen?</translation>
+        <translation>Wollen Sie den Empfänger von der Liste der zuletzt genutzten Empfänger entfernen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="24"/>
         <source>Yes, I want to remove</source>
-        <translation>Ja, ich will entfernen</translation>
+        <translation>Ja, ich will ihn entfernen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="25"/>
         <source>No, thanks</source>
-        <translation>Nein, Danke</translation>
+        <translation>Nein, Danke.</translation>
     </message>
 </context>
 <context>
@@ -1930,7 +1989,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
-        <translation>Rückgängig</translation>
+        <translation>Rückgängig machen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
@@ -1964,7 +2023,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation>Möchten Sie das Foto löschen oder die Verknüpfung aufheben? Durch das Löschen wird das Foto vollständig aus Ihrem Projekt entfernt, während durch das Aufheben der Verknüpfung das Foto in Ihrem Projekt verbleibt, aber nicht mehr mit dem spezifischen Objekt verknüpft ist.</translation>
+        <translation>Möchten Sie das Foto löschen oder die Verknüpfung aufheben? Durch das Löschen wird das Foto vollständig aus Ihrem Projekt entfernt. Durch das Aufheben der Verknüpfung verbleibt das Foto in Ihrem Projekt, ist aber nicht mehr mit dem spezifischen Objekt verknüpft.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
@@ -1974,7 +2033,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
         <source>Unlink photo</source>
-        <translation>Unlink Foto</translation>
+        <translation>Foto-Verknüpfung aufheben</translation>
     </message>
 </context>
 <context>
@@ -1988,7 +2047,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
         <source>Any unsynchronised changes will be lost in project 
  %1</source>
-        <translation> Alle nicht synchronisierten Änderungen im Projekt gehen verloren  %1</translation>
+        <translation>Alle nicht synchronisierten Änderungen im Projekt %1 gehen verloren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
@@ -2006,7 +2065,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
         <source>Changelog could not be loaded</source>
-        <translation>Änderungen können nicht geladen werden</translation>
+        <translation>Änderungen können nicht geladen werden.</translation>
     </message>
 </context>
 <context>
@@ -2038,42 +2097,42 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
         <source>GPS accuracy threshold</source>
-        <translation>GPS Genauigkeitsschwellenwert</translation>
+        <translation>GPS-Genauigkeitsschwellenwert</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
-        <translation>Bestimmt, wann der Genauigkeitsindikator gelb wird</translation>
+        <translation>Bestimmt, wann der Genauigkeitsindikator gelb wird.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold, in meters</source>
-        <translation>GPS Genauigkeitsschwellenwert, in Metern</translation>
+        <translation>GPS-Genauigkeitsschwellenwert, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
         <source>Manage GPS receivers</source>
-        <translation>GPS Empfänger verwalten</translation>
+        <translation>GPS-Empfänger verwalten</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>GPS antenna height</source>
-        <translation>GPS Antennen Höhe</translation>
+        <translation>GPS-Antennenhöhe</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
-        <translation>Enthält die Stabhöhe und die Höhe der GPS-Empfängerantenne</translation>
+        <translation>Ist die Stabhöhe + die Höhe der GPS-Empfängerantenne</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
         <source>GPS antenna height, in meters</source>
-        <translation>GPS Antennenhöhe, in Metern</translation>
+        <translation>GPS-Antennenhöhe, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
         <source>Streaming mode</source>
-        <translation>Aufzeichnungs Modus</translation>
+        <translation>Aufzeichnungs-Modus</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="114"/>
@@ -2083,7 +2142,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="115"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Wählen Sie eine Intervall Typ zur automatischen Aufzeichnung</translation>
+        <translation>Wählen Sie eine Intervall-Typ für die automatische Aufzeichnung.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
@@ -2093,22 +2152,22 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="132"/>
         <source>Threshold interval</source>
-        <translation>Intervall Schwelle</translation>
+        <translation>Intervall-Schwelle</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>Im Aufzeichnungs-Modus wird in jedem Intervall ein Punk zum Objekt hinzugefügt</translation>
+        <translation>Im Aufzeichnungs-Modus wird nach jedem Intervall ein Punkt zum Objekt hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in meters</source>
-        <translation>Intervall Schwelle, in Metern</translation>
+        <translation>Intervall-Schwelle, in Metern</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Intervall Schwelle, in Sekunden</translation>
+        <translation>Intervall-Schwelle, in Sekunden</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="146"/>
@@ -2118,32 +2177,32 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
         <source>Reuse last entered value</source>
-        <translation>Letzten Wert wiederverwenden</translation>
+        <translation>Zuletzt eingegebenen Wert wiederverwenden</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
-        <translation>Jedes Feld bietet die Option, den gleichen Wert für das nächste Objekt wiederzuverwenden</translation>
+        <translation>Jedes Feld bietet die Option, denselben Wert wieder für das nächste Objekt zu verwenden.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Automatically sync changes</source>
-        <translation>Änderungen werden automatisch synchronisiert</translation>
+        <translation>Änderungen werden automatisch synchronisiert.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
         <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Jedes Mal, wenn Sie Änderungen speichern, wird die App automatisch synchronisieren</translation>
+        <translation>Jedes Mal, wenn Sie Änderungen speichern, wird die App diese automatisch synchronisieren.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Auto-lock position</source>
-        <translation>Auto-Lock Position</translation>
+        <translation>Position auto-sperren </translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
         <source>Each time you start recording, the app centers to GPS</source>
-        <translation>Bei jedem Start der Aufnahme, zentriert sich die App auf die GPS-Position</translation>
+        <translation>Bei jedem Start der Aufnahme, zentriert sich die App auf die GPS-Position.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
@@ -2212,12 +2271,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="117"/>
         <source>I want to subscribe to the newsletter</source>
-        <translation>Ich möchte mich für den Newsletter anmelden</translation>
+        <translation>Ich möchte mich für den Newsletter anmelden.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="142"/>
         <source>Already have an account?</source>
-        <translation>Ich habe bereits ein Benutzerkonto</translation>
+        <translation>Ich habe bereits ein Benutzerkonto.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="148"/>
@@ -2230,17 +2289,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
         <source>We could not split the feature</source>
-        <translation>Das Feature konnte nicht geteilt werden</translation>
+        <translation>Das Feature konnte nicht geteilt werden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Bitte stellen Sie sicher, dass die geteilte Linie Ihr Feature kreuzt. Das Feature muss eine gültige Geometrie haben, damit es geteilt werden kann.</translation>
+        <translation>Bitte stellen Sie sicher, dass die Teilungs-Linie Ihr Objekt schneidet. Das Objekt muss eine gültige Geometrie haben, damit es geteilt werden kann.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
@@ -2248,7 +2307,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
-        <translation>Rückgängig</translation>
+        <translation>Rückgängig machen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
@@ -2274,19 +2333,19 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Abstecken</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
         <source>Feature</source>
         <translation>Objekt</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
         <source>Distance</source>
         <translation>Distanz</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>k. A.</translation>
     </message>
 </context>
 <context>
@@ -2294,7 +2353,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="25"/>
         <source>You have reached a data limit</source>
-        <translation>Sie haben ein Datenlimit erreicht</translation>
+        <translation>Sie haben ein Datenlimit erreicht.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="28"/>
@@ -2309,7 +2368,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="68"/>
         <source>Using</source>
-        <translation>in Verwendung</translation>
+        <translation>In Verwendung</translation>
     </message>
 </context>
 <context>
@@ -2322,7 +2381,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
         <source>Move around your designated object to record its geometry. You can stop this anytime.</source>
-        <translation>Bewegen Sie sich um das festgelegte Objekt, um seine Geometrie aufzuzeichnen. Sie können dies jederzeit beenden.</translation>
+        <translation>Umrunden Sie das festgelegte Objekt, um seine Geometrie aufzuzeichnen. Sie können dies jederzeit beenden.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
@@ -2373,7 +2432,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Ok, I understand</source>
-        <translation>Ok, ich verstehe</translation>
+        <translation>Ok, ich verstehe.</translation>
     </message>
 </context>
 <context>
@@ -2399,12 +2458,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
         <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation>Wir waren fleißig und haben Mergin Maps noch besser gemacht! Dieses Update bringt ein frisches Design und verbesserte Navigation mit sich. Finden Sie schneller was Sie benötigen. Schauen Sie sich um!</translation>
+        <translation>Wir waren fleißig und haben Mergin Maps noch besser gemacht! Dieses Update bringt ein frisches Design und eine verbesserte Navigation mit sich. Finden Sie nun schneller, was Sie benötigen. Schauen Sie sich um!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>
         <source>Let&apos;s start!</source>
-        <translation>Lassen Sie uns anfangen</translation>
+        <translation>Lassen Sie uns anfangen!</translation>
     </message>
 </context>
 <context>
@@ -2472,7 +2531,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
-        <translation>Bitte geben Sie Ihre Branche an</translation>
+        <translation>Bitte geben Sie Ihre Branche an.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
@@ -2482,12 +2541,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
-        <translation>Erstellen Ihres Arbeitsbereichs: Teilen Sie uns Ihre Branche mit.</translation>
+        <translation>Erstellung Ihres Arbeitsbereichs: Teilen Sie uns Ihre Branche mit.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
-        <translation>Bitte geben Sie Ihre Branche an</translation>
+        <translation>Bitte geben Sie Ihre Branche an.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
@@ -2506,32 +2565,32 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="820"/>
         <source>Username must have at least 4 characters</source>
-        <translation>Der Benutzername muss mindestens 4 Zeichen haben</translation>
+        <translation>Der Benutzername muss mindestens 4 Zeichen haben.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="827"/>
         <source>Username contains invalid characters</source>
-        <translation>Der Benutzername enthält ungültige Zeichen</translation>
+        <translation>Der Benutzername enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="834"/>
         <source>Please enter a valid email</source>
-        <translation>Bitte eine gültige E-Mail-Adresse eingeben</translation>
+        <translation>Bitte eine gültige E-Mail-Adresse eingeben.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="841"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>Passwort nicht sicher genug. Es muss%1 mindestens 8 Zeichen haben%1 Kleinbuchstaben enthalten%1 Großbuchstaben enthalten%1 Zahlen oder Sonderzeichen enthalten</translation>
+        <translation>Passwort nicht sicher genug. Es muss%1 mindestens 8 Zeichen haben%1 Klein- und Großbuchstaben enthalten%1 und Zahlen oder Sonderzeichen enthalten.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="854"/>
         <source>Passwords do not match</source>
-        <translation>Passwörter nicht identisch</translation>
+        <translation>Passwörter sind nicht identisch.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="861"/>
         <source>Please accept Terms and Privacy Policy</source>
-        <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen</translation>
+        <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="891"/>
@@ -2566,12 +2625,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="3854"/>
         <source>Workspace name contains invalid characters</source>
-        <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen</translation>
+        <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3920"/>
         <source>Workspace %1 already exists</source>
-        <translation>Arbeitsbereich %1 ist bereits vorhanden</translation>
+        <translation>Arbeitsbereich %1 ist bereits vorhanden.</translation>
     </message>
 </context>
 <context>
@@ -2584,7 +2643,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation>Änderungen konnten nicht übernommen werden</translation>
+        <translation>Änderungen konnten nicht übernommen werden.</translation>
     </message>
 </context>
 <context>
@@ -2597,12 +2656,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
         <source>GPS receiver of this device</source>
-        <translation>GPS Empfänger dieses Gerätes</translation>
+        <translation>GPS-Empfänger dieses Gerätes</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
         <source>Internal (fused)</source>
-        <translation>Intern (fused)</translation>
+        <translation>Intern (fusioniert)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="42"/>
@@ -2617,7 +2676,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="54"/>
         <source>Internal (gps)</source>
-        <translation>Intern (gps)</translation>
+        <translation>Intern (GPS)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="55"/>
@@ -2627,12 +2686,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation>Bluetooth Gerät</translation>
+        <translation>Bluetooth-Gerät</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation>Bluetooth Gerät</translation>
+        <translation>Bluetooth-Gerät</translation>
     </message>
 </context>
 <context>
@@ -2640,17 +2699,17 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="154"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>Konnten den Aufzeichnungs-Layer für das Projekt nicht finden</translation>
+        <translation>Konnte den Tracking-Layer für das Projekt nicht finden.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="163"/>
         <source>Tracking layer not found or invalid</source>
-        <translation>Aufzeichnungs-Layer wurde nicht gefunden oder ist ungültig</translation>
+        <translation>Tracking-Layer wurde nicht gefunden oder ist ungültig.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Aufzeichnung konnte nicht gestartet werden, bitte kontaktieren Sie den Support</translation>
+        <translation>Tracking konnte nicht gestartet werden, bitte kontaktieren Sie den Support.</translation>
     </message>
 </context>
 <context>
@@ -2658,7 +2717,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation>Der Projekt Name enthält ungültige Zeichen</translation>
+        <translation>Der Projektname enthält ungültige Zeichen.</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
@@ -2671,7 +2730,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Pending changes to synchronise</source>
-        <translation>Anstehende Änderungen für die Synchronisation</translation>
+        <translation>Zur Synchronisierung anstehende Änderungen </translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="107"/>
@@ -2766,27 +2825,27 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>DGPS fix</source>
-        <translation>DGPS Fix</translation>
+        <translation>DGPS-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="146"/>
         <source>PPS fix</source>
-        <translation>PPS Fix</translation>
+        <translation>PPS-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="149"/>
         <source>RTK fix</source>
-        <translation>RTK Fix</translation>
+        <translation>RTK-Fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="152"/>
         <source>RTK float</source>
-        <translation>RTK Float</translation>
+        <translation>RTK-Float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="155"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Geschätzter Fixpunkt (Koppelnavigation)</translation>
+        <translation>Geschätzter Fix (Koppelnavigation)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="158"/>
@@ -2796,7 +2855,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../main.cpp" line="539"/>
         <source>Report submitted. Please contact us on %1</source>
-        <translation>Bericht gesendet. Kontaktiere uns unter %1</translation>
+        <translation>Bericht gesendet. Kontaktieren Sie uns unter %1.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="544"/>
@@ -2806,7 +2865,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
-        <translation>Synchronisation abgebrochen</translation>
+        <translation>Synchronisierung abgebrochen</translation>
     </message>
 </context>
 <context>
@@ -2820,113 +2879,118 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
+        <location filename="../qml/main.qml" line="269"/>
         <source>Sync</source>
         <translation>Sync</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="277"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="276"/>
+        <location filename="../qml/main.qml" line="285"/>
         <source>No editable layers found.</source>
-        <translation>Keine zu bearbeitenden Layer gefunden!</translation>
+        <translation>Keine bearbeitbaren Layer gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="282"/>
+        <location filename="../qml/main.qml" line="291"/>
         <source>Layers</source>
         <translation>Layers</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="291"/>
+        <location filename="../qml/main.qml" line="300"/>
         <source>Projects</source>
         <translation>Projekte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="299"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>Zoom to project</source>
-        <translation>Gesamtansicht</translation>
+        <translation>Auf Projekt zoomen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="317"/>
         <source>Map themes</source>
         <translation>Kartenthemen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="319"/>
+        <location filename="../qml/main.qml" line="328"/>
         <source>Position tracking</source>
-        <translation>Positions Tracking</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="330"/>
-        <source>Local changes</source>
-        <translation>Änderungen</translation>
+        <translation>Positions-Tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="339"/>
+        <source>Measure</source>
+        <translation>Messen </translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="345"/>
+        <source>Local changes</source>
+        <translation>Lokale Änderungen</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="354"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="534"/>
-        <location filename="../qml/main.qml" line="542"/>
+        <location filename="../qml/main.qml" line="549"/>
+        <location filename="../qml/main.qml" line="557"/>
         <source>not tracking</source>
-        <translation>keine Aufzeichnung</translation>
+        <translation>kein Tracking</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="735"/>
+        <location filename="../qml/main.qml" line="776"/>
         <source>Select feature</source>
         <translation>Objekt auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="819"/>
+        <location filename="../qml/main.qml" line="860"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal</translation>
+        <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="823"/>
+        <location filename="../qml/main.qml" line="864"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="843"/>
+        <location filename="../qml/main.qml" line="884"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Die Kommunikation mit dem Server ist fehlgeschlagen. Versuchen Sie, Ihre Netzwerkverbindung zu verbessern.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="894"/>
+        <location filename="../qml/main.qml" line="935"/>
         <source>Up to date</source>
         <translation>Auf dem neuesten Stand</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="952"/>
+        <location filename="../qml/main.qml" line="993"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Beim Laden des Projekts traten Probleme auf. %1Details anzeigen%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="647"/>
+        <location filename="../qml/main.qml" line="688"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Abstecken ist deaktiviert, weil der Standort nicht verfügbar ist!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="788"/>
+        <location filename="../qml/main.qml" line="829"/>
         <source>Successfully synchronised</source>
         <translation>Synchronisierung erfolgreich</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="826"/>
+        <location filename="../qml/main.qml" line="867"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
-        <translation>Bei der Synchronisierung ist ein Problem aufgetreten. Wir werden es erneut versuchen. Klicken Sie hier, um mehr zu erfahren</translation>
+        <translation>Bei der Synchronisierung ist ein Problem aufgetreten. Wir werden es erneut versuchen. Klicken Sie hier, um mehr zu erfahren.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="973"/>
+        <location filename="../qml/main.qml" line="1014"/>
         <source>Could not read the project file:</source>
         <translation>Konnte die Projektdatei nicht lesen:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="998"/>
+        <location filename="../qml/main.qml" line="1039"/>
         <source>Press back again to quit the app</source>
         <translation>Drücken Sie erneut auf &quot;Zurück&quot;, um die Anwendung zu beenden.</translation>
     </message>

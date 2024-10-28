@@ -246,7 +246,7 @@ jobs:
               -S ../ \
               -B ./
       
-      - name: build APK
+      - name: Build APK
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
@@ -271,7 +271,7 @@ jobs:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
 
-      - name: build AAB
+      - name: Build AAB
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -298,4 +298,3 @@ jobs:
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB
-          

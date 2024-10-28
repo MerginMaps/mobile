@@ -168,25 +168,48 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, QgsProject *project )
 {
-  Qgis::DistanceUnit distUnit = destUnit;
+  if ( !project )
+    return QString();
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  return InputUtils::formatDistanceHelper( distanceInMeters, precision, project->distanceUnits() );
+}
+
+QString InputUtils::formatDistanceHelper( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+{
+  if ( destUnit == Qgis::DistanceUnit::Unknown )
   {
-    distUnit = QgsProject::instance()->distanceUnits();
+    destUnit = Qgis::DistanceUnit::Meters;
   }
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  const double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, destUnit );
+  const double distance = distanceInMeters * factor;
+  const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
+
+  return QString( "%L1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+}
+
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *project )
+{
+  if ( !project )
+    return QString();
+
+  return InputUtils::formatAreaHelper( areaInSquareMeters, precision, project->areaUnits() );
+}
+
+QString InputUtils::formatAreaHelper( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit )
+{
+  if ( destUnit == Qgis::AreaUnit::Unknown )
   {
-    return QString::number( distanceInMeters, 'f', precision );
+    destUnit = Qgis::AreaUnit::SquareMeters;
   }
 
-  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
-  double distance = distanceInMeters * factor;
-  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
+  const double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::AreaUnit::SquareMeters, destUnit );
+  const double area = areaInSquareMeters * factor;
+  const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
 
-  return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+  return QString( "%L1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
@@ -2193,4 +2216,9 @@ bool InputUtils::openLink( const QString &homePath, const QString &link )
   }
 
   return true;
+}
+
+double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
+{
+  return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
 }
