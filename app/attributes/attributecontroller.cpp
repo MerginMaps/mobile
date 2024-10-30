@@ -232,10 +232,11 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
-        // Retrieving field name/alias expression
         QgsEditFormConfig editFormConfig = layer->editFormConfig();
         QString fieldName = field.name();
         QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
+
+        // Retrieving field name expression
         QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
         QString nameExpressionString = nameProperty.expressionString();
         QgsExpression nameExpression( nameExpressionString );
@@ -948,7 +949,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
-  // Evaluate form items alias/name
+  // Evaluate form items name
   {
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )

@@ -37,7 +37,7 @@ FormItem::FormItem( const QUuid &id,
   , mParentTabId( parentTabId )
   , mType( type )
   , mName( name )
-  , mNameExpression( nameExpression ) //mNameExpression
+  , mNameExpression( nameExpression )
   , mShowName( showName )
   , mIsEditable( isEditable )
   , mEditableExpression( editableExpression )
