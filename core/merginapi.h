@@ -109,6 +109,7 @@ struct DownloadQueueItem
   qint64 rangeTo = -1;       //!< what range of bytes to download (-1 if downloading the whole file)
   bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
   QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
+  int retryCount = 0;
 };
 
 
@@ -142,6 +143,8 @@ struct TransactionStatus
     Pull
   };
 
+  static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
+
   qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
   qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
@@ -165,6 +168,9 @@ struct TransactionStatus
   // push-related data
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
   QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
+
+  // retry handling
+  int retryCount = 0;  //!< current number of retry attempts for failed network requests
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
@@ -657,7 +663,7 @@ class MerginApi: public QObject
 
     // Pull slots
     void pullInfoReplyFinished();
-    void downloadItemReplyFinished();
+    void downloadItemReplyFinished( DownloadQueueItem item );
     void cacheServerConfig();
 
     // Push slots
@@ -784,6 +790,13 @@ class MerginApi: public QObject
     //! Refreshes auth token if it is expired. It does a blocking call to authorize.
     //! Works only when login, password and token is set in UserAuth
     void refreshAuthToken();
+
+    /**
+     * Checks if a network error should trigger a retry attempt.
+     * \param reply Network reply to check for retryable errors
+     * \returns True if the error should trigger a retry, false otherwise
+     */
+    bool isRetryableNetworkError( QNetworkReply *reply );
 
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 

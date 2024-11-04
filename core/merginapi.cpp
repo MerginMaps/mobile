@@ -265,6 +265,16 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
 
   DownloadQueueItem item = transaction.downloadQueue.takeFirst();
 
+  QString itemInfo = QStringLiteral( "downloadNextItem : DownloadQueueItem(path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7)" )
+                     .arg( item.filePath )
+                     .arg( item.size )
+                     .arg( item.version )
+                     .arg( item.rangeFrom )
+                     .arg( item.rangeTo )
+                     .arg( item.downloadDiff )
+                     .arg( item.tempFileName );
+  qDebug() << "Processing item:" << itemInfo;
+
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/" ) + projectFullName );
   QUrlQuery query;
   // Handles special chars in a filePath (e.g prevents to convert "+" sign into a space)
@@ -287,7 +297,8 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
   }
 
   QNetworkReply *reply = mManager.get( request );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::downloadItemReplyFinished );
+  connect( reply, &QNetworkReply::finished, this, [this, item]() { downloadItemReplyFinished( item ); } );
+
   transaction.replyPullItems.insert( reply );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting item: " ) + url.toString() +
@@ -373,14 +384,12 @@ QString MerginApi::getApiKey( const QString &serverName )
   return "not-secret-key";
 }
 
-void MerginApi::downloadItemReplyFinished()
+void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
-
   QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
   QString tempFileName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrTempFileName ) ).toString();
-
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
   Q_ASSERT( transaction.replyPullItems.contains( r ) );
@@ -388,13 +397,10 @@ void MerginApi::downloadItemReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     QByteArray data = r->readAll();
-
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Downloaded item (%1 bytes)" ).arg( data.size() ) );
-
     QString tempFolder = getTempProjectDir( projectFullName );
     QString tempFilePath = tempFolder + "/" + tempFileName;
     createPathIfNotExists( tempFilePath );
-
     // save to a tmp file, assemble at the end
     QFile file( tempFilePath );
     if ( file.open( QIODevice::WriteOnly ) )
@@ -406,13 +412,10 @@ void MerginApi::downloadItemReplyFinished()
     {
       CoreUtils::log( "pull " + projectFullName, "Failed to open for writing: " + file.fileName() );
     }
-
     transaction.transferedSize += data.size();
     emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
-
     transaction.replyPullItems.remove( r );
     r->deleteLater();
-
     if ( !transaction.downloadQueue.isEmpty() )
     {
       // one request finished, let's start another one
@@ -428,6 +431,42 @@ void MerginApi::downloadItemReplyFinished()
       // no more requests to start, but there are pending requests - let's do nothing and wait
     }
   }
+  else if ( item.retryCount < transaction.MAX_RETRY_COUNT && isRetryableNetworkError( r ) )
+  {
+    item.retryCount++;
+    // Put the item back at the front for retry
+    transaction.downloadQueue.prepend( item );
+
+    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Retrying download (attempt %1 of 5)" ).arg( transaction.retryCount ) );
+
+    QString itemInfo = QStringLiteral( "DownloadQueueItem ( path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7 )" )
+                       .arg( item.filePath )
+                       .arg( item.size )
+                       .arg( item.version )
+                       .arg( item.rangeFrom )
+                       .arg( item.rangeTo )
+                       .arg( item.downloadDiff )
+                       .arg( item.tempFileName );
+    // qDebug() << "Retrying item:" << itemInfo;
+
+    qDebug() << "Current queue:";
+    for ( const DownloadQueueItem &queueItem : transaction.downloadQueue )
+    {
+      QString queueItemInfo = QStringLiteral( "DownloadQueueItem ( path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7)" )
+                              .arg( queueItem.filePath )
+                              .arg( queueItem.size )
+                              .arg( queueItem.version )
+                              .arg( queueItem.rangeFrom )
+                              .arg( queueItem.rangeTo )
+                              .arg( queueItem.downloadDiff )
+                              .arg( queueItem.tempFileName );
+      qDebug() << queueItemInfo;
+    }
+
+    downloadNextItem( projectFullName );
+    transaction.replyPullItems.remove( r );
+    r->deleteLater();
+  }
   else
   {
     QString serverMsg = extractServerErrorMsg( r->readAll() );
@@ -439,15 +478,12 @@ void MerginApi::downloadItemReplyFinished()
         serverMsg = r->errorString();
     }
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-
     transaction.replyPullItems.remove( r );
     r->deleteLater();
-
     if ( !transaction.pullItemsAborting )
     {
       // the first failed request will abort all the other pending requests too, and finish pull with error
       abortPullItems( projectFullName );
-
       // signal a networking error - we may retry
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
@@ -3222,8 +3258,8 @@ ProjectDiff MerginApi::compareProjectFiles(
   /*
   for ( MerginFile file : oldServerFilesMap )
   {
-    // R-D/L-D
-    // TODO: need to do anything?
+  // R-D/L-D
+  // TODO: need to do anything?
   }
   */
 
@@ -3945,3 +3981,20 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
 
+bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )
+{
+  Q_ASSERT( reply );
+
+  QNetworkReply::NetworkError err = reply->error();
+  int httpCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+
+  bool isRetryableError = ( err == QNetworkReply::TimeoutError ||
+                            err == QNetworkReply::TemporaryNetworkFailureError ||
+                            err == QNetworkReply::NetworkSessionFailedError ||
+                            err == QNetworkReply::UnknownNetworkError );
+
+  bool isRetryableHttpCode = ( httpCode == 500 || httpCode == 502 ||
+                               httpCode == 503 || httpCode == 504 );
+
+  return isRetryableError || isRetryableHttpCode;
+}
