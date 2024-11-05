@@ -2942,3 +2942,32 @@ void TestMerginApi::testParseVersion()
   QCOMPARE( major, 2024 );
   QCOMPARE( minor, 4 );
 }
+
+void TestMerginApi::testDownloadWithNetworkError()
+{
+  MockNetworkManager *mockManager = new MockNetworkManager( mApi );
+  mApi->setNetworkManager( mockManager );
+
+  QString projectName = "testDownloadWithNetworkError";
+  QString projectNamespace = mWorkspaceName;
+  createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  mockManager->setShouldFail( true );
+
+  QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
+  QSignalSpy errorSpy( mApi, &MerginApi::networkErrorOccurred );
+
+  mApi->pullProject( projectNamespace, projectName );
+
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
+
+  QCOMPARE( spy.count(), 1 );
+  QList<QVariant> arguments = spy.takeFirst();
+  QVERIFY( !arguments.at( 1 ).toBool() );
+
+  QCOMPARE( errorSpy.count(), 1 );
+
+  mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
+
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
+}

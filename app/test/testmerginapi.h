@@ -21,6 +21,44 @@
 
 #include <qgsapplication.h>
 
+class MockReply : public QNetworkReply
+{
+  public:
+    explicit MockReply( QObject *parent = nullptr ) : QNetworkReply( parent )
+    {
+      QNetworkReply::setError( QNetworkReply::ConnectionRefusedError, "Mock network failure" );
+      QMetaObject::invokeMethod( this, "finished", Qt::QueuedConnection );
+    }
+
+    void abort() override {}
+    qint64 readData( char *, qint64 ) override { return -1; }
+    qint64 writeData( const char *, qint64 ) override { return -1; }
+};
+
+class MockNetworkManager : public QNetworkAccessManager
+{
+  public:
+    explicit MockNetworkManager( QObject *parent = nullptr )
+      : QNetworkAccessManager( parent )
+      , mShouldFail( false )
+    {}
+
+    void setShouldFail( bool shouldFail ) { mShouldFail = shouldFail; }
+    bool shouldFail() const { return mShouldFail; }
+
+    QNetworkReply *post( const QNetworkRequest &request, const QByteArray &data )
+    {
+      if ( mShouldFail )
+      {
+        return new MockReply( this );
+      }
+      return QNetworkAccessManager::post( request, data );
+    }
+
+  private:
+    bool mShouldFail;
+};
+
 class TestMerginApi: public QObject
 {
     Q_OBJECT
@@ -40,6 +78,7 @@ class TestMerginApi: public QObject
     void testListProject();
     void testListProjectsByName();
     void testDownloadProject();
+    void testDownloadWithNetworkError();
     void testDownloadProjectSpecChars();
     void testCancelDownloadProject();
     void testCreateProjectTwice();
