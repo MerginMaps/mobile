@@ -266,16 +266,6 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
 
   DownloadQueueItem item = transaction.downloadQueue.takeFirst();
 
-  QString itemInfo = QStringLiteral( "downloadNextItem : DownloadQueueItem(path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7)" )
-                     .arg( item.filePath )
-                     .arg( item.size )
-                     .arg( item.version )
-                     .arg( item.rangeFrom )
-                     .arg( item.rangeTo )
-                     .arg( item.downloadDiff )
-                     .arg( item.tempFileName );
-  qDebug() << "Processing item:" << itemInfo;
-
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/raw/" ) + projectFullName );
   QUrlQuery query;
   // Handles special chars in a filePath (e.g prevents to convert "+" sign into a space)
@@ -432,37 +422,12 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
       // no more requests to start, but there are pending requests - let's do nothing and wait
     }
   }
-  else if ( item.retryCount < transaction.MAX_RETRY_COUNT && isRetryableNetworkError( r ) )
+  else if ( transaction.retryCount < transaction.MAX_RETRY_COUNT && isRetryableNetworkError( r ) )
   {
-    item.retryCount++;
-    // Put the item back at the front for retry
-    transaction.downloadQueue.prepend( item );
+    transaction.retryCount++;
+    transaction.downloadQueue.append( item );
 
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Retrying download (attempt %1 of 5)" ).arg( transaction.retryCount ) );
-
-    QString itemInfo = QStringLiteral( "DownloadQueueItem ( path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7 )" )
-                       .arg( item.filePath )
-                       .arg( item.size )
-                       .arg( item.version )
-                       .arg( item.rangeFrom )
-                       .arg( item.rangeTo )
-                       .arg( item.downloadDiff )
-                       .arg( item.tempFileName );
-    // qDebug() << "Retrying item:" << itemInfo;
-
-    qDebug() << "Current queue:";
-    for ( const DownloadQueueItem &queueItem : transaction.downloadQueue )
-    {
-      QString queueItemInfo = QStringLiteral( "DownloadQueueItem ( path: %1, size: %2, version: %3, range: %4-%5, diff: %6, temp: %7)" )
-                              .arg( queueItem.filePath )
-                              .arg( queueItem.size )
-                              .arg( queueItem.version )
-                              .arg( queueItem.rangeFrom )
-                              .arg( queueItem.rangeTo )
-                              .arg( queueItem.downloadDiff )
-                              .arg( queueItem.tempFileName );
-      qDebug() << queueItemInfo;
-    }
 
     downloadNextItem( projectFullName );
     transaction.replyPullItems.remove( r );
