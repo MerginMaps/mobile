@@ -579,6 +579,17 @@ class MerginApi: public QObject
      */
     bool apiSupportsWorkspaces();
 
+    /**
+     * Returns the network manager used for Mergin API requests
+     */
+    QNetworkAccessManager *networkManager() const { return mManager; }
+
+    /**
+     * Sets the network manager to be used for Mergin API requests
+     * \param QNetworkAccessManager
+     */
+    void setNetworkManager( QNetworkAccessManager *manager );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -656,6 +667,7 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
+    void networkManagerChanged();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -802,7 +814,7 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
-    QNetworkAccessManager mManager;
+    QNetworkAccessManager *mManager = nullptr;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
     QString mDataDir; // dir with all projects

@@ -2687,7 +2687,7 @@ void TestMerginApi::deleteRemoteProjectNow( MerginApi *api, const QString &proje
   QUrl url( api->mApiRoot + QStringLiteral( "/v2/projects/%1" ).arg( projectId ) );
   request.setUrl( url );
   qDebug() << "Trying to delete project " << projectName << ", id: " << projectId << " (" << url << ")";
-  QNetworkReply *r = api->mManager.deleteResource( request );
+  QNetworkReply *r = api->mManager->deleteResource( request );
   QSignalSpy spy( r, &QNetworkReply::finished );
   spy.wait( TestUtils::SHORT_REPLY );
 

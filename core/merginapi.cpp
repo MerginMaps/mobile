@@ -49,6 +49,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
+  , mManager( new QNetworkAccessManager( this ) )
 {
   // load cached data if there are any
   QSettings cache;
@@ -199,7 +200,7 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
 
   QString requestId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
 
@@ -248,7 +249,7 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   QString requestId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 
-  QNetworkReply *reply = mManager.post( request, body.toJson() );
+  QNetworkReply *reply = mManager->post( request, body.toJson() );
   CoreUtils::log( "list projects by name", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsByNameReplyFinished( requestId );} );
 
@@ -296,7 +297,7 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
     request.setRawHeader( "Range", range.toUtf8() );
   }
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   connect( reply, &QNetworkReply::finished, this, [this, item]() { downloadItemReplyFinished( item ); } );
 
   transaction.replyPullItems.insert( reply );
@@ -603,7 +604,7 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyPushFile );
-  transaction.replyPushFile = mManager.post( request, data );
+  transaction.replyPushFile = mManager->post( request, data );
   connect( transaction.replyPushFile, &QNetworkReply::finished, this, &MerginApi::pushFileReplyFinished );
 
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading item: " ) + url.toString() );
@@ -626,7 +627,7 @@ void MerginApi::pushStart( const QString &projectFullName, const QByteArray &jso
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyPushStart );
-  transaction.replyPushStart = mManager.post( request, json );
+  transaction.replyPushStart = mManager->post( request, json );
   connect( transaction.replyPushStart, &QNetworkReply::finished, this, &MerginApi::pushStartReplyFinished );
 
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Starting push request: " ) + url.toString() );
@@ -689,7 +690,7 @@ void MerginApi::sendPushCancelRequest( const QString &projectFullName, const QSt
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
-  QNetworkReply *reply = mManager.post( request, QByteArray() );
+  QNetworkReply *reply = mManager->post( request, QByteArray() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pushCancelReplyFinished );
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting upload transaction cancel: " ) + url.toString() );
 }
@@ -743,7 +744,7 @@ void MerginApi::pushFinish( const QString &projectFullName, const QString &trans
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyPushFinish );
-  transaction.replyPushFinish = mManager.post( request, QByteArray() );
+  transaction.replyPushFinish = mManager->post( request, QByteArray() );
   connect( transaction.replyPushFinish, &QNetworkReply::finished, this, &MerginApi::pushFinishReplyFinished );
 
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting transaction finish: " ) + transactionUUID );
@@ -839,7 +840,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
@@ -914,7 +915,7 @@ void MerginApi::registerUser( const QString &username,
   jsonObject.insert( QStringLiteral( "api_key" ), getApiKey( mApiRoot ) );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( username, password ); } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
@@ -950,7 +951,7 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   jsonObject.insert( QStringLiteral( "subscribe" ), wantsNewsletter );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   connect( reply, &QNetworkReply::finished, this, [ = ]() { this->postRegistrationFinished(); } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
 }
@@ -976,7 +977,7 @@ void MerginApi::getUserInfo()
   QUrl url( urlString );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "user info", QStringLiteral( "Requesting user info: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getUserInfoFinished );
 }
@@ -1003,7 +1004,7 @@ void MerginApi::getWorkspaceInfo()
   QUrl url( urlString );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "workspace info", QStringLiteral( "Requesting workspace info: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getWorkspaceInfoReplyFinished );
 }
@@ -1034,7 +1035,7 @@ void MerginApi::getServiceInfo()
   QUrl url( urlString );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
 
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getServiceInfoReplyFinished );
 
@@ -1139,7 +1140,7 @@ bool MerginApi::createProject( const QString &projectNamespace, const QString &p
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::createProjectFinished );
   CoreUtils::log( "create " + projectFullName, QStringLiteral( "Requesting project creation: " ) + url.toString() );
 
@@ -1159,7 +1160,7 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   QUrl url( mApiRoot + QStringLiteral( "/v1/project/%1" ).arg( projectFullName ) );
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
-  QNetworkReply *reply = mManager.deleteResource( request );
+  QNetworkReply *reply = mManager->deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, [this, informUser]() { this->deleteProjectFinished( informUser );} );
   CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Requesting project deletion: " ) + url.toString() );
 }
@@ -1470,7 +1471,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool w
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
-  return mManager.get( request );
+  return mManager->get( request );
 }
 
 bool MerginApi::validateAuth()
@@ -1689,7 +1690,7 @@ void MerginApi::pingMergin()
   QUrl url( mApiRoot + QStringLiteral( "/ping" ) );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "ping", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
@@ -2594,7 +2595,7 @@ void MerginApi::requestServerConfig( const QString &projectFullName )
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyPullServerConfig );
-  transaction.replyPullServerConfig = mManager.get( request );
+  transaction.replyPullServerConfig = mManager->get( request );
   connect( transaction.replyPullServerConfig, &QNetworkReply::finished, this, &MerginApi::cacheServerConfig );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting mergin config: " ) + url.toString() );
@@ -3555,7 +3556,7 @@ void MerginApi::deleteAccount()
   QNetworkRequest request = getDefaultRequest();
   QUrl url( mApiRoot + QStringLiteral( "/v1/user" ) );
   request.setUrl( url );
-  QNetworkReply *reply = mManager.deleteResource( request );
+  QNetworkReply *reply = mManager->deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, [this]() { this->deleteAccountFinished();} );
   CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
 }
@@ -3607,7 +3608,7 @@ void MerginApi::getServerConfig()
   QUrl url( urlString );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
 
   connect( reply, &QNetworkReply::finished, this, &MerginApi::getServerConfigReplyFinished );
   CoreUtils::log( "Config", QStringLiteral( "Requesting server configuration: " ) + url.toString() );
@@ -3723,7 +3724,7 @@ void MerginApi::listWorkspaces()
   QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "list workspaces", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listWorkspacesReplyFinished );
 }
@@ -3779,7 +3780,7 @@ void MerginApi::listInvitations()
   QNetworkRequest request = getDefaultRequest( mUserAuth->hasAuthData() );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager.get( request );
+  QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "list invitations", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::listInvitationsReplyFinished );
 }
@@ -3842,7 +3843,7 @@ void MerginApi::processInvitation( const QString &uuid, bool accept )
   jsonObject.insert( QStringLiteral( "accept" ), accept );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   CoreUtils::log( "process invitation", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::processInvitationReplyFinished );
 }
@@ -3904,7 +3905,7 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
 
-  QNetworkReply *reply = mManager.post( request, json );
+  QNetworkReply *reply = mManager->post( request, json );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::createWorkspaceReplyFinished );
   CoreUtils::log( "create " + workspaceName, QStringLiteral( "Requesting workspace creation: " ) + url.toString() );
 
@@ -3997,4 +3998,17 @@ bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )
                                httpCode == 503 || httpCode == 504 );
 
   return isRetryableError || isRetryableHttpCode;
+}
+
+void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
+{
+  if ( mManager == manager )
+    return;
+
+  delete mManager;
+  mManager = manager;
+  if ( mManager )
+    mManager->setParent( this );
+
+  emit networkManagerChanged();
 }
