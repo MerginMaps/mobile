@@ -2945,29 +2945,34 @@ void TestMerginApi::testParseVersion()
 
 void TestMerginApi::testDownloadWithNetworkError()
 {
-  // MockNetworkManager *mockManager = new MockNetworkManager( mApi );
-  // mApi->setNetworkManager( mockManager );
+    QString projectName = "testDownloadWithNetworkError";
+    QString projectNamespace = mWorkspaceName;
 
-  // QString projectName = "testDownloadWithNetworkError";
-  // QString projectNamespace = mWorkspaceName;
-  // createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+    // Create a test project on server
+    createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
-  // mockManager->setShouldFail( true );
+    // Create mock network manager
+    MockNetworkManager *mockManager = new MockNetworkManager( mApi );
+    mApi->setNetworkManager( mockManager );
 
-  // QSignalSpy spy( mApi, &MerginApi::syncProjectFinished );
-  // QSignalSpy errorSpy( mApi, &MerginApi::networkErrorOccurred );
+    // Track retry signals
+    QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
 
-  // mApi->pullProject( projectNamespace, projectName );
+    // Start download and make network fail after project info
+    mApi->pullProject( projectNamespace, projectName );
 
-  // QVERIFY( spy.wait( TestUtils::LONG_REPLY * 5 ) );
+    QSignalSpy pullStartedSpy( mApi, &MerginApi::pullFilesStarted );
+    QVERIFY( pullStartedSpy.wait( TestUtils::SHORT_REPLY ) );
+    mockManager->setShouldFail( true );
 
-  // QCOMPARE( spy.count(), 1 );
-  // QList<QVariant> arguments = spy.takeFirst();
-  // QVERIFY( !arguments.at( 1 ).toBool() );
+    // Wait for sync to finish
+    QSignalSpy syncFinishedSpy( mApi, &MerginApi::syncProjectFinished );
+    QVERIFY( syncFinishedSpy.wait( TestUtils::LONG_REPLY ) );
 
-  // QCOMPARE( errorSpy.count(), 1 );
+    // Verify we got retry signals
+    QVERIFY( retrySpy.count() > 0 );
 
-  // mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
-
-  // deleteRemoteProjectNow( mApi, projectNamespace, projectName );
+    // Cleanup
+    mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
+    deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 }

@@ -430,6 +430,8 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Retrying download (attempt %1 of 5)" ).arg( transaction.retryCount ) );
 
     downloadNextItem( projectFullName );
+
+    emit downloadItemRetried( projectFullName, transaction.retryCount );
     transaction.replyPullItems.remove( r );
     r->deleteLater();
   }
