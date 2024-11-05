@@ -26,7 +26,7 @@ class MockReply : public QNetworkReply
   public:
     explicit MockReply( QObject *parent = nullptr ) : QNetworkReply( parent )
     {
-      QNetworkReply::setError( QNetworkReply::ConnectionRefusedError, "Mock network failure" );
+      QNetworkReply::setError( QNetworkReply::UnknownNetworkError, "Mock network failure" );
       QMetaObject::invokeMethod( this, "finished", Qt::QueuedConnection );
     }
 
