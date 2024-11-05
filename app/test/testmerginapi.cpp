@@ -2945,34 +2945,34 @@ void TestMerginApi::testParseVersion()
 
 void TestMerginApi::testDownloadWithNetworkError()
 {
-    QString projectName = "testDownloadWithNetworkError";
-    QString projectNamespace = mWorkspaceName;
+  QString projectName = "testDownloadWithNetworkError";
+  QString projectNamespace = mWorkspaceName;
 
-    // Create a test project on server
-    createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  // Create a test project on server
+  createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
-    // Create mock network manager
-    MockNetworkManager *mockManager = new MockNetworkManager( mApi );
-    mApi->setNetworkManager( mockManager );
+  // Create mock network manager
+  MockNetworkManager *mockManager = new MockNetworkManager( mApi );
+  mApi->setNetworkManager( mockManager );
 
-    // Track retry signals
-    QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
+  // Track retry signals
+  QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
 
-    // Start download and make network fail after project info
-    mApi->pullProject( projectNamespace, projectName );
+  // Start download and make network fail after project info
+  mApi->pullProject( projectNamespace, projectName );
 
-    QSignalSpy pullStartedSpy( mApi, &MerginApi::pullFilesStarted );
-    QVERIFY( pullStartedSpy.wait( TestUtils::SHORT_REPLY ) );
-    mockManager->setShouldFail( true );
+  QSignalSpy pullStartedSpy( mApi, &MerginApi::pullFilesStarted );
+  QVERIFY( pullStartedSpy.wait( TestUtils::SHORT_REPLY ) );
+  mockManager->setShouldFail( true );
 
-    // Wait for sync to finish
-    QSignalSpy syncFinishedSpy( mApi, &MerginApi::syncProjectFinished );
-    QVERIFY( syncFinishedSpy.wait( TestUtils::LONG_REPLY ) );
+  // Wait for sync to finish
+  QSignalSpy syncFinishedSpy( mApi, &MerginApi::syncProjectFinished );
+  QVERIFY( syncFinishedSpy.wait( TestUtils::LONG_REPLY ) );
 
-    // Verify we got retry signals
-    QVERIFY( retrySpy.count() > 0 );
+  // Verify we got retry signals
+  QVERIFY( retrySpy.count() > 0 );
 
-    // Cleanup
-    mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
-    deleteRemoteProjectNow( mApi, projectNamespace, projectName );
+  // Cleanup
+  mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
+  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 }
