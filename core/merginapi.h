@@ -668,6 +668,7 @@ class MerginApi: public QObject
     void networkManagerChanged();
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
+    void downloadItemsStarted();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

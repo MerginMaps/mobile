@@ -2945,34 +2945,53 @@ void TestMerginApi::testParseVersion()
 
 void TestMerginApi::testDownloadWithNetworkError()
 {
+  // Store original network manager to restore it later
+  QNetworkAccessManager *originalManager = mApi->networkManager();
+
+  // create a project and do initial setup
   QString projectName = "testDownloadWithNetworkError";
-  QString projectNamespace = mWorkspaceName;
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
-  // Create a test project on server
-  createRemoteProject( mApiExtra, projectNamespace, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
-
-  // Create mock network manager
-  MockNetworkManager *mockManager = new MockNetworkManager( mApi );
+  // Set up mock network manager that will fail after first chunk
+  MockNetworkManager *mockManager = new MockNetworkManager();
   mApi->setNetworkManager( mockManager );
 
-  // Track retry signals
-  QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
+  QSignalSpy spyDownloadStarted( mApi, &MerginApi::downloadItemsStarted );
+  QSignalSpy spyRetried( mApi, &MerginApi::downloadItemRetried );
+  QSignalSpy spyFinished( mApi, &MerginApi::syncProjectFinished );
 
-  // Start download and make network fail after project info
-  mApi->pullProject( projectNamespace, projectName );
+  // Start download
+  mApi->pullProject( mWorkspaceName, projectName );
 
-  QSignalSpy pullStartedSpy( mApi, &MerginApi::pullFilesStarted );
-  QVERIFY( pullStartedSpy.wait( TestUtils::SHORT_REPLY ) );
+  // Wait for individual downloads to start
+  QVERIFY( spyDownloadStarted.wait( TestUtils::SHORT_REPLY ) );
+  QCOMPARE( spyDownloadStarted.count(), 1 );
+
+  // Now simulate network failure
   mockManager->setShouldFail( true );
 
-  // Wait for sync to finish
-  QSignalSpy syncFinishedSpy( mApi, &MerginApi::syncProjectFinished );
-  QVERIFY( syncFinishedSpy.wait( TestUtils::LONG_REPLY ) );
+  // Wait for retries
+  QVERIFY( spyRetried.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( spyRetried.count() >= 1 );  // Should have at least one retry
 
-  // Verify we got retry signals
-  QVERIFY( retrySpy.count() > 0 );
+  QList<QVariant> retryArgs = spyRetried.takeFirst();
+  QCOMPARE( retryArgs.at( 0 ).toString(), MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  QVERIFY( retryArgs.at( 1 ).toInt() >= 1 );
 
-  // Cleanup
-  mApi->setNetworkManager( new QNetworkAccessManager( mApi ) );
-  deleteRemoteProjectNow( mApi, projectNamespace, projectName );
+  // Restore normal network behavior to let download finish
+  mockManager->setShouldFail( false );
+
+  // Wait for download to finish
+  QVERIFY( spyFinished.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( spyFinished.count(), 1 );
+
+  QList<QVariant> finishArgs = spyFinished.takeFirst();
+  QCOMPARE( finishArgs.at( 0 ).toString(), MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  QVERIFY( finishArgs.at( 1 ).toBool() );  // Should finish successfully
+
+  // Clean up and restore original network manager
+  deleteLocalProject( mApi, mWorkspaceName, projectName );
+  mApi->setNetworkManager( originalManager );
+  delete mockManager;
 }
+
