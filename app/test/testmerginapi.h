@@ -24,15 +24,32 @@
 class MockReply : public QNetworkReply
 {
   public:
-    explicit MockReply( QObject *parent = nullptr ) : QNetworkReply( parent )
+    explicit MockReply( const QNetworkRequest &request, QNetworkAccessManager::Operation operation, QObject *parent = nullptr )
+      : QNetworkReply( parent )
     {
-      QNetworkReply::setError( QNetworkReply::TimeoutError, "Mock network failure" );
+      setRequest( request );
+      setOperation( operation );
+      setUrl( request.url() );
+
+      setError( QNetworkReply::TimeoutError, "Mock network failure" );
+
+      QMetaObject::invokeMethod( this, "errorOccurred", Qt::QueuedConnection, Q_ARG( QNetworkReply::NetworkError, QNetworkReply::TimeoutError ) );
       QMetaObject::invokeMethod( this, "finished", Qt::QueuedConnection );
     }
 
     void abort() override {}
-    qint64 readData( char *, qint64 ) override { return -1; }
-    qint64 writeData( const char *, qint64 ) override { return -1; }
+
+    qint64 readData( char *data, qint64 maxlen ) override
+    {
+      Q_UNUSED( data );
+      Q_UNUSED( maxlen );
+      return -1;
+    }
+
+    qint64 bytesAvailable() const override
+    {
+      return 0;
+    }
 };
 
 class MockNetworkManager : public QNetworkAccessManager
@@ -43,25 +60,23 @@ class MockNetworkManager : public QNetworkAccessManager
       , mShouldFail( false )
     {}
 
-    void setShouldFail( bool shouldFail ) { mShouldFail = shouldFail; }
-    bool shouldFail() const { return mShouldFail; }
-
-    QNetworkReply *get( const QNetworkRequest &request )
+    void setShouldFail( bool shouldFail )
     {
-      if ( mShouldFail )
-      {
-        return new MockReply( this );
-      }
-      return QNetworkAccessManager::get( request );
+      mShouldFail = shouldFail;
     }
 
-    QNetworkReply *post( const QNetworkRequest &request, const QByteArray &data )
+    bool shouldFail() const { return mShouldFail; }
+
+  protected:
+    QNetworkReply *createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData = nullptr ) override
     {
       if ( mShouldFail )
       {
-        return new MockReply( this );
+        MockReply *reply = new MockReply( request, op, this );
+        return reply;
       }
-      return QNetworkAccessManager::post( request, data );
+
+      return QNetworkAccessManager::createRequest( op, request, outgoingData );
     }
 
   private:
