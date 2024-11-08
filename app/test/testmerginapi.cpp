@@ -2982,7 +2982,7 @@ void TestMerginApi::testDownloadWithNetworkError()
   QVERIFY( retrySpy.count() > 0 );
   QCOMPARE( finishSpy.count(), 1 );
 
-  // Verify that 5 (MAX_RETRY_COUNT) retry attempts were made
+  // Verify that transaction.MAX_RETRY_COUNT retry attempts were made
   int maxRetries = TransactionStatus::MAX_RETRY_COUNT;
   QCOMPARE( retrySpy.count(), maxRetries );
 

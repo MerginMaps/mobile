@@ -427,7 +427,8 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
     transaction.retryCount++;
     transaction.downloadQueue.append( item );
 
-    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Retrying download (attempt %1 of 5)" ).arg( transaction.retryCount ) );
+    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Retrying download (attempt %1 of %2)" ).arg( transaction.retryCount )
+                    .arg( transaction.MAX_RETRY_COUNT ) );
 
     downloadNextItem( projectFullName );
 
@@ -3228,8 +3229,8 @@ ProjectDiff MerginApi::compareProjectFiles(
   /*
   for ( MerginFile file : oldServerFilesMap )
   {
-  // R-D/L-D
-  // TODO: need to do anything?
+    // R-D/L-D
+    // TODO: need to do anything?
   }
   */
 
