@@ -3972,6 +3972,9 @@ bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )
 
 void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
 {
+  if ( !manager )
+    return;
+
   if ( mManager == manager )
     return;
 

@@ -584,6 +584,7 @@ class MerginApi: public QObject
 
     /**
      * Sets the network manager to be used for Mergin API requests
+     * Function will return early if manager is null.
      */
     void setNetworkManager( QNetworkAccessManager *manager );
 
