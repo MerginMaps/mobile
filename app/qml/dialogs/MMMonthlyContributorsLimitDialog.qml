@@ -31,4 +31,8 @@ MMComponents.MMDrawerDialog {
     root.manageAccountClicked()
     close()
   }
+
+  onSecondaryButtonClicked: {
+    close()
+  }
 }
