@@ -20,7 +20,7 @@ MMComponents.MMDrawerDialog {
   signal manageAccountClicked()
 
   title: qsTr("You've reached the maximum number of active monthly contributors for your current subscription.")
-  imageSource: __style.reachedDataLimitImage
+  imageSource: __style.reachedMonthlyContributorLimitImage
 
   description: qsTr( "Upgrade your subscription or wait until next month for the limit to reset." )
 
