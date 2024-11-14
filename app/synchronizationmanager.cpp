@@ -286,10 +286,6 @@ void SynchronizationManager::onProjectSyncFailure(
   }
   else
   {
-    if ( error == SynchronizationError::MonthlyContributorsLimitHit )
-    {
-      emit monthlyContributorsLimitReached( "" );
-    }
     mSyncProcesses.remove( projectFullName );
     emit syncFinished( projectFullName, false, -1, false );
 
