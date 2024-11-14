@@ -2994,6 +2994,9 @@ void TestMerginApi::testDownloadWithNetworkError()
   LocalProject localProject = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
   QVERIFY( !localProject.isValid() );
 
+  // Disconnect all signals
+  disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
+
   // Restore the original manager
   QNetworkAccessManager *originalManager = new QNetworkAccessManager( this );
   mApi->setNetworkManager( originalManager );
