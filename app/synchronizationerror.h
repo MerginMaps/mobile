@@ -31,6 +31,7 @@ class SynchronizationError
       ProjectNotFound,
       VersionMismatch,
       ServerError,
+      MonthlyContributorsLimitHit,
       UnknownError
     };
     Q_ENUMS( ErrorType );

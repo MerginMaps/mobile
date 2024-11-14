@@ -715,6 +715,14 @@ ApplicationWindow {
     onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
+  MMMonthlyContributorsLimitDialog {
+    id: monthlyContributorsLimitDialog
+
+    apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
+
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+  }
+
   MMProjectLimitDialog {
     id: projectLimitDialog
 
@@ -873,6 +881,10 @@ ApplicationWindow {
           }
         }
       }
+    }
+
+    function onMonthlyContributorsLimitReached( uploadSize ) {
+      monthlyContributorsLimitDialog.open()
     }
   }
 

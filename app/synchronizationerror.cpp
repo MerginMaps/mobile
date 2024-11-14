@@ -37,6 +37,11 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
     // Project no longer exists / is on different server
     return ErrorType::ProjectNotFound;
   }
+  else if ( errorCode == 422 )
+  {
+    // Hit the maximun number of contributor per month
+    return ErrorType::MonthlyContributorsLimitHit;
+  }
   else if ( errorCode >= 500 )
   {
     // Exceptions in server code or maintenance mode
