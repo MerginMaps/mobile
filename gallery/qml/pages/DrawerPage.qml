@@ -297,9 +297,6 @@ Page {
   MMMonthlyContributorsLimitDialog {
     id: monthlyContributorsLimitDialog
 
-    dataToSync: "643.8 MB"
-    dataUsing: "9.23 MB / 10.0 MB"
-    usedData: 0.923
     apiSupportsSubscription: true
 
     onPrimaryButtonClicked: {
