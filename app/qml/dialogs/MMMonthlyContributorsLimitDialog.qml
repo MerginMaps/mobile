@@ -24,7 +24,7 @@ MMComponents.MMDrawerDialog {
 
   description: qsTr( "Upgrade your subscription or wait until next month for the limit to reset." )
 
-  primaryButton.text: apiSupportsSubscription ? qsTr("Manage account") : ""
+  primaryButton.text: apiSupportsSubscription ? qsTr("Manage account") : qsTr("Upgrade")
   secondaryButton.text: qsTr("Cancel")
 
   onPrimaryButtonClicked: {

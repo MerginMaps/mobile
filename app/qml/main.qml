@@ -720,7 +720,14 @@ ApplicationWindow {
 
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
-    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+    onManageAccountClicked: function() {
+      if(__merginApi.apiSupportsSubscriptions) {
+        Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+      }
+      else {
+        Qt.openUrlExternally("https://www.merginmaps.com/pricing")
+      }
+    }
   }
 
   MMProjectLimitDialog {
