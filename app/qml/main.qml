@@ -867,7 +867,7 @@ ApplicationWindow {
           // just banner that we will try again
           __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
         }
-        else if ( errorType === MM.SyncError.MonthlyContributorsLimitHit){
+        else if ( errorType === MM.SyncError.MonthlyContributorsLimitHit ){
           monthlyContributorsLimitDialog.open()
         }
         else
