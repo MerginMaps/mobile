@@ -19,13 +19,13 @@ MMComponents.MMDrawerDialog {
 
   signal manageAccountClicked()
 
-  title: qsTr("You've reached the maximum number of active monthly contributors for your current subscription.")
+  title: qsTr( "You've reached the maximum number of active monthly contributors for your current subscription." )
   imageSource: __style.reachedMonthlyContributorLimitImage
 
   description: qsTr( "Upgrade your subscription or wait until next month for the limit to reset." )
 
-  primaryButton.text: apiSupportsSubscription ? qsTr("Manage account") : qsTr("Upgrade")
-  secondaryButton.text: qsTr("Cancel")
+  primaryButton.text: apiSupportsSubscription ? qsTr( "Manage account" ) : qsTr( "Upgrade" )
+  secondaryButton.text: qsTr( "Cancel" )
 
   onPrimaryButtonClicked: {
     root.manageAccountClicked()
