@@ -276,6 +276,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Add")
         iconSource: __style.addIcon
+        visible: __inputUtils.userHasEditableRole( __activeProject.qgsProject )
         onClicked: {
           if ( __recordingLayersModel.rowCount() > 0 ) {
             stateManager.state = "map"
