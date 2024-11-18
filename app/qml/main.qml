@@ -721,7 +721,7 @@ ApplicationWindow {
     apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
 
     onManageAccountClicked: function() {
-      if(__merginApi.apiSupportsSubscriptions) {
+      if (__merginApi.apiSupportsSubscriptions) {
         Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
       }
       else {
@@ -932,7 +932,7 @@ ApplicationWindow {
     }
 
     function onMigrationRequested( version ) {
-      if( __appSettings.ignoreMigrateVersion !== version ) {
+      if ( __appSettings.ignoreMigrateVersion !== version ) {
         migrationDialog.version = version
         migrationDialog.open()
       }
