@@ -260,8 +260,8 @@ void FeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
     request.setOrderBy( QgsFeatureRequest::OrderBy(
     {
       QgsFeatureRequest::OrderByClause(
-        mLayer->attributeTableConfig().sortExpression(),
-        mLayer->attributeTableConfig().sortOrder() == Qt::AscendingOrder )
+      mLayer->attributeTableConfig().sortExpression(),
+      mLayer->attributeTableConfig().sortOrder() == Qt::AscendingOrder )
     } ) );
   }
 

@@ -3184,9 +3184,9 @@ ProjectDiff MerginApi::compareProjectFiles(
 
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
           bool previouslyIgnoredButShouldDownload = \
-              config.downloadMissingFiles &&
-              lastSyncConfig.isValid &&
-              MerginApi::excludeFromSync( file.path, lastSyncConfig );
+            config.downloadMissingFiles &&
+            lastSyncConfig.isValid &&
+            MerginApi::excludeFromSync( file.path, lastSyncConfig );
 
           if ( previouslyIgnoredButShouldDownload )
           {
