@@ -725,7 +725,7 @@ ApplicationWindow {
         Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
       }
       else {
-        Qt.openUrlExternally("https://www.merginmaps.com/pricing")
+        Qt.openUrlExternally(__inputHelp.merginPricingLink)
       }
     }
   }
