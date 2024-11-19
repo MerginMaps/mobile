@@ -920,7 +920,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
     }
   }
 
-  // Evaluate form items editability
+  // Evaluate if form items are editable
   {
     QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
@@ -935,12 +935,12 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
         if ( exp.isValid() )
         {
-          editable = exp.evaluate( &expressionContext ).toInt();
+          editable = exp.evaluate( &expressionContext ).toBool();
         }
 
         if ( item->isEditable() != editable )
         {
-          item->setEditable( editable );
+          item->setIsEditable( editable );
           changedFormItems << item->id();
         }
       }

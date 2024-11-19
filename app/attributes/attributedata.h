@@ -128,7 +128,7 @@ class FormItem
     void setValidationStatus( FieldValidator::ValidationStatus status );
 
     bool isEditable() const;
-    void setEditable( bool editable );
+    void setIsEditable( bool editable );
 
     bool isVisible() const;
     void setVisible( bool visible );

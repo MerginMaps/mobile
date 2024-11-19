@@ -245,7 +245,7 @@ void FormItem::setVisible( bool visible )
   mVisible = visible;
 }
 
-void FormItem::setEditable( bool editable )
+void FormItem::setIsEditable( bool editable )
 {
   mIsEditable = editable;
 }
