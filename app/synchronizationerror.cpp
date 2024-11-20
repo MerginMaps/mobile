@@ -40,7 +40,12 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
   else if ( errorCode == 422 )
   {
     // Hit the maximun number of contributor per month
-    return ErrorType::MonthlyContributorsLimitHit;
+    if ( errorMessage.contains( QStringLiteral( "Maximum number of workspace contributors" ) ) )
+    {
+      return ErrorType::MonthlyContributorsLimitHit;
+    }
+
+    return ErrorType::UnknownError;
   }
   else if ( errorCode >= 500 )
   {
