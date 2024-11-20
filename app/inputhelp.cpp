@@ -116,11 +116,6 @@ QString InputHelp::merginSubscriptionLink() const
   }
 }
 
-QString InputHelp::merginPricingLink() const
-{
-  return inputWeb + "/pricing" + utmTagSubscription;
-}
-
 QString InputHelp::privacyPolicyLink() const
 {
   return inputWeb + "/privacy-policy" + utmTagOther;

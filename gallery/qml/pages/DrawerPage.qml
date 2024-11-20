@@ -297,8 +297,6 @@ Page {
   MMMonthlyContributorsLimitDialog {
     id: monthlyContributorsLimitDialog
 
-    apiSupportsSubscription: true
-
     onPrimaryButtonClicked: {
       console.log("Manage workspace clicked")
     }

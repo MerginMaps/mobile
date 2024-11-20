@@ -718,16 +718,7 @@ ApplicationWindow {
   MMMonthlyContributorsLimitDialog {
     id: monthlyContributorsLimitDialog
 
-    apiSupportsSubscription: __merginApi.apiSupportsSubscriptions
-
-    onManageAccountClicked: function() {
-      if (__merginApi.apiSupportsSubscriptions) {
-        Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
-      }
-      else {
-        Qt.openUrlExternally(__inputHelp.merginPricingLink)
-      }
-    }
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
   MMProjectLimitDialog {
