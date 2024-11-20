@@ -406,12 +406,15 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
     transaction.transferedSize += data.size();
     emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
     transaction.replyPullItems.remove( r );
+
     r->deleteLater();
+
     if ( !transaction.downloadQueue.isEmpty() )
     {
       // one request finished, let's start another one
       downloadNextItem( projectFullName );
     }
+
     else if ( transaction.replyPullItems.isEmpty() )
     {
       // nothing else to download and all requests are finished, we're done
@@ -3978,10 +3981,7 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   if ( mManager == manager )
     return;
 
-  delete mManager;
   mManager = manager;
-  if ( mManager )
-    mManager->setParent( this );
 
   emit networkManagerChanged();
 }

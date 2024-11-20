@@ -24,17 +24,22 @@
 class MockReply : public QNetworkReply
 {
   public:
-    explicit MockReply( const QNetworkRequest &request, QNetworkAccessManager::Operation operation, QObject *parent = nullptr )
+    explicit MockReply( const QNetworkRequest &request, QNetworkAccessManager::Operation operation,
+                        QObject *parent = nullptr, QNetworkReply::NetworkError errorCode = QNetworkReply::NoError )
       : QNetworkReply( parent )
     {
       setRequest( request );
       setOperation( operation );
       setUrl( request.url() );
 
-      setError( QNetworkReply::TimeoutError, "Mock network failure" );
+      if ( errorCode != QNetworkReply::NoError )
+      {
+        setError( errorCode, "Mock network failure" );
+        QMetaObject::invokeMethod( this, "errorOccurred", Qt::QueuedConnection, Q_ARG( QNetworkReply::NetworkError, errorCode ) );
+      }
 
-      QMetaObject::invokeMethod( this, "errorOccurred", Qt::QueuedConnection, Q_ARG( QNetworkReply::NetworkError, QNetworkReply::TimeoutError ) );
       QMetaObject::invokeMethod( this, "finished", Qt::QueuedConnection );
+      open( QIODevice::ReadOnly );
     }
 
     void abort() override {}
@@ -58,29 +63,29 @@ class MockNetworkManager : public QNetworkAccessManager
     explicit MockNetworkManager( QObject *parent = nullptr )
       : QNetworkAccessManager( parent )
       , mShouldFail( false )
+      , mErrorCode( QNetworkReply::NoError )
     {}
 
-    void setShouldFail( bool shouldFail )
+    void setShouldFail( bool shouldFail, QNetworkReply::NetworkError errorCode = QNetworkReply::NoError )
     {
       mShouldFail = shouldFail;
+      mErrorCode = errorCode;
     }
-
-    bool shouldFail() const { return mShouldFail; }
 
   protected:
     QNetworkReply *createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData = nullptr ) override
     {
       if ( mShouldFail )
       {
-        MockReply *reply = new MockReply( request, op, this );
+        auto *reply = new MockReply( request, op, this, mErrorCode );
         return reply;
       }
-
       return QNetworkAccessManager::createRequest( op, request, outgoingData );
     }
 
   private:
     bool mShouldFail;
+    QNetworkReply::NetworkError mErrorCode;
 };
 
 class TestMerginApi: public QObject
