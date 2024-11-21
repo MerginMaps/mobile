@@ -865,9 +865,6 @@ ApplicationWindow {
           // just banner that we will try again
           __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
         }
-        else if ( errorType === MM.SyncError.MonthlyContributorsLimitHit ){
-          monthlyContributorsLimitDialog.open()
-        }
         else
         {
           syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
@@ -902,6 +899,10 @@ ApplicationWindow {
       }
       storageLimitDialog.dataToSync = __inputUtils.bytesToHumanSize(uploadSize)
       storageLimitDialog.open()
+    }
+
+    function onMonthlyContributorLimitReached( uploadSize ) {
+      monthlyContributorsLimitDialog.open()
     }
 
     function onProjectLimitReached( maxProjects, errorMsg ) {

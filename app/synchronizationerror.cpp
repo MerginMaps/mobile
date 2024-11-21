@@ -37,16 +37,6 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
     // Project no longer exists / is on different server
     return ErrorType::ProjectNotFound;
   }
-  else if ( errorCode == 422 )
-  {
-    // Hit the maximun number of contributor per month
-    if ( errorMessage.contains( QStringLiteral( "Maximum number of workspace contributors" ) ) )
-    {
-      return ErrorType::MonthlyContributorsLimitHit;
-    }
-
-    return ErrorType::UnknownError;
-  }
   else if ( errorCode >= 500 )
   {
     // Exceptions in server code or maintenance mode
