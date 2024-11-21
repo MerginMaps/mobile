@@ -3945,3 +3945,21 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
 
+bool MerginApi::updateProjectMetadata( const QString &filePath )
+{
+
+    QNetworkReply *r = getProjectInfo( filePath );
+    Q_ASSERT( r );
+
+    if ( r->error() == QNetworkReply::NoError )
+    {
+        QByteArray data = r->readAll();
+        MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+

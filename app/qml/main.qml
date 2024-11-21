@@ -388,6 +388,7 @@ ApplicationWindow {
     }
 
     onOpenProjectRequested: function( projectPath ) {
+      __merginApi.updateProjectMetadata( projectPath ) //HERE
       __activeProject.load( projectPath )
     }
 
