@@ -2951,45 +2951,62 @@ void TestMerginApi::testDownloadWithNetworkError()
   QString projectName = "testDownloadRetry";
   createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
 
-  // Create mock manager - initially not failing
-  MockNetworkManager *failingManager = new MockNetworkManager( this );
-  mApi->setNetworkManager( failingManager );
-
-  QSignalSpy startSpy( mApi, &MerginApi::downloadItemsStarted );
-  QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
-  QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
-
-  // First attempt - TimeoutError
-  connect( mApi, &MerginApi::downloadItemsStarted, this, [this, failingManager]()
+  // Errors to test
+  QList<QNetworkReply::NetworkError> errorsToTest =
   {
-    failingManager->setShouldFail( true, QNetworkReply::TimeoutError );
-  } );
+    QNetworkReply::TimeoutError,
+    QNetworkReply::NetworkSessionFailedError
+  };
 
-  mApi->pullProject( mWorkspaceName, projectName );
-  QVERIFY( startSpy.wait( TestUtils::LONG_REPLY ) );
-  QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
-
-  disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
-
-  failingManager->setShouldFail( false );
-
-  // Second attempt - TemporaryNetworkFailureError
-  connect( mApi, &MerginApi::downloadItemsStarted, this, [this, failingManager]()
+  foreach ( QNetworkReply::NetworkError networkError, errorsToTest )
   {
-    failingManager->setShouldFail( true, QNetworkReply::TemporaryNetworkFailureError );
-  } );
+    // Create mock manager - initially not failing
+    MockNetworkManager *failingManager = new MockNetworkManager( this );
+    mApi->setNetworkManager( failingManager );
 
-  mApi->pullProject( mWorkspaceName, projectName );
-  QVERIFY( startSpy.wait( TestUtils::LONG_REPLY ) );
-  QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+    // Create signal spies
+    QSignalSpy startSpy( mApi, &MerginApi::downloadItemsStarted );
+    QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
+    QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
 
-  disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
+    // Trigger the current network error when download starts
+    connect( mApi, &MerginApi::downloadItemsStarted, this, [this, failingManager, networkError]()
+    {
+      failingManager->setShouldFail( true, networkError );
+    } );
 
-  QVERIFY( startSpy.count() > 0 );
-  QVERIFY( retrySpy.count() > 0 );
-  QCOMPARE( finishSpy.count(), 3 );
+    mApi->pullProject( mWorkspaceName, projectName );
 
-  // Restore original manager and clear old one
-  mApi->setNetworkManager( originalManager );
-  delete failingManager;
+    // Verify a transaction was created
+    QCOMPARE( mApi->transactions().count(), 1 );
+
+    // Wait for download to start and then fail
+    QVERIFY( startSpy.wait( TestUtils::LONG_REPLY ) );
+    QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+
+    // Verify signals were emitted
+    QVERIFY( startSpy.count() > 0 );
+    QVERIFY( retrySpy.count() > 0 );
+    QCOMPARE( finishSpy.count(), 1 );
+
+    // Verify that MAX_RETRY_COUNT retry attempts were made
+    int maxRetries = TransactionStatus::MAX_RETRY_COUNT;
+    QCOMPARE( retrySpy.count(), maxRetries );
+
+    // Verify sync failed
+    QList<QVariant> arguments = finishSpy.takeFirst();
+    QVERIFY( !arguments.at( 1 ).toBool() );
+
+    // Verify no local project was created
+    LocalProject localProject = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
+    QVERIFY( !localProject.isValid() );
+
+    // Disconnect all signals
+    disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
+
+    // Clean up
+    mApi->setNetworkManager( originalManager );
+    delete failingManager;
+  }
 }
+
