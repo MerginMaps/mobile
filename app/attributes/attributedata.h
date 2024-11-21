@@ -169,8 +169,8 @@ class FormItem
     const QgsEditorWidgetSetup mEditorWidgetSetup;
     const int mFieldIndex;
     const QgsExpression mVisibilityExpression;
-    const QgsExpression mNameExpression;
-    const QgsExpression mEditableExpression;
+    const QgsExpression mNameExpression; // Expression to define field’s display name (alias)
+    const QgsExpression mEditableExpression; // Expression to determine whether the field is editable
 
     QString mName;
     QString mValidationMessage;
