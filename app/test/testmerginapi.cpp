@@ -2971,6 +2971,8 @@ void TestMerginApi::testDownloadWithNetworkError()
 
   disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
 
+  failingManager->setShouldFail( false );
+
   // Second attempt - TemporaryNetworkFailureError
   connect( mApi, &MerginApi::downloadItemsStarted, this, [this, failingManager]()
   {
