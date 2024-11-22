@@ -573,6 +573,8 @@ class MerginApi: public QObject
      */
     bool apiSupportsWorkspaces();
 
+    Q_INVOKABLE bool updateProjectMetadata( const QString &filePath );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -788,8 +790,6 @@ class MerginApi: public QObject
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
-
-    bool updateProjectMetadata( const QString &filePath );
 
     QNetworkAccessManager mManager;
     QString mApiRoot;
