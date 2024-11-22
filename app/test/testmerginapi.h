@@ -108,6 +108,7 @@ class TestMerginApi: public QObject
     void testListProjectsByName();
     void testDownloadProject();
     void testDownloadWithNetworkError();
+    void testDownloadWithNetworkErrorRecovery();
     void testDownloadProjectSpecChars();
     void testCancelDownloadProject();
     void testCreateProjectTwice();
