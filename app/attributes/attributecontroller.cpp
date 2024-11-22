@@ -928,7 +928,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       std::shared_ptr<FormItem> item = formItemsIterator.value();
       QgsExpression exp = item->editableExpression();
 
-      if ( !exp.expression().isEmpty() )
+      if ( !exp.expression().isEmpty() && !item->field().defaultValueDefinition().applyOnUpdate() )
       {
         bool editable = item->isEditable();
         exp.prepare( &expressionContext );
