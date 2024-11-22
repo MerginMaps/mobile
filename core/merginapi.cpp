@@ -3960,17 +3960,18 @@ bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )
   Q_ASSERT( reply );
 
   QNetworkReply::NetworkError err = reply->error();
-  int httpCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
   bool isRetryableError = ( err == QNetworkReply::TimeoutError ||
                             err == QNetworkReply::TemporaryNetworkFailureError ||
                             err == QNetworkReply::NetworkSessionFailedError ||
-                            err == QNetworkReply::UnknownNetworkError );
+                            err == QNetworkReply::UnknownNetworkError ||
+                            err == QNetworkReply::RemoteHostClosedError ||
+                            err == QNetworkReply::ProxyConnectionClosedError ||
+                            err == QNetworkReply::ProxyTimeoutError ||
+                            err == QNetworkReply::UnknownProxyError ||
+                            err == QNetworkReply::ServiceUnavailableError );
 
-  bool isRetryableHttpCode = ( httpCode == 500 || httpCode == 502 ||
-                               httpCode == 503 || httpCode == 504 );
-
-  return isRetryableError || isRetryableHttpCode;
+  return isRetryableError;
 }
 
 void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
