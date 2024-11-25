@@ -901,7 +901,8 @@ ApplicationWindow {
       storageLimitDialog.open()
     }
 
-    function onMonthlyContributorLimitReached( uploadSize ) {
+    function onMonthlyContributorLimitReached( quota, serverMsg ) {
+      monthlyContributorsLimitDialog.contributorsQuota = quota
       monthlyContributorsLimitDialog.open()
     }
 

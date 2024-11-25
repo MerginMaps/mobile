@@ -15,9 +15,11 @@ import "../components" as MMComponents
 MMComponents.MMDrawerDialog {
   id: root
 
+  property int contributorsQuota
+
   signal manageAccountClicked()
 
-  title: qsTr( "You've reached the maximum number of active monthly contributors for your current subscription." )
+  title: qsTr( "You've reached the maximum number of active monthly contributors (%1) for your current subscription." ).arg( contributorsQuota )
   imageSource: __style.reachedMonthlyContributorLimitImage
 
   description: qsTr( "Upgrade your subscription or wait until next month for the limit to reset." )

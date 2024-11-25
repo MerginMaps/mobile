@@ -297,6 +297,8 @@ Page {
   MMMonthlyContributorsLimitDialog {
     id: monthlyContributorsLimitDialog
 
+    contributorsQuota: 15
+
     onPrimaryButtonClicked: {
       console.log("Manage workspace clicked")
     }

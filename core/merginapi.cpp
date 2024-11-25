@@ -2145,7 +2145,11 @@ void MerginApi::pushStartReplyFinished()
     }
     else if ( EnumHelper::isEqual( code, ErrorCode::MonthlyContributorsLimitHit ) )
     {
-      emit monthlyContributorLimitReached( serverMsg );
+      int quota = 0;
+      QVariant maximunMonthlyContributor = extractServerErrorValue( data, "projects_quota" );
+      if ( maximunMonthlyContributor.isValid() )
+        quota = maximunMonthlyContributor.toInt();
+      emit monthlyContributorLimitReached( quota, serverMsg );
     }
     else
     {
