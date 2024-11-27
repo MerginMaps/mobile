@@ -2222,14 +2222,3 @@ double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
 {
   return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
 }
-
-bool InputUtils::userHasEditableRole( QgsProject *project )
-{
-  const QString &projectDir = project->absolutePath();
-  QString metadataFilePath = projectDir + "/" + MerginApi::sMetadataFile;
-  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( metadataFilePath );
-  QString role = metadata.role;
-
-  bool hasEditableRole = role != "reader" && role != "guest";
-  return hasEditableRole;
-}

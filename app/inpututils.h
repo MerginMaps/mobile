@@ -589,11 +589,6 @@ class InputUtils: public QObject
      */
     static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
 
-    /**
-     * Checks if the user can edit the project
-     */
-    Q_INVOKABLE static bool userHasEditableRole( QgsProject *project );
-
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

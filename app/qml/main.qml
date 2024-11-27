@@ -276,7 +276,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Add")
         iconSource: __style.addIcon
-        visible: __inputUtils.userHasEditableRole( __activeProject.qgsProject )
+        visible: __activeProject.projectRole !== "reader"
         onClicked: {
           if ( __recordingLayersModel.rowCount() > 0 ) {
             stateManager.state = "map"
@@ -388,7 +388,6 @@ ApplicationWindow {
     }
 
     onOpenProjectRequested: function( projectPath ) {
-      __merginApi.updateProjectMetadata( projectPath ) //HERE
       __activeProject.load( projectPath )
     }
 

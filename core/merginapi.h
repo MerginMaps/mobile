@@ -573,7 +573,23 @@ class MerginApi: public QObject
      */
     bool apiSupportsWorkspaces();
 
-    Q_INVOKABLE bool updateProjectMetadata( const QString &filePath );
+    /** Creates a request to get project details (list of project files).
+     */
+    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withAuth = true );
+
+    enum CustomAttribute
+    {
+      AttrProjectFullName = QNetworkRequest::User,
+      AttrTempFileName    = QNetworkRequest::User + 1,
+      AttrWorkspaceName   = QNetworkRequest::User + 2,
+      AttrAcceptFlag      = QNetworkRequest::User + 3,
+    };
+
+    /**
+    * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
+    * \param data Data received from mergin server on a request failed.
+    */
+    QString extractServerErrorMsg( const QByteArray &data );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -746,19 +762,10 @@ class MerginApi: public QObject
     */
     QVariant extractServerErrorValue( const QByteArray &data, const QString &key );
     /**
-    * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
-    * \param data Data received from mergin server on a request failed.
-    */
-    QString extractServerErrorMsg( const QByteArray &data );
-    /**
     * Returns a temporary project path.
     * \param projectFullName
     */
     QString getTempProjectDir( const QString &projectFullName );
-
-    /** Creates a request to get project details (list of project files).
-     */
-    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withAuth = true );
 
     //! Called when pull of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectPull( const QString &projectFullName );
@@ -800,14 +807,6 @@ class MerginApi: public QObject
     MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
-
-    enum CustomAttribute
-    {
-      AttrProjectFullName = QNetworkRequest::User,
-      AttrTempFileName    = QNetworkRequest::User + 1,
-      AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3,
-    };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;

@@ -1404,7 +1404,6 @@ void MerginApi::onPlanProductIdChanged()
 
 QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, bool withAuth )
 {
-  qDebug() << "HERE getProjectInfo 1: " << projectFullName;
   if ( withAuth && !validateAuth() )
   {
     emit missingAuthorizationError( projectFullName );
@@ -3946,52 +3945,4 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
 {
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
-
-bool MerginApi::updateProjectMetadata(const QString &filePath)
-{
-    qDebug() << "Entering updateProjectMetadata with filePath:" << filePath;
-
-    // Extract the project directory from the file path
-    QFileInfo fileInfo(filePath);
-    QString projectDir = fileInfo.absolutePath();
-    qDebug() << "Extracted projectDir:" << projectDir;
-
-    // Try to find the project from local projects using directory
-    LocalProject projectInfo = mLocalProjects.projectFromDirectory(projectDir);
-    if (!projectInfo.isValid())
-    {
-        qDebug() << "Could not find local project for path:" << filePath;
-        CoreUtils::log("update metadata", "Could not find local project for path: " + filePath);
-        return false;
-    }
-    qDebug() << "Found local project. Namespace:" << projectInfo.projectNamespace
-             << "Name:" << projectInfo.projectName;
-
-    // Get the full project name from the local project info
-    QString projectFullName = getFullProjectName(projectInfo.projectNamespace, projectInfo.projectName);
-    qDebug() << "Full project name:" << projectFullName;
-
-    QNetworkReply *r = getProjectInfo(projectFullName, true);
-    if (!r)
-    {
-        qDebug() << "Network reply is null for project name:" << projectFullName;
-        return false;
-    }
-
-    qDebug() << "Network reply received. Checking for errors...";
-    if (r->error() == QNetworkReply::NoError)
-    {
-        QByteArray data = r->readAll();
-        qDebug() << "Received data:" << data;
-        MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson(data);
-        qDebug() << "Parsed server project metadata successfully.";
-        return true;
-    }
-    else
-    {
-        qDebug() << "Network reply error:" << r->errorString();
-        return false;
-    }
-}
-
 
