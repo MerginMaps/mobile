@@ -50,6 +50,8 @@ Item {
     {
       // just hide the panel - project already loaded
       hidePanel()
+      // update user's role in project ( in case user has changed )
+      __activeProject.updateProjectMetadata()
     }
     else
     {

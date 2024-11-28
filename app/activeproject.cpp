@@ -31,6 +31,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
                               , LayersProxyModel &recordingLayerPM
                               , LocalProjectsManager &localProjectsManager
+                              , MerginApi *merginApi
                               , QObject *parent ) :
 
   QObject( parent )
@@ -38,6 +39,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   , mActiveLayer( activeLayer )
   , mRecordingLayerPM( recordingLayerPM )
   , mLocalProjectsManager( localProjectsManager )
+  , mMerginApi( merginApi )
   , mProjectLoadingLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
@@ -100,6 +102,9 @@ bool ActiveProject::load( const QString &filePath )
 
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
+  // update user's role each time a project is opened, following #3174
+  updateProjectMetadata();
+
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
   // clear autosync
@@ -552,4 +557,70 @@ bool ActiveProject::positionTrackingSupported() const
   }
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
+}
+
+bool ActiveProject::updateProjectMetadata()
+{
+  if ( !mMerginApi )
+  {
+    return false;
+  }
+
+  QNetworkReply *reply = mMerginApi->getProjectInfo( projectFullName() );
+  if ( !reply )
+  {
+    restoreCachedRole();
+    return false;
+  }
+
+  reply->request().setAttribute( static_cast<QNetworkRequest::Attribute>( mMerginApi->AttrProjectFullName ), projectFullName() );
+
+  connect( reply, &QNetworkReply::finished, this, &ActiveProject::updateProjectMetadataReplyFinished );
+
+  return true;
+}
+
+void ActiveProject::updateProjectMetadataReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( mMerginApi->AttrProjectFullName ) ).toString();
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QByteArray data = r->readAll();
+
+    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+    QString role = serverProject.role;
+    setProjectRole( role );
+  }
+  else
+  {
+    restoreCachedRole();
+  }
+
+  r->deleteLater();
+}
+
+void ActiveProject::restoreCachedRole()
+{
+  MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( mLocalProject.projectDir + "/" + mMerginApi->sMetadataFile );
+  QString role = cachedProjectMetadata.role;
+  setProjectRole( role );
+}
+
+QString ActiveProject::projectRole() const
+{
+  return mProjectRole;
+}
+
+void ActiveProject::setProjectRole( const QString &role )
+{
+  if ( mProjectRole != role )
+  {
+    mProjectRole = role;
+
+    emit projectRoleChanged();
+  }
 }
