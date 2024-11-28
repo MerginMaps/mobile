@@ -125,7 +125,13 @@ class ActiveProject: public QObject
      * Returns role/permission level of current user for this project
      */
     Q_INVOKABLE QString projectRole() const;
+
     void setProjectRole( const QString &role );
+
+    /**
+     * Restores cached project role in metadata
+     */
+    void restoreCachedRole();
 
     /**
      * Creates a network request to fetch latest project information and define user role in this project

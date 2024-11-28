@@ -97,12 +97,14 @@ QString ActiveProject::projectFullName() const
 
 bool ActiveProject::load( const QString &filePath )
 {
-  updateProjectMetadata();
   return forceLoad( filePath, false );
 }
 
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
+  // update user's role each time a project is opened, following #3174
+  updateProjectMetadata();
+
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
   // clear autosync
@@ -567,6 +569,7 @@ bool ActiveProject::updateProjectMetadata()
   QNetworkReply *reply = mMerginApi->getProjectInfo( projectFullName() );
   if ( !reply )
   {
+    restoreCachedRole();
     return false;
   }
 
@@ -589,22 +592,22 @@ void ActiveProject::updateProjectMetadataReplyFinished()
     QByteArray data = r->readAll();
 
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-
     QString role = serverProject.role;
     setProjectRole( role );
   }
   else
   {
-    QString serverMsg = mMerginApi->extractServerErrorMsg( r->readAll() );
-
-    QString projectDir = mQgsProject->absolutePath();
-    MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( mLocalProject.projectDir + "/" + mMerginApi->sMetadataFile );
-
-    QString role = cachedProjectMetadata.role;
-    setProjectRole( role );
+    restoreCachedRole();
   }
 
   r->deleteLater();
+}
+
+void ActiveProject::restoreCachedRole()
+{
+  MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( mLocalProject.projectDir + "/" + mMerginApi->sMetadataFile );
+  QString role = cachedProjectMetadata.role;
+  setProjectRole( role );
 }
 
 QString ActiveProject::projectRole() const

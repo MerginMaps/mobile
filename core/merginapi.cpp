@@ -720,7 +720,6 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
 
   CoreUtils::log( "pull " + projectFullName, "### Starting ###" );
 
-  qDebug() << "HERE projectNamespace AND projectName : " << projectNamespace << "  " <<  projectName;
   QNetworkReply *reply = getProjectInfo( projectFullName, withAuth );
   if ( reply )
   {
