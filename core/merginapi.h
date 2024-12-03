@@ -166,6 +166,10 @@ struct TransactionStatus
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
   QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
 
+  // retry handling
+  int retryCount = 0;  //!< current number of retry attempts for failed network requests
+  static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
+
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
@@ -574,6 +578,17 @@ class MerginApi: public QObject
      */
     bool apiSupportsWorkspaces();
 
+    /**
+     * Returns the network manager used for Mergin API requests
+     */
+    QNetworkAccessManager *networkManager() const { return mManager; }
+
+    /**
+     * Sets the network manager to be used for Mergin API requests
+     * Function will return early if manager is null.
+     */
+    void setNetworkManager( QNetworkAccessManager *manager );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -652,6 +667,10 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
+    void networkManagerChanged();
+
+    void downloadItemRetried( const QString &projectFullName, int retryCount );
+    void downloadItemsStarted();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -659,7 +678,7 @@ class MerginApi: public QObject
 
     // Pull slots
     void pullInfoReplyFinished();
-    void downloadItemReplyFinished();
+    void downloadItemReplyFinished( DownloadQueueItem item );
     void cacheServerConfig();
 
     // Push slots
@@ -787,11 +806,18 @@ class MerginApi: public QObject
     //! Works only when login, password and token is set in UserAuth
     void refreshAuthToken();
 
+    /**
+     * Checks if a network error should trigger a retry attempt.
+     * \param reply Network reply to check for retryable errors
+     * \returns True if the error should trigger a retry, false otherwise
+     */
+    bool isRetryableNetworkError( QNetworkReply *reply );
+
     QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
-    QNetworkAccessManager mManager;
+    QNetworkAccessManager *mManager = nullptr;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
     QString mDataDir; // dir with all projects
