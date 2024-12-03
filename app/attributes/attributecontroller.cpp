@@ -232,6 +232,20 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
+        QgsEditFormConfig editFormConfig = layer->editFormConfig();
+        QString fieldName = field.name();
+        QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
+
+        // Retrieving field name expression
+        QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
+        QString nameExpressionString = nameProperty.expressionString();
+        QgsExpression nameExpression( nameExpressionString );
+
+        // Retrieving field editability expression
+        QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
+        QString editableExpressionString = editableProperty.expressionString();
+        QgsExpression editableExpression( editableExpressionString );
+
         if ( !expression.isEmpty() )
         {
           expressions << field.constraints().constraintExpression();
@@ -249,8 +263,10 @@ void AttributeController::flatten(
               groupName,
               parentTabRow,
               layer->attributeDisplayName( fieldIndex ),
+              nameExpression,
               editorField->showLabel(),
               !isReadOnly,
+              editableExpression,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               parentVisibilityExpressions // field doesn't have visibility expression itself
@@ -900,6 +916,64 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         item->setVisible( visible );
         changedFormItems << item->id();
       }
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate if form items are editable
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->editableExpression();
+
+      if ( !exp.expression().isEmpty() && !item->field().defaultValueDefinition().applyOnUpdate() )
+      {
+        bool editable = item->isEditable();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          editable = exp.evaluate( &expressionContext ).toBool();
+        }
+
+        if ( item->isEditable() != editable )
+        {
+          item->setIsEditable( editable );
+          changedFormItems << item->id();
+        }
+      }
+
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate form items name
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->nameExpression();
+
+      if ( !exp.expression().isEmpty() )
+      {
+        QString name = item->name();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          name = exp.evaluate( &expressionContext ).toString();
+        }
+
+        if ( item->name() != name )
+        {
+          item->setName( name );
+          changedFormItems << item->id();
+        }
+      }
+
       ++formItemsIterator;
     }
   }
