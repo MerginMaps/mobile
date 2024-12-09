@@ -22,7 +22,7 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
-#include "../core/merginapi.h"
+#include "merginapi.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -127,17 +127,6 @@ class ActiveProject: public QObject
     Q_INVOKABLE QString projectRole() const;
 
     void setProjectRole( const QString &role );
-
-    /**
-     * Restores cached project role in metadata
-     */
-    void restoreCachedRole();
-
-    /**
-     * Creates a network request to fetch latest project information and define user role in this project
-     */
-    Q_INVOKABLE bool updateProjectMetadata();
-    void updateProjectMetadataReplyFinished();
 
   signals:
     void qgsProjectChanged();

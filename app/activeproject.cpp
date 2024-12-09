@@ -76,6 +76,17 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   setAutosyncEnabled( mAppSettings.autosyncAllowed() );
 
   QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
+
+  QObject::connect(
+    mMerginApi,
+    &MerginApi::projectMetadataRoleUpdated,
+    this, [this]( const QString & projectFullName, const QString & role )
+  {
+    if ( projectFullName == this->projectFullName() )
+    {
+      setProjectRole( role );
+    }
+  } );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -103,7 +114,7 @@ bool ActiveProject::load( const QString &filePath )
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
   // update user's role each time a project is opened, following #3174
-  updateProjectMetadata();
+  mMerginApi->updateProjectMetadataRole( projectFullName() );
 
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
@@ -559,56 +570,9 @@ bool ActiveProject::positionTrackingSupported() const
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }
 
-bool ActiveProject::updateProjectMetadata()
-{
-  if ( !mMerginApi )
-  {
-    return false;
-  }
-
-  QNetworkReply *reply = mMerginApi->getProjectInfo( projectFullName() );
-  if ( !reply )
-  {
-    restoreCachedRole();
-    return false;
-  }
-
-  reply->request().setAttribute( static_cast<QNetworkRequest::Attribute>( mMerginApi->AttrProjectFullName ), projectFullName() );
-
-  connect( reply, &QNetworkReply::finished, this, &ActiveProject::updateProjectMetadataReplyFinished );
-
-  return true;
-}
-
-void ActiveProject::updateProjectMetadataReplyFinished()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
-  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( mMerginApi->AttrProjectFullName ) ).toString();
-
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    QByteArray data = r->readAll();
-
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-    QString role = serverProject.role;
-    setProjectRole( role );
-  }
-  else
-  {
-    restoreCachedRole();
-  }
-
-  r->deleteLater();
-}
-
-void ActiveProject::restoreCachedRole()
-{
-  MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( mLocalProject.projectDir + "/" + mMerginApi->sMetadataFile );
-  QString role = cachedProjectMetadata.role;
-  setProjectRole( role );
-}
+// read cached role from metadata -> get reply -> update if changed
+// metadataRoleFetchFinishedSignal -> (data)
+// store role in app settings or update only role in cached json or nothing :)
 
 QString ActiveProject::projectRole() const
 {
