@@ -243,8 +243,15 @@ void AttributeController::flatten(
 
         // Retrieving field editability expression
         QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
-        QString editableExpressionString = editableProperty.expressionString();
-        QgsExpression editableExpression( editableExpressionString );
+        QString editableExpressionString;
+        QgsExpression editableExpression;
+
+        // Bypass reading the editable expression if Apply default value on update is enabled
+        if ( !field.defaultValueDefinition().applyOnUpdate() )
+        {
+          editableExpressionString = editableProperty.expressionString();
+          editableExpression = QgsExpression( editableExpressionString );
+        }
 
         if ( !expression.isEmpty() )
         {
@@ -928,7 +935,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
       std::shared_ptr<FormItem> item = formItemsIterator.value();
       QgsExpression exp = item->editableExpression();
 
-      if ( !exp.expression().isEmpty() && !item->field().defaultValueDefinition().applyOnUpdate() )
+      if ( !exp.expression().isEmpty() )
       {
         bool editable = item->isEditable();
         exp.prepare( &expressionContext );
