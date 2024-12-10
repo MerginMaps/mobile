@@ -198,6 +198,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl acceptInvitationImage READ acceptInvitationImage CONSTANT )
     Q_PROPERTY( QUrl acceptInvitationLogoImage READ acceptInvitationLogoImage CONSTANT )
     Q_PROPERTY( QUrl reachedDataLimitImage READ reachedDataLimitImage CONSTANT )
+    Q_PROPERTY( QUrl reachedMonthlyContributorLimitImage READ reachedMonthlyContributorLimitImage CONSTANT )
     Q_PROPERTY( QUrl uploadImage READ uploadImage CONSTANT )
     Q_PROPERTY( QUrl noMapThemesImage READ noMapThemesImage CONSTANT )
     Q_PROPERTY( QUrl syncFailedImage READ syncFailedImage CONSTANT )
@@ -496,6 +497,7 @@ class MMStyle: public QObject
     QUrl noPermissionsImage() {return QUrl( "qrc:/images/NoPermissions.svg" );}
     QUrl signInImage() {return QUrl( "qrc:/images/SignIn.svg" );}
     QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimit.svg" );}
+    QUrl reachedMonthlyContributorLimitImage() {return QUrl( "qrc:/images/ReachedMonthlyContributorLimit.svg" );}
     QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
     QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
     QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}

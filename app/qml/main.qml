@@ -716,6 +716,12 @@ ApplicationWindow {
     onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
 
+  MMMonthlyContributorsLimitDialog {
+    id: monthlyContributorsLimitDialog
+
+    onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
+  }
+
   MMProjectLimitDialog {
     id: projectLimitDialog
 
@@ -896,6 +902,11 @@ ApplicationWindow {
       storageLimitDialog.open()
     }
 
+    function onMonthlyContributorLimitReached( quota, serverMsg ) {
+      monthlyContributorsLimitDialog.contributorsQuota = quota
+      monthlyContributorsLimitDialog.open()
+    }
+
     function onProjectLimitReached( maxProjects, errorMsg ) {
       __merginApi.getUserInfo()
       if (__merginApi.apiSupportsSubscriptions) {
@@ -915,7 +926,7 @@ ApplicationWindow {
     }
 
     function onMigrationRequested( version ) {
-      if( __appSettings.ignoreMigrateVersion !== version ) {
+      if ( __appSettings.ignoreMigrateVersion !== version ) {
         migrationDialog.version = version
         migrationDialog.open()
       }

@@ -101,16 +101,6 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
   project.projectNamespace = docObj.value( QStringLiteral( "namespace" ) ).toString();
   project.role = docObj.value( QStringLiteral( "role" ) ).toString();
 
-  QJsonValue access = docObj.value( QStringLiteral( "access" ) );
-  if ( access.isObject() )
-  {
-    QJsonArray writersnames = access.toObject().value( "writersnames" ).toArray();
-    for ( QJsonValueRef tag : writersnames )
-    {
-      project.writersnames.append( tag.toString() );
-    }
-  }
-
   QString versionStr = docObj.value( QStringLiteral( "version" ) ).toString();
   if ( versionStr.isEmpty() )
   {
