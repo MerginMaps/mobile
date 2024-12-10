@@ -113,9 +113,6 @@ bool ActiveProject::load( const QString &filePath )
 
 bool ActiveProject::forceLoad( const QString &filePath, bool force )
 {
-  // update user's role each time a project is opened, following #3174
-  mMerginApi->updateProjectMetadataRole( projectFullName() );
-
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
   // clear autosync
@@ -204,6 +201,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     updateRecordingLayers();
     updateActiveLayer();
     updateMapSettingsLayers();
+    updateUserRoleInActiveProject();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -587,4 +585,10 @@ void ActiveProject::setProjectRole( const QString &role )
 
     emit projectRoleChanged();
   }
+}
+
+void ActiveProject::updateUserRoleInActiveProject()
+{
+  // update user's role each time a project is opened, following #3174
+  mMerginApi->updateProjectMetadataRole( projectFullName() );
 }

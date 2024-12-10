@@ -128,6 +128,11 @@ class ActiveProject: public QObject
 
     void setProjectRole( const QString &role );
 
+    /**
+     * Calls Mergin API to update current project’s role
+     */
+    void updateUserRoleInActiveProject();
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
