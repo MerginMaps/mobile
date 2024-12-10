@@ -574,6 +574,11 @@ class MerginApi: public QObject
      */
     bool apiSupportsWorkspaces();
 
+    /**
+     * Updates project metadata role by fetching latest information from server.
+     */
+    Q_INVOKABLE void updateProjectMetadataRole( const QString &projectFullName );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -652,6 +657,7 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
+    void projectMetadataRoleUpdated( const QString &projectFullName, const QString &role );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -791,6 +797,10 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
+    void updateProjectMetadataRoleReplyFinished();
+
+    bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
+
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
@@ -807,6 +817,7 @@ class MerginApi: public QObject
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
       AttrAcceptFlag      = QNetworkRequest::User + 3,
+      AttrCachedRole      = QNetworkRequest::User + 4
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
