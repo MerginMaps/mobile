@@ -568,10 +568,6 @@ bool ActiveProject::positionTrackingSupported() const
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }
 
-// read cached role from metadata -> get reply -> update if changed
-// metadataRoleFetchFinishedSignal -> (data)
-// store role in app settings or update only role in cached json or nothing :)
-
 QString ActiveProject::projectRole() const
 {
   return mProjectRole;
