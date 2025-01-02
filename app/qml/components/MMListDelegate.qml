@@ -38,9 +38,9 @@ Item {
         if ( index >= ListView.view.count - 1 )
           return false;
 
-        // hide line if next item is invisible
+        // hide line if next item is invisible and is the last item
         var nextItem = ListView.view.itemAtIndex( index + 1 );
-        if ( nextItem && !nextItem.visible )
+        if ( nextItem && !nextItem.visible && index + 1 >= ListView.view.count - 1 )
           return false;
 
         return true;
