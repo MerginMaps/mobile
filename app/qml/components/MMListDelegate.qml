@@ -28,14 +28,26 @@ Item {
   property alias rightContent: rightContentGroup.children
 
   property bool hasLine: {
-    // calculate automatically when this item is a delegate in list
+    if ( !visible )
+      return false;
+
+     // calculate automatically when this item is a delegate in list
     if ( typeof index != "undefined" ) {
       if ( ListView?.view ?? false ) {
-        return index < ListView.view.count - 1
+        // hide line if this is the last item
+        if ( index >= ListView.view.count - 1 )
+          return false;
+
+        // hide line if next item is invisible
+        var nextItem = ListView.view.itemAtIndex( index + 1 );
+        if ( nextItem && !nextItem.visible )
+          return false;
+
+        return true;
       }
     }
 
-    return true
+    return true;
   }
 
   property real verticalSpacing: root.secondaryText ? __style.margin8 : __style.margin20

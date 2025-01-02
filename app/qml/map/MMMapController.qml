@@ -808,6 +808,8 @@ Item {
       // TODO: why we need to set hight here?
       height: __style.menuDrawerHeight
 
+      visible: !__inputUtils.isPositionTrackingLayerId( model.layerId, __activeProject.qgsProject )
+
       leftContent: MMIcon {
         source: model.iconSource
       }
