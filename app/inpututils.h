@@ -589,11 +589,6 @@ class InputUtils: public QObject
      */
     static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
 
-    /**
-     * Returns true if the layerId corresponds to position tracking layer id
-     */
-    Q_INVOKABLE bool isPositionTrackingLayerId( const QString &layerId, QgsProject *project );
-
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
