@@ -39,11 +39,6 @@ Page {
       }
 
       Button {
-        text: "MMMonthlyContributorsLimitDialog"
-        onClicked: monthlyContributorsLimitDialog.open()
-      }
-
-      Button {
         text: "MMCloseAccountDialog"
         onClicked: closeAccountDialog.open()
       }
@@ -288,16 +283,6 @@ Page {
     dataUsing: "9.23 MB / 10.0 MB"
     usedData: 0.923
     apiSupportsSubscription: true
-
-    onPrimaryButtonClicked: {
-      console.log("Manage workspace clicked")
-    }
-  }
-
-  MMMonthlyContributorsLimitDialog {
-    id: monthlyContributorsLimitDialog
-
-    contributorsQuota: 15
 
     onPrimaryButtonClicked: {
       console.log("Manage workspace clicked")

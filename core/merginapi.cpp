@@ -2117,13 +2117,14 @@ void MerginApi::pushStartReplyFinished()
       serverMsg = sSyncCanceledMessage;
 
     QString code = extractServerErrorCode( data );
+    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     transaction.replyPushStart->deleteLater();
     transaction.replyPushStart = nullptr;
 
-    if ( EnumHelper::isEqual( code, ErrorCode::StorageLimitHit ) )
+    if ( showLimitReachedDialog )
     {
       const QList<MerginFile> files = transaction.pushQueue;
       qreal uploadSize = 0;
@@ -2142,14 +2143,6 @@ void MerginApi::pushStartReplyFinished()
         detachProjectFromMergin( projectNamespace, projectName, false );
         deleteProject( projectNamespace, projectName, false );
       }
-    }
-    else if ( EnumHelper::isEqual( code, ErrorCode::MonthlyContributorsLimitHit ) )
-    {
-      int quota = 0;
-      QVariant maximunMonthlyContributor = extractServerErrorValue( data, "projects_quota" );
-      if ( maximunMonthlyContributor.isValid() )
-        quota = maximunMonthlyContributor.toInt();
-      emit monthlyContributorLimitReached( quota, serverMsg );
     }
     else
     {
