@@ -51,7 +51,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
 
     //! Returns true if the layer is the position tracking layer
-    Q_INVOKABLE bool isPositionTrackingLayer( QgsMapLayer *layer ) const;
+    Q_INVOKABLE bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project ) const;
 
     /**
      * @brief layers method return layers from source model filtered with filter function

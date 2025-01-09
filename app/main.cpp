@@ -489,12 +489,8 @@ int main( int argc, char *argv[] )
   ProjectWizard pw( projectDir );
   NotificationModel notificationModel;
 
-  // layer models
-  LayersModel lm;
-  LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
-
   ActiveLayer al;
-  ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
+  ActiveProject activeProject( as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -657,7 +653,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
-  engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );

@@ -41,7 +41,6 @@ class ActiveProject: public QObject
     explicit ActiveProject(
       AppSettings &appSettings
       , ActiveLayer &activeLayer
-      , LayersProxyModel &recordingLayerPM
       , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
@@ -179,7 +178,6 @@ class ActiveProject: public QObject
 
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
 

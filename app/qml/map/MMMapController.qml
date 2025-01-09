@@ -795,12 +795,28 @@ Item {
     }
   }
 
+  MM.LayerTreeSortFilterModel {
+    id: recordingLayersModel
+
+    layerTreeModel: MM.LayerTreeModel {
+      id: layerTreeModel
+      qgsProject: __activeProject.qgsProject
+    }
+  }
+
   MMListDrawer {
     id: activeLayerPanel
 
     drawerHeader.title: qsTr( "Choose Active Layer" )
 
-    list.model: __recordingLayersModel
+    list.model:   MM.LayerTreeSortFilterModel {
+      id: recordingLayersModel
+
+      layerTreeModel: MM.LayerTreeModel {
+        id: layerTreeModel
+        qgsProject: __activeProject.qgsProject
+      }
+    }
 
     list.delegate: MMListDelegate {
       text: model.layerName

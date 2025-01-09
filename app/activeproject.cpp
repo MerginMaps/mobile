@@ -29,14 +29,12 @@ const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loadin
 
 ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
-                              , LayersProxyModel &recordingLayerPM
                               , LocalProjectsManager &localProjectsManager
                               , QObject *parent ) :
 
   QObject( parent )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
-  , mRecordingLayerPM( recordingLayerPM )
   , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
 {
@@ -185,7 +183,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     }
 
     updateMapTheme();
-    updateRecordingLayers();
     updateActiveLayer();
     updateMapSettingsLayers();
 
@@ -483,29 +480,32 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
   emit mapThemeChanged( mMapTheme );
 
-  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
   updateActiveLayer();
   updateMapSettingsLayers();
 }
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !layerVisible( mActiveLayer.layer() ) )
-  {
-    QgsMapLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
-
-    if ( !defaultLayer )
+    if ( !layerVisible( mActiveLayer.layer() ) )
     {
-      defaultLayer = mRecordingLayerPM.firstUsableLayer();
+        QgsMapLayer *defaultLayer = nullptr;
+
+        const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+        for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
+        {
+            QgsMapLayer *layer = it.value();
+
+            // If it's a vector layer and visible, let's choose it
+            QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+            if ( vectorLayer && layerVisible( layer ) )
+            {
+                defaultLayer = layer;
+                break;
+            }
+        }
+
+        setActiveLayer( defaultLayer );
     }
-
-    setActiveLayer( defaultLayer );
-  }
-}
-
-void ActiveProject::updateRecordingLayers()
-{
-  mRecordingLayerPM.refreshData();
 }
 
 bool ActiveProject::isProjectLoaded() const
@@ -534,7 +534,6 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
   node->setItemVisibilityChecked( !node->isVisible() );
 
   updateMapTheme();
-  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
   updateActiveLayer();
   updateMapSettingsLayers();
 }

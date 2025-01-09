@@ -154,14 +154,9 @@ QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
   return sourceModel()->data( index, role );
 }
 
-bool LayersProxyModel::isPositionTrackingLayer( QgsMapLayer *layer ) const
+bool LayersProxyModel::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project ) const
 {
-  if ( !layer )
-    return false;
-
-  QgsProject *project = QgsProject::instance();
-
-  if ( !project )
+  if ( !layer || !project )
     return false;
 
   QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
