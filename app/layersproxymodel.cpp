@@ -13,11 +13,25 @@
 #include "qgsproject.h"
 #include "qgslayertree.h"
 
-LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelType ) :
+LayersProxyModel::LayersProxyModel( QObject *parent ) :
+    QgsMapLayerProxyModel( parent ),
+    mModelType( LayerModelTypes::AllLayers ),
+    mModel( nullptr ),
+    mProject( nullptr )
+{
+    filterFunction = []( QgsMapLayer * ) { return true; };
+    QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
+    QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
+}
+
+LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelType, QgsProject *project ) :
+  QgsMapLayerProxyModel( nullptr ),
   mModelType( modelType ),
-  mModel( model )
+  mModel( model ),
+  mProject( project )
 {
   setSourceModel( mModel );
+  setProject( mProject );
 
   switch ( mModelType )
   {
@@ -27,7 +41,7 @@ LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelTyp
     default:
       filterFunction = []( QgsMapLayer * ) { return true; };
       break;
-  }
+  } //inherit 2 ocurrences from layer proxy model - layersProxyModel and recordingLayersProxyModel
 
   QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
   QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
@@ -154,11 +168,54 @@ QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
   return sourceModel()->data( index, role );
 }
 
-bool LayersProxyModel::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project ) const
+bool LayersProxyModel::isPositionTrackingLayer( QgsMapLayer *layer ) const
 {
-  if ( !layer || !project )
+  if ( !layer || !mProject )
     return false;
 
-  QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
+  QString trackingLayerId = mProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
   return layer->id() == trackingLayerId;
+}
+
+QgsProject *LayersProxyModel::qgsProject() const
+{
+  return mProject;
+}
+
+void LayersProxyModel::setQgsProject( QgsProject *project )
+{
+  if ( mProject != project )
+  {
+    mProject = project;
+    emit qgsProjectChanged();
+  }
+}
+
+LayerModelTypes LayersProxyModel::modelType() const
+{
+  return mModelType;
+}
+
+void LayersProxyModel::setModelType( LayerModelTypes type )
+{
+  if ( mModelType != type )
+  {
+    mModelType = type;
+    emit modelTypeChanged();
+  }
+}
+
+LayersModel *LayersProxyModel::model() const
+{
+  return mModel;
+}
+
+void LayersProxyModel::setModel( LayersModel *model )
+{
+  if ( mModel != model )
+  {
+    mModel = model;
+    setSourceModel( mModel );
+    emit modelChanged();
+  }
 }

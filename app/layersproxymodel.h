@@ -32,9 +32,13 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_OBJECT
 
     Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
+    Q_PROPERTY( QgsProject* qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
+    Q_PROPERTY( LayerModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
+    Q_PROPERTY( LayersModel* model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
-    LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers );
+    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr );
+    LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers, QgsProject *project = nullptr );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
@@ -51,15 +55,29 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
 
     //! Returns true if the layer is the position tracking layer
-    Q_INVOKABLE bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project ) const;
+    Q_INVOKABLE bool isPositionTrackingLayer( QgsMapLayer *layer ) const;
 
     /**
      * @brief layers method return layers from source model filtered with filter function
      */
     QList<QgsMapLayer *> layers() const;
 
+    //! Getters and setters
+
+    QgsProject *qgsProject() const;
+    void setQgsProject( QgsProject *project );
+
+    LayerModelTypes modelType() const;
+    void setModelType( LayerModelTypes type );
+
+    LayersModel *model() const;
+    void setModel( LayersModel *model );
+
   signals:
     void countChanged();
+    void qgsProjectChanged();
+    void modelTypeChanged();
+    void modelChanged();
 
   public slots:
     void refreshData();
@@ -82,6 +100,8 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      * In future will allow dependency injection of custom filter functions.
      */
     std::function<bool( QgsMapLayer * )> filterFunction;
+
+    QgsProject *mProject;
 };
 
 #endif // LAYERSPROXYMODEL_H

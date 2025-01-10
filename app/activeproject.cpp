@@ -486,26 +486,26 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-    if ( !layerVisible( mActiveLayer.layer() ) )
+  if ( !layerVisible( mActiveLayer.layer() ) )
+  {
+    QgsMapLayer *defaultLayer = nullptr;
+
+    const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+    for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
     {
-        QgsMapLayer *defaultLayer = nullptr;
+      QgsMapLayer *layer = it.value();
 
-        const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
-        for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
-        {
-            QgsMapLayer *layer = it.value();
-
-            // If it's a vector layer and visible, let's choose it
-            QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-            if ( vectorLayer && layerVisible( layer ) )
-            {
-                defaultLayer = layer;
-                break;
-            }
-        }
-
-        setActiveLayer( defaultLayer );
+      // If it's a vector layer and visible, let's choose it
+      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+      if ( vectorLayer && layerVisible( layer ) )
+      {
+        defaultLayer = layer;
+        break;
+      }
     }
+
+    setActiveLayer( defaultLayer );
+  }
 }
 
 bool ActiveProject::isProjectLoaded() const

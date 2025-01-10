@@ -274,10 +274,18 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+        MM.LayersProxyModel {
+          id: recordingLayersModel
+
+          modelType: MM.LayerModelTypes.ActiveLayerSelection
+          qgsProject: __activeProject.qgsProject
+          model: MM.LayersModel {}
+        }
+
         text: qsTr("Add")
         iconSource: __style.addIcon
         onClicked: {
-          if ( __recordingLayersModel.rowCount() > 0 ) {
+          if ( recordingLayersModel.rowCount() > 0 ) {
             stateManager.state = "map"
             map.record()
           }

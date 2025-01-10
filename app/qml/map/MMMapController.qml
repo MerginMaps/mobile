@@ -795,27 +795,17 @@ Item {
     }
   }
 
-  MM.LayerTreeSortFilterModel {
-    id: recordingLayersModel
-
-    layerTreeModel: MM.LayerTreeModel {
-      id: layerTreeModel
-      qgsProject: __activeProject.qgsProject
-    }
-  }
-
   MMListDrawer {
     id: activeLayerPanel
 
     drawerHeader.title: qsTr( "Choose Active Layer" )
 
-    list.model:   MM.LayerTreeSortFilterModel {
+    list.model: MM.LayersProxyModel {
       id: recordingLayersModel
 
-      layerTreeModel: MM.LayerTreeModel {
-        id: layerTreeModel
-        qgsProject: __activeProject.qgsProject
-      }
+      qgsProject: __activeProject.qgsProject
+      modelType: MM.LayerModelTypes.RecordingLayers
+      model: MM.LayersModel {}
     }
 
     list.delegate: MMListDelegate {
@@ -834,7 +824,7 @@ Item {
       }
 
       onClicked: {
-        __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( model.layerId ) )
+        __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
         activeLayerPanel.close()
       }
     }
