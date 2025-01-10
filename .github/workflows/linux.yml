@@ -214,6 +214,6 @@ jobs:
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

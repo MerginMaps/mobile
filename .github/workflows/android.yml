@@ -266,7 +266,7 @@ jobs:
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
@@ -294,7 +294,7 @@ jobs:
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB

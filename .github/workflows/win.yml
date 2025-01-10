@@ -199,7 +199,7 @@ jobs:
             xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error
