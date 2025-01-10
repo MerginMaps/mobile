@@ -195,8 +195,7 @@ class ErrorCode
     {
       Unknown = 0,
       ProjectsLimitHit,
-      StorageLimitHit,
-      MonthlyContributorsLimitHit,
+      StorageLimitHit
     };
     Q_ENUM( Value );
 };
@@ -603,7 +602,6 @@ class MerginApi: public QObject
     );
 
     void storageLimitReached( qreal uploadSize );
-    void monthlyContributorLimitReached( int contributorsQuota, const QString &message );
     void projectLimitReached( int maxProjects, const QString &message );
     void migrationRequested( const QString &version );
     void notifySuccess( const QString &message );

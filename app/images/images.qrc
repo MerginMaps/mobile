@@ -35,6 +35,5 @@
         <file>SignIn.svg</file>
         <file>NoWorkspace.svg</file>
         <file>BlueInfo.svg</file>
-        <file>ReachedMonthlyContributorLimit.svg</file>
     </qresource>
 </RCC>
