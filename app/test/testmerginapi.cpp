@@ -2965,12 +2965,12 @@ void TestMerginApi::testDownloadWithNetworkError()
     mApi->setNetworkManager( failingManager );
 
     // Create signal spies
-    QSignalSpy startSpy( mApi, &MerginApi::downloadItemsStarted );
+    QSignalSpy startSpy( mApi, &MerginApi::pullFilesStarted );
     QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
     QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
 
     // Trigger the current network error when download starts
-    connect( mApi, &MerginApi::downloadItemsStarted, this, [this, failingManager, networkError]()
+    connect( mApi, &MerginApi::pullFilesStarted, this, [this, failingManager, networkError]()
     {
       failingManager->setShouldFail( true, networkError );
     } );
@@ -3002,7 +3002,7 @@ void TestMerginApi::testDownloadWithNetworkError()
     QVERIFY( !localProject.isValid() );
 
     // Disconnect all signals
-    disconnect( mApi, &MerginApi::downloadItemsStarted, this, nullptr );
+    disconnect( mApi, &MerginApi::pullFilesStarted, this, nullptr );
 
     // Clean up
     mApi->setNetworkManager( originalManager );
@@ -3023,7 +3023,7 @@ void TestMerginApi::testDownloadWithNetworkErrorRecovery()
   mApi->setNetworkManager( failingManager );
 
   // Create signal spies
-  QSignalSpy startSpy( mApi, &MerginApi::downloadItemsStarted );
+  QSignalSpy startSpy( mApi, &MerginApi::pullFilesStarted );
   QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
   QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
 
@@ -3038,13 +3038,13 @@ void TestMerginApi::testDownloadWithNetworkErrorRecovery()
     if ( retryCount == 2 )
     {
       failingManager->setShouldFail( false );
-      disconnect( mApi, &MerginApi::downloadItemsStarted, nullptr, nullptr );
+      disconnect( mApi, &MerginApi::pullFilesStarted, nullptr, nullptr );
       disconnect( mApi, &MerginApi::downloadItemRetried, nullptr, nullptr );
     }
   } );
 
   // Trigger network error when download starts
-  connect( mApi, &MerginApi::downloadItemsStarted, this, [failingManager, networkError]()
+  connect( mApi, &MerginApi::pullFilesStarted, this, [failingManager, networkError]()
   {
     failingManager->setShouldFail( true, networkError );
   } );

@@ -2445,8 +2445,6 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   }
   else
   {
-    emit downloadItemsStarted();
-
     while ( transaction.replyPullItems.count() < 5 && !transaction.downloadQueue.isEmpty() )
     {
       downloadNextItem( projectFullName );
