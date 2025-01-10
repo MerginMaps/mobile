@@ -238,28 +238,29 @@ void AttributeController::flatten(
 
         // Retrieving field name expression
         QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
-        QString nameExpressionString = nameProperty.expressionString();
-        QgsExpression nameExpression( nameExpressionString );
+        QgsExpression nameExpression; // empty if users set to hide the field label
+
+        if ( !editorField->showLabel() )
+        {
+          QgsExpression nameExpression = QgsExpression( nameProperty.expressionString() );
+        }
 
         // Retrieving field editability expression
         QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
-        QString editableExpressionString;
-        QgsExpression editableExpression;
+        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
+                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
+        QgsExpression isEditableExpression; // empty if the field is read-only
 
-        // Bypass reading the editable expression if Apply default value on update is enabled
-        if ( !field.defaultValueDefinition().applyOnUpdate() )
+        if ( !isReadOnly )
         {
-          editableExpressionString = editableProperty.expressionString();
-          editableExpression = QgsExpression( editableExpressionString );
+          QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
+          isEditableExpression = QgsExpression( editableProperty.expressionString() );
         }
 
         if ( !expression.isEmpty() )
         {
           expressions << field.constraints().constraintExpression();
         }
-
-        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
-                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
@@ -273,7 +274,7 @@ void AttributeController::flatten(
               nameExpression,
               editorField->showLabel(),
               !isReadOnly,
-              editableExpression,
+              isEditableExpression,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               parentVisibilityExpressions // field doesn't have visibility expression itself
