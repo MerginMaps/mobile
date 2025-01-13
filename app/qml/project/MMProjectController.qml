@@ -48,8 +48,6 @@ Item {
   function setupProjectOpen( projectPath ) {
     if ( projectPath === __activeProject.localProject.qgisProjectFilePath )
     {
-      // update user's role in project ( in case user has changed )
-      __activeProject.updateUserRoleInActiveProject()
       // just hide the panel - project already loaded
       hidePanel()
     }

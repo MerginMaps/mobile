@@ -131,7 +131,7 @@ class ActiveProject: public QObject
     /**
      * Calls Mergin API to update current project’s role
      */
-    void updateUserRoleInActiveProject();
+    Q_INVOKABLE void updateUserRoleInActiveProject();
 
   signals:
     void qgsProjectChanged();

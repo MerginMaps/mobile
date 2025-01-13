@@ -87,6 +87,13 @@ ActiveProject::ActiveProject( AppSettings &appSettings
       setProjectRole( role );
     }
   } );
+
+  QObject::connect(
+    mMerginApi,
+    &MerginApi::authChanged,
+    this,
+    &ActiveProject::updateUserRoleInActiveProject
+  );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -585,6 +592,6 @@ void ActiveProject::setProjectRole( const QString &role )
 
 void ActiveProject::updateUserRoleInActiveProject()
 {
-  // update user's role each time a project is opened, following #3174
+  // update user's role each time a project is opened or auth changes, following #3174
   mMerginApi->updateProjectMetadataRole( projectFullName() );
 }
