@@ -799,6 +799,8 @@ class MerginApi: public QObject
 
     bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
 
+    QString getCachedProjectRole( const QString &projectFullName ) const;
+
     QNetworkAccessManager mManager;
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
@@ -814,8 +816,7 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3,
-      AttrCachedRole      = QNetworkRequest::User + 4
+      AttrAcceptFlag      = QNetworkRequest::User + 3
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
