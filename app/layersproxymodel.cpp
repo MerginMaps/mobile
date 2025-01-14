@@ -14,18 +14,9 @@
 #include "qgslayertree.h"
 
 LayersProxyModel::LayersProxyModel( QObject *parent ) :
-    QgsMapLayerProxyModel{ parent }
+  QgsMapLayerProxyModel{ parent },
+  filterFunction( []( QgsMapLayer * layer ) { return ( layer && layer->isValid() ); } ) // default filter
 {
-  switch ( mModelType )
-  {
-    case ActiveLayerSelection:
-      filterFunction = [this]( QgsMapLayer * layer ) { return recordingAllowed( layer ); };
-      break;
-    default:
-      filterFunction = []( QgsMapLayer * ) { return true; };
-      break;
-  } //inherit 2 ocurrences from layer proxy model - layersProxyModel and recordingLayersProxyModel
-
   QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
   QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
 }
@@ -174,7 +165,7 @@ void LayersProxyModel::setQgsProject( QgsProject *project )
   }
 }
 
-LayerModelTypes LayersProxyModel::modelType() const
+LayersProxyModel::LayerModelTypes LayersProxyModel::modelType() const
 {
   return mModelType;
 }
@@ -184,6 +175,9 @@ void LayersProxyModel::setModelType( LayerModelTypes type )
   if ( mModelType != type )
   {
     mModelType = type;
+
+    applyFilterFunction();
+
     emit modelTypeChanged();
   }
 }
@@ -200,5 +194,24 @@ void LayersProxyModel::setModel( LayersModel *model )
     mModel = model;
     setSourceModel( mModel );
     emit modelChanged();
+  }
+}
+
+void LayersProxyModel::applyFilterFunction()
+{
+  switch ( mModelType )
+  {
+    case ActiveLayerSelection:
+      filterFunction = [this]( QgsMapLayer * layer )
+      {
+        return recordingAllowed( layer );
+      };
+      break;
+    default:
+      filterFunction = []( QgsMapLayer * )
+      {
+        return true;
+      };
+      break;
   }
 }

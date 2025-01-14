@@ -21,24 +21,23 @@
 
 #include "layersmodel.h"
 
-enum LayerModelTypes
-{
-    AllLayers,
-    ActiveLayerSelection
-};
-
 class LayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
     Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
-    Q_PROPERTY( QgsProject* qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
+    Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
     Q_PROPERTY( LayerModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
-    Q_PROPERTY( LayersModel* model READ model WRITE setModel NOTIFY modelChanged )
+    Q_PROPERTY( LayersModel *model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
-    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr  );
+    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr );
 
+    enum LayerModelTypes
+    {
+      AllLayers,
+      ActiveLayerSelection
+    };
     Q_ENUM( LayerModelTypes );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
@@ -62,6 +61,9 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      * @brief layers method return layers from source model filtered with filter function
      */
     QList<QgsMapLayer *> layers() const;
+
+    //! Filter current model according to its type
+    void applyFilterFunction();
 
     //! Getters and setters
 

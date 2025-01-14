@@ -349,7 +349,7 @@ void initDeclarative()
   qmlRegisterType< SplittingMapTool >( "mm", 1, 0, "SplittingMapTool" );
   qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
 
-  //qmlRegisterType<LayerModelTypes>( "mm", 1, 0, "LayerModelTypes" );
+  // layers model
   qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
   qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
 }
