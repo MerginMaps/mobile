@@ -240,9 +240,9 @@ void AttributeController::flatten(
         QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
         QgsExpression nameExpression; // empty if users set to hide the field label
 
-        if ( !editorField->showLabel() )
+        if ( editorField->showLabel() )
         {
-          QgsExpression nameExpression = QgsExpression( nameProperty.expressionString() );
+          nameExpression = QgsExpression( nameProperty.expressionString() );
         }
 
         // Retrieving field editability expression
@@ -253,7 +253,6 @@ void AttributeController::flatten(
 
         if ( !isReadOnly )
         {
-          QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
           isEditableExpression = QgsExpression( editableProperty.expressionString() );
         }
 
