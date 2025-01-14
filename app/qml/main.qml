@@ -255,6 +255,14 @@ ApplicationWindow {
     accuracy: LocationPermission.Precise
   }
 
+  MM.LayersProxyModel {
+    id: recordingLayersModel
+
+    modelType: MM.LayersProxyModel.AllLayers
+    qgsProject: __activeProject.qgsProject
+    model: MM.LayersModel {}
+  }
+
   MMToolbar {
     id: mapToolbar
 
@@ -274,13 +282,7 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
-        MM.LayersProxyModel {
-          id: recordingLayersModel
-
-          modelType: MM.LayerModelTypes.ActiveLayerSelection
-          qgsProject: __activeProject.qgsProject
-          model: MM.LayersModel {}
-        }
+        id: addButton
 
         text: qsTr("Add")
         iconSource: __style.addIcon

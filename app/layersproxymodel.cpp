@@ -14,25 +14,8 @@
 #include "qgslayertree.h"
 
 LayersProxyModel::LayersProxyModel( QObject *parent ) :
-    QgsMapLayerProxyModel( parent ),
-    mModelType( LayerModelTypes::AllLayers ),
-    mModel( nullptr ),
-    mProject( nullptr )
+    QgsMapLayerProxyModel{ parent }
 {
-    filterFunction = []( QgsMapLayer * ) { return true; };
-    QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
-    QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
-}
-
-LayersProxyModel::LayersProxyModel( LayersModel *model, LayerModelTypes modelType, QgsProject *project ) :
-  QgsMapLayerProxyModel( nullptr ),
-  mModelType( modelType ),
-  mModel( model ),
-  mProject( project )
-{
-  setSourceModel( mModel );
-  setProject( mProject );
-
   switch ( mModelType )
   {
     case ActiveLayerSelection:

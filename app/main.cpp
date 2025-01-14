@@ -260,9 +260,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginServerType>( "mm", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "mm", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "mm", 1, 0, "MerginProjectStatusModel", "Enum" );
-  qmlRegisterUncreatableType<LayersModel>( "mm", 1, 0, "LayersModel", "" );
-  qmlRegisterUncreatableType<LayerModelTypes>( "mm", 1, 0, "LayerModelTypes", "" );
-  qmlRegisterUncreatableType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "mm", 1, 0, "ActiveLayer", "" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "mm", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
   qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
@@ -351,6 +348,10 @@ void initDeclarative()
   qmlRegisterType< RecordingMapTool >( "mm", 1, 0, "RecordingMapTool" );
   qmlRegisterType< SplittingMapTool >( "mm", 1, 0, "SplittingMapTool" );
   qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
+
+  //qmlRegisterType<LayerModelTypes>( "mm", 1, 0, "LayerModelTypes" );
+  qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
+  qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
 }
 
 void addQmlImportPath( QQmlEngine &engine )

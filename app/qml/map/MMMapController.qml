@@ -804,7 +804,7 @@ Item {
       id: recordingLayersModel
 
       qgsProject: __activeProject.qgsProject
-      modelType: MM.LayerModelTypes.RecordingLayers
+      modelType: MM.LayersProxyModel.ActiveLayerSelection
       model: MM.LayersModel {}
     }
 

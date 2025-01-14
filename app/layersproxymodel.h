@@ -23,8 +23,8 @@
 
 enum LayerModelTypes
 {
-  ActiveLayerSelection,
-  AllLayers
+    AllLayers,
+    ActiveLayerSelection
 };
 
 class LayersProxyModel : public QgsMapLayerProxyModel
@@ -37,8 +37,9 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     Q_PROPERTY( LayersModel* model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
-    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr );
-    LayersProxyModel( LayersModel *model, LayerModelTypes modelType = LayerModelTypes::AllLayers, QgsProject *project = nullptr );
+    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr  );
+
+    Q_ENUM( LayerModelTypes );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
