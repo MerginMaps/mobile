@@ -30,7 +30,6 @@
         <file>../app/qml/dialogs/MMStreamingModeDialog.qml</file>
         <file>../app/qml/dialogs/MMPositionTrackingDialog.qml</file>
         <file>../app/qml/dialogs/MMStorageLimitDialog.qml</file>
-        <file>../app/qml/dialogs/MMMonthlyContributorsLimitDialog.qml</file>
         <file>../app/qml/dialogs/MMCloseAccountDialog.qml</file>
         <file>../app/qml/dialogs/MMRemoveProjectDialog.qml</file>
         <file>../app/qml/dialogs/MMDownloadProjectDialog.qml</file>

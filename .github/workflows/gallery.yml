@@ -121,7 +121,7 @@ jobs:
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
           
       - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz
           name: Mergin Maps Gallery ${{ matrix.os }}

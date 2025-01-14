@@ -41,7 +41,6 @@ ScrollView {
         Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
         Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
         Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
-        Column { Image { source: __style.reachedMonthlyContributorLimitImage } Text { text: "reachedMonthlyContributorLimitImage" } }
         Column { Image { source: __style.positiveMMSymbolImage } Text { text: "positiveMMSymbolImage" } }
         Column { Image { source: __style.negativeMMSymbolImage } Text { text: "negativeMMSymbolImage" } }
         Column { Image { source: __style.closeAccountImage } Text { text: "closeAccountImage" } }

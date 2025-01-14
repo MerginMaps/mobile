@@ -59,7 +59,6 @@ set(MM_QML
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
     dialogs/MMMissingAuthDialog.qml
-    dialogs/MMMonthlyContributorsLimitDialog.qml
     dialogs/MMNoPermissionsDialog.qml
     dialogs/MMPositionTrackingDialog.qml
     dialogs/MMProjectLimitDialog.qml
