@@ -125,6 +125,11 @@ class CoreUtils
      */
     static QString bytesToHumanSize( double bytes );
 
+    /**
+     * Returns path to project metadata file for a given project directory
+     */
+    static QString getProjectMetadataPath( QString projectDir );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

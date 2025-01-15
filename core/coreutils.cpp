@@ -335,3 +335,11 @@ QString CoreUtils::bytesToHumanSize( double bytes )
     return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
   }
 }
+
+QString CoreUtils::getProjectMetadataPath( QString projectDir )
+{
+  if ( projectDir.isEmpty() )
+    return QString();
+
+  return projectDir + "/.mergin/mergin.json";
+}

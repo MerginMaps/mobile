@@ -3984,27 +3984,22 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
   tempFileName = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
 
-void MerginApi::updateProjectMetadataRole( const QString &projectFullName )
+void MerginApi::reloadProjectRole( const QString &projectFullName )
 {
   if ( projectFullName.isEmpty() )
   {
     return;
   }
 
-  QString cachedRole = MerginApi::getCachedProjectRole( projectFullName );
-
   QNetworkReply *reply = getProjectInfo( projectFullName );
   if ( !reply )
-  {
-    emit projectMetadataRoleUpdated( projectFullName, cachedRole );
     return;
-  }
 
   reply->request().setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::updateProjectMetadataRoleReplyFinished );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::reloadProjectRoleReplyFinished );
 }
 
-void MerginApi::updateProjectMetadataRoleReplyFinished()
+void MerginApi::reloadProjectRoleReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -4022,7 +4017,7 @@ void MerginApi::updateProjectMetadataRoleReplyFinished()
     {
       if ( updateCachedProjectRole( projectFullName, role ) )
       {
-        emit projectMetadataRoleUpdated( projectFullName, role );
+        emit projectRoleUpdated( projectFullName, role );
       }
       else
       {
@@ -4032,7 +4027,7 @@ void MerginApi::updateProjectMetadataRoleReplyFinished()
   }
   else
   {
-    emit projectMetadataRoleUpdated( projectFullName, cachedRole );
+    emit projectRoleUpdated( projectFullName, cachedRole );
   }
 
   r->deleteLater();

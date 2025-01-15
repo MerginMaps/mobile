@@ -2369,7 +2369,7 @@ void TestMerginApi::testAutosync()
 
   MapThemesModel mtm; AppSettings as; ActiveLayer al;
   LayersModel lm; LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
-  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager(), mApi );
+  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 

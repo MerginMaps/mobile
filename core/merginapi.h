@@ -574,9 +574,9 @@ class MerginApi: public QObject
     bool apiSupportsWorkspaces();
 
     /**
-     * Updates project metadata role by fetching latest information from server.
+     * Reloads project metadata role by fetching latest information from server.
      */
-    Q_INVOKABLE void updateProjectMetadataRole( const QString &projectFullName );
+    Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -655,7 +655,7 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
-    void projectMetadataRoleUpdated( const QString &projectFullName, const QString &role );
+    void projectRoleUpdated( const QString &projectFullName, const QString &role );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -795,7 +795,7 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
-    void updateProjectMetadataRoleReplyFinished();
+    void reloadProjectRoleReplyFinished();
 
     bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
 

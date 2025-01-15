@@ -45,7 +45,6 @@ class ActiveProject: public QObject
       , ActiveLayer &activeLayer
       , LayersProxyModel &recordingLayerPM
       , LocalProjectsManager &localProjectsManager
-      , MerginApi *mMerginApi
       , QObject *parent = nullptr );
 
     virtual ~ActiveProject();
@@ -131,7 +130,12 @@ class ActiveProject: public QObject
     /**
      * Calls Mergin API to update current project’s role
      */
-    Q_INVOKABLE void updateUserRoleInActiveProject();
+    void updateUserRoleInActiveProject();
+
+    /**
+     * Update current project’s role
+     */
+    void onProjectRoleUpdated( const QString &projectFullName, const QString &role );
 
   signals:
     void qgsProjectChanged();
