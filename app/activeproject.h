@@ -117,7 +117,7 @@ class ActiveProject: public QObject
 
     bool positionTrackingSupported() const;
 
-    //! Returns project has at least one layer that allows recording
+    //! Returns true if the project has at least one layer that allows recording
     Q_INVOKABLE bool projectHasRecordingLayers() const;
 
   signals:
