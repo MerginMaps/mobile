@@ -604,6 +604,9 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
 
+    /**
+     * Returns true if the layer allows recording
+     */
     static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
 
   public slots:
