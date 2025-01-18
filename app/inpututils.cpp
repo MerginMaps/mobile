@@ -2222,3 +2222,44 @@ double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
 {
   return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
 }
+
+bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
+{
+  if ( !layer || !layer->isValid() )
+    return false;
+  return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
+}
+
+bool InputUtils::layerVisible( QgsMapLayer *layer )
+{
+  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
+
+  if ( layerTree )
+    return layerTree->isVisible();
+
+  return false;
+}
+
+bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project )
+{
+  if ( !layer || !project )
+    return false;
+
+  QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
+  return layer->id() == trackingLayerId;
+}
+
+bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
+{
+  if ( !layer || !layer->isValid() || !project )
+    return false;
+
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  return ( vectorLayer &&
+           !vectorLayer->readOnly() &&
+           layerHasGeometry( vectorLayer ) &&
+           layerVisible( layer ) &&
+           !isPositionTrackingLayer( layer, project ) );
+}

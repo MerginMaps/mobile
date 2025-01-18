@@ -54,9 +54,6 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     //! Returns first layer from proxy model's layers list (filtered with filter function)
     Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
 
-    //! Returns true if the layer is the position tracking layer
-    Q_INVOKABLE bool isPositionTrackingLayer( QgsMapLayer *layer ) const;
-
     /**
      * @brief layers method return layers from source model filtered with filter function
      */
@@ -86,13 +83,6 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     void refreshData();
 
   private:
-
-    //! returns if input layer is capable of recording new features
-    bool recordingAllowed( QgsMapLayer *layer ) const;
-
-    //! filters if input layer is visible in current map theme
-    bool layerVisible( QgsMapLayer *layer ) const;
-
     LayerModelTypes mModelType;
     LayersModel *mModel;
 

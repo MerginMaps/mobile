@@ -589,6 +589,23 @@ class InputUtils: public QObject
      */
     static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
 
+    /**
+     * filters if input layer is visible in current map theme
+     */
+    static bool layerVisible( QgsMapLayer *layer );
+
+    /**
+     * Returns if layer is not NoGeo and not Unknown
+     */
+    static bool layerHasGeometry( const QgsVectorLayer *layer );
+
+    /**
+     * Returns true if the layer is the position tracking layer
+     */
+    Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
+
+    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

@@ -255,14 +255,6 @@ ApplicationWindow {
     accuracy: LocationPermission.Precise
   }
 
-  MM.LayersProxyModel {
-    id: recordingLayersModel
-
-    modelType: MM.LayersProxyModel.AllLayers
-    qgsProject: __activeProject.qgsProject
-    model: MM.LayersModel {}
-  }
-
   MMToolbar {
     id: mapToolbar
 
@@ -287,7 +279,7 @@ ApplicationWindow {
         text: qsTr("Add")
         iconSource: __style.addIcon
         onClicked: {
-          if ( recordingLayersModel.rowCount() > 0 ) {
+          if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
             map.record()
           }

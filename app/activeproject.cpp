@@ -552,3 +552,18 @@ bool ActiveProject::positionTrackingSupported() const
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
 }
+
+bool ActiveProject::projectHasRecordingLayers() const
+{
+  if ( !mQgsProject )
+    return false;
+
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    if ( InputUtils::recordingAllowed( it.value(), mQgsProject ) )
+      return true;
+  }
+
+  return false;
+}

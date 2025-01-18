@@ -33,33 +33,6 @@ bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &sour
   return filterFunction( layer );
 }
 
-bool layerHasGeometry( const QgsVectorLayer *layer )
-{
-  if ( !layer || !layer->isValid() )
-    return false;
-  return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
-}
-
-bool LayersProxyModel::recordingAllowed( QgsMapLayer *layer ) const
-{
-  if ( !layer || !layer->isValid() )
-    return false;
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-  return ( vectorLayer && !vectorLayer->readOnly() && layerHasGeometry( vectorLayer ) && layerVisible( layer ) && !isPositionTrackingLayer( layer ) );
-}
-
-bool LayersProxyModel::layerVisible( QgsMapLayer *layer ) const
-{
-  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
-  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
-
-  if ( layerTree )
-    return layerTree->isVisible();
-
-  return false;
-}
-
 QList<QgsMapLayer *> LayersProxyModel::layers() const
 {
   QList<QgsMapLayer *> filteredLayers;
@@ -142,15 +115,6 @@ QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
   return sourceModel()->data( index, role );
 }
 
-bool LayersProxyModel::isPositionTrackingLayer( QgsMapLayer *layer ) const
-{
-  if ( !layer || !mProject )
-    return false;
-
-  QString trackingLayerId = mProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
-  return layer->id() == trackingLayerId;
-}
-
 QgsProject *LayersProxyModel::qgsProject() const
 {
   return mProject;
@@ -204,7 +168,7 @@ void LayersProxyModel::applyFilterFunction()
     case ActiveLayerSelection:
       filterFunction = [this]( QgsMapLayer * layer )
       {
-        return recordingAllowed( layer );
+        return InputUtils::recordingAllowed( layer, mProject );
       };
       break;
     default:
