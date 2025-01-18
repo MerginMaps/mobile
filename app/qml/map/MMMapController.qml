@@ -800,7 +800,13 @@ Item {
 
     drawerHeader.title: qsTr( "Choose Active Layer" )
 
-    list.model: __recordingLayersModel
+    list.model: MM.LayersProxyModel {
+      id: recordingLayersModel
+
+      qgsProject: __activeProject.qgsProject
+      modelType: MM.LayersProxyModel.ActiveLayerSelection
+      model: MM.LayersModel {}
+    }
 
     list.delegate: MMListDelegate {
       text: model.layerName
@@ -818,7 +824,7 @@ Item {
       }
 
       onClicked: {
-        __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( model.layerId ) )
+        __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
         activeLayerPanel.close()
       }
     }

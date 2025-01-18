@@ -2368,8 +2368,7 @@ void TestMerginApi::testAutosync()
   InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectdir );
 
   MapThemesModel mtm; AppSettings as; ActiveLayer al;
-  LayersModel lm; LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
-  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager() );
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 

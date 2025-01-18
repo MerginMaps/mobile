@@ -274,10 +274,12 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+        id: addButton
+
         text: qsTr("Add")
         iconSource: __style.addIcon
         onClicked: {
-          if ( __recordingLayersModel.rowCount() > 0 ) {
+          if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
             map.record()
           }

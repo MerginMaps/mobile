@@ -41,7 +41,6 @@ class ActiveProject: public QObject
     explicit ActiveProject(
       AppSettings &appSettings
       , ActiveLayer &activeLayer
-      , LayersProxyModel &recordingLayerPM
       , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
@@ -118,6 +117,9 @@ class ActiveProject: public QObject
 
     bool positionTrackingSupported() const;
 
+    //! Returns true if the project has at least one layer that allows recording
+    Q_INVOKABLE bool projectHasRecordingLayers() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -179,7 +181,6 @@ class ActiveProject: public QObject
 
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
 
