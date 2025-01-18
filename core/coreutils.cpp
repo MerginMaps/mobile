@@ -21,6 +21,8 @@
 #include <QCryptographicHash>
 #include <QRegularExpression>
 #include <QStorageInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "qcoreapplication.h"
 
@@ -342,4 +344,36 @@ QString CoreUtils::getProjectMetadataPath( QString projectDir )
     return QString();
 
   return projectDir + "/.mergin/mergin.json";
+}
+
+bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value )
+{
+  QFile file( filePath );
+  if ( !file.open( QIODevice::ReadOnly ) )
+  {
+    return false;
+  }
+
+  QByteArray data = file.readAll();
+  file.close();
+
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( !doc.isObject() )
+  {
+    return false;
+  }
+
+  QJsonObject obj = doc.object();
+  obj[key] = value;
+  doc.setObject( obj );
+
+  if ( !file.open( QIODevice::WriteOnly ) )
+  {
+    return false;
+  }
+
+  bool success = ( file.write( doc.toJson() ) != -1 );
+  file.close();
+
+  return success;
 }

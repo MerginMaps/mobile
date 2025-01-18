@@ -3458,35 +3458,7 @@ bool MerginApi::updateCachedProjectRole( const QString &projectFullName, const Q
   }
 
   QString metadataPath = project.projectDir + "/" + sMetadataFile;
-
-  QFile file( metadataPath );
-  if ( !file.open( QIODevice::ReadOnly ) )
-  {
-    return false;
-  }
-
-  QByteArray data = file.readAll();
-  file.close();
-
-  QJsonDocument doc = QJsonDocument::fromJson( data );
-  if ( !doc.isObject() )
-  {
-    return false;
-  }
-
-  QJsonObject obj = doc.object();
-  obj["role"] = newRole;
-  doc.setObject( obj );
-
-  if ( !file.open( QIODevice::WriteOnly ) )
-  {
-    return false;
-  }
-
-  bool success = ( file.write( doc.toJson() ) != -1 );
-  file.close();
-
-  return success;
+  return CoreUtils::replaceValueInJson( metadataPath, "role", newRole );
 }
 
 void MerginApi::createPathIfNotExists( const QString &filePath )

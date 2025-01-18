@@ -124,18 +124,7 @@ class ActiveProject: public QObject
      * Returns role/permission level of current user for this project
      */
     Q_INVOKABLE QString projectRole() const;
-
     void setProjectRole( const QString &role );
-
-    /**
-     * Calls Mergin API to update current project’s role
-     */
-    void updateUserRoleInActiveProject();
-
-    /**
-     * Update current project’s role
-     */
-    void onProjectRoleUpdated( const QString &projectFullName, const QString &role );
 
   signals:
     void qgsProjectChanged();

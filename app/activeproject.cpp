@@ -185,7 +185,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     }
 
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
-    qDebug() << "ROLE 1 : " << role;
     setProjectRole( role );
 
     updateMapTheme();

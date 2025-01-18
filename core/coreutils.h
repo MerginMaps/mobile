@@ -130,6 +130,11 @@ class CoreUtils
      */
     static QString getProjectMetadataPath( QString projectDir );
 
+    /**
+     * Updates a value in a JSON file at the specified top-level key
+     */
+    static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;
