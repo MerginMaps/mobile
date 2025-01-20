@@ -101,11 +101,6 @@ class ActiveProject: public QObject
     void updateMapSettingsLayers() const;
 
     /**
-     * layerVisible returns boolean if input layer is visible within current project
-     */
-    bool layerVisible( QgsMapLayer *layer );
-
-    /**
      * Return the QGIS log recorded during the loading phase of the project
      */
     Q_INVOKABLE QString projectLoadingLog() const;

@@ -2232,7 +2232,14 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
 
 bool InputUtils::layerVisible( QgsMapLayer *layer )
 {
+  if ( !layer || !layer->isValid() )
+    return false;
+
   QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+
+  if ( !root )
+    return false;
+
   QgsLayerTreeLayer *layerTree = root->findLayer( layer );
 
   if ( layerTree )
@@ -2262,4 +2269,18 @@ bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
            layerHasGeometry( vectorLayer ) &&
            layerVisible( layer ) &&
            !isPositionTrackingLayer( layer, project ) );
+}
+
+QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )
+{
+  if ( !project || layerName.isEmpty() )
+    return nullptr;
+
+  QList<QgsMapLayer *> layersByName = project->mapLayersByName( layerName );
+  if ( !layersByName.isEmpty() )
+  {
+    return layersByName.first();
+  }
+
+  return nullptr;
 }

@@ -14,11 +14,12 @@
 #include "qgslayertree.h"
 
 LayersProxyModel::LayersProxyModel( QObject *parent ) :
-  QgsMapLayerProxyModel{ parent },
-  filterFunction( []( QgsMapLayer * layer ) { return ( layer && layer->isValid() ); } ) // default filter
+  QgsMapLayerProxyModel{ parent }
 {
   QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
   QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
+
+  updateFilterFunction();
 }
 
 bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
@@ -140,7 +141,7 @@ void LayersProxyModel::setModelType( LayerModelTypes type )
   {
     mModelType = type;
 
-    applyFilterFunction();
+    updateFilterFunction();
 
     emit modelTypeChanged();
   }
@@ -161,7 +162,7 @@ void LayersProxyModel::setModel( LayersModel *model )
   }
 }
 
-void LayersProxyModel::applyFilterFunction()
+void LayersProxyModel::updateFilterFunction()
 {
   switch ( mModelType )
   {

@@ -385,30 +385,6 @@ AutosyncController *ActiveProject::autosyncController() const
   return nullptr;
 }
 
-bool ActiveProject::layerVisible( QgsMapLayer *layer )
-{
-  if ( !mQgsProject || !layer )
-  {
-    return false;
-  }
-
-  QgsLayerTree *root = mQgsProject->layerTreeRoot();
-
-  if ( !root )
-  {
-    return false;
-  }
-
-  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
-
-  if ( !layerTree )
-  {
-    return false;
-  }
-
-  return layerTree->isVisible();
-}
-
 QString ActiveProject::projectLoadingLog() const
 {
   return mProjectLoadingLog;
@@ -486,18 +462,15 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !layerVisible( mActiveLayer.layer() ) )
+  if ( !InputUtils::layerVisible( mActiveLayer.layer() ) )
   {
-    QgsMapLayer *defaultLayer = nullptr;
+    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
     const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
     for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
     {
       QgsMapLayer *layer = it.value();
-
-      // If it's a vector layer and visible, let's choose it
-      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-      if ( vectorLayer && layerVisible( layer ) )
+      if ( InputUtils::recordingAllowed( layer, mQgsProject ) )
       {
         defaultLayer = layer;
         break;

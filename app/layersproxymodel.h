@@ -60,7 +60,7 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     QList<QgsMapLayer *> layers() const;
 
     //! Filter current model according to its type
-    void applyFilterFunction();
+    void updateFilterFunction();
 
     //! Getters and setters
 

@@ -609,6 +609,12 @@ class InputUtils: public QObject
      */
     static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
 
+    /**
+     * Returns QgsMapLayer pointer for given layer name and project.
+     * If layer with given name does not exist or there is no project, returns nullptr.
+     */
+    static QgsMapLayer *mapLayerFromName( const QString &layerName, QgsProject *project );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
