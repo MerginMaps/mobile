@@ -27,6 +27,7 @@ class TestCoreUtils : public QObject
     void testHasProjectFileExtension();
     void testNameValidation();
     void testNameAbbr();
+    void testReplaceValueInJson();
 };
 
 #endif // TESTCOREUTILS_H

@@ -272,3 +272,66 @@ void TestCoreUtils::testNameAbbr()
     QCOMPARE( CoreUtils::nameAbbr( name, email ), test.second );
   }
 }
+
+void TestCoreUtils::testReplaceValueInJson()
+{
+  // Create a temporary test file
+  QString testFilePath = QDir::tempPath() + "/test_replace_value.json";
+
+  // Test case 1: Basic replacement in valid JSON
+  {
+    QFile file( testFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( R"({"name": "test", "value": 123})" );
+    file.close();
+
+    QVERIFY( CoreUtils::replaceValueInJson( testFilePath, "value", 456 ) );
+
+    // Verify the change
+    QVERIFY( file.open( QIODevice::ReadOnly ) );
+    QJsonDocument doc = QJsonDocument::fromJson( file.readAll() );
+    file.close();
+    QVERIFY( doc.isObject() );
+    QJsonObject obj = doc.object();
+    QCOMPARE( obj["value"].toInt(), 456 );
+    QCOMPARE( obj["name"].toString(), QString( "test" ) );
+  }
+
+  // Test case 2: Add new key-value pair
+  {
+    QFile file( testFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( R"({"name": "test"})" );
+    file.close();
+
+    QVERIFY( CoreUtils::replaceValueInJson( testFilePath, "newKey", "newValue" ) );
+
+    // Verify the addition
+    QVERIFY( file.open( QIODevice::ReadOnly ) );
+    QJsonDocument doc = QJsonDocument::fromJson( file.readAll() );
+    file.close();
+    QVERIFY( doc.isObject() );
+    QJsonObject obj = doc.object();
+    QCOMPARE( obj["newKey"].toString(), QString( "newValue" ) );
+    QCOMPARE( obj["name"].toString(), QString( "test" ) );
+  }
+
+  // Test case 3: Invalid JSON file
+  {
+    QFile file( testFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( "invalid json content" );
+    file.close();
+
+    QVERIFY( !CoreUtils::replaceValueInJson( testFilePath, "key", "value" ) );
+  }
+
+  // Test case 4: Non-existent file
+  {
+    QString nonExistentPath = QDir::tempPath() + "/non_existent.json";
+    QVERIFY( !CoreUtils::replaceValueInJson( nonExistentPath, "key", "value" ) );
+  }
+
+  // Clean up
+  QFile::remove( testFilePath );
+}
