@@ -592,7 +592,7 @@ class InputUtils: public QObject
     /**
      * filters if input layer is visible in current map theme
      */
-    static bool layerVisible( QgsMapLayer *layer );
+    static bool layerVisible( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns if layer is not NoGeo and not Unknown

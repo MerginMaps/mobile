@@ -462,10 +462,18 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !InputUtils::layerVisible( mActiveLayer.layer() ) )
+  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
   {
-    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
+    QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
+    if ( InputUtils::recordingAllowed( defaultAppSettingsLayer, mQgsProject ) )
+    {
+      setActiveLayer( defaultAppSettingsLayer );
+      return;
+    }
+
+    // default layer from app settings has no recording allowed => let's try to search for a new one
+    QgsMapLayer *defaultLayer = nullptr;
     const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
     for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
     {
@@ -477,7 +485,8 @@ void ActiveProject::updateActiveLayer()
       }
     }
 
-    setActiveLayer( defaultLayer );
+    if ( defaultLayer )
+      setActiveLayer( defaultLayer );
   }
 }
 

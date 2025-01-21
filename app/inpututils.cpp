@@ -2230,12 +2230,12 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
   return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
-bool InputUtils::layerVisible( QgsMapLayer *layer )
+bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
 {
-  if ( !layer || !layer->isValid() )
+  if ( !layer || !layer->isValid() || !project )
     return false;
 
-  QgsLayerTree *root = QgsProject::instance()->layerTreeRoot();
+  QgsLayerTree *root = project->layerTreeRoot();
 
   if ( !root )
     return false;
@@ -2267,7 +2267,7 @@ bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
   return ( vectorLayer &&
            !vectorLayer->readOnly() &&
            layerHasGeometry( vectorLayer ) &&
-           layerVisible( layer ) &&
+           layerVisible( layer, project ) &&
            !isPositionTrackingLayer( layer, project ) );
 }
 

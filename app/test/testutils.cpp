@@ -216,29 +216,29 @@ void TestUtils::testLayerHasGeometry()
 
 void TestUtils::testLayerVisible()
 {
-  // null layer => should be false
-  QCOMPARE( InputUtils::layerVisible( nullptr ), false );
-
   QgsProject *project = new QgsProject();
   project->clear();
+
+  // null layer => should be false
+  QCOMPARE( InputUtils::layerVisible( nullptr, project ), false );
 
   // valid memory layer
   QgsVectorLayer *layer = new QgsVectorLayer( "LineString?crs=EPSG:4326", "VisibleLineLayer", "memory" );
   QVERIFY( layer->isValid() );
 
   // won't appear in the layer tree => false
-  QCOMPARE( InputUtils::layerVisible( layer ), false );
+  QCOMPARE( InputUtils::layerVisible( layer, project ), false );
 
   // added to project => true
   project->addMapLayer( layer );
-  QCOMPARE( InputUtils::layerVisible( layer ), true );
+  QCOMPARE( InputUtils::layerVisible( layer, project ), true );
 
   // hide layer => false
   QgsLayerTree *root = project->layerTreeRoot();
   QgsLayerTreeLayer *layerTree = root->findLayer( layer );
   QVERIFY( layerTree );
   layerTree->setItemVisibilityChecked( false );
-  QCOMPARE( InputUtils::layerVisible( layer ), false );
+  QCOMPARE( InputUtils::layerVisible( layer, project ), false );
 
   delete project;
 }

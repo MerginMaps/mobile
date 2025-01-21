@@ -812,6 +812,8 @@ Item {
 
       drawerHeader.title: qsTr( "Choose Active Layer" )
 
+      onClosed: activeLayerPanelLoader.active = false
+
       list.model: MM.LayersProxyModel {
         id: recordingLayersModel
 
@@ -838,7 +840,6 @@ Item {
         onClicked: {
           __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
           activeLayerPanel.close()
-          activeLayerPanelLoader.active = false
         }
       }
 
