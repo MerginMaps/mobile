@@ -3988,18 +3988,12 @@ void MerginApi::reloadProjectRoleReplyFinished()
     if ( role != cachedRole )
     {
       if ( updateCachedProjectRole( projectFullName, role ) )
-      {
         emit projectRoleUpdated( projectFullName, role );
-      }
-      else
-      {
-        CoreUtils::log( "metadata", QString( "Failed to update cached role for project %1" ).arg( projectFullName ) );
-      }
     }
   }
   else
   {
-    emit projectRoleUpdated( projectFullName, cachedRole );
+    CoreUtils::log( "metadata", QString( "Failed to update cached role for project %1" ).arg( projectFullName ) );
   }
 
   r->deleteLater();

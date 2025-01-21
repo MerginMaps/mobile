@@ -275,10 +275,10 @@ void TestCoreUtils::testNameAbbr()
 
 void TestCoreUtils::testReplaceValueInJson()
 {
-  // Create a temporary test file
+  // temporary test file
   QString testFilePath = QDir::tempPath() + "/test_replace_value.json";
 
-  // Test case 1: Basic replacement in valid JSON
+  // basic replacement in valid JSON with int value
   {
     QFile file( testFilePath );
     QVERIFY( file.open( QIODevice::WriteOnly ) );
@@ -287,7 +287,7 @@ void TestCoreUtils::testReplaceValueInJson()
 
     QVERIFY( CoreUtils::replaceValueInJson( testFilePath, "value", 456 ) );
 
-    // Verify the change
+    // verify
     QVERIFY( file.open( QIODevice::ReadOnly ) );
     QJsonDocument doc = QJsonDocument::fromJson( file.readAll() );
     file.close();
@@ -296,8 +296,26 @@ void TestCoreUtils::testReplaceValueInJson()
     QCOMPARE( obj["value"].toInt(), 456 );
     QCOMPARE( obj["name"].toString(), QString( "test" ) );
   }
+  // valid JSON with string value
+  {
+    QFile file( testFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( R"({"name": "test", "status": "active"})" );
+    file.close();
 
-  // Test case 2: Add new key-value pair
+    QVERIFY( CoreUtils::replaceValueInJson( testFilePath, "status", "inactive" ) );
+
+    // verify replacement
+    QVERIFY( file.open( QIODevice::ReadOnly ) );
+    QJsonDocument doc = QJsonDocument::fromJson( file.readAll() );
+    file.close();
+    QVERIFY( doc.isObject() );
+    QJsonObject obj = doc.object();
+    QCOMPARE( obj["status"].toString(), QString( "inactive" ) );
+    QCOMPARE( obj["name"].toString(), QString( "test" ) );
+  }
+
+  // add new key-value pair
   {
     QFile file( testFilePath );
     QVERIFY( file.open( QIODevice::WriteOnly ) );
@@ -306,7 +324,7 @@ void TestCoreUtils::testReplaceValueInJson()
 
     QVERIFY( CoreUtils::replaceValueInJson( testFilePath, "newKey", "newValue" ) );
 
-    // Verify the addition
+    // verify the addition
     QVERIFY( file.open( QIODevice::ReadOnly ) );
     QJsonDocument doc = QJsonDocument::fromJson( file.readAll() );
     file.close();
@@ -316,7 +334,7 @@ void TestCoreUtils::testReplaceValueInJson()
     QCOMPARE( obj["name"].toString(), QString( "test" ) );
   }
 
-  // Test case 3: Invalid JSON file
+  // invalid JSON file
   {
     QFile file( testFilePath );
     QVERIFY( file.open( QIODevice::WriteOnly ) );
@@ -326,12 +344,11 @@ void TestCoreUtils::testReplaceValueInJson()
     QVERIFY( !CoreUtils::replaceValueInJson( testFilePath, "key", "value" ) );
   }
 
-  // Test case 4: Non-existent file
+  // non-existent file
   {
     QString nonExistentPath = QDir::tempPath() + "/non_existent.json";
     QVERIFY( !CoreUtils::replaceValueInJson( nonExistentPath, "key", "value" ) );
   }
 
-  // Clean up
   QFile::remove( testFilePath );
 }

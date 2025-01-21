@@ -22,7 +22,6 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
-#include "merginapi.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -192,8 +191,6 @@ class ActiveProject: public QObject
     LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
-    MerginApi *mMerginApi = nullptr;
-
     std::unique_ptr<AutosyncController> mAutosyncController;
 
     QString mProjectLoadingLog;

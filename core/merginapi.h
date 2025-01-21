@@ -795,10 +795,14 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
+    //! Checks if retrieving the project role from the server was successful and
+    //! if it differs from the current project role, emits a signal with new project role
     void reloadProjectRoleReplyFinished();
 
+    //! Updates project role in metadata file
     bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
 
+    //! Retrieves cached role from metadata file
     QString getCachedProjectRole( const QString &projectFullName ) const;
 
     QNetworkAccessManager mManager;
