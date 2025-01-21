@@ -311,7 +311,7 @@ void TestUtils::testMapLayerFromName()
   QgsProject *project = new QgsProject();
   QCOMPARE( InputUtils::mapLayerFromName( "", project ), static_cast<QgsMapLayer *>( nullptr ) );
 
-  // ddd a named layer to project and check => should succeed
+  // added a named layer to project and check => should succeed
   QgsVectorLayer *layer = new QgsVectorLayer( "Point?crs=EPSG:4326", "MyTestLayer", "memory" );
   QVERIFY( layer->isValid() );
   project->addMapLayer( layer );
