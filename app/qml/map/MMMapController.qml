@@ -471,7 +471,10 @@ Item {
             text: __activeLayer.layerName
             leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
 
-            onClicked: activeLayerPanel.open()
+            onClicked: {
+              activeLayerPanelLoader.active = true
+              activeLayerPanelLoader.item.open()
+            }
           }
 
           Item {
@@ -795,45 +798,56 @@ Item {
     }
   }
 
-  MMListDrawer {
-    id: activeLayerPanel
+  Loader {
+    id: activeLayerPanelLoader
+    active: false
+    sourceComponent: activeLayerPanelComponent
+  }
 
-    drawerHeader.title: qsTr( "Choose Active Layer" )
+  Component {
+    id: activeLayerPanelComponent
 
-    list.model: MM.LayersProxyModel {
-      id: recordingLayersModel
+    MMListDrawer {
+      id: activeLayerPanel
 
-      qgsProject: __activeProject.qgsProject
-      modelType: MM.LayersProxyModel.ActiveLayerSelection
-      model: MM.LayersModel {}
-    }
+      drawerHeader.title: qsTr( "Choose Active Layer" )
 
-    list.delegate: MMListDelegate {
-      text: model.layerName
+      list.model: MM.LayersProxyModel {
+        id: recordingLayersModel
 
-      // TODO: why we need to set hight here?
-      height: __style.menuDrawerHeight
-
-      leftContent: MMIcon {
-        source: model.iconSource
+        qgsProject: __activeProject.qgsProject
+        modelType: MM.LayersProxyModel.ActiveLayerSelection
+        model: MM.LayersModel {}
       }
 
-      rightContent: MMIcon {
-        source: __style.doneCircleIcon
-        visible: __activeLayer.layerId === model.layerId
+      list.delegate: MMListDelegate {
+        text: model.layerName
+
+        // TODO: why we need to set hight here?
+        height: __style.menuDrawerHeight
+
+        leftContent: MMIcon {
+          source: model.iconSource
+        }
+
+        rightContent: MMIcon {
+          source: __style.doneCircleIcon
+          visible: __activeLayer.layerId === model.layerId
+        }
+
+        onClicked: {
+          __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
+          activeLayerPanel.close()
+          activeLayerPanelLoader.active = false
+        }
       }
 
-      onClicked: {
-        __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
-        activeLayerPanel.close()
+      emptyStateDelegate: MMMessage {
+        image: __style.negativeMMSymbolImage
+        description: qsTr( "Could not find any editable layers in the project." )
+        linkText: qsTr( "See how to enable digitizing in your project." )
+        link: __inputHelp.howToEnableDigitizingLink
       }
-    }
-
-    emptyStateDelegate: MMMessage {
-      image: __style.negativeMMSymbolImage
-      description: qsTr( "Could not find any editable layers in the project." )
-      linkText: qsTr( "See how to enable digitizing in your project." )
-      link: __inputHelp.howToEnableDigitizingLink
     }
   }
 

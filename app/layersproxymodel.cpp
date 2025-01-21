@@ -179,4 +179,6 @@ void LayersProxyModel::updateFilterFunction()
       };
       break;
   }
+
+  refreshData();
 }
