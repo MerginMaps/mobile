@@ -22,6 +22,7 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
+#include "merginprojectmetadata.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
