@@ -670,13 +670,12 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
-    <<< <<< < HEAD
+
     void projectRoleUpdated( const QString &projectFullName, const QString &role );
-    == == == =
-      void networkManagerChanged();
+
+    void networkManagerChanged();
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
-    >>> >>> > master
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -823,7 +822,6 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
-    <<< <<< < HEAD
     //! Checks if retrieving the project role from the server was successful and
     //! if it differs from the current project role, emits a signal with new project role
     void reloadProjectRoleReplyFinished();
@@ -834,10 +832,8 @@ class MerginApi: public QObject
     //! Retrieves cached role from metadata file
     QString getCachedProjectRole( const QString &projectFullName ) const;
 
-    QNetworkAccessManager mManager;
-    == == == =
-      QNetworkAccessManager * mManager = nullptr;
-    >>> >>> > master
+    QNetworkAccessManager *mManager = nullptr;
+
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
     QString mDataDir; // dir with all projects
