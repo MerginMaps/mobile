@@ -2969,7 +2969,9 @@ void TestMerginApi::testUpdateProjectMetadataRole()
   QCOMPARE( cachedRole, QString( "reader" ) );
 
   // Role in server wasn't updated and stills "owner" => let's reload it from server and see if it updates in cached
+  QSignalSpy spy( mApi, &MerginApi::projectRoleUpdated );
   mApi->reloadProjectRole( fullProjectName );
+  QVERIFY( spy.wait() );
   cachedRole = mApi->getCachedProjectRole( fullProjectName );
   QCOMPARE( cachedRole, QString( "owner" ) );
 
