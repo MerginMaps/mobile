@@ -2953,18 +2953,25 @@ void TestMerginApi::testUpdateProjectMetadataRole()
   LocalProject projectInfo = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
   QVERIFY( projectInfo.isValid() );
 
+  QString fullProjectName = MerginApi::getFullProjectName( mWorkspaceName, projectName );
+
   // Test 1: Initial role should be 'owner'
-  QString cachedRole = mApi->getCachedProjectRole( MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  QString cachedRole = mApi->getCachedProjectRole( fullProjectName );
   QCOMPARE( cachedRole, QString( "owner" ) );
 
   // Test 2: Update cached role to 'reader'
   QString newRole = "reader";
-  bool updateSuccess = mApi->updateCachedProjectRole( MerginApi::getFullProjectName( mWorkspaceName, projectName ), newRole );
+  bool updateSuccess = mApi->updateCachedProjectRole( fullProjectName, newRole );
   QVERIFY( updateSuccess );
 
   // Verify role was updated in cache
-  cachedRole = mApi->getCachedProjectRole( MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  cachedRole = mApi->getCachedProjectRole( fullProjectName );
   QCOMPARE( cachedRole, QString( "reader" ) );
+
+  // Role in server wasn't updated and stills "owner" => let's reload it from server and see if it updates in cached
+  mApi->reloadProjectRole( fullProjectName );
+  cachedRole = mApi->getCachedProjectRole( fullProjectName );
+  QCOMPARE( cachedRole, QString( "owner" ) );
 
   // Clean up
   deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
