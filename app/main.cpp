@@ -495,6 +495,7 @@ int main( int argc, char *argv[] )
 
   ActiveLayer al;
   ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
+
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -567,6 +568,27 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+  } );
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    merginApi->reloadProjectRole( activeProject.projectFullName() );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    if ( activeProject.isProjectLoaded() )
+    {
+      merginApi->reloadProjectRole( activeProject.projectFullName() );
+    }
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
+  {
+    if ( projectFullName == activeProject.projectFullName() )
+    {
+      activeProject.setProjectRole( role );
+    }
   } );
 
   QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )

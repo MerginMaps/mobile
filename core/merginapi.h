@@ -578,6 +578,11 @@ class MerginApi: public QObject
     bool apiSupportsWorkspaces();
 
     /**
+     * Reloads project metadata role by fetching latest information from server.
+     */
+    Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
+
+    /**
      * Returns the network manager used for Mergin API requests
      */
     QNetworkAccessManager *networkManager() const { return mManager; }
@@ -665,6 +670,9 @@ class MerginApi: public QObject
     void apiSupportsWorkspacesChanged();
 
     void serverWasUpgraded();
+
+    void projectRoleUpdated( const QString &projectFullName, const QString &role );
+
     void networkManagerChanged();
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
@@ -814,7 +822,18 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
+    //! Checks if retrieving the project role from the server was successful and
+    //! if it differs from the current project role, emits a signal with new project role
+    void reloadProjectRoleReplyFinished();
+
+    //! Updates project role in metadata file
+    bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
+
+    //! Retrieves cached role from metadata file
+    QString getCachedProjectRole( const QString &projectFullName ) const;
+
     QNetworkAccessManager *mManager = nullptr;
+
     QString mApiRoot;
     LocalProjectsManager &mLocalProjects;
     QString mDataDir; // dir with all projects
@@ -829,7 +848,7 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3,
+      AttrAcceptFlag      = QNetworkRequest::User + 3
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus

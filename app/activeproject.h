@@ -22,6 +22,7 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
+#include "merginprojectmetadata.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -33,6 +34,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( QString projectRole READ projectRole WRITE setProjectRole NOTIFY projectRoleChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
@@ -118,6 +120,12 @@ class ActiveProject: public QObject
 
     bool positionTrackingSupported() const;
 
+    /**
+     * Returns role/permission level of current user for this project
+     */
+    Q_INVOKABLE QString projectRole() const;
+    void setProjectRole( const QString &role );
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -144,6 +152,8 @@ class ActiveProject: public QObject
 
     // Emited when the app (UI) should show tracking because there is a running tracking service
     void startPositionTracking();
+
+    void projectRoleChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
@@ -182,10 +192,10 @@ class ActiveProject: public QObject
     LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
-
     std::unique_ptr<AutosyncController> mAutosyncController;
 
     QString mProjectLoadingLog;
+    QString mProjectRole;
 
     /**
     * Reloads project.

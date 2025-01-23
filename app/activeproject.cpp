@@ -184,6 +184,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
 
+    QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
+    setProjectRole( role );
+
     updateMapTheme();
     updateRecordingLayers();
     updateActiveLayer();
@@ -552,4 +555,19 @@ bool ActiveProject::positionTrackingSupported() const
   }
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
+}
+
+QString ActiveProject::projectRole() const
+{
+  return mProjectRole;
+}
+
+void ActiveProject::setProjectRole( const QString &role )
+{
+  if ( mProjectRole != role )
+  {
+    mProjectRole = role;
+
+    emit projectRoleChanged();
+  }
 }
