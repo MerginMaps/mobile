@@ -164,6 +164,8 @@ void LayersProxyModel::setModel( LayersModel *model )
 
 void LayersProxyModel::updateFilterFunction()
 {
+  beginResetModel();
+
   switch ( mModelType )
   {
     case ActiveLayerSelection:
@@ -180,5 +182,5 @@ void LayersProxyModel::updateFilterFunction()
       break;
   }
 
-  refreshData();
+  endResetModel();
 }
