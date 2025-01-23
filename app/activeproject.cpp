@@ -551,6 +551,8 @@ bool ActiveProject::projectHasRecordingLayers() const
   }
 
   return false;
+}
+
 QString ActiveProject::projectRole() const
 {
   return mProjectRole;
