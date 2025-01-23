@@ -278,6 +278,7 @@ ApplicationWindow {
 
         text: qsTr("Add")
         iconSource: __style.addIcon
+        visible: __activeProject.projectRole !== "reader"
         onClicked: {
           if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
