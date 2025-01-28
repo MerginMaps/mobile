@@ -593,6 +593,11 @@ class MerginApi: public QObject
      */
     void setNetworkManager( QNetworkAccessManager *manager );
 
+    /**
+     * Returns whether user is currently logged in
+    */
+    Q_INVOKABLE bool isLoggedIn() const;
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();

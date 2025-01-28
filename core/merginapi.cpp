@@ -3966,7 +3966,7 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
 
 void MerginApi::reloadProjectRole( const QString &projectFullName )
 {
-  if ( projectFullName.isEmpty() )
+  if ( projectFullName.isEmpty() || !isLoggedIn() )
   {
     return;
   }
@@ -4052,4 +4052,9 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   mManager = manager;
 
   emit networkManagerChanged();
+}
+
+bool MerginApi::isLoggedIn() const
+{
+  return mUserAuth->hasAuthData() && !mUserAuth->authToken().isEmpty();
 }
