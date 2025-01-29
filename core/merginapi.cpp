@@ -1453,7 +1453,7 @@ bool MerginApi::validateAuth()
     return false;
   }
 
-  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTime().toUTC() )
+  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
   {
     authorize( mUserAuth->username(), mUserAuth->password() );
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
@@ -3966,12 +3966,10 @@ DownloadQueueItem::DownloadQueueItem( const QString &fp, qint64 s, int v, qint64
 
 void MerginApi::reloadProjectRole( const QString &projectFullName )
 {
-  if ( projectFullName.isEmpty() || !isLoggedIn() )
-  {
+  if ( projectFullName.isEmpty() )
     return;
-  }
 
-  QNetworkReply *reply = getProjectInfo( projectFullName );
+  QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->isLoggedIn() ); //withAuth depends on whether user is logged in or not
   if ( !reply )
     return;
 
@@ -4052,9 +4050,4 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   mManager = manager;
 
   emit networkManagerChanged();
-}
-
-bool MerginApi::isLoggedIn() const
-{
-  return mUserAuth->hasAuthData() && !mUserAuth->authToken().isEmpty() && !( mUserAuth->tokenExpiration() < QDateTime().currentDateTime().toUTC() );
 }
