@@ -4056,5 +4056,5 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
 
 bool MerginApi::isLoggedIn() const
 {
-  return mUserAuth->hasAuthData() && !mUserAuth->authToken().isEmpty();
+  return mUserAuth->hasAuthData() && !mUserAuth->authToken().isEmpty() && !( mUserAuth->tokenExpiration() < QDateTime().currentDateTime().toUTC() );
 }
