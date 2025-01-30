@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include <QSettings>
 #include <QJsonObject>
+#include <qt6keychain/keychain.h>
 
 class MerginUserAuth: public QObject
 {
