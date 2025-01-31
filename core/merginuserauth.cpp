@@ -115,12 +115,12 @@ void MerginUserAuth::loadAuthData()
 #else
   // desktop => QSettings
   QSettings settings;
-  settings.beginGroup( "Input/" );
-  mUsername = settings.value( "username" ).toString();
-  mPassword = settings.value( "password" ).toString();
-  mUserId = settings.value( "userId" ).toInt();
-  mTokenExpiration = settings.value( "expire" ).toDateTime();
-  mAuthToken = settings.value( "token" ).toByteArray();
+  settings.beginGroup( QStringLiteral( "Input/" ) );
+  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
+  mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+  mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
+  mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
+  mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
   settings.endGroup();
 #endif
 }
