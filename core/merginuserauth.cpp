@@ -24,6 +24,23 @@ void MerginUserAuth::clear()
   mTokenExpiration.setTime( QTime() );
   mUserId = -1;
 
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+  deleteKey( "username" );
+  deleteKey( "password" );
+  deleteKey( "userId" );
+  deleteKey( "token" );
+  deleteKey( "expire" );
+#else
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+  settings.remove( "username" );
+  settings.remove( "password" );
+  settings.remove( "userId" );
+  settings.remove( "token" );
+  settings.remove( "expire" );
+  settings.endGroup();
+#endif
+
   emit authChanged();
 }
 
@@ -31,6 +48,18 @@ void MerginUserAuth::clearTokenData()
 {
   mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
   mAuthToken.clear();
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+  deleteKey( QStringLiteral( "token" ) );
+  deleteKey( QStringLiteral( "expire" ) );
+#else
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+  settings.remove( "token" );
+  settings.remove( "expire" );
+  settings.endGroup();
+#endif
+
   emit authChanged();
 }
 
@@ -56,48 +85,20 @@ void MerginUserAuth::saveAuthData()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   // mobile => QtKeychain
-  const QString group = QStringLiteral( "Input/" );
-
-  auto writeJob = [this, group]( const QString & key, const QVariant & value )
-  {
-    auto *job = new QKeychain::WritePasswordJob( QStringLiteral( "mergin_maps_auth" ), this );
-    job->setAutoDelete( false );
-    job->setKey( group + key );
-
-    if ( value.type() == QVariant::ByteArray )
-      job->setTextData( QString::fromUtf8( value.toByteArray().toBase64() ) );
-    else if ( value.type() == QVariant::DateTime )
-      job->setTextData( value.toDateTime().toString( Qt::ISODate ) );
-    else
-      job->setTextData( value.toString() );
-
-    connect( job, &QKeychain::Job::finished, this, [this, job, key]()
-    {
-      if ( job->error() )
-      {
-        CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, job->errorString() ) );
-      }
-      job->deleteLater();
-    } );
-
-    job->start();
-  };
-
-  writeJob( QStringLiteral( "username" ), mUsername );
-  writeJob( QStringLiteral( "password" ), mPassword );
-  writeJob( QStringLiteral( "userId" ), mUserId );
-  writeJob( QStringLiteral( "token" ), mAuthToken );
-  writeJob( QStringLiteral( "expire" ), mTokenExpiration );
-
+  writeKey( "username", mUsername );
+  writeKey( "password", mPassword );
+  writeKey( "userId", mUserId );
+  writeKey( "token", mAuthToken );
+  writeKey( "expire", mTokenExpiration );
 #else
   // desktop => QSettings
   QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  settings.setValue( QStringLiteral( "username" ), mUsername );
-  settings.setValue( QStringLiteral( "password" ), mPassword );
-  settings.setValue( QStringLiteral( "userId" ), mUserId );
-  settings.setValue( QStringLiteral( "token" ), mAuthToken );
-  settings.setValue( QStringLiteral( "expire" ), mTokenExpiration );
+  settings.beginGroup( "Input/" );
+  settings.setValue( "username", mUsername );
+  settings.setValue( "password", mPassword );
+  settings.setValue( "userId", mUserId );
+  settings.setValue( "token", mAuthToken );
+  settings.setValue( "expire", mTokenExpiration );
   settings.endGroup();
 #endif
 }
@@ -106,53 +107,20 @@ void MerginUserAuth::loadAuthData()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   // mobile => QtKeychain
-  const QString group = QStringLiteral( "Input/" );
-
-  auto readJob = [this, group]( const QString & key, auto & destination, std::function<typename std::decay<decltype( destination )>::type( const QString & )> converter )
-  {
-    auto *job = new QKeychain::ReadPasswordJob( QStringLiteral( "mergin_maps_auth" ), this );
-    job->setAutoDelete( false );
-    job->setKey( group + key );
-
-    connect( job, &QKeychain::Job::finished, this, [this, job, key, &destination, converter]()
-    {
-      if ( !job->error() && !job->textData().isEmpty() )
-      {
-        destination = converter( job->textData() );
-      }
-      else if ( job->error() )
-      {
-        CoreUtils::log( "Auth", QString( "Keychain read error (%1): %2" ).arg( key, job->errorString() ) );
-      }
-      job->deleteLater();
-    } );
-
-    job->start();
-  };
-
-  readJob( QStringLiteral( "username" ), mUsername, []( const QString & v ) { return v; } );
-  readJob( QStringLiteral( "password" ), mPassword, []( const QString & v ) { return v; } );
-  readJob( QStringLiteral( "userId" ), mUserId, []( const QString & v ) { return v.toInt(); } );
-
-  readJob( QStringLiteral( "token" ), mAuthToken, []( const QString & v )
-  {
-    return QByteArray::fromBase64( v.toUtf8() );
-  } );
-
-  readJob( QStringLiteral( "expire" ), mTokenExpiration, []( const QString & v )
-  {
-    return QDateTime::fromString( v, Qt::ISODate );
-  } );
-
+  readKey( "username", mUsername, []( const QString & v ) { return v; } );
+  readKey( "password", mPassword, []( const QString & v ) { return v; } );
+  readKey( "userId", mUserId, []( const QString & v ) { return v.toInt(); } );
+  readKey( "token", mAuthToken, []( const QString & v ) { return QByteArray::fromBase64( v.toUtf8() ); } );
+  readKey( "expire", mTokenExpiration, []( const QString & v ) { return QDateTime::fromString( v, Qt::ISODate ); } );
 #else
   // desktop => QSettings
   QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
-  mPassword = settings.value( QStringLiteral( "password" ) ).toString();
-  mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
-  mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
-  mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+  settings.beginGroup( "Input/" );
+  mUsername = settings.value( "username" ).toString();
+  mPassword = settings.value( "password" ).toString();
+  mUserId = settings.value( "userId" ).toInt();
+  mTokenExpiration = settings.value( "expire" ).toDateTime();
+  mAuthToken = settings.value( "token" ).toByteArray();
   settings.endGroup();
 #endif
 }
@@ -215,4 +183,76 @@ void MerginUserAuth::setTokenExpiration( const QDateTime &tokenExpiration )
 bool MerginUserAuth::hasValidToken() const
 {
   return !mAuthToken.isEmpty() && mTokenExpiration >= QDateTime().currentDateTimeUtc();
+}
+
+void MerginUserAuth::deleteKey( const QString &key )
+{
+  auto *job = new QKeychain::DeletePasswordJob( "mergin_maps_auth", this );
+  job->setAutoDelete( false );
+  job->setKey( "Input/" + key );
+
+  connect( job, &QKeychain::Job::finished, this, [this, job, key]()
+  {
+    if ( job->error() )
+    {
+      CoreUtils::log( "Auth", QString( "Keychain delete error (%1): %2" ).arg( key, job->errorString() ) );
+    }
+    job->deleteLater();
+  } );
+
+  job->start();
+}
+
+void MerginUserAuth::writeKey( const QString &key, const QVariant &value )
+{
+  auto *job = new QKeychain::WritePasswordJob( "mergin_maps_auth", this );
+  job->setAutoDelete( false );
+  job->setKey( "Input/" + key );
+
+  if ( value.type() == QVariant::ByteArray )
+  {
+    job->setTextData( QString::fromUtf8( value.toByteArray().toBase64() ) );
+  }
+  else if ( value.type() == QVariant::DateTime )
+  {
+    job->setTextData( value.toDateTime().toString( Qt::ISODate ) );
+  }
+  else
+  {
+    job->setTextData( value.toString() );
+  }
+
+  connect( job, &QKeychain::Job::finished, this, [this, job, key]()
+  {
+    if ( job->error() )
+    {
+      CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, job->errorString() ) );
+    }
+    job->deleteLater();
+  } );
+
+  job->start();
+}
+
+template <typename T, typename Converter>
+void MerginUserAuth::readKey( const QString &key, T &destination, Converter converter )
+{
+  auto *job = new QKeychain::ReadPasswordJob( "mergin_maps_auth", this );
+  job->setAutoDelete( false );
+  job->setKey( "Input/" + key );
+
+  connect( job, &QKeychain::Job::finished, this, [this, job, key, &destination, converter]()
+  {
+    if ( !job->error() && !job->textData().isEmpty() )
+    {
+      destination = converter( job->textData() );
+    }
+    else if ( job->error() )
+    {
+      CoreUtils::log( "Auth", QString( "Keychain read error (%1): %2" ).arg( key, job->errorString() ) );
+    }
+    job->deleteLater();
+  } );
+
+  job->start();
 }

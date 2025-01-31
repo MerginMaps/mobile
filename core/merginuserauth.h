@@ -62,6 +62,16 @@ class MerginUserAuth: public QObject
     void setFromJson( QJsonObject docObj );
 
   private:
+    //! Delete a key in keychain
+    void deleteKey( const QString &key );
+
+    //! Write a key/value in keychain
+    void writeKey( const QString &key, const QVariant &value );
+
+    //! Read a key from keychain into a destination variable
+    template <typename T, typename Converter>
+    void readKey( const QString &key, T &destination, Converter converter );
+
     QString mUsername;
     QString mPassword;
     int mUserId = -1;
