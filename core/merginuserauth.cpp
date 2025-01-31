@@ -85,20 +85,20 @@ void MerginUserAuth::saveAuthData()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   // mobile => QtKeychain
-  writeKey( "username", mUsername );
-  writeKey( "password", mPassword );
-  writeKey( "userId", mUserId );
-  writeKey( "token", mAuthToken );
-  writeKey( "expire", mTokenExpiration );
+  writeKey( QStringLiteral( "username" ), mUsername );
+  writeKey( QStringLiteral( "password" ), mPassword );
+  writeKey( QStringLiteral( "userId" ), mUserId );
+  writeKey( QStringLiteral( "token" ), mAuthToken );
+  writeKey( QStringLiteral( "expire" ), mTokenExpiration );
 #else
   // desktop => QSettings
   QSettings settings;
   settings.beginGroup( "Input/" );
-  settings.setValue( "username", mUsername );
-  settings.setValue( "password", mPassword );
-  settings.setValue( "userId", mUserId );
-  settings.setValue( "token", mAuthToken );
-  settings.setValue( "expire", mTokenExpiration );
+  settings.setValue( QStringLiteral( "username" ), mUsername );
+  settings.setValue( QStringLiteral( "password" ), mPassword );
+  settings.setValue( QStringLiteral( "userId" ), mUserId );
+  settings.setValue( QStringLiteral( "token" ), mAuthToken );
+  settings.setValue( QStringLiteral( "expire" ), mTokenExpiration );
   settings.endGroup();
 #endif
 }
@@ -107,11 +107,11 @@ void MerginUserAuth::loadAuthData()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   // mobile => QtKeychain
-  readKey( "username", mUsername, []( const QString & v ) { return v; } );
-  readKey( "password", mPassword, []( const QString & v ) { return v; } );
-  readKey( "userId", mUserId, []( const QString & v ) { return v.toInt(); } );
-  readKey( "token", mAuthToken, []( const QString & v ) { return QByteArray::fromBase64( v.toUtf8() ); } );
-  readKey( "expire", mTokenExpiration, []( const QString & v ) { return QDateTime::fromString( v, Qt::ISODate ); } );
+  readKey( QStringLiteral( "username" ), mUsername, []( const QString & v ) { return v; } );
+  readKey( QStringLiteral( "password" ), mPassword, []( const QString & v ) { return v; } );
+  readKey( QStringLiteral( "userId" ), mUserId, []( const QString & v ) { return v.toInt(); } );
+  readKey( QStringLiteral( "token" ), mAuthToken, []( const QString & v ) { return QByteArray::fromBase64( v.toUtf8() ); } );
+  readKey( QStringLiteral( "expire" ), mTokenExpiration, []( const QString & v ) { return QDateTime::fromString( v, Qt::ISODate ); } );
 #else
   // desktop => QSettings
   QSettings settings;
