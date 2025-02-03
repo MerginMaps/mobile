@@ -1,13 +1,3 @@
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-
 #ifndef MERGINUSERAUTH_H
 #define MERGINUSERAUTH_H
 
@@ -16,6 +6,7 @@
 #include <QDateTime>
 #include <QSettings>
 #include <QJsonObject>
+#include "credentialstore.h"
 #include <qt6keychain/keychain.h>
 
 class MerginUserAuth: public QObject
@@ -29,6 +20,7 @@ class MerginUserAuth: public QObject
     ~MerginUserAuth() = default;
   signals:
     void authChanged();
+    void credentialsLoaded();
 
   public:
     //! Returns true if username/password is set, but that does not
@@ -62,21 +54,12 @@ class MerginUserAuth: public QObject
     void setFromJson( QJsonObject docObj );
 
   private:
-    //! Delete a key in keychain
-    void deleteKey( const QString &key );
-
-    //! Write a key/value in keychain
-    void writeKey( const QString &key, const QVariant &value );
-
-    //! Read a key from keychain into a destination variable
-    template <typename T, typename Converter>
-    void readKey( const QString &key, T &destination, Converter converter );
-
     QString mUsername;
     QString mPassword;
     int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
+    CredentialStore *mCredentialStore = nullptr;
 };
 
 #endif // MERGINUSERAUTH_H

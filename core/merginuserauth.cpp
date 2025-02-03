@@ -12,8 +12,13 @@
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
+  , mUsername( "" )
+  , mPassword( "" )
+  , mUserId( -1 )
+  , mAuthToken()
+  , mTokenExpiration()
+  , mCredentialStore( new CredentialStore( this ) )
 {
-  clear();
 }
 
 void MerginUserAuth::clear()
@@ -24,22 +29,22 @@ void MerginUserAuth::clear()
   mTokenExpiration.setTime( QTime() );
   mUserId = -1;
 
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-  deleteKey( "username" );
-  deleteKey( "password" );
-  deleteKey( "userId" );
-  deleteKey( "token" );
-  deleteKey( "expire" );
-#else
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.remove( "username" );
-  settings.remove( "password" );
-  settings.remove( "userId" );
-  settings.remove( "token" );
-  settings.remove( "expire" );
-  settings.endGroup();
-#endif
+// #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+//   mCredentialStore->deleteKey( "username" );
+//   mCredentialStore->deleteKey( "password" );
+//   mCredentialStore->deleteKey( "userId" );
+//   mCredentialStore->deleteKey( "token" );
+//   mCredentialStore->deleteKey( "expire" );
+// #else
+//   QSettings settings;
+//   settings.beginGroup( "Input/" );
+//   settings.remove( "username" );
+//   settings.remove( "password" );
+//   settings.remove( "userId" );
+//   settings.remove( "token" );
+//   settings.remove( "expire" );
+//   settings.endGroup();
+// #endif
 
   emit authChanged();
 }
@@ -49,16 +54,16 @@ void MerginUserAuth::clearTokenData()
   mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
   mAuthToken.clear();
 
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-  deleteKey( QStringLiteral( "token" ) );
-  deleteKey( QStringLiteral( "expire" ) );
-#else
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.remove( "token" );
-  settings.remove( "expire" );
-  settings.endGroup();
-#endif
+// #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+//   mCredentialStore->deleteKey( QStringLiteral( "token" ) );
+//   mCredentialStore->deleteKey( QStringLiteral( "expire" ) );
+// #else
+//   QSettings settings;
+//   settings.beginGroup( "Input/" );
+//   settings.remove( "token" );
+//   settings.remove( "expire" );
+//   settings.endGroup();
+// #endif
 
   emit authChanged();
 }
@@ -84,12 +89,12 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 void MerginUserAuth::saveAuthData()
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-  // mobile => QtKeychain
-  writeKey( QStringLiteral( "username" ), mUsername );
-  writeKey( QStringLiteral( "password" ), mPassword );
-  writeKey( QStringLiteral( "userId" ), mUserId );
-  writeKey( QStringLiteral( "token" ), mAuthToken );
-  writeKey( QStringLiteral( "expire" ), mTokenExpiration );
+  // mobile => QtKeychain via CredentialStore
+  mCredentialStore->writeKey( QStringLiteral( "username" ), mUsername );
+  mCredentialStore->writeKey( QStringLiteral( "password" ), mPassword );
+  mCredentialStore->writeKey( QStringLiteral( "userId" ), mUserId );
+  mCredentialStore->writeKey( QStringLiteral( "token" ), mAuthToken );
+  mCredentialStore->writeKey( QStringLiteral( "expire" ), mTokenExpiration );
 #else
   // desktop => QSettings
   QSettings settings;
@@ -103,26 +108,150 @@ void MerginUserAuth::saveAuthData()
 #endif
 }
 
+// void MerginUserAuth::loadAuthData()
+// {
+// #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+//   // mobile => QtKeychain
+//   connect( mCredentialStore, &CredentialStore::keyRead, this, [this]( const QString & key, const QVariant & value ) //read credentials in chain to emit authChanged only
+//   {
+//     if ( key == "username" )
+//     {
+//       mUsername = value.toString();
+//       mCredentialStore->readKey( "password" );
+//     }
+//     else if ( key == "password" )
+//     {
+//       mPassword = value.toString();
+//       mCredentialStore->readKey( "userId" );
+//     }
+//     else if ( key == "userId" )
+//     {
+//       mUserId = value.toInt();
+//       mCredentialStore->readKey( "token" );
+//     }
+//     else if ( key == "token" )
+//     {
+//       mAuthToken = value.toByteArray();
+//       mCredentialStore->readKey( "expire" );
+//     }
+//     else if ( key == "expire" )
+//     {
+//       mTokenExpiration = value.toDateTime();
+
+//       if ( mTokenExpiration < QDateTime::currentDateTimeUtc() )
+//       {
+//         clearTokenData();
+//       }
+
+//       emit authChanged();
+//     }
+//   } );
+
+//   mCredentialStore->readKey( "username" );
+// #else
+//   // desktop => QSettings
+//   QSettings settings;
+//   settings.beginGroup( QStringLiteral( "Input/" ) );
+//   mUsername = settings.value( QStringLiteral( "username" ) ).toString();
+//   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+//   mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
+//   mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
+//   mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+//   settings.endGroup();
+
+//   emit authChanged();
+// #endif
+// }
+
 void MerginUserAuth::loadAuthData()
 {
+  qDebug() << "TESTLOADAUTHDATA: Starting loadAuthData()";
+
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-  // mobile => QtKeychain
-  readKey( QStringLiteral( "username" ), mUsername, []( const QString & v ) { return v; } );
-  readKey( QStringLiteral( "password" ), mPassword, []( const QString & v ) { return v; } );
-  readKey( QStringLiteral( "userId" ), mUserId, []( const QString & v ) { return v.toInt(); } );
-  readKey( QStringLiteral( "token" ), mAuthToken, []( const QString & v ) { return QByteArray::fromBase64( v.toUtf8() ); } );
-  readKey( QStringLiteral( "expire" ), mTokenExpiration, []( const QString & v ) { return QDateTime::fromString( v, Qt::ISODate ); } );
+  // mobile => QtKeychain via CredentialStore asynchronous chain
+  if ( mCredentialStore )
+  {
+    qDebug() << "TESTLOADAUTHDATA: Using CredentialStore for authentication";
+
+    connect( mCredentialStore, &CredentialStore::keyRead, this, [this]( const QString & key, const QString & value )
+    {
+      qDebug() << "TESTLOADAUTHDATA: keyRead signal received - key:" << key << ", value:" << value;
+
+      if ( key == "username" )
+      {
+        mUsername = value;
+        qDebug() << "TESTLOADAUTHDATA: Username set to" << mUsername;
+        mCredentialStore->readKey( QStringLiteral( "password" ) );
+      }
+      else if ( key == "password" )
+      {
+        mPassword = value;
+        qDebug() << "TESTLOADAUTHDATA: Password set";
+        mCredentialStore->readKey( QStringLiteral( "userId" ) );
+      }
+      else if ( key == "userId" )
+      {
+        mUserId = value.toInt();
+        qDebug() << "TESTLOADAUTHDATA: UserId set to" << mUserId;
+        mCredentialStore->readKey( QStringLiteral( "token" ) );
+      }
+      else if ( key == "token" )
+      {
+        mAuthToken = QByteArray::fromBase64( value.toUtf8() );
+        qDebug() << "TESTLOADAUTHDATA: Token set (Base64 decoded)";
+        mCredentialStore->readKey( QStringLiteral( "expire" ) );
+      }
+      else if ( key == "expire" )
+      {
+        mTokenExpiration = QDateTime::fromString( value, Qt::ISODate );
+        qDebug() << "TESTLOADAUTHDATA: Token expiration set to" << mTokenExpiration.toString(Qt::ISODate);
+
+        if ( mTokenExpiration < QDateTime::currentDateTimeUtc() )
+        {
+          qDebug() << "TESTLOADAUTHDATA: Token is expired.";
+          CoreUtils::log( "Auth", "Token is expired." );
+        }
+
+        emit authChanged();
+        qDebug() << "TESTLOADAUTHDATA: authChanged() emitted";
+
+        emit credentialsLoaded();
+        qDebug() << "TESTLOADAUTHDATA: credentialsLoaded() emitted";
+      }
+    } );
+
+    qDebug() << "TESTLOADAUTHDATA: Reading username from CredentialStore";
+    mCredentialStore->readKey( QStringLiteral( "username" ) );
+  }
+  else
+  {
+    qDebug() << "TESTLOADAUTHDATA: mCredentialStore is null!";
+  }
 #else
   // desktop => QSettings
+  qDebug() << "TESTLOADAUTHDATA: Using QSettings for authentication";
   QSettings settings;
   settings.beginGroup( QStringLiteral( "Input/" ) );
+
   mUsername = settings.value( QStringLiteral( "username" ) ).toString();
+  qDebug() << "TESTLOADAUTHDATA: Username set to" << mUsername;
+
   mPassword = settings.value( QStringLiteral( "password" ) ).toString();
+  qDebug() << "TESTLOADAUTHDATA: Password set";
+
   mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
+  qDebug() << "TESTLOADAUTHDATA: UserId set to" << mUserId;
+
   mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
+  qDebug() << "TESTLOADAUTHDATA: Token expiration set to" << mTokenExpiration.toString(Qt::ISODate);
+
   mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
+  qDebug() << "TESTLOADAUTHDATA: Token set (raw bytes)";
+
   settings.endGroup();
 #endif
+
+  qDebug() << "TESTLOADAUTHDATA: Finished loadAuthData()";
 }
 
 QString MerginUserAuth::username() const
@@ -183,76 +312,4 @@ void MerginUserAuth::setTokenExpiration( const QDateTime &tokenExpiration )
 bool MerginUserAuth::hasValidToken() const
 {
   return !mAuthToken.isEmpty() && mTokenExpiration >= QDateTime().currentDateTimeUtc();
-}
-
-void MerginUserAuth::deleteKey( const QString &key )
-{
-  auto *job = new QKeychain::DeletePasswordJob( "mergin_maps_auth", this );
-  job->setAutoDelete( false );
-  job->setKey( "Input/" + key );
-
-  connect( job, &QKeychain::Job::finished, this, [this, job, key]()
-  {
-    if ( job->error() )
-    {
-      CoreUtils::log( "Auth", QString( "Keychain delete error (%1): %2" ).arg( key, job->errorString() ) );
-    }
-    job->deleteLater();
-  } );
-
-  job->start();
-}
-
-void MerginUserAuth::writeKey( const QString &key, const QVariant &value )
-{
-  auto *job = new QKeychain::WritePasswordJob( "mergin_maps_auth", this );
-  job->setAutoDelete( false );
-  job->setKey( "Input/" + key );
-
-  if ( value.type() == QVariant::ByteArray )
-  {
-    job->setTextData( QString::fromUtf8( value.toByteArray().toBase64() ) );
-  }
-  else if ( value.type() == QVariant::DateTime )
-  {
-    job->setTextData( value.toDateTime().toString( Qt::ISODate ) );
-  }
-  else
-  {
-    job->setTextData( value.toString() );
-  }
-
-  connect( job, &QKeychain::Job::finished, this, [this, job, key]()
-  {
-    if ( job->error() )
-    {
-      CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, job->errorString() ) );
-    }
-    job->deleteLater();
-  } );
-
-  job->start();
-}
-
-template <typename T, typename Converter>
-void MerginUserAuth::readKey( const QString &key, T &destination, Converter converter )
-{
-  auto *job = new QKeychain::ReadPasswordJob( "mergin_maps_auth", this );
-  job->setAutoDelete( false );
-  job->setKey( "Input/" + key );
-
-  connect( job, &QKeychain::Job::finished, this, [this, job, key, &destination, converter]()
-  {
-    if ( !job->error() && !job->textData().isEmpty() )
-    {
-      destination = converter( job->textData() );
-    }
-    else if ( job->error() )
-    {
-      CoreUtils::log( "Auth", QString( "Keychain read error (%1): %2" ).arg( key, job->errorString() ) );
-    }
-    job->deleteLater();
-  } );
-
-  job->start();
 }

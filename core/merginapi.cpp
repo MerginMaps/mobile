@@ -106,11 +106,17 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   getServerConfig();
   pingMergin();
 
-  if ( mUserAuth->hasAuthData() )
+  // if ( mUserAuth->hasAuthData() ) // check credentials loaded here
+  // {
+  //   QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
+  //   QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
+  // }
+
+  QObject::connect( mUserAuth, &MerginUserAuth::credentialsLoaded, this, [this]()
   {
     QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
     QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
-  }
+  } );
 }
 
 void MerginApi::loadCache()
