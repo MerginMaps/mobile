@@ -147,6 +147,7 @@ void MerginUserAuth::loadAuthData()
         emit credentialsLoaded();
       }
     } );
+
     mCredentialStore->readKey( QStringLiteral( "username" ) );
   }
 #else
