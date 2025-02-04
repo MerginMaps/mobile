@@ -224,3 +224,8 @@ bool MerginUserAuth::hasValidToken() const
 {
   return !mAuthToken.isEmpty() && mTokenExpiration >= QDateTime().currentDateTimeUtc();
 }
+
+bool MerginUserAuth::isLoggedIn()
+{
+  return hasAuthData() && hasValidToken();
+}
