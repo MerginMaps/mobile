@@ -114,6 +114,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
 
   QObject::connect( mUserAuth, &MerginUserAuth::credentialsLoaded, this, [this]()
   {
+    qDebug() << "REACHED HERE! ";
     QObject::connect( this, &MerginApi::pingMerginFinished, this, &MerginApi::getUserInfo, Qt::SingleShotConnection );
     QObject::connect( this, &MerginApi::userInfoReplyFinished, this, &MerginApi::getWorkspaceInfo, Qt::SingleShotConnection );
   } );

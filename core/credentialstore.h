@@ -37,6 +37,7 @@ class CredentialStore : public QObject
   signals:
     //! Emitted when a key is read, with both key and its retrieved value.
     void keyRead( const QString &key, const QString &value );
+
     //void credentialsLoaded();
 };
 
