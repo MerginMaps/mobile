@@ -20,6 +20,7 @@ MerginUserAuth::MerginUserAuth( QObject *parent )
   , mTokenExpiration()
   , mCredentialStore( new CredentialStore( this ) )
 {
+  clear();
 }
 
 void MerginUserAuth::clear()
@@ -83,81 +84,12 @@ void MerginUserAuth::saveAuthData()
   mCredentialStore->writeKey( KEY_EXPIRE, mTokenExpiration );
 }
 
-// void MerginUserAuth::loadAuthData()
-// {
-//   // loads authentication data by sequentially reading keys in a chain
-//   // if any key returns an empty value, falls back to QSettings for all credentials.
-//   if ( mCredentialStore )
-//   {
-//     QMetaObject::Connection conn;
-//     conn = connect( mCredentialStore, &CredentialStore::keyRead, this, [ this, &conn ]( const QString & key, const QString & value )
-//     {
-//       if ( value.isEmpty() )
-//       {
-//         // fallback => load all credentials from QSettings
-//         QSettings settings;
-//         settings.beginGroup( "Input/" );
-//         mUsername = settings.value( KEY_USERNAME ).toString();
-//         mPassword = settings.value( KEY_PASSWORD ).toString();
-//         mUserId = settings.value( KEY_USERID ).toInt();
-//         mAuthToken = settings.value( KEY_TOKEN ).toByteArray();
-//         mTokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
-//         settings.endGroup();
-
-//         disconnect( conn );
-//         emit authChanged();
-//         emit credentialsLoaded();
-//         return;
-//       }
-
-//       if ( key == KEY_USERNAME )
-//       {
-//         mUsername = value;
-//         mCredentialStore->readKey( KEY_PASSWORD );
-//       }
-//       else if ( key == KEY_PASSWORD )
-//       {
-//         mPassword = value;
-//         mCredentialStore->readKey( KEY_USERID );
-//       }
-//       else if ( key == KEY_USERID )
-//       {
-//         mUserId = value.toInt();
-//         mCredentialStore->readKey( KEY_TOKEN );
-//       }
-//       else if ( key == KEY_TOKEN )
-//       {
-//         mAuthToken = QByteArray::fromBase64( value.toUtf8() );
-//         mCredentialStore->readKey( KEY_EXPIRE );
-//       }
-//       else if ( key == KEY_EXPIRE )
-//       {
-//         mTokenExpiration = QDateTime::fromString( value, Qt::ISODate );
-//         if ( mTokenExpiration < QDateTime::currentDateTimeUtc() )
-//         {
-//           CoreUtils::log( "Auth", "Token is expired." );
-//         }
-
-//         disconnect( conn );
-
-//         //check if we have all credentials
-//         emit authChanged();
-//         emit credentialsLoaded();
-//       }
-//     } );
-
-//     mCredentialStore->readKey( KEY_USERNAME );
-//   }
-// }
-
 void MerginUserAuth::loadAuthData()
 {
-  // loads authentication data by sequentially reading keys in a chain
-  // if any credential is missing or invalid, falls back to QSettings for all credentials.
+  // loads credentials data via chained key reads; falls back to QSettings if any are invalid
   if ( mCredentialStore )
   {
-    QMetaObject::Connection conn;
-    conn = connect( mCredentialStore, &CredentialStore::keyRead, this, [this, &conn]( const QString & key, const QString & value )
+    mCredentialChainConnection = connect( mCredentialStore, &CredentialStore::keyRead, this, [this]( const QString & key, const QString & value )
     {
       if ( key == KEY_USERNAME )
       {
@@ -183,14 +115,12 @@ void MerginUserAuth::loadAuthData()
       {
         mTokenExpiration = QDateTime::fromString( value, Qt::ISODate );
 
-        disconnect( conn );
+        disconnect( mCredentialChainConnection );
 
-        // check whether we have valid credentials.
         bool hasAllCredentials = !mUsername.isEmpty() && !mPassword.isEmpty() && ( mUserId != 0 ) && !mAuthToken.isEmpty() && mTokenExpiration.isValid();
 
-        if ( !hasAllCredentials )
+        if ( !hasAllCredentials ) // fallback => load all credentials from QSettings
         {
-          // fallback => load all credentials from QSettings
           QSettings settings;
           settings.beginGroup( "Input/" );
           mUsername = settings.value( KEY_USERNAME ).toString();

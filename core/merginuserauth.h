@@ -17,15 +17,6 @@
 #include <QJsonObject>
 #include "credentialstore.h"
 
-namespace
-{
-  static constexpr const char KEY_USERNAME[] = "username";
-  static constexpr const char KEY_PASSWORD[] = "password";
-  static constexpr const char KEY_USERID[]   = "userId";
-  static constexpr const char KEY_TOKEN[]    = "token";
-  static constexpr const char KEY_EXPIRE[]   = "expire";
-}
-
 class MerginUserAuth: public QObject
 {
     Q_OBJECT
@@ -35,6 +26,13 @@ class MerginUserAuth: public QObject
   public:
     explicit MerginUserAuth( QObject *parent = nullptr );
     ~MerginUserAuth() = default;
+
+    static inline const QString KEY_USERNAME = QStringLiteral( "username" );
+    static inline const QString KEY_PASSWORD = QStringLiteral( "password" );
+    static inline const QString KEY_USERID = QStringLiteral( "userId" );
+    static inline const QString KEY_TOKEN = QStringLiteral( "token" );
+    static inline const QString KEY_EXPIRE = QStringLiteral( "expire" );
+
   signals:
     void authChanged();
     void credentialsLoaded();
@@ -80,6 +78,7 @@ class MerginUserAuth: public QObject
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
     CredentialStore *mCredentialStore = nullptr;
+    QMetaObject::Connection mCredentialChainConnection;
 };
 
 #endif // MERGINUSERAUTH_H
