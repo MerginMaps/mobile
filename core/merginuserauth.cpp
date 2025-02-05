@@ -9,7 +9,6 @@
 
 #include "merginuserauth.h"
 #include "coreutils.h"
-#include <QMetaObject>
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
@@ -28,7 +27,7 @@ void MerginUserAuth::clear()
   mUsername = "";
   mPassword = "";
   mAuthToken.clear();
-  mTokenExpiration = QDateTime();
+  mTokenExpiration.setTime( QTime() );
   mUserId = -1;
 
   if ( mCredentialStore )

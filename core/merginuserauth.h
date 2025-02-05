@@ -6,7 +6,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 #ifndef MERGINUSERAUTH_H
 #define MERGINUSERAUTH_H
 
