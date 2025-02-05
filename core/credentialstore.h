@@ -31,14 +31,13 @@ class CredentialStore : public QObject
     //! Reads a key from keychain and emits a signal with the value when job is finished
     void readKey( const QString &key );
 
-    //! Delete a key in keychain
-    void deleteKey( const QString &key );
-
   signals:
     //! Emitted when a key is read, with both key and its retrieved value.
     void keyRead( const QString &key, const QString &value );
 
-    //void credentialsLoaded();
+  private:
+    QKeychain::WritePasswordJob *mWriteJob = nullptr;
+    QKeychain::ReadPasswordJob *mReadJob = nullptr;
 };
 
 #endif // CREDENTIALSTORE_H

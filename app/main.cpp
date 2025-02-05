@@ -567,18 +567,18 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
   } );
 
-  // QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
-  // {
-  //   merginApi->reloadProjectRole( activeProject.projectFullName() );
-  // } );
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    merginApi->reloadProjectRole( activeProject.projectFullName() );
+  } );
 
-  // QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
-  // {
-  //   if ( activeProject.isProjectLoaded() )
-  //   {
-  //     merginApi->reloadProjectRole( activeProject.projectFullName() );
-  //   }
-  // } );
+  QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    if ( activeProject.isProjectLoaded() )
+    {
+      merginApi->reloadProjectRole( activeProject.projectFullName() );
+    }
+  } );
 
   QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
   {

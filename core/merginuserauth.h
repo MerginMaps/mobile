@@ -16,7 +16,15 @@
 #include <QSettings>
 #include <QJsonObject>
 #include "credentialstore.h"
-#include <qt6keychain/keychain.h>
+
+namespace
+{
+  static constexpr const char KEY_USERNAME[] = "username";
+  static constexpr const char KEY_PASSWORD[] = "password";
+  static constexpr const char KEY_USERID[]   = "userId";
+  static constexpr const char KEY_TOKEN[]    = "token";
+  static constexpr const char KEY_EXPIRE[]   = "expire";
+}
 
 class MerginUserAuth: public QObject
 {
@@ -40,9 +48,7 @@ class MerginUserAuth: public QObject
     //! i.e. we should be good to do authenticated requests.
     Q_INVOKABLE bool hasValidToken() const;
 
-    /**
-     * Returns whether user is currently logged in
-    */
+    //! Returns whether user is currently logged in
     Q_INVOKABLE bool isLoggedIn();
 
     void clear();
