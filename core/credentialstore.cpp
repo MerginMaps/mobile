@@ -26,7 +26,7 @@ void CredentialStore::writeKey( const QString &key, const QVariant &value )
 
   if ( value.type() == QVariant::ByteArray )
   {
-    mWriteJob->setTextData( QString::fromUtf8( value.toByteArray().toBase64() ) );
+    mWriteJob->setBinaryData( value.toByteArray() );
   }
   else if ( value.type() == QVariant::DateTime )
   {
