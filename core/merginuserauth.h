@@ -14,6 +14,8 @@
 #include <QDateTime>
 #include <QSettings>
 #include <QJsonObject>
+#include <QJsonDocument>
+
 #include "credentialstore.h"
 
 class MerginUserAuth: public QObject

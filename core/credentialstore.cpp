@@ -45,6 +45,10 @@ void CredentialStore::writeKey( const QString &key, const QVariant &value )
     {
       CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, mWriteJob->errorString() ) );
     }
+    else
+    {
+      emit keyWritten( key );
+    }
   } );
 
   mWriteJob->start();

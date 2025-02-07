@@ -35,6 +35,7 @@ class CredentialStore : public QObject
     //! Emitted when a key is read, with both key and its retrieved value.
     void keyRead( const QString &key, const QString &value );
 
+    void keyWritten( const QString &key );
   private:
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;
