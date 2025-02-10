@@ -61,7 +61,10 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 void MerginUserAuth::saveAuthData()
 {
   if ( !mCredentialStore )
+  {
+    CoreUtils::log( "Auth", QString( "Credential store not initialized." ) );
     return;
+  }
 
   mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration );
 }
@@ -75,28 +78,16 @@ void MerginUserAuth::loadAuthData()
            ( const QString & username,
              const QString & password,
              int userId,
-             const QByteArray & token,
+             const QString & token,
              const QDateTime & tokenExpiration )
   {
-    if ( !username.isEmpty() || !password.isEmpty() || userId != -1 )
+    if ( !username.isEmpty() && !password.isEmpty() )
     {
       mUsername = username;
       mPassword = password;
       mUserId = userId;
-      mAuthToken = token;
+      mAuthToken = token.toUtf8();
       mTokenExpiration = tokenExpiration;
-    }
-    else
-    {
-      // if JSON parsing failed or no data was found => fallback to QSettings
-      QSettings settings;
-      settings.beginGroup( "Input/" );
-      mUsername = settings.value( CredentialStore::KEY_USERNAME ).toString();
-      mPassword = settings.value( CredentialStore::KEY_PASSWORD ).toString();
-      mUserId = settings.value( CredentialStore::KEY_USERID ).toInt();
-      mAuthToken = settings.value( CredentialStore::KEY_TOKEN ).toByteArray();
-      mTokenExpiration = settings.value( CredentialStore::KEY_EXPIRE ).toDateTime();
-      settings.endGroup();
     }
 
     emit authChanged();

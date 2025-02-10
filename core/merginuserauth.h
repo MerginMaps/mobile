@@ -16,6 +16,7 @@
 #include <QJsonObject>
 
 #include "credentialstore.h"
+#include "coreutils.h"
 
 class MerginUserAuth: public QObject
 {
