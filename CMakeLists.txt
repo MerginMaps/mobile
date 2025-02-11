@@ -145,7 +145,9 @@ set(HAVE_BLUETOOTH
 
 set(USE_INSECURE_KEYCHAIN_FALLBACK
     FALSE
-    CACHE BOOL "Wheter to use insecure credential store if keychain is not available. Useful in CI."
+    CACHE
+      BOOL
+      "Wheter to use insecure credential store if keychain is not available. Useful in CI"
 )
 
 set(QT6_VERSION
