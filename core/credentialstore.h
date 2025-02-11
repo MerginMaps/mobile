@@ -45,6 +45,7 @@ class CredentialStore : public QObject
     //! Reads authentication data from keychain and emits a signal with all auth values
     void readAuthData();
 
+
   signals:
     //! Emitted when authentication data is read, including all authentication key values
     void authDataRead( const QString &username,
@@ -53,13 +54,26 @@ class CredentialStore : public QObject
                        const QString &token,
                        const QDateTime &tokenExpiration );
 
+    //! Emitted when a key is read, with both key and its retrieved value.
+    void keyRead( const QString &key, const QString &value );
+
   private:
+    //! Reads a key from keychain and emits a signal with the value when job is finished
+    //! Do not call it multiple times without waiting for key reading to finish
+    void readKey( const QString &key );
+
     //! Write a key/value in keychain
     //! Do not call it multiple times without waiting for key writing to finish
     void writeKey( const QString &key, const QString &value );
 
+    void readCredentialsFromJson();
+
+    void readCredentialsFromChain();
+
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;
+    QMetaObject::Connection mCredentialChainConnection;
+    QMetaObject::Connection mCredentialChainWriteConnection;
 };
 
 #endif // CREDENTIALSTORE_H

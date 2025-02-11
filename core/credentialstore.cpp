@@ -43,6 +43,26 @@ void CredentialStore::writeKey( const QString &key, const QString &value )
   mWriteJob->start();
 }
 
+void CredentialStore::readKey( const QString &key )
+{
+  mReadJob->setKey( key );
+
+  disconnect( mReadJob, nullptr, this, nullptr );
+  connect( mReadJob, &QKeychain::Job::finished, this, [this, key]()
+  {
+    if ( !mReadJob->error() && !mReadJob->textData().isEmpty() )
+    {
+      emit keyRead( key, mReadJob->textData() );
+    }
+    else if ( mReadJob->error() )
+    {
+      CoreUtils::log( "Auth", QString( "Keychain read error (%1): %2" ).arg( key, mReadJob->errorString() ) );
+    }
+  } );
+
+  mReadJob->start();
+}
+
 void CredentialStore::writeAuthData( const QString &username,
                                      const QString &password,
                                      int userId,
@@ -73,7 +93,21 @@ void CredentialStore::writeAuthData( const QString &username,
   settings.endGroup();
 }
 
+
 void CredentialStore::readAuthData()
+{
+#ifdef ANDROID
+  // on Android, credentials are stored across multiple keys
+  // we chain-read each key sequentially to ensure asynchronous operation
+  readCredentialsFromChain();
+#else
+  // on other platforms, credentials are stored as a JSON object under a single key,
+  // so we directly read the JSON entry to obtain all credential data at once.
+  readCredentialsFromJson();
+#endif
+}
+
+void CredentialStore::readCredentialsFromJson()
 {
   mReadJob->setKey( KEY_AUTH_ENTRY );
 
@@ -125,3 +159,71 @@ void CredentialStore::readAuthData()
 
   mReadJob->start();
 }
+
+void CredentialStore::readCredentialsFromChain()
+{
+  QString username, password, token;
+  int userId = -1;
+  QDateTime tokenExpiration;
+
+  mCredentialChainConnection = connect( this, &CredentialStore::keyRead, this,
+                                        [this, &username, &password, &token, &userId, &tokenExpiration]
+                                        ( const QString & key, const QString & value )
+  {
+    if ( key == KEY_USERNAME )
+    {
+      username = value;
+      this->readKey( KEY_PASSWORD );
+    }
+    else if ( key == KEY_PASSWORD )
+    {
+      password = value;
+      this->readKey( KEY_USERID );
+    }
+    else if ( key == KEY_USERID )
+    {
+      userId = value.toInt();
+      this->readKey( KEY_TOKEN );
+    }
+    else if ( key == KEY_TOKEN )
+    {
+      token = value;
+      this->readKey( KEY_EXPIRE );
+    }
+    else if ( key == KEY_EXPIRE )
+    {
+      tokenExpiration = QDateTime::fromString( value, Qt::ISODate );
+
+      disconnect( mCredentialChainConnection );
+
+      bool hasAllCredentials = !username.isEmpty()
+                               && !password.isEmpty()
+                               && userId != -1
+                               && !token.isEmpty()
+                               && tokenExpiration.isValid();
+
+      if ( !hasAllCredentials )
+      {
+        // fallback => load from QSettings
+        QSettings settings;
+        settings.beginGroup( "Input/" );
+        username = settings.value( KEY_USERNAME ).toString();
+        password = settings.value( KEY_PASSWORD ).toString();
+        userId = settings.value( KEY_USERID ).toInt();
+        token = settings.value( KEY_TOKEN ).toByteArray();
+        tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
+        settings.endGroup();
+      }
+      else if ( tokenExpiration < QDateTime::currentDateTimeUtc() )
+      {
+        CoreUtils::log( "Auth", "Token is expired." );
+      }
+
+      // emit final result with whichever credentials we have
+      emit authDataRead( username, password, userId, token, tokenExpiration );
+    }
+  } );
+
+  this->readKey( KEY_USERNAME );
+}
+
