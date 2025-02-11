@@ -45,7 +45,6 @@ class CredentialStore : public QObject
     //! Reads authentication data from keychain and emits a signal with all auth values
     void readAuthData();
 
-
   signals:
     //! Emitted when authentication data is read, including all authentication key values
     void authDataRead( const QString &username,
@@ -54,40 +53,41 @@ class CredentialStore : public QObject
                        const QString &token,
                        const QDateTime &tokenExpiration );
 
-    //! Emitted when a key is read, with both key and its retrieved value.
-    void keyRead( const QString &key, const QString &value );
-
-    //! Emitted when a key is read, with its value.
-    void keyWritten( const QString &key );
-
   private:
-    //! Reads a key from keychain and emits a signal with the value when job is finished
-    //! Do not call it multiple times without waiting for key reading to finish
-    void readKey( const QString &key );
-
-    //! Write a key/value in keychain
+    //! Write a key/value in keychain asynchronously
     //! Do not call it multiple times without waiting for key writing to finish
-    void writeKey( const QString &key, const QString &value );
+    void writeKeyAsync( const QString &key, const QString &value );
 
-    void jsonWriteCredentials( const QString &username,
-                               const QString &password,
-                               int userId,
-                               const QString &token,
-                               const QDateTime &tokenExpiration );
+    //! Reads a key from keychain synchronously
+    //! Uses a QEventLoop to block until QKeychain read operation completes
+    QString readKeySync( const QString &key );
 
-    void chainWriteCredentials( const QString &username,
-                                const QString &password,
-                                int userId,
-                                const QString &token,
-                                const QDateTime &tokenExpiration );
+    //! Write a key/value in keychain synchronously
+    //! Uses a QEventLoop to block until QKeychain write operation completes
+    bool writeKeySync( const QString &key, const QString &value );
 
-    void jsonReadCredentials();
-    void chainReadCredentials();
+    //! Writes all credential data as a single JSON object to the keychain asynchronously
+    void writeCredentialsAsJson( const QString &username,
+                                 const QString &password,
+                                 int userId,
+                                 const QString &token,
+                                 const QDateTime &tokenExpiration );
+
+    //! Writes each credential value to the keychain synchronously under separate keys
+    void writeMultipleCredentials( const QString &username,
+                                   const QString &password,
+                                   int userId,
+                                   const QString &token,
+                                   const QDateTime &tokenExpiration );
+
+    //! Reads credential data stored as a JSON object from the keychain asynchronously
+    void readCredentialsFromJson();
+
+    //! Reads credential data stored under separate keys from the keychain synchronously
+    void readMultipleCredentials();
 
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;
-    QMetaObject::Connection mCredentialChainConnection;
-    QMetaObject::Connection mCredentialChainWriteConnection;
 };
 
 #endif // CREDENTIALSTORE_H
