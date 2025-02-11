@@ -81,14 +81,11 @@ void MerginUserAuth::loadAuthData()
              const QString & token,
              const QDateTime & tokenExpiration )
   {
-    if ( !username.isEmpty() && !password.isEmpty() )
-    {
-      mUsername = username;
-      mPassword = password;
-      mUserId = userId;
-      mAuthToken = token.toUtf8();
-      mTokenExpiration = tokenExpiration;
-    }
+    mUsername = username;
+    mPassword = password;
+    mUserId = userId;
+    mAuthToken = token.toUtf8();
+    mTokenExpiration = tokenExpiration;
 
     emit authChanged();
     emit credentialsLoaded();

@@ -27,7 +27,8 @@ class CredentialStore : public QObject
     explicit CredentialStore( QObject *parent = nullptr );
     ~CredentialStore() = default;
 
-    static inline const QString KEY_MERGIN    = QStringLiteral( "mergin_maps" );
+    static inline const QString KEY_MM   = QStringLiteral( "mergin_maps" );
+    static inline const QString KEY_AUTH_ENTRY   = QStringLiteral( "auth" );
     static inline const QString KEY_USERNAME = QStringLiteral( "username" );
     static inline const QString KEY_PASSWORD = QStringLiteral( "password" );
     static inline const QString KEY_USERID   = QStringLiteral( "userId" );
@@ -54,10 +55,8 @@ class CredentialStore : public QObject
 
   private:
     //! Write a key/value in keychain
-    void writeKey( const QString &key, const QVariant &value );
-
-    //! Reads a key from keychain and emits a signal with the value when job is finished
-    void readKey( const QString &key );
+    //! Do not call it multiple times without waiting for key writing to finish
+    void writeKey( const QString &key, const QString &value );
 
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;

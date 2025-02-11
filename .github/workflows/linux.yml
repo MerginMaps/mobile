@@ -148,6 +148,7 @@ jobs:
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -DENABLE_TESTS=TRUE \
+             -DUSE_INSECURE_KEYCHAIN_FALLBACK=TRUE \
              -GNinja \
              -S ../input
 
