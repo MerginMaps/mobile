@@ -70,18 +70,16 @@ void CredentialStore::writeAuthData( const QString &username,
                                      const QDateTime &tokenExpiration )
 {
 
-  QJsonObject authObject;
-  authObject.insert( KEY_USERNAME, username );
-  authObject.insert( KEY_PASSWORD, password );
-  authObject.insert( KEY_USERID, userId );
-  authObject.insert( KEY_TOKEN, token );
-  authObject.insert( KEY_EXPIRE, tokenExpiration.toUTC().toString( Qt::ISODate ) );
 
-  QJsonDocument doc( authObject );
-  QString jsonString = QString::fromUtf8( doc.toJson( QJsonDocument::Compact ) );
-
-  writeKey( KEY_AUTH_ENTRY, jsonString );
-
+#ifdef ANDROID
+  // on Android, credentials are stored across multiple keys
+  // we chain-write each key sequentially to ensure asynchronous operation
+  chainWriteCredentials( username, password, userId, token, tokenExpiration );
+#else
+  // on other platforms, credentials are stored as a JSON object under a single key,
+  // so we directly write the JSON entry to store all credential data at once.
+  jsonWriteCredentials( username, password, userId, token, tokenExpiration );
+#endif
   // remove any legacy QSettings credentials to ensure we're using secure storage going forward
   QSettings settings;
   settings.beginGroup( "Input/" );
@@ -93,21 +91,74 @@ void CredentialStore::writeAuthData( const QString &username,
   settings.endGroup();
 }
 
-
 void CredentialStore::readAuthData()
 {
 #ifdef ANDROID
   // on Android, credentials are stored across multiple keys
   // we chain-read each key sequentially to ensure asynchronous operation
-  readCredentialsFromChain();
+  chainReadCredentials();
 #else
   // on other platforms, credentials are stored as a JSON object under a single key,
   // so we directly read the JSON entry to obtain all credential data at once.
-  readCredentialsFromJson();
+  jsonReadCredentials();
 #endif
 }
 
-void CredentialStore::readCredentialsFromJson()
+void CredentialStore::jsonWriteCredentials( const QString &username,
+    const QString &password,
+    int userId,
+    const QString &token,
+    const QDateTime &tokenExpiration )
+{
+  QJsonObject authObject;
+  authObject.insert( KEY_USERNAME, username );
+  authObject.insert( KEY_PASSWORD, password );
+  authObject.insert( KEY_USERID, userId );
+  authObject.insert( KEY_TOKEN, token );
+  authObject.insert( KEY_EXPIRE, tokenExpiration.toUTC().toString( Qt::ISODate ) );
+
+  QJsonDocument doc( authObject );
+  QString jsonString = QString::fromUtf8( doc.toJson( QJsonDocument::Compact ) );
+
+  writeKey( KEY_AUTH_ENTRY, jsonString );
+}
+
+void CredentialStore::chainWriteCredentials( const QString &username,
+    const QString &password,
+    int userId,
+    const QString &token,
+    const QDateTime &tokenExpiration )
+{
+  mCredentialChainWriteConnection = connect( this, &CredentialStore::keyWritten, this,
+                                    [this, username, password, userId, token, tokenExpiration]( const QString & key )
+  {
+    if ( key == KEY_USERNAME )
+    {
+      this->writeKey( KEY_PASSWORD, password );
+    }
+    else if ( key == KEY_PASSWORD )
+    {
+      this->writeKey( KEY_USERID, QString::number( userId ) );
+    }
+    else if ( key == KEY_USERID )
+    {
+      this->writeKey( KEY_TOKEN, token );
+    }
+    else if ( key == KEY_TOKEN )
+    {
+      this->writeKey( KEY_EXPIRE,
+                      tokenExpiration.toUTC().toString( Qt::ISODate ) );
+    }
+    else if ( key == KEY_EXPIRE )
+    {
+      disconnect( mCredentialChainWriteConnection );
+    }
+  } );
+
+  writeKey( KEY_USERNAME, username );
+}
+
+void CredentialStore::jsonReadCredentials()
 {
   mReadJob->setKey( KEY_AUTH_ENTRY );
 
@@ -160,7 +211,7 @@ void CredentialStore::readCredentialsFromJson()
   mReadJob->start();
 }
 
-void CredentialStore::readCredentialsFromChain()
+void CredentialStore::chainReadCredentials()
 {
   QString username, password, token;
   int userId = -1;

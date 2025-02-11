@@ -27,13 +27,13 @@ class CredentialStore : public QObject
     explicit CredentialStore( QObject *parent = nullptr );
     ~CredentialStore() = default;
 
-    static inline const QString KEY_MM   = QStringLiteral( "mergin_maps" );
-    static inline const QString KEY_AUTH_ENTRY   = QStringLiteral( "auth" );
+    static inline const QString KEY_MM = QStringLiteral( "mergin_maps" );
+    static inline const QString KEY_AUTH_ENTRY = QStringLiteral( "auth" );
     static inline const QString KEY_USERNAME = QStringLiteral( "username" );
     static inline const QString KEY_PASSWORD = QStringLiteral( "password" );
-    static inline const QString KEY_USERID   = QStringLiteral( "userId" );
-    static inline const QString KEY_TOKEN    = QStringLiteral( "token" );
-    static inline const QString KEY_EXPIRE   = QStringLiteral( "expire" );
+    static inline const QString KEY_USERID = QStringLiteral( "userId" );
+    static inline const QString KEY_TOKEN = QStringLiteral( "token" );
+    static inline const QString KEY_EXPIRE = QStringLiteral( "expire" );
 
     //! Write authentication values data to keychain
     void writeAuthData( const QString &username,
@@ -57,6 +57,9 @@ class CredentialStore : public QObject
     //! Emitted when a key is read, with both key and its retrieved value.
     void keyRead( const QString &key, const QString &value );
 
+    //! Emitted when a key is read, with its value.
+    void keyWritten( const QString &key );
+
   private:
     //! Reads a key from keychain and emits a signal with the value when job is finished
     //! Do not call it multiple times without waiting for key reading to finish
@@ -66,9 +69,20 @@ class CredentialStore : public QObject
     //! Do not call it multiple times without waiting for key writing to finish
     void writeKey( const QString &key, const QString &value );
 
-    void readCredentialsFromJson();
+    void jsonWriteCredentials( const QString &username,
+                               const QString &password,
+                               int userId,
+                               const QString &token,
+                               const QDateTime &tokenExpiration );
 
-    void readCredentialsFromChain();
+    void chainWriteCredentials( const QString &username,
+                                const QString &password,
+                                int userId,
+                                const QString &token,
+                                const QDateTime &tokenExpiration );
+
+    void jsonReadCredentials();
+    void chainReadCredentials();
 
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;
