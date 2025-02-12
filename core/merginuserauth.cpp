@@ -66,6 +66,13 @@ void MerginUserAuth::saveAuthData()
     return;
   }
 
+  qDebug() << "Saving auth data:"
+           << "Username:" << mUsername
+           << "Password:" << mPassword
+           << "UserID:" << mUserId
+           << "AuthToken:" << mAuthToken
+           << "TokenExpiration:" << mTokenExpiration;
+
   mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration );
 }
 

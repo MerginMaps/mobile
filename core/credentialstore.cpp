@@ -18,6 +18,8 @@ CredentialStore::CredentialStore( QObject *parent )
   mWriteJob->setAutoDelete( false );
   mReadJob = new QKeychain::ReadPasswordJob( KEY_MM, this );
   mReadJob->setAutoDelete( false );
+  mDeleteJob = new QKeychain::DeletePasswordJob( KEY_MM, this );
+  mDeleteJob->setAutoDelete( false );
 
 #ifdef USE_INSECURE_KEYCHAIN_FALLBACK
   mReadJob->setInsecureFallback( true );
@@ -198,6 +200,9 @@ void CredentialStore::readMultipleCredentials()
 
 bool CredentialStore::writeKeySync( const QString &key, const QString &value )
 {
+  // if ( value.isEmpty() ) // if empty value, delete it
+  //   return deleteKeySync( key );
+
   QEventLoop loop;
   disconnect( mWriteJob, nullptr, this, nullptr );
   connect( mWriteJob, &QKeychain::Job::finished, &loop, [&]() { loop.quit(); } );
@@ -234,3 +239,23 @@ QString CredentialStore::readKeySync( const QString &key )
   }
   return mReadJob->textData();
 }
+
+bool CredentialStore::deleteKeySync( const QString &key )
+{
+  QEventLoop loop;
+  disconnect( mDeleteJob, nullptr, this, nullptr );
+  connect( mDeleteJob, &QKeychain::Job::finished, &loop, [&]() { loop.quit(); } );
+
+  mDeleteJob->setKey( key );
+  mDeleteJob->start();
+
+  loop.exec();
+
+  if ( mDeleteJob->error() )
+  {
+    CoreUtils::log( "Auth", QString( "Keychain delete error (%1): %2" ).arg( key, mDeleteJob->errorString() ) );
+    return false;
+  }
+  return true;
+}
+

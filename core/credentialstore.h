@@ -66,6 +66,10 @@ class CredentialStore : public QObject
     //! Uses a QEventLoop to block until QKeychain write operation completes
     bool writeKeySync( const QString &key, const QString &value );
 
+    //! Delete a key from the keychain synchronously
+    //! Uses a QEventLoop to block until QKeychain delete operation completes
+    bool deleteKeySync( const QString &key );
+
     //! Writes all credential data as a single JSON object to the keychain asynchronously
     void writeCredentialsAsJson( const QString &username,
                                  const QString &password,
@@ -88,6 +92,7 @@ class CredentialStore : public QObject
 
     QKeychain::WritePasswordJob *mWriteJob = nullptr;
     QKeychain::ReadPasswordJob *mReadJob = nullptr;
+    QKeychain::DeletePasswordJob *mDeleteJob = nullptr;
 };
 
 #endif // CREDENTIALSTORE_H
