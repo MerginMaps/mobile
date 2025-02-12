@@ -72,7 +72,8 @@ class MerginUserAuth: public QObject
     int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
-    CredentialStore *mCredentialStore = nullptr;
+
+    CredentialStore *mCredentialStore = nullptr; // owned by this
 };
 
 #endif // MERGINUSERAUTH_H

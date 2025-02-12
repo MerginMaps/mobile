@@ -26,7 +26,7 @@ void MerginUserAuth::clear()
   mUsername = "";
   mPassword = "";
   mAuthToken.clear();
-  mTokenExpiration.setTime( QTime() );
+  mTokenExpiration = QDateTime();
   mUserId = -1;
 
   emit authChanged();
@@ -62,7 +62,7 @@ void MerginUserAuth::saveAuthData()
 {
   if ( !mCredentialStore )
   {
-    CoreUtils::log( "Auth", QString( "Credential store not initialized." ) );
+    CoreUtils::log( "Auth", QString( "Credential store is not available for writing!!" ) );
     return;
   }
 
@@ -79,7 +79,10 @@ void MerginUserAuth::saveAuthData()
 void MerginUserAuth::loadAuthData()
 {
   if ( !mCredentialStore )
+  {
+    CoreUtils::log( "Auth", QString( "Credential store is not available for reading!!" ) );
     return;
+  }
 
   connect( mCredentialStore, &CredentialStore::authDataRead, this, [this]
            ( const QString & username,
@@ -94,9 +97,16 @@ void MerginUserAuth::loadAuthData()
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
 
+    qDebug() << "Read auth data:"
+             << "Username:" << mUsername
+             << "Password:" << mPassword
+             << "UserID:" << mUserId
+             << "AuthToken:" << mAuthToken
+             << "TokenExpiration:" << mTokenExpiration;
+
     emit authChanged();
     emit credentialsLoaded();
-  } );
+  }, Qt::SingleShotConnection );
 
   mCredentialStore->readAuthData();
 }

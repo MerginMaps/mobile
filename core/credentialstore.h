@@ -12,11 +12,8 @@
 
 #include <QObject>
 #include <QString>
-#include <QVariant>
 #include <QDateTime>
-#include <QSettings>
-#include <QJsonObject>
-#include <QJsonDocument>
+
 #include <qt6keychain/keychain.h>
 
 class CredentialStore : public QObject
@@ -27,13 +24,15 @@ class CredentialStore : public QObject
     explicit CredentialStore( QObject *parent = nullptr );
     ~CredentialStore() = default;
 
-    static inline const QString KEY_MM = QStringLiteral( "mergin_maps" );
-    static inline const QString KEY_AUTH_ENTRY = QStringLiteral( "auth" );
-    static inline const QString KEY_USERNAME = QStringLiteral( "username" );
-    static inline const QString KEY_PASSWORD = QStringLiteral( "password" );
-    static inline const QString KEY_USERID = QStringLiteral( "userId" );
-    static inline const QString KEY_TOKEN = QStringLiteral( "token" );
-    static inline const QString KEY_EXPIRE = QStringLiteral( "expire" );
+    static const QString KEYCHAIN_GROUP;
+    static const QString KEYCHAIN_ENTRY_CREDENTIALS;
+    static const QString KEYCHAIN_ENTRY_TOKEN;
+
+    static const QString KEY_USERNAME;
+    static const QString KEY_PASSWORD;
+    static const QString KEY_USERID;
+    static const QString KEY_TOKEN;
+    static const QString KEY_EXPIRE;
 
     //! Write authentication values data to keychain
     void writeAuthData( const QString &username,
@@ -54,45 +53,17 @@ class CredentialStore : public QObject
                        const QDateTime &tokenExpiration );
 
   private:
-    //! Write a key/value in keychain asynchronously
-    //! Do not call it multiple times without waiting for key writing to finish
-    void writeKeyAsync( const QString &key, const QString &value );
 
-    //! Reads a key from keychain synchronously
-    //! Uses a QEventLoop to block until QKeychain read operation completes
-    QString readKeySync( const QString &key );
+    //! Reads a key from keychain and stores the value in the intermediary results
+    //! The method recursively calls itself to read both Keychain entries
+    void readKeyRecursively( const QString &key );
 
-    //! Write a key/value in keychain synchronously
-    //! Uses a QEventLoop to block until QKeychain write operation completes
-    bool writeKeySync( const QString &key, const QString &value );
+    void finishReadingOperation();
 
-    //! Delete a key from the keychain synchronously
-    //! Uses a QEventLoop to block until QKeychain delete operation completes
-    bool deleteKeySync( const QString &key );
+    QMap<QString, QString> mReadResults; // to store intermediary read results
 
-    //! Writes all credential data as a single JSON object to the keychain asynchronously
-    void writeCredentialsAsJson( const QString &username,
-                                 const QString &password,
-                                 int userId,
-                                 const QString &token,
-                                 const QDateTime &tokenExpiration );
-
-    //! Writes each credential value to the keychain synchronously under separate keys
-    void writeMultipleCredentials( const QString &username,
-                                   const QString &password,
-                                   int userId,
-                                   const QString &token,
-                                   const QDateTime &tokenExpiration );
-
-    //! Reads credential data stored as a JSON object from the keychain asynchronously
-    void readCredentialsFromJson();
-
-    //! Reads credential data stored under separate keys from the keychain synchronously
-    void readMultipleCredentials();
-
-    QKeychain::WritePasswordJob *mWriteJob = nullptr;
-    QKeychain::ReadPasswordJob *mReadJob = nullptr;
-    QKeychain::DeletePasswordJob *mDeleteJob = nullptr;
+    QKeychain::WritePasswordJob *mWriteJob = nullptr; // owned by this
+    QKeychain::ReadPasswordJob *mReadJob = nullptr; // owned by this
 };
 
 #endif // CREDENTIALSTORE_H

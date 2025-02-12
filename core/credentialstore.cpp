@@ -9,40 +9,30 @@
 
 #include "credentialstore.h"
 #include "coreutils.h"
-#include <QEventLoop>
+
+#include <QJsonObject>
+#include <QJsonDocument>
+
+const QString CredentialStore::KEYCHAIN_GROUP = QStringLiteral( "mergin_maps" );
+const QString CredentialStore::KEYCHAIN_ENTRY_CREDENTIALS = QStringLiteral( "credentials" );
+const QString CredentialStore::KEYCHAIN_ENTRY_TOKEN = QStringLiteral( "token" );
+
+const QString CredentialStore::KEY_USERNAME = QStringLiteral( "u" );
+const QString CredentialStore::KEY_PASSWORD = QStringLiteral( "p" );
+const QString CredentialStore::KEY_USERID = QStringLiteral( "id" );
+const QString CredentialStore::KEY_TOKEN = QStringLiteral( "t" );
+const QString CredentialStore::KEY_EXPIRE = QStringLiteral( "e" );
 
 CredentialStore::CredentialStore( QObject *parent )
   : QObject( parent )
 {
-  mWriteJob = new QKeychain::WritePasswordJob( KEY_MM, this );
+  mWriteJob = new QKeychain::WritePasswordJob( KEYCHAIN_GROUP, this );
   mWriteJob->setAutoDelete( false );
-  mReadJob = new QKeychain::ReadPasswordJob( KEY_MM, this );
+
+  mReadJob = new QKeychain::ReadPasswordJob( KEYCHAIN_GROUP, this );
   mReadJob->setAutoDelete( false );
-  mDeleteJob = new QKeychain::DeletePasswordJob( KEY_MM, this );
-  mDeleteJob->setAutoDelete( false );
-
-#ifdef USE_INSECURE_KEYCHAIN_FALLBACK
-  mReadJob->setInsecureFallback( true );
-  mWriteJob->setInsecureFallback( true );
-#endif
 }
 
-void CredentialStore::writeKeyAsync( const QString &key, const QString &value )
-{
-  mWriteJob->setKey( key );
-  mWriteJob->setTextData( value );
-
-  disconnect( mWriteJob, nullptr, this, nullptr );
-  connect( mWriteJob, &QKeychain::Job::finished, this, [this, key]()
-  {
-    if ( mWriteJob->error() )
-    {
-      CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, mWriteJob->errorString() ) );
-    }
-  } );
-
-  mWriteJob->start();
-}
 
 void CredentialStore::writeAuthData
 ( const QString &username,
@@ -51,62 +41,70 @@ void CredentialStore::writeAuthData
   const QString &token,
   const QDateTime &tokenExpiration )
 {
-#ifdef ANDROID
-  // on Android, credentials are stored across multiple keys using a synchronous approach
-  writeMultipleCredentials( username, password, userId, token, tokenExpiration );
-#else
-  // on other platforms, all credential data is stored as a single JSON object asynchronously
-  writeCredentialsAsJson( username, password, userId, token, tokenExpiration );
-#endif
-  // remove any legacy QSettings credentials to ensure we're using secure storage going forward
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.remove( KEY_USERNAME );
-  settings.remove( KEY_PASSWORD );
-  settings.remove( KEY_USERID );
-  settings.remove( KEY_TOKEN );
-  settings.remove( KEY_EXPIRE );
-  settings.endGroup();
+  //
+  // 1. Split the data into two jsons
+  //
+
+  QJsonObject credentialsJsonObj;
+  credentialsJsonObj.insert( KEY_USERNAME, username );
+  credentialsJsonObj.insert( KEY_PASSWORD, password );
+  credentialsJsonObj.insert( KEY_USERID, userId );
+
+  QJsonDocument credentialsJson( credentialsJsonObj );
+
+  QJsonObject tokenJsonObj;
+  tokenJsonObj.insert( KEY_TOKEN, token );
+  tokenJsonObj.insert( KEY_EXPIRE, tokenExpiration.toString( Qt::ISODateWithMs ) );
+
+  QJsonDocument tokenJson( tokenJsonObj );
+
+  //
+  // 2. Store JSONs one by one
+  //
+
+  mWriteJob->setKey( KEYCHAIN_ENTRY_CREDENTIALS );
+  mWriteJob->setBinaryData( credentialsJson.toJson( QJsonDocument::Compact ) );
+
+  connect( mWriteJob, &QKeychain::Job::finished, this, [this, tokenJson]()
+  {
+    if ( mWriteJob->error() )
+    {
+      CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( KEYCHAIN_ENTRY_CREDENTIALS, mWriteJob->errorString() ) );
+      return; // do not try to store the token either
+    }
+
+    // let's store the token now
+    mWriteJob->setKey( KEYCHAIN_ENTRY_TOKEN );
+    mWriteJob->setBinaryData( tokenJson.toJson( QJsonDocument::Compact ) );
+
+    mWriteJob->start();
+
+  }, Qt::SingleShotConnection );
+
+  mWriteJob->start();
+
+  //
+  // 3. Clear any previous data from QSettings (migration from the previous insecure QSettings)
+  //
+
+  // TODO: pass
 }
 
 void CredentialStore::readAuthData()
 {
-#ifdef ANDROID
-  // on Android, credentials are stored across multiple keys using a synchronous approach
-  readMultipleCredentials();
-#else
-  // on other platforms, all credential data is stored as a single JSON object asynchronously
-  readCredentialsFromJson();
-#endif
+  mReadResults.clear();
+  readKeyRecursively( KEYCHAIN_ENTRY_CREDENTIALS );
 }
 
-void CredentialStore::writeCredentialsAsJson
-( const QString &username,
-  const QString &password,
-  int userId,
-  const QString &token,
-  const QDateTime &tokenExpiration )
+void CredentialStore::readKeyRecursively( const QString &key )
 {
-  QJsonObject authObject;
-  authObject.insert( KEY_USERNAME, username );
-  authObject.insert( KEY_PASSWORD, password );
-  authObject.insert( KEY_USERID, userId );
-  authObject.insert( KEY_TOKEN, token );
-  authObject.insert( KEY_EXPIRE, tokenExpiration.toUTC().toString( Qt::ISODate ) );
+  //
+  // 1. Read both entries from keychain (async)
+  //
 
-  QJsonDocument doc( authObject );
-  QString jsonString = QString::fromUtf8( doc.toJson( QJsonDocument::Compact ) );
+  mReadJob->setKey( key );
 
-  writeKeyAsync( KEY_AUTH_ENTRY, jsonString );
-}
-
-void CredentialStore::readCredentialsFromJson()
-{
-  mReadJob->setKey( KEY_AUTH_ENTRY );
-
-  disconnect( mReadJob, nullptr, this, nullptr );
-
-  connect( mReadJob, &QKeychain::Job::finished, this, [this]()
+  connect( mReadJob, &QKeychain::Job::finished, this, [this, key]()
   {
     if ( mReadJob->error() )
     {
@@ -115,147 +113,88 @@ void CredentialStore::readCredentialsFromJson()
       return;
     }
 
-    QString username, password, token;
-    int userId = -1;
-    QDateTime tokenExpiration;
+    mReadResults[ key ] = mReadJob->textData();
 
-    QJsonDocument doc = QJsonDocument::fromJson( mReadJob->textData().toUtf8() );
-
-    if ( !doc.isNull() && doc.isObject() )
-    {
-      QJsonObject authObject = doc.object();
-
-      username = authObject.value( KEY_USERNAME ).toString();
-      password = authObject.value( KEY_PASSWORD ).toString();
-      userId = authObject.value( KEY_USERID ).toInt();
-      token = authObject.value( KEY_TOKEN ).toString();
-
-      QString expireStr = authObject.value( KEY_EXPIRE ).toString();
-      tokenExpiration = QDateTime::fromString( expireStr, Qt::ISODate );
+    if ( key == KEYCHAIN_ENTRY_CREDENTIALS ) {
+      readKeyRecursively( KEYCHAIN_ENTRY_TOKEN ); // Read the second entry
+    }
+    else if ( key == KEYCHAIN_ENTRY_TOKEN ) {
+      finishReadingOperation(); // We have all the data now, let's wrap it up and return back
     }
 
-    if ( username.isEmpty() && password.isEmpty() )
-    {
-      // fallback to legacy credential storage using QSettings
-      QSettings settings;
-      settings.beginGroup( "Input/" );
-      username = settings.value( KEY_USERNAME ).toString();
-      password = settings.value( KEY_PASSWORD ).toString();
-      userId = settings.value( KEY_USERID ).toInt();
-      token = settings.value( KEY_TOKEN ).toByteArray();
-      tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
-      settings.endGroup();
-    }
-
-    emit authDataRead( username, password, userId, token, tokenExpiration );
-  } );
+  }, Qt::SingleShotConnection );
 
   mReadJob->start();
 }
 
-void CredentialStore::writeMultipleCredentials
-( const QString &username,
-  const QString &password,
-  int userId,
-  const QString &token,
-  const QDateTime &tokenExpiration )
+void CredentialStore::finishReadingOperation()
 {
-  writeKeySync( KEY_USERNAME, username );
-  writeKeySync( KEY_PASSWORD, password );
-  writeKeySync( KEY_USERID, QString::number( userId ) );
-  writeKeySync( KEY_TOKEN, token );
-  writeKeySync( KEY_EXPIRE, tokenExpiration.toUTC().toString( Qt::ISODate ) );
-}
+  //
+  // 2. Construct JSONs from the intermediary results and emit the data
+  //
 
-void CredentialStore::readMultipleCredentials()
-{
-  QString username = readKeySync( KEY_USERNAME );
-  QString password = readKeySync( KEY_PASSWORD );
-  QString userIdStr = readKeySync( KEY_USERID );
-  int userId = userIdStr.toInt();
-  QString token = readKeySync( KEY_TOKEN );
-  QString tokenExpireStr = readKeySync( KEY_EXPIRE );
-  QDateTime tokenExpiration = QDateTime::fromString( tokenExpireStr, Qt::ISODate );
+  QString username, password;
+  int userid = -1;
+  QByteArray token;
+  QDateTime tokenExpiration;
 
-  if ( username.isEmpty() && password.isEmpty() )
+  if ( mReadResults.size() != 2 )
   {
-    // fallback => load from QSettings
-    QSettings settings;
-    settings.beginGroup( "Input/" );
-    username = settings.value( KEY_USERNAME ).toString();
-    password = settings.value( KEY_PASSWORD ).toString();
-    userId = settings.value( KEY_USERID ).toInt();
-    token = settings.value( KEY_TOKEN ).toByteArray();
-    tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
-    settings.endGroup();
-  }
-  else if ( tokenExpiration < QDateTime::currentDateTimeUtc() )
-  {
-    CoreUtils::log( "Auth", "Token is expired." );
+    CoreUtils::log( QStringLiteral( "Auth" ),
+                    QString( "Something ugly happened when reading, invalid size of the intermediary results, size:" ).arg( mReadResults.size() )
+                    );
+    emit authDataRead( username, password, userid, token, tokenExpiration );
+    return;
   }
 
-  // emit final result with whichever credentials we have
-  emit authDataRead( username, password, userId, token, tokenExpiration );
-}
+  QString credentialsJsonString = mReadResults.value( KEYCHAIN_ENTRY_CREDENTIALS, QString() );
+  QString tokenJsonString = mReadResults.value( KEYCHAIN_ENTRY_TOKEN, QString() );
 
-bool CredentialStore::writeKeySync( const QString &key, const QString &value )
-{
-  // if ( value.isEmpty() ) // if empty value, delete it
-  //   return deleteKeySync( key );
-
-  QEventLoop loop;
-  disconnect( mWriteJob, nullptr, this, nullptr );
-  connect( mWriteJob, &QKeychain::Job::finished, &loop, [&]() { loop.quit(); } );
-
-  mWriteJob->setKey( key );
-  mWriteJob->setTextData( value );
-  mWriteJob->start();
-
-  loop.exec();
-
-  if ( mWriteJob->error() )
+  if ( credentialsJsonString.isEmpty() || tokenJsonString.isEmpty() )
   {
-    CoreUtils::log( "Auth", QString( "Keychain write error (%1): %2" ).arg( key, mWriteJob->errorString() ) );
-    return false;
+    CoreUtils::log(
+          QStringLiteral( "Auth" ),
+          QString( "Something ugly happened when reading, one of the read jsons is empty (%1, %2)" ).arg( credentialsJsonString.length(), tokenJsonString.length() )
+          );
+    emit authDataRead( username, password, userid, token, tokenExpiration );
+    return;
   }
-  return true;
-}
 
-QString CredentialStore::readKeySync( const QString &key )
-{
-  QEventLoop loop;
-  disconnect( mReadJob, nullptr, this, nullptr );
-  connect( mReadJob, &QKeychain::Job::finished, &loop, [&]() { loop.quit(); } );
+  QJsonParseError parsingError;
+  QJsonDocument credentialsJson = QJsonDocument::fromJson( credentialsJsonString.toUtf8(), &parsingError );
 
-  mReadJob->setKey( key );
-  mReadJob->start();
-
-  loop.exec();
-
-  if ( mReadJob->error() )
+  if ( parsingError.error != QJsonParseError::NoError )
   {
-    CoreUtils::log( "Auth", QString( "Keychain read error (%1): %2" ).arg( key, mReadJob->errorString() ) );
-    return QString();
+    CoreUtils::log( QStringLiteral( "Auth" ), QString( "Could not construct credentials JSON when reading, error: %1" ).arg( parsingError.errorString() ) );
+    emit authDataRead( username, password, userid, token, tokenExpiration );
+    return;
   }
-  return mReadJob->textData();
-}
 
-bool CredentialStore::deleteKeySync( const QString &key )
-{
-  QEventLoop loop;
-  disconnect( mDeleteJob, nullptr, this, nullptr );
-  connect( mDeleteJob, &QKeychain::Job::finished, &loop, [&]() { loop.quit(); } );
+  QJsonDocument tokenJson = QJsonDocument::fromJson( tokenJsonString.toUtf8(), &parsingError );
 
-  mDeleteJob->setKey( key );
-  mDeleteJob->start();
-
-  loop.exec();
-
-  if ( mDeleteJob->error() )
+  if ( parsingError.error != QJsonParseError::NoError )
   {
-    CoreUtils::log( "Auth", QString( "Keychain delete error (%1): %2" ).arg( key, mDeleteJob->errorString() ) );
-    return false;
+    CoreUtils::log( QStringLiteral( "Auth" ), QString( "Could not construct token JSON when reading, error: %1" ).arg( parsingError.errorString() ) );
+    emit authDataRead( username, password, userid, token, tokenExpiration );
+    return;
   }
-  return true;
-}
 
+  QJsonObject credentialsJsonObject = credentialsJson.object();
+  QJsonObject tokenJsonObject = tokenJson.object();
+
+  username = credentialsJsonObject.value( KEY_USERNAME ).toString();
+  password = credentialsJsonObject.value( KEY_PASSWORD ).toString();
+  userid = credentialsJsonObject.value( KEY_USERID ).toInt();
+
+  token = tokenJsonObject.value( KEY_TOKEN ).toString().toUtf8();
+  tokenExpiration = QDateTime::fromString( tokenJsonObject.value( KEY_EXPIRE ).toString(), Qt::ISODateWithMs );
+
+  //
+  // If credentials are empty, we should look at QSettings as we previously stored credentials there.
+  // Freshly upgraded app might not have the auth data migrated yet.
+  //
+  // TODO: pass...
+  //
+
+  emit authDataRead( username, password, userid, token, tokenExpiration );
+}
