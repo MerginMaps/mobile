@@ -23,9 +23,9 @@ Building Mergin Maps mobile app from source - step by step
 # 1. Introduction
 
 This document is the original installation guide of the described software
-Mergin Maps Input. The software and hardware descriptions named in this
+Mergin Maps mobile app. The software and hardware descriptions named in this
 document are in most cases registered trademarks and are therefore subject
-to the legal requirements. Mergin Maps Input is subject to the GNU General Public
+to the legal requirements. Mergin Maps mobile app is subject to the GNU General Public
 License.
 
 The details, that are given in this document have been written and verified
@@ -44,7 +44,7 @@ place for describing build procedures. Please do not remove this notice.
 
 # 2. Overview
 
-Mergin Maps Input, like a number of major projects (e.g., KDE 4.0),
+Mergin Maps, like a number of major projects (e.g., KDE 4.0),
 uses [CMake](https://www.cmake.org) for building from source.
 
 It is C++ application build on top of [Qt](https://www.qt.io), [QGIS](https://www.qgis.org/en/site/)
@@ -279,7 +279,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
 **Note to document writers:**: This section needs a proper rewrite
 
 Even technically it should be possible, we haven't tried this setup yet. If you managed to compile 
-Mergin Maps Input Android on Windows, please help us to update this section. 
+Mergin Maps Android on Windows, please help us to update this section. 
 
 # 5. Building iOS
 

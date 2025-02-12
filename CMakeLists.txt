@@ -132,7 +132,7 @@ set(INPUT_SDK_PATH
     ${INPUT_SDK_PATH_DEFAULT}
     CACHE
       PATH
-      "Path to the Mergin Maps Input SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
+      "Path to the Mergin Maps mobile SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
 )
 set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
@@ -154,7 +154,7 @@ set(INPUT_VERSION_CODE
 )
 
 mm_detect_version()
-message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
+message(STATUS "Mergin Maps ${version_desc} - ${platform_desc}")
 
 # ########################################################################################
 # FIND PACKAGES
