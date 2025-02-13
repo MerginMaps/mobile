@@ -115,10 +115,12 @@ void CredentialStore::readKeyRecursively( const QString &key )
 
     mReadResults[ key ] = mReadJob->textData();
 
-    if ( key == KEYCHAIN_ENTRY_CREDENTIALS ) {
+    if ( key == KEYCHAIN_ENTRY_CREDENTIALS )
+    {
       readKeyRecursively( KEYCHAIN_ENTRY_TOKEN ); // Read the second entry
     }
-    else if ( key == KEYCHAIN_ENTRY_TOKEN ) {
+    else if ( key == KEYCHAIN_ENTRY_TOKEN )
+    {
       finishReadingOperation(); // We have all the data now, let's wrap it up and return back
     }
 
@@ -142,7 +144,7 @@ void CredentialStore::finishReadingOperation()
   {
     CoreUtils::log( QStringLiteral( "Auth" ),
                     QString( "Something ugly happened when reading, invalid size of the intermediary results, size:" ).arg( mReadResults.size() )
-                    );
+                  );
     emit authDataRead( username, password, userid, token, tokenExpiration );
     return;
   }
@@ -153,9 +155,9 @@ void CredentialStore::finishReadingOperation()
   if ( credentialsJsonString.isEmpty() || tokenJsonString.isEmpty() )
   {
     CoreUtils::log(
-          QStringLiteral( "Auth" ),
-          QString( "Something ugly happened when reading, one of the read jsons is empty (%1, %2)" ).arg( credentialsJsonString.length(), tokenJsonString.length() )
-          );
+      QStringLiteral( "Auth" ),
+      QString( "Something ugly happened when reading, one of the read jsons is empty (%1, %2)" ).arg( credentialsJsonString.length(), tokenJsonString.length() )
+    );
     emit authDataRead( username, password, userid, token, tokenExpiration );
     return;
   }
