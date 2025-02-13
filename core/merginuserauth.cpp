@@ -61,13 +61,6 @@ void MerginUserAuth::saveAuthData()
     return;
   }
 
-  qDebug() << "Saving auth data:"
-           << "Username:" << mUsername
-           << "Password:" << mPassword
-           << "UserID:" << mUserId
-           << "AuthToken:" << mAuthToken
-           << "TokenExpiration:" << mTokenExpiration;
-
   mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration );
 }
 
@@ -91,13 +84,6 @@ void MerginUserAuth::loadAuthData()
     mUserId = userId;
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
-
-    qDebug() << "Read auth data:"
-             << "Username:" << mUsername
-             << "Password:" << mPassword
-             << "UserID:" << mUserId
-             << "AuthToken:" << mAuthToken
-             << "TokenExpiration:" << mTokenExpiration;
 
     emit authChanged();
     emit credentialsLoaded();
