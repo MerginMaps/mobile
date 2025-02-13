@@ -84,7 +84,7 @@ void CredentialStore::writeAuthData
   mWriteJob->start();
 
   //
-  // 3. Clear any previous data from QSettings (migration from the previous insecure QSettings)
+  // 3. Clear any previous data from QSettings (migration from the previous QSettings)
   //
 
   // TODO: pass

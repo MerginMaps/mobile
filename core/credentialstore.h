@@ -16,6 +16,12 @@
 
 #include <qt6keychain/keychain.h>
 
+/**
+ * \brief The CredentialStore class stores user credentials either to QtKeychain
+ *  or QSettings, according to USE_KEYCHAIN cmake flag.
+ *
+ * \note Read and write operations are async when QtKeychain is used
+ */
 class CredentialStore : public QObject
 {
     Q_OBJECT

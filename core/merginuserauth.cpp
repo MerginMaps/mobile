@@ -11,11 +11,6 @@
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
-  , mUsername( "" )
-  , mPassword( "" )
-  , mUserId( -1 )
-  , mAuthToken()
-  , mTokenExpiration()
   , mCredentialStore( new CredentialStore( this ) )
 {
   clear();

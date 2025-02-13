@@ -143,11 +143,11 @@ set(HAVE_BLUETOOTH
     CACHE BOOL "Building with bluetooth position provider"
 )
 
-set(USE_INSECURE_KEYCHAIN_FALLBACK
+set(USE_KEYCHAIN
     FALSE
     CACHE
       BOOL
-      "Wheter to use insecure credential store if keychain is not available. Useful in CI"
+      "Wheter to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
 set(QT6_VERSION

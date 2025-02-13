@@ -14,7 +14,6 @@ set(MM_CORE_SRCS
     project.cpp
     geodiffutils.cpp
     projectchecksumcache.cpp
-    credentialstore.cpp
 )
 
 set(MM_CORE_HDRS
@@ -51,6 +50,14 @@ else ()
       "Using dummy MM_SERVER_API_KEY. You will not be able to call certain Mergin Maps API (e.g. register)"
   )
 endif ()
+
+if (USE_KEYCHAIN)
+    set(MM_CORE_SRCS ${MM_CORE_SRCS} credentialstorekeychain.cpp)
+    message(STATUS "Using QtKeychain to store credentials.")
+else()
+    set(MM_CORE_SRCS ${MM_CORE_SRCS} credentialstoreplaintext.cpp)
+    message(STATUS "Using QSettings to store credentials.")
+endif()
 
 add_library(mm_core OBJECT ${MM_CORE_SRCS} ${MM_CORE_HDRS})
 target_include_directories(mm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
