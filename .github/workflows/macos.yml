@@ -141,6 +141,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Debug \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DUSE_SERVER_API_KEY=TRUE \
+             -DUSE_KEYCHAIN=No \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
@@ -173,6 +174,7 @@ jobs:
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_MM_SERVER_API_KEY=TRUE \
+             -DUSE_KEYCHAIN=No \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \

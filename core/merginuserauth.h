@@ -6,8 +6,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
-
 #ifndef MERGINUSERAUTH_H
 #define MERGINUSERAUTH_H
 
@@ -16,6 +14,9 @@
 #include <QDateTime>
 #include <QSettings>
 #include <QJsonObject>
+
+#include "credentialstore.h"
+#include "coreutils.h"
 
 class MerginUserAuth: public QObject
 {
@@ -26,8 +27,10 @@ class MerginUserAuth: public QObject
   public:
     explicit MerginUserAuth( QObject *parent = nullptr );
     ~MerginUserAuth() = default;
+
   signals:
     void authChanged();
+    void credentialsLoaded();
 
   public:
     //! Returns true if username/password is set, but that does not
@@ -38,9 +41,7 @@ class MerginUserAuth: public QObject
     //! i.e. we should be good to do authenticated requests.
     Q_INVOKABLE bool hasValidToken() const;
 
-    /**
-     * Returns whether user is currently logged in
-    */
+    //! Returns whether user is currently logged in
     Q_INVOKABLE bool isLoggedIn();
 
     void clear();
@@ -71,6 +72,8 @@ class MerginUserAuth: public QObject
     int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
+
+    CredentialStore *mCredentialStore = nullptr; // owned by this
 };
 
 #endif // MERGINUSERAUTH_H

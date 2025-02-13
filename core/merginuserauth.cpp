@@ -11,6 +11,7 @@
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
+  , mCredentialStore( new CredentialStore( this ) )
 {
   clear();
 }
@@ -20,7 +21,7 @@ void MerginUserAuth::clear()
   mUsername = "";
   mPassword = "";
   mAuthToken.clear();
-  mTokenExpiration.setTime( QTime() );
+  mTokenExpiration = QDateTime();
   mUserId = -1;
 
   emit authChanged();
@@ -30,6 +31,7 @@ void MerginUserAuth::clearTokenData()
 {
   mTokenExpiration = QDateTime().currentDateTime().addDays( -42 ); // to make it expired arbitrary days ago
   mAuthToken.clear();
+
   emit authChanged();
 }
 
@@ -53,26 +55,41 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 
 void MerginUserAuth::saveAuthData()
 {
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.setValue( "username", mUsername );
-  settings.setValue( "password", mPassword );
-  settings.setValue( "userId", mUserId );
-  settings.setValue( "token", mAuthToken );
-  settings.setValue( "expire", mTokenExpiration );
-  settings.endGroup();
+  if ( !mCredentialStore )
+  {
+    CoreUtils::log( "Auth", QString( "Credential store is not available for writing!!" ) );
+    return;
+  }
+
+  mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration );
 }
 
 void MerginUserAuth::loadAuthData()
 {
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  mUsername = settings.value( QStringLiteral( "username" ) ).toString();
-  mPassword = settings.value( QStringLiteral( "password" ) ).toString();
-  mUserId = settings.value( QStringLiteral( "userId" ) ).toInt();
-  mTokenExpiration = settings.value( QStringLiteral( "expire" ) ).toDateTime();
-  mAuthToken = settings.value( QStringLiteral( "token" ) ).toByteArray();
-  settings.endGroup();
+  if ( !mCredentialStore )
+  {
+    CoreUtils::log( "Auth", QString( "Credential store is not available for reading!!" ) );
+    return;
+  }
+
+  connect( mCredentialStore, &CredentialStore::authDataRead, this, [this]
+           ( const QString & username,
+             const QString & password,
+             int userId,
+             const QString & token,
+             const QDateTime & tokenExpiration )
+  {
+    mUsername = username;
+    mPassword = password;
+    mUserId = userId;
+    mAuthToken = token.toUtf8();
+    mTokenExpiration = tokenExpiration;
+
+    emit authChanged();
+    emit credentialsLoaded();
+  }, Qt::SingleShotConnection );
+
+  mCredentialStore->readAuthData();
 }
 
 QString MerginUserAuth::username() const

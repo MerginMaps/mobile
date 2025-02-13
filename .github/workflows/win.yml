@@ -153,6 +153,7 @@ jobs:
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
              -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/x64-windows ^
              -DUSE_MM_SERVER_API_KEY=TRUE ^
+             -DUSE_KEYCHAIN=No ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
              -G "NMake Makefiles" ^
              -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^

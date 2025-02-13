@@ -143,6 +143,13 @@ set(HAVE_BLUETOOTH
     CACHE BOOL "Building with bluetooth position provider"
 )
 
+set(USE_KEYCHAIN
+    FALSE
+    CACHE
+      BOOL
+      "Wheter to use keychains/wallets to store credentials. If false, we use QSettings"
+)
+
 set(QT6_VERSION
     ${QT_VERSION_DEFAULT}
     CACHE STRING "QT6 version to use"
