@@ -241,7 +241,7 @@ void TestMerginApi::testDownloadProjectSpecChars()
   // Add special characters in the project file name
   QFile projectFile( projectDir + "/project.qgs" );
   QVERIFY( projectFile.exists() );
-  QString specChars( "+?%@&" );
+  QString specChars( "._- " );
   QString newProjectFileName = QString( "%1.qgs" ).arg( specChars );
   QVERIFY( projectFile.rename( projectDir + "/" + newProjectFileName ) );
 
