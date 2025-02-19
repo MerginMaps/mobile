@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+
+import "../components" as MMComponents
 import "."
 
 Image {
@@ -39,22 +41,28 @@ Image {
     }
   }
 
-  Rectangle {
-    anchors.fill: parent
-    color: __style.polarColor
-    z: -1
+  // Rectangle {
+  //   anchors.fill: parent
+  //   color: __style.polarColor
+  //   z: -1
 
-    MMIcon {
-      anchors.centerIn: parent
-      source: __style.morePhotosIcon
-      color: __style.mediumGreenColor
-      size: __style.icon32
-    }
-  }
+  //   MMIcon {
+  //     anchors.centerIn: parent
+  //     source: __style.morePhotosIcon
+  //     color: __style.mediumGreenColor
+  //     size: __style.icon32
+  //   }
+  // }
 
   MMSingleClickMouseArea {
     anchors.fill: parent
     onSingleClicked: root.clicked(root.photoUrl)
+  }
+
+  MMComponents.MMBusyIndicator {
+    id: busyIndicator
+    anchors.centerIn: parent
+    visible: root.photoUrl.status === Image.Loading
   }
 
   onStatusChanged: {
