@@ -208,15 +208,21 @@ MMFormPhotoViewer {
     //  - absoluteImagePath is the actual path on the device and is used by QML Image to show the image
     //
     function setAbsoluteImagePath() {
-      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
-
       if ( !root._fieldValue || root._fieldValueIsNull ) {
         root.photoState = "notSet"
         absoluteImagePath = ""
+        return
       }
-      else if ( root._fieldValue && __inputUtils.fileExists( absolutePath ) ) {
+
+      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
+
+      if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
         absoluteImagePath = "file://" + absolutePath
+      }
+      else if ( __inputUtils.isValidUrl( absolutePath ) ) {
+          root.photoState = "valid";
+          absoluteImagePath = absolutePath;
       }
       else {
         root.photoState = "notAvailable"
