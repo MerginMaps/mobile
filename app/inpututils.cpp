@@ -2284,3 +2284,10 @@ QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject 
 
   return nullptr;
 }
+
+bool InputUtils::isValidUrl( const QString &link )
+{
+  QUrl url( link );
+  return url.isValid() && ( url.scheme().toLower() == QStringLiteral( "http" ) ||
+                            url.scheme().toLower() == QStringLiteral( "https" ) );
+}

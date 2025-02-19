@@ -615,6 +615,11 @@ class InputUtils: public QObject
      */
     static QgsMapLayer *mapLayerFromName( const QString &layerName, QgsProject *project );
 
+    /**
+     * Checks if the given string is a valid URL with "http" and "https" schemes
+     */
+    Q_INVOKABLE static bool isValidUrl( const QString &link );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
