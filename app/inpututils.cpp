@@ -2289,8 +2289,4 @@ bool InputUtils::isValidUrl( const QString &link )
 {
   QUrl url( link );
   return url.isValid();
-
-  // should we check for https scheme?
-  // ( url.scheme().toLower() == QStringLiteral( "http" ) ||
-  // url.scheme().toLower() == QStringLiteral( "https" ) );
 }

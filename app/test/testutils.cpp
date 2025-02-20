@@ -324,3 +324,19 @@ void TestUtils::testMapLayerFromName()
 
   delete project;
 }
+
+void TestUtils::testIsValidUrl()
+{
+  // valid urls
+  QVERIFY( InputUtils::isValidUrl( "http://www.example.com" ) );
+  QVERIFY( InputUtils::isValidUrl( "https://example.com/path?query=1" ) );
+  QVERIFY( InputUtils::isValidUrl( "ftp://ftp.example.com/resource" ) );
+  QVERIFY( InputUtils::isValidUrl( "www.example.com" ) );
+  QVERIFY( InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl
+
+  // invalid urls
+  QVERIFY( !InputUtils::isValidUrl( "htp://www.example.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "http//missingcolon.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "://example.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
+}

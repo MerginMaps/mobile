@@ -41,18 +41,19 @@ Image {
     }
   }
 
-  // Rectangle {
-  //   anchors.fill: parent
-  //   color: __style.polarColor
-  //   z: -1
+  Rectangle {
+    anchors.fill: parent
+    color: __style.polarColor
+    z: -1
+    visible: root.status === Image.Error // if image has transparent background, we would still see it
 
-  //   MMIcon {
-  //     anchors.centerIn: parent
-  //     source: __style.morePhotosIcon
-  //     color: __style.mediumGreenColor
-  //     size: __style.icon32
-  //   }
-  // }
+    MMIcon {
+      anchors.centerIn: parent
+      source: __style.morePhotosIcon
+      color: __style.mediumGreenColor
+      size: __style.icon32
+    }
+  }
 
   MMSingleClickMouseArea {
     anchors.fill: parent
@@ -62,7 +63,7 @@ Image {
   MMComponents.MMBusyIndicator {
     id: busyIndicator
     anchors.centerIn: parent
-    visible: root.photoUrl.status === Image.Loading
+    visible: root.status === Image.Loading
   }
 
   onStatusChanged: {
