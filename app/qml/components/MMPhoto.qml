@@ -49,7 +49,7 @@ Image {
 
     MMIcon {
       anchors.centerIn: parent
-      source: __style.morePhotosIcon
+      source: ( root.photoUrl && root.photoUrl.startsWith( "file://" ) ) ? __style.morePhotosIcon : __style.morePhotosIcon //__style.loadingImageErrorIcon
       color: __style.mediumGreenColor
       size: __style.icon32
     }
