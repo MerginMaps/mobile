@@ -2287,6 +2287,9 @@ QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject 
 
 bool InputUtils::isValidUrl( const QString &link )
 {
+  if ( link.isEmpty() )
+    return false;
+
   QUrl url( link );
   return url.isValid();
 }
