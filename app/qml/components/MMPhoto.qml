@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+
+import "../components" as MMComponents
 import "."
 
 Image {
@@ -43,10 +45,11 @@ Image {
     anchors.fill: parent
     color: __style.polarColor
     z: -1
+    visible: root.status === Image.Error // if image has transparent background, we would still see it
 
     MMIcon {
       anchors.centerIn: parent
-      source: __style.morePhotosIcon
+      source: ( root.photoUrl && root.photoUrl.startsWith( "file://" ) ) ? __style.morePhotosIcon : __style.morePhotosIcon //__style.loadingImageErrorIcon
       color: __style.mediumGreenColor
       size: __style.icon32
     }
@@ -55,6 +58,12 @@ Image {
   MMSingleClickMouseArea {
     anchors.fill: parent
     onSingleClicked: root.clicked(root.photoUrl)
+  }
+
+  MMComponents.MMBusyIndicator {
+    id: busyIndicator
+    anchors.centerIn: parent
+    visible: root.status === Image.Loading
   }
 
   onStatusChanged: {
