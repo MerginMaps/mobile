@@ -2994,14 +2994,23 @@ bool MerginApi::hasLocalChanges(
   const QString &projectDir
 )
 {
-  if ( localFiles.count() != oldServerFiles.count() )
+  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+
+  QList<MerginFile> filteredOldServerFiles;
+  for ( const MerginFile &file : oldServerFiles )
+  {
+    if ( !excludeFromSync( file.path, config ) )
+      filteredOldServerFiles.append( file );
+  }
+
+  if ( localFiles.count() != filteredOldServerFiles.count() )
   {
     return true;
   }
 
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( const MerginFile &file : oldServerFiles )
+  for ( const MerginFile &file : filteredOldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }
