@@ -3116,3 +3116,54 @@ void TestMerginApi::testDownloadWithNetworkErrorRecovery()
   mApi->setNetworkManager( originalManager );
   delete failingManager;
 }
+
+void TestMerginApi::testMerginConfigFromFile()
+{
+  QString tempFilePath;
+  MerginConfig config;
+
+  // 1 => valid JSON
+  tempFilePath = QDir::tempPath() + "/test_valid_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    QByteArray data = "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}";
+    file.write( data );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, true );
+  QCOMPARE( config.selectiveSyncDir, QString( "photos" ) );
+  QFile::remove( tempFilePath );
+
+  // 2 => invalid JSON (non-JSON content)
+  tempFilePath = QDir::tempPath() + "/test_invalid_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    QByteArray data = "this is not valid JSON";
+    file.write( data );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+  QFile::remove( tempFilePath );
+
+  // 3 => empty file
+  tempFilePath = QDir::tempPath() + "/test_empty_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( "" );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+  QFile::remove( tempFilePath );
+
+  // 4 => file-not-found
+  tempFilePath = QDir::tempPath() + "/nonexistent_config.json";
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+}
