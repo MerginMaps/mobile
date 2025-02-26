@@ -22,6 +22,7 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
+#include "merginprojectmetadata.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -33,6 +34,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( QString projectRole READ projectRole WRITE setProjectRole NOTIFY projectRoleChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
@@ -41,7 +43,6 @@ class ActiveProject: public QObject
     explicit ActiveProject(
       AppSettings &appSettings
       , ActiveLayer &activeLayer
-      , LayersProxyModel &recordingLayerPM
       , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
@@ -102,11 +103,6 @@ class ActiveProject: public QObject
     void updateMapSettingsLayers() const;
 
     /**
-     * layerVisible returns boolean if input layer is visible within current project
-     */
-    bool layerVisible( QgsMapLayer *layer );
-
-    /**
      * Return the QGIS log recorded during the loading phase of the project
      */
     Q_INVOKABLE QString projectLoadingLog() const;
@@ -117,6 +113,14 @@ class ActiveProject: public QObject
     const QString &mapTheme() const;
 
     bool positionTrackingSupported() const;
+
+    //! Returns true if the project has at least one layer that allows recording
+    Q_INVOKABLE bool projectHasRecordingLayers() const;
+    /**
+     * Returns role/permission level of current user for this project
+     */
+    Q_INVOKABLE QString projectRole() const;
+    void setProjectRole( const QString &role );
 
   signals:
     void qgsProjectChanged();
@@ -144,6 +148,8 @@ class ActiveProject: public QObject
 
     // Emited when the app (UI) should show tracking because there is a running tracking service
     void startPositionTracking();
+
+    void projectRoleChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
@@ -179,13 +185,12 @@ class ActiveProject: public QObject
 
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
-    LayersProxyModel &mRecordingLayerPM;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
-
     std::unique_ptr<AutosyncController> mAutosyncController;
 
     QString mProjectLoadingLog;
+    QString mProjectRole;
 
     /**
     * Reloads project.

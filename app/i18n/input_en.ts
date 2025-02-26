@@ -1287,87 +1287,87 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="550"/>
+        <location filename="../qml/map/MMMapController.qml" line="553"/>
         <source>streaming</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="626"/>
+        <location filename="../qml/map/MMMapController.qml" line="629"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="640"/>
+        <location filename="../qml/map/MMMapController.qml" line="643"/>
         <source>Connected, no position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="644"/>
+        <location filename="../qml/map/MMMapController.qml" line="647"/>
         <source>Unknown accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="786"/>
+        <location filename="../qml/map/MMMapController.qml" line="789"/>
         <source>GPS currently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="801"/>
+        <location filename="../qml/map/MMMapController.qml" line="813"/>
         <source>Choose Active Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="828"/>
+        <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Could not find any editable layers in the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="829"/>
+        <location filename="../qml/map/MMMapController.qml" line="849"/>
         <source>See how to enable digitizing in your project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="846"/>
+        <location filename="../qml/map/MMMapController.qml" line="867"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="851"/>
+        <location filename="../qml/map/MMMapController.qml" line="872"/>
         <source>Split geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="863"/>
+        <location filename="../qml/map/MMMapController.qml" line="884"/>
         <source>Redraw geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="875"/>
+        <location filename="../qml/map/MMMapController.qml" line="896"/>
         <source>Streaming mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="881"/>
+        <location filename="../qml/map/MMMapController.qml" line="902"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1019"/>
+        <location filename="../qml/map/MMMapController.qml" line="1040"/>
         <source>Splitting done successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1110"/>
+        <location filename="../qml/map/MMMapController.qml" line="1131"/>
         <source>Select some point to start editing the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1123"/>
+        <location filename="../qml/map/MMMapController.qml" line="1144"/>
         <source>Record new geometry for the feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1213"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2556,78 +2556,78 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="224"/>
+        <location filename="../../core/merginapi.cpp" line="225"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="820"/>
+        <location filename="../../core/merginapi.cpp" line="828"/>
         <source>Username must have at least 4 characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="827"/>
+        <location filename="../../core/merginapi.cpp" line="835"/>
         <source>Username contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="834"/>
+        <location filename="../../core/merginapi.cpp" line="842"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="841"/>
+        <location filename="../../core/merginapi.cpp" line="849"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="854"/>
+        <location filename="../../core/merginapi.cpp" line="862"/>
         <source>Passwords do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="861"/>
+        <location filename="../../core/merginapi.cpp" line="869"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="891"/>
+        <location filename="../../core/merginapi.cpp" line="899"/>
         <source>Marketing source cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="899"/>
+        <location filename="../../core/merginapi.cpp" line="907"/>
         <source>Industry cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1303"/>
+        <location filename="../../core/merginapi.cpp" line="1311"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1325"/>
+        <location filename="../../core/merginapi.cpp" line="1333"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1357"/>
+        <location filename="../../core/merginapi.cpp" line="1365"/>
         <source>Workspace created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1690"/>
+        <location filename="../../core/merginapi.cpp" line="1698"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3854"/>
+        <location filename="../../core/merginapi.cpp" line="3873"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3920"/>
+        <location filename="../../core/merginapi.cpp" line="3939"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2852,12 +2852,12 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="539"/>
+        <location filename="../main.cpp" line="537"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="544"/>
+        <location filename="../main.cpp" line="542"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2883,113 +2883,113 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="277"/>
+        <location filename="../qml/main.qml" line="279"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="285"/>
+        <location filename="../qml/main.qml" line="288"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="291"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="300"/>
+        <location filename="../qml/main.qml" line="303"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="311"/>
         <source>Zoom to project</source>
         <translation type="unfinished">Zoom to project</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="317"/>
+        <location filename="../qml/main.qml" line="320"/>
         <source>Map themes</source>
         <translation type="unfinished">Map themes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="328"/>
+        <location filename="../qml/main.qml" line="331"/>
         <source>Position tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="339"/>
+        <location filename="../qml/main.qml" line="342"/>
         <source>Measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="345"/>
+        <location filename="../qml/main.qml" line="348"/>
         <source>Local changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="354"/>
+        <location filename="../qml/main.qml" line="357"/>
         <source>Settings</source>
         <translation type="unfinished">Settings</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="549"/>
-        <location filename="../qml/main.qml" line="557"/>
+        <location filename="../qml/main.qml" line="552"/>
+        <location filename="../qml/main.qml" line="560"/>
         <source>not tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="779"/>
         <source>Select feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="860"/>
+        <location filename="../qml/main.qml" line="863"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="864"/>
+        <location filename="../qml/main.qml" line="867"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="884"/>
+        <location filename="../qml/main.qml" line="887"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="935"/>
+        <location filename="../qml/main.qml" line="938"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="993"/>
+        <location filename="../qml/main.qml" line="996"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="688"/>
+        <location filename="../qml/main.qml" line="691"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="829"/>
+        <location filename="../qml/main.qml" line="832"/>
         <source>Successfully synchronised</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="867"/>
+        <location filename="../qml/main.qml" line="870"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1014"/>
+        <location filename="../qml/main.qml" line="1017"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1039"/>
+        <location filename="../qml/main.qml" line="1042"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>

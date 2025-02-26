@@ -240,6 +240,7 @@ jobs:
               -DQT_ANDROID_SIGN_APK=Yes \
               -DQT_ANDROID_SIGN_AAB=Yes \
               -DUSE_MM_SERVER_API_KEY=Yes \
+              -DUSE_KEYCHAIN=No \
               -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
               -GNinja \
               -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -266,7 +267,7 @@ jobs:
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
@@ -294,7 +295,7 @@ jobs:
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB
