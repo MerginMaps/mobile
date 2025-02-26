@@ -3167,3 +3167,55 @@ void TestMerginApi::testMerginConfigFromFile()
   config = MerginConfig::fromFile( tempFilePath );
   QVERIFY( !config.isValid );
 }
+
+void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
+{
+  // temporary project directory
+  QTemporaryDir tempDir;
+  QVERIFY( tempDir.isValid() );
+  QString projectDir = tempDir.path();
+
+  // create a mergin‑config file enabling selective sync,
+  // so that files under "photos" are excluded from the sync
+  QString configPath = projectDir + "/mergin-config.json";
+  {
+    QFile configFile( configPath );
+    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
+    configFile.write( "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}" );
+    configFile.close();
+  }
+
+  // create two server files => one in "photos" folder (excluded), one in root folder (not excluded)
+  MerginFile serverExcluded;
+  serverExcluded.path = "photos/photo.jpg";
+  serverExcluded.checksum = "img_checksum";
+
+  MerginFile serverIncluded;
+  serverIncluded.path = "data.txt";
+  serverIncluded.checksum = "data_checksum";
+
+  QList<MerginFile> oldServerFiles;
+  oldServerFiles.append( serverExcluded );
+  oldServerFiles.append( serverIncluded );
+
+  // first scenario => local files list exactly matches the non‑excluded server file
+  // the excluded file ("photos/photo.jpg") is ignored, and no local changes should be detected
+  QList<MerginFile> localFilesNoChange;
+  localFilesNoChange.append( serverIncluded );
+
+  bool result = mApi->hasLocalChanges( oldServerFiles, localFilesNoChange, projectDir );
+  QVERIFY( !result );
+
+  // second scenario => local file list contains a modified version of non‑excluded file
+  // the checksum of "data.txt" is different, and local changes should be detected
+  QList<MerginFile> localFilesChanged;
+  {
+    MerginFile modifiedIncluded = serverIncluded;
+    modifiedIncluded.checksum = "different_checksum";
+    localFilesChanged.append( modifiedIncluded );
+  }
+
+  result = mApi->hasLocalChanges( oldServerFiles, localFilesChanged, projectDir );
+  QVERIFY( result );
+}
+

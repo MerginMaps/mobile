@@ -150,6 +150,7 @@ class TestMerginApi: public QObject
     void testAutosyncFailure();
     void testUpdateProjectMetadataRole();
     void testMerginConfigFromFile();
+    void testHasLocalChangesWithSelectiveSyncEnabled();
 
     void testRegisterAndDelete();
     void testCreateWorkspace();
