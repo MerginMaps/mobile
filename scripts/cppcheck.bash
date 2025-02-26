@@ -20,7 +20,6 @@ cppcheck --library=qt.cfg \
          --enable=all \
          --inconclusive \
          --suppress="unusedFunction" \
-         --suppress="functionConst" \
          --std=c++17 \
          -i app/test \
          ${SCRIPT_DIR}/../app \

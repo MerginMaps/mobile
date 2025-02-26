@@ -49,10 +49,10 @@ class ActiveProject: public QObject
     virtual ~ActiveProject();
 
     //! Returns active project's QgsProject instance to do QGIS API magic
-    QgsProject *qgsProject();
+    QgsProject *qgsProject() const;
 
     //! Returns Input related info about active project
-    LocalProject localProject();
+    LocalProject localProject() const;
 
     Q_INVOKABLE QString projectFullName() const;
 
