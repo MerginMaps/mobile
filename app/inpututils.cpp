@@ -2293,3 +2293,8 @@ bool InputUtils::isValidUrl( const QString &link )
   QUrl url( link );
   return url.isValid();
 }
+
+bool InputUtils::isLocalFile( const QString &filePath )
+{
+  return filePath.startsWith( QStringLiteral( "file://" ) );
+}

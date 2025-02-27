@@ -63,6 +63,7 @@ namespace TestUtils
   void testRecordingAllowed();
   void testMapLayerFromName();
   void testIsValidUrl();
+  void testIsLocalFile();
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

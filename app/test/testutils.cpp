@@ -340,3 +340,21 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
+
+void TestUtils::testIsLocalFile()
+{
+  // file starting with "file://"
+  QCOMPARE( InputUtils::isLocalFile( "file://C:/path/to/file.txt" ), true );
+
+  // HTTP URL should return false
+  QCOMPARE( InputUtils::isLocalFile( "http://example.com/file.txt" ), false );
+
+  // relative file path should return false
+  QCOMPARE( InputUtils::isLocalFile( "/path/to/file.txt" ), false );
+
+  // empty string returns false
+  QCOMPARE( InputUtils::isLocalFile( "" ), false );
+
+  // ("FILE://") should return false due to case sensitivity
+  QCOMPARE( InputUtils::isLocalFile( "FILE://C:/path/to/file.txt" ), false );
+}
