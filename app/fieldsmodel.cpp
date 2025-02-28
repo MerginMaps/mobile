@@ -47,7 +47,7 @@ bool FieldsModel::removeField( int row )
   return true;
 }
 
-QList<FieldConfiguration> FieldsModel::fields()
+QList<FieldConfiguration> FieldsModel::fields() const
 {
   return mFields;
 }
