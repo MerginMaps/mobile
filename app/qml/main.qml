@@ -331,7 +331,7 @@ ApplicationWindow {
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
         active: map.isTrackingPosition
-        visible: __activeProject.positionTrackingSupported
+        visible: __activeProject.positionTrackingSupported && __activeProject.projectRole !== "reader"
 
         onClicked: {
           trackingPanelLoader.active = true
@@ -1019,7 +1019,7 @@ ApplicationWindow {
     }
 
     function onPositionTrackingSupportedChanged() {
-      positionTrackingButton.visible = __activeProject.positionTrackingSupported
+      positionTrackingButton.visible = __activeProject.positionTrackingSupported && __activeProject.projectRole !== "reader"
       mapToolbar.recalculate()
     }
   }
