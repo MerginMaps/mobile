@@ -426,6 +426,7 @@ class MMStyle: public QObject
     QUrl moreIcon() const {return QUrl( "qrc:/More.svg" );}
     QUrl moreVerticalIcon() const {return QUrl( "qrc:/MoreVertical.svg" );}
     QUrl morePhotosIcon() const {return QUrl( "qrc:/MorePhotos.svg" );}
+    QUrl remoteImageLoadErrorIcon() const {return QUrl( "qrc:/RemoteImageLoadError.svg" );}
     QUrl mouthIcon() const {return QUrl( "qrc:/Mouth.svg" );}
     QUrl measurementToolIcon() const {return QUrl( "qrc:/Measure.svg" );}
     QUrl closeShapeIcon() const {return QUrl( "qrc:/CloseShape.svg" );}
