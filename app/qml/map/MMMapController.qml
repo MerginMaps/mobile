@@ -35,6 +35,10 @@ Item {
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
+  property var mapToolComponent: {
+    measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
+  }
+
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   signal featureIdentified( var pair )
@@ -59,6 +63,8 @@ Item {
 
   signal stakeoutStarted( var pair )
   signal accuracyButtonClicked()
+
+  signal measureStarted()
 
   signal localChangesPanelRequested()
 
@@ -87,6 +93,9 @@ Item {
       name: "stakeout"
     },
     State {
+      name: "measure"
+    },
+    State {
       name: "inactive" // ignores touch input
     }
   ]
@@ -97,44 +106,62 @@ Item {
     updatePosition()
 
     switch ( state ) {
+      case "record": {
+        root.showInfoTextMessage( qsTr( "Mark the geometry on the map and click record" ) )
 
-    case "record": {
-      root.recordingStarted()
-      break
-    }
+        if ( __appSettings.autolockPosition ) { // center to GPS
+          if ( gpsStateGroup.state === "unavailable" ) {
+            __notificationModel.addError( "GPS currently unavailable." )
+          }
+          else {
+            root.centeredToGPS = true
+            updatePosition()
+          }
+        }
 
-    case "recordInLayer": {
-      root.recordInLayerFeatureStarted()
-      root.hideHighlight()
-      break
-    }
+        root.recordingStarted()
+        break
+      }
 
-    case "edit": {
-      root.editingGeometryStarted()
-      root.hideHighlight()
-      break
-    }
+      case "recordInLayer": {
+        root.recordInLayerFeatureStarted()
+        root.hideHighlight()
+        break
+      }
 
-    case "split": {
-      root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
-      root.splittingStarted()
-      break
-    }
+      case "edit": {
+        root.editingGeometryStarted()
+        root.hideHighlight()
+        break
+      }
 
-    case "view": {
-      root.hideHighlight()
-      break
-    }
+      case "split": {
+        root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
+        root.splittingStarted()
+        break
+      }
 
-    case "stakeout": {
-      root.hideHighlight()
-      root.stakeoutStarted( internal.stakeoutTarget )
-      break
-    }
+      case "view": {
+        root.hideHighlight()
+        break
+      }
 
-    case "inactive": {
-      break
-    }
+      case "stakeout": {
+        root.hideHighlight()
+        root.stakeoutStarted( internal.stakeoutTarget )
+        break
+      }
+
+      case "measure": {
+        root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
+        root.hideHighlight()
+        root.measureStarted()
+        break
+      }
+
+      case "inactive": {
+        break
+      }
     }
   }
 
@@ -370,6 +397,17 @@ Item {
     sourceComponent: splittingToolsComponent
   }
 
+  Loader {
+    id: measurementToolsLoader
+
+    anchors.fill: mapCanvas
+
+    asynchronous: true
+    active: root.state === "measure"
+
+    sourceComponent: measurementToolsComponent
+  }
+
   // map available content within safe area
   Item {
     anchors {
@@ -433,7 +471,10 @@ Item {
             text: __activeLayer.layerName
             leftIconSource: __inputUtils.loadIconFromLayer( __activeLayer.layer )
 
-            onClicked: activeLayerPanel.open()
+            onClicked: {
+              activeLayerPanelLoader.active = true
+              activeLayerPanelLoader.item.open()
+            }
           }
 
           Item {
@@ -486,10 +527,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" )
+        if ( root.state === "stakeout" || root.state === "measure" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -757,39 +798,57 @@ Item {
     }
   }
 
-  MMListDrawer {
-    id: activeLayerPanel
+  Loader {
+    id: activeLayerPanelLoader
+    active: false
+    sourceComponent: activeLayerPanelComponent
+  }
 
-    drawerHeader.title: qsTr( "Choose Active Layer" )
+  Component {
+    id: activeLayerPanelComponent
 
-    list.model: __recordingLayersModel
+    MMListDrawer {
+      id: activeLayerPanel
 
-    list.delegate: MMListDelegate {
-      text: model.layerName
+      drawerHeader.title: qsTr( "Choose Active Layer" )
 
-      // TODO: why we need to set hight here?
-      height: __style.menuDrawerHeight
+      onClosed: activeLayerPanelLoader.active = false
 
-      leftContent: MMIcon {
-        source: model.iconSource
+      list.model: MM.LayersProxyModel {
+        id: recordingLayersModel
+
+        qgsProject: __activeProject.qgsProject
+        modelType: MM.LayersProxyModel.ActiveLayerSelection
+        model: MM.LayersModel {}
       }
 
-      rightContent: MMIcon {
-        source: __style.doneCircleIcon
-        visible: __activeLayer.layerId === model.layerId
+      list.delegate: MMListDelegate {
+        text: model.layerName
+
+        // TODO: why we need to set hight here?
+        height: __style.menuDrawerHeight
+
+        leftContent: MMIcon {
+          source: model.iconSource
+        }
+
+        rightContent: MMIcon {
+          source: __style.doneCircleIcon
+          visible: __activeLayer.layerId === model.layerId
+        }
+
+        onClicked: {
+          __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
+          activeLayerPanel.close()
+        }
       }
 
-      onClicked: {
-        __activeProject.setActiveLayer( __recordingLayersModel.layerFromLayerId( model.layerId ) )
-        activeLayerPanel.close()
+      emptyStateDelegate: MMMessage {
+        image: __style.negativeMMSymbolImage
+        description: qsTr( "Could not find any editable layers in the project." )
+        linkText: qsTr( "See how to enable digitizing in your project." )
+        link: __inputHelp.howToEnableDigitizingLink
       }
-    }
-
-    emptyStateDelegate: MMMessage {
-      image: __style.negativeMMSymbolImage
-      description: qsTr( "Could not find any editable layers in the project." )
-      linkText: qsTr( "See how to enable digitizing in your project." )
-      link: __inputHelp.howToEnableDigitizingLink
     }
   }
 
@@ -952,6 +1011,18 @@ Item {
   }
 
   Component {
+    id: measurementToolsComponent
+
+    MMMeasurementTools {
+      anchors.fill: parent
+
+      map: mapCanvas
+      positionMarkerComponent: positionMarker
+      onFinishMeasurement: root.finishMeasure()
+    }
+  }
+
+  Component {
     id: splittingToolsComponent
 
     MMSplittingTools {
@@ -1100,6 +1171,10 @@ Item {
     state = "stakeout"
   }
 
+  function measure() {
+    state = "measure"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1114,6 +1189,10 @@ Item {
     root.highlightPair( internal.stakeoutTarget )
     mapCanvas.mapSettings.extent = internal.extentBeforeStakeout
     root.centeredToGPS = internal.centeredToGPSBeforeStakeout
+  }
+
+  function finishMeasure() {
+    state = "view"
   }
 
   function centerToPair( pair ) {

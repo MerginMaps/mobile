@@ -85,9 +85,12 @@ MMPrivateComponents.MMBaseInput {
           height: width
         }
 
-        MouseArea {
+        MMComponents.MMSingleClickMouseArea{
           anchors.fill: parent
-          onClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+          onSingleClicked: {
+            root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
+            root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+          }
         }
       }
 
@@ -132,9 +135,9 @@ MMPrivateComponents.MMBaseInput {
             verticalAlignment: Text.AlignVCenter
           }
 
-          MouseArea {
+          MMComponents.MMSingleClickMouseArea {
             anchors.fill: parent
-            onClicked: root.openLinkedFeature( model.FeaturePair )
+            onSingleClicked: root.openLinkedFeature( model.FeaturePair )
           }
 
           onVisibleChanged: root.recalculateVisibleItems()

@@ -27,6 +27,7 @@ set(MM_SRCS
     maptools/abstractmaptool.cpp
     maptools/recordingmaptool.cpp
     maptools/splittingmaptool.cpp
+    maptools/measurementmaptool.cpp
     ios/iosimagepicker.cpp
     ios/iosutils.cpp
     position/providers/abstractpositionprovider.cpp
@@ -109,6 +110,7 @@ set(MM_HDRS
     maptools/abstractmaptool.h
     maptools/recordingmaptool.h
     maptools/splittingmaptool.h
+    maptools/measurementmaptool.h
     ios/iosimagepicker.h
     ios/iosutils.h
     position/providers/abstractpositionprovider.h

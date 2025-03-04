@@ -9,65 +9,52 @@
 
 import QtQuick
 import QtQuick.Controls
+import "../../components" as MMComponents
 
-TabBar {
+MMComponents.MMListView {
   id: root
 
-  property alias tabButtonsModel: tabBarRepeater.model
+  implicitHeight: __style.row45
 
-  implicitHeight: 56 * __dp
-
-  spacing: 20 * __dp
-
-  leftPadding: internal.tabBarPadding
-  rightPadding: internal.tabBarPadding
+  spacing: 0
 
   clip: true
+  orientation: ListView.Horizontal
 
-  background: Rectangle {
-    color: __style.lightGreenColor
-  }
+  interactive: contentWidth > width
 
-  Repeater {
-    id: tabBarRepeater
+  header: MMComponents.MMListSpacer { width: __style.margin20 }
+  footer: MMComponents.MMListSpacer { width: __style.margin20 }
 
-    TabButton {
-      id: tabDelegate
+  delegate: Control {
+    id: tabDelegate
 
-      property bool isSelected: TabBar.index === root.currentIndex
+    property bool isSelected: ListView.isCurrentItem
 
-      height: 45 * __dp
-      width: contentItem.implicitWidth
+    height: __style.row45
+    width: contentItem.implicitWidth
 
-      anchors.verticalCenter: parent.verticalCenter
+    focusPolicy: Qt.NoFocus
 
-      focusPolicy: Qt.NoFocus
+    background: Rectangle {
+      visible: tabDelegate.isSelected
+      color: __style.grassColor
+      radius: __style.radius30
+    }
 
-      contentItem: Text {
-        text: model.Name
+    contentItem: MMComponents.MMText {
+      text: model.Name
 
-        leftPadding: __style.margin20
-        rightPadding: __style.margin20
+      font: __style.t4
 
-        font: __style.t4
-        color: __style.forestColor
+      leftPadding: __style.margin20
+      rightPadding: __style.margin20
+    }
 
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-      }
-
-      background: Rectangle {
-        radius: 30 * __dp
-        color: __style.grassColor
-
-        visible: tabDelegate.isSelected
-      }
+    MouseArea {
+      anchors.fill: parent
+      onClicked: root.currentIndex = index
     }
   }
-
-  QtObject {
-    id: internal
-
-    property real tabBarPadding: 20 * __dp
-  }
 }
+

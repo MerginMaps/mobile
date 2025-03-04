@@ -52,6 +52,9 @@ class FeaturesModel : public QAbstractListModel
     // Name of the property is intentionally `count` so that it matches ListModel's count property
     Q_PROPERTY( int count READ count NOTIFY countChanged )
 
+    // Returns if the model should be sorted according to the layer's attribute table configuration sort order
+    Q_PROPERTY( bool useAttributeTableSortOrder MEMBER mUseAttributeTableSortOrder )
+
   public:
 
     enum ModelRoles
@@ -160,6 +163,9 @@ class FeaturesModel : public QAbstractListModel
     QAtomicInt mNextSearchId = 0;
     QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
     bool mFetchingResults = false;
+    bool mUseAttributeTableSortOrder = false;
+
+    friend class TestModels;
 };
 
 #endif // FEATURESMODEL_H

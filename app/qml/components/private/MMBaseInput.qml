@@ -28,6 +28,7 @@ Item {
   property alias checkboxChecked: checkbox.checked
 
   property bool readOnly: false
+  property bool shouldShowValidation: true
 
   property string errorMsg: ""
   property string warningMsg: ""
@@ -64,7 +65,7 @@ Item {
     states: [
       State {
         name: "valid"
-        when: !warningMsg && !errorMsg
+        when: !shouldShowValidation || ( !warningMsg && !errorMsg )
       },
       State {
         name: "error"
@@ -170,7 +171,7 @@ Item {
       width: parent.width
       height: validationMessagegroup.implicitHeight
 
-      visible: root.validationState !== "valid" && root.editState === "enabled"
+      visible: root.validationState !== "valid" && root.shouldShowValidation
 
       RowLayout {
         id: validationMessagegroup

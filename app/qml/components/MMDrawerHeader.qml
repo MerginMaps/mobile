@@ -22,7 +22,9 @@ Rectangle {
   property font titleFont: __style.t3
 
   property bool hasCloseButton: true
+
   property alias closeButton: closeBtn
+  property alias topLeftItemContent: topLeftButtonGroup.children
 
   color: __style.transparentColor
 
@@ -31,14 +33,26 @@ Rectangle {
   implicitHeight: 60 * __dp
   implicitWidth: ApplicationWindow.window?.width ?? 0
 
+  Item {
+    id: topLeftButtonGroup
+
+    width: childrenRect.width
+    height: parent.height
+  }
+
   Text {
-    // If the close button is visible, we need to properly center the text
-    property real margin: internal.closeBtnRealWidth + internal.headerSpacing + __style.pageMargins
+    property real leftMarginShift: {
+      return Math.max( internal.closeBtnRealWidth, topLeftButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+    }
+
+    property real rightMarginShift: {
+      return Math.max( internal.closeBtnRealWidth, topLeftButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+    }
 
     anchors {
       fill: parent
-      leftMargin: margin
-      rightMargin: margin
+      leftMargin: leftMarginShift
+      rightMargin: rightMarginShift
     }
 
     text: root.title

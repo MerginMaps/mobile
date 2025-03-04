@@ -241,7 +241,7 @@ void TestMerginApi::testDownloadProjectSpecChars()
   // Add special characters in the project file name
   QFile projectFile( projectDir + "/project.qgs" );
   QVERIFY( projectFile.exists() );
-  QString specChars( "+?%@&" );
+  QString specChars( "_-. " ); // can't start with dot or space
   QString newProjectFileName = QString( "%1.qgs" ).arg( specChars );
   QVERIFY( projectFile.rename( projectDir + "/" + newProjectFileName ) );
 
@@ -2368,8 +2368,7 @@ void TestMerginApi::testAutosync()
   InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectdir );
 
   MapThemesModel mtm; AppSettings as; ActiveLayer al;
-  LayersModel lm; LayersProxyModel lpm( &lm, LayerModelTypes::ActiveLayerSelection );
-  ActiveProject activeProject( as, al, lpm, mApi->localProjectsManager() );
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 
@@ -2687,7 +2686,7 @@ void TestMerginApi::deleteRemoteProjectNow( MerginApi *api, const QString &proje
   QUrl url( api->mApiRoot + QStringLiteral( "/v2/projects/%1" ).arg( projectId ) );
   request.setUrl( url );
   qDebug() << "Trying to delete project " << projectName << ", id: " << projectId << " (" << url << ")";
-  QNetworkReply *r = api->mManager.deleteResource( request );
+  QNetworkReply *r = api->mManager->deleteResource( request );
   QSignalSpy spy( r, &QNetworkReply::finished );
   spy.wait( TestUtils::SHORT_REPLY );
 
@@ -2892,4 +2891,228 @@ void TestMerginApi::testRegistration()
   mApi->registerUser( username, email, password, confirm_password, false );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
+}
+
+void TestMerginApi::testParseVersion()
+{
+  int major, minor;
+
+  // Valid version string
+  QVERIFY( mApi->parseVersion( "1.2.3", major, minor ) );
+  QCOMPARE( major, 1 );
+  QCOMPARE( minor, 2 );
+
+  // Valid version string with larger numbers
+  QVERIFY( mApi->parseVersion( "10.20.30", major, minor ) );
+  QCOMPARE( major, 10 );
+  QCOMPARE( minor, 20 );
+
+  // Invalid version string (missing patch version)
+  QVERIFY( !mApi->parseVersion( "1.2", major, minor ) );
+
+  // Invalid version string (missing minor version)
+  QVERIFY( !mApi->parseVersion( "1..3", major, minor ) );
+
+  // Invalid version string (non-numeric characters)
+  QVERIFY( !mApi->parseVersion( "a.b.c", major, minor ) );
+
+  // Invalid version string (additional characters)
+  QVERIFY( !mApi->parseVersion( "1.2.3.4", major, minor ) );
+
+  // Empty version string
+  QVERIFY( !mApi->parseVersion( "", major, minor ) );
+
+  // Null version string
+  QVERIFY( !mApi->parseVersion( QString(), major, minor ) );
+
+  // Valid version string with leading zeros
+  QVERIFY( mApi->parseVersion( "01.02.03", major, minor ) );
+  QCOMPARE( major, 1 );
+  QCOMPARE( minor, 2 );
+
+  // Valid version string with spaces in the last argument
+  QVERIFY( mApi->parseVersion( "1.2. 3", major, minor ) );
+
+  // Invalid version string with only minor version (should fail)
+  QVERIFY( !mApi->parseVersion( ".2.3", major, minor ) );
+
+  // Valid version string in expected format
+  QVERIFY( mApi->parseVersion( "2024.4.3", major, minor ) );
+  QCOMPARE( major, 2024 );
+  QCOMPARE( minor, 4 );
+}
+
+void TestMerginApi::testUpdateProjectMetadataRole()
+{
+  QString projectName = "testUpdateProjectMetadataRole";
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  LocalProject projectInfo = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
+  QVERIFY( projectInfo.isValid() );
+
+  QString fullProjectName = MerginApi::getFullProjectName( mWorkspaceName, projectName );
+
+  // Test 1: Initial role should be 'owner'
+  QString cachedRole = mApi->getCachedProjectRole( fullProjectName );
+  QCOMPARE( cachedRole, QString( "owner" ) );
+
+  // Test 2: Update cached role to 'reader'
+  QString newRole = "reader";
+  bool updateSuccess = mApi->updateCachedProjectRole( fullProjectName, newRole );
+  QVERIFY( updateSuccess );
+
+  // Verify role was updated in cache
+  cachedRole = mApi->getCachedProjectRole( fullProjectName );
+  QCOMPARE( cachedRole, QString( "reader" ) );
+
+  // Role in server wasn't updated and stills "owner" => let's reload it from server and see if it updates in cached
+  QSignalSpy spy( mApi, &MerginApi::projectRoleUpdated );
+  mApi->reloadProjectRole( fullProjectName );
+  QVERIFY( spy.wait() );
+  cachedRole = mApi->getCachedProjectRole( fullProjectName );
+  QCOMPARE( cachedRole, QString( "owner" ) );
+
+  // Clean up
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
+}
+
+void TestMerginApi::testDownloadWithNetworkError()
+{
+  // Store original manager
+  QNetworkAccessManager *originalManager = mApi->networkManager();
+
+  QString projectName = "testDownloadRetry";
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // Errors to test
+  QList<QNetworkReply::NetworkError> errorsToTest =
+  {
+    QNetworkReply::TimeoutError,
+    QNetworkReply::NetworkSessionFailedError
+  };
+
+  foreach ( QNetworkReply::NetworkError networkError, errorsToTest )
+  {
+    // Create mock manager - initially not failing
+    MockNetworkManager *failingManager = new MockNetworkManager( this );
+    mApi->setNetworkManager( failingManager );
+
+    // Create signal spies
+    QSignalSpy startSpy( mApi, &MerginApi::pullFilesStarted );
+    QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
+    QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
+
+    // Trigger the current network error when download starts
+    connect( mApi, &MerginApi::pullFilesStarted, this, [this, failingManager, networkError]()
+    {
+      failingManager->setShouldFail( true, networkError );
+    } );
+
+    mApi->pullProject( mWorkspaceName, projectName );
+
+    // Verify a transaction was created
+    QCOMPARE( mApi->transactions().count(), 1 );
+
+    // Wait for download to start and then fail
+    QVERIFY( startSpy.wait( TestUtils::LONG_REPLY ) );
+    QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+
+    // Verify signals were emitted
+    QVERIFY( startSpy.count() > 0 );
+    QVERIFY( retrySpy.count() > 0 );
+    QCOMPARE( finishSpy.count(), 1 );
+
+    // Verify that MAX_RETRY_COUNT retry attempts were made
+    int maxRetries = TransactionStatus::MAX_RETRY_COUNT;
+    QCOMPARE( retrySpy.count(), maxRetries );
+
+    // Verify sync failed
+    QList<QVariant> arguments = finishSpy.takeFirst();
+    QVERIFY( !arguments.at( 1 ).toBool() );
+
+    // Verify no local project was created
+    LocalProject localProject = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
+    QVERIFY( !localProject.isValid() );
+
+    // Disconnect all signals
+    disconnect( mApi, &MerginApi::pullFilesStarted, this, nullptr );
+
+    // Clean up
+    mApi->setNetworkManager( originalManager );
+    delete failingManager;
+  }
+}
+
+void TestMerginApi::testDownloadWithNetworkErrorRecovery()
+{
+  // Store original manager
+  QNetworkAccessManager *originalManager = mApi->networkManager();
+
+  QString projectName = "testDownloadRetryRecovery";
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+
+  // Create mock manager - initially not failing
+  MockNetworkManager *failingManager = new MockNetworkManager( this );
+  mApi->setNetworkManager( failingManager );
+
+  // Create signal spies
+  QSignalSpy startSpy( mApi, &MerginApi::pullFilesStarted );
+  QSignalSpy retrySpy( mApi, &MerginApi::downloadItemRetried );
+  QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
+
+  // Counter to track retry attempts
+  int retryCount = 0;
+  QNetworkReply::NetworkError networkError = QNetworkReply::TimeoutError;
+
+  // Reset network after two retries
+  connect( mApi, &MerginApi::downloadItemRetried, this, [&retryCount, failingManager, this]()
+  {
+    retryCount++;
+    if ( retryCount == 2 )
+    {
+      failingManager->setShouldFail( false );
+      disconnect( mApi, &MerginApi::pullFilesStarted, nullptr, nullptr );
+      disconnect( mApi, &MerginApi::downloadItemRetried, nullptr, nullptr );
+    }
+  } );
+
+  // Trigger network error when download starts
+  connect( mApi, &MerginApi::pullFilesStarted, this, [failingManager, networkError]()
+  {
+    failingManager->setShouldFail( true, networkError );
+  } );
+
+  mApi->pullProject( mWorkspaceName, projectName );
+
+  // Verify a transaction was created
+  QCOMPARE( mApi->transactions().count(), 1 );
+
+  // Wait for download to start, retry twice, and then complete successfully
+  QVERIFY( startSpy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+
+  // Verify signals were emitted
+  QVERIFY( startSpy.count() > 0 );
+  QCOMPARE( retrySpy.count(), 2 );  // Should have exactly 2 retries
+  QCOMPARE( finishSpy.count(), 1 );
+
+  // Verify sync succeeded
+  QList<QVariant> arguments = finishSpy.takeFirst();
+  QVERIFY( arguments.at( 1 ).toBool() );
+
+  // Verify local project was created successfully
+  LocalProject localProject = mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName );
+  QVERIFY( localProject.isValid() );
+
+  // Verify project files were downloaded correctly
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QStringList projectFiles = QDir( projectDir ).entryList( QDir::Files );
+  QVERIFY( projectFiles.count() > 0 );
+  QVERIFY( projectFiles.contains( "project.qgs" ) );
+
+  // Clean up
+  mApi->setNetworkManager( originalManager );
+  delete failingManager;
 }

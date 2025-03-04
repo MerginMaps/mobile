@@ -89,11 +89,9 @@ MMPrivateComponents.MMBaseInput {
           size: __style.icon32
         }
 
-        MouseArea {
+        MMComponents.MMSingleClickMouseArea {
           anchors.fill: parent
-          onClicked: {
-            root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
-          }
+          onSingleClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
         }
       }
 

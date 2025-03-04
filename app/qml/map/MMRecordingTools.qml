@@ -110,56 +110,25 @@ Item {
     lineBorderWidth: 0
   }
 
-  MMHighlight {
-    id: handlesHighlight
+  Loader {
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    lineStrokeStyle: ShapePath.DashLine
-    lineWidth: MMHighlight.LineWidths.Narrow
+    sourceComponent: handlesHighlightComponent
   }
 
-  MMHighlight {
-    id: guideline
+  Loader {
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
-    height: root.map.height
-    width: root.map.width
-
-    lineWidth: MMHighlight.LineWidths.Narrow
-    lineStrokeStyle: ShapePath.DashLine
-
-    mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
+    sourceComponent: guidelineHighlightComponent
   }
 
-  MMHighlight {
-    id: midSegmentsHighlight
+  Loader {
+    active: __inputUtils.isLineLayer( __activeLayer.vectorLayer ) ||
+            __inputUtils.isPolygonLayer( __activeLayer.vectorLayer )
 
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerBorderColor: __style.grapeColor
-  }
-
-  MMHighlight {
-    id: existingVerticesHighlight
-
-    height: root.map.height
-    width: root.map.width
-
-    mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
-
-    markerType: MMHighlight.MarkerTypes.Circle
-    markerSize: MMHighlight.MarkerSizes.Bigger
+    sourceComponent: midSegmentsHighlightComponent
   }
 
   // Duplicate position marker to be painted on the top of highlights
@@ -185,6 +154,19 @@ Item {
     qgsProject: __activeProject.qgsProject
     mapSettings: root.map.mapSettings
     shouldUseSnapping: !mapTool.isUsingPosition
+  }
+
+  MMHighlight {
+    id: existingVerticesHighlight
+
+    height: root.map.height
+    width: root.map.width
+
+    mapSettings: root.map.mapSettings
+    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
+
+    markerType: MMHighlight.MarkerTypes.Circle
+    markerSize: MMHighlight.MarkerSizes.Bigger
   }
 
   MMToolbar {
@@ -302,6 +284,56 @@ Item {
         return pointToolbarButtons
       }
       return polygonToolbarButtons
+    }
+  }
+
+  Component {
+    id:  handlesHighlightComponent
+
+    MMHighlight {
+      id: handlesHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+      lineStrokeStyle: ShapePath.DashLine
+      lineWidth: MMHighlight.LineWidths.Narrow
+    }
+  }
+
+  Component {
+    id: guidelineHighlightComponent
+
+    MMHighlight {
+      id: guideline
+
+      height: root.map.height
+      width: root.map.width
+
+      lineWidth: MMHighlight.LineWidths.Narrow
+      lineStrokeStyle: ShapePath.DashLine
+
+      mapSettings: root.map.mapSettings
+      geometry: guidelineController.guidelineGeometry
+    }
+  }
+
+  Component {
+    id: midSegmentsHighlightComponent
+
+    MMHighlight {
+      id: midSegmentsHighlight
+
+      height: root.map.height
+      width: root.map.width
+
+      mapSettings: root.map.mapSettings
+      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
+
+      markerType: MMHighlight.MarkerTypes.Circle
+      markerBorderColor: __style.grapeColor
     }
   }
 

@@ -158,6 +158,10 @@ ApplicationWindow {
         // if stakeout panel is opened
         return stakeoutPanelLoader.item.panelHeight - mapToolbar.height
       }
+      else if ( measurePanelLoader.active )
+      {
+        return measurePanelLoader.item.panelHeight - mapToolbar.height
+      }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
         // if feature preview panel is opened
@@ -219,6 +223,11 @@ ApplicationWindow {
       stakeoutPanelLoader.item.targetPair = pair
     }
 
+    onMeasureStarted: function( pair ) {
+      measurePanelLoader.active = true
+      measurePanelLoader.focus = true
+    }
+
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
       projectController.openChangesPanel( __activeProject.projectFullName(), true )
@@ -265,10 +274,13 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+        id: addButton
+
         text: qsTr("Add")
         iconSource: __style.addIcon
+        visible: __activeProject.projectRole !== "reader"
         onClicked: {
-          if ( __recordingLayersModel.rowCount() > 0 ) {
+          if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
             map.record()
           }
@@ -324,6 +336,12 @@ ApplicationWindow {
         onClicked: {
           trackingPanelLoader.active = true
         }
+      }
+
+      MMToolbarButton {
+        text: qsTr("Measure")
+        iconSource: __style.measurementToolIcon
+        onClicked: map.measure()
       }
 
       MMToolbarButton {
@@ -593,6 +611,32 @@ ApplicationWindow {
       }
 
       onPanelHeightUpdated: map.updatePosition()
+    }
+  }
+
+  Loader {
+    id: measurePanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: measurePanelComponent
+  }
+
+  Component {
+    id: measurePanelComponent
+
+    MMMeasureDrawer {
+      id: measurePanel
+
+      width: window.width
+      mapTool: map.mapToolComponent
+
+      onMeasureFinished: {
+        measurePanelLoader.active = false
+        map.finishMeasure()
+      }
     }
   }
 

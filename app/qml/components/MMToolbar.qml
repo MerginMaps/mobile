@@ -119,6 +119,9 @@ Rectangle {
       text: model.btnData.text
 
       onClicked: {
+        // Prevent freezing by clearing focus from all elements
+        // Issues #3389 and #3483
+        root.forceActiveFocus()
         root.index = model.index
         model.btnData.clicked()
       }

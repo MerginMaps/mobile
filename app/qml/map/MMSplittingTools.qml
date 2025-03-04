@@ -50,7 +50,10 @@ Item {
     height: root.map.height
     width: root.map.width
 
+    markerColor: __style.deepOceanColor
     lineColor: __style.deepOceanColor
+    lineStrokeStyle: ShapePath.DashLine
+    lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
     geometry: guidelineController.guidelineGeometry
@@ -64,7 +67,7 @@ Item {
 
     markerColor: __style.deepOceanColor
     lineColor: __style.deepOceanColor
-    lineStrokeStyle: ShapePath.DashLine
+    lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )

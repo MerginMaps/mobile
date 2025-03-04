@@ -28,7 +28,8 @@ MMFormComboboxBaseEditor {
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
-  property bool _fieldIsReadOnly: parent.fieldIsReadOnly
+  property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property string _fieldTitle: parent.fieldTitle
   property string _fieldErrorMessage: parent.fieldErrorMessage
@@ -47,7 +48,8 @@ MMFormComboboxBaseEditor {
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
-  readOnly: _fieldIsReadOnly
+  readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
+  shouldShowValidation: !_fieldFormIsReadOnly
 
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState

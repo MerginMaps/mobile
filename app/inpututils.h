@@ -75,7 +75,12 @@ class InputUtils: public QObject
     Q_INVOKABLE QString getFileName( const QString &filePath );
     Q_INVOKABLE QString formatProjectName( const QString &fullProjectName );
     Q_INVOKABLE QString formatNumber( const double number, int precision = 1 );
-    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision = 1, Qgis::DistanceUnit destUnit = Qgis::DistanceUnit::Unknown );
+    Q_INVOKABLE QString formatDistanceInProjectUnit( const double distanceInMeters, int precision, QgsProject *project );
+    Q_INVOKABLE QString formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *project );
+
+    static QString formatDistanceHelper( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit );
+    static QString formatAreaHelper( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit );
+
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
@@ -578,6 +583,37 @@ class InputUtils: public QObject
      * Returns QGIS profiler data
      */
     static QVector<QString> qgisProfilerLog();
+
+    /**
+     * Calculates the Euclidean distance between two pixel points
+     */
+    static double pixelDistanceBetween( const QPointF &p1, const QPointF &p2 );
+
+    /**
+     * filters if input layer is visible in current map theme
+     */
+    static bool layerVisible( QgsMapLayer *layer, QgsProject *project );
+
+    /**
+     * Returns if layer is not NoGeo and not Unknown
+     */
+    static bool layerHasGeometry( const QgsVectorLayer *layer );
+
+    /**
+     * Returns true if the layer is the position tracking layer
+     */
+    Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
+
+    /**
+     * Returns true if the layer allows recording
+     */
+    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
+
+    /**
+     * Returns QgsMapLayer pointer for given layer name and project.
+     * If layer with given name does not exist or there is no project, returns nullptr.
+     */
+    static QgsMapLayer *mapLayerFromName( const QString &layerName, QgsProject *project );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

@@ -195,6 +195,8 @@ jobs:
             -DIOS_USE_PRODUCTION_SIGNING=TRUE \
             -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
             -DIOS=TRUE \
+            -DUSE_MM_SERVER_API_KEY=TRUE \
+            -DUSE_KEYCHAIN=No \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
             -G "Xcode" \

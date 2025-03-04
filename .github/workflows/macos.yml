@@ -19,7 +19,7 @@ env:
   QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
   INPUT_SDK_VERSION: x64-osx-20240517-205
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 0
+  CACHE_VERSION: 1
   CMAKE_VERSION: '3.29.0'
   XC_VERSION: ${{ '15.2' }}
 
@@ -141,6 +141,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Debug \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DUSE_SERVER_API_KEY=TRUE \
+             -DUSE_KEYCHAIN=No \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
@@ -153,7 +154,7 @@ jobs:
 
       - name: run tests
         env:
-          TEST_MERGIN_URL: https://test.dev.merginmaps.com/
+          TEST_MERGIN_URL: https://app.dev.merginmaps.com/
           TEST_API_USERNAME: test_mobileapp2
           TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
         run: |
@@ -172,6 +173,8 @@ jobs:
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
              -DUSE_SERVER_API_KEY=TRUE \
+             -DUSE_MM_SERVER_API_KEY=TRUE \
+             -DUSE_KEYCHAIN=No \
              -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -196,6 +199,6 @@ jobs:
           tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Input.app"
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/${{ env.INPUT_TAR }}

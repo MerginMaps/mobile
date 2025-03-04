@@ -109,6 +109,32 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
+
+    /**
+     * Returns available device storage
+    */
+    static QString getAvailableDeviceStorage();
+
+    /**
+     * Returns total device storage
+    */
+    static QString getTotalDeviceStorage();
+
+    /**
+     * Converts bytes to human readable size (e.g. 1GB, 500MB)
+     */
+    static QString bytesToHumanSize( double bytes );
+
+    /**
+     * Returns path to project metadata file for a given project directory
+     */
+    static QString getProjectMetadataPath( QString projectDir );
+
+    /**
+     * Updates a value in a JSON file at the specified top-level key
+     */
+    static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

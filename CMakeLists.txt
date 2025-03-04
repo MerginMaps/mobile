@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.22)
 # ########################################################################################
 
 # TODO automatically change with the scripts/update version script
-set(MM_VERSION_MAJOR "2024")
-set(MM_VERSION_MINOR "3")
+set(MM_VERSION_MAJOR "2025")
+set(MM_VERSION_MINOR "2")
 set(MM_VERSION_PATCH "0")
 set(QT_VERSION_DEFAULT "6.6.3")
 
@@ -113,7 +113,7 @@ set(COVERAGE
     CACHE BOOL "Compile with coverage flags"
 )
 set(USE_MM_SERVER_API_KEY
-    TRUE
+    FALSE
     CACHE
       BOOL
       "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it."
@@ -141,6 +141,13 @@ set(ENABLE_TESTS
 set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
+)
+
+set(USE_KEYCHAIN
+    FALSE
+    CACHE
+      BOOL
+      "Wheter to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
 set(QT6_VERSION

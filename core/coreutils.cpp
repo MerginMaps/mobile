@@ -20,6 +20,9 @@
 #include <QTextStream>
 #include <QCryptographicHash>
 #include <QRegularExpression>
+#include <QStorageInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "qcoreapplication.h"
 
@@ -282,4 +285,95 @@ QString CoreUtils::nameAbbr( const QString &name, const QString &email )
     return name.left( 2 ).toUpper();
 
   return email.left( 2 ).toUpper();
+}
+
+QString CoreUtils::getAvailableDeviceStorage()
+{
+  QString appDir = QCoreApplication::applicationDirPath();
+  QStorageInfo storageInfo( appDir );
+
+  if ( storageInfo.isValid() && storageInfo.isReady() )
+  {
+    return bytesToHumanSize( storageInfo.bytesAvailable() );
+  }
+
+  return "N/A";
+}
+
+QString CoreUtils::getTotalDeviceStorage()
+{
+  QString appDir = QCoreApplication::applicationDirPath();
+  QStorageInfo storageInfo( appDir );
+
+  if ( storageInfo.isValid() && storageInfo.isReady() )
+  {
+    return bytesToHumanSize( storageInfo.bytesTotal() );
+  }
+
+  return "N/A";
+}
+
+QString CoreUtils::bytesToHumanSize( double bytes )
+{
+  const int precision = 1;
+  if ( bytes < 1e-5 )
+  {
+    return "0.0";
+  }
+  else if ( bytes < 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
+  }
+  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
+  }
+  else
+  {
+    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
+  }
+}
+
+QString CoreUtils::getProjectMetadataPath( QString projectDir )
+{
+  if ( projectDir.isEmpty() )
+    return QString();
+
+  return projectDir + "/.mergin/mergin.json";
+}
+
+bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value )
+{
+  QFile file( filePath );
+  if ( !file.open( QIODevice::ReadOnly ) )
+  {
+    return false;
+  }
+
+  QByteArray data = file.readAll();
+  file.close();
+
+  QJsonDocument doc = QJsonDocument::fromJson( data );
+  if ( !doc.isObject() )
+  {
+    return false;
+  }
+
+  QJsonObject obj = doc.object();
+  obj[key] = value;
+  doc.setObject( obj );
+
+  if ( !file.open( QIODevice::WriteOnly ) )
+  {
+    return false;
+  }
+
+  bool success = ( file.write( doc.toJson() ) != -1 );
+  file.close();
+
+  return success;
 }

@@ -37,7 +37,7 @@ MMDrawer {
         image: __style.closeAccountImage
 
         title: qsTr("Do you really wish to close your account?")
-        description: qsTr("This action will delete your Mergin Maps account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.")
+        description: qsTr("This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.")
       }
 
       MMText {

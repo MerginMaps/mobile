@@ -158,6 +158,12 @@ int FeaturesModel::rowCount( const QModelIndex &parent ) const
 
 QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) const
 {
+  if ( !featurePair.layer() || !featurePair.layer()->isValid() )
+  {
+    CoreUtils::log( QStringLiteral( "Features Model" ), QStringLiteral( "Received invalid feature layer pair!" ) );
+    return tr( "Unknown title" );
+  }
+
   QString title;
 
   QgsExpressionContext context( QgsExpressionContextUtils::globalProjectLayerScopes( featurePair.layer() ) );
@@ -243,6 +249,20 @@ void FeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
   if ( !mSearchExpression.isEmpty() )
   {
     request.setFilterExpression( buildSearchExpression() );
+  }
+
+  if ( mUseAttributeTableSortOrder && mLayer && !mLayer->attributeTableConfig().sortExpression().isEmpty() )
+  {
+    // get a context with global, project and layer scopes
+    // QGIS docs are not very clear, but this context is also used for evaluation of the request's 'order by' expressions too
+    QgsExpressionContext context = mLayer->createExpressionContext();
+    request.setExpressionContext( context );
+    request.setOrderBy( QgsFeatureRequest::OrderBy(
+    {
+      QgsFeatureRequest::OrderByClause(
+      mLayer->attributeTableConfig().sortExpression(),
+      mLayer->attributeTableConfig().sortOrder() == Qt::AscendingOrder )
+    } ) );
   }
 
   request.setLimit( FEATURES_LIMIT );

@@ -67,6 +67,12 @@ ScrollView {
           checked: false
         }
 
+        MMCheckBox {
+          id: checkboxEditable
+          text: checked ? "attribute editable: yes" : "attribute editable: no"
+          checked: true
+        }
+
         GalleryComponents.EditorItem {
           width: parent.width
           height: relationEditor.height

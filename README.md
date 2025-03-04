@@ -47,7 +47,7 @@ For more information on how to use the app, see [Documentation](https://merginma
 
 ## How to help/contribute?
 
-- Help with translations, join [Mergin Maps mobile app Transifex Team](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
+- Help with translations, join [Mergin Maps mobile app Transifex Team](https://explore.transifex.com/lutra-consulting/mergin-maps-mobile/)
 - Write a review of the application on [App Store](https://apps.apple.com/us/app/mergin-maps/id1478603559) or [Google Play](https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&hl=en&gl=US)
 - Test the application and [report bugs](https://github.com/MerginMaps/mobile/issues)
 - Write a blog post or case study or create a Youtube video. We are happy to help to promote it or co-author and place on our websites

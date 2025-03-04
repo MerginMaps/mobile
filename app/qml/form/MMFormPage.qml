@@ -71,6 +71,18 @@ Page {
     }
   ]
 
+  Keys.onReleased: function( event ) {
+    if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
+      if ( root.controller.hasAnyChanges )  {
+        saveChangesDialog.open()
+      }
+      else {
+        root.rollbackAndClose()
+      }
+      event.accepted = true;
+    }
+  }
+
   property bool layerIsReadOnly: true
   property bool layerIsSpatial: true
 
@@ -80,7 +92,15 @@ Page {
 
   header: MMComponents.MMPageHeader {
 
-    onBackClicked: root.rollbackAndClose()
+    onBackClicked: {
+      if ( root.controller.hasAnyChanges )  {
+        saveChangesDialog.open()
+      }
+      else {
+        root.rollbackAndClose()
+      }
+    }
+
 
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
@@ -108,12 +128,15 @@ Page {
     MMFormComponents.MMFormTabBar {
       id: tabBar
 
+      Layout.topMargin: __style.margin10
+      Layout.bottomMargin: __style.margin10
       Layout.alignment: Qt.AlignHCenter
+      Layout.fillWidth: true
       Layout.maximumWidth: Math.min(__style.maxPageWidth, root.width)
 
-      visible: root.controller.hasTabs
+      model: root.controller.attributeTabProxyModel
 
-      tabButtonsModel: root.controller.attributeTabProxyModel
+      visible: root.controller.hasTabs
 
       onCurrentIndexChanged: formSwipe.setCurrentIndex( tabBar.currentIndex )
     }
@@ -128,7 +151,7 @@ Page {
 
       clip: true
 
-      onCurrentIndexChanged: tabBar.setCurrentIndex( formSwipe.currentIndex )
+      onCurrentIndexChanged: tabBar.currentIndex = formSwipe.currentIndex
 
       Repeater {
         id: swipeViewRepeater
@@ -161,7 +184,7 @@ Page {
             section {
               property: "Group"
               delegate: sectionDelegate
-              labelPositioning: ViewSection.CurrentLabelAtStart | ViewSection.InlineLabels
+              labelPositioning: ViewSection.InlineLabels
             }
 
             delegate: editorDelegate
@@ -178,7 +201,7 @@ Page {
 
   footer: MMComponents.MMToolbar {
 
-    visible: !root.layerIsReadOnly
+    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
 
     ObjectModel {
       id: readStateButtons
@@ -208,7 +231,7 @@ Page {
         id: editGeometry
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
-        visible: root.layerIsSpatial
+        visible: root.layerIsSpatial && __activeProject.projectRole !== "reader"
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
       }
     }
@@ -220,22 +243,14 @@ Page {
   Component {
     id: sectionDelegate
 
-    Item {
-
-      property string sectionTitle: section
+    Rectangle {
 
       height: section ? childrenRect.height : 0
       width: ListView.view.width
 
-      // section bgnd
-      Rectangle {
-        anchors.fill: parent;
-        color: __style.lightGreenColor;
-      }
+      color: __style.lightGreenColor
 
       MMComponents.MMText {
-        id: sectionTitle
-
         text: section
         font: __style.h3
         color: __style.forestColor
@@ -274,14 +289,16 @@ Page {
         width: parent.width
 
         property var fieldValue: model.RawValue
-        property bool fieldValueIsNull: model.RawValueIsNull
+        property bool fieldValueIsNull: model.RawValueIsNull ?? true
 
         property var field: model.Field
         property var fieldIndex: model.FieldIndex
         property var fieldWidget: model.EditorWidget
         property var fieldConfig: model.EditorWidgetConfig
 
-        property bool fieldIsReadOnly: root.state === "readOnly" || !AttributeEditable
+        property bool fieldFormIsReadOnly: root.state === "readOnly"
+        property bool fieldIsEditable: AttributeEditable
+
         property bool fieldShouldShowTitle: model.ShowName
 
         property string fieldTitle: model.Name
@@ -297,8 +314,6 @@ Page {
         property bool fieldRememberValueState: model.RememberValue ? true : false
 
         active: fieldWidget !== 'Hidden'
-
-        Keys.forwardTo: backHandler
 
         source: {
           if ( model.EditorWidget !== undefined ) {
@@ -397,28 +412,6 @@ Page {
 
   MMFormEditFailedDialog {
     id: editingFailedDialog
-  }
-
-  Item {
-    id: backHandler
-
-    focus: true
-    Keys.onReleased: function( event ) {
-      if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-        if ( root.controller.hasAnyChanges )  {
-          saveChangesDialog.open()
-        }
-        else {
-          root.rollbackAndClose()
-        }
-        event.accepted = true;
-      }
-    }
-
-    onVisibleChanged: function( visible ) {
-      if ( visible )
-        backHandler.forceActiveFocus()
-    }
   }
 
   Connections {

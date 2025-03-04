@@ -168,25 +168,48 @@ QString InputUtils::formatNumber( const double number, int precision )
   return QString::number( number, 'f', precision );
 }
 
-QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+QString InputUtils::formatDistanceInProjectUnit( const double distanceInMeters, int precision, QgsProject *project )
 {
-  Qgis::DistanceUnit distUnit = destUnit;
+  if ( !project )
+    return QString();
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  return InputUtils::formatDistanceHelper( distanceInMeters, precision, project->distanceUnits() );
+}
+
+QString InputUtils::formatDistanceHelper( const double distanceInMeters, int precision, Qgis::DistanceUnit destUnit )
+{
+  if ( destUnit == Qgis::DistanceUnit::Unknown )
   {
-    distUnit = QgsProject::instance()->distanceUnits();
+    destUnit = Qgis::DistanceUnit::Meters;
   }
 
-  if ( distUnit == Qgis::DistanceUnit::Unknown )
+  const double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, destUnit );
+  const double distance = distanceInMeters * factor;
+  const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
+
+  return QString( "%L1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+}
+
+QString InputUtils::formatAreaInProjectUnit( const double areaInSquareMeters, int precision, QgsProject *project )
+{
+  if ( !project )
+    return QString();
+
+  return InputUtils::formatAreaHelper( areaInSquareMeters, precision, project->areaUnits() );
+}
+
+QString InputUtils::formatAreaHelper( const double areaInSquareMeters, int precision, Qgis::AreaUnit destUnit )
+{
+  if ( destUnit == Qgis::AreaUnit::Unknown )
   {
-    return QString::number( distanceInMeters, 'f', precision );
+    destUnit = Qgis::AreaUnit::SquareMeters;
   }
 
-  double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::DistanceUnit::Meters, distUnit );
-  double distance = distanceInMeters * factor;
-  QString abbreviation = QgsUnitTypes::toAbbreviatedString( distUnit );
+  const double factor = QgsUnitTypes::fromUnitToUnitFactor( Qgis::AreaUnit::SquareMeters, destUnit );
+  const double area = areaInSquareMeters * factor;
+  const QString abbreviation = QgsUnitTypes::toAbbreviatedString( destUnit );
 
-  return QString( "%1 %2" ).arg( QString::number( distance, 'f', precision ), abbreviation );
+  return QString( "%L1 %2" ).arg( QString::number( area, 'f', precision ), abbreviation );
 }
 
 QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &tMax )
@@ -535,27 +558,7 @@ QString InputUtils::filesToString( QList<MerginFile> files )
 
 QString InputUtils::bytesToHumanSize( double bytes )
 {
-  const int precision = 1;
-  if ( bytes < 1e-5 )
-  {
-    return "0.0";
-  }
-  else if ( bytes < 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
-  }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
-  }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
-  {
-    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
-  }
-  else
-  {
-    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
-  }
+  return CoreUtils::bytesToHumanSize( bytes );
 }
 
 bool InputUtils::acquireCameraPermission()
@@ -2213,4 +2216,71 @@ bool InputUtils::openLink( const QString &homePath, const QString &link )
   }
 
   return true;
+}
+
+double InputUtils::pixelDistanceBetween( const QPointF &p1, const QPointF &p2 )
+{
+  return std::hypot( p1.x() - p2.x(), p1.y() - p2.y() );
+}
+
+bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
+{
+  if ( !layer || !layer->isValid() )
+    return false;
+  return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
+}
+
+bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
+{
+  if ( !layer || !layer->isValid() || !project )
+    return false;
+
+  QgsLayerTree *root = project->layerTreeRoot();
+
+  if ( !root )
+    return false;
+
+  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
+
+  if ( layerTree )
+    return layerTree->isVisible();
+
+  return false;
+}
+
+bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project )
+{
+  if ( !layer || !project )
+    return false;
+
+  QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
+  return layer->id() == trackingLayerId;
+}
+
+bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
+{
+  if ( !layer || !layer->isValid() || !project )
+    return false;
+
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+
+  return ( vectorLayer &&
+           !vectorLayer->readOnly() &&
+           layerHasGeometry( vectorLayer ) &&
+           layerVisible( layer, project ) &&
+           !isPositionTrackingLayer( layer, project ) );
+}
+
+QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )
+{
+  if ( !project || layerName.isEmpty() )
+    return nullptr;
+
+  QList<QgsMapLayer *> layersByName = project->mapLayersByName( layerName );
+  if ( !layersByName.isEmpty() )
+  {
+    return layersByName.first();
+  }
+
+  return nullptr;
 }

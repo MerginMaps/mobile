@@ -33,6 +33,53 @@ void TestAttributePreviewController::cleanupTestCase()
 
 }
 
+void TestAttributePreviewController::testMultilineMapTips()
+{
+  // Layer creation
+  QgsVectorLayer *layerPhoto =
+    new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string" ),
+                        QStringLiteral( "layer" ),
+                        QStringLiteral( "memory" )
+                      );
+  QVERIFY( layerPhoto && layerPhoto->isValid() );
+  layerPhoto->setMapTipTemplate( "# image\nfile:///my/path/to/image/[%\n  CASE WHEN fldtxt = 'myphoto' THEN\n    'hello.jpg'\n  ELSE\n    'world.jpg'\n  END\n%]" );
+
+  // Feature 1 setup
+  QgsFeature p1( layerPhoto->dataProvider()->fields() );
+  p1.setAttribute( QStringLiteral( "fldtxt" ), "myphoto" );
+  layerPhoto->dataProvider()->addFeatures( QgsFeatureList() << p1 );
+
+  // Feature 2 setup
+  QgsFeature p2( layerPhoto->dataProvider()->fields() );
+  p2.setAttribute( QStringLiteral( "fldtxt" ), "notmyphoto" );
+  layerPhoto->dataProvider()->addFeatures( QgsFeatureList() << p2 );
+  QgsProject::instance()->addMapLayer( layerPhoto );
+
+  // Controller setup
+  AttributePreviewController controller;
+  controller.setProject( QgsProject::instance() );
+  QCOMPARE( controller.type(), AttributePreviewController::Empty );
+
+  // Assertion for matching feature
+  FeatureLayerPair pair1( p1, layerPhoto );
+  controller.setFeatureLayerPair( pair1 );
+  QCOMPARE( controller.type(), AttributePreviewController::Photo );
+  QCOMPARE( controller.photo(), "file:///my/path/to/image/hello.jpg" );
+
+  // Assertion for non-matching feature
+  FeatureLayerPair pair2( p2, layerPhoto );
+  controller.setFeatureLayerPair( pair2 );
+  QCOMPARE( controller.type(), AttributePreviewController::Photo );
+  QCOMPARE( controller.photo(), "file:///my/path/to/image/world.jpg" );
+
+  // Reset
+  controller.reset();
+  QCOMPARE( controller.type(), AttributePreviewController::Empty );
+
+  // Cleanup
+  QgsProject::instance()->removeAllMapLayers();
+}
+
 void TestAttributePreviewController::testPreviewForms()
 {
   // Prepare Layers!

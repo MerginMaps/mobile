@@ -232,13 +232,34 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
+        QgsEditFormConfig editFormConfig = layer->editFormConfig();
+        QString fieldName = field.name();
+        QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
+
+        // Retrieving field name expression
+        QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
+        QgsExpression nameExpression; // empty if users set to hide the field label
+
+        if ( editorField->showLabel() )
+        {
+          nameExpression = QgsExpression( nameProperty.expressionString() );
+        }
+
+        // Retrieving field editability expression
+        QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
+        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
+                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
+        QgsExpression isEditableExpression; // empty if the field is read-only
+
+        if ( !isReadOnly )
+        {
+          isEditableExpression = QgsExpression( editableProperty.expressionString() );
+        }
+
         if ( !expression.isEmpty() )
         {
           expressions << field.constraints().constraintExpression();
         }
-
-        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
-                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
@@ -249,8 +270,10 @@ void AttributeController::flatten(
               groupName,
               parentTabRow,
               layer->attributeDisplayName( fieldIndex ),
+              nameExpression,
               editorField->showLabel(),
               !isReadOnly,
+              isEditableExpression,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               parentVisibilityExpressions // field doesn't have visibility expression itself
@@ -632,6 +655,15 @@ void AttributeController::acquireId()
     emit commitFailed();
   }
 
+  //
+  // We need to trigger the recalucation of the form because QgsVectorLayer::featureAdded
+  // is called before commit is finished. This can cause issues with evaluation of validations
+  // when old feature with FID_IS_NEW is not yet removed from the layer and the new feature
+  // with valid fid is already added (unique constraints are failing as it detects two features
+  // with the same values). We thus manually trigger the recalculation here.
+  //
+  recalculateDerivedItems();
+
   disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
 }
 
@@ -891,6 +923,64 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         item->setVisible( visible );
         changedFormItems << item->id();
       }
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate if form items are editable
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->editableExpression();
+
+      if ( !exp.expression().isEmpty() )
+      {
+        bool editable = item->isEditable();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          editable = exp.evaluate( &expressionContext ).toBool();
+        }
+
+        if ( item->isEditable() != editable )
+        {
+          item->setIsEditable( editable );
+          changedFormItems << item->id();
+        }
+      }
+
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate form items name
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->nameExpression();
+
+      if ( !exp.expression().isEmpty() )
+      {
+        QString name = item->name();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          name = exp.evaluate( &expressionContext ).toString();
+        }
+
+        if ( item->name() != name )
+        {
+          item->setName( name );
+          changedFormItems << item->id();
+        }
+      }
+
       ++formItemsIterator;
     }
   }
@@ -1511,11 +1601,20 @@ void AttributeController::renamePhotos()
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
         QFileInfo fi( src );
         QString newName = QStringLiteral( "%1.%2" ).arg( val.toString() ).arg( fi.completeSuffix() );
+
+        // Remove leading slashes from newName following issue #3415
+        const QRegularExpression leadingSlashes( "^/+" );
+        newName.remove( leadingSlashes );
+
         const QString dst = InputUtils::getAbsolutePath( newName, prefix );
         if ( InputUtils::renameFile( src, dst ) )
         {
           mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newName );
           expressionContext.setFeature( featureLayerPair().featureRef() );
+        }
+        else
+        {
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Could not rename file from %1 to %2" ).arg( src ).arg( dst ) );
         }
       }
     }

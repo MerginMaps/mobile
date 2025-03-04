@@ -27,8 +27,8 @@ jobs:
       NDK_VERSION: r25
       NDK_VERSION_FULL: r25b
       JDK_VERSION: 11
-      SDK_PLATFORM: android-33
-      SDK_BUILD_TOOLS: 33.0.1
+      SDK_PLATFORM: android-34
+      SDK_BUILD_TOOLS: 34.0.0
       INPUT_SDK_VERSION_ARM: arm-android-20240517-224
       INPUT_SDK_VERSION_ARM64: arm64-android-20240517-224
       CCACHE_DIR: /Users/runner/work/ccache
@@ -239,13 +239,15 @@ jobs:
               -DQT_HOST_PATH=$QT_BASE/macos \
               -DQT_ANDROID_SIGN_APK=Yes \
               -DQT_ANDROID_SIGN_AAB=Yes \
+              -DUSE_MM_SERVER_API_KEY=Yes \
+              -DUSE_KEYCHAIN=No \
               -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
               -GNinja \
               -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
               -S ../ \
               -B ./
       
-      - name: build APK
+      - name: Build APK
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
@@ -265,12 +267,12 @@ jobs:
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
 
-      - name: build AAB
+      - name: Build AAB
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -293,8 +295,7 @@ jobs:
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB
-          

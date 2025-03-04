@@ -152,6 +152,8 @@ jobs:
              -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
              -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/x64-windows ^
+             -DUSE_MM_SERVER_API_KEY=TRUE ^
+             -DUSE_KEYCHAIN=No ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
              -G "NMake Makefiles" ^
              -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^
@@ -198,7 +200,7 @@ jobs:
             xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error

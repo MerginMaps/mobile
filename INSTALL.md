@@ -143,7 +143,7 @@ Steps to build and run Input:
    cmake -G Ninja \
      -DCMAKE_PREFIX_PATH=~/Qt/6.6.3/gcc_64 \
      -DINPUT_SDK_PATH=~/input-sdk/x64-linux \
-     -DQGIS_QUICK_DATA_PATH=~/input/app/android/assets/qgis-data \
+     -DQGIS_QUICK_DATA_PATH=../app/android/assets/qgis-data \
      -DUSE_MM_SERVER_API_KEY=FALSE \
      ..
    ninja
@@ -152,7 +152,7 @@ Steps to build and run Input:
 5. Run Input
 
    ```
-   ./app/input
+   ./app/Input
    ```
 
 
@@ -418,15 +418,15 @@ nmake
 # 8. Auto Testing
 
 You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.
-Also you need to open Passbolt and check for password for user `test_mobileapp_dev` on `test.dev.merginmaps.com`, 
+Also you need to open Passbolt and check for password for user `test_mobileapp` on `app.dev.merginmaps.com`, 
 or you need some user with unlimited projects limit. First workspace from list is taken.
 
-! Note that the same user cannot run tests in paraller ! 
+! Note that the same user cannot run tests in paraller ! This user is used for CI, consider creating your own account for local development !
 
 now you need to set environment variables: 
 ```
-TEST_MERGIN_URL=https://test.dev.merginmaps.com/
-TEST_API_USERNAME=test_mobileapp_dev
+TEST_MERGIN_URL=https://app.dev.merginmaps.com/
+TEST_API_USERNAME=test_mobileapp
 TEST_API_PASSWORD=<your_password>
 ```
 

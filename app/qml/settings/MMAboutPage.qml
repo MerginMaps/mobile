@@ -18,7 +18,7 @@ MMPage {
 
   signal visitWebsiteClicked()
 
-  pageHeader.title: qsTr( "About Mergin Maps" )
+  pageHeader.title: qsTr( "About" )
 
   pageContent: ScrollView {
 

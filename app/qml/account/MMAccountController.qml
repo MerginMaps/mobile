@@ -46,24 +46,6 @@ Item {
     stackView.pop(null);
   }
 
-  function shuffleAndAppend( listModel, items )
-  {
-    items = items
-        .map(function( item ) {
-            return { value: item, sort: Math.random() };
-        })
-        .sort(function( a, b ) {
-            return a.sort - b.sort;
-        })
-        .map(function( obj ) {
-            return obj.value;
-        });
-
-    items.forEach( function( item ) {
-        listModel.append( item );
-    });
-  }
-
   Connections {
     target: __merginApi
     enabled: controller.inProgress
@@ -153,7 +135,7 @@ Item {
 
       objectName: "signUpPanel"
       tocString: __inputUtils.htmlLink(
-          qsTr("I accept the Mergin Maps %1Terms and Conditions%3 and %2Privacy Policy%3"),
+          qsTr("I accept the %1Terms and Conditions%3 and %2Privacy Policy%3"),
           __style.forestColor,
           __inputHelp.merginTermsLink,
           __inputHelp.privacyPolicyLink

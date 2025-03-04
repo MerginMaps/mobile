@@ -30,11 +30,10 @@ class AbstractMapTool : public QObject
     void setMapSettings( InputMapSettings *newMapSettings );
 
   signals:
-
+    void onAboutToChangeMapSettings();
     void mapSettingsChanged( InputMapSettings *mapSettings );
 
   private:
-
     InputMapSettings *mMapSettings = nullptr;
 };
 

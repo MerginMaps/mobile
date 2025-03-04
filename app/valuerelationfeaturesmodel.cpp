@@ -40,6 +40,12 @@ void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request
       request.setExpressionContext( filterContext );
     }
   }
+
+  if ( mConfig.value( QStringLiteral( "OrderByValue" ) ).toBool() )
+  {
+    // replace any existing order by clause with our value field
+    request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( mTitleField ) } ) );
+  }
 }
 
 void ValueRelationFeaturesModel::setup()

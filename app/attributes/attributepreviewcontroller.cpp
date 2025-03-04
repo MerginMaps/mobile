@@ -115,16 +115,12 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   return lst;
 }
 
-QString AttributePreviewController::mapTipImage( )
+QString AttributePreviewController::mapTipImage()
 {
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
-  QStringList lst = mapTip.split( '\n' ); // first line is "# image"
-  if ( lst.count() >= 2 )
-    return QgsExpression::replaceExpressionText( lst[1], &context );
-  else
-    return QString();
+  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
+  return QgsExpression::replaceExpressionText( mapTip, &context );
 }
 
 QString AttributePreviewController::mapTipHtml( )

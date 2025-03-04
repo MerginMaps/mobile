@@ -96,5 +96,8 @@
         <file>Youtube.svg</file>
         <file>ZoomToProject.svg</file>
         <file>StakeOut.svg</file>
+        <file>Student.svg</file>
+        <file>Measure.svg</file>
+        <file>CloseShape.svg</file>
     </qresource>
 </RCC>

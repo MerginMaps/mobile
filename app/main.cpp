@@ -114,6 +114,7 @@
 #include "maptools/abstractmaptool.h"
 #include "maptools/recordingmaptool.h"
 #include "maptools/splittingmaptool.h"
+#include "maptools/measurementmaptool.h"
 
 #include "layer/layertreemodel.h"
 #include "layer/layertreemodelpixmapprovider.h"
@@ -259,8 +260,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginServerType>( "mm", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "mm", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "mm", 1, 0, "MerginProjectStatusModel", "Enum" );
-  qmlRegisterUncreatableType<LayersModel>( "mm", 1, 0, "LayersModel", "" );
-  qmlRegisterUncreatableType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel", "" );
   qmlRegisterUncreatableType<ActiveLayer>( "mm", 1, 0, "ActiveLayer", "" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "mm", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );
   qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
@@ -348,6 +347,11 @@ void initDeclarative()
   qmlRegisterUncreatableType< AbstractMapTool >( "mm", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
   qmlRegisterType< RecordingMapTool >( "mm", 1, 0, "RecordingMapTool" );
   qmlRegisterType< SplittingMapTool >( "mm", 1, 0, "SplittingMapTool" );
+  qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
+
+  // layers model
+  qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
+  qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -459,6 +463,11 @@ int main( int argc, char *argv[] )
   // See issue #3431 -> disable Android accessibility features to prevent ANRs
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );
 #endif
+#ifdef Q_OS_IOS
+  // See issue #3561 -> WFS layers causing stress on iOS
+  qputenv( "QGIS_USE_SHARED_MEMORY_KEEP_ALIVE", "1" );
+  qDebug() <<  "Setting QGIS_USE_SHARED_MEMORY_KEEP_ALIVE environment variable TRUE";
+#endif
 
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings as;
@@ -482,12 +491,8 @@ int main( int argc, char *argv[] )
   ProjectWizard pw( projectDir );
   NotificationModel notificationModel;
 
-  // layer models
-  LayersModel lm;
-  LayersProxyModel recordingLpm( &lm, LayerModelTypes::ActiveLayerSelection );
-
   ActiveLayer al;
-  ActiveProject activeProject( as, al, recordingLpm, localProjectsManager );
+  ActiveProject activeProject( as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -560,6 +565,27 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+  } );
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    merginApi->reloadProjectRole( activeProject.projectFullName() );
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  {
+    if ( activeProject.isProjectLoaded() )
+    {
+      merginApi->reloadProjectRole( activeProject.projectFullName() );
+    }
+  } );
+
+  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
+  {
+    if ( projectFullName == activeProject.projectFullName() )
+    {
+      activeProject.setProjectRole( role );
+    }
   } );
 
   QObject::connect( ma.get(), &MerginApi::notifyInfo, &lambdaContext, [&notificationModel]( const QString & message )
@@ -650,7 +676,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
-  engine.rootContext()->setContextProperty( "__recordingLayersModel", &recordingLpm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
