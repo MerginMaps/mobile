@@ -256,6 +256,7 @@ find_package(Lzma REQUIRED)
 find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
 find_package(Utf8 REQUIRED)
+find_package(Absl REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
