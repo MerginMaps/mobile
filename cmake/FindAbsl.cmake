@@ -11,8 +11,6 @@ set(absl_libs
     bad_any_cast_impl
     bad_optional_access
     bad_variant_access
-    base
-    base_internal
     bind_front
     bits
     bounded_utf8_length_sequence
@@ -196,6 +194,8 @@ set(absl_libs
     variant
     vlog_config_internal
     vlog_is_on
+    base
+    base_internal
 )
 
 foreach (absl_lib IN ITEMS ${absl_libs})
@@ -206,20 +206,37 @@ foreach (absl_lib IN ITEMS ${absl_libs})
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-
-  if (EXISTS ${absl_${absl_lib}_LIBRARY})
-    if (NOT TARGET Absl::absl_${absl_lib})
-      add_library(Absl::absl_${absl_lib} UNKNOWN IMPORTED)
+  if (NOT TARGET absl::${absl_lib})
+    if (EXISTS ${absl_${absl_lib}_LIBRARY})
+      add_library(absl::${absl_lib} UNKNOWN IMPORTED)
       set_target_properties(
-        Absl::absl_${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
+        absl::${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
       )
 
-      set(ABSL_TARGETS "${ABSL_TARGETS};Absl::absl_${absl_lib}")
+      set(ABSL_TARGETS "${ABSL_TARGETS};absl::${absl_lib}")
+    else ()
+      add_library(absl::${absl_lib} INTERFACE IMPORTED)
     endif ()
   endif ()
 
 endforeach ()
 
-set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
+if (TARGET absl::symbolize)
+  set_target_properties(
+    absl::symbolize
+    PROPERTIES
+      INTERFACE_LINK_LIBRARIES
+      "absl::debugging_internal;absl::demangle_internal;absl::base;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::raw_logging_internal;absl::strings;\$<LINK_ONLY:\$<\$<BOOL:>:-ldbghelp>>"
+  )
+endif ()
 
-find_package_handle_standard_args(Absl REQUIRED_VARS ABSL_TARGETS)
+if (TARGET absl::debugging_internal)
+  set_target_properties(
+    absl::debugging_internal
+    PROPERTIES
+      INTERFACE_LINK_LIBRARIES
+      "absl::core_headers;absl::config;absl::dynamic_annotations;absl::errno_saver;absl::raw_logging_internal"
+  )
+endif ()
+
+find_package_handle_standard_args(absl REQUIRED_VARS ABSL_TARGETS)
