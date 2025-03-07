@@ -116,11 +116,17 @@ class ActiveProject: public QObject
 
     //! Returns true if the project has at least one layer that allows recording
     Q_INVOKABLE bool projectHasRecordingLayers() const;
+
     /**
      * Returns role/permission level of current user for this project
      */
     Q_INVOKABLE QString projectRole() const;
     void setProjectRole( const QString &role );
+
+    /**
+     * Returns true if user role is different than reader
+     */
+    Q_INVOKABLE bool userHasEditableRole() const;
 
   signals:
     void qgsProjectChanged();

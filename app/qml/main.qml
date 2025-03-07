@@ -278,7 +278,7 @@ ApplicationWindow {
 
         text: qsTr("Add")
         iconSource: __style.addIcon
-        visible: __activeProject.projectRole !== "reader"
+        visible: __activeProject.userHasEditableRole
         onClicked: {
           if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
@@ -331,7 +331,7 @@ ApplicationWindow {
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
         active: map.isTrackingPosition
-        visible: __activeProject.positionTrackingSupported && __activeProject.projectRole !== "reader"
+        visible: __activeProject.positionTrackingSupported
 
         onClicked: {
           trackingPanelLoader.active = true
@@ -1019,7 +1019,7 @@ ApplicationWindow {
     }
 
     function onPositionTrackingSupportedChanged() {
-      positionTrackingButton.visible = __activeProject.positionTrackingSupported && __activeProject.projectRole !== "reader"
+      positionTrackingButton.visible = __activeProject.positionTrackingSupported
       mapToolbar.recalculate()
     }
   }

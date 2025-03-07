@@ -201,7 +201,7 @@ Page {
 
   footer: MMComponents.MMToolbar {
 
-    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    visible: !root.layerIsReadOnly && __activeProject.userHasEditableRole
 
     ObjectModel {
       id: readStateButtons
@@ -231,7 +231,7 @@ Page {
         id: editGeometry
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
-        visible: root.layerIsSpatial && __activeProject.projectRole !== "reader"
+        visible: root.layerIsSpatial && __activeProject.userHasEditableRole
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
       }
     }

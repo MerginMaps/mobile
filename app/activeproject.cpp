@@ -535,7 +535,7 @@ bool ActiveProject::positionTrackingSupported() const
     return false;
   }
 
-  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false ) && userHasEditableRole();
 }
 
 bool ActiveProject::projectHasRecordingLayers() const
@@ -566,4 +566,9 @@ void ActiveProject::setProjectRole( const QString &role )
 
     emit projectRoleChanged();
   }
+}
+
+bool ActiveProject::userHasEditableRole() const
+{
+  return mProjectRole != "reader";
 }
