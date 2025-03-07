@@ -45,9 +45,9 @@ set(absl_libs
     crc_internal
     debugging
     debugging_internal
-    decode_rust_punycode
     demangle_internal
     demangle_rust
+    decode_rust_punycode
     die_if_null
     dynamic_annotations
     endian
@@ -202,7 +202,7 @@ foreach (absl_lib IN ITEMS ${absl_libs})
 
   find_library(
     absl_${absl_lib}_LIBRARY
-    NAMES absl_${absl_lib} libabsl_${absl_lib}
+    NAMES absl_${absl_lib} libabsl_${absl_lib} ${absl_lib}
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
@@ -220,6 +220,6 @@ foreach (absl_lib IN ITEMS ${absl_libs})
 
 endforeach ()
 
-set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS};${ABSL_TARGETS}")
+set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
 
 find_package_handle_standard_args(Absl REQUIRED_VARS ABSL_TARGETS)
