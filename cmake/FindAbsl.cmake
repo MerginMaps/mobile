@@ -206,36 +206,36 @@ foreach (absl_lib IN ITEMS ${absl_libs})
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-  if (NOT TARGET absl::${absl_lib})
+  if (NOT TARGET Absl::${absl_lib})
     if (EXISTS ${absl_${absl_lib}_LIBRARY})
-      add_library(absl::${absl_lib} UNKNOWN IMPORTED)
+      add_library(Absl::${absl_lib} UNKNOWN IMPORTED)
       set_target_properties(
-        absl::${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
+        Absl::${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
       )
 
-      set(ABSL_TARGETS "${ABSL_TARGETS};absl::${absl_lib}")
+      set(ABSL_TARGETS "${ABSL_TARGETS};Absl::${absl_lib}")
     else ()
-      add_library(absl::${absl_lib} INTERFACE IMPORTED)
+      add_library(Absl::${absl_lib} INTERFACE IMPORTED)
     endif ()
   endif ()
 
 endforeach ()
 
-if (TARGET absl::symbolize)
+if (TARGET Absl::symbolize)
   set_target_properties(
-    absl::symbolize
+    Absl::symbolize
     PROPERTIES
       INTERFACE_LINK_LIBRARIES
-      "absl::debugging_internal;absl::demangle_internal;absl::base;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::raw_logging_internal;absl::strings;\$<LINK_ONLY:\$<\$<BOOL:>:-ldbghelp>>"
+      "Absl::debugging_internal;Absl::demangle_internal;Absl::base;Absl::config;Absl::core_headers;Absl::dynamic_annotations;Absl::malloc_internal;Absl::raw_logging_internal;Absl::strings;\$<LINK_ONLY:\$<\$<BOOL:>:-ldbghelp>>"
   )
 endif ()
 
-if (TARGET absl::debugging_internal)
+if (TARGET Absl::debugging_internal)
   set_target_properties(
-    absl::debugging_internal
+    Absl::debugging_internal
     PROPERTIES
       INTERFACE_LINK_LIBRARIES
-      "absl::core_headers;absl::config;absl::dynamic_annotations;absl::errno_saver;absl::raw_logging_internal"
+      "Absl::core_headers;Absl::config;Absl::dynamic_annotations;Absl::errno_saver;Absl::raw_logging_internal"
   )
 endif ()
 
