@@ -75,8 +75,7 @@ jobs:
 
       - name: Install brew deps
         run: |
-          pip3 install -U pip
-          pip3 install aqtinstall
+          brew install aqtinstall
 
           brew install gnupg
           brew install openssl@1.1
