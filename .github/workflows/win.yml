@@ -25,13 +25,13 @@ jobs:
     runs-on: windows-2019
     
     env:
-      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20240517-231
+      QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
+      INPUT_SDK_VERSION: x64-windows-20250307-242
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
-      VS_VERSION: "2019"
+      VS_VERSION: "2022"
       CMAKE_VERSION: '3.29.0'
-      QT_ARCH: "win64_msvc2019_64"
+      QT_ARCH: "win64_msvc2022_64"
       
     steps:
       - name: Checkout Input
@@ -95,7 +95,7 @@ jobs:
             build-win64-ccache-refs/heads/master-
           
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
           target: desktop

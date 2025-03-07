@@ -17,11 +17,11 @@ on:
 
 env:
   QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  INPUT_SDK_VERSION: arm64-osx-20240517-4
+  INPUT_SDK_VERSION: arm64-osx-20250306-11
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
-  XC_VERSION: ${{ '15.2' }}
+  XC_VERSION: ${{ '16.2' }}
 
 concurrency:
   group: ci-${{github.ref}}-macos-arm64
@@ -30,10 +30,10 @@ concurrency:
 jobs:
   macos_arm64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout Input
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: input
 

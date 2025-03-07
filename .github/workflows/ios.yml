@@ -16,10 +16,10 @@ on:
       - published
 
 env:   
-  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  XC_VERSION: ${{ '15.2' }}
+  QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
+  XC_VERSION: ${{ '16.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20240517-182
+  INPUT_SDK_VERSION: arm64-ios-20250306-192
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -33,15 +33,15 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
  
       - name: Download ios-cmake toolchain
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
             repository: leetal/ios-cmake
             ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}

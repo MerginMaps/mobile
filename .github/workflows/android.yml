@@ -21,16 +21,16 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-15
     env:
-      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
+      QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
       NDK_VERSION: r25
       NDK_VERSION_FULL: r25b
       JDK_VERSION: 11
       SDK_PLATFORM: android-34
       SDK_BUILD_TOOLS: 34.0.0
-      INPUT_SDK_VERSION_ARM: arm-android-20240517-224
-      INPUT_SDK_VERSION_ARM64: arm64-android-20240517-224
+      INPUT_SDK_VERSION_ARM: arm-android-20250306-234
+      INPUT_SDK_VERSION_ARM64: arm64-android-20250306-234
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
@@ -38,10 +38,10 @@ jobs:
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      XC_VERSION: ${{ '15.2' }}
+      XC_VERSION: ${{ '16.2' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
