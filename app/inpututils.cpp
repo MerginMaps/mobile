@@ -2084,17 +2084,17 @@ static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QS
   for ( int r = 0; r < rc; r++ )
   {
     QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
-      if ( QgsApplication::profiler()->data( rowIndex, static_cast<int>(QgsRuntimeProfilerNode::CustomRole::Group) ).toString() != group )
+    if ( QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Group ) ).toString() != group )
       continue;
     bool ok;
-    double elapsed = QgsApplication::profiler()->data( rowIndex, static_cast<int>(QgsRuntimeProfilerNode::CustomRole::Elapsed) ).toDouble( &ok );
+    double elapsed = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Elapsed ) ).toDouble( &ok );
     if ( !ok )
       elapsed = 0.0;
     total_elapsed += elapsed;
 
     if ( elapsed > PROFILER_THRESHOLD )
     {
-      QString name = QgsApplication::profiler()->data( rowIndex, static_cast<int>(QgsRuntimeProfilerNode::CustomRole::Name) ).toString();
+      QString name = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Name ) ).toString();
       lines << QStringLiteral( "  %1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number( elapsed, 'f', 3 ) );
     }
     total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
