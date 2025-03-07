@@ -21,16 +21,14 @@ find_package_handle_standard_args(
 if (Utf8_FOUND AND NOT TARGET Utf8::utf8_range)
   add_library(Utf8::utf8_range UNKNOWN IMPORTED)
   set_target_properties(
-    Utf8::utf8_range
-    PROPERTIES IMPORTED_LOCATION "${utf8_range_LIBRARY}"
+    Utf8::utf8_range PROPERTIES IMPORTED_LOCATION "${utf8_range_LIBRARY}"
   )
 endif ()
 
 if (Utf8_FOUND AND NOT TARGET Utf8::utf8_validity)
   add_library(Utf8::utf8_validity UNKNOWN IMPORTED)
   set_target_properties(
-    Utf8::utf8_validity
-    PROPERTIES IMPORTED_LOCATION "${utf8_validity_LIBRARY}"
+    Utf8::utf8_validity PROPERTIES IMPORTED_LOCATION "${utf8_validity_LIBRARY}"
   )
 endif ()
 
