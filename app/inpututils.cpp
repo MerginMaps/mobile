@@ -2189,14 +2189,21 @@ QVector<QString> InputUtils::qgisProfilerLog()
   return lines;
 }
 
-QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
+void InputUtils::parseAndAppendPositionUpdates( const QString &data, QgsGeometry &geometry )
 {
-  QList<QgsPoint> parsedUpdates;
+  // We currently support tracking only fro linestrings
+  QgsLineString *line = qgsgeometry_cast<QgsLineString *>( geometry.constGet() );
+  if ( !line )
+  {
+    qCritical() << "Error, could not cast tracked geometry to a line!";
+    return;
+  }
+
   QStringList positions = data.split( '\n', Qt::SkipEmptyParts );
 
   if ( positions.isEmpty() )
   {
-    return parsedUpdates;
+    return;
   }
 
   for ( int ix = 0; ix < positions.size(); ix++ )
@@ -2216,10 +2223,8 @@ QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
       Qgis::WkbType::PointZM // explicitly mention the point type
     );
 
-    parsedUpdates << geop;
+    line->addVertex( geop );
   }
-
-  return parsedUpdates;
 }
 
 QString InputUtils::getManufacturer()
