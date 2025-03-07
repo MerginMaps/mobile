@@ -1,6 +1,7 @@
 # GPLv2 Licence
 
 set(absl_libs
+    abseil_dll
     algorithm
     algorithm_container
     any
@@ -219,6 +220,6 @@ foreach (absl_lib IN ITEMS ${absl_libs})
 
 endforeach ()
 
-set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
+set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS};${ABSL_TARGETS}")
 
 find_package_handle_standard_args(Absl REQUIRED_VARS ABSL_TARGETS)
