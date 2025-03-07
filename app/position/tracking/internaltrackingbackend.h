@@ -12,7 +12,6 @@
 
 #include "abstracttrackingbackend.h"
 #include <QDateTime>
-#include <qglobal.h>
 
 class PositionKit;
 

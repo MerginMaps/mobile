@@ -9,32 +9,24 @@
 
 #include "abstracttrackingbackend.h"
 
+#include <QStandardPaths>
+#include <QDir>
+#include <QGuiApplication>
+
 AbstractTrackingBackend::AbstractTrackingBackend(
   UpdateFrequency updateFrequency,
-  SignalSlotSupport signalSlotSupport,
-  TrackingMethod trackingMethod,
   QObject *parent
 )
   : QObject( parent )
   , mUpdateFrequency( updateFrequency )
-  , mTrackingMethod( trackingMethod )
-  , mSignalSlotSupport( signalSlotSupport )
 {
+  QDir appData( QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) );
+  QString trackingFilePath = appData.absoluteFilePath( QStringLiteral( "tracking_data.txt" ) );
 
-}
+  qDebug() << "Position Tracking --> file path:" << trackingFilePath;
 
-void AbstractTrackingBackend::notifyListeners( const QgsPoint &position )
-{
-  if ( mSignalSlotSupport == SignalSlotSupport::Supported )
-  {
-    emit positionChanged( position );
-    return;
-  }
-
-  if ( mNotifyFunction )
-  {
-    mNotifyFunction( position );
-  }
+  // TODO: store tracking file in project data directory instead of standard location
+  mFile.setFileName( trackingFilePath );
 }
 
 AbstractTrackingBackend::UpdateFrequency AbstractTrackingBackend::updateFrequency() const
@@ -50,22 +42,31 @@ void AbstractTrackingBackend::setUpdateFrequency( const UpdateFrequency &newUpda
   emit updateFrequencyChanged( mUpdateFrequency );
 }
 
-AbstractTrackingBackend::SignalSlotSupport AbstractTrackingBackend::signalSlotSupport() const
+void AbstractTrackingBackend::storeDataAndNotify( double x, double y, double z, double m )
 {
-  return mSignalSlotSupport;
-}
+  //
+  // TODO: keep the file opened
+  //
 
-AbstractTrackingBackend::TrackingMethod AbstractTrackingBackend::trackingMethod() const
-{
-  return mTrackingMethod;
-}
+  if ( !mFile.open( QFile::Append ) )
+  {
+    qDebug() << "Could not open tracking file when storing data!";
+  }
 
-void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const QgsPoint & )> fn )
-{
-  mNotifyFunction = fn;
-}
+  //
+  // In the future we might want to store in binary to optimize the file size and read/write
+  //
 
-void AbstractTrackingBackend::setSignalSlotSupport( SignalSlotSupport support )
-{
-  mSignalSlotSupport = support;
+  QString trackline = QStringLiteral("%1 %2 %3 %4\n").arg(x).arg(y).arg(z).arg(m);
+  mFile.write( trackline.toUtf8() );
+
+  mFile.close();
+
+  // now let's notify the manager
+
+  // TODO: is it ok to use QGuiApplication here? It runs in android thread
+  if ( QGuiApplication::applicationState() == Qt::ApplicationState::ApplicationActive )
+  {
+    emit positionUpdated();
+  }
 }
