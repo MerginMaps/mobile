@@ -857,7 +857,7 @@ Item {
           recordingLayersModel.model.reset()
         }
 
-        function onProjectReloaded(qgsProject) {
+        function onProjectReloaded( qgsProject ) {
           recordingLayersModel.qgsProject = __activeProject.qgsProject
         }
       }
