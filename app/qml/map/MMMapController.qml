@@ -853,10 +853,6 @@ Item {
       Connections {
         target: __activeProject
 
-        function onProjectWillBeReloaded() {
-          recordingLayersModel.model.reset()
-        }
-
         function onProjectReloaded( qgsProject ) {
           recordingLayersModel.qgsProject = __activeProject.qgsProject
         }
