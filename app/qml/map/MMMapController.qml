@@ -849,6 +849,18 @@ Item {
         linkText: qsTr( "See how to enable digitizing in your project." )
         link: __inputHelp.howToEnableDigitizingLink
       }
+
+      Connections {
+        target: __activeProject
+
+        function onProjectWillBeReloaded() {
+          recordingLayersModel.model.reset()
+        }
+
+        function onProjectReloaded(qgsProject) {
+          recordingLayersModel.qgsProject = __activeProject.qgsProject
+        }
+      }
     }
   }
 
