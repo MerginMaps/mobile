@@ -338,15 +338,8 @@ Now you can create a build (either on commmand line or by setting these variable
 2. Get MM mobile SDK - it contains pre-built dependencies of used libraries
 
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/macos.yml`
-
-   - 2.1. For Intel chips
-
-     - Download mobile SDK for `osx` - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
-     - Unpack the downloaded .tar.gz to `~/mobile-sdk/x64-osx`
-
-   - 2.2. For Apple M chips
-     - You need to build SDK yourself, follow steps how to do it here https://github.com/merginmaps/mobile-sdk
-     - Your SDK will be installed in the `build folder/vcpkg_installed/arm64-osx/`
+   - Download mobile SDK for `osx` - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
+   - Unpack the downloaded .tar.gz to `~/mobile-sdk/x64-osx` or `~/mobile-sdk/arm64-osx`
 
 3. Get Qt libraries - Mobile SDK does not include Qt SDK
 

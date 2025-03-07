@@ -496,6 +496,8 @@ target_link_libraries(
          Geos::Geos-c
          Geos::Geos
          Protobuf::Protobuf-lite
+         Utf8::utf8_range
+         Utf8::utf8_validity
          Expat::Expat
          Freexl::Freexl
          Exiv2::Exiv2

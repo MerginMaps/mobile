@@ -50,6 +50,7 @@ endif ()
 # PROJECT SETUP
 # ########################################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake/absl ${CMAKE_PREFIX_PATH})
 set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
 set(INPUT_SCRIPTS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
 
@@ -254,6 +255,7 @@ find_package(Geotiff REQUIRED)
 find_package(Lzma REQUIRED)
 find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
+find_package(Utf8 REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
