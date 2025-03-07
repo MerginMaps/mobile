@@ -22,7 +22,7 @@ concurrency:
 jobs:
   win64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: windows-2019
+    runs-on: windows-2022
     
     env:
       QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change

@@ -81,11 +81,12 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          brew install aqtinstall
+          brew update
           
           brew install gnupg
-          brew install openssl@1.1
+          brew install openssl
           brew install ninja
+          brew install aqtinstall
           
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -188,7 +189,7 @@ jobs:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
           cd core/
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          /opt/homebrew/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
@@ -200,7 +201,7 @@ jobs:
           INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
 
         run: |
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          /opt/homebrew/bin/openssl \
            aes-256-cbc -d \
            -in Input_keystore.keystore.enc \
            -out Input_keystore.keystore \
