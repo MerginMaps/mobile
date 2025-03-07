@@ -75,6 +75,7 @@ jobs:
 
       - name: Install brew deps
         run: |
+          brew update
           brew install aqtinstall
 
           brew install gnupg
