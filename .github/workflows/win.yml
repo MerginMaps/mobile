@@ -149,7 +149,6 @@ jobs:
           
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
-             -DCMAKE_FIND_DEBUG_MODE=ON ^
              -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
              -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/x64-windows ^

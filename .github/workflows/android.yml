@@ -146,7 +146,7 @@ jobs:
          distribution: zulu
 
       - name: Setup Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.7
+        uses: malinskiy/action-android/install-sdk@release/0.1.4
 
       - name: Install Android Tools
         run: |
