@@ -229,10 +229,6 @@ if (TARGET Absl::symbolize)
   )
 endif ()
 
-if (LNX)
-  set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
-endif ()
-
 if (TARGET Absl::debugging_internal)
   set_target_properties(
     Absl::debugging_internal
@@ -255,6 +251,14 @@ if (TARGET Absl::str_format_internal)
     PROPERTIES
       INTERFACE_LINK_LIBRARIES
       "Absl::bits;Absl::strings;Absl::config;Absl::core_headers;Absl::fixed_array;Absl::inlined_vector;Absl::numeric_representation;Absl::type_traits;Absl::utility;Absl::int128;Absl::span"
+  )
+endif ()
+
+if (TARGET Absl::demangle_rust)
+  set_target_properties(
+    Absl::demangle_rust
+    PROPERTIES INTERFACE_LINK_LIBRARIES
+               "Absl::config;Absl::core_headers;Absl::decode_rust_punycode"
   )
 endif ()
 
