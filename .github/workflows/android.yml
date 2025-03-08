@@ -148,12 +148,11 @@ jobs:
          distribution: zulu
 
       - name: Setup Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.4
+        uses: malinskiy/action-android/install-sdk@release/0.1.7
 
       - name: Install Android Tools
         run: |
-          sdkmanager --update --verbose
-          sdkmanager --licenses && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
+          sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
 
       # Input SDK
       - name: Cache Input-SDK

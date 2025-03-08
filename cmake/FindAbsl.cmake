@@ -220,7 +220,6 @@ foreach (absl_lib IN ITEMS ${absl_libs})
   endif ()
 endforeach ()
 
-
 if (TARGET Absl::symbolize)
   set_target_properties(
     Absl::symbolize

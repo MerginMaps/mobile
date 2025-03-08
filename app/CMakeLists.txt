@@ -502,8 +502,8 @@ target_link_libraries(
          Expat::Expat
          Freexl::Freexl
          Exiv2::Exiv2
-         Inih::Inih
          Inih::Inireader
+         Inih::Inih
          Tiff::Tiff
          Sqlite3::Sqlite3
          MiniZip::MiniZip
