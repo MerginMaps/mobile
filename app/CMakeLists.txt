@@ -496,7 +496,6 @@ target_link_libraries(
          Geos::Geos-c
          Geos::Geos
          Protobuf::Protobuf-lite
-         ${ABSL_TARGETS}
          Utf8::utf8_range
          Utf8::utf8_validity
          Expat::Expat

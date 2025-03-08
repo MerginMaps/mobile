@@ -229,12 +229,34 @@ if (TARGET Absl::symbolize)
   )
 endif ()
 
+if (LNX)
+  set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
+endif ()
+
 if (TARGET Absl::debugging_internal)
   set_target_properties(
     Absl::debugging_internal
     PROPERTIES
       INTERFACE_LINK_LIBRARIES
       "Absl::core_headers;Absl::config;Absl::dynamic_annotations;Absl::errno_saver;Absl::raw_logging_internal"
+  )
+endif ()
+
+if (TARGET Absl::demangle_internal)
+  set_target_properties(
+    Absl::demangle_internal PROPERTIES INTERFACE_LINK_LIBRARIES
+                                       "Absl::config;Absl::demangle_rust"
+  )
+endif ()
+
+if (TARGET Absl::str_format_internal)
+  set_target_properties(
+    Absl::str_format_internal
+    PROPERTIES
+      INTERFACE_COMPILE_FEATURES "cxx_std_14"
+      INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+      INTERFACE_LINK_LIBRARIES
+      "Absl::bits;Absl::strings;Absl::config;Absl::core_headers;Absl::fixed_array;Absl::inlined_vector;Absl::numeric_representation;Absl::type_traits;Absl::utility;Absl::int128;Absl::span"
   )
 endif ()
 
