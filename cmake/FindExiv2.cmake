@@ -13,10 +13,7 @@ find_library(
   NO_DEFAULT_PATH
 )
 
-
-find_package_handle_standard_args(
-  Exiv2 REQUIRED_VARS Exiv2_LIBRARY Exiv2_INCLUDE_DIR
-)
+find_package_handle_standard_args(Exiv2 REQUIRED_VARS Exiv2_LIBRARY Exiv2_INCLUDE_DIR)
 
 if (Exiv2_FOUND AND NOT TARGET Exiv2::Exiv2)
   add_library(Exiv2::Exiv2 UNKNOWN IMPORTED)

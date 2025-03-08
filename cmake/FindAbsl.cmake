@@ -223,7 +223,7 @@ endforeach ()
 
 if (LNX)
   set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
-endif()
+endif ()
 
 if (TARGET Absl::symbolize)
   set_target_properties(
