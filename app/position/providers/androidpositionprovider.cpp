@@ -14,7 +14,6 @@
 
 #include <QCoreApplication>
 #include <QLocationPermission>
-#include <QtJniTypes>
 
 #include <android/log.h>
 
