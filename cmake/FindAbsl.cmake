@@ -218,12 +218,8 @@ foreach (absl_lib IN ITEMS ${absl_libs})
       add_library(Absl::${absl_lib} INTERFACE IMPORTED)
     endif ()
   endif ()
-
 endforeach ()
 
-if (LNX)
-  set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
-endif ()
 
 if (TARGET Absl::symbolize)
   set_target_properties(

@@ -517,6 +517,7 @@ target_link_libraries(
          Lzma::Lzma
          Zstd::Zstd
          Bz2::Bz2
+         ${ABSL_TARGETS}
 )
 
 if (IOS OR MACOS)
