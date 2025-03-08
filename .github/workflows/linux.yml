@@ -17,7 +17,7 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20250307-191
+  INPUT_SDK_VERSION: x64-linux-20250308-194
   QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
   CMAKE_VERSION: '3.29.0'
   CACHE_VERSION: 0

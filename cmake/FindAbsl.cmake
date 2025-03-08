@@ -221,6 +221,10 @@ foreach (absl_lib IN ITEMS ${absl_libs})
 
 endforeach ()
 
+if (LNX)
+  set(ABSL_TARGETS "${ABSL_TARGETS};${ABSL_TARGETS}")
+endif()
+
 if (TARGET Absl::symbolize)
   set_target_properties(
     Absl::symbolize

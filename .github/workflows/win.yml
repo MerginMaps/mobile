@@ -26,7 +26,7 @@ jobs:
     
     env:
       QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20250307-242
+      INPUT_SDK_VERSION: x64-windows-20250308-245
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
       VS_VERSION: "2022"
@@ -197,11 +197,11 @@ jobs:
         shell: cmd
         run: |
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
+          path: mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error
 
