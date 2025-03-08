@@ -253,8 +253,6 @@ if (TARGET Absl::str_format_internal)
   set_target_properties(
     Absl::str_format_internal
     PROPERTIES
-      INTERFACE_COMPILE_FEATURES "cxx_std_14"
-      INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
       INTERFACE_LINK_LIBRARIES
       "Absl::bits;Absl::strings;Absl::config;Absl::core_headers;Absl::fixed_array;Absl::inlined_vector;Absl::numeric_representation;Absl::type_traits;Absl::utility;Absl::int128;Absl::span"
   )
