@@ -164,7 +164,7 @@ AndroidPositionProvider::AndroidPositionProvider( bool fused, QObject *parent )
 
   __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] create Java object" );
 
-  auto context = QNativeInterface::QAndroidApplication::context();
+  QJniObject context = QNativeInterface::QAndroidApplication::context();
 
   mAndroidPos = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "createWithJniCallback",
                 "(Landroid/content/Context;ZI)Luk/co/lutraconsulting/MMAndroidPosition;", context, mFused, mInstanceId );
@@ -183,7 +183,7 @@ AndroidPositionProvider::~AndroidPositionProvider()
 
 bool AndroidPositionProvider::isFusedAvailable()
 {
-  auto context = QNativeInterface::QAndroidApplication::context();
+  QJniObject context = QNativeInterface::QAndroidApplication::context();
 
   return QJniObject::callStaticMethod<jboolean>( "uk/co/lutraconsulting/MMAndroidPosition", "isFusedLocationProviderAvailable",
          "(Landroid/content/Context;)Z", context );
@@ -191,7 +191,7 @@ bool AndroidPositionProvider::isFusedAvailable()
 
 QString AndroidPositionProvider::fusedErrorString()
 {
-  auto context = QNativeInterface::QAndroidApplication::context();
+  QJniObject context = QNativeInterface::QAndroidApplication::context();
 
   QJniObject str = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "fusedLocationProviderErrorString",
                    "(Landroid/content/Context;)Ljava/lang/String;", context );
