@@ -95,6 +95,7 @@ class InputUtils: public QObject
      * Geometry must be in canvas CRS
      */
     Q_INVOKABLE bool canExtentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE QPointF centerOnScreenHighligtedGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
