@@ -2426,10 +2426,9 @@ void TestMerginApi::testRegisterAndDelete()
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
-  QString username = "test_" + quiteRandom;
-  QString email = username + "@nonexistant.email.com";
+  QString email = "test_" + quiteRandom + "@nonexistant.email.com";
 
-  qDebug() << "username:" << username;
+  qDebug() << "email:" << email;
   // do not want to be authorized
   mApi->clearAuth();
 
@@ -2443,9 +2442,8 @@ void TestMerginApi::testRegisterAndDelete()
     QVERIFY( false );
   }
 
-
   QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
 
   // now delete user
@@ -2462,11 +2460,10 @@ void TestMerginApi::testCreateWorkspace()
   QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
   // we need to register new user for tests and assign its credentials to env vars
-  QString username = TestUtils::generateUsername();
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
 
-  qDebug() << "REGISTERING NEW TEST USER:" << username;
+  qDebug() << "REGISTERING NEW TEST USER:" << email;
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
@@ -2479,17 +2476,17 @@ void TestMerginApi::testCreateWorkspace()
   }
 
   QSignalSpy authSpy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
   QVERIFY( !authSpy.isEmpty() );
 
   // we also need to create a workspace for this user
   QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
-  mApi->createWorkspace( username );
+  mApi->createWorkspace( email );
   QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( wsSpy.takeFirst().at( 0 ), username );
+  QCOMPARE( wsSpy.takeFirst().at( 0 ), email );
 
-  qDebug() << "CREATED NEW WORKSPACE:" << username;
+  qDebug() << "CREATED NEW WORKSPACE:" << email;
 
   // call userInfo to set active workspace
   QSignalSpy infoSpy( mApi, &MerginApi::userInfoReplyFinished );
