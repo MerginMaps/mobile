@@ -2854,17 +2854,14 @@ void TestMerginApi::testServerError()
 
 void TestMerginApi::testRegistration()
 {
-  QString username = "?";
   QString email = "broken@email";
   QString password = "pwd";
-  QString confirm_password = password;
 
   // do not want to be authorized
   mApi->clearAuth();
 
   // wrong email test
   QSignalSpy spy( mApi, &MerginApi::registrationFailed );
-  username = "username";
   mApi->registerUser( email, password, true );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::EMAIL );
@@ -2876,7 +2873,7 @@ void TestMerginApi::testRegistration()
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::PASSWORD );
 
   // unchecked TOC test
-  confirm_password = "Lutra123:)";
+  password = "Lutra123:)";
   mApi->registerUser( email, password, false );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
