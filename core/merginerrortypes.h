@@ -19,10 +19,8 @@ class RegistrationError
     enum RegistrationErrorType
     {
       OTHER = 0,
-      USERNAME,
       EMAIL,
       PASSWORD,
-      CONFIRM_PASSWORD,
       TOC
     };
     Q_ENUM( RegistrationErrorType )

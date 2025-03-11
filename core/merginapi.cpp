@@ -816,27 +816,11 @@ void MerginApi::authorize( const QString &login, const QString &password )
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
-void MerginApi::registerUser( const QString &username,
-                              const QString &email,
+void MerginApi::registerUser( const QString &email,
                               const QString &password,
-                              const QString &confirmPassword,
                               bool acceptedTOC )
 {
   // Some very basic checks, so we do not validate everything
-  if ( username.isEmpty() || username.length() < 4 )
-  {
-    QString msg = tr( "Username must have at least 4 characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
-  if ( !CoreUtils::isValidName( username ) )
-  {
-    QString msg = tr( "Username contains invalid characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
     QString msg = tr( "Please enter a valid email" );
@@ -857,13 +841,6 @@ void MerginApi::registerUser( const QString &username,
 
   }
 
-  if ( confirmPassword != password )
-  {
-    QString msg = tr( "Passwords do not match" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-    return;
-  }
-
   if ( !acceptedTOC )
   {
     QString msg = tr( "Please accept Terms and Privacy Policy" );
@@ -880,14 +857,13 @@ void MerginApi::registerUser( const QString &username,
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "username" ), username );
   jsonObject.insert( QStringLiteral( "email" ), email );
   jsonObject.insert( QStringLiteral( "password" ), password );
   jsonObject.insert( QStringLiteral( "api_key" ), getApiKey( mApiRoot ) );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( username, password ); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( email, password ); } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -1300,7 +1276,7 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
-void MerginApi::registrationFinished( const QString &username, const QString &password )
+void MerginApi::registrationFinished( const QString &login, const QString &password )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -1311,8 +1287,8 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     QString msg = tr( "Registration successful" );
     emit notifySuccess( msg );
 
-    if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
-      authorize( username, password );
+    if ( !login.isEmpty() && !password.isEmpty() ) // log in immediately
+      authorize( login, password );
 
     emit registrationSucceeded();
   }

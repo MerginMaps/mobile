@@ -152,16 +152,14 @@ Item {
         stackView.popOnePageOrClose()
       }
 
-      onSignUpClicked: function ( username, email, password, passwordConfirm, tocAccept, newsletterSubscribe ) {
+      onSignUpClicked: function ( email, password, tocAccept, newsletterSubscribe ) {
         if ( __merginApi.serverType !== MM.MerginServerType.SAAS ) {
           return; //should not happen
         }
         else {
           stackView.pending = true
-          __merginApi.registerUser( username,
-                                   email,
+          __merginApi.registerUser( email,
                                    password,
-                                   passwordConfirm,
                                    tocAccept )
 
           postRegisterData.wantNewsletter = newsletterSubscribe
