@@ -136,7 +136,7 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
 
     return Error;
   }
-  else if ( containsDecimals && field.type() != QVariant::Type::Double )
+  else if ( containsDecimals && field.type() != QMetaType::Type::Double )
   {
     /* ConverCompatible check passes for doubles written into int fields,
      * however, the value would not be saved and would get replaced by zero,

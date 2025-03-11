@@ -196,7 +196,7 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
     QgsFeatureRequest req;
     req.setFilterRect( r );
     req.setLimit( mFeaturesLimit );
-    req.setFlags( QgsFeatureRequest::ExactIntersect );
+    req.setFlags( Qgis::FeatureRequestFlag::ExactIntersect );
 
     QgsFeatureIterator fit = layer->getFeatures( req );
     QgsFeature f;

@@ -2,7 +2,7 @@
 
 find_path(
   ZXing_INCLUDE_DIR
-  ZXing/ZXConfig.h
+  ZXing/ZXVersion.h
   "${INPUT_SDK_PATH_MULTI}/include"
   NO_DEFAULT_PATH
 )
