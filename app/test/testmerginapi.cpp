@@ -2435,7 +2435,7 @@ void TestMerginApi::testRegisterAndDelete()
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
@@ -2470,7 +2470,7 @@ void TestMerginApi::testCreateWorkspace()
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
