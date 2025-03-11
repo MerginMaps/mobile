@@ -1327,47 +1327,47 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="867"/>
+        <location filename="../qml/map/MMMapController.qml" line="875"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="872"/>
+        <location filename="../qml/map/MMMapController.qml" line="880"/>
         <source>Split geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="884"/>
+        <location filename="../qml/map/MMMapController.qml" line="892"/>
         <source>Redraw geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="896"/>
+        <location filename="../qml/map/MMMapController.qml" line="904"/>
         <source>Streaming mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="902"/>
+        <location filename="../qml/map/MMMapController.qml" line="910"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1040"/>
+        <location filename="../qml/map/MMMapController.qml" line="1048"/>
         <source>Splitting done successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1131"/>
+        <location filename="../qml/map/MMMapController.qml" line="1139"/>
         <source>Select some point to start editing the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1144"/>
+        <location filename="../qml/map/MMMapController.qml" line="1152"/>
         <source>Record new geometry for the feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1234"/>
+        <location filename="../qml/map/MMMapController.qml" line="1242"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
