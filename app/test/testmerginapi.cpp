@@ -2460,10 +2460,11 @@ void TestMerginApi::testCreateWorkspace()
   QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
   // we need to register new user for tests and assign its credentials to env vars
+  QString username = TestUtils::generateUsername();
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
 
-  qDebug() << "REGISTERING NEW TEST USER:" << email;
+  qDebug() << "REGISTERING NEW TEST USER WITH EMAIL:" << email;
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
@@ -2482,11 +2483,11 @@ void TestMerginApi::testCreateWorkspace()
 
   // we also need to create a workspace for this user
   QSignalSpy wsSpy( mApi, &MerginApi::workspaceCreated );
-  mApi->createWorkspace( email );
+  mApi->createWorkspace( username );
   QVERIFY( wsSpy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( wsSpy.takeFirst().at( 0 ), email );
+  QCOMPARE( wsSpy.takeFirst().at( 0 ), username );
 
-  qDebug() << "CREATED NEW WORKSPACE:" << email;
+  qDebug() << "CREATED NEW WORKSPACE:" << username;
 
   // call userInfo to set active workspace
   QSignalSpy infoSpy( mApi, &MerginApi::userInfoReplyFinished );
