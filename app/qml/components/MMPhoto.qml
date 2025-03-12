@@ -68,7 +68,6 @@ Image {
 
   onStatusChanged: {
     if (status === Image.Error) {
-      __notificationModel.addError( "Could not load the image. The file may not exist, could be invalid, or the URL might be incorrect: " + root.photoUrl );
       console.error("MMPhoto: Error loading image: " + root.photoUrl);
     }
   }

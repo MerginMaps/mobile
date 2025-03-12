@@ -71,6 +71,12 @@ MMPrivateComponents.MMBaseInput {
       photoUrl: root.photoUrl
       fillMode: Image.PreserveAspectCrop
 
+      onStatusChanged: {
+      if ( status === Image.Error ) {
+          root.errorMsg = "Unable to load the image. It may be missing or invalid, the URL might be incorrect, or there may be no network connection: " + root.photoUrl;
+        }
+      }
+
       MouseArea {
         anchors.fill: parent
         onClicked: {
