@@ -207,13 +207,13 @@ foreach (absl_lib IN ITEMS ${absl_libs})
     PATHS "${INPUT_SDK_PATH_MULTI}/lib"
     NO_DEFAULT_PATH
   )
-  if (NOT TARGET Absl::${absl_lib})
+  if (NOT TARGET "Absl::${absl_lib}")
     if (EXISTS ${absl_${absl_lib}_LIBRARY})
       add_library(Absl::${absl_lib} UNKNOWN IMPORTED)
       set_target_properties(
         Absl::${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
       )
-
+      
       set(ABSL_TARGETS "${ABSL_TARGETS};Absl::${absl_lib}")
     else ()
       add_library(Absl::${absl_lib} INTERFACE IMPORTED)
