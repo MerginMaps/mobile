@@ -24,7 +24,7 @@ import "../components/photo" as MMPhotoComponents
 MMPrivateComponents.MMBaseInput {
   id: root
 
-  property url photoUrl: ""
+  property string photoUrl: ""
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
@@ -69,7 +69,7 @@ MMPrivateComponents.MMBaseInput {
       visible: photoStateGroup.state !== "notSet"
 
       photoUrl: root.photoUrl
-      isLocalFile: String( root.photoUrl ).startsWith( "file://" )
+      isLocalFile: root.photoUrl.startsWith( "file://" )
 
       fillMode: Image.PreserveAspectCrop
 
