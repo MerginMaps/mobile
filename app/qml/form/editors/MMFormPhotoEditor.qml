@@ -131,6 +131,7 @@ MMFormPhotoViewer {
     function resetValueAndClose() {
       root.editorValueChanged( "", true )
 
+      errorMsg = ""
       imagePath = ""
       close()
     }

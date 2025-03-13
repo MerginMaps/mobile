@@ -18,6 +18,7 @@ Image {
   id: root
 
   property url photoUrl
+  property bool isLocalFile: true
 
   signal clicked( var path )
 
@@ -49,7 +50,7 @@ Image {
 
     MMIcon {
       anchors.centerIn: parent
-      source: ( root.photoUrl && __inputUtils.isLocalFile( root.photoUrl ) ) ? __style.morePhotosIcon : __style.remoteImageLoadErrorIcon
+      source: root.photoUrl && root.isLocalFile ? __style.morePhotosIcon : __style.remoteImageLoadErrorIcon
       color: __style.mediumGreenColor
       size: __style.icon32
     }

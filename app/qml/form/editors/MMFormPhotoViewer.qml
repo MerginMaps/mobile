@@ -69,11 +69,14 @@ MMPrivateComponents.MMBaseInput {
       visible: photoStateGroup.state !== "notSet"
 
       photoUrl: root.photoUrl
+      isLocalFile: String( root.photoUrl ).startsWith( "file://" )
+
       fillMode: Image.PreserveAspectCrop
 
       onStatusChanged: {
       if ( status === Image.Error ) {
-          root.errorMsg = "Unable to load the image. It may be missing or invalid, the URL might be incorrect, or there may be no network connection: " + root.photoUrl;
+          __inputUtils.log( "Image Loading", "Could not load the image. It may be missing or invalid, the URL might be incorrect, or there may be no network connection: " + root.photoUrl )
+          root.errorMsg = "Could not load the image."
         }
       }
 

@@ -620,11 +620,6 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isValidUrl( const QString &link );
 
-    /**
-     * Checks whether the given file path starts with "file://"
-     */
-    Q_INVOKABLE static bool isLocalFile( const QString &filePath );
-
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
