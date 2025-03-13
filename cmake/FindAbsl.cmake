@@ -213,7 +213,6 @@ foreach (absl_lib IN ITEMS ${absl_libs})
       set_target_properties(
         Absl::${absl_lib} PROPERTIES IMPORTED_LOCATION "${absl_${absl_lib}_LIBRARY}"
       )
-      
       set(ABSL_TARGETS "${ABSL_TARGETS};Absl::${absl_lib}")
     else ()
       add_library(Absl::${absl_lib} INTERFACE IMPORTED)
