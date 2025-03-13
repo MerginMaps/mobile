@@ -5,9 +5,9 @@ cmake_minimum_required(VERSION 3.22)
 # ########################################################################################
 
 # TODO automatically change with the scripts/update version script
-set(MM_VERSION_MAJOR "2024")
-set(MM_VERSION_MINOR "6")
-set(MM_VERSION_PATCH "0")
+set(MM_VERSION_MAJOR "2025")
+set(MM_VERSION_MINOR "1")
+set(MM_VERSION_PATCH "1")
 set(QT_VERSION_DEFAULT "6.6.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
@@ -141,6 +141,13 @@ set(ENABLE_TESTS
 set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
+)
+
+set(USE_KEYCHAIN
+    FALSE
+    CACHE
+      BOOL
+      "Wheter to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
 set(QT6_VERSION

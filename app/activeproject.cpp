@@ -29,14 +29,12 @@ const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loadin
 
 ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
-                              , LayersProxyModel &recordingLayerPM
                               , LocalProjectsManager &localProjectsManager
                               , QObject *parent ) :
 
   QObject( parent )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
-  , mRecordingLayerPM( recordingLayerPM )
   , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
 {
@@ -78,12 +76,12 @@ ActiveProject::ActiveProject( AppSettings &appSettings
 
 ActiveProject::~ActiveProject() = default;
 
-QgsProject *ActiveProject::qgsProject()
+QgsProject *ActiveProject::qgsProject() const
 {
   return mQgsProject;
 }
 
-LocalProject ActiveProject::localProject()
+LocalProject ActiveProject::localProject() const
 {
   return mLocalProject;
 }
@@ -184,8 +182,10 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
 
+    QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
+    setProjectRole( role );
+
     updateMapTheme();
-    updateRecordingLayers();
     updateActiveLayer();
     updateMapSettingsLayers();
 
@@ -388,30 +388,6 @@ AutosyncController *ActiveProject::autosyncController() const
   return nullptr;
 }
 
-bool ActiveProject::layerVisible( QgsMapLayer *layer )
-{
-  if ( !mQgsProject || !layer )
-  {
-    return false;
-  }
-
-  QgsLayerTree *root = mQgsProject->layerTreeRoot();
-
-  if ( !root )
-  {
-    return false;
-  }
-
-  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
-
-  if ( !layerTree )
-  {
-    return false;
-  }
-
-  return layerTree->isVisible();
-}
-
 QString ActiveProject::projectLoadingLog() const
 {
   return mProjectLoadingLog;
@@ -483,29 +459,38 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
   emit mapThemeChanged( mMapTheme );
 
-  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
   updateActiveLayer();
   updateMapSettingsLayers();
 }
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !layerVisible( mActiveLayer.layer() ) )
+  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
   {
-    QgsMapLayer *defaultLayer = mRecordingLayerPM.layerFromLayerName( mAppSettings.defaultLayer() );
+    QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
-    if ( !defaultLayer )
+    if ( InputUtils::recordingAllowed( defaultAppSettingsLayer, mQgsProject ) )
     {
-      defaultLayer = mRecordingLayerPM.firstUsableLayer();
+      setActiveLayer( defaultAppSettingsLayer );
+      return;
     }
 
-    setActiveLayer( defaultLayer );
-  }
-}
+    // default layer from app settings has no recording allowed => let's try to search for a new one
+    QgsMapLayer *defaultLayer = nullptr;
+    const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+    for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
+    {
+      QgsMapLayer *layer = it.value();
+      if ( InputUtils::recordingAllowed( layer, mQgsProject ) )
+      {
+        defaultLayer = layer;
+        break;
+      }
+    }
 
-void ActiveProject::updateRecordingLayers()
-{
-  mRecordingLayerPM.refreshData();
+    if ( defaultLayer )
+      setActiveLayer( defaultLayer );
+  }
 }
 
 bool ActiveProject::isProjectLoaded() const
@@ -534,7 +519,6 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
   node->setItemVisibilityChecked( !node->isVisible() );
 
   updateMapTheme();
-  updateRecordingLayers(); // <- worth to decouple similar to map themes model decoupling
   updateActiveLayer();
   updateMapSettingsLayers();
 }
@@ -552,4 +536,34 @@ bool ActiveProject::positionTrackingSupported() const
   }
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
+}
+
+bool ActiveProject::projectHasRecordingLayers() const
+{
+  if ( !mQgsProject )
+    return false;
+
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    if ( InputUtils::recordingAllowed( it.value(), mQgsProject ) )
+      return true;
+  }
+
+  return false;
+}
+
+QString ActiveProject::projectRole() const
+{
+  return mProjectRole;
+}
+
+void ActiveProject::setProjectRole( const QString &role )
+{
+  if ( mProjectRole != role )
+  {
+    mProjectRole = role;
+
+    emit projectRoleChanged();
+  }
 }

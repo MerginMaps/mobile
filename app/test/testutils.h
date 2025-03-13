@@ -56,6 +56,12 @@ namespace TestUtils
    * Returns true if files were successfully created
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
+
+  void testLayerHasGeometry();
+  void testLayerVisible();
+  void testIsPositionTrackingLayer();
+  void testRecordingAllowed();
+  void testMapLayerFromName();
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

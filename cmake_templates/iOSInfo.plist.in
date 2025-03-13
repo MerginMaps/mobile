@@ -77,6 +77,8 @@
 		<string>sl</string>
 		<string>sl_SI</string>
 		<string>fi_FI</string>
+		<string>cs_CZ</string>
+		<string>cs</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

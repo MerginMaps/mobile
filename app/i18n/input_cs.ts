@@ -1,33 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en_US">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="cs">
 <context>
     <name>ActiveProject</name>
     <message>
         <location filename="../activeproject.cpp" line="263"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Obecné</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="263"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt má přiřazen neplatný CRS. Mapa a nástroje mají nedefinované chování!</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrstva</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze načíst zdroj</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrstva má přiřazen neplatný CRS. Záznamové nástroje mají nedefinované chování.</translation>
     </message>
 </context>
 <context>
@@ -35,28 +33,28 @@
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (fused)</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní (fúzovaný)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (gps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní (gps)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="214"/>
         <location filename="../position/providers/androidpositionprovider.cpp" line="228"/>
         <source>No location permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádná oprávnění k poloze</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="230"/>
         <source>Fused location not available</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojené místo není k dispozici</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno</translation>
     </message>
 </context>
 <context>
@@ -66,27 +64,27 @@
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation type="unfinished"></translation>
+        <translation>Došlo k chybě a sledování nebylo možné spustit, kontaktujte prosím podporu</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše zařízení nepodporuje sledování, dostupné od verze Android 8.0.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Před zahájením sledování povolte povolení k poloze</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Před zahájením sledování povolte v zařízení služby určování polohy.</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
         <source>Enable notifications to see tracking in the notifications tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Povolení oznámení pro zobrazení sledování v oznamovací oblasti</translation>
     </message>
 </context>
 <context>
@@ -94,22 +92,22 @@
     <message>
         <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Oprávnění k ukládání je trvale zakázáno, povolte jej prosím v nastavení, abyste mohli načítat obrázky z galerie.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby bylo možné načíst obrázky z galerie, potřebuje Mergin Maps oprávnění k ukládání</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Povolení fotoaparátu je trvale zakázáno, povolte jej prosím v nastavení.</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation type="unfinished"></translation>
+        <translation>K fotografování potřebujeme povolení k fotoaparátu.</translation>
     </message>
 </context>
 <context>
@@ -118,39 +116,39 @@
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
         <source>No connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedostupné připojení</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
         <source>Reconnecting</source>
-        <translation type="unfinished"></translation>
+        <translation>Obnova spojení</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spojení ztraceno, obnovení za (%1)</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
         <source>Bluetooth permission disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Oprávnění Bluetooth zakázáno</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
         <source>Could not connect to device, not paired</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze navázat spojení se zařízením, není spárováno</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
         <source>Connecting to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojování k %1</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno</translation>
     </message>
 </context>
 <context>
@@ -158,7 +156,7 @@
     <message>
         <location filename="../featuresmodel.cpp" line="164"/>
         <source>Unknown title</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámý název</translation>
     </message>
 </context>
 <context>
@@ -166,18 +164,19 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation type="unfinished"></translation>
+        <translation>Před přidáním nového pole vyplňte prosím jméno předchozího.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
         <source>Field %1 already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole %1 již existuje.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="108"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole %1 již existuje.
+Nemůže být přidáno do projektu.</translation>
     </message>
 </context>
 <context>
@@ -185,17 +184,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chybí požadovaná mřížka pro posun datového bodu PROJ: %1. Pro nově stažený projekt restartujte Mergin Maps.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba při vytváření vlastní operace PROJ. Pro nově stažený projekt restartujte Mergin Maps.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chybí požadované posuny vztažné mřížky PROJ: %1. Pro nově stažený projekt restartujte Mergin Maps.</translation>
     </message>
 </context>
 <context>
@@ -203,117 +202,117 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../inpututils.cpp" line="236"/>
         <source>just now</source>
-        <translation type="unfinished"></translation>
+        <translation>právě teď</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minutes ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 minutami</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minute ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 minutou</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hours ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 hodinami</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hour ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 hodinou</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 days ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 dny</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 day ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 dnem</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 weeks ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 týdny</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 week ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 týdnem</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 months ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 měsíci</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 month ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 měsícem</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 years ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 roky</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 year ago</source>
-        <translation type="unfinished"></translation>
+        <translation>před %1 rokem</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1484"/>
         <source>screen resolution: %1x%2 px
 </source>
-        <translation type="unfinished">screen resolution: %1x%2 px
+        <translation>rozlišení displeje: %1x%2 px
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1485"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation type="unfinished">screen DPI: %1x%2
+        <translation>DPI displeje: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1486"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation type="unfinished">screen size: %1x%2 mm
+        <translation>velikost displeje: %1x%2 mm
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1487"/>
         <source>reported device pixel ratio: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>hlášený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1488"/>
         <source>calculated device pixel ratio: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>vypočtený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1489"/>
         <source>used dp scale: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>použité měřítko dp: %1</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="2018"/>
         <source>You need to add at least %1 point(s) to every part.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ke každé části je třeba přidat alespoň %1 bod(y).</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="2022"/>
         <source>You need to add at least %1 point(s).</source>
-        <translation type="unfinished"></translation>
+        <translation>Je třeba přidat alespoň %1 bodů.</translation>
     </message>
 </context>
 <context>
@@ -321,13 +320,13 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../position/providers/internalpositionprovider.cpp" line="16"/>
         <source>Internal</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní</translation>
     </message>
     <message>
         <location filename="../position/providers/internalpositionprovider.cpp" line="41"/>
         <location filename="../position/providers/internalpositionprovider.cpp" line="120"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno</translation>
     </message>
 </context>
 <context>
@@ -335,17 +334,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="210"/>
         <source>Download failed, remove and retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Stažení se nezdařilo, odstraňte a zkuste to znovu</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="230"/>
         <source>Found multiple QGIS project files</source>
-        <translation type="unfinished"></translation>
+        <translation>Nalezeno více souborů projektu QGIS</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se najít soubor projektu QGIS</translation>
     </message>
 </context>
 <context>
@@ -353,22 +352,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
         <source>About</source>
-        <translation type="unfinished">About</translation>
+        <translation>O</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
         <source>We are bringing the benefits of open source GIS to businesses without compromises</source>
-        <translation type="unfinished"></translation>
+        <translation>Přinášíme firmám výhody open source GIS bez kompromisů.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="85"/>
         <source>Visit website</source>
-        <translation type="unfinished"></translation>
+        <translation>Navštivte webové stránky</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="102"/>
         <source>Developed by</source>
-        <translation type="unfinished">Developed by</translation>
+        <translation>Vyvinuto</translation>
     </message>
 </context>
 <context>
@@ -376,7 +375,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMAcceptInvitationController.qml" line="35"/>
         <source>You have pending workspace invitations.&lt;br&gt;Please %1accept or reject%2 them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Máte nevyřízené pozvánky do pracovního prostoru.&lt;br&gt;Prosím, %1přijměte je nebo odmítněte%2.</translation>
     </message>
 </context>
 <context>
@@ -384,27 +383,27 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="61"/>
         <source>You have been invited to a workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Byli jste pozváni do pracovního prostoru</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
         <source>Join the workspace and explore together!</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojte se k pracovnímu prostoru a objevujte společně!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
         <source>Join workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit se k pracovnímu prostoru</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="102"/>
         <source>or</source>
-        <translation type="unfinished"></translation>
+        <translation>nebo</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="110"/>
         <source>Want to create a new workspace instead? %1Click here%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete místo toho vytvořit nový pracovní prostor? %1Klikněte zde%2</translation>
     </message>
 </context>
 <context>
@@ -412,17 +411,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizujte aplikaci, abyste mohli používat nejnovější funkce.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="84"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Server je momentálně nedostupný, zkontrolujte připojení nebo to zkuste později.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="138"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation type="unfinished"></translation>
+        <translation>Souhlasím s %1Obchodními podmínkami%3 a %2Zásadami ochrany osobních údajů%3.</translation>
     </message>
 </context>
 <context>
@@ -430,37 +429,37 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="95"/>
         <source>Workspaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostory</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="124"/>
         <source>Manage Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Spravovat účet</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="141"/>
         <source>Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Úložiště</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="170"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Obecné</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="185"/>
         <source>Sign out</source>
-        <translation type="unfinished">Sign out</translation>
+        <translation>Odhlásit se</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="197"/>
         <source>Close account</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavřít účet</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="198"/>
         <source>This will delete all your data</source>
-        <translation type="unfinished"></translation>
+        <translation>Tím se vymažou všechna vaše data.</translation>
     </message>
 </context>
 <context>
@@ -468,27 +467,27 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="24"/>
         <source>Connect to bluetooth device</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojení k zařízení Bluetooth</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="48"/>
         <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro připojení k externím přijímačům je nutné povolení Bluetooth. Povolte jej v nastavení systému</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
         <source>Unknown device</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámé zařízení</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro připojení nového přijímače GPS je třeba povolit Bluetooth.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
         <source>Looking for devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyhledávání zařízení</translation>
     </message>
 </context>
 <context>
@@ -496,12 +495,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/components/calendar/MMAmPmSwitch.qml" line="41"/>
         <source>AM</source>
-        <translation type="unfinished"></translation>
+        <translation>AM</translation>
     </message>
     <message>
         <location filename="../qml/form/components/calendar/MMAmPmSwitch.qml" line="52"/>
         <source>PM</source>
-        <translation type="unfinished"></translation>
+        <translation>PM</translation>
     </message>
 </context>
 <context>
@@ -509,42 +508,42 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="28"/>
         <source>Connecting to</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojování k</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
         <source>Connecting</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojování</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="33"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="38"/>
         <source>Failed to connect to</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se připojit k</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
         <source>You might be asked to pair your device during this process.</source>
-        <translation type="unfinished"></translation>
+        <translation>Během tohoto procesu můžete být vyzváni ke spárování zařízení.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
         <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuto zprávu můžete zavřít, pokusíme se opakovaně připojit k vašemu zařízení.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
-        <translation type="unfinished"></translation>
+        <translation>K zadanému zařízení se nám nepodařilo připojit. Zkontrolujte, zda je zařízení zapnuté a zda se k němu lze připojit.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Více informací</translation>
     </message>
 </context>
 <context>
@@ -552,7 +551,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Potvrdit</translation>
     </message>
 </context>
 <context>
@@ -560,17 +559,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="21"/>
         <source>Changelog</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol změn</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="35"/>
         <source>What&apos;s new</source>
-        <translation type="unfinished"></translation>
+        <translation>Co je nového</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="36"/>
         <source>See what changed since you were last here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podívejte se, co se změnilo od vaší poslední návštěvy.</translation>
     </message>
 </context>
 <context>
@@ -578,47 +577,47 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="39"/>
         <source>Do you really wish to close your account?</source>
-        <translation type="unfinished"></translation>
+        <translation>Opravdu si přejete zrušit svůj účet?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
         <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tato akce povede ke smazání vašeho účtu. Jste-li vlastníkem pracovního prostoru, musíte vlastnictví převést na někoho jiného nebo pracovní prostor uzavřít.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
         <source>Username</source>
-        <translation type="unfinished">Username</translation>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="62"/>
         <source>Enter your username</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="64"/>
         <source>Usernames do not match.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelská jména se neshodují.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="70"/>
         <source>Please note</source>
-        <translation type="unfinished"></translation>
+        <translation>Vezměte prosím na vědomí</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="71"/>
         <source>Type in your username and click ‘Yes’ to delete your account.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte své uživatelské jméno a kliknutím na tlačítko „Ano“ svůj účet smažte.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="87"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="95"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano</translation>
     </message>
 </context>
 <context>
@@ -626,12 +625,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/components/MMCodeScanner.qml" line="79"/>
         <source>Scan the QR code</source>
-        <translation type="unfinished"></translation>
+        <translation>Naskenujte QR kód</translation>
     </message>
     <message>
         <location filename="../qml/components/MMCodeScanner.qml" line="80"/>
         <source>Please make sure that the lense is clear.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ujistěte se, že je čočka čistá.</translation>
     </message>
 </context>
 <context>
@@ -639,37 +638,37 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="56"/>
         <source>Name your workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Pojmenujte svůj pracovní prostor</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="72"/>
         <source>Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. Let’s start by giving it a name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostor je místo pro ukládání projektů. Do pracovního prostoru můžete pozvat své kolegy a spolupracovat na projektech. Začněme tím, že mu dáme jméno.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="92"/>
         <source>Workspace name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název pracovního prostoru</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="93"/>
         <source>Your Workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Váš pracovní prostor</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
         <source>A tip from us</source>
-        <translation type="unfinished"></translation>
+        <translation>Tip od nás</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
         <source>A good candidate for a workspace name is the name of your team or organisation</source>
-        <translation type="unfinished"></translation>
+        <translation>Vhodným kandidátem na název pracovního prostoru je název vašeho týmu nebo organizace.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
         <source>Create workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvoření pracovního prostoru</translation>
     </message>
 </context>
 <context>
@@ -677,7 +676,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/components/calendar/MMDateTimePicker.qml" line="211"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Čas</translation>
     </message>
 </context>
 <context>
@@ -685,27 +684,27 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="23"/>
         <source>Discard the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Odmítnout změny?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknutím na tlačítko „Ano“ se změny geometrie zruší. Pokud chcete změny uložit, stiskněte tlačítko „Ne“ a poté tlačítko „Hotovo“ na panelu nástrojů.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknutím na tlačítko „Ano“ se nová geometrie zruší a žádný prvek se neuloží. Pokud chcete geometrii uložit, stiskněte „Ne“ a poté „Hotovo“ na panelu nástrojů.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
         <source>Yes, I want to discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci odmítnout</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="38"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji.</translation>
     </message>
 </context>
 <context>
@@ -713,23 +712,24 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="24"/>
         <source>Download project</source>
-        <translation type="unfinished"></translation>
+        <translation>Stáhnout projekt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete si stáhnout projekt
+%1 ?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="26"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Stáhnout</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="27"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Zrušit</translation>
     </message>
 </context>
 <context>
@@ -737,7 +737,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
         <source>Add feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat funkci</translation>
     </message>
 </context>
 <context>
@@ -745,12 +745,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
         <source>Search for features...</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledání funkcí...</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
         <source>Add feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat prvek</translation>
     </message>
 </context>
 <context>
@@ -758,22 +758,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
         <source>Delete feature</source>
-        <translation type="unfinished">Delete feature</translation>
+        <translation>Smazat prvek</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation type="unfinished"></translation>
+        <translation>Opravdu chcete odstranit tento prvek?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Yes, I want to delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci odstranit</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji.</translation>
     </message>
 </context>
 <context>
@@ -781,17 +781,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="18"/>
         <source>Saving failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložení selhalo</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="19"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se uložit změny. K tomu by normálně nemělo docházet. Restartujte prosím aplikaci a zkuste to znovu - pokud to nepomůže, kontaktujte prosím podporu.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok, rozumím.</translation>
     </message>
 </context>
 <context>
@@ -799,28 +799,28 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="106"/>
         <source>New feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Nový prvek</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="107"/>
         <location filename="../qml/form/MMFormPage.qml" line="210"/>
         <source>Edit feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Upravit prvek</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="223"/>
         <source>Delete</source>
-        <translation type="unfinished">Delete</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="232"/>
         <source>Edit geometry</source>
-        <translation type="unfinished">Edit geometry</translation>
+        <translation>Upravit geometrii</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="444"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Funkci se nepodařilo uložit, zkontrolujte prosím všechna povinná pole.</translation>
     </message>
 </context>
 <context>
@@ -828,27 +828,27 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
         <source>Photo is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fotografie chybí.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Open Image</source>
-        <translation type="unfinished">Open Image</translation>
+        <translation>Otevřít obrázek</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
         <source>Image files (*.gif *.png *.jpg)</source>
-        <translation type="unfinished">Image files (*.gif *.png *.jpg)</translation>
+        <translation>Obrázkové soubory (*.gif *.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
         <source>Could not create directory %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze vytvořit adresář %1.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
         <source>Failed to process the image</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrázek se nepodařilo zpracovat</translation>
     </message>
 </context>
 <context>
@@ -856,12 +856,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="164"/>
         <source> more</source>
-        <translation type="unfinished"></translation>
+        <translation>více</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="207"/>
         <source>Add feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat prvek</translation>
     </message>
 </context>
 <context>
@@ -869,12 +869,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
         <source>Change link</source>
-        <translation type="unfinished"></translation>
+        <translation>Změnit odkaz</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
         <source>Unlink feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Odpojit prvek</translation>
     </message>
 </context>
 <context>
@@ -882,22 +882,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="21"/>
         <source>Unsaved changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuložené změny</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="22"/>
         <source>Do you want to save the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete uložit změny?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="23"/>
         <source>Yes, I want to save</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci uložit</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji</translation>
     </message>
 </context>
 <context>
@@ -905,27 +905,27 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
         <source>GPS info</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS info</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="63"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
         <source>No receiver</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádný příjemce</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="76"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="93"/>
         <source>Longitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeměpisná délka</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="96"/>
@@ -945,87 +945,87 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="112"/>
         <source>Latitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeměpisná šířka</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="131"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="146"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="161"/>
         <source>Horizontal accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Horizontální přesnost</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="176"/>
         <source>Vertical accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikální přesnost</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="191"/>
         <source>Altitude</source>
-        <translation type="unfinished"></translation>
+        <translation>Nadmořská výška</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="205"/>
         <source>Fix quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Opravit kvalitu</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
         <source>Satellites (in use/view)</source>
-        <translation type="unfinished"></translation>
+        <translation>Satelity (v provozu / viditelné)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="238"/>
         <source>HDOP</source>
-        <translation type="unfinished"></translation>
+        <translation>HDOP</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="255"/>
         <source>VDOP</source>
-        <translation type="unfinished"></translation>
+        <translation>VDOP</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="272"/>
         <source>PDOP</source>
-        <translation type="unfinished"></translation>
+        <translation>PDOP</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="289"/>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Rychlost</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="304"/>
         <source>Last Fix</source>
-        <translation type="unfinished"></translation>
+        <translation>Poslední oprava</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
         <source>GPS antenna height</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška GPS antény</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
         <source>Not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenastaveno</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>Manage GPS receivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Správa GPS přijímačů</translation>
     </message>
 </context>
 <context>
@@ -1033,97 +1033,97 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
         <source>Search engine (Google, ...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyhledávač (Google, ...)</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
         <source>Blog</source>
-        <translation type="unfinished"></translation>
+        <translation>Blog</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
         <source>Mouth</source>
-        <translation type="unfinished"></translation>
+        <translation>Ústa</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>QGIS website</source>
-        <translation type="unfinished"></translation>
+        <translation>QGIS web</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Application store</source>
-        <translation type="unfinished"></translation>
+        <translation>Obchod s aplikacemi</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
         <source>Teacher</source>
-        <translation type="unfinished"></translation>
+        <translation>Učitel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
         <source>Conference</source>
-        <translation type="unfinished"></translation>
+        <translation>Konference</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="39"/>
         <source>Social media</source>
-        <translation type="unfinished"></translation>
+        <translation>Sociální sítě</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="42"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatní</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
         <source>YouTube</source>
-        <translation type="unfinished"></translation>
+        <translation>YouTube</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
         <source>Twitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Twitter</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
         <source>Facebook</source>
-        <translation type="unfinished"></translation>
+        <translation>Facebook</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="134"/>
         <source>LinkedIn</source>
-        <translation type="unfinished"></translation>
+        <translation>LinkedIn</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="135"/>
         <source>Mastodon</source>
-        <translation type="unfinished"></translation>
+        <translation>Mastodon</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="136"/>
         <source>Reddit</source>
-        <translation type="unfinished"></translation>
+        <translation>Reddit</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="173"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokračovat</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
         <source>Where did you hear about us?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kde jste se o nás dozvěděli?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
         <source>Please specify the source</source>
-        <translation type="unfinished"></translation>
+        <translation>Uveďte zdroj</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj</translation>
     </message>
 </context>
 <context>
@@ -1131,32 +1131,32 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
         <source>Settings</source>
-        <translation type="unfinished">Settings</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation type="unfinished"></translation>
+        <translation>Viditelné na mapě</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Legenda</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
         <source>Attribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Připsání</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="240"/>
         <source>Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Prvky</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="255"/>
         <source>Layer info</source>
-        <translation type="unfinished"></translation>
+        <translation>Info o vrstvě</translation>
     </message>
 </context>
 <context>
@@ -1164,12 +1164,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/layers/MMLayersListPage.qml" line="21"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrstvy</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledat</translation>
     </message>
 </context>
 <context>
@@ -1177,7 +1177,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/layers/MMLayersListSearchPage.qml" line="21"/>
         <source>Search layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledání vrstev</translation>
     </message>
 </context>
 <context>
@@ -1185,12 +1185,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Potvrdit výběr</translation>
     </message>
 </context>
 <context>
@@ -1198,22 +1198,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="18"/>
         <source>(no-entries)</source>
-        <translation type="unfinished"></translation>
+        <translation>(bez údajů)</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="25"/>
         <source>Diagnostic log</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol diagnostiky</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="65"/>
         <source>Sending...</source>
-        <translation type="unfinished"></translation>
+        <translation>Odeslání...</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="65"/>
         <source>Send to developers</source>
-        <translation type="unfinished"></translation>
+        <translation>Odeslat vývojářům</translation>
     </message>
 </context>
 <context>
@@ -1221,52 +1221,52 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="38"/>
         <source>Log in</source>
-        <translation type="unfinished"></translation>
+        <translation>Přihlášení</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="87"/>
         <source>Email or username</source>
-        <translation type="unfinished"></translation>
+        <translation>E-mail nebo uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="96"/>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="102"/>
         <source>Forgot password?</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapomenuté heslo?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="113"/>
         <source>Sign in</source>
-        <translation type="unfinished">Sign in</translation>
+        <translation>Přihlásit se</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
         <source>Don&apos;t have an account?</source>
-        <translation type="unfinished"></translation>
+        <translation>Nemáte účet?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="132"/>
         <source>Sign up</source>
-        <translation type="unfinished">Sign up</translation>
+        <translation>Zaregistrujte se</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="183"/>
         <source>Change server</source>
-        <translation type="unfinished"></translation>
+        <translation>Změnit server</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="202"/>
         <source>Server address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresa serveru</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="218"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Potvrdit</translation>
     </message>
 </context>
 <context>
@@ -1274,102 +1274,102 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="110"/>
         <source>Mark the geometry on the map and click record</source>
-        <translation type="unfinished"></translation>
+        <translation>Označte geometrii na mapě a klikněte na tlačítko zaznamenat.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="139"/>
         <source>Create line to split the selected feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořte čáru pro rozdělení vybraného prvku</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="156"/>
         <source>Add points to measure distance, close the shape to measure area</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidáním bodů změříte vzdálenost, uzavřením tvaru změříte plochu.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="553"/>
         <source>streaming</source>
-        <translation type="unfinished"></translation>
+        <translation>streaming</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="629"/>
         <source>Connecting to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojování k %1</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="643"/>
         <source>Connected, no position</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno, žádná pozice</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="647"/>
         <source>Unknown accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámá přesnost</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="789"/>
         <source>GPS currently unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS momentálně nedostupné</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="813"/>
         <source>Choose Active Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte aktivní vrstvu</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="848"/>
         <source>Could not find any editable layers in the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>V projektu se nepodařilo najít žádné upravitelné vrstvy.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="849"/>
         <source>See how to enable digitizing in your project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podívejte se, jak v projektu povolit digitalizaci.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="875"/>
+        <location filename="../qml/map/MMMapController.qml" line="867"/>
         <source>More options</source>
-        <translation type="unfinished"></translation>
+        <translation>Další možnosti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="880"/>
+        <location filename="../qml/map/MMMapController.qml" line="872"/>
         <source>Split geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělení geometrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="892"/>
+        <location filename="../qml/map/MMMapController.qml" line="884"/>
         <source>Redraw geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Překreslit geometrii</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="904"/>
+        <location filename="../qml/map/MMMapController.qml" line="896"/>
         <source>Streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim streamování</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="910"/>
+        <location filename="../qml/map/MMMapController.qml" line="902"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivní</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1048"/>
+        <location filename="../qml/map/MMMapController.qml" line="1040"/>
         <source>Splitting done successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozdělení proběhlo úspěšně</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1139"/>
+        <location filename="../qml/map/MMMapController.qml" line="1131"/>
         <source>Select some point to start editing the geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte nějaký bod a začněte upravovat geometrii.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1152"/>
+        <location filename="../qml/map/MMMapController.qml" line="1144"/>
         <source>Record new geometry for the feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Záznam nové geometrie prvku</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1242"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>GPS currently unavailable.</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS v současné době nedostupná.</translation>
     </message>
 </context>
 <context>
@@ -1377,17 +1377,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="20"/>
         <source>Map Themes</source>
-        <translation type="unfinished">Map Themes</translation>
+        <translation>Motivy mapy</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="25"/>
         <source>There are currently no map themes</source>
-        <translation type="unfinished"></translation>
+        <translation>V současné době nejsou k dispozici žádné motivy map</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="27"/>
         <source>Learn more about %1how to setup themes%2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Další informace o %1jak nastavit motivy%2.</translation>
     </message>
 </context>
 <context>
@@ -1395,7 +1395,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/components/MMMeasureCrosshair.qml" line="93"/>
         <source>Close shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavřít tvar</translation>
     </message>
 </context>
 <context>
@@ -1403,47 +1403,47 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="54"/>
         <source>Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Měření</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Opakovat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
         <source>Undo</source>
-        <translation type="unfinished">Undo</translation>
+        <translation>Vrátit</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
         <source>Perimeter</source>
-        <translation type="unfinished"></translation>
+        <translation>Obvod</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Délka</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="92"/>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Plocha</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
         <source>Close shape</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavřít tvar</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
         <source>Add point</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat bod</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="112"/>
         <source>Done</source>
-        <translation type="unfinished">Done</translation>
+        <translation>Hotovo</translation>
     </message>
 </context>
 <context>
@@ -1451,7 +1451,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/components/MMMessage.qml" line="30"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Více informací</translation>
     </message>
 </context>
 <context>
@@ -1459,22 +1459,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="20"/>
         <source>Upload project?</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahrát projekt?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="21"/>
         <source>This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento projekt není v současné době nahrán na cloud. Nahrajte jej, abyste aktivovali synchronizaci a spolupráci.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="22"/>
         <source>Yes, I want to upload it</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci ho nahrát</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji.</translation>
     </message>
 </context>
 <context>
@@ -1482,22 +1482,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="20"/>
         <source>Sign in to your account</source>
-        <translation type="unfinished"></translation>
+        <translation>Přihlaste se do svého účtu</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
         <source>You need to be signed in to your account in order to synchronise the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro synchronizaci projektu musíte být přihlášeni ke svému účtu.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
         <source>Yes, I want to sign in</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci se přihlásit</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji.</translation>
     </message>
 </context>
 <context>
@@ -1505,17 +1505,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="18"/>
         <source>No rights to access the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádná přístupová práva k projektu</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
         <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>V tomto projektu není povoleno synchronizovat změny. Obraťte se na vlastníka projektu, aby vám přidělil správné oprávnění. Pokud jste vlastníkem projektu, přihlaste se do ovládacího panelu.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok, rozumím.</translation>
     </message>
 </context>
 <context>
@@ -1523,22 +1523,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
         <source>Your server will soon be out of date</source>
-        <translation type="unfinished"></translation>
+        <translation>Váš server bude brzy zastaralý</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
         <source>Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro aktualizaci serveru na nejnovější verzi se obraťte na správce serveru. Následující verze naší mobilní aplikace nemusí být kompatibilní s aktuální verzí vašeho serveru.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="28"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Zjistěte více</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="30"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorovat</translation>
     </message>
 </context>
 <context>
@@ -1546,12 +1546,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="56"/>
         <source>Take a picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Pořiďte obrázek</translation>
     </message>
     <message>
         <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
-        <translation type="unfinished"></translation>
+        <translation>Z fotogalerie</translation>
     </message>
 </context>
 <context>
@@ -1559,42 +1559,42 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="82"/>
         <source>Unknown device</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámé zařízení</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
         <source>Internal receivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní přijímače</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
         <source>External receivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Externí přijímače</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="135"/>
         <source>Connect new receiver</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojit nový přijímač</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="146"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojení k externím přijímačům přes Bluetooth není podporováno.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tato funkce není v systému iOS k dispozici. Výrobce hardwaru může poskytnout vlastní aplikaci, která se připojí k přijímači a nastaví polohu. Aplikace si bude stále myslet, že se jedná o interní GPS vašeho telefonu/tabletu.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
         <source>Internal</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
         <source>Manage GPS receivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Správa GPS přijímačů</translation>
     </message>
 </context>
 <context>
@@ -1602,37 +1602,37 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="23"/>
         <source>Position tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledování polohy</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledujte své trasy i při vypnuté obrazovce. Vaše záznamy jsou uloženy v samostatné vrstvě. Finalizované stopy jsou synchronizovány jako všechny ostatní funkce.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>The app can track your position on this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikace může sledovat vaši pozici na tomto projektu.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Stop tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastavit sledování</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Start tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahájit sledování</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="43"/>
         <source>Tracked distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledovaná vzdálenost</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="63"/>
         <source>Tracking time</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledování času</translation>
     </message>
 </context>
 <context>
@@ -1640,12 +1640,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="176"/>
         <source>Edit</source>
-        <translation type="unfinished">Edit</translation>
+        <translation>Upravit</translation>
     </message>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="187"/>
         <source>Stake out</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozorovat</translation>
     </message>
 </context>
 <context>
@@ -1653,17 +1653,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="21"/>
         <source>PROJ Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba PROJ</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="24"/>
         <source>There was an issue with loading your PROJ files. Please refer to our documentation to learn how to set up PROJ.</source>
-        <translation type="unfinished"></translation>
+        <translation>Při načítání vašich souborů PROJ došlo k problému. V naší dokumentaci se dozvíte, jak nastavit PROJ.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="27"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Více informací</translation>
     </message>
 </context>
 <context>
@@ -1672,24 +1672,24 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/project/MMProjectController.qml" line="204"/>
         <location filename="../qml/project/MMProjectController.qml" line="377"/>
         <source>Home</source>
-        <translation type="unfinished">Home</translation>
+        <translation>Domovská strana</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="207"/>
         <location filename="../qml/project/MMProjectController.qml" line="386"/>
         <source>Projects</source>
-        <translation type="unfinished">Projects</translation>
+        <translation>Projekty</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="209"/>
         <location filename="../qml/project/MMProjectController.qml" line="395"/>
         <source>Explore</source>
-        <translation type="unfinished">Explore</translation>
+        <translation>Procházet</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodporovaný server, obraťte se na správce serveru.</translation>
     </message>
 </context>
 <context>
@@ -1697,47 +1697,47 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizace změn projektu</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nezavírejte prosím aplikaci.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
-        <translation type="unfinished"></translation>
+        <translation>Více možností</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Stáhnout</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizovat projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Místní změny</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebrat ze zařízení</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahrát</translation>
     </message>
 </context>
 <context>
@@ -1745,37 +1745,37 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="41"/>
         <source>Search for projects...</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledání projektů...</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="63"/>
         <source>Your attention is required</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše pozornost je nutná</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
         <source>Click here to access the dashboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknutím sem získáte přístup k ovládacímu panelu</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
         <source>No workspace detected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebyl zjištěn pracovní prostor</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="85"/>
         <source>Create your workspace by clicking here</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořte si pracovní prostor kliknutím sem</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Currently open</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuálně otevřen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Downloaded projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Stažené projekty</translation>
     </message>
 </context>
 <context>
@@ -1783,12 +1783,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="32"/>
         <source>Project issues</source>
-        <translation type="unfinished"></translation>
+        <translation>Problémy projektu</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="83"/>
         <source>QGIS log</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol QGIS</translation>
     </message>
 </context>
 <context>
@@ -1796,17 +1796,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="24"/>
         <source>You have reached a maximum number of projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosáhli jste maximálního počtu projektů</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="26"/>
         <source>Manage account</source>
-        <translation type="unfinished"></translation>
+        <translation>Spravovat účet</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="40"/>
         <source>Maximum number of projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximální počet projektů</translation>
     </message>
 </context>
 <context>
@@ -1814,42 +1814,42 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="149"/>
         <source>The project can not be opened</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt nelze otevřít</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
         <source>Could not synchronise project, please make sure you are logged in and have sufficient rights.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt se nepodařilo synchronizovat, ujistěte se, že jste přihlášeni a máte dostatečná práva.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořit projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
         <source>Let&apos;s get started</source>
-        <translation type="unfinished"></translation>
+        <translation>Začínáme</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="238"/>
         <source>First step is to create your brand new project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prvním krokem je vytvoření nového projektu.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>Unable to get the list of projects.</source>
-        <translation type="unfinished">Unable to get the list of projects.</translation>
+        <translation>Nelze zobrazit seznam projektů.</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenalezeny žádné projekty</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="275"/>
         <source>Retry</source>
-        <translation type="unfinished"></translation>
+        <translation>Znovu</translation>
     </message>
 </context>
 <context>
@@ -1857,17 +1857,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="20"/>
         <source>Failed to open the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt se nepodařilo otevřít</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="23"/>
         <source>Unfortunately, your project could not be opened, please refer to our documentation to understand common problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Váš projekt se bohužel nepodařilo otevřít, v naší dokumentaci najdete informace o běžných problémech.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="26"/>
         <source>Learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Více informací</translation>
     </message>
 </context>
 <context>
@@ -1875,7 +1875,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevření projektu ...</translation>
     </message>
 </context>
 <context>
@@ -1883,7 +1883,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectServerTab.qml" line="38"/>
         <source>Search for projects...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyhledávání projektů...</translation>
     </message>
 </context>
 <context>
@@ -1891,17 +1891,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="94"/>
         <source>Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidáno</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="95"/>
         <source>Removed</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebráno</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="96"/>
         <source>Edited</source>
-        <translation type="unfinished"></translation>
+        <translation>Upraveno</translation>
     </message>
 </context>
 <context>
@@ -1909,22 +1909,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Your local changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše místní změny</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Project Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Stav projektu</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
         <source>There are currently no local changes</source>
-        <translation type="unfinished"></translation>
+        <translation>V současné době nejsou žádné místní změny</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="44"/>
         <source>Once you have made some changes, they will appear here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jakmile provedete nějaké změny, zobrazí se zde.</translation>
     </message>
 </context>
 <context>
@@ -1932,32 +1932,32 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
         <source>Create Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořit projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
         <source>Project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název projektu</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="54"/>
         <source>Fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="99"/>
         <source>Add field</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat pole</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
         <source>Create project</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořit projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
         <source>Empty project name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název projektu je prázdný</translation>
     </message>
 </context>
 <context>
@@ -1965,22 +1965,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="22"/>
         <source>Remove receiver</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstranit přijímač</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete odstranit přijímač ze seznamu posledních přijímačů?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="24"/>
         <source>Yes, I want to remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Ano, chci odstranit</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="25"/>
         <source>No, thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne, děkuji.</translation>
     </message>
 </context>
 <context>
@@ -1988,28 +1988,28 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
-        <translation type="unfinished">Undo</translation>
+        <translation>Vrátit</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstranit</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvolnit</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
         <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
-        <translation type="unfinished">Record</translation>
+        <translation>Zaznamenat</translation>
     </message>
 </context>
 <context>
@@ -2017,22 +2017,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="23"/>
         <source>Delete photo?</source>
-        <translation type="unfinished"></translation>
+        <translation>Samazat fotku?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete fotografii odstranit nebo zrušit její propojení? Odstraněním fotografii z projektu zcela odstraníte, zatímco zrušením propojení fotografii v projektu ponecháte, ale odstraníte ji z této konkrétní funkce.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
         <source>Delete photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Smazat fotku</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
         <source>Unlink photo</source>
-        <translation type="unfinished"></translation>
+        <translation>Odpojit fotku</translation>
     </message>
 </context>
 <context>
@@ -2040,23 +2040,24 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="24"/>
         <source>Remove project</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebrat projekt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
         <source>Any unsynchronised changes will be lost in project 
  %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Jakékoli nesynchronizované změny budou v projektu ztraceny. 
+%1</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebrat</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Zrušit</translation>
     </message>
 </context>
 <context>
@@ -2064,7 +2065,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
         <source>Changelog could not be loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Seznam změn nelze načíst</translation>
     </message>
 </context>
 <context>
@@ -2072,7 +2073,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/settings/components/MMSettingsInput.qml" line="67"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Potvrdit</translation>
     </message>
 </context>
 <context>
@@ -2081,162 +2082,162 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/settings/MMSettingsPage.qml" line="33"/>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Time elapsed</source>
-        <translation type="unfinished"></translation>
+        <translation>Uplynulý čas</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="34"/>
         <source>Distance traveled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ujetá vzdálenost</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="52"/>
         <source>GPS</source>
-        <translation type="unfinished">GPS</translation>
+        <translation>GPS</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
         <source>GPS accuracy threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Prahová hodnota přesnosti GPS</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Určuje, kdy indikátor přesnosti zežloutne</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold, in meters</source>
-        <translation type="unfinished"></translation>
+        <translation>Práh přesnosti GPS v metrech</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
         <source>Manage GPS receivers</source>
-        <translation type="unfinished"></translation>
+        <translation>Správa GPS přijímačů</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>GPS antenna height</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška GPS antény</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahrnuje výšku stožáru a výšku antény přijímače GPS</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
         <source>GPS antenna height, in meters</source>
-        <translation type="unfinished"></translation>
+        <translation>Výška antény GPS v metrech</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
         <source>Streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim streamování</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="114"/>
         <source>Interval threshold type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ prahové hodnoty intervalu</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="115"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvolte typ prahu pro režim streamování</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Distance Traveled</source>
-        <translation type="unfinished"></translation>
+        <translation>Ujetá vzdálenost</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="132"/>
         <source>Threshold interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Prahový interval</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim streamování přidá do objektu bod v každém intervalu</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in meters</source>
-        <translation type="unfinished"></translation>
+        <translation>Prahový interval, v metrech</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Prahový interval v sekundách</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="146"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Záznam</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
         <source>Reuse last entered value</source>
-        <translation type="unfinished"></translation>
+        <translation>Znovu použít poslední zadanou hodnotu</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Každé pole nabízí možnost opakovaně použít jeho hodnotu v dalším prvku</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Automatically sync changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Automaticky synchronizovat změny</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
         <source>Each time you save changes, the app will sync automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Při každém uložení změn se aplikace automaticky synchronizuje</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Auto-lock position</source>
-        <translation type="unfinished"></translation>
+        <translation>Poloha automatického uzamčení</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
         <source>Each time you start recording, the app centers to GPS</source>
-        <translation type="unfinished"></translation>
+        <translation>Při každém spuštění nahrávání se aplikace vycentruje na GPS</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Obecné</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="200"/>
         <source>About</source>
-        <translation type="unfinished">About</translation>
+        <translation>O aplikaci</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
         <source>Changelog</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol změn</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="220"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
         <source>Privacy policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Zásady ochrany osobních údajů</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="240"/>
         <source>Terms of service</source>
-        <translation type="unfinished"></translation>
+        <translation>Podmínky služby</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="250"/>
         <source>Diagnostic log</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol diagnostiky</translation>
     </message>
 </context>
 <context>
@@ -2245,42 +2246,42 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/account/MMSignUpPage.qml" line="45"/>
         <location filename="../qml/account/MMSignUpPage.qml" line="123"/>
         <source>Sign up</source>
-        <translation type="unfinished">Sign up</translation>
+        <translation>Zaregistrujte se</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="74"/>
         <source>Username</source>
-        <translation type="unfinished">Username</translation>
+        <translation>Uživatelské jméno</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="83"/>
         <source>Email</source>
-        <translation type="unfinished"></translation>
+        <translation>E-mail</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="92"/>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="100"/>
         <source>Confirm password</source>
-        <translation type="unfinished"></translation>
+        <translation>Potvrdit heslo</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="117"/>
         <source>I want to subscribe to the newsletter</source>
-        <translation type="unfinished"></translation>
+        <translation>Chci se přihlásit k odběru zpravodaje</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="142"/>
         <source>Already have an account?</source>
-        <translation type="unfinished"></translation>
+        <translation>Máte už účet?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="148"/>
         <source>Sign in</source>
-        <translation type="unfinished">Sign in</translation>
+        <translation>Přihlásit se</translation>
     </message>
 </context>
 <context>
@@ -2288,17 +2289,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
         <source>We could not split the feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Funkci jsme nemohli rozdělit</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ujistěte se, že dělicí čára protíná vaši funkci. Aby bylo možné prvek rozdělit, musí mít platnou geometrii.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation type="unfinished"></translation>
+        <translation>Dobře, rozumím.</translation>
     </message>
 </context>
 <context>
@@ -2306,22 +2307,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
-        <translation type="unfinished">Undo</translation>
+        <translation>Vrátit</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat bod</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
-        <translation type="unfinished">Done</translation>
+        <translation>Hotovo</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
-        <translation type="unfinished"></translation>
+        <translation>Musíte přidat alespoň 2 body.</translation>
     </message>
 </context>
 <context>
@@ -2329,22 +2330,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
         <source>Stake out</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozorovat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
         <source>Feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Prvek</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzdálenost</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
 </context>
 <context>
@@ -2352,22 +2353,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="25"/>
         <source>You have reached a data limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosáhli jste datového limitu</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="28"/>
         <source>Manage account</source>
-        <translation type="unfinished"></translation>
+        <translation>Spravovat účet</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="41"/>
         <source>Data to sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Data k synchronizaci</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="68"/>
         <source>Using</source>
-        <translation type="unfinished"></translation>
+        <translation>Použití</translation>
     </message>
 </context>
 <context>
@@ -2375,22 +2376,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim streamování</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
         <source>Move around your designated object to record its geometry. You can stop this anytime.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pohybujte se kolem určeného objektu a zaznamenejte jeho geometrii. Tento postup můžete kdykoli zastavit.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Stop streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastavit režim streamování</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Start streaming mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Spustit režim streamování</translation>
     </message>
 </context>
 <context>
@@ -2398,22 +2399,22 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="34"/>
         <source>Select workspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte pracovní prostor</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
         <source>Pending invitations</source>
-        <translation type="unfinished"></translation>
+        <translation>Čekající pozvánky</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
         <source>Your workspaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše pracovní prostory</translation>
     </message>
 </context>
 <context>
@@ -2421,17 +2422,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
         <source>Failed to synchronise your changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizace změn se nezdařila</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="30"/>
         <source>Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaše změny nemohly být odeslány na server, ujistěte se, že máte datové připojení a oprávnění k úpravám tohoto projektu.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Ok, I understand</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok, rozumím.</translation>
     </message>
 </context>
 <context>
@@ -2439,12 +2440,12 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="71"/>
         <source>More options</source>
-        <translation type="unfinished"></translation>
+        <translation>Více možností</translation>
     </message>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
-        <translation type="unfinished">More</translation>
+        <translation>Více</translation>
     </message>
 </context>
 <context>
@@ -2452,17 +2453,17 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="20"/>
         <source>New Look &amp; Feel</source>
-        <translation type="unfinished"></translation>
+        <translation>Nový vzhled a funkce</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
         <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikaci jsme pilně vylepšovali! Tato aktualizace přináší nový vzhled a vylepšenou navigaci, díky které rychleji najdete, co potřebujete. Rozhlédněte se!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>
         <source>Let&apos;s start!</source>
-        <translation type="unfinished"></translation>
+        <translation>Začínáme!</translation>
     </message>
 </context>
 <context>
@@ -2470,87 +2471,87 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="32"/>
         <source>Agriculture</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemědělství</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="33"/>
         <source>Archaeology</source>
-        <translation type="unfinished"></translation>
+        <translation>Archeologie</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="34"/>
         <source>Construction and engineering</source>
-        <translation type="unfinished"></translation>
+        <translation>Stavebnictví a strojírenství</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="35"/>
         <source>Electric utilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrické sítě</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="36"/>
         <source>Environmental protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ochrana životního prostředí</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="37"/>
         <source>Local governments</source>
-        <translation type="unfinished"></translation>
+        <translation>Místní samosprávy</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="38"/>
         <source>Natural resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Přírodní zdroje</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="39"/>
         <source>Telecom</source>
-        <translation type="unfinished"></translation>
+        <translation>Telekomunikace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="40"/>
         <source>Transportation</source>
-        <translation type="unfinished"></translation>
+        <translation>Doprava</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="41"/>
         <source>Water utilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Vodohospodářské služby</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
         <source>Student/University</source>
-        <translation type="unfinished"></translation>
+        <translation>Student/univerzita</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatní</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Uveďte své odvětví</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokračovat</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořte si svůj pracovní prostor: seznamte nás se svým oborem</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Uveďte, o jaké odvětví se jedná</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
-        <translation type="unfinished"></translation>
+        <translation>Odvětví</translation>
     </message>
 </context>
 <context>
@@ -2559,77 +2560,77 @@ Won&apos;t be added to the project.</source>
         <location filename="../../core/merginapi.cpp" line="225"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosím, odstraňte některé projekty, protože aplikace v současné době umožňuje pouze %1 stažených projektů.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="828"/>
         <source>Username must have at least 4 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno musí mít alespoň 4 znaky</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="835"/>
         <source>Username contains invalid characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Uživatelské jméno obsahuje neplatné znaky</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="842"/>
         <source>Please enter a valid email</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadejte prosím platný e-mail</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="849"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Heslo není dostatečně silné. Musí%1 mít alespoň 8 znaků%1 obsahovat malá písmena%1 obsahovat velká písmena%1 obsahovat číslice nebo speciální znaky.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="862"/>
         <source>Passwords do not match</source>
-        <translation type="unfinished"></translation>
+        <translation>Hesla se neshodují</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="869"/>
         <source>Please accept Terms and Privacy Policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Přijměte prosím podmínky a zásady ochrany osobních údajů</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="899"/>
         <source>Marketing source cannot be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Zdroj marketingu nemůže být prázdný</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="907"/>
         <source>Industry cannot be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Odvětví nemůže být prázdné</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1311"/>
         <source>Registration successful</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrace proběhla úspěšně</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1333"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Na vybraném serveru nejsou povoleny nové registrace. Informujte se u svého správce.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1365"/>
         <source>Workspace created</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostor vytvořen</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1698"/>
         <source>Project detached from the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt odpojen od serveru</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3873"/>
         <source>Workspace name contains invalid characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Název pracovního prostoru obsahuje neplatné znaky</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3939"/>
         <source>Workspace %1 already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Pracovní prostor %1 již existuje</translation>
     </message>
 </context>
 <context>
@@ -2637,12 +2638,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
         <source>Pending Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Čekající změny</translation>
     </message>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se identifikovat změny</translation>
     </message>
 </context>
 <context>
@@ -2650,47 +2651,47 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
         <source>GPS receiver of this device</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS přijímač v zařízení</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
         <source>Internal (fused)</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní (fúzovaný)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="42"/>
         <source>Using GPS, Wifi and sensors</source>
-        <translation type="unfinished"></translation>
+        <translation>Použití GPS, Wifi a senzorů</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="44"/>
         <source>Not available (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedostupné (%1)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="54"/>
         <source>Internal (gps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Interní (gps)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="55"/>
         <source>Using GPS only</source>
-        <translation type="unfinished"></translation>
+        <translation>Pouze pomocí GPS</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation type="unfinished"></translation>
+        <translation>zařízení připojená přes Bluetooth</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation type="unfinished"></translation>
+        <translation>zařízení připojená přes Bluetooth</translation>
     </message>
 </context>
 <context>
@@ -2698,17 +2699,17 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="154"/>
         <source>Could not find tracking layer for the project</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se najít sledovací vrstvu projektu</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="163"/>
         <source>Tracking layer not found or invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledovací vrstva nenalezena nebo neplatná</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledování se nepodařilo spustit, kontaktujte prosím podporu</translation>
     </message>
 </context>
 <context>
@@ -2716,12 +2717,12 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Název projektu obsahuje neplatné znaky</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
         <source>Project %1 created</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt %1 byl vytvořen</translation>
     </message>
 </context>
 <context>
@@ -2729,18 +2730,18 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Pending changes to synchronise</source>
-        <translation type="unfinished"></translation>
+        <translation>Nevyřízené změny k synchronizaci</translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="107"/>
         <source>Local project, not uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Místní projekt, nenahraný</translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="115"/>
         <location filename="../projectsmodel.cpp" line="119"/>
         <source>Updated %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizováno %1</translation>
     </message>
 </context>
 <context>
@@ -2748,123 +2749,123 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be a number</source>
-        <translation type="unfinished"></translation>
+        <translation>Musí být číselná hodnota</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value must be lower than %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota musí být menší než %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota musí být větší než %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota je příliš vysoká</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Field can not contain decimal places</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole musí obsahovat celé číslo</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Can not be longer than %1 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Nesmí být delší než %1 znaků</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Field should not be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole by nemělo být prázdné</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Field must not be empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Pole nesmí být prázdné</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota by měla být jedinečná</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
-        <translation type="unfinished"></translation>
+        <translation>Hodnota musí být unikátní</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="71"/>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation type="unfinished"></translation>
+        <translation>Nesplněné omezení výrazu QGIS</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nevalidní hodnota</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="132"/>
         <source>No data</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedostupná data</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="135"/>
         <source>No fix</source>
-        <translation type="unfinished"></translation>
+        <translation>Není opraveno</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="138"/>
         <source>GPS fix, no correction data</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS oprava, bez korekčních dat</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>DGPS fix</source>
-        <translation type="unfinished"></translation>
+        <translation>DGPS oprava</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="146"/>
         <source>PPS fix</source>
-        <translation type="unfinished"></translation>
+        <translation>PPS oprava</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="149"/>
         <source>RTK fix</source>
-        <translation type="unfinished"></translation>
+        <translation>RTK oprava</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="152"/>
         <source>RTK float</source>
-        <translation type="unfinished"></translation>
+        <translation>RTK float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="155"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation type="unfinished"></translation>
+        <translation>Odhadovaná oprava (dead reckoning)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="158"/>
         <source>Unknown fix</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámá oprava</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="537"/>
         <source>Report submitted. Please contact us on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zpráva byla odeslána. Kontaktujte nás prosím na %1</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="542"/>
         <source>Failed to submit report. Please check your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se odeslat zprávu. Zkontrolujte prosím své internetové připojení.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizace zrušena</translation>
     </message>
 </context>
 <context>
@@ -2872,7 +2873,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Připojeno</translation>
     </message>
 </context>
 <context>
@@ -2880,118 +2881,118 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="269"/>
         <source>Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizace</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="279"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="288"/>
         <source>No editable layers found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebyly nalezeny žádné editovatelné vrstvy.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="294"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrstvy</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="303"/>
         <source>Projects</source>
-        <translation type="unfinished">Projects</translation>
+        <translation>Projekty</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="311"/>
         <source>Zoom to project</source>
-        <translation type="unfinished">Zoom to project</translation>
+        <translation>Přiblížení projektu</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="320"/>
         <source>Map themes</source>
-        <translation type="unfinished">Map themes</translation>
+        <translation>Motivy mapy</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="331"/>
         <source>Position tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Sledování polohy</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="342"/>
         <source>Measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Měření</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="348"/>
         <source>Local changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Místní změny</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="357"/>
         <source>Settings</source>
-        <translation type="unfinished">Settings</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="552"/>
         <location filename="../qml/main.qml" line="560"/>
         <source>not tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>nesleduje</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="779"/>
         <source>Select feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat prvek</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="863"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation type="unfinished"></translation>
+        <translation>Někdo jiný synchronizuje, zkusíme to později.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="867"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaily</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="887"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se navázat komunikaci se serverem. Zkuste zlepšit síťové připojení.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="938"/>
         <source>Up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualizováno</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="996"/>
         <source>There were issues loading the project. %1View details%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Objevily se problémy s načítáním projektu. %1Zobrazit podrobnosti%2</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="691"/>
         <source>Stake out is disabled because location is unavailable!</source>
-        <translation type="unfinished"></translation>
+        <translation>Stake out je vypnut, protože poloha není k dispozici!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="832"/>
         <source>Successfully synchronised</source>
-        <translation type="unfinished"></translation>
+        <translation>Úspěšná synchronizace</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="870"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
-        <translation type="unfinished"></translation>
+        <translation>Při synchronizaci došlo k problému, zkusíme to znovu. Klikněte pro více informací</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="1017"/>
         <source>Could not read the project file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nelze přečíst soubor projektu:</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="1042"/>
         <source>Press back again to quit the app</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro vypnutí aplikace znovu stiskněte &quot;Zpět&quot;.</translation>
     </message>
 </context>
 </TS>

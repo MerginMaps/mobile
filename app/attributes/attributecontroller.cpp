@@ -232,13 +232,34 @@ void AttributeController::flatten(
         QStringList expressions;
         QString expression = field.constraints().constraintExpression();
 
+        QgsEditFormConfig editFormConfig = layer->editFormConfig();
+        QString fieldName = field.name();
+        QgsPropertyCollection fieldProperties = editFormConfig.dataDefinedFieldProperties( fieldName );
+
+        // Retrieving field name expression
+        QgsProperty nameProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Alias );
+        QgsExpression nameExpression; // empty if users set to hide the field label
+
+        if ( editorField->showLabel() )
+        {
+          nameExpression = QgsExpression( nameProperty.expressionString() );
+        }
+
+        // Retrieving field editability expression
+        QgsProperty editableProperty = fieldProperties.property( QgsEditFormConfig::DataDefinedProperty::Editable );
+        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
+                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
+        QgsExpression isEditableExpression; // empty if the field is read-only
+
+        if ( !isReadOnly )
+        {
+          isEditableExpression = QgsExpression( editableProperty.expressionString() );
+        }
+
         if ( !expression.isEmpty() )
         {
           expressions << field.constraints().constraintExpression();
         }
-
-        bool isReadOnly = ( layer->editFormConfig().readOnly( fieldIndex ) ) ||
-                          ( !field.defaultValueDefinition().expression().isEmpty() && field.defaultValueDefinition().applyOnUpdate() );
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
         std::shared_ptr<FormItem> formItemData =
@@ -249,8 +270,10 @@ void AttributeController::flatten(
               groupName,
               parentTabRow,
               layer->attributeDisplayName( fieldIndex ),
+              nameExpression,
               editorField->showLabel(),
               !isReadOnly,
+              isEditableExpression,
               getEditorWidgetSetup( layer, fieldIndex ),
               fieldIndex,
               parentVisibilityExpressions // field doesn't have visibility expression itself
@@ -900,6 +923,64 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
         item->setVisible( visible );
         changedFormItems << item->id();
       }
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate if form items are editable
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->editableExpression();
+
+      if ( !exp.expression().isEmpty() )
+      {
+        bool editable = item->isEditable();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          editable = exp.evaluate( &expressionContext ).toBool();
+        }
+
+        if ( item->isEditable() != editable )
+        {
+          item->setIsEditable( editable );
+          changedFormItems << item->id();
+        }
+      }
+
+      ++formItemsIterator;
+    }
+  }
+
+  // Evaluate form items name
+  {
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
+    while ( formItemsIterator != mFormItems.end() )
+    {
+      std::shared_ptr<FormItem> item = formItemsIterator.value();
+      QgsExpression exp = item->nameExpression();
+
+      if ( !exp.expression().isEmpty() )
+      {
+        QString name = item->name();
+        exp.prepare( &expressionContext );
+
+        if ( exp.isValid() )
+        {
+          name = exp.evaluate( &expressionContext ).toString();
+        }
+
+        if ( item->name() != name )
+        {
+          item->setName( name );
+          changedFormItems << item->id();
+        }
+      }
+
       ++formItemsIterator;
     }
   }
