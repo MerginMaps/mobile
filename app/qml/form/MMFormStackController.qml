@@ -258,7 +258,7 @@ Item {
       if ( formsStack.depth > 1 ) {
         formsStack.pop()
       }
-      else{
+      else {
         formsStack.clear()
       }
 
