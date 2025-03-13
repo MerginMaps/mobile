@@ -74,6 +74,7 @@ ScrollView {
             GalleryComponents.IconLine { name: "moreIcon"; source: __style.moreIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "moreVerticalIcon"; source: __style.moreVerticalIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "morePhotosIcon"; source: __style.morePhotosIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
+            GalleryComponents.IconLine { name: "remoteImageLoadErrorIcon"; source: __style.remoteImageLoadErrorIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "plusIcon"; source: __style.plusIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "positionTrackingIcon"; source: __style.positionTrackingIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "measurementToolIcon"; source: __style.measurementToolIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
