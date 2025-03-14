@@ -39,7 +39,6 @@ const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg"
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
-bool MerginApi::mSupportsSelectiveSync = true;
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
@@ -335,7 +334,7 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
   return false;
 }
 
-bool MerginApi::supportsSelectiveSync()
+bool MerginApi::supportsSelectiveSync() const
 {
   return mSupportsSelectiveSync;
 }
@@ -1617,13 +1616,13 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool hasLocalProjectChanges )
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
   MerginConfig config;
-  if ( hasLocalProjectChanges )
+  if ( supportsSelectiveSync )
   {
     config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
   }
