@@ -1202,37 +1202,16 @@ Item {
   function jumpToHighlighted( mapOffset ) {
     if ( identifyHighlight.geometry === null )
       return
-
-    if ( __inputUtils.canExtentContainGeometry( identifyHighlight.geometry, mapCanvas.mapSettings ) ){
-      let screenPt = __inputUtils.geometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
-      screenPt.y += mapOffset / 2
-      mapCanvas.jumpTo( screenPt )
+    let screenPt
+    if ( __inputUtils.extentContainGeometry( identifyHighlight.geometry, mapCanvas.mapSettings ) ){
+      screenPt = __inputUtils.geometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
     }
     else{
-       console.log("EXTENT CANNOT CONTAIN GEOMETRY");
-
-      // let distanceBottom = __inputUtils.centerOnScreenHighligtedGeom( identifyHighlight.geometry, mapCanvas.mapSettings )
-      let screenPt = __inputUtils.centerOnScreenHighligtedGeom( identifyHighlight.geometry, mapCanvas.mapSettings )
-      // console.log("distanceBottom")
-      // console.log(distanceBottom)
-
-      console.log("offset")
-      console.log((mapOffset / 2) )
-
-        //very bad
-      // let screenPt = Qt.point( Screen.width / 2 - width / 2 , Screen.height / 2 - height / 2 )
-
-      // if (distanceBottom > (mapOffset / 2) ) {
-      //   return
-      // }
-
-      // screenPt.y += (mapOffset / 2) - distanceBottom
-      screenPt.y += mapOffset / 2
-      mapCanvas.jumpTo( screenPt )
-
+      screenPt = __inputUtils.onScreenGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
     }
 
-
+    screenPt.y += mapOffset / 2
+    mapCanvas.jumpTo( screenPt )
   }
 
   function highlightPair( pair ) {

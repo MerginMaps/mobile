@@ -94,8 +94,8 @@ class InputUtils: public QObject
      * Returns the true if the geometry could fully be contained in the current screen otherwise false
      * Geometry must be in canvas CRS
      */
-    Q_INVOKABLE bool canExtentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings );
-    Q_INVOKABLE QPointF centerOnScreenHighligtedGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE bool extentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE QPointF onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform

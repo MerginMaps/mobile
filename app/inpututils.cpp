@@ -320,7 +320,7 @@ QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, 
  * 
  * Nota Bene: Assume geometry and map canvas CRS are the same
  */
-bool InputUtils::canExtentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings )
+bool InputUtils::extentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
   QPointF screenPoint;
 
@@ -329,54 +329,32 @@ bool InputUtils::canExtentContainGeometry( const QgsGeometry &geom, InputMapSett
 
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
-  qDebug() << "canExtentContainGeometry:geomBbox: " << QgsGeometry::fromRect(geomBbox).asWkt();
-  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-  qDebug() << "canExtentContainGeometry:currentExtent: " << QgsGeometry::fromRect(currentExtent).asWkt();
 
   return currentExtent.contains(geomBbox);
 }
 
 
 /**
- * Returns true if the geometry \a geom is fully contain within the current map extent
+ * Returns the center point of the \a geom currently display on screen
  *
  * Nota Bene: Assume geometry and map canvas CRS are the same
  */
-QPointF InputUtils::centerOnScreenHighligtedGeom( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
-
     QPointF screenPoint;
     if ( !mapSettings || geom.isNull() || !geom.constGet() )
-        // return screenPoint;
         return screenPoint;
-        // return false;
-
 
     QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
     QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect(currentExtent);
 
-     qDebug() << "geomExtend: " << currentExtentAsGeom.asWkt();
+    QgsGeometry intersectedGeom = currentExtentAsGeom.intersection(geom);
 
-    QgsGeometry intersected_geom = currentExtentAsGeom.intersection(geom);
-
-     qDebug() << "inter sected_geom: " << intersected_geom.asWkt();
-
-
-
-    // QgsPoint centroid = QgsPoint( intersected_geom.centroid().asPoint() );
-
-
-    QgsRectangle bbox = intersected_geom.boundingBox();
-
-
+    QgsRectangle bbox = intersectedGeom.boundingBox();
     QgsPoint target = QgsPoint(bbox.center().x(), bbox.center().y());
-
-    QPoint pt = QPoint(bbox.center().x(), bbox.yMaximum());
 
     screenPoint = mapSettings->coordinateToScreen( target );
 
-
-    // return screenPoint.y();
     return screenPoint;
 }
 
