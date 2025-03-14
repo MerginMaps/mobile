@@ -322,8 +322,6 @@ QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, 
  */
 bool InputUtils::extentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
-  QPointF screenPoint;
-
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return false;
 
