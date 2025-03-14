@@ -327,6 +327,7 @@ bool InputUtils::canExtentContainGeometry( const QgsGeometry &geom, InputMapSett
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return false;
 
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
   qDebug() << "canExtentContainGeometry:geomBbox: " << QgsGeometry::fromRect(geomBbox).asWkt();
   QgsRectangle currentExtent = mapSettings->mapSettings().extent();
@@ -351,10 +352,7 @@ QPointF InputUtils::centerOnScreenHighligtedGeom( const QgsGeometry &geom, Input
         // return false;
 
 
-    QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-
-    qDebug() << "currentExtent: " << currentExtent.asWktPolygon();
-
+    QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
     QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect(currentExtent);
 
      qDebug() << "geomExtend: " << currentExtentAsGeom.asWkt();
