@@ -30,9 +30,9 @@ namespace ProjectStatus
   Q_ENUM_NS( Status )
 
   //! Returns project state from ProjectStatus::Status enum for the project
-  Status projectStatus( const Project &project );
+  Status projectStatus( const Project &project, bool supportsSelectiveSync );
 
-  bool hasLocalChanges( const LocalProject &project );
+  bool hasLocalChanges( const LocalProject &project, bool supportsSelectiveSync );
 }
 
 /**
