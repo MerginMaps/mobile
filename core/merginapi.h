@@ -517,10 +517,10 @@ class MerginApi: public QObject
     */
     static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
-    static bool supportsSelectiveSync();
+    bool supportsSelectiveSync() const;
     void setSupportsSelectiveSync( bool supportsSelectiveSync );
 
-    /**ss
+    /**
      * Determine Mergin server type by querying /config endpoint.
      * Possible types are: saas, ce, ee and legacy
      */
@@ -859,7 +859,7 @@ class MerginApi: public QObject
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
-    static bool mSupportsSelectiveSync;
+    bool mSupportsSelectiveSync = true;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
