@@ -3000,7 +3000,7 @@ bool MerginApi::hasLocalChanges(
 {
   QList<MerginFile> filteredOldServerFiles;
 
-  if ( config.isValid ) // if a config was set, support selective sync is supported
+  if ( config.isValid ) // if a config was set, selective sync is supported
   {
     for ( const MerginFile &file : oldServerFiles )
     {
