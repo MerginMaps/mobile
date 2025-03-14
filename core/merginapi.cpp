@@ -1617,14 +1617,18 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool hasLocalProjectChanges )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
-  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  MerginConfig config;
+  if ( hasLocalProjectChanges )
+  {
+    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -2991,14 +2995,14 @@ void MerginApi::getWorkspaceInfoReplyFinished()
 bool MerginApi::hasLocalChanges(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &localFiles,
-  const QString &projectDir
+  const QString &projectDir,
+  const MerginConfig config
 )
 {
   QList<MerginFile> filteredOldServerFiles;
-  if ( supportsSelectiveSync() )
-  {
-    MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
 
+  if ( config.isValid ) // if a config was set, support selective sync is supported
+  {
     for ( const MerginFile &file : oldServerFiles )
     {
       if ( !excludeFromSync( file.path, config ) )

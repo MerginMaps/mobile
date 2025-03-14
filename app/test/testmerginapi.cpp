@@ -764,7 +764,7 @@ void TestMerginApi::testPushNoChanges()
   QCOMPARE( project2.mergin.status, ProjectStatus::UpToDate );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testUpdateAddedFile()
@@ -1103,7 +1103,7 @@ void TestMerginApi::testDiffUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // replace gpkg with a new version with a modified geometry
   // but make sure time it gets a different timestamp or its checksum will be read from the cache
@@ -1115,7 +1115,7 @@ void TestMerginApi::testDiffUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1126,7 +1126,7 @@ void TestMerginApi::testDiffUpload()
   uploadRemoteProject( mApi, mWorkspaceName, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffSubdirsUpload()
@@ -1142,7 +1142,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/" + base ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // replace gpkg with a new version with a modified geometry
   // but make sure time it gets a different timestamp or its checksum will be read from the cache
@@ -1154,7 +1154,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << base ;
   QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1165,7 +1165,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   uploadRemoteProject( mApi, mWorkspaceName, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffUpdateBasic()
@@ -1183,7 +1183,7 @@ void TestMerginApi::testDiffUpdateBasic()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl0->isValid() );
@@ -1213,7 +1213,7 @@ void TestMerginApi::testDiffUpdateBasic()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
@@ -1233,7 +1233,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1267,7 +1267,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QCOMPARE( diff, expectedDiff );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // check that geodiff knows there was one added feature
   GeodiffUtils::ChangesetSummary expectedSummary;
@@ -1291,7 +1291,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   // like before the update - there should be locally modified base.gpkg with the changes we did
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiff );
   QCOMPARE( GeodiffUtils::parseChangesetSummary( changes ), expectedSummary );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffUpdateWithRebaseFailed()
@@ -1312,7 +1312,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1338,7 +1338,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   qDebug() << diff.dump();
   QCOMPARE( diff, expectedDiff );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // check that geodiff knows there was one added feature
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
@@ -1364,7 +1364,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   ProjectDiff expectedDiffFinal;
   expectedDiffFinal.localAdded = QSet<QString>() << conflictFilename;
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiffFinal );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testUpdateWithDiffs()
@@ -1382,7 +1382,7 @@ void TestMerginApi::testUpdateWithDiffs()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1413,7 +1413,7 @@ void TestMerginApi::testUpdateWithDiffs()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
 
@@ -3198,12 +3198,18 @@ void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
   oldServerFiles.append( serverExcluded );
   oldServerFiles.append( serverIncluded );
 
+  // retrieve config file we wrote
+  MerginConfig config = MerginConfig::fromFile( configPath );
+  QVERIFY( config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, true );
+  QCOMPARE( config.selectiveSyncDir, QString( "photos" ) ); // verify selective sync folder
+
   // first scenario => local files list exactly matches the non‑excluded server file
   // the excluded file ("photos/photo.jpg") is ignored, and no local changes should be detected
   QList<MerginFile> localFilesNoChange;
   localFilesNoChange.append( serverIncluded );
 
-  bool result = mApi->hasLocalChanges( oldServerFiles, localFilesNoChange, projectDir );
+  bool result = mApi->hasLocalChanges( oldServerFiles, localFilesNoChange, projectDir, config );
   QVERIFY( !result );
 
   // second scenario => local file list contains a modified version of non‑excluded file
@@ -3215,7 +3221,7 @@ void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
     localFilesChanged.append( modifiedIncluded );
   }
 
-  result = mApi->hasLocalChanges( oldServerFiles, localFilesChanged, projectDir );
+  result = mApi->hasLocalChanges( oldServerFiles, localFilesChanged, projectDir, config );
   QVERIFY( result );
 }
 
