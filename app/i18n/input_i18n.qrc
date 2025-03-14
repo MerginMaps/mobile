@@ -12,6 +12,7 @@
     <file>input_zh_CN.qm</file> 
     <file>input_az.qm</file> 
     <file>input_fr_FR.qm</file> 
+    <file>input_cs_CZ.qm</file> 
     <file>input_sl_SI.qm</file> 
     <file>input_pt_BR.qm</file> 
     <file>input_pt_PT.qm</file> 
@@ -32,6 +33,7 @@
     <file>input_id_ID.qm</file> 
     <file>input_zh.qm</file> 
     <file>input_fr.qm</file> 
+    <file>input_cs.qm</file> 
     <file>input_az_AZ.qm</file> 
     <file>input_hu.qm</file> 
     <file>input_sk_SK.qm</file> 

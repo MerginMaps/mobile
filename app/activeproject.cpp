@@ -76,12 +76,12 @@ ActiveProject::ActiveProject( AppSettings &appSettings
 
 ActiveProject::~ActiveProject() = default;
 
-QgsProject *ActiveProject::qgsProject()
+QgsProject *ActiveProject::qgsProject() const
 {
   return mQgsProject;
 }
 
-LocalProject ActiveProject::localProject()
+LocalProject ActiveProject::localProject() const
 {
   return mLocalProject;
 }
