@@ -2998,29 +2998,29 @@ bool MerginApi::hasLocalChanges(
   const MerginConfig config
 )
 {
-  QList<MerginFile> filteredOldServerFiles;
+  QList<MerginFile> resolvedOldServerFiles;
 
   if ( config.isValid ) // if a config was set, selective sync is supported
   {
     for ( const MerginFile &file : oldServerFiles )
     {
       if ( !excludeFromSync( file.path, config ) )
-        filteredOldServerFiles.append( file );
+        resolvedOldServerFiles.append( file );
     }
   }
   else
   {
-    filteredOldServerFiles = oldServerFiles;
+    resolvedOldServerFiles = oldServerFiles;
   }
 
-  if ( localFiles.count() != filteredOldServerFiles.count() )
+  if ( localFiles.count() != resolvedOldServerFiles.count() )
   {
     return true;
   }
 
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( const MerginFile &file : filteredOldServerFiles )
+  for ( const MerginFile &file : resolvedOldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }
