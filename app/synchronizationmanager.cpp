@@ -83,7 +83,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
 
   bool syncHasStarted = false;
 
-  if ( ProjectStatus::hasLocalChanges( project ) )
+  if ( ProjectStatus::hasLocalChanges( project, mMerginApi->supportsSelectiveSync() ) )
   {
     syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
   }
