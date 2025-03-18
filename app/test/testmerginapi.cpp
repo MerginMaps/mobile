@@ -3237,11 +3237,11 @@ void TestMerginApi::testHasLocalProjectChanges()
 
   // create a valid local project
   QDir().mkdir( projectDir + "/.mergin" );
-  QString metadataPath = projectDir + "/.mergin/mergin.json";
+  QString metadataPath = projectDir + "/.mergin/metadata.json";
   {
     QFile metadataFile( metadataPath );
     QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
-    metadataFile.write( "{\"files\": []}" );
+    metadataFile.write( "{\"files\": [{\"path\": \"project.qgs\", \"checksum\": \"old_checksum\"}]}" );
     metadataFile.close();
   }
 
@@ -3249,12 +3249,12 @@ void TestMerginApi::testHasLocalProjectChanges()
   {
     QFile projectFile( projectDir + "/project.qgs" );
     QVERIFY( projectFile.open( QIODevice::WriteOnly ) );
-    projectFile.write( "project content" );
+    projectFile.write( "modified content" );
     projectFile.close();
   }
 
-  // first scenario => no changes, no selective sync
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, false ) ); // expected result: false (no changes)
+  // first scenario => project sets up with changes, no selective sync
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // true (has changes)
 
   // second scenario => local changes, no selective sync
   {
@@ -3263,7 +3263,7 @@ void TestMerginApi::testHasLocalProjectChanges()
     newFile.write( "new content" );
     newFile.close();
   }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // expected result: true (has changes)
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // true (has changes)
 
   // third scenario => local changes, selective sync enabled
   QString configPath = projectDir + "/mergin-config.json";
@@ -3272,21 +3272,28 @@ void TestMerginApi::testHasLocalProjectChanges()
     QVERIFY( configFile.open( QIODevice::WriteOnly ) );
     configFile.write( "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}" );
     configFile.close();
+
+    // update metadata to include excluded file
+    QFile metadataFile( metadataPath );
+    QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
+    metadataFile.write( "{\"files\": ["
+                        "{\"path\": \"project.qgs\", \"checksum\": \"old_checksum\"},"
+                        "{\"path\": \"photos/photo.jpg\", \"checksum\": \"photo_checksum\"}"
+                        "]}" );
+    metadataFile.close();
   }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: true (has changes)
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // true (has changes)
 
   // fourth scenario => only selective sync directory changes, selective sync enabled
-  // remove regular change
   QVERIFY( QFile::remove( projectDir + "/new_file.txt" ) );
-  // then add a change in the excluded photos directory
   QDir().mkdir( projectDir + "/photos" );
   {
     QFile photoFile( projectDir + "/photos/photo.jpg" );
     QVERIFY( photoFile.open( QIODevice::WriteOnly ) );
-    photoFile.write( "photo content" );
+    photoFile.write( "modified photo" );
     photoFile.close();
   }
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: false (no changes)
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, true ) ); // false (no synced changes)
 
   // fifth scenario => mixed changes (normal and selective sync directories)
   {
@@ -3295,7 +3302,7 @@ void TestMerginApi::testHasLocalProjectChanges()
     anotherFile.write( "more content" );
     anotherFile.close();
   }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: true (has changes)
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // true (has changes)
 
   // sixth scenario => invalid config file (non-JSON content)
   {
@@ -3304,6 +3311,5 @@ void TestMerginApi::testHasLocalProjectChanges()
     configFile.write( "not valid json" );
     configFile.close();
   }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) );   // should fall back to no selective sync and detect changes
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) );   // true (falls back to full check)
 }
-
