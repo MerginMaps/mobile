@@ -76,7 +76,6 @@ MMPrivateComponents.MMBaseInput {
       onStatusChanged: {
       if ( status === Image.Error ) {
           __inputUtils.log( "Image Loading", "Could not load the image. It may be missing or invalid, the URL might be incorrect, or there may be no network connection: " + root.photoUrl )
-          root.errorMsg = "Could not load the image."
         }
       }
 
