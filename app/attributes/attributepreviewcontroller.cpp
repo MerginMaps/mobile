@@ -135,7 +135,19 @@ QString AttributePreviewController::featureTitle( )
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
   QgsExpression expr( mFeatureLayerPair.layer()->displayExpression() );
-  return expr.evaluate( &context ).toString();
+
+  QString title = expr.evaluate( &context ).toString();
+
+  if ( title.isEmpty() )
+  {
+    // let's use a default format with layer name as user did not set any specific display expression
+    if ( mFeatureLayerPair.layer() && mFeatureLayerPair.layer()->isValid() && mFeatureLayerPair.feature().isValid() )
+    {
+      title = QStringLiteral("%1 (%2)").arg( mFeatureLayerPair.layer()->name() ).arg( mFeatureLayerPair.feature().id() );
+    }
+  }
+
+  return title;
 }
 
 QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( QgsMapLayer *layer )
