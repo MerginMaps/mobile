@@ -104,6 +104,8 @@ class InputUtils: public QObject
 
     //! Helper methods to use for transforming geometry from QML as overriding does not work properly there
     Q_INVOKABLE static QgsGeometry transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
+    Q_INVOKABLE static QString printGeom( const QgsGeometry &geometry );
+
     Q_INVOKABLE static QgsGeometry transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings );
 
     /**

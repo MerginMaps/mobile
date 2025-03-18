@@ -107,6 +107,8 @@ Item {
     mapSettings: root.map.mapSettings
     geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
 
+
+
     lineBorderWidth: 0
   }
 
@@ -222,6 +224,7 @@ Item {
             mapTool.releaseVertex( crosshair.recordPoint )
           }
           else {
+            console.log("MMRecordingTools ADD:", crosshair.recordPoint )
             mapTool.addPoint( crosshair.recordPoint )
           }
         }
@@ -300,6 +303,8 @@ Item {
       geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
       lineStrokeStyle: ShapePath.DashLine
       lineWidth: MMHighlight.LineWidths.Narrow
+      lineColor: 'green'
+       onGeometryChanged: console.log("handle highligh geom:", __inputUtils.printGeom(mapTool.handles ))
     }
   }
 
