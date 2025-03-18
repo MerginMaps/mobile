@@ -303,59 +303,39 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
   QPointF screenPoint;
-
+  QgsPoint target;
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
-
-  QgsRectangle bbox = geom.boundingBox();
-  screenPoint = mapSettings->coordinateToScreen( QgsPoint( bbox.center() ) );
-
-  return screenPoint;
-}
-/**
- * Returns true if the geometry \a geom is fully contain within the current map extent
- *
- * Nota Bene: Assume geometry and map canvas CRS are the same
- */
-bool InputUtils::extentContainGeometry( const QgsGeometry &geom, InputMapSettings *mapSettings )
-{
-  if ( !mapSettings || geom.isNull() || !geom.constGet() )
-    return false;
 
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
 
-  return currentExtent.contains( geomBbox );
-}
+  qDebug() << "currentExtent:" << currentExtent.xMinimum()<<","
+                               << currentExtent.yMinimum()<<","
+                               << currentExtent.xMaximum()<<","
+                               << currentExtent.yMaximum();
+  qDebug() << "geom:" << geom.asWkt();
 
 
-/**
- * Returns the center point of the \a geom currently display on screen
- *
- * Nota Bene: Assume geometry and map canvas CRS are the same
- */
-QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
-{
-  QPointF screenPoint;
-  if ( !mapSettings || geom.isNull() || !geom.constGet() )
-    return screenPoint;
-
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
-  QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-
-  QgsGeometry intersectedGeom = currentExtentAsGeom.intersection( geom );
-
-  QgsRectangle bbox = intersectedGeom.boundingBox();
-  QgsPoint target = QgsPoint( bbox.center().x(), bbox.center().y() );
+  if (currentExtent.contains( geomBbox )){
+    // Keep the geometry as is
+    target = QgsPoint( geomBbox.center() );
+  }
+  else{
+    // Cut the geometry to current extent
+    QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+    QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+    QgsRectangle bbox = intersectedGeom.boundingBox();
+    target = QgsPoint( bbox.center() );
+  }
 
   screenPoint = mapSettings->coordinateToScreen( target );
-
+  qDebug() << "screenPoint:" << screenPoint;
   return screenPoint;
 }
-
 
 double InputUtils::convertCoordinateString( const QString &rationalValue )
 {
