@@ -3148,6 +3148,7 @@ void TestMerginApi::testMerginConfigFromFile()
   }
   config = MerginConfig::fromFile( tempFilePath );
   QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
   QFile::remove( tempFilePath );
 
   // 3 => empty file
@@ -3160,12 +3161,14 @@ void TestMerginApi::testMerginConfigFromFile()
   }
   config = MerginConfig::fromFile( tempFilePath );
   QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
   QFile::remove( tempFilePath );
 
   // 4 => file-not-found
   tempFilePath = QDir::tempPath() + "/nonexistent_config.json";
   config = MerginConfig::fromFile( tempFilePath );
   QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
 }
 
 void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
@@ -3223,5 +3226,84 @@ void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
 
   result = mApi->hasLocalChanges( oldServerFiles, localFilesChanged, projectDir, config );
   QVERIFY( result );
+}
+
+void TestMerginApi::testHasLocalProjectChanges()
+{
+  // temporary project directory
+  QTemporaryDir tempDir;
+  QVERIFY( tempDir.isValid() );
+  QString projectDir = tempDir.path();
+
+  // create a valid local project
+  QDir().mkdir( projectDir + "/.mergin" );
+  QString metadataPath = projectDir + "/.mergin/mergin.json";
+  {
+    QFile metadataFile( metadataPath );
+    QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
+    metadataFile.write( "{\"files\": []}" );
+    metadataFile.close();
+  }
+
+  // basic project files
+  {
+    QFile projectFile( projectDir + "/project.qgs" );
+    QVERIFY( projectFile.open( QIODevice::WriteOnly ) );
+    projectFile.write( "project content" );
+    projectFile.close();
+  }
+
+  // first scenario => no changes, no selective sync
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, false ) ); // expected result: false (no changes)
+
+  // second scenario => local changes, no selective sync
+  {
+    QFile newFile( projectDir + "/new_file.txt" );
+    QVERIFY( newFile.open( QIODevice::WriteOnly ) );
+    newFile.write( "new content" );
+    newFile.close();
+  }
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // expected result: true (has changes)
+
+  // third scenario => local changes, selective sync enabled
+  QString configPath = projectDir + "/mergin-config.json";
+  {
+    QFile configFile( configPath );
+    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
+    configFile.write( "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}" );
+    configFile.close();
+  }
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: true (has changes)
+
+  // fourth scenario => only selective sync directory changes, selective sync enabled
+  // remove regular change
+  QVERIFY( QFile::remove( projectDir + "/new_file.txt" ) );
+  // then add a change in the excluded photos directory
+  QDir().mkdir( projectDir + "/photos" );
+  {
+    QFile photoFile( projectDir + "/photos/photo.jpg" );
+    QVERIFY( photoFile.open( QIODevice::WriteOnly ) );
+    photoFile.write( "photo content" );
+    photoFile.close();
+  }
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: false (no changes)
+
+  // fifth scenario => mixed changes (normal and selective sync directories)
+  {
+    QFile anotherFile( projectDir + "/another_file.txt" );
+    QVERIFY( anotherFile.open( QIODevice::WriteOnly ) );
+    anotherFile.write( "more content" );
+    anotherFile.close();
+  }
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // expected result: true (has changes)
+
+  // sixth scenario => invalid config file (non-JSON content)
+  {
+    QFile configFile( configPath );
+    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
+    configFile.write( "not valid json" );
+    configFile.close();
+  }
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) );   // should fall back to no selective sync and detect changes
 }
 

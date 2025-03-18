@@ -155,6 +155,8 @@ class TestMerginApi: public QObject
     void testRegisterAndDelete();
     void testCreateWorkspace();
 
+    void testHasLocalProjectChanges();
+
     // mergin functions
     void testExcludeFromSync();
 
