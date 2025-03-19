@@ -143,7 +143,7 @@ QString AttributePreviewController::featureTitle( )
     // let's use a default format with layer name as user did not set any specific display expression
     if ( mFeatureLayerPair.layer() && mFeatureLayerPair.layer()->isValid() && mFeatureLayerPair.feature().isValid() )
     {
-      title = QStringLiteral("%1 (%2)").arg( mFeatureLayerPair.layer()->name() ).arg( mFeatureLayerPair.feature().id() );
+      title = QStringLiteral( "%1 (%2)" ).arg( mFeatureLayerPair.layer()->name() ).arg( mFeatureLayerPair.feature().id() );
     }
   }
 
