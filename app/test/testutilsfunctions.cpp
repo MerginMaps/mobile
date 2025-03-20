@@ -952,14 +952,14 @@ void TestUtilsFunctions::testOnScreenGeometryCenterToScreenCoordinates()
   InputMapSettings ms;
   ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
   ms.setOutputSize( QSize( 436, 690 ) );
-  QgsGeometry geom = QgsGeometry::fromWkt( "LineString (605540.02427726075984538 5422974.88796170614659786, 618450.11232534842565656 5430064.85434877127408981, 631042.73919192561879754 5418953.71299590915441513, 652418.458746955730021 5431228.87868097703903913)");
+  QgsGeometry geom = QgsGeometry::fromWkt( "LineString (605540.02427726075984538 5422974.88796170614659786, 618450.11232534842565656 5430064.85434877127408981, 631042.73919192561879754 5418953.71299590915441513, 652418.458746955730021 5431228.87868097703903913)" );
   double epsilon = 0.1;
 
   // Case when the geometry can fully be contained within the extent
-  ms.setExtent( QgsRectangle( 595290, 5.35402e+06, 661796, 5.45927e+06) );
-  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates(geom, &ms), QPointF(220.861,224.065), epsilon ), true );
+  ms.setExtent( QgsRectangle( 595290, 5.35402e+06, 661796, 5.45927e+06 ) );
+  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 220.861, 224.065 ), epsilon ), true );
 
   // Case when we cut the geometry to current extent
   ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
-  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates(geom, &ms), QPointF(286.257,274.5), epsilon ), true );
+  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.257, 274.5 ), epsilon ), true );
 }
