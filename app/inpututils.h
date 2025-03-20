@@ -88,7 +88,7 @@ class InputUtils: public QObject
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
-    Q_INVOKABLE QPointF onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE QPointF relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform

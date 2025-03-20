@@ -957,9 +957,9 @@ void TestUtilsFunctions::testOnScreenGeometryCenterToScreenCoordinates()
 
   // Case when the geometry can fully be contained within the extent
   ms.setExtent( QgsRectangle( 595290, 5.35402e+06, 661796, 5.45927e+06) );
-  QCOMPARE( InputUtils::equals( mUtils->onScreenGeometryCenterToScreenCoordinates(geom, &ms), QPointF(220.861,224.065), epsilon ), true );
+  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates(geom, &ms), QPointF(220.861,224.065), epsilon ), true );
 
   // Case when we cut the geometry to current extent
   ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
-  QCOMPARE( InputUtils::equals( mUtils->onScreenGeometryCenterToScreenCoordinates(geom, &ms), QPointF(286.257,274.5), epsilon ), true );
+  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates(geom, &ms), QPointF(286.257,274.5), epsilon ), true );
 }

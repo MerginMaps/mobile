@@ -303,7 +303,7 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
   QPointF screenPoint;
   QgsPoint target;
@@ -313,18 +313,14 @@ QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
 
-  qDebug() << "currentExtent:" << currentExtent.xMinimum()<<","
-                               << currentExtent.yMinimum()<<","
-                               << currentExtent.xMaximum()<<","
-                               << currentExtent.yMaximum();
-  qDebug() << "geom:" << geom.asWkt();
 
-
-  if (currentExtent.contains( geomBbox )){
+  if ( currentExtent.contains( geomBbox ) )
+  {
     // Keep the geometry as is
     target = QgsPoint( geomBbox.center() );
   }
-  else{
+  else
+  {
     // Cut the geometry to current extent
     QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
     QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
@@ -333,7 +329,6 @@ QPointF InputUtils::onScreenGeometryCenterToScreenCoordinates( const QgsGeometry
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
-  qDebug() << "screenPoint:" << screenPoint;
   return screenPoint;
 }
 
