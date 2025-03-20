@@ -3255,7 +3255,7 @@ void TestMerginApi::testHasLocalProjectChanges()
   QVERIFY( !mApi->supportsSelectiveSync() );
 
   // expected results: no changes
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+  QVERIFY( !mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // 2: second scenario => metadata has files and no local files, selective sync not supported
   // add an entry to metadata file
@@ -3277,14 +3277,17 @@ void TestMerginApi::testHasLocalProjectChanges()
   writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, doc.toJson() );
 
   // expected results: has changes
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+  QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // 3: third scenario => metadata files equals local files, selective sync supported
   writeFileContent( projectDir + "/test.txt", QByteArray( "test content" ) );
 
   // update checksum in metadata file to match local file
+  QFileInfo fileInfo( projectDir + "/test.txt" );
   QByteArray checksum = CoreUtils::calculateChecksum( projectDir + "/test.txt" );
   fileObj["checksum"] = QString( checksum );
+  fileObj["size"] = fileInfo.size();
+  fileObj["mtime"] = fileInfo.lastModified().toString( Qt::ISODateWithMs );
   filesArray = QJsonArray();
   filesArray.append( fileObj );
   obj["files"] = filesArray;
@@ -3295,12 +3298,12 @@ void TestMerginApi::testHasLocalProjectChanges()
   QVERIFY( mApi->supportsSelectiveSync() );
 
   // expected results: no changes
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+  QVERIFY( !mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // 4: fourth scenario => local files differs from metadata, selective sync supported
   writeFileContent( projectDir + "/test.txt", QByteArray( "modified content" ) );
   // expected results: has changes
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+  QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // clean up
   QDir( projectDir ).removeRecursively();
