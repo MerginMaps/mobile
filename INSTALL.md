@@ -239,7 +239,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
    - Proceed with this step only if the previous automatic step did not work for you or you do not want to use QtCreator
 
    - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
-   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;33.0.1" "ndk;25.2.9519653" "platforms;android-33" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
+   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;34.0.0" "ndk;26.1.10909125" "platforms;android-34" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
 
 5. Get MM mobile SDK - it contains pre-built dependencies of used libraries (QGIS, etc..)
 
