@@ -26,7 +26,6 @@ void MeasurementMapTool::addPoint()
 
     if ( !mPoints.empty() && transformedPoint == mPoints.back() )
       return;
-
     mPoints.push_back( transformedPoint );
     rebuildGeometry();
   }

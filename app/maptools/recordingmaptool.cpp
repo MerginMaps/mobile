@@ -51,6 +51,9 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     return;
   }
 
+  qDebug() << "ADD POINT" << point.toQPointF();
+
+  QPointF tmp_qpoint = point.toQPointF();
   QgsPoint pointToAdd( point );
 
   if ( mPositionKit && ( mCenteredToGPS || mRecordingType == StreamMode ) )
@@ -708,11 +711,15 @@ void RecordingMapTool::collectVertices()
       // if this is firt point in line (or part) we add handle start point first
       if ( vertexId.vertex == 0 && vertexId.part != startPart && vertexCount >= 2 )
       {
+          // if() {
+
+          // }
         // next line point. needed to get calculate handle point coordinates
         QgsVertexId id( vertexId.part, vertexId.ring, 1 );
 
         // start handle point
         QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+
         mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleStart ) );
         startPart = vertexId.part;
       }

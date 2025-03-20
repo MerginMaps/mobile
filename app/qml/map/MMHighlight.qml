@@ -17,6 +17,7 @@ import ".."
 Item {
   id: highlight
 
+  property string objectName
   // geometry to highlight
   // geometry must be in map canvas CRS!
   property var geometry
@@ -133,7 +134,7 @@ Item {
     refTransformScale = mapTransformScale
 
     let data = __inputUtils.extractGeometryCoordinates( highlight.geometry )
-
+    console.log("extracted geometry", data)
     let newMarkerItems = []
     let newLineElements = []
     let newPolygonElements = []

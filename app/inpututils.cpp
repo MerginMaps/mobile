@@ -419,8 +419,16 @@ QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geom
   {
     return QgsGeometry();
   }
-
+  // qDebug() << "before transform" <<geometry.asWkt();
+  // qDebug() << "transformGeometryToMapWithLayer" << transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() ).asWkt();
   return transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
+}
+
+QString InputUtils::printGeom( const QgsGeometry &geometry )
+{
+
+    // qDebug() << geometry.asWkt();
+    return geometry.asWkt();
 }
 
 QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings )
@@ -542,7 +550,7 @@ QVector<double> InputUtils::extractGeometryCoordinates( const QgsGeometry &geome
   {
     addSingleGeometry( geom, geomType, data );
   }
-
+  // qDebug() << "DATA:" << data;
   return data;
 }
 
