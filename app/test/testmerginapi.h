@@ -151,11 +151,10 @@ class TestMerginApi: public QObject
     void testUpdateProjectMetadataRole();
     void testMerginConfigFromFile();
     void testHasLocalChangesWithSelectiveSyncEnabled();
+    void testHasLocalProjectChanges();
 
     void testRegisterAndDelete();
     void testCreateWorkspace();
-
-    void testHasLocalProjectChanges();
 
     // mergin functions
     void testExcludeFromSync();

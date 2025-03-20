@@ -3231,85 +3231,77 @@ void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
 void TestMerginApi::testHasLocalProjectChanges()
 {
   // temporary project directory
+  QString projectName = "testHasLocalProjectChanges";
   QTemporaryDir tempDir;
   QVERIFY( tempDir.isValid() );
   QString projectDir = tempDir.path();
 
-  // create a valid local project
-  QDir().mkdir( projectDir + "/.mergin" );
-  QString metadataPath = projectDir + "/.mergin/metadata.json";
-  {
-    QFile metadataFile( metadataPath );
-    QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
-    metadataFile.write( "{\"files\": [{\"path\": \"project.qgs\", \"checksum\": \"old_checksum\"}]}" );
-    metadataFile.close();
-  }
+  QDir dir( projectDir );
+  QVERIFY( dir.mkdir( ".mergin" ) );
 
-  // basic project files
-  {
-    QFile projectFile( projectDir + "/project.qgs" );
-    QVERIFY( projectFile.open( QIODevice::WriteOnly ) );
-    projectFile.write( "modified content" );
-    projectFile.close();
-  }
+  // 1: first scenario => empty metadata and no local files, selective sync not supported
+  // create empty metadata
+  MerginProjectMetadata emptyMetadata;
+  QJsonDocument emptyDoc;
+  QJsonObject emptyObj;
+  emptyObj["files"] = QJsonArray();
+  emptyObj["name"] = projectName;
+  emptyObj["namespace"] = mWorkspaceName;
+  emptyObj["version"] = "v1";
+  emptyDoc.setObject( emptyObj );
 
-  // first scenario => project sets up with changes, no selective sync
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // true (has changes)
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, emptyDoc.toJson() );
+  mApi->setSupportsSelectiveSync( false );
+  QVERIFY( !mApi->supportsSelectiveSync() );
 
-  // second scenario => local changes, no selective sync
-  {
-    QFile newFile( projectDir + "/new_file.txt" );
-    QVERIFY( newFile.open( QIODevice::WriteOnly ) );
-    newFile.write( "new content" );
-    newFile.close();
-  }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, false ) ); // true (has changes)
+  // expected results: no changes
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
-  // third scenario => local changes, selective sync enabled
-  QString configPath = projectDir + "/mergin-config.json";
-  {
-    QFile configFile( configPath );
-    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
-    configFile.write( "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}" );
-    configFile.close();
+  // 2: second scenario => metadata has files and no local files, selective sync not supported
+  // add an entry to metadata file
+  MerginProjectMetadata metadata;
+  QJsonDocument doc;
+  QJsonObject obj;
+  QJsonArray filesArray;
+  QJsonObject fileObj;
+  fileObj["path"] = "test.txt";
+  fileObj["checksum"] = "abc123";
+  fileObj["size"] = 100;
+  fileObj["mtime"] = QDateTime::currentDateTime().toString( Qt::ISODateWithMs );
+  filesArray.append( fileObj );
+  obj["files"] = filesArray;
+  obj["name"] = projectName;
+  obj["namespace"] = mWorkspaceName;
+  obj["version"] = "v1";
+  doc.setObject( obj );
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, doc.toJson() );
 
-    // update metadata to include excluded file
-    QFile metadataFile( metadataPath );
-    QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
-    metadataFile.write( "{\"files\": ["
-                        "{\"path\": \"project.qgs\", \"checksum\": \"old_checksum\"},"
-                        "{\"path\": \"photos/photo.jpg\", \"checksum\": \"photo_checksum\"}"
-                        "]}" );
-    metadataFile.close();
-  }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // true (has changes)
+  // expected results: has changes
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
-  // fourth scenario => only selective sync directory changes, selective sync enabled
-  QVERIFY( QFile::remove( projectDir + "/new_file.txt" ) );
-  QDir().mkdir( projectDir + "/photos" );
-  {
-    QFile photoFile( projectDir + "/photos/photo.jpg" );
-    QVERIFY( photoFile.open( QIODevice::WriteOnly ) );
-    photoFile.write( "modified photo" );
-    photoFile.close();
-  }
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, true ) ); // false (no synced changes)
+  // 3: third scenario => metadata files equals local files, selective sync supported
+  writeFileContent( projectDir + "/test.txt", QByteArray( "test content" ) );
 
-  // fifth scenario => mixed changes (normal and selective sync directories)
-  {
-    QFile anotherFile( projectDir + "/another_file.txt" );
-    QVERIFY( anotherFile.open( QIODevice::WriteOnly ) );
-    anotherFile.write( "more content" );
-    anotherFile.close();
-  }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) ); // true (has changes)
+  // update checksum in metadata file to match local file
+  QByteArray checksum = CoreUtils::calculateChecksum( projectDir + "/test.txt" );
+  fileObj["checksum"] = QString( checksum );
+  filesArray = QJsonArray();
+  filesArray.append( fileObj );
+  obj["files"] = filesArray;
+  doc.setObject( obj );
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, doc.toJson() );
 
-  // sixth scenario => invalid config file (non-JSON content)
-  {
-    QFile configFile( configPath );
-    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
-    configFile.write( "not valid json" );
-    configFile.close();
-  }
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, true ) );   // true (falls back to full check)
+  mApi->setSupportsSelectiveSync( true );
+  QVERIFY( mApi->supportsSelectiveSync() );
+
+  // expected results: no changes
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // 4: fourth scenario => local files differs from metadata, selective sync supported
+  writeFileContent( projectDir + "/test.txt", QByteArray( "modified content" ) );
+  // expected results: has changes
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // clean up
+  QDir( projectDir ).removeRecursively();
 }
