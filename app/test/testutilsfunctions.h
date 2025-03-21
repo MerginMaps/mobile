@@ -50,7 +50,7 @@ class TestUtilsFunctions: public QObject
     void testParsePositionUpdates();
     void testFormatDistanceInProjectUnit();
     void testFormatAreaInProjectUnit();
-    void testOnScreenGeometryCenterToScreenCoordinates();
+    void testRelevantGeometryCenterToScreenCoordinates();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

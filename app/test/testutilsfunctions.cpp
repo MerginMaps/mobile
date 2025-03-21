@@ -947,7 +947,7 @@ void TestUtilsFunctions::testFormatAreaInProjectUnit()
   QVERIFY( area2str == "1.7 ac" );
 }
 
-void TestUtilsFunctions::testOnScreenGeometryCenterToScreenCoordinates()
+void TestUtilsFunctions::testRelevantGeometryCenterToScreenCoordinates()
 {
   InputMapSettings ms;
   ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
