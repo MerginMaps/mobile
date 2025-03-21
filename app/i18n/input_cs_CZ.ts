@@ -841,12 +841,12 @@ Nemůže být přidáno do projektu.</translation>
         <translation>Obrázkové soubory (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="234"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
         <source>Could not create directory %1.</source>
         <translation>Nelze vytvořit adresář %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="306"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
         <source>Failed to process the image</source>
         <translation>Obrázek se nepodařilo zpracovat</translation>
     </message>
@@ -1327,47 +1327,47 @@ Nemůže být přidáno do projektu.</translation>
         <translation>Podívejte se, jak v projektu povolit digitalizaci.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="867"/>
+        <location filename="../qml/map/MMMapController.qml" line="875"/>
         <source>More options</source>
         <translation>Další možnosti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="872"/>
+        <location filename="../qml/map/MMMapController.qml" line="880"/>
         <source>Split geometry</source>
         <translation>Rozdělení geometrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="884"/>
+        <location filename="../qml/map/MMMapController.qml" line="892"/>
         <source>Redraw geometry</source>
         <translation>Překreslit geometrii</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="896"/>
+        <location filename="../qml/map/MMMapController.qml" line="904"/>
         <source>Streaming mode</source>
         <translation>Režim streamování</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="902"/>
+        <location filename="../qml/map/MMMapController.qml" line="910"/>
         <source>Active</source>
         <translation>Aktivní</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1040"/>
+        <location filename="../qml/map/MMMapController.qml" line="1048"/>
         <source>Splitting done successfully</source>
         <translation>Rozdělení proběhlo úspěšně</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1131"/>
+        <location filename="../qml/map/MMMapController.qml" line="1139"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vyberte nějaký bod a začněte upravovat geometrii.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1144"/>
+        <location filename="../qml/map/MMMapController.qml" line="1152"/>
         <source>Record new geometry for the feature</source>
         <translation>Záznam nové geometrie prvku</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1234"/>
+        <location filename="../qml/map/MMMapController.qml" line="1242"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS v současné době nedostupná.</translation>
     </message>
@@ -2243,43 +2243,33 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MMSignUpPage</name>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="45"/>
-        <location filename="../qml/account/MMSignUpPage.qml" line="123"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="43"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="104"/>
         <source>Sign up</source>
         <translation>Zaregistrujte se</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="74"/>
-        <source>Username</source>
-        <translation>Uživatelské jméno</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="83"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="72"/>
         <source>Email</source>
         <translation>E-mail</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="92"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="81"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="100"/>
-        <source>Confirm password</source>
-        <translation>Potvrdit heslo</translation>
-    </message>
-    <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="117"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="98"/>
         <source>I want to subscribe to the newsletter</source>
         <translation>Chci se přihlásit k odběru zpravodaje</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="142"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="121"/>
         <source>Already have an account?</source>
         <translation>Máte už účet?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSignUpPage.qml" line="148"/>
+        <location filename="../qml/account/MMSignUpPage.qml" line="127"/>
         <source>Sign in</source>
         <translation>Přihlásit se</translation>
     </message>
@@ -2563,72 +2553,57 @@ only allows up to %1 downloaded projects.</source>
         <translation>Prosím, odstraňte některé projekty, protože aplikace v současné době umožňuje pouze %1 stažených projektů.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="828"/>
-        <source>Username must have at least 4 characters</source>
-        <translation>Uživatelské jméno musí mít alespoň 4 znaky</translation>
-    </message>
-    <message>
-        <location filename="../../core/merginapi.cpp" line="835"/>
-        <source>Username contains invalid characters</source>
-        <translation>Uživatelské jméno obsahuje neplatné znaky</translation>
-    </message>
-    <message>
-        <location filename="../../core/merginapi.cpp" line="842"/>
+        <location filename="../../core/merginapi.cpp" line="826"/>
         <source>Please enter a valid email</source>
         <translation>Zadejte prosím platný e-mail</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="849"/>
+        <location filename="../../core/merginapi.cpp" line="833"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Heslo není dostatečně silné. Musí%1 mít alespoň 8 znaků%1 obsahovat malá písmena%1 obsahovat velká písmena%1 obsahovat číslice nebo speciální znaky.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="862"/>
-        <source>Passwords do not match</source>
-        <translation>Hesla se neshodují</translation>
-    </message>
-    <message>
-        <location filename="../../core/merginapi.cpp" line="869"/>
+        <location filename="../../core/merginapi.cpp" line="846"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Přijměte prosím podmínky a zásady ochrany osobních údajů</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="899"/>
+        <location filename="../../core/merginapi.cpp" line="875"/>
         <source>Marketing source cannot be empty</source>
         <translation>Zdroj marketingu nemůže být prázdný</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="907"/>
+        <location filename="../../core/merginapi.cpp" line="883"/>
         <source>Industry cannot be empty</source>
         <translation>Odvětví nemůže být prázdné</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1311"/>
+        <location filename="../../core/merginapi.cpp" line="1287"/>
         <source>Registration successful</source>
         <translation>Registrace proběhla úspěšně</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1333"/>
+        <location filename="../../core/merginapi.cpp" line="1309"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Na vybraném serveru nejsou povoleny nové registrace. Informujte se u svého správce.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1365"/>
+        <location filename="../../core/merginapi.cpp" line="1341"/>
         <source>Workspace created</source>
         <translation>Pracovní prostor vytvořen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1698"/>
+        <location filename="../../core/merginapi.cpp" line="1674"/>
         <source>Project detached from the server</source>
         <translation>Projekt odpojen od serveru</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3873"/>
+        <location filename="../../core/merginapi.cpp" line="3849"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Název pracovního prostoru obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3939"/>
+        <location filename="../../core/merginapi.cpp" line="3915"/>
         <source>Workspace %1 already exists</source>
         <translation>Pracovní prostor %1 již existuje</translation>
     </message>
