@@ -201,3 +201,64 @@ void TestAttributePreviewController::testPreviewForms()
   // Cleanup
   QgsProject::instance()->removeAllMapLayers();
 }
+
+void TestAttributePreviewController::testFeatureTitle()
+{
+  // Layer creation
+  QgsVectorLayer *layer =
+    new QgsVectorLayer( QStringLiteral( "Point?field=name:string" ),
+                        QStringLiteral( "layer" ),
+                        QStringLiteral( "memory" )
+                      );
+  QVERIFY( layer && layer->isValid() );
+
+  layer->setName( QStringLiteral( "Point" ) );
+
+  QgsFeature f1( layer->dataProvider()->fields() );
+  f1.setAttribute( QStringLiteral( "name" ), "My feature" );
+  layer->dataProvider()->addFeatures( QgsFeatureList() << f1 );
+
+  QgsFeature f2( layer->dataProvider()->fields() );
+  f2.setAttribute( QStringLiteral( "name" ), "" );
+  layer->dataProvider()->addFeatures( QgsFeatureList() << f2 );
+
+  QgsProject::instance()->addMapLayer( layer );
+
+  AttributePreviewController controller;
+  controller.setProject( QgsProject::instance() );
+
+  //
+  // Valid scenarios
+  //
+
+  FeatureLayerPair pair1( layer->getFeature( 1 ), layer );
+  controller.setFeatureLayerPair( pair1 );
+  QCOMPARE( controller.title(), QStringLiteral( "My feature" ) );
+
+  FeatureLayerPair pair2( layer->getFeature( 2 ), layer );
+  controller.setFeatureLayerPair( pair2 );
+  QCOMPARE( controller.title(), QStringLiteral( "Point (2)" ) );
+
+  //
+  // FeaturePair is somehow malformed
+  //
+
+  FeatureLayerPair pair3( QgsFeature(), nullptr );
+  controller.setFeatureLayerPair( pair3 );
+  QCOMPARE( controller.title(), QStringLiteral( "" ) );
+
+  FeatureLayerPair pair4( layer->getFeature( 2 ), nullptr );
+  controller.setFeatureLayerPair( pair4 );
+  QCOMPARE( controller.title(), QStringLiteral( "" ) );
+
+  FeatureLayerPair pair5( QgsFeature(), layer );
+  controller.setFeatureLayerPair( pair5 );
+  QCOMPARE( controller.title(), QStringLiteral( "" ) );
+
+  //
+  // Set layer name as empty and check if default "Unnamed Layer" is applied
+  //
+  layer->setName( QStringLiteral( "" ) );
+  controller.setFeatureLayerPair( pair2 );
+  QCOMPARE( controller.title(), QStringLiteral( "Unnamed Layer (2)" ) );
+}

@@ -30,6 +30,7 @@ class TestAttributePreviewController: public QObject
 
     void testPreviewForms();
     void testMultilineMapTips();
+    void testFeatureTitle();
 
   private:
 };
