@@ -254,4 +254,11 @@ void TestAttributePreviewController::testFeatureTitle()
   FeatureLayerPair pair5( QgsFeature(), layer );
   controller.setFeatureLayerPair( pair5 );
   QCOMPARE( controller.title(), QStringLiteral( "" ) );
+
+  //
+  // Set layer name as empty and check if default "Unnamed Layer" is applied
+  //
+  layer->setName( QStringLiteral( "" ) );
+  controller.setFeatureLayerPair( pair2 );
+  QCOMPARE( controller.title(), QStringLiteral( "Unnamed Layer (2)" ) );
 }
