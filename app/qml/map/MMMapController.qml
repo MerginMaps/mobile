@@ -1210,8 +1210,8 @@ Item {
   function jumpToHighlighted( mapOffset ) {
     if ( identifyHighlight.geometry === null )
       return
+    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
 
-    let screenPt = __inputUtils.geometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
     screenPt.y += mapOffset / 2
     mapCanvas.jumpTo( screenPt )
   }
