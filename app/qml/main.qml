@@ -777,7 +777,7 @@ ApplicationWindow {
     id: featurePairSelection
 
     drawerHeader.title: qsTr( "Select feature" )
-    list.model: MM.FeaturesModel {}
+    list.model: MM.StaticFeaturesModel {}
 
     list. delegate: MMListDelegate {
       text: model.FeatureTitle
@@ -794,7 +794,7 @@ ApplicationWindow {
     function showPairs( pairs ) {
       if ( pairs.length > 0 )
       {
-        list.model.populateStaticModel( pairs )
+        list.model.populate( pairs )
         open()
       }
     }

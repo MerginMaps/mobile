@@ -91,6 +91,8 @@
 #include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
+#include "staticfeaturesmodel.h"
+#include "layerfeaturesmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
@@ -325,6 +327,8 @@ void initDeclarative()
   qmlRegisterType< MapThemesModel >( "mm", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "mm", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "mm", 1, 0, "FeaturesModel" );
+  qmlRegisterType< StaticFeaturesModel >( "mm", 1, 0, "StaticFeaturesModel" );
+  qmlRegisterType< LayerFeaturesModel >( "mm", 1, 0, "LayerFeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "mm", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "mm", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
