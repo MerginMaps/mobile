@@ -40,7 +40,6 @@ const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" <
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 
-
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
   , mLocalProjects( localProjects )
@@ -1593,14 +1592,18 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
-  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  MerginConfig config;
+  if ( supportsSelectiveSync )
+  {
+    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -2967,17 +2970,33 @@ void MerginApi::getWorkspaceInfoReplyFinished()
 bool MerginApi::hasLocalChanges(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &localFiles,
-  const QString &projectDir
+  const QString &projectDir,
+  const MerginConfig config
 )
 {
-  if ( localFiles.count() != oldServerFiles.count() )
+  QList<MerginFile> resolvedOldServerFiles;
+
+  if ( config.isValid ) // if a config was set, selective sync is supported
+  {
+    for ( const MerginFile &file : oldServerFiles )
+    {
+      if ( !excludeFromSync( file.path, config ) )
+        resolvedOldServerFiles.append( file );
+    }
+  }
+  else
+  {
+    resolvedOldServerFiles = oldServerFiles;
+  }
+
+  if ( localFiles.count() != resolvedOldServerFiles.count() )
   {
     return true;
   }
 
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( const MerginFile &file : oldServerFiles )
+  for ( const MerginFile &file : resolvedOldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }

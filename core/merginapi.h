@@ -388,7 +388,7 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
-    static bool hasLocalProjectChanges( const QString &projectDir );
+    static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
 
     /**
      * Parse major and minor version number from version string
@@ -473,7 +473,8 @@ class MerginApi: public QObject
     static bool hasLocalChanges(
       const QList<MerginFile> &oldServerFiles,
       const QList<MerginFile> &localFiles,
-      const QString &projectDir
+      const QString &projectDir,
+      const MerginConfig config
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
