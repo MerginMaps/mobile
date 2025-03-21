@@ -2426,16 +2426,15 @@ void TestMerginApi::testRegisterAndDelete()
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
-  QString username = "test_" + quiteRandom;
-  QString email = username + "@nonexistant.email.com";
+  QString email = "test_" + quiteRandom + "@nonexistant.email.com";
 
-  qDebug() << "username:" << username;
+  qDebug() << "email:" << email;
   // do not want to be authorized
   mApi->clearAuth();
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
@@ -2443,9 +2442,8 @@ void TestMerginApi::testRegisterAndDelete()
     QVERIFY( false );
   }
 
-
   QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
 
   // now delete user
@@ -2466,11 +2464,11 @@ void TestMerginApi::testCreateWorkspace()
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
 
-  qDebug() << "REGISTERING NEW TEST USER:" << username;
+  qDebug() << "REGISTERING NEW TEST USER WITH EMAIL:" << email;
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
@@ -2479,7 +2477,7 @@ void TestMerginApi::testCreateWorkspace()
   }
 
   QSignalSpy authSpy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
   QVERIFY( !authSpy.isEmpty() );
 
@@ -2854,41 +2852,27 @@ void TestMerginApi::testServerError()
 
 void TestMerginApi::testRegistration()
 {
-  QString username = "?";
   QString email = "broken@email";
   QString password = "pwd";
-  QString confirm_password = password;
 
   // do not want to be authorized
   mApi->clearAuth();
 
-  // wrong username test
-  QSignalSpy spy( mApi, &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, confirm_password, true );
-  QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::USERNAME );
-
   // wrong email test
-  username = "username";
-  mApi->registerUser( username, email, password, confirm_password, true );
+  QSignalSpy spy( mApi, &MerginApi::registrationFailed );
+  mApi->registerUser( email, password, true );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::EMAIL );
 
   // wrong password test
   email = "username@email.com";
-  mApi->registerUser( username, email, password, confirm_password, true );
+  mApi->registerUser( email, password, true );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::PASSWORD );
 
-  // wrong confirm password test
-  password = "Lutra123:)";
-  mApi->registerUser( username, email, password, confirm_password, true );
-  QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-
   // unchecked TOC test
-  confirm_password = "Lutra123:)";
-  mApi->registerUser( username, email, password, confirm_password, false );
+  password = "Lutra123:)";
+  mApi->registerUser( email, password, false );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
 }
