@@ -130,6 +130,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl moreVerticalIcon READ moreVerticalIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
+    Q_PROPERTY( QUrl remoteImageLoadErrorIcon READ remoteImageLoadErrorIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
@@ -231,7 +232,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairForegroundImage READ crosshairForegroundImage CONSTANT )
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
     Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
-
 
     /*
      * Pixel sizes used across the app
@@ -426,6 +426,7 @@ class MMStyle: public QObject
     QUrl moreIcon() const {return QUrl( "qrc:/More.svg" );}
     QUrl moreVerticalIcon() const {return QUrl( "qrc:/MoreVertical.svg" );}
     QUrl morePhotosIcon() const {return QUrl( "qrc:/MorePhotos.svg" );}
+    QUrl remoteImageLoadErrorIcon() const {return QUrl( "qrc:/RemoteImageLoadError.svg" );}
     QUrl mouthIcon() const {return QUrl( "qrc:/Mouth.svg" );}
     QUrl measurementToolIcon() const {return QUrl( "qrc:/Measure.svg" );}
     QUrl closeShapeIcon() const {return QUrl( "qrc:/CloseShape.svg" );}
