@@ -146,7 +146,7 @@ QString AttributePreviewController::featureTitle( )
       QString layerName = mFeatureLayerPair.layer()->name();
       if ( layerName.isEmpty() )
       {
-        layerName = QStringLiteral( "Unnamed Layer" );
+        layerName = tr( "Unnamed Layer" );
       }
 
       title = QStringLiteral( "%1 (%2)" ).arg( layerName ).arg( mFeatureLayerPair.feature().id() );
