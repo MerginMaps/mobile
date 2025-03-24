@@ -114,3 +114,49 @@ void TestActiveProject::testPositionTrackingFlag()
   id = mApi->localProjectsManager().projectId( projectDir + "/" + projectName );
   mApi->localProjectsManager().removeLocalProject( id );
 }
+
+void TestActiveProject::testRecordingAllowed()
+{
+  // Setup an ActiveProject instance.
+  AppSettings as;
+  ActiveLayer al;
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+
+  // 1: null layer should return false
+  QCOMPARE( activeProject.recordingAllowed( nullptr ), false );
+
+  QgsVectorLayer *validLayer = new QgsVectorLayer( "Polygon?crs=EPSG:4326", "PolygonLayer", "memory" );
+  QVERIFY( validLayer->isValid() );
+
+  QgsProject *project = activeProject.qgsProject();
+  project->addMapLayer( validLayer );
+
+  // 2: valid and writable layer should return true
+  QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
+
+  // 3: read-only layer should return false
+  validLayer->setReadOnly( true );
+  QCOMPARE( activeProject.recordingAllowed( validLayer ), false );
+  validLayer->setReadOnly( false ); // restore for further tests
+
+  // 4: no geometry should return false
+  QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeomLayer", "memory" );
+  QVERIFY( noGeomLayer->isValid() );
+  project->addMapLayer( noGeomLayer );
+  QCOMPARE( activeProject.recordingAllowed( noGeomLayer ), false );
+
+  // 5: position tracking layer should return false
+  project->writeEntry( "Mergin", "PositionTracking/TrackingLayer", validLayer->id() );
+  QCOMPARE( activeProject.recordingAllowed( validLayer ), false );
+
+  // restore position tracking layer id and it should return true
+  project->writeEntry( "Mergin", "PositionTracking/TrackingLayer", QString() );
+  QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
+
+  // cleanup
+  project->removeMapLayer( validLayer->id() );
+  project->removeMapLayer( noGeomLayer->id() );
+  delete validLayer;
+  delete noGeomLayer;
+}
+

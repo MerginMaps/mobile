@@ -8,21 +8,19 @@
  ***************************************************************************/
 
 #include "qgsvectorlayer.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 
 #include "qgsproject.h"
 #include "qgslayertree.h"
 
-LayersProxyModel::LayersProxyModel( QObject *parent ) :
+RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
   QgsMapLayerProxyModel{ parent }
 {
-  QObject::connect( this, &LayersProxyModel::rowsInserted, this, &LayersProxyModel::countChanged );
-  QObject::connect( this, &LayersProxyModel::rowsRemoved, this, &LayersProxyModel::countChanged );
-
-  updateFilterFunction();
+  QObject::connect( this, &RecordingLayersProxyModel::rowsInserted, this, &RecordingLayersProxyModel::countChanged );
+  QObject::connect( this, &RecordingLayersProxyModel::rowsRemoved, this, &RecordingLayersProxyModel::countChanged );
 }
 
-bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
+bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
 {
   if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
     return false;
@@ -31,10 +29,10 @@ bool LayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &sour
   QModelIndex index = mModel->index( source_row, 0, source_parent );
   QgsMapLayer *layer = mModel->layerFromIndex( index );
 
-  return filterFunction( layer );
+  return mModel->data( index, LayersModel::LayerVisible ).toBool();
 }
 
-QList<QgsMapLayer *> LayersProxyModel::layers() const
+QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
 {
   QList<QgsMapLayer *> filteredLayers;
 
@@ -52,12 +50,12 @@ QList<QgsMapLayer *> LayersProxyModel::layers() const
   return filteredLayers;
 }
 
-void LayersProxyModel::refreshData()
+void RecordingLayersProxyModel::refreshData()
 {
   invalidate();
 }
 
-QgsMapLayer *LayersProxyModel::firstUsableLayer() const
+QgsMapLayer *RecordingLayersProxyModel::firstUsableLayer() const
 {
   QList<QgsMapLayer *> filteredLayers = layers();
 
@@ -69,7 +67,7 @@ QgsMapLayer *LayersProxyModel::firstUsableLayer() const
   return nullptr;
 }
 
-QModelIndex LayersProxyModel::indexFromLayerId( QString layerId ) const
+QModelIndex RecordingLayersProxyModel::indexFromLayerId( QString layerId ) const
 {
   if ( layerId.isEmpty() )
     return QModelIndex();
@@ -79,7 +77,7 @@ QModelIndex LayersProxyModel::indexFromLayerId( QString layerId ) const
   return mModel->indexFromLayer( layer ); // return source model index to skip converting indexes in proxy model
 }
 
-QgsVectorLayer *LayersProxyModel::layerFromLayerId( QString layerId ) const
+QgsVectorLayer *RecordingLayersProxyModel::layerFromLayerId( QString layerId ) const
 {
   QList<QgsMapLayer *> filteredLayers = layers();
 
@@ -95,7 +93,7 @@ QgsVectorLayer *LayersProxyModel::layerFromLayerId( QString layerId ) const
   return nullptr;
 }
 
-QgsVectorLayer *LayersProxyModel::layerFromLayerName( const QString &layerName ) const
+QgsVectorLayer *RecordingLayersProxyModel::layerFromLayerName( const QString &layerName ) const
 {
   QList<QgsMapLayer *> filteredLayers = layers();
 
@@ -111,76 +109,23 @@ QgsVectorLayer *LayersProxyModel::layerFromLayerName( const QString &layerName )
   return nullptr;
 }
 
-QVariant LayersProxyModel::getData( QModelIndex index, int role ) const
+QVariant RecordingLayersProxyModel::getData( QModelIndex index, int role ) const
 {
   return sourceModel()->data( index, role );
 }
 
-QgsProject *LayersProxyModel::qgsProject() const
-{
-  return mProject;
-}
-
-void LayersProxyModel::setQgsProject( QgsProject *project )
-{
-  if ( mProject != project )
-  {
-    mProject = project;
-    emit qgsProjectChanged();
-  }
-}
-
-LayersProxyModel::LayerModelTypes LayersProxyModel::modelType() const
-{
-  return mModelType;
-}
-
-void LayersProxyModel::setModelType( LayerModelTypes type )
-{
-  if ( mModelType != type )
-  {
-    mModelType = type;
-
-    updateFilterFunction();
-
-    emit modelTypeChanged();
-  }
-}
-
-LayersModel *LayersProxyModel::model() const
+LayersModel *RecordingLayersProxyModel::model() const
 {
   return mModel;
 }
 
-void LayersProxyModel::setModel( LayersModel *model )
+void RecordingLayersProxyModel::setModel( LayersModel *model )
 {
   if ( mModel != model )
   {
     mModel = model;
     setSourceModel( mModel );
+    setFilters( Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer );
     emit modelChanged();
   }
-}
-
-void LayersProxyModel::updateFilterFunction()
-{
-  beginResetModel();
-
-  switch ( mModelType )
-  {
-    case ActiveLayerSelection:
-      filterFunction = [this]( QgsMapLayer * layer )
-      {
-        return InputUtils::recordingAllowed( layer, mProject );
-      };
-      break;
-    default:
-      filterFunction = []( QgsMapLayer * )
-      {
-        return true;
-      };
-      break;
-  }
-
-  endResetModel();
 }

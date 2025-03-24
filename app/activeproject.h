@@ -18,7 +18,7 @@
 #include "inputconfig.h"
 #include "appsettings.h"
 #include "activelayer.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
@@ -116,11 +116,20 @@ class ActiveProject: public QObject
 
     //! Returns true if the project has at least one layer that allows recording
     Q_INVOKABLE bool projectHasRecordingLayers() const;
+
     /**
      * Returns role/permission level of current user for this project
      */
     Q_INVOKABLE QString projectRole() const;
     void setProjectRole( const QString &role );
+
+    /**
+     * Returns true if the layer allows recording:
+     */
+    bool recordingAllowed( QgsMapLayer *layer ) const ;
+
+    //! Returns position tracking layer ID if exists
+    Q_INVOKABLE QString positionTrackingLayerId() const;
 
   signals:
     void qgsProjectChanged();

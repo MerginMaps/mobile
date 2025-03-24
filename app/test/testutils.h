@@ -60,7 +60,6 @@ namespace TestUtils
   void testLayerHasGeometry();
   void testLayerVisible();
   void testIsPositionTrackingLayer();
-  void testRecordingAllowed();
   void testMapLayerFromName();
 }
 

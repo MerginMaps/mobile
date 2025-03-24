@@ -8,8 +8,8 @@
 ***************************************************************************/
 
 
-#ifndef LAYERSPROXYMODEL_H
-#define LAYERSPROXYMODEL_H
+#ifndef RECORDINGLAYERSPROXYMODEL_H
+#define RECORDINGLAYERSPROXYMODEL_H
 
 #include <QObject>
 
@@ -21,17 +21,16 @@
 
 #include "layersmodel.h"
 
-class LayersProxyModel : public QgsMapLayerProxyModel
+class RecordingLayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
     Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
-    Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
-    Q_PROPERTY( LayerModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
+    //Q_PROPERTY( LayerModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
     Q_PROPERTY( LayersModel *model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
-    Q_INVOKABLE explicit LayersProxyModel( QObject *parent = nullptr );
+    Q_INVOKABLE explicit RecordingLayersProxyModel( QObject *parent = nullptr );
 
     enum LayerModelTypes
     {
@@ -60,15 +59,11 @@ class LayersProxyModel : public QgsMapLayerProxyModel
     QList<QgsMapLayer *> layers() const;
 
     //! Filter current model according to its type
-    void updateFilterFunction();
+    //void updateFilterFunction();
 
     //! Getters and setters
-
-    QgsProject *qgsProject() const;
-    void setQgsProject( QgsProject *project );
-
-    LayerModelTypes modelType() const;
-    void setModelType( LayerModelTypes type );
+    // LayerModelTypes modelType() const;
+    // void setModelType( LayerModelTypes type );
 
     LayersModel *model() const;
     void setModel( LayersModel *model );
@@ -93,8 +88,6 @@ class LayersProxyModel : public QgsMapLayerProxyModel
      * In future will allow dependency injection of custom filter functions.
      */
     std::function<bool( QgsMapLayer * )> filterFunction;
-
-    QgsProject *mProject;
 };
 
-#endif // LAYERSPROXYMODEL_H
+#endif // RECORDINGLAYERSPROXYMODEL_H

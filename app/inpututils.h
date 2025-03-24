@@ -605,11 +605,6 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
 
     /**
-     * Returns true if the layer allows recording
-     */
-    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
-
-    /**
      * Returns QgsMapLayer pointer for given layer name and project.
      * If layer with given name does not exist or there is no project, returns nullptr.
      */

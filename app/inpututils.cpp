@@ -2257,20 +2257,6 @@ bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *projec
   return layer->id() == trackingLayerId;
 }
 
-bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
-{
-  if ( !layer || !layer->isValid() || !project )
-    return false;
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer &&
-           !vectorLayer->readOnly() &&
-           layerHasGeometry( vectorLayer ) &&
-           layerVisible( layer, project ) &&
-           !isPositionTrackingLayer( layer, project ) );
-}
-
 QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )
 {
   if ( !project || layerName.isEmpty() )

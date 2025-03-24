@@ -186,8 +186,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     setProjectRole( role );
 
     updateMapTheme();
-    updateActiveLayer();
     updateMapSettingsLayers();
+    updateActiveLayer();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -465,11 +465,11 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
+  if ( !mMapSettings->layers().contains( mActiveLayer.layer() ) )
   {
     QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
-    if ( InputUtils::recordingAllowed( defaultAppSettingsLayer, mQgsProject ) )
+    if ( recordingAllowed( defaultAppSettingsLayer ) )
     {
       setActiveLayer( defaultAppSettingsLayer );
       return;
@@ -481,7 +481,7 @@ void ActiveProject::updateActiveLayer()
     for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
     {
       QgsMapLayer *layer = it.value();
-      if ( InputUtils::recordingAllowed( layer, mQgsProject ) )
+      if ( recordingAllowed( layer ) )
       {
         defaultLayer = layer;
         break;
@@ -519,8 +519,8 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
   node->setItemVisibilityChecked( !node->isVisible() );
 
   updateMapTheme();
-  updateActiveLayer();
   updateMapSettingsLayers();
+  updateActiveLayer();
 }
 
 const QString &ActiveProject::mapTheme() const
@@ -546,7 +546,7 @@ bool ActiveProject::projectHasRecordingLayers() const
   const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
   {
-    if ( InputUtils::recordingAllowed( it.value(), mQgsProject ) )
+    if ( recordingAllowed( it.value() ) )
       return true;
   }
 
@@ -567,3 +567,20 @@ void ActiveProject::setProjectRole( const QString &role )
     emit projectRoleChanged();
   }
 }
+
+bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
+{
+  if ( !layer )
+    return false;
+
+  return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId();
+}
+
+QString ActiveProject::positionTrackingLayerId() const
+{
+  if ( !mQgsProject )
+    return QString();
+
+  return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
+}
+
