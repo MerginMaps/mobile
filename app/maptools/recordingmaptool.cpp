@@ -719,7 +719,7 @@ void RecordingMapTool::collectVertices()
           if ( geom->vertexAt( vertexId ) != geom->vertexAt( id ) )
           {
             foundVertexAtDifferentPositions = true;
-          }   
+          }
           offsetId++;
         }
 
