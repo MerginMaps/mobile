@@ -943,6 +943,19 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
+  // clear recorded geometry
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( lineLayer );
+
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( mapTool.handles.isEmpty() )
+  
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QVERIFY( mapTool.handles.vertexAt(1) == pointsToAdd[1])
+
   delete project;
   delete lineLayer;
 }

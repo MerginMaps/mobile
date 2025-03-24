@@ -708,13 +708,29 @@ void RecordingMapTool::collectVertices()
       // if this is firt point in line (or part) we add handle start point first
       if ( vertexId.vertex == 0 && vertexId.part != startPart && vertexCount >= 2 )
       {
-        // next line point. needed to get calculate handle point coordinates
-        QgsVertexId id( vertexId.part, vertexId.ring, 1 );
+        QgsVertexId id;
+        int offsetId = 1;
+        bool foundVertexAtDifferentPositions = false;
+        // While the first and next vertex are the same position we are looking for the next vertex
+        while (!foundVertexAtDifferentPositions && offsetId < vertexCount) 
+        {
+          id = QgsVertexId ( vertexId.part, vertexId.ring, offsetId );
 
-        // start handle point
-        QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
-        mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleStart ) );
-        startPart = vertexId.part;
+          if (geom->vertexAt(vertexId) != geom->vertexAt(id))
+          {
+            foundVertexAtDifferentPositions = true;
+          }   
+          offsetId++;
+        }
+        
+        if (foundVertexAtDifferentPositions)
+        {
+          // start handle point
+          QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
+
+          mVertices.push_back( Vertex( vertexId, handle, Vertex::HandleStart ) );
+          startPart = vertexId.part;
+        }
       }
 
       // add actual vertex and midpoint if this is not the last vertex of the line
