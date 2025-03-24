@@ -712,18 +712,18 @@ void RecordingMapTool::collectVertices()
         int offsetId = 1;
         bool foundVertexAtDifferentPositions = false;
         // While the first and next vertex are the same position we are looking for the next vertex
-        while (!foundVertexAtDifferentPositions && offsetId < vertexCount) 
+        while ( !foundVertexAtDifferentPositions && offsetId < vertexCount )
         {
-          id = QgsVertexId ( vertexId.part, vertexId.ring, offsetId );
+          id = QgsVertexId( vertexId.part, vertexId.ring, offsetId );
 
-          if (geom->vertexAt(vertexId) != geom->vertexAt(id))
+          if ( geom->vertexAt( vertexId ) != geom->vertexAt( id ) )
           {
             foundVertexAtDifferentPositions = true;
           }   
           offsetId++;
         }
-        
-        if (foundVertexAtDifferentPositions)
+
+        if ( foundVertexAtDifferentPositions )
         {
           // start handle point
           QgsPoint handle = handlePoint( geom->vertexAt( id ), geom->vertexAt( vertexId ) );
