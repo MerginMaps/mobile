@@ -34,20 +34,10 @@ bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIn
 
 QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
 {
-  QList<QgsMapLayer *> filteredLayers;
-
   if ( !mModel )
-    return filteredLayers;
+    return QList<QgsMapLayer *>();
 
-  QList<QgsMapLayer *> allLayers = mModel->layers();
-  int layersCount = allLayers.size();
-
-  for ( int i = 0; i < layersCount; i++ )
-  {
-    if ( filterFunction( allLayers.at( i ) ) )
-      filteredLayers << allLayers.at( i );
-  }
-  return filteredLayers;
+  return mModel->layers();
 }
 
 void RecordingLayersProxyModel::refreshData()

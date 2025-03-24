@@ -58,13 +58,6 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
      */
     QList<QgsMapLayer *> layers() const;
 
-    //! Filter current model according to its type
-    //void updateFilterFunction();
-
-    //! Getters and setters
-    // LayerModelTypes modelType() const;
-    // void setModelType( LayerModelTypes type );
-
     LayersModel *model() const;
     void setModel( LayersModel *model );
 

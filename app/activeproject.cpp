@@ -353,22 +353,7 @@ void ActiveProject::updateMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
-  QgsLayerTree *root = mQgsProject->layerTreeRoot();
-
-  // Get list of all visible and valid layers in the project
-  QList< QgsMapLayer * > visibleLayers;
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
-  {
-    if ( nodeLayer->isVisible() )
-    {
-      QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer && layer->isValid() )
-      {
-        visibleLayers << layer;
-      }
-    }
-  }
-
+  QList<QgsMapLayer *> visibleLayers = getVisibleLayers();
   mMapSettings->setLayers( visibleLayers );
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
@@ -465,7 +450,9 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !mMapSettings->layers().contains( mActiveLayer.layer() ) )
+  QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
+
+  if ( !visibleLayers.contains( mActiveLayer.layer() ) )
   {
     QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
@@ -584,3 +571,25 @@ QString ActiveProject::positionTrackingLayerId() const
   return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
 }
 
+QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
+{
+  if ( !mQgsProject )
+  {
+    return QList<QgsMapLayer *>();
+  }
+
+  QList<QgsMapLayer *> visibleLayers;
+  QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
+
+  for ( auto it = projectLayers.begin(); it != projectLayers.end(); ++it )
+  {
+    QgsMapLayer *layer = it.value();
+
+    if ( layer && layer->isValid() && InputUtils::layerVisible( layer, mQgsProject ) )
+    {
+      visibleLayers << layer;
+    }
+  }
+
+  return visibleLayers;
+}

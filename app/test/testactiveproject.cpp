@@ -117,7 +117,6 @@ void TestActiveProject::testPositionTrackingFlag()
 
 void TestActiveProject::testRecordingAllowed()
 {
-  // Setup an ActiveProject instance.
   AppSettings as;
   ActiveLayer al;
   ActiveProject activeProject( as, al, mApi->localProjectsManager() );

@@ -131,6 +131,9 @@ class ActiveProject: public QObject
     //! Returns position tracking layer ID if exists
     Q_INVOKABLE QString positionTrackingLayerId() const;
 
+    //! Returns if layer is valid and visible
+    QList<QgsMapLayer *> getVisibleLayers() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
