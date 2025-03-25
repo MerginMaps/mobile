@@ -113,6 +113,14 @@
     </message>
 </context>
 <context>
+    <name>AttributePreviewController</name>
+    <message>
+        <location filename="../attributes/attributepreviewcontroller.cpp" line="149"/>
+        <source>Unnamed Layer</source>
+        <translation>Calque sans nom</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPositionProvider</name>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
@@ -269,52 +277,52 @@ Ne sera pas ajouté au projet.</translation>
         <translation>il y a %1 an</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1500"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>résolution de l&apos;écran : %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1485"/>
+        <location filename="../inpututils.cpp" line="1501"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de l&apos;écran : %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1486"/>
+        <location filename="../inpututils.cpp" line="1502"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>taille de l&apos;écran : %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1487"/>
+        <location filename="../inpututils.cpp" line="1503"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Ratio rapporté de pixels de l&apos;appareil: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1488"/>
+        <location filename="../inpututils.cpp" line="1504"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Ratio calculé de pixels de l&apos;appareil: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1489"/>
+        <location filename="../inpututils.cpp" line="1505"/>
         <source>used dp scale: %1</source>
         <translation>Échelle dp utilisée: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2018"/>
+        <location filename="../inpututils.cpp" line="2034"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Vous devez ajouter au moins %1 point(s) à chaque partie.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2022"/>
+        <location filename="../inpututils.cpp" line="2038"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Vous devez ajouter au moins %1 point(s).</translation>
     </message>
@@ -2565,63 +2573,63 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="225"/>
+        <location filename="../../core/merginapi.cpp" line="224"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Veuillez supprimer certains de vos projets car l&apos;application n&apos;autorise actuellement que %1 projets téléchargés.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="826"/>
+        <location filename="../../core/merginapi.cpp" line="825"/>
         <source>Please enter a valid email</source>
         <translation>Veuillez saisir une adresse e-mail valide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="833"/>
+        <location filename="../../core/merginapi.cpp" line="832"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Ce mot de passe n&apos;est pas assez sécurisé. Il doit%1 comporter au moins 8 caractères%1 contenir des caractères minuscules%1 contenir des caractères majuscules%1 contenir des chiffres ou des caractères spéciaux</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="846"/>
+        <location filename="../../core/merginapi.cpp" line="845"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Veuillez accepter les termes et la politique de confidentialité</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="875"/>
+        <location filename="../../core/merginapi.cpp" line="874"/>
         <source>Marketing source cannot be empty</source>
         <translation>Le champ marketing ne peut être vide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="883"/>
+        <location filename="../../core/merginapi.cpp" line="882"/>
         <source>Industry cannot be empty</source>
         <translation>Le champ industrie ne peut être vide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1287"/>
+        <location filename="../../core/merginapi.cpp" line="1286"/>
         <source>Registration successful</source>
         <translation>Inscription réussie</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1309"/>
+        <location filename="../../core/merginapi.cpp" line="1308"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Les nouveaux enregistrements sur le serveur sélectionné ne sont pas autorisés. Veuillez vérifier auprès de votre administrateur.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1341"/>
+        <location filename="../../core/merginapi.cpp" line="1340"/>
         <source>Workspace created</source>
         <translation>Espace de travail créé</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1674"/>
+        <location filename="../../core/merginapi.cpp" line="1677"/>
         <source>Project detached from the server</source>
         <translation>Projet séparé du serveur</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3849"/>
+        <location filename="../../core/merginapi.cpp" line="3868"/>
         <source>Workspace name contains invalid characters</source>
         <translation>L&apos;espace de travail contient des caractères invalides</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3915"/>
+        <location filename="../../core/merginapi.cpp" line="3934"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espace de travail %1 est déjà existant</translation>
     </message>
