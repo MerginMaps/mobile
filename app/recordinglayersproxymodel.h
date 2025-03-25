@@ -26,7 +26,6 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
     Q_OBJECT
 
     Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
-    //Q_PROPERTY( LayerModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
     Q_PROPERTY( LayersModel *model READ model WRITE setModel NOTIFY modelChanged )
 
   public:

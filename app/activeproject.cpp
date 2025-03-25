@@ -578,16 +578,19 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
     return QList<QgsMapLayer *>();
   }
 
-  QList<QgsMapLayer *> visibleLayers;
-  QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
-  for ( auto it = projectLayers.begin(); it != projectLayers.end(); ++it )
+  // Get list of all visible and valid layers in the project
+  QList< QgsMapLayer * > visibleLayers;
+  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
   {
-    QgsMapLayer *layer = it.value();
-
-    if ( layer && layer->isValid() && InputUtils::layerVisible( layer, mQgsProject ) )
+    if ( nodeLayer->isVisible() )
     {
-      visibleLayers << layer;
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer && layer->isValid() )
+      {
+        visibleLayers << layer;
+      }
     }
   }
 
