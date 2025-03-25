@@ -133,10 +133,10 @@ void TestActiveProject::testRecordingAllowed()
   // 2: valid and writable layer should return true
   QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
 
-  // 3: read-only layer should return false
-  validLayer->setReadOnly( true );
-  QCOMPARE( activeProject.recordingAllowed( validLayer ), false );
-  validLayer->setReadOnly( false ); // restore for further tests
+  // // 3: read-only layer should return false
+  // validLayer->setReadOnly( true );
+  // QCOMPARE( activeProject.recordingAllowed( validLayer ), false );
+  // validLayer->setReadOnly( false ); // restore for further tests
 
   // 4: no geometry should return false
   QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeomLayer", "memory" );

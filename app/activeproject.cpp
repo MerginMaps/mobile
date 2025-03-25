@@ -452,6 +452,9 @@ void ActiveProject::updateActiveLayer()
 {
   QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
 
+  if ( !mActiveLayer.layer() || !mActiveLayer.layer()->isValid() || visibleLayers.isEmpty() )
+    return;
+
   if ( !visibleLayers.contains( mActiveLayer.layer() ) )
   {
     QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
