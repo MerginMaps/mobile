@@ -111,6 +111,14 @@
     </message>
 </context>
 <context>
+    <name>AttributePreviewController</name>
+    <message>
+        <location filename="../attributes/attributepreviewcontroller.cpp" line="149"/>
+        <source>Unnamed Layer</source>
+        <translation>Vrstva bez názvu</translation>
+    </message>
+</context>
+<context>
     <name>BluetoothPositionProvider</name>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
@@ -267,50 +275,50 @@ Nemůže být přidáno do projektu.</translation>
         <translation>před %1 rokem</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1484"/>
+        <location filename="../inpututils.cpp" line="1500"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozlišení displeje: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1485"/>
+        <location filename="../inpututils.cpp" line="1501"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI displeje: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1486"/>
+        <location filename="../inpututils.cpp" line="1502"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>velikost displeje: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1487"/>
+        <location filename="../inpututils.cpp" line="1503"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>hlášený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1488"/>
+        <location filename="../inpututils.cpp" line="1504"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>vypočtený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1489"/>
+        <location filename="../inpututils.cpp" line="1505"/>
         <source>used dp scale: %1</source>
         <translation>použité měřítko dp: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2018"/>
+        <location filename="../inpututils.cpp" line="2034"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Ke každé části je třeba přidat alespoň %1 bod(y).</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2022"/>
+        <location filename="../inpututils.cpp" line="2038"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Je třeba přidat alespoň %1 bodů.</translation>
     </message>
@@ -2547,63 +2555,63 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="225"/>
+        <location filename="../../core/merginapi.cpp" line="224"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Prosím, odstraňte některé projekty, protože aplikace v současné době umožňuje pouze %1 stažených projektů.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="826"/>
+        <location filename="../../core/merginapi.cpp" line="825"/>
         <source>Please enter a valid email</source>
         <translation>Zadejte prosím platný e-mail</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="833"/>
+        <location filename="../../core/merginapi.cpp" line="832"/>
         <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
         <translation>Heslo není dostatečně silné. Musí%1 mít alespoň 8 znaků%1 obsahovat malá písmena%1 obsahovat velká písmena%1 obsahovat číslice nebo speciální znaky.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="846"/>
+        <location filename="../../core/merginapi.cpp" line="845"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Přijměte prosím podmínky a zásady ochrany osobních údajů</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="875"/>
+        <location filename="../../core/merginapi.cpp" line="874"/>
         <source>Marketing source cannot be empty</source>
         <translation>Zdroj marketingu nemůže být prázdný</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="883"/>
+        <location filename="../../core/merginapi.cpp" line="882"/>
         <source>Industry cannot be empty</source>
         <translation>Odvětví nemůže být prázdné</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1287"/>
+        <location filename="../../core/merginapi.cpp" line="1286"/>
         <source>Registration successful</source>
         <translation>Registrace proběhla úspěšně</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1309"/>
+        <location filename="../../core/merginapi.cpp" line="1308"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Na vybraném serveru nejsou povoleny nové registrace. Informujte se u svého správce.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1341"/>
+        <location filename="../../core/merginapi.cpp" line="1340"/>
         <source>Workspace created</source>
         <translation>Pracovní prostor vytvořen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1674"/>
+        <location filename="../../core/merginapi.cpp" line="1677"/>
         <source>Project detached from the server</source>
         <translation>Projekt odpojen od serveru</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3849"/>
+        <location filename="../../core/merginapi.cpp" line="3868"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Název pracovního prostoru obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3915"/>
+        <location filename="../../core/merginapi.cpp" line="3934"/>
         <source>Workspace %1 already exists</source>
         <translation>Pracovní prostor %1 již existuje</translation>
     </message>
