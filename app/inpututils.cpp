@@ -324,6 +324,7 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
   else
   {
     // The geometry is outside the current viewed extent
+    mapSettings->setExtent( geom.boundingBox() );
     target = QgsPoint( geom.boundingBox().center() );
   }
 
