@@ -139,7 +139,7 @@ void TestActiveProject::testRecordingAllowed()
   // 2: valid and writable layer should return true
   QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
 
-  // 3: read-only layer should return false => move this scenario to merginApi?
+  // 3: read-only layer should return false
   QgsVectorLayer *readOnlyLayer = new QgsVectorLayer( projectDir + "/tracking_layer.gpkg", "ReadOnlyLayer", "ogr" );
   QVERIFY( readOnlyLayer->isValid() );
   project->addMapLayer( readOnlyLayer );
