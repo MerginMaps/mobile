@@ -313,8 +313,9 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
 
+  bool extentCanContainGeom = ( currentExtent.width() > geomBbox.width() && currentExtent.height() > geomBbox.height() );
 
-  if ( currentExtent.contains( geomBbox ) )
+  if ( extentCanContainGeom )
   {
     // Keep the geometry as is
     target = QgsPoint( geomBbox.center() );
