@@ -123,15 +123,13 @@ class ActiveProject: public QObject
     Q_INVOKABLE QString projectRole() const;
     void setProjectRole( const QString &role );
 
-    /**
-     * Returns true if the layer allows recording:
-     */
+    //! Returns if project layer allows recording (has geometry, editable, not position tracking layer, visible)
     bool recordingAllowed( QgsMapLayer *layer ) const ;
 
     //! Returns position tracking layer ID if exists
     Q_INVOKABLE QString positionTrackingLayerId() const;
 
-    //! Returns if layer is valid and visible
+    //! Returns all visible and valid layers in the project
     QList<QgsMapLayer *> getVisibleLayers() const;
 
   signals:

@@ -186,8 +186,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     setProjectRole( role );
 
     updateMapTheme();
-    updateMapSettingsLayers();
     updateActiveLayer();
+    updateMapSettingsLayers();
 
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
@@ -452,34 +452,26 @@ void ActiveProject::updateActiveLayer()
 {
   QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
 
-  if ( !mActiveLayer.layer() || !mActiveLayer.layer()->isValid() || visibleLayers.isEmpty() )
+  if ( !mQgsProject || visibleLayers.isEmpty() )
     return;
 
-  if ( !visibleLayers.contains( mActiveLayer.layer() ) )
+  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
   {
-    QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
+    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
-    if ( recordingAllowed( defaultAppSettingsLayer ) )
+    if ( !recordingAllowed( defaultLayer ) || !defaultLayer )
     {
-      setActiveLayer( defaultAppSettingsLayer );
-      return;
-    }
-
-    // default layer from app settings has no recording allowed => let's try to search for a new one
-    QgsMapLayer *defaultLayer = nullptr;
-    const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
-    for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
-    {
-      QgsMapLayer *layer = it.value();
-      if ( recordingAllowed( layer ) )
+      for ( QgsMapLayer *layer : visibleLayers )
       {
-        defaultLayer = layer;
-        break;
+        if ( recordingAllowed( layer ) )
+        {
+          defaultLayer = layer;
+          break;
+        }
       }
     }
 
-    if ( defaultLayer )
-      setActiveLayer( defaultLayer );
+    setActiveLayer( defaultLayer );
   }
 }
 
@@ -509,8 +501,8 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
   node->setItemVisibilityChecked( !node->isVisible() );
 
   updateMapTheme();
-  updateMapSettingsLayers();
   updateActiveLayer();
+  updateMapSettingsLayers();
 }
 
 const QString &ActiveProject::mapTheme() const
@@ -577,17 +569,18 @@ QString ActiveProject::positionTrackingLayerId() const
 QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 {
   if ( !mQgsProject )
-  {
     return QList<QgsMapLayer *>();
-  }
 
   QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
+  if ( !root )
+    return QList<QgsMapLayer *>();
+
   // Get list of all visible and valid layers in the project
-  QList< QgsMapLayer * > visibleLayers;
+  QList<QgsMapLayer *> visibleLayers;
   foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
   {
-    if ( nodeLayer->isVisible() )
+    if ( nodeLayer && nodeLayer->isVisible() )
     {
       QgsMapLayer *layer = nodeLayer->layer();
       if ( layer && layer->isValid() )

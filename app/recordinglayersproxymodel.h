@@ -57,6 +57,7 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
      */
     QList<QgsMapLayer *> layers() const;
 
+    //! Getters and setters
     LayersModel *model() const;
     void setModel( LayersModel *model );
 
