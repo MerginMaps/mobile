@@ -117,9 +117,15 @@ void TestActiveProject::testPositionTrackingFlag()
 
 void TestActiveProject::testRecordingAllowed()
 {
+  QString projectDir = TestUtils::testDataDir() + "/tracking/";
+  QString projectFilename = "tracking-project.qgz";
+
   AppSettings as;
   ActiveLayer al;
   ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
+  QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
 
   // 1: null layer should return false
   QCOMPARE( activeProject.recordingAllowed( nullptr ), false );
@@ -134,6 +140,13 @@ void TestActiveProject::testRecordingAllowed()
   QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
 
   // 3: read-only layer should return false => move this scenario to merginApi?
+  QgsVectorLayer *readOnlyLayer = new QgsVectorLayer( projectDir + "/tracking_layer.gpkg", "ReadOnlyLayer", "ogr" );
+  QVERIFY( readOnlyLayer->isValid() );
+  project->addMapLayer( readOnlyLayer );
+  readOnlyLayer->setReadOnly( true );
+
+  QVERIFY( readOnlyLayer->readOnly() );
+  QCOMPARE( activeProject.recordingAllowed( readOnlyLayer ), false );
 
   // 4: no geometry should return false
   QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeomLayer", "memory" );
@@ -148,5 +161,8 @@ void TestActiveProject::testRecordingAllowed()
   // restore position tracking layer id and it should return true
   project->writeEntry( "Mergin", "PositionTracking/TrackingLayer", QString() );
   QCOMPARE( activeProject.recordingAllowed( validLayer ), true );
+
+  const QString id = mApi->localProjectsManager().projectId( projectDir + "/" + projectFilename );
+  mApi->localProjectsManager().removeLocalProject( id );
 }
 

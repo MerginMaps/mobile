@@ -555,6 +555,9 @@ bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
   if ( !layer )
     return false;
 
+  if ( layer->readOnly() )
+    return false;
+
   return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId();
 }
 
