@@ -640,6 +640,11 @@ ApplicationWindow {
     }
   }
 
+  MM.RememberAttributesController {
+    id: rememberAttributesController
+    rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+  }
+
   MMFormStackController {
     id: formsStackManager
 
@@ -647,6 +652,7 @@ ApplicationWindow {
     width: window.width
 
     project: __activeProject.qgsProject
+    rememberAttributesController: rememberAttributesController
 
     onCreateLinkedFeatureRequested: function( targetLayer, parentPair )  {
       if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
