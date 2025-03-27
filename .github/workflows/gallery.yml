@@ -34,6 +34,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: fix pip 
+        if: matrix.os == 'macos-15'
+        run: |
+          # get rid of pip error: externally-managed-environment
+          brew install pipx
+          
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
