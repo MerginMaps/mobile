@@ -38,6 +38,7 @@ jobs:
         if: matrix.os == 'macos-15'
         run: |
           # get rid of pip error: externally-managed-environment
+          brew update
           brew install aqtinstall
           
       - name: Install Qt
