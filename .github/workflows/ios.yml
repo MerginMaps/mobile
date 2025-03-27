@@ -16,10 +16,10 @@ on:
       - published
 
 env:   
-  QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
+  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
   XC_VERSION: ${{ '16.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20250307-195
+  INPUT_SDK_VERSION: arm64-ios-20250326-198
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache

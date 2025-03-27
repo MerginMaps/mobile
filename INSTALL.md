@@ -141,7 +141,7 @@ Steps to build and run Input:
    mkdir build
    cd build
    cmake -G Ninja \
-     -DCMAKE_PREFIX_PATH=~/Qt/6.8.2/gcc_64 \
+     -DCMAKE_PREFIX_PATH=~/Qt/6.8.3/gcc_64 \
      -DINPUT_SDK_PATH=~/input-sdk/x64-linux \
      -DQGIS_QUICK_DATA_PATH=../app/android/assets/qgis-data \
      -DUSE_MM_SERVER_API_KEY=FALSE \
@@ -265,8 +265,8 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
   cmake \
     -DCMAKE_BUILD_TYPE=Debug \
     -DQT_ANDROID_ABIS=arm64-v8a \
-    -DQT_HOST_PATH=/opt/Qt/6.8.2/macos \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/6.8.2/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
+    -DQT_HOST_PATH=/opt/Qt/6.8.3/macos \
+    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/6.8.3/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
     -DUSE_MM_SERVER_API_KEY=FALSE \
     -GNinja \
     ../input/
@@ -321,8 +321,8 @@ Now you can create a build (either on commmand line or by setting these variable
 
   cmake \
     -DIOS=TRUE \
-    -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.2/ios \
-    -DQT_HOST_PATH=/opt/Qt/6.8.2/macos \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/ios \
+    -DQT_HOST_PATH=/opt/Qt/6.8.3/macos \
     -DCMAKE_TOOLCHAIN_FILE:PATH="~/input-sdk/ios.toolchain.cmake" \
     -DCMAKE_INSTALL_PREFIX:PATH="../install" \
     -DUSE_SERVER_API_KEY=FALSE \
@@ -355,7 +355,7 @@ cd build-desktop
 
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.2/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos \
   -DINPUT_SDK_PATH=<path_to_mobile_sdk_from_step_2> \
   -DQGIS_QUICK_DATA_PATH=<path_to_mobile_repo>/app/android/assets/qgis-data \
   -GNinja \
@@ -382,7 +382,7 @@ For version of the tools used, see `.github/workflows/win.yml`
 - setup build environment
 ```
 set ROOT_DIR=C:\Users\zilol\Projects
-set Qt6_DIR=C:\Qt\6.8.2\msvc2019_64
+set Qt6_DIR=C:\Qt\6.8.3\msvc2019_64
 set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```

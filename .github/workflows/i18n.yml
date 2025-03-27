@@ -11,7 +11,7 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-latest
     env:
-      QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
+      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
     steps:
 
       - uses: actions/checkout@v4

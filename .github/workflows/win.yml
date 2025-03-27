@@ -25,8 +25,8 @@ jobs:
     runs-on: windows-2022
     
     env:
-      QT_VERSION: '6.8.2' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20250308-245
+      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+      INPUT_SDK_VERSION: x64-windows-20250327-248
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
       VS_VERSION: "2022"
