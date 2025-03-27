@@ -33,19 +33,11 @@ jobs:
       
     steps:
       - uses: actions/checkout@v4
-
-      - name: fix pip 
-        if: matrix.os == 'macos-15'
-        run: |
-          # get rid of pip error: externally-managed-environment
-          brew update
-          brew install aqtinstall
           
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          setup-python: 'false'
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           dir: ${{ github.workspace }}
           cache: true
