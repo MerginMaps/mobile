@@ -129,7 +129,7 @@ class ActiveProject: public QObject
     //! Returns position tracking layer ID if exists
     Q_INVOKABLE QString positionTrackingLayerId() const;
 
-    //! Returns all visible and valid layers in the project
+    //! Returns all visible valid layers in the project
     QList<QgsMapLayer *> getVisibleLayers() const;
 
   signals:

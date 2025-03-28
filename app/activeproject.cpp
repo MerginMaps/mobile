@@ -452,14 +452,14 @@ void ActiveProject::updateActiveLayer()
 {
   QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
 
-  if ( !mQgsProject || visibleLayers.isEmpty() )
+  if ( visibleLayers.isEmpty() )
     return;
 
-  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
+  if ( !visibleLayers.contains( mActiveLayer.layer() ) )
   {
     QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
-    if ( !recordingAllowed( defaultLayer ) || !defaultLayer )
+    if ( !recordingAllowed( defaultLayer ) )
     {
       for ( QgsMapLayer *layer : visibleLayers )
       {
@@ -555,6 +555,8 @@ bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
   if ( !layer )
     return false;
 
+  //there is a bug in QgsMapLayerProxyModel::layerMatchesFilters, but having
+  //just Qgis::LayerFilter::WritableLayer should be enough when fixed
   if ( layer->readOnly() )
     return false;
 
@@ -579,9 +581,11 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
   if ( !root )
     return QList<QgsMapLayer *>();
 
-  // Get list of all visible and valid layers in the project
+  // Get list of all visible valid layers in the project
   QList<QgsMapLayer *> visibleLayers;
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
+  const QList<QgsLayerTreeLayer *> nodeLayers = root->findLayers();
+
+  for ( QgsLayerTreeLayer *nodeLayer : nodeLayers )
   {
     if ( nodeLayer && nodeLayer->isVisible() )
     {

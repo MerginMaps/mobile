@@ -817,7 +817,7 @@ Item {
       list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        exceptedLayerIds: __activeProject.positionTrackingLayerId()
+        exceptedLayerIds: [__activeProject.positionTrackingLayerId()]
         model: MM.LayersModel {}
       }
 

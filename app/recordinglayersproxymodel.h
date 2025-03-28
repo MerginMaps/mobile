@@ -73,14 +73,6 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
   private:
     LayerModelTypes mModelType;
     LayersModel *mModel;
-
-    /**
-     * @brief filterFunction method takes layer and outputs if \bold this model type accepts layer.
-     * Returns true for proxy model built without specific type or AllLayers type.
-     *
-     * In future will allow dependency injection of custom filter functions.
-     */
-    std::function<bool( QgsMapLayer * )> filterFunction;
 };
 
 #endif // RECORDINGLAYERSPROXYMODEL_H

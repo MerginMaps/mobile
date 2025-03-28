@@ -2230,7 +2230,7 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
   return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
-bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
+bool InputUtils::isLayerVisible( QgsMapLayer *layer, QgsProject *project )
 {
   if ( !layer || !layer->isValid() || !project )
     return false;
