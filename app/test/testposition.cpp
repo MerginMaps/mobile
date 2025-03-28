@@ -395,7 +395,7 @@ void TestPosition::testPositionTracking()
 
   trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
 
-  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
 
   // store the geometry
   QgsVectorLayer *trackingLayer = QgsProject::instance()->mapLayer<QgsVectorLayer *>( "tracking_layer_aad89df7_21db_466e_b5c1_a80160f74c01" );
@@ -409,7 +409,7 @@ void TestPosition::testPositionTracking()
 
   int addedFid = addedSpy.at( 1 ).at( 0 ).toInt();
   QgsFeature f = trackingLayer->getFeature( addedFid );
-  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineStringZM (-92.36 38.93 20" ) ) );
+  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
 
   QString datetimeFormat = QStringLiteral( "dd.MM.yyyy hh:mm:ss" );
   QString dateTrackingStartedFromManager = manager.startTime().toString( datetimeFormat );
@@ -448,7 +448,7 @@ void TestPosition::testPositionTrackingHighlight()
   trackingHighlight.setTrackedGeometry( g );
   trackingHighlight.setMapPosition( p );
 
-  QString result = QStringLiteral( "LineStringZM (5 5 5 5, 10 10 10 nan)" );
+  QString result = QStringLiteral( "LineString ZM (5 5 5 5, 10 10 10 nan)" );
 
   QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
 
@@ -459,7 +459,7 @@ void TestPosition::testPositionTrackingHighlight()
   trackingHighlight.setTrackedGeometry( g );
   trackingHighlight.setMapPosition( p );
 
-  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 10 10 10 nan)" );
+  result = QStringLiteral( "LineString ZM (5 5 5 5, 6 6 5 5, 10 10 10 nan)" );
 
   QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
 
@@ -470,7 +470,7 @@ void TestPosition::testPositionTrackingHighlight()
   trackingHighlight.setTrackedGeometry( g );
   trackingHighlight.setMapPosition( p );
 
-  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 10 10 10 nan)" );
+  result = QStringLiteral( "LineString ZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 10 10 10 nan)" );
 
   QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
 
@@ -478,7 +478,7 @@ void TestPosition::testPositionTrackingHighlight()
   p = QgsPoint( 20, 20, 20 );
   trackingHighlight.setMapPosition( p );
 
-  result = QStringLiteral( "LineStringZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 20 20 20 nan)" );
+  result = QStringLiteral( "LineString ZM (5 5 5 5, 6 6 5 5, 7 7 5 5, 20 20 20 nan)" );
   QCOMPARE( trackingHighlight.highlightGeometry().asWkt( 1 ), result );
 
   // lost map position

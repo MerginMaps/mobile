@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QSet>
 
+#include "qgis.h"
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
 #include "qgsattributeeditorfield.h"
@@ -561,7 +562,7 @@ void AttributeController::updateOnLayerChange()
         mExpressionFieldsOutsideForm << i;
       }
 
-      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == QgsFields::OriginExpression )
+      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == Qgis::FieldOrigin::Expression )
       {
         mVirtualFieldsOutsideForm << i;
       }
@@ -830,7 +831,7 @@ void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItem
 
     const QgsField field = item->field();
 
-    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == QgsFields::OriginExpression )
+    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == Qgis::FieldOrigin::Expression )
     {
       QString expressionString = mFeatureLayerPair.layer()->expressionField( item->fieldIndex() );
       evaluateExpressionAndUpdateValue( changedFormItems,

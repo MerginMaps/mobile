@@ -21,38 +21,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          os: [ubuntu-latest, macos-13, windows-2019]
+          os: [ubuntu-latest, macos-15, windows-2022]
     runs-on: ${{ matrix.os }}
     env:
-      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
+      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 1
-      XC_VERSION: ${{ '15.2' }} # macos-only
-      VS_VERSION: "2019" # win-only
-      QT_ARCH: "win64_msvc2019_64" # win-only
+      XC_VERSION: ${{ '16.2' }} # macos-only
+      VS_VERSION: "2022" # win-only
+      QT_ARCH: "win64_msvc2022_64" # win-only
       
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
+          
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          setup-python: 'false'
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v${{ env.CACHE_VERSION}}-${{ env.QT_VERSION }}-gallery
  
       - name: Select latest Xcode (macos)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-15'
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       - uses: seanmiddleditch/gha-setup-ninja@master
-        if: matrix.os != 'windows-2019'
+        if: matrix.os != 'windows-2022'
 
       - name: Configure and Build Gallery App (macos & ubuntu)
-        if: matrix.os != 'windows-2019'
+        if: matrix.os != 'windows-2022'
         run: |
             mkdir -p ${{ github.workspace }}/install-gallery
             mkdir -p ${{ github.workspace }}/build-gallery
@@ -72,7 +71,7 @@ jobs:
             ls -la ${{ github.workspace }}/install-gallery
 
       - name: Prepare vars (windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         id: vars
         shell: bash
         run: |
@@ -81,13 +80,13 @@ jobs:
           echo "WORKSPACE_DIR: $WORKSPACE_DIR"
 
       - name: Developer Command Prompt for Microsoft Visual C++ (windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         uses: ilammy/msvc-dev-cmd@v1
         with:
           vsversion: ${{ env.VS_VERSION }}
 
       - name: Configure and Build Gallery App (windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         shell: cmd
         run: |
           mkdir install-gallery -ea 0
@@ -106,14 +105,14 @@ jobs:
           nmake install
 
       - name: Prepare artefacts (macos & ubuntu)
-        if: matrix.os != 'windows-2019'
+        if: matrix.os != 'windows-2022'
         run: |
           cd ${{ github.workspace }}/install-gallery
           ls -la .
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
 
       - name: Prepare artefacts (windows)
-        if: matrix.os == 'windows-2019'
+        if: matrix.os == 'windows-2022'
         shell: cmd
         run: |
           cd install-gallery

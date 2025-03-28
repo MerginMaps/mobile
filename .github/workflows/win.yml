@@ -22,16 +22,16 @@ concurrency:
 jobs:
   win64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: windows-2019
+    runs-on: windows-2022
     
     env:
-      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20240517-231
+      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+      INPUT_SDK_VERSION: x64-windows-20250327-248
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       CACHE_VERSION: 0
-      VS_VERSION: "2019"
+      VS_VERSION: "2022"
       CMAKE_VERSION: '3.29.0'
-      QT_ARCH: "win64_msvc2019_64"
+      QT_ARCH: "win64_msvc2022_64"
       
     steps:
       - name: Checkout Input
@@ -95,7 +95,7 @@ jobs:
             build-win64-ccache-refs/heads/master-
           
       - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
           target: desktop
@@ -111,7 +111,7 @@ jobs:
         uses: pat-s/always-upload-cache@v3.0.11
         with:
           path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
+          key: ${{ runner.os }}-input-sdk-v1-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
 
       - name: Install Input-SDK
         shell: bash
@@ -197,11 +197,11 @@ jobs:
         shell: cmd
         run: |
             makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
+            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: mergin-maps-input-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
+          path: mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           if-no-files-found: error
 

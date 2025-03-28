@@ -197,6 +197,7 @@ set(qt_libs
     QmlCompiler
     QmlCore
     QmlLocalStorage
+    QmlMeta
     QmlModels
     QmlWorkerScript
     QmlXmlListModel
