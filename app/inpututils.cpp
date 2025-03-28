@@ -310,22 +310,22 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
 
+  // Cut the geometry to current extent
+  QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+  QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
 
-  if ( currentExtent.contains( geomBbox ) )
+  if ( !intersectedGeom.isEmpty() )
   {
-    // Keep the geometry as is
-    target = QgsPoint( geomBbox.center() );
+    target = QgsPoint( intersectedGeom.boundingBox().center() );
   }
   else
   {
-    // Cut the geometry to current extent
-    QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-    QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
-    QgsRectangle bbox = intersectedGeom.boundingBox();
-    target = QgsPoint( bbox.center() );
+    // The geometry is outside the current viewed extent
+    mapSettings->setExtent( geom.boundingBox() );
+    target = QgsPoint( geom.boundingBox().center() );
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
