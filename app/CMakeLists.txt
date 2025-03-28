@@ -65,7 +65,7 @@ set(MM_SRCS
     invitationsmodel.cpp
     invitationsproxymodel.cpp
     layersmodel.cpp
-    layersproxymodel.cpp
+    recordinglayersproxymodel.cpp
     main.cpp
     mapthemesmodel.cpp
     notificationmodel.cpp
@@ -149,7 +149,7 @@ set(MM_HDRS
     invitationsmodel.h
     invitationsproxymodel.h
     layersmodel.h
-    layersproxymodel.h
+    recordinglayersproxymodel.h
     mapthemesmodel.h
     notificationmodel.h
     projectsmodel.h
