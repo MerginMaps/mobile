@@ -20,6 +20,7 @@ Item {
 
   property var project
   property var featureLayerPair
+  property var rememberAttributesController
 
   // child features in relations need to have these set in order to prefill their foreign keys
   property var linkedRelation
@@ -177,9 +178,7 @@ Item {
       controller: MM.AttributeController {
         variablesManager: __variablesManager
 
-        rememberAttributesController: MM.RememberAttributesController {
-          rememberValuesAllowed: __appSettings.reuseLastEnteredValues
-        }
+        rememberAttributesController: root.rememberAttributesController
         // NOTE: order matters, we want to init variables manager before
         // assingning FeatureLayerPair, as VariablesManager is required
         // for correct expression evaluation

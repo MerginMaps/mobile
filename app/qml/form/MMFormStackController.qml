@@ -19,6 +19,7 @@ Item {
   */
 
   property var project
+  property var rememberAttributesController
 
   property int activeFormIndex: formsStack.depth - 1
 
@@ -280,6 +281,7 @@ Item {
       id: wrapper
 
       project: root.project
+      rememberAttributesController: root.rememberAttributesController
 
       onClosed: {
         if ( panelState !== "hidden" ) {
