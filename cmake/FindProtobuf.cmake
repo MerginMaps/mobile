@@ -25,6 +25,7 @@ if (Protobuf_FOUND AND NOT TARGET Protobuf::Protobuf-lite)
     PROPERTIES IMPORTED_LOCATION "${Protobuf_lite_LIBRARY}" INTERFACE_INCLUDE_DIRECTORIES
                                                             "${Protobuf_INCLUDE_DIR}"
   )
+
 endif ()
 
 mark_as_advanced(Protobuf_lite_LIBRARY Protobuf_INCLUDE_DIR)

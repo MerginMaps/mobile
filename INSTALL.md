@@ -141,7 +141,7 @@ Steps to build and run Input:
    mkdir build
    cd build
    cmake -G Ninja \
-     -DCMAKE_PREFIX_PATH=~/Qt/6.6.3/gcc_64 \
+     -DCMAKE_PREFIX_PATH=~/Qt/6.8.3/gcc_64 \
      -DINPUT_SDK_PATH=~/input-sdk/x64-linux \
      -DQGIS_QUICK_DATA_PATH=../app/android/assets/qgis-data \
      -DUSE_MM_SERVER_API_KEY=FALSE \
@@ -239,7 +239,7 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
    - Proceed with this step only if the previous automatic step did not work for you or you do not want to use QtCreator
 
    - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
-   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;33.0.1" "ndk;25.2.9519653" "platforms;android-33" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
+   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;34.0.0" "ndk;26.1.10909125" "platforms;android-34" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
 
 5. Get MM mobile SDK - it contains pre-built dependencies of used libraries (QGIS, etc..)
 
@@ -265,8 +265,8 @@ If you have "error: undefined reference to 'stdout'" or so, make sure that in BU
   cmake \
     -DCMAKE_BUILD_TYPE=Debug \
     -DQT_ANDROID_ABIS=arm64-v8a \
-    -DQT_HOST_PATH=/opt/Qt/6.6.3/macos \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/6.6.3/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
+    -DQT_HOST_PATH=/opt/Qt/6.8.3/macos \
+    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/6.8.3/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
     -DUSE_MM_SERVER_API_KEY=FALSE \
     -GNinja \
     ../input/
@@ -321,8 +321,8 @@ Now you can create a build (either on commmand line or by setting these variable
 
   cmake \
     -DIOS=TRUE \
-    -DCMAKE_PREFIX_PATH=/opt/Qt/6.6.3/ios \
-    -DQT_HOST_PATH=/opt/Qt/6.6.3/macos \
+    -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/ios \
+    -DQT_HOST_PATH=/opt/Qt/6.8.3/macos \
     -DCMAKE_TOOLCHAIN_FILE:PATH="~/input-sdk/ios.toolchain.cmake" \
     -DCMAKE_INSTALL_PREFIX:PATH="../install" \
     -DUSE_SERVER_API_KEY=FALSE \
@@ -338,15 +338,8 @@ Now you can create a build (either on commmand line or by setting these variable
 2. Get MM mobile SDK - it contains pre-built dependencies of used libraries
 
    - Check what SDK version is currently in use - look for `INPUT_SDK_VERSION` in `.github/workflows/macos.yml`
-
-   - 2.1. For Intel chips
-
-     - Download mobile SDK for `osx` - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
-     - Unpack the downloaded .tar.gz to `~/mobile-sdk/x64-osx`
-
-   - 2.2. For Apple M chips
-     - You need to build SDK yourself, follow steps how to do it here https://github.com/merginmaps/mobile-sdk
-     - Your SDK will be installed in the `build folder/vcpkg_installed/arm64-osx/`
+   - Download mobile SDK for `osx` - go to https://github.com/merginmaps/mobile-sdk/releases and download the built SDK.
+   - Unpack the downloaded .tar.gz to `~/mobile-sdk/x64-osx` or `~/mobile-sdk/arm64-osx`
 
 3. Get Qt libraries - Mobile SDK does not include Qt SDK
 
@@ -362,7 +355,7 @@ cd build-desktop
 
 cmake \
   -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_PREFIX_PATH=/opt/Qt/6.6.3/macos \
+  -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos \
   -DINPUT_SDK_PATH=<path_to_mobile_sdk_from_step_2> \
   -DQGIS_QUICK_DATA_PATH=<path_to_mobile_repo>/app/android/assets/qgis-data \
   -GNinja \
@@ -389,7 +382,7 @@ For version of the tools used, see `.github/workflows/win.yml`
 - setup build environment
 ```
 set ROOT_DIR=C:\Users\zilol\Projects
-set Qt6_DIR=C:\Qt\6.6.3\msvc2019_64
+set Qt6_DIR=C:\Qt\6.8.3\msvc2019_64
 set PATH=%QT_ROOT%\bin;C:\Program Files\CMake\bin\;%PATH%
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```
