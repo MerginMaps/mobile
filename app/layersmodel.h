@@ -15,6 +15,7 @@
 #include <QPointer>
 
 #include "inputconfig.h"
+#include "inpututils.h"
 #include "qgsmaplayer.h"
 #include "qgsmaplayermodel.h"
 
@@ -37,7 +38,8 @@ class LayersModel : public QgsMapLayerModel
       VectorLayerRole,
       HasGeometryRole,
       IconSourceRole,
-      LayerIdRole
+      LayerIdRole,
+      LayerVisible
     };
     Q_ENUM( LayerRoles )
 
