@@ -56,6 +56,13 @@ Control {
   background: Rectangle {
     color: root.projectIsOpened ? __style.forestColor : __style.polarColor
     radius: __style.radius12
+    MouseArea {
+      anchors.fill: parent
+      onClicked: function( mouse ) {
+        mouse.accepted = true
+        root.openRequested()
+      }
+    }
   }
 
   contentItem: Item {
@@ -64,14 +71,6 @@ Control {
 
     Behavior on implicitHeight {
       NumberAnimation { duration: 150 }
-    }
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: function( mouse ) {
-        mouse.accepted = true
-        root.openRequested()
-      }
     }
 
     Column {
