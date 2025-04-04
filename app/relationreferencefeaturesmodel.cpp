@@ -12,7 +12,7 @@
 #include "qgsrelationmanager.h"
 
 RelationReferenceFeaturesModel::RelationReferenceFeaturesModel( QObject *parent )
-  : FeaturesModel( parent )
+  : LayerFeaturesModel( parent )
 {
 }
 
@@ -80,7 +80,7 @@ void RelationReferenceFeaturesModel::setup()
 
   if ( !layer ) return;
 
-  FeaturesModel::setLayer( layer );
+  LayerFeaturesModel::setLayer( layer );
 
   populate();
 }

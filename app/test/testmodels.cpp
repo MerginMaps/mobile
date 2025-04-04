@@ -9,7 +9,7 @@
 
 #include "testmodels.h"
 #include "testutils.h"
-#include "featuresmodel.h"
+#include "layerfeaturesmodel.h"
 #include "valuerelationfeaturesmodel.h"
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -27,10 +27,10 @@ void TestModels::cleanup()
 
 }
 
-void TestModels::testFeaturesModel()
+void TestModels::testLayerFeaturesModel()
 {
-  FeaturesModel fModel;
-  QSignalSpy spy( &fModel, &FeaturesModel::fetchingResultsChanged );
+  LayerFeaturesModel fModel;
+  QSignalSpy spy( &fModel, &LayerFeaturesModel::fetchingResultsChanged );
 
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=main", "base", "ogr" );
@@ -57,11 +57,11 @@ void TestModels::testFeaturesModel()
   QCOMPARE( title, QStringLiteral( "First" ) );
 }
 
-void TestModels::testFeaturesModelSorted()
+void TestModels::testLayerFeaturesModelSorted()
 {
-  FeaturesModel model;
+  LayerFeaturesModel model;
 
-  QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=subsub", "subsub", "ogr" );
@@ -146,7 +146,7 @@ void TestModels::testValueRelationFeaturesModel()
 
   ValueRelationFeaturesModel model;
 
-  QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
   // setup value relation, initially unsorted
   QVariantMap config =

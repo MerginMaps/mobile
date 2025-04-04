@@ -14,7 +14,7 @@
 #include "qgsproject.h"
 
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
-  : FeaturesModel( parent )
+  : LayerFeaturesModel( parent )
 {
 }
 
@@ -53,13 +53,13 @@ void RelationFeaturesModel::setup()
 
   QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
 
-  FeaturesModel::setLayer( mRelation.referencingLayer() );
+  LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
 }
 
 void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
-  FeaturesModel::setupFeatureRequest( request );
+  LayerFeaturesModel::setupFeatureRequest( request );
 
   QgsFeatureRequest e = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
   request.combineFilterExpression( e.filterExpression()->operator QString() );

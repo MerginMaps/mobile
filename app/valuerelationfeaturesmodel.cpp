@@ -14,7 +14,7 @@
 #include "qgsexpressioncontextutils.h"
 
 ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
-  : FeaturesModel( parent )
+  : LayerFeaturesModel( parent )
 {
 }
 
@@ -22,7 +22,7 @@ ValueRelationFeaturesModel::~ValueRelationFeaturesModel() = default;
 
 void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
-  FeaturesModel::setupFeatureRequest( request );
+  LayerFeaturesModel::setupFeatureRequest( request );
 
   if ( !mFilterExpression.isEmpty() )
   {
@@ -32,7 +32,7 @@ void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request
     if ( QgsValueRelationFieldFormatter::expressionIsUsable( mFilterExpression, mPair.feature() ) )
     {
       QgsExpression exp( mFilterExpression );
-      QgsExpressionContext filterContext = QgsExpressionContext( QgsExpressionContextUtils::globalProjectLayerScopes( FeaturesModel::layer() ) );
+      QgsExpressionContext filterContext = QgsExpressionContext( QgsExpressionContextUtils::globalProjectLayerScopes( LayerFeaturesModel::layer() ) );
 
       if ( mPair.feature().isValid() && QgsValueRelationFieldFormatter::expressionRequiresFormScope( mFilterExpression ) )
         filterContext.appendScope( QgsExpressionContextUtils::formScope( mPair.feature() ) );
@@ -68,7 +68,7 @@ void ValueRelationFeaturesModel::setup()
       mTitleField = valueFieldName;
 
       mFilterExpression = mConfig.value( QStringLiteral( "FilterExpression" ) ).toString();
-      FeaturesModel::setLayer( layer );
+      LayerFeaturesModel::setLayer( layer );
 
       mAllowMulti = mConfig.value( QStringLiteral( "AllowMulti" ) ).toBool();
       mIsInitialized = true;

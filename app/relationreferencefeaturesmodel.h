@@ -14,14 +14,14 @@
 
 #include "inputconfig.h"
 #include "qgsproject.h"
-#include "featuresmodel.h"
+#include "layerfeaturesmodel.h"
 
 /**
  * \brief The RelationReferenceFeaturesModel class serve as a helper class for relation reference widget.
  * It is a subclass of FeaturesModel so it is a model containing features from parent layer of the relation reference.
  * Config and Project must be provided in order for this model to work.
  */
-class RelationReferenceFeaturesModel : public FeaturesModel
+class RelationReferenceFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
 
