@@ -289,17 +289,42 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   if ( geom.isNull() || !geom.constGet() )
     return;
 
-  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent( pair.layer(), geom.boundingBox() );
-  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-  QgsPointXY currentExtentCenter = currentExtent.center();
-  QgsPointXY featureCenter = bbox.center();
+  geom = transformGeometryToMapWithLayer( geom, pair.layer(), mapSettings );
+  setExtentToGeom( geom, mapSettings );
+}
 
-  double offsetX = currentExtentCenter.x() - featureCenter.x();
-  double offsetY = currentExtentCenter.y() - featureCenter.y();
-  currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
-  currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
-  currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
-  currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
+void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings )
+{
+  if ( geom.isNull() || !geom.constGet() )
+    return;
+
+  QgsRectangle bbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+
+  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  {
+    QgsPointXY currentExtentCenter = currentExtent.center();
+    QgsPointXY featureCenter = bbox.center();
+
+    double offsetX = currentExtentCenter.x() - featureCenter.x();
+    double offsetY = currentExtentCenter.y() - featureCenter.y();
+
+    currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
+    currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
+    currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
+    currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
+  }
+  else
+  {
+    // Add a small offset to encompass handles etc..
+    double h = 15 * mapSettings->mapSettings().mapUnitsPerPixel();
+
+    currentExtent.setXMinimum( bbox.xMinimum() - h );
+    currentExtent.setXMaximum( bbox.xMaximum() + h );
+    currentExtent.setYMinimum( bbox.yMinimum() - h );
+    currentExtent.setYMaximum( bbox.yMaximum() + h );
+  }
+
   mapSettings->setExtent( currentExtent );
 }
 
@@ -310,22 +335,22 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
   QgsRectangle geomBbox = geom.boundingBox();
 
+  // Cut the geometry to current extent
+  QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+  QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
 
-  if ( currentExtent.contains( geomBbox ) )
+  if ( !intersectedGeom.isEmpty() )
   {
-    // Keep the geometry as is
-    target = QgsPoint( geomBbox.center() );
+    target = QgsPoint( intersectedGeom.boundingBox().center() );
   }
   else
   {
-    // Cut the geometry to current extent
-    QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-    QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
-    QgsRectangle bbox = intersectedGeom.boundingBox();
-    target = QgsPoint( bbox.center() );
+    // The geometry is outside the current viewed extent
+    setExtentToGeom( geom, mapSettings );
+    target = QgsPoint( geom.boundingBox().center() );
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
