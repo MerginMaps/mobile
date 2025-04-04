@@ -84,6 +84,13 @@ class InputUtils: public QObject
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
+     * Set the extent around a geometry
+     *
+     * Assume \a geom and \a mapSetting are the same CRS
+     */
+    Q_INVOKABLE void setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
+
+    /**
      * Returns the center point of the \a geom currently displayed on screen
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
