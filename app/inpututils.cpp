@@ -290,7 +290,7 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
     return;
 
   geom = transformGeometryToMapWithLayer( geom, pair.layer(), mapSettings );
-  setExtentToGeom(geom, mapSettings);
+  setExtentToGeom( geom, mapSettings );
 }
 
 void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings )
