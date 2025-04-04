@@ -17,8 +17,6 @@ StaticFeaturesModel::StaticFeaturesModel( QObject *parent )
 {
 }
 
-StaticFeaturesModel::~StaticFeaturesModel() = default;
-
 void StaticFeaturesModel::populate( FeatureLayerPairs pairs )
 {
   beginResetModel();

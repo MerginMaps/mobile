@@ -26,7 +26,6 @@ class StaticFeaturesModel : public FeaturesModel
   public:
 
     explicit StaticFeaturesModel( QObject *parent = nullptr );
-    virtual ~StaticFeaturesModel();
 
     /**
      * \brief populate populates a static model using the supplied \a pairs

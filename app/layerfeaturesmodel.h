@@ -51,7 +51,6 @@ class LayerFeaturesModel : public FeaturesModel
   public:
 
     explicit LayerFeaturesModel( QObject *parent = nullptr );
-    virtual ~LayerFeaturesModel();
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 

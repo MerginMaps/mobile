@@ -27,8 +27,6 @@ LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &LayerFeaturesModel::onFutureFinished );
 }
 
-LayerFeaturesModel::~LayerFeaturesModel() = default;
-
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   int row = index.row();
