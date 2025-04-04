@@ -943,6 +943,23 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
+  // clear recorded geometry
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( lineLayer );
+
+  //
+  // Test the handles calculation logic
+  //
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( mapTool.handles().isEmpty() );
+
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QCOMPARE( mapTool.handles().vertexAt( 0 ).asWkt( 14 ), "Point (-96.22182942132511 22.34151145046518)" );
+  QCOMPARE( mapTool.handles().vertexAt( 1 ), pointsToAdd[0] );
+
   delete project;
   delete lineLayer;
 }
