@@ -28,6 +28,7 @@ Item {
 
   signal contentClicked()
   signal editClicked()
+  signal openFormClicked()
   signal stakeoutClicked( var feature )
   signal closeClicked()
 
@@ -179,6 +180,17 @@ Item {
               visible: internal.showEditButton
 
               onClicked: root.editClicked()
+            }
+
+            MMComponents.MMButton {
+              id: formButton
+
+              text: qsTr( "Open form" )
+              iconSourceLeft: __style.formIcon
+
+              visible: !internal.showEditButton
+
+              onClicked: root.openFormClicked()
             }
 
             MMComponents.MMButton {
