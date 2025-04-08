@@ -46,7 +46,7 @@
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginprojectstatusmodel.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
 #include "merginuserauth.h"
@@ -350,7 +350,7 @@ void initDeclarative()
   qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
 
   // layers model
-  qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
+  qmlRegisterType<RecordingLayersProxyModel>( "mm", 1, 0, "RecordingLayersProxyModel" );
   qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
 }
 
