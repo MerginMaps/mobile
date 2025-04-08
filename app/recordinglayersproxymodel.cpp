@@ -16,8 +16,6 @@
 RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
   QgsMapLayerProxyModel{ parent }
 {
-  QObject::connect( this, &RecordingLayersProxyModel::rowsInserted, this, &RecordingLayersProxyModel::countChanged );
-  QObject::connect( this, &RecordingLayersProxyModel::rowsRemoved, this, &RecordingLayersProxyModel::countChanged );
 }
 
 bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
@@ -43,65 +41,6 @@ QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
 void RecordingLayersProxyModel::refreshData()
 {
   invalidate();
-}
-
-QgsMapLayer *RecordingLayersProxyModel::firstUsableLayer() const
-{
-  QList<QgsMapLayer *> filteredLayers = layers();
-
-  if ( filteredLayers.size() > 0 )
-  {
-    return filteredLayers.at( 0 );
-  }
-
-  return nullptr;
-}
-
-QModelIndex RecordingLayersProxyModel::indexFromLayerId( QString layerId ) const
-{
-  if ( layerId.isEmpty() )
-    return QModelIndex();
-
-  QgsVectorLayer *layer = layerFromLayerId( layerId );
-
-  return mModel->indexFromLayer( layer ); // return source model index to skip converting indexes in proxy model
-}
-
-QgsVectorLayer *RecordingLayersProxyModel::layerFromLayerId( QString layerId ) const
-{
-  QList<QgsMapLayer *> filteredLayers = layers();
-
-  for ( int i = 0; i < filteredLayers.count(); i++ )
-  {
-    if ( filteredLayers.at( i )->id() == layerId )
-    {
-      QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( filteredLayers.at( i ) );
-      if ( layer )
-        return layer;
-    }
-  }
-  return nullptr;
-}
-
-QgsVectorLayer *RecordingLayersProxyModel::layerFromLayerName( const QString &layerName ) const
-{
-  QList<QgsMapLayer *> filteredLayers = layers();
-
-  for ( int i = 0; i < filteredLayers.count(); i++ )
-  {
-    if ( filteredLayers.at( i )->name() == layerName )
-    {
-      QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( filteredLayers.at( i ) );
-      if ( layer )
-        return layer;
-    }
-  }
-  return nullptr;
-}
-
-QVariant RecordingLayersProxyModel::getData( QModelIndex index, int role ) const
-{
-  return sourceModel()->data( index, role );
 }
 
 LayersModel *RecordingLayersProxyModel::model() const

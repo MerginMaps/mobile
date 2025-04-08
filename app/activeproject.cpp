@@ -453,7 +453,10 @@ void ActiveProject::updateActiveLayer()
   QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
 
   if ( visibleLayers.isEmpty() )
+  {
+    setActiveLayer( nullptr );
     return;
+  }
 
   if ( !visibleLayers.contains( mActiveLayer.layer() ) )
   {

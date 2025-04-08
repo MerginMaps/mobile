@@ -25,32 +25,12 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
 {
     Q_OBJECT
 
-    Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
     Q_PROPERTY( LayersModel *model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
     Q_INVOKABLE explicit RecordingLayersProxyModel( QObject *parent = nullptr );
 
-    enum LayerModelTypes
-    {
-      AllLayers,
-      ActiveLayerSelection
-    };
-    Q_ENUM( LayerModelTypes );
-
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
-
-    //! Helper methods that convert layer to/from index/name
-    Q_INVOKABLE QModelIndex indexFromLayerId( QString layerId ) const;
-    Q_INVOKABLE QgsVectorLayer *layerFromLayerId( QString layerId ) const;
-
-    QgsVectorLayer *layerFromLayerName( const QString &layerName ) const;
-
-    //! Helper method to get data from source model to skip converting indexes
-    Q_INVOKABLE QVariant getData( QModelIndex index, int role ) const;
-
-    //! Returns first layer from proxy model's layers list (filtered with filter function)
-    Q_INVOKABLE QgsMapLayer *firstUsableLayer() const;
 
     /**
      * @brief layers method return layers from source model filtered with filter function
@@ -71,7 +51,6 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
     void refreshData();
 
   private:
-    LayerModelTypes mModelType;
     LayersModel *mModel;
 };
 
