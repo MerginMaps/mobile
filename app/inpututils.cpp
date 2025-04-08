@@ -316,13 +316,14 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   }
   else
   {
-    // Add a small offset to encompass handles etc..
-    double h = 15 * mapSettings->mapSettings().mapUnitsPerPixel();
+    currentExtent.setXMinimum( bbox.xMinimum() );
+    currentExtent.setXMaximum( bbox.xMaximum() );
+    currentExtent.setYMinimum( bbox.yMinimum() );
+    currentExtent.setYMaximum( bbox.yMaximum() );
 
-    currentExtent.setXMinimum( bbox.xMinimum() - h );
-    currentExtent.setXMaximum( bbox.xMaximum() + h );
-    currentExtent.setYMinimum( bbox.yMinimum() - h );
-    currentExtent.setYMaximum( bbox.yMaximum() + h );
+    // Add a offset to encompass handles etc..
+    // This number is based on what feel confortable for the user
+    currentExtent.scale( 1.18 );
   }
 
   mapSettings->setExtent( currentExtent );
