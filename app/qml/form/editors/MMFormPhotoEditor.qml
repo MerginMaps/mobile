@@ -87,11 +87,11 @@ MMFormPhotoViewer {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  photoUrl: internal.absoluteImagePath
+  photoUrl: internal.resolvedImageSource
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
-  on_FieldValueChanged: internal.setAbsoluteImagePath()
-  on_FieldValueIsNullChanged: internal.setAbsoluteImagePath()
+  on_FieldValueChanged: internal.setImageSource()
+  on_FieldValueIsNullChanged: internal.setImageSource()
 
   onCapturePhotoClicked: internal.capturePhoto()
   onChooseFromGalleryClicked: internal.chooseFromGallery()
@@ -131,6 +131,7 @@ MMFormPhotoViewer {
     function resetValueAndClose() {
       root.editorValueChanged( "", true )
 
+      errorMsg = ""
       imagePath = ""
       close()
     }
@@ -199,28 +200,35 @@ MMFormPhotoViewer {
                                             targetDir
                                             )
 
-    property string absoluteImagePath
+    property string resolvedImageSource
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
     //
-    // Sets path of the assigned photo to the absoluteImagePath.
-    //  - absoluteImagePath is the actual path on the device and is used by QML Image to show the image
+    // Sets path or url of the assigned photo to the resolvedImageSource.
+    //  - resolvedImageSource is the actual path on the device or a remote url,
+    //  - and is used by QML Image to show the image
     //
-    function setAbsoluteImagePath() {
-      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
-
+    function setImageSource() {
       if ( !root._fieldValue || root._fieldValueIsNull ) {
         root.photoState = "notSet"
-        absoluteImagePath = ""
+        resolvedImageSource = ""
+        return
       }
-      else if ( root._fieldValue && __inputUtils.fileExists( absolutePath ) ) {
+
+      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
+
+      if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
-        absoluteImagePath = "file://" + absolutePath
+        resolvedImageSource = "file://" + absolutePath
+      }
+      else if ( __inputUtils.isValidUrl( absolutePath ) ) {
+          root.photoState = "valid";
+          resolvedImageSource = absolutePath;
       }
       else {
         root.photoState = "notAvailable"
-        absoluteImagePath = ""
+        resolvedImageSource = ""
       }
     }
 

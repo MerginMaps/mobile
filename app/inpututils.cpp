@@ -303,16 +303,32 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
   QPointF screenPoint;
-
+  QgsPoint target;
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
-  QgsRectangle bbox = geom.boundingBox();
-  screenPoint = mapSettings->coordinateToScreen( QgsPoint( bbox.center() ) );
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  QgsRectangle geomBbox = geom.boundingBox();
 
+
+  if ( currentExtent.contains( geomBbox ) )
+  {
+    // Keep the geometry as is
+    target = QgsPoint( geomBbox.center() );
+  }
+  else
+  {
+    // Cut the geometry to current extent
+    QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+    QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+    QgsRectangle bbox = intersectedGeom.boundingBox();
+    target = QgsPoint( bbox.center() );
+  }
+
+  screenPoint = mapSettings->coordinateToScreen( target );
   return screenPoint;
 }
 
@@ -1160,7 +1176,7 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
     return getEditorWidgetSetup( field, QStringLiteral( "Range" ) );
   else if ( field.isDateOrTime() )
     return getEditorWidgetSetup( field, QStringLiteral( "DateTime" ) );
-  else if ( field.type() == QVariant::Bool )
+  else if ( field.type() == QMetaType::Type::Bool )
     return getEditorWidgetSetup( field, QStringLiteral( "CheckBox" ) );
   else
     return getEditorWidgetSetup( field, QStringLiteral( "TextEdit" ) );
@@ -1510,7 +1526,7 @@ QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject
 
 QString InputUtils::fieldType( const QgsField &field )
 {
-  return QVariant( field.type() ).typeName();
+  return QMetaType::typeName( field.type() );
 }
 
 QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
@@ -2084,17 +2100,17 @@ static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QS
   for ( int r = 0; r < rc; r++ )
   {
     QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
-    if ( QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Group ).toString() != group )
+    if ( QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Group ) ).toString() != group )
       continue;
     bool ok;
-    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble( &ok );
+    double elapsed = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Elapsed ) ).toDouble( &ok );
     if ( !ok )
       elapsed = 0.0;
     total_elapsed += elapsed;
 
     if ( elapsed > PROFILER_THRESHOLD )
     {
-      QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
+      QString name = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Name ) ).toString();
       lines << QStringLiteral( "  %1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number( elapsed, 'f', 3 ) );
     }
     total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
@@ -2269,4 +2285,13 @@ QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject 
   }
 
   return nullptr;
+}
+
+bool InputUtils::isValidUrl( const QString &link )
+{
+  if ( link.isEmpty() )
+    return false;
+
+  QUrl url( link );
+  return url.isValid();
 }

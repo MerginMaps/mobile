@@ -155,6 +155,8 @@ Item {
 
       onContentClicked: root.panelState = "form"
 
+      onOpenFormClicked: root.panelState = "form"
+
       onEditClicked: {
         root.panelState = "form"
         featureForm.state = "edit"

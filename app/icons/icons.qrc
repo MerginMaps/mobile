@@ -99,5 +99,6 @@
         <file>Student.svg</file>
         <file>Measure.svg</file>
         <file>CloseShape.svg</file>
+        <file>RemoteImageLoadError.svg</file>
     </qresource>
 </RCC>

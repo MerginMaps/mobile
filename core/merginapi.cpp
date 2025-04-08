@@ -40,7 +40,6 @@ const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" <
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 
-
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
   , mLocalProjects( localProjects )
@@ -816,27 +815,11 @@ void MerginApi::authorize( const QString &login, const QString &password )
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
-void MerginApi::registerUser( const QString &username,
-                              const QString &email,
+void MerginApi::registerUser( const QString &email,
                               const QString &password,
-                              const QString &confirmPassword,
                               bool acceptedTOC )
 {
   // Some very basic checks, so we do not validate everything
-  if ( username.isEmpty() || username.length() < 4 )
-  {
-    QString msg = tr( "Username must have at least 4 characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
-  if ( !CoreUtils::isValidName( username ) )
-  {
-    QString msg = tr( "Username contains invalid characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
   if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
   {
     QString msg = tr( "Please enter a valid email" );
@@ -857,13 +840,6 @@ void MerginApi::registerUser( const QString &username,
 
   }
 
-  if ( confirmPassword != password )
-  {
-    QString msg = tr( "Passwords do not match" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-    return;
-  }
-
   if ( !acceptedTOC )
   {
     QString msg = tr( "Please accept Terms and Privacy Policy" );
@@ -880,14 +856,13 @@ void MerginApi::registerUser( const QString &username,
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "username" ), username );
   jsonObject.insert( QStringLiteral( "email" ), email );
   jsonObject.insert( QStringLiteral( "password" ), password );
   jsonObject.insert( QStringLiteral( "api_key" ), getApiKey( mApiRoot ) );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( username, password ); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( email, password ); } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -1300,7 +1275,7 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
-void MerginApi::registrationFinished( const QString &username, const QString &password )
+void MerginApi::registrationFinished( const QString &login, const QString &password )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -1311,8 +1286,8 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     QString msg = tr( "Registration successful" );
     emit notifySuccess( msg );
 
-    if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
-      authorize( username, password );
+    if ( !login.isEmpty() && !password.isEmpty() ) // log in immediately
+      authorize( login, password );
 
     emit registrationSucceeded();
   }
@@ -1617,14 +1592,18 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
-  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  MerginConfig config;
+  if ( supportsSelectiveSync )
+  {
+    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -2991,17 +2970,33 @@ void MerginApi::getWorkspaceInfoReplyFinished()
 bool MerginApi::hasLocalChanges(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &localFiles,
-  const QString &projectDir
+  const QString &projectDir,
+  const MerginConfig config
 )
 {
-  if ( localFiles.count() != oldServerFiles.count() )
+  QList<MerginFile> resolvedOldServerFiles;
+
+  if ( config.isValid ) // if a config was set, selective sync is supported
+  {
+    for ( const MerginFile &file : oldServerFiles )
+    {
+      if ( !excludeFromSync( file.path, config ) )
+        resolvedOldServerFiles.append( file );
+    }
+  }
+  else
+  {
+    resolvedOldServerFiles = oldServerFiles;
+  }
+
+  if ( localFiles.count() != resolvedOldServerFiles.count() )
   {
     return true;
   }
 
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( const MerginFile &file : oldServerFiles )
+  for ( const MerginFile &file : resolvedOldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }
