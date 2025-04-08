@@ -37,6 +37,9 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
      */
     QList<QgsMapLayer *> layers() const;
 
+    //! Helper method that convert layer to/from index/name
+    Q_INVOKABLE QgsVectorLayer *layerFromLayerId( QString layerId ) const;
+
     //! Getters and setters
     LayersModel *model() const;
     void setModel( LayersModel *model );
