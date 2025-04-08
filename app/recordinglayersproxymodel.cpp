@@ -14,13 +14,17 @@
 #include "qgslayertree.h"
 
 RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
-  QgsMapLayerProxyModel{ parent }
+  QgsMapLayerProxyModel{ parent },
+  mModel( nullptr )
 {
 }
 
 bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
 {
   if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
+    return false;
+
+  if ( !mModel )
     return false;
 
   // get layer from row and parent index
