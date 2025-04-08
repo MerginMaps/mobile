@@ -54,7 +54,7 @@ For more information on how to use the app, see [Documentation](https://merginma
 - Software developer? Code and prepare a pull request. We will help you with [setup of the development environment](./INSTALL.md) and answer your questions.
 - Donate or [subscribe](https://merginmaps.com/) to the Mergin Maps Cloud service to help us maintain the project.
 
-<div><img style="float: left" width="45" height="45" src="https://raw.githubusercontent.com/MerginMaps/docs/main/src/.vuepress/public/slack.svg" alt="Slack icon"><a href="https://merginmaps.com/community/join">Join our community chat</a><br/>and ask questions!</div>
+<div><img align="left" width="45" height="45" src="https://raw.githubusercontent.com/MerginMaps/docs/main/src/public/slack.svg"><a href="https://merginmaps.com/community/join">Join our community chat</a><br/>and ask questions!</div>
 
 ## Features
 
