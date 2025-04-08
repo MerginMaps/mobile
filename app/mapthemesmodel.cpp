@@ -27,9 +27,9 @@ MapThemesModel::~MapThemesModel() = default;
 
 void MapThemesModel::setupModel()
 {
-  beginResetModel();
-
   clear();
+
+  beginResetModel();
 
   if ( mQgsProject )
   {

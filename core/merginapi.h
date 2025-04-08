@@ -324,10 +324,8 @@ class MerginApi: public QObject
     * \param acceptedTOC Whether user accepted Terms and Conditions
     */
     Q_INVOKABLE void registerUser(
-      const QString &username,
       const QString &email,
       const QString &password,
-      const QString &confirmPassword,
       bool acceptedTOC
     );
 
@@ -390,7 +388,7 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
-    static bool hasLocalProjectChanges( const QString &projectDir );
+    static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
 
     /**
      * Parse major and minor version number from version string
@@ -475,7 +473,8 @@ class MerginApi: public QObject
     static bool hasLocalChanges(
       const QList<MerginFile> &oldServerFiles,
       const QList<MerginFile> &localFiles,
-      const QString &projectDir
+      const QString &projectDir,
+      const MerginConfig config
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -700,7 +699,7 @@ class MerginApi: public QObject
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
     void authorizeFinished();
-    void registrationFinished( const QString &username = QStringLiteral(), const QString &password = QStringLiteral() );
+    void registrationFinished( const QString &login = QStringLiteral(), const QString &password = QStringLiteral() );
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();

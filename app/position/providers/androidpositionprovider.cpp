@@ -164,10 +164,15 @@ AndroidPositionProvider::AndroidPositionProvider( bool fused, QObject *parent )
 
   __android_log_print( ANDROID_LOG_INFO, "CPP", "[c++] create Java object" );
 
-  jobject context = QNativeInterface::QAndroidApplication::context();
+  QJniObject context = QNativeInterface::QAndroidApplication::context();
 
-  mAndroidPos = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "createWithJniCallback",
-                "(Landroid/content/Context;ZI)Luk/co/lutraconsulting/MMAndroidPosition;", context, mFused, mInstanceId );
+  mAndroidPos = QJniObject::callStaticObjectMethod(
+                  "uk/co/lutraconsulting/MMAndroidPosition",
+                  "createWithJniCallback",
+                  "(Landroid/content/Context;ZI)Luk/co/lutraconsulting/MMAndroidPosition;",
+                  context.object(),
+                  mFused,
+                  mInstanceId );
 
   AndroidPositionProvider::startUpdates();
 }
@@ -183,18 +188,19 @@ AndroidPositionProvider::~AndroidPositionProvider()
 
 bool AndroidPositionProvider::isFusedAvailable()
 {
-  jobject context = QNativeInterface::QAndroidApplication::context();
-
   return QJniObject::callStaticMethod<jboolean>( "uk/co/lutraconsulting/MMAndroidPosition", "isFusedLocationProviderAvailable",
-         "(Landroid/content/Context;)Z", context );
+         "(Landroid/content/Context;)Z", QNativeInterface::QAndroidApplication::context() );
 }
 
 QString AndroidPositionProvider::fusedErrorString()
 {
-  jobject context = QNativeInterface::QAndroidApplication::context();
+  QJniObject context = QNativeInterface::QAndroidApplication::context();
 
-  QJniObject str = QJniObject::callStaticObjectMethod( "uk/co/lutraconsulting/MMAndroidPosition", "fusedLocationProviderErrorString",
-                   "(Landroid/content/Context;)Ljava/lang/String;", context );
+  QJniObject str = QJniObject::callStaticObjectMethod(
+                     "uk/co/lutraconsulting/MMAndroidPosition",
+                     "fusedLocationProviderErrorString",
+                     "(Landroid/content/Context;)Ljava/lang/String;",
+                     context.object() );
 
   return str.toString();
 }

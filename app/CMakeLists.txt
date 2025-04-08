@@ -500,10 +500,13 @@ target_link_libraries(
          Geos::Geos-c
          Geos::Geos
          Protobuf::Protobuf-lite
+         Utf8::utf8_range
+         Utf8::utf8_validity
          Expat::Expat
          Freexl::Freexl
          Exiv2::Exiv2
-         Exiv2::Exiv2-xmp
+         Inih::Inireader
+         Inih::Inih
          Tiff::Tiff
          Sqlite3::Sqlite3
          MiniZip::MiniZip
@@ -517,6 +520,7 @@ target_link_libraries(
          Lzma::Lzma
          Zstd::Zstd
          Bz2::Bz2
+         Absl::Absl
 )
 
 if (IOS OR MACOS)
@@ -540,6 +544,7 @@ endif ()
 
 if (IOS)
   target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
+  qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
 endif ()
 
 if (ENABLE_TESTS)
