@@ -1911,4 +1911,4 @@ if (NOT TARGET Absl::Absl)
 
 endif ()
 
-find_package_handle_standard_args(absl REQUIRED_VARS ABSL_TARGETS)
+find_package_handle_standard_args(Absl REQUIRED_VARS ABSL_TARGETS)
