@@ -36,11 +36,11 @@ class RelationFeaturesModel : public LayerFeaturesModel
 
   public:
 
-    enum relationModelRoles
+    enum RelationModelRoles
     {
-      PhotoPath = Qt::UserRole + 100,
+      PhotoPath = LayerModelRoles::LastRole + 1,
     };
-    Q_ENUM( relationModelRoles );
+    Q_ENUM( RelationModelRoles );
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
     ~RelationFeaturesModel() override;

@@ -52,7 +52,8 @@ class LayerFeaturesModel : public FeaturesModel
 
     enum LayerModelRoles
     {
-      SearchResult = Qt::UserRole + 50, // pair of attribute and its value by which the feature was found, empty if search expression is empty
+      SearchResult = ModelRoles::LastRole + 1, // pair of attribute and its value by which the feature was found, empty if search expression is empty
+      LastRole = SearchResult
     };
     Q_ENUM( LayerModelRoles );
 

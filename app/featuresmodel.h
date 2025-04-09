@@ -41,6 +41,7 @@ class FeaturesModel : public QAbstractListModel
       Description, // secondary text in list view
       LayerName,
       LayerIcon,
+      LastRole = LayerIcon
     };
     Q_ENUM( ModelRoles );
 
