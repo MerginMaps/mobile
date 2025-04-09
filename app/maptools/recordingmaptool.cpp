@@ -77,8 +77,6 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
   }
 
-  mLastRecordedPoint = pointToAdd;
-
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 
   if ( !mActiveFeature.isValid() )
@@ -198,9 +196,16 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
     else
     {
+      if (mLastRecordedPoint == pointToAdd)
+      {
+        // Avoid duplicated vertex to be inserted
+        return;
+      }
       mRecordedGeometry.get()->insertVertex( id, pointToAdd );
     }
   }
+
+  mLastRecordedPoint = pointToAdd;
 
   mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
