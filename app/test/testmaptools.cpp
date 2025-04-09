@@ -891,7 +891,7 @@ void TestMapTools::testAddVertexLineLayer()
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[3] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
