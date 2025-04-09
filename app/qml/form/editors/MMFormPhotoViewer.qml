@@ -24,7 +24,7 @@ import "../components/photo" as MMPhotoComponents
 MMPrivateComponents.MMBaseInput {
   id: root
 
-  property url photoUrl: ""
+  property string photoUrl: ""
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
@@ -69,7 +69,15 @@ MMPrivateComponents.MMBaseInput {
       visible: photoStateGroup.state !== "notSet"
 
       photoUrl: root.photoUrl
+      isLocalFile: root.photoUrl.startsWith( "file://" )
+
       fillMode: Image.PreserveAspectCrop
+
+      onStatusChanged: {
+      if ( status === Image.Error ) {
+          __inputUtils.log( "Image Loading", "Could not load the image. It may be missing or invalid, the URL might be incorrect, or there may be no network connection: " + root.photoUrl )
+        }
+      }
 
       MouseArea {
         anchors.fill: parent

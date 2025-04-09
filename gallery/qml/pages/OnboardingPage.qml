@@ -158,10 +158,6 @@ Page {
 
       tocString: "Please read our Terms and Conditions"
 
-      onSignInClicked: console.log("Sign in clicked")
-      onSignUpClicked: function(username, email, password, passwordConfirm, tocAccept, newsletterSubscribe) {
-        console.log("Sign up clicked: " + username + ";" +  email + ";" + password + ";" + passwordConfirm + ";" + tocAccept + ";" + newsletterSubscribe)
-      }
       onBackClicked: stackview.pop()
     }
   }

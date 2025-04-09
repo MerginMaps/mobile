@@ -232,7 +232,7 @@ QString FeaturesModel::buildSearchExpression()
       if ( field.configurationFlags().testFlag( Qgis::FieldConfigurationFlag::NotSearchable ) ||
            ( field.isNumeric() && !searchExpressionIsNumeric ) )
         continue;
-      else if ( field.type() == QVariant::String || field.isNumeric() )
+      else if ( field.type() == QMetaType::QString || field.isNumeric() )
         expressionParts << QStringLiteral( "%1 ILIKE '%%2%'" ).arg( QgsExpression::quotedColumnRef( field.name() ), word );
     }
     wordExpressions << QStringLiteral( "(%1)" ).arg( expressionParts.join( QLatin1String( " ) OR ( " ) ) );

@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 3.22)
 
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2025")
-set(MM_VERSION_MINOR "1")
-set(MM_VERSION_PATCH "1")
-set(QT_VERSION_DEFAULT "6.6.3")
+set(MM_VERSION_MINOR "2")
+set(MM_VERSION_PATCH "0")
+set(QT_VERSION_DEFAULT "6.8.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
@@ -228,6 +228,7 @@ endif ()
 find_package(ZLIB REQUIRED)
 find_package(Bz2 REQUIRED)
 find_package(Curl REQUIRED)
+find_package(Inih REQUIRED)
 find_package(Exiv2 REQUIRED)
 find_package(Expat REQUIRED)
 find_package(Freexl REQUIRED)
@@ -254,6 +255,8 @@ find_package(Geotiff REQUIRED)
 find_package(Lzma REQUIRED)
 find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
+find_package(Utf8 REQUIRED)
+find_package(Absl REQUIRED QUIET)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
