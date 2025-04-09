@@ -196,7 +196,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
     else
     {
-      if (mLastRecordedPoint == pointToAdd)
+      if ( mLastRecordedPoint == pointToAdd )
       {
         // Avoid duplicated vertex to be inserted
         return;
