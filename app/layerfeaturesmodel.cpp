@@ -44,6 +44,14 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   return FeaturesModel::data( index, role );
 }
 
+QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
+{
+  QHash<int, QByteArray> roles = FeaturesModel::roleNames();
+  roles[SearchResult] = QStringLiteral( "SearchResult" ).toLatin1();
+
+  return roles;
+}
+
 void LayerFeaturesModel::populate()
 {
   if ( mLayer )

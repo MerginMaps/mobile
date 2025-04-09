@@ -90,7 +90,6 @@ QHash<int, QByteArray> FeaturesModel::roleNames() const
   roleNames[Feature] = QStringLiteral( "Feature" ).toLatin1();
   roleNames[FeaturePair] = QStringLiteral( "FeaturePair" ).toLatin1();
   roleNames[Description] = QStringLiteral( "Description" ).toLatin1();
-  roleNames[SearchResult] = QStringLiteral( "SearchResult" ).toLatin1();
   roleNames[LayerName] = QStringLiteral( "LayerName" ).toLatin1();
   roleNames[LayerIcon] = QStringLiteral( "LayerIcon" ).toLatin1();
   return roleNames;

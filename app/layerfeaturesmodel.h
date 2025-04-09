@@ -50,9 +50,16 @@ class LayerFeaturesModel : public FeaturesModel
 
   public:
 
+    enum LayerModelRoles
+    {
+      SearchResult = Qt::UserRole + 50, // pair of attribute and its value by which the feature was found, empty if search expression is empty
+    };
+    Q_ENUM( LayerModelRoles );
+
     explicit LayerFeaturesModel( QObject *parent = nullptr );
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     /**
      * \brief reloadFeatures reloads features from current layer

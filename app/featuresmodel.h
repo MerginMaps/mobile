@@ -39,7 +39,6 @@ class FeaturesModel : public QAbstractListModel
       Feature,
       FeaturePair,
       Description, // secondary text in list view
-      SearchResult, // pair of attribute and its value by which the feature was found, empty if search expression is empty
       LayerName,
       LayerIcon,
     };

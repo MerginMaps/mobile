@@ -87,7 +87,7 @@ void ValueRelationFeaturesModel::reset()
   mPair = FeatureLayerPair();
   mConfig = QVariantMap();
   mIsInitialized = false;
-  FeaturesModel::reset();
+  LayerFeaturesModel::reset();
 }
 
 QVariant ValueRelationFeaturesModel::featureTitle( const FeatureLayerPair &pair ) const
@@ -97,12 +97,12 @@ QVariant ValueRelationFeaturesModel::featureTitle( const FeatureLayerPair &pair 
     return pair.feature().attribute( mTitleField );
   }
 
-  return FeaturesModel::featureTitle( pair );
+  return LayerFeaturesModel::featureTitle( pair );
 }
 
 QVariant ValueRelationFeaturesModel::convertToKey( const QVariant &id )
 {
-  QgsFeature f = FeaturesModel::convertRoleValue( FeaturesModel::FeatureId, id, Feature ).value<QgsFeature>();
+  QgsFeature f = convertRoleValue( FeaturesModel::FeatureId, id, Feature ).value<QgsFeature>();
   return f.attribute( mKeyField );
 }
 
@@ -153,9 +153,9 @@ QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, Mod
     keyMap.insert( key, QLatin1String() );
   }
 
-  for ( int ix = 0; ix < FeaturesModel::rowCount(); ++ix )
+  for ( int ix = 0; ix < rowCount(); ++ix )
   {
-    QgsFeature f = FeaturesModel::data( index( ix, 0 ), Feature ).value<QgsFeature>();
+    QgsFeature f = data( index( ix, 0 ), Feature ).value<QgsFeature>();
 
     if ( keyMap.contains( f.attribute( mKeyField ).toString() ) )
     {
@@ -163,7 +163,7 @@ QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, Mod
         roleList.append( f.id() );
       else
       {
-        QVariant attr = FeaturesModel::convertRoleValue( FeatureId, f.id(), toRole );
+        QVariant attr = convertRoleValue( FeatureId, f.id(), toRole );
         if ( !attr.isNull() )
           roleList.append( attr );
       }
