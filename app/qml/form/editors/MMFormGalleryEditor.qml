@@ -67,7 +67,7 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: __activeProject.projectRole !== "reader" ? addFeatureComponent : Component
+    header: __activeProject.projectRole !== "reader" ? addFeatureComponent : null
   }
 
   Component {
