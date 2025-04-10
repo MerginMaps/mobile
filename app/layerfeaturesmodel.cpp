@@ -8,16 +8,14 @@
  ***************************************************************************/
 
 #include "layerfeaturesmodel.h"
-#include "coreutils.h"
 
 #include "inpututils.h"
 #include "qgsproject.h"
-#include "qgsexpressioncontextutils.h"
 #include "qgsvectorlayerfeatureiterator.h"
 
 #include <QLocale>
 #include <QTimer>
-#include <QtConcurrent>
+#include <QtConcurrentRun>
 
 
 LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
@@ -26,6 +24,8 @@ LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
 {
   connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &LayerFeaturesModel::onFutureFinished );
 }
+
+LayerFeaturesModel::~LayerFeaturesModel() = default;
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {

@@ -26,6 +26,7 @@ class StaticFeaturesModel : public FeaturesModel
   public:
 
     explicit StaticFeaturesModel( QObject *parent = nullptr );
+    ~StaticFeaturesModel() override;
 
     /**
      * \brief populate populates a static model using the supplied \a pairs
@@ -33,21 +34,21 @@ class StaticFeaturesModel : public FeaturesModel
      * This can be used to set the initial contents of the model.
      * Any existing feature layer pairs will be removed from the model.
      */
-    Q_INVOKABLE void populate( FeatureLayerPairs pairs );
+    Q_INVOKABLE void populate( const FeatureLayerPairs &pairs );
 
     /**
      * \brief append adds a \a pair to the model
      * \param pair to be added to the model
      * If \a pair already exists in the model, it is not added a second time.
      */
-    Q_INVOKABLE void append( FeatureLayerPair pair );
+    Q_INVOKABLE void append( const FeatureLayerPair &pair );
 
     /**
      * \brief remove removes a \a pair from the model
      * \param pair to be removed from the model
      * If \a pair does not exists in the model, nothing happens.
      */
-    Q_INVOKABLE void remove( FeatureLayerPair pair );
+    Q_INVOKABLE void remove( const FeatureLayerPair &pair );
 
     /**
      * \brief collectGeometries returns all the geometries in the model as a multipart geometry

@@ -17,7 +17,9 @@ StaticFeaturesModel::StaticFeaturesModel( QObject *parent )
 {
 }
 
-void StaticFeaturesModel::populate( FeatureLayerPairs pairs )
+StaticFeaturesModel::~StaticFeaturesModel() = default;
+
+void StaticFeaturesModel::populate( const FeatureLayerPairs &pairs )
 {
   beginResetModel();
   mFeatures.clear();
@@ -26,11 +28,11 @@ void StaticFeaturesModel::populate( FeatureLayerPairs pairs )
   emit countChanged( rowCount() );
 }
 
-void StaticFeaturesModel::append( FeatureLayerPair pair )
+void StaticFeaturesModel::append( const FeatureLayerPair &pair )
 {
-  for ( auto &f : std::as_const( mFeatures ) )
+  for ( const FeatureLayerPair &feature : std::as_const( mFeatures ) )
   {
-    if ( f == pair )
+    if ( feature == pair )
       return;
   }
 
@@ -40,7 +42,7 @@ void StaticFeaturesModel::append( FeatureLayerPair pair )
   emit countChanged( rowCount() );
 }
 
-void StaticFeaturesModel::remove( FeatureLayerPair pair )
+void StaticFeaturesModel::remove( const FeatureLayerPair &pair )
 {
   beginRemoveRows( QModelIndex(), rowCount(), rowCount() );
   const bool removed = mFeatures.removeOne( pair );
@@ -53,13 +55,13 @@ QgsGeometry StaticFeaturesModel::collectGeometries( InputMapSettings *targetSett
 {
   QVector<QgsGeometry> geoms;
 
-  for ( auto &p : std::as_const( mFeatures ) )
+  for ( const FeatureLayerPair &pair : std::as_const( mFeatures ) )
   {
-    if ( !p.isValid() )
+    if ( !pair.isValid() )
       continue;
 
-    const QgsGeometry geom = InputUtils::transformGeometry( p.feature().geometry(),
-                             p.layer()->crs(),
+    const QgsGeometry geom = InputUtils::transformGeometry( pair.feature().geometry(),
+                             pair.layer()->crs(),
                              targetSettings->destinationCrs(),
                              targetSettings->transformContext() );
     geoms.append( geom );

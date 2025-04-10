@@ -58,6 +58,7 @@ class LayerFeaturesModel : public FeaturesModel
     Q_ENUM( LayerModelRoles );
 
     explicit LayerFeaturesModel( QObject *parent = nullptr );
+    ~LayerFeaturesModel() override;
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
     QHash<int, QByteArray> roleNames() const override;
