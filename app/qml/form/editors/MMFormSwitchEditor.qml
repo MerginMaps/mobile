@@ -26,6 +26,7 @@ MMSwitchInput {
   property var _field: parent.field
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -52,9 +53,10 @@ MMSwitchInput {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  text: checked ? internal.checkedStateValue : internal.uncheckedStateValue
+  text: _fieldHasMixedValues ? "" : checked ? internal.checkedStateValue : internal.uncheckedStateValue
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
-  checked: _fieldValue === internal.checkedStateValue
+  checked: _fieldHasMixedValues ? internal.uncheckedStateValue : _fieldValue === internal.checkedStateValue
 
   onToggled: {
     let newVal = checked ? internal.checkedStateValue : internal.uncheckedStateValue

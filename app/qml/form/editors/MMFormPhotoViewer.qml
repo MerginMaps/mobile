@@ -46,6 +46,9 @@ MMPrivateComponents.MMBaseInput {
       },
       State {
         name: "notAvailable"
+      },
+      State {
+        name: "multiple"
       }
     ]
 
@@ -66,7 +69,7 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: photoStateGroup.state !== "notSet"
+      visible: photoStateGroup.state === "valid" || photoStateGroup.state === "notAvailable"
 
       photoUrl: root.photoUrl
       isLocalFile: root.photoUrl.startsWith( "file://" )
@@ -118,6 +121,19 @@ MMPrivateComponents.MMBaseInput {
 
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
+    }
+
+    MMComponents.MMText {
+      width: parent.width
+      height: parent.height
+
+      font: __style.p6
+      text: qsTr( "Editing photos of multiple features is not supported" )
+
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+
+      visible: photoStateGroup.state === "multiple"
     }
   }
 

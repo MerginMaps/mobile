@@ -42,7 +42,6 @@ MMPrivateComponents.MMBaseInput {
       text: root._fieldValue !== undefined ? root._fieldValue : ''
       textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
 
-
       topPadding: __style.margin12
       bottomPadding: __style.margin12
       leftPadding: __style.margin20
