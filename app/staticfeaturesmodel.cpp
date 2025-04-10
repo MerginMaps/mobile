@@ -30,11 +30,8 @@ void StaticFeaturesModel::populate( const FeatureLayerPairs &pairs )
 
 void StaticFeaturesModel::append( const FeatureLayerPair &pair )
 {
-  for ( const FeatureLayerPair &feature : std::as_const( mFeatures ) )
-  {
-    if ( feature == pair )
-      return;
-  }
+  if ( contains( pair ) )
+    return;
 
   beginInsertRows( QModelIndex(), rowCount(), rowCount() );
   mFeatures.append( pair );
@@ -73,4 +70,14 @@ QgsGeometry StaticFeaturesModel::collectGeometries( InputMapSettings *targetSett
 FeatureLayerPairs StaticFeaturesModel::features() const
 {
   return mFeatures;
+}
+
+bool StaticFeaturesModel::contains( const FeatureLayerPair &pair ) const
+{
+  for ( const FeatureLayerPair &feat : std::as_const( mFeatures ) )
+  {
+    if ( feat == pair )
+      return true;
+  }
+  return false;
 }

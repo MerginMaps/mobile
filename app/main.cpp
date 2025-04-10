@@ -99,6 +99,8 @@
 #include "valuerelationfeaturesmodel.h"
 #include "snaputils.h"
 #include "guidelinecontroller.h"
+#include "multieditmanager.h"
+#include "mixedattributevalue.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -336,6 +338,7 @@ void initDeclarative()
   qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
+  qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );
@@ -356,6 +359,8 @@ void initDeclarative()
   // layers model
   qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
   qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
+
+  QMetaType::registerConverter( &MixedAttributeValue::toString );
 }
 
 void addQmlImportPath( QQmlEngine &engine )

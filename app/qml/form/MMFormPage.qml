@@ -67,6 +67,9 @@ Page {
       name: "edit"
     },
     State {
+      name: "multiEdit"
+    },
+    State {
       name: "add"
     }
   ]
@@ -105,6 +108,7 @@ Page {
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
+      else if ( root.state === "multiEdit" ) return qsTr( "Edit selected features" )
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
@@ -112,7 +116,7 @@ Page {
 
       anchors.verticalCenter: parent.verticalCenter
 
-      visible: root.state === "add" || root.state === "edit"
+      visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
 
       iconSource: __style.checkmarkIcon
       iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
@@ -201,7 +205,7 @@ Page {
 
   footer: MMComponents.MMToolbar {
 
-    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader" && root.state !== "multiEdit"
 
     ObjectModel {
       id: readStateButtons
