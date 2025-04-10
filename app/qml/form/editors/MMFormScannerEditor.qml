@@ -26,6 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput  {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -56,7 +57,8 @@ MMPrivateComponents.MMBaseSingleLineInput  {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+  text: root._fieldValue === undefined || root._fieldValueIsNull || _fieldHasMixedValues ? '' : root._fieldValue
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
   onTextEdited: root.editorValueChanged( root.text, root.text === "" )
 

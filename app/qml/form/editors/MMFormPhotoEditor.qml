@@ -57,6 +57,7 @@ MMFormPhotoViewer {
   property var _fieldConfig: parent.fieldConfig
   property var _fieldIndex: parent.fieldIndex
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property string _fieldHomePath: parent.fieldHomePath
   property var _fieldActiveProject: parent.fieldActiveProject
@@ -213,6 +214,12 @@ MMFormPhotoViewer {
       if ( !root._fieldValue || root._fieldValueIsNull ) {
         root.photoState = "notSet"
         resolvedImageSource = ""
+        return
+      }
+
+      if ( root._fieldHasMixedValues ) {
+        root.photoState = "multiple"
+        resolvedImageSource = root._fieldValue
         return
       }
 

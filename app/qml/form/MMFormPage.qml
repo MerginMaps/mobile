@@ -294,6 +294,7 @@ Page {
 
         property var fieldValue: model.RawValue
         property bool fieldValueIsNull: model.RawValueIsNull ?? true
+        property bool fieldHasMixedValues: model.HasMixedValues ?? false
 
         property var field: model.Field
         property var fieldIndex: model.FieldIndex

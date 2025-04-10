@@ -26,6 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -57,7 +58,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField {
-    text: Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
+    text: _fieldHasMixedValues ? "" : Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
+    placeholderText: _fieldHasMixedValues ? _fieldValue : ""
     readOnly: true
   }
 

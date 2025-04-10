@@ -27,6 +27,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property var _field: parent.field
   property var _fieldValue: parent.fieldValue
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -42,7 +43,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   signal editorValueChanged( var newValue, bool isNull )
   signal rememberValueBoxClicked( bool state )
 
-  text: _fieldValue === undefined || _fieldValueIsNull ? '' : _fieldValue
+  text: _fieldValue === undefined || _fieldValueIsNull || _fieldHasMixedValues ? '' : _fieldValue
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
   shouldShowValidation: !_fieldFormIsReadOnly
