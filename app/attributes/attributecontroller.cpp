@@ -36,6 +36,7 @@
 #include "qgsrelation.h"
 #include "inpututils.h"
 #include "coreutils.h"
+#include "mixedattributevalue.h"
 
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
@@ -719,7 +720,7 @@ void AttributeController::evaluateExpressionAndUpdateValue( QSet<QUuid> &changed
     if ( formItem )
     {
       formItem->setRawValue( val );
-      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
+      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
       changedFormItems.insert( formItem->id() );
     }
 
@@ -1228,6 +1229,15 @@ bool AttributeController::save()
   }
   else
   {
+    // Change any MixedAttributeValues to null or they'll be implicitly converted to their string representation
+    for ( int i = 0; i < feat.attributeCount(); ++i )
+    {
+      if ( feat.attribute( i ).userType() == qMetaTypeId< MixedAttributeValue >() )
+      {
+        feat.setAttribute( i, QVariant() );
+      }
+    }
+
     // update it instead of adding
     if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
     {
@@ -1470,7 +1480,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     else
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull } );
+      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
     }
     recalculateDerivedItems( true, false );
     return true;

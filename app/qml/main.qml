@@ -99,7 +99,7 @@ ApplicationWindow {
     projDialog.open()
   }
 
-  function selectFeature( pair ) {
+  function identifyFeature( pair ) {
     let hasNullGeometry = pair.feature.geometry.isNull
 
     if ( hasNullGeometry ) {
@@ -161,6 +161,10 @@ ApplicationWindow {
       else if ( measurePanelLoader.active )
       {
         return measurePanelLoader.item.panelHeight - mapToolbar.height
+      }
+      else if ( selectionPanelLoader.active )
+      {
+        return selectionPanelLoader.item.panelHeight - mapToolbar.height
       }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
@@ -226,6 +230,11 @@ ApplicationWindow {
     onMeasureStarted: function( pair ) {
       measurePanelLoader.active = true
       measurePanelLoader.focus = true
+    }
+
+    onSelectionStarted: {
+      selectionPanelLoader.active = true
+      selectionPanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -446,7 +455,7 @@ ApplicationWindow {
           close()
         }
 
-        window.selectFeature( featurePair )
+        window.identifyFeature( featurePair )
       }
 
       onAddFeature: function( targetLayer ) {
@@ -615,6 +624,39 @@ ApplicationWindow {
   }
 
   Loader {
+    id: selectionPanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: selectionPanelComponent
+  }
+
+  Component {
+    id: selectionPanelComponent
+
+    MMSelectionDrawer {
+      id: selectionPanel
+
+      model: map.multiEditManager?.model
+      layer: map.multiEditManager?.layer
+      width: window.width
+
+      onEditSelected: {
+        let pair = map.multiEditManager.editableFeature()
+        formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
+        selectionPanel.formOpened = true
+      }
+
+      onSelectionFinished: {
+        selectionPanelLoader.active = false
+        map.finishSelect()
+      }
+    }
+  }
+
+  Loader {
     id: measurePanelLoader
 
     focus: true
@@ -681,6 +723,17 @@ ApplicationWindow {
       }
 
       map.hideHighlight()
+
+      if ( selectionPanelLoader.active && selectionPanelLoader.item.formOpened )
+      {
+        selectionPanelLoader.active = false
+        map.finishSelect()
+      }
+    }
+
+    onSelectFeature: function( feature ) {
+      closeDrawer()
+      map.select( feature )
     }
 
     onStakeoutFeature: function( feature ) {

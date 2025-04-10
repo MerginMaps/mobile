@@ -117,6 +117,7 @@ set(MM_QML
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
     gps/MMMeasureDrawer.qml
+    gps/MMSelectionDrawer.qml
     gps/components/MMGpsDataText.qml
     inputs/MMComboboxInput.qml
     inputs/MMPasswordInput.qml

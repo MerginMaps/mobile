@@ -62,6 +62,8 @@ class StaticFeaturesModel : public FeaturesModel
      */
     FeatureLayerPairs features() const;
 
+    bool contains( const FeatureLayerPair &pair ) const;
+
   private:
 
     friend class TestModels;
