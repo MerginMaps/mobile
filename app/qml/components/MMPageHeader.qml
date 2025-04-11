@@ -56,6 +56,7 @@ Rectangle {
 
     text: root.title?.toString()?.replace(/\n/g, ' ') ?? ''
     elide: Text.ElideMiddle
+    textFormat: Text.PlainText
 
     font: root.titleFont
     color: __style.forestColor

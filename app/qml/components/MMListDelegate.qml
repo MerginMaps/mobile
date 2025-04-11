@@ -84,6 +84,7 @@ Item {
 
           font: __style.t3
           text: root.text
+          textFormat: Text.PlainText
 
           color: __style.nightColor
         }
