@@ -41,6 +41,8 @@ Item {
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
+  property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
+
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -65,6 +67,8 @@ Item {
   signal accuracyButtonClicked()
 
   signal measureStarted()
+
+  signal selectionStarted()
 
   signal localChangesPanelRequested()
 
@@ -94,6 +98,9 @@ Item {
     },
     State {
       name: "measure"
+    },
+    State {
+      name: "select"
     },
     State {
       name: "inactive" // ignores touch input
@@ -156,6 +163,12 @@ Item {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
         root.measureStarted()
+        break
+      }
+
+      case "select": {
+        root.showInfoTextMessage( qsTr( "Tap on features to add to the selection" ) ) // todo: add the layer name?
+        root.selectionStarted()
         break
       }
 
@@ -237,6 +250,13 @@ Item {
           root.hideHighlight()
           root.nothingIdentified()
         }
+      }
+      else if ( root.state === "select" )
+      {
+        let screenPoint = Qt.point( point.x, point.y )
+        let pair = identifyKit.identifyOne( screenPoint )
+
+        multiEditManager.toggleSelection( pair )
       }
     }
 
@@ -527,10 +547,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" || root.state === "select" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" || root.state === "measure" )
+        if ( root.state === "stakeout" || root.state === "measure" || root.state === "select" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -922,6 +942,43 @@ Item {
     }
   }
 
+
+  Loader {
+    id: multiEditLoader
+
+    anchors.fill: mapCanvas
+
+    // active: true
+    active: root.state === "select"
+
+    sourceComponent: multiEditComponent
+  }
+
+  Component {
+    id: multiEditComponent
+
+    Item {
+      property alias manager: multiEditManager
+
+      MM.MultiEditManager {
+        id: multiEditManager
+
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      MMHighlight {
+        id: selectionHighlight
+
+        height: mapCanvas.height
+        width: mapCanvas.width
+        visible: root.state === "select"
+
+        mapSettings: mapCanvas.mapSettings
+        geometry: multiEditManager.geometry
+      }
+    }
+  }
+
   MMDiscardGeometryChangesDialog {
     id: cancelEditDialog
 
@@ -1183,6 +1240,15 @@ Item {
     state = "measure"
   }
 
+  function select( featurepair ) {
+    state = "select"
+    multiEditManager.initialize( featurepair )
+  }
+
+  function finishSelect() {
+    state = "view"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1265,6 +1331,7 @@ Item {
         break
       }
 
+      case "select":
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position

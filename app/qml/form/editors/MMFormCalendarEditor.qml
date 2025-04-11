@@ -29,6 +29,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -52,6 +53,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
   text: formatText( root._fieldValue )
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
   warningMsg: _fieldWarningMessage
   errorMsg: _fieldErrorMessage
@@ -94,7 +96,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
       id: dateTimeDrawer
 
       title: root._fieldTitle
-      dateTime: root._fieldValueIsNull ? new Date() : dateTransformer.toJsDate( root._fieldValue )
+      dateTime: root._fieldValueIsNull || root._fieldHasMixedValues ? new Date() : dateTransformer.toJsDate( root._fieldValue )
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
@@ -110,7 +112,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   function openCalendar() {
-    if (root._fieldValueIsNull) {
+    if (root._fieldValueIsNull || _fieldHasMixedValues) {
       root.openPicker( new Date() )
     }
     else {
@@ -174,7 +176,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   function formatText( qtDate ) {
-    if ( qtDate === undefined || root._fieldValueIsNull ) {
+    if ( qtDate === undefined || root._fieldValueIsNull || root._fieldHasMixedValues) {
       return ''
     }
     else {
