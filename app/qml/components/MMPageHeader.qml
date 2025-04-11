@@ -54,7 +54,7 @@ Rectangle {
       topMargin: root.topSpacing
     }
 
-    text: root.title
+    text: root.title?.toString()?.replace(/\n/g, ' ') ?? ''
     elide: Text.ElideMiddle
 
     font: root.titleFont
