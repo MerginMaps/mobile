@@ -9,7 +9,9 @@
 
 #include "testmodels.h"
 #include "testutils.h"
-#include "featuresmodel.h"
+#include "layerfeaturesmodel.h"
+#include "staticfeaturesmodel.h"
+#include "inputmapsettings.h"
 #include "valuerelationfeaturesmodel.h"
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -27,10 +29,62 @@ void TestModels::cleanup()
 
 }
 
-void TestModels::testFeaturesModel()
+void TestModels::testStaticFeaturesModel()
 {
-  FeaturesModel fModel;
-  QSignalSpy spy( &fModel, &FeaturesModel::fetchingResultsChanged );
+  StaticFeaturesModel model;
+
+  QVERIFY( model.rowCount() == 0 );
+
+  QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
+  QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=main", "base", "ogr" );
+
+  QVERIFY( layer && layer->isValid() );
+
+  FeatureLayerPairs pairs;
+  QgsFeature f1 = layer->getFeature( 1 );
+  QVERIFY( f1.isValid() );
+
+  QgsFeature f2 = layer->getFeature( 2 );
+  QVERIFY( f2.isValid() );
+
+  pairs << FeatureLayerPair( f1, layer )
+        << FeatureLayerPair( f2, layer );
+
+  model.populate( pairs );
+  QCOMPARE( model.rowCount(), 2 );
+
+  InputMapSettings settings;
+  QgsCoordinateReferenceSystem targetCrs( QStringLiteral( "EPSG:3857" ) );
+  settings.setDestinationCrs( targetCrs );
+
+  QgsGeometry geom = model.collectGeometries( &settings );
+  QCOMPARE( geom.asWkt( 1 ), QLatin1String( "MultiPoint ((-132502.9 79191),(-132502.9 79191))" ) );
+
+  FeatureLayerPairs returnedPairs = model.features();
+  QVERIFY( pairs == returnedPairs );
+
+  model.remove( FeatureLayerPair( f1, layer ) );
+  QCOMPARE( model.rowCount(), 1 );
+
+  // cannot remove what's not there
+  model.remove( FeatureLayerPair( f1, layer ) );
+  QCOMPARE( model.rowCount(), 1 );
+
+  geom = model.collectGeometries( &settings );
+  QCOMPARE( geom.asWkt( 1 ), QLatin1String( "MultiPoint ((-132502.9 79191))" ) );
+
+  model.append( FeatureLayerPair( f1, layer ) );
+  QCOMPARE( model.rowCount(), 2 );
+
+  // cannot add the same feature pair twice
+  model.append( FeatureLayerPair( f1, layer ) );
+  QCOMPARE( model.rowCount(), 2 );
+}
+
+void TestModels::testLayerFeaturesModel()
+{
+  LayerFeaturesModel fModel;
+  QSignalSpy spy( &fModel, &LayerFeaturesModel::fetchingResultsChanged );
 
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=main", "base", "ogr" );
@@ -57,11 +111,11 @@ void TestModels::testFeaturesModel()
   QCOMPARE( title, QStringLiteral( "First" ) );
 }
 
-void TestModels::testFeaturesModelSorted()
+void TestModels::testLayerFeaturesModelSorted()
 {
-  FeaturesModel model;
+  LayerFeaturesModel model;
 
-  QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
   QgsVectorLayer *layer = new QgsVectorLayer( projectDir + "/db.gpkg|layername=subsub", "subsub", "ogr" );
@@ -146,7 +200,7 @@ void TestModels::testValueRelationFeaturesModel()
 
   ValueRelationFeaturesModel model;
 
-  QSignalSpy spy( &model, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
   // setup value relation, initially unsorted
   QVariantMap config =

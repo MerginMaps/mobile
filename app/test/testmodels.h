@@ -22,8 +22,9 @@ class TestModels : public QObject
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
-    void testFeaturesModel();
-    void testFeaturesModelSorted();
+    void testStaticFeaturesModel();
+    void testLayerFeaturesModel();
+    void testLayerFeaturesModelSorted();
     void testValueRelationFeaturesModel();
     void testProjectsModel();
     void testProjectsProxyModel();

@@ -14,7 +14,7 @@
 #include "qgsproject.h"
 
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
-  : FeaturesModel( parent )
+  : LayerFeaturesModel( parent )
 {
 }
 
@@ -31,16 +31,16 @@ QVariant RelationFeaturesModel::data( const QModelIndex &index, int role ) const
 
   if ( role == PhotoPath )
   {
-    const FeatureLayerPair pair = FeaturesModel::data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
+    const FeatureLayerPair pair = LayerFeaturesModel::data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
     return relationPhotoPath( pair );
   }
   else
-    return FeaturesModel::data( index, role );
+    return LayerFeaturesModel::data( index, role );
 }
 
 QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 {
-  QHash<int, QByteArray> roles = FeaturesModel::roleNames();
+  QHash<int, QByteArray> roles = LayerFeaturesModel::roleNames();
   roles[PhotoPath] = QStringLiteral( "PhotoPath" ).toLatin1();
 
   return roles;
@@ -53,13 +53,13 @@ void RelationFeaturesModel::setup()
 
   QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
 
-  FeaturesModel::setLayer( mRelation.referencingLayer() );
+  LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
 }
 
 void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
-  FeaturesModel::setupFeatureRequest( request );
+  LayerFeaturesModel::setupFeatureRequest( request );
 
   QgsFeatureRequest e = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
   request.combineFilterExpression( e.filterExpression()->operator QString() );

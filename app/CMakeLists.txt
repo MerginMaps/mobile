@@ -64,6 +64,7 @@ set(MM_SRCS
     inpututils_p.cpp
     invitationsmodel.cpp
     invitationsproxymodel.cpp
+    layerfeaturesmodel.cpp
     layersmodel.cpp
     layersproxymodel.cpp
     main.cpp
@@ -76,6 +77,7 @@ set(MM_SRCS
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
     snaputils.cpp
+    staticfeaturesmodel.cpp
     streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
@@ -148,6 +150,7 @@ set(MM_HDRS
     inpututils_p.h
     invitationsmodel.h
     invitationsproxymodel.h
+    layerfeaturesmodel.h
     layersmodel.h
     layersproxymodel.h
     mapthemesmodel.h
@@ -159,6 +162,7 @@ set(MM_HDRS
     relationreferencefeaturesmodel.h
     scalebarkit.h
     snaputils.h
+    staticfeaturesmodel.h
     streamingintervaltype.h
     synchronizationerror.h
     synchronizationmanager.h
