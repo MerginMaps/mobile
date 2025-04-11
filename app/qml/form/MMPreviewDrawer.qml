@@ -90,6 +90,7 @@ Item {
           Layout.preferredHeight: implicitHeight
 
           text: root.controller.title
+          textFormat: Text.PlainText
 
           font: __style.t1
           color: __style.forestColor
@@ -249,6 +250,7 @@ Item {
                 width: parent.width
 
                 text: model.Value
+                textFormat: Text.PlainText
                 font: __style.t3
                 color: __style.nightColor
 
