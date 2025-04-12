@@ -1,0 +1,8 @@
+{
+  "name": "libtasn1",
+  "version": "4.19.0",
+  "port-version": 0,
+  "description": "GNU Abstract Syntax Notation One (ASN.1) and Distinguished Encoding Rules (DER) manipulation",
+  "homepage": "https://www.gnu.org/software/libtasn1/",
+  "license": null
+}

@@ -2,6 +2,9 @@ name: linux Build
 on:
   push:
     paths:
+    - 'vcpkg-overlay/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -105,24 +108,6 @@ jobs:
           ccache --set-config=max_size=2.0G
           ccache -s
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/x64-linux
-          cd ${{ github.workspace }}/input-sdk/x64-linux
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-
       # Build Input App
       - name: Calculate build number
         run: |
@@ -143,7 +128,6 @@ jobs:
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DCOVERAGE=TRUE \

@@ -11,15 +11,11 @@ else ()
   find_path(
     Tasn1_INCLUDE_DIR
     libtasn1.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
   )
 
   find_library(
     Tasn1_LIBRARY
     NAMES tasn1
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
   )
 endif ()
 
