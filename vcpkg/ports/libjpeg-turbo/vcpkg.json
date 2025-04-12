@@ -1,0 +1,22 @@
+{
+  "name": "libjpeg-turbo",
+  "version-semver": "3.7.0",
+  "description": "JPEG image codec; taken from GDAL so on iOS it has renamed symbols and does not clash with Qt JPEG; this is NOT jpeg-turbo - name used so we do not need to patch all other libraries that uses JPEG",
+  "homepage": "https://gdal.org",
+  "license": null,
+  "supports": "!uwp",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    {
+      "name": "vcpkg-pkgconfig-get-modules",
+      "host": true
+    }
+  ]
+}

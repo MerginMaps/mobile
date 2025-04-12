@@ -2,6 +2,9 @@ name: iOS Build
 on:
   push:
     paths:
+    - 'vcpkg-overlay/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -18,8 +21,7 @@ on:
 env:   
   QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
   XC_VERSION: ${{ '16.4' }}
-  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20250326-198
+  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0"
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -128,24 +130,6 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
-          cd ${{ github.workspace }}/input-sdk/arm64-ios
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-
       # Qt
       - name: Cache Qt
         id: cache-qt
@@ -201,7 +185,6 @@ jobs:
             -DUSE_MM_SERVER_API_KEY=TRUE \
             -DUSE_KEYCHAIN=No \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
             -G "Xcode" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -S ${{ github.workspace }} \

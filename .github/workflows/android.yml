@@ -2,6 +2,9 @@ name: Android
 on:
   push:
     paths:
+    - 'vcpkg-overlay/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -29,8 +32,6 @@ jobs:
       JDK_VERSION: 17
       SDK_PLATFORM: android-34
       SDK_BUILD_TOOLS: 34.0.0
-      INPUT_SDK_VERSION_ARM: arm-android-20250326-241
-      INPUT_SDK_VERSION_ARM64: arm64-android-20250326-241
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
@@ -172,38 +173,6 @@ jobs:
       - name: Install Android Tools
         run: |
           sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
-
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION_ARM }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          # download
-          wget -O \
-            input-sdk-arm-android.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM }}.tar.gz
-          
-          wget -O \
-            input-sdk-arm64-android.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM64 }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM64 }}.tar.gz
-             
-          # unpack
-          mkdir -p ${{ github.workspace }}/input-sdk/arm-android
-          cd ${{ github.workspace }}/input-sdk/arm-android
-          tar -xvzf ${{ github.workspace }}/input-sdk-arm-android.tar.gz
-
-          mkdir -p ${{ github.workspace }}/input-sdk/arm64-android
-          cd ${{ github.workspace }}/input-sdk/arm64-android
-          tar -xvzf ${{ github.workspace }}/input-sdk-arm64-android.tar.gz
-
-          # check
-          ls ${{ github.workspace }}/input-sdk
 
       - name: Extract Mergin API_KEY
         env:
