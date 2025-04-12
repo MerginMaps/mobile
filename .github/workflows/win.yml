@@ -116,7 +116,7 @@ jobs:
         shell: cmd
         run: |
             CALL "C:\Program Files\Microsoft Visual Studio\${{ env.VS_VERSION }}\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
-                    
+
       - name: Configure app
         shell: cmd
         run: |

@@ -3,23 +3,23 @@ name: iOS Build
 on:
   push:
     paths:
-    - 'vcpkg-overlay/**'
-    - 'vcpkg.json'
-    - 'VCPKG_BASELINE'
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/ios.yml'
-    - '.github/secrets/ios/**'
+      - 'vcpkg-overlay/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/ios.yml'
+      - '.github/secrets/ios/**'
 
   release:
     types:
       - published
 
-env:   
+env:
   CMAKE_VERSION: '3.31.6'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
@@ -52,7 +52,6 @@ jobs:
           echo $(brew --prefix bison)/bin >> $GITHUB_PATH
           echo $(brew --prefix flex)/bin >> $GITHUB_PATH
           echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
-
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
@@ -137,16 +136,16 @@ jobs:
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
 
-            TIMESTAMP=`date "+%y.%-m"`
-            CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
+          TIMESTAMP=`date "+%y.%-m"`
+          CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-            echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
-            echo "Build number: ${CF_BUNDLE_VERSION}"
+          echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+          echo "Build number: ${CF_BUNDLE_VERSION}"
 
-            # add build number to summary
-            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
+          # add build number to summary
+          echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
 
       - name: Create build system with cmake
         run: |
@@ -174,7 +173,7 @@ jobs:
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -S ${{ github.workspace }}/mm \
             -B ./
- 
+
       - name: Build app (release)
         run: |
           cd build-mm

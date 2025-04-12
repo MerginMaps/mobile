@@ -34,6 +34,7 @@ vcpkg_cmake_configure(
         -DBUILD_WITH_QT6=ON
          ${QTKEYCHAIN_OPTIONS}
 )
+
 vcpkg_cmake_install()
 
 vcpkg_copy_pdbs()

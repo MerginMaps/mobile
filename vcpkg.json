@@ -52,6 +52,10 @@
             "default-features": false,
             "features": ["webp", "zip", "lzma", "jpeg", "zstd"]
         },
+        {
+            "name": "kdab-openssl",
+            "platform": "android"
+        },
         "geodiff",
         "nu-book-zxing-cpp",
         "gdal",

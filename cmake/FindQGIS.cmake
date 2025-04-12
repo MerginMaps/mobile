@@ -23,7 +23,10 @@ set(QGIS_PROVIDERS_LIST
 )
 
 foreach (provider ${QGIS_PROVIDERS_LIST})
-  find_library(QGIS_${provider}_LIBRARY NAMES ${provider}_a)
+  find_library(
+    QGIS_${provider}_LIBRARY
+    NAMES ${provider}_a
+  )
   set(QGIS_REQUIRED_VARS ${QGIS_REQUIRED_VARS} QGIS_${provider}_LIBRARY)
 endforeach ()
 

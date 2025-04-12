@@ -1,8 +1,14 @@
 # GPLv2 Licence
 
-find_path(Spatialite_INCLUDE_DIR spatialite.h)
+find_path(
+  Spatialite_INCLUDE_DIR
+  spatialite.h
+)
 
-find_library(Spatialite_LIBRARY NAMES spatialite)
+find_library(
+  Spatialite_LIBRARY
+  NAMES spatialite
+)
 
 find_package_handle_standard_args(
   Spatialite REQUIRED_VARS Spatialite_LIBRARY Spatialite_INCLUDE_DIR

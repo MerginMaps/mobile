@@ -3,7 +3,7 @@ name: android Build
 on:
   push:
     paths:
-    - 'vcpkg/**'
+    - 'vcpkg-overlay/**'
     - 'vcpkg.json'
     - 'VCPKG_BASELINE'
     - 'app/**'
@@ -33,7 +33,7 @@ jobs:
             ANDROID_ABI: 'armeabi-v7a'
           - TRIPLET: 'arm64-android'
             ANDROID_ABI: 'arm64-v8a'
-            
+
     runs-on: macos-15
     env:
       NDK_VERSION: 'r26' # '26.1.10909125'
@@ -43,6 +43,9 @@ jobs:
       ANDROIDAPI: 24
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       SDK_BUILD_TOOLS: 34.0.0
+      CCACHE_DIR: /Users/runner/work/ccache
+      GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
+      CACHE_VERSION: 0
       CMAKE_VERSION: '3.31.6'
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
@@ -134,6 +137,18 @@ jobs:
       - name: Install Android Tools
         run: |
           sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
+
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
+        run: |
+          cd core/
+          /opt/homebrew/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
 
       - name: Extract GPS keystore
         env:
