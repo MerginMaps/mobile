@@ -2,24 +2,26 @@ name: iOS Build
 on:
   push:
     paths:
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/ios.yml'
-    - '.github/secrets/ios/**'
+      - 'vcpkg-overlay/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/ios.yml'
+      - '.github/secrets/ios/**'
 
   release:
     types:
       - published
 
-env:   
+env:
   QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
   XC_VERSION: ${{ '16.4' }}
-  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20250326-198
+  IOS_CMAKE_TOOLCHAIN_VERSION: '4.4.0'
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -36,17 +38,17 @@ jobs:
     runs-on: macos-15
     steps:
       - name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+        run: 'sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app'
 
       - uses: actions/checkout@v4
- 
+
       - name: Download ios-cmake toolchain
         uses: actions/checkout@v4
         with:
-            repository: leetal/ios-cmake
-            ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
-            path: ios-cmake
-      
+          repository: leetal/ios-cmake
+          ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
+          path: ios-cmake
+
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v3.0.11
@@ -82,12 +84,12 @@ jobs:
           brew install openssl
           brew install ccache
           brew install ninja
-        
+
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
-     
+
       - name: Install ccache
         run: |
           mkdir -p ${CCACHE_DIR}
@@ -128,24 +130,6 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
           cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
-          cd ${{ github.workspace }}/input-sdk/arm64-ios
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-
       # Qt
       - name: Cache Qt
         id: cache-qt
@@ -153,7 +137,7 @@ jobs:
         with:
           path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache-v3-${{ env.QT_VERSION }}-ios
-          
+
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
         run: |
@@ -167,21 +151,20 @@ jobs:
             -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
             -O ${{ github.workspace }}/Qt
 
-
       - name: Calculate a build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
 
-            TIMESTAMP=`date "+%y.%-m"`
-            CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
+          TIMESTAMP=`date "+%y.%-m"`
+          CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-            echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
-            echo "Build number: ${CF_BUNDLE_VERSION}"
+          echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+          echo "Build number: ${CF_BUNDLE_VERSION}"
 
-            # add build number to summary
-            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
+          # add build number to summary
+          echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
 
       - name: Create build system with cmake
         run: |
@@ -201,12 +184,11 @@ jobs:
             -DUSE_MM_SERVER_API_KEY=TRUE \
             -DUSE_KEYCHAIN=No \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
             -G "Xcode" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -S ${{ github.workspace }} \
             -B ./
- 
+
       - name: Build Input
         run: |
           cd build-INPUT
