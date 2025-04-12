@@ -2,15 +2,11 @@
 find_path(
   QGIS_INCLUDE_DIR
   qgis.h
-  "${INPUT_SDK_PATH_MULTI}/include/qgis"
-  NO_DEFAULT_PATH
 )
 
 find_library(
   QGIS_CORE_LIBRARY
   NAMES qgis_core
-  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-  NO_DEFAULT_PATH
 )
 
 set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR)
@@ -36,8 +32,6 @@ foreach (provider ${QGIS_PROVIDERS_LIST})
   find_library(
     QGIS_${provider}_LIBRARY
     NAMES ${provider}_a
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
   )
   set(QGIS_REQUIRED_VARS ${QGIS_REQUIRED_VARS} QGIS_${provider}_LIBRARY)
 endforeach ()

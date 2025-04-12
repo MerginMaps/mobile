@@ -1,0 +1,50 @@
+{
+    "vcpkg-configuration": {
+      "overlay-ports": [
+        "vcpkg/ports"
+      ],
+      "overlay-triplets": [
+        "vcpkg/triplets"
+      ]
+    },
+    "name": "merginmaps-mobile-app",
+    "description": "Collect. Share. Publish.",
+    "version": "2025.2.0",
+    "dependencies": [
+        {
+            "name": "sqlite3",
+            "default-features": false,
+            "features": [ "rtree", "json1", "fts3" ]
+        },
+        {
+            "name": "exiv2",
+            "features": ["xmp"]
+        },
+        {
+            "name": "proj",
+            "default-features": false,
+            "features": ["tiff"]
+        },
+        {
+            "name": "libspatialite",
+            "default-features": false,
+            "features": ["freexl"]
+        },
+        {
+            "name": "tiff",
+            "default-features": false,
+            "features": ["webp", "zip", "lzma", "jpeg", "zstd"]
+        },
+        {
+            "name": "kdab-openssl",
+            "platform": "android"
+        },
+        "geodiff",
+        "nu-book-zxing-cpp",
+        "gdal",
+        "qt6",
+        "qca-qt6",
+        "qtkeychain-qt6",
+        "qgis-qt6"
+    ]
+}
