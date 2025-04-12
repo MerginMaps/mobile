@@ -43,7 +43,8 @@ if (APPLE
     AND NOT IOS
     AND NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE}
 )
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15.0")
+# TODO change for arm64/osx
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "15.4")
 endif ()
 
 # ########################################################################################
@@ -60,7 +61,7 @@ mm_detect_platform()
 project(
   Input
   VERSION ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH}
-  DESCRIPTION "The easiest way to take your QGIS projects into the field"
+  DESCRIPTION "Collect. Share. Publish."
   HOMEPAGE_URL "https://merginmaps.com"
   LANGUAGES CXX
 )
@@ -79,21 +80,6 @@ if (IOS)
   set(HAVE_BLUETOOTH_DEFAULT FALSE)
 else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
-endif ()
-
-# on android in multi-ABI build, command line variables are NOT passed to
-# ExternalProject_Add called by QT. Therefore we need to pass the variables through ENV
-if (ANDROID)
-  if (NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE})
-    message(
-      FATAL_ERROR
-        "On Android, you need to define INPUT_SDK_ANDROID_BASE as environment variable. Clean build directory and run cmake again!"
-    )
-  else ()
-    set(INPUT_SDK_PATH_DEFAULT $ENV{INPUT_SDK_ANDROID_BASE})
-  endif ()
-else ()
-  set(INPUT_SDK_PATH_DEFAULT "")
 endif ()
 
 if (DEFINED ENV{INPUT_VERSION_CODE})
@@ -128,12 +114,7 @@ set(IOS_USE_PRODUCTION_SIGNING
       BOOL
       "Whether to sign the ios build with production certificate. Used in CI, leave false when building locally to automatically manage signing"
 )
-set(INPUT_SDK_PATH
-    ${INPUT_SDK_PATH_DEFAULT}
-    CACHE
-      PATH
-      "Path to the Mergin Maps Mobile-SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
-)
+
 set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
     CACHE BOOL "Whether to build tests"
@@ -166,27 +147,6 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # ########################################################################################
 # FIND PACKAGES
 # ########################################################################################
-
-if (ANDROID)
-  set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
-
-  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a})
-    message(WARNING "INPUT_SDK_PATH arm-android directory does not exist!")
-  endif ()
-
-  set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
-  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a})
-    message(WARNING "INPUT_SDK_PATH arm64-android directory does not exist!")
-  endif ()
-
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
-  # allow libraries outside of SDK/NDK directory
-  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
-  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
-  set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
-else ()
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH})
-endif ()
 
 find_package(
   Qt6 ${QT6_VERSION}
@@ -222,42 +182,43 @@ if (NOT IOS)
 endif ()
 
 if (NOT LNX)
-  find_package(Charset REQUIRED)
+  # find_package(Charset CONFIG REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
 
 find_package(ZLIB REQUIRED)
-find_package(Bz2 REQUIRED)
-find_package(Curl REQUIRED)
-find_package(Inih REQUIRED)
-find_package(Exiv2 REQUIRED)
-find_package(Expat REQUIRED)
-find_package(Freexl REQUIRED)
-find_package(Gdal REQUIRED)
-find_package(Geodiff REQUIRED)
-find_package(Geos REQUIRED)
-find_package(Jpeg REQUIRED)
-find_package(Pq REQUIRED)
-find_package(Proj REQUIRED)
+# find_package(Bz2 CONFIG REQUIRED)
+# find_package(bzip2 CONFIG REQUIRED) 
+find_package(CURL CONFIG REQUIRED)
+# find_package(Inih CONFIG REQUIRED)
+find_package(exiv2 CONFIG REQUIRED)
+find_package(expat CONFIG REQUIRED)
+# find_package(freexl CONFIG REQUIRED)
+find_package(GDAL CONFIG REQUIRED)
+find_package(Geodiff CONFIG REQUIRED)
+find_package(GEOS CONFIG REQUIRED)
+find_package(Jpeg CONFIG REQUIRED)
+find_package(PostgreSQL REQUIRED)
+find_package(PROJ CONFIG REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(QGIS REQUIRED)
-find_package(Qca REQUIRED)
-find_package(Qtkeychain REQUIRED)
+find_package(Qca CONFIG REQUIRED)
+find_package(Qt6Keychain CONFIG REQUIRED)
 find_package(Spatialindex REQUIRED)
 find_package(Spatialite REQUIRED)
-find_package(Sqlite3 REQUIRED)
-find_package(Tiff REQUIRED)
-find_package(WebP REQUIRED)
-find_package(Xml2 REQUIRED)
-find_package(ZXing REQUIRED)
-find_package(Zip REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(Geotiff REQUIRED)
-find_package(Lzma REQUIRED)
-find_package(Zstd REQUIRED)
-find_package(MiniZip REQUIRED)
-find_package(Utf8 REQUIRED)
-find_package(Absl REQUIRED QUIET)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+# find_package(Tiff CONFIG REQUIRED)
+find_package(WebP CONFIG REQUIRED)
+# find_package(Xml2 CONFIG REQUIRED)
+find_package(ZXing CONFIG REQUIRED)
+find_package(libzip CONFIG REQUIRED)
+find_package(OpenSSL CONFIG REQUIRED)
+find_package(GeoTIFF CONFIG REQUIRED)
+# find_package(Lzma CONFIG REQUIRED)
+find_package(Zstd CONFIG REQUIRED)
+find_package(unofficial-minizip CONFIG REQUIRED)
+# find_package(Utf8 CONFIG REQUIRED)
+find_package(Absl CONFIG REQUIRED)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)

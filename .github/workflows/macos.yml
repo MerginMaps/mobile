@@ -2,6 +2,9 @@ name: macOS Build
 on:
   push:
     paths:
+    - 'vcpkg-overlay/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -17,7 +20,6 @@ on:
 
 env:
   QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  INPUT_SDK_VERSION: x64-osx-20250326-218
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
@@ -105,24 +107,6 @@ jobs:
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
-
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/x64-osx
-          cd ${{ github.workspace }}/input-sdk/x64-osx
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
 
       # Build Input App
       - name: Calculate build number
