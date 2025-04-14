@@ -322,6 +322,11 @@ class RecordingMapTool : public AbstractMapTool
      */
     bool shouldBeVisible( QgsPoint point );
 
+    /**
+     * Check the layers intersection mode and change the feature geometry accordingly
+     */
+    void avoidIntersections();
+
     QgsGeometry mRecordedGeometry;
 
     bool mCenteredToGPS = false;
