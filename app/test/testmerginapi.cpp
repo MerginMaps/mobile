@@ -2744,6 +2744,7 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
   bool ok = f.open( QIODeviceBase::WriteOnly );
   Q_ASSERT( ok );
   f.write( data );
+  f.flush();
   f.close();
 }
 
@@ -3287,7 +3288,14 @@ void TestMerginApi::testHasLocalProjectChanges()
   // 4: fourth scenario => local files differs from metadata, selective sync supported
   writeFileContent( projectDir + "/test.txt", QByteArray( "modified content" ) );
 
-  QTest::qSleep( 1000 ); // small delay to ensure filesystem operations complete
+  QByteArray metadataContent = readFileContent( projectDir + "/" + MerginApi::sMetadataFile );
+  qDebug() << "[testHasLocalProjectChanges] Metadata file content:" << metadataContent;
+
+  QByteArray newChecksum = CoreUtils::calculateChecksum( projectDir + "/test.txt" );
+  QCOMPARE( QString( checksum ), fileObj["checksum"].toString() );
+  QVERIFY( QString( newChecksum ) != fileObj["checksum"].toString() );
+  qDebug() << "[testHasLocalProjectChanges] Checksum in metadata:" << fileObj["checksum"].toString();
+  qDebug() << "[testHasLocalProjectChanges] New checksum from modified file:" << QString( newChecksum );
 
   // expected results: has changes
   QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
