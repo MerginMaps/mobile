@@ -50,9 +50,6 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
     void modelTypeChanged();
     void modelChanged();
 
-  public slots:
-    void refreshData();
-
   private:
     LayersModel *mModel;
 };

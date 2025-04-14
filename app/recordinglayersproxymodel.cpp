@@ -42,11 +42,6 @@ QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
   return mModel->layers();
 }
 
-void RecordingLayersProxyModel::refreshData()
-{
-  invalidate();
-}
-
 QgsVectorLayer *RecordingLayersProxyModel::layerFromLayerId( QString layerId ) const
 {
   QList<QgsMapLayer *> filteredLayers = layers();
