@@ -312,7 +312,8 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
 
     // Add a offset to encompass handles etc..
     // This number is based on what feel confortable for the user
-    currentExtent.scale( 1.18 );
+    constexpr double SCALE_FACTOR = 1.18;
+    currentExtent.scale( SCALE_FACTOR );
   }
 
   mapSettings->setExtent( currentExtent );
