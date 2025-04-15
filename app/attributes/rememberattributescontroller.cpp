@@ -100,29 +100,20 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
-  if ( !rememberValuesAllowed() )
+  if ( !rememberValuesAllowed() || !layer || !mActiveProject )
     return false;
 
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
   QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-  bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
+  bool currentlyEnabled = settings.value( fieldEnabledKey, false ).toBool();
 
-  if ( layer && shouldRemember )
-  {
-    if ( !fieldEnabled )
-      settings.setValue( fieldEnabledKey, true );
-
-    settings.endGroup();
-    return true;
-  }
-
-  if ( fieldEnabled )
-    settings.setValue( fieldEnabledKey, false );
+  if ( currentlyEnabled != shouldRemember )
+    settings.setValue( fieldEnabledKey, shouldRemember );
 
   settings.endGroup();
-  return false;
+  return shouldRemember;
 }
 
 bool RememberAttributesController::rememberedValue(
@@ -130,6 +121,9 @@ bool RememberAttributesController::rememberedValue(
   int fieldIndex,
   QVariant &value ) const
 {
+  if ( !layer || !mActiveProject )
+    return false;
+
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
