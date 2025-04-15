@@ -235,12 +235,16 @@ Item {
     }
 
     onClicked: function( point ) {
-      if ( root.state === "view" )
+      if ( root.state === "view" || root.state === "select" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = identifyKit.identifyOne( screenPoint )
 
-        if ( pair.valid )
+        if ( root.state === "select" )
+        {
+          multiEditManager.toggleSelection( pair )
+        }
+        else if ( pair.valid )  // root.state === "view"
         {
           root.highlightPair( pair )
           root.featureIdentified( pair )
@@ -250,13 +254,6 @@ Item {
           root.hideHighlight()
           root.nothingIdentified()
         }
-      }
-      else if ( root.state === "select" )
-      {
-        let screenPoint = Qt.point( point.x, point.y )
-        let pair = identifyKit.identifyOne( screenPoint )
-
-        multiEditManager.toggleSelection( pair )
       }
     }
 

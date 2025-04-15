@@ -41,12 +41,6 @@ void MultiEditManager::toggleSelection( const FeatureLayerPair &pair )
        ( mLayer && mLayer != pair.layer() ) )
     return;
 
-  if ( mModel->count() == 0 )
-  {
-    mModel->populate( { pair } );
-    return;
-  }
-
   if ( mModel->contains( pair ) )
   {
     mModel->remove( pair );
