@@ -1065,7 +1065,7 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
   if ( mActiveLayer && featureIsValid )
   {
     // Avoid overlaps of features after drawing new feature
-    if ( mState == MapToolState::Record )
+    if ( mState == MapToolState::Record && mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       avoidIntersections();
     }
@@ -1234,7 +1234,7 @@ void RecordingMapTool::completeEditOperation()
   if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
     // Avoid overlaps of features after each edit of geometry
-    if ( mState == MapToolState::Grab )
+    if ( mState == MapToolState::Grab && mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       avoidIntersections();
     }
@@ -1705,42 +1705,39 @@ void RecordingMapTool::avoidIntersections()
       break;
   }
 
+  // if the list is empty we allow overlaps
   if ( avoidIntersectionsLayers.isEmpty() )
   {
     return;
   }
+
   // the operation checks the intersection with selected layers and also avoids the active feature that is being edited
   const Qgis::GeometryOperationResult operationResult = mRecordedGeometry.avoidIntersectionsV2( avoidIntersectionsLayers, {{mActiveLayer, {mActiveFeature.id()}}} );
+
   // the geometry type has changed, we will try to make it compatible with active layer
   if ( operationResult == Qgis::GeometryOperationResult::GeometryTypeHasChanged )
   {
     const QVector<QgsGeometry> newGeoms = mRecordedGeometry.coerceToType( mActiveLayer->wkbType() );
+    // if we coerce to just 1 geometry set that geometry as the new geometry
     if ( newGeoms.count() == 1 )
     {
       mRecordedGeometry = newGeoms[0];
     }
+    // we coerced to multiple new geometries, pick the biggest and set it as the new geometry
     else
     {
-      QgsFeatureList removedFeatures;
       double largest = 0;
-      int largestPartIndex = -1;
       for ( int i = 0; i < newGeoms.size(); ++i )
       {
         const QgsGeometry& currentPart = newGeoms.at( i );
         const double currentPartSize = mActiveLayer->geometryType() == Qgis::GeometryType::Polygon ? currentPart.area() : currentPart.length();
 
-        QgsFeature partFeature( mActiveLayer->fields() );
-        partFeature.setAttributes( mActiveFeature.attributes() );
-        partFeature.setGeometry( currentPart );
-        removedFeatures.append( partFeature );
         if ( currentPartSize > largest )
         {
           mRecordedGeometry = currentPart;
-          largestPartIndex = i;
           largest = currentPartSize;
         }
       }
-      removedFeatures.removeAt( largestPartIndex );
     }
   }
 }
