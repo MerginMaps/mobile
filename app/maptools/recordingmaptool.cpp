@@ -1064,6 +1064,10 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 
   if ( mActiveLayer && featureIsValid )
   {
+    // Avoid overlaps of features after drawing new feature
+    if ( mState == MapToolState::Record ) {
+      avoidIntersections();
+    }
     mActiveFeature.setGeometry( mRecordedGeometry );
     return FeatureLayerPair( mActiveFeature, mActiveLayer );
   }
@@ -1228,7 +1232,10 @@ void RecordingMapTool::completeEditOperation()
 {
   if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
-    avoidIntersections();
+    // Avoid overlaps of features after each edit of geometry
+    if ( mState == MapToolState::Grab ) {
+      avoidIntersections();
+    }
     mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
     mActiveLayer->endEditCommand();
     mActiveLayer->triggerRepaint();
