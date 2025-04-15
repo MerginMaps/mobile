@@ -20,6 +20,7 @@
 #include "qgsfeature.h"
 #include "qgsvectorlayer.h"
 #include "inputconfig.h"
+#include "activeproject.h"
 #include <QHash>
 
 class FeatureLayerPair;
@@ -34,17 +35,21 @@ class  RememberAttributesController : public QObject
     //! Returns TRUE if remembering values is allowed
     Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
 
+    //! Provides context for creating project-specific settings keys
+    Q_PROPERTY( ActiveProject *activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
+
+    //! Usage on attribute operations
+    Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
 
-    //! Restore clean/initial state: no layers, no features!
-    Q_INVOKABLE void reset();
+    static const QString CACHED_ATTRIBUTES_GROUP;
 
     bool rememberValuesAllowed() const;
     void setRememberValuesAllowed( bool rememberValuesAllowed );
 
-    void storeLayerFields( const QgsVectorLayer *layer );
     void storeFeature( const FeatureLayerPair &pair );
 
     // Returns false if the value is not remembered
@@ -56,21 +61,20 @@ class  RememberAttributesController : public QObject
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
+    FeatureLayerPair featureLayerPair() const;
+    void setFeatureLayerPair( const FeatureLayerPair &pair );
+
+    ActiveProject *activeProject() const;
+    void setActiveProject( ActiveProject *newActiveProject );
+
   signals:
     void rememberValuesAllowedChanged();
+    void activeProjectChanged();
+    void featureLayerPairChanged();
 
   private:
-    //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
-    struct RememberedValues
-    {
-      QgsFeature feature;
-      QVector<bool> attributeFilter;
-    };
-
-    bool mRememberValuesAllowed = false;
-    //! Remembered last created feature for each layer (key)
-    QHash<QString, RememberedValues> mRememberedValues;
-
+    ActiveProject *mActiveProject = nullptr;
+    FeatureLayerPair mFeatureLayerPair;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H
