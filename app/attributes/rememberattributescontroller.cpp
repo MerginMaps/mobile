@@ -16,86 +16,112 @@
 #include "rememberattributescontroller.h"
 #include "featurelayerpair.h"
 #include "qgsattributes.h"
-#include "featurelayerpair.h"
+#include <coreutils.h>
+#include <QSettings>
+
+
+const QString RememberAttributesController::CACHED_ATTRIBUTES_GROUP = QStringLiteral( "cachedAttributesValue" );
 
 RememberAttributesController::RememberAttributesController( QObject *parent )
   : QObject( parent )
 {
 }
 
-void RememberAttributesController::reset()
-{
-  mRememberedValues.clear();
-}
-
 RememberAttributesController::~RememberAttributesController() = default;
 
 bool RememberAttributesController::rememberValuesAllowed() const
 {
-  return mRememberValuesAllowed;
+  QSettings settings;
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
+  bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
+  settings.endGroup();
+  return reuseLastEnteredValues;
 }
 
 void RememberAttributesController::setRememberValuesAllowed( bool rememberValuesAllowed )
 {
-  if ( mRememberValuesAllowed != rememberValuesAllowed )
+  if ( this->rememberValuesAllowed() != rememberValuesAllowed )
   {
-    mRememberValuesAllowed = rememberValuesAllowed;
+    QSettings settings;
+    settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
+    settings.setValue( "reuseLastEnteredValues", rememberValuesAllowed );
+    settings.endGroup();
     emit rememberValuesAllowedChanged();
-  }
-}
-
-void RememberAttributesController::storeLayerFields( const QgsVectorLayer *layer )
-{
-  if ( layer && ( !mRememberedValues.contains( layer->id() ) ) )
-  {
-    mRememberedValues[layer->id()] = RememberedValues();
-    mRememberedValues[layer->id()].attributeFilter.fill( false, layer->fields().size() );
   }
 }
 
 void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 {
-  if ( pair.layer() )
-    storeLayerFields( pair.layer() );
-  mRememberedValues[pair.layer()->id()].feature = pair.feature();
+  const QgsVectorLayer *layer = pair.layer();
+  const QgsFeature &feature = pair.feature();
+
+  if ( !layer )
+    return;
+
+  QSettings settings;
+  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
+
+  const QgsFields &fields = layer->fields();
+  for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
+  {
+    QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+    bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
+
+    if ( fieldEnabled )
+    {
+      QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+      QVariant value = feature.attribute( fieldIndex );
+      settings.setValue( fieldValueKey, value );
+    }
+  }
+
+  settings.endGroup();
 }
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
   // global switch off of the functionality
-  if ( !mRememberValuesAllowed )
+  if ( !rememberValuesAllowed() )
     return false;
 
-  if ( !layer || !mRememberedValues.contains( layer->id() ) )
+  if ( !layer )
     return false;
 
-  const RememberedValues from = mRememberedValues[layer->id()];
-  if ( fieldIndex < 0 || fieldIndex >= from.attributeFilter.size() )
-    // serious screw-up, mismatch between layer and stored layer?
-    return false;
+  QSettings settings;
+  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
-  return from.attributeFilter.at( fieldIndex );
+  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+  bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();;
+
+  settings.endGroup();
+
+  return fieldEnabled;
 }
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
-  // global switch off of the functionality
-  if ( !mRememberValuesAllowed )
+  if ( !rememberValuesAllowed() )
     return false;
 
-  if ( layer && mRememberedValues.contains( layer->id() ) )
+  QSettings settings;
+  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
+
+  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+  bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
+
+  if ( layer && shouldRemember )
   {
-    RememberedValues &from = mRememberedValues[layer->id()];
-    if ( fieldIndex >= 0 && fieldIndex < from.attributeFilter.length() )
-    {
-      bool oldVal = from.attributeFilter[fieldIndex];
-      if ( oldVal != shouldRemember )
-      {
-        from.attributeFilter[fieldIndex] = shouldRemember;
-        return true;
-      }
-    }
+    if ( !fieldEnabled )
+      settings.setValue( fieldEnabledKey, true );
+
+    settings.endGroup();
+    return true;
   }
+
+  if ( fieldEnabled )
+    settings.setValue( fieldEnabledKey, false );
+
+  settings.endGroup();
   return false;
 }
 
@@ -104,27 +130,76 @@ bool RememberAttributesController::rememberedValue(
   int fieldIndex,
   QVariant &value ) const
 {
-  // global switch off of the functionality
-  if ( !mRememberValuesAllowed )
-    return false;
+  QSettings settings;
+  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
-  if ( !layer || !mRememberedValues.contains( layer->id() ) )
-    return false;
+  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+  bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
 
-  const RememberedValues from = mRememberedValues[layer->id()];
-  if ( !from.feature.isValid() )
-    return false;
+  if ( fieldEnabled )
+  {
+    QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+    QVariant fieldValue = settings.value( fieldValueKey, QVariant() );
+    value = fieldValue;
+    settings.endGroup();
+    return true;
+  }
 
-  QgsAttributes fromAttributes = from.feature.attributes();
-  if ( fieldIndex < 0 || fieldIndex >= fromAttributes.length() )
-    // serious screw-up, mismatch between layer and stored layer?
-    return false;
+  settings.endGroup();
+  return false;
+}
 
-  if ( !from.attributeFilter.at( fieldIndex ) )
-    // user do not want to remember this value
-    return false;
+FeatureLayerPair RememberAttributesController::featureLayerPair() const
+{
+  return mFeatureLayerPair;
+}
 
-  // got it
-  value = fromAttributes.at( fieldIndex );
-  return true;
+void RememberAttributesController::setFeatureLayerPair( const FeatureLayerPair &pair )
+{
+  if ( mFeatureLayerPair != pair )
+  {
+    mFeatureLayerPair = pair;
+    emit featureLayerPairChanged();
+  }
+
+  const QgsFeature &feature = pair.feature();
+  const QgsVectorLayer *layer = pair.layer();
+
+  if ( !layer || !mActiveProject )
+    return;
+
+  QSettings settings;
+  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
+
+  const QgsFields &fields = layer->fields();
+  for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
+  {
+    QVariant value = feature.attribute( fieldIndex );
+    QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+
+    if ( shouldRememberValue( layer, fieldIndex ) )
+    {
+      settings.setValue( fieldValueKey, value );
+    }
+    else if ( layer->editFormConfig().reuseLastValue( ( fieldIndex ) ) )
+    {
+      setShouldRememberValue( layer, fieldIndex, true );
+      settings.setValue( fieldValueKey, value );
+    }
+  }
+
+  settings.endGroup();
+}
+
+ActiveProject *RememberAttributesController::activeProject() const
+{
+  return mActiveProject;
+}
+
+void RememberAttributesController::setActiveProject( ActiveProject *newActiveProject )
+{
+  if ( mActiveProject == newActiveProject )
+    return;
+  mActiveProject = newActiveProject;
+  emit activeProjectChanged( );
 }
