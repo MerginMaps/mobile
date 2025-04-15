@@ -1065,7 +1065,8 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
   if ( mActiveLayer && featureIsValid )
   {
     // Avoid overlaps of features after drawing new feature
-    if ( mState == MapToolState::Record ) {
+    if ( mState == MapToolState::Record )
+    {
       avoidIntersections();
     }
     mActiveFeature.setGeometry( mRecordedGeometry );
@@ -1233,7 +1234,8 @@ void RecordingMapTool::completeEditOperation()
   if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
     // Avoid overlaps of features after each edit of geometry
-    if ( mState == MapToolState::Grab ) {
+    if ( mState == MapToolState::Grab )
+    {
       avoidIntersections();
     }
     mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
@@ -1687,10 +1689,12 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
   emit activeFeatureChanged( mActiveFeature );
 }
 
-void RecordingMapTool::avoidIntersections() {
+void RecordingMapTool::avoidIntersections()
+{
 
   QList<QgsVectorLayer *> avoidIntersectionsLayers;
-  switch ( mapSettings()->project()->avoidIntersectionsMode() ) {
+  switch ( mapSettings()->project()->avoidIntersectionsMode() )
+  {
     case Qgis::AvoidIntersectionsMode::AvoidIntersectionsLayers:
       avoidIntersectionsLayers = mapSettings()->project()->avoidIntersectionsLayers();
       break;
@@ -1701,17 +1705,22 @@ void RecordingMapTool::avoidIntersections() {
       break;
   }
 
-  if ( avoidIntersectionsLayers.isEmpty() ) {
+  if ( avoidIntersectionsLayers.isEmpty() )
+  {
     return;
   }
   // the operation checks the intersection with selected layers and also avoids the active feature that is being edited
-  const Qgis::GeometryOperationResult operationResult = mRecordedGeometry.avoidIntersectionsV2( avoidIntersectionsLayers, {{mActiveLayer, {mActiveFeature.id()}}});
+  const Qgis::GeometryOperationResult operationResult = mRecordedGeometry.avoidIntersectionsV2( avoidIntersectionsLayers, {{mActiveLayer, {mActiveFeature.id()}}} );
   // the geometry type has changed, we will try to make it compatible with active layer
-  if ( operationResult == Qgis::GeometryOperationResult::GeometryTypeHasChanged ) {
+  if ( operationResult == Qgis::GeometryOperationResult::GeometryTypeHasChanged )
+  {
     const QVector<QgsGeometry> newGeoms = mRecordedGeometry.coerceToType( mActiveLayer->wkbType() );
-    if ( newGeoms.count() == 1 ) {
+    if ( newGeoms.count() == 1 )
+    {
       mRecordedGeometry = newGeoms[0];
-    } else {
+    }
+    else
+    {
       QgsFeatureList removedFeatures;
       double largest = 0;
       int largestPartIndex = -1;

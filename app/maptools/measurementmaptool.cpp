@@ -88,7 +88,7 @@ void MeasurementMapTool::finalizeMeasurement( bool closeShapeClicked )
 
   if ( closeShapeClicked && mCanCloseShape )
   {
-    geometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << pointList );
+    geometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY >> () << pointList );
     perimeter = mDistanceArea.measurePerimeter( geometry );
     setArea( mDistanceArea.measureArea( geometry ) );
     setCanCloseShape( false );
