@@ -84,7 +84,18 @@ class InputUtils: public QObject
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
+     * Set the extent around a geometry.
+     * The extent is also zoomed out of the actual geometry using a buffer of 18% around their bounding box.
+     * In the case the geometry have no bounding box (e.g a point geometry) The extent is simply panned to the geometry
+     *
+     * Assume \a geom and \a mapSetting are the same CRS
+     */
+    Q_INVOKABLE void setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
+
+    /**
      * Returns the center point of the \a geom currently displayed on screen
+     *
+     * Fall back to \see setExtentToGeom in case we don't find any geometry relevant
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
