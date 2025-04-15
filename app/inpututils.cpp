@@ -298,28 +298,17 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   if ( geom.isNull() || !geom.constGet() )
     return;
 
-  QgsRectangle bbox = geom.boundingBox();
+  const QgsRectangle bbox = geom.boundingBox();
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
   if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
   {
-    QgsPointXY currentExtentCenter = currentExtent.center();
-    QgsPointXY featureCenter = bbox.center();
-
-    double offsetX = currentExtentCenter.x() - featureCenter.x();
-    double offsetY = currentExtentCenter.y() - featureCenter.y();
-
-    currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
-    currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
-    currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
-    currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
+    const QgsVector offset = currentExtent.center() - bbox.center();
+    currentExtent -= offset;
   }
   else
   {
-    currentExtent.setXMinimum( bbox.xMinimum() );
-    currentExtent.setXMaximum( bbox.xMaximum() );
-    currentExtent.setYMinimum( bbox.yMinimum() );
-    currentExtent.setYMaximum( bbox.yMaximum() );
+    currentExtent = bbox;
 
     // Add a offset to encompass handles etc..
     // This number is based on what feel confortable for the user
@@ -337,11 +326,10 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
     return screenPoint;
 
   const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
-  QgsRectangle geomBbox = geom.boundingBox();
 
   // Cut the geometry to current extent
-  QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-  QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
 
   if ( !intersectedGeom.isEmpty() )
   {
