@@ -40,7 +40,7 @@ class MultiEditManager : public QObject
     Q_INVOKABLE void initialize( const FeatureLayerPair &pair );
 
     //! add \a pair to selection or remove it if it already exists. Does nothing if pair.layer != mLayer
-    Q_INVOKABLE void toggleSelection( const FeatureLayerPair &pair );
+    Q_INVOKABLE void toggleSelect( const FeatureLayerPair &pair );
 
     //! Returns a FeatureLayerPair with the feature in mTempLayer
     Q_INVOKABLE FeatureLayerPair editableFeature();

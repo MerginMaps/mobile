@@ -50,7 +50,7 @@ Item {
   signal closed()
   signal editGeometryRequested( var pair )
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
-  signal selectFeature( var feature )
+  signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
   signal previewPanelChanged( var panelHeight )
 
@@ -301,8 +301,8 @@ Item {
       onCreateLinkedFeature: function( targetLayer, parentPair ) {
         root.createLinkedFeatureRequested( targetLayer, parentPair )
       }
-      onSelectFeature: function( feature ) {
-        root.selectFeature( feature )
+      onMultiSelectFeature: function( feature ) {
+        root.multiSelectFeature( feature )
       }
       onStakeoutFeature: function( feature ) {
         root.stakeoutFeature( feature )

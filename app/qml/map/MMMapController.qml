@@ -68,7 +68,7 @@ Item {
 
   signal measureStarted()
 
-  signal selectionStarted()
+  signal multiSelectStarted()
 
   signal localChangesPanelRequested()
 
@@ -100,7 +100,7 @@ Item {
       name: "measure"
     },
     State {
-      name: "select"
+      name: "multiSelect"
     },
     State {
       name: "inactive" // ignores touch input
@@ -166,9 +166,9 @@ Item {
         break
       }
 
-      case "select": {
+      case "multiSelect": {
         root.showInfoTextMessage( qsTr( "Tap on features to add or remove from the selection" ) )
-        root.selectionStarted()
+        root.multiSelectStarted()
         break
       }
 
@@ -235,14 +235,14 @@ Item {
     }
 
     onClicked: function( point ) {
-      if ( root.state === "view" || root.state === "select" )
+      if ( root.state === "view" || root.state === "multiSelect" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = identifyKit.identifyOne( screenPoint )
 
-        if ( root.state === "select" )
+        if ( root.state === "multiSelect" )
         {
-          multiEditManager.toggleSelection( pair )
+          multiEditManager.toggleSelect( pair )
         }
         else if ( pair.valid )  // root.state === "view"
         {
@@ -544,10 +544,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" || root.state === "select" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" || root.state === "measure" || root.state === "select" )
+        if ( root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -945,8 +945,7 @@ Item {
 
     anchors.fill: mapCanvas
 
-    // active: true
-    active: root.state === "select"
+    active: root.state === "multiSelect"
 
     sourceComponent: multiEditComponent
   }
@@ -968,7 +967,7 @@ Item {
 
         height: mapCanvas.height
         width: mapCanvas.width
-        visible: root.state === "select"
+        visible: root.state === "multiSelect"
 
         markerType: MMHighlight.MarkerTypes.Circle
         mapSettings: mapCanvas.mapSettings
@@ -1238,12 +1237,12 @@ Item {
     state = "measure"
   }
 
-  function select( featurepair ) {
-    state = "select"
+  function startMultiSelect( featurepair ) {
+    state = "multiSelect"
     multiEditManager.initialize( featurepair )
   }
 
-  function finishSelect() {
+  function finishMultiSelect() {
     state = "view"
   }
 
@@ -1329,7 +1328,7 @@ Item {
         break
       }
 
-      case "select":
+      case "multiSelect":
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position

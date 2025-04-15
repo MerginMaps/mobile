@@ -42,7 +42,7 @@ Item {
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
-  signal selectFeature( var feature )
+  signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
   signal previewPanelChanged( var panelHeight )
 
@@ -150,8 +150,8 @@ Item {
 
       width: root.width
 
-      onSelectClicked: function( feature ) {
-        root.selectFeature( feature )
+      onSelectMoreClicked: function( feature ) {
+        root.multiSelectFeature( feature )
       }
 
       onStakeoutClicked: function( feature ) {

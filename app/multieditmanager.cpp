@@ -35,7 +35,7 @@ void MultiEditManager::initialize( const FeatureLayerPair &pair )
   }
 }
 
-void MultiEditManager::toggleSelection( const FeatureLayerPair &pair )
+void MultiEditManager::toggleSelect( const FeatureLayerPair &pair )
 {
   if ( !pair.isValid() ||
        ( mLayer && mLayer != pair.layer() ) )

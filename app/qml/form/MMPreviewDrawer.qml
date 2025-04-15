@@ -29,7 +29,7 @@ Item {
   signal contentClicked()
   signal editClicked()
   signal openFormClicked()
-  signal selectClicked( var feature )
+  signal selectMoreClicked( var feature )
   signal stakeoutClicked( var feature )
   signal closeClicked()
 
@@ -195,15 +195,15 @@ Item {
             }
 
             MMComponents.MMButton {
-              id: selectButton
+              id: selectMoreButton
 
               text: qsTr( "Select more" )
               iconSourceLeft: __style.workspacesIcon
               type: MMComponents.MMButton.Secondary
 
-              visible: internal.showSelectButton
+              visible: internal.showSelectMoreButton
 
-              onClicked: root.selectClicked( controller.featureLayerPair )
+              onClicked: root.selectMoreClicked( controller.featureLayerPair )
             }
 
             MMComponents.MMButton {
@@ -321,9 +321,9 @@ Item {
     property bool isEmptyType: root.controller.type === MM.AttributePreviewController.Empty
 
     property bool showEditButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
-    property bool showSelectButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    property bool showSelectMoreButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
     property bool showStakeoutButton: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-    property bool showButtons: showEditButton || showSelectButton || showStakeoutButton
+    property bool showButtons: showEditButton || showSelectMoreButton || showStakeoutButton
 
     property bool showPhoto: isPhotoType && windowHasEnoughHeightToShowContent
     property bool showFields: isFieldsType && windowHasEnoughHeightToShowContent

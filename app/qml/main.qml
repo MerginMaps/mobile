@@ -162,9 +162,9 @@ ApplicationWindow {
       {
         return measurePanelLoader.item.panelHeight - mapToolbar.height
       }
-      else if ( selectionPanelLoader.active )
+      else if ( multiSelectPanelLoader.active )
       {
-        return selectionPanelLoader.item.panelHeight - mapToolbar.height
+        return multiSelectPanelLoader.item.panelHeight - mapToolbar.height
       }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
@@ -232,9 +232,9 @@ ApplicationWindow {
       measurePanelLoader.focus = true
     }
 
-    onSelectionStarted: {
-      selectionPanelLoader.active = true
-      selectionPanelLoader.focus = true
+    onMultiSelectStarted: {
+      multiSelectPanelLoader.active = true
+      multiSelectPanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -624,20 +624,20 @@ ApplicationWindow {
   }
 
   Loader {
-    id: selectionPanelLoader
+    id: multiSelectPanelLoader
 
     focus: true
     active: false
     asynchronous: true
 
-    sourceComponent: selectionPanelComponent
+    sourceComponent: multiSelectPanelComponent
   }
 
   Component {
-    id: selectionPanelComponent
+    id: multiSelectPanelComponent
 
     MMSelectionDrawer {
-      id: selectionPanel
+      id: multiSelectPanel
 
       model: map.multiEditManager?.model
       layer: map.multiEditManager?.layer
@@ -646,12 +646,12 @@ ApplicationWindow {
       onEditSelected: {
         let pair = map.multiEditManager.editableFeature()
         formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
-        selectionPanel.formOpened = true
+        multiSelectPanel.formOpened = true
       }
 
       onSelectionFinished: {
-        selectionPanelLoader.active = false
-        map.finishSelect()
+        multiSelectPanelLoader.active = false
+        map.finishMultiSelect()
       }
     }
   }
@@ -724,16 +724,16 @@ ApplicationWindow {
 
       map.hideHighlight()
 
-      if ( selectionPanelLoader.active && selectionPanelLoader.item.formOpened )
+      if ( multiSelectPanelLoader.active && multiSelectPanelLoader.item.formOpened )
       {
-        selectionPanelLoader.active = false
-        map.finishSelect()
+        multiSelectPanelLoader.active = false
+        map.finishMultiSelect()
       }
     }
 
-    onSelectFeature: function( feature ) {
+    onMultiSelectFeature: function( feature ) {
       closeDrawer()
-      map.select( feature )
+      map.startMultiSelect( feature )
     }
 
     onStakeoutFeature: function( feature ) {
