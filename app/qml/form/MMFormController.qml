@@ -186,6 +186,8 @@ Item {
 
         rememberAttributesController: MM.RememberAttributesController {
           rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+          featureLayerPair: root.featureLayerPair
+          activeProject: __activeProject
         }
         // NOTE: order matters, we want to init variables manager before
         // assingning FeatureLayerPair, as VariablesManager is required
