@@ -30,7 +30,6 @@ MMPrivateComponents.MMBaseInput {
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
   property var _fieldActiveProject: parent.fieldActiveProject
-  property bool _fieldFormIsMultiEdit: parent.fieldFormIsMultiEdit
 
   property string _fieldTitle: parent.fieldTitle
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -50,24 +49,8 @@ MMPrivateComponents.MMBaseInput {
     radius: __style.radius12
     color: __style.polarColor
 
-    MMComponents.MMText {
-      id: disabledMessage
-      width: parent.width
-      height: parent.height
-
-      font: __style.p6
-      text: qsTr( "Editing relations of multiple features is not supported" )
-
-      horizontalAlignment: Text.AlignHCenter
-      verticalAlignment: Text.AlignVCenter
-      wrapMode: Text.WordWrap
-
-      visible: root._fieldFormIsMultiEdit
-    }
-
     MouseArea {
       anchors.fill: parent
-      enabled: !disabledMessage.visible
       onClicked: function( mouse ) {
         mouse.accepted = true
         listLoader.active = true
@@ -77,9 +60,6 @@ MMPrivateComponents.MMBaseInput {
 
     Flow {
       id: flow
-
-      enabled: !disabledMessage.visible
-      visible: !disabledMessage.visible
 
       anchors {
         fill: parent

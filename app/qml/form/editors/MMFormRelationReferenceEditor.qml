@@ -21,8 +21,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property var _fieldActiveProject: parent.fieldActiveProject
-  property bool _fieldFormIsMultiEdit: parent.fieldFormIsMultiEdit
-  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
   property bool _fieldIsEditable: parent.fieldIsEditable
@@ -40,9 +38,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   signal rememberValueBoxClicked( bool state )
 
   on_FieldValueChanged: {
-    if ( root._fieldHasMixedValues )
-      return
-
     textField.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
@@ -61,15 +56,9 @@ MMPrivateComponents.MMBaseSingleLineInput {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  placeholderText: root._fieldHasMixedValues ? root._fieldValue : ""
-
   textField.readOnly: true
 
-  textField.onReleased: {
-    // can be opened even when the field is readonly, but not when multi editing
-    if ( root._fieldFormIsMultiEdit )
-      return
-
+  textField.onReleased: { // can be opened even when the field is readonly
     let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
     if ( featurePair === null || !featurePair.valid ) return
 
@@ -83,9 +72,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   onRightContentClicked: {
-    if ( root._fieldFormIsMultiEdit )
-      return
-
     listLoader.active = true
     listLoader.focus = true
   }
@@ -96,12 +82,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
     config: root._fieldConfig
     project: root._fieldActiveProject
 
-    onModelReset: {
-      if ( root._fieldHasMixedValues )
-        return
-
-      textField.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
-    }
+    onModelReset: textField.text = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeatureTitle ) || ""
   }
 
   Loader {

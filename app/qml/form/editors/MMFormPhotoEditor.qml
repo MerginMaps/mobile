@@ -57,7 +57,6 @@ MMFormPhotoViewer {
   property var _fieldConfig: parent.fieldConfig
   property var _fieldIndex: parent.fieldIndex
   property bool _fieldValueIsNull: parent.fieldValueIsNull
-  property bool _fieldFormIsMultiEdit: parent.fieldFormIsMultiEdit
 
   property string _fieldHomePath: parent.fieldHomePath
   property var _fieldActiveProject: parent.fieldActiveProject
@@ -211,12 +210,6 @@ MMFormPhotoViewer {
     //  - and is used by QML Image to show the image
     //
     function setImageSource() {
-      if ( root._fieldFormIsMultiEdit ) {
-        root.photoState = "multiple"
-        resolvedImageSource = ""
-        return
-      }
-
       if ( !root._fieldValue || root._fieldValueIsNull ) {
         root.photoState = "notSet"
         resolvedImageSource = ""
