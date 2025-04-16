@@ -64,17 +64,13 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
   const QgsFields &fields = layer->fields();
   for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
   {
-    QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+    QString fieldEnabledKey = keyForField( "enabled", layer, fieldIndex );
     bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
+    bool qgisReuseLastValue = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
 
-    bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
-
-    bool con1 = (fieldEnabled && rememberValuesAllowed());
-    bool con2 = ( !rememberValuesAllowed() && qgisReuse);
-
-    if ( con1 || con2 )
+    if ( rememberValuesAllowed() ? fieldEnabled : qgisReuseLastValue ) //we want to keep QGIS's reuseLastValue independent when global switch off
     {
-      QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+      QString fieldValueKey = keyForField( "value", layer, fieldIndex );
       QVariant value = feature.attribute( fieldIndex );
       settings.setValue( fieldValueKey, value );
     }
@@ -85,24 +81,18 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
-  // // global switch off of the functionality
-
-  if ( !rememberValuesAllowed() )
-    return layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
-
   if ( !layer )
     return false;
 
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
-  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-
-  bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();;
+  QString fieldEnabledKey = keyForField( "enabled", layer, fieldIndex );
+  bool currentlyEnabled = settings.value( fieldEnabledKey, layer->editFormConfig().reuseLastValue( fieldIndex ) ).toBool();
 
   settings.endGroup();
 
-  return fieldEnabled;
+  return currentlyEnabled;
 }
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
@@ -112,16 +102,9 @@ bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer 
 
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
-
-  bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
-
-  bool currentlyEnabled;
-  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-
-  if (settings.contains(fieldEnabledKey))
-    currentlyEnabled = settings.value( fieldEnabledKey, false ).toBool();
-  else if (qgisReuse)
-    currentlyEnabled = qgisReuse;
+  bool qgisReuseLastValue = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
+  QString fieldEnabledKey = keyForField( "enabled", layer, fieldIndex );
+  bool currentlyEnabled = settings.value( fieldEnabledKey, qgisReuseLastValue ).toBool();
 
   if ( currentlyEnabled != shouldRemember )
     settings.setValue( fieldEnabledKey, shouldRemember );
@@ -141,16 +124,13 @@ bool RememberAttributesController::rememberedValue(
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
-  QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+  QString fieldEnabledKey = keyForField( "enabled", layer, fieldIndex );
   bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
+  bool qgisReuseLastValue = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
 
-  bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
-
-  bool con1 = (fieldEnabled && rememberValuesAllowed());
-  bool con2 = ( !rememberValuesAllowed() && qgisReuse);
-  if ( con1 || con2 )
+  if ( rememberValuesAllowed() ? fieldEnabled : qgisReuseLastValue ) //we want to keep QGIS's reuseLastValue independent when global switch off
   {
-    QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+    QString fieldValueKey = keyForField( "value", layer, fieldIndex );
     QVariant fieldValue = settings.value( fieldValueKey, QVariant() );
     value = fieldValue;
     settings.endGroup();
@@ -159,42 +139,6 @@ bool RememberAttributesController::rememberedValue(
 
   settings.endGroup();
   return false;
-}
-
-FeatureLayerPair RememberAttributesController::featureLayerPair() const
-{
-  return mFeatureLayerPair;
-}
-
-void RememberAttributesController::setFeatureLayerPair( const FeatureLayerPair &pair )
-{
-  if ( mFeatureLayerPair != pair )
-  {
-    mFeatureLayerPair = pair;
-    emit featureLayerPairChanged();
-  }
-
-  const QgsFeature &feature = pair.feature();
-  const QgsVectorLayer *layer = pair.layer();
-
-  if ( !layer || !mActiveProject )
-    return;
-
-  QSettings settings;
-  settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
-
-  const QgsFields &fields = layer->fields();
-  for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
-  {
-    if ( shouldRememberValue( layer, fieldIndex ) )
-    {
-      QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-      QVariant rememberedValue = settings.value( fieldValueKey );
-      mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
-    }
-  }
-
-  settings.endGroup();
 }
 
 ActiveProject *RememberAttributesController::activeProject() const
@@ -208,4 +152,9 @@ void RememberAttributesController::setActiveProject( ActiveProject *newActivePro
     return;
   mActiveProject = newActiveProject;
   emit activeProjectChanged( );
+}
+
+QString RememberAttributesController::keyForField( const QString &suffix, const QgsVectorLayer *layer, int fieldIndex ) const
+{
+  return QStringLiteral( "/%1/%2/%3/%4" ).arg( mActiveProject->projectFullName(), layer->id(), QString::number( fieldIndex ), suffix );
 }
