@@ -1729,7 +1729,7 @@ void RecordingMapTool::avoidIntersections()
       double largest = 0;
       for ( int i = 0; i < newGeoms.size(); ++i )
       {
-        const QgsGeometry& currentPart = newGeoms.at( i );
+        const QgsGeometry &currentPart = newGeoms.at( i );
         const double currentPartSize = mActiveLayer->geometryType() == Qgis::GeometryType::Polygon ? currentPart.area() : currentPart.length();
 
         if ( currentPartSize > largest )
