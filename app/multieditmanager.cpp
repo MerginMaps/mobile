@@ -174,7 +174,7 @@ void MultiEditManager::createTemporaryLayer()
   for ( const QgsVectorLayerJoinInfo &join : joins )
   {
     // do not copy join information for auxiliary layer
-    if ( !auxLayer || ( auxLayer && auxLayer->id() != join.joinLayerId() ) )
+    if ( !auxLayer || auxLayer->id() != join.joinLayerId() )
       mTempLayer->addJoin( join );
   }
 
