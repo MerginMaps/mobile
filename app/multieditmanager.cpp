@@ -13,6 +13,8 @@
 #include "featurelayerpair.h"
 #include "qgsmemoryproviderutils.h"
 #include "qgsexpressioncontextutils.h"
+#include "qgsvectorlayerjoininfo.h"
+#include "qgsauxiliarystorage.h"
 #include "qgis.h"
 
 
@@ -60,12 +62,10 @@ bool MultiEditManager::applyEdits()
   mTempLayer->getFeatures().nextFeature( oneFeature );
 
   QgsAttributeMap attrs;
-  const QgsFields fields = oneFeature.fields();
+  const QgsFields fields = mLayer->fields();
+
   for ( int i = 0; i < fields.count(); i++ )
   {
-    const QgsField f = fields.at( i );
-    const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
-
     const QVariant value = oneFeature.attribute( i );
     // We want to exclude null values. MixedAttributeValues have also been saved as null on the temp layer
     if ( !value.isNull() && fields.fieldOrigin( i ) == Qgis::FieldOrigin::Provider )
@@ -169,9 +169,21 @@ void MultiEditManager::createTemporaryLayer()
   QgsFeature feature( tempLayerFields );
   const bool added = mTempLayer->dataProvider()->addFeature( feature );
 
+  const QList<QgsVectorLayerJoinInfo> joins = mLayer->vectorJoins();
+  QgsAuxiliaryLayer *auxLayer = mLayer->auxiliaryLayer();
+  for ( const QgsVectorLayerJoinInfo &join : joins )
+  {
+    // do not copy join information for auxiliary layer
+    if ( !auxLayer || ( auxLayer && auxLayer->id() != join.joinLayerId() ) )
+      mTempLayer->addJoin( join );
+  }
+
+  if ( auxLayer )
+    mTempLayer->setAuxiliaryLayer( auxLayer->clone( mTempLayer.get() ) );
+
   mTempLayer->setAttributeTableConfig( mLayer->attributeTableConfig() );
 
-  for ( int i = 0; i < mLayer->fields().count(); i++ )
+  for ( int i = 0; i < layerFields.count(); i++ )
   {
     if ( layerFields.fieldOrigin( i ) == Qgis::FieldOrigin::Expression )
     {
@@ -185,10 +197,10 @@ void MultiEditManager::createTemporaryLayer()
     mTempLayer->setDefaultValueDefinition( i, mLayer->defaultValueDefinition( i ) );
 
     QMap< QgsFieldConstraints::Constraint, QgsFieldConstraints::ConstraintStrength> constraints = mLayer->fieldConstraintsAndStrength( i );
-    for ( auto constraintIt = constraints.constBegin() ; constraintIt != constraints.constEnd(); ++constraintIt )
+    for ( auto it = constraints.constBegin() ; it != constraints.constEnd(); ++it )
     {
-      if ( !( mTempLayer->fieldConstraints( i ) & constraintIt.key() ) && constraintIt.value() != QgsFieldConstraints::ConstraintStrength::ConstraintStrengthNotSet )
-        mTempLayer->setFieldConstraint( i, constraintIt.key(), constraintIt.value() );
+      if ( !( mTempLayer->fieldConstraints( i ) & it.key() ) && it.value() != QgsFieldConstraints::ConstraintStrength::ConstraintStrengthNotSet )
+        mTempLayer->setFieldConstraint( i, it.key(), it.value() );
     }
   }
 
