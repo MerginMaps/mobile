@@ -814,11 +814,10 @@ Item {
 
       onClosed: activeLayerPanelLoader.active = false
 
-      list.model: MM.LayersProxyModel {
+      list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        qgsProject: __activeProject.qgsProject
-        modelType: MM.LayersProxyModel.ActiveLayerSelection
+        exceptedLayerIds: [__activeProject.positionTrackingLayerId()]
         model: MM.LayersModel {}
       }
 

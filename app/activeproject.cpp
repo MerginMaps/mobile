@@ -353,22 +353,7 @@ void ActiveProject::updateMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
-  QgsLayerTree *root = mQgsProject->layerTreeRoot();
-
-  // Get list of all visible and valid layers in the project
-  QList< QgsMapLayer * > visibleLayers;
-  foreach ( QgsLayerTreeLayer *nodeLayer, root->findLayers() )
-  {
-    if ( nodeLayer->isVisible() )
-    {
-      QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer && layer->isValid() )
-      {
-        visibleLayers << layer;
-      }
-    }
-  }
-
+  QList<QgsMapLayer *> visibleLayers = getVisibleLayers();
   mMapSettings->setLayers( visibleLayers );
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
@@ -465,31 +450,31 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
 void ActiveProject::updateActiveLayer()
 {
-  if ( !InputUtils::layerVisible( mActiveLayer.layer(), mQgsProject ) )
+  QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
+
+  if ( visibleLayers.isEmpty() )
   {
-    QgsMapLayer *defaultAppSettingsLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
+    setActiveLayer( nullptr );
+    return;
+  }
 
-    if ( InputUtils::recordingAllowed( defaultAppSettingsLayer, mQgsProject ) )
-    {
-      setActiveLayer( defaultAppSettingsLayer );
-      return;
-    }
+  if ( !visibleLayers.contains( mActiveLayer.layer() ) )
+  {
+    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
 
-    // default layer from app settings has no recording allowed => let's try to search for a new one
-    QgsMapLayer *defaultLayer = nullptr;
-    const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
-    for ( auto it = layers.cbegin(); it != layers.cend(); ++it )
+    if ( !recordingAllowed( defaultLayer ) )
     {
-      QgsMapLayer *layer = it.value();
-      if ( InputUtils::recordingAllowed( layer, mQgsProject ) )
+      for ( QgsMapLayer *layer : visibleLayers )
       {
-        defaultLayer = layer;
-        break;
+        if ( recordingAllowed( layer ) )
+        {
+          defaultLayer = layer;
+          break;
+        }
       }
     }
 
-    if ( defaultLayer )
-      setActiveLayer( defaultLayer );
+    setActiveLayer( defaultLayer );
   }
 }
 
@@ -546,7 +531,7 @@ bool ActiveProject::projectHasRecordingLayers() const
   const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
   {
-    if ( InputUtils::recordingAllowed( it.value(), mQgsProject ) )
+    if ( recordingAllowed( it.value() ) )
       return true;
   }
 
@@ -566,4 +551,54 @@ void ActiveProject::setProjectRole( const QString &role )
 
     emit projectRoleChanged();
   }
+}
+
+bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
+{
+  if ( !layer )
+    return false;
+
+  //there is a bug in QgsMapLayerProxyModel::layerMatchesFilters, but having
+  //just Qgis::LayerFilter::WritableLayer should be enough when fixed
+  if ( layer->readOnly() )
+    return false;
+
+  return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId();
+}
+
+QString ActiveProject::positionTrackingLayerId() const
+{
+  if ( !mQgsProject )
+    return QString();
+
+  return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
+}
+
+QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
+{
+  if ( !mQgsProject )
+    return QList<QgsMapLayer *>();
+
+  QgsLayerTree *root = mQgsProject->layerTreeRoot();
+
+  if ( !root )
+    return QList<QgsMapLayer *>();
+
+  // Get list of all visible valid layers in the project
+  QList<QgsMapLayer *> visibleLayers;
+  const QList<QgsLayerTreeLayer *> nodeLayers = root->findLayers();
+
+  for ( QgsLayerTreeLayer *nodeLayer : nodeLayers )
+  {
+    if ( nodeLayer && nodeLayer->isVisible() )
+    {
+      QgsMapLayer *layer = nodeLayer->layer();
+      if ( layer && layer->isValid() )
+      {
+        visibleLayers << layer;
+      }
+    }
+  }
+
+  return visibleLayers;
 }

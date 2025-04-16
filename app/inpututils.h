@@ -604,7 +604,7 @@ class InputUtils: public QObject
     /**
      * filters if input layer is visible in current map theme
      */
-    static bool layerVisible( QgsMapLayer *layer, QgsProject *project );
+    static bool isLayerVisible( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns if layer is not NoGeo and not Unknown
@@ -615,11 +615,6 @@ class InputUtils: public QObject
      * Returns true if the layer is the position tracking layer
      */
     Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
-
-    /**
-     * Returns true if the layer allows recording
-     */
-    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns QgsMapLayer pointer for given layer name and project.

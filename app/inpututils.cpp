@@ -2261,7 +2261,7 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
   return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
-bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
+bool InputUtils::isLayerVisible( QgsMapLayer *layer, QgsProject *project )
 {
   if ( !layer || !layer->isValid() || !project )
     return false;
@@ -2286,20 +2286,6 @@ bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *projec
 
   QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
   return layer->id() == trackingLayerId;
-}
-
-bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
-{
-  if ( !layer || !layer->isValid() || !project )
-    return false;
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer &&
-           !vectorLayer->readOnly() &&
-           layerHasGeometry( vectorLayer ) &&
-           layerVisible( layer, project ) &&
-           !isPositionTrackingLayer( layer, project ) );
 }
 
 QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )
