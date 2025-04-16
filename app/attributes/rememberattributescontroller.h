@@ -38,9 +38,6 @@ class  RememberAttributesController : public QObject
     //! Provides context for creating project-specific settings keys
     Q_PROPERTY( ActiveProject *activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
 
-    //! Usage on attribute operations
-    Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
-
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
@@ -61,8 +58,8 @@ class  RememberAttributesController : public QObject
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
-    FeatureLayerPair featureLayerPair() const;
-    void setFeatureLayerPair( const FeatureLayerPair &pair );
+    // Helper method to retrieve enabled and value keys;
+    QString keyForField( const QString &suffix, const QgsVectorLayer *layer, int fieldIndex ) const;
 
     ActiveProject *activeProject() const;
     void setActiveProject( ActiveProject *newActiveProject );
@@ -70,11 +67,9 @@ class  RememberAttributesController : public QObject
   signals:
     void rememberValuesAllowedChanged();
     void activeProjectChanged();
-    void featureLayerPairChanged();
 
   private:
     ActiveProject *mActiveProject = nullptr;
-    FeatureLayerPair mFeatureLayerPair;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H
