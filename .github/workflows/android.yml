@@ -24,6 +24,17 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # - TRIPLET: 'arm-android'
+          #   QT_ARCH: 'android_armv7'
+          #   ANDROID_ABI: 'armeabi-v7a'
+          - TRIPLET: 'arm64-android'
+            QT_ARCH: 'android_arm64_v8a'
+            ANDROID_ABI: 'arm64-v8a'
+            
     runs-on: macos-15
     env:
       QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
@@ -40,6 +51,7 @@ jobs:
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       XC_VERSION: ${{ '16.2' }}
+      VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
 
     steps:
       - uses: actions/checkout@v4
@@ -104,6 +116,10 @@ jobs:
           brew install openssl
           brew install ninja
           brew install aqtinstall
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext
+          echo $(brew --prefix bison)/bin >> $GITHUB_PATH
+          echo $(brew --prefix flex)/bin >> $GITHUB_PATH
+          echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
           
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -202,6 +218,25 @@ jobs:
           echo "path to keystore $PATH_TO_KEYSTORE"
           echo "QT_ANDROID_KEYSTORE_PATH=$PATH_TO_KEYSTORE" >> $GITHUB_ENV
 
+      - name: Get vcpkg
+        shell: bash
+        run: |
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ github.workspace }}/VCPKG_BASELINE`
+          echo "using VCPKG_TAG ${VCPKG_TAG}"
+          git checkout ${VCPKG_TAG}
+
+      - name: Install vcpkg
+        run: |
+          echo "install vcpkg"
+          cd "${{ env.VCPKG_ROOT }}"
+          chmod +x ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.sh
+          
       # Build Input App
       - name: Calculate build number
         env:
@@ -220,12 +255,18 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
 
         run: |
             mkdir -p ${{ github.workspace }}/build-Input
             cd ${{ github.workspace }}/build-Input
 
+            export Qt6_DIR=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/${{ matrix.QT_ARCH }}
+            export QT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
+            export PATH=${{ env.VCPKG_ROOT }}:$PATH
+            export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
+          
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
               -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
