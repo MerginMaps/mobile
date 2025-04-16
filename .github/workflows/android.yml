@@ -1,9 +1,9 @@
-name: android Build
+name: Android Build
 
 on:
   push:
     paths:
-    - 'vcpkg-overlay/**'
+    - 'vcpkg/**'
     - 'vcpkg.json'
     - 'VCPKG_BASELINE'
     - 'app/**'
