@@ -59,8 +59,20 @@ bool MultiEditManager::applyEdits()
   QgsFeature oneFeature;
   mTempLayer->getFeatures().nextFeature( oneFeature );
 
-  // toMap() will exclude null values. MixedAttributeValues have been saved as null on the temp layer
-  QgsAttributeMap attrs = oneFeature.attributes().toMap();
+  QgsAttributeMap attrs;
+  const QgsFields fields = oneFeature.fields();
+  for ( int i = 0; i < fields.count(); i++ )
+  {
+    const QgsField f = fields.at( i );
+    const QgsDefaultValue defaultDefinition = f.defaultValueDefinition();
+
+    const QVariant value = oneFeature.attribute( i );
+    // We want to exclude null values. MixedAttributeValues have also been saved as null on the temp layer
+    if ( !value.isNull() && fields.fieldOrigin( i ) == Qgis::FieldOrigin::Provider )
+    {
+      attrs[i] = oneFeature.attribute( i );
+    }
+  }
 
   if ( attrs.isEmpty() )
     return false;
@@ -142,17 +154,30 @@ FeatureLayerPair MultiEditManager::editableFeature()
 
 void MultiEditManager::createTemporaryLayer()
 {
+  QgsFields tempLayerFields;
+  const QgsFields layerFields = mLayer->fields();
+  for ( int i = 0; i < layerFields.count(); ++i )
+  {
+    if ( layerFields.fieldOrigin( i ) == Qgis::FieldOrigin::Provider )
+      tempLayerFields.append( layerFields.at( i ) );
+  }
+
   mTempLayer.reset( QgsMemoryProviderUtils::createMemoryLayer(
                       QStringLiteral( "multi_edit_layer" ),
-                      mLayer->fields(),
+                      tempLayerFields,
                       Qgis::WkbType::NoGeometry ) );
-  QgsFeature feature( mLayer->fields() );
+  QgsFeature feature( tempLayerFields );
   const bool added = mTempLayer->dataProvider()->addFeature( feature );
 
   mTempLayer->setAttributeTableConfig( mLayer->attributeTableConfig() );
 
   for ( int i = 0; i < mLayer->fields().count(); i++ )
   {
+    if ( layerFields.fieldOrigin( i ) == Qgis::FieldOrigin::Expression )
+    {
+      mTempLayer->addExpressionField( mLayer->expressionField( i ), layerFields.at( i ) );
+    }
+
     mTempLayer->setFieldAlias( i, mLayer->attributeAlias( i ) );
     mTempLayer->setFieldConfigurationFlags( i, mLayer->fieldConfigurationFlags( i ) );
     mTempLayer->setEditorWidgetSetup( i, mLayer->editorWidgetSetup( i ) );
@@ -164,11 +189,6 @@ void MultiEditManager::createTemporaryLayer()
     {
       if ( !( mTempLayer->fieldConstraints( i ) & constraintIt.key() ) && constraintIt.value() != QgsFieldConstraints::ConstraintStrength::ConstraintStrengthNotSet )
         mTempLayer->setFieldConstraint( i, constraintIt.key(), constraintIt.value() );
-    }
-
-    if ( mLayer->fields().fieldOrigin( i ) == Qgis::FieldOrigin::Expression )
-    {
-      mTempLayer->addExpressionField( mLayer->expressionField( i ), mLayer->fields().at( i ) );
     }
   }
 
