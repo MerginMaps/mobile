@@ -221,6 +221,13 @@ jobs:
             export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
 
+            export Qt6_DIR=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/${{ matrix.QT_ARCH }}
+            export QT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos
+            export PATH=${{ env.VCPKG_ROOT }}:$PATH
+            export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
+          
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
               -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \

@@ -3,7 +3,7 @@ name: iOS Build
 on:
   push:
     paths:
-      - 'vcpkg-overlay/**'
+      - 'vcpkg/**'
       - 'vcpkg.json'
       - 'VCPKG_BASELINE'
       - 'app/**'
