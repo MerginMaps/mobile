@@ -81,8 +81,9 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
   // global switch off of the functionality
+
   if ( !rememberValuesAllowed() )
-    return false;
+    return layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
 
   if ( !layer )
     return false;
@@ -168,17 +169,11 @@ void RememberAttributesController::setFeatureLayerPair( const FeatureLayerPair &
   const QgsFields &fields = layer->fields();
   for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
   {
-    QVariant value = feature.attribute( fieldIndex );
-    QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-
     if ( shouldRememberValue( layer, fieldIndex ) )
     {
-      settings.setValue( fieldValueKey, value );
-    }
-    else if ( layer->editFormConfig().reuseLastValue( ( fieldIndex ) ) )
-    {
-      setShouldRememberValue( layer, fieldIndex, true );
-      settings.setValue( fieldValueKey, value );
+      QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+      QVariant rememberedValue = settings.value( fieldValueKey );
+      mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
     }
   }
 
