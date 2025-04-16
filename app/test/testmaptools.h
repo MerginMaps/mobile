@@ -51,6 +51,8 @@ class TestMapTools : public QObject
     void testAntennaHeight();
     void testSmallTracking();
 
+    void testAvoidIntersections();
+
   private:
     PositionKit *mPositionKit;
     AppSettings *mAppSettings;
