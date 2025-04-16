@@ -67,7 +67,12 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
     QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
     bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
 
-    if ( fieldEnabled )
+    bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
+
+    bool con1 = (fieldEnabled && rememberValuesAllowed());
+    bool con2 = ( !rememberValuesAllowed() && qgisReuse);
+
+    if ( con1 || con2 )
     {
       QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
       QVariant value = feature.attribute( fieldIndex );
@@ -80,7 +85,7 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
-  // global switch off of the functionality
+  // // global switch off of the functionality
 
   if ( !rememberValuesAllowed() )
     return layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
@@ -92,6 +97,7 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
   QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
+
   bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();;
 
   settings.endGroup();
@@ -101,14 +107,21 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
-  if ( !rememberValuesAllowed() || !layer || !mActiveProject )
+  if ( !layer || !mActiveProject )
     return false;
 
   QSettings settings;
   settings.beginGroup( CACHED_ATTRIBUTES_GROUP );
 
+  bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
+
+  bool currentlyEnabled;
   QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
-  bool currentlyEnabled = settings.value( fieldEnabledKey, false ).toBool();
+
+  if (settings.contains(fieldEnabledKey))
+    currentlyEnabled = settings.value( fieldEnabledKey, false ).toBool();
+  else if (qgisReuse)
+    currentlyEnabled = qgisReuse;
 
   if ( currentlyEnabled != shouldRemember )
     settings.setValue( fieldEnabledKey, shouldRemember );
@@ -131,7 +144,11 @@ bool RememberAttributesController::rememberedValue(
   QString fieldEnabledKey = QStringLiteral( "/%1/%2/%3/enabled" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
   bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
 
-  if ( fieldEnabled )
+  bool qgisReuse = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
+
+  bool con1 = (fieldEnabled && rememberValuesAllowed());
+  bool con2 = ( !rememberValuesAllowed() && qgisReuse);
+  if ( con1 || con2 )
   {
     QString fieldValueKey = QStringLiteral( "/%1/%2/%3/value" ).arg( mActiveProject->projectFullName() ).arg( layer->id() ).arg( fieldIndex );
     QVariant fieldValue = settings.value( fieldValueKey, QVariant() );
