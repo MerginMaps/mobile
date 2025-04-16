@@ -115,6 +115,9 @@ void LocalProjectsManager::removeLocalProject( const QString &projectId )
     {
       emit aboutToRemoveLocalProject( mProjects[i] );
 
+      QString projectFullName = mProjects[i].fullName();
+      clearAllProjectSettings( projectFullName );
+
       CoreUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
 
@@ -249,3 +252,17 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   mProjects << project;
   emit localProjectAdded( project );
 }
+
+void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullName )
+{
+  clearCachedAttributesValueSettings( projectFullName );
+}
+
+void LocalProjectsManager::clearCachedAttributesValueSettings( const QString &projectFullName )
+{
+  QSettings settings;
+  settings.beginGroup( "cachedAttributesValue/" + projectFullName );
+  settings.remove( "" );
+  settings.endGroup();
+}
+
