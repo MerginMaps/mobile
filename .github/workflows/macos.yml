@@ -28,8 +28,7 @@ concurrency:
   group: ci-${{github.ref}}-macos
   cancel-in-progress: true
 
-jobs:
-  build:              
+jobs:           
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
