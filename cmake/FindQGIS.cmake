@@ -1,13 +1,7 @@
 # GPLv2 Licence
-find_path(
-  QGIS_INCLUDE_DIR
-  qgis.h
-)
+find_path(QGIS_INCLUDE_DIR qgis.h)
 
-find_library(
-  QGIS_CORE_LIBRARY
-  NAMES qgis_core
-)
+find_library(QGIS_CORE_LIBRARY NAMES qgis_core)
 
 set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR)
 set(QGIS_PROVIDERS_LIST
@@ -29,10 +23,7 @@ set(QGIS_PROVIDERS_LIST
 )
 
 foreach (provider ${QGIS_PROVIDERS_LIST})
-  find_library(
-    QGIS_${provider}_LIBRARY
-    NAMES ${provider}_a
-  )
+  find_library(QGIS_${provider}_LIBRARY NAMES ${provider}_a)
   set(QGIS_REQUIRED_VARS ${QGIS_REQUIRED_VARS} QGIS_${provider}_LIBRARY)
 endforeach ()
 
