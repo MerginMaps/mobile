@@ -43,7 +43,7 @@ if (APPLE
     AND NOT IOS
     AND NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE}
 )
-# TODO change for arm64/osx
+  # TODO change for arm64/osx
   set(CMAKE_OSX_DEPLOYMENT_TARGET "15.4")
 endif ()
 
@@ -187,8 +187,7 @@ if (NOT LNX)
 endif ()
 
 find_package(ZLIB REQUIRED)
-# find_package(Bz2 CONFIG REQUIRED)
-# find_package(bzip2 CONFIG REQUIRED) 
+# find_package(Bz2 CONFIG REQUIRED) find_package(bzip2 CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
 # find_package(Inih CONFIG REQUIRED)
 find_package(exiv2 CONFIG REQUIRED)
