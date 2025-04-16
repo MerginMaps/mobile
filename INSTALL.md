@@ -232,7 +232,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    - This step can now be performed via QtCreator, if it for some reason fails/does not work, skip this step and continue with manual setup
 
    - Open QtCreator and navigate to `settings -> devices -> Android`, here:
-      - JDK location: Add Path to Java version, e.g. `/opt/homebrew/Cellar/openjdk@17/17.0.11/libexec/openjdk.jdk/Contents/Home`
+      - JDK location: Add Path to Java version, e.g. `/opt/homebrew/Cellar/openjdk@17/17.0.11/libexec/openjdk.jdk/Contents/Home` (or /opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Contents/Home/)
       - Android SDK location: set path to some empty writeable directory, e.g. `~/android`
       - Hit `Set up SDK` and install the current SDK version (find the correct version in `.github/workflows/android.yml`)
       - Let QtCreator install NDK
