@@ -20,84 +20,79 @@ on:
 
 env:
   QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
-  XC_VERSION: ${{ '15.2' }}
-
+  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+  VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+  
 concurrency:
   group: ci-${{github.ref}}-macos
   cancel-in-progress: true
 
 jobs:
+  build:              
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    strategy:
+        matrix:
+          include:
+            - os: macos-13
+              triplet: x64-osx
+              deployment-target: "10.15"
+              target-arch: x86_64
+              xcode: "15.2"
+            - os: macos-15
+              triplet: arm64-osx
+              deployment-target: "15.4" # TODO get back to "11.0" when https://github.com/microsoft/vcpkg/issues/44976 is fixed
+              target-arch: arm64
+              xcode: "16.2"
+              
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout Input
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          path: input
+          path: mm
 
-      - name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-
-      - name: install brew deps
+      - name: Export GitHub Actions cache environment variables
+        uses: actions/github-script@v7
+        with:
+          script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      
+      - name: Install brew deps
         run: |
-          brew install lcov
-          brew install ccache
-          brew install ninja
+          brew uninstall cmake
+          brew install automake bison flex gnu-sed autoconf-archive nasm libtool xcbeautify mono lcov openssl
 
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
-          
+
+      - name: Setup XCode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: ${{ matrix.xcode }}
+                   
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd input/core/
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          cd mm/core/
+          $HOMEBREW_PREFIX/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
               -k "$MERGINSECRETS_DECRYPT_KEY" \
               -md md5
 
-      # CCache
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
         with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-mac-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-mac-ccache-refs/heads/${{ github.base_ref }}-
-            build-mac-ccache-refs/heads/master-
+          key: ccache-${{ matrix.triplet }}
+          max-size: 200M
 
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-mac-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-mac-ccache-${{ github.ref }}-
-            build-mac-ccache-refs/heads/master-
-
-      - name: Install ccache
-        run: |
-          mkdir -p ${CCACHE_DIR}
-          ccache --set-config=max_size=2.0G
-          ccache -s
-
-      # Qt
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -106,65 +101,80 @@ jobs:
           dir: ${{ github.workspace }}
           modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
           cache: true
-          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
+          cache-key-prefix: qtcache-${{ matrix.triplet }}
 
-      # Build Input App
+      - name: Install vcpkg
+        shell: bash
+        run: |
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ github.workspace }}/mm/VCPKG_BASELINE`
+          git checkout ${VCPKG_TAG}
+          cd "${{ env.VCPKG_ROOT }}"
+          chmod +x ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.sh
+          
       - name: Calculate build number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
             echo "Version code: ${BUILD_NUM}"
-
-      # Do Tests 
-      - name: build Input (Debug)
+ 
+      - name: build app (debug)
+        if: ${{ matrix.triplet != 'x64-osx' }}
         run: |
-          mkdir -p build-Input-db
-          cd build-Input-db
+          mkdir -p build-mm-db
+          cd build-mm-db
           
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
+             -DCMAKE_OSX_DEPLOYMENT_TARGET=${{ matrix.deployment-target }} \
+             -DCMAKE_OSX_ARCHITECTURES=${{ matrix.target-arch }} \
+             -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+             -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/mm/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -DENABLE_TESTS=TRUE \
              -GNinja \
-             -S ../input
+             -S ../mm
              
           ninja
 
       - name: run tests
+        if: ${{ matrix.triplet != 'x64-osx' }}
         env:
           TEST_MERGIN_URL: https://app.dev.merginmaps.com/
           TEST_API_USERNAME: test_mobileapp2
           TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
         run: |
-          cd build-Input-db/
+          cd build-mm-db/
           ctest --output-on-failure
 
-      # Package
-      - name: build Input (Release)
+      - name: build app (release)
         run: |
-          mkdir -p install-Input
-          mkdir -p build-Input-rel
-          cd build-Input-rel
+          mkdir -p install-mm
+          mkdir -p build-mm-rel
+          cd build-mm-rel
 
           cmake \
              -DCMAKE_BUILD_TYPE=Release \
              -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${QT_VERSION}/macos \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-osx \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/mm/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -GNinja \
-             -S ../input
-          
+             -S ../mm
+
           ninja  
           ninja install
 
@@ -174,15 +184,67 @@ jobs:
         with:
           format: 'YYYYMMDD'
 
-      - name: package Input.app
+      - name: package app
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
-          echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
-          cd ${{ github.workspace }}/install-Input
+          APP_TAR=input-app-${{ matrix.triplet }}.tar.gz
+          echo "APP_TAR=${APP_TAR}" >> $GITHUB_ENV
+          cd ${{ github.workspace }}/install-mm
           find .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} "./Input.app"
+          tar -c -z -f ${{ github.workspace }}/${APP_TAR} "./Input.app"
 
-      - name: Upload Sdk in Artifacts
+      - name: Upload package
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/${{ env.INPUT_TAR }}
+          path: ${{ github.workspace }}/${{ env.APP_TAR }}
+          
+  create_dmg:
+    name: Create dmg
+    runs-on: macos-15
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare build env
+        run: |
+          brew install create-dmg
+
+      - name: Download app
+        uses: actions/download-artifact@v4
+        with:
+          pattern: input-app-*
+          path: |
+            artifacts
+
+      - name: Create universal app
+        run: |
+          mkdir -p x64
+          gtar --strip-components=4 -zxf ./artifacts/input-app-x64-osx/input-app-x64-osx.tar.gz -C x64
+          mkdir -p arm64
+          gtar --strip-components=4 -zxf ./artifacts/input-app-arm64-osx/input-app-arm64-osx.tar.gz -C arm64
+          pip install lipomerge
+          lipomerge ./x64 ./arm64 universal
+
+      - name: Create dmg
+        run: |
+          if [[ "${{ github.event_name }}" == "release" && "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "${{ secrets.APPLE_DEVELOPER_ID_P12_BASE64 }}" | base64 --decode > cert.p12
+            export P12_PATH=cert.p12
+            export P12_PASSWORD=${{ secrets.APPLE_DEVELOPER_ID_P12_PASSWORD }}
+            export API_KEY_ID=${{ secrets.IOS_APPSTORE_KEY_ID }}
+            export API_KEY_ISSUER_ID=${{ secrets.IOS_APPSTORE_ISSUER_ID }}
+            echo "${{ secrets.IOS_APPSTORE_PRIVATE_KEY }}" > authkey.p8
+            export API_KEY_PATH=authkey.p8
+          fi
+
+          export APP_PATH=$(pwd)/universal/Input.app
+          export DMG_PATH=merginmaps_app.dmg
+          ./scripts/create_dmg.sh
+
+      - name: Upload dmg
+        uses: actions/upload-artifact@v4
+        id: artifact-macos
+        with:
+          name: merginmaps_app.dmg
+          path: |
+            *.dmg

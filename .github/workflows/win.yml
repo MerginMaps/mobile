@@ -1,5 +1,8 @@
 name: Build win64
 
+# TODO remove
+skip: true
+
 on:
   push:
     paths:
