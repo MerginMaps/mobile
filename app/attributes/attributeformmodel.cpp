@@ -16,6 +16,7 @@
 #include "attributeformmodel.h"
 #include "attributecontroller.h"
 #include "attributedata.h"
+#include "mixedattributevalue.h"
 
 AttributeFormModel::AttributeFormModel( QObject *parent, AttributeController *controller, const QVector<QUuid> &data )
   : QAbstractListModel( parent )
@@ -86,6 +87,9 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return QVariant::fromValue( item->relation() );
     case RawValue:
       return item->rawValue();
+    case HasMixedValues:
+      return item->rawValue().userType() == qMetaTypeId< MixedAttributeValue >();
+
     default:
       return QVariant();
   }
@@ -132,6 +136,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[ValidationStatus] = QByteArray( "ValidationStatus" );
   roles[Relation] = QByteArray( "Relation" );
   roles[RawValue] = QByteArray( "RawValue" );
+  roles[HasMixedValues] = QByteArray( "HasMixedValues" );
 
   return roles;
 }

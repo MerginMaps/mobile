@@ -11,6 +11,7 @@ set(MM_SRCS
     attributes/attributetabmodel.cpp
     attributes/attributetabproxymodel.cpp
     attributes/fieldvalidator.cpp
+    attributes/mixedattributevalue.cpp
     attributes/rememberattributescontroller.cpp
     layer/layerdetaildata.cpp
     layer/layerdetaillegendimageprovider.cpp
@@ -69,6 +70,7 @@ set(MM_SRCS
     layersproxymodel.cpp
     main.cpp
     mapthemesmodel.cpp
+    multieditmanager.cpp
     notificationmodel.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
@@ -96,6 +98,7 @@ set(MM_HDRS
     attributes/attributetabmodel.h
     attributes/attributetabproxymodel.h
     attributes/fieldvalidator.h
+    attributes/mixedattributevalue.h
     attributes/rememberattributescontroller.h
     layer/layerdetaildata.h
     layer/layerdetaillegendimageprovider.h
@@ -154,6 +157,7 @@ set(MM_HDRS
     layersmodel.h
     layersproxymodel.h
     mapthemesmodel.h
+    multieditmanager.h
     notificationmodel.h
     projectsmodel.h
     projectsproxymodel.h

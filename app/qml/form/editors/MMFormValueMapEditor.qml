@@ -26,6 +26,7 @@ MMFormComboboxBaseEditor {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -44,6 +45,8 @@ MMFormComboboxBaseEditor {
   signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
