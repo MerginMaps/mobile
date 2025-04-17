@@ -740,6 +740,26 @@ int main( int argc, char *argv[] )
     style->setSafeAreaBottom( safeAreaInsets[2] );
     style->setSafeAreaLeft( safeAreaInsets[3] );
   }
+
+  //
+  // Workaround for Qt bug <link> on iOS.
+  // ApplicationWindow's height and width are not properly updated (updated without signals),
+  // causing visual layout issues throughout the app.
+  // Forcing the screen to portrait mode triggers a recalculation and repaint of visual items,
+  // resolving the layout problems.
+  //
+  // Therefore, as a temporary fix, we rotate the screen to portrait mode on iOS when the app
+  // starts in landscape mode. It's crucial to execute this code after a short delay using
+  // QTimer, ensuring that the UIScene has been properly initialized.
+  //
+
+  const int SHORT_STARTUP_DELAY = 1;
+
+  QTimer::singleShot( SHORT_STARTUP_DELAY, &lambdaContext, [&iosUtils]()
+  {
+    iosUtils.rotateScreenToPortrait();
+  } );
+
 #endif
 
   // Set simulated position for desktop builds
