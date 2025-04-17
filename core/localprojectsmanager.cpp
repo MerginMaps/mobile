@@ -261,7 +261,7 @@ void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullNa
 void LocalProjectsManager::clearCachedAttributesValueSettings( const QString &projectFullName )
 {
   QSettings settings;
-  settings.beginGroup( "cachedAttributesValue/" + projectFullName );
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_ATTRIBUTES_GROUP, projectFullName ) );
   settings.remove( "" );
   settings.endGroup();
 }

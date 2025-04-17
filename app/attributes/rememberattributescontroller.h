@@ -17,13 +17,11 @@
 #define REMEMBERATTRIBUTESCONTROLLER_H
 
 
-#include "qgsfeature.h"
-#include "qgsvectorlayer.h"
-#include "inputconfig.h"
-#include "activeproject.h"
-#include <QHash>
+#include <QObject>
 
+class ActiveProject;
 class FeatureLayerPair;
+class QgsVectorLayer;
 
 /**
  * \note QML Type: RememberAttributes
@@ -42,10 +40,8 @@ class  RememberAttributesController : public QObject
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
 
-    static const QString CACHED_ATTRIBUTES_GROUP;
-
     bool rememberValuesAllowed() const;
-    void setRememberValuesAllowed( bool rememberValuesAllowed );
+    void setRememberValuesAllowed( bool allowed );
 
     void storeFeature( const FeatureLayerPair &pair );
 
@@ -58,9 +54,6 @@ class  RememberAttributesController : public QObject
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
-    // Helper method to retrieve enabled and value keys;
-    QString keyForField( const QString &suffix, const QgsVectorLayer *layer, int fieldIndex ) const;
-
     ActiveProject *activeProject() const;
     void setActiveProject( ActiveProject *newActiveProject );
 
@@ -69,6 +62,9 @@ class  RememberAttributesController : public QObject
     void activeProjectChanged();
 
   private:
+    // Helper method to retrieve settings value keys;
+    QString keyForField( const QgsVectorLayer *layer, int fieldIndex ) const;
+
     ActiveProject *mActiveProject = nullptr;
 };
 
