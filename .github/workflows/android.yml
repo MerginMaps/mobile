@@ -118,6 +118,8 @@ jobs:
           
       - name: Install Qt
         if: steps.cache-qt.outputs.cache-hit != 'true'
+        env:
+          AQT_CONFIG: ./scripts/aqt-settings.ini
         run: |
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_arm64_v8a \
