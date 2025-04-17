@@ -15,12 +15,17 @@
 
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"
-
 #include "featurelayerpair.h"
 #include "rememberattributescontroller.h"
+#include "appsettings.h"
+#include "activelayer.h"
+#include "localprojectsmanager.h"
+#include "activeproject.h"
 
 void TestRememberAttributesController::init()
 {
+  QSettings settings;
+  settings.clear();
 }
 
 void TestRememberAttributesController::cleanup()
@@ -46,6 +51,12 @@ void TestRememberAttributesController::noFeatureTest()
 void TestRememberAttributesController::storedFeatureTest()
 {
   RememberAttributesController controller;
+  AppSettings appSettings;
+  ActiveLayer activeLayer;
+  LocalProjectsManager localProjectsManager( QDir::tempPath() );
+  ActiveProject activeProject( appSettings, activeLayer, localProjectsManager, this );
+  controller.setActiveProject( &activeProject );
+
   controller.setRememberValuesAllowed( true );
 
   std::unique_ptr<QgsVectorLayer> layer(
@@ -137,7 +148,13 @@ void TestRememberAttributesController::storedFeatureTest()
   QCOMPARE( val, 3 );
 
   // ok now user switched to completely different project
-  controller.reset();
+
+  // reset settings
+  QSettings settings;
+  settings.beginGroup( RememberAttributesController::CACHED_ATTRIBUTES_GROUP );
+  settings.remove( "" );
+  settings.endGroup();
+
   QCOMPARE( controller.shouldRememberValue( layer.get(), 0 ), false );
   QCOMPARE( controller.rememberedValue( layer.get(), 0, val ), false );
   QCOMPARE( controller.shouldRememberValue( layer.get(), 1 ), false );
