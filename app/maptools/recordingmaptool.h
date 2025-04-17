@@ -274,6 +274,9 @@ class RecordingMapTool : public AbstractMapTool
     void canUndoChanged( bool canUndo );
     void activeFeatureChanged( const QgsFeature &activeFeature );
 
+    void finalEmptyGeometry();
+    void finalSingleGeometry();
+
   public slots:
     void onPositionChanged();
 
