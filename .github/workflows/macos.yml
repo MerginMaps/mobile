@@ -32,9 +32,10 @@ jobs:
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     strategy:
+        fail-fast: false
         matrix:
           include:
-            - os: macos-14
+            - os: macos-13
               triplet: x64-osx
               deployment-target: "10.15"
               target-arch: x86_64
@@ -62,7 +63,7 @@ jobs:
       - name: Install brew deps
         run: |
           brew uninstall cmake
-          brew install automake bison flex gnu-sed autoconf-archive nasm libtool xcbeautify mono lcov openssl
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl
 
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
