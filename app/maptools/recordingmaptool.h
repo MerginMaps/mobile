@@ -274,6 +274,9 @@ class RecordingMapTool : public AbstractMapTool
     void canUndoChanged( bool canUndo );
     void activeFeatureChanged( const QgsFeature &activeFeature );
 
+    void finalEmptyGeometry();
+    void finalSingleGeometry();
+
   public slots:
     void onPositionChanged();
 
@@ -321,6 +324,11 @@ class RecordingMapTool : public AbstractMapTool
      * Check whether given point should be used for creating markers/handles
      */
     bool shouldBeVisible( QgsPoint point );
+
+    /**
+     * Check the layers intersection mode and change the feature geometry accordingly
+     */
+    void avoidIntersections();
 
     QgsGeometry mRecordedGeometry;
 

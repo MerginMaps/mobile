@@ -235,8 +235,8 @@ class  AttributeController : public QObject
     FeatureLayerPair mFeatureLayerPair;
     std::unique_ptr<AttributeTabProxyModel> mAttributeTabProxyModel;
     QVector<AttributeFormProxyModel *> mAttributeFormProxyModelForTabItem;
-    QMap<QUuid, std::shared_ptr<FormItem>> mFormItems; // order of fields in tab is in tab item
-    QVector<std::shared_ptr<TabItem>> mTabItems; // order of tabs by tab row number
+    QMap<QUuid, std::shared_ptr<FormItem >> mFormItems; // order of fields in tab is in tab item
+    QVector<std::shared_ptr<TabItem >> mTabItems; // order of tabs by tab row number
     QSet<int> mExpressionFieldsOutsideForm; // indices of fields with expressions which are outside of the form
     QSet<int> mVirtualFieldsOutsideForm; // indices of virtual fields which are outside of the form
 

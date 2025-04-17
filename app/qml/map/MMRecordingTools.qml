@@ -47,6 +47,18 @@ Item {
     }
   }
 
+  Connections {
+    target: mapTool
+
+    function onFinalEmptyGeometry() {
+      __notificationModel.addWarning( "The feature has empty geometry, after avoiding overlaps!" )
+    }
+
+    function onFinalSingleGeometry() {
+      __notificationModel.addWarning( "Avoiding overlaps generated multiple geometries, only the biggest was kept!" )
+    }
+  }
+
   MM.RecordingMapTool {
     id: mapTool
 
