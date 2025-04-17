@@ -64,20 +64,14 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
   const QgsFields &fields = layer->fields();
   for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
   {
-    QString fieldEnabledKey = keyForField( "enabled", layer, fieldIndex );
-    bool fieldEnabled = settings.value( fieldEnabledKey, false ).toBool();
-    bool qgisReuseLastValue = layer->editFormConfig().reuseLastValue( ( fieldIndex ) );
-
-    if ( rememberValuesAllowed() ? fieldEnabled : qgisReuseLastValue ) //we want to keep QGIS's reuseLastValue independent when global switch off
-    {
-      QString fieldValueKey = keyForField( "value", layer, fieldIndex );
-      QVariant value = feature.attribute( fieldIndex );
-      settings.setValue( fieldValueKey, value );
-    }
+    QString fieldValueKey = keyForField( "value", layer, fieldIndex );
+    QVariant value = feature.attribute( fieldIndex );
+    settings.setValue( fieldValueKey, value );
   }
 
   settings.endGroup();
 }
+
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
