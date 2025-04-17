@@ -68,7 +68,7 @@ bool MultiEditManager::applyEdits()
   {
     const QVariant value = oneFeature.attribute( i );
     // We want to exclude null values. MixedAttributeValues have also been saved as null on the temp layer
-    if ( !value.isNull() && fields.fieldOrigin( i ) == Qgis::FieldOrigin::Provider )
+    if ( value.isValid() && fields.fieldOrigin( i ) == Qgis::FieldOrigin::Provider )
     {
       attrs[i] = oneFeature.attribute( i );
     }
