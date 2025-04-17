@@ -7,28 +7,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTMODELS_H
-#define TESTMODELS_H
+import QtQuick
+import QtQuick.Controls
 
-#include "inputconfig.h"
+import "../../components/private" as MMPrivateComponents
 
-#include <QObject>
+/*
+ * A disabled widget to replace relation/relation reference widgets
+ * when multi-editing
+ */
 
-class TestModels : public QObject
-{
-    Q_OBJECT
+MMPrivateComponents.MMBaseSingleLineInput {
+  id: root
 
-  private slots:
-    void init(); // will be called before each testfunction is executed.
-    void cleanup(); // will be called after every testfunction.
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property string _fieldTitle: parent.fieldTitle
 
-    void testStaticFeaturesModel();
-    void testLayerFeaturesModel();
-    void testLayerFeaturesModelSorted();
-    void testValueRelationFeaturesModel();
-    void testProjectsModel();
-    void testProjectsProxyModel();
+  placeholderText: qsTr( "Not available while editing multiple features" )
 
-};
+  readOnly: true
+  shouldShowValidation: false
 
-#endif // TESTMODELS_H
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+}

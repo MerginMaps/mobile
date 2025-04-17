@@ -7,28 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTMODELS_H
-#define TESTMODELS_H
+#include "mixedattributevalue.h"
 
-#include "inputconfig.h"
 
-#include <QObject>
-
-class TestModels : public QObject
+MixedAttributeValue::MixedAttributeValue()
 {
-    Q_OBJECT
 
-  private slots:
-    void init(); // will be called before each testfunction is executed.
-    void cleanup(); // will be called after every testfunction.
-
-    void testStaticFeaturesModel();
-    void testLayerFeaturesModel();
-    void testLayerFeaturesModelSorted();
-    void testValueRelationFeaturesModel();
-    void testProjectsModel();
-    void testProjectsProxyModel();
-
-};
-
-#endif // TESTMODELS_H
+}

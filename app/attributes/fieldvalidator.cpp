@@ -10,6 +10,7 @@
 #include "fieldvalidator.h"
 #include "attributedata.h"
 #include "featurelayerpair.h"
+#include "mixedattributevalue.h"
 
 #include "qgsfield.h"
 #include "qgsvectorlayerutils.h"
@@ -36,6 +37,10 @@ FieldValidator::ValidationStatus FieldValidator::validate( const FeatureLayerPai
 
   const QgsField field = item.field();
   QVariant value = item.rawValue();
+
+  // We also ignore Mixed values when multi-editing, as those fields' values will not be saved to the edited features
+  if ( value.userType() == qMetaTypeId<MixedAttributeValue>() )
+    return Valid;
 
   bool isNumeric = item.editorWidgetType() == QStringLiteral( "Range" ) || field.isNumeric();
   if ( isNumeric )

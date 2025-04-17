@@ -1080,7 +1080,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle, bool isMultiEdit )
 {
   QString widgetName = widgetNameIn.toLower();
 
@@ -1131,7 +1131,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "externalresource" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
   {
@@ -1143,6 +1146,9 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+
     // check if we should use gallery or word tags
     bool useGallery = false;
 
@@ -1179,7 +1185,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relationreference" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
   }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
