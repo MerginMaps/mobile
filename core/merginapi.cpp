@@ -1297,25 +1297,51 @@ void MerginApi::registrationFinished( const QString &login, const QString &passw
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    QString serverMsg = extractServerErrorMsg( data );
     CoreUtils::log( "register", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
+    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    const int status = statusCode.toInt();
     if ( status == 401 || status == 400 )
     {
-      emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notifyError( serverMsg );
+      if ( serverErrorCode == "InvalidUsername" || serverErrorCode == "InvalidEmail" )
+      {
+        const QString msg = tr( "Please enter a valid email" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
+        emit notifyError( tr( "Registration failed" ) );
+      }
+      else if ( serverErrorCode == "InvalidPassword" )
+      {
+        const QString msg = tr( "Password not strong enough!%1"
+                                "%3 Password must be at least 8 characters long.%4"
+                                "%3 Password must contain at least 3 character categories among the following:"
+                                "<ul type=\"disc\">"
+                                "%3 Lowercase characters (a-z)%4"
+                                "%3 Uppercase characters (A-Z)%4"
+                                "%3 Digits (0-9)%4"
+                                "%3 Special characters %4"
+                                "%2%4%2" )
+                            .arg( "<ul>", "</ul>", "<li>", "</li>" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
+        emit notifyError( tr( "Registration failed" ) );
+      }
+      else
+      {
+        emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
+        emit notifyError( serverMsg );
+      }
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
-      QString msg = tr( "New registrations are not allowed on the selected server. Please check with your administrator." );
+      const QString msg = tr( "New registrations are not allowed on the selected server. Please check with your administrator." );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
       emit notifyError( msg );
     }
     else
     {
-      QString msg = QStringLiteral( "Mergin API error: register" );
+      const QString msg = QStringLiteral( "Mergin API error: register" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
       emit networkErrorOccurred( serverMsg, msg );
     }
