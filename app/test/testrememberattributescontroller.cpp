@@ -151,7 +151,7 @@ void TestRememberAttributesController::storedFeatureTest()
 
   // reset settings
   QSettings settings;
-  settings.beginGroup( RememberAttributesController::CACHED_ATTRIBUTES_GROUP );
+  settings.beginGroup( CoreUtils::CACHED_ATTRIBUTES_GROUP );
   settings.remove( "" );
   settings.endGroup();
 
