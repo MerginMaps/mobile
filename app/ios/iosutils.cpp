@@ -31,6 +31,13 @@ bool IosUtils::isIos() const
 #endif
 }
 
+void IosUtils::rotateScreenToPortrait()
+{
+#ifdef Q_OS_IOS
+  rotateScreenToPortraitImpl();
+#endif
+}
+
 void IosUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
   mLastCode = code;
