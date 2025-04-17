@@ -1064,8 +1064,8 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 
   if ( mActiveLayer && featureIsValid )
   {
-    // Avoid overlaps of features after drawing new feature
-    if ( mState == MapToolState::Record && mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
+    // Avoid overlaps of features after finishing drawing
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
     {
       avoidIntersections();
     }
@@ -1233,11 +1233,6 @@ void RecordingMapTool::completeEditOperation()
 {
   if ( mActiveLayer && mActiveLayer->isEditCommandActive() )
   {
-    // Avoid overlaps of features after each edit of geometry
-    if ( mState == MapToolState::Grab && mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
-    {
-      avoidIntersections();
-    }
     mActiveLayer->changeGeometry( mActiveFeature.id(), mRecordedGeometry );
     mActiveLayer->endEditCommand();
     mActiveLayer->triggerRepaint();
@@ -1738,6 +1733,13 @@ void RecordingMapTool::avoidIntersections()
           largest = currentPartSize;
         }
       }
+      emit finalSingleGeometry();
     }
   }
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    emit finalEmptyGeometry();
+  }
+
 }
