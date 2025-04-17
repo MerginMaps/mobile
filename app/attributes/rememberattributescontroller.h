@@ -17,12 +17,11 @@
 #define REMEMBERATTRIBUTESCONTROLLER_H
 
 
-#include "qgsfeature.h"
-#include "qgsvectorlayer.h"
-#include "inputconfig.h"
-#include <QHash>
+#include <QObject>
 
+class ActiveProject;
 class FeatureLayerPair;
+class QgsVectorLayer;
 
 /**
  * \note QML Type: RememberAttributes
@@ -34,17 +33,16 @@ class  RememberAttributesController : public QObject
     //! Returns TRUE if remembering values is allowed
     Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
 
+    //! Provides context for creating project-specific settings keys
+    Q_PROPERTY( ActiveProject *activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
+
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
 
-    //! Restore clean/initial state: no layers, no features!
-    Q_INVOKABLE void reset();
-
     bool rememberValuesAllowed() const;
-    void setRememberValuesAllowed( bool rememberValuesAllowed );
+    void setRememberValuesAllowed( bool allowed );
 
-    void storeLayerFields( const QgsVectorLayer *layer );
     void storeFeature( const FeatureLayerPair &pair );
 
     // Returns false if the value is not remembered
@@ -56,21 +54,18 @@ class  RememberAttributesController : public QObject
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
+    ActiveProject *activeProject() const;
+    void setActiveProject( ActiveProject *newActiveProject );
+
   signals:
     void rememberValuesAllowedChanged();
+    void activeProjectChanged();
 
   private:
-    //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
-    struct RememberedValues
-    {
-      QgsFeature feature;
-      QVector<bool> attributeFilter;
-    };
+    // Helper method to retrieve settings value keys;
+    QString keyForField( const QgsVectorLayer *layer, int fieldIndex ) const;
 
-    bool mRememberValuesAllowed = false;
-    //! Remembered last created feature for each layer (key)
-    QHash<QString, RememberedValues> mRememberedValues;
-
+    ActiveProject *mActiveProject = nullptr;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H
