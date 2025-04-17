@@ -731,15 +731,30 @@ int main( int argc, char *argv[] )
     style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
   }
 #elif defined( Q_OS_IOS )
-  auto safeAreaInsets = iosUtils.getSafeArea();
 
-  if ( safeAreaInsets.length() == 4 )
+  //
+  // After migration to Qt 6.8.3, we can no longer reliably read the safe area on app startup (on iOS).
+  // It appears the UIWindow is not fully initialized, returning zero safe area insets.
+  // However, the window is correctly initialized once the event loop begins processing events.
+  // Therefore, we delay the safe area retrieval until after the event loop starts.
+  // This is a temporary workaround and might be replaced in the future by
+  // the more robust approach described in https://www.qt.io/blog/expanded-client-areas-and-safe-areas-in-qt-6.9.
+  //
+
+  const int SAFE_AREA_REFRESH_DELAY_MS = 10;
+
+  QTimer::singleShot( SAFE_AREA_REFRESH_DELAY_MS, &lambdaContext, [&iosUtils, &style]()
   {
-    style->setSafeAreaTop( safeAreaInsets[0] );
-    style->setSafeAreaRight( safeAreaInsets[1] );
-    style->setSafeAreaBottom( safeAreaInsets[2] );
-    style->setSafeAreaLeft( safeAreaInsets[3] );
-  }
+    auto safeAreaInsets = iosUtils.getSafeArea();
+
+    if ( safeAreaInsets.length() == 4 )
+    {
+      style->setSafeAreaTop( safeAreaInsets[0] );
+      style->setSafeAreaRight( safeAreaInsets[1] );
+      style->setSafeAreaBottom( safeAreaInsets[2] );
+      style->setSafeAreaLeft( safeAreaInsets[3] );
+    }
+  } );
 
   //
   // Workaround for Qt bug <link> on iOS.

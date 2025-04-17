@@ -30,17 +30,17 @@ void IosUtils::rotateScreenToPortraitImpl()
   if ( @available( iOS 16.0, * ) )
   {
     NSArray *array = [[[UIApplication sharedApplication] connectedScenes] allObjects];
-    UIWindowScene *scene = (UIWindowScene *)array[0];
+    UIWindowScene *scene = ( UIWindowScene * )array[0];
 
     if ( scene )
     {
-      UIWindowScene *windowScene = (UIWindowScene *)scene;
+      UIWindowScene *windowScene = ( UIWindowScene * )scene;
       UIInterfaceOrientation orientation = windowScene.interfaceOrientation;
 
       if ( orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight )
       {
         UIWindowSceneGeometryPreferencesIOS *geometryPreferences = [[UIWindowSceneGeometryPreferencesIOS alloc] initWithInterfaceOrientations:UIInterfaceOrientationMaskPortrait];
-        [scene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler:^(NSError * _Nonnull error) { NSLog(@"%@", error); }];
+        [scene requestGeometryUpdateWithPreferences:geometryPreferences errorHandler: ^ ( NSError * _Nonnull error ) { NSLog( @"%@", error ); }];
       }
     }
   }
