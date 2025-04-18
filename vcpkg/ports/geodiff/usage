@@ -1,0 +1,4 @@
+The package Geodiff provides CMake targets:
+
+    find_package(Geodiff CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE Geodiff::Geodiff)

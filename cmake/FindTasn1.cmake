@@ -8,19 +8,9 @@ if (LNX
 )
   message(FATAL_ERROR "tasn1 is not available for this platform in input-SDK")
 else ()
-  find_path(
-    Tasn1_INCLUDE_DIR
-    libtasn1.h
-    "${INPUT_SDK_PATH_MULTI}/include"
-    NO_DEFAULT_PATH
-  )
+  find_path(Tasn1_INCLUDE_DIR libtasn1.h)
 
-  find_library(
-    Tasn1_LIBRARY
-    NAMES tasn1
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+  find_library(Tasn1_LIBRARY NAMES tasn1)
 endif ()
 
 find_package_handle_standard_args(Tasn1 REQUIRED_VARS Tasn1_LIBRARY Tasn1_INCLUDE_DIR)
