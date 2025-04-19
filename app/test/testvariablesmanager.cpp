@@ -111,6 +111,11 @@ void TestVariablesManager::userVariables()
   evaluateExpression( QStringLiteral( "@mergin_url" ),  mApi->apiRoot(), &context );
   evaluateExpression( QStringLiteral( "@mergin_user_email" ), mApi->userInfo()->email(), &context );
   evaluateExpression( QStringLiteral( "@mergin_username" ), username, &context );
+  evaluateExpression( QStringLiteral( "@mergin_full_name" ), mApi->userInfo()->name(), &context );
+  evaluateExpression( QStringLiteral( "@mm_url" ),  mApi->apiRoot(), &context );
+  evaluateExpression( QStringLiteral( "@mm_user_email" ), mApi->userInfo()->email(), &context );
+  evaluateExpression( QStringLiteral( "@mm_username" ), username, &context );
+  evaluateExpression( QStringLiteral( "@mm_full_name" ), mApi->userInfo()->name(), &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()

@@ -34,6 +34,10 @@ void VariablesManager::removeMerginProjectVariables( QgsProject *project )
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_full_name" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_version" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_owner" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_full_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_version" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_owner" ) );
 }
 
 void VariablesManager::registerInputExpressionFunctions()
@@ -97,16 +101,21 @@ QgsExpressionContextScope *VariablesManager::positionScope()
 void VariablesManager::apiRootChanged()
 {
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_url" ),  mMerginApi->apiRoot() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_url" ),  mMerginApi->apiRoot() );
 }
 
 void VariablesManager::authChanged()
 {
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userAuth()->username() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
 }
 
 void VariablesManager::setUserVariables()
 {
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_user_email" ),  mMerginApi->userInfo()->email() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_user_email" ),  mMerginApi->userInfo()->email() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_full_name" ),  mMerginApi->userInfo()->name() );
 }
 
 void VariablesManager::setVersionVariable( const QString &projectFullName )
@@ -114,7 +123,10 @@ void VariablesManager::setVersionVariable( const QString &projectFullName )
   if ( !mCurrentProject )
     return;
 
-  if ( mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString() == projectFullName )
+  const QString oldVariableName = mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString();
+  const QString newVariableName = mCurrentProject->customVariables().value( QStringLiteral( "mm_project_full_name" ) ).toString();
+
+  if ( oldVariableName == projectFullName  && newVariableName == projectFullName )
     setProjectVariables();
 }
 
@@ -187,6 +199,10 @@ void VariablesManager::setProjectVariables()
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_name" ),  metadata.name );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_version" ), metadata.version );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_name" ),  metadata.name );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_owner" ),   metadata.projectNamespace );
   }
   else
   {
