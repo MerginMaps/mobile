@@ -67,7 +67,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
     providerType = mPositionKit->positionProvider()->type();
   }
 
-  GeoPosition position = mPositionKit->position();
+  const GeoPosition position = mPositionKit->position();
   const QgsGeometry point = QgsGeometry( new QgsPoint( position.longitude, position.latitude, position.elevation ) );
 
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
@@ -82,7 +82,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( position.verticalSpeed ) );
   addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( position.magneticVariation ) );
   addPositionVariable( scope, QStringLiteral( "timestamp" ), position.utcDateTime );
-  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
+  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + static_cast<int>( direction ) ) % 360 );
   addPositionVariable( scope, QStringLiteral( "from_gps" ), mUseGpsPoint );
   addPositionVariable( scope, QStringLiteral( "satellites_visible" ), position.satellitesVisible );
   addPositionVariable( scope, QStringLiteral( "satellites_used" ), position.satellitesUsed );
@@ -135,7 +135,7 @@ bool VariablesManager::useGpsPoint() const
   return mUseGpsPoint;
 }
 
-void VariablesManager::setUseGpsPoint( bool useGpsPoint )
+void VariablesManager::setUseGpsPoint( const bool useGpsPoint )
 {
   if ( mUseGpsPoint != useGpsPoint )
   {
@@ -184,15 +184,15 @@ void VariablesManager::setProjectVariables()
     return;
 
 
-  QString filePath = mCurrentProject->fileName();
-  QString projectDir = mMerginApi->localProjectsManager().projectFromProjectFilePath( filePath ).projectDir;
+  const QString filePath = mCurrentProject->fileName();
+  const QString projectDir = mMerginApi->localProjectsManager().projectFromProjectFilePath( filePath ).projectDir;
   if ( projectDir.isEmpty() )
   {
     removeMerginProjectVariables( mCurrentProject );
     return;
   }
 
-  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + MerginApi::sMetadataFile );
+  const MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + MerginApi::sMetadataFile );
   if ( metadata.isValid() )
   {
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_version" ), metadata.version );
@@ -222,7 +222,7 @@ void VariablesManager::addPositionVariable( QgsExpressionContextScope *scope, co
   }
 }
 
-QVariant VariablesManager::getGeoPositionAttribute( double attributeValue, int precision )
+QVariant VariablesManager::getGeoPositionAttribute( const double attributeValue, const int precision )
 {
   if ( attributeValue >= 0 )
   {

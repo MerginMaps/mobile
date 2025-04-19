@@ -21,7 +21,7 @@
 class MerginApi;
 
 /*
- * The class sets global and project variables related to Mergin.
+ * The class sets global and project variables related to Mergin Maps.
  */
 class VariablesManager : public QObject
 {
@@ -31,8 +31,8 @@ class VariablesManager : public QObject
     //! Source of direction
     Q_PROPERTY( Compass *compass READ compass WRITE setCompass NOTIFY compassChanged )
     /**
-     * Property binded with RecordingMapTool. If true, the RecordingMapTool has used current position to create or edit geometry
-     * for a feature. Therefore current position information matches geometry for that feature.
+     * Property bound with RecordingMapTool. If true, the RecordingMapTool has used current position to create or edit geometry
+     * for a feature. Therefore, current position information matches geometry for that feature.
      **/
     Q_PROPERTY( bool useGpsPoint READ useGpsPoint WRITE setUseGpsPoint NOTIFY useGpsPointChanged )
 
@@ -41,7 +41,7 @@ class VariablesManager : public QObject
     ~VariablesManager() override;
 
     void removeMerginProjectVariables( QgsProject *project );
-    //! Creates and registers custom expression functions to Input, so they can be used in default value definitions.
+    //! Creates and registers custom expression functions to mobile app, so they can be used in default value definitions.
     void registerInputExpressionFunctions();
     QgsExpressionContextScope *positionScope();
 

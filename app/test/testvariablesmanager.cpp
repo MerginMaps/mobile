@@ -12,7 +12,6 @@
 #include "qgsexpressioncontextutils.h"
 
 #include "test/testmerginapi.h"
-#include "inputtests.h"
 #include "testutils.h"
 #include "position/providers/bluetoothpositionprovider.h"
 #include "merginapi.h"
@@ -40,7 +39,7 @@ void TestVariablesManager::cleanup()
 
 }
 
-void TestVariablesManager::positionVariables()
+void TestVariablesManager::testPositionVariables()
 {
   mAppSettings->setGpsAntennaHeight( 0 );
 
@@ -95,7 +94,7 @@ void TestVariablesManager::positionVariables()
   mAppSettings->setGpsAntennaHeight( 0 );
 }
 
-void TestVariablesManager::userVariables()
+void TestVariablesManager::testUserVariables()
 {
   QString apiRoot, username, password, workspace;
   TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
@@ -143,7 +142,7 @@ void TestVariablesManager::evaluateExpression( const QString &expStr, const QStr
   QgsExpression exp( expStr );
   QVERIFY2( exp.prepare( context ), expStr.toStdString().c_str() );
   QVERIFY( !exp.hasParserError() );
-  QVariant value = exp.evaluate();
+  const QVariant value = exp.evaluate();
   QVERIFY2( !exp.hasEvalError(), expStr.toStdString().c_str() );
   QCOMPARE( value, expectedValue );
 }
