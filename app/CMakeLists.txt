@@ -308,6 +308,8 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/position
 )
 
+qt_policy(SET QTP0002 NEW)
+
 if (ANDROID)
   if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
     file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
@@ -565,8 +567,7 @@ target_compile_definitions(
 
 add_subdirectory(qml)
 
-# register Singleton TODO REMOVE!
-set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+qt_policy(SET QTP0004 NEW)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)
