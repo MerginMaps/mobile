@@ -2641,9 +2641,13 @@ void TestMapTools::testAvoidIntersections()
   mapTool.setActiveVertex( Vertex( QgsVertexId( 0, 0, 2 ), { -95.5, 23.0 }, Vertex::Existing ) );
   QVERIFY( mapTool.activeVertex().isValid() );
   mapTool.releaseVertex( { -96.5, 23 } );
+  mapTool.getFeatureLayerPair();
   QCOMPARE( mapTool.recordedGeometry().constGet()->area(), 10 );
+
   mapTool.setActiveVertex( Vertex( QgsVertexId( 0, 0, 3 ), { -90.5, 25.0 }, Vertex::Existing ) );
+  QVERIFY( mapTool.activeVertex().isValid() );
   mapTool.releaseVertex( { -88.5, 25.0 } );
+  mapTool.getFeatureLayerPair();
   QCOMPARE( mapTool.recordedGeometry().constGet()->area(), 12 );
 
   delete project;
