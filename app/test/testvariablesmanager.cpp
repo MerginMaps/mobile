@@ -71,7 +71,7 @@ void TestVariablesManager::testPositionVariables()
   evaluateExpression( QStringLiteral( "@position_magnetic_variation" ), QStringLiteral( "0.00" ), &context );
   evaluateExpression( QStringLiteral( "@position_direction" ), QStringLiteral( "0" ), &context );
   evaluateExpression( QStringLiteral( "@position_satellites_visible" ), QStringLiteral( "9" ), &context );
-  evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "3" ), &context );
+  evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "9" ), &context );
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "3.20" ), &context );
   evaluateExpression( QStringLiteral( "@position_vdop" ), QStringLiteral( "4.90" ), &context );
   evaluateExpression( QStringLiteral( "@position_pdop" ), QStringLiteral( "5.90" ), &context );
@@ -96,12 +96,11 @@ void TestVariablesManager::testPositionVariables()
 
 void TestVariablesManager::testUserVariables()
 {
-  QString apiRoot, username, password, workspace;
+  QString apiRoot, username, password;
   TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
   if ( TestUtils::needsToAuthorizeAgain( mApi, username ) )
   {
     TestUtils::authorizeUser( mApi, username, password );
-    TestUtils::selectFirstWorkspace( mApi, workspace );
   }
 
   QgsExpressionContext context;
