@@ -6,7 +6,6 @@
 - [2. Overview](#2-overview)
   - [2.1 Secrets](#21-secrets)
   - [2.2 Code formatting](#22-code-formatting)
-  - [2.3 Required Qt packages](#23-required-qt-packages)
 - [3. Building GNU/Linux](#3-building-gnulinux)
 - [4. Building Android (on Linux/macOS/Windows)](#4-building-android-on-linuxmacoswindows)
   - [4.1. Android on Ubuntu](#41-android-on-ubuntu)
@@ -99,6 +98,7 @@ To manually run the style check, run `pre-commit run --all-files` or optionally 
 
 In case you want to skip execution of pre-commit hooks, add additional flag `--no-verify` to your commit command, e.g.: `git commit -m "nit" --no-verify`
 
+<<<<<<< HEAD
 ## 2.3 Required Qt packages
 
 Mergin Maps Mobile app is built with Qt. If you are using Qt's `Maintenance tool`, make sure to install these packages:
@@ -113,6 +113,8 @@ Mergin Maps Mobile app is built with Qt. If you are using Qt's `Maintenance tool
    - `Qt Multimedia`
    - `Qt Positioning`
    - `Qt Sensors`
+=======
+>>>>>>> df49e97f (use Qt from vcpkg)
 
 # 3. Building GNU/Linux
 
