@@ -86,6 +86,8 @@ Item {
         }
       }
 
+      supportsSso: true
+
       onSignInClicked: function ( username, password ) {
         stackView.pending = true
         __merginApi.authorize(username, password)
@@ -125,6 +127,11 @@ Item {
         Qt.openUrlExternally(__merginApi.resetPasswordUrl());
       }
 
+      onContinueWithSsoClicked: {
+        // stackView.pending = true //??
+
+        __merginApi.requestSsoLogin()
+      }
     }
   }
 

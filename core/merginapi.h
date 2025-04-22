@@ -218,6 +218,7 @@ class MerginApi: public QObject
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
     Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
+    Q_PROPERTY( bool serverSupportsSso READ serverSupportsSso WRITE setServerSupportsSso NOTIFY serverSupportsSsoChanged )
 
   public:
 
@@ -308,6 +309,7 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
+    Q_INVOKABLE void authorizeWithSso();
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -577,6 +579,11 @@ class MerginApi: public QObject
     bool apiSupportsWorkspaces();
 
     /**
+     * Returns true if the configured server has SSO enabled
+     */
+    bool serverSupportsSso() const;
+
+    /**
      * Reloads project metadata role by fetching latest information from server.
      */
     Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
@@ -591,6 +598,11 @@ class MerginApi: public QObject
      * Function will return early if manager is null.
      */
     void setNetworkManager( QNetworkAccessManager *manager );
+
+    /**
+     * Makes this API available to use/not to use SSO
+     */
+    void setServerSupportsSso( bool ssoSupported );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -675,6 +687,10 @@ class MerginApi: public QObject
     void networkManagerChanged();
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
+
+    void serverSupportsSsoChanged();
+
+    void ssoConfigurationRequested();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -858,6 +874,7 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
+    bool mServerSupportsSso = false;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
