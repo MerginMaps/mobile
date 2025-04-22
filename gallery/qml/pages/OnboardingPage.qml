@@ -128,10 +128,12 @@ Page {
     MMLoginPage {
       id: login
       apiRoot: "app.merginmaps.com"
-      warningMsg: "This is warning message like server offline"
+      // warningMsg: "This is warning message like server offline"
 
       width: root.width
       height: root.height
+
+      supportsSso: false
 
       onSignInClicked: function(username, password) {
         pending = true

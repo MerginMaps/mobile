@@ -433,6 +433,7 @@ target_link_libraries(
          Qt6::Sensors
          Qt6::QuickControls2
          Qt6::Network
+         Qt6::NetworkAuth
          Qt6::Svg
          Qt6::Sql
          Qt6::Core

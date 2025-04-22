@@ -61,7 +61,7 @@ endif ()
 
 add_library(mm_core OBJECT ${MM_CORE_SRCS} ${MM_CORE_HDRS})
 target_include_directories(mm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(mm_core PRIVATE Qt6::Core Qt6::Network Geodiff::Geodiff)
+target_link_libraries(mm_core PRIVATE Qt6::Core Qt6::Network Qt6::NetworkAuth Geodiff::Geodiff)
 
 if (NOT USE_MM_SERVER_API_KEY)
   target_compile_definitions(mm_core PRIVATE USE_MERGIN_DUMMY_API_KEY)

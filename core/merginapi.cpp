@@ -814,6 +814,26 @@ void MerginApi::authorize( const QString &login, const QString &password )
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
+void MerginApi::authorizeWithSso()
+{
+  // Let's check if we need to ask for the email
+
+  if ( !mServerSupportsSso )
+  {
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "Requested sso auth for server that does not support sso!" ) );
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( false );
+  QUrl url( mApiRoot + QStringLiteral( "v2/sso/config" ) );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::authorizeFinished );
+
+  emit ssoConfigurationRequested();
+}
+
 void MerginApi::registerUser( const QString &email,
                               const QString &password,
                               bool acceptedTOC )
@@ -3222,9 +3242,9 @@ ProjectDiff MerginApi::compareProjectFiles(
 
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
           bool previouslyIgnoredButShouldDownload = \
-            config.downloadMissingFiles &&
-            lastSyncConfig.isValid &&
-            MerginApi::excludeFromSync( file.path, lastSyncConfig );
+              config.downloadMissingFiles &&
+              lastSyncConfig.isValid &&
+              MerginApi::excludeFromSync( file.path, lastSyncConfig );
 
           if ( previouslyIgnoredButShouldDownload )
           {
@@ -3678,6 +3698,16 @@ void MerginApi::getServerConfigReplyFinished()
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
+
+      QJsonValue ssoEnabled = doc.object().value( QStringLiteral( "sso_enabled" ) );
+      if ( ssoEnabled == QJsonValue::Bool && ssoEnabled.toBool() )
+      {
+        setServerSupportsSso( true );
+      }
+      else
+      {
+        setServerSupportsSso( false ); // key is missing or set to false
+      }
     }
   }
   else
@@ -4080,4 +4110,18 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   mManager = manager;
 
   emit networkManagerChanged();
+}
+
+bool MerginApi::serverSupportsSso() const
+{
+  return mServerSupportsSso;
+}
+
+void MerginApi::setServerSupportsSso( bool ssoSupported )
+{
+  if ( mServerSupportsSso == ssoSupported )
+    return;
+
+  mServerSupportsSso = ssoSupported;
+  emit serverSupportsSsoChanged();
 }
