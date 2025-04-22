@@ -16,7 +16,13 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "28")
+  if (DEFINED ENV{ANDROIDAPI})
+    set(ANDROIDAPI $ENV{ANDROIDAPI})
+  else ()
+    message(FATAL_ERROR "ANDROIDAPI not defined as env variable")
+  endif ()
+  # set(ANDROIDAPI "28")
+
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")
@@ -36,15 +42,15 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "16.0")
+  # set(DEPLOYMENT_TARGET "16.0")
 endif ()
 
-if (APPLE
-    AND NOT IOS
-    AND NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE}
-)
-  # TODO change for arm64/osx
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "15.4")
+if (APPLE)
+  if (DEFINED ENV{DEPLOYMENT_TARGET})
+    set(CMAKE_OSX_DEPLOYMENT_TARGET $ENV{DEPLOYMENT_TARGET})
+  else ()
+    message(FATAL_ERROR "DEPLOYMENT_TARGET not defined as env variable")
+  endif ()
 endif ()
 
 # ########################################################################################
@@ -196,7 +202,7 @@ find_package(expat CONFIG REQUIRED)
 find_package(GDAL CONFIG REQUIRED)
 find_package(Geodiff CONFIG REQUIRED)
 find_package(GEOS CONFIG REQUIRED)
-find_package(Jpeg CONFIG REQUIRED)
+# find_package(Jpeg CONFIG REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(PROJ CONFIG REQUIRED)
 find_package(Protobuf REQUIRED)

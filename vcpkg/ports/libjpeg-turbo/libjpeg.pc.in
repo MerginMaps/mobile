@@ -1,8 +1,0 @@
-prefix=@CMAKE_INSTALL_PREFIX@
-
-Name: libjpeg
-Version: 6b
-Description: jpeg with renamed symbols
-URL: https://gdal.org
-Libs: -L${prefix}/lib -ljpeg
-Cflags: -I${prefix}/include -DRENAME_INTERNAL_JPEG_SYMBOLS
