@@ -114,6 +114,8 @@ in the file `VCPKG_BASELINE` in the repository.
    chmod +x ./bootstrap-vcpkg.sh
    ./bootstrap-vcpkg.sh
    ```
+=======
+>>>>>>> df49e97f (use Qt from vcpkg)
 
 ## 2.4 ccache
 
