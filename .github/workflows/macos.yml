@@ -181,38 +181,6 @@ jobs:
           fi
 
           export APP_PATH=${{ github.workspace }}/install-mm/Input.app
-          export DMG_PATH=merginmaps-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.dmg
-          ./mm/scripts/create_dmg.sh
-
-      - name: Download app
-        uses: actions/download-artifact@v4
-        with:
-          pattern: input-app-*
-          path: |
-            artifacts
-
-      - name: Create universal app
-        run: |
-          mkdir -p x64
-          gtar --strip-components=4 -zxf ./artifacts/input-app-x64-osx/input-app-x64-osx.tar.gz -C x64
-          mkdir -p arm64
-          gtar --strip-components=4 -zxf ./artifacts/input-app-arm64-osx/input-app-arm64-osx.tar.gz -C arm64
-          pip install lipomerge
-          lipomerge ./x64 ./arm64 universal
-
-      - name: Create dmg
-        run: |
-          if [[ "${{ github.event_name }}" == "release" && "${{ github.ref }}" == refs/tags/v* ]]; then
-            echo "${{ secrets.APPLE_DEVELOPER_ID_P12_BASE64 }}" | base64 --decode > cert.p12
-            export P12_PATH=cert.p12
-            export P12_PASSWORD=${{ secrets.APPLE_DEVELOPER_ID_P12_PASSWORD }}
-            export API_KEY_ID=${{ secrets.IOS_APPSTORE_KEY_ID }}
-            export API_KEY_ISSUER_ID=${{ secrets.IOS_APPSTORE_ISSUER_ID }}
-            echo "${{ secrets.IOS_APPSTORE_PRIVATE_KEY }}" > authkey.p8
-            export API_KEY_PATH=authkey.p8
-          fi
-
-          export APP_PATH=${{ github.workspace }}/install-mm/Input.app
           export DMG_PATH=merginmaps_app.dmg
           ./scripts/create_dmg.sh
 

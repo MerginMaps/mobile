@@ -26,8 +26,6 @@ fi
 
 create-dmg --volname "Mergin Maps Mobile App Installer" \
 	--hide-extension "Input.app" \
-	--volicon "./platform/macos/installer.icns" \
-	--background "./platform/macos/installer_background.png" \
 	--window-pos 200 120 \
 	--window-size 512 320 \
 	--icon-size 100 \
