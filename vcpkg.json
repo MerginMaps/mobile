@@ -10,6 +10,7 @@
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
     "version": "2025.2.0",
+    "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
             "name": "sqlite3",
@@ -35,16 +36,46 @@
             "default-features": false,
             "features": ["webp", "zip", "lzma", "jpeg", "zstd"]
         },
-        {
-            "name": "kdab-openssl",
-            "platform": "android"
-        },
         "geodiff",
         "nu-book-zxing-cpp",
         "gdal",
-        "qt6",
-        "qca-qt6",
+        "qca",
         "qtkeychain-qt6",
-        "qgis-qt6"
+        "qgis",
+        {
+          "name": "qgis",
+          "host": true,
+          "default-features": false
+        },
+        {
+          "name": "qtbase",
+          "default-features": false
+        },
+        "qtconnectivity",
+        "qtdeclarative",
+        "qtimageformats",
+        "qtlocation",
+        {
+          "name": "qtmultimedia",
+          "features": [
+            {
+              "name": "ffmpeg",
+              "platform": "linux | android | windows"
+            },
+            "qml"
+          ]
+        },
+        "qtremoteobjects",
+        {
+          "name": "qtsensors",
+          "features": [
+            "qml"
+          ]
+        },
+        {
+          "name": "qttools",
+          "host": true,
+          "default-features": false
+        }
     ]
 }
