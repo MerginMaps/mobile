@@ -13,6 +13,8 @@ test/temp_extra_projects/
 input.pro.user*
 app/android/assets/qgis-data/proj_custom/
 app/android/assets/qgis-data/projects/
+app/android/assets/qgis-data/proj/*
+app/android/assets/qgis-data/resources/*
 app/android/assets/projects/
 app/android/AndroidManifest.xml
 *.gpkg-wal
