@@ -166,9 +166,6 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       r->addVertex( pointToAdd );
       r->close();
-      mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
-      emit recordedGeometryChanged( mRecordedGeometry );
-      return;
     }
     else
     {
@@ -198,7 +195,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       if ( mLastRecordedPoint == pointToAdd )
       {
-        // Avoid duplicated vertex to be inserted
+        // Avoid inserting duplicated vertex
         return;
       }
       mRecordedGeometry.get()->insertVertex( id, pointToAdd );
