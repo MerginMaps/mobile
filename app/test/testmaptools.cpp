@@ -260,7 +260,9 @@ void TestMapTools::testRecording()
 
   QCOMPARE( geometryChangedSpy.count(), 2 );
 
+  // Already existing point, skip inserting
   recordTool->addPoint( pointsToAdd[0] );
+
   recordTool->addPoint( pointsToAdd[1] );
 
   QVERIFY( !recordTool->hasValidGeometry() );
@@ -271,7 +273,7 @@ void TestMapTools::testRecording()
 
   recordTool->addPoint( pointsToAdd[3] );
 
-  QCOMPARE( geometryChangedSpy.count(), 6 );
+  QCOMPARE( geometryChangedSpy.count(), 5 );
 
   delete project;
   delete recordTool;
@@ -852,9 +854,9 @@ void TestMapTools::testAddVertexLineLayer()
   {
     { -97.129, 22.602 }, // added to end
     { -104.923, 24.840 }, // added to end
-    { -104.923, 24.840 }, // Same as previous point should not be recorded
     { -108, 26 }, // added to end
     { -110, 28 }, // added to end
+    { -110, 28 }, // Same as previous point should not be recorded
     { -95, 20 }, // added to start
     { -109, 27 }, // added to middle
   };
@@ -883,22 +885,17 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::LineString );
 
   mapTool.addPoint( pointsToAdd[2] );
-  QVERIFY( mapTool.hasValidGeometry() );
-  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 2 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
-
-  mapTool.addPoint( pointsToAdd[3] );
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[3] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   // nothing should be added in VIEW (neither in GRAB) state
   mapTool.setState( RecordingMapTool::View );
-  mapTool.addPoint( pointsToAdd[4] );
+  mapTool.addPoint( pointsToAdd[3] );
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
@@ -910,7 +907,7 @@ void TestMapTools::testAddVertexLineLayer()
 
   // even if active vertex would incorrectly remained set, point should be added to the end of the line
   mapTool.setActiveVertex( Vertex( QgsVertexId( 0, 0, 1 ), pointsToAdd[1], Vertex::Existing ) );
-  mapTool.addPoint( pointsToAdd[4] );
+  mapTool.addPoint( pointsToAdd[3] );
   mapTool.setActiveVertex( Vertex() );
 
   QVERIFY( mapTool.hasValidGeometry() );
@@ -919,6 +916,12 @@ void TestMapTools::testAddVertexLineLayer()
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[4] );
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[3] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[4] );
 
   //
   // Let's try to add point from beginning
