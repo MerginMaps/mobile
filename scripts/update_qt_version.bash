@@ -2,6 +2,8 @@
 
 set -e
 
+# TODO fix!
+
 echo "update_qt_version.bash MAJOR.MINOR.BUILD"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

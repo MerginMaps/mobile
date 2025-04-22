@@ -8,11 +8,10 @@ cmake_minimum_required(VERSION 3.22)
 set(MM_VERSION_MAJOR "2025")
 set(MM_VERSION_MINOR "6")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.8.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
-if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
+if (DEFINED ENV{INPUT_SDK_ANDROID_BASE}) # TODO android!
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
@@ -344,14 +343,21 @@ endif ()
 # ########################################################################################
 # RESOURCES
 # ########################################################################################
-# TODO - this would need to rething the approach so the assets are in binary folder 
-file(MAKE_DIRECTORY app/android/assets/qgis-data/resources)
-file (COPY ${QGIS_RESOURCE_DIR}/qgis.db DESTINATION app/android/assets/qgis-data/resources/)
-file (COPY ${QGIS_RESOURCE_DIR}/srs.db DESTINATION app/android/assets/qgis-data/resources/)
-file (COPY ${PROJ_DIR} DESTINATION app/android/assets/qgis-data/proj 
+# TODO - this would need to rething the approach so the assets are in binary folder
+message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/app/android/assets/qgis-data/resources)
+file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
+     DESTINATION ${CMAKE_SOURCE_DIR}/app/android/assets/qgis-data/resources/
+)
+file(COPY ${QGIS_RESOURCE_DIR}/srs.db
+     DESTINATION ${CMAKE_SOURCE_DIR}/app/android/assets/qgis-data/resources/
+)
+file(
+  COPY ${PROJ_DIR}
+  DESTINATION ${CMAKE_SOURCE_DIR}/app/android/assets/qgis-data/
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
- )
+)
 
 # ########################################################################################
 # SUBDIRECTORIES

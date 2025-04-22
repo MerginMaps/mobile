@@ -35,27 +35,21 @@ if (MACOS)
 
   set(executable_path "Input.app/Contents/MacOS/INPUT")
 
-  # https://doc-snapshots.qt.io/qt6-dev/qt-deploy-runtime-dependencies.html Replace with
-  # qt_generate_deploy_script from QT 6.5.x The following script must only be executed at
-  # install time Note: This command is in technology preview and may change in future
-  # releases. (QT 6.4.x)
-  file(
-    GENERATE
-    OUTPUT ${deploy_script}
+  qt_generate_deploy_script(
+    TARGET
+    Input
+    OUTPUT_SCRIPT
+    deploy_script
     CONTENT
-      "
-		include(\"${QT_DEPLOY_SUPPORT}\")
-
-        qt_deploy_qml_imports(TARGET Input)
-
-    	qt_deploy_runtime_dependencies(
-            QML_DIR \"${qml_path}\"
-			EXECUTABLE \"${executable_path}\"
-			GENERATE_QT_CONF
-		)"
+    "
+      qt_deploy_runtime_dependencies(
+        EXECUTABLE \"${executable_path}\"
+        GENERATE_QT_CONF
+  )"
   )
 
-  install(SCRIPT ${deploy_script})
+  install(SCRIPT ${deploy_script} COMPONENT Runtime)
+  include(InstallRequiredSystemLibraries)
 endif ()
 
 # ########################################################################################

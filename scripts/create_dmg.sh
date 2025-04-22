@@ -24,10 +24,8 @@ if [[ -n ${API_KEY_ID:-} ]]; then
 	codesign --force --options runtime --sign "Developer ID Application" --deep --keychain "$KEYCHAIN_NAME" "$APP_PATH"
 fi
 
-create-dmg --volname "Mergin Maps mobile app Installer" \
+create-dmg --volname "Mergin Maps Mobile App Installer" \
 	--hide-extension "Input.app" \
-	--volicon "./platform/macos/installer.icns" \
-	--background "./platform/macos/installer_background.png" \
 	--window-pos 200 120 \
 	--window-size 512 320 \
 	--icon-size 100 \
