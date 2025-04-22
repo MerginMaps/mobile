@@ -18,6 +18,7 @@
 #include "qgsmaplayer.h"
 #include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
+#include "coreutils.h"
 
 InputMapSettings::InputMapSettings( QObject *parent )
   : QObject( parent )
@@ -29,6 +30,14 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::extentChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
+
+  // store map extent to QSettings every 5 seconds
+  mSaveExtentTimer.setSingleShot( true );
+  connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
+  connect( this, &InputMapSettings::extentChanged, this, [this]()
+  {
+    mSaveExtentTimer.start( 5000 );
+  } );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
@@ -258,6 +267,11 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
   }
 
+  if ( mMapSettings.extent().isEmpty() )
+  {
+    loadSavedExtent();
+  }
+
   mMapSettings.setRotation( 0 );
 
   mMapSettings.setTransformContext( mProject->transformContext() );
@@ -346,3 +360,24 @@ void InputMapSettings::setTemporalEnd( const QDateTime &end )
   mMapSettings.setTemporalRange( QgsDateTimeRange( range.begin(), end ) );
   emit temporalStateChanged();
 }
+
+void InputMapSettings::saveExtentToSettings()
+{
+  QSettings settings;
+  const QgsRectangle extent = this->extent();
+  qDebug() << "saving extent : " << extent.toString();;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_SETTINGS_GROUP + "/mapExtent", mProject->baseName() ) );
+  settings.setValue( "extent", extent );
+  settings.endGroup();
+}
+
+void InputMapSettings::loadSavedExtent()
+{
+  qDebug() << "CALLED?:";
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_SETTINGS_GROUP + "/mapExtent", mProject->baseName() ) );
+  QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
+  setExtent( extent );
+  settings.endGroup();
+}
+
