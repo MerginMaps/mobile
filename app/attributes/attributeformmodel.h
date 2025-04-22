@@ -62,7 +62,8 @@ class  AttributeFormModel : public QAbstractListModel
       ValidationMessage,
       ValidationStatus,
       Relation, //!< QgsRelation instance for this item, empty if it is not a relation
-      RawValue
+      RawValue,
+      HasMixedValues, //!< TRUE when editing multiple features that have different value for this attribute
     };
 
     Q_ENUM( AttributeFormRoles )

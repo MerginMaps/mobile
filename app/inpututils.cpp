@@ -289,17 +289,33 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   if ( geom.isNull() || !geom.constGet() )
     return;
 
-  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent( pair.layer(), geom.boundingBox() );
-  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-  QgsPointXY currentExtentCenter = currentExtent.center();
-  QgsPointXY featureCenter = bbox.center();
+  geom = transformGeometryToMapWithLayer( geom, pair.layer(), mapSettings );
+  setExtentToGeom( geom, mapSettings );
+}
 
-  double offsetX = currentExtentCenter.x() - featureCenter.x();
-  double offsetY = currentExtentCenter.y() - featureCenter.y();
-  currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
-  currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
-  currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
-  currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
+void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings )
+{
+  if ( geom.isNull() || !geom.constGet() )
+    return;
+
+  const QgsRectangle bbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+
+  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  {
+    const QgsVector offset = currentExtent.center() - bbox.center();
+    currentExtent -= offset;
+  }
+  else
+  {
+    currentExtent = bbox;
+
+    // Add a offset to encompass handles etc..
+    // This number is based on what feel confortable for the user
+    constexpr double SCALE_FACTOR = 1.18;
+    currentExtent.scale( SCALE_FACTOR );
+  }
+
   mapSettings->setExtent( currentExtent );
 }
 
@@ -310,22 +326,21 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
-  QgsRectangle geomBbox = geom.boundingBox();
+  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
+  // Cut the geometry to current extent
+  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
 
-  if ( currentExtent.contains( geomBbox ) )
+  if ( !intersectedGeom.isEmpty() )
   {
-    // Keep the geometry as is
-    target = QgsPoint( geomBbox.center() );
+    target = QgsPoint( intersectedGeom.boundingBox().center() );
   }
   else
   {
-    // Cut the geometry to current extent
-    QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-    QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
-    QgsRectangle bbox = intersectedGeom.boundingBox();
-    target = QgsPoint( bbox.center() );
+    // The geometry is outside the current viewed extent
+    setExtentToGeom( geom, mapSettings );
+    target = QgsPoint( geom.boundingBox().center() );
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
@@ -1065,7 +1080,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle, bool isMultiEdit )
 {
   QString widgetName = widgetNameIn.toLower();
 
@@ -1116,7 +1131,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "externalresource" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
   {
@@ -1128,6 +1146,9 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+
     // check if we should use gallery or word tags
     bool useGallery = false;
 
@@ -1164,7 +1185,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relationreference" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
   }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
@@ -2246,7 +2270,7 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
   return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
-bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
+bool InputUtils::isLayerVisible( QgsMapLayer *layer, QgsProject *project )
 {
   if ( !layer || !layer->isValid() || !project )
     return false;
@@ -2271,20 +2295,6 @@ bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *projec
 
   QString trackingLayerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString() );
   return layer->id() == trackingLayerId;
-}
-
-bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
-{
-  if ( !layer || !layer->isValid() || !project )
-    return false;
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer &&
-           !vectorLayer->readOnly() &&
-           layerHasGeometry( vectorLayer ) &&
-           layerVisible( layer, project ) &&
-           !isPositionTrackingLayer( layer, project ) );
 }
 
 QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )

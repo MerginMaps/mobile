@@ -30,7 +30,7 @@ Item {
   property var relationToApply
   property var controllerToApply
 
-  property alias formState: featureForm.state // add, edit or ReadOnly
+  property alias formState: featureForm.state // add, edit, readOnly or multiEdit
   property alias panelState: statesManager.state
 
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
@@ -42,6 +42,7 @@ Item {
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
+  signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
   signal previewPanelChanged( var panelHeight )
 
@@ -148,6 +149,10 @@ Item {
       controller: MM.AttributePreviewController { project: root.project; featureLayerPair: root.featureLayerPair }
 
       width: root.width
+
+      onSelectMoreClicked: function( feature ) {
+        root.multiSelectFeature( feature )
+      }
 
       onStakeoutClicked: function( feature ) {
         root.stakeoutFeature( feature )

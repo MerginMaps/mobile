@@ -7,30 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTACTIVEPROJECT_H
-#define TESTACTIVEPROJECT_H
+#include "mixedattributevalue.h"
 
-#include <QObject>
-#include <merginapi.h>
 
-class TestActiveProject : public QObject
+MixedAttributeValue::MixedAttributeValue()
 {
-    Q_OBJECT
-  public:
-    explicit TestActiveProject( MerginApi *api );
-    ~TestActiveProject();
 
-  private slots:
-    void init();
-    void cleanup();
-
-    void testProjectValidations();
-    void testProjectLoadFailure();
-    void testPositionTrackingFlag();
-    void testRecordingAllowed();
-
-  private:
-    MerginApi *mApi;
-};
-
-#endif // TESTACTIVEPROJECT_H
+}

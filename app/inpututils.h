@@ -84,7 +84,18 @@ class InputUtils: public QObject
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
+     * Set the extent around a geometry.
+     * The extent is also zoomed out of the actual geometry using a buffer of 18% around their bounding box.
+     * In the case the geometry have no bounding box (e.g a point geometry) The extent is simply panned to the geometry
+     *
+     * Assume \a geom and \a mapSetting are the same CRS
+     */
+    Q_INVOKABLE void setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
+
+    /**
      * Returns the center point of the \a geom currently displayed on screen
+     *
+     * Fall back to \see setExtentToGeom in case we don't find any geometry relevant
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
@@ -393,7 +404,7 @@ class InputUtils: public QObject
       * \param config map coming from QGIS describing this field
       * \param field qgsfield instance of this field
       */
-    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation(), const QString &editorTitle = QString() );
+    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation(), const QString &editorTitle = QString(), bool isMultiEdit = false );
 
     /**
      * \copydoc QgsCoordinateFormatter::format()
@@ -593,7 +604,7 @@ class InputUtils: public QObject
     /**
      * filters if input layer is visible in current map theme
      */
-    static bool layerVisible( QgsMapLayer *layer, QgsProject *project );
+    static bool isLayerVisible( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns if layer is not NoGeo and not Unknown
@@ -604,11 +615,6 @@ class InputUtils: public QObject
      * Returns true if the layer is the position tracking layer
      */
     Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
-
-    /**
-     * Returns true if the layer allows recording
-     */
-    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns QgsMapLayer pointer for given layer name and project.

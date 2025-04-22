@@ -41,6 +41,8 @@ Item {
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
+  property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
+
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -65,6 +67,8 @@ Item {
   signal accuracyButtonClicked()
 
   signal measureStarted()
+
+  signal multiSelectStarted()
 
   signal localChangesPanelRequested()
 
@@ -94,6 +98,9 @@ Item {
     },
     State {
       name: "measure"
+    },
+    State {
+      name: "multiSelect"
     },
     State {
       name: "inactive" // ignores touch input
@@ -156,6 +163,12 @@ Item {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
         root.measureStarted()
+        break
+      }
+
+      case "multiSelect": {
+        root.showInfoTextMessage( qsTr( "Tap on features to add or remove from the selection" ) )
+        root.multiSelectStarted()
         break
       }
 
@@ -222,12 +235,16 @@ Item {
     }
 
     onClicked: function( point ) {
-      if ( root.state === "view" )
+      if ( root.state === "view" || root.state === "multiSelect" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = identifyKit.identifyOne( screenPoint )
 
-        if ( pair.valid )
+        if ( root.state === "multiSelect" )
+        {
+          multiEditManager.toggleSelect( pair )
+        }
+        else if ( pair.valid )  // root.state === "view"
         {
           root.highlightPair( pair )
           root.featureIdentified( pair )
@@ -527,10 +544,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" || root.state === "measure" )
+        if ( root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -814,11 +831,10 @@ Item {
 
       onClosed: activeLayerPanelLoader.active = false
 
-      list.model: MM.LayersProxyModel {
+      list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        qgsProject: __activeProject.qgsProject
-        modelType: MM.LayersProxyModel.ActiveLayerSelection
+        exceptedLayerIds: [__activeProject.positionTrackingLayerId()]
         model: MM.LayersModel {}
       }
 
@@ -918,6 +934,43 @@ Item {
             moreToolsMenu.close()
           }
         }
+      }
+    }
+  }
+
+
+  Loader {
+    id: multiEditLoader
+
+    anchors.fill: mapCanvas
+
+    active: root.state === "multiSelect"
+
+    sourceComponent: multiEditComponent
+  }
+
+  Component {
+    id: multiEditComponent
+
+    Item {
+      property alias manager: multiEditManager
+
+      MM.MultiEditManager {
+        id: multiEditManager
+
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      MMHighlight {
+        id: multiEditHighlight
+
+        height: mapCanvas.height
+        width: mapCanvas.width
+        visible: root.state === "multiSelect"
+
+        markerType: MMHighlight.MarkerTypes.Circle
+        mapSettings: mapCanvas.mapSettings
+        geometry: multiEditManager.geometry
       }
     }
   }
@@ -1183,6 +1236,15 @@ Item {
     state = "measure"
   }
 
+  function startMultiSelect( featurepair ) {
+    state = "multiSelect"
+    multiEditManager.initialize( featurepair )
+  }
+
+  function finishMultiSelect() {
+    state = "view"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1265,6 +1327,7 @@ Item {
         break
       }
 
+      case "multiSelect":
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position

@@ -46,7 +46,7 @@
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginprojectstatusmodel.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
 #include "merginuserauth.h"
@@ -91,12 +91,16 @@
 #include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
+#include "staticfeaturesmodel.h"
+#include "layerfeaturesmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
 #include "snaputils.h"
 #include "guidelinecontroller.h"
+#include "multieditmanager.h"
+#include "mixedattributevalue.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -325,6 +329,8 @@ void initDeclarative()
   qmlRegisterType< MapThemesModel >( "mm", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "mm", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "mm", 1, 0, "FeaturesModel" );
+  qmlRegisterType< StaticFeaturesModel >( "mm", 1, 0, "StaticFeaturesModel" );
+  qmlRegisterType< LayerFeaturesModel >( "mm", 1, 0, "LayerFeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "mm", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "mm", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
@@ -332,6 +338,7 @@ void initDeclarative()
   qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
+  qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );
@@ -350,8 +357,10 @@ void initDeclarative()
   qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
 
   // layers model
-  qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
+  qmlRegisterType<RecordingLayersProxyModel>( "mm", 1, 0, "RecordingLayersProxyModel" );
   qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
+
+  QMetaType::registerConverter( &MixedAttributeValue::toString );
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -731,15 +740,50 @@ int main( int argc, char *argv[] )
     style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
   }
 #elif defined( Q_OS_IOS )
-  auto safeAreaInsets = iosUtils.getSafeArea();
 
-  if ( safeAreaInsets.length() == 4 )
+  //
+  // After migration to Qt 6.8.3, we can no longer reliably read the safe area on app startup (on iOS).
+  // It appears the UIWindow is not fully initialized, returning zero safe area insets.
+  // However, the window is correctly initialized once the event loop begins processing events.
+  // Therefore, we delay the safe area retrieval until after the event loop starts.
+  // This is a temporary workaround and might be replaced in the future by
+  // the more robust approach described in https://www.qt.io/blog/expanded-client-areas-and-safe-areas-in-qt-6.9.
+  //
+
+  const int SAFE_AREA_REFRESH_DELAY_MS = 10;
+
+  QTimer::singleShot( SAFE_AREA_REFRESH_DELAY_MS, &lambdaContext, [&iosUtils, &style]()
   {
-    style->setSafeAreaTop( safeAreaInsets[0] );
-    style->setSafeAreaRight( safeAreaInsets[1] );
-    style->setSafeAreaBottom( safeAreaInsets[2] );
-    style->setSafeAreaLeft( safeAreaInsets[3] );
-  }
+    auto safeAreaInsets = iosUtils.getSafeArea();
+
+    if ( safeAreaInsets.length() == 4 )
+    {
+      style->setSafeAreaTop( safeAreaInsets[0] );
+      style->setSafeAreaRight( safeAreaInsets[1] );
+      style->setSafeAreaBottom( safeAreaInsets[2] );
+      style->setSafeAreaLeft( safeAreaInsets[3] );
+    }
+  } );
+
+  //
+  // Workaround for Qt bug <link> on iOS.
+  // ApplicationWindow's height and width are not properly updated (updated without signals),
+  // causing visual layout issues throughout the app.
+  // Forcing the screen to portrait mode triggers a recalculation and repaint of visual items,
+  // resolving the layout problems.
+  //
+  // Therefore, as a temporary fix, we rotate the screen to portrait mode on iOS when the app
+  // starts in landscape mode. It's crucial to execute this code after a short delay using
+  // QTimer, ensuring that the UIScene has been properly initialized.
+  //
+
+  const int SHORT_STARTUP_DELAY = 1;
+
+  QTimer::singleShot( SHORT_STARTUP_DELAY, &lambdaContext, [&iosUtils]()
+  {
+    iosUtils.rotateScreenToPortrait();
+  } );
+
 #endif
 
   // Set simulated position for desktop builds

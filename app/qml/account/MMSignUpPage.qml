@@ -69,7 +69,7 @@ MMPage {
 
         width: parent.width
 
-        title: qsTr( "Email" )
+        title: qsTr( "Work email" )
         textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
       }
 

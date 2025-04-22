@@ -54,6 +54,7 @@ QVariant LayersModel::data( const QModelIndex &index, int role ) const
       else return MMStyle::rasterLayerNoColorOverlayIcon();
     }
     case LayerIdRole: return layer->id();
+    case LayerVisible: return ( mProject && InputUtils::isLayerVisible( layer, mProject ) );
   }
   return QVariant();
 }

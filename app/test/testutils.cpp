@@ -220,25 +220,25 @@ void TestUtils::testLayerVisible()
   project->clear();
 
   // null layer => should be false
-  QCOMPARE( InputUtils::layerVisible( nullptr, project ), false );
+  QCOMPARE( InputUtils::isLayerVisible( nullptr, project ), false );
 
   // valid memory layer
   QgsVectorLayer *layer = new QgsVectorLayer( "LineString?crs=EPSG:4326", "VisibleLineLayer", "memory" );
   QVERIFY( layer->isValid() );
 
   // won't appear in the layer tree => false
-  QCOMPARE( InputUtils::layerVisible( layer, project ), false );
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), false );
 
   // added to project => true
   project->addMapLayer( layer );
-  QCOMPARE( InputUtils::layerVisible( layer, project ), true );
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), true );
 
   // hide layer => false
   QgsLayerTree *root = project->layerTreeRoot();
   QgsLayerTreeLayer *layerTree = root->findLayer( layer );
   QVERIFY( layerTree );
   layerTree->setItemVisibilityChecked( false );
-  QCOMPARE( InputUtils::layerVisible( layer, project ), false );
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), false );
 
   delete project;
 }
@@ -260,45 +260,6 @@ void TestUtils::testIsPositionTrackingLayer()
   // not tracking layer ID => false
   project->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString( "some-other-id" ) );
   QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), false );
-
-  delete project;
-}
-
-void TestUtils::testRecordingAllowed()
-{
-  QCOMPARE( InputUtils::recordingAllowed( nullptr, nullptr ), false );
-
-  QgsProject *project = new QgsProject();
-
-  //valid vector layer => true
-  QgsVectorLayer *validLayer = new QgsVectorLayer( "Polygon?crs=EPSG:4326", "PolygonLayer", "memory" );
-  project->addMapLayer( validLayer );
-  QCOMPARE( InputUtils::recordingAllowed( validLayer, project ), true );
-
-  // not visible => false
-  QgsLayerTreeLayer *layerNode = project->layerTreeRoot()->findLayer( validLayer );
-  QVERIFY( layerNode );
-  layerNode->setItemVisibilityChecked( false );
-  QCOMPARE( InputUtils::recordingAllowed( validLayer, project ), false );
-  layerNode->setItemVisibilityChecked( true ); // restore
-
-  // read-only layer => false
-  validLayer->setReadOnly( true );
-  QCOMPARE( InputUtils::recordingAllowed( validLayer, project ), false );
-  validLayer->setReadOnly( false ); // restore
-
-  // noGeo => false
-  QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeomLayer", "memory" );
-  project->addMapLayer( noGeomLayer );
-  QCOMPARE( InputUtils::recordingAllowed( noGeomLayer, project ), false );
-
-  // position tracking layer => false
-  project->writeEntry( "Mergin", "PositionTracking/TrackingLayer", validLayer->id() );
-  QCOMPARE( InputUtils::recordingAllowed( validLayer, project ), false );
-
-  // restore valid layer => true
-  project->writeEntry( "Mergin", "PositionTracking/TrackingLayer", QString() );
-  QCOMPARE( InputUtils::recordingAllowed( validLayer, project ), true );
 
   delete project;
 }

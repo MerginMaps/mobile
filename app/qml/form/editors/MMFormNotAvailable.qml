@@ -7,30 +7,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTACTIVEPROJECT_H
-#define TESTACTIVEPROJECT_H
+import QtQuick
+import QtQuick.Controls
 
-#include <QObject>
-#include <merginapi.h>
+import "../../components/private" as MMPrivateComponents
 
-class TestActiveProject : public QObject
-{
-    Q_OBJECT
-  public:
-    explicit TestActiveProject( MerginApi *api );
-    ~TestActiveProject();
+/*
+ * A disabled widget to replace relation/relation reference widgets
+ * when multi-editing
+ */
 
-  private slots:
-    void init();
-    void cleanup();
+MMPrivateComponents.MMBaseSingleLineInput {
+  id: root
 
-    void testProjectValidations();
-    void testProjectLoadFailure();
-    void testPositionTrackingFlag();
-    void testRecordingAllowed();
+  property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
+  property string _fieldTitle: parent.fieldTitle
 
-  private:
-    MerginApi *mApi;
-};
+  placeholderText: qsTr( "Not available while editing multiple features" )
 
-#endif // TESTACTIVEPROJECT_H
+  readOnly: true
+  shouldShowValidation: false
+
+  title: _fieldShouldShowTitle ? _fieldTitle : ""
+}

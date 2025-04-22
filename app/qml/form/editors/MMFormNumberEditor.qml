@@ -26,6 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -76,12 +77,14 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField {
-    text: root._fieldValue === undefined || root._fieldValueIsNull ? '' : root._fieldValue
+    text: root._fieldValue === undefined || root._fieldValueIsNull || _fieldHasMixedValues ? '' : root._fieldValue
+    placeholderText: _fieldHasMixedValues ? _fieldValue : ""
+    horizontalAlignment: _fieldHasMixedValues ? TextInput.AlignHCenter : TextInput.AlignLeft
 
     clip: true
 
     // AlignHCenter with optional suffix
-    leftPadding: Math.max( 0, ( textField.width / 2 - textField.contentWidth / 2 ) - ( internal.suffix ? suffixText.width / 2 : 0 ) )
+    leftPadding: placeholderText !== "" ? 0 : Math.max( 0, ( textField.width / 2 - textField.contentWidth / 2 ) - ( internal.suffix ? suffixText.width / 2 : 0 ) )
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
 

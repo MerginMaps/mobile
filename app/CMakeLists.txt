@@ -11,6 +11,7 @@ set(MM_SRCS
     attributes/attributetabmodel.cpp
     attributes/attributetabproxymodel.cpp
     attributes/fieldvalidator.cpp
+    attributes/mixedattributevalue.cpp
     attributes/rememberattributescontroller.cpp
     layer/layerdetaildata.cpp
     layer/layerdetaillegendimageprovider.cpp
@@ -64,10 +65,12 @@ set(MM_SRCS
     inpututils_p.cpp
     invitationsmodel.cpp
     invitationsproxymodel.cpp
+    layerfeaturesmodel.cpp
     layersmodel.cpp
-    layersproxymodel.cpp
+    recordinglayersproxymodel.cpp
     main.cpp
     mapthemesmodel.cpp
+    multieditmanager.cpp
     notificationmodel.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
@@ -76,6 +79,7 @@ set(MM_SRCS
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
     snaputils.cpp
+    staticfeaturesmodel.cpp
     streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
@@ -94,6 +98,7 @@ set(MM_HDRS
     attributes/attributetabmodel.h
     attributes/attributetabproxymodel.h
     attributes/fieldvalidator.h
+    attributes/mixedattributevalue.h
     attributes/rememberattributescontroller.h
     layer/layerdetaildata.h
     layer/layerdetaillegendimageprovider.h
@@ -148,9 +153,11 @@ set(MM_HDRS
     inpututils_p.h
     invitationsmodel.h
     invitationsproxymodel.h
+    layerfeaturesmodel.h
     layersmodel.h
-    layersproxymodel.h
+    recordinglayersproxymodel.h
     mapthemesmodel.h
+    multieditmanager.h
     notificationmodel.h
     projectsmodel.h
     projectsproxymodel.h
@@ -159,6 +166,7 @@ set(MM_HDRS
     relationreferencefeaturesmodel.h
     scalebarkit.h
     snaputils.h
+    staticfeaturesmodel.h
     streamingintervaltype.h
     synchronizationerror.h
     synchronizationmanager.h
