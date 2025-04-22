@@ -1149,7 +1149,9 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[0] );
 
   QVERIFY( !mapTool.hasValidGeometry() );
+  qDebug() << "mapTool.recordedGeometry().constGet()->nCoordinates()" << mapTool.recordedGeometry().constGet()->nCoordinates();
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 1 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
