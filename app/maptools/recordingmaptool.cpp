@@ -164,8 +164,19 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     if ( r->nCoordinates() < 2 )
     {
+      if ( mLastRecordedPoint == pointToAdd )
+      {
+        // Avoid inserting duplicated vertex
+        return;
+      }
       r->addVertex( pointToAdd );
       r->close();
+      
+      mLastRecordedPoint = pointToAdd;
+
+      mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
+      emit recordedGeometryChanged( mRecordedGeometry );
+      return;
     }
     else
     {
