@@ -58,7 +58,7 @@ jobs:
       - name: Install brew deps
         run: |
           brew uninstall cmake
-          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl create-dmg
 
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
@@ -170,16 +170,6 @@ jobs:
 
           ninja  
           ninja install
-
-      - name: Get TimeStamp
-        id: time
-        uses: josStorer/get-current-time@v2.0.2
-        with:
-          format: 'YYYYMMDD'
-
-      - name: Prepare build env
-        run: |
-          brew install create-dmg
 
       - name: Create dmg
         run: |

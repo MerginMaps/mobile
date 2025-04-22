@@ -1,7 +1,7 @@
 # GPLv2 Licence
 find_path(QGIS_INCLUDE_DIR qgis.h PATH_SUFFIXES qgis)
 find_library(QGIS_CORE_LIBRARY NAMES qgis_core)
-find_path(QGIS_RESOURCE_DIR qgis.db PATH_SUFFIXES qgis/resources PATH)
+find_path(QGIS_RESOURCE_DIR qgis.db PATH_SUFFIXES share/qgis/resources PATH)
 
 set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR QGIS_RESOURCE_DIR)
 set(QGIS_PROVIDERS_LIST
