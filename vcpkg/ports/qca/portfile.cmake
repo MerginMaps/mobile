@@ -17,9 +17,9 @@ vcpkg_from_github(
         0001-fix-path-for-vcpkg.patch
         0002-fix-build-error.patch
         0003-Define-NOMINMAX-for-botan-plugin-with-MSVC.patch
-        ios.patch
-        connect_fix.patch
 )
+
+vcpkg_find_acquire_program(PKGCONFIG)
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
   set(QCA_FEATURE_INSTALL_DIR_DEBUG ${CURRENT_PACKAGES_DIR}/debug/bin/Qca)
@@ -35,6 +35,7 @@ endif()
 # So we do it here:
 message(STATUS "Importing certstore")
 file(REMOVE "${SOURCE_PATH}/certs/rootcerts.pem")
+
 # Using file(DOWNLOAD) to use https
 file(DOWNLOAD https://raw.githubusercontent.com/mozilla/gecko-dev/master/security/nss/lib/ckfw/builtins/certdata.txt
     "${CURRENT_BUILDTREES_DIR}/cert/certdata.txt"
@@ -47,26 +48,30 @@ vcpkg_execute_required_process(
 )
 message(STATUS "Importing certstore done")
 
-if(VCPKG_CROSSCOMPILING)
-   list(APPEND QCA_OPTIONS -DQT_HOST_PATH=${CURRENT_HOST_INSTALLED_DIR})
-   list(APPEND QCA_OPTIONS -DQT_ADDITIONAL_PACKAGES_PREFIX_PATH=${CURRENT_HOST_INSTALLED_DIR})
-   list(APPEND QCA_OPTIONS -DQT_HOST_PATH_CMAKE_DIR:PATH=${CURRENT_HOST_INSTALLED_DIR}/share)
+set(PLUGINS logger softstore wincrypto)
+if("botan" IN_LIST FEATURES)
+    list(APPEND PLUGINS botan)
 endif()
- 
-list(APPEND QCA_OPTIONS -DWITH_gnupg_PLUGIN=no)
+if ("gnupg" IN_LIST FEATURES)
+    list(APPEND PLUGINS gnupg)
+endif()
+if ("ossl" IN_LIST FEATURES)
+    list(APPEND PLUGINS ossl)
+endif()
+
 # Configure and build
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        -DBUILD_WITH_QT6=ON
         -DUSE_RELATIVE_PATHS=ON
+        "-DBUILD_PLUGINS=${PLUGINS}"
         -DBUILD_TESTS=OFF
         -DBUILD_TOOLS=OFF
+        -DBUILD_WITH_QT6=ON
         -DQCA_SUFFIX=OFF
         -DQCA_FEATURE_INSTALL_DIR=share/qca/mkspecs/features
         -DOSX_FRAMEWORK=OFF
-        -DQT6=ON
-        ${QCA_OPTIONS}
+        "-DPKG_CONFIG_EXECUTABLE=${PKGCONFIG}"
     OPTIONS_DEBUG
         -DQCA_PLUGINS_INSTALL_DIR=${QCA_FEATURE_INSTALL_DIR_DEBUG}
     OPTIONS_RELEASE
@@ -91,5 +96,7 @@ file(REMOVE_RECURSE
     "${CURRENT_PACKAGES_DIR}/debug/share"
 )
 
+vcpkg_fixup_pkgconfig()
+
 # Handle copyright
-file(INSTALL "${SOURCE_PATH}/COPYING" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/COPYING")

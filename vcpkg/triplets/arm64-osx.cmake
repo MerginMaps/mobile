@@ -8,9 +8,10 @@ set(VCPKG_BUILD_TYPE release)
 
 if(DEFINED ENV{DEPLOYMENT_TARGET})
   set(VCPKG_OSX_DEPLOYMENT_TARGET $ENV{DEPLOYMENT_TARGET})
+else()
+    message(FATAL_ERROR "DEPLOYMENT_TARGET not defined as env variable")
 endif()
 # See https://github.com/microsoft/vcpkg/issues/10038
 set(VCPKG_C_FLAGS -mmacosx-version-min=${VCPKG_OSX_DEPLOYMENT_TARGET})
 set(VCPKG_CXX_FLAGS -mmacosx-version-min=${VCPKG_OSX_DEPLOYMENT_TARGET})
 
-set(VCPKG_ENV_PASSTHROUGH Qt6_DIR) # needed by port/qt6/vcpkg-cmake-wrapper.cmake

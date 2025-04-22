@@ -1,5 +1,5 @@
 # GPLv2 Licence
-find_path(QGIS_INCLUDE_DIR qgis.h)
+find_path(QGIS_INCLUDE_DIR qgis.h PATH_SUFFIXES qgis)
 
 find_library(QGIS_CORE_LIBRARY NAMES qgis_core)
 

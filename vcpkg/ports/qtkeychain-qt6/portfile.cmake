@@ -8,10 +8,23 @@ vcpkg_from_github(
     HEAD_REF master
 )
 
-# Opportunity to build without dependency on qt5-tools/qt5-declarative
-set(BUILD_TRANSLATIONS OFF)
-if("translations" IN_LIST FEATURES)
-    set(BUILD_TRANSLATIONS ON)
+if(VCPKG_CROSSCOMPILING)
+   list(APPEND QTKEYCHAIN_OPTIONS -DQT_HOST_PATH=${CURRENT_HOST_INSTALLED_DIR})
+   list(APPEND QTKEYCHAIN_OPTIONS -DQT_HOST_PATH_CMAKE_DIR:PATH=${CURRENT_HOST_INSTALLED_DIR}/share)
+   # remove when https://github.com/microsoft/vcpkg/pull/16111 is merged
+   if(VCPKG_TARGET_ARCHITECTURE STREQUAL arm64 AND VCPKG_TARGET_IS_WINDOWS)
+       list(APPEND QTKEYCHAIN_OPTIONS -DCMAKE_CROSSCOMPILING=ON -DCMAKE_SYSTEM_PROCESSOR:STRING=ARM64 -DCMAKE_SYSTEM_NAME:STRING=Windows)
+   endif()
+endif()
+
+list(APPEND QTKEYCHAIN_OPTIONS -DBUILD_TEST_APPLICATION:BOOL=OFF)
+list(APPEND QTKEYCHAIN_OPTIONS -DLIBSECRET_SUPPORT:BOOL=OFF)
+
+# FIXME: Why does build translations fail on arm64-windows?
+if (VCPKG_TARGET_IS_WINDOWS AND VCPKG_TARGET_ARCHITECTURE STREQUAL arm64)
+     list(APPEND QTKEYCHAIN_OPTIONS -DBUILD_TRANSLATIONS:BOOL=OFF)
+else()
+     list(APPEND QTKEYCHAIN_OPTIONS -DBUILD_TRANSLATIONS:BOOL=ON)
 endif()
 
 vcpkg_cmake_configure(
@@ -19,15 +32,10 @@ vcpkg_cmake_configure(
     SOURCE_PATH ${SOURCE_PATH}
     OPTIONS
         -DBUILD_WITH_QT6=ON
-        -DBUILD_TEST_APPLICATION=OFF
-        -DBUILD_TRANSLATIONS=${BUILD_TRANSLATIONS}
-        -DBUILD_TOOLS=OFF
-        -DWITH_nss_PLUGIN=OFF
-        -DWITH_pkcs11_PLUGIN=OFF
-        -DLIBSECRET_SUPPORT=OFF
+         ${QTKEYCHAIN_OPTIONS}
 )
-
 vcpkg_cmake_install()
+
 vcpkg_copy_pdbs()
 vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/Qt6Keychain PACKAGE_NAME Qt6Keychain)
 
