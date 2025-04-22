@@ -24,23 +24,15 @@ env:
   VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
   XC_VERSION: ${{ '16.2' }}
   DEPLOYMENT_TARGET: '11.0'
+  TRIPLET: arm64-osx
   
 concurrency:
   group: ci-${{github.ref}}-macos
   cancel-in-progress: true
 
-jobs:           
+jobs:
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    strategy:
-        fail-fast: false
-        matrix:
-          include:
-            - os: 
-              triplet: arm64-osx
-              deployment-target: "11.0"
-              target-arch: arm64
-              
     runs-on: macos-15
     steps:
       - name: Checkout
@@ -85,18 +77,8 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ccache-${{ matrix.triplet }}
+          key: ccache-${{ env.TRIPLET }}
           max-size: 200M
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: ${{ env.QT_VERSION }}
-          target: desktop
-          dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
-          cache: true
-          cache-key-prefix: qtcache-${{ matrix.triplet }}
 
       - name: Install vcpkg
         shell: bash
@@ -126,7 +108,6 @@ jobs:
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
              -DVCPKG_TARGET_TRIPLET=arm64-osx \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
@@ -157,7 +138,6 @@ jobs:
           cmake \
              -DCMAKE_BUILD_TYPE=Release \
              -DVCPKG_TARGET_TRIPLET=arm64-osx \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
              -DUSE_SERVER_API_KEY=TRUE \
