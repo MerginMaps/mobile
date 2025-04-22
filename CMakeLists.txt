@@ -345,6 +345,7 @@ endif ()
 # RESOURCES
 # ########################################################################################
 # TODO - this would need to rething the approach so the assets are in binary folder 
+file(MAKE_DIRECTORY app/android/assets/qgis-data/resources)
 file (COPY ${QGIS_RESOURCE_DIR}/qgis.db DESTINATION app/android/assets/qgis-data/resources/)
 file (COPY ${QGIS_RESOURCE_DIR}/srs.db DESTINATION app/android/assets/qgis-data/resources/)
 file (COPY ${PROJ_DIR} DESTINATION app/android/assets/qgis-data/proj 
