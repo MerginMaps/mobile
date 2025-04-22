@@ -1311,6 +1311,12 @@ void MerginApi::registrationFinished( const QString &login, const QString &passw
         emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
         emit notifyError( tr( "Registration failed" ) );
       }
+      else if ( serverErrorCode == "ExistingEmail" )
+      {
+        const QString msg = tr( "This email address is already registered" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
+        emit notifyError( tr( "Registration failed" ) );
+      }
       else if ( serverErrorCode == "InvalidPassword" )
       {
         const QString msg = tr( "Password not strong enough!%1"
