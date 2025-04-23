@@ -41,18 +41,18 @@
         <translation>Belső (GPS)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="214"/>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="228"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="220"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="234"/>
         <source>No location permissions</source>
         <translation>Nincs engedélyezve a helyzetmeghatározás</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="230"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
         <source>Fused location not available</source>
         <translation>Az egyesített helyzetmeghatározás nem érhető el</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
     </message>
@@ -162,7 +162,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="164"/>
+        <location filename="../featuresmodel.cpp" line="69"/>
         <source>Unknown title</source>
         <translation>Ismeretlen cím</translation>
     </message>
@@ -275,52 +275,52 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>%1 évvel ezelőtt </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1500"/>
+        <location filename="../inpututils.cpp" line="1524"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>képernyő felbontás: %1x%2 pixel
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1501"/>
+        <location filename="../inpututils.cpp" line="1525"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>képernyő DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1502"/>
+        <location filename="../inpututils.cpp" line="1526"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>képernyő méret: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1503"/>
+        <location filename="../inpututils.cpp" line="1527"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>jelentett eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1504"/>
+        <location filename="../inpututils.cpp" line="1528"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>számított eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1505"/>
+        <location filename="../inpututils.cpp" line="1529"/>
         <source>used dp scale: %1</source>
         <translation>használt dp skála: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2034"/>
+        <location filename="../inpututils.cpp" line="2058"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Minden részhez legalább %1 pontot kell hozzáadnia.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2038"/>
+        <location filename="../inpututils.cpp" line="2062"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Legalább %1 pontot kell hozzáadnia.</translation>
     </message>
@@ -805,30 +805,43 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
+    <name>MMFormNotAvailable</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormNotAvailable.qml" line="26"/>
+        <source>Not available while editing multiple features</source>
+        <translation>Nem érhető el több elem egyidejű szerkesztésekor</translation>
+    </message>
+</context>
+<context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="106"/>
+        <location filename="../qml/form/MMFormPage.qml" line="109"/>
         <source>New feature</source>
         <translation>Új elem</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="107"/>
-        <location filename="../qml/form/MMFormPage.qml" line="210"/>
+        <location filename="../qml/form/MMFormPage.qml" line="110"/>
+        <location filename="../qml/form/MMFormPage.qml" line="214"/>
         <source>Edit feature</source>
         <translation>Elem szerkesztése</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="223"/>
+        <location filename="../qml/form/MMFormPage.qml" line="111"/>
+        <source>Edit selected features</source>
+        <translation>Kiválasztott elemek szerkesztése</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/MMFormPage.qml" line="227"/>
         <source>Delete</source>
         <translation>Törlés</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="232"/>
+        <location filename="../qml/form/MMFormPage.qml" line="236"/>
         <source>Edit geometry</source>
         <translation>Geometria szerkesztése</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="444"/>
+        <location filename="../qml/form/MMFormPage.qml" line="450"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Nem sikerült elmenteni az elemet, ellenőrizze a kitöltendő mezőket</translation>
     </message>
@@ -864,12 +877,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="164"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
         <source> more</source>
         <translation>több</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="207"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
         <source>Add feature</source>
         <translation>Elem hozzáadása</translation>
     </message>
@@ -1282,102 +1295,107 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="110"/>
+        <location filename="../qml/map/MMMapController.qml" line="117"/>
         <source>Mark the geometry on the map and click record</source>
         <translation>Válassza ki a geometriát a térképen, és bökjön a rögzítésre</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="139"/>
+        <location filename="../qml/map/MMMapController.qml" line="146"/>
         <source>Create line to split the selected feature</source>
         <translation>Vonal létrehozása a kiválasztott elem felosztásához</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="156"/>
+        <location filename="../qml/map/MMMapController.qml" line="163"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation>Adjon hozzá pontokat a távolság méréséhez, zárja be az alakzatot a terület méréséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="553"/>
+        <location filename="../qml/map/MMMapController.qml" line="170"/>
+        <source>Tap on features to add or remove from the selection</source>
+        <translation>A kiválasztáshoz történő hozzáadáshoz vagy eltávolításához bökjön az elemekre</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="570"/>
         <source>streaming</source>
         <translation>streaming</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="629"/>
+        <location filename="../qml/map/MMMapController.qml" line="646"/>
         <source>Connecting to %1</source>
         <translation>Csatlakozás: %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="643"/>
+        <location filename="../qml/map/MMMapController.qml" line="660"/>
         <source>Connected, no position</source>
         <translation>Csatlakozva, nincs pozíció</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="647"/>
+        <location filename="../qml/map/MMMapController.qml" line="664"/>
         <source>Unknown accuracy</source>
         <translation>Ismeretlen pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="789"/>
+        <location filename="../qml/map/MMMapController.qml" line="806"/>
         <source>GPS currently unavailable</source>
         <translation>A GPS jelenleg nem elérhető</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="813"/>
+        <location filename="../qml/map/MMMapController.qml" line="830"/>
         <source>Choose Active Layer</source>
         <translation>Aktív réteg kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="848"/>
+        <location filename="../qml/map/MMMapController.qml" line="864"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>A projektben nem található semmilyen szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="849"/>
+        <location filename="../qml/map/MMMapController.qml" line="865"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Nézze meg, hogy lehet engedélyezni a digitalizálást a projektjében.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="875"/>
+        <location filename="../qml/map/MMMapController.qml" line="891"/>
         <source>More options</source>
         <translation>Több lehetőség</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="880"/>
+        <location filename="../qml/map/MMMapController.qml" line="896"/>
         <source>Split geometry</source>
         <translation>Geometria felosztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="892"/>
+        <location filename="../qml/map/MMMapController.qml" line="908"/>
         <source>Redraw geometry</source>
         <translation>Geometria újrarajzolása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="904"/>
+        <location filename="../qml/map/MMMapController.qml" line="920"/>
         <source>Streaming mode</source>
         <translation>Streaming mód</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="910"/>
+        <location filename="../qml/map/MMMapController.qml" line="926"/>
         <source>Active</source>
         <translation>Aktív</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1048"/>
+        <location filename="../qml/map/MMMapController.qml" line="1101"/>
         <source>Splitting done successfully</source>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1139"/>
+        <location filename="../qml/map/MMMapController.qml" line="1192"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1152"/>
+        <location filename="../qml/map/MMMapController.qml" line="1205"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1242"/>
+        <location filename="../qml/map/MMMapController.qml" line="1304"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -1648,12 +1666,22 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMPreviewDrawer</name>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="176"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="179"/>
         <source>Edit</source>
         <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="187"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="190"/>
+        <source>Open form</source>
+        <translation>Űrlap megnyitása</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="201"/>
+        <source>Select more</source>
+        <translation>Több kiválasztása</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="213"/>
         <source>Stake out</source>
         <translation>Áthelyezés</translation>
     </message>
@@ -1705,47 +1733,47 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
         <source>Synchronising project changes</source>
         <translation>Projekt változások szinkronizálása</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Kérjük, ne zárja be az alkalmazást.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
         <source>Stop</source>
         <translation>Állj</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
         <source>More options</source>
         <translation>Több lehetőség</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
         <source>Download</source>
         <translation>Letöltés</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
         <source>Synchronise project</source>
         <translation>Projekt szinkronizálása</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
         <source>Local changes</source>
         <translation>Helyi változások</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
         <source>Remove from device</source>
         <translation>Eltávolítás az eszközről</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
         <source>Upload</source>
         <translation>Feltöltés</translation>
     </message>
@@ -2071,6 +2099,29 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
+    <name>MMSelectionDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
+        <source>Select features</source>
+        <translation>Elemek kiválasztása</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="63"/>
+        <source>%n Feature(s) selected</source>
+        <translation><numerusform>%n elem kiválasztva</numerusform><numerusform>%n elem kiválasztva</numerusform></translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <source>on layer %1</source>
+        <translation>%1 rétegen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="88"/>
+        <source>Edit</source>
+        <translation>Szerkesztés</translation>
+    </message>
+</context>
+<context>
     <name>MMSettingsController</name>
     <message>
         <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
@@ -2260,8 +2311,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="72"/>
-        <source>Email</source>
-        <translation>E-mail</translation>
+        <source>Work email</source>
+        <translation>Munkahelyi e-mail</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="81"/>
@@ -2839,12 +2890,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Ismeretlen javítás</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="537"/>
+        <location filename="../main.cpp" line="546"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>A jelentés elküldve. Kérjük lépjen velünk kapcsolatba itt: %1</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="542"/>
+        <location filename="../main.cpp" line="551"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
@@ -2852,6 +2903,11 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginapi.cpp" line="41"/>
         <source>Synchronisation canceled</source>
         <translation>Szinkronizálás megszakítva</translation>
+    </message>
+    <message>
+        <location filename="../attributes/mixedattributevalue.h" line="33"/>
+        <source>* Mixed Values *</source>
+        <translation>* Vegyes értékek *</translation>
     </message>
 </context>
 <context>
@@ -2865,118 +2921,118 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="269"/>
+        <location filename="../qml/main.qml" line="278"/>
         <source>Sync</source>
         <translation>Szinkronizálás</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="279"/>
+        <location filename="../qml/main.qml" line="288"/>
         <source>Add</source>
         <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="297"/>
         <source>No editable layers found.</source>
         <translation>Nem található szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="303"/>
         <source>Layers</source>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="303"/>
+        <location filename="../qml/main.qml" line="312"/>
         <source>Projects</source>
         <translation>Projektek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="311"/>
+        <location filename="../qml/main.qml" line="320"/>
         <source>Zoom to project</source>
         <translation>Nagyítás a projektre</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="320"/>
+        <location filename="../qml/main.qml" line="329"/>
         <source>Map themes</source>
         <translation>Térkép témák</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="331"/>
+        <location filename="../qml/main.qml" line="340"/>
         <source>Position tracking</source>
         <translation>Pozíció követése</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="342"/>
+        <location filename="../qml/main.qml" line="351"/>
         <source>Measure</source>
         <translation>Mérés</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="348"/>
+        <location filename="../qml/main.qml" line="357"/>
         <source>Local changes</source>
         <translation>Helyi változások</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="357"/>
+        <location filename="../qml/main.qml" line="366"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="552"/>
-        <location filename="../qml/main.qml" line="560"/>
+        <location filename="../qml/main.qml" line="561"/>
+        <location filename="../qml/main.qml" line="569"/>
         <source>not tracking</source>
         <translation>nincs követés</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="779"/>
+        <location filename="../qml/main.qml" line="832"/>
         <source>Select feature</source>
         <translation>Elem kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="863"/>
+        <location filename="../qml/main.qml" line="916"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Valaki más is szinkronizál, később újra megpróbáljuk</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="867"/>
+        <location filename="../qml/main.qml" line="920"/>
         <source>Details</source>
         <translation>Részletek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="887"/>
+        <location filename="../qml/main.qml" line="940"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a szerverrel. Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="938"/>
+        <location filename="../qml/main.qml" line="991"/>
         <source>Up to date</source>
         <translation>Naprakész</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="996"/>
+        <location filename="../qml/main.qml" line="1049"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Probléma történt a projekt betöltése során. %1Nézze meg a részleteket%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="691"/>
+        <location filename="../qml/main.qml" line="744"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Az áthelyezés le van tiltva, mert a helymeghatározás nem elérhető!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="832"/>
+        <location filename="../qml/main.qml" line="885"/>
         <source>Successfully synchronised</source>
         <translation>Sikeresen szinkronizálva</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="870"/>
+        <location filename="../qml/main.qml" line="923"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hiba történt a szinkronizálás során, újra megpróbáljuk. Kattintson a további információért</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1017"/>
+        <location filename="../qml/main.qml" line="1070"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1042"/>
+        <location filename="../qml/main.qml" line="1095"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>
