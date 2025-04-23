@@ -179,7 +179,6 @@ function(copy_path basepath targetdir)
     endif()
 endfunction()
 
-
 if(VCPKG_TARGET_IS_WINDOWS)
     file(GLOB QGIS_TOOL_PATH ${CURRENT_PACKAGES_DIR}/bin/*${VCPKG_TARGET_EXECUTABLE_SUFFIX} ${CURRENT_PACKAGES_DIR}/*${VCPKG_TARGET_EXECUTABLE_SUFFIX})
     if(QGIS_TOOL_PATH)
