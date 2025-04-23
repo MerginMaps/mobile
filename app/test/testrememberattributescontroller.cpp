@@ -38,14 +38,12 @@ void TestRememberAttributesController::noFeatureTest()
   RememberAttributesController controller;
 
 
-  QCOMPARE( controller.rememberValuesAllowed(), false );
-  controller.setRememberValuesAllowed( true );
-  QCOMPARE( controller.rememberValuesAllowed(), true );
+  QCOMPARE( controller.mRememberValuesAllowed, false );
+  controller.mRememberValuesAllowed = true;
 
   QCOMPARE( controller.shouldRememberValue( nullptr, 1 ), false );
   QVariant val;
   QCOMPARE( controller.rememberedValue( nullptr, 1, val ), false );
-
 }
 
 void TestRememberAttributesController::storedFeatureTest()
@@ -55,9 +53,8 @@ void TestRememberAttributesController::storedFeatureTest()
   ActiveLayer activeLayer;
   LocalProjectsManager localProjectsManager( QDir::tempPath() );
   ActiveProject activeProject( appSettings, activeLayer, localProjectsManager, this );
-  controller.setActiveProject( &activeProject );
-
-  controller.setRememberValuesAllowed( true );
+  controller.mActiveProjectId = activeProject.localProject().id();
+  controller.mRememberValuesAllowed = true;
 
   std::unique_ptr<QgsVectorLayer> layer(
     new QgsVectorLayer( QStringLiteral( "Point?field=fldtxt:string&field=fldint:integer" ),
