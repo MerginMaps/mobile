@@ -16,7 +16,6 @@
 #include "rememberattributescontroller.h"
 #include "featurelayerpair.h"
 #include "coreutils.h"
-#include "activeproject.h"
 #include "qgsattributes.h"
 #include <QSettings>
 
@@ -28,61 +27,38 @@ RememberAttributesController::RememberAttributesController( QObject *parent )
 
 RememberAttributesController::~RememberAttributesController() = default;
 
-bool RememberAttributesController::rememberValuesAllowed() const
-{
-  QSettings settings;
-  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  const bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
-  settings.endGroup();
-  return reuseLastEnteredValues;
-}
-
-void RememberAttributesController::setRememberValuesAllowed( bool allowed )
-{
-  if ( rememberValuesAllowed() != allowed )
-  {
-    QSettings settings;
-    settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-    settings.setValue( "reuseLastEnteredValues", allowed );
-    settings.endGroup();
-    emit rememberValuesAllowedChanged();
-  }
-}
-
 void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 {
   const QgsVectorLayer *layer = pair.layer();
   const QgsFeature &feature = pair.feature();
 
-  if ( !layer )
+  if ( !layer || mActiveProjectId.isEmpty() )
     return;
-
-  QSettings settings;
 
   const QgsFields fields = layer->fields();
   for ( int fieldIndex = 0; fieldIndex < fields.count(); fieldIndex++ )
   {
     const QString fieldValueKey = keyForField( layer, fieldIndex );
-    bool enabled = false;
-    if ( rememberValuesAllowed() )
+    if ( mRememberValuesAllowed )
     {
-      if ( settings.contains( fieldValueKey ) )
-        enabled = true;
-    }
-    else
-    {
-      if ( layer->editFormConfig().reuseLastValue( fieldIndex ) )
-        enabled = true;
+      // if key does not exist, default to invalid QVariant, meaning "unchecked"
+      // if key value is valid, replace it with the new value from the feature
+      if ( mSettings.value( fieldValueKey, QVariant() ).isValid() )
+        mSettings.setValue( fieldValueKey, feature.attribute( fieldIndex ) );
+      // else do nothing, keep invalid value in settings, meaning "unchecked"
+
+      continue;
     }
 
-    if ( enabled )
+    // we still need to store the value when qgis says so, even if mRememberValuesAllowed is false
+    if ( enabledInQgis( layer, fieldIndex ) )
     {
-      const QVariant value = feature.attribute( fieldIndex );
-      settings.setValue( fieldValueKey, value );
+      mSettings.setValue( fieldValueKey, feature.attribute( fieldIndex ) );
     }
     else
     {
-      settings.remove( fieldValueKey );
+      // Let's tidy up and not keep unneeded settings entries
+      mSettings.remove( fieldValueKey );
     }
   }
 }
@@ -90,15 +66,21 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
 {
-  if ( !layer )
+  if ( !mRememberValuesAllowed || !layer )
     return false;
 
-  QSettings settings;
   const QString fieldValueKey = keyForField( layer, fieldIndex );
 
-  if ( rememberValuesAllowed() )
+  if ( mSettings.contains( fieldValueKey ) )
   {
-    return settings.contains( fieldValueKey );
+    if ( mSettings.value( fieldValueKey ).isValid() )
+      return true;
+    else
+      return false;
+  }
+  else if ( enabledInQgis( layer, fieldIndex ) )
+  {
+    return true;
   }
 
   return false;
@@ -106,32 +88,30 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
-  if ( !layer || !mActiveProject )
+  if ( !layer || mActiveProjectId.isEmpty() )
     return false;
 
-  bool changed = false;
-  QSettings settings;
   const QString fieldValueKey = keyForField( layer, fieldIndex );
 
-  // rememberValuesAllowed() is always true, this method is called when toggling the checkboxes
-  if ( settings.contains( fieldValueKey ) )
+  const bool wasChecked = mSettings.value( fieldValueKey, QVariant() ).isValid();
+  // mRrememberValuesAllowed is always true, this method is called when toggling the checkboxes
+
+  if ( shouldRemember )
   {
-    if ( !shouldRemember )
+    if ( !mSettings.value( fieldValueKey, QVariant() ).isValid() )
     {
-      settings.remove( fieldValueKey );
-      changed = true;
+      // we either have no value stored, or an invalid one, meaning "unchecked".
+      // Store a valid empty string, meaning "checked but no stored value yet"
+      mSettings.setValue( fieldValueKey, QString() );
     }
   }
   else
   {
-    if ( shouldRemember )
-    {
-      settings.setValue( fieldValueKey, QString() );
-      changed = true;
-    }
+    // we should not remember, set to invalid value, meaning "unchecked"
+    mSettings.setValue( fieldValueKey, QVariant() );
   }
 
-  return changed;
+  return wasChecked != shouldRemember;
 }
 
 bool RememberAttributesController::rememberedValue(
@@ -139,36 +119,33 @@ bool RememberAttributesController::rememberedValue(
   int fieldIndex,
   QVariant &value ) const
 {
-  if ( !layer || !mActiveProject )
+  if ( !layer || mActiveProjectId.isEmpty() )
     return false;
 
-  bool valueRead = false;
-  QSettings settings;
   const QString fieldValueKey = keyForField( layer, fieldIndex );
 
-  if ( settings.contains( fieldValueKey ) )
+  if ( !mRememberValuesAllowed )
   {
-    value = settings.value( fieldValueKey );
-    valueRead = true;
+    if ( !enabledInQgis( layer, fieldIndex ) )
+      return false;
   }
 
-  return valueRead;
-}
+  if ( !mSettings.value( fieldValueKey, QVariant() ).isValid() )
+  {
+    return false;
+  }
 
-ActiveProject *RememberAttributesController::activeProject() const
-{
-  return mActiveProject;
-}
+  value = mSettings.value( fieldValueKey );
 
-void RememberAttributesController::setActiveProject( ActiveProject *newActiveProject )
-{
-  if ( mActiveProject == newActiveProject )
-    return;
-  mActiveProject = newActiveProject;
-  emit activeProjectChanged( );
+  return true;
 }
 
 QString RememberAttributesController::keyForField( const QgsVectorLayer *layer, int fieldIndex ) const
 {
-  return QStringLiteral( "/%1/%2/%3/%4" ).arg( CoreUtils::CACHED_ATTRIBUTES_GROUP, mActiveProject->projectFullName(), layer->id(), QString::number( fieldIndex ) );
+  return QStringLiteral( "/%1/%2/%3/%4" ).arg( CoreUtils::CACHED_ATTRIBUTES_GROUP, mActiveProjectId, layer->id(), QString::number( fieldIndex ) );
+}
+
+bool RememberAttributesController::enabledInQgis( const QgsVectorLayer *layer, int fieldIndex ) const
+{
+  return layer->editFormConfig().reuseLastValue( fieldIndex );
 }

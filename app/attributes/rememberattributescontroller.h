@@ -18,8 +18,9 @@
 
 
 #include <QObject>
+#include <QString>
+#include <QSettings>
 
-class ActiveProject;
 class FeatureLayerPair;
 class QgsVectorLayer;
 
@@ -31,17 +32,14 @@ class  RememberAttributesController : public QObject
     Q_OBJECT
 
     //! Returns TRUE if remembering values is allowed
-    Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
+    Q_PROPERTY( bool rememberValuesAllowed MEMBER mRememberValuesAllowed )
 
     //! Provides context for creating project-specific settings keys
-    Q_PROPERTY( ActiveProject *activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
+    Q_PROPERTY( QString activeProjectId MEMBER mActiveProjectId )
 
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
-
-    bool rememberValuesAllowed() const;
-    void setRememberValuesAllowed( bool allowed );
 
     void storeFeature( const FeatureLayerPair &pair );
 
@@ -54,9 +52,6 @@ class  RememberAttributesController : public QObject
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
-    ActiveProject *activeProject() const;
-    void setActiveProject( ActiveProject *newActiveProject );
-
   signals:
     void rememberValuesAllowedChanged();
     void activeProjectChanged();
@@ -65,7 +60,14 @@ class  RememberAttributesController : public QObject
     // Helper method to retrieve settings value keys;
     QString keyForField( const QgsVectorLayer *layer, int fieldIndex ) const;
 
-    ActiveProject *mActiveProject = nullptr;
+    // Returns if remember values is enabled in QGIS form config
+    bool enabledInQgis( const QgsVectorLayer *layer, int fieldIndex ) const;
+
+    QString mActiveProjectId;
+    bool mRememberValuesAllowed = false;
+    QSettings mSettings;
+
+    friend class TestRememberAttributesController;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H
