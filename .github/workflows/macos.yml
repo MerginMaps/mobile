@@ -96,7 +96,7 @@ jobs:
           cd "${{ env.VCPKG_ROOT }}"
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
-          
+
       - name: Calculate build number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
