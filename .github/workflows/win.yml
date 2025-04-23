@@ -125,10 +125,7 @@ jobs:
           cd build-mm
 
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
-          
-          where.exe vcpkg
-          where.exe cmake
-          
+
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
