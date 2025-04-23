@@ -110,6 +110,8 @@ class CoreUtils
 
     static const QString QSETTINGS_APP_GROUP_NAME;
     static const QString CACHED_MAP_SETTINGS_GROUP;
+    static const QString LAYER_VISIBILITY_GROUP;
+    static const QString MAP_THEME_GROUP;
     /**
      * Returns available device storage
     */

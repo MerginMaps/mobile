@@ -365,7 +365,7 @@ void InputMapSettings::saveExtentToSettings()
 {
   QSettings settings;
   const QgsRectangle extent = this->extent();
-  qDebug() << "saving extent : " << extent.toString();;
+  qDebug() << " [ saveExtentToSettings ] saving extent : " << extent.toString();;
   settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_SETTINGS_GROUP + "/mapExtent", mProject->baseName() ) );
   settings.setValue( "extent", extent );
   settings.endGroup();
@@ -373,7 +373,7 @@ void InputMapSettings::saveExtentToSettings()
 
 void InputMapSettings::loadSavedExtent()
 {
-  qDebug() << "CALLED?:";
+  qDebug() << " [loadSavedExtent] called";
   QSettings settings;
   settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_SETTINGS_GROUP + "/mapExtent", mProject->baseName() ) );
   QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
