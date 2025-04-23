@@ -60,6 +60,7 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1.6.0
         with:
           xcode-version: ${{ env.XC_VERSION }}
+
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
