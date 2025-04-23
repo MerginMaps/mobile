@@ -171,7 +171,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       }
       r->addVertex( pointToAdd );
       r->close();
-      
+
       mLastRecordedPoint = pointToAdd;
 
       mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
