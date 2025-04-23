@@ -125,6 +125,8 @@ jobs:
           mkdir build-mm -ea 0
           cd build-mm
           
+          set PATH="%VCPKG_ROOT%;%PATH%"
+          
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
