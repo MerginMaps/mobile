@@ -61,7 +61,7 @@ jobs:
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd input/core/
+          cd mm/core/
           openssl \
             aes-256-cbc -d \
             -in merginsecrets.cpp.enc \
