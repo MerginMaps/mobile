@@ -205,7 +205,7 @@ jobs:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
         if: success()
         run: |
-          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-mm/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
 
