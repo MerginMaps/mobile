@@ -505,7 +505,7 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
 
   node->setItemVisibilityChecked( !node->isVisible() );
 
-  updateMapTheme();
+  restoreMapTheme();
   updateActiveLayer();
   updateMapSettingsLayers();
 
@@ -612,7 +612,7 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 
 void ActiveProject::restoreLayersVisibility()
 {
-  // restore layer visibility
+  // restore layers visibility
   QStringList savedIds = mAppSettings.visibleLayerIdsForProject( projectFullName() );
   if ( !savedIds.isEmpty() )
   {
