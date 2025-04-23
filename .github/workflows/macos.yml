@@ -2,7 +2,7 @@ name: macOS Build
 on:
   push:
     paths:
-    - 'vcpkg-overlay/**'
+    - 'vcpkg/**'
     - 'vcpkg.json'
     - 'VCPKG_BASELINE'
     - 'app/**'
@@ -118,7 +118,7 @@ jobs:
           
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
-             -DVCPKG_TARGET_TRIPLET=arm64-osx \
+             -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
@@ -148,7 +148,7 @@ jobs:
 
           cmake \
              -DCMAKE_BUILD_TYPE=Release \
-             -DVCPKG_TARGET_TRIPLET=arm64-osx \
+             -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
              -DUSE_SERVER_API_KEY=TRUE \
@@ -161,6 +161,12 @@ jobs:
 
           ninja  
           ninja install
+
+      - name: Get TimeStamp
+        id: time
+        uses: josStorer/get-current-time@v2.0.2
+        with:
+          format: 'YYYYMMDD'
 
       - name: Create dmg
         run: |
@@ -175,8 +181,8 @@ jobs:
           fi
 
           export APP_PATH=${{ github.workspace }}/install-mm/Input.app
-          export DMG_PATH=merginmaps_app.dmg
-          ./scripts/create_dmg.sh
+          export DMG_PATH=merginmaps-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.dmg
+          ./mm/scripts/create_dmg.sh
 
       - name: Upload dmg
         uses: actions/upload-artifact@v4
