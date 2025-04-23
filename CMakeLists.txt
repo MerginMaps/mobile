@@ -136,11 +136,6 @@ set(USE_KEYCHAIN
       "Whether to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
-set(QT6_VERSION
-    ${QT_VERSION_DEFAULT}
-    CACHE STRING "QT6 version to use"
-)
-
 set(INPUT_VERSION_CODE
     "${INPUT_VERSION_CODE_DEFAULT}"
     CACHE STRING "Build version (for stores)"
@@ -154,7 +149,7 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # ########################################################################################
 
 find_package(
-  Qt6 ${QT6_VERSION}
+  Qt6
   COMPONENTS Quick
              Qml
              Xml
@@ -167,11 +162,8 @@ find_package(
              Sql
              Core
              Core5Compat
-  REQUIRED
-)
-find_package(
-  Qt6 ${QT6_VERSION}
-  COMPONENTS Multimedia Widgets
+             Multimedia
+             Widgets
   REQUIRED
 )
 
@@ -179,7 +171,7 @@ if (NOT IOS)
   # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
   # iOS.
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS PrintSupport
     REQUIRED
   )
@@ -230,7 +222,7 @@ endif ()
 
 if (HAVE_BLUETOOTH)
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS Bluetooth
     REQUIRED
   )
@@ -238,7 +230,7 @@ endif ()
 
 if (ENABLE_TESTS)
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS Test
     REQUIRED
   )
