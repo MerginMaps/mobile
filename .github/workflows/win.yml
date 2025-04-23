@@ -1,12 +1,9 @@
 name: Build win64
 
-# TODO remove
-skip: true
-
 on:
   push:
     paths:
-    - 'vcpkg-overlay/**'
+    - 'vcpkg/**'
     - 'vcpkg.json'
     - 'VCPKG_BASELINE'
     - 'app/**'
@@ -16,34 +13,35 @@ on:
     - 'cmake_templates/**'
     - 'CMakeLists.txt'
     - '.github/workflows/win.yml'
- 
+
   release:
     types:
       - published
- 
+
 concurrency:
   group: ci-${{github.ref}}-windows
   cancel-in-progress: true
-  
+
 jobs:
   win64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: windows-2022
-    
+
     env:
-      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-      INPUT_SDK_VERSION: x64-windows-20250327-248
       CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
-      CACHE_VERSION: 0
       VS_VERSION: "2022"
-      CMAKE_VERSION: '3.29.0'
+      CMAKE_VERSION: '3.31.6'
       QT_ARCH: "win64_msvc2022_64"
-      
+      TRIPLET: x64-windows
+      CMAKE_GENERATOR: "Visual Studio 17 2022" # see https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
+      CMAKE_ARCH: "x64"
+      VCPKG_ROOT: "C:/vcpkg-root" # Looks like there is more space on C: than on D: drive (~14GB)
+
     steps:
-      - name: Checkout Input
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          path: input
+          path: mm
  
       - name: Prepare vars
         id: vars
@@ -61,57 +59,53 @@ jobs:
       - name: Install ccache
         shell: cmd
         run: |
-            choco install ccache
             choco install nsis
-            where ccache
-            where openssl
-            where makensis
-          
+
       - name: Extract Mergin API_KEY
         shell: cmd
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd input/core/
+          cd mm/core/
           openssl aes-256-cbc -d  -in merginsecrets.cpp.enc  -out merginsecrets.cpp  -k "%MERGINSECRETS_DECRYPT_KEY%" -md md5
           
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
         with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-win64-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-win64-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-win64-ccache-refs/heads/${{ github.base_ref }}-
-            build-win64-ccache-refs/heads/master-
+          key: ccache-${{ env.TRIPLET }}
+          max-size: 200M
 
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-win64-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-win64-ccache-${{ github.ref }}-
-            build-win64-ccache-refs/heads/master-
-          
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: ${{ env.QT_VERSION }}
-          target: desktop
-          arch: ${{ env.QT_ARCH }}
-          dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
-          cache: true
-          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-win
-   
-      # Build Input App
+      - name: Get vcpkg
+        shell: bash
+        run: |
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/VCPKG_BASELINE`
+          echo "using VCPKG_TAG ${VCPKG_TAG}"
+          git checkout ${VCPKG_TAG}
+
+      - name: Install vcpkg
+        shell: cmd
+        run: |
+          CALL "C:\vcpkg-root\bootstrap-vcpkg.bat"
+
+      - name: Setup NuGet Credentials
+        shell: pwsh
+        run: |
+          .$(${{ env.VCPKG_ROOT }}/vcpkg fetch nuget) `
+            sources add `
+            -Source "https://nuget.pkg.github.com/merginmaps/index.json" `
+            -StorePasswordInClearText `
+            -Name GitHub `
+            -UserName "mergin-maps-bot" `
+            -Password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
+          .$(${{ env.VCPKG_ROOT }}/vcpkg fetch nuget) `
+            setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" `
+            -Source "https://nuget.pkg.github.com/merginmaps/index.json"
+
       - name: Calculate build number
         shell: bash
         run: |
@@ -124,43 +118,46 @@ jobs:
         with:
           vsversion: ${{ env.VS_VERSION }}
         
-      - name: Configure Input
+      - name: Configure app
         shell: cmd
         run: |
-          mkdir install-Input -ea 0
-          mkdir build-Input -ea 0
-          cd build-Input
+          mkdir install-mm -ea 0
+          mkdir build-mm -ea 0
+          cd build-mm
           
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
-             -DCMAKE_PREFIX_PATH:PATH=${{ env.Qt6_Dir }} ^
-             -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input ^
-             -DINPUT_SDK_PATH:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/input-sdk/x64-windows ^
+             -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
+             -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" ^
+             -G "${{ env.CMAKE_GENERATOR }}" ^
+             -A ${{ env.CMAKE_ARCH }} ^
+             -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} ^
+             -DVCPKG_INSTALL_OPTIONS="--x-buildtrees-root=C:/src" ^
              -DUSE_MM_SERVER_API_KEY=TRUE ^
              -DUSE_KEYCHAIN=No ^
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
              -G "NMake Makefiles" ^
-             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/input ^
+             -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/mm ^
              -B .
               
-      - name: Build Input
+      - name: Build app
         shell: cmd
         run: |
-          cd build-Input
+          cd build-mm
           nmake
 
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
-      - name: Install Input
+      - name: Install app
         shell: cmd
         run: |
-            cd build-Input
+            cd build-mm
             nmake install 
             
-            mkdir C:\input-package
-            mkdir C:\input-package\stage
-            robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-Input C:\input-package\stage /E /NFL
-            dir C:\input-package\stage
+            mkdir C:\mm-package
+            mkdir C:\mm-package\stage
+            robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
+            dir C:\mm-package\stage
             
       - name: Downloading redist
         shell: bash
@@ -168,7 +165,7 @@ jobs:
           URL="https://aka.ms/vs/17/release/vc_redist.x64.exe"
           echo "downloading: $URL"
           curl -fsSL --connect-timeout 60 -o \
-            /c/input-package/stage/vc_redist.x64.exe \
+            /c/mm-package/stage/vc_redist.x64.exe \
             ${URL}
 
       - name: Get TimeStamp
@@ -177,11 +174,11 @@ jobs:
         with:
           format: 'YYYYMMDD'
           
-      - name: create package
+      - name: Create package
         shell: cmd
         run: |
-            makensis.exe input\scripts\input_win.nsi
-            xcopy C:\input-package\inputapp-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
+            makensis.exe mm\scripts\input_win.nsi
+            xcopy C:\mm-package\inputapp-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v4
