@@ -613,17 +613,14 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 void ActiveProject::restoreLayersVisibility()
 {
   // restore layer visibility
-  if ( mMapSettings )
+  QStringList savedIds = mAppSettings.visibleLayerIdsForProject( projectFullName() );
+  if ( !savedIds.isEmpty() )
   {
-    QStringList savedIds = mAppSettings.visibleLayerIdsForProject( projectFullName() );
-    if ( !savedIds.isEmpty() )
+    QgsLayerTree *root = mQgsProject->layerTreeRoot();
+    for ( QgsLayerTreeLayer *nodeLayer : root->findLayers() )
     {
-      QgsLayerTree *root = mQgsProject->layerTreeRoot();
-      for ( QgsLayerTreeLayer *nodeLayer : root->findLayers() )
-      {
-        bool ok = savedIds.contains( nodeLayer->layer()->id() );
-        nodeLayer->setItemVisibilityChecked( ok );
-      }
+      bool ok = savedIds.contains( nodeLayer->layer()->id() );
+      nodeLayer->setItemVisibilityChecked( ok );
     }
   }
 }
