@@ -92,8 +92,7 @@ jobs:
           cd "${{ env.VCPKG_ROOT }}"
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
-
-      - name: Setup NuGet Credentials
+- name: Setup NuGet Credentials
         shell: bash
         run: |
           mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
@@ -107,7 +106,6 @@ jobs:
           mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
-
       - name: Calculate build number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
