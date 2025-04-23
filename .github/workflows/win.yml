@@ -113,23 +113,20 @@ jobs:
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
             echo "Version code: ${BUILD_NUM}"
 
-      - name: Developer Command Prompt for Microsoft Visual C++
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          vsversion: ${{ env.VS_VERSION }}
-        
+      - name: Setup compiler
+        shell: cmd
+        run: |
+            CALL "C:\Program Files\Microsoft Visual Studio\${{ env.VS_VERSION }}\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
+                    
       - name: Configure app
         shell: cmd
         run: |
           mkdir install-mm -ea 0
           mkdir build-mm -ea 0
           cd build-mm
-          
+
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
-          
-          where.exe vcpkg
-          where.exe cmake
-          
+
           cmake ^
              -DCMAKE_BUILD_TYPE=Release ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
