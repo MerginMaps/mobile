@@ -342,7 +342,7 @@ void AppSettings::setIgnoreMigrateVersion( const QString &version )
 QString AppSettings::mapThemeForProject( const QString &projectKey ) const
 {
   QSettings settings;
-  settings.beginGroup( CoreUtils::MAP_THEME_GROUP );
+  settings.beginGroup( CoreUtils::CACHED_MAP_THEME_GROUP );
   QString theme = settings.value( projectKey, "" ).toString();
   settings.endGroup();
 
@@ -352,7 +352,7 @@ QString AppSettings::mapThemeForProject( const QString &projectKey ) const
 void AppSettings::setMapThemeForProject( const QString &projectKey, const QString &theme )
 {
   QSettings settings;
-  settings.beginGroup( CoreUtils::MAP_THEME_GROUP );
+  settings.beginGroup( CoreUtils::CACHED_MAP_THEME_GROUP );
   settings.setValue( projectKey, theme );
   settings.endGroup();
 }
@@ -360,7 +360,7 @@ void AppSettings::setMapThemeForProject( const QString &projectKey, const QStrin
 QStringList AppSettings::visibleLayerIdsForProject( const QString &projectKey ) const
 {
   QSettings settings;
-  settings.beginGroup( CoreUtils::LAYER_VISIBILITY_GROUP );
+  settings.beginGroup( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP );
   QVariantList list = settings.value( projectKey, QVariantList() ).toList();
   settings.endGroup();
 
@@ -373,7 +373,7 @@ QStringList AppSettings::visibleLayerIdsForProject( const QString &projectKey ) 
 void AppSettings::setVisibleLayerIdsForProject( const QString &projectKey, const QStringList &layerIds )
 {
   QSettings settings;
-  settings.beginGroup( CoreUtils::LAYER_VISIBILITY_GROUP );
+  settings.beginGroup( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP );
 
   QVariantList list;
   for ( const QString &id : layerIds )

@@ -30,8 +30,8 @@ const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" )
 const QString CoreUtils::CACHED_MAP_SETTINGS_GROUP = QStringLiteral( "mapSettings" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
-const QString CoreUtils::LAYER_VISIBILITY_GROUP = QStringLiteral( "layerVisibility" );
-const QString CoreUtils::MAP_THEME_GROUP = QStringLiteral( "mapTheme" );
+const QString CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP = QStringLiteral( "layersVisibility" );
+const QString CoreUtils::CACHED_MAP_THEME_GROUP = QStringLiteral( "mapTheme" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
 

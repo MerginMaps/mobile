@@ -68,6 +68,15 @@ class LocalProjectsManager : public QObject
     //! Finds all QGIS project files and set the err variable if any occured.
     QString findQgisProjectFile( const QString &projectDir, QString &err );
 
+    //! Clears all settings groups for the given project full name
+    void clearAllProjectSettings( const QString &projectFullName );
+
+    //! Clears only layersVisibility settings group for the given project full name
+    void clearCachedLayersVisibilitySettings( const QString &projectFullName );
+
+    //! Clears only mapSettings settings group for the given project full name
+    void clearCachedMapThemesSettings( const QString &projectFullName );
+
   signals:
     void localProjectAdded( const LocalProject &project );
     void localProjectDataChanged( const LocalProject &project );
