@@ -39,7 +39,18 @@
         "geodiff",
         "nu-book-zxing-cpp",
         "gdal",
-        "qca",
+        {
+          "name": "qca",
+          "host": true,
+          "default-features": false
+        },
+        {
+          "name": "qca",
+          "default-features": false,
+          "features": [
+            "ossl"
+          ]
+        },
         "qtkeychain-qt6",
         "qgis",
         {
