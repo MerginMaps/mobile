@@ -22,13 +22,12 @@ on:
 env:
   CMAKE_VERSION: '3.31.6'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
-  VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+  VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
   XC_VERSION: ${{ '16.4' }}
   DEPLOYMENT_TARGET: '14.0'
   TRIPLET: arm64-ios
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
-
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -207,4 +206,3 @@ jobs:
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-mm/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
-
