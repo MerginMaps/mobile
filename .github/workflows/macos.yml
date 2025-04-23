@@ -182,8 +182,8 @@ jobs:
           fi
 
           export APP_PATH=${{ github.workspace }}/install-mm/Input.app
-          export DMG_PATH=merginmaps_app.dmg
-          ./scripts/create_dmg.sh
+          export DMG_PATH=merginmaps-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.dmg
+          ./mm/scripts/create_dmg.sh
 
       - name: Upload dmg
         uses: actions/upload-artifact@v4
