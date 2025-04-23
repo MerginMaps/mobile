@@ -32,7 +32,7 @@ concurrency:
 jobs:
   linux_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -123,6 +123,7 @@ jobs:
              -DCMAKE_BUILD_TYPE=Debug \
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
+             -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-db/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
