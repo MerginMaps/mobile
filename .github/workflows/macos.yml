@@ -121,6 +121,7 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_SERVER_API_KEY=TRUE \
+             -DHAVE_BLUETOOTH=FALSE \
              -DUSE_KEYCHAIN=No \
              -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/mm/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
