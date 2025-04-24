@@ -46,6 +46,7 @@ jobs:
       JDK_VERSION: 17
       SDK_PLATFORM: android-34
       ANDROIDAPI: 24 # TODO
+      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       SDK_BUILD_TOOLS: 34.0.0
       CMAKE_VERSION: '3.31.6'
       QT_ANDROID_KEYSTORE_ALIAS: input
