@@ -509,10 +509,13 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
   updateActiveLayer();
   updateMapSettingsLayers();
 
-  QStringList visIds;
+  QStringList visibleLayerIds;
   for ( QgsMapLayer *layer : getVisibleLayers() )
-    visIds << layer->id();
-  mAppSettings.setVisibleLayerIdsForProject( projectFullName(), visIds );
+  {
+    visibleLayerIds << layer->id();
+  }
+
+  mAppSettings.setVisibleLayerIdsForProject( projectFullName(), visibleLayerIds );
 }
 
 const QString &ActiveProject::mapTheme() const
@@ -619,8 +622,8 @@ void ActiveProject::restoreLayersVisibility()
     QgsLayerTree *root = mQgsProject->layerTreeRoot();
     for ( QgsLayerTreeLayer *nodeLayer : root->findLayers() )
     {
-      bool ok = savedIds.contains( nodeLayer->layer()->id() );
-      nodeLayer->setItemVisibilityChecked( ok );
+      bool visible = savedIds.contains( nodeLayer->layer()->id() );
+      nodeLayer->setItemVisibilityChecked( visible );
     }
   }
 }

@@ -256,6 +256,14 @@ void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullNa
   clearCachedMapThemesSettings( projectFullName );
 }
 
+void LocalProjectsManager::clearCachedMapExtentSettings( const QString &projectFullName )
+{
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, projectFullName ) );
+  settings.remove( "" );
+  settings.endGroup();
+}
+
 void LocalProjectsManager::clearCachedLayersVisibilitySettings( const QString &projectFullName )
 {
   QSettings settings;

@@ -364,10 +364,13 @@ QStringList AppSettings::visibleLayerIdsForProject( const QString &projectKey ) 
   QVariantList list = settings.value( projectKey, QVariantList() ).toList();
   settings.endGroup();
 
-  QStringList ids;
-  for ( const QVariant &v : list )
-    ids << v.toString();
-  return ids;
+  QStringList visibleLayerIds;
+  for ( const QVariant &layerId : list )
+  {
+    visibleLayerIds << layerId.toString();
+  }
+
+  return visibleLayerIds;
 }
 
 void AppSettings::setVisibleLayerIdsForProject( const QString &projectKey, const QStringList &layerIds )
@@ -377,7 +380,9 @@ void AppSettings::setVisibleLayerIdsForProject( const QString &projectKey, const
 
   QVariantList list;
   for ( const QString &id : layerIds )
+  {
     list << id;
+  }
 
   settings.setValue( projectKey, list );
   settings.endGroup();

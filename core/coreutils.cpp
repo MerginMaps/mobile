@@ -27,9 +27,9 @@
 #include "qcoreapplication.h"
 
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
-const QString CoreUtils::CACHED_MAP_SETTINGS_GROUP = QStringLiteral( "mapSettings" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
+const QString CoreUtils::CACHED_MAP_EXTENT_GROUP = QStringLiteral( "mapExtent" );
 const QString CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP = QStringLiteral( "layersVisibility" );
 const QString CoreUtils::CACHED_MAP_THEME_GROUP = QStringLiteral( "mapTheme" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
