@@ -365,9 +365,12 @@ void InputMapSettings::saveExtentToSettings()
 {
   QSettings settings;
   const QgsRectangle extent = this->extent();
-  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
-  settings.setValue( "extent", extent );
-  settings.endGroup();
+  if ( !extent.isEmpty() && extent.isFinite() )
+  {
+    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+    settings.setValue( "extent", extent );
+    settings.endGroup();
+  }
 }
 
 void InputMapSettings::loadSavedExtent()
@@ -375,7 +378,9 @@ void InputMapSettings::loadSavedExtent()
   QSettings settings;
   settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
   QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
-  setExtent( extent );
   settings.endGroup();
+
+  if ( !extent.isEmpty() && extent.isFinite() )
+    setExtent( extent );
 }
 

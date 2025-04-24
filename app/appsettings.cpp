@@ -337,8 +337,6 @@ void AppSettings::setIgnoreMigrateVersion( const QString &version )
   emit ignoreMigrateVersionChanged();
 }
 
-#include "coreutils.h"
-
 QString AppSettings::mapThemeForProject( const QString &projectKey ) const
 {
   QSettings settings;

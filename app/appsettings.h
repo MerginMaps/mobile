@@ -113,9 +113,6 @@ class AppSettings: public QObject
 
     void ignoreMigrateVersionChanged();
 
-    void mapThemeForProjectChanged( const QString &projectKey, const QString &theme );
-    void visibleLayerIdsForProjectChanged( const QString &projectKey, const QStringList &layerIds );
-
   private:
     // Projects path
     QString mDefaultProject;

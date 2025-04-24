@@ -412,6 +412,7 @@ void ActiveProject::updateMapTheme()
     }
   }
 
+  mAppSettings.setMapThemeForProject( projectFullName(), mMapTheme );
   setMapTheme( themeCandidateName );
 }
 
@@ -443,7 +444,6 @@ void ActiveProject::setMapTheme( const QString &themeName )
     collection->applyTheme( mMapTheme, root, &model );
   }
 
-  mAppSettings.setMapThemeForProject( projectFullName(), mMapTheme );
   emit mapThemeChanged( mMapTheme );
 
   updateActiveLayer();
