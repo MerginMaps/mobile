@@ -28,9 +28,9 @@ jobs:
     runs-on: windows-2022
 
     env:
-      CCACHE_DIR: C:/ccache-cache # https://linux.die.net/man/1/ccache
       VS_VERSION: "2022"
       CMAKE_VERSION: '3.31.6'
+      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       QT_ARCH: "win64_msvc2022_64"
       TRIPLET: x64-windows
       CMAKE_GENERATOR: "Visual Studio 17 2022" # see https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
