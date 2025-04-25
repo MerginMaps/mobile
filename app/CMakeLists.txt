@@ -536,6 +536,8 @@ target_link_libraries(
          libzip::zip
          # WebP::WebP WebP::Sharpyuv Curl::Curl Jpeg::Jpeg Geotiff::Geotiff Lzma::Lzma
          # Zstd::Zstd Bz2::Bz2 Absl::Absl
+         poly2tri::poly2tri
+         meshoptimizer::meshoptimizer
 )
 
 if (IOS OR MACOS)
@@ -562,6 +564,19 @@ if (IOS)
     Input PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
   )
   # TODO is this needed? qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+endif ()
+
+if (WIN)
+  target_link_libraries(
+    Input
+    PUBLIC WinLibraries::avcodec
+           WinLibraries::avdevice
+           WinLibraries::avformat
+           WinLibraries::avutil
+           WinLibraries::swresample
+           WinLibraries::swscale
+           WinLibraries::openh264
+  )
 endif ()
 
 if (ENABLE_TESTS)
