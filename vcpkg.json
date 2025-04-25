@@ -13,6 +13,22 @@
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
+          "name": "ffmpeg",
+          "default-features": false,
+          "features": [
+            "avcodec",
+            "avdevice",
+            "avformat",
+            {
+              "name": "openh264",
+              "platform": "linux | windows"
+            },
+            "swresample",
+            "swscale"
+          ],
+          "platform": "linux | android | windows"
+        },
+        {
             "name": "sqlite3",
             "default-features": false,
             "features": [ "rtree", "json1", "fts3" ]
