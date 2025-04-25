@@ -33,7 +33,7 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
 
-  // store map extent to QSettings when extent hasn't changed for 2 seconds
+  // store map extent to QSettings when extent hasn't changed
   mSaveExtentTimer.setSingleShot( true );
   connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
   connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( EXTENT_SAVE_DELAY_MS ); } );
