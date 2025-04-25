@@ -93,7 +93,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   providerType = QStringLiteral( "internal" );
 #endif
 
-  if ( type == QStringLiteral( "external" ) )
+  if ( providerType == QStringLiteral( "external" ) )
   {
 #ifdef HAVE_BLUETOOTH
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name );
