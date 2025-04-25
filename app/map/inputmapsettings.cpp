@@ -20,6 +20,8 @@
 #include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
 
+static constexpr int EXTENT_SAVE_DELAY_MS = 2000;
+
 InputMapSettings::InputMapSettings( QObject *parent )
   : QObject( parent )
 {
@@ -34,7 +36,7 @@ InputMapSettings::InputMapSettings( QObject *parent )
   // store map extent to QSettings when extent hasn't changed for 2 seconds
   mSaveExtentTimer.setSingleShot( true );
   connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
-  connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( 2000 ); } );
+  connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( EXTENT_SAVE_DELAY_MS ); } );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
@@ -378,5 +380,11 @@ void InputMapSettings::loadSavedExtent()
   settings.endGroup();
 
   if ( !extent.isEmpty() && extent.isFinite() )
+  {
     setExtent( extent );
+  }
+  else
+  {
+    CoreUtils::log( "MapSettings", QStringLiteral( "No valid saved extent found for project %1" ).arg( mProject->baseName() ) );
+  }
 }
