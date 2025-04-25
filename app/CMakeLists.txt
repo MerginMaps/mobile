@@ -561,8 +561,7 @@ if (IOS)
   target_link_libraries(
     Input PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
   )
-  # TODO is this needed?
-  # qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+  # TODO is this needed? qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
 endif ()
 
 if (ENABLE_TESTS)

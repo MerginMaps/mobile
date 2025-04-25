@@ -2,10 +2,7 @@
 
 # needs to be called after project() command so toolchains are already evaluated
 macro (mm_detect_platform)
-  if (DEFINED ENV{INPUT_SDK_ANDROID_BASE}
-      OR ANDROID
-      OR CMAKE_SYSTEM_NAME STREQUAL "Android"
-  )
+  if (ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android")
     # android can be build on any host platform
     set(ANDROID TRUE)
   else ()

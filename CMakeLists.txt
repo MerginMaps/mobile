@@ -11,9 +11,10 @@ set(MM_VERSION_PATCH "0")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
-if (DEFINED ENV{INPUT_SDK_ANDROID_BASE}) # TODO android!
+if (ANDROID_ABI)
+  message("HELLO ANDROID")
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
-  set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
+  # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
   if (DEFINED ENV{ANDROIDAPI})
     set(ANDROIDAPI $ENV{ANDROIDAPI})
@@ -44,7 +45,9 @@ if (IOS)
   # set(DEPLOYMENT_TARGET "16.0")
 endif ()
 
-if (APPLE)
+# iOS and macOS desktop builds
+if (APPLE AND NOT ANDROID_ABI)
+  message("HERE DEPLOYMENT_TARGET")
   if (DEFINED ENV{DEPLOYMENT_TARGET})
     set(CMAKE_OSX_DEPLOYMENT_TARGET $ENV{DEPLOYMENT_TARGET})
   else ()
