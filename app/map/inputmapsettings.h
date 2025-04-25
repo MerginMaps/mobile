@@ -18,6 +18,7 @@
 #include "inputconfig.h"
 
 #include <QObject>
+#include <QTimer>
 
 #include "qgscoordinatetransformcontext.h"
 #include "qgsmaplayer.h"
@@ -343,10 +344,21 @@ class InputMapSettings : public QObject
      */
     void onCrsChanged();
 
+    /**
+     * Saves current map extent to QSettings
+     */
+    void saveExtentToSettings();
+
+    /**
+     * Retrieves saved map extent from QSettings and set it as the map extent
+     */
+    void loadSavedExtent();
+
   private:
     QgsProject *mProject = nullptr;
     QgsMapSettings mMapSettings;
     qreal mDevicePixelRatio = 1.0;
+    QTimer mSaveExtentTimer;
 };
 
 #endif // INPUTMAPSETTINGS_H

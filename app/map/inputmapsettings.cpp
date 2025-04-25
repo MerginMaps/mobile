@@ -14,6 +14,7 @@
 
 #include "qgis.h"
 #include "inputmapsettings.h"
+#include "coreutils.h"
 
 #include "qgsmaplayer.h"
 #include "qgsmessagelog.h"
@@ -30,13 +31,10 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
 
-  // store map extent to QSettings every 5 seconds
+  // store map extent to QSettings when extent hasn't changed for 2 seconds
   mSaveExtentTimer.setSingleShot( true );
   connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
-  connect( this, &InputMapSettings::extentChanged, this, [this]()
-  {
-    mSaveExtentTimer.start( 5000 );
-  } );
+  connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( 2000 ); } );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
@@ -366,7 +364,7 @@ void InputMapSettings::saveExtentToSettings()
   const QgsRectangle extent = this->extent();
   if ( !extent.isEmpty() && extent.isFinite() )
   {
-    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
     settings.setValue( "extent", extent );
     settings.endGroup();
   }
@@ -375,7 +373,7 @@ void InputMapSettings::saveExtentToSettings()
 void InputMapSettings::loadSavedExtent()
 {
   QSettings settings;
-  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
   QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
   settings.endGroup();
 
