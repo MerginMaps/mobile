@@ -4,10 +4,8 @@ set(VCPKG_LIBRARY_LINKAGE static)
 set(VCPKG_CMAKE_SYSTEM_NAME Android)
 set(VCPKG_BUILD_TYPE release)
 
-
-set(VCPKG_MAKE_BUILD_TRIPLET "--host=arm64-darwin-android")
-# TODO linux
-# set(VCPKG_MAKE_BUILD_TRIPLET "--host=aarch64-linux-android")
+# Note to myself and others: this is correct even on macOS host
+set(VCPKG_MAKE_BUILD_TRIPLET "--host=aarch64-linux-android")
 
 set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DANDROID_ABI=arm64-v8a)
 
