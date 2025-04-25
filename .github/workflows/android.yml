@@ -1,8 +1,5 @@
 name: android Build
 
-# TODO remove
-skip: true
-
 on:
   push:
     paths:
@@ -33,10 +30,8 @@ jobs:
       matrix:
         include:
           - TRIPLET: 'arm-android'
-            QT_ARCH: 'android_armv7'
             ANDROID_ABI: 'armeabi-v7a'
           - TRIPLET: 'arm64-android'
-            QT_ARCH: 'android_arm64_v8a'
             ANDROID_ABI: 'arm64-v8a'
             
     runs-on: macos-15
@@ -45,7 +40,7 @@ jobs:
       NDK_VERSION_FULL: r26b
       JDK_VERSION: 17
       SDK_PLATFORM: android-34
-      ANDROIDAPI: 24 # TODO
+      ANDROIDAPI: 24
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       SDK_BUILD_TOOLS: 34.0.0
       CMAKE_VERSION: '3.31.6'
@@ -75,7 +70,7 @@ jobs:
         run: |
           brew uninstall cmake
           brew install gnupg
-          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl create-dmg mono
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl mono
           echo $(brew --prefix bison)/bin >> $GITHUB_PATH
           echo $(brew --prefix flex)/bin >> $GITHUB_PATH
           echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
@@ -120,11 +115,6 @@ jobs:
         with:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
-
-      - name: Install CMake and Ninja
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: ${{ env.CMAKE_VERSION }}
 
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
@@ -179,8 +169,22 @@ jobs:
           cd "${{ env.VCPKG_ROOT }}"
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
-          
-      # Build Input App
+
+      - name: Setup NuGet Credentials
+        shell: bash
+        run: |
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "mergin-maps-bot" \
+            -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
+
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json"
+
       - name: Calculate build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
@@ -206,15 +210,14 @@ jobs:
             export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
-          
-          # -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
-          
+
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
               -D CMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
               -D ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
               -D ANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
               -D ANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
+              -DVCPKG_HOST_TRIPLET=arm64-osx \
               -D VCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
               -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
               -DANDROID_ARM_NEON=ON \
@@ -223,8 +226,7 @@ jobs:
               -DANDROIDAPI=${ANDROIDAPI} \
               -DANDROID_PLATFORM=android-${ANDROIDAPI} \
               -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
-              -DANDROID_STL="c++_shared"
-              
+              -DANDROID_STL="c++_shared" \
               -DQT_ANDROID_SIGN_APK=Yes \
               -DQT_ANDROID_SIGN_AAB=Yes \
               -DUSE_MM_SERVER_API_KEY=Yes \
@@ -239,8 +241,6 @@ jobs:
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
         run: |
             cd ${{ github.workspace }}/build-mm
             ninja apk
@@ -266,7 +266,6 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
         run: |
             cd ${{ github.workspace }}/build-Input
             ninja aab
