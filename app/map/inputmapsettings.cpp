@@ -29,6 +29,14 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::extentChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
+
+  // store map extent to QSettings every 5 seconds
+  mSaveExtentTimer.setSingleShot( true );
+  connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
+  connect( this, &InputMapSettings::extentChanged, this, [this]()
+  {
+    mSaveExtentTimer.start( 5000 );
+  } );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
@@ -258,6 +266,11 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
   }
 
+  if ( mMapSettings.extent().isEmpty() )
+  {
+    loadSavedExtent();
+  }
+
   mMapSettings.setRotation( 0 );
 
   mMapSettings.setTransformContext( mProject->transformContext() );
@@ -345,4 +358,27 @@ void InputMapSettings::setTemporalEnd( const QDateTime &end )
   const QgsDateTimeRange range = mMapSettings.temporalRange();
   mMapSettings.setTemporalRange( QgsDateTimeRange( range.begin(), end ) );
   emit temporalStateChanged();
+}
+
+void InputMapSettings::saveExtentToSettings()
+{
+  QSettings settings;
+  const QgsRectangle extent = this->extent();
+  if ( !extent.isEmpty() && extent.isFinite() )
+  {
+    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+    settings.setValue( "extent", extent );
+    settings.endGroup();
+  }
+}
+
+void InputMapSettings::loadSavedExtent()
+{
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+  QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
+  settings.endGroup();
+
+  if ( !extent.isEmpty() && extent.isFinite() )
+    setExtent( extent );
 }
