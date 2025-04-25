@@ -370,6 +370,10 @@ void InputMapSettings::saveExtentToSettings()
     settings.setValue( "extent", extent );
     settings.endGroup();
   }
+  else
+  {
+    CoreUtils::log( "MapSettings", QStringLiteral( "No valid extent to be saved for project %1" ).arg( mProject->baseName() ) );
+  }
 }
 
 void InputMapSettings::loadSavedExtent()
@@ -385,6 +389,6 @@ void InputMapSettings::loadSavedExtent()
   }
   else
   {
-    CoreUtils::log( "MapSettings", QStringLiteral( "No valid saved extent found for project %1" ).arg( mProject->baseName() ) );
+    CoreUtils::log( "MapSettings", QStringLiteral( "No valid loaded extent found for project %1" ).arg( mProject->baseName() ) );
   }
 }
