@@ -155,10 +155,6 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # FIND PACKAGES
 # ########################################################################################
 
-if (WIN)
-  find_package(WMF REQUIRED)
-endif ()
-
 find_package(
   Qt6
   COMPONENTS Quick
