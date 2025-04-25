@@ -5,7 +5,7 @@ set(VCPKG_CMAKE_SYSTEM_NAME Android)
 set(VCPKG_BUILD_TYPE release)
 
 
-set(VCPKG_MAKE_BUILD_TRIPLET "--host=aarch64-darwin-android")
+set(VCPKG_MAKE_BUILD_TRIPLET "--host=arm64-darwin-android")
 # TODO linux
 # set(VCPKG_MAKE_BUILD_TRIPLET "--host=aarch64-linux-android")
 
