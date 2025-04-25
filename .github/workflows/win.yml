@@ -145,7 +145,10 @@ jobs:
         shell: cmd
         run: |
           cd build-mm
-          nmake
+          
+          set PATH=${{ env.VCPKG_ROOT }};%PATH%
+          
+          cmake --build ${{ github.workspace }}\build --config Release --verbose
 
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
