@@ -4,9 +4,8 @@ set(VCPKG_LIBRARY_LINKAGE static)
 set(VCPKG_CMAKE_SYSTEM_NAME Android)
 set(VCPKG_BUILD_TYPE release)
 
-set(VCPKG_MAKE_BUILD_TRIPLET "--host=arm64-darwin-androideabi")
-# TODO linux
-# set(VCPKG_MAKE_BUILD_TRIPLET "--host=armv7a-linux-androideabi")
+# Note to myself and others: this is correct even on macOS host
+set(VCPKG_MAKE_BUILD_TRIPLET "--host=armv7a-linux-androideabi")
 
 
 set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DANDROID_ABI=armeabi-v7a -DANDROID_ARM_NEON=ON)
