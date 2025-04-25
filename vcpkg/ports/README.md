@@ -7,3 +7,4 @@
 - qtkeychain-qt6 - official port uses qt5
 - qtmultimedia - unknown
 - qtpositioning - unknown
+- gstreamer - unknown (linux build ffmpeg?)
