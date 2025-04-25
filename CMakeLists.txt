@@ -220,6 +220,12 @@ find_package(GeoTIFF CONFIG REQUIRED)
 # find_package(Lzma CONFIG REQUIRED) find_package(Zstd CONFIG REQUIRED)
 find_package(unofficial-minizip CONFIG REQUIRED)
 # find_package(Utf8 CONFIG REQUIRED) find_package(Absl CONFIG REQUIRED)
+find_package(poly2tri CONFIG)
+
+if (WIN)
+  find_package(FFMPEG REQUIRED)
+  find_package(WinLibraries REQUIRED)
+endif ()
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
