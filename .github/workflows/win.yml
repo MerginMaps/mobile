@@ -1,4 +1,4 @@
-name: Build win64
+name: win64 Build
 
 on:
   push:
