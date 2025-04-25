@@ -23,6 +23,7 @@
       "proj",
       "geos",
       "jhasse-poly2tri",
+      "meshoptimizer",
       {
         "name": "qca",
         "default-features": false,
