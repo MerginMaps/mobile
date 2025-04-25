@@ -221,6 +221,7 @@ find_package(GeoTIFF CONFIG REQUIRED)
 find_package(unofficial-minizip CONFIG REQUIRED)
 # find_package(Utf8 CONFIG REQUIRED) find_package(Absl CONFIG REQUIRED)
 find_package(poly2tri CONFIG)
+find_package(meshoptimizer CONFIG REQUIRED)
 
 if (WIN)
   find_package(FFMPEG REQUIRED)
