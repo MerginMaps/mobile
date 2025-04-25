@@ -30,8 +30,7 @@ set(VCPKG_C_FLAGS "-fstack-protector-strong")
 
 if(DEFINED ENV{ANDROIDAPI})
   set(VCPKG_CMAKE_SYSTEM_VERSION $ENV{ANDROIDAPI})
+else()
+    message(FATAL_ERROR "$ENV{ANDROIDAPI} not defined as env variable")
 endif()
 
-set(VCPKG_ENV_PASSTHROUGH Qt6_DIR) # needed by port/qt6/vcpkg-cmake-wrapper.cmake
-set(VCPKG_ENV_PASSTHROUGH QT_HOST_PATH) # needed by port/qt6/vcpkg-cmake-wrapper.cmake
-set(QT_HOST_PATH $ENV{QT_HOST_PATH} CACHE PATH "needed by QtPublicDependencyHelpers.cmake" FORCE)

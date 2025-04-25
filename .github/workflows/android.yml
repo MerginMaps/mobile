@@ -1,5 +1,4 @@
 name: Android Build
-
 on:
   push:
     paths:
@@ -116,11 +115,6 @@ jobs:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
 
-      - name: Install CMake and Ninja
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: ${{ env.CMAKE_VERSION }}
-
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
@@ -210,16 +204,14 @@ jobs:
             export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
-          
-          # -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
-          
+
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
               -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
               -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
               -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
               -DVCPKG_HOST_TRIPLET=arm64-osx \
-              -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+              -D VCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
               -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
               -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
