@@ -829,13 +829,11 @@ void MerginApi::registerUser( const QString &email,
 
   if ( password.isEmpty() || password.length() < 8 )
   {
-    const QString msg = tr( "%1%3 Password must be at least 8 characters long.%4"
-                            "%3 Include at least 3 character categories among the following:"
+    const QString msg = tr( "%1%3 Password must be at least 8 characters long and include:"
                             "<ul type=\"disc\">"
                             "%3 Lowercase characters (a-z)%4"
                             "%3 Uppercase characters (A-Z)%4"
-                            "%3 Digits (0-9)%4"
-                            "%3 Special characters %4"
+                            "%3 At least one digit (0–9) or special character%4"
                             "%2%4%2" )
                         .arg( "<ul>", "</ul>", "<li>", "</li>" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
@@ -1318,13 +1316,11 @@ void MerginApi::registrationFinished( const QString &login, const QString &passw
       }
       else if ( serverErrorCode == "InvalidPassword" )
       {
-        const QString msg = tr( "%1%3 Password must be at least 8 characters long.%4"
-                                "%3 Include at least 3 character categories among the following:"
+        const QString msg = tr( "%1%3 Password must be at least 8 characters long and include:"
                                 "<ul type=\"disc\">"
                                 "%3 Lowercase characters (a-z)%4"
                                 "%3 Uppercase characters (A-Z)%4"
-                                "%3 Digits (0-9)%4"
-                                "%3 Special characters %4"
+                                "%3 At least one digit (0–9) or special character%4"
                                 "%2%4%2" )
                             .arg( "<ul>", "</ul>", "<li>", "</li>" );
         emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
