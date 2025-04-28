@@ -2,7 +2,15 @@
     "description": "<p>Mergin Maps mobile app is a QGIS powered app for Android and iOS devices.</p>", 
     "license": "GPLv3", 
     "title": "Mergin Maps mobile app", 
+<<<<<<< HEAD
     "version": "2025.3.0",
+=======
+<<<<<<< HEAD
+    "version": "2025.2.2",
+=======
+    "version": "2025.3.0",
+>>>>>>> 25af5392 (bump version)
+>>>>>>> 80721e37 (bump version)
     "upload_type": "software", 
     "publication_date": "2022-02-24", 
     "creators": [
@@ -39,7 +47,15 @@
     "related_identifiers": [
         {
             "scheme": "url", 
+<<<<<<< HEAD
             "identifier": "https://github.com/MerginMaps/mobile/tree/2025.3.0", 
+=======
+<<<<<<< HEAD
+            "identifier": "https://github.com/MerginMaps/mobile/tree/2025.2.2", 
+=======
+            "identifier": "https://github.com/MerginMaps/mobile/tree/2025.3.0", 
+>>>>>>> 25af5392 (bump version)
+>>>>>>> 80721e37 (bump version)
             "relation": "isSupplementTo"
         }, 
         {
