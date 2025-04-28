@@ -169,9 +169,6 @@ class TestMerginApi: public QObject
 
     void testParseVersion();
 
-  signals:
-    QString fileWritten( QString &filename );
-
   private:
     MerginApi *mApi = nullptr;
 
