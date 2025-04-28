@@ -51,11 +51,11 @@ Item {
     target: mapTool
 
     function onFinalEmptyGeometry() {
-      __notificationModel.addWarning( "The feature has empty geometry, after avoiding overlaps!" )
+      __notificationModel.addWarning( qsTr( "The feature has empty geometry, after avoiding overlaps! Try drawing new one after clicking \"Edit Geometry\"." ) )
     }
 
     function onFinalSingleGeometry() {
-      __notificationModel.addWarning( "Avoiding overlaps generated multiple geometries, only the biggest was kept!" )
+      __notificationModel.addWarning( qsTr( "Avoiding overlaps generated multiple geometries, only the biggest was kept!" ) )
     }
   }
 
