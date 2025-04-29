@@ -1,5 +1,9 @@
 # GPLv2 Licence
 
+if (IOS OR ANDROID)
+  message(FATAL_ERROR "Install step cannot be called on IOS and Android")
+endif ()
+
 # TODO is ${Qt6_DIR} defined?
 set(Qt6_base_dir ${Qt6_DIR}/../../..)
 
