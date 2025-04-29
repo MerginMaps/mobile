@@ -147,7 +147,7 @@ jobs:
           
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
           
-          cmake --build ${{ github.workspace }}\build --config Release --verbose
+          cmake --build ${{ github.workspace }}\build-mm --config Release --verbose
 
           IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
