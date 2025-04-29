@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.22)
 # GLOBAL SETTINGS (call before "project()")
 # ########################################################################################
 
-# TODO automatically change with the scripts/update version script
+# Note: To update version use script/update_all_versions.bash
 set(MM_VERSION_MAJOR "2025")
 set(MM_VERSION_MINOR "6")
 set(MM_VERSION_PATCH "0")
@@ -12,7 +12,6 @@ set(MM_VERSION_PATCH "0")
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
 if (ANDROID_ABI)
-  message("HELLO ANDROID")
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
@@ -47,7 +46,6 @@ endif ()
 
 # iOS and macOS desktop builds
 if (APPLE AND NOT ANDROID_ABI)
-  message("HERE DEPLOYMENT_TARGET")
   if (DEFINED ENV{DEPLOYMENT_TARGET})
     set(CMAKE_OSX_DEPLOYMENT_TARGET $ENV{DEPLOYMENT_TARGET})
   else ()
@@ -59,8 +57,9 @@ endif ()
 # PROJECT SETUP
 # ########################################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
+# TODO remove this variable
 set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
-set(INPUT_SCRIPTS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
 
 include(VersionDetect)
 include(PlatformDetect)
@@ -173,7 +172,7 @@ find_package(
 
 if (NOT IOS)
   # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
-  # iOS.
+  # iOS
   find_package(
     Qt6
     COMPONENTS PrintSupport
@@ -343,7 +342,6 @@ endif ()
 # ########################################################################################
 # RESOURCES
 # ########################################################################################
-# TODO - this would need to rething the approach so the assets are in binary folder
 message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/app/android/assets/qgis-data/resources)
 file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
@@ -377,7 +375,7 @@ if (WIN
     OR LNX
     OR MACOS
 )
-  # qt_add_executable on Android automatically creates target for apk/aab on IOS we use
-  # xcodebuild to build ipa
+  # qt_add_executable - on Android automatically creates target for apk/aab - on IOS we
+  # use xcodebuild to build ipa
   include(InstallStep)
 endif ()
