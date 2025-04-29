@@ -2615,56 +2615,70 @@ only allows up to %1 downloaded projects.</source>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="825"/>
+        <location filename="../../core/merginapi.cpp" line="1307"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="832"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <location filename="../../core/merginapi.cpp" line="1319"/>
+        <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="845"/>
+        <location filename="../../core/merginapi.cpp" line="846"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="874"/>
+        <location filename="../../core/merginapi.cpp" line="875"/>
         <source>Marketing source cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="882"/>
+        <location filename="../../core/merginapi.cpp" line="883"/>
         <source>Industry cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1286"/>
+        <location filename="../../core/merginapi.cpp" line="1287"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1308"/>
+        <location filename="../../core/merginapi.cpp" line="1309"/>
+        <location filename="../../core/merginapi.cpp" line="1315"/>
+        <location filename="../../core/merginapi.cpp" line="1327"/>
+        <source>Registration failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1313"/>
+        <source>This email address is already registered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1338"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1340"/>
+        <location filename="../../core/merginapi.cpp" line="1370"/>
         <source>Workspace created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1677"/>
+        <location filename="../../core/merginapi.cpp" line="1707"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3868"/>
+        <location filename="../../core/merginapi.cpp" line="3898"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3934"/>
+        <location filename="../../core/merginapi.cpp" line="3964"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
