@@ -312,7 +312,6 @@ class MerginApi: public QObject
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
     Q_INVOKABLE void clearAuth();
-    Q_INVOKABLE void resetApiRoot();
     Q_INVOKABLE QString resetPasswordUrl();
 
     /**
@@ -376,13 +375,10 @@ class MerginApi: public QObject
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
-    static const QString sMarketingPageRoot;
     static const QString sDefaultApiRoot;
     static const QString sSyncCanceledMessage;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
-
-    static QString marketingPageRoot() { return sMarketingPageRoot; }
 
     static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
 
