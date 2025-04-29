@@ -46,7 +46,7 @@ Image {
     anchors.fill: parent
     color: __style.polarColor
     z: -1
-    visible: root.status === Image.Error // if image has transparent background, we would still see it
+    visible: root.photoUrl == '' || root.status === Image.Error // if image has transparent background, we would still see it
 
     MMIcon {
       anchors.centerIn: parent
