@@ -14,8 +14,12 @@
 #include "test/testmerginapi.h"
 #include "inputtests.h"
 #include "testutils.h"
-#include "position/providers/bluetoothpositionprovider.h"
+
 #include "merginapi.h"
+
+#ifdef HAVE_BLUETOOTH
+#include "position/providers/bluetoothpositionprovider.h"
+#endif
 
 TestVariablesManager::TestVariablesManager( MerginApi *api, VariablesManager *vm, PositionKit *pk, AppSettings *as )
 {
@@ -42,6 +46,7 @@ void TestVariablesManager::cleanup()
 
 void TestVariablesManager::positionVariables()
 {
+#ifdef HAVE_BLUETOOTH
   mAppSettings->setGpsAntennaHeight( 0 );
 
   BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
@@ -93,6 +98,7 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "1.678" ), &context );
 
   mAppSettings->setGpsAntennaHeight( 0 );
+#endif
 }
 
 void TestVariablesManager::userVariables()
