@@ -25,8 +25,7 @@ class InputHelp: public QObject
 
     Q_PROPERTY( QString privacyPolicyLink READ privacyPolicyLink NOTIFY linkChanged )
     Q_PROPERTY( QString helpRootLink READ helpRootLink )
-    Q_PROPERTY( QString inputWebLink READ inputWebLink NOTIFY linkChanged )
-    Q_PROPERTY( QString merginWebLink READ merginWebLink NOTIFY merginLinkChanged )
+    Q_PROPERTY( QString mmWebLink READ mmWebLink NOTIFY linkChanged )
     Q_PROPERTY( QString merginDashboardLink READ merginDashboardLink NOTIFY merginLinkChanged )
     Q_PROPERTY( QString merginSubscriptionLink READ merginSubscriptionLink NOTIFY merginLinkChanged )
     Q_PROPERTY( QString merginSubscriptionDetailsLink READ merginSubscriptionDetailsLink NOTIFY linkChanged )
@@ -59,8 +58,7 @@ class InputHelp: public QObject
     explicit InputHelp( MerginApi *merginApi );
 
     QString helpRootLink() const;
-    QString inputWebLink() const;
-    QString merginWebLink() const;
+    QString mmWebLink() const;
     QString merginDashboardLink() const;
     QString merginSubscriptionLink() const;
     QString privacyPolicyLink() const;
