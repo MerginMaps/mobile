@@ -3295,3 +3295,30 @@ void TestMerginApi::testHasLocalProjectChanges()
   // clean up
   QDir( projectDir ).removeRecursively();
 }
+
+void TestMerginApi::testApiRoot()
+{
+  QString originalRoot = mApi->apiRoot();
+
+  QVector< QPair<QString, QString> > testcases =
+  {
+    { "https://app.merginmaps.com/", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "http://app.merginmaps.com/", "http://app.merginmaps.com" },
+    { "http://app.merginmaps.com", "http://app.merginmaps.com" },
+    { "https://app.merginmaps.com//", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com///", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com////", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "https://example.com", "https://example.com" },
+    { "example.com/", "example.com" }
+  };
+
+  for ( auto testcase : testcases )
+  {
+    mApi->setApiRoot( testcase.first );
+    QCOMPARE( mApi->apiRoot(), testcase.second );
+  }
+
+  mApi->setApiRoot( originalRoot );
+}

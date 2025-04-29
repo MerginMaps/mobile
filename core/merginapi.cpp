@@ -32,8 +32,7 @@
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
 const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
-const QString MerginApi::sMarketingPageRoot = QStringLiteral( "https://merginmaps.com/" );
-const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
@@ -115,7 +114,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
 void MerginApi::loadCache()
 {
   QSettings settings;
-  mApiRoot = settings.value( QStringLiteral( "Input/apiRoot" ) ).toString();
+  setApiRoot( settings.value( QStringLiteral( "Input/apiRoot" ) ).toString() );
   int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
@@ -591,7 +590,7 @@ void MerginApi::pushStart( const QString &projectFullName, const QByteArray &jso
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/%1" ).arg( projectFullName ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/%1" ).arg( projectFullName ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -655,7 +654,7 @@ void MerginApi::cancelPush( const QString &projectFullName )
 void MerginApi::sendPushCancelRequest( const QString &projectFullName, const QString &transactionUUID )
 {
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/cancel/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -708,7 +707,7 @@ void MerginApi::pushFinish( const QString &projectFullName, const QString &trans
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/finish/%1" ).arg( transactionUUID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/finish/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -798,7 +797,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   mUserAuth->blockSignals( false );
 
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/auth/login" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -850,7 +849,7 @@ void MerginApi::registerUser( const QString &email,
 
   // request
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/register" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/auth/register" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -886,7 +885,7 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   }
   // request
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/post-register" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -913,11 +912,11 @@ void MerginApi::getUserInfo()
   QString urlString;
   if ( mServerType == MerginServerType::OLD )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
+    urlString = mApiRoot + QStringLiteral( "/v1/user/%1" ).arg( mUserAuth->username() );
   }
   else
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/profile" );
+    urlString = mApiRoot + QStringLiteral( "/v1/user/profile" );
   }
 
   QNetworkRequest request = getDefaultRequest();
@@ -946,7 +945,7 @@ void MerginApi::getWorkspaceInfo()
     return;
   }
 
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
   QNetworkRequest request = getDefaultRequest();
   QUrl url( urlString );
   request.setUrl( url );
@@ -967,11 +966,11 @@ void MerginApi::getServiceInfo()
 
   if ( mServerType == MerginServerType::SAAS )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
+    urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
   }
   else if ( mServerType == MerginServerType::OLD )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/service" );
+    urlString = mApiRoot + QStringLiteral( "/v1/user/service" );
   }
   else
   {
@@ -1038,14 +1037,6 @@ void MerginApi::clearAuth()
   mUserInfo->clearCachedWorkspacesInfo();
   mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
-}
-
-void MerginApi::resetApiRoot()
-{
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  setApiRoot( defaultApiRoot() );
-  settings.endGroup();
 }
 
 QString MerginApi::resetPasswordUrl()
@@ -1724,6 +1715,12 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   else
   {
     newApiRoot = apiRoot;
+  }
+
+  // Api root should not include the trailing slash!
+  while ( newApiRoot.endsWith( "/" ) )
+  {
+    newApiRoot.chop( 1 );
   }
 
   if ( newApiRoot != mApiRoot )
@@ -3839,7 +3836,7 @@ void MerginApi::processInvitation( const QString &uuid, bool accept )
   }
 
   QNetworkRequest request = getDefaultRequest( true );
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/invitation/%1" ).arg( uuid );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/workspace/invitation/%1" ).arg( uuid );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
