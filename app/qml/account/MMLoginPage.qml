@@ -127,7 +127,7 @@ MMPage {
 
           visible: root.supportsSso
 
-          // enabled: !root.pending
+          enabled: !root.pending
 
           onClicked: root.continueWithSsoClicked()
         }

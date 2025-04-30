@@ -18,11 +18,9 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
 {
   apiRootChanged();
   setUserVariables();
-  authChanged();
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
-  QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
   QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
@@ -102,16 +100,12 @@ void VariablesManager::apiRootChanged()
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_url" ),  mMerginApi->apiRoot() );
 }
 
-void VariablesManager::authChanged()
-{
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userAuth()->username() );
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
-}
-
 void VariablesManager::setUserVariables()
 {
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userInfo()->username() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_full_name" ),  mMerginApi->userInfo()->name() );
 }

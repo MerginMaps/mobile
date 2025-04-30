@@ -86,7 +86,7 @@ Item {
         }
       }
 
-      supportsSso: true
+      supportsSso: __merginApi.apiSupportsSso
 
       onSignInClicked: function ( username, password ) {
         stackView.pending = true
@@ -122,9 +122,27 @@ Item {
       }
 
       onContinueWithSsoClicked: {
-        // stackView.pending = true //??
+        stackView.pending = true
 
         __merginApi.requestSsoLogin()
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "loginPage"
+
+        function onSsoConfigIsMultiTenant() {
+            stackView.pending = false
+            stackView.push( ssoPanel )
+        }
+
+        // function onSsoWaiting() {
+        //   stackView.pending = true
+        // }
+
+        // function onSsoFinished() {
+        //   stackView.pending = false
+        // }
       }
     }
   }
@@ -189,6 +207,28 @@ Item {
             }
           }
         }
+      }
+    }
+  }
+
+  Component {
+    id: ssoPanel
+
+    MMSsoPage {
+
+      objectName: "ssoPanel"
+
+      onBackClicked: {
+        stackView.popOnePageOrClose()
+      }
+
+      onLoginWithPasswordClicked: {
+        stackView.popOnePageOrClose()
+      }
+
+      onSignInClicked: function( email ) {
+        stackView.pending = true
+        __merginApi.authorizeWithSso(email)
       }
     }
   }

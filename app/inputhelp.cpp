@@ -232,7 +232,7 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   retLines.push_back( QStringLiteral( "Device Model: %1" ).arg( InputUtils::getDeviceModel() ) );
   retLines.push_back( QStringLiteral( "Device Manufacturer: %1" ).arg( InputUtils::getManufacturer() ) );
   retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
-  retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userAuth()->username() ) );
+  retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userInfo()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
@@ -263,7 +263,7 @@ void InputHelp::submitReport()
   QString log = fullLog( false );
   QByteArray logArr = log.toUtf8();
   QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersion() );
-  QString username = mMerginApi->userAuth()->username().toHtmlEscaped();
+  QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
   if ( username.isEmpty() )
     username = "unknown";
   QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app ).arg( username );

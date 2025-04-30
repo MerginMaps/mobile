@@ -13,6 +13,7 @@ set(MM_QML
     account/MMHowYouFoundUsPage.qml
     account/MMLoginPage.qml
     account/MMSignUpPage.qml
+    account/MMSsoPage.qml
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
