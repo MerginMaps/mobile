@@ -36,6 +36,8 @@
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
+class QOAuth2AuthorizationCodeFlow;
+
 struct ProjectDiff
 {
   // changes that should be pushed
@@ -218,7 +220,7 @@ class MerginApi: public QObject
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
     Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
-    Q_PROPERTY( bool serverSupportsSso READ serverSupportsSso WRITE setServerSupportsSso NOTIFY serverSupportsSsoChanged )
+    Q_PROPERTY( bool apiSupportsSso READ apiSupportsSso WRITE setApiSupportsSso NOTIFY apiSupportsSsoChanged )
 
   public:
 
@@ -309,7 +311,8 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
-    Q_INVOKABLE void authorizeWithSso();
+    Q_INVOKABLE void requestSsoLogin();
+    Q_INVOKABLE void authorizeWithSso( const QString &email );
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -369,7 +372,7 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void deleteAccount();
 
-    static const int MERGIN_API_VERSION_MAJOR = 2020;
+    static const int MERGIN_API_VERSION_MAJOR = 1800; //2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
     static const int MINIMUM_SERVER_VERSION_MINOR = 2;
@@ -581,7 +584,7 @@ class MerginApi: public QObject
     /**
      * Returns true if the configured server has SSO enabled
      */
-    bool serverSupportsSso() const;
+    bool apiSupportsSso() const;
 
     /**
      * Reloads project metadata role by fetching latest information from server.
@@ -602,7 +605,7 @@ class MerginApi: public QObject
     /**
      * Makes this API available to use/not to use SSO
      */
-    void setServerSupportsSso( bool ssoSupported );
+    void setApiSupportsSso( bool ssoSupported );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -688,9 +691,10 @@ class MerginApi: public QObject
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
 
-    void serverSupportsSsoChanged();
+    void apiSupportsSsoChanged();
 
-    void ssoConfigurationRequested();
+    void ssoConfigIsMultiTenant();
+    void ssoConnectionsRequested();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -731,6 +735,9 @@ class MerginApi: public QObject
     void listInvitationsReplyFinished();
     void processInvitationReplyFinished();
     void createWorkspaceReplyFinished();
+
+    void ssoConfigReplyFinished();
+    void ssoConnectionsReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -847,6 +854,8 @@ class MerginApi: public QObject
     //! Retrieves cached role from metadata file
     QString getCachedProjectRole( const QString &projectFullName ) const;
 
+    void startSsoFlow( const QString &clientId );
+
     QNetworkAccessManager *mManager = nullptr;
 
     QString mApiRoot;
@@ -874,7 +883,7 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
-    bool mServerSupportsSso = false;
+    bool mApiSupportsSso = false;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
@@ -884,6 +893,8 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
+
+    QOAuth2AuthorizationCodeFlow *mOauth2Flow = nullptr;
 
     friend class TestMerginApi;
 };

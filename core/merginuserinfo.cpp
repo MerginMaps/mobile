@@ -24,6 +24,7 @@ void MerginUserInfo::clear()
   mName = "";
   mNameAbbr = "";
   mEmail = "";
+  mUsername = "";
   mActiveWorkspace = -1;
   mWorkspaces.clear();
   mInvitations.clear();
@@ -38,6 +39,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mName = docObj.value( QStringLiteral( "name" ) ).toString();
+  mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
   mNameAbbr = CoreUtils::nameAbbr( mName, mEmail );
 
   int preferredWorkspace = -1;
@@ -84,6 +86,11 @@ QString MerginUserInfo::nameAbbr() const
 QString MerginUserInfo::email() const
 {
   return mEmail;
+}
+
+QString MerginUserInfo::username() const
+{
+  return mUsername;
 }
 
 QString MerginUserInfo::activeWorkspaceName() const
