@@ -255,14 +255,10 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
 
 void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullName )
 {
-  clearCachedMapExtentSettings( projectFullName );
-}
-
-void LocalProjectsManager::clearCachedMapExtentSettings( const QString &projectFullName )
-{
   QSettings settings;
-  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP, projectFullName ) );
+  settings.beginGroup( projectFullName );
   settings.remove( "" );
   settings.endGroup();
 }
+
 

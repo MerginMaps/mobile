@@ -2681,3 +2681,55 @@ void TestMapTools::testAvoidIntersections()
   delete project;
   delete polygonLayer;
 }
+
+void TestMapTools::testExtentSaveAndLoad()
+{
+  InputMapSettings mapSettings;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  QString projectId = "testExtentSaveAndLoadProjectId";
+
+  // clear previous configuration
+  QSettings settings;
+  settings.beginGroup( projectId );
+  settings.remove( "" );
+  settings.endGroup();
+
+  QgsRectangle firstExtent( -107.0, 22.0, -72.0, 52.0 );
+  mapSettings.setProject( project );
+  mapSettings.setProjectId( projectId );
+  mapSettings.setExtent( firstExtent );
+
+  // timer has started but extent is not yet saved in settings => let's check directly in QSettings
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( projectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
+  QgsRectangle noExtentYet = settings.value( "extent" ).value<QgsRectangle>();
+  // there should be no saved extent now
+  QVERIFY( noExtentYet.isEmpty() );
+  settings.endGroup();
+
+  QTest::qWait( TestUtils::SHORT_REPLY );
+
+  // expected => saved extent is now firstExtent after waiting
+  QCOMPARE( mapSettings.extent(), firstExtent );
+
+  QgsRectangle secondExtent( -110.0, 25.0, -75.0, 55.0 );
+  mapSettings.setExtent( secondExtent );
+  QVERIFY( mapSettings.extent() != firstExtent );
+
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( projectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
+  QgsRectangle noSecondExtentYet = settings.value( "extent" ).value<QgsRectangle>();
+  // secondExtent shouldn't be saved by now
+  QVERIFY( mapSettings.extent() != noSecondExtentYet );
+  settings.endGroup();
+
+  QTest::qWait( TestUtils::SHORT_REPLY );
+
+  mapSettings.loadSavedExtent();
+
+  // expected => saved extent is now the secondExtent after waiting
+  QCOMPARE( mapSettings.extent(), secondExtent );
+
+  delete project;
+}
