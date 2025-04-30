@@ -428,7 +428,7 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="138"/>
+        <location filename="../qml/account/MMAccountController.qml" line="132"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2608,19 +2608,21 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="224"/>
+        <location filename="../../core/merginapi.cpp" line="223"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="825"/>
+        <location filename="../../core/merginapi.cpp" line="824"/>
+        <location filename="../../core/merginapi.cpp" line="1298"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="832"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
+        <location filename="../../core/merginapi.cpp" line="831"/>
+        <location filename="../../core/merginapi.cpp" line="1310"/>
+        <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2639,32 +2641,44 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1286"/>
+        <location filename="../../core/merginapi.cpp" line="1278"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1308"/>
+        <location filename="../../core/merginapi.cpp" line="1300"/>
+        <location filename="../../core/merginapi.cpp" line="1306"/>
+        <location filename="../../core/merginapi.cpp" line="1318"/>
+        <source>Registration failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1304"/>
+        <source>This email address is already registered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1329"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1340"/>
+        <location filename="../../core/merginapi.cpp" line="1361"/>
         <source>Workspace created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1677"/>
+        <location filename="../../core/merginapi.cpp" line="1698"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3868"/>
+        <location filename="../../core/merginapi.cpp" line="3895"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3934"/>
+        <location filename="../../core/merginapi.cpp" line="3961"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2899,7 +2913,7 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="41"/>
+        <location filename="../../core/merginapi.cpp" line="40"/>
         <source>Synchronisation canceled</source>
         <translation type="unfinished"></translation>
     </message>
