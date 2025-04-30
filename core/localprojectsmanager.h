@@ -81,9 +81,6 @@ class LocalProjectsManager : public QObject
     //! Clears all settings groups for the given project full name
     void clearAllProjectSettings( const QString &projectFullName );
 
-    //! Clears only mapExtent settings group for the given project full name
-    void clearCachedMapExtentSettings( const QString &projectFullName );
-
     QString mDataDir;   //!< directory with all local projects
     LocalProjectsList mProjects;
 };

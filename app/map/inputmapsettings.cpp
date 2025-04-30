@@ -266,10 +266,7 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
   }
 
-  if ( mMapSettings.extent().isEmpty() )
-  {
-    loadSavedExtent();
-  }
+  loadSavedExtent();
 
   mMapSettings.setRotation( 0 );
 
@@ -360,35 +357,42 @@ void InputMapSettings::setTemporalEnd( const QDateTime &end )
   emit temporalStateChanged();
 }
 
+QString InputMapSettings::projectId() const
+{
+  return mProjectId;
+}
+
+void InputMapSettings::setProjectId( const QString &projectId )
+{
+  if ( projectId == mProjectId )
+    return;
+
+  mProjectId = projectId;
+  emit projectIdChanged();
+}
+
 void InputMapSettings::saveExtentToSettings()
 {
   QSettings settings;
   const QgsRectangle extent = this->extent();
-  if ( !extent.isEmpty() && extent.isFinite() )
+  if ( !extent.isEmpty() && extent.isFinite() && !mProjectId.isEmpty() )
   {
-    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( mProjectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
     settings.setValue( "extent", extent );
     settings.endGroup();
-  }
-  else
-  {
-    CoreUtils::log( "MapSettings", QStringLiteral( "No valid extent to be saved for project %1" ).arg( mProject->baseName() ) );
   }
 }
 
 void InputMapSettings::loadSavedExtent()
 {
   QSettings settings;
-  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP, mProject->baseName() ) );
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( mProjectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
   QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
   settings.endGroup();
 
-  if ( !extent.isEmpty() && extent.isFinite() )
+  if ( !extent.isEmpty() && extent.isFinite() && !mProjectId.isEmpty() )
   {
     setExtent( extent );
   }
-  else
-  {
-    CoreUtils::log( "MapSettings", QStringLiteral( "No valid loaded extent found for project %1" ).arg( mProject->baseName() ) );
-  }
 }
+
