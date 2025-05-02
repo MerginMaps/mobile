@@ -26,8 +26,6 @@ class TestMapTools : public QObject
     void init();
     void cleanup();
 
-    void testExtentSaveAndLoad();
-
     void testSnapping();
     void testSplitting();
     void testRecording();
@@ -52,6 +50,8 @@ class TestMapTools : public QObject
 
     void testAntennaHeight();
     void testSmallTracking();
+
+    void testExtentSaveAndLoad();
 
   private:
     PositionKit *mPositionKit;
