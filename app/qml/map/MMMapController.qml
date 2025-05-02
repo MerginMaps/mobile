@@ -239,7 +239,6 @@ Item {
     anchors.fill: parent
 
     mapSettings.project: __activeProject.qgsProject
-    mapSettings.projectId: __activeProject.projectFullName()
 
     MM.IdentifyKit {
       id: identifyKit
