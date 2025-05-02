@@ -298,9 +298,9 @@ class InputMapSettings : public QObject
     //! \copydoc InputMapSettings::projectId
     void setProjectId( const QString &projectId );
 
-     /**
-     * Saves current map extent to QSettings
-     */
+    /**
+    * Saves current map extent to QSettings
+    */
     void saveExtentToSettings();
 
     /**

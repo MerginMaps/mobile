@@ -26,8 +26,6 @@ class TestMapTools : public QObject
     void init();
     void cleanup();
 
-    void testExtentSaveAndLoad();
-
     void testSnapping();
     void testSplitting();
     void testRecording();
@@ -54,6 +52,8 @@ class TestMapTools : public QObject
     void testSmallTracking();
 
     void testAvoidIntersections();
+
+    void testExtentSaveAndLoad();
 
   private:
     PositionKit *mPositionKit;

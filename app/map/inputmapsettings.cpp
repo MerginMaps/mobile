@@ -37,6 +37,7 @@ InputMapSettings::InputMapSettings( QObject *parent )
   mSaveExtentTimer.setSingleShot( true );
   connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
   connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( EXTENT_SAVE_DELAY_MS ); } );
+  connect( this, &InputMapSettings::projectIdChanged, this, &InputMapSettings::loadSavedExtent );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
