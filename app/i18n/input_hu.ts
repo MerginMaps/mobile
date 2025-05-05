@@ -2773,7 +2773,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
         <source>Project %1 created</source>
-        <translation>%1 projekt létrehozva </translation>
+        <translation>%1 projekt létrehozva</translation>
     </message>
 </context>
 <context>
