@@ -2768,7 +2768,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation>A projekt neve érvénytelen karaktert tartalmaz </translation>
+        <translation>A projekt neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
