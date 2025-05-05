@@ -1995,7 +1995,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
         <source>Empty project name</source>
-        <translation>A projekt neve üres </translation>
+        <translation>A projekt neve üres</translation>
     </message>
 </context>
 <context>
