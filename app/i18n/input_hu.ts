@@ -1975,7 +1975,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
         <source>Project name</source>
-        <translation>Projekt neve </translation>
+        <translation>Projekt neve</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="54"/>
