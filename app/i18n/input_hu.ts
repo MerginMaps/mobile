@@ -1033,7 +1033,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="304"/>
         <source>Last Fix</source>
-        <translation>Utolsó javítás </translation>
+        <translation>Utolsó javítás</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
