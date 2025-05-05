@@ -2737,12 +2737,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation>Bluetooth eszköz </translation>
+        <translation> Bluetooth eszköz</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation>Bluetooth eszköz </translation>
+        <translation> Bluetooth eszköz</translation>
     </message>
 </context>
 <context>
