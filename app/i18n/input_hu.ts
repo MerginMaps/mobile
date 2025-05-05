@@ -612,7 +612,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="70"/>
         <source>Please note</source>
-        <translation>Kérjük, jegyezze meg </translation>
+        <translation>Kérjük, jegyezze meg</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="71"/>
