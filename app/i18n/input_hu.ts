@@ -1990,7 +1990,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
         <source>Create project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
