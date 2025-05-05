@@ -2845,7 +2845,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
-        <translation>Az értéknek egyedinek kell lennie </translation>
+        <translation>Az értéknek egyedinek kell lennie</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="71"/>
