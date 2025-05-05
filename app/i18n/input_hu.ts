@@ -487,7 +487,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
         <source>Unknown device</source>
-        <translation>Ismeretlen eszköz </translation>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
@@ -1587,7 +1587,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="82"/>
         <source>Unknown device</source>
-        <translation>Ismeretlen eszköz </translation>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
