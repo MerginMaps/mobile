@@ -272,7 +272,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 year ago</source>
-        <translation>%1 évvel ezelőtt </translation>
+        <translation>%1 évvel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1524"/>
