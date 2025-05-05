@@ -2676,7 +2676,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="3895"/>
         <source>Workspace name contains invalid characters</source>
-        <translation>A munkaterület neve érvénytelen karaktert tartalmaz </translation>
+        <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3961"/>
