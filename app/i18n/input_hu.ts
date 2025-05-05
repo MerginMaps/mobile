@@ -1164,7 +1164,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
         <source>Legend</source>
-        <translation>Jelmagyarázat </translation>
+        <translation>Jelmagyarázat</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
