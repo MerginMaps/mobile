@@ -1617,7 +1617,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
         <source>Internal</source>
-        <translation>Belső </translation>
+        <translation>Belső</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
@@ -2702,7 +2702,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
-        <translation>Belső </translation>
+        <translation>Belső</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
