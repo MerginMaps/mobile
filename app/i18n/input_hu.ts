@@ -215,28 +215,28 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minutes ago</source>
-        <translation>%1 perccel ezelőtt </translation>
+        <translation>%1 perccel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minute ago</source>
-        <translation>%1 perccel ezelőtt </translation>
+        <translation>%1 perccel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hours ago</source>
-        <translation>%1 órával ezelőtt </translation>
+        <translation>%1 órával ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hour ago</source>
-        <translation>%1 órával ezelőtt </translation>
+        <translation>%1 órával ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 days ago</source>
-        <translation>%1 nappal ezelőtt </translation>
+        <translation>%1 nappal ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
