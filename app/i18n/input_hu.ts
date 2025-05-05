@@ -2856,7 +2856,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
-        <translation>Érvénytelen érték </translation>
+        <translation>Érvénytelen érték</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="132"/>
