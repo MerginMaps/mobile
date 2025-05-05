@@ -20,7 +20,7 @@
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
-        <translation>Nem lehet betölteni a forrást</translation>
+        <translation>Nem lehet betölteni a forrást </translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="284"/>
@@ -210,69 +210,69 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../inpututils.cpp" line="236"/>
         <source>just now</source>
-        <translation>csak most </translation>
+        <translation>csak most</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minutes ago</source>
-        <translation>%1 perccel ezelőtt </translation>
+        <translation>%1 perccel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minute ago</source>
-        <translation>%1 perccel ezelőtt </translation>
+        <translation>%1 perccel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hours ago</source>
-        <translation>%1 órával ezelőtt </translation>
+        <translation>%1 órával ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hour ago</source>
-        <translation>%1 órával ezelőtt </translation>
+        <translation>%1 órával ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 days ago</source>
-        <translation>%1 nappal ezelőtt </translation>
+        <translation>%1 nappal ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 day ago</source>
-        <translation>%1 nappal ezelőtt </translation>
+        <translation>%1 nappal ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 weeks ago</source>
-        <translation>%1 héttel ezelőtt </translation>
+        <translation>%1 héttel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 week ago</source>
-        <translation>%1 héttel ezelőtt </translation>
+        <translation>%1 héttel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 months ago</source>
-        <translation>%1 hónappal ezelőtt </translation>
+        <translation>%1 hónappal ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 month ago</source>
-        <translation>%1 hónappal ezelőtt </translation>
+        <translation>%1 hónappal ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 years ago</source>
-        <translation>%1 évvel ezelőtt </translation>
+        <translation>%1 évvel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 year ago</source>
-        <translation>%1 évvel ezelőtt </translation>
+        <translation>%1 évvel ezelőtt</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1524"/>
@@ -487,7 +487,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
         <source>Unknown device</source>
-        <translation>Ismeretlen eszköz </translation>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
@@ -612,7 +612,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="70"/>
         <source>Please note</source>
-        <translation>Kérjük, jegyezze meg </translation>
+        <translation>Kérjük, jegyezze meg</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="71"/>
@@ -879,7 +879,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
         <source> more</source>
-        <translation>több</translation>
+        <translation> több</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
@@ -1033,7 +1033,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="304"/>
         <source>Last Fix</source>
-        <translation>Utolsó javítás </translation>
+        <translation>Utolsó javítás</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
@@ -1159,12 +1159,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation>Látható a térképen </translation>
+        <translation>Látható a térképen</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
         <source>Legend</source>
-        <translation>Jelmagyarázat </translation>
+        <translation>Jelmagyarázat</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
@@ -1587,7 +1587,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="82"/>
         <source>Unknown device</source>
-        <translation>Ismeretlen eszköz </translation>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
@@ -1617,7 +1617,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
         <source>Internal</source>
-        <translation>Belső </translation>
+        <translation>Belső</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
@@ -1862,7 +1862,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
@@ -1882,7 +1882,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
-        <translation>Nem található projekt!</translation>
+        <translation>Nem található projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="275"/>
@@ -1952,7 +1952,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Project Status</source>
-        <translation>Projekt állapot </translation>
+        <translation>Projekt állapot</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
@@ -1970,12 +1970,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
         <source>Create Project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
         <source>Project name</source>
-        <translation>Projekt neve </translation>
+        <translation>Projekt neve</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="54"/>
@@ -1985,17 +1985,17 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="99"/>
         <source>Add field</source>
-        <translation>Mező hozzáadása </translation>
+        <translation>Mező hozzáadása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
         <source>Create project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
         <source>Empty project name</source>
-        <translation>A projekt neve üres </translation>
+        <translation>A projekt neve üres</translation>
     </message>
 </context>
 <context>
@@ -2003,7 +2003,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="22"/>
         <source>Remove receiver</source>
-        <translation>Vevő eltávolítása </translation>
+        <translation>Vevő eltávolítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
@@ -2031,7 +2031,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
-        <translation>Eltávolítás </translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
@@ -2078,7 +2078,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="24"/>
         <source>Remove project</source>
-        <translation>Projekt eltávolítása </translation>
+        <translation>Projekt eltávolítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
@@ -2090,7 +2090,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
         <source>Remove</source>
-        <translation>Eltávolítás </translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
@@ -2676,12 +2676,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="3895"/>
         <source>Workspace name contains invalid characters</source>
-        <translation>A munkaterület neve érvénytelen karaktert tartalmaz </translation>
+        <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3961"/>
         <source>Workspace %1 already exists</source>
-        <translation>%1 munkaterület már létezik </translation>
+        <translation>%1 munkaterület már létezik</translation>
     </message>
 </context>
 <context>
@@ -2702,7 +2702,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
-        <translation>Belső </translation>
+        <translation>Belső</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
@@ -2737,12 +2737,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation>Bluetooth eszköz </translation>
+        <translation> Bluetooth eszköz</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation>Bluetooth eszköz </translation>
+        <translation>Bluetooth eszköz</translation>
     </message>
 </context>
 <context>
@@ -2768,12 +2768,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation>A projekt neve érvénytelen karaktert tartalmaz </translation>
+        <translation>A projekt neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
         <source>Project %1 created</source>
-        <translation>%1 projekt létrehozva </translation>
+        <translation>%1 projekt létrehozva</translation>
     </message>
 </context>
 <context>
@@ -2845,7 +2845,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
-        <translation>Az értéknek egyedinek kell lennie </translation>
+        <translation>Az értéknek egyedinek kell lennie</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="71"/>
@@ -2856,12 +2856,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
-        <translation>Érvénytelen érték </translation>
+        <translation>Érvénytelen érték</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="132"/>
         <source>No data</source>
-        <translation>Nincs adat </translation>
+        <translation>Nincs adat</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="135"/>
