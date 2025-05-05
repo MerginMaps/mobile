@@ -2861,7 +2861,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="132"/>
         <source>No data</source>
-        <translation>Nincs adat </translation>
+        <translation>Nincs adat</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="135"/>
