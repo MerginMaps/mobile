@@ -879,7 +879,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
         <source> more</source>
-        <translation>több</translation>
+        <translation> több</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
