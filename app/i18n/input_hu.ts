@@ -2681,7 +2681,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="3961"/>
         <source>Workspace %1 already exists</source>
-        <translation>%1 munkaterület már létezik </translation>
+        <translation>%1 munkaterület már létezik</translation>
     </message>
 </context>
 <context>
