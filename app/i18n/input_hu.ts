@@ -1159,7 +1159,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation>Látható a térképen </translation>
+        <translation>Látható a térképen</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
