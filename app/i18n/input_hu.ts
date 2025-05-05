@@ -1985,7 +1985,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="99"/>
         <source>Add field</source>
-        <translation>Mező hozzáadása </translation>
+        <translation>Mező hozzáadása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
