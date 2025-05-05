@@ -1882,7 +1882,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="246"/>
         <source>No projects found</source>
-        <translation>Nem található projekt!</translation>
+        <translation>Nem található projekt</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="275"/>
