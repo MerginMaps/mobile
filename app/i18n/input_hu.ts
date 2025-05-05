@@ -2003,7 +2003,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="22"/>
         <source>Remove receiver</source>
-        <translation>Vevő eltávolítása </translation>
+        <translation>Vevő eltávolítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
