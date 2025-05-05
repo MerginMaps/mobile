@@ -1952,7 +1952,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Project Status</source>
-        <translation>Projekt állapot </translation>
+        <translation>Projekt állapot</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
