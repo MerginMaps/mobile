@@ -2078,7 +2078,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="24"/>
         <source>Remove project</source>
-        <translation>Projekt eltávolítása </translation>
+        <translation>Projekt eltávolítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
