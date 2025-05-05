@@ -2031,7 +2031,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
-        <translation>Eltávolítás </translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
@@ -2090,7 +2090,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
         <source>Remove</source>
-        <translation>Eltávolítás </translation>
+        <translation>Eltávolítás</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
