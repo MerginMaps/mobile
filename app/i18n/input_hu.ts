@@ -1862,7 +1862,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="212"/>
         <source>Create project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="237"/>
@@ -1970,7 +1970,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
         <source>Create Project</source>
-        <translation>Projekt létrehozása </translation>
+        <translation>Projekt létrehozása</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
