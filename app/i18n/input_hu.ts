@@ -210,7 +210,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../inpututils.cpp" line="236"/>
         <source>just now</source>
-        <translation>csak most </translation>
+        <translation>csak most</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
