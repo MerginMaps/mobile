@@ -10,16 +10,9 @@
 #include "coreutils.h"
 #include "inputconfig.h"
 
-#include <QDateTime>
-#include <QDebug>
-#include <QUuid>
 #include <QSettings>
-#include <QDir>
-#include <QFile>
-#include <QDirIterator>
 #include <QTextStream>
 #include <QCryptographicHash>
-#include <QRegularExpression>
 #include <QStorageInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -29,7 +22,7 @@
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
-QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
+QString CoreUtils::sLogFile = LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
 
 QString CoreUtils::deviceUuid()
@@ -38,11 +31,11 @@ QString CoreUtils::deviceUuid()
 
   QSettings settings;
   settings.beginGroup( QSETTINGS_APP_GROUP_NAME );
-  QVariant uuidEntry = settings.value( "deviceUuid" );
+  const QVariant uuidEntry = settings.value( "deviceUuid" );
   if ( uuidEntry.isNull() )
   {
     uuid = uuidWithoutBraces( QUuid::createUuid() );
-    CoreUtils::log( QStringLiteral( "Device" ), QStringLiteral( "deviceUuid generated: %1" ).arg( uuid ) );
+    log( QStringLiteral( "Device" ), QStringLiteral( "deviceUuid generated: %1" ).arg( uuid ) );
     settings.setValue( "deviceUuid", uuid );
   }
   else
@@ -79,15 +72,15 @@ QString CoreUtils::appVersionCode()
   return version;
 }
 
-QString CoreUtils::localizedDateFromUTFString( QString timestamp )
+QString CoreUtils::localizedDateFromUTFString( const QString &timestamp )
 {
   if ( timestamp.isEmpty() )
     return QString();
 
-  QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
+  const QDateTime dateTime = QDateTime::fromString( timestamp, Qt::ISODate );
   if ( dateTime.isValid() )
   {
-    QLocale locale = QLocale::system();
+    const QLocale locale = QLocale::system();
     return locale.toString( dateTime.date(), locale.dateFormat( QLocale::ShortFormat ) );
   }
   else
@@ -108,12 +101,12 @@ QString CoreUtils::uuidWithoutBraces( const QUuid &uuid )
 #endif
 }
 
-bool CoreUtils::removeDir( const QString &dir )
+bool CoreUtils::removeDir( const QString &projectDir )
 {
-  if ( dir.isEmpty() || dir == "/" )
+  if ( projectDir.isEmpty() || projectDir == "/" )
     return false;
 
-  return QDir( dir ).removeRecursively();
+  return QDir( projectDir ).removeRecursively();
 }
 
 QString CoreUtils::downloadInProgressFilePath( const QString &projectDir )
@@ -136,7 +129,9 @@ void CoreUtils::log( const QString &topic, const QString &info )
 {
   QString logFilePath;
   QByteArray data;
-  data.append( QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic ).arg( info ).toUtf8() );
+  data.append(
+    QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic )
+    .arg( info ).toUtf8() );
   appendLog( data, sLogFile );
 }
 
@@ -166,11 +161,11 @@ void CoreUtils::appendLog( const QByteArray &data, const QString &path )
 
 QString CoreUtils::findUniquePath( const QString &path )
 {
-  QFileInfo originalPath( path );
+  const QFileInfo originalPath( path );
   QString uniquePath = path;
 
   // are we dealing with directory?
-  bool isDirectory = originalPath.isDir();
+  const bool isDirectory = originalPath.isDir();
 
   int i = 0;
   QFileInfo f( uniquePath );
@@ -215,10 +210,10 @@ QByteArray CoreUtils::calculateChecksum( const QString &filePath )
 QString CoreUtils::createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName )
 {
   QString projectDirPath = findUniquePath( baseDataDir + "/" + projectName );
-  QDir projectDir( projectDirPath );
+  const QDir projectDir( projectDirPath );
   if ( !projectDir.exists() )
   {
-    QDir dir( "" );
+    const QDir dir( "" );
     dir.mkdir( projectDirPath );
   }
   return projectDirPath;
@@ -234,12 +229,12 @@ bool CoreUtils::createEmptyFile( const QString &filePath )
   return true;
 }
 
-QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QString &username, int version )
+QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QString &username, const int version )
 {
   if ( file.isEmpty() )
     return QString();
 
-  QFileInfo f( file );
+  const QFileInfo f( file );
 
   QString suffix = f.completeSuffix();
   if ( hasProjectFileExtension( file ) )
@@ -249,24 +244,24 @@ QString CoreUtils::generateConflictedCopyFileName( const QString &file, const QS
   return QString( "%1/%2 (conflicted copy, %3 v%4).%5" ).arg( f.path(), f.baseName(), username, QString::number( version ).toUtf8(), suffix );
 }
 
-QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, int version )
+QString CoreUtils::generateEditConflictFileName( const QString &file, const QString &username, const int version )
 {
   if ( file.isEmpty() )
     return QString();
 
-  QFileInfo f( file );
+  const QFileInfo f( file );
   return QString( "%1/%2 (edit conflict, %3 v%4).json" ).arg( f.path(), f.baseName(), username, QString::number( version ) );
 }
 
-bool CoreUtils::hasProjectFileExtension( const QString filePath )
+bool CoreUtils::hasProjectFileExtension( const QString &filePath )
 {
   return filePath.contains( ".qgs", Qt::CaseInsensitive ) || filePath.contains( ".qgz", Qt::CaseInsensitive );
 }
 
 bool CoreUtils::isValidName( const QString &name )
 {
-  static QRegularExpression reForbiddenmNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
-  QRegularExpressionMatch matchForbiddenNames = reForbiddenmNames.match( name );
+  static QRegularExpression reForbiddenNames( R"([@#$%^&*\(\)\{\}\[\]\\\/\|\+=<>~\?:;,`\'\"]|^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  const QRegularExpressionMatch matchForbiddenNames = reForbiddenNames.match( name );
   return !matchForbiddenNames.hasMatch();
 }
 
@@ -289,8 +284,8 @@ QString CoreUtils::nameAbbr( const QString &name, const QString &email )
 
 QString CoreUtils::getAvailableDeviceStorage()
 {
-  QString appDir = QCoreApplication::applicationDirPath();
-  QStorageInfo storageInfo( appDir );
+  const QString appDir = QCoreApplication::applicationDirPath();
+  const QStorageInfo storageInfo( appDir );
 
   if ( storageInfo.isValid() && storageInfo.isReady() )
   {
@@ -302,8 +297,8 @@ QString CoreUtils::getAvailableDeviceStorage()
 
 QString CoreUtils::getTotalDeviceStorage()
 {
-  QString appDir = QCoreApplication::applicationDirPath();
-  QStorageInfo storageInfo( appDir );
+  const QString appDir = QCoreApplication::applicationDirPath();
+  const QStorageInfo storageInfo( appDir );
 
   if ( storageInfo.isValid() && storageInfo.isReady() )
   {
@@ -313,32 +308,29 @@ QString CoreUtils::getTotalDeviceStorage()
   return "N/A";
 }
 
-QString CoreUtils::bytesToHumanSize( double bytes )
+QString CoreUtils::bytesToHumanSize( const double bytes )
 {
-  const int precision = 1;
+  constexpr int precision = 1;
   if ( bytes < 1e-5 )
   {
     return "0.0";
   }
-  else if ( bytes < 1024.0 * 1024.0 )
+  if ( bytes < 1024.0 * 1024.0 )
   {
     return QString::number( bytes / 1024.0, 'f', precision ) + " KB";
   }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 )
+  if ( bytes < 1024.0 * 1024.0 * 1024.0 )
   {
     return QString::number( bytes / 1024.0 / 1024.0, 'f', precision ) + " MB";
   }
-  else if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
+  if ( bytes < 1024.0 * 1024.0 * 1024.0 * 1024.0 )
   {
     return QString::number( bytes / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " GB";
   }
-  else
-  {
-    return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
-  }
+  return QString::number( bytes / 1024.0 / 1024.0 / 1024.0 / 1024.0, 'f', precision ) + " TB";
 }
 
-QString CoreUtils::getProjectMetadataPath( QString projectDir )
+QString CoreUtils::getProjectMetadataPath( const QString &projectDir )
 {
   if ( projectDir.isEmpty() )
     return QString();
@@ -354,7 +346,7 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
     return false;
   }
 
-  QByteArray data = file.readAll();
+  const QByteArray data = file.readAll();
   file.close();
 
   QJsonDocument doc = QJsonDocument::fromJson( data );
@@ -372,10 +364,28 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
     return false;
   }
 
-  bool success = ( file.write( doc.toJson() ) != -1 );
+  const bool success = file.write( doc.toJson() ) != -1;
   file.close();
 
   return success;
+}
+
+QString CoreUtils::getFullProjectName( const QString &projectNamespace, const QString &projectName )
+{
+  return QString( "%1/%2" ).arg( projectNamespace ).arg( projectName );
+}
+
+bool CoreUtils::extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName )
+{
+  QStringList parts = sourceString.split( "/" );
+  if ( parts.length() > 1 )
+  {
+    projectNamespace = parts.at( parts.length() - 2 );
+    projectName = parts.last();
+    return true;
+  }
+  projectName = sourceString;
+  return false;
 }
 
 bool CoreUtils::isValidEmail( const QString &email )

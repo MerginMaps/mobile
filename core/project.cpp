@@ -10,27 +10,45 @@
 #include "project.h"
 #include "merginapi.h"
 #include "coreutils.h"
+#include "../app/inpututils.h"
 
 QString LocalProject::id() const
 {
-  return fullName();
+  // if project directory or project name doesn't exist return empty string
+  if ( projectDir.isEmpty() || projectName.isEmpty() )
+    return {};
+
+  return projectId;
 }
 
 QString LocalProject::fullName() const
 {
   if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
-    return MerginApi::getFullProjectName( projectNamespace, projectName );
+    return CoreUtils::getFullProjectName( projectNamespace, projectName );
 
   if ( projectDir.isEmpty() )
-    return QString();
+    return {};
 
-  QDir dir( projectDir );
+  const QDir dir( projectDir );
   return dir.dirName();
+}
+
+QString LocalProject::generateProjectId()
+{
+  return CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 }
 
 QString MerginProject::id() const
 {
-  return MerginApi::getFullProjectName( projectNamespace, projectName );
+  return projectId;
+}
+
+QString MerginProject::fullName() const
+{
+  if ( !projectName.isEmpty() && !projectNamespace.isEmpty() )
+    return CoreUtils::getFullProjectName( projectNamespace, projectName );
+
+  return {};
 }
 
 ProjectStatus::Status ProjectStatus::projectStatus( const Project &project, const bool supportsSelectiveSync )
@@ -58,9 +76,9 @@ ProjectStatus::Status ProjectStatus::projectStatus( const Project &project, cons
   return ProjectStatus::UpToDate;
 }
 
-bool ProjectStatus::hasLocalChanges( const LocalProject &project, bool supportsSelectiveSync )
+bool ProjectStatus::hasLocalChanges( const LocalProject &project, const bool supportsSelectiveSync )
 {
-  QString metadataFilePath = project.projectDir + "/" + MerginApi::sMetadataFile;
+  const QString metadataFilePath = project.projectDir + "/" + MerginApi::sMetadataFile;
 
   // If the project does not have metadata file, there are local changes
   if ( !QFile::exists( metadataFilePath ) )

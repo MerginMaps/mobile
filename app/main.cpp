@@ -586,20 +586,20 @@ int main( int argc, char *argv[] )
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {
-    merginApi->reloadProjectRole( activeProject.projectFullName() );
+    merginApi->reloadProjectRole( activeProject.projectId() );
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {
     if ( activeProject.isProjectLoaded() )
     {
-      merginApi->reloadProjectRole( activeProject.projectFullName() );
+      merginApi->reloadProjectRole( activeProject.projectId() );
     }
   } );
 
-  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
+  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectId, const QString & role )
   {
-    if ( projectFullName == activeProject.projectFullName() )
+    if ( projectId == activeProject.projectId() )
     {
       activeProject.setProjectRole( role );
     }
@@ -624,11 +624,11 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
-  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectId, const bool successfully, const int version, const bool reloadNeeded )
   {
     Q_UNUSED( successfully );
     Q_UNUSED( version );
-    if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
+    if ( reloadNeeded && activeProject.projectId() == projectId )
     {
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
     }
@@ -680,7 +680,7 @@ int main( int argc, char *argv[] )
   // and properly close connection after writting changes to gpkg.
   qputenv( "OGR_SQLITE_JOURNAL", "DELETE" );
 
-
+  // TODO: rework to singletons instead (check Qt docs why)
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   engine.rootContext()->setContextProperty( "__androidUtils", &androidUtils );

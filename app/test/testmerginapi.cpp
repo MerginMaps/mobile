@@ -227,12 +227,12 @@ void TestMerginApi::testDownloadProjectSpecChars()
 
   // create an empty project on the server
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName, true );
+  mApi->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
   // make MerginApi aware of the project and its directory
-  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName, TODO );
 
   // Copy data
   QString sourcePath = mTestDataPath + "/" + TestMerginApi::TEST_PROJECT_NAME + "/";
@@ -274,7 +274,7 @@ void TestMerginApi::testCancelDownloadProject()
   QSignalSpy spy5( mApi, &MerginApi::syncProjectFinished );
   mApi->pullProject( mWorkspaceName, projectName );
   QCOMPARE( mApi->transactions().count(), 1 );
-  mApi->cancelPull( MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  mApi->cancelPull( TODO );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy5.count(), 1 );
@@ -293,7 +293,7 @@ void TestMerginApi::testCancelDownloadProject()
   QCOMPARE( spy6.count(), 1 );
 
   QSignalSpy spy7( mApi, &MerginApi::syncProjectFinished );
-  mApi->cancelPull( MerginApi::getFullProjectName( mWorkspaceName, projectName ) );
+  mApi->cancelPull( TODO );
 
   // no need to wait for the signal here - as we call abort() the reply's finished() signal is immediately emitted
   QCOMPARE( spy7.count(), 1 );
@@ -318,7 +318,7 @@ void TestMerginApi::testCreateProjectTwice()
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName, true );
+  mApi->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -331,7 +331,7 @@ void TestMerginApi::testCreateProjectTwice()
 
   // Create again, expecting error
   QSignalSpy spy2( mApi, &MerginApi::networkErrorOccurred );
-  mApi->createProject( projectNamespace, projectName, true );
+  mApi->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy2.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy2.count(), 1 );
 
@@ -380,7 +380,7 @@ void TestMerginApi::testCreateDeleteProject()
   QVERIFY( !_findProjectByName( projectNamespace, projectName, projects ).isValid() );
 
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
-  mApi->createProject( projectNamespace, projectName, true );
+  mApi->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -408,7 +408,7 @@ void TestMerginApi::testUploadProject()
   deleteRemoteProjectNow( mApi, projectNamespace, projectName );
 
   QSignalSpy spy0( mApiExtra, &MerginApi::projectCreated );
-  mApiExtra->createProject( projectNamespace, projectName, true );
+  mApiExtra->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy0.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy0.count(), 1 );
   QCOMPARE( spy0.takeFirst().at( 1 ).toBool(), true );
@@ -418,7 +418,7 @@ void TestMerginApi::testUploadProject()
 
   // copy project's test data to the new project directory
   QVERIFY( InputUtils::cpDir( mTestDataPath + "/" + TEST_PROJECT_NAME, projectDir ) );
-  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName, TODO );
 
   // project info does not have any version information yet
   Project project0 = mLocalProjectsModel->projectFromId( MerginApi::getFullProjectName( projectNamespace, projectName ) );
@@ -1593,7 +1593,7 @@ void TestMerginApi::testMigrateDetachProject()
 
   // detach project
   QString projectNamespace = mWorkspaceName;
-  mApi->detachProjectFromMergin( projectNamespace, projectName );
+  mApi->detachProjectFromMergin( projectNamespace );
   // TEST if is NOT mergin project
   QVERIFY( !QFileInfo::exists( projectDir + "/.mergin/" ) );
 }
@@ -2624,7 +2624,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
 
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
-  api->createProject( projectNamespace, projectName, true );
+  api->createProject( projectNamespace, projectName, TODO, true );
   QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
@@ -2634,7 +2634,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   InputUtils::cpDir( sourcePath, projectDir );
 
   // make MerginApi aware of the project and its directory
-  api->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+  api->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName, TODO );
 
   // Upload data
   QSignalSpy spy3( api, &MerginApi::syncProjectFinished );
@@ -2668,7 +2668,7 @@ QString TestMerginApi::projectIdFromProjectFullName( MerginApi *api, const QStri
 
   QString projectFullName = api->getFullProjectName( projectNamespace, projectName );
 
-  QNetworkReply *r = api->getProjectInfo( projectFullName );
+  QNetworkReply *r = api->getProjectInfo( projectFullName, TODO );
   Q_ASSERT( r );
   QSignalSpy spy( r, &QNetworkReply::finished );
   spy.wait( TestUtils::SHORT_REPLY );

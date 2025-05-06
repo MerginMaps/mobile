@@ -15,14 +15,12 @@
 
 #include "qgsproject.h"
 
-#include "inputconfig.h"
 #include "appsettings.h"
 #include "activelayer.h"
 #include "recordinglayersproxymodel.h"
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
-#include "merginprojectmetadata.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -47,7 +45,7 @@ class ActiveProject: public QObject
       , LocalProjectsManager &localProjectsManager
       , QObject *parent = nullptr );
 
-    virtual ~ActiveProject();
+    ~ActiveProject() override;
 
     //! Returns active project's QgsProject instance to do QGIS API magic
     QgsProject *qgsProject() const;
@@ -57,6 +55,8 @@ class ActiveProject: public QObject
 
     Q_INVOKABLE QString projectFullName() const;
 
+    Q_INVOKABLE QString projectId() const;
+
     /**
      * Loads a .qgz/.qgs project file specified by filePath.
      * \param filePath Path to project file.
@@ -64,10 +64,10 @@ class ActiveProject: public QObject
     Q_INVOKABLE bool load( const QString &filePath );
 
     /**
-     * Applies map theme with 'name' to currently loaded QGIS project
+     * Applies map theme with 'themeName' to currently loaded QGIS project
      * Invalidates active layer if it is no longer visible
      */
-    Q_INVOKABLE void setMapTheme( const QString &name );
+    Q_INVOKABLE void setMapTheme( const QString &themeName );
 
     /**
      * setActiveLayer sets active layer from layer
@@ -128,7 +128,7 @@ class ActiveProject: public QObject
      * Returns if project layer allows recording (has geometry, editable, not position tracking layer, not map
      * sketching layer) regardless of visibility
      */
-    bool recordingAllowed( QgsMapLayer *layer ) const ;
+    bool recordingAllowed( const QgsMapLayer *layer ) const ;
 
     //! Returns position tracking layer ID if exists
     Q_INVOKABLE QString positionTrackingLayerId() const;
@@ -165,7 +165,7 @@ class ActiveProject: public QObject
 
     void positionTrackingSupportedChanged();
 
-    // Emited when the app (UI) should show tracking because there is a running tracking service
+    // Emitted when the app (UI) should show tracking because there is a running tracking service
     void startPositionTracking();
 
     void projectRoleChanged();
@@ -174,7 +174,7 @@ class ActiveProject: public QObject
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
-    bool reloadProject( QString projectDir );
+    bool reloadProject( const QString &projectDir );
 
     void setAutosyncEnabled( bool enabled );
 
@@ -196,10 +196,7 @@ class ActiveProject: public QObject
      *  if not, sets first available layer as active;
      *  sets nullptr if there are no other available layers
      */
-    void updateActiveLayer();
-
-    //! Reloads layers in 'recoring layers model'
-    void updateRecordingLayers();
+    void updateActiveLayer() const;
 
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
