@@ -127,7 +127,7 @@ void AttributeController::prefillRelationReferenceField()
   const QList<QgsRelation::FieldPair> fieldPairs = mLinkedRelation.fieldPairs();
   for ( const QgsRelation::FieldPair &fieldPair : fieldPairs )
   {
-    QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> itemData = formItemsIterator.value();
@@ -524,7 +524,7 @@ void AttributeController::updateOnLayerChange()
   AttributeTabModel *tabModel = new AttributeTabModel( mAttributeTabProxyModel.get(), this, mTabItems.size() );
   mAttributeTabProxyModel->setSourceModel( tabModel );
   mAttributeFormProxyModelForTabItem.resize( mTabItems.size() );
-  QVector<std::shared_ptr<TabItem >>::iterator tabItemsIterator = mTabItems.begin();
+  QVector<std::shared_ptr<TabItem>>::iterator tabItemsIterator = mTabItems.begin();
   while ( tabItemsIterator != mTabItems.end() )
   {
     std::shared_ptr<TabItem> item = *tabItemsIterator;
@@ -539,7 +539,7 @@ void AttributeController::updateOnLayerChange()
 
   // collect fields which have default value expression and are not in the form
   QSet<int> fieldIndexes;
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -579,7 +579,7 @@ void AttributeController::updateOnFeatureChange()
 
   const QgsFeature feature = mFeatureLayerPair.feature();
 
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> itemData = formItemsIterator.value();
@@ -758,7 +758,7 @@ void AttributeController::recalculateDefaultValues(
   }
 
   // evaluate default values for fields in the form
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -825,7 +825,7 @@ void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItem
   }
 
   // evaluate virtual fields in the form
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -879,7 +879,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   // Evaluate tab items visiblity
   {
-    QVector<std::shared_ptr<TabItem >>::iterator tabItemsIterator = mTabItems.begin();
+    QVector<std::shared_ptr<TabItem>>::iterator tabItemsIterator = mTabItems.begin();
     while ( tabItemsIterator != mTabItems.end() )
     {
       std::shared_ptr<TabItem> item = *tabItemsIterator;
@@ -902,7 +902,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   // Evaluate form items visibility
   {
-    QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -931,7 +931,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   // Evaluate if form items are editable
   {
-    QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -960,7 +960,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
   // Evaluate form items name
   {
-    QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -991,7 +991,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   {
     bool containsValidationError = false;
     {
-      QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+      QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
       while ( formItemsIterator != mFormItems.end() )
       {
         std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -1024,7 +1024,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   bool anyChanges = isNewFeature();
   if ( !anyChanges )
   {
-    QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
     while ( formItemsIterator != mFormItems.end() )
     {
       std::shared_ptr<FormItem> item = formItemsIterator.value();
@@ -1056,7 +1056,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
 
 void AttributeController::recalculateRichTextWidgets( QSet<QUuid> &changedFormItems, QgsExpressionContext &context )
 {
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> itemData = formItemsIterator.value();
@@ -1565,7 +1565,7 @@ void AttributeController::renamePhotos()
   expressionContext.setFeature( mFeatureLayerPair.featureRef() );
 
   // check for new photos
-  QMap<QUuid, std::shared_ptr<FormItem >>::iterator formItemsIterator = mFormItems.begin();
+  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
