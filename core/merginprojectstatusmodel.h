@@ -10,7 +10,6 @@
 #ifndef MERGINPROJECTSTATUSMODEL_H
 #define MERGINPROJECTSTATUSMODEL_H
 
-#include <QObject>
 #include <QAbstractListModel>
 #include "merginapi.h"
 
@@ -59,7 +58,7 @@ class MerginProjectStatusModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const override;
     Q_INVOKABLE QVariant data( const QModelIndex &index, int role ) const override;
 
-    Q_INVOKABLE bool loadProjectInfo( const QString &projectFullName );
+    Q_INVOKABLE bool loadProjectInfo( const QString &projectId );
 
   private:
     void insertIntoItems( const QSet<QString> &files, const ProjectChangelogStatus &status, const QString &projectDir );

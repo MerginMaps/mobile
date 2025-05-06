@@ -9,7 +9,6 @@
 
 #include <QDebug>
 #include <QStandardPaths>
-#include <QTimer>
 
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
@@ -91,12 +90,17 @@ QString ActiveProject::projectFullName() const
   return mLocalProject.fullName();
 }
 
+QString ActiveProject::projectId() const
+{
+  return mLocalProject.id();
+}
+
 bool ActiveProject::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
 }
 
-bool ActiveProject::forceLoad( const QString &filePath, bool force )
+bool ActiveProject::forceLoad( const QString &filePath, const bool force )
 {
   CoreUtils::log( QStringLiteral( "Project loading" ), filePath + " " + ( force ? "true" : "false" ) );
 
@@ -133,11 +137,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
   mProjectLoadingLog.clear();
 
-  QString logFilePath = CoreUtils::logFilename();
+  const QString logFilePath = CoreUtils::logFilename();
   qint64 alreadyAppendedCharsCount = 0;
 
   {
-    QFile file( logFilePath );
+    const QFile file( logFilePath );
     alreadyAppendedCharsCount = file.size();
   }
 
@@ -157,13 +161,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     res = mQgsProject->read( filePath );
     if ( !res )
     {
-      QString error = mQgsProject->error();
+      const QString error = mQgsProject->error();
       CoreUtils::log( QStringLiteral( "Project loading" ), QStringLiteral( "Could not read project file: " ) + error );
 
       mLocalProject = LocalProject();
       if ( mMapSettings )
       {
-        QList< QgsMapLayer * > layers;
+        const QList< QgsMapLayer * > layers;
         mMapSettings->setLayers( layers );
       }
       mQgsProject->clear();
@@ -182,7 +186,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Could not find project in local projects: " ) + filePath );
     }
 
-    QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
+    const QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
 
     updateMapTheme();
@@ -194,7 +198,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit positionTrackingSupportedChanged();
   }
 
-  bool foundErrorsInLoadedProject = validateProject();
+  const bool foundErrorsInLoadedProject = validateProject();
 
   flagFile.remove();
   if ( !force )
@@ -207,7 +211,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       if ( file.open( QIODevice::ReadOnly ) )
       {
         file.seek( alreadyAppendedCharsCount );
-        QByteArray neededLogFileData = file.readAll();
+        const QByteArray neededLogFileData = file.readAll();
         mProjectLoadingLog = QString::fromStdString( neededLogFileData.toStdString() );
         file.close();
       }
@@ -265,7 +269,7 @@ bool ActiveProject::validateProject()
 
   // B. Per-Layer validations
   QMap<QString, QgsMapLayer *> projectLayers = mQgsProject->mapLayers();
-  for ( QgsMapLayer *layer : projectLayers )
+  for ( const QgsMapLayer *layer : projectLayers )
   {
     // B.1. Layer Validity
     if ( !layer->isValid() )
@@ -289,7 +293,7 @@ bool ActiveProject::validateProject()
   return errorsFound;
 }
 
-bool ActiveProject::reloadProject( QString projectDir )
+bool ActiveProject::reloadProject( const QString &projectDir )
 {
   if ( mQgsProject->homePath() == projectDir )
   {
@@ -298,7 +302,7 @@ bool ActiveProject::reloadProject( QString projectDir )
     if ( mMapSettings )
       extent = mMapSettings->extent();
 
-    bool result = forceLoad( mQgsProject->fileName(), true );
+    const bool result = forceLoad( mQgsProject->fileName(), true );
 
     // restore extent
     if ( mMapSettings && !extent.isNull() )
@@ -309,7 +313,7 @@ bool ActiveProject::reloadProject( QString projectDir )
   return false;
 }
 
-void ActiveProject::setAutosyncEnabled( bool enabled )
+void ActiveProject::setAutosyncEnabled( const bool enabled )
 {
   if ( enabled )
   {
@@ -353,7 +357,7 @@ void ActiveProject::updateMapSettingsLayers() const
 {
   if ( !mQgsProject || !mMapSettings ) return;
 
-  QList<QgsMapLayer *> visibleLayers = getVisibleLayers();
+  const QList<QgsMapLayer *> visibleLayers = getVisibleLayers();
   mMapSettings->setLayers( visibleLayers );
   mMapSettings->setTransformContext( mQgsProject->transformContext() );
 }
@@ -386,7 +390,7 @@ void ActiveProject::updateMapTheme()
   }
 
   QgsLayerTree *root = mQgsProject->layerTreeRoot();
-  QgsMapThemeCollection *collection = mQgsProject->mapThemeCollection();
+  const QgsMapThemeCollection *collection = mQgsProject->mapThemeCollection();
 
   if ( !root || !collection )
   {
@@ -398,7 +402,7 @@ void ActiveProject::updateMapTheme()
   QString themeCandidateName;
   QStringList mapThemes = collection->mapThemes();
 
-  QgsMapThemeCollection::MapThemeRecord themeCandidate = collection->createThemeFromCurrentState( root, &model );
+  const QgsMapThemeCollection::MapThemeRecord themeCandidate = collection->createThemeFromCurrentState( root, &model );
 
   for ( const QString &themeName : mapThemes )
   {
@@ -448,7 +452,7 @@ void ActiveProject::setMapTheme( const QString &themeName )
   updateMapSettingsLayers();
 }
 
-void ActiveProject::updateActiveLayer()
+void ActiveProject::updateActiveLayer() const
 {
   QList< QgsMapLayer * > visibleLayers = getVisibleLayers();
 
@@ -553,7 +557,7 @@ void ActiveProject::setProjectRole( const QString &role )
   }
 }
 
-bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
+bool ActiveProject::recordingAllowed( const QgsMapLayer *layer ) const
 {
   if ( !layer )
     return false;
@@ -579,7 +583,7 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
   if ( !mQgsProject )
     return QList<QgsMapLayer *>();
 
-  QgsLayerTree *root = mQgsProject->layerTreeRoot();
+  const QgsLayerTree *root = mQgsProject->layerTreeRoot();
 
   if ( !root )
     return QList<QgsMapLayer *>();
@@ -588,7 +592,7 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
   QList<QgsMapLayer *> visibleLayers;
   const QList<QgsLayerTreeLayer *> nodeLayers = root->findLayers();
 
-  for ( QgsLayerTreeLayer *nodeLayer : nodeLayers )
+  for ( const QgsLayerTreeLayer *nodeLayer : nodeLayers )
   {
     if ( nodeLayer && nodeLayer->isVisible() )
     {

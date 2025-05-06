@@ -11,12 +11,9 @@
 #define SYNCHRONIZATIONMANAGER_H
 
 #include <QObject>
-#include <QNetworkReply>
 
-#include "inputconfig.h"
 #include "project.h"
 #include "merginapi.h"
-#include "synchronizationerror.h"
 #include "synchronizationoptions.h"
 
 struct SyncProcess
@@ -40,30 +37,30 @@ class SynchronizationManager : public QObject
 
     explicit SynchronizationManager( MerginApi *merginApi, QObject *parent = nullptr );
 
-    virtual ~SynchronizationManager();
+    ~SynchronizationManager() override;
 
-    //! Stops a running sync process if there is one for project specified by projectFullname
-    void stopProjectSync( const QString &projectFullName );
+    //! Stops a running sync process if there is one for project specified by projectId
+    void stopProjectSync( const QString &projectId ) const;
 
-    Q_INVOKABLE void migrateProjectToMergin( const QString &projectName );
+    Q_INVOKABLE void migrateProjectToMergin( const QString &projectName, const QString &projectId );
 
     //! Returns sync progress of specified project in range <0, 1>. Returns -1 if this project is not being synchronised.
-    qreal syncProgress( const QString &projectFullName ) const;
+    qreal syncProgress( const QString &projectId ) const;
 
     //! Returns true if specified project is being synchronised, false otherwise.
-    Q_INVOKABLE bool hasPendingSync( const QString &projectFullName ) const;
+    Q_INVOKABLE bool hasPendingSync( const QString &projectId ) const;
 
+    //! Returns list of UUIDs of pending projects
     QList<QString> pendingProjects() const;
 
   signals:
 
     // Synchronization signals
-    void syncStarted( const QString &projectFullName );
-    void syncCancelled( const QString &projectFullName );
-    void syncProgressChanged( const QString &projectFullName, qreal progress );
-    void syncFinished( const QString &projectFullName, bool success, int newVersion, bool reloadNeeded );
-
-    void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
+    void syncStarted( const QString &projectId );
+    void syncCancelled( const QString &projectId );
+    void syncProgressChanged( const QString &projectId, qreal progress );
+    void syncFinished( const QString &projectId, bool success, int newVersion, bool reloadNeeded );
+    void syncError( const QString &projectId, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
 
   public slots:
 
@@ -71,8 +68,9 @@ class SynchronizationManager : public QObject
      * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
      *
      * \param project Project struct instance
-     * \param withAut Bears an information whether authorization should be included in sync requests.
+     * \param auth Bears an information whether authorization should be included in sync requests.
      *                Authorization can be omitted for pull of public projects
+     * \param strategy The fetching strategy to use
      */
     void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
@@ -80,17 +78,16 @@ class SynchronizationManager : public QObject
     void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
 
     // Handling of synchronization changes from MerginApi
-    void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
-    void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
-    void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
-    void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
-    void onProjectReloadNeededAfterSync( const QString &projectFullName );
-    void onProjectCreated( const QString &projectName, bool result );
+    void onProjectSyncCanceled( const QString &projectId );
+    void onProjectSyncProgressChanged( const QString &projectId, qreal progress );
+    void onProjectSyncFinished( const QString &projectId, bool successfully, int version );
+    void onProjectSyncFailure( const QString &message, int httpCode, const QString &projectId );
+    void onProjectReloadNeededAfterSync( const QString &projectId );
+    void onProjectCreated( const QString &projectId, bool result );
 
   private:
 
-    // Hashmap of currently running synchronizations, key: project full name
+    // Hashmap of currently running synchronizations, key: project ID
     QHash<QString, SyncProcess> mSyncProcesses;
 
     MerginApi *mMerginApi = nullptr; // not owned
