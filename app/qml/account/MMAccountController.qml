@@ -213,6 +213,7 @@ Item {
 
       onSignInClicked: function( email ) {
         stackView.pending = true
+        focusOnBrowser = true
         __merginApi.authorizeWithSso(email)
       }
 
@@ -222,6 +223,10 @@ Item {
 
         function onSsoConfigIsMultiTenant() {
           stackView.pending = false
+        }
+
+        function onSsoConfigIsSingleTenant() {
+          focusOnBrowser = true
         }
 
         function onAuthChanged() {

@@ -881,6 +881,7 @@ void MerginApi::ssoConfigReplyFinished()
       else if ( !clientId.isEmpty() )
       {
         // Single tenant, proceed with oauth2 flow
+        emit ssoConfigIsSingleTenant();
         startSsoFlow( clientId );
       }
       else
@@ -4200,7 +4201,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
   {
 #ifdef MOBILE_OS
     const QString CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
-    mOauth2ReplyHandler = new QOAuthUriSchemeReplyHandler( CALLBACK_URL, mOauth2Flow );
+    mOauth2ReplyHandler = new QOAuthUriSchemeReplyHandler( CALLBACK_URL, &mOauth2Flow );
 #else
     constexpr int OAUTH2_LISTEN_PORT = 8082;
     mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( OAUTH2_LISTEN_PORT, &mOauth2Flow );
@@ -4259,7 +4260,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
   if ( mOauth2ReplyHandler->isListening() )
   {
     // Initiate the authorization
-    qDebug() << "handler is listening on port: " << mOauth2ReplyHandler->port();
+    // qDebug() << "handler is listening on port: " << mOauth2ReplyHandler->port();
     mOauth2Flow.grant();
   }
   else
