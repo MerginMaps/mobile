@@ -23,6 +23,7 @@
 #include <QSet>
 #include <QByteArray>
 #include <QDateTime>
+#include <QOAuth2AuthorizationCodeFlow>
 
 #include "merginapistatus.h"
 #include "merginservertype.h"
@@ -36,7 +37,11 @@
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
 
-class QOAuth2AuthorizationCodeFlow;
+#ifdef MOBILE_OS
+class QOAuthUriSchemeReplyHandler;
+#else
+class QOAuthHttpServerReplyHandler;
+#endif
 
 struct ProjectDiff
 {
@@ -312,6 +317,7 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
     Q_INVOKABLE void requestSsoLogin();
+    Q_INVOKABLE void abortSsoFlow();
     Q_INVOKABLE void authorizeWithSso( const QString &email );
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
@@ -691,6 +697,7 @@ class MerginApi: public QObject
     void apiSupportsSsoChanged();
 
     void ssoConfigIsMultiTenant();
+
     void ssoConnectionsRequested();
 
   private slots:
@@ -891,7 +898,12 @@ class MerginApi: public QObject
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
 
-    QOAuth2AuthorizationCodeFlow *mOauth2Flow = nullptr;
+    QOAuth2AuthorizationCodeFlow mOauth2Flow;
+#ifdef MOBILE_OS
+    QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr;
+#else
+    QOAuthHttpServerReplyHandler *mOauth2ReplyHandler = nullptr;
+#endif
 
     friend class TestMerginApi;
 };

@@ -62,7 +62,7 @@ MMPage {
 
         text: qsTr( "Sign in" )
 
-        enabled: email.text.length !== 0  // todo: use email regex?
+        enabled: email.text.match( "\\S+@\\S+\\.\\S+" )
 
         onClicked: {
           root.signInClicked( email.text )
@@ -87,5 +87,10 @@ MMPage {
 
       MMListFooterSpacer {}
     }
+  }
+
+  Component.onCompleted: {
+    console.log( "SSO page completed!" )
+    __merginApi.requestSsoLogin()
   }
 }

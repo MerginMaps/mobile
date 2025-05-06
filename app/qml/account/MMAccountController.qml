@@ -123,26 +123,7 @@ Item {
 
       onContinueWithSsoClicked: {
         stackView.pending = true
-
-        __merginApi.requestSsoLogin()
-      }
-
-      Connections {
-        target: __merginApi
-        enabled: stackView.currentItem.objectName === "loginPage"
-
-        function onSsoConfigIsMultiTenant() {
-            stackView.pending = false
-            stackView.push( ssoPanel )
-        }
-
-        // function onSsoWaiting() {
-        //   stackView.pending = true
-        // }
-
-        // function onSsoFinished() {
-        //   stackView.pending = false
-        // }
+        stackView.push( ssoPanel )
       }
     }
   }
@@ -219,16 +200,34 @@ Item {
       objectName: "ssoPanel"
 
       onBackClicked: {
+        __merginApi.abortSsoFlow()
+        stackView.pending = false
         stackView.popOnePageOrClose()
       }
 
       onLoginWithPasswordClicked: {
+        __merginApi.abortSsoFlow()
+        stackView.pending = false
         stackView.popOnePageOrClose()
       }
 
       onSignInClicked: function( email ) {
         stackView.pending = true
         __merginApi.authorizeWithSso(email)
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "ssoPanel"
+
+        function onSsoConfigIsMultiTenant() {
+          stackView.pending = false
+        }
+
+        function onAuthChanged() {
+          stackView.pending = false
+          controller.end()
+        }
       }
     }
   }
