@@ -10,50 +10,47 @@
 #ifndef PROJECTWIZARD_H
 #define PROJECTWIZARD_H
 
-#include <QObject>
-
-#include "inputconfig.h"
 #include "fieldsmodel.h"
 #include "qgsfieldmodel.h"
 #include "qgsvectorlayer.h"
 #include "qgsmapsettings.h"
-#include <qgssinglesymbolrenderer.h>
 
 /**
- * Controller for creating new Input project.
+ * Controller for creating new Mergin Maps project.
  */
 class ProjectWizard : public QObject
 {
     Q_OBJECT
   public:
     explicit ProjectWizard( const QString &dataDir, QObject *parent = nullptr );
-    ~ProjectWizard() = default;
+    ~ProjectWizard() override = default;
 
     /**
-     * Creates a new project in unique directory named accoridng project name.
+     * Creates a new project in unique directory named according to project name.
      * \param projectName Project's name for newly created project.
      * \param fieldsModel Fields configuration model for a new project
      */
-    Q_INVOKABLE void createProject( QString const &projectName, FieldsModel *fieldsModel );
+    Q_INVOKABLE void createProject( QString const &projectName, const FieldsModel *fieldsModel );
 
   public slots:
     //! To append "mapcanvas" property to project file required to correctly show a project.
-    void writeMapCanvasSetting( QDomDocument &doc );
+    void writeMapCanvasSetting( QDomDocument &doc ) const;
 
   signals:
     /**
-      * Emitted after a project has been craeted.
+      * Emitted after a project has been created.
      */
     void projectCreationFailed( const QString &message );
     void projectCreated( const QString &projectDir, const QString &projectName );
     void notifySuccess( const QString &message );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
-    QgsFields createFields( const QList<FieldConfiguration> fieldsConfig ) const;
+    QgsFields createFields( const QList<FieldConfiguration> &fieldsConfig ) const;
     QgsSingleSymbolRenderer *surveyLayerRenderer();
-    QVariant::Type parseType( const QString &type ) const;
+
+    QMetaType::Type parseType( const QString &type ) const;
     QString widgetToType( const QString &widgetType ) const;
-    QString findWidgetTypeByFieldName( const QString name, const QList<FieldConfiguration> fieldsConfig ) const;
+    QString findWidgetTypeByFieldName( const QString &name, const QList<FieldConfiguration> &fieldsConfig ) const;
 
     QString mDataDir;
     std::unique_ptr<QgsMapSettings> mSettings = nullptr;

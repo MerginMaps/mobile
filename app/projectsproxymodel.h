@@ -10,17 +10,16 @@
 #ifndef PROJECTSPROXYMODEL_H
 #define PROJECTSPROXYMODEL_H
 
-#include <QObject>
 #include <QSortFilterProxyModel>
 
-#include "inputconfig.h"
 #include "projectsmodel.h"
 
 /**
  * \brief The ProjectsProxyModel class used as a proxy filter/sort model for the \see ProjectsModel class.
  *
- * ProjectsProxyModel is a QML type with required property of projectSourceModel. Without source model, this model does nothing (is not initialized).
- * After setting source model, this model starts sorting and allows filtering (search) from view.
+ * ProjectsProxyModel is a QML type with required property of projectSourceModel. Without source model, this model does
+ * nothing (is not initialized). After setting source model, this model starts sorting and allows filtering (search)
+ * from view.
  */
 class ProjectsProxyModel : public QSortFilterProxyModel
 {
@@ -42,7 +41,7 @@ class ProjectsProxyModel : public QSortFilterProxyModel
     bool activeProjectAlwaysFirst() const;
 
   public slots:
-    void setSearchExpression( QString searchExpression );
+    void setSearchExpression( const QString &searchExpression );
     void setProjectSourceModel( ProjectsModel *sourceModel );
 
   signals:
