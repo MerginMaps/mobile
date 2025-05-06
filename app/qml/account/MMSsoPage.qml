@@ -23,6 +23,8 @@ MMPage {
   signal signInClicked( string email )
   signal loginWithPasswordClicked
 
+  property bool focusOnBrowser: false
+
   pageHeader {
     title: qsTr( "Sign in with SSO" )
     titleFont: __style.h3
@@ -67,6 +69,12 @@ MMPage {
         onClicked: {
           root.signInClicked( email.text )
         }
+      }
+
+      MMText {
+        visible: root.focusOnBrowser
+
+        text: qsTr( "Please follow the instructions on your web browser" )
       }
 
       MMHlineText {

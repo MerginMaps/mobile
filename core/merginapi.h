@@ -700,6 +700,7 @@ class MerginApi: public QObject
     void apiSupportsSsoChanged();
 
     void ssoConfigIsMultiTenant();
+    void ssoConfigIsSingleTenant();
 
     void ssoConnectionsRequested();
 
