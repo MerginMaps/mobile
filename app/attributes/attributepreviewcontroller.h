@@ -39,7 +39,7 @@ class AttributePreviewModel : public QAbstractListModel
   public:
 
     AttributePreviewModel(
-      const QVector<QPair<QString, QString >> &items = QVector<QPair<QString, QString >> ()
+      const QVector<QPair<QString, QString>> &items = QVector<QPair<QString, QString >> ()
     );
 
     ~AttributePreviewModel() override;
@@ -57,7 +57,7 @@ class AttributePreviewModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
   private:
-    QVector<QPair<QString, QString >> mItems; //!< pair of name&value
+    QVector<QPair<QString, QString>> mItems; //!< pair of name&value
 };
 
 /*

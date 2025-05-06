@@ -19,7 +19,7 @@
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
 
-AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString >> &items )
+AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString>> &items )
   : QAbstractListModel( nullptr )
   , mItems( items )
 {
@@ -61,13 +61,13 @@ QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
   }
 }
 
-QVector<QPair<QString, QString >> AttributePreviewController::mapTipFields( )
+QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
 {
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
-    return QVector<QPair<QString, QString >> ();
+    return QVector<QPair<QString, QString>> ();
 
   QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
-  QVector<QPair<QString, QString >> lst;
+  QVector<QPair<QString, QString>> lst;
   const QgsFields fields = mFeatureLayerPair.layer()->fields();
 
   if ( mapTip.isEmpty() )
@@ -236,7 +236,7 @@ void AttributePreviewController::recalculate()
   }
   else if ( mapTip.startsWith( "# fields\n" ) || mapTip.isEmpty() )
   {
-    const QVector<QPair<QString, QString >> items = mapTipFields();
+    const QVector<QPair<QString, QString>> items = mapTipFields();
     if ( !items.empty() )
     {
       mType = AttributePreviewController::Fields;

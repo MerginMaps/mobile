@@ -823,7 +823,7 @@ void TestUtilsFunctions::testParsePositionUpdates()
   // example: "10 20 30 40\n" -> QgsPoint( x:10, y:20, z:30, m:40 )
   //
 
-  QList<std::pair<QString, QList<QgsPoint >>> testcases =
+  QList<std::pair<QString, QList<QgsPoint>>> testcases =
   {
     { QString(), QList<QgsPoint>() },
     { "", QList<QgsPoint>() },

@@ -350,7 +350,7 @@ void TestMapTools::testMeasuring()
 
   QVERIFY( measurementTool->recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
 
-  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY >> () << points );
+  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>> () << points );
   double expectedArea = distanceArea.measureArea( polygonGeometry );
   QCOMPARE( measurementTool->area(), expectedArea );
 
