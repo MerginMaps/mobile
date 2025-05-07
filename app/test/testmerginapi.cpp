@@ -2744,7 +2744,6 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
   bool ok = f.open( QIODeviceBase::WriteOnly );
   Q_ASSERT( ok );
   f.write( data );
-  f.flush();
   f.close();
 }
 
@@ -3288,18 +3287,38 @@ void TestMerginApi::testHasLocalProjectChanges()
   // 4: fourth scenario => local files differs from metadata, selective sync supported
   writeFileContent( projectDir + "/test.txt", QByteArray( "modified content" ) );
 
-  QByteArray metadataContent = readFileContent( projectDir + "/" + MerginApi::sMetadataFile );
-  qDebug() << "[testHasLocalProjectChanges] Metadata file content:" << metadataContent;
-
-  QByteArray newChecksum = CoreUtils::calculateChecksum( projectDir + "/test.txt" );
-  QCOMPARE( QString( checksum ), fileObj["checksum"].toString() );
-  QVERIFY( QString( newChecksum ) != fileObj["checksum"].toString() );
-  qDebug() << "[testHasLocalProjectChanges] Checksum in metadata:" << fileObj["checksum"].toString();
-  qDebug() << "[testHasLocalProjectChanges] New checksum from modified file:" << QString( newChecksum );
+  QTest::qSleep( 1000 );
 
   // expected results: has changes
   QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // clean up
   QDir( projectDir ).removeRecursively();
+}
+
+void TestMerginApi::testApiRoot()
+{
+  QString originalRoot = mApi->apiRoot();
+
+  QVector< QPair<QString, QString> > testcases =
+  {
+    { "https://app.merginmaps.com/", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "http://app.merginmaps.com/", "http://app.merginmaps.com" },
+    { "http://app.merginmaps.com", "http://app.merginmaps.com" },
+    { "https://app.merginmaps.com//", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com///", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com////", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "https://example.com", "https://example.com" },
+    { "example.com/", "example.com" }
+  };
+
+  for ( auto testcase : testcases )
+  {
+    mApi->setApiRoot( testcase.first );
+    QCOMPARE( mApi->apiRoot(), testcase.second );
+  }
+
+  mApi->setApiRoot( originalRoot );
 }

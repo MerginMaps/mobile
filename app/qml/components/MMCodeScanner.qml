@@ -24,17 +24,6 @@ Popup {
 
   signal scanFinished( var data )
 
-  CaptureSession {
-    id: captureSession
-
-    camera: Camera {
-      id: camera
-      active: true
-      focusMode: Camera.FocusModeAutoNear
-    }
-    videoOutput: videoOutput
-  }
-
   MM.QrCodeDecoder {
     id: qrcodeScanner
 
@@ -48,6 +37,17 @@ Popup {
 
   contentItem: Item {
     anchors.fill: parent
+
+    CaptureSession {
+      id: captureSession
+
+      camera: Camera {
+        id: camera
+        active: true
+        focusMode: Camera.FocusModeAutoNear
+      }
+      videoOutput: videoOutput
+    }
 
     MMBusyIndicator {
       anchors.centerIn: parent

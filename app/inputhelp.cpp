@@ -24,7 +24,7 @@
 const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
 const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QString helpDeskMail = QStringLiteral( "support@merginmaps.com" );
-const QString inputWeb = QStringLiteral( "https://merginmaps.com" );
+const QString mmWeb = QStringLiteral( "https://merginmaps.com" );
 const QString changelogRss = QStringLiteral( "https://wishlist.merginmaps.com/rss/changelog.xml" );
 
 const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
@@ -46,19 +46,9 @@ QString InputHelp::helpRootLink() const
   return helpRoot + "/" + utmTagHelp;
 }
 
-QString InputHelp::inputWebLink() const
+QString InputHelp::mmWebLink() const
 {
-  return inputWeb + "/" +  utmTagOther;
-}
-
-QString InputHelp::merginWebLink() const
-{
-  if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
-  {
-    return mMerginApi->apiRoot(); // UTM tags are included only for production server
-  }
-
-  return MerginApi::defaultApiRoot() + utmTagOther;
+  return mmWeb + "/" +  utmTagOther;
 }
 
 QString InputHelp::merginLinkHelper( const QString &subpath, const QString &utmTag ) const
@@ -76,7 +66,7 @@ QString InputHelp::merginLinkHelper( const QString &subpath, const QString &utmT
 
   if ( mMerginApi && mMerginApi->apiRoot() != MerginApi::defaultApiRoot() )
   {
-    return mMerginApi->apiRoot() + subpath + activeWorkspacePathPart;
+    return mMerginApi->apiRoot() + "/" + subpath + activeWorkspacePathPart;
   }
 
   // Let's include UTM tags for production server
@@ -96,7 +86,7 @@ QString InputHelp::merginLinkHelper( const QString &subpath, const QString &utmT
     queryParams = utmTag;
   }
 
-  return MerginApi::defaultApiRoot() + subpath + queryParams;
+  return MerginApi::defaultApiRoot() + "/" + subpath + queryParams;
 }
 
 QString InputHelp::merginDashboardLink() const
@@ -118,7 +108,7 @@ QString InputHelp::merginSubscriptionLink() const
 
 QString InputHelp::privacyPolicyLink() const
 {
-  return inputWeb + "/privacy-policy" + utmTagOther;
+  return mmWeb + "/privacy-policy" + utmTagOther;
 }
 
 QString InputHelp::merginSubscriptionDetailsLink() const
@@ -158,7 +148,7 @@ QString InputHelp::howToConnectGPSLink() const
 
 QString InputHelp::merginTermsLink() const
 {
-  return MerginApi::marketingPageRoot() + "terms-of-service" + utmTagOther;
+  return mmWeb + "/terms-of-service" + utmTagOther;
 }
 
 QString InputHelp::projectLoadingErrorHelpLink() const
@@ -168,7 +158,7 @@ QString InputHelp::projectLoadingErrorHelpLink() const
 
 QString InputHelp::whatsNewPostLink() const
 {
-  return inputWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
+  return mmWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
 QString InputHelp::changelogLink()

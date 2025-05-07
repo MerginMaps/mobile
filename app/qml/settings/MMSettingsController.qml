@@ -82,7 +82,7 @@ Item {
 
     MMAboutPage {
       onBackClicked: root.back()
-      onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.inputWebLink )
+      onVisitWebsiteClicked: Qt.openUrlExternally( __inputHelp.mmWebLink )
     }
   }
 

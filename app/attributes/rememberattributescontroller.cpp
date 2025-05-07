@@ -18,6 +18,8 @@
 #include "qgsattributes.h"
 #include "featurelayerpair.h"
 
+QHash<QString, RememberAttributesController::RememberedValues> RememberAttributesController::sRememberedValues;
+
 RememberAttributesController::RememberAttributesController( QObject *parent )
   : QObject( parent )
 {
@@ -25,7 +27,7 @@ RememberAttributesController::RememberAttributesController( QObject *parent )
 
 void RememberAttributesController::reset()
 {
-  mRememberedValues.clear();
+  sRememberedValues.clear();
 }
 
 RememberAttributesController::~RememberAttributesController() = default;
@@ -46,10 +48,10 @@ void RememberAttributesController::setRememberValuesAllowed( bool rememberValues
 
 void RememberAttributesController::storeLayerFields( const QgsVectorLayer *layer )
 {
-  if ( layer && ( !mRememberedValues.contains( layer->id() ) ) )
+  if ( layer && ( !sRememberedValues.contains( keyForLayer( layer ) ) ) )
   {
-    mRememberedValues[layer->id()] = RememberedValues();
-    mRememberedValues[layer->id()].attributeFilter.fill( false, layer->fields().size() );
+    sRememberedValues[keyForLayer( layer )] = RememberedValues();
+    sRememberedValues[keyForLayer( layer )].attributeFilter.fill( false, layer->fields().size() );
   }
 }
 
@@ -57,7 +59,7 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 {
   if ( pair.layer() )
     storeLayerFields( pair.layer() );
-  mRememberedValues[pair.layer()->id()].feature = pair.feature();
+  sRememberedValues[keyForLayer( pair.layer() )].feature = pair.feature();
 }
 
 bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
@@ -66,10 +68,10 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
   if ( !mRememberValuesAllowed )
     return false;
 
-  if ( !layer || !mRememberedValues.contains( layer->id() ) )
+  if ( !layer || !sRememberedValues.contains( keyForLayer( layer ) ) )
     return false;
 
-  const RememberedValues from = mRememberedValues[layer->id()];
+  const RememberedValues from = sRememberedValues[keyForLayer( layer )];
   if ( fieldIndex < 0 || fieldIndex >= from.attributeFilter.size() )
     // serious screw-up, mismatch between layer and stored layer?
     return false;
@@ -83,9 +85,9 @@ bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer 
   if ( !mRememberValuesAllowed )
     return false;
 
-  if ( layer && mRememberedValues.contains( layer->id() ) )
+  if ( layer && sRememberedValues.contains( keyForLayer( layer ) ) )
   {
-    RememberedValues &from = mRememberedValues[layer->id()];
+    RememberedValues &from = sRememberedValues[keyForLayer( layer )];
     if ( fieldIndex >= 0 && fieldIndex < from.attributeFilter.length() )
     {
       bool oldVal = from.attributeFilter[fieldIndex];
@@ -99,6 +101,11 @@ bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer 
   return false;
 }
 
+QString RememberAttributesController::keyForLayer( const QgsVectorLayer *layer ) const
+{
+  return QStringLiteral( "%1/%2" ).arg( mActiveProjectId, layer->id() );
+}
+
 bool RememberAttributesController::rememberedValue(
   const QgsVectorLayer *layer,
   int fieldIndex,
@@ -108,10 +115,10 @@ bool RememberAttributesController::rememberedValue(
   if ( !mRememberValuesAllowed )
     return false;
 
-  if ( !layer || !mRememberedValues.contains( layer->id() ) )
+  if ( !layer || !sRememberedValues.contains( keyForLayer( layer ) ) )
     return false;
 
-  const RememberedValues from = mRememberedValues[layer->id()];
+  const RememberedValues from = sRememberedValues[keyForLayer( layer )];
   if ( !from.feature.isValid() )
     return false;
 
