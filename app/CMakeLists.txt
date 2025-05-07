@@ -345,7 +345,7 @@ if (MACOS)
   set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
   target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
   set_source_files_properties(
-    ${ENTITLEMENTS_FILEv} PROPERTIES MACOSX_PACKAGE_LOCATION .
+    ${ENTITLEMENTS_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION .
   )
 
   set_target_properties(
@@ -394,7 +394,7 @@ if (IOS)
   set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
   target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
   set_source_files_properties(
-    ${ENTITLEMENTS_FILEv} PROPERTIES MACOSX_PACKAGE_LOCATION .
+    ${ENTITLEMENTS_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION .
   )
 
   set_target_properties(
