@@ -340,6 +340,14 @@ if (ANDROID)
 endif ()
 
 if (MACOS)
+
+  # entitlements file
+  set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+  target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
+  set_source_files_properties(
+    ${ENTITLEMENTS_FILEv} PROPERTIES MACOSX_PACKAGE_LOCATION .
+  )
+
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
@@ -349,7 +357,7 @@ if (MACOS)
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
-               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements
+               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS mm.entitlements
   )
 endif ()
 
@@ -382,6 +390,13 @@ if (IOS)
                ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/MMLaunchScreen.storyboard
   )
 
+  # entitlements file
+  set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+  target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
+  set_source_files_properties(
+    ${ENTITLEMENTS_FILEv} PROPERTIES MACOSX_PACKAGE_LOCATION .
+  )
+
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
@@ -391,7 +406,7 @@ if (IOS)
                MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
                XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
-               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements
+               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS mm.entitlements
   )
 
   if (IOS_USE_PRODUCTION_SIGNING)

@@ -77,16 +77,19 @@ MMPage {
         text: qsTr( "Please follow the instructions on your web browser" )
       }
 
+
+      MMListSpacer { height: __style.margin20 }
+
       MMHlineText {
         width: parent.width
 
-        title: qsTr("Login with password?")
+        title: qsTr("Use password instead?")
       }
 
       MMButton {
         width: parent.width
 
-        text: qsTr( "Login with password" )
+        text: qsTr( "Sign in with password" )
 
         type: MMButton.Types.Secondary
 

@@ -889,7 +889,8 @@ void MerginApi::ssoConfigReplyFinished()
         qDebug() << "should not happen!";
         // should not happen
         // either sso not supported or single tenant with no id
-        // report an error?
+        // report an error?\
+        // notifyError()
       }
     }
   }
@@ -3054,6 +3055,7 @@ void MerginApi::pushCancelReplyFinished()
 
 void MerginApi::getUserInfoFinished()
 {
+  // update userAuth with email if sso
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
