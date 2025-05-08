@@ -9,7 +9,6 @@
 
 #include "QtDebug"
 #include <QJsonDocument>
-#include <QJsonArray>
 #include <QSignalSpy>
 
 #include "testutils.h"
@@ -74,7 +73,7 @@ void TestUtils::selectFirstWorkspace( MerginApi *api, QString &workspace )
 
 }
 
-bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
+bool TestUtils::needsToAuthorizeAgain( const MerginApi *api, const QString &username )
 {
   Q_ASSERT( api );
   // no auth at all
@@ -108,21 +107,21 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 
 QString TestUtils::generateUsername()
 {
-  QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
+  const QDateTime time = QDateTime::currentDateTime();
+  const QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
   return QStringLiteral( "input-%1" ).arg( uniqename );
 }
 
 QString TestUtils::generateEmail()
 {
-  QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
+  const QDateTime time = QDateTime::currentDateTime();
+  const QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
   return QStringLiteral( "mergin+autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
 }
 
 QString TestUtils::generatePassword()
 {
-  QString pass = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
+  const QString pass = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   return QStringLiteral( "_Pass12%1" ).arg( pass );
 }
 
@@ -140,7 +139,7 @@ bool TestUtils::generateProjectFolder( const QString &rootPath, const QJsonDocum
   if ( !QDir( rootPath ).exists() )
     return false;
 
-  QJsonObject rootObj = structure.object();
+  const QJsonObject rootObj = structure.object();
 
   // generate files
   if ( rootObj.contains( "files" ) )
@@ -176,9 +175,9 @@ bool TestUtils::generateProjectFolder( const QString &rootPath, const QJsonDocum
 
 QgsProject *TestUtils::loadPlanesTestProject()
 {
-  QString projectDir = TestUtils::testDataDir() + "/planes";
-  QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
-  QString projectName = "quickapp_project.qgs";
+  const QString projectDir = testDataDir() + "/planes";
+  const QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
+  const QString projectName = "quickapp_project.qgs";
 
   // copy the project to tmp dir to not change its data
   InputUtils::cpDir( projectDir, projectTempDir );
@@ -195,18 +194,18 @@ void TestUtils::testLayerHasGeometry()
   QCOMPARE( InputUtils::layerHasGeometry( nullptr ), false );
 
   // invalid layer => should be false
-  QgsVectorLayer *invalidLayer = new QgsVectorLayer( "", "InvalidLayer", "none" );
+  const QgsVectorLayer *invalidLayer = new QgsVectorLayer( "", "InvalidLayer", "none" );
   QVERIFY( invalidLayer->isValid() == false );
   QCOMPARE( InputUtils::layerHasGeometry( invalidLayer ), false );
   delete invalidLayer;
 
   // valid memory layer with geometry
-  QgsVectorLayer *pointLayer = new QgsVectorLayer( "Point?crs=EPSG:4326", "ValidPointLayer", "memory" );
+  const QgsVectorLayer *pointLayer = new QgsVectorLayer( "Point?crs=EPSG:4326", "ValidPointLayer", "memory" );
   QVERIFY( pointLayer->isValid() );
   QCOMPARE( InputUtils::layerHasGeometry( pointLayer ), true );
 
   // layer with NoGeo => should be false
-  QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeometryLayer", "memory" );
+  const QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeometryLayer", "memory" );
   QVERIFY( noGeomLayer->isValid() );
   QCOMPARE( InputUtils::layerHasGeometry( noGeomLayer ), false );
 
@@ -234,7 +233,7 @@ void TestUtils::testLayerVisible()
   QCOMPARE( InputUtils::isLayerVisible( layer, project ), true );
 
   // hide layer => false
-  QgsLayerTree *root = project->layerTreeRoot();
+  const QgsLayerTree *root = project->layerTreeRoot();
   QgsLayerTreeLayer *layerTree = root->findLayer( layer );
   QVERIFY( layerTree );
   layerTree->setItemVisibilityChecked( false );
@@ -253,7 +252,7 @@ void TestUtils::testIsPositionTrackingLayer()
   QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), false );
 
   // tracking layer ID => true
-  QString layerId = layer->id();
+  const QString layerId = layer->id();
   project->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), layerId );
   QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), true );
 
@@ -276,7 +275,7 @@ void TestUtils::testMapLayerFromName()
   QgsVectorLayer *layer = new QgsVectorLayer( "Point?crs=EPSG:4326", "MyTestLayer", "memory" );
   QVERIFY( layer->isValid() );
   project->addMapLayer( layer );
-  QgsMapLayer *found = InputUtils::mapLayerFromName( "MyTestLayer", project );
+  const QgsMapLayer *found = InputUtils::mapLayerFromName( "MyTestLayer", project );
   QVERIFY( found != nullptr );
   QCOMPARE( found->name(), QString( "MyTestLayer" ) );
 
@@ -300,4 +299,15 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "://example.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
+}
+
+template <typename T>
+T TestUtils::findProjectByName( const QString &projectFullName, const QList<T> &projects )
+{
+  for ( T project : projects )
+  {
+    if ( project.fullName() == projectFullName )
+      return project;
+  }
+  return T();
 }

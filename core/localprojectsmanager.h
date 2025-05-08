@@ -34,9 +34,6 @@ class LocalProjectsManager : public QObject
     LocalProject projectFromProjectFilePath( const QString &projectFilePath ) const;
     LocalProject projectFromProjectId( const QString &projectId ) const;
 
-    LocalProject projectFromMerginName( const QString &projectFullName ) const;
-    LocalProject projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
-
     //! Adds entry about newly created project
     void addLocalProject( const QString &projectDir, const QString &projectName );
 
