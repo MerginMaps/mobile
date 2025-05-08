@@ -10,7 +10,6 @@
 #include "project.h"
 #include "merginapi.h"
 #include "coreutils.h"
-#include "../app/inpututils.h"
 
 QString LocalProject::id() const
 {

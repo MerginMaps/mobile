@@ -12,7 +12,6 @@
 
 #include <QString>
 
-#include "project.h"
 #include "qgsproject.h"
 
 class MerginApi;
@@ -66,7 +65,15 @@ namespace TestUtils
    * Function returns the project with same fullname. Expected types to pass are \a MerginProject & \a LocalProject.
    */
   template <typename T>
-  T findProjectByName( const QString &projectFullName, const QList<T> &projects );
+  T findProjectByName( const QString &projectFullName, const QList<T> &projects )
+  {
+    for ( T project : projects )
+    {
+      if ( project.fullName() == projectFullName )
+        return project;
+    }
+    return T();
+  };
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \
