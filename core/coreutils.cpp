@@ -130,8 +130,8 @@ void CoreUtils::log( const QString &topic, const QString &info )
   QString logFilePath;
   QByteArray data;
   data.append(
-    QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic )
-    .arg( info ).toUtf8() );
+        QString( "%1 %2: %3\n" ).arg( QDateTime().currentDateTimeUtc().toString( Qt::ISODateWithMs ) ).arg( topic )
+        .arg( info ).toUtf8() );
   appendLog( data, sLogFile );
 }
 

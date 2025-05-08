@@ -83,21 +83,6 @@ LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectI
   return {};
 }
 
-LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
-{
-  for ( const LocalProject &info : mProjects.values() )
-  {
-    if ( info.fullName() == projectFullName )
-      return info;
-  }
-  return {};
-}
-
-LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
-{
-  return projectFromMerginName( CoreUtils::getFullProjectName( projectNamespace, projectName ) );
-}
-
 void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
 {
   addProject( projectDir, QString(), projectName, LocalProject::generateProjectId() );
