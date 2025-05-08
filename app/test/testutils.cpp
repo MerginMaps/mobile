@@ -300,14 +300,3 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
-
-template <typename T>
-T TestUtils::findProjectByName( const QString &projectFullName, const QList<T> &projects )
-{
-  for ( T project : projects )
-  {
-    if ( project.fullName() == projectFullName )
-      return project;
-  }
-  return T();
-}
