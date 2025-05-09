@@ -17,6 +17,7 @@
 #include <QPointer>
 #include <QSet>
 #include <QByteArray>
+#include <utility>
 
 #include "merginapistatus.h"
 #include "merginservertype.h"
@@ -93,7 +94,7 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
+  DownloadQueueItem( QString fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
 
   QString filePath;          //!< path within the project
   qint64 size;               //!< size of the item in bytes
@@ -119,8 +120,8 @@ struct PullTask
     Delete,         //!< remove files that have been removed from the server
   };
 
-  PullTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
-    : method( m ), filePath( fp ), data( d ) {}
+  PullTask( const Method m, QString fp, const QList<DownloadQueueItem> &d )
+    : method( m ), filePath( std::move( fp ) ), data( d ) {}
 
   Method method;                  //!< what to do with the file
   QString filePath;               //!< what is the file path within project
@@ -654,7 +655,7 @@ class MerginApi: public QObject
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
     void authorizeFinished();
-    void registrationFinished( const QString &login = QStringLiteral(), const QString &password = QStringLiteral() );
+    void registrationFinished( const QString &login = QString(), const QString &password = QString() );
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
