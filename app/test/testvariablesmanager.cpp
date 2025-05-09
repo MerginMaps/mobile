@@ -12,7 +12,6 @@
 #include "qgsexpressioncontextutils.h"
 
 #include "test/testmerginapi.h"
-#include "inputtests.h"
 #include "testutils.h"
 #include "position/providers/bluetoothpositionprovider.h"
 #include "merginapi.h"
@@ -40,7 +39,7 @@ void TestVariablesManager::cleanup()
 
 }
 
-void TestVariablesManager::positionVariables()
+void TestVariablesManager::testPositionVariables()
 {
   mAppSettings->setGpsAntennaHeight( 0 );
 
@@ -72,7 +71,7 @@ void TestVariablesManager::positionVariables()
   evaluateExpression( QStringLiteral( "@position_magnetic_variation" ), QStringLiteral( "0.00" ), &context );
   evaluateExpression( QStringLiteral( "@position_direction" ), QStringLiteral( "0" ), &context );
   evaluateExpression( QStringLiteral( "@position_satellites_visible" ), QStringLiteral( "9" ), &context );
-  evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "3" ), &context );
+  evaluateExpression( QStringLiteral( "@position_satellites_used" ), QStringLiteral( "9" ), &context );
   evaluateExpression( QStringLiteral( "@position_hdop" ), QStringLiteral( "3.20" ), &context );
   evaluateExpression( QStringLiteral( "@position_vdop" ), QStringLiteral( "4.90" ), &context );
   evaluateExpression( QStringLiteral( "@position_pdop" ), QStringLiteral( "5.90" ), &context );
@@ -95,14 +94,13 @@ void TestVariablesManager::positionVariables()
   mAppSettings->setGpsAntennaHeight( 0 );
 }
 
-void TestVariablesManager::userVariables()
+void TestVariablesManager::testUserVariables()
 {
-  QString apiRoot, username, password, workspace;
+  QString apiRoot, username, password;
   TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
   if ( TestUtils::needsToAuthorizeAgain( mApi, username ) )
   {
     TestUtils::authorizeUser( mApi, username, password );
-    TestUtils::selectFirstWorkspace( mApi, workspace );
   }
 
   QgsExpressionContext context;
@@ -111,6 +109,11 @@ void TestVariablesManager::userVariables()
   evaluateExpression( QStringLiteral( "@mergin_url" ),  mApi->apiRoot(), &context );
   evaluateExpression( QStringLiteral( "@mergin_user_email" ), mApi->userInfo()->email(), &context );
   evaluateExpression( QStringLiteral( "@mergin_username" ), username, &context );
+  evaluateExpression( QStringLiteral( "@mergin_full_name" ), mApi->userInfo()->name(), &context );
+  evaluateExpression( QStringLiteral( "@mm_url" ),  mApi->apiRoot(), &context );
+  evaluateExpression( QStringLiteral( "@mm_user_email" ), mApi->userInfo()->email(), &context );
+  evaluateExpression( QStringLiteral( "@mm_username" ), username, &context );
+  evaluateExpression( QStringLiteral( "@mm_full_name" ), mApi->userInfo()->name(), &context );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()
@@ -138,7 +141,7 @@ void TestVariablesManager::evaluateExpression( const QString &expStr, const QStr
   QgsExpression exp( expStr );
   QVERIFY2( exp.prepare( context ), expStr.toStdString().c_str() );
   QVERIFY( !exp.hasParserError() );
-  QVariant value = exp.evaluate();
+  const QVariant value = exp.evaluate();
   QVERIFY2( !exp.hasEvalError(), expStr.toStdString().c_str() );
   QCOMPARE( value, expectedValue );
 }
