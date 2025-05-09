@@ -386,12 +386,15 @@ void InputMapSettings::saveExtentToSettings()
 
 void InputMapSettings::loadSavedExtent()
 {
+  if ( mProjectId.isEmpty() )
+    return;
+
   QSettings settings;
   settings.beginGroup( QStringLiteral( "%1/%2" ).arg( mProjectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
   QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
   settings.endGroup();
 
-  if ( !extent.isEmpty() && extent.isFinite() && !mProjectId.isEmpty() )
+  if ( !extent.isEmpty() && extent.isFinite() )
   {
     setExtent( extent );
   }
