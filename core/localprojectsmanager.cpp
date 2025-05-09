@@ -249,3 +249,33 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   mProjects << project;
   emit localProjectAdded( project );
 }
+
+void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullName )
+{
+  clearCachedLayersVisibilitySettings( projectFullName );
+  clearCachedMapThemesSettings( projectFullName );
+}
+
+void LocalProjectsManager::clearCachedMapExtentSettings( const QString &projectFullName )
+{
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_EXTENT_GROUP, projectFullName ) );
+  settings.remove( "" );
+  settings.endGroup();
+}
+
+void LocalProjectsManager::clearCachedLayersVisibilitySettings( const QString &projectFullName )
+{
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP, projectFullName ) );
+  settings.remove( "" );
+  settings.endGroup();
+}
+
+void LocalProjectsManager::clearCachedMapThemesSettings( const QString &projectFullName )
+{
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( CoreUtils::CACHED_MAP_THEME_GROUP, projectFullName ) );
+  settings.remove( "" );
+  settings.endGroup();
+}

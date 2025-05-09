@@ -86,6 +86,12 @@ class AppSettings: public QObject
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
 
+    QString mapThemeForProject( const QString &projectKey ) const;
+    void setMapThemeForProject( const QString &projectKey, const QString &theme );
+
+    QStringList visibleLayerIdsForProject( const QString &projectKey ) const;
+    void setVisibleLayerIdsForProject( const QString &projectKey, const QStringList &layerIds );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
