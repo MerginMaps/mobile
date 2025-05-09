@@ -267,8 +267,6 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
   }
 
-  loadSavedExtent();
-
   mMapSettings.setRotation( 0 );
 
   mMapSettings.setTransformContext( mProject->transformContext() );
