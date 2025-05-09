@@ -64,7 +64,7 @@ QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
 QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
 {
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
-    return QVector<QPair<QString, QString>>();
+    return QVector<QPair<QString, QString>> ();
 
   QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
   QVector<QPair<QString, QString>> lst;

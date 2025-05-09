@@ -47,6 +47,18 @@ Item {
     }
   }
 
+  Connections {
+    target: mapTool
+
+    function onFinalEmptyGeometry() {
+      __notificationModel.addWarning( qsTr( "Geometry was removed to avoid overlaps with other features. Tap \"Edit Geometry\" to draw a new one." ) )
+    }
+
+    function onFinalSingleGeometry() {
+      __notificationModel.addWarning( qsTr( "Geometry was adjusted to avoid overlaps with other features." ) )
+    }
+  }
+
   MM.RecordingMapTool {
     id: mapTool
 
