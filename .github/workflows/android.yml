@@ -43,6 +43,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Disk space before cleanup
+        run: |
+          df -h .
+
+      #
+      # Simulators on macOS runners take up a lot of disk space.
+      # We do not use them and are in need of some additional disk space.
+      #
+      # See https://github.com/actions/runner-images/issues/10511 and
+      # https://github.com/carbon-language/carbon-lang/pull/4287
+      #
+      - name: Delete simulators to reclaim disk space
+        shell: bash
+        run: |
+          xcrun simctl delete all
+          sudo rm -rf ~/Library/Developer/CoreSimulator/Caches/*
+
+      - name: Disk space after cleanup
+        run: |
+          df -h .
+
       # CCache
       - name: Prepare build cache for pull request
         uses: pat-s/always-upload-cache@v3.0.11
