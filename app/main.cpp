@@ -401,6 +401,12 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationVersion( version );
 
 
+#ifdef ANDROID
+  // Fix rendering problems on some Android devices - see https://bugreports.qt.io/browse/QTBUG-134089
+  QCoreApplication::setAttribute( Qt::AA_DisableShaderDiskCache );
+#endif
+
+
 #ifdef INPUT_TEST
   InputTests tests;
   tests.parseArgs( argc, argv );
