@@ -2903,12 +2903,12 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="546"/>
+        <location filename="../main.cpp" line="552"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="551"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
