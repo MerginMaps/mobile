@@ -3286,9 +3286,9 @@ void TestMerginApi::testHasLocalProjectChanges()
   QVERIFY( !mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // 4: fourth scenario => local files differs from metadata, selective sync supported
-  writeFileContent( projectDir + "/test.txt", QByteArray( "modified content" ) );
+  writeFileContent( projectDir + "/new_file.txt", QByteArray( "new content" ) );
 
-  QTest::qSleep( TestUtils::SHORT_REPLY );
+  QTest::qSleep( 1000 );
 
   // expected results: has changes
   QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
