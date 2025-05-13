@@ -50,6 +50,8 @@ class MerginUserAuth: public QObject
     //! Returns whether user is currently logged in
     Q_INVOKABLE bool isLoggedIn();
 
+    Q_INVOKABLE bool isUsingSso() const { return mMethod == AuthMethod::SSO; }
+
     void clear();
 
     QString username() const;

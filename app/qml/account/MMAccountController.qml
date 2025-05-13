@@ -37,6 +37,11 @@ Item {
 
     controller.inProgress = true;
     stackView.push( loginPageComp, {}, StackView.PushTransition )
+
+    if ( __merginApi.userAuth.isUsingSso() )
+    {
+      stackView.push( ssoPanel )
+    }
   }
 
   // Finish onboarding
@@ -213,8 +218,7 @@ Item {
 
       onSignInClicked: function( email ) {
         stackView.pending = true
-        focusOnBrowser = true
-        __merginApi.authorizeWithSso(email)
+        __merginApi.requestSsoConnections(email)
       }
 
       Connections {
@@ -225,13 +229,18 @@ Item {
           stackView.pending = false
         }
 
-        function onSsoConfigIsSingleTenant() {
+        function onSsoAuthorizeUsingBrowser() {
           focusOnBrowser = true
         }
 
         function onAuthChanged() {
           stackView.pending = false
           controller.end()
+        }
+
+        function onNotifyError() {
+          stackView.pending = false
+          focusOnBrowser = false
         }
       }
     }
