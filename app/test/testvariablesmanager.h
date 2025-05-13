@@ -6,18 +6,15 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <QObject>
-#include <QtTest>
-
-#include "inputconfig.h"
-#include "variablesmanager.h"
-#include "qgeopositioninfo.h"
-#include "positionkit.h"
-#include "appsettings.h"
-#include "compass.h"
-
 #ifndef TESTVARIABLESMANAGER_H
 #define TESTVARIABLESMANAGER_H
+
+#include <QtTest>
+
+#include "variablesmanager.h"
+#include "positionkit.h"
+#include "appsettings.h"
+
 
 class MerginApi;
 
@@ -30,8 +27,8 @@ class TestVariablesManager: public QObject
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
-    void positionVariables();
-    void userVariables();
+    void testPositionVariables();
+    void testUserVariables();
 
   private:
     MerginApi *mApi;

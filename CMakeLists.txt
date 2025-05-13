@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.22)
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2025")
 set(MM_VERSION_MINOR "2")
-set(MM_VERSION_PATCH "3")
+set(MM_VERSION_PATCH "4")
 set(QT_VERSION_DEFAULT "6.8.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
@@ -36,7 +36,7 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "14.0")
+  set(DEPLOYMENT_TARGET "16.0")
 endif ()
 
 if (APPLE

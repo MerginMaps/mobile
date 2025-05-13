@@ -1579,16 +1579,19 @@ bool MerginApi::validateAuth()
   {
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
 
-    // we need to request auth again, until refresh tokens are implemented
-    if ( mUserAuth->authMethod() == MerginUserAuth::AuthMethod::SSO )
+    switch ( mUserAuth->authMethod() )
     {
-      emit authRequested();
-      return false;
+      case MerginUserAuth::AuthMethod::SSO:
+        // we need to request auth again
+        emit authRequested();
+        return false;
+      case MerginUserAuth::AuthMethod::Password:
+        refreshAuthToken();
+        return true;
     }
-
-    refreshAuthToken();
   }
-  return true;
+  // unreachable
+  return false;
 }
 
 void MerginApi::checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg )

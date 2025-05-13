@@ -386,13 +386,13 @@ Page {
         ignoreUnknownSignals: true
 
         function onSaved() {
-          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnSave === "function" ) {
+          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnFormSaved === "function" ) {
             formEditorsLoader.item.callbackOnFormSaved()
           }
         }
 
         function onCanceled() {
-          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnCancel === "function" ) {
+          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnFormCanceled === "function" ) {
             formEditorsLoader.item.callbackOnFormCanceled()
           }
         }
