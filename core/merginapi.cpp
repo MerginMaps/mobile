@@ -90,10 +90,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
   {
-    qDebug() << "*********** AUTH CHANGED ************** ";
-    qDebug() << mUserAuth->userId();
-    qDebug() << mUserAuth->username();
-    qDebug() << mUserAuth->authToken();
     if ( mUserAuth->hasValidToken() )
     {
       // do not call /user/profile when user just logged out
@@ -821,7 +817,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
-void MerginApi::requestSsoLogin()
+void MerginApi::requestSsoConfig()
 {
   if ( !mApiSupportsSso )
   {
@@ -830,32 +826,12 @@ void MerginApi::requestSsoLogin()
   }
 
   QNetworkRequest request = getDefaultRequest( false );
-  QUrl url( mApiRoot + QStringLiteral( "v2/sso/config" ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v2/sso/config" ) );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager->get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConfigReplyFinished );
-}
-
-void MerginApi::authorizeWithSso( const QString &email )
-{
-  if ( !mApiSupportsSso )
-  {
-    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "Requested sso auth for server that does not support sso!" ) );
-    return;
-  }
-
-  QNetworkRequest request = getDefaultRequest( false );
-  QUrl url( mApiRoot + QStringLiteral( "v2/sso/connections" ) );
-  QUrlQuery query;
-  query.addQueryItem( QStringLiteral( "email" ), email );
-  url.setQuery( query );
-  request.setUrl( url );
-
-  QNetworkReply *reply = mManager->get( request );
-  connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConnectionsReplyFinished );
-
-  emit ssoConnectionsRequested();
+  CoreUtils::log( "SSO", QStringLiteral( "Requesting sso configuration: " ) + url.toString() );
 }
 
 void MerginApi::ssoConfigReplyFinished()
@@ -865,7 +841,6 @@ void MerginApi::ssoConfigReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "SSO", QStringLiteral( "Connections retrieved" ) );
 
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
@@ -876,34 +851,52 @@ void MerginApi::ssoConfigReplyFinished()
       if ( flowType == QLatin1String( "multi" ) )
       {
         // Multi tenant server, ask for email
+        CoreUtils::log( "SSO", QStringLiteral( "Configuration retrieved, server is multi tenant" ) );
         emit ssoConfigIsMultiTenant();
       }
       else if ( !clientId.isEmpty() )
       {
         // Single tenant, proceed with oauth2 flow
-        emit ssoConfigIsSingleTenant();
+        CoreUtils::log( "SSO", QStringLiteral( "Configuration retrieved, server is single tenant" ) );
         startSsoFlow( clientId );
       }
       else
       {
-        qDebug() << "should not happen!";
-        // should not happen
-        // either sso not supported or single tenant with no id
-        // report an error?\
-        // notifyError()
+        CoreUtils::log( "SSO", QStringLiteral( "Server is single tenant but did not return a clientId, not good!" ) );
+        emit notifyError( tr( "There is a problem with the server's SSO configuration. Contact the administrator." ) );
       }
     }
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
     CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
-    // emit postRegistrationFailed( QStringLiteral( "Post-registation failed %1" ).arg( serverMsg ) );
+    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    const int status = statusCode.toInt();
+    emit notifyError( QStringLiteral( "%1 %2" ).arg( status ).arg( serverMsg ) ); // TODO: show generic error?
   }
 
   r->deleteLater();
+}
+
+void MerginApi::requestSsoConnections( const QString &email )
+{
+  if ( !mApiSupportsSso )
+  {
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "Requested sso auth for server that does not support sso!" ) );
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( false );
+  QUrl url( mApiRoot + QStringLiteral( "/v2/sso/connections" ) );
+  QUrlQuery query;
+  query.addQueryItem( QStringLiteral( "email" ), email );
+  url.setQuery( query );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConnectionsReplyFinished );
+  CoreUtils::log( "SSO", QStringLiteral( "Requesting available connections: " ) + url.toString() );
 }
 
 void MerginApi::ssoConnectionsReplyFinished()
@@ -913,7 +906,6 @@ void MerginApi::ssoConnectionsReplyFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "SSO", QStringLiteral( "Connections retrieved" ) );
 
     QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
@@ -923,7 +915,9 @@ void MerginApi::ssoConnectionsReplyFinished()
       if ( clientId.isEmpty() )
       {
         // no connection found for requested domain
-        qDebug() << "No client id for domain";
+        // should not happen, as the server would return 404 in that case
+        CoreUtils::log( "SSO", QStringLiteral( "No Connections available for the specified domain" ) );
+        emit notifyError( tr( "SSO is not supported for the specified domain" ) );
       }
       else
       {
@@ -933,13 +927,14 @@ void MerginApi::ssoConnectionsReplyFinished()
   }
   else
   {
-    // TODO: on 404, we should say something like 'SSO not supported for that domain'
-
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
     CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
-    // emit postRegistrationFailed( QStringLiteral( "Post-registation failed %1" ).arg( serverMsg ) );
+    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    const int status = statusCode.toInt();
+    if ( status == 404 )
+      emit notifyError( tr( "SSO is not supported for the specified domain" ) );
+    else
+      emit notifyError( QStringLiteral( "%1 %2" ).arg( status ).arg( serverMsg ) ); // TODO: show generic error?
   }
 
   r->deleteLater();
@@ -1591,6 +1586,14 @@ bool MerginApi::validateAuth()
   if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
   {
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
+
+    // we need to request auth again, until refresh tokens are implemented
+    if ( mUserAuth->authMethod() == MerginUserAuth::AuthMethod::SSO )
+    {
+      emit authRequested();
+      return false;
+    }
+
     refreshAuthToken();
   }
   return true;
@@ -3055,7 +3058,6 @@ void MerginApi::pushCancelReplyFinished()
 
 void MerginApi::getUserInfoFinished()
 {
-  // update userAuth with email if sso
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
@@ -3070,6 +3072,17 @@ void MerginApi::getUserInfoFinished()
       if ( mServerType == MerginServerType::OLD )
       {
         mWorkspaceInfo->setFromJson( docObj );
+      }
+
+      switch ( mUserAuth->authMethod() )
+      {
+        case MerginUserAuth::AuthMethod::SSO:
+          mUserAuth->blockSignals( true );
+          mUserAuth->setUsername( mUserInfo->email() );
+          mUserAuth->blockSignals( false );
+          break;
+        case MerginUserAuth::AuthMethod::Password:
+          break;
       }
     }
   }
@@ -4194,6 +4207,7 @@ QString MerginApi::getCachedProjectRole( const QString &projectFullName ) const
 
 void MerginApi::startSsoFlow( const QString &clientId )
 {
+  CoreUtils::log( "SSO", QStringLiteral( "Starting SSO flow for clientId: %1" ).arg( clientId ) );
   mOauth2Flow.setAuthorizationUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/authorize" ) ) );
   mOauth2Flow.setAccessTokenUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/token" ) ) );
   mOauth2Flow.setClientIdentifier( clientId );
@@ -4207,75 +4221,63 @@ void MerginApi::startSsoFlow( const QString &clientId )
 #else
     constexpr int OAUTH2_LISTEN_PORT = 8082;
     mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( OAUTH2_LISTEN_PORT, &mOauth2Flow );
-    const QString msg = QStringLiteral( "You can close this page and return to Mergin Maps<pre>****:***:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::.::::::::::::::.:.::.::::::::::::::.:::::::::::::::::::::::::\n****:::::::::::::::::::::::::::::::::::::::::::::::::::::..:::::::..:....::.::......:.::::...:::::..:..:..:..::.:::::::..:.:::::\n***::::::::::::::::::::::::::::::...:::::.:::..:.:..........::::::.::...:.:.:..:.....::.:.........................:::::::...::::\n**:::::I***I:::::::::::::::::::::::::::...:.::...:::....:.:.:::::...:.....:............::......:::......:...:::...:::::::.::..::\n*:::::::*I:*:::::::::::::::::::::::::::::**IV......I*:::::::::::::.::..::...:::.::::..:.........::::....::.....::.::::::.:::::::\n**::::::IF:*:::::::::::::::::::::::I:............:::*:..*...:.:::...::..:.......:............:..:.....:.::.....:....:::..:::..::\n***:*::::V.::::::::::::.........I...............:::...::I..I:::::.::..:................................:.:..:...:::....:::::.:::\n*::::*:*:*:*:::::::::.......I...............II:I:II:...:.*...:.*..:..::..................................:.:::::::.:::::::::::::\n*:::I:::.:.*::::.:::::...::........*:.:...I*.:I:*IIV:.::***I:I:::.::.::::................................:::::::::::::::::::::::\n********::*::*::::::...I.........:**:*III:IIIFVFNF:*I..**::.:*.I*:::::...........................::::..:::::::::::::::.:::::::::\n***VF*:****:*::::::::V.........**:*:.::NFFFIIFNNNNF..::*I:*.:.::::::.............:..............:::.::::::::::::::::::::::::::::\n***IV***I:::*:::::V..........::.::*NF*FNNFFNNVFFFNNNV:::.I.*..:.....I:.**...................:....:::::::::::::::::::::::::::::::\n*******I::****::::...........INFFN*FNNNVNNNNVFFNNVFIFV:II*::*:*..**I:*:.::......................::.:::::::::::::::::::::::::::::\n****I***********.............INFFNFNNNVNNFNVNNNNVFNNNNN:..::.:*.::..I....*:........................:::::::::::::::::::::::::::::\n*************V:...............:FNNVFNFVFNNINNFVFNNVNNFF*...I*.*II..::..:.I.I:............................:.:...:.....:::::::::::\nII********VI:.:....................:I::NNFFFVFFNNFNIFVF:*.:*::::.::..*:II:..:::.:.:....................................:.:.:.:.:\nFFFFFFVFV:::.:::....::I*......I...:II:VFNVNIFV:NFNFFF:......:.:*:I:..I:**I..:..................................................:\n*IVV*::.:.:...::I:::I*:...:..::::V:..FNI.V*INFIFFFFF:.........:I..::*.*.::*:::..:..............................................:\n:::::::::*:...:*::.:I::*I.:*.*I::II.:.:.:VFF*FFNNVFF...:...........*I****...:.....................................:..........*..\n:::*I***I*V:*FFV*::.***:I.*:.****I:::*::.:.*I*:NNVFI:................:.:..:::::..::.........:......................:.:.....*....\n:::::*V**I*:.NFNIFNV:::*IV*.::FNVNVFIN**:I*FVFNFNFV::...:..:.::.::.::..:::.::...:...............:.....:.................:*.....:\n::I***::I*:*:IVFVNFVV.:I**:*...VF*:FVFIVVVVF:NFINNFI........::.....::...............................::........:......:........:*\n:V****INF*:*V*V*FINNF:**I*::I:*.IIIFNFNFNVVIFNFFNNFV........:.........................::...:.............:.:.:::......I........:\n::*:IV::FNVVNNIFFFF:*IV::*VFN*II..*INNFNFFFNVVFVNNNVI::::::.:::::..:::...:....:.:...::.:........:::..:::::::::::.I..I......I*:*:\nI:*NVNV:*V*VNFFFFFVV*:FFFIFFFI*:*N**VVNFNNN**NFIINNF.V:::::::::::::.:.:.:::.::::.::.:::::::::::::::::::::::::::*:.*I.......:.VV*\nI::::::I:I**VFFI*NIFF*FVNVV:FNFFVIFFFFFVN*......*VFFNFF:::*::::::::::::::::::::::::::::::::::*:::***********IIFFI*......II*::VVN\n**::*II:::..*:IINNFFFFFFVFFNFFFNFVVFF*FF:...........N*NVI*I************.************************IIIIIIIIII*FVVFI.........I..IFFF\n****I*:I*:*I**I:*IVINFFFFNVFFNFVFVFIIF...............IVNFIII:IIII**IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIVVVIIIIIFV*FV.......**:F:VFVFFF\n*I****I:::I*V*:F:I:**IIVIVFN*IFNVVIF........I:.......***FFFVIVIIVVVIVIVVIIIVVVIII:*IIIIIIIVIVVVVVVVVVVVFFVVV....*.:.:VIFFFFFNNN*\n***NNNVNF*NFIII*I**I:I::I*I*::*VF*.........***I:.......:..*NFIIVVVVVVVVVVVVVVVV.....IIIVVVVVVVVVVVVIVVII:*...*:.:..VFVFFFFF::::.\n:::FNVFVNIVFFFI*II*I**IIFFF*F:..........:**I:*..........::.....VVVVVVVVIVVVVI......:..*VVVVVVVVVFF*::*I........VVFINFFF:.:VF....\n:::FFNFNFFFFNIFI*:I*V*::V:.........:::.I:.*:I*.**..:....:*.V:.:.VVVVVVVV**:*IFFN.IFFVI.:VFF*:*::*V...**.I*.VI*IVV:.:.:VVV..:.::.\n:::::::*FFNFVI:..........:..........I:..:**.I...::*..:::....II*.....IFNNNNNNNN*VVVVVFVVFVVFFVV:.....**VVVVVV*..:....*VV:.:::::::\n:::.:::::..:....::......:V::::..II.I*II::::.I:I..*.*:VV.::..IIVF.:VI:.*...*:.:*II***::.......*I.FIF***..:::::.:VFFVII.::::::IVFF\n::::*****:......I::.....:*I::::..::::*:......:::..FVVF*F*:*F..IVFV:V**:FF*::.........:............:::..FFFFFFFFFFF..:::::FFVVFFV\n::::::I***I*.I.*:::.I..*I*:.*.I.......*.I*:..*::..*:F*:*I:*:V...*FFIFFFV*FFV::.....:..::...*.:..::**:.VVVFVVVVVI....:IFNNNNNNFI*\n:::::::::.**::::::.*NV.I:.I*:*:..:V.:::::..::I.**..FNFVNI**FFV:V...*FNNFFIINFF::::.:I*::.:::::VFVVVVI*:*VNNFF*..:::::::::*VVFFFN\n::::::*V:I*VF*IFV*NVFFI:**::.VI::::*.::I.:*.:.I:*:..FNFFFFV*IIV:*FVVIV.INFFFIFFNFI::..FFFFI::VNNFFI:*IIVFFV..:::::::VNNNNFVFNV**\n::::FVVFF*NNFFNNNNFFV::I::.I*I::.....:*::VF.FF*::*:..:VNFFNFF***III:II:*V*::IFNFFNNFFF*:.IFNFFFFFFFFFFVI......:.:::*I::..:VFFFFF\n:::NNVFVFNNFNFNFVV::*V*F.FNVN:I:::*IV:::.IFFNVIVI.:::..NNFFFNVN*II**IIVIVIV***********IIIV:FVIF*VFIV.....:*VFFFFFFFFFNNNFFFFFFFF\n::NFVNFVIN*VFN*NNIIFINVFNNINVNN:.::..........FNN:VVF.....:NFFFNNVF*I:::::*IIIIIV***********:**I*...::::**I:IFNNFNNNNNNF*::IIVFNN\n::NVFFNVNFNVNNVNNNVNNIFNFVNFNN**:::IVNN.I.FN*IIINIVNNI:V:...VNNFNFNFNV**::::::::::::::*II*....:FNFFNNNFFFNNNNNF:.......:::::::..\n.:NINNVFFFNIFNVNFNVNFVNNNVNVNNF:::IN:*V**NI:V::VFIFNNNFV***I:...:VFFFNNFFFNNNNNNNV:.......:::......::::....:::::::::YRREBRAP*NAI\n</pre>" );
+    const QString msg = tr( "You can now close this page and return to Mergin Maps" );
     mOauth2ReplyHandler->setCallbackText( msg );
 #endif
 
     mOauth2Flow.setReplyHandler( mOauth2ReplyHandler );
 
-    connect( &mOauth2Flow, &QAbstractOAuth::authorizeWithBrowser, this, &QDesktopServices::openUrl );
-    connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]()
+    connect( &mOauth2Flow, &QAbstractOAuth::authorizeWithBrowser, this, [this]( const QUrl & url )
     {
-      mUserAuth->setFromSso( mOauth2Flow.token(), mOauth2Flow.expirationAt() );
-
-      // mOauth2Flow->deleteLater();
+      CoreUtils::log( "SSO", QStringLiteral( "Opening browser to autorize: %1" ).arg( url.toString() ) );
+      QDesktopServices::openUrl( url );
+      emit ssoAuthorizeUsingBrowser();
     } );
 
-
-    connect( &mOauth2Flow, &QAbstractOAuth::requestFailed, this, [this]( const QAbstractOAuth::Error error )
+    connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]()
     {
-      // TODO: error message on fail??
-      qDebug() << "REQUEST FAILED: " ;// << error;
-      // mOauth2Flow->deleteLater();
+      CoreUtils::log( "SSO", QStringLiteral( "Successfully authorized, token expires at: %1" ).arg( mOauth2Flow.expirationAt().toString() ) );
+      mUserAuth->setFromSso( mOauth2Flow.token(), mOauth2Flow.expirationAt() );
+      mOauth2ReplyHandler->close();
     } );
 
     connect( &mOauth2Flow, &QAbstractOAuth2::error, this, [this]( const QString & error, const QString & errorDescription, const QUrl & uri )
     {
-      // TODO: error message on fail??
-      qDebug() << "QAbstractOAuth2::error :" << error << errorDescription << uri;
-      // mOauth2Flow->deleteLater();
-    } );
-    connect( mOauth2ReplyHandler, &QOAuthHttpServerReplyHandler::callbackReceived, this, [this]( const QVariantMap & vars )
-    {
-      qDebug() << "Callback received!!!! " << vars;
-    } );
-    connect( mOauth2ReplyHandler, &QOAuthHttpServerReplyHandler::destroyed, this, [this]
-    {
-      qDebug() << "********Handler Destroyed*********** ";
-    } );
-    connect( &mOauth2Flow, &QOAuth2AuthorizationCodeFlow::destroyed, this, [this]
-    {
-      qDebug() << "********Flow Destroyed*********** ";
+      Q_UNUSED( uri )
+      CoreUtils::log( "SSO", QStringLiteral( "OAuth2 error %1: %2" ).arg( error, errorDescription ) );
+      mOauth2ReplyHandler->close();
+      emit authFailed();
+      emit notifyError( tr( "SSO authorization failed" ) );
     } );
   }
 
-  if ( !mOauth2ReplyHandler )
-  {
-    // should not happen
-    return;
-  }
-
-  // uri handler is not listening by default
+  // QOAuthUriSchemeReplyHandler is not listening by default
   if ( !mOauth2ReplyHandler->isListening() )
     mOauth2ReplyHandler->listen();
 
   if ( mOauth2ReplyHandler->isListening() )
   {
     // Initiate the authorization
-    // qDebug() << "handler is listening on port: " << mOauth2ReplyHandler->port();
+#ifdef MOBILE_OS
+    CoreUtils::log( "SSO", QStringLiteral( "Listening for callback" ) );
+#else
+    CoreUtils::log( "SSO", QStringLiteral( "Listening for callback on port: %1" ).arg( mOauth2ReplyHandler->port() ) );
+#endif
     mOauth2Flow.grant();
   }
   else
   {
-    // TODO: error, reply handler could not start listening
+    CoreUtils::log( "SSO", QStringLiteral( "Could not start listening for callback" ) );
+    emit authFailed();
+    emit notifyError( tr( "SSO authorization failed" ) );
   }
 }
 
 void MerginApi::abortSsoFlow()
 {
-  qDebug() << "**** SSO flow aborted! ****";
-  // if ( mOauth2Flow )
-  //   mOauth2Flow->deleteLater();
+  CoreUtils::log( "SSO", QStringLiteral( "SSO flow aborted" ) );
+  if ( mOauth2ReplyHandler && mOauth2ReplyHandler->isListening() )
+    mOauth2ReplyHandler->close();
 }
 
 bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )

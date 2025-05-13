@@ -57,6 +57,7 @@ MMPage {
 
         title: qsTr( "Work email" )
         textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
+        text: __merginApi.userAuth.username
       }
 
       MMButton {
@@ -101,7 +102,6 @@ MMPage {
   }
 
   Component.onCompleted: {
-    console.log( "SSO page completed!" )
-    __merginApi.requestSsoLogin()
+    __merginApi.requestSsoConfig()
   }
 }

@@ -316,9 +316,26 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
-    Q_INVOKABLE void requestSsoLogin();
+
+    /**
+     * Requests the server's sso config
+     * If server config is single tenant, the sso flow is started
+     *
+     * \see startSsoFlow()
+     */
+    Q_INVOKABLE void requestSsoConfig();
+
+    /**
+     * Requests the available sso connections for the specified email
+     * If a connection is found, sso flow is started
+     *
+     * \see ssoConnectionsReplyFinished(), startSsoFlow()
+     */
+    Q_INVOKABLE void requestSsoConnections( const QString &email );
+
+    //! Stops the OAuth2 reply handlers from listening
     Q_INVOKABLE void abortSsoFlow();
-    Q_INVOKABLE void authorizeWithSso( const QString &email );
+
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -377,7 +394,7 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void deleteAccount();
 
-    static const int MERGIN_API_VERSION_MAJOR = 1800; //2020;
+    static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
     static const int MINIMUM_SERVER_VERSION_MINOR = 2;
@@ -696,10 +713,11 @@ class MerginApi: public QObject
 
     void apiSupportsSsoChanged();
 
+    //! Emitted when server sso config is returned and server is multi tenant
     void ssoConfigIsMultiTenant();
-    void ssoConfigIsSingleTenant();
 
-    void ssoConnectionsRequested();
+    //! Emitted when the sso url is opened in the browser and application loses focus
+    void ssoAuthorizeUsingBrowser();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -901,9 +919,9 @@ class MerginApi: public QObject
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS
-    QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr;
+    QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
 #else
-    QOAuthHttpServerReplyHandler *mOauth2ReplyHandler = nullptr;
+    QOAuthHttpServerReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
 #endif
 
     friend class TestMerginApi;

@@ -340,15 +340,6 @@ if (ANDROID)
 endif ()
 
 if (MACOS)
-
-  # entitlements file
-  set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
-  target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
-  set_source_files_properties(
-    ${ENTITLEMENTS_FILE} PROPERTIES
-    XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
-  )
-
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
@@ -358,7 +349,6 @@ if (MACOS)
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
-               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${ENTITLEMENTS_FILE}"
   )
 endif ()
 
