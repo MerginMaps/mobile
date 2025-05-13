@@ -1587,15 +1587,18 @@ bool MerginApi::validateAuth()
   {
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
 
-    // we need to request auth again, until refresh tokens are implemented
-    if ( mUserAuth->authMethod() == MerginUserAuth::AuthMethod::SSO )
+    switch ( mUserAuth->authMethod() )
     {
-      emit authRequested();
-      return false;
+      case MerginUserAuth::AuthMethod::SSO:
+        // we need to request auth again
+        emit authRequested();
+        return false;
+      case MerginUserAuth::AuthMethod::Password:
+        refreshAuthToken();
+        return true;
     }
-
-    refreshAuthToken();
   }
+
   return true;
 }
 
@@ -3079,6 +3082,7 @@ void MerginApi::getUserInfoFinished()
         case MerginUserAuth::AuthMethod::SSO:
           mUserAuth->blockSignals( true );
           mUserAuth->setUsername( mUserInfo->email() );
+          mUserAuth->saveAuthData();
           mUserAuth->blockSignals( false );
           break;
         case MerginUserAuth::AuthMethod::Password:
@@ -4207,6 +4211,12 @@ QString MerginApi::getCachedProjectRole( const QString &projectFullName ) const
 
 void MerginApi::startSsoFlow( const QString &clientId )
 {
+#ifdef MOBILE_OS
+  const QString CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
+#else
+  constexpr int OAUTH2_LISTEN_PORT = 8082;
+#endif
+
   CoreUtils::log( "SSO", QStringLiteral( "Starting SSO flow for clientId: %1" ).arg( clientId ) );
   mOauth2Flow.setAuthorizationUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/authorize" ) ) );
   mOauth2Flow.setAccessTokenUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/token" ) ) );
@@ -4216,11 +4226,9 @@ void MerginApi::startSsoFlow( const QString &clientId )
   if ( !mOauth2ReplyHandler )
   {
 #ifdef MOBILE_OS
-    const QString CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
     mOauth2ReplyHandler = new QOAuthUriSchemeReplyHandler( CALLBACK_URL, &mOauth2Flow );
 #else
-    constexpr int OAUTH2_LISTEN_PORT = 8082;
-    mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( OAUTH2_LISTEN_PORT, &mOauth2Flow );
+    mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( QHostAddress::Null, OAUTH2_LISTEN_PORT, &mOauth2Flow );
     const QString msg = tr( "You can now close this page and return to Mergin Maps" );
     mOauth2ReplyHandler->setCallbackText( msg );
 #endif
@@ -4251,9 +4259,14 @@ void MerginApi::startSsoFlow( const QString &clientId )
     } );
   }
 
-  // QOAuthUriSchemeReplyHandler is not listening by default
   if ( !mOauth2ReplyHandler->isListening() )
+  {
+#ifdef MOBILE_OS
     mOauth2ReplyHandler->listen();
+#else
+    mOauth2ReplyHandler->listen( QHostAddress::Null, OAUTH2_LISTEN_PORT );
+#endif
+  }
 
   if ( mOauth2ReplyHandler->isListening() )
   {
