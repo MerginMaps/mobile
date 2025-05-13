@@ -36,7 +36,7 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "14.0")
+  set(DEPLOYMENT_TARGET "16.0")
 endif ()
 
 if (APPLE
