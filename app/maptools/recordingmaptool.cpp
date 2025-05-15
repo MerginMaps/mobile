@@ -69,6 +69,14 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setY( transformed.y() );
   }
 
+  if ( mLastRecordedPoint == pointToAdd )
+  {
+    // Avoid inserting duplicated vertex
+    return;
+  }
+
+  mLastRecordedPoint = pointToAdd;
+
   fixZM( pointToAdd );
 
   // apply gps antenna height
@@ -164,15 +172,8 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     if ( r->nCoordinates() < 2 )
     {
-      if ( mLastRecordedPoint == pointToAdd )
-      {
-        // Avoid inserting duplicated vertex
-        return;
-      }
       r->addVertex( pointToAdd );
       r->close();
-
-      mLastRecordedPoint = pointToAdd;
 
       mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -204,16 +205,10 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     }
     else
     {
-      if ( mLastRecordedPoint == pointToAdd )
-      {
-        // Avoid inserting duplicated vertex
-        return;
-      }
       mRecordedGeometry.get()->insertVertex( id, pointToAdd );
     }
   }
 
-  mLastRecordedPoint = pointToAdd;
 
   mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
@@ -635,6 +630,8 @@ void RecordingMapTool::prepareEditing()
   {
     setRecordedGeometry( QgsGeometry() );
   }
+
+  mLastRecordedPoint = QgsPoint();
 }
 
 void RecordingMapTool::collectVertices()
