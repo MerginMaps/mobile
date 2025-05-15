@@ -4038,7 +4038,7 @@ void MerginApi::processInvitationReplyFinished()
 
     // if server version is at least 2025.4.1, let‘s get workspaceId from response and switch to it
     // emit processInvitationSuccess to navigate to project's page in qml
-    if ( serverVersionIsAtLeast( 2025, 4, 1 ) )
+    if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
     {
       QByteArray data = r->readAll();
       QJsonDocument doc = QJsonDocument::fromJson( data );
@@ -4050,11 +4050,8 @@ void MerginApi::processInvitationReplyFinished()
         if ( responseObj.contains( "workspace_id" ) )
         {
           int workspaceId = responseObj.value( "workspace_id" ).toInt();
-          if ( accept )
-          {
-            mUserInfo->setActiveWorkspace( workspaceId );
-            emit processInvitationSuccess();
-          }
+          mUserInfo->setActiveWorkspace( workspaceId );
+          emit processInvitationSuccess();
         }
       }
     }
