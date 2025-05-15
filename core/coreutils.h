@@ -109,7 +109,9 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
-
+    static const QString CACHED_MAP_EXTENT_GROUP;
+    static const QString CACHED_LAYERS_VISIBILITY_GROUP;
+    static const QString CACHED_MAP_THEME_GROUP;
     /**
      * Returns available device storage
     */
