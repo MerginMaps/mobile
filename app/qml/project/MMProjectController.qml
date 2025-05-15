@@ -678,6 +678,7 @@ Item {
 
     function onProcessInvitationSuccess() {
       root.showProjectsPage()
+      __notificationModel.addInfo( qsTr( "Download a project and start collecting." ) )
     }
   }
 }
