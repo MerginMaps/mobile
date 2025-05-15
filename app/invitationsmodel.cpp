@@ -46,9 +46,9 @@ void InvitationsModel::listInvitations()
 
 void InvitationsModel::onListInvitationsFinished( const QList<MerginInvitation> &invitations )
 {
-  beginResetModel();
-
   clear();
+
+  beginResetModel();
 
   for ( const MerginInvitation &invite : invitations )
   {

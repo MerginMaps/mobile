@@ -41,9 +41,9 @@ void WorkspacesModel::listWorkspaces()
 
 void WorkspacesModel::onListWorkspacesFinished( const QMap<int, QString> &workspaces )
 {
-  beginResetModel();
-
   clear();
+
+  beginResetModel();
 
   QMap<int, QString>::const_iterator it = workspaces.constBegin();
 
