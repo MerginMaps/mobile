@@ -11,17 +11,15 @@
 #define TESTUTILS_H
 
 #include <QString>
-#include <qtestcase.h>
 
-#include "inputconfig.h"
 #include "qgsproject.h"
 
 class MerginApi;
 
 namespace TestUtils
 {
-  const int SHORT_REPLY = 5000;
-  const int LONG_REPLY = 90000;
+  constexpr int SHORT_REPLY = 5000;
+  constexpr int LONG_REPLY = 90000;
 
   //! authorize user and select the active workspace
   void authorizeUser( MerginApi *api, const QString &username, const QString &password );
@@ -38,7 +36,7 @@ namespace TestUtils
   void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   //! Whether we need to auth again
-  bool needsToAuthorizeAgain( MerginApi *api, const QString &username );
+  bool needsToAuthorizeAgain( const MerginApi *api, const QString &username );
 
   QString generateUsername();
   QString generateEmail();
@@ -62,6 +60,20 @@ namespace TestUtils
   void testIsPositionTrackingLayer();
   void testMapLayerFromName();
   void testIsValidUrl();
+
+  /**
+   * Function returns the project with same fullname. Expected types to pass are \a MerginProject & \a LocalProject.
+   */
+  template <typename T>
+  T findProjectByName( const QString &projectFullName, const QList<T> &projects )
+  {
+    for ( T project : projects )
+    {
+      if ( project.fullName() == projectFullName )
+        return project;
+    }
+    return T();
+  };
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

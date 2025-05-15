@@ -36,11 +36,11 @@ QHash<int, QByteArray> MerginProjectStatusModel::roleNames() const
   return roleNames;
 }
 
-QVariant MerginProjectStatusModel::data( const QModelIndex &index, int role ) const
+QVariant MerginProjectStatusModel::data( const QModelIndex &index, const int role ) const
 {
-  int row = index.row();
+  const int row = index.row();
   if ( row < 0 || row >= mItems.count() )
-    return QVariant();
+    return {};
 
   ProjectStatusItem item = mItems.at( row );
 
@@ -54,7 +54,7 @@ QVariant MerginProjectStatusModel::data( const QModelIndex &index, int role ) co
     case Updates: return item.updates;
     case Section: return item.section;
   }
-  return QVariant();
+  return {};
 
 }
 
@@ -123,14 +123,14 @@ void MerginProjectStatusModel::infoProjectUpdated( const ProjectDiff &projectDif
   endResetModel();
 }
 
-bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
+bool MerginProjectStatusModel::loadProjectInfo( const QString &projectId )
 {
-  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  const LocalProject projectInfo = mLocalProjects.projectFromProjectId( projectId );
   if ( !projectInfo.projectDir.isEmpty() )
   {
-    ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
+    const ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
 
-    bool hasLocalChanges = !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty();
+    const bool hasLocalChanges = !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty();
 
     if ( hasLocalChanges )
       infoProjectUpdated( diff, projectInfo.projectDir );

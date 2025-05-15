@@ -10,7 +10,6 @@
 #ifndef LOCALPROJECTSMANAGER_H
 #define LOCALPROJECTSMANAGER_H
 
-#include <QObject>
 #include "project.h"
 
 /**
@@ -29,20 +28,17 @@ class LocalProjectsManager : public QObject
 
     QString dataDir() const { return mDataDir; }
 
-    LocalProjectsList projects() const { return mProjects; }
+    LocalProjectsDict projects() const { return mProjects; }
 
     LocalProject projectFromDirectory( const QString &projectDir ) const;
     LocalProject projectFromProjectFilePath( const QString &projectFilePath ) const;
     LocalProject projectFromProjectId( const QString &projectId ) const;
 
-    LocalProject projectFromMerginName( const QString &projectFullName ) const;
-    LocalProject projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const;
-
     //! Adds entry about newly created project
     void addLocalProject( const QString &projectDir, const QString &projectName );
 
     //! Adds entry for downloaded project
-    void addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+    void addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName, const QString &projectId );
 
     //! Should forget about that project (it has been removed already)
     Q_INVOKABLE void removeLocalProject( const QString &projectId );
@@ -57,16 +53,19 @@ class LocalProjectsManager : public QObject
      * Returns changes of a project specified by projectId in the form :
      * (pending changes, features in layer survey: 10 addition, 3 updates, 1 deletion. 10 new files)
      */
-    Q_INVOKABLE QString projectChanges( const QString &projectId );
+    Q_INVOKABLE QString projectChanges( const QString &projectId ) const;
 
     //! after successful update/upload - both server and local version are the same
-    void updateLocalVersion( const QString &projectDir, int version );
+    void updateLocalVersion( const QString &projectId, int version );
 
     //! Updates project's namespace
-    void updateNamespace( const QString &projectDir, const QString &projectNamespace );
+    void updateNamespace( const QString &projectId, const QString &projectNamespace );
 
-    //! Finds all QGIS project files and set the err variable if any occured.
+    //! Finds all QGIS project files and set the err variable if any occurred.
     QString findQgisProjectFile( const QString &projectDir, QString &err );
+
+    //! Updates project's ID
+    void updateProjectId( const QString &oldProjectId, const QString &newProjectId );
 
   signals:
     void localProjectAdded( const LocalProject &project );
@@ -76,10 +75,10 @@ class LocalProjectsManager : public QObject
     void dataDirReloaded();
 
   private:
-    void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+    void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName, const QString &projectId );
 
     QString mDataDir;   //!< directory with all local projects
-    LocalProjectsList mProjects;
+    LocalProjectsDict mProjects;
 };
 
 

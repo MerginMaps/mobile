@@ -38,98 +38,80 @@ void LocalProjectsManager::reloadDataDir()
       info.projectName = metadata.name;
       info.projectNamespace = metadata.projectNamespace;
       info.localVersion = metadata.version;
+      info.projectId = metadata.projectId;
     }
     else
     {
       info.projectName = folderName;
+      info.projectId = LocalProject::generateProjectId();
     }
 
-    mProjects << info;
+    mProjects.insert( info.projectId, info );
   }
 
-  QString msg = QString( "Found %1 local projects in %2" ).arg( mProjects.size() ).arg( mDataDir );
+  const QString msg = QString( "Found %1 local projects in %2" ).arg( mProjects.size() ).arg( mDataDir );
   CoreUtils::log( "Local projects", msg );
   emit dataDirReloaded();
 }
 
 LocalProject LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
 {
-  for ( const LocalProject &info : mProjects )
+  for ( const LocalProject &info : mProjects.values() )
   {
     if ( info.projectDir == projectDir )
       return info;
   }
-  return LocalProject();
+  return {};
 }
 
 LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
 {
-  for ( const LocalProject &info : mProjects )
+  for ( const LocalProject &info : mProjects.values() )
   {
     if ( info.qgisProjectFilePath == projectFilePath )
       return info;
   }
-  return LocalProject();
+  return {};
 }
 
 LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectId ) const
 {
-  for ( const LocalProject &info : mProjects )
+  if ( mProjects.contains( projectId ) )
   {
-    if ( info.id() == projectId )
-      return info;
+    return mProjects.value( projectId );
   }
-  return LocalProject();
-}
-
-LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
-{
-  for ( const LocalProject &info : mProjects )
-  {
-    if ( info.id() == projectFullName )
-      return info;
-  }
-  return LocalProject();
-}
-
-LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectNamespace, const QString &projectName ) const
-{
-  return projectFromMerginName( MerginApi::getFullProjectName( projectNamespace, projectName ) );
+  return {};
 }
 
 void LocalProjectsManager::addLocalProject( const QString &projectDir, const QString &projectName )
 {
-  addProject( projectDir, QString(), projectName );
+  addProject( projectDir, QString(), projectName, LocalProject::generateProjectId() );
 }
 
-void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+void LocalProjectsManager::addMerginProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName, const QString &projectId )
 {
-  addProject( projectDir, projectNamespace, projectName );
+  addProject( projectDir, projectNamespace, projectName, projectId );
 }
 
 void LocalProjectsManager::removeLocalProject( const QString &projectId )
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  if ( mProjects.contains( projectId ) )
   {
-    if ( mProjects[i].id() == projectId )
-    {
-      emit aboutToRemoveLocalProject( mProjects[i] );
+    const LocalProject project = mProjects.value( projectId );
+    emit aboutToRemoveLocalProject( project );
 
-      CoreUtils::removeDir( mProjects[i].projectDir );
-      mProjects.removeAt( i );
-
-      return;
-    }
+    CoreUtils::removeDir( project.projectDir );
+    mProjects.remove( projectId );
   }
 }
 
 bool LocalProjectsManager::projectIsValid( const QString &path ) const
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  for ( LocalProject &project : mProjects.values() )
   {
-    if ( mProjects[i].qgisProjectFilePath == path )
+    if ( project.qgisProjectFilePath == path )
     {
-      return mProjects[i].projectError.isEmpty();
+      return project.projectError.isEmpty();
     }
   }
   return false;
@@ -137,66 +119,55 @@ bool LocalProjectsManager::projectIsValid( const QString &path ) const
 
 QString LocalProjectsManager::projectId( const QString &path ) const
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  for ( LocalProject &project : mProjects.values() )
   {
-    if ( mProjects[i].qgisProjectFilePath == path )
+    if ( project.qgisProjectFilePath == path )
     {
-      return mProjects[i].id();
+      return project.id();
     }
   }
-  return QString();
+  return {};
 }
 
 QString LocalProjectsManager::projectName( const QString &projectId ) const
 {
-  LocalProject project = projectFromProjectId( projectId );
+  const LocalProject project = projectFromProjectId( projectId );
 
   if ( project.isValid() )
   {
-    return MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
+    return CoreUtils::getFullProjectName( project.projectNamespace, project.projectName );
   }
 
-  return QString();
+  return {};
 }
 
-QString LocalProjectsManager::projectChanges( const QString &projectId )
+QString LocalProjectsManager::projectChanges( const QString &projectId ) const
 {
-  LocalProject project = projectFromProjectId( projectId );
+  const LocalProject project = projectFromProjectId( projectId );
 
   if ( project.isValid() )
   {
     return MerginApi::localProjectChanges( project.projectDir ).dump();
   }
 
-  return QString();
+  return {};
 }
 
-void LocalProjectsManager::updateLocalVersion( const QString &projectDir, int version )
+void LocalProjectsManager::updateLocalVersion( const QString &projectId, const int version )
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  if ( mProjects.contains( projectId ) )
   {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      mProjects[i].localVersion = version;
-
-      emit localProjectDataChanged( mProjects[i] );
-      return;
-    }
+    mProjects[ projectId ].localVersion = version;
+    emit localProjectDataChanged( mProjects.value( projectId ) );
   }
-  Q_ASSERT( false );  // should not happen
 }
 
-void LocalProjectsManager::updateNamespace( const QString &projectDir, const QString &projectNamespace )
+void LocalProjectsManager::updateNamespace( const QString &projectId, const QString &projectNamespace )
 {
-  for ( int i = 0; i < mProjects.count(); ++i )
+  if ( mProjects.contains( projectId ) )
   {
-    if ( mProjects[i].projectDir == projectDir )
-    {
-      mProjects[i].projectNamespace = projectNamespace;
-
-      emit localProjectDataChanged( mProjects[i] );
-      return;
-    }
+    mProjects[ projectId ].projectNamespace = projectNamespace;
+    emit localProjectDataChanged( mProjects.value( projectId ) );
   }
 }
 
@@ -208,7 +179,7 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
     // download failed or copying from .temp to project dir failed (app was probably closed meanwhile)
 
     err = tr( "Download failed, remove and retry" );
-    return QString();
+    return {};
   }
 
   QList<QString> foundProjectFiles;
@@ -235,17 +206,33 @@ QString LocalProjectsManager::findQgisProjectFile( const QString &projectDir, QS
     err = tr( "Failed to find a QGIS project file" );
   }
 
-  return QString();
+  return {};
 }
 
-void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName )
+void LocalProjectsManager::updateProjectId( const QString &oldProjectId, const QString &newProjectId )
+{
+  if ( mProjects.contains( oldProjectId ) )
+  {
+    // updating values just in LocalProjectsManager is not enough we also update ProjectsModel and ActiveProject
+    LocalProject project = mProjects.value( oldProjectId );
+    emit aboutToRemoveLocalProject( project );
+    mProjects.remove( oldProjectId );
+    project.projectId = newProjectId;
+    mProjects.insert( newProjectId, project );
+    emit localProjectAdded( project );
+    emit localProjectDataChanged( project );
+  }
+}
+
+void LocalProjectsManager::addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName, const QString &projectId )
 {
   LocalProject project;
   project.projectDir = projectDir;
   project.qgisProjectFilePath = findQgisProjectFile( projectDir, project.projectError );
   project.projectName = projectName;
   project.projectNamespace = projectNamespace;
+  project.projectId = projectId;
 
-  mProjects << project;
+  mProjects.insert( projectId, project );
   emit localProjectAdded( project );
 }

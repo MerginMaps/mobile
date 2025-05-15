@@ -10,8 +10,6 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include <QObject>
-#include <QDateTime>
 #include <QDirIterator>
 #include <memory>
 
@@ -37,10 +35,8 @@ namespace ProjectStatus
 
 /**
  * \brief The LocalProject struct is used as a struct for projects that are available on the device.
- * The struct is used in the \see Projects struct and also for communication between LocalProjectsManager and ProjectsModel
- *
- * \note Struct contains member id() which in this time returns projects full name, however, once we
- * start using projects IDs, it can be replaced for that ID.
+ * The struct is used in the \see Projects struct and also for communication between LocalProjectsManager
+ * and ProjectsModel.
  */
 struct LocalProject
 {
@@ -48,15 +44,22 @@ struct LocalProject
 
   public:
 
+    // TODO: remove?
     Q_PROPERTY( QString qgisProjectFilePath MEMBER qgisProjectFilePath )
 
-    LocalProject() {};
-    ~LocalProject() {};
+    LocalProject() = default;
+    ~LocalProject() = default;
 
     QString projectName;
     QString projectNamespace;
+    QString projectId;
 
-    Q_INVOKABLE QString id() const; //! projectFullName for time being
+    //! Returns the UUID of project
+    Q_INVOKABLE QString id() const;
+
+    //! generates a new UUID
+    static QString generateProjectId();
+
     QString fullName() const;
 
     QString projectDir;
@@ -68,18 +71,20 @@ struct LocalProject
 
     bool isValid() const { return !projectDir.isEmpty(); }
 
-    //! Returns true if the local version instance has a mergin counterpart based on localVersion.
-    //! LocalVersion comes from metadata file stored in .mergin folder.
-    //! Note: this is just for scenarios where you only have LocalProject instance and not Project,
-    //!       Project->isMergin() is recommended to use over this one
+    /**
+     * Returns true if the local version instance has a mergin counterpart based on localVersion.
+     * LocalVersion comes from metadata file stored in .mergin folder.
+     * Note: this is just for scenarios where you only have LocalProject instance and not Project,
+     * \note Project->isMergin() is recommended to use over this one
+     */
     bool hasMerginMetadata() const { return localVersion > -1; }
 
-    bool operator ==( const LocalProject &other )
+    bool operator ==( const LocalProject &other ) const
     {
       return ( this->id() == other.id() );
     }
 
-    bool operator !=( const LocalProject &other )
+    bool operator !=( const LocalProject &other ) const
     {
       return !( *this == other );
     }
@@ -88,19 +93,21 @@ struct LocalProject
 /**
  * \brief The MerginProject struct is used for projects that comes from Mergin.
  * This struct is used in the \see Projects struct and also for communication between MerginAPI and ProjectsModel
- *
- * \note Struct contains member id() which in this time returns projects full name, however, once we
- * start using projects IDs, it can be replaced for that ID.
  */
 struct MerginProject
 {
-  MerginProject() {};
-  ~MerginProject() {};
+  MerginProject() = default;
+  ~MerginProject() = default;
 
   QString projectName;
   QString projectNamespace;
+  QString projectId;
 
-  QString id() const; //!< projectFullName for time being
+  /**
+   * Returns the project ID or empty string if no ID is known. Then it's necessary to fetch the ID from API.
+   */
+  QString id() const;
+  QString fullName() const;
 
   QDateTime serverUpdated; // available latest version of project files on server
   int serverVersion = -1;
@@ -111,12 +118,12 @@ struct MerginProject
 
   bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
 
-  bool operator ==( const MerginProject &other )
+  bool operator ==( const MerginProject &other ) const
   {
     return ( this->id() == other.id() );
   }
 
-  bool operator !=( const MerginProject &other )
+  bool operator !=( const MerginProject &other ) const
   {
     return !( *this == other );
   }
@@ -125,13 +132,13 @@ struct MerginProject
 /**
  * \brief The Project struct serves as a struct for any kind of project (local/mergin).
  * It consists of two main parts - mergin and local.
- * Both parts are pointers to their specific structs and based on the pointer value (nullptr or assigned) this structs
- * decides if the project is local, mergin or both.
+ * Both parts are pointers to their specific structs and based on the pointer value (nullptr or assigned) these structs
+ * decide if the project is local, mergin or both.
  */
 struct Project
 {
-  Project() {};
-  ~Project() {};
+  Project() = default;
+  ~Project() = default;
 
   MerginProject mergin;
   LocalProject local;
@@ -142,50 +149,52 @@ struct Project
   QString projectName() const
   {
     if ( isMergin() ) return mergin.projectName;
-    else if ( isLocal() ) return local.projectName;
-    return QString();
+    if ( isLocal() ) return local.projectName;
+    return {};
   }
 
   QString projectNamespace() const
   {
     if ( isMergin() ) return mergin.projectNamespace;
-    else if ( isLocal() ) return local.projectNamespace;
-    return QString();
+    if ( isLocal() ) return local.projectNamespace;
+    return {};
   }
 
   QString id() const
   {
     if ( isMergin() ) return mergin.id();
-    else if ( isLocal() ) return local.id();
-    return QString();
+    if ( isLocal() ) return local.id();
+    return {};
   }
 
   QString fullName() const
   {
-    return id();
+    if ( isMergin() ) return mergin.fullName();
+    if ( isLocal() ) return local.fullName();
+    return {};
   }
 
-  bool operator ==( const Project &other )
+  bool operator ==( const Project &other ) const
   {
     if ( this->isLocal() && other.isLocal() )
     {
-      return this->local.id() == other.local.id();
+      return this->local.id() == other.local.id() && this->local.fullName() == other.local.fullName();
     }
-    else if ( this->isMergin() && other.isMergin() )
+    if ( this->isMergin() && other.isMergin() )
     {
-      return this->mergin.id() == other.mergin.id();
+      return this->mergin.id() == other.mergin.id() && this->mergin.fullName() == other.mergin.fullName();
     }
     return false;
   }
 
-  bool operator !=( const Project &other )
+  bool operator !=( const Project &other ) const
   {
     return !( *this == other );
   }
 };
 
 typedef QList<MerginProject> MerginProjectsList;
-typedef QList<LocalProject> LocalProjectsList;
+typedef QHash<QString, LocalProject> LocalProjectsDict;
 Q_DECLARE_METATYPE( MerginProjectsList )
 
 #endif // PROJECT_H
