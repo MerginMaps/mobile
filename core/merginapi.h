@@ -626,6 +626,17 @@ class MerginApi: public QObject
      */
     void setApiSupportsSso( bool ssoSupported );
 
+    /**
+     * Returns server API version string (e.g. "2023.4.0")
+     */
+    QString apiVersion() const;
+    void setApiVersion( const QString &apiVersion );
+
+    /**
+     * Checks if server version meets or exceeds a required minimum version
+     */
+    bool serverVersionIsAtLeast( int requiredMajor, int requiredMinor, int requiredPatch ) const;
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -695,6 +706,7 @@ class MerginApi: public QObject
     void listInvitationsFinished( const QList<MerginInvitation> &invitations );
 
     void processInvitationFailed();
+    void processInvitationSuccess();
     void processInvitationFinished( bool accepted );
 
     void workspaceCreated( const QString &workspaceName );
@@ -716,6 +728,8 @@ class MerginApi: public QObject
 
     //! Emitted when server sso config is returned and server is multi tenant
     void ssoConfigIsMultiTenant();
+
+    void apiVersionChanged( const QString &apiVersion );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -905,6 +919,7 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
     bool mApiSupportsSso = false;
+    QString mApiVersion;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
