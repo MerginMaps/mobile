@@ -668,5 +668,9 @@ Item {
     function onActiveWorkspaceChanged() {
       root.refreshProjects()
     }
+
+    function onProcessInvitationSuccess() {
+      stackView.popOnePageOrClose()
+    }
   }
 }
