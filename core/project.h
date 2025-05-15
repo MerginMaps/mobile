@@ -96,39 +96,37 @@ struct LocalProject
  */
 struct MerginProject
 {
-    MerginProject() = default;
-    ~MerginProject() = default;
+  MerginProject() = default;
+  ~MerginProject() = default;
 
-    QString projectName;
-    QString projectNamespace;
+  QString projectName;
+  QString projectNamespace;
+  QString projectId;
 
-    /**
-     * Returns the project ID or empty string if no ID is known. Then it's necessary to fetch the ID from API.
-     */
-    QString id() const;
-    QString fullName() const;
+  /**
+   * Returns the project ID or empty string if no ID is known. Then it's necessary to fetch the ID from API.
+   */
+  QString id() const;
+  QString fullName() const;
 
-    QDateTime serverUpdated; // available latest version of project files on server
-    int serverVersion = -1;
+  QDateTime serverUpdated; // available latest version of project files on server
+  int serverVersion = -1;
 
-    ProjectStatus::Status status = ProjectStatus::NoVersion;
+  ProjectStatus::Status status = ProjectStatus::NoVersion;
 
-    QString remoteError; // Error leading to project not being able to sync (received error code from server)
+  QString remoteError; // Error leading to project not being able to sync (received error code from server)
 
-    bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
+  bool isValid() const { return !projectName.isEmpty() && !projectNamespace.isEmpty(); }
 
-    bool operator ==( const MerginProject &other ) const
-    {
-      return ( this->id() == other.id() );
-    }
+  bool operator ==( const MerginProject &other ) const
+  {
+    return ( this->id() == other.id() );
+  }
 
-    bool operator !=( const MerginProject &other ) const
-    {
-      return !( *this == other );
-    }
-
-  private:
-    QString projectId;
+  bool operator !=( const MerginProject &other ) const
+  {
+    return !( *this == other );
+  }
 };
 
 /**

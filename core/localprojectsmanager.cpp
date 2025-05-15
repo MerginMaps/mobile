@@ -157,9 +157,8 @@ void LocalProjectsManager::updateLocalVersion( const QString &projectId, const i
 {
   if ( mProjects.contains( projectId ) )
   {
-    LocalProject project = mProjects.value( projectId );
-    project.localVersion = version;
-    emit localProjectDataChanged( project );
+    mProjects[ projectId ].localVersion = version;
+    emit localProjectDataChanged( mProjects.value( projectId ) );
   }
 }
 
@@ -167,9 +166,8 @@ void LocalProjectsManager::updateNamespace( const QString &projectId, const QStr
 {
   if ( mProjects.contains( projectId ) )
   {
-    LocalProject project = mProjects.value( projectId );
-    project.projectNamespace = projectNamespace;
-    emit localProjectDataChanged( project );
+    mProjects[ projectId ].projectNamespace = projectNamespace;
+    emit localProjectDataChanged( mProjects.value( projectId ) );
   }
 }
 
