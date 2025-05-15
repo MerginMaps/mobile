@@ -670,5 +670,9 @@ Item {
         root.refreshProjects()
       }
     }
+
+    function onProcessInvitationSuccess() {
+      stackView.popOnePageOrClose()
+    }
   }
 }
