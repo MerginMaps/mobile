@@ -81,6 +81,13 @@ Item {
     stackView.push( workspaceListComponent )
   }
 
+  function showProjectsPage() {
+    if ( stackView.depth > 1 )
+      stackView.pop( null ) // gets back to workspaceProjectsPanelComp (initialItem)
+
+    stackView.currentItem.state = "workspace"
+  }
+
   visible: false
   focus: true
 
@@ -670,7 +677,7 @@ Item {
     }
 
     function onProcessInvitationSuccess() {
-      stackView.popOnePageOrClose()
+      root.showProjectsPage()
     }
   }
 }
