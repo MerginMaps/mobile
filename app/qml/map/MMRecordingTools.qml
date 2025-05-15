@@ -51,7 +51,7 @@ Item {
     target: mapTool
 
     function onFinalEmptyGeometry() {
-      __notificationModel.addWarning(
+      __notificationModel.addError(
         qsTr( "Geometry was removed to avoid overlaps with other features. Tap \"Edit Geometry\" to draw a new one." ),
         MM.NotificationType.NoAction,
         Number.MAX_SAFE_INTEGER)
