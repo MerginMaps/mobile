@@ -65,7 +65,7 @@ MMPage {
 
         text: qsTr( "Sign in" )
 
-        enabled: email.text.match( "\\S+@\\S+\\.\\S+" )
+        enabled: __inputUtils.isValidEmail( email.text )
 
         onClicked: {
           root.signInClicked( email.text )

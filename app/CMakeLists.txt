@@ -385,8 +385,7 @@ if (IOS)
   set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
   target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
   set_source_files_properties(
-    ${ENTITLEMENTS_FILE} PROPERTIES
-    XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
+    ${ENTITLEMENTS_FILE} PROPERTIES XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
   )
 
   set_target_properties(

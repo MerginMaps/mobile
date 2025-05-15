@@ -19,9 +19,12 @@
 #include <QUuid>
 #include <QtMath>
 #include <QElapsedTimer>
-#include <QOAuthHttpServerReplyHandler>
-#include <QOAuthUriSchemeReplyHandler>
 #include <QDesktopServices>
+#ifdef MOBILE_OS
+#include <QOAuthUriSchemeReplyHandler>
+#else
+#include <QOAuthHttpServerReplyHandler>
+#endif
 
 #include "projectchecksumcache.h"
 #include "coreutils.h"
@@ -41,6 +44,14 @@ const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg"
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
+#ifdef MOBILE_OS
+const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
+#else
+// We use QHostAddress::Null so that LocalHost is used and if that fails try LocalHostIPv6
+// see https://doc.qt.io/qt-6/qoauthhttpserverreplyhandler.html#listen
+const QHostAddress MerginApi::OAUTH2_LISTEN_ADDRESS = QHostAddress::Null;
+constexpr int MerginApi::OAUTH2_LISTEN_PORT = 10042;
+#endif
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
@@ -3369,12 +3380,9 @@ ProjectDiff MerginApi::compareProjectFiles(
           }
 
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
-          bool previouslyIgnoredButShouldDownload = \
-              config.downloadMissingFiles &&
-              lastSyncConfig.isValid &&
-              MerginApi::excludeFromSync( file.path, lastSyncConfig );
-
-          if ( previouslyIgnoredButShouldDownload )
+          if ( config.downloadMissingFiles &&
+               lastSyncConfig.isValid &&
+               MerginApi::excludeFromSync( file.path, lastSyncConfig ) )
           {
             diff.remoteAdded << file.path;
             continue;
@@ -4211,12 +4219,6 @@ QString MerginApi::getCachedProjectRole( const QString &projectFullName ) const
 
 void MerginApi::startSsoFlow( const QString &clientId )
 {
-#ifdef MOBILE_OS
-  const QString CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
-#else
-  constexpr int OAUTH2_LISTEN_PORT = 8082;
-#endif
-
   CoreUtils::log( "SSO", QStringLiteral( "Starting SSO flow for clientId: %1" ).arg( clientId ) );
   mOauth2Flow.setAuthorizationUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/authorize" ) ) );
   mOauth2Flow.setAccessTokenUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/token" ) ) );
@@ -4228,7 +4230,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
 #ifdef MOBILE_OS
     mOauth2ReplyHandler = new QOAuthUriSchemeReplyHandler( CALLBACK_URL, &mOauth2Flow );
 #else
-    mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( QHostAddress::Null, OAUTH2_LISTEN_PORT, &mOauth2Flow );
+    mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( OAUTH2_LISTEN_ADDRESS, OAUTH2_LISTEN_PORT, &mOauth2Flow );
     const QString msg = tr( "You can now close this page and return to Mergin Maps" );
     mOauth2ReplyHandler->setCallbackText( msg );
 #endif
@@ -4264,7 +4266,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
 #ifdef MOBILE_OS
     mOauth2ReplyHandler->listen();
 #else
-    mOauth2ReplyHandler->listen( QHostAddress::Null, OAUTH2_LISTEN_PORT );
+    mOauth2ReplyHandler->listen( OAUTH2_LISTEN_ADDRESS, OAUTH2_LISTEN_PORT );
 #endif
   }
 

@@ -627,6 +627,13 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isValidUrl( const QString &link );
 
+    /**
+     * Checks if the given string might be a valid email address
+     * The check is not robust and may return false positives but should not return false negatives
+     * Its purpose is to weed out bad email addresses in the front end
+     */
+    Q_INVOKABLE static bool isValidEmail( const QString &email );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

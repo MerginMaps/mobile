@@ -920,8 +920,11 @@ class MerginApi: public QObject
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS
     QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
+    static const QString CALLBACK_URL;
 #else
     QOAuthHttpServerReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
+    static const QHostAddress OAUTH2_LISTEN_ADDRESS;
+    static const int OAUTH2_LISTEN_PORT;
 #endif
 
     friend class TestMerginApi;
