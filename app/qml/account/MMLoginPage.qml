@@ -122,7 +122,7 @@ MMPage {
         MMButton {
           width: parent.width
 
-          text: qsTr( "🔐 Continue with SSO" )
+          text: qsTr( "Continue with SSO" )
           type: MMButton.Types.Secondary
 
           visible: root.supportsSso
