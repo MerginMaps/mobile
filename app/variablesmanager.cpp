@@ -203,7 +203,7 @@ void VariablesManager::setProjectVariables()
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_version" ), metadata.version );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_name" ),  metadata.name );
-    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  CoreUtils::getFullProjectName( metadata.projectNamespace,  metadata.name ) );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_owner" ),   metadata.projectNamespace );
   }
   else

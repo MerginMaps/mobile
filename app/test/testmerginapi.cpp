@@ -44,6 +44,9 @@ TestMerginApi::~TestMerginApi() = default;
 
 void TestMerginApi::initTestCase()
 {
+  // ping API was late and tests were failing because they didn't delete projects on start
+  QSignalSpy spy( mApi, &MerginApi::pingMerginFinished );
+  spy.wait( TestUtils::LONG_REPLY );
 
   QString apiRoot, username, password, workspace;
   TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
@@ -82,6 +85,11 @@ void TestMerginApi::initTestCase()
   mApiExtra = new MerginApi( *mLocalProjectsExtra );
 
   mApiExtra->setApiRoot( mApi->apiRoot() );
+
+  // ping API was late and tests were failing because they didn't delete projects on start
+  QSignalSpy spy2( mApiExtra, &MerginApi::pingMerginFinished );
+  spy2.wait( TestUtils::LONG_REPLY );
+
   if ( TestUtils::needsToAuthorizeAgain( mApiExtra, username ) )
   {
     TestUtils::authorizeUser( mApiExtra, username, password );
@@ -331,9 +339,9 @@ void TestMerginApi::testCreateProjectTwice()
 
   const QList<QVariant> arguments = spy2.takeFirst();
   QVERIFY( arguments.at( 0 ).metaType().id() == QMetaType::QString );
-  QVERIFY( arguments.at( 1 ).metaType().id() == QMetaType::QString );
+  QVERIFY( arguments.at( 1 ).metaType().id() == QMetaType::Int );
 
-  QCOMPARE( arguments.at( 1 ).toString(), QStringLiteral( "Mergin API error: createProject" ) );
+  QCOMPARE( arguments.at( 1 ).toInt(), 409 );
 
   //Clean created project
   deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
@@ -351,8 +359,8 @@ void TestMerginApi::testDeleteNonExistingProject()
 
   const QList<QVariant> arguments = spy.takeFirst();
   QVERIFY( arguments.at( 0 ).metaType().id() == QMetaType::QString );
-  QVERIFY( arguments.at( 1 ).metaType().id() == QMetaType::QString );
-  QCOMPARE( arguments.at( 1 ).toString(), QStringLiteral( "Mergin API error: deleteProject" ) );
+  QVERIFY( arguments.at( 1 ).metaType().id() == QMetaType::Int );
+  QCOMPARE( arguments.at( 1 ).toInt(), 404 );
 }
 
 void TestMerginApi::testCreateDeleteProject()
@@ -485,9 +493,6 @@ void TestMerginApi::testUploadProject()
 
 void TestMerginApi::testMultiChunkUploadDownload()
 {
-  // this will try to upload a file that needs to be split into multiple chunks
-  // and then also download it correctly again in a clean new download
-
   const QString projectName = "testMultiChunkUploadDownload";
   const QString projectFullName = CoreUtils::getFullProjectName( mWorkspaceName, projectName );
 
@@ -524,8 +529,6 @@ void TestMerginApi::testMultiChunkUploadDownload()
 
 void TestMerginApi::testEmptyFileUploadDownload()
 {
-  // test will try to upload a project with empty file
-
   const QString projectName = QStringLiteral( "testEmptyFileUploadDownload" );
   const QString projectFullName = CoreUtils::getFullProjectName( mWorkspaceName, projectName );
 
@@ -618,9 +621,6 @@ void TestMerginApi::testPushAddedFile()
 
 void TestMerginApi::testPushRemovedFile()
 {
-  // download a project, then remove a file locally and upload the project.
-  // we then check that the file is really removed on the subsequent download.
-
   const QString projectName = "testPushRemovedFile";
   const QString projectFullName = CoreUtils::getFullProjectName( mWorkspaceName, projectName );
 
@@ -1283,7 +1283,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   QCOMPARE( summary, expectedSummary );
 
   // update our local version now
-  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  downloadRemoteProject( mApi, projectFullName, projectId );
 
   //
   // check the result
@@ -1354,7 +1354,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
 
   // check that projectReloadNeededAfterSync is emitted and has correct argument
   QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 0 ).toString(), mWorkspaceName + "/"  + projectName );
+  QCOMPARE( spy.takeFirst().at( 0 ).toString(), projectId );
 
   //
   // check the result
@@ -1469,14 +1469,17 @@ void TestMerginApi::testMigrateProject()
 
   // migrate project
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
+  QSignalSpy spy1( mApi, &MerginApi::projectAttachedToMergin );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
-  QString localProjectId = TestUtils::findProjectByName( projectFullName, mApi->mLocalProjects.projects().values() ).id();
+  // we pass only project name to search for as the project is local and doesn't have workspace set yet
+  QString localProjectId = TestUtils::findProjectByName( projectName, mApi->mLocalProjects.projects().values() ).id();
   mApi->createProject( mWorkspaceName, projectName, localProjectId );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.count(), 2 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+  QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY * 5 ) );
 
@@ -1507,16 +1510,18 @@ void TestMerginApi::testMigrateProjectAndSync()
   // step 1
   createLocalProject( projectDir );
   mApi->mLocalProjects.reloadDataDir();
-  QString localProjectId = TestUtils::findProjectByName( projectFullName, mApi->mLocalProjects.projects().values() ).id();
+  QString localProjectId = TestUtils::findProjectByName( projectName, mApi->mLocalProjects.projects().values() ).id();
   // step 2
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
+  QSignalSpy spy1( mApi, &MerginApi::projectAttachedToMergin );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
   mApi->createProject( mWorkspaceName, projectName, localProjectId );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.count(), 2 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+  QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY * 5 ) );
 
@@ -1568,17 +1573,19 @@ void TestMerginApi::testMigrateDetachProject()
 
   // reload local manager after copying the project
   mApi->mLocalProjects.reloadDataDir();
-  QString localProjectId = TestUtils::findProjectByName( projectFullName, mApi->mLocalProjects.projects().values() ).id();
+  QString localProjectId = TestUtils::findProjectByName( projectName, mApi->mLocalProjects.projects().values() ).id();
 
   // migrate project
   QSignalSpy spy( mApi, &MerginApi::projectCreated );
+  QSignalSpy spy1( mApi, &MerginApi::projectAttachedToMergin );
   QSignalSpy spy2( mApi, &MerginApi::syncProjectFinished );
 
   mApi->createProject( mWorkspaceName, projectName, localProjectId );
 
   QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
-  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.count(), 2 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
+  QVERIFY( spy1.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( mApi->transactions().count(), 1 );
   QVERIFY( spy2.wait( TestUtils::LONG_REPLY * 5 ) );
 

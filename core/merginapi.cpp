@@ -48,6 +48,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mWorkspaceInfo( new MerginWorkspaceInfo )
   , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
+  , mManager( new QNetworkAccessManager( this ) )
 {
   // load cached data if there are any
   const QSettings cache;
@@ -242,10 +243,11 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   QNetworkRequest request = getDefaultRequest( true );
   request.setUrl( url );
+  request.setRawHeader( "Content-type", "application/json" );
 
   QString requestId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
 
-  const QNetworkReply *reply = mManager->get( request );
+  const QNetworkReply *reply = mManager->post( request, body.toJson() );
   CoreUtils::log( "list projects by name", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, [this, requestId] {this->listProjectsByNameReplyFinished( requestId );} );
 
@@ -1137,6 +1139,8 @@ void MerginApi::createProjectFinished()
     // Upload data if createProject has been called for a local project with empty namespace (case of migrating a project)
     if ( mLocalProjects.projects().contains( projectId ) )
     {
+      // we shoot this signal for tests
+      emit projectCreated( projectId, true );
       // we remove the process saved under the old ID and pushProject will insert new process with new ID
       emit projectCreated( projectId, false );
 
@@ -1159,7 +1163,7 @@ void MerginApi::createProjectFinished()
           const QDir projectDir( info.projectDir );
           if ( projectDir.exists() && !projectDir.isEmpty() )
           {
-            pushProject( projectFullName, projectId, true );
+            pushProject( projectFullName, serverProject.projectId, true );
           }
         }
         else
@@ -1221,9 +1225,10 @@ void MerginApi::deleteProjectFinished( const bool informUser )
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const int serverErrorCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     CoreUtils::log( "delete " + projectId, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    emit networkErrorOccurred( serverMsg );
+    emit networkErrorOccurred( serverMsg, serverErrorCode );
   }
 
   r->deleteLater();
@@ -3308,6 +3313,7 @@ MerginProject MerginApi::parseProjectMetadata( const QJsonObject &proj )
 
   project.projectName = proj.value( QStringLiteral( "name" ) ).toString();
   project.projectNamespace = proj.value( QStringLiteral( "namespace" ) ).toString();
+  project.projectId = proj.value( QStringLiteral( "id" ) ).toString();
 
   QString versionStr = proj.value( QStringLiteral( "version" ) ).toString();
   if ( versionStr.isEmpty() )

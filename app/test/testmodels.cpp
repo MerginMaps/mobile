@@ -304,16 +304,19 @@ void TestModels::testProjectsModel()
   Project p0;
   p0.local.projectNamespace = QStringLiteral( "namespace" );
   p0.local.projectName = QStringLiteral( "project_B" );
+  p0.local.projectId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
   p0.local.projectDir = QStringLiteral( "project_B_dir" );
 
   Project p1;
   p1.local.projectNamespace = QStringLiteral( "namespace" );
   p1.local.projectName = QStringLiteral( "project_A" );
+  p1.local.projectId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
   p1.local.projectDir = QStringLiteral( "project_A_dir" );
 
   Project p2;
   p2.local.projectNamespace = QStringLiteral( "namespace" );
   p2.local.projectName = QStringLiteral( "project_C" );
+  p2.local.projectId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
   p2.local.projectDir = QStringLiteral( "project_C_dir" );
 
   ProjectsModel model;

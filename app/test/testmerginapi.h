@@ -160,7 +160,8 @@ class TestMerginApi: public QObject
     void testUploadProject();
 
     /**
-     * Test creates new project on server. Tries to upload and download bigger file (multiple chunks).
+     * Test creates new project on server. Tries to upload a file that needs to be split into multiple chunks
+     * and then also downloads it correctly again in a clean new download.
      */
     void testMultiChunkUploadDownload();
 
