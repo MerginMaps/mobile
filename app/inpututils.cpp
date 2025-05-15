@@ -2336,7 +2336,7 @@ bool InputUtils::isValidEmail( const QString &email )
   if ( email.isEmpty() )
     return false;
 
-  const thread_local QRegularExpression re( QStringLiteral( "\\S+@\\S+\\.\\S{2,}" ) );
+  const thread_local QRegularExpression re( QStringLiteral( "^\\S+@\\S+\\.\\S{2,}" ) );
   const QRegularExpressionMatch match = re.match( email );
   return match.hasMatch();
 }

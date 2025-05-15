@@ -963,3 +963,19 @@ void TestUtilsFunctions::testRelevantGeometryCenterToScreenCoordinates()
   ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
   QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.257, 274.5 ), epsilon ), true );
 }
+
+void TestUtilsFunctions::testIsValidEmail()
+{
+  // valid emails
+  QVERIFY( InputUtils::isValidEmail( "name@domain.tld" ) );
+  QVERIFY( InputUtils::isValidEmail( "a@a.aa" ) );
+  QVERIFY( InputUtils::isValidEmail( "abcdefghijklmnopqrstuvwxyzαβγδεζηθικλμνξοπρστυφχψω1234567890~!@#$%^&*()-_=+[]\{}|;:'\",./<>?@domain.com" ) );
+  QVERIFY( InputUtils::isValidEmail( "user@abcdefghijklmnopqrstuvwxyz.αβγδεζηθικλμνξοπρστυφχψω1234567890~!@#$%^&*()-_=+[]\{}|;:'\",/<>.com" ) );
+
+  // invalid emails
+  QVERIFY( !InputUtils::isValidEmail( "" ) ); // empty email
+  QVERIFY( !InputUtils::isValidEmail( "missing-at-sign.com" ) );
+  QVERIFY( !InputUtils::isValidEmail( "user@missing_tld" ) );
+  QVERIFY( !InputUtils::isValidEmail( "no spaces@domain.com" ) );
+  QVERIFY( !InputUtils::isValidEmail( "user@no spaces.com" ) );
+}
