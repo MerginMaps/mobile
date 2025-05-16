@@ -1171,10 +1171,12 @@ void MerginApi::createProjectFinished()
     else if ( userMissingPermissions )
     {
       emit notifyError( tr( "You don't have permission to create new projects in this workspace." ) );
-      emit insufficientPermissions();
+      emit projectCreationFailed();
     }
     else
     {
+      emit notifyError( tr( "Couldn't create the project." ) );
+      emit projectCreationFailed();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
     }
   }

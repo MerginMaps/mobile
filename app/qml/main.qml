@@ -992,7 +992,7 @@ ApplicationWindow {
       }
     }
 
-    function onInsufficientPermissions()
+    function onProjectCreationFailed()
     {
       syncButton.iconRotateAnimationRunning = false
     }
