@@ -882,9 +882,7 @@ void MerginApi::ssoConfigReplyFinished()
   {
     const QString serverMsg = extractServerErrorMsg( r->readAll() );
     CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    const int status = statusCode.toInt();
-    emit notifyError( QStringLiteral( "%1 %2" ).arg( status ).arg( serverMsg ) ); // TODO: show generic error?
+    emit notifyError( tr( "Error getting the SSO configuration from the server" ) );
   }
 
   r->deleteLater();
@@ -901,7 +899,7 @@ void MerginApi::requestSsoConnections( const QString &email )
   QNetworkRequest request = getDefaultRequest( false );
   QUrl url( mApiRoot + QStringLiteral( "/v2/sso/connections" ) );
   QUrlQuery query;
-  query.addQueryItem( QStringLiteral( "email" ), email );
+  query.addQueryItem( QStringLiteral( "email" ), email.toUtf8().toPercentEncoding() );
   url.setQuery( query );
   request.setUrl( url );
 
@@ -945,7 +943,7 @@ void MerginApi::ssoConnectionsReplyFinished()
     if ( status == 404 )
       emit notifyError( tr( "SSO is not supported for the specified domain" ) );
     else
-      emit notifyError( QStringLiteral( "%1 %2" ).arg( status ).arg( serverMsg ) ); // TODO: show generic error?
+      emit notifyError( tr( "Error getting the SSO configuration from the server" ) );
   }
 
   r->deleteLater();
