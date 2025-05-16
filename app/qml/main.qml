@@ -991,6 +991,11 @@ ApplicationWindow {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
     }
+
+    function onProjectCreationFailed()
+    {
+      syncButton.iconRotateAnimationRunning = false
+    }
   }
 
   Connections {
