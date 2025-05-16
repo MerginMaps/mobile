@@ -65,7 +65,7 @@ MMPage {
 
         text: qsTr( "Sign in" )
 
-        enabled: __inputUtils.isValidEmail( email.text )
+        enabled: __inputUtils.isValidEmail( email.length > 0 )
 
         onClicked: {
           root.signInClicked( email.text )
