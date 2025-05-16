@@ -680,7 +680,7 @@ Item {
 
     function onProcessInvitationSuccess() {
       root.showProjectsPage()
-      __notificationModel.addInfo( qsTr( "Download a project and start collecting." ) )
+      __notificationModel.addInfo( qsTr( "Download a project and start collecting." ), MM.NotificationType.NoAction, 10 ) // 10 seconds
     }
   }
 }
