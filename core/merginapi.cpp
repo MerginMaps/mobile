@@ -3631,6 +3631,8 @@ void MerginApi::getServerConfigReplyFinished()
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      setApiVersion( apiVersion );
+
       int major = -1;
       int minor = -1;
       bool validVersion = parseVersion( apiVersion, major, minor );
@@ -3862,6 +3864,26 @@ void MerginApi::processInvitationReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
+
+    // if server version is at least 2025.4.1, let‘s get workspaceId from response and switch to it
+    // emit processInvitationSuccess to navigate to project's page in qml
+    if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
+    {
+      QByteArray data = r->readAll();
+      QJsonDocument doc = QJsonDocument::fromJson( data );
+
+      if ( doc.isObject() )
+      {
+        QJsonObject responseObj = doc.object();
+
+        if ( responseObj.contains( "workspace_id" ) )
+        {
+          int workspaceId = responseObj.value( "workspace_id" ).toInt();
+          mUserInfo->setActiveWorkspace( workspaceId );
+          emit processInvitationSuccess();
+        }
+      }
+    }
   }
   else
   {
@@ -4072,4 +4094,52 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   mManager = manager;
 
   emit networkManagerChanged();
+}
+
+QString MerginApi::apiVersion() const
+{
+  return mApiVersion;
+}
+
+void MerginApi::setApiVersion( const QString &apiVersion )
+{
+  if ( mApiVersion != apiVersion )
+  {
+    mApiVersion = apiVersion;
+    emit apiVersionChanged( mApiVersion );
+  }
+}
+
+bool MerginApi::serverVersionIsAtLeast( int requiredMajor, int requiredMinor, int requiredPatch ) const
+{
+  int serverMajor = -1;
+  int serverMinor = -1;
+  bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor );
+
+  if ( !validVersion )
+    return false;
+
+  // let‘s extract patch version ( parseVersion only extracts major and minor )
+  int serverPatch = -1;
+  bool patchOk;
+  QStringList versionParts = mApiVersion.split( '.' );
+  serverPatch = versionParts[2].toInt( &patchOk );
+
+  if ( !patchOk )
+    return false;
+
+  // check major
+  if ( serverMajor > requiredMajor )
+    return true;
+  if ( serverMajor < requiredMajor )
+    return false;
+
+  // check minor
+  if ( serverMinor > requiredMinor )
+    return true;
+  if ( serverMinor < requiredMinor )
+    return false;
+
+  // check patch
+  return serverPatch >= requiredPatch;
 }
