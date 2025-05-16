@@ -109,7 +109,7 @@ void NotificationModel::addError( const QString &message, const NotificationType
 
 void NotificationModel::addInfo( const QString &message, const NotificationType::ActionType action, const uint interval )
 {
-  add( message, interval, NotificationType::Information, NotificationType::WaitingIcon, action );
+  add( message, interval, NotificationType::Information, NotificationType::InfoIcon, action );
 }
 
 void NotificationModel::addWarning( const QString &message, const NotificationType::ActionType action, const uint interval )
