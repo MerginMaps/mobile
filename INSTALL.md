@@ -109,6 +109,7 @@ Mergin Maps Mobile app is built with Qt. If you are using Qt's `Maintenance tool
  - `Qt Shader Tools`
  - `Additional libraries:`
    - `Qt Connectivity` -> used for Bluetooth
+   - `Qt Network Auth`
    - `Qt Multimedia`
    - `Qt Positioning`
    - `Qt Sensors`

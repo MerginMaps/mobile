@@ -23,6 +23,7 @@
 #include <QSet>
 #include <QByteArray>
 #include <QDateTime>
+#include <QOAuth2AuthorizationCodeFlow>
 
 #include "merginapistatus.h"
 #include "merginservertype.h"
@@ -35,6 +36,12 @@
 #include "merginuserinfo.h"
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
+
+#ifdef MOBILE_OS
+class QOAuthUriSchemeReplyHandler;
+#else
+class QOAuthHttpServerReplyHandler;
+#endif
 
 struct ProjectDiff
 {
@@ -218,6 +225,7 @@ class MerginApi: public QObject
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
     Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
+    Q_PROPERTY( bool apiSupportsSso READ apiSupportsSso WRITE setApiSupportsSso NOTIFY apiSupportsSsoChanged )
 
   public:
 
@@ -308,6 +316,26 @@ class MerginApi: public QObject
     * \param password Password to given username to log in to Mergin
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
+
+    /**
+     * Requests the server's sso config
+     * If server config is single tenant, the sso flow is started
+     *
+     * \see startSsoFlow()
+     */
+    Q_INVOKABLE void requestSsoConfig();
+
+    /**
+     * Requests the available sso connections for the specified email
+     * If a connection is found, sso flow is started
+     *
+     * \see ssoConnectionsReplyFinished(), startSsoFlow()
+     */
+    Q_INVOKABLE void requestSsoConnections( const QString &email );
+
+    //! Stops the OAuth2 reply handlers from listening
+    Q_INVOKABLE void abortSsoFlow();
+
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
@@ -573,6 +601,11 @@ class MerginApi: public QObject
     bool apiSupportsWorkspaces();
 
     /**
+     * Returns true if the configured server has SSO enabled
+     */
+    bool apiSupportsSso() const;
+
+    /**
      * Reloads project metadata role by fetching latest information from server.
      */
     Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
@@ -587,6 +620,11 @@ class MerginApi: public QObject
      * Function will return early if manager is null.
      */
     void setNetworkManager( QNetworkAccessManager *manager );
+
+    /**
+     * Makes this API available to use/not to use SSO
+     */
+    void setApiSupportsSso( bool ssoSupported );
 
   signals:
     void apiSupportsSubscriptionsChanged();
@@ -672,6 +710,14 @@ class MerginApi: public QObject
 
     void downloadItemRetried( const QString &projectFullName, int retryCount );
 
+    void apiSupportsSsoChanged();
+
+    //! Emitted when server sso config is returned and server is multi tenant
+    void ssoConfigIsMultiTenant();
+
+    //! Emitted when the sso url is opened in the browser and application loses focus
+    void ssoAuthorizeUsingBrowser();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -711,6 +757,9 @@ class MerginApi: public QObject
     void listInvitationsReplyFinished();
     void processInvitationReplyFinished();
     void createWorkspaceReplyFinished();
+
+    void ssoConfigReplyFinished();
+    void ssoConnectionsReplyFinished();
 
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
@@ -827,6 +876,8 @@ class MerginApi: public QObject
     //! Retrieves cached role from metadata file
     QString getCachedProjectRole( const QString &projectFullName ) const;
 
+    void startSsoFlow( const QString &clientId );
+
     QNetworkAccessManager *mManager = nullptr;
 
     QString mApiRoot;
@@ -854,6 +905,7 @@ class MerginApi: public QObject
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
+    bool mApiSupportsSso = false;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
@@ -863,6 +915,16 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
+
+    QOAuth2AuthorizationCodeFlow mOauth2Flow;
+#ifdef MOBILE_OS
+    QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
+    static const QString CALLBACK_URL;
+#else
+    QOAuthHttpServerReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
+    static const QHostAddress OAUTH2_LISTEN_ADDRESS;
+    static const int OAUTH2_LISTEN_PORT;
+#endif
 
     friend class TestMerginApi;
 };
