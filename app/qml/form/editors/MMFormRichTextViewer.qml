@@ -50,7 +50,7 @@ MMPrivateComponents.MMBaseInput {
       onLinkActivated: function ( link ) {
         if ( !__inputUtils.openLink( root._fieldHomePath, link.toString( ) ) )
         {
-          __notificationModel.addError( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." )
+          __notificationModel.addError( qsTr( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." ) )
         }
       }
     }
