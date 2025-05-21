@@ -63,7 +63,7 @@ class AndroidUtils: public QObject
     void hideSplashScreen();
 
     /**
-      * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
+      * Starts ACTION_GET_CONTENT activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.
       * The code parameter will be used in response (signal)
       */
@@ -72,11 +72,11 @@ class AndroidUtils: public QObject
     Q_INVOKABLE bool openFile( const QString &filePath );
 
 #ifdef ANDROID
-    const static int MEDIA_CODE = 101;
-    const static int CAMERA_CODE = 102;
-    const static int BLUETOOTH_CODE = 103;
+    static constexpr int MEDIA_CODE = 101;
+    static constexpr int CAMERA_CODE = 102;
+    static constexpr int BLUETOOTH_CODE = 103;
 
-    const static int ANDROID_VERSION_13 = 13;
+    static constexpr int ANDROID_VERSION_13 = 13;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif

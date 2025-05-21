@@ -241,22 +241,17 @@ bool AndroidUtils::openFile( const QString &filePath )
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
-  double buildVersion = QSysInfo::productVersion().toDouble();
+  const double buildVersion = QSysInfo::productVersion().toDouble();
 
   //
   // Android SDK 33 has a new set of permissions when reading external storage.
   // See https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE
   //
-  QString storagePermissionType = QStringLiteral( "android.permission.READ_MEDIA_IMAGES" );
-  if ( buildVersion < ANDROID_VERSION_13 )
-  {
-    storagePermissionType = QStringLiteral( "android.permission.READ_EXTERNAL_STORAGE" );
-  }
 
-  if ( !checkAndAcquirePermissions( storagePermissionType ) )
+  if ( buildVersion < ANDROID_VERSION_13 && !checkAndAcquirePermissions( QStringLiteral( "android.permission.READ_EXTERNAL_STORAGE" ) ) )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
+    const jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -297,8 +292,12 @@ bool AndroidUtils::requestCameraPermission()
 bool AndroidUtils::requestMediaLocationPermission()
 {
 #ifdef ANDROID
+  const double buildVersion = QSysInfo::productVersion().toDouble();
   // ACCESS_MEDIA_LOCATION is a runtime permission without UI dialog (User do not need to click anything to grant it, it is granted automatically)
-  return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+  if ( buildVersion < ANDROID_VERSION_13 )
+  {
+    return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+  }
 #endif
   return true;
 }
@@ -314,18 +313,17 @@ void AndroidUtils::callImagePicker( const QString &code )
 
   mLastCode = code;
 
-  // request media location permission to be able to read EXIF metadata from gallery image
+  // request media location permission to be able to read EXIF metadata from gallery image (only necessary for android < 14)
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
-  QJniObject ACTION_PICK = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_PICK", "Ljava/lang/String;" );
-  QJniObject EXTERNAL_CONTENT_URI = QJniObject::getStaticObjectField( "android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;" );
+  const QJniObject ACTION_GET_CONTENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_GET_CONTENT", "Ljava/lang/String;" );
 
-  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>() );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_GET_CONTENT.object<jstring>() );
 
-  if ( ACTION_PICK.isValid() && intent.isValid() )
+  if ( ACTION_GET_CONTENT.isValid() && intent.isValid() )
   {
-    intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
+    intent = intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
     QtAndroidPrivate::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
   }
 #endif
