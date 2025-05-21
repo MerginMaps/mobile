@@ -10,8 +10,6 @@
 #ifndef ANDROIDUTILS_H
 #define ANDROIDUTILS_H
 
-#include "inputconfig.h"
-
 #ifdef ANDROID
 #include <QtCore/private/qandroidextras_p.h>
 #include <QJniObject>
@@ -30,9 +28,9 @@ class AndroidUtils: public QObject
   public:
     explicit AndroidUtils( QObject *parent = nullptr );
 
-    bool isAndroid() const;
+    static bool isAndroid() ;
 
-    bool checkAndAcquirePermissions( const QString &permissionString );
+    static bool checkAndAcquirePermissions( const QString &permissionString );
 
     static QString externalStorageAppFolder();
 
@@ -52,7 +50,7 @@ class AndroidUtils: public QObject
     bool requestMediaLocationPermission();
 
     void turnBluetoothOn();
-    bool isBluetoothTurnedOn();
+    bool isBluetoothTurnedOn() const;
 
     static void quitApp();
 
@@ -60,7 +58,7 @@ class AndroidUtils: public QObject
     static QString getDeviceModel();
     Q_INVOKABLE QVector<int> getSafeArea();
 
-    void hideSplashScreen();
+    static void hideSplashScreen();
 
     /**
       * Starts ACTION_GET_CONTENT activity which opens a gallery. If an image is selected,
@@ -69,7 +67,7 @@ class AndroidUtils: public QObject
       */
     Q_INVOKABLE void callImagePicker( const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
-    Q_INVOKABLE bool openFile( const QString &filePath );
+    Q_INVOKABLE static bool openFile( const QString &filePath );
 
 #ifdef ANDROID
     static constexpr int MEDIA_CODE = 101;
