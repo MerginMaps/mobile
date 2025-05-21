@@ -930,7 +930,17 @@ double InputUtils::screenUnitsToMeters( InputMapSettings *mapSettings, int baseL
   QPoint pointCenter( s.width() / 2, s.height() / 2 );
   QgsPointXY p1 = mapSettings->screenToCoordinate( pointCenter );
   QgsPointXY p2 = mapSettings->screenToCoordinate( pointCenter + QPoint( baseLengthPixels, 0 ) );
-  return mDistanceArea.measureLine( p1, p2 );
+
+  try
+  {
+    return mDistanceArea.measureLine( p1, p2 );
+  }
+  catch ( QgsCsException &e )
+  {
+    Q_UNUSED( e )
+  }
+
+  return 0.0;
 }
 
 QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSettings )
