@@ -283,6 +283,29 @@ Item {
       }
     }
 
+    onDoubleClicked: function( point )
+    {
+      zoom( point, 0.4 )
+    }
+
+    onWheelTurned: function( point, angle )
+    {
+      if ( angle > 0 ) {
+        zoom( Qt.point( point.x, point.y ), 0.67 )
+      }
+      else {
+        zoom( Qt.point( point.x, point.y ), 1.5 )
+      }
+    }
+
+    onDragged: function( oldPoint, newPoint )
+    {
+      if ( root.state === "annotate" )
+        return
+
+      pan( oldPoint, newPoint )
+    }
+
     onIsRenderingChanged: {
       if ( root.state === "inactive" ) {
         fadeInAnimation.stop()
