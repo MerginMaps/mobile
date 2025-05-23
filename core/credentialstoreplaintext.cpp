@@ -21,6 +21,7 @@ const QString CredentialStore::KEY_PASSWORD = QStringLiteral( "password" );
 const QString CredentialStore::KEY_USERID = QStringLiteral( "userId" );
 const QString CredentialStore::KEY_TOKEN = QStringLiteral( "token" );
 const QString CredentialStore::KEY_EXPIRE = QStringLiteral( "expire" );
+const QString CredentialStore::KEY_METHOD = QStringLiteral( "method" );
 
 //
 // We store credentials in QSettings and read them in synchronous operation
@@ -37,7 +38,8 @@ void CredentialStore::writeAuthData
   const QString &password,
   int userId,
   const QString &token,
-  const QDateTime &tokenExpiration )
+  const QDateTime &tokenExpiration,
+  int method )
 {
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
@@ -47,6 +49,7 @@ void CredentialStore::writeAuthData
   settings.setValue( KEY_USERID, userId );
   settings.setValue( KEY_TOKEN, token );
   settings.setValue( KEY_EXPIRE, tokenExpiration );
+  settings.setValue( KEY_METHOD, method );
 
   settings.endGroup();
 }
@@ -57,6 +60,7 @@ void CredentialStore::readAuthData()
   int userid = -1;
   QByteArray token;
   QDateTime tokenExpiration;
+  int method;
 
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
@@ -66,10 +70,11 @@ void CredentialStore::readAuthData()
   userid = settings.value( KEY_USERID ).toInt();
   token = settings.value( KEY_TOKEN ).toByteArray();
   tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
+  method = settings.value( KEY_METHOD, 0 ).toInt();
 
   settings.endGroup();
 
-  emit authDataRead( username, password, userid, token, tokenExpiration );
+  emit authDataRead( username, password, userid, token, tokenExpiration, method );
 }
 
 void CredentialStore::readKeyRecursively( const QString &key )
