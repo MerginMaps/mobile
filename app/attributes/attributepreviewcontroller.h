@@ -39,7 +39,7 @@ class AttributePreviewModel : public QAbstractListModel
   public:
 
     AttributePreviewModel(
-      const QVector<QPair<QString, QString>> &items = QVector<QPair<QString, QString>>()
+      const QVector<QPair<QString, QString>> &items = QVector<QPair<QString, QString >> ()
     );
 
     ~AttributePreviewModel() override;

@@ -95,10 +95,10 @@ class NotificationModel : public QAbstractListModel
     NotificationModel( QObject *parent = nullptr );
     ~NotificationModel();
 
-    Q_INVOKABLE void addSuccess( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
-    Q_INVOKABLE void addError( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
-    Q_INVOKABLE void addInfo( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
-    Q_INVOKABLE void addWarning( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction );
+    Q_INVOKABLE void addSuccess( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
+    Q_INVOKABLE void addError( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
+    Q_INVOKABLE void addInfo( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
+    Q_INVOKABLE void addWarning( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
     Q_INVOKABLE void remove( uint id );
     Q_INVOKABLE void onNotificationClicked( uint id );
 
@@ -117,8 +117,7 @@ class NotificationModel : public QAbstractListModel
     uint nextId() { static uint id = 0; return id++; }
     void timerFired();
 
-  private:
-    uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 5;
+    static constexpr uint DEFAULT_NOTIFICATION_EXPIRATION_SECS = 5;
     QList<Notification> mNotifications;
     QTimer *mTimer;
 };

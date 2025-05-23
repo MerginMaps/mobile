@@ -97,24 +97,24 @@ void NotificationModel::add( const QString &message, uint interval, Notification
   emit rowCountChanged();
 }
 
-void NotificationModel::addSuccess( const QString &message, NotificationType::ActionType action )
+void NotificationModel::addSuccess( const QString &message, const NotificationType::ActionType action, const uint interval )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Success, NotificationType::CheckIcon, action );
+  add( message, interval, NotificationType::Success, NotificationType::CheckIcon, action );
 }
 
-void NotificationModel::addError( const QString &message, NotificationType::ActionType action )
+void NotificationModel::addError( const QString &message, const NotificationType::ActionType action, const uint interval )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Error, NotificationType::ExclamationIcon, action );
+  add( message, interval, NotificationType::Error, NotificationType::ExclamationIcon, action );
 }
 
-void NotificationModel::addInfo( const QString &message, NotificationType::ActionType action )
+void NotificationModel::addInfo( const QString &message, const NotificationType::ActionType action, const uint interval )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Information, NotificationType::WaitingIcon, action );
+  add( message, interval, NotificationType::Information, NotificationType::WaitingIcon, action );
 }
 
-void NotificationModel::addWarning( const QString &message, NotificationType::ActionType action )
+void NotificationModel::addWarning( const QString &message, const NotificationType::ActionType action, const uint interval )
 {
-  add( message, NotificationModel::DEFAULT_NOTIFICATION_EXPIRATION_SECS, NotificationType::Warning, NotificationType::ExclamationIcon, action );
+  add( message, interval, NotificationType::Warning, NotificationType::ExclamationIcon, action );
 }
 
 // check for auto removing notification
