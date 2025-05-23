@@ -31,6 +31,8 @@ Item {
 
   signal dragged( point oldPoint, point newPoint )
 
+  signal dragReleased( point p )
+
   // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
@@ -171,7 +173,7 @@ Item {
 
       onPressed: function ( mouse ) {
         initialPosition = Qt.point( mouse.x, mouse.y )
-        rendererPrivate.freeze( mouseArea.freezeId )
+        // rendererPrivate.freeze( mouseArea.freezeId )
 
         dragDifferentiatorTimer.start()
       }
@@ -216,6 +218,8 @@ Item {
           // this was a pressAndHold or a drag release
 
           clickDifferentiatorTimer.ignoreNextTrigger = false
+
+          mapRoot.dragReleased( clickPosition )
         }
 
         previousPosition = null

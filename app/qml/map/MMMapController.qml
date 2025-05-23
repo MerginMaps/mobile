@@ -43,6 +43,8 @@ Item {
 
   property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
 
+  property MM.AnnotationsController annotationsController: annotationsLoader.item?.controller ?? null
+
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -69,6 +71,8 @@ Item {
   signal measureStarted()
 
   signal multiSelectStarted()
+
+  signal drawStarted()
 
   signal localChangesPanelRequested()
 
@@ -101,6 +105,9 @@ Item {
     },
     State {
       name: "multiSelect"
+    },
+    State {
+      name: "annotate"
     },
     State {
       name: "inactive" // ignores touch input
@@ -169,6 +176,12 @@ Item {
       case "multiSelect": {
         root.showInfoTextMessage( qsTr( "Tap on features to add or remove from the selection" ) )
         root.multiSelectStarted()
+        break
+      }
+
+      case "annotate": {
+        root.showInfoTextMessage( qsTr( "Draw annotation" ) )
+        root.drawStarted()
         break
       }
 
@@ -301,9 +314,21 @@ Item {
     onDragged: function( oldPoint, newPoint )
     {
       if ( root.state === "annotate" )
-        return
+      {
+        annotationsLoader.item.controller.updateHighlight( oldPoint, newPoint )
+      }
+      else
+      {
+        pan( oldPoint, newPoint )
+      }
+    }
 
-      pan( oldPoint, newPoint )
+    onDragReleased: function( point )
+    {
+      if ( root.state === "annotate" )
+      {
+        annotationsLoader.item.controller.finishDigitizing()
+      }
     }
 
     onIsRenderingChanged: {
@@ -586,6 +611,17 @@ Item {
           bottom: parent.bottom
         }
 
+        MMMapButton {
+          id: annotationsButton
+
+          visible: root.state === "view" && __activeProject.mapAnnotationsEnabled
+          iconSource: __style.redrawGeometryIcon
+
+          onClicked: {
+            root.state = "annotate"
+          }
+        }
+
         MMMapLabel {
           visible: root.state !== "inactive" && root.isStreaming
           iconSource: __style.streamingIcon
@@ -857,7 +893,7 @@ Item {
       list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        exceptedLayerIds: [__activeProject.positionTrackingLayerId()]
+        exceptedLayerIds: [ __activeProject.positionTrackingLayerId(), __activeProject.mapAnnotationsLayerId() ]
         model: MM.LayersModel {}
       }
 
@@ -994,6 +1030,43 @@ Item {
         markerType: MMHighlight.MarkerTypes.Circle
         mapSettings: mapCanvas.mapSettings
         geometry: multiEditManager.geometry
+      }
+    }
+  }
+
+  Loader {
+    id: annotationsLoader
+
+    anchors.fill: mapCanvas
+
+    active: root.state === "annotate"
+
+    sourceComponent: annotationComponent
+  }
+
+  Component {
+    id: annotationComponent
+
+    Item {
+      property alias controller: annotationsController
+
+      MM.AnnotationsController {
+        id: annotationsController
+
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      MMHighlight {
+        id: annotationsHighlight
+
+        height: mapCanvas.height
+        width: mapCanvas.width
+
+        lineColor: annotationsController.activeColor
+        lineWidth: MMHighlight.LineWidths.Normal
+
+        mapSettings: mapCanvas.mapSettings
+        geometry: annotationsController.highlightGeometry
       }
     }
   }

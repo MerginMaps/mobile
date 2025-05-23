@@ -237,6 +237,11 @@ ApplicationWindow {
       multiSelectPanelLoader.focus = true
     }
 
+    onDrawStarted: {
+      annotationsPanelLoader.active = true
+      annotationsPanelLoader.focus = true
+    }
+
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
       projectController.openChangesPanel( __activeProject.projectFullName(), true )
@@ -652,6 +657,33 @@ ApplicationWindow {
       onSelectionFinished: {
         multiSelectPanelLoader.active = false
         map.finishMultiSelect()
+      }
+    }
+  }
+
+  Loader {
+    id: annotationsPanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: annotationsPanelComponent
+  }
+
+  Component {
+    id: annotationsPanelComponent
+
+    MMAnnotationsDrawer {
+      id: annotationsPanel
+
+      annotationsController: map.annotationsController
+
+      width: window.width
+
+      onClosed: {
+        annotationsPanelLoader.active = false
+        map.state = "view"
       }
     }
   }
