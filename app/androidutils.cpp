@@ -320,6 +320,7 @@ void AndroidUtils::callImagePicker( const QString &code )
   if ( ACTION_GET_CONTENT.isValid() && intent.isValid() )
   {
     intent = intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
+    intent = intent.callObjectMethod( "putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", QJniObject::fromString( "EXTRA_LOCAL_ONLY" ).object<jstring>(), true );
     QtAndroidPrivate::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
   }
 #endif
