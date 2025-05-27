@@ -28,6 +28,8 @@
 
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
+const QString CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP = QStringLiteral( "layersVisibility" );
+const QString CoreUtils::CACHED_MAP_THEME_GROUP = QStringLiteral( "mapTheme" );
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;

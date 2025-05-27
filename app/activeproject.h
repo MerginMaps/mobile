@@ -190,6 +190,12 @@ class ActiveProject: public QObject
     //! Reloads layers in 'recoring layers model'
     void updateRecordingLayers();
 
+    //! Restores saved layers visibility settings for the project
+    void restoreLayersVisibility();
+
+    //! Restores saved map theme for the project
+    void restoreMapTheme();
+
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
 

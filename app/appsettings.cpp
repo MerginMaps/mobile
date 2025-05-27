@@ -336,3 +336,53 @@ void AppSettings::setIgnoreMigrateVersion( const QString &version )
   setValue( QStringLiteral( "ignoreMigrateVersion" ), version );
   emit ignoreMigrateVersionChanged();
 }
+
+QString AppSettings::mapThemeForProject( const QString &projectKey ) const
+{
+  QSettings settings;
+  settings.beginGroup( projectKey );
+  QString theme = settings.value( CoreUtils::CACHED_MAP_THEME_GROUP ).toString();
+  settings.endGroup();
+
+  return theme;
+}
+
+void AppSettings::setMapThemeForProject( const QString &projectKey, const QString &theme )
+{
+  QSettings settings;
+  settings.beginGroup( projectKey );
+  settings.setValue( CoreUtils::CACHED_MAP_THEME_GROUP, theme );
+  settings.endGroup();
+}
+
+QStringList AppSettings::visibleLayerIdsForProject( const QString &projectKey ) const
+{
+  QSettings settings;
+  settings.beginGroup( projectKey );
+  QVariantList list = settings.value( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP, QVariantList() ).toList();
+  settings.endGroup();
+
+  QStringList visibleLayerIds;
+  for ( const QVariant &layerId : list )
+  {
+    visibleLayerIds << layerId.toString();
+  }
+
+  return visibleLayerIds;
+}
+
+void AppSettings::setVisibleLayerIdsForProject( const QString &projectKey, const QStringList &layerIds )
+{
+  QSettings settings;
+  settings.beginGroup( projectKey );
+
+  QVariantList list;
+  for ( const QString &id : layerIds )
+  {
+    list << id;
+  }
+
+  settings.setValue( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP, list );
+  settings.endGroup();
+}
+

@@ -185,7 +185,8 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
 
-    updateMapTheme();
+    restoreLayersVisibility();
+    restoreMapTheme();
     updateActiveLayer();
     updateMapSettingsLayers();
 
@@ -411,6 +412,7 @@ void ActiveProject::updateMapTheme()
     }
   }
 
+  mAppSettings.setMapThemeForProject( projectFullName(), mMapTheme );
   setMapTheme( themeCandidateName );
 }
 
@@ -503,9 +505,17 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
 
   node->setItemVisibilityChecked( !node->isVisible() );
 
-  updateMapTheme();
+  restoreMapTheme();
   updateActiveLayer();
   updateMapSettingsLayers();
+
+  QStringList visibleLayerIds;
+  for ( QgsMapLayer *layer : getVisibleLayers() )
+  {
+    visibleLayerIds << layer->id();
+  }
+
+  mAppSettings.setVisibleLayerIdsForProject( projectFullName(), visibleLayerIds );
 }
 
 const QString &ActiveProject::mapTheme() const
@@ -602,3 +612,31 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 
   return visibleLayers;
 }
+
+void ActiveProject::restoreLayersVisibility()
+{
+  QStringList savedIds = mAppSettings.visibleLayerIdsForProject( projectFullName() );
+  if ( !savedIds.isEmpty() )
+  {
+    QgsLayerTree *root = mQgsProject->layerTreeRoot();
+    for ( QgsLayerTreeLayer *nodeLayer : root->findLayers() )
+    {
+      bool visible = savedIds.contains( nodeLayer->layer()->id() );
+      nodeLayer->setItemVisibilityChecked( visible );
+    }
+  }
+}
+
+void ActiveProject::restoreMapTheme()
+{
+  QString savedTheme = mAppSettings.mapThemeForProject( projectFullName() );
+  if ( !savedTheme.isEmpty() )
+  {
+    setMapTheme( savedTheme );
+  }
+  else
+  {
+    updateMapTheme();
+  }
+}
+
