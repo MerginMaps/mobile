@@ -115,8 +115,8 @@ void LocalProjectsManager::removeLocalProject( const QString &projectId )
     {
       emit aboutToRemoveLocalProject( mProjects[i] );
 
-      QString projectFullName = mProjects[i].fullName();
-      clearAllProjectSettings( projectFullName );
+      QString sanitizedProjectFullName = CoreUtils::sanitizePathSlashes( mProjects[i].fullName() );
+      clearAllProjectSettings( sanitizedProjectFullName );
 
       CoreUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
@@ -253,11 +253,10 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   emit localProjectAdded( project );
 }
 
-void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullName )
+void LocalProjectsManager::clearAllProjectSettings( const QString &projectId )
 {
-  QString projectKey = CoreUtils::sanitizePathSlashes( projectFullName );
   QSettings settings;
-  settings.beginGroup( projectKey );
+  settings.beginGroup( projectId );
   settings.remove( "" );
   settings.endGroup();
 }

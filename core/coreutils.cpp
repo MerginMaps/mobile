@@ -380,10 +380,10 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
   return success;
 }
 
-QString CoreUtils::sanitizePathSlashes( const QString &input )
+QString CoreUtils::sanitizePathSlashes( const QString &name )
 {
-  QString sanitized = input;
-  sanitized.replace( '/', '_' );
-  sanitized.replace( '\\', '_' );
-  return sanitized;
+  QString sanitizedName = name;
+  sanitizedName.replace( '/', '_' );
+  sanitizedName.replace( '\\', '_' );
+  return sanitizedName;
 }
