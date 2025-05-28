@@ -352,3 +352,16 @@ void TestCoreUtils::testReplaceValueInJson()
 
   QFile::remove( testFilePath );
 }
+
+void TestCoreUtils::testSanitizePathSlashes()
+{
+  // empty string => should return empty
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "" ), QString( "" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "simple_project_name" ), QString( "simple_project_name" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "workspace/project" ), QString( "workspace_project" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "workspace\\project" ), QString( "workspace_project" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "workspace/sub\\project" ), QString( "workspace_sub_project" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "workspace//project\\\\name" ), QString( "workspace__project__name" ) );
+  QCOMPARE( CoreUtils::sanitizePathSlashes( "user@domain/my-project\\v1.0" ), QString( "user@domain_my-project_v1.0" ) );
+}
+

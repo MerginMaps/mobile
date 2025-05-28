@@ -137,6 +137,12 @@ class CoreUtils
      */
     static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
 
+    /**
+     * Sanitizes a string by replacing path separators with underscores
+     * Useful to set QSettings group names, avoiding unpredicted behavior caused by slashes
+     */
+    static QString sanitizePathSlashes( const QString &input );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

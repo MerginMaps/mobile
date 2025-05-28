@@ -255,8 +255,9 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
 
 void LocalProjectsManager::clearAllProjectSettings( const QString &projectFullName )
 {
+  QString projectKey = CoreUtils::sanitizePathSlashes( projectFullName );
   QSettings settings;
-  settings.beginGroup( projectFullName );
+  settings.beginGroup( projectKey );
   settings.remove( "" );
   settings.endGroup();
 }

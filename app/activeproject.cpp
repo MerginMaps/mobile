@@ -91,6 +91,11 @@ QString ActiveProject::projectFullName() const
   return mLocalProject.fullName();
 }
 
+QString ActiveProject::sanitizedProjectFullName() const
+{
+  return CoreUtils::sanitizePathSlashes( projectFullName() );
+}
+
 bool ActiveProject::load( const QString &filePath )
 {
   return forceLoad( filePath, false );
@@ -412,17 +417,11 @@ void ActiveProject::updateMapTheme()
     }
   }
 
-  mAppSettings.setMapThemeForProject( projectFullName(), mMapTheme );
   setMapTheme( themeCandidateName );
 }
 
 void ActiveProject::setMapTheme( const QString &themeName )
 {
-  if ( mMapTheme == themeName )
-  {
-    return;
-  }
-
   if ( !mQgsProject )
   {
     return;
@@ -446,6 +445,7 @@ void ActiveProject::setMapTheme( const QString &themeName )
 
   emit mapThemeChanged( mMapTheme );
 
+  setMapThemeForProject();
   updateActiveLayer();
   updateMapSettingsLayers();
 }
@@ -515,7 +515,7 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
     visibleLayerIds << layer->id();
   }
 
-  mAppSettings.setVisibleLayerIdsForProject( projectFullName(), visibleLayerIds );
+  setVisibleLayerIdsForProject( visibleLayerIds );
 }
 
 const QString &ActiveProject::mapTheme() const
@@ -615,7 +615,7 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 
 void ActiveProject::restoreLayersVisibility()
 {
-  QStringList savedIds = mAppSettings.visibleLayerIdsForProject( projectFullName() );
+  QStringList savedIds = visibleLayerIdsForProject();
   if ( !savedIds.isEmpty() )
   {
     QgsLayerTree *root = mQgsProject->layerTreeRoot();
@@ -629,7 +629,7 @@ void ActiveProject::restoreLayersVisibility()
 
 void ActiveProject::restoreMapTheme()
 {
-  QString savedTheme = mAppSettings.mapThemeForProject( projectFullName() );
+  QString savedTheme = mapThemeForProject();
   if ( !savedTheme.isEmpty() )
   {
     setMapTheme( savedTheme );
@@ -638,5 +638,57 @@ void ActiveProject::restoreMapTheme()
   {
     updateMapTheme();
   }
+}
+
+QString ActiveProject::mapThemeForProject() const
+{
+  QSettings settings;
+  settings.beginGroup( sanitizedProjectFullName() );
+  QString theme = settings.value( CoreUtils::CACHED_MAP_THEME_GROUP, "" ).toString();
+  settings.endGroup();
+
+  return theme;
+}
+
+void ActiveProject::setMapThemeForProject()
+{
+  if ( mMapTheme.isEmpty() )
+    return;
+
+  QSettings settings;
+  settings.beginGroup( sanitizedProjectFullName() );
+  settings.setValue( CoreUtils::CACHED_MAP_THEME_GROUP, mMapTheme );
+  settings.endGroup();
+}
+
+QStringList ActiveProject::visibleLayerIdsForProject() const
+{
+  QSettings settings;
+  settings.beginGroup( sanitizedProjectFullName() );
+  QVariantList list = settings.value( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP, QVariantList() ).toList();
+  settings.endGroup();
+
+  QStringList visibleLayerIds;
+  for ( const QVariant &layerId : list )
+  {
+    visibleLayerIds << layerId.toString();
+  }
+
+  return visibleLayerIds;
+}
+
+void ActiveProject::setVisibleLayerIdsForProject( const QStringList &layerIds )
+{
+  QSettings settings;
+  settings.beginGroup( sanitizedProjectFullName() );
+
+  QVariantList list;
+  for ( const QString &id : layerIds )
+  {
+    list << id;
+  }
+
+  settings.setValue( CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP, list );
+  settings.endGroup();
 }
 
