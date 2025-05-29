@@ -937,7 +937,8 @@ double InputUtils::screenUnitsToMeters( InputMapSettings *mapSettings, int baseL
   }
   catch ( QgsCsException &e )
   {
-    Q_UNUSED( e )
+    Q_UNUSED( e );
+    CoreUtils::log( "screenUnitsToMeters", QString( "Coordinate transformation failed: %1" ).arg( e.what() ) );
   }
 
   return 0.0;
