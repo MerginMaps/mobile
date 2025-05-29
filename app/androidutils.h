@@ -65,7 +65,7 @@ class AndroidUtils: public QObject
       * handler of the activity emits imageSelected signal.
       * The code parameter will be used in response (signal)
       */
-    Q_INVOKABLE void callImagePicker( const QString &code = "" );
+    Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE static bool openFile( const QString &filePath );
 
@@ -87,6 +87,7 @@ class AndroidUtils: public QObject
 
   private:
     QString mLastCode;
+    QString mTargetPath;
 
 #ifdef ANDROID
     QBluetoothLocalDevice mBluetooth;

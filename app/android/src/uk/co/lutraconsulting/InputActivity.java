@@ -33,6 +33,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.content.ActivityNotFoundException;
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import androidx.core.content.FileProvider;
 import android.widget.Toast;
 
@@ -41,8 +45,13 @@ import androidx.core.splashscreen.SplashScreen;
 
 public class InputActivity extends QtActivity
 {
+  public static native void imageSelected(String imagePath, String code);
+
   private static final String TAG = "Mergin Maps Input Activity";
+  private static final int MEDIA_CODE = 101;
   private boolean keepSplashScreenVisible = true;
+  private String localTargetPath = null;
+  private String imageCode = null;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -143,29 +152,50 @@ public class InputActivity extends QtActivity
 
     try 
     {
-        Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
+      Uri fileUri = FileProvider.getUriForFile( this, "uk.co.lutraconsulting.fileprovider", file );
 
-        showFileIntent.setData( fileUri );
+      showFileIntent.setData( fileUri );
 
-        // FLAG_GRANT_READ_URI_PERMISSION grants temporary read permission to the content URI.
-        // FLAG_ACTIVITY_NEW_TASK is used when starting an Activity from a non-Activity context.
-        showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION );
+      // FLAG_GRANT_READ_URI_PERMISSION grants temporary read permission to the content URI.
+      // FLAG_ACTIVITY_NEW_TASK is used when starting an Activity from a non-Activity context.
+      showFileIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION );
     } 
     catch ( IllegalArgumentException e )
     {
-        return false;
+      return false;
     }
 
     if ( showFileIntent.resolveActivity( getPackageManager() ) != null ) 
     {
-        startActivity( showFileIntent );
+      startActivity( showFileIntent );
     } 
     else 
     {
-        return false;
+      return false;
     }
     
     return true;
+  }
+
+  public void copyFile(InputStream src, File dst) throws IOException {
+    OutputStream out = null;
+
+    try {
+      out = new FileOutputStream(dst);
+      // Transfer bytes from src to out
+      byte[] buf = new byte[1024];
+      int len;
+      while ((len = src.read(buf)) > 0) {
+        out.write(buf, 0, len);
+      }
+    } catch (IOException e) {
+      throw new IOException("Cannot copy a photo to working directory.");
+    } finally {
+      if (src != null)
+        src.close();
+      if (out != null)
+        out.close();
+    }
   }
 
   public void quitGracefully()

@@ -13,9 +13,6 @@
 #include <QtCore/private/qandroidextras_p.h>
 #include <QCoreApplication>
 #include <QJniObject>
-#include <QJniEnvironment>
-#include <QDebug>
-#include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
 
@@ -298,7 +295,7 @@ bool AndroidUtils::requestMediaLocationPermission()
   return true;
 }
 
-void AndroidUtils::callImagePicker( const QString &code )
+void AndroidUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
 #ifdef ANDROID
 
@@ -308,13 +305,13 @@ void AndroidUtils::callImagePicker( const QString &code )
   }
 
   mLastCode = code;
+  mTargetPath = targetPath;
 
   // request media location permission to be able to read EXIF metadata from gallery image (only necessary for android < 14)
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
   const QJniObject ACTION_GET_CONTENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_GET_CONTENT", "Ljava/lang/String;" );
-
   QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_GET_CONTENT.object<jstring>() );
 
   if ( ACTION_GET_CONTENT.isValid() && intent.isValid() )
@@ -403,20 +400,29 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
 
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
+    //this method is ugly and unreadable, but it should be just a temporary solution before refactoring
     const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
-    const QJniObject mediaStore = QJniObject::getStaticObjectField( "android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;" );
-    const QJniEnvironment env;
-    jobjectArray projection = env->NewObjectArray( 1, env->FindClass( "java/lang/String" ), nullptr );
-    jobject projectionDataAndroid = env->NewStringUTF( mediaStore.toString().toStdString().c_str() );
-    env->SetObjectArrayElement( projection, 0, projectionDataAndroid );
-    const auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    const QJniObject contentResolver = activity.callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
-    QJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
-    const jint columnIndex = cursor.callMethod<jint>( "getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>() );
-    cursor.callMethod<jboolean>( "moveToFirst", "()Z" );
-    const QJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
-    const QString selectedImagePath = "file://" + result.toString();
-    emit imageSelected( selectedImagePath, mLastCode );
+    const QString fileName = uri.callObjectMethod( "getLastPathSegment", "()Ljava/lang/String;" ).toString();
+    const QJniObject newCopyFile = QJniObject( "java/io/File",
+                                   "(Ljava/lang/String;)V",
+                                   QJniObject::fromString( mTargetPath + "/" + fileName ).object<jstring>() );
+    newCopyFile.callMethod<jboolean>( "createNewFile", "()Z" );
+    const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    const QJniObject contentResolver = activity.callObjectMethod( "getContentResolver",
+                                       "()Landroid/content/ContentResolver;" );
+    const QJniObject fileStream = contentResolver.callObjectMethod( "openInputStream",
+                                  "(Landroid/net/Uri;)Ljava/io/InputStream;",
+                                  uri.object() );
+    activity.callMethod<void>( "copyFile",
+                               "(Ljava/io/InputStream;Ljava/io/File;)V",
+                               fileStream.object(),
+                               newCopyFile.object() );
+    const QJniObject newUri = QJniObject::callStaticObjectMethod( "android/net/Uri",
+                              "fromFile",
+                              "(Ljava/io/File;)Landroid/net/Uri;",
+                              newCopyFile.object() );
+    const QString newUriString = newUri.callObjectMethod( "toString", "()Ljava/lang/String;" ).toString();
+    emit imageSelected( newUriString, mLastCode );
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {
@@ -429,7 +435,7 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
   else
   {
     const QString msg( "Something went wrong with media store activity" );
-    qDebug() << msg;
+    CoreUtils::log( "Android utils", msg );
     emit notifyError( msg );
   }
 
