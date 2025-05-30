@@ -505,7 +505,7 @@ void ActiveProject::switchLayerTreeNodeVisibility( QgsLayerTreeNode *node )
 
   node->setItemVisibilityChecked( !node->isVisible() );
 
-  restoreMapTheme();
+  updateMapTheme();
   updateActiveLayer();
   updateMapSettingsLayers();
 
