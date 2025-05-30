@@ -402,12 +402,15 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
   {
     //this method is ugly and unreadable, but it should be just a temporary solution before refactoring
     const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
-    const QString fileName = uri.callObjectMethod( "getLastPathSegment", "()Ljava/lang/String;" ).toString();
+    const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    const QString fileName = activity.callObjectMethod( "getFileName",
+                             "(Landroid/net/Uri;)Ljava/lang/String;",
+                             uri.object() )
+                             .toString();
     const QJniObject newCopyFile = QJniObject( "java/io/File",
                                    "(Ljava/lang/String;)V",
                                    QJniObject::fromString( mTargetPath + "/" + fileName ).object<jstring>() );
     newCopyFile.callMethod<jboolean>( "createNewFile", "()Z" );
-    const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     const QJniObject contentResolver = activity.callObjectMethod( "getContentResolver",
                                        "()Landroid/content/ContentResolver;" );
     const QJniObject fileStream = contentResolver.callObjectMethod( "openInputStream",

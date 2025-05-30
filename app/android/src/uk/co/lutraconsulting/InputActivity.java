@@ -39,14 +39,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import androidx.core.content.FileProvider;
 import android.widget.Toast;
+import android.database.Cursor;
+import android.provider.OpenableColumns;
 
 import androidx.core.view.WindowCompat;
 import androidx.core.splashscreen.SplashScreen;
 
 public class InputActivity extends QtActivity
 {
-  public static native void imageSelected(String imagePath, String code);
-
   private static final String TAG = "Mergin Maps Input Activity";
   private static final int MEDIA_CODE = 101;
   private boolean keepSplashScreenVisible = true;
@@ -196,6 +196,28 @@ public class InputActivity extends QtActivity
       if (out != null)
         out.close();
     }
+  }
+
+  public String getFileName(Uri uri) {
+    String result = null;
+    if (uri.getScheme().equals("content")) {
+      Cursor cursor = getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
+      try {
+        if (cursor != null && cursor.moveToFirst()) {
+          result = cursor.getString(0);
+        }
+      } finally {
+        cursor.close();
+      }
+    }
+    if (result == null) {
+      result = uri.getPath();
+      int cut = result.lastIndexOf('/');
+      if (cut != -1) {
+        result = result.substring(cut + 1);
+      }
+    }
+    return result;
   }
 
   public void quitGracefully()
