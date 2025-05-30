@@ -1152,7 +1152,9 @@ void MerginApi::createProjectFinished()
     QString code = extractServerErrorCode( data );
     QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
+    bool userMissingPermissions = ( httpCode == 403 );
 
     CoreUtils::log( "create " + projectFullName, message );
 
@@ -1166,9 +1168,15 @@ void MerginApi::createProjectFinished()
         maxProjects = maxProjectVariant.toInt();
       emit projectLimitReached( maxProjects, serverMsg );
     }
+    else if ( userMissingPermissions )
+    {
+      emit notifyError( tr( "You don't have permission to create new projects in this workspace." ) );
+      emit projectCreationFailed();
+    }
     else
     {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
+      emit projectCreationFailed();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
     }
   }
