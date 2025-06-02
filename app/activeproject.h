@@ -132,6 +132,21 @@ class ActiveProject: public QObject
     //! Returns all visible valid layers in the project
     QList<QgsMapLayer *> getVisibleLayers() const;
 
+    //! Stores current map theme in QSettings
+    QString mapThemeForProject() const;
+
+    //! Retrieves map theme from QSettings
+    void setMapThemeForProject();
+
+    //! Stores visible layers ids in QSettings
+    QStringList visibleLayerIdsForProject() const;
+
+    //! Restores visible layers ids from QSettings
+    void setVisibleLayerIdsForProject( const QStringList &layerIds );
+
+    //! Returns projectFullName with forward and back slashes replaced with underscores
+    QString sanitizedProjectFullName() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -195,21 +210,6 @@ class ActiveProject: public QObject
 
     //! Restores saved map theme for the project
     void restoreMapTheme();
-
-    //! Stores current map theme in QSettings
-    QString mapThemeForProject() const;
-
-    //! Retrieves map theme from QSettings
-    void setMapThemeForProject();
-
-    //! Stores visible layers ids in QSettings
-    QStringList visibleLayerIdsForProject() const;
-
-    //! Restores visible layers ids from QSettings
-    void setVisibleLayerIdsForProject( const QStringList &layerIds );
-
-    //! Returns projectFullName with forward and back slashes replaced with underscores
-    QString sanitizedProjectFullName() const;
 
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
