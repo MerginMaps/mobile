@@ -428,7 +428,7 @@ Won&apos;t be added to the project.</source>
         <translation>El servidor no está disponible actualmente, verifica tu conexión o vuelve a intentarlo más tarde.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="138"/>
+        <location filename="../qml/account/MMAccountController.qml" line="132"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Acepto los %1Términos y Condiciones%3 y la %2Política de Privacidad%3</translation>
     </message>
@@ -1248,7 +1248,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="87"/>
         <source>Email or username</source>
-        <translation>Email o nombre de usuario</translation>
+        <translation>Correo o nombre de usuario</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="96"/>
@@ -2607,21 +2607,23 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="224"/>
+        <location filename="../../core/merginapi.cpp" line="223"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Elimina algunos proyectos como la aplicación actualmente.
 solo permite hasta %1 proyectos descargados.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="825"/>
+        <location filename="../../core/merginapi.cpp" line="824"/>
+        <location filename="../../core/merginapi.cpp" line="1298"/>
         <source>Please enter a valid email</source>
-        <translation>Por favor, introduce un e-mail válido</translation>
+        <translation>Por favor, introduce un correo válido</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="832"/>
-        <source>Password not strong enough. It must%1 be at least 8 characters long%1 contain lowercase characters%1 contain uppercase characters%1 contain digits or special characters</source>
-        <translation>La contraseña no es lo suficientemente fuerte. Debe contener %1 como mínimo 8 caracteres%1 letras minúsculas%1 letras mayúsculas%1 números o caracteres especiales</translation>
+        <location filename="../../core/merginapi.cpp" line="831"/>
+        <location filename="../../core/merginapi.cpp" line="1310"/>
+        <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
+        <translation>%1%3 La contraseña debe tener al menos 8 caracteres e incluir:1%3 Letras minúsculas (a-z)%4%3 Letras mayúsculas (A-Z)%4%3 Al menos un dígito (0–9) o un carácter especial%4%2%4%2</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="845"/>
@@ -2639,32 +2641,44 @@ solo permite hasta %1 proyectos descargados.</translation>
         <translation>Industria no puede estar vacia</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1286"/>
+        <location filename="../../core/merginapi.cpp" line="1278"/>
         <source>Registration successful</source>
         <translation>Registro exitoso</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1308"/>
+        <location filename="../../core/merginapi.cpp" line="1300"/>
+        <location filename="../../core/merginapi.cpp" line="1306"/>
+        <location filename="../../core/merginapi.cpp" line="1318"/>
+        <source>Registration failed</source>
+        <translation>Error en el registro</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1304"/>
+        <source>This email address is already registered</source>
+        <translation>Esta dirección de correo ya está registrada</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1329"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>No se permiten nuevos registros en el servidor seleccionado. Por favor consulte con su administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1340"/>
+        <location filename="../../core/merginapi.cpp" line="1361"/>
         <source>Workspace created</source>
         <translation>Espacio de trabajo creado</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1677"/>
+        <location filename="../../core/merginapi.cpp" line="1698"/>
         <source>Project detached from the server</source>
         <translation>Proyecto desconectado del servidor</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3868"/>
+        <location filename="../../core/merginapi.cpp" line="3895"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nombre del espacio de trabajo contiene caracteres no válidos</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3934"/>
+        <location filename="../../core/merginapi.cpp" line="3961"/>
         <source>Workspace %1 already exists</source>
         <translation>El espacio de trabajo %1 ya existe</translation>
     </message>
@@ -2899,7 +2913,7 @@ solo permite hasta %1 proyectos descargados.</translation>
         <translation>No se pudo enviar el informe. Por favor revise su conexion a internet.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="41"/>
+        <location filename="../../core/merginapi.cpp" line="40"/>
         <source>Synchronisation canceled</source>
         <translation>Sincronización cancelada</translation>
     </message>

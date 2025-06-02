@@ -69,9 +69,9 @@ void LayerTreeFlatModel::reset()
 
 void LayerTreeFlatModel::populate()
 {
-  beginResetModel();
-
   clear();
+
+  beginResetModel();
 
   if ( mLayerTreeModel )
   {

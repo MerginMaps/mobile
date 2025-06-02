@@ -118,7 +118,7 @@ Item {
 
         if ( __appSettings.autolockPosition ) { // center to GPS
           if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.addError( "GPS currently unavailable." )
+            __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
           }
           else {
             root.centeredToGPS = true

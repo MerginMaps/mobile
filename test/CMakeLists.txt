@@ -24,6 +24,7 @@ set(MM_TESTS
     testLayerTree
     testActiveProject
     testProjectChecksumCache
+    testVariablesManager
 )
 
 foreach (test ${MM_TESTS})

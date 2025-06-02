@@ -1858,32 +1858,32 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="212"/>
+        <location filename="../qml/project/MMProjectList.qml" line="214"/>
         <source>Create project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="237"/>
+        <location filename="../qml/project/MMProjectList.qml" line="239"/>
         <source>Let&apos;s get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="240"/>
         <source>First step is to create your brand new project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>Unable to get the list of projects.</source>
         <translation type="unfinished">Unable to get the list of projects.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>No projects found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="275"/>
+        <location filename="../qml/project/MMProjectList.qml" line="277"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2903,12 +2903,12 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="546"/>
+        <location filename="../main.cpp" line="552"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="551"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>

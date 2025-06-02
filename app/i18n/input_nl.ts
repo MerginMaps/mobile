@@ -1,31 +1,31 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="es_419">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="nl">
 <context>
     <name>ActiveProject</name>
     <message>
         <location filename="../activeproject.cpp" line="263"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="263"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
-        <translation>El proyecto tiene asignado un CRS no válido.  ¡El mapa y las herramientas tienen un comportamiento indefinido!</translation>
+        <translation>Project heeft verkeerd coördinatensysteem. Kaart en gereedschap hebben afwijkend gedrag!</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer</source>
-        <translation>Capa</translation>
+        <translation>Laag</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="275"/>
         <source>Unable to load source </source>
-        <translation>No se puede cargar la fuente</translation>
+        <translation>Kan bronnen niet laden</translation>
     </message>
     <message>
         <location filename="../activeproject.cpp" line="284"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
-        <translation>La capa tiene un CRS no válido asignado.  Las herramientas de grabación tienen un comportamiento indefinido.</translation>
+        <translation>Laag heeft verkeerd coördinatensysteem. Gereedschap voor vastlegging heeft afwijkend gedrag!</translation>
     </message>
 </context>
 <context>
@@ -33,28 +33,28 @@
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (fused)</source>
-        <translation>Interno (fusionado)</translation>
+        <translation>Intern (samengevoegd)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
         <source>Internal (gps)</source>
-        <translation>Interno (gps)</translation>
+        <translation>Intern (gps)</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="220"/>
         <location filename="../position/providers/androidpositionprovider.cpp" line="234"/>
         <source>No location permissions</source>
-        <translation>Sin permiso de ubicación</translation>
+        <translation>Geen recht voor gebruik lokatie</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
         <source>Fused location not available</source>
-        <translation>Ubicación fusionada no disponible</translation>
+        <translation>Samengevoegde locatie niet beschikbaar</translation>
     </message>
     <message>
         <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Verbonden</translation>
     </message>
 </context>
 <context>
@@ -64,27 +64,27 @@
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation>Se produjo un error y el seguimiento no pudo iniciarse; comuníquese con el soporte técnico</translation>
+        <translation>Er is een probleem en tracking kon niet starten, neem contact op met support</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Su dispositivo no admite seguimiento, disponible desde Android 8.0</translation>
+        <translation>Uw toestel ondersteund niet het maken van een track, beschikbaar vanaf Android 8.0</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Habilite el permiso de ubicación antes de comenzar el seguimiento</translation>
+        <translation>Geef toestemming voor gebruik locatie voordat u een track kunt maken </translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation>Habilite los servicios de ubicación en su dispositivo antes de comenzar el seguimiento</translation>
+        <translation>Activeer locatie services om een track te kunnen maken</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
         <source>Enable notifications to see tracking in the notifications tray</source>
-        <translation>Habilite las notificaciones para ver el seguimiento en la bandeja de notificaciones</translation>
+        <translation>Activeer meldingen om de tracks in de meldingenlijst te zien</translation>
     </message>
 </context>
 <context>
@@ -92,22 +92,22 @@
     <message>
         <location filename="../androidutils.cpp" line="263"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
-        <translation>Permiso de almacenamiento está denegado permanentemente, por favor habítelo en ajustes para cargar imágenes de la galería</translation>
+        <translation>Toestemming tot opslag permanent geweigerd, sta dit toe in de instellingen om foto&apos;s te kunnen laden vanuit fotogallerij</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="267"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
-        <translation>Mergin Maps necesita un permiso de almacenamiento para poder cargar imágenes desde la galería</translation>
+        <translation>Mergin Maps heeft toegang nodig tot foto galerij voor het kunnen laden van foto&apos;s</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="285"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
-        <translation>Permiso de la cámara denegado permanentemente, habilítelo en configuración</translation>
+        <translation>Cameratoestemming is permanent geweigerd. Sta dit toe in de instellingen</translation>
     </message>
     <message>
         <location filename="../androidutils.cpp" line="289"/>
         <source>We need a camera permission in order to take a photo</source>
-        <translation>Necesitamos permiso de la cámara para poder tomar fotografías</translation>
+        <translation>We hebben cameratoestemming nodig om een ​​foto te maken</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../attributes/attributepreviewcontroller.cpp" line="149"/>
         <source>Unnamed Layer</source>
-        <translation>Capa sin nombre</translation>
+        <translation>Laag zonder naam</translation>
     </message>
 </context>
 <context>
@@ -124,39 +124,39 @@
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
         <source>No connection</source>
-        <translation>Sin conexión</translation>
+        <translation>Geen verbinding</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
         <source>Reconnecting</source>
-        <translation>Reconectando</translation>
+        <translation>Opnieuw verbinden</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
         <source>No connection, reconnecting in (%1)</source>
-        <translation>Sin conexión, reconectado en (%1)</translation>
+        <translation>Geen verbinding, opnieuw verbinden in (%1)</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
         <source>Bluetooth permission disabled</source>
-        <translation>Permiso de Bluetooth deshabilitado</translation>
+        <translation>Geen toegang tot Bluetooth </translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
         <source>Could not connect to device, not paired</source>
-        <translation>No se puede conectar el dispositivo, no emparejado</translation>
+        <translation>Kon geen verbinding met toestel opzetten, niet gekoppeld</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
         <source>Connecting to %1</source>
-        <translation>Conectando a %1</translation>
+        <translation>Verbinden met %1</translation>
     </message>
     <message>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
         <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Verbonden</translation>
     </message>
 </context>
 <context>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../featuresmodel.cpp" line="69"/>
         <source>Unknown title</source>
-        <translation>Título desconocido</translation>
+        <translation>Onbekende titel</translation>
     </message>
 </context>
 <context>
@@ -172,19 +172,19 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Por favor, rellena el campo precedente antes de añadir un nuevo campo.</translation>
+        <translation>Vul een naam in van het vorige veld in voordat u een nieuw veld toevoegt.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
         <source>Field %1 already exists.</source>
-        <translation>Campo %1 ya existe.</translation>
+        <translation>Veld %1 bestaat al.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="108"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
-        <translation>Campo %1 ya existe. 
-No se añadirá al proyecto.</translation>
+        <translation>Veld %1 bestaat al. 
+Wordt niet toegevoegd aan het project.</translation>
     </message>
 </context>
 <context>
@@ -192,17 +192,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../inputprojutils.cpp" line="77"/>
         <source>Missing required PROJ datum shift grid: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Falta la cuadrícula de desplazamiento de datos PROJ requerida: %1.  Para el proyecto recién descargado, reinicie Mergin Maps.</translation>
+        <translation>De benodigde PROJ datum shift grid ontbreekt: %1. Voor nieuw gedownload project, herstart Mergin Maps.</translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="98"/>
         <source>Error creating custom PROJ operation. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Error al crear la operación PROJ personalizada.  Para el proyecto recién descargado, reinicie Mergin Maps.</translation>
+        <translation>Fout bij aanmaken van Custom PROJ. Voor nieuw gedownload project, herstart Mergin Maps. </translation>
     </message>
     <message>
         <location filename="../inputprojutils.cpp" line="108"/>
         <source>Missing required PROJ datum shift grids: %1. For newly downloaded project please restart Mergin Maps.</source>
-        <translation>Faltan cuadrículas de desplazamiento de datos PROJ requeridas: %1.  Para el proyecto recién descargado, reinicie Mergin Maps.</translation>
+        <translation>De benodigde PROJ datum shift grid ontbreekt: %1. Voor nieuw gedownload project, herstart Mergin Maps.</translation>
     </message>
 </context>
 <context>
@@ -210,119 +210,119 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../inpututils.cpp" line="236"/>
         <source>just now</source>
-        <translation>ahora mismo</translation>
+        <translation>zojuist</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minutes ago</source>
-        <translation>Hace %1 minutos</translation>
+        <translation>%1 minuten geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="241"/>
         <source>%1 minute ago</source>
-        <translation>Hace %1 minuto</translation>
+        <translation>%1 minuut geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hours ago</source>
-        <translation>Hace %1 horas</translation>
+        <translation>%1 uren geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="246"/>
         <source>%1 hour ago</source>
-        <translation>Hace %1 hora</translation>
+        <translation>%1 uur geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 days ago</source>
-        <translation>Hace %1 días</translation>
+        <translation>%1 dagen geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
         <source>%1 day ago</source>
-        <translation>Hace %1 día</translation>
+        <translation>%1 dag geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 weeks ago</source>
-        <translation>Hace %1 semanas</translation>
+        <translation>%1 weken geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="260"/>
         <source>%1 week ago</source>
-        <translation>Hace %1 semana</translation>
+        <translation>%1 week geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 months ago</source>
-        <translation>Hace %1 meses</translation>
+        <translation>%1 maanden geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="265"/>
         <source>%1 month ago</source>
-        <translation>Hace %1 mes</translation>
+        <translation>%1 maand geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 years ago</source>
-        <translation>Hace %1 años</translation>
+        <translation>%1 jaren geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="270"/>
         <source>%1 year ago</source>
-        <translation>Hace %1 año</translation>
+        <translation>%1 jaar geleden</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1524"/>
         <source>screen resolution: %1x%2 px
 </source>
-        <translation>resolución de pantalla: %1x%2 px
+        <translation>schermresolutie: %1x%2 px
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1525"/>
         <source>screen DPI: %1x%2
 </source>
-        <translation>pantalla DPI: %1x%2
+        <translation>scherm DPI: %1x%2
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1526"/>
         <source>screen size: %1x%2 mm
 </source>
-        <translation>tamaño de pantalla: %1x%2 mm
+        <translation>schermgrootte: %1x%2 mm
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1527"/>
         <source>reported device pixel ratio: %1
 </source>
-        <translation>Relación de píxeles del dispositivo informada: %1
+        <translation>gerapporteerde pixelverhouding van het apparaat: %1
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1528"/>
         <source>calculated device pixel ratio: %1
 </source>
-        <translation>Relación de píxeles del dispositivo calculada: %1
+        <translation>berekende pixelverhouding van het apparaat: %1
 </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1529"/>
         <source>used dp scale: %1</source>
-        <translation>escala de dp utilizada: %1</translation>
+        <translation>gebruikte schermresolutie: %1</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="2058"/>
         <source>You need to add at least %1 point(s) to every part.</source>
-        <translation>Debe agregar al menos %1 punto(s) a cada parte.</translation>
+        <translation>Je moet minstens %1 punt(en) toevoegen voor elk deel.</translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="2062"/>
         <source>You need to add at least %1 point(s).</source>
-        <translation>Debe agregar al menos %1 punto(s).</translation>
+        <translation>Je moet minstens %1 punt(en) toevoegen.</translation>
     </message>
 </context>
 <context>
@@ -330,13 +330,13 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../position/providers/internalpositionprovider.cpp" line="16"/>
         <source>Internal</source>
-        <translation>Interno</translation>
+        <translation>Intern</translation>
     </message>
     <message>
         <location filename="../position/providers/internalpositionprovider.cpp" line="41"/>
         <location filename="../position/providers/internalpositionprovider.cpp" line="120"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Verbonden</translation>
     </message>
 </context>
 <context>
@@ -344,17 +344,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="210"/>
         <source>Download failed, remove and retry</source>
-        <translation>No se ha podido descargar, eliminar y reintentar más tarde</translation>
+        <translation>Download mislukt, verwijder en probeer opnieuw</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="230"/>
         <source>Found multiple QGIS project files</source>
-        <translation>Encontrados varios archivos de proyecto QGIS</translation>
+        <translation>Meerdere QGIS project bestanden gevonden</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="235"/>
         <source>Failed to find a QGIS project file</source>
-        <translation>Archivo de proyecto QGIS no encontrado</translation>
+        <translation>Geen QGIS project bestand gevonden</translation>
     </message>
 </context>
 <context>
@@ -362,22 +362,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="21"/>
         <source>About</source>
-        <translation>Acerca de</translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="70"/>
         <source>We are bringing the benefits of open source GIS to businesses without compromises</source>
-        <translation>Llevamos los beneficios del SIG de código abierto a las empresas sin concesiones</translation>
+        <translation>Wij brengen de voordelen van open source GIS naar het bedrijfsleven zonder compromissen te sluiten.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="85"/>
         <source>Visit website</source>
-        <translation>Visite el sitio web</translation>
+        <translation>Bezoek de website</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMAboutPage.qml" line="102"/>
         <source>Developed by</source>
-        <translation>Desarrollado por</translation>
+        <translation>Ontwikkeld door</translation>
     </message>
 </context>
 <context>
@@ -385,7 +385,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationController.qml" line="35"/>
         <source>You have pending workspace invitations.&lt;br&gt;Please %1accept or reject%2 them.</source>
-        <translation>Tienes invitaciones pendientes para espacios de trabajo.1 Por favor, %1acéptalas o rechace%2.</translation>
+        <translation>U heeft uitnodigingen tot workspaces.&lt;br&gt;Graag %1accepteren of weiger%2 deze.</translation>
     </message>
 </context>
 <context>
@@ -393,27 +393,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="61"/>
         <source>You have been invited to a workspace</source>
-        <translation>Has sido invitado a un espacio de trabajo</translation>
+        <translation>U bent uitgenodigd tot een workspace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="62"/>
         <source>Join the workspace and explore together!</source>
-        <translation>¡Únete al espacio de trabajo y explora juntos!</translation>
+        <translation>Wordt lid van deze workspace en ga samen verkennen!</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="95"/>
         <source>Join workspace</source>
-        <translation>Unirse al espacio de trabajo</translation>
+        <translation>Lid worden van workspace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="102"/>
         <source>or</source>
-        <translation>o</translation>
+        <translation>of</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAcceptInvitationPage.qml" line="110"/>
         <source>Want to create a new workspace instead? %1Click here%2</source>
-        <translation>¿Quieres crear un nuevo espacio de trabajo? %1Haga clic aquí%2</translation>
+        <translation>Wilt u in plaats daarvan een nieuwe workspace aanmaken? %1Klik hier%2</translation>
     </message>
 </context>
 <context>
@@ -421,17 +421,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="80"/>
         <source>Please update the app to use the latest features.</source>
-        <translation>Por favor, actualiza MerginMaps para utilizar las últimas herramientas.</translation>
+        <translation>Graag de app bijwerken om gebruik te kunnen maken van nieuwe mogelijkheden.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="84"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
-        <translation>El servidor no está disponible actualmente, verifica tu conexión o vuelve a intentarlo más tarde.</translation>
+        <translation>De server is momenteel niet beschikbaar, controleer uw connectie of probeer het later opnieuw.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountController.qml" line="132"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Acepto los %Términos y Condiciones%3 y la %2Política de Privacidad%3</translation>
+        <translation>Ik accepteer de %1Gebruiksovereenkomst en Voorwaarden%3 en %2Privacybeleid%3</translation>
     </message>
 </context>
 <context>
@@ -439,37 +439,37 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="95"/>
         <source>Workspaces</source>
-        <translation>Espacios de trabajo</translation>
+        <translation>Workspaces</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="124"/>
         <source>Manage Account</source>
-        <translation>Administrar cuenta</translation>
+        <translation>Bewerk Account</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="141"/>
         <source>Storage</source>
-        <translation>Almacenamiento</translation>
+        <translation>Opslag</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="170"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="185"/>
         <source>Sign out</source>
-        <translation>Salir</translation>
+        <translation>Uitloggen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="197"/>
         <source>Close account</source>
-        <translation>Cerrar cuenta</translation>
+        <translation>Sluit account</translation>
     </message>
     <message>
         <location filename="../qml/account/MMAccountPage.qml" line="198"/>
         <source>This will delete all your data</source>
-        <translation>Esto borrará todos sus datos</translation>
+        <translation>Dit zal al uw data verwijderen</translation>
     </message>
 </context>
 <context>
@@ -477,27 +477,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="24"/>
         <source>Connect to bluetooth device</source>
-        <translation>Conectado a dispositivo bluetooth</translation>
+        <translation>Connect met een bluetooth apparaat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="48"/>
         <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
-        <translation>Se requiere permiso de Bluetooth para conectarse a receptores externos.  Por favor habilítelo en la configuración del sistema</translation>
+        <translation>Toegang tot Bluetooth is nodig om gebruik te kunnen maken van externe ontvangers. Graag deze activeren in systeem instellingen.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
         <source>Unknown device</source>
-        <translation>Dispositivo desconocido</translation>
+        <translation>Onbekend apparaat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
         <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Es necesario habilitar el Bluetooth para conectar un nuevo receptor GPS</translation>
+        <translation>Het is noodzakelijk om Bluetooth te activeren om te kunnen verbinden met een nieuwe GPS ontvanger.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
         <source>Looking for devices</source>
-        <translation>Buscando dispositivos</translation>
+        <translation>Zoeken naar apparaten</translation>
     </message>
 </context>
 <context>
@@ -518,42 +518,42 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="28"/>
         <source>Connecting to</source>
-        <translation>Conectando a</translation>
+        <translation>Verbinden met</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
         <source>Connecting</source>
-        <translation>Conectando</translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="33"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Verbonden</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="38"/>
         <source>Failed to connect to</source>
-        <translation>No se pudo conectar a</translation>
+        <translation>Mislukt om te verbinden met</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
         <source>You might be asked to pair your device during this process.</source>
-        <translation>Es posible que se le solicite que vincule su dispositivo durante este proceso</translation>
+        <translation>U wordt mogelijk gevraagd om je apparaat te koppelen tijdens dit proces.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
         <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation>Puede cerrar este mensaje, intentaremos conectar repetidamente a su dispositivo.</translation>
+        <translation>U kunt deze melding sluiten, we zullen herhaaldelijk proberen te verbinden met uw apparaat.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
-        <translation>No se pudo conectar al dispositivo especificado. Por favor asegúrese que su dispositivo está encendido y acepta conexiones.</translation>
+        <translation>Het was niet mogelijk om de verbinding met gegeven apparaat op te zetten. Controleer dat uw apparaat aan staat en ermee kan worden verbonden.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Leer meer</translation>
     </message>
 </context>
 <context>
@@ -561,7 +561,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
         <source>Confirm</source>
-        <translation>Confirma</translation>
+        <translation>Bevestig</translation>
     </message>
 </context>
 <context>
@@ -569,17 +569,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="21"/>
         <source>Changelog</source>
-        <translation>Log de cambios</translation>
+        <translation>Registratie van wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="35"/>
         <source>What&apos;s new</source>
-        <translation>Novedades</translation>
+        <translation>Wat is er nieuw</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMChangelogPage.qml" line="36"/>
         <source>See what changed since you were last here.</source>
-        <translation>Vea lo que ha cambiado desde la última vez que estuvo aquí.</translation>
+        <translation>Kijk wat er is gewijzigd sinds het laatste bezoek.</translation>
     </message>
 </context>
 <context>
@@ -587,47 +587,47 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="39"/>
         <source>Do you really wish to close your account?</source>
-        <translation>¿Desea realmente cerrar su cuenta?</translation>
+        <translation>Weet u zeker dat u uw account wil sluiten?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="40"/>
         <source>This action will delete your account. If you are a workspace owner, you need to transfer the ownership to somebody else or close the workspace.</source>
-        <translation>Esta acción eliminará tu cuenta. Si eres el propietario de un espacio de trabajo, debes transferir la propiedad a otra persona o cerrar el espacio de trabajo.</translation>
+        <translation>Deze actie zal uw account verwijderen. Wanneer u de eigenaar bent van een workspace, dan dient u deze over te dragen naar iemand anders of u sluit de workspace.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="61"/>
         <source>Username</source>
-        <translation>Nombre de usuario</translation>
+        <translation>Gebruikersnaam</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="62"/>
         <source>Enter your username</source>
-        <translation>Ingrese su nombre de usuario</translation>
+        <translation>Geef uw gebruikersnaam</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="64"/>
         <source>Usernames do not match.</source>
-        <translation>Nombres de usuario no se corresponden</translation>
+        <translation>Gebruikersnamen komen niet overeen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="70"/>
         <source>Please note</source>
-        <translation>Tenga en cuenta</translation>
+        <translation>Een punt van aandacht</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="71"/>
         <source>Type in your username and click ‘Yes’ to delete your account.</source>
-        <translation>Escriba su nombre de usuario y haga clic en &quot;Sí&quot; para eliminar su cuenta.</translation>
+        <translation>Geef uw gebruikersnaam en druk op &apos;Ja&apos; om uw account te verwijderen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="87"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Nee</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMCloseAccountDialog.qml" line="95"/>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Ja</translation>
     </message>
 </context>
 <context>
@@ -635,12 +635,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/components/MMCodeScanner.qml" line="79"/>
         <source>Scan the QR code</source>
-        <translation>Escanea el código QR</translation>
+        <translation>Scan de QR code</translation>
     </message>
     <message>
         <location filename="../qml/components/MMCodeScanner.qml" line="80"/>
         <source>Please make sure that the lense is clear.</source>
-        <translation>Asegúrese de que la lente esté clara.</translation>
+        <translation>Graag controleren dat de lens schoon is.</translation>
     </message>
 </context>
 <context>
@@ -648,37 +648,37 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="56"/>
         <source>Name your workspace</source>
-        <translation>Nombra tu espacio de trabajo</translation>
+        <translation>Geef uw workspace een naam</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="72"/>
         <source>Workspace is a place to store your projects. Colleagues can be invited to your workspace to collaborate on projects. Let’s start by giving it a name.</source>
-        <translation>El espacio de trabajo es un lugar para almacenar tus proyectos. Se pueden invitar a colegas a su espacio de trabajo para colaborar en proyectos. Empecemos por darle un nombre.</translation>
+        <translation>De workspace is de plaats waar uw projecten worden opgeslagen. Collega&apos;s uitgenodigd tot de workspace kunnen samenwerken aan projecten. Begin met het geven van een naam aan de workspace.</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="92"/>
         <source>Workspace name</source>
-        <translation>Nombre del espacio de trabajo</translation>
+        <translation>Naam van workspace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="93"/>
         <source>Your Workspace</source>
-        <translation>Tu espacio de trabajo</translation>
+        <translation>Uw workspace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="111"/>
         <source>A tip from us</source>
-        <translation>Un consejo nuestro</translation>
+        <translation>Een tip van ons</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="112"/>
         <source>A good candidate for a workspace name is the name of your team or organisation</source>
-        <translation>Un buen candidato para el nombre de un espacio de trabajo es el nombre de su equipo u organización.</translation>
+        <translation>Een goede naam voor een workspace is de naam van uw team of organisatie</translation>
     </message>
     <message>
         <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
         <source>Create workspace</source>
-        <translation>Crear espacio de trabajo</translation>
+        <translation>Aanmaken workspace</translation>
     </message>
 </context>
 <context>
@@ -686,7 +686,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/components/calendar/MMDateTimePicker.qml" line="211"/>
         <source>Time</source>
-        <translation>Hora</translation>
+        <translation>Tijd</translation>
     </message>
 </context>
 <context>
@@ -694,27 +694,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="23"/>
         <source>Discard the changes?</source>
-        <translation>Descartar los cambios?</translation>
+        <translation>Wijzigingen ongedaan maken?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Al hacer clic en &apos;Sí&apos;, se descartan los cambios en la geometría. Si desea guardar los cambios, presione &quot;No&quot; y luego &quot;Hecho&quot; en la barra de herramientas.</translation>
+        <translation>Wanneer u &apos;Ja&apos; selecteert, zullen uw wijzigingen van de geometrie ongedaan worden gemaakt. Wanneer u de wijzigingen wilt opslaan, selecteer dan &apos;Nee&apos; en &apos;Gereed&apos; in de knoppenbalk. </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Al hacer clic en &quot;Sí&quot;, se descarta la nueva geometría y no se guardará ningun elemento. Si desea guardar la geometría, presione &quot;No&quot; y luego &quot;Hecho&quot; en la barra de herramientas.</translation>
+        <translation>Wanneer u &apos;Ja&apos; selecteert, wordt je nieuwe geometrie verwijderd en zal er geen object worden opgeslagen.  Wanneer u de geometrie wilt opslaan, selecteer dan &apos;Nee&apos; en &apos;Gereed&apos; in de knoppenbalk. </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
         <source>Yes, I want to discard</source>
-        <translation>Sí, quiero descartarlo</translation>
+        <translation>Ja, ik wil wijzigingen ongedaan maken</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="38"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -722,24 +722,24 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="24"/>
         <source>Download project</source>
-        <translation>Descargar proyecto</translation>
+        <translation>Download project</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Desea descargar el proyecto
-%1 ?</translation>
+        <translation>Wilt u het project downloaden
+ %1 ?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="26"/>
         <source>Download</source>
-        <translation>Descargar</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="27"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
@@ -747,7 +747,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
         <source>Add feature</source>
-        <translation>Añadir entidad</translation>
+        <translation>Object toevoegen</translation>
     </message>
 </context>
 <context>
@@ -755,12 +755,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
         <source>Search for features...</source>
-        <translation>Búsqueda de entidades...</translation>
+        <translation>Zoek naar objecten...</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
         <source>Add feature</source>
-        <translation>Añadir entidad</translation>
+        <translation>Object toevoegen</translation>
     </message>
 </context>
 <context>
@@ -768,22 +768,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
         <source>Delete feature</source>
-        <translation>Eliminar entidad</translation>
+        <translation>Verwijder object</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
         <source>Are you sure you want to delete this feature?</source>
-        <translation>¿Está seguro de que quiere eliminar este objeto?</translation>
+        <translation>Weet u zeker dat u dit object wilt verwijderen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Yes, I want to delete</source>
-        <translation>Si, quiero eliminarle</translation>
+        <translation>Ja, ik wil verwijderen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -791,17 +791,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="18"/>
         <source>Saving failed</source>
-        <translation>Error al guardar</translation>
+        <translation>Opslaan is niet gelukt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="19"/>
         <source>Failed to save changes. This should not happen normally. Please restart the app and try again — if that does not help, please contact support.</source>
-        <translation>Error al guardar los cambios. Esto no debería pasar normalmente. Por favor, reinicie la aplicación y pruebe otra vez — si eso no lo soluciona, por favor contacte con soporte.</translation>
+        <translation>Wijzigingen niet opgeslagen. Normaal zou dit niet mogen gebeuren. Herstart de app en probeer het nogmaals — wanneer dat niet helpt, neem contact op met support.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Si, lo entiendo</translation>
+        <translation>Ok, ik begrijp het</translation>
     </message>
 </context>
 <context>
@@ -809,7 +809,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormNotAvailable.qml" line="26"/>
         <source>Not available while editing multiple features</source>
-        <translation>No disponible al editar varias entidades</translation>
+        <translation>Niet beschikbaar tijdens het bewerken van meerdere objecten</translation>
     </message>
 </context>
 <context>
@@ -817,33 +817,33 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="109"/>
         <source>New feature</source>
-        <translation>Añadir entidad</translation>
+        <translation>Nieuw object</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="110"/>
         <location filename="../qml/form/MMFormPage.qml" line="214"/>
         <source>Edit feature</source>
-        <translation>Editar entidad</translation>
+        <translation>Bewerk object</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="111"/>
         <source>Edit selected features</source>
-        <translation>Editar entidades seleccionadas</translation>
+        <translation>Bewerk geselecteerde objecten</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="227"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="236"/>
         <source>Edit geometry</source>
-        <translation>Editar geometría</translation>
+        <translation>Geometrie wijzigen</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="450"/>
         <source>Feature could not be saved, please check all required fields</source>
-        <translation>El objeto no se ha podido guardar, por favor compruebe todos los campos requeridos.</translation>
+        <translation>Object kan niet worden opgeslagen, controleer verplichte velden</translation>
     </message>
 </context>
 <context>
@@ -851,27 +851,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
         <source>Photo is missing.</source>
-        <translation>Falta la fotografía.</translation>
+        <translation>Foto ontbreekt.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
         <source>Open Image</source>
-        <translation>Abrir imagen</translation>
+        <translation>Afbeelding Openen</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
         <source>Image files (*.gif *.png *.jpg)</source>
-        <translation>Archivos de imagen (*.gif *.png *.jpg) </translation>
+        <translation>Afbeeldingsbestanden (*.gif *.png *.jpg)</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
         <source>Could not create directory %1.</source>
-        <translation>No se pudo crear el directorio %1.</translation>
+        <translation>Folder %1 niet aangemaakt.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
         <source>Failed to process the image</source>
-        <translation>No se pudo procesar la imagen</translation>
+        <translation>Afbeelding kon niet worden verwerkt</translation>
     </message>
 </context>
 <context>
@@ -879,12 +879,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
         <source> more</source>
-        <translation>más</translation>
+        <translation>meer</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
         <source>Add feature</source>
-        <translation>Añadir entidad</translation>
+        <translation>Object toevoegen</translation>
     </message>
 </context>
 <context>
@@ -892,12 +892,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
         <source>Change link</source>
-        <translation>Cambiar enlace</translation>
+        <translation>Wijzig koppeling</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
         <source>Unlink feature</source>
-        <translation>Desvincular entidad</translation>
+        <translation>Verwijder koppeling naar object</translation>
     </message>
 </context>
 <context>
@@ -905,22 +905,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="21"/>
         <source>Unsaved changes</source>
-        <translation>Cambios no guardados</translation>
+        <translation>Niet opgeslagen wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="22"/>
         <source>Do you want to save the changes?</source>
-        <translation>¿Desea guardar los cambios?</translation>
+        <translation>Wilt u de wijzigingen opslaan?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="23"/>
         <source>Yes, I want to save</source>
-        <translation>Si, quiero guardar</translation>
+        <translation>Ja, ik wil wijzigingen opslaan</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -928,27 +928,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
         <source>GPS info</source>
-        <translation>Información de GPS</translation>
+        <translation>GPS info</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="63"/>
         <source>Source</source>
-        <translation>Fuente</translation>
+        <translation>Bron</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
         <source>No receiver</source>
-        <translation>Sin receptor</translation>
+        <translation>Geen ontvanger</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="76"/>
         <source>Status</source>
-        <translation>Estado</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="93"/>
         <source>Longitude</source>
-        <translation>Longitud</translation>
+        <translation>Lengtegraad</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="96"/>
@@ -968,12 +968,12 @@ No se añadirá al proyecto.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>N.V.T.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="112"/>
         <source>Latitude</source>
-        <translation>Latitud</translation>
+        <translation>Breedtegraad</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="131"/>
@@ -988,27 +988,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="161"/>
         <source>Horizontal accuracy</source>
-        <translation>Precisión horizontal</translation>
+        <translation>Horizontale nauwkeurigheid</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="176"/>
         <source>Vertical accuracy</source>
-        <translation>Precisión vertical</translation>
+        <translation>Verticale nauwkeurigheid</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="191"/>
         <source>Altitude</source>
-        <translation>Altitud</translation>
+        <translation>Hoogte</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="205"/>
         <source>Fix quality</source>
-        <translation>Calidad del posicionamiento</translation>
+        <translation>Kwaliteit positiebepaling</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
         <source>Satellites (in use/view)</source>
-        <translation>Satélites (en uso / vista)</translation>
+        <translation>Satellieten (n gebruik/zicht)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="238"/>
@@ -1028,27 +1028,27 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="289"/>
         <source>Speed</source>
-        <translation>Velocidad</translation>
+        <translation>Snelheid</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="304"/>
         <source>Last Fix</source>
-        <translation>Último arreglo</translation>
+        <translation>Laatste fixatie</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
         <source>GPS antenna height</source>
-        <translation>Altura de la antena GPS</translation>
+        <translation>Lengte GPS antenne</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
         <source>Not set</source>
-        <translation>No establecido</translation>
+        <translation>Niet gegeven</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>Manage GPS receivers</source>
-        <translation>Gestionar receptores GPS</translation>
+        <translation>GPS ontvangers beheren</translation>
     </message>
 </context>
 <context>
@@ -1056,7 +1056,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
         <source>Search engine (Google, ...)</source>
-        <translation>Motor de búsqueda (Google, ...)</translation>
+        <translation>Zoekmachine (Google, ...)</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
@@ -1066,37 +1066,37 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
         <source>Mouth</source>
-        <translation>Entrada</translation>
+        <translation>Mondeling</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>QGIS website</source>
-        <translation>Sitio web de QGIS</translation>
+        <translation>QGIS website</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Application store</source>
-        <translation>Tienda de aplicaciones</translation>
+        <translation>Application store</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
         <source>Teacher</source>
-        <translation>Maestro</translation>
+        <translation>Onderwijs</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
         <source>Conference</source>
-        <translation>Conferencia</translation>
+        <translation>Conferentie</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="39"/>
         <source>Social media</source>
-        <translation>Red Social</translation>
+        <translation>Social media</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="42"/>
         <source>Other</source>
-        <translation>Otros</translation>
+        <translation>Anders</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
@@ -1131,22 +1131,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="173"/>
         <source>Continue</source>
-        <translation>Continuar</translation>
+        <translation>Doorgaan</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
         <source>Where did you hear about us?</source>
-        <translation>¿Dónde escuchaste de nosotros?</translation>
+        <translation>Waar heb je over ons gehoord?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
         <source>Please specify the source</source>
-        <translation>Por favor, especifique la fuente</translation>
+        <translation>Wilt u de bron vermelden</translation>
     </message>
     <message>
         <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
         <source>Source</source>
-        <translation>Fuente</translation>
+        <translation>Bron</translation>
     </message>
 </context>
 <context>
@@ -1154,32 +1154,32 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
         <source>Visible on map</source>
-        <translation>Visible en mapa</translation>
+        <translation>Zichtbaar op de kaart</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
         <source>Legend</source>
-        <translation>Leyenda</translation>
+        <translation>Legenda</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
         <source>Attribution</source>
-        <translation>Atribución</translation>
+        <translation>Toekenning</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="240"/>
         <source>Features</source>
-        <translation>Entidades</translation>
+        <translation>Objecten</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayerDetailPage.qml" line="255"/>
         <source>Layer info</source>
-        <translation>Información de capa</translation>
+        <translation>Kaartlaag info</translation>
     </message>
 </context>
 <context>
@@ -1187,12 +1187,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/layers/MMLayersListPage.qml" line="21"/>
         <source>Layers</source>
-        <translation>Capas</translation>
+        <translation>Kaartlagen</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Zoek</translation>
     </message>
 </context>
 <context>
@@ -1200,7 +1200,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/layers/MMLayersListSearchPage.qml" line="21"/>
         <source>Search layers</source>
-        <translation>Buscar capas</translation>
+        <translation>Zoek in kaartlagen</translation>
     </message>
 </context>
 <context>
@@ -1208,12 +1208,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Zoek</translation>
     </message>
     <message>
         <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
-        <translation>Confirmar selección</translation>
+        <translation>Bevestig selectie</translation>
     </message>
 </context>
 <context>
@@ -1221,22 +1221,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="18"/>
         <source>(no-entries)</source>
-        <translation>{sin entradas}</translation>
+        <translation>(niets ingegeven)</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="25"/>
         <source>Diagnostic log</source>
-        <translation>Registro de diagnóstico</translation>
+        <translation>Diagnostisch logboek</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="65"/>
         <source>Sending...</source>
-        <translation>Enviando...</translation>
+        <translation>Bezig met verzenden...</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMLogPage.qml" line="65"/>
         <source>Send to developers</source>
-        <translation>Enviar a los Desarrolladores</translation>
+        <translation>Verstuur naar ontwikkelaars</translation>
     </message>
 </context>
 <context>
@@ -1244,52 +1244,52 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="38"/>
         <source>Log in</source>
-        <translation>Ingresar</translation>
+        <translation>Inloggen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="87"/>
         <source>Email or username</source>
-        <translation>Email o nombre de usuario</translation>
+        <translation>Email of gebruikersnaam</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="96"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Wachtwoord</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="102"/>
         <source>Forgot password?</source>
-        <translation>¿Has olvidado tu contraseña?</translation>
+        <translation>Wachtwoord vergeten?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="113"/>
         <source>Sign in</source>
-        <translation>Iniciar sesión</translation>
+        <translation>Inloggen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
         <source>Don&apos;t have an account?</source>
-        <translation>¿No tienes una cuenta?</translation>
+        <translation>Heeft u geen account?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="132"/>
         <source>Sign up</source>
-        <translation>Registrarse</translation>
+        <translation>Registreren</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="183"/>
         <source>Change server</source>
-        <translation>Cambiar servidor</translation>
+        <translation>Verander server</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="202"/>
         <source>Server address</source>
-        <translation>Dirección del servidor</translation>
+        <translation>Server adres</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="218"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Bevestig</translation>
     </message>
 </context>
 <context>
@@ -1297,107 +1297,107 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="117"/>
         <source>Mark the geometry on the map and click record</source>
-        <translation>Marque la geometría en el mapa y haga clic en grabar</translation>
+        <translation>Wijs de geometrie aan op de kaart en selecteer opname</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="146"/>
         <source>Create line to split the selected feature</source>
-        <translation>Crear línea para dividir el objeto seleccionada</translation>
+        <translation>Maak een lijn om het geselecteerd object op te splitsen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="163"/>
         <source>Add points to measure distance, close the shape to measure area</source>
-        <translation>Agregue puntos para medir la distancia, cierre la forma para medir el área</translation>
+        <translation>Voeg punten toe om de afstand te meten, sluit tot vlak om de oppervlakte te berekenen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="170"/>
         <source>Tap on features to add or remove from the selection</source>
-        <translation>Toque las entidades para agregarlas o eliminarlas de la selección.</translation>
+        <translation>Raak objecten aan om deze aan selectie toe te voegen of te verwijderen </translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="570"/>
         <source>streaming</source>
-        <translation>transmisión</translation>
+        <translation>streaming</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="646"/>
         <source>Connecting to %1</source>
-        <translation>Conectando a %1</translation>
+        <translation>Verbinden met %1</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="660"/>
         <source>Connected, no position</source>
-        <translation>Conectado, sin posición</translation>
+        <translation>Verbonden, geen locatie</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="664"/>
         <source>Unknown accuracy</source>
-        <translation>Precisión desconocida</translation>
+        <translation>Nauwkeurigheid onbekend</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="806"/>
         <source>GPS currently unavailable</source>
-        <translation>GNSS no disponible actualmente.</translation>
+        <translation>GPS is momenteel niet beschikbaar</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="830"/>
         <source>Choose Active Layer</source>
-        <translation>Seleccionar capa activa</translation>
+        <translation>Kies actieve laag</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="864"/>
         <source>Could not find any editable layers in the project.</source>
-        <translation>No se pudieron encontrar capas editables en el proyecto.</translation>
+        <translation>Kon geen bewerkbare lagen vinden in het project.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="865"/>
         <source>See how to enable digitizing in your project.</source>
-        <translation>Vea cómo habilitar la digitalización en su proyecto.</translation>
+        <translation>Bekijk hoe het digitaliseren beschikbaar wordt in uw project.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="891"/>
         <source>More options</source>
-        <translation>Más opciones</translation>
+        <translation>Meer opties</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="896"/>
         <source>Split geometry</source>
-        <translation>Separar geometría</translation>
+        <translation>Opsplitsen geometrie</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="908"/>
         <source>Redraw geometry</source>
-        <translation>Redibujar geometría</translation>
+        <translation>Geometrie opnieuw tekenen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="920"/>
         <source>Streaming mode</source>
-        <translation>Modo de transmisión</translation>
+        <translation>Streaming mode</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="926"/>
         <source>Active</source>
-        <translation>Activo</translation>
+        <translation>Actief</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1101"/>
         <source>Splitting done successfully</source>
-        <translation>División realizada con éxito</translation>
+        <translation>Succesvol opgesplitst</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1192"/>
         <source>Select some point to start editing the geometry</source>
-        <translation>Seleccione algún punto para comenzar a editar la geometría</translation>
+        <translation>Selecteer een punt om de geometrie te bewerken</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1205"/>
         <source>Record new geometry for the feature</source>
-        <translation>Grabar nueva geometría para el elemento</translation>
+        <translation>Nieuwe geometrie registreren voor object</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1304"/>
         <source>GPS currently unavailable.</source>
-        <translation>GNSS no disponible actualmente.</translation>
+        <translation>GPS is momenteel niet beschikbaar.</translation>
     </message>
 </context>
 <context>
@@ -1405,17 +1405,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="20"/>
         <source>Map Themes</source>
-        <translation>Temas de mapa</translation>
+        <translation>Kaartthema&apos;s</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="25"/>
         <source>There are currently no map themes</source>
-        <translation>Actualmente no hay temas de mapas</translation>
+        <translation>Er zijn momenteel geen kaartthema&apos;s</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapThemeDrawer.qml" line="27"/>
         <source>Learn more about %1how to setup themes%2.</source>
-        <translation>Obtenga más información sobre %1cómo configurar temas%2.</translation>
+        <translation>Leer meer over %1het aanmaken van thema&apos;s%2.</translation>
     </message>
 </context>
 <context>
@@ -1423,7 +1423,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/map/components/MMMeasureCrosshair.qml" line="93"/>
         <source>Close shape</source>
-        <translation>Cerrar forma</translation>
+        <translation>Sluit lijn tot vlak</translation>
     </message>
 </context>
 <context>
@@ -1431,47 +1431,47 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="54"/>
         <source>Measure</source>
-        <translation>Medidad</translation>
+        <translation>Maat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
         <source>Repeat</source>
-        <translation>Repetir</translation>
+        <translation>Herhaal</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
         <source>Perimeter</source>
-        <translation>Perímetro</translation>
+        <translation>Omtrek</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
         <source>Length</source>
-        <translation>Longitud</translation>
+        <translation>Lengte</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="92"/>
         <source>Area</source>
-        <translation>Área</translation>
+        <translation>Oppervlakte</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
         <source>Close shape</source>
-        <translation>Cerrar forma</translation>
+        <translation>Sluit lijn tot vlak</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
         <source>Add point</source>
-        <translation>Agregar punto</translation>
+        <translation>Punt toevoegen</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMMeasureDrawer.qml" line="112"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Gereed</translation>
     </message>
 </context>
 <context>
@@ -1479,7 +1479,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/components/MMMessage.qml" line="30"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Leer meer</translation>
     </message>
 </context>
 <context>
@@ -1487,22 +1487,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="20"/>
         <source>Upload project?</source>
-        <translation>¿Subir proyecto?</translation>
+        <translation>Project uploaden?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="21"/>
         <source>This project is currently not uploaded on cloud. Upload it in order to activate synchronization and collaboration.</source>
-        <translation>Este proyecto actualmente no está subido a la nube. Súbelo para activar la sincronización y la colaboración.</translation>
+        <translation>Dit project is momenteel niet aanwezig in de cloud. Upload het project om te kunnen synchroniseren en samenwerken.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="22"/>
         <source>Yes, I want to upload it</source>
-        <translation>Sí, quiero subirlo</translation>
+        <translation>Ja, ik wil deze uploaden</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMigrateToMerginDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -1510,22 +1510,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="20"/>
         <source>Sign in to your account</source>
-        <translation>Inicie sesión en su cuenta</translation>
+        <translation>Log in op uw account</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="21"/>
         <source>You need to be signed in to your account in order to synchronise the project.</source>
-        <translation>Debe iniciar sesión en su cuenta para poder sincronizar el proyecto.</translation>
+        <translation>Je moet ingelogd zijn op uw account om een project te synchroniseren.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="22"/>
         <source>Yes, I want to sign in</source>
-        <translation>Sí, quiero registrarme</translation>
+        <translation>Ja, ik wil inloggen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMMissingAuthDialog.qml" line="23"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -1533,17 +1533,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="18"/>
         <source>No rights to access the project</source>
-        <translation>Sin derechos de acceso al proyecto.</translation>
+        <translation>Geen toegangsrechten voor het project</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="19"/>
         <source>You are not allowed to synchronise your changes in this project. Contact the project owner to assign you the correct permission. If you are the project owner, log in to the dashboard.</source>
-        <translation>No tienes permiso para sincronizar tus cambios en este proyecto. Ponte en contacto con el propietario del proyecto para que te asigne el permiso correcto. Si eres el propietario del proyecto, inicia sesión en el panel de control.</translation>
+        <translation>U mag uw wijzigingen niet synchroniseren. Neem contact op met de eigenaar van het project voor het krijgen van rechten. Wanneer jij de project eigenaar bent, log in op het dashboard.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Si, lo entiendo</translation>
+        <translation>Ok, ik begrijp het</translation>
     </message>
 </context>
 <context>
@@ -1551,22 +1551,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
         <source>Your server will soon be out of date</source>
-        <translation>Su servidor pronto quedará obsoleto</translation>
+        <translation>Uw server versie zal binnenkort te oud zijn</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
         <source>Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.</source>
-        <translation>Comuníquese con el administrador de su servidor para actualizar su servidor a la última versión. Es posible que las versiones posteriores de nuestra aplicación móvil no sean compatibles con la versión actual de su servidor.</translation>
+        <translation>Neemt u a.u.b. contact op met uw server administrator om deze te upgrade naar de laatste versie. Volgende versies van onze mobiele app kunnen wellicht niet meer compatible zijn met u huidige server versie.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="28"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Leer meer</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="30"/>
         <source>Ignore</source>
-        <translation>Ignorar</translation>
+        <translation>Negeer</translation>
     </message>
 </context>
 <context>
@@ -1574,12 +1574,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="56"/>
         <source>Take a picture</source>
-        <translation>Toma una foto</translation>
+        <translation>Een foto nemen</translation>
     </message>
     <message>
         <location filename="../qml/form/components/photo/MMPhotoAttachment.qml" line="95"/>
         <source>From gallery</source>
-        <translation>De la galería</translation>
+        <translation>Vanuit gallerij</translation>
     </message>
 </context>
 <context>
@@ -1587,42 +1587,42 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="82"/>
         <source>Unknown device</source>
-        <translation>Dispositivo desconocido</translation>
+        <translation>Onbekend apparaat</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
         <source>Internal receivers</source>
-        <translation>Receptores internos</translation>
+        <translation>Interne ontvangers</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
         <source>External receivers</source>
-        <translation>Receptores externos</translation>
+        <translation>Externe ontvangers</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="135"/>
         <source>Connect new receiver</source>
-        <translation>Conectar nuevo receptor</translation>
+        <translation>Verbind met nieuwe ontvanger</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="146"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
-        <translation>No se admite la conexión a receptores externos a través de Bluetooth</translation>
+        <translation>Het verbinden met externe ontvangers via bluetooth is niet ondersteund</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
-        <translation>Esta función no está disponible en iOS. Es posible que el proveedor de tu hardware te proporcione una aplicación personalizada que se conecta al receptor y establece la posición. La aplicación seguirá pensando que es el GPS interno de tu teléfono o tableta.</translation>
+        <translation>Deze functie is niet beschikbaar in iOS. Uw hardware leverancier kan een custom app aanbieden om de verbinding op te zetten met de ontvanger en de locatiebepaling. De app gaat er dan nog steeds vanuit dat de interne GPS ontvanger wordt gebruikt van je telefoon/tablet.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
         <source>Internal</source>
-        <translation>Interno</translation>
+        <translation>Intern</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
         <source>Manage GPS receivers</source>
-        <translation>Gestionar receptores GPS</translation>
+        <translation>GPS ontvangers beheren</translation>
     </message>
 </context>
 <context>
@@ -1630,37 +1630,37 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="23"/>
         <source>Position tracking</source>
-        <translation>Seguimiento de posición</translation>
+        <translation>Positie tracking</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>Track your routes even with your screen off. Your records are stored in a separate layer. Finalised tracks are synced like any other feature.</source>
-        <translation>Sigue tus rutas incluso con la pantalla apagada. Sus registros se almacenan en una capa separada. Las pistas finalizadas se sincronizan como cualquier otra función.</translation>
+        <translation>Traceer uw routes zelfs wanneer het scherm uit staat. Uw tracks worden opgeslagen in een aparte laag. Tracks die zijn afgerond worden gesynchroniseerd net als andere geregistreerde objecten.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
         <source>The app can track your position on this project.</source>
-        <translation>La aplicación puede rastrear tu posición en este proyecto.</translation>
+        <translation>De app kan door uw positie te volgen een track aanmaken met dit project.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Stop tracking</source>
-        <translation>Detener seguimiento</translation>
+        <translation>Stop met aanmaken van track</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Start tracking</source>
-        <translation>Comenzar seguimiento</translation>
+        <translation>Start met aanmaken van track</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="43"/>
         <source>Tracked distance</source>
-        <translation>Distancia registrada</translation>
+        <translation>Afstand aangemaakte track</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="63"/>
         <source>Tracking time</source>
-        <translation>Tiempo registrado</translation>
+        <translation>Tijd aangemaakte track</translation>
     </message>
 </context>
 <context>
@@ -1668,22 +1668,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="179"/>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation>Wijzigen</translation>
     </message>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="190"/>
         <source>Open form</source>
-        <translation>Abrir formulario</translation>
+        <translation>Open formulier</translation>
     </message>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="201"/>
         <source>Select more</source>
-        <translation>Mas selecciones</translation>
+        <translation>Selecteer meer</translation>
     </message>
     <message>
         <location filename="../qml/form/MMPreviewDrawer.qml" line="213"/>
         <source>Stake out</source>
-        <translation>Replantear</translation>
+        <translation>Punt uitzetten</translation>
     </message>
 </context>
 <context>
@@ -1691,17 +1691,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="21"/>
         <source>PROJ Error</source>
-        <translation>Error en PROJ</translation>
+        <translation>Foutmelding PROJ </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="24"/>
         <source>There was an issue with loading your PROJ files. Please refer to our documentation to learn how to set up PROJ.</source>
-        <translation>Hubo un problema al cargar tus archivos PROJ. Consulte nuestra documentación para aprender cómo configurar PROJ.</translation>
+        <translation>Er was een probleem met het laden van uw PROJ bestanden. In onze documentatie kunt u vinden hoe PROJ op te zetten.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjErrorDialog.qml" line="27"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Leer meer</translation>
     </message>
 </context>
 <context>
@@ -1710,24 +1710,24 @@ No se añadirá al proyecto.</translation>
         <location filename="../qml/project/MMProjectController.qml" line="204"/>
         <location filename="../qml/project/MMProjectController.qml" line="377"/>
         <source>Home</source>
-        <translation>Inicio</translation>
+        <translation>Thuis</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="207"/>
         <location filename="../qml/project/MMProjectController.qml" line="386"/>
         <source>Projects</source>
-        <translation>Proyectos</translation>
+        <translation>Projecten</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="209"/>
         <location filename="../qml/project/MMProjectController.qml" line="395"/>
         <source>Explore</source>
-        <translation>Explorar</translation>
+        <translation>Verkennen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
-        <translation>Servidor no compatible, comuníquese con el administrador de su servidor.</translation>
+        <translation>Server wordt niet ondersteund, neem contact op met uw server administrator.</translation>
     </message>
 </context>
 <context>
@@ -1735,47 +1735,47 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
         <source>Synchronising project changes</source>
-        <translation>Sincronización de cambios del proyecto</translation>
+        <translation>Synchroniseren van wijzigingen project</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
         <source>Please don&apos;t close the app.</source>
-        <translation>Por favor, no cierres la aplicación.</translation>
+        <translation>Wilt u de app niet afsluiten.</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
         <source>Stop</source>
-        <translation>Detener</translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
         <source>More options</source>
-        <translation>Más opciones</translation>
+        <translation>Meer opties</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
         <source>Download</source>
-        <translation>Descargar</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
         <source>Synchronise project</source>
-        <translation>Sincronizar proyecto</translation>
+        <translation>Synchroniseer project</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
         <source>Local changes</source>
-        <translation>Cambios locales</translation>
+        <translation>Lokale wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
         <source>Remove from device</source>
-        <translation>Eliminar del dispositivo</translation>
+        <translation>Verwijder van appraat</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
         <source>Upload</source>
-        <translation>Subir</translation>
+        <translation>Upload</translation>
     </message>
 </context>
 <context>
@@ -1783,37 +1783,37 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="41"/>
         <source>Search for projects...</source>
-        <translation>Búsqueda de proyectos...</translation>
+        <translation>Zoek naar projecten...</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="63"/>
         <source>Your attention is required</source>
-        <translation>Se requiere su atención</translation>
+        <translation>Uw aandacht is nodig</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="64"/>
         <source>Click here to access the dashboard</source>
-        <translation>Haga clic aquí para acceder al panel de control</translation>
+        <translation>Klik hier om het dashboard te benaderen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="84"/>
         <source>No workspace detected</source>
-        <translation>Espacio de trabajo no detectado</translation>
+        <translation>Geen workspace gevonden</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="85"/>
         <source>Create your workspace by clicking here</source>
-        <translation>Crea tu espacio de trabajo haciendo clic aquí</translation>
+        <translation>Maak uw workspace aan door hier te klikken</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Currently open</source>
-        <translation>Actualmente abierto</translation>
+        <translation>Momenteel open</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectHomeTab.qml" line="129"/>
         <source>Downloaded projects</source>
-        <translation>Proyectos descargados</translation>
+        <translation>Projecten gedownload</translation>
     </message>
 </context>
 <context>
@@ -1821,12 +1821,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="32"/>
         <source>Project issues</source>
-        <translation>Errores del Proyecto</translation>
+        <translation>Project problemen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectIssuesPage.qml" line="83"/>
         <source>QGIS log</source>
-        <translation>Log de QGIS</translation>
+        <translation>QGIS log</translation>
     </message>
 </context>
 <context>
@@ -1834,17 +1834,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="24"/>
         <source>You have reached a maximum number of projects</source>
-        <translation>Has alcanzado un número máximo de proyectos.</translation>
+        <translation>U heeft het maximaal aantal projecten bereikt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="26"/>
         <source>Manage account</source>
-        <translation>Administrar cuenta</translation>
+        <translation>Beheer account</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLimitDialog.qml" line="40"/>
         <source>Maximum number of projects</source>
-        <translation>Número máximo de proyectos</translation>
+        <translation>Maximum aantal projecten</translation>
     </message>
 </context>
 <context>
@@ -1852,42 +1852,42 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="149"/>
         <source>The project can not be opened</source>
-        <translation>El proyecto no puede ser abierto</translation>
+        <translation>Het project kan niet worden geopend</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectList.qml" line="162"/>
         <source>Could not synchronise project, please make sure you are logged in and have sufficient rights.</source>
-        <translation>No se pudo sincronizar el proyecto, asegúrese de haber iniciado sesión y tener los derechos suficientes.</translation>
+        <translation>Kon het project niet synchroniseren, zorg ervoor dat u bent ingelogd en voldoende rechten heeft.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="212"/>
+        <location filename="../qml/project/MMProjectList.qml" line="214"/>
         <source>Create project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Maak project aan</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="237"/>
+        <location filename="../qml/project/MMProjectList.qml" line="239"/>
         <source>Let&apos;s get started</source>
-        <translation>Empecemos</translation>
+        <translation>Laten we beginnen</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="240"/>
         <source>First step is to create your brand new project.</source>
-        <translation>El primer paso es crear su nuevo proyecto.</translation>
+        <translation>De eerste stap is het aanmaken van een nieuw project.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>Unable to get the list of projects.</source>
-        <translation>No se puede obtener la lista de proyectos.</translation>
+        <translation>Kan de lijst met projecten niet ophalen.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>No projects found</source>
-        <translation>No se encontraron proyectos</translation>
+        <translation>Geen projecten gevonden</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="275"/>
+        <location filename="../qml/project/MMProjectList.qml" line="277"/>
         <source>Retry</source>
-        <translation>Reintentar</translation>
+        <translation>Probeer opnieuw</translation>
     </message>
 </context>
 <context>
@@ -1895,17 +1895,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="20"/>
         <source>Failed to open the project</source>
-        <translation>No se pudo abrir el proyecto</translation>
+        <translation>Openen project mislukt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="23"/>
         <source>Unfortunately, your project could not be opened, please refer to our documentation to understand common problems.</source>
-        <translation>Desafortunadamente, su proyecto no se pudo abrir; consulte nuestra documentación para comprender los problemas comunes.</translation>
+        <translation>Helaas, uw project kon niet worden geopend. Wilt u onze documentatie raadplegen om veel voorkomende problemen te begrijpen. </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProjectLoadErrorDialog.qml" line="26"/>
         <source>Learn more</source>
-        <translation>Aprende más</translation>
+        <translation>Leer meer</translation>
     </message>
 </context>
 <context>
@@ -1913,7 +1913,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectLoadingPage.qml" line="33"/>
         <source>Opening project ...</source>
-        <translation>Abriendo proyecto...</translation>
+        <translation>Project aan het openen ...</translation>
     </message>
 </context>
 <context>
@@ -1921,7 +1921,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectServerTab.qml" line="38"/>
         <source>Search for projects...</source>
-        <translation>Búsqueda de proyectos...</translation>
+        <translation>Zoek naar projecten...</translation>
     </message>
 </context>
 <context>
@@ -1929,17 +1929,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="94"/>
         <source>Added</source>
-        <translation>Agregado</translation>
+        <translation>Toegevoegd</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="95"/>
         <source>Removed</source>
-        <translation>Eliminado</translation>
+        <translation>Verwijderd</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectStatusItem.qml" line="96"/>
         <source>Edited</source>
-        <translation>Editado</translation>
+        <translation>Bewerkt</translation>
     </message>
 </context>
 <context>
@@ -1947,22 +1947,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Your local changes</source>
-        <translation>Sus cambios locales</translation>
+        <translation>Uw lokale wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="27"/>
         <source>Project Status</source>
-        <translation>Estado del proyecto</translation>
+        <translation>Project status</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="43"/>
         <source>There are currently no local changes</source>
-        <translation>Actualmente no hay cambios locales.</translation>
+        <translation>Er zijn momenteel geen lokale wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectStatusPage.qml" line="44"/>
         <source>Once you have made some changes, they will appear here.</source>
-        <translation>Una vez que haya realizado algunos cambios, aparecerán aquí.</translation>
+        <translation>Wanneer u enkele wijzigingen heeft gemaakt, zullen deze hier verschijnen.</translation>
     </message>
 </context>
 <context>
@@ -1970,32 +1970,32 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
         <source>Create Project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Maak project aan</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
         <source>Project name</source>
-        <translation>Nombre del proyecto</translation>
+        <translation>Projectnaam</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="54"/>
         <source>Fields</source>
-        <translation>Campos</translation>
+        <translation>Velden</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="99"/>
         <source>Add field</source>
-        <translation>Añadir campo</translation>
+        <translation>Voeg veld toe</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
         <source>Create project</source>
-        <translation>Crear proyecto</translation>
+        <translation>Maak project aan</translation>
     </message>
     <message>
         <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
         <source>Empty project name</source>
-        <translation>Nombre del proyecto vacío</translation>
+        <translation>Lege projectnaam</translation>
     </message>
 </context>
 <context>
@@ -2003,22 +2003,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="22"/>
         <source>Remove receiver</source>
-        <translation>Eliminar receptor</translation>
+        <translation>Verwijder ontvanger</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="23"/>
         <source>Do you want to remove receiver from the list of recent receivers?</source>
-        <translation>¿Quiere eliminar al receptor de la lista de receptores recientes?</translation>
+        <translation>Wilt u de ontvanger verwijderen uit de lijst van recente ontvangers?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="24"/>
         <source>Yes, I want to remove</source>
-        <translation>Sí, quiero eliminar</translation>
+        <translation>Ja, ik wil verwijderen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="25"/>
         <source>No, thanks</source>
-        <translation>No, gracias</translation>
+        <translation>Nee, bedankt</translation>
     </message>
 </context>
 <context>
@@ -2026,28 +2026,28 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
         <source>Remove</source>
-        <translation>Quitar</translation>
+        <translation>Verwijder</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
         <source>Release</source>
-        <translation>Lanzamiento</translation>
+        <translation>Vrijgeven</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Voeg toe</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
         <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
         <source>Record</source>
-        <translation>Grabar</translation>
+        <translation>Opnemen</translation>
     </message>
 </context>
 <context>
@@ -2055,22 +2055,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="23"/>
         <source>Delete photo?</source>
-        <translation>¿Eliminar foto?</translation>
+        <translation>Foto verwijderen?</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation>¿Quieres eliminar o desvincular la foto? Al eliminarla se elimina la foto de su proyecto por completo, mientras que al desvincularla se mantiene la foto en su proyecto pero la elimina de este objeto.</translation>
+        <translation>Wilt u de foto verwijderen of ontkoppelen? Bij verwijderen wordt de foto geheel uit uw project verwijderd, bij ontkoppelen behoudt u de foto maar is deze niet meer gekoppeld aan dit specifieke object.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
         <source>Delete photo</source>
-        <translation>Eliminar foto</translation>
+        <translation>Foto verwijderen</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
         <source>Unlink photo</source>
-        <translation>Desvincular foto</translation>
+        <translation>Koppeling naar foto verwijderen</translation>
     </message>
 </context>
 <context>
@@ -2078,24 +2078,24 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="24"/>
         <source>Remove project</source>
-        <translation>Eliminar proyecto</translation>
+        <translation>Verwijder project</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="25"/>
         <source>Any unsynchronised changes will be lost in project 
  %1</source>
-        <translation>Cualquier cambio no sincronizado se perderá en el proyecto
+        <translation>Niet gesynchroniseerde wijzigingen zullen verloren gaan in project
 %1</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="26"/>
         <source>Remove</source>
-        <translation>Quitar</translation>
+        <translation>Verwijder</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
@@ -2103,22 +2103,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
         <source>Select features</source>
-        <translation>Seleccionar entidades</translation>
+        <translation>Selecteer objecten</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="63"/>
         <source>%n Feature(s) selected</source>
-        <translation><numerusform>%n Entidad(es) seleccionada(s)</numerusform><numerusform>%n Entidad(es) seleccionada(s)</numerusform><numerusform>%n Entidad(es) seleccionada(s)</numerusform></translation>
+        <translation><numerusform>%n Object(en) geselecteerd</numerusform><numerusform>%n Object(en) geselecteerd</numerusform></translation>
     </message>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
         <source>on layer %1</source>
-        <translation>en la capa %1</translation>
+        <translation>over laag %1</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="88"/>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation>Bewerk</translation>
     </message>
 </context>
 <context>
@@ -2126,7 +2126,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
         <source>Changelog could not be loaded</source>
-        <translation>No se pudo cargar el registro de cambios</translation>
+        <translation>De log van wijzigingen kon niet worden geladen</translation>
     </message>
 </context>
 <context>
@@ -2134,7 +2134,7 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/components/MMSettingsInput.qml" line="67"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Bevestig</translation>
     </message>
 </context>
 <context>
@@ -2143,12 +2143,12 @@ No se añadirá al proyecto.</translation>
         <location filename="../qml/settings/MMSettingsPage.qml" line="33"/>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Time elapsed</source>
-        <translation>Tiempo transcurrido</translation>
+        <translation>Tijd verstreken</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="34"/>
         <source>Distance traveled</source>
-        <translation>Distancia recorrida</translation>
+        <translation>Afstand afgelegd</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="52"/>
@@ -2158,147 +2158,147 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
         <source>GPS accuracy threshold</source>
-        <translation>Umbral de precisión del GPS</translation>
+        <translation>GPS nauwkeurigheidsmarge</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
         <source>Determines when the accuracy indicator turns yellow</source>
-        <translation>Determina cuándo el indicador de precisión se vuelve amarillo.</translation>
+        <translation>Bepaald wanneer de indicator voor nauwkeurigheid geel wordt</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold, in meters</source>
-        <translation>Umbral de precisión del GPS, en metros</translation>
+        <translation>GPS nauwkeurigheidsmarge in meters</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
         <source>Manage GPS receivers</source>
-        <translation>Gestionar receptores GPS</translation>
+        <translation>GPS ontvangers beheren</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>GPS antenna height</source>
-        <translation>Altura de la antena GPS</translation>
+        <translation>Lengte GPS antenne</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
-        <translation>Incluye altura del poste y altura de la antena del receptor GPS.</translation>
+        <translation>Inclusief stokhoogte en lengte van de GPS ontvanger antenne</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
         <source>GPS antenna height, in meters</source>
-        <translation>Altura de la antena GPS, en metros</translation>
+        <translation>Lengte GPS antenne in meters</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
         <source>Streaming mode</source>
-        <translation>Modo de transmisión</translation>
+        <translation>Streaming mode</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="114"/>
         <source>Interval threshold type</source>
-        <translation>Tipo de umbral de intervalo</translation>
+        <translation>Type interval marge</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="115"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Elige un tipo de umbral para el modo de streaming</translation>
+        <translation>Kies een type van interval marge voor streaming mode</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Distance Traveled</source>
-        <translation>Distancia recorrida</translation>
+        <translation>Afstand afgelegd</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="132"/>
         <source>Threshold interval</source>
-        <translation>Intervalo umbral</translation>
+        <translation>Interval marge</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>El modo Streaming agregará un punto al objeto en cada intervalo.</translation>
+        <translation>Tijdens streaming mode zal er een punt worden toegevoegd bij elke interval</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in meters</source>
-        <translation>Intervalo umbral, en metros</translation>
+        <translation>Interval marge in meters</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Intervalo umbral, en segundos</translation>
+        <translation>Interval marge in seconden</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="146"/>
         <source>Recording</source>
-        <translation>Grabando</translation>
+        <translation>Opnemen</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
         <source>Reuse last entered value</source>
-        <translation>Reusar último valor ingresado</translation>
+        <translation>Gebruik opnieuw laatst ingegeven waarde </translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
-        <translation>Cada campo ofrece una opción para reutilizar su valor en el siguiente objeto</translation>
+        <translation>Elk veld geeft een optie om de waarde opnieuw te gebruiken voor de volgende registratie</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Automatically sync changes</source>
-        <translation>Sincronizar cambios automáticamente</translation>
+        <translation>Automatisch wijzigingen synchroniseren</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
         <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Cada vez que guardes cambios, la aplicación se sincronizará automáticamente</translation>
+        <translation>Elke keer wanneer je wijzigingen opslaat, zal de app automatisch synchroniseren</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Auto-lock position</source>
-        <translation>Posición de bloqueo automático</translation>
+        <translation>Auto-lock positie</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
         <source>Each time you start recording, the app centers to GPS</source>
-        <translation>Cada vez que comienzas a grabar, la aplicación se centra en el GPS</translation>
+        <translation>Wanneer je begint met registreren, zal de app centreren op je GPS positie </translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>General</source>
-        <translation>General</translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="200"/>
         <source>About</source>
-        <translation>Acerca de</translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
         <source>Changelog</source>
-        <translation>Log de cambios</translation>
+        <translation>Registratie van wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="220"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
         <source>Privacy policy</source>
-        <translation>Política de privacidad</translation>
+        <translation>Privacybeleid</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="240"/>
         <source>Terms of service</source>
-        <translation>Términos del servicio</translation>
+        <translation>Gebruiksovereenkomst van diensten</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="250"/>
         <source>Diagnostic log</source>
-        <translation>Registro de diagnóstico</translation>
+        <translation>Diagnostisch logboek</translation>
     </message>
 </context>
 <context>
@@ -2307,32 +2307,32 @@ No se añadirá al proyecto.</translation>
         <location filename="../qml/account/MMSignUpPage.qml" line="43"/>
         <location filename="../qml/account/MMSignUpPage.qml" line="104"/>
         <source>Sign up</source>
-        <translation>Registrarse</translation>
+        <translation>Registreren</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="72"/>
         <source>Work email</source>
-        <translation>Correo electrónico del trabajo</translation>
+        <translation>Email werk</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="81"/>
         <source>Password</source>
-        <translation>Contraseña</translation>
+        <translation>Wachtwoord</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="98"/>
         <source>I want to subscribe to the newsletter</source>
-        <translation>Quiero suscribirme al newsletter</translation>
+        <translation>I will mij abonneren op de nieuwsbrief</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="121"/>
         <source>Already have an account?</source>
-        <translation>¿Ya tienes una cuenta?</translation>
+        <translation>Heeft u al een account?</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="127"/>
         <source>Sign in</source>
-        <translation>Iniciar sesión</translation>
+        <translation>Inloggen</translation>
     </message>
 </context>
 <context>
@@ -2340,17 +2340,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
         <source>We could not split the feature</source>
-        <translation>No se puede separar la entidad</translation>
+        <translation>Het object kon niet worden opgesplitst</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
         <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Asegúrese de que la línea dividida cruce su entidad. La entidad debe tener una geometría válida para poder dividirla.</translation>
+        <translation>Zorg ervoor dat de lijn volledig over het object heen kruist. Het object moet een geldige geometrie hebben om te kunnen opsplitsen. </translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
-        <translation>Si, lo entiendo</translation>
+        <translation>Ok, ik begrijp het</translation>
     </message>
 </context>
 <context>
@@ -2358,22 +2358,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="91"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="97"/>
         <source>Add point</source>
-        <translation>Añadir punto</translation>
+        <translation>Punt toevoegen</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="103"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Gereed</translation>
     </message>
     <message>
         <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
-        <translation>Se requiere adicionar por lo menos 2 puntos.</translation>
+        <translation>Je moet minstens 2 punten toevoegen.</translation>
     </message>
 </context>
 <context>
@@ -2381,22 +2381,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
         <source>Stake out</source>
-        <translation>Replantear</translation>
+        <translation>Punt uitzetten</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
         <source>Feature</source>
-        <translation>Entidad</translation>
+        <translation>Object</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
         <source>Distance</source>
-        <translation>Distancia</translation>
+        <translation>Afstand</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>N.V.T.</translation>
     </message>
 </context>
 <context>
@@ -2404,22 +2404,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="25"/>
         <source>You have reached a data limit</source>
-        <translation>Has alcanzado un límite de datos</translation>
+        <translation>U heeft een data limiet bereikt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="28"/>
         <source>Manage account</source>
-        <translation>Administrar cuenta</translation>
+        <translation>Beheer account</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="41"/>
         <source>Data to sync</source>
-        <translation>Datos para sincronizar:</translation>
+        <translation>Te syncen data</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStorageLimitDialog.qml" line="68"/>
         <source>Using</source>
-        <translation>Usando</translation>
+        <translation>Gebruik makend van</translation>
     </message>
 </context>
 <context>
@@ -2427,22 +2427,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation>Modo de transmisión</translation>
+        <translation>Streaming mode</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
         <source>Move around your designated object to record its geometry. You can stop this anytime.</source>
-        <translation>Muévase alrededor del objeto designado para registrar su geometría. Puedes detener esto en cualquier momento.</translation>
+        <translation>Beweeg om de geometrie vast te leggen van het te registreren object Je kunt op elk moment hiermee stoppen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Stop streaming mode</source>
-        <translation>Detener modo de transmisión</translation>
+        <translation>Stop met streaming mode</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Start streaming mode</source>
-        <translation>Comenzar modo de transmisión</translation>
+        <translation>Start met streaming mode</translation>
     </message>
 </context>
 <context>
@@ -2450,22 +2450,22 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="34"/>
         <source>Select workspace</source>
-        <translation>Seleccionar espacio de trabajo</translation>
+        <translation>Selecteer workspace</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Zoek</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
         <source>Pending invitations</source>
-        <translation>Invitaciones pendientes</translation>
+        <translation>Openstaande uitnodigingen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
         <source>Your workspaces</source>
-        <translation>Tus espacios de trabajo</translation>
+        <translation>Uw workspaces</translation>
     </message>
 </context>
 <context>
@@ -2473,17 +2473,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
         <source>Failed to synchronise your changes</source>
-        <translation>No se pudieron sincronizar los cambios</translation>
+        <translation>Jouw wijzigingen konden niet gesynchroniseerd</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="30"/>
         <source>Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project.</source>
-        <translation>Sus cambios no se pudieron enviar al servidor, asegúrese de tener una conexión de datos y tener permiso para editar este proyecto.</translation>
+        <translation>Jouw wijzigingen konden niet naar de server worden verzonden, zorg dat je bent verbonden met het internet en dat je schrijfrechten hebt voor dit project.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Ok, I understand</source>
-        <translation>Si, lo entiendo</translation>
+        <translation>Ok, ik begrijp het</translation>
     </message>
 </context>
 <context>
@@ -2491,12 +2491,12 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="71"/>
         <source>More options</source>
-        <translation>Más opciones</translation>
+        <translation>Meer opties</translation>
     </message>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
-        <translation>Más</translation>
+        <translation>Meer</translation>
     </message>
 </context>
 <context>
@@ -2504,17 +2504,17 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="20"/>
         <source>New Look &amp; Feel</source>
-        <translation>Nuevo Look &amp; Feel</translation>
+        <translation>Nieuwe Look &amp; Feel</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="21"/>
         <source>We&apos;ve been busy making the app even better! This update brings a fresh look and improved navigation, making it faster to find what you need. Take a look around!</source>
-        <translation>¡Hemos estado trabajando duro para mejorar la aplicación! Esta actualización le da un aspecto renovado y una navegación mejorada, lo que hace que sea más rápido encontrar lo que necesitas. ¡Échale un vistazo!</translation>
+        <translation>We zijn druk bezig geweest om de app nog beter te maken! Door de update heeft de app een nieuw fris uiterlijk en heeft deze verbeterde navigatie, waardoor u sneller vind wat u nodig heeft. Neem gerust eens rond!</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMWelcomeToNewDesignDialog.qml" line="22"/>
         <source>Let&apos;s start!</source>
-        <translation>¡Comencemos!</translation>
+        <translation>Laten we beginnen!</translation>
     </message>
 </context>
 <context>
@@ -2522,87 +2522,87 @@ No se añadirá al proyecto.</translation>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="32"/>
         <source>Agriculture</source>
-        <translation>Agricultura</translation>
+        <translation>Landbouw</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="33"/>
         <source>Archaeology</source>
-        <translation>Arqueologia</translation>
+        <translation>Archaeologie</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="34"/>
         <source>Construction and engineering</source>
-        <translation>Construcción e ingenieria</translation>
+        <translation>Bouw en infra</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="35"/>
         <source>Electric utilities</source>
-        <translation>Servicios de electricidad</translation>
+        <translation>Elektriciteitsbedrijf</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="36"/>
         <source>Environmental protection</source>
-        <translation>Protección ambiental</translation>
+        <translation>Natuur en omgevingsbescherming</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="37"/>
         <source>Local governments</source>
-        <translation>Gobierno local</translation>
+        <translation>Lokale overheid</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="38"/>
         <source>Natural resources</source>
-        <translation>Recursos naturales</translation>
+        <translation>Natuurlijke bronnen</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="39"/>
         <source>Telecom</source>
-        <translation>Telecomunicaciones</translation>
+        <translation>Kabel &amp; Telecom bedrijf</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="40"/>
         <source>Transportation</source>
-        <translation>Transporte</translation>
+        <translation>Transport</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="41"/>
         <source>Water utilities</source>
-        <translation>Servicios de agua</translation>
+        <translation>Waterbedrijf</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="42"/>
         <source>Student/University</source>
-        <translation>Estudiante/Universidad</translation>
+        <translation>Student/Universiteit</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="45"/>
         <source>Other</source>
-        <translation>Otros</translation>
+        <translation>Overige</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="54"/>
         <source>Specify your industry</source>
-        <translation>Especifique su industria</translation>
+        <translation>Specificeer uw industrie</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="174"/>
         <source>Continue</source>
-        <translation>Continuar</translation>
+        <translation>Doorgaan</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="196"/>
         <source>Crafting your workspace: let us know your industry</source>
-        <translation>Creando su espacio de trabajo: háganos saber su industria</translation>
+        <translation>Voor het bouwen van uw workspace: laat ons weten in welk werkgebied u actief bent</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="197"/>
         <source>Please specify the industry</source>
-        <translation>Por favor, especifique la industria</translation>
+        <translation>Wilt u uw industrie/werkgebied specificeren</translation>
     </message>
     <message>
         <location filename="../qml/account/MMWhichIndustryPage.qml" line="212"/>
         <source>Industry</source>
-        <translation>Industria</translation>
+        <translation>Industrie</translation>
     </message>
 </context>
 <context>
@@ -2611,77 +2611,77 @@ No se añadirá al proyecto.</translation>
         <location filename="../../core/merginapi.cpp" line="223"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
-        <translation>Elimina algunos proyectos como la aplicación actualmente.
-solo permite hasta %1 proyectos descargados.</translation>
+        <translation>Wilt u enkele projecten verwijderen aangezien de app
+momenteel tot %1 gedownloade projecten toestaat.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="824"/>
         <location filename="../../core/merginapi.cpp" line="1298"/>
         <source>Please enter a valid email</source>
-        <translation>Por favor, introduce un e-mail válido</translation>
+        <translation>Voeg een geldig e-mailadres in</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="831"/>
         <location filename="../../core/merginapi.cpp" line="1310"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
-        <translation>Error en el registro</translation>
+        <translation>%1%3 Het wachtwoord moet minstens 8 karakters lang zijn en volgende bevatten::&lt;ul type=&quot;disc&quot;&gt;%3 Kleine letters (a-z)%4%3 Hoofdletters (A-Z)%4%3 Minimaal 1 cijfer (0–9) of een speciaal teken%4%2%4%2</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="845"/>
         <source>Please accept Terms and Privacy Policy</source>
-        <translation>Por favor, acepta las condiciones de uso y la política de privacidad</translation>
+        <translation>Accepteer de voorwaarden en het privacybeleid</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="874"/>
         <source>Marketing source cannot be empty</source>
-        <translation>Fuente de marketing no puede estar vacia</translation>
+        <translation>Bron van marketing kan niet leeg zijn</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="882"/>
         <source>Industry cannot be empty</source>
-        <translation>Industria no puede estar vacia</translation>
+        <translation>Industrie/werkgebied kan niet leeg zijn</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1278"/>
         <source>Registration successful</source>
-        <translation>Registro exitoso</translation>
+        <translation>Registratie succesvol</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1300"/>
         <location filename="../../core/merginapi.cpp" line="1306"/>
         <location filename="../../core/merginapi.cpp" line="1318"/>
         <source>Registration failed</source>
-        <translation>Error en el registro</translation>
+        <translation>Registratie mislukt</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1304"/>
         <source>This email address is already registered</source>
-        <translation>Esta dirección de correo ya está registrada</translation>
+        <translation>Dit email-adres is al geregistreerd</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1329"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
-        <translation>No se permiten nuevos registros en el servidor seleccionado. Por favor consulte con su administrador.</translation>
+        <translation>Nieuwe registraties zijn niet toegestaan ​​op de geselecteerde server. Neem contact op met uw beheerder.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1361"/>
         <source>Workspace created</source>
-        <translation>Espacio de trabajo creado</translation>
+        <translation>Workspace aangemaakt</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1698"/>
         <source>Project detached from the server</source>
-        <translation>Proyecto desconectado del servidor</translation>
+        <translation>Project ontkoppelt van de server</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3895"/>
         <source>Workspace name contains invalid characters</source>
-        <translation>El nombre del espacio de trabajo contiene caracteres no válidos</translation>
+        <translation>De naam van de workspace bevat niet toegestane karakters</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="3961"/>
         <source>Workspace %1 already exists</source>
-        <translation>El espacio de trabajo %1 ya existe</translation>
+        <translation>Workspace %1 bestaat al</translation>
     </message>
 </context>
 <context>
@@ -2689,12 +2689,12 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="70"/>
         <source>Pending Changes</source>
-        <translation>Cambios pendientes</translation>
+        <translation>In afwachting van wijzigingen</translation>
     </message>
     <message>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
-        <translation>No se ha podido determinar cambios</translation>
+        <translation>Kan geen wijzigingen vaststellen</translation>
     </message>
 </context>
 <context>
@@ -2702,47 +2702,47 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
-        <translation>Interno</translation>
+        <translation>Intern</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="32"/>
         <source>GPS receiver of this device</source>
-        <translation>Receptor GNSS de este dispositivo</translation>
+        <translation>GPS ontvanger van dit toestel</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
         <source>Internal (fused)</source>
-        <translation>Interno (fusionado)</translation>
+        <translation>Intern (samengevoegd)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="42"/>
         <source>Using GPS, Wifi and sensors</source>
-        <translation>Usando GPS, Wifi y sensores</translation>
+        <translation>Gebruikt GPS, Wifi en sensoren</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="44"/>
         <source>Not available (%1)</source>
-        <translation>No disponible (%1)</translation>
+        <translation>Niet beschikbaar (%1)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="54"/>
         <source>Internal (gps)</source>
-        <translation>Interno (gps)</translation>
+        <translation>Intern (gps)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="55"/>
         <source>Using GPS only</source>
-        <translation>Usando solo GPS</translation>
+        <translation>Gebruikt alleen GPS</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
         <source> Bluetooth device</source>
-        <translation>Dispositivo Bluetooth</translation>
+        <translation> Bluetooth toestel</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
         <source>Bluetooth device</source>
-        <translation>Dispositivo Bluetooth</translation>
+        <translation> Bluetooth toestel</translation>
     </message>
 </context>
 <context>
@@ -2750,17 +2750,17 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="154"/>
         <source>Could not find tracking layer for the project</source>
-        <translation>No se pudo encontrar la capa de tracking en el proyecto</translation>
+        <translation>Kon geen tracking lagen vinden in het project.</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="163"/>
         <source>Tracking layer not found or invalid</source>
-        <translation>Capa de Tracking no encontrada o no válida</translation>
+        <translation>Tracking laag niet gevonden of niet goed</translation>
     </message>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>No se pudo iniciar el seguimiento, comuníquese con el soporte</translation>
+        <translation>Mislukt om te starten met tracking, neem contact op met support</translation>
     </message>
 </context>
 <context>
@@ -2768,12 +2768,12 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../projectwizard.cpp" line="161"/>
         <source>Project name contains invalid characters</source>
-        <translation>El nombre del proyecto contiene caracteres no válidos</translation>
+        <translation>Projectnaam bevat niet toegestane karakters</translation>
     </message>
     <message>
         <location filename="../projectwizard.cpp" line="212"/>
         <source>Project %1 created</source>
-        <translation>Proyecto %1 creado</translation>
+        <translation>Project %1 aangemaakt</translation>
     </message>
 </context>
 <context>
@@ -2781,18 +2781,18 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../projectsmodel.cpp" line="102"/>
         <source>Pending changes to synchronise</source>
-        <translation>Cambios pendientes para sincronizar</translation>
+        <translation>Openstaande wijzigingen om te synchroniseren</translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="107"/>
         <source>Local project, not uploaded</source>
-        <translation>Proyecto local, no subido</translation>
+        <translation>Lokaal project, niet geladen</translation>
     </message>
     <message>
         <location filename="../projectsmodel.cpp" line="115"/>
         <location filename="../projectsmodel.cpp" line="119"/>
         <source>Updated %1</source>
-        <translation>Actualizado %1</translation>
+        <translation>Bijgewerkt %1</translation>
     </message>
 </context>
 <context>
@@ -2800,128 +2800,128 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be a number</source>
-        <translation>El valor debe ser un número</translation>
+        <translation>Waarde moet een getal zijn</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value must be lower than %1</source>
-        <translation>El valor debe ser menor que %1</translation>
+        <translation>Waarde moet lager zijn dan %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Value must be higher than %1</source>
-        <translation>El valor debe ser mayor que %1</translation>
+        <translation>Waarde moet hoger zijn dan %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="62"/>
         <source>Value is too large</source>
-        <translation>El valor es demasiado largo</translation>
+        <translation>Waarde is te groot</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Field can not contain decimal places</source>
-        <translation>El campo no puede contener decimales</translation>
+        <translation>Veld kan niet het aantal decimale cijfers bevatten</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Can not be longer than %1 characters</source>
-        <translation>No puede tener más de %1 caracteres</translation>
+        <translation>Kan niet langer zijn dan %1 karakters</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Field should not be empty</source>
-        <translation>El campo no debería estar vacío</translation>
+        <translation>Veld niet leeg laten</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Field must not be empty</source>
-        <translation>El campo no puede estar vacío</translation>
+        <translation>Veld mag niet leeg zijn</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="69"/>
         <source>Value should be unique</source>
-        <translation>El valor debería ser único</translation>
+        <translation>Geef unieke waarde</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Value must be unique</source>
-        <translation>El valor debe ser único</translation>
+        <translation>Waarde moet uniek zijn</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="71"/>
         <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation>Restricción de expresión de QGIS no cumplida</translation>
+        <translation>Niet voldaan aan QGIS expressie</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="74"/>
         <source>Not a valid value</source>
-        <translation>No es un valor valido</translation>
+        <translation>Geen geldige waarde</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="132"/>
         <source>No data</source>
-        <translation>Sin datos</translation>
+        <translation>Geen data</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="135"/>
         <source>No fix</source>
-        <translation>Sin corrección</translation>
+        <translation>Geen positie bepaald</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="138"/>
         <source>GPS fix, no correction data</source>
-        <translation>Corrección GNSS, sin datos de corrección</translation>
+        <translation>GPS fix, geen correcte data</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>DGPS fix</source>
-        <translation>Corrección DGPS</translation>
+        <translation>DGPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="146"/>
         <source>PPS fix</source>
-        <translation>Corrección PPS</translation>
+        <translation>PPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="149"/>
         <source>RTK fix</source>
-        <translation>Corrección RTK</translation>
+        <translation>RTK fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="152"/>
         <source>RTK float</source>
-        <translation>Flotante RTK</translation>
+        <translation>RTK float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="155"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Corrección estimada (navegación por estima)</translation>
+        <translation>Geschatte fix (gegist bestek)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="158"/>
         <source>Unknown fix</source>
-        <translation>Corrección desconocida</translation>
+        <translation>Onbekende fix</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="546"/>
         <source>Report submitted. Please contact us on %1</source>
-        <translation>Informe presentado. Por favor contáctenos en %1</translation>
+        <translation>Rapport ingediend. Neem contact met ons op via %1</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="551"/>
         <source>Failed to submit report. Please check your internet connection.</source>
-        <translation>No se pudo enviar el informe. Por favor revise su conexion a internet.</translation>
+        <translation>Rapport kon niet worden ingediend. Controleer uw internetverbinding.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="40"/>
         <source>Synchronisation canceled</source>
-        <translation>Sincronización cancelada</translation>
+        <translation>Synchronisatie afgebroken</translation>
     </message>
     <message>
         <location filename="../attributes/mixedattributevalue.h" line="33"/>
         <source>* Mixed Values *</source>
-        <translation>* Valores mixtos *</translation>
+        <translation>* Mix van Waarden *</translation>
     </message>
 </context>
 <context>
@@ -2929,7 +2929,7 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
         <source>Connected</source>
-        <translation>Conectado</translation>
+        <translation>Verbonden</translation>
     </message>
 </context>
 <context>
@@ -2937,118 +2937,118 @@ solo permite hasta %1 proyectos descargados.</translation>
     <message>
         <location filename="../qml/main.qml" line="278"/>
         <source>Sync</source>
-        <translation>Sincronizar</translation>
+        <translation>Sync</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="288"/>
         <source>Add</source>
-        <translation>Añadir</translation>
+        <translation>Voeg toe</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="297"/>
         <source>No editable layers found.</source>
-        <translation>No se ha encontrado capas editables</translation>
+        <translation>Geen muteerbare lagen aanwezig.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="303"/>
         <source>Layers</source>
-        <translation>Capas</translation>
+        <translation>Lagen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="312"/>
         <source>Projects</source>
-        <translation>Proyectos</translation>
+        <translation>Projecten</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="320"/>
         <source>Zoom to project</source>
-        <translation>Hacer zoom al proyecto</translation>
+        <translation>Op project inzoomen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="329"/>
         <source>Map themes</source>
-        <translation>Temas de mapa</translation>
+        <translation>Kaartthema&apos;s</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="340"/>
         <source>Position tracking</source>
-        <translation>Seguimiento de posición</translation>
+        <translation>Positie tracking</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="351"/>
         <source>Measure</source>
-        <translation>Medida</translation>
+        <translation>Maat</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="357"/>
         <source>Local changes</source>
-        <translation>Cambios locales</translation>
+        <translation>Lokale wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="366"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="561"/>
         <location filename="../qml/main.qml" line="569"/>
         <source>not tracking</source>
-        <translation>sin seguimiento</translation>
+        <translation>tracking staat niet aan</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="832"/>
         <source>Select feature</source>
-        <translation>Seleccionar entidad</translation>
+        <translation>Selecteer object</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="916"/>
         <source>Somebody else is syncing, we will try again later</source>
-        <translation>Alguien más está sincronizando, lo intentaremos de nuevo más tarde.</translation>
+        <translation>Iemand is aan het synchroniseren, we proberen het later nog eens</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="920"/>
         <source>Details</source>
-        <translation>Detalles</translation>
+        <translation>Details</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="940"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
-        <translation>No se pudo comunicar con el servidor. Intente mejorar su conexión de red.</translation>
+        <translation>Communicatie met server mislukt. Probeer netwerk verbindingen  te herstellen.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="991"/>
         <source>Up to date</source>
-        <translation>Actualizado</translation>
+        <translation>Geen wijzigingen</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="1049"/>
         <source>There were issues loading the project. %1View details%2</source>
-        <translation>Hubo problemas al cargar el proyecto. %1Ver detalles%2</translation>
+        <translation>Er waren problemen met het laden van het project. %1Bekijk details%2</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="744"/>
         <source>Stake out is disabled because location is unavailable!</source>
-        <translation>¡El replanteo está desactivado porque la ubicación no está disponible!</translation>
+        <translation>Punt uitzetten is niet actief omdat locatie niet bekend is!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="885"/>
         <source>Successfully synchronised</source>
-        <translation>Sincronizado exitosamente</translation>
+        <translation>Succesvol gesynchroniseerd</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="923"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
-        <translation>Hubo un problema durante la sincronización, lo intentaremos nuevamente. Haga clic para obtener más información</translation>
+        <translation>Er was een probleem tijdens het synchroniseren, we zullen het nog eens proberen. Klik om meer te leren</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="1070"/>
         <source>Could not read the project file:</source>
-        <translation>Could not read the project file:</translation>
+        <translation>Kon het projectbestand niet lezen:</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="1095"/>
         <source>Press back again to quit the app</source>
-        <translation>Para salir de la aplicación presiona nuevamente atrás</translation>
+        <translation>Druk nogmaals op terug om de app te verlaten</translation>
     </message>
 </context>
 </TS>

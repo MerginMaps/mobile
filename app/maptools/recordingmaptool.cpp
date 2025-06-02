@@ -69,6 +69,14 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd.setY( transformed.y() );
   }
 
+  if ( mLastRecordedPoint == pointToAdd )
+  {
+    // Avoid inserting duplicated vertex
+    return;
+  }
+
+  mLastRecordedPoint = pointToAdd;
+
   fixZM( pointToAdd );
 
   // apply gps antenna height
@@ -76,8 +84,6 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
   {
     pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
   }
-
-  mLastRecordedPoint = pointToAdd;
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );
 
@@ -168,6 +174,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     {
       r->addVertex( pointToAdd );
       r->close();
+
       mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
       return;
@@ -201,6 +208,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       mRecordedGeometry.get()->insertVertex( id, pointToAdd );
     }
   }
+
 
   mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
@@ -622,6 +630,8 @@ void RecordingMapTool::prepareEditing()
   {
     setRecordedGeometry( QgsGeometry() );
   }
+
+  mLastRecordedPoint = QgsPoint();
 }
 
 void RecordingMapTool::collectVertices()
@@ -1064,6 +1074,11 @@ FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 
   if ( mActiveLayer && featureIsValid )
   {
+    // Avoid overlaps of features after finishing drawing
+    if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
+    {
+      avoidIntersections();
+    }
     mActiveFeature.setGeometry( mRecordedGeometry );
     return FeatureLayerPair( mActiveFeature, mActiveLayer );
   }
@@ -1677,4 +1692,64 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
 
   mActiveFeature = newActiveFeature;
   emit activeFeatureChanged( mActiveFeature );
+}
+
+void RecordingMapTool::avoidIntersections()
+{
+
+  QList<QgsVectorLayer *> avoidIntersectionsLayers;
+  switch ( mapSettings()->project()->avoidIntersectionsMode() )
+  {
+    case Qgis::AvoidIntersectionsMode::AvoidIntersectionsLayers:
+      avoidIntersectionsLayers = mapSettings()->project()->avoidIntersectionsLayers();
+      break;
+    case Qgis::AvoidIntersectionsMode::AvoidIntersectionsCurrentLayer:
+      avoidIntersectionsLayers.append( mActiveLayer );
+      break;
+    case Qgis::AvoidIntersectionsMode::AllowIntersections:
+      break;
+  }
+
+  // if the list is empty we allow overlaps
+  if ( avoidIntersectionsLayers.isEmpty() )
+  {
+    return;
+  }
+
+  // the operation checks the intersection with selected layers and also avoids the active feature that is being edited
+  const Qgis::GeometryOperationResult operationResult = mRecordedGeometry.avoidIntersectionsV2( avoidIntersectionsLayers, {{mActiveLayer, {mActiveFeature.id()}}} );
+
+  // the geometry type has changed, we will try to make it compatible with active layer
+  if ( operationResult == Qgis::GeometryOperationResult::GeometryTypeHasChanged )
+  {
+    const QVector<QgsGeometry> newGeoms = mRecordedGeometry.coerceToType( mActiveLayer->wkbType() );
+    // if we coerce to just 1 geometry set that geometry as the new geometry
+    if ( newGeoms.count() == 1 )
+    {
+      mRecordedGeometry = newGeoms[0];
+    }
+    // we coerced to multiple new geometries, pick the biggest and set it as the new geometry
+    else
+    {
+      double largest = 0;
+      for ( int i = 0; i < newGeoms.size(); ++i )
+      {
+        const QgsGeometry &currentPart = newGeoms.at( i );
+        const double currentPartSize = mActiveLayer->geometryType() == Qgis::GeometryType::Polygon ? currentPart.area() : currentPart.length();
+
+        if ( currentPartSize > largest )
+        {
+          mRecordedGeometry = currentPart;
+          largest = currentPartSize;
+        }
+      }
+      emit finalSingleGeometry();
+    }
+  }
+
+  if ( mRecordedGeometry.isEmpty() )
+  {
+    emit finalEmptyGeometry();
+  }
+
 }

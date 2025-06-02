@@ -260,7 +260,9 @@ void TestMapTools::testRecording()
 
   QCOMPARE( geometryChangedSpy.count(), 2 );
 
+  // Already existing point, skip inserting
   recordTool->addPoint( pointsToAdd[0] );
+
   recordTool->addPoint( pointsToAdd[1] );
 
   QVERIFY( !recordTool->hasValidGeometry() );
@@ -271,7 +273,7 @@ void TestMapTools::testRecording()
 
   recordTool->addPoint( pointsToAdd[3] );
 
-  QCOMPARE( geometryChangedSpy.count(), 6 );
+  QCOMPARE( geometryChangedSpy.count(), 5 );
 
   delete project;
   delete recordTool;
@@ -350,7 +352,7 @@ void TestMapTools::testMeasuring()
 
   QVERIFY( measurementTool->recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
 
-  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>>() << points );
+  QgsGeometry polygonGeometry = QgsGeometry::fromPolygonXY( QList<QList<QgsPointXY>> () << points );
   double expectedArea = distanceArea.measureArea( polygonGeometry );
   QCOMPARE( measurementTool->area(), expectedArea );
 
@@ -854,6 +856,7 @@ void TestMapTools::testAddVertexLineLayer()
     { -104.923, 24.840 }, // added to end
     { -108, 26 }, // added to end
     { -110, 28 }, // added to end
+    { -110, 28 }, // Same as previous point should not be recorded
     { -95, 20 }, // added to start
     { -109, 27 }, // added to middle
   };
@@ -914,16 +917,22 @@ void TestMapTools::testAddVertexLineLayer()
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
+  mapTool.addPoint( pointsToAdd[4] );
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[3] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[4] );
+
   //
   // Let's try to add point from beginning
   //
   mapTool.setInsertPolicy( RecordingMapTool::Start );
 
-  mapTool.addPoint( pointsToAdd[4] );
+  mapTool.addPoint( pointsToAdd[5] );
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 5 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[4] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[5] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
@@ -934,14 +943,31 @@ void TestMapTools::testAddVertexLineLayer()
   mapTool.setInsertPolicy( RecordingMapTool::End );
 
   Vertex addPosition = Vertex( QgsVertexId( 0, 0, 3 ), pointsToAdd[3], Vertex::Existing );
-  mapTool.addPointAtPosition( addPosition, pointsToAdd[5] );
+  mapTool.addPointAtPosition( addPosition, pointsToAdd[6] );
 
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 6 );
-  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[5] );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 3 ), pointsToAdd[6] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
   QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  // clear recorded geometry
+  mapTool.setActiveLayer( nullptr );
+  mapTool.setActiveLayer( lineLayer );
+
+  //
+  // Test the handles calculation logic
+  //
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( mapTool.handles().isEmpty() );
+
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QCOMPARE( mapTool.handles().vertexAt( 0 ).asWkt( 14 ), "Point (-96.22182942132511 22.34151145046518)" );
+  QCOMPARE( mapTool.handles().vertexAt( 1 ), pointsToAdd[0] );
 
   delete project;
   delete lineLayer;
@@ -1123,7 +1149,9 @@ void TestMapTools::testAddVertexPolygonLayer()
   mapTool.addPoint( pointsToAdd[0] );
 
   QVERIFY( !mapTool.hasValidGeometry() );
+  qDebug() << "mapTool.recordedGeometry().constGet()->nCoordinates()" << mapTool.recordedGeometry().constGet()->nCoordinates();
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 1 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
@@ -2634,4 +2662,72 @@ void TestMapTools::testExtentSaveAndLoad()
   QCOMPARE( mapSettings.extent(), secondExtent );
 
   delete project;
+void TestMapTools::testAvoidIntersections()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+  project->setAvoidIntersectionsMode( Qgis::AvoidIntersectionsMode::AvoidIntersectionsCurrentLayer );
+  QCOMPARE( project->avoidIntersectionsMode(), Qgis::AvoidIntersectionsMode::AvoidIntersectionsCurrentLayer );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  // Create memory layer to work with
+  QgsVectorLayer *polygonLayer = new QgsVectorLayer( "Polygon?crs=epsg:4326", "polygonlayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  // create first polygon
+  mapTool.addPoint( { -95.5, 22.0 } );
+  mapTool.addPoint( { -97.5, 22.0 } );
+  mapTool.addPoint( { -97.5, 26.0 } );
+  mapTool.addPoint( { -95.5, 26.0 } );
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 5 );
+  // finish creating the feature
+  FeatureLayerPair pair = mapTool.getFeatureLayerPair();
+  QVERIFY( pair.layer()->isValid() );
+  QVERIFY( pair.feature().isValid() );
+
+  // create 2nd polygon intersecting first
+  mapTool.setActiveFeature( QgsFeature() );
+  mapTool.addPoint( { -96.5, 23.0 } );
+  mapTool.addPoint( { -96.5, 25.0 } );
+  mapTool.addPoint( { -90.5, 25.0 } );
+  mapTool.addPoint( { -90.5, 23.0 } );
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->area(), 12 );
+  // finish creating the feature
+  pair = mapTool.getFeatureLayerPair();
+  QVERIFY( pair.layer()->isValid() );
+  QVERIFY( pair.feature().isValid() );
+  QCOMPARE( pair.feature().geometry().constGet()->area(), 10 );
+
+  // now edit 2nd polygon
+  // first we move one vertex to intersect the other polygon, then we move
+  // another vertex somewhere else not intersecting anything
+  mapTool.setState( RecordingMapTool::Grab );
+  mapTool.setActiveVertex( Vertex( QgsVertexId( 0, 0, 2 ), { -95.5, 23.0 }, Vertex::Existing ) );
+  QVERIFY( mapTool.activeVertex().isValid() );
+  mapTool.releaseVertex( { -96.5, 23 } );
+  mapTool.getFeatureLayerPair();
+  QCOMPARE( mapTool.recordedGeometry().constGet()->area(), 10 );
+
+  mapTool.setActiveVertex( Vertex( QgsVertexId( 0, 0, 3 ), { -90.5, 25.0 }, Vertex::Existing ) );
+  QVERIFY( mapTool.activeVertex().isValid() );
+  mapTool.releaseVertex( { -88.5, 25.0 } );
+  mapTool.getFeatureLayerPair();
+  QCOMPARE( mapTool.recordedGeometry().constGet()->area(), 12 );
+
+  delete project;
+  delete polygonLayer;
 }

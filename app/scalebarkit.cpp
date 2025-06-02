@@ -82,7 +82,7 @@ void ScaleBarKit::updateScaleBar()
     return;
 
   double distInMeters = InputUtils().screenUnitsToMeters( mMapSettings, mPreferredWidth ); // meters
-  if ( std::isnan( distInMeters ) )
+  if ( std::isnan( distInMeters ) || distInMeters <= 0.0 )
     return;
 
   double dist;
