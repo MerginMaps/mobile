@@ -4099,7 +4099,6 @@ void MerginApi::processInvitationReplyFinished()
       if ( doc.isObject() )
       {
         QJsonObject responseObj = doc.object();
-
         if ( responseObj.contains( "workspace_id" ) )
         {
           int workspaceId = responseObj.value( "workspace_id" ).toInt();
