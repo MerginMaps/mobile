@@ -2662,6 +2662,8 @@ void TestMapTools::testExtentSaveAndLoad()
   QCOMPARE( mapSettings.extent(), secondExtent );
 
   delete project;
+}
+
 void TestMapTools::testAvoidIntersections()
 {
   RecordingMapTool mapTool;
