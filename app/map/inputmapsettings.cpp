@@ -258,7 +258,6 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
 
     QgsRectangle defaultExtent = mProject->viewSettings()->fullExtent();
     defaultExtent.grow( mProject->crs().isGeographic() ? 0.01 : 100.0 );
-    defaultExtent.scale( 1.05 );
     mMapSettings.setExtent( defaultExtent );
   }
 
