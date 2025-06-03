@@ -28,6 +28,7 @@ class TestCoreUtils : public QObject
     void testNameValidation();
     void testNameAbbr();
     void testReplaceValueInJson();
+    void testSanitizePathSlashes();
 };
 
 #endif // TESTCOREUTILS_H

@@ -28,6 +28,8 @@
 
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
+const QString CoreUtils::CACHED_LAYERS_VISIBILITY_GROUP = QStringLiteral( "layersVisibility" );
+const QString CoreUtils::CACHED_MAP_THEME_GROUP = QStringLiteral( "mapTheme" );
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
@@ -376,4 +378,12 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
   file.close();
 
   return success;
+}
+
+QString CoreUtils::sanitizePathSlashes( const QString &name )
+{
+  QString sanitizedName = name;
+  sanitizedName.replace( '/', '_' );
+  sanitizedName.replace( '\\', '_' );
+  return sanitizedName;
 }

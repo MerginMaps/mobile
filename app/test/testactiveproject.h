@@ -28,6 +28,8 @@ class TestActiveProject : public QObject
     void testProjectLoadFailure();
     void testPositionTrackingFlag();
     void testRecordingAllowed();
+    void testStoreMapThemeInSettings();
+    void testStoreLayersVisibilityInSettings();
 
   private:
     MerginApi *mApi;

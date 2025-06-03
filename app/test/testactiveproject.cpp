@@ -166,3 +166,64 @@ void TestActiveProject::testRecordingAllowed()
   mApi->localProjectsManager().removeLocalProject( id );
 }
 
+void TestActiveProject::testStoreMapThemeInSettings()
+{
+  AppSettings as;
+  ActiveLayer al;
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+
+  QString projectDir = TestUtils::testDataDir() + "/tracking/";
+  QString projectFilename = "tracking-project.qgz";
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
+  QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
+
+  QString testTheme = "test_theme_name";
+
+  activeProject.setMapTheme( testTheme );
+
+  QString retrievedTheme = activeProject.mapThemeForProject();
+  QCOMPARE( retrievedTheme, testTheme );
+
+  activeProject.setMapTheme( QString() );
+
+  retrievedTheme = activeProject.mapThemeForProject();
+  QCOMPARE( retrievedTheme, testTheme );
+
+  const QString id = mApi->localProjectsManager().projectId( projectDir + "/" + projectFilename );
+  mApi->localProjectsManager().removeLocalProject( id );
+}
+
+void TestActiveProject::testStoreLayersVisibilityInSettings()
+{
+  AppSettings as;
+  ActiveLayer al;
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+
+  QString projectDir = TestUtils::testDataDir() + "/tracking/";
+  QString projectFilename = "tracking-project.qgz";
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
+  QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
+
+  // create and store test layer IDs
+  QStringList testLayerIds;
+  testLayerIds << "layer_id_1" << "layer_id_2" << "layer_id_3";
+  activeProject.setVisibleLayerIdsForProject( testLayerIds );
+
+  // retrieve and verify
+  QStringList retrievedIds = activeProject.visibleLayerIdsForProject();
+  QCOMPARE( retrievedIds.size(), testLayerIds.size() );
+  for ( const QString &id : testLayerIds )
+  {
+    QVERIFY( retrievedIds.contains( id ) );
+  }
+
+  // empty list
+  activeProject.setVisibleLayerIdsForProject( QStringList() );
+  retrievedIds = activeProject.visibleLayerIdsForProject();
+  QCOMPARE( retrievedIds.size(), 0 );
+
+  const QString id = mApi->localProjectsManager().projectId( projectDir + "/" + projectFilename );
+  mApi->localProjectsManager().removeLocalProject( id );
+}
