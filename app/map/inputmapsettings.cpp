@@ -255,10 +255,11 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
   if ( !foundTheMapCanvas )
   {
     mMapSettings.setDestinationCrs( mProject->crs() );
-    QgsRectangle defaultExtent = mProject->viewSettings()->fullExtent();
-    mMapSettings.setExtent( defaultExtent );
 
     const double MIN_SCALE_DENOMINATOR = 100;
+    QgsRectangle defaultExtent = mProject->viewSettings()->fullExtent();
+
+    mMapSettings.setExtent( defaultExtent );
     if ( mMapSettings.computeScaleForExtent( defaultExtent ) < MIN_SCALE_DENOMINATOR )
     {
       mMapSettings.setExtent( mMapSettings.computeExtentForScale( center(), MIN_SCALE_DENOMINATOR ) );
