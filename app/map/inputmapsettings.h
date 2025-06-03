@@ -18,6 +18,7 @@
 #include "inputconfig.h"
 
 #include <QObject>
+#include <QTimer>
 
 #include "qgscoordinatetransformcontext.h"
 #include "qgsmaplayer.h"
@@ -128,6 +129,12 @@ class InputMapSettings : public QObject
      * The temporal range's end (i.e. higher) value
      */
     Q_PROPERTY( QDateTime temporalEnd READ temporalEnd WRITE setTemporalEnd NOTIFY temporalStateChanged )
+
+    /**
+     * Identifier for current project.
+     */
+    Q_PROPERTY( QString projectId READ projectId WRITE setProjectId NOTIFY projectIdChanged )
+
 
   public:
     //! Create new map settings
@@ -285,9 +292,28 @@ class InputMapSettings : public QObject
     //! \copydoc InputMapSettings::temporalEnd
     void setTemporalEnd( const QDateTime &end );
 
+    //! \copydoc InputMapSettings::projectId
+    QString projectId() const;
+
+    //! \copydoc InputMapSettings::projectId
+    void setProjectId( const QString &projectId );
+
+    /**
+    * Saves current map extent to QSettings
+    */
+    void saveExtentToSettings();
+
+    /**
+     * Retrieves saved map extent from QSettings and set it as the map extent
+     */
+    void loadSavedExtent();
+
   signals:
     //! \copydoc InputMapSettings::project
     void projectChanged();
+
+    //! \copydoc InputMapSettings::projectId
+    void projectIdChanged();
 
     //! \copydoc InputMapSettings::extent
     void extentChanged();
@@ -347,6 +373,8 @@ class InputMapSettings : public QObject
     QgsProject *mProject = nullptr;
     QgsMapSettings mMapSettings;
     qreal mDevicePixelRatio = 1.0;
+    QTimer mSaveExtentTimer;
+    QString mProjectId;
 };
 
 #endif // INPUTMAPSETTINGS_H

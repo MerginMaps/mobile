@@ -78,6 +78,9 @@ class LocalProjectsManager : public QObject
   private:
     void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
 
+    //! Clears all settings groups for the given project full name
+    void clearAllProjectSettings( const QString &projectFullName );
+
     QString mDataDir;   //!< directory with all local projects
     LocalProjectsList mProjects;
 };
