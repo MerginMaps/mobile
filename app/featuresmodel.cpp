@@ -11,6 +11,7 @@
 
 #include "inpututils.h"
 #include "qgsexpressioncontextutils.h"
+#include "coreutils.h"
 
 
 FeaturesModel::FeaturesModel( QObject *parent )

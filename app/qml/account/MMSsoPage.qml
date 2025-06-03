@@ -1,0 +1,107 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+
+import mm 1.0 as MM
+
+import "./components" as MMAccountComponents
+import "../components"
+import "../inputs"
+
+
+MMPage {
+  id: root
+
+  signal signInClicked( string email )
+  signal loginWithPasswordClicked
+
+  property bool focusOnBrowser: false
+
+  pageHeader {
+    title: qsTr( "Sign in with SSO" )
+    titleFont: __style.h3
+    baseHeaderHeight: __style.row80
+  }
+
+  pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
+
+  pageContent: MMScrollView {
+    id: contentScroller
+
+    width: parent.width
+    height: parent.height
+
+    Column {
+      id: maincol
+
+      width: parent.width
+
+      spacing: __style.spacing20
+
+      MMListSpacer {
+        height: __style.margin20
+      }
+
+      MMTextInput {
+        id: email
+
+        width: parent.width
+
+        title: qsTr( "Work email" )
+        textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
+        text: __merginApi.userAuth.username
+      }
+
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Sign in" )
+
+        enabled: __inputUtils.isValidEmail( email.length > 0 )
+
+        onClicked: {
+          root.signInClicked( email.text )
+        }
+      }
+
+      MMText {
+        visible: root.focusOnBrowser
+
+        text: qsTr( "Please follow the instructions on your web browser" )
+      }
+
+
+      MMListSpacer { height: __style.margin20 }
+
+      MMHlineText {
+        width: parent.width
+
+        title: qsTr("Use password instead?")
+      }
+
+      MMButton {
+        width: parent.width
+
+        text: qsTr( "Sign in with password" )
+
+        type: MMButton.Types.Secondary
+
+        onClicked: root.loginWithPasswordClicked()
+      }
+
+      MMListFooterSpacer {}
+    }
+  }
+
+  Component.onCompleted: {
+    __merginApi.requestSsoConfig()
+  }
+}

@@ -37,6 +37,11 @@ Item {
 
     controller.inProgress = true;
     stackView.push( loginPageComp, {}, StackView.PushTransition )
+
+    if ( __merginApi.userAuth.isUsingSso() )
+    {
+      stackView.push( ssoPanel )
+    }
   }
 
   // Finish onboarding
@@ -86,6 +91,8 @@ Item {
         }
       }
 
+      supportsSso: __merginApi.apiSupportsSso
+
       onSignInClicked: function ( username, password ) {
         stackView.pending = true
         __merginApi.authorize(username, password)
@@ -119,6 +126,10 @@ Item {
         Qt.openUrlExternally(__merginApi.resetPasswordUrl());
       }
 
+      onContinueWithSsoClicked: {
+        stackView.pending = true
+        stackView.push( ssoPanel )
+      }
     }
   }
 
@@ -181,6 +192,55 @@ Item {
               stackView.push( createWorkspaceComponent )
             }
           }
+        }
+      }
+    }
+  }
+
+  Component {
+    id: ssoPanel
+
+    MMSsoPage {
+
+      objectName: "ssoPanel"
+
+      onBackClicked: {
+        __merginApi.abortSsoFlow()
+        stackView.pending = false
+        stackView.popOnePageOrClose()
+      }
+
+      onLoginWithPasswordClicked: {
+        __merginApi.abortSsoFlow()
+        stackView.pending = false
+        stackView.popOnePageOrClose()
+      }
+
+      onSignInClicked: function( email ) {
+        stackView.pending = true
+        __merginApi.requestSsoConnections(email)
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "ssoPanel"
+
+        function onSsoConfigIsMultiTenant() {
+          stackView.pending = false
+        }
+
+        function onSsoAuthorizeUsingBrowser() {
+          focusOnBrowser = true
+        }
+
+        function onAuthChanged() {
+          stackView.pending = false
+          controller.end()
+        }
+
+        function onNotifyError() {
+          stackView.pending = false
+          focusOnBrowser = false
         }
       }
     }
