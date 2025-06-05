@@ -619,5 +619,5 @@ QString ActiveProject::mapAnnotationsLayerId() const
   if ( !mQgsProject )
     return QString();
 
-  return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/MapAnnotationsLayer" ), QString() );
+  return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ), QString() );
 }
