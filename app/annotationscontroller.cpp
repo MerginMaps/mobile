@@ -32,7 +32,7 @@ AnnotationsController::AnnotationsController( QObject *parent )
 AnnotationsController::~AnnotationsController()
 {
   if ( mLayer )
-    qDebug() << "commit: " << mLayer->commitChanges();
+    qDebug() << "Annotations layer, commit changes: " << mLayer->commitChanges();
 }
 
 void AnnotationsController::updateHighlight( QPointF oldPoint, QPointF newPoint )
@@ -45,7 +45,6 @@ void AnnotationsController::updateHighlight( QPointF oldPoint, QPointF newPoint 
     ls->addMValue();
     auto *mls = new QgsMultiLineString( QList<QgsLineString *>() << ls );
     mHighlight = QgsGeometry( mls );
-    qDebug() << mHighlight.asWkt( 0 );
 
     mScreenPoints = QgsGeometry( new QgsLineString( { QgsPointXY( oldPoint.x(), oldPoint.y() ) } ) );
   }
@@ -60,7 +59,6 @@ void AnnotationsController::updateHighlight( QPointF oldPoint, QPointF newPoint 
 
 void AnnotationsController::finishDigitizing()
 {
-  qDebug() << "SAVE";
   clearHighlight();
 
 
