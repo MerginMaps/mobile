@@ -78,32 +78,49 @@ MMDrawer {
         spacing: __style.margin12
 
         Repeater {
+          id: colorsView
+
           model: root.annotationsController?.availableColors() ?? null
 
           Button {
-            required property string modelData
-
             implicitWidth: 42
             implicitHeight: 42
             background: Rectangle {
               color: modelData
               radius: __style.radius30
-              border.width: 2 * __dp + ( root.annotationsController.activeColor === modelData ? 3 : 0 )
+              border.width: 1 + ( root.annotationsController.activeColor.toString() === modelData ? 2 : 0 )
               border.color: "black"
             }
 
             onClicked: {
               root.annotationsController.eraserActive = false
               root.annotationsController.activeColor = modelData
-              console.log( root.annotationsController.activeColor, modelData )
+            }
+
+            Component.onCompleted: {
+              // set the initial color to be the first one in the list
+              if ( index === 0 )
+              {
+                root.annotationsController.activeColor = modelData
+              }
             }
           }
         }
 
         MMButton {
-          text: qsTr( "Erase" )
-          iconSourceLeft: __style.smallEditIcon
+          text: qsTr( "Eraser" )
+          iconSourceLeft: __style.editIcon
+
+          type: MMButton.Types.Primary
           size: MMButton.Sizes.Small
+
+          fontColor: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
+          iconColor: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
+          bgndColor: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          fontColorHover: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          iconColorHover: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          bgndColorHover: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
+
           onClicked: {
             root.annotationsController.activeColor = color
             root.annotationsController.eraserActive = true

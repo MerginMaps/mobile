@@ -1062,8 +1062,8 @@ Item {
         height: mapCanvas.height
         width: mapCanvas.width
 
-        lineColor: annotationsController.activeColor
-        lineWidth: MMHighlight.LineWidths.Normal
+        lineColor: annotationsController.eraserActive ? "red" : annotationsController.activeColor
+        lineWidth: annotationsController.eraserActive ? MMHighlight.LineWidths.Narrow : MMHighlight.LineWidths.Normal
 
         mapSettings: mapCanvas.mapSettings
         geometry: annotationsController.highlightGeometry
