@@ -141,8 +141,8 @@ QStringList AnnotationsController::availableColors() const
 {
   QgsProject *project = mMapSettings->project();
 
-  const QStringList defaultColors = { "#ffffff", "#12181f", "#a6cbf4", "#9bd1a9", "#f4cb46", "#ffb673", "#ffbabc" };
-  return project->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/MapAnnotationsLayer" ), defaultColors );
+  const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
+  return project->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Colors" ), defaultColors );
 }
 
 void AnnotationsController::clearHighlight()
@@ -166,7 +166,7 @@ void AnnotationsController::setMapSettings( InputMapSettings *settings )
 
   clearHighlight();
 
-  const QString layerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/MapAnnotationsLayer" ) );
+  const QString layerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ) );
   mLayer = project->mapLayer<QgsVectorLayer *>( layerId );
 
   if ( !mLayer )
