@@ -70,7 +70,7 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
     {
       if ( mMapSettings->project() &&
            ( !layer->flags().testFlag( QgsMapLayer::Identifiable )
-             || layer->id() == mMapSettings->project()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/MapAnnotationsLayer" ) ) ) )
+             || layer->id() == mMapSettings->project()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ) ) ) )
         continue;
 
       QgsVectorLayer *vl = qobject_cast<QgsVectorLayer *>( layer );
