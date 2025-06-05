@@ -311,10 +311,12 @@ void AndroidUtils::callImagePicker( const QString &targetPath, const QString &co
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
-  const QJniObject ACTION_GET_CONTENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_GET_CONTENT", "Ljava/lang/String;" );
-  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_GET_CONTENT.object<jstring>() );
+  // we use ACTION_OPEN_DOCUMENT instead of ACTION_GET_CONTENT, because the new image picker redacted EXIF metadata on
+  // some devices
+  const QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_OPEN_DOCUMENT", "Ljava/lang/String;" );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_OPEN_DOCUMENT.object<jstring>() );
 
-  if ( ACTION_GET_CONTENT.isValid() && intent.isValid() )
+  if ( ACTION_OPEN_DOCUMENT.isValid() && intent.isValid() )
   {
     intent = intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
     intent = intent.callObjectMethod( "putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", QJniObject::fromString( "EXTRA_LOCAL_ONLY" ).object<jstring>(), true );
@@ -400,32 +402,16 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
 
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
-    //this method is ugly and unreadable, but it should be just a temporary solution before refactoring
+    // we call importImage method which copies the image from gallery to project and returns the project image path
+    // as we can't keep the access to images outside the app
     const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
     const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    const QString fileName = activity.callObjectMethod( "getFileName",
-                             "(Landroid/net/Uri;)Ljava/lang/String;",
-                             uri.object() )
-                             .toString();
-    const QJniObject newCopyFile = QJniObject( "java/io/File",
-                                   "(Ljava/lang/String;)V",
-                                   QJniObject::fromString( mTargetPath + "/" + fileName ).object<jstring>() );
-    newCopyFile.callMethod<jboolean>( "createNewFile", "()Z" );
-    const QJniObject contentResolver = activity.callObjectMethod( "getContentResolver",
-                                       "()Landroid/content/ContentResolver;" );
-    const QJniObject fileStream = contentResolver.callObjectMethod( "openInputStream",
-                                  "(Landroid/net/Uri;)Ljava/io/InputStream;",
-                                  uri.object() );
-    activity.callMethod<void>( "copyFile",
-                               "(Ljava/io/InputStream;Ljava/io/File;)V",
-                               fileStream.object(),
-                               newCopyFile.object() );
-    const QJniObject newUri = QJniObject::callStaticObjectMethod( "android/net/Uri",
-                              "fromFile",
-                              "(Ljava/io/File;)Landroid/net/Uri;",
-                              newCopyFile.object() );
-    const QString newUriString = newUri.callObjectMethod( "toString", "()Ljava/lang/String;" ).toString();
-    emit imageSelected( newUriString, mLastCode );
+    const QString newUri = activity.callObjectMethod( "importImage",
+                           "(Landroid/net/Uri;Ljava/lang/String;)Ljava/lang/String;",
+                           uri.object(),
+                           QJniObject::fromString( mTargetPath ).object<jstring>() )
+                           .toString();
+    emit imageSelected( newUri, mLastCode );
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {

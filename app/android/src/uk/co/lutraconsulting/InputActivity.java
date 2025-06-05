@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import androidx.core.content.FileProvider;
 import android.widget.Toast;
 import android.database.Cursor;
@@ -175,6 +176,20 @@ public class InputActivity extends QtActivity
     }
     
     return true;
+  }
+
+  public String importImage(Uri imageUri, String targetPath) {
+    String fileName = getFileName( imageUri );
+    File newCopyFile = new File( targetPath + "/" + fileName );
+    try {
+      newCopyFile.createNewFile();
+      InputStream fileStream = getContentResolver().openInputStream( imageUri );
+      copyFile( fileStream, newCopyFile );
+      return Uri.fromFile( newCopyFile ).toString();
+    } catch (IOException e) {
+      Log.e( TAG, "IOException while importing image from gallery!" );
+      return "";
+    }
   }
 
   public void copyFile(InputStream src, File dst) throws IOException {
