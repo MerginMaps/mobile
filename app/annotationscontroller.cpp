@@ -94,7 +94,7 @@ void AnnotationsController::finishDigitizing()
 
     if ( !fids.isEmpty() )
     {
-      mLayer->beginEditCommand( tr( "Delete map annotation" ) );
+      mLayer->beginEditCommand( QStringLiteral( "Delete map annotation" ) );
       mLayer->deleteFeatures( fids );
       mLayer->endEditCommand();
     }
@@ -118,7 +118,7 @@ void AnnotationsController::finishDigitizing()
     const QgsGeometry geom = InputUtils::transformGeometry( multiLineGeom, mMapSettings->destinationCrs(), mLayer );
     QgsFeature feature = QgsVectorLayerUtils::createFeature( mLayer, geom );
     feature.setAttribute( QStringLiteral( "color" ), mColor );
-    mLayer->beginEditCommand( tr( "Add map annotation" ) );
+    mLayer->beginEditCommand( QStringLiteral( "Add map annotation" ) );
     mLayer->addFeature( feature );
     mLayer->endEditCommand();
   }
