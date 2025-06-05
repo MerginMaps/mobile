@@ -88,7 +88,7 @@ MMDrawer {
             background: Rectangle {
               color: modelData
               radius: __style.radius30
-              border.width: 1 + ( root.annotationsController.activeColor.toString() === modelData ? 2 : 0 )
+              border.width: 1 + ( root.annotationsController.activeColor.toString().toLowerCase() === modelData.toLowerCase() ? 2 : 0 )
               border.color: "black"
             }
 
@@ -122,7 +122,7 @@ MMDrawer {
           bgndColorHover: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
 
           onClicked: {
-            root.annotationsController.activeColor = color
+            root.annotationsController.activeColor = null
             root.annotationsController.eraserActive = true
           }
         }
