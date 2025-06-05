@@ -27,6 +27,7 @@ class LayerDetailData : public QObject
 
     // out properties
     Q_PROPERTY( QString name READ name NOTIFY nameChanged )
+    Q_PROPERTY( QString layerId READ layerId NOTIFY layerIdChanged )
     Q_PROPERTY( bool isVisible READ isVisible NOTIFY isVisibleChanged )
     Q_PROPERTY( bool isSpatial READ isSpatial NOTIFY isSpatialChanged )
     Q_PROPERTY( bool isVectorLayer READ isVectorLayer NOTIFY isVectorLayerChanged )
@@ -44,6 +45,7 @@ class LayerDetailData : public QObject
     bool isSpatial() const;
     bool isVectorLayer() const;
     const QString &name() const;
+    const QString &layerId() const;
     QgsVectorLayer *vectorLayer() const;
     QgsMapLayer *mapLayer() const;
 
@@ -56,6 +58,7 @@ class LayerDetailData : public QObject
     void isVisibleChanged( bool isVisible );
     void isVectorLayerChanged( bool isVectorLayer );
     void nameChanged( const QString &name );
+    void layerIdChanged( const QString &layerId );
     void vectorLayerChanged( QgsVectorLayer *vectorLayer );
     void layerTreeNodeChanged( QgsLayerTreeNode *layerTreeNode );
     void mapLayerChanged( QgsMapLayer *mapLayer );
@@ -65,6 +68,7 @@ class LayerDetailData : public QObject
     std::unique_ptr<QgsLegendRenderer> mLegendRenderer; // owned
 
     QString mName;
+    QString mLayerId;
     bool mIsSpatial = false;
     bool mIsVisible = false;
     bool mIsVectorLayer = false;
