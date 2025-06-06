@@ -6,7 +6,6 @@
     android:versionName="@INPUT_VERSION@">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/> <!-- Read images from gallery, Android <=12 -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/> <!-- Read images from gallery, Android 13+ -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -58,6 +57,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <!-- Get access to images/videos -->
+            <intent-filter>
+                 <action android:name="android.intent.action.GET_CONTENT" />
+            </intent-filter>
+
             <meta-data 
                 android:name="android.app.lib_name" 
                 android:value="-- %%INSERT_APP_LIB_NAME%% --" />
@@ -88,17 +92,32 @@
         </activity>
 
         <!-- Activity Android native camera -->
-        <activity android:name="uk.co.lutraconsulting.CameraActivity" android:label="Input" android:parentActivityName="uk.co.lutraconsulting.InputActivity"
-        android:configChanges="screenLayout|orientation|screenSize">
+        <activity
+            android:name="uk.co.lutraconsulting.CameraActivity"
+            android:label="Mergin Maps"
+            android:parentActivityName="uk.co.lutraconsulting.InputActivity"
+            android:configChanges="screenLayout|orientation|screenSize"
+            >
              <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
         </activity>
 
-        <provider android:name="androidx.core.content.FileProvider" android:authorities="uk.co.lutraconsulting.fileprovider" android:exported="false" android:grantUriPermissions="true">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="uk.co.lutraconsulting.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
              <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths">
              </meta-data>
         </provider>
 
-        <service android:process=":trackingThread" android:name=".PositionTrackingService" android:foregroundServiceType="location" android:stopWithTask="true" android:exported="false"/>
+        <service
+            android:process=":trackingThread"
+            android:name=".PositionTrackingService"
+            android:foregroundServiceType="location"
+            android:stopWithTask="true"
+            android:exported="false"
+            />
     </application>
 
     <!-- Explicitly mention that we need to use external app for capturing an image and open file-->

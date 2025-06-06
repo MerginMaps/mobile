@@ -10,8 +10,6 @@
 #ifndef ANDROIDUTILS_H
 #define ANDROIDUTILS_H
 
-#include "inputconfig.h"
-
 #ifdef ANDROID
 #include <QtCore/private/qandroidextras_p.h>
 #include <QJniObject>
@@ -30,9 +28,9 @@ class AndroidUtils: public QObject
   public:
     explicit AndroidUtils( QObject *parent = nullptr );
 
-    bool isAndroid() const;
+    static bool isAndroid() ;
 
-    bool checkAndAcquirePermissions( const QString &permissionString );
+    static bool checkAndAcquirePermissions( const QString &permissionString );
 
     static QString externalStorageAppFolder();
 
@@ -52,7 +50,7 @@ class AndroidUtils: public QObject
     bool requestMediaLocationPermission();
 
     void turnBluetoothOn();
-    bool isBluetoothTurnedOn();
+    bool isBluetoothTurnedOn() const;
 
     static void quitApp();
 
@@ -60,23 +58,23 @@ class AndroidUtils: public QObject
     static QString getDeviceModel();
     Q_INVOKABLE QVector<int> getSafeArea();
 
-    void hideSplashScreen();
+    static void hideSplashScreen();
 
     /**
-      * Starts ACTION_PICK activity which opens a gallery. If an image is selected,
+      * Starts ACTION_GET_CONTENT activity which opens a gallery. If an image is selected,
       * handler of the activity emits imageSelected signal.
       * The code parameter will be used in response (signal)
       */
-    Q_INVOKABLE void callImagePicker( const QString &code = "" );
+    Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
-    Q_INVOKABLE bool openFile( const QString &filePath );
+    Q_INVOKABLE static bool openFile( const QString &filePath );
 
 #ifdef ANDROID
-    const static int MEDIA_CODE = 101;
-    const static int CAMERA_CODE = 102;
-    const static int BLUETOOTH_CODE = 103;
+    static constexpr int MEDIA_CODE = 101;
+    static constexpr int CAMERA_CODE = 102;
+    static constexpr int BLUETOOTH_CODE = 103;
 
-    const static int ANDROID_VERSION_13 = 13;
+    static constexpr int ANDROID_VERSION_13 = 13;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif
@@ -89,6 +87,7 @@ class AndroidUtils: public QObject
 
   private:
     QString mLastCode;
+    QString mTargetPath;
 
 #ifdef ANDROID
     QBluetoothLocalDevice mBluetooth;

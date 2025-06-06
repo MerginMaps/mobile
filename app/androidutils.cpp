@@ -13,9 +13,6 @@
 #include <QtCore/private/qandroidextras_p.h>
 #include <QCoreApplication>
 #include <QJniObject>
-#include <QJniEnvironment>
-#include <QDebug>
-#include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
 
@@ -26,7 +23,7 @@ AndroidUtils::AndroidUtils( QObject *parent ): QObject( parent )
 {
 }
 
-bool AndroidUtils::isAndroid() const
+bool AndroidUtils::isAndroid()
 {
 #ifdef ANDROID
   return true;
@@ -57,25 +54,23 @@ QString AndroidUtils::externalStorageAppFolder()
 {
 #ifdef ANDROID
   // AppDataLocation returns two paths, first is internal app storage and the second is external storage
-  QStringList paths = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation );
+  const QStringList paths = QStandardPaths::standardLocations( QStandardPaths::AppDataLocation );
   if ( paths.size() > 1 )
   {
     return paths.at( 1 );
   }
-  else
-  {
-    CoreUtils::log( "StorageException", "Path from QStandardPaths do not include external storage!! Using path: " + paths.at( 0 ) );
-    return paths.at( 0 );
-  }
+
+  CoreUtils::log( "StorageException", "Path from QStandardPaths do not include external storage!! Using path: " + paths.at( 0 ) );
+  return paths.at( 0 );
 #endif
 
-  return QString();
+  return {};
 }
 
 bool AndroidUtils::requestNotificationPermission()
 {
 #ifdef ANDROID
-  double buildVersion = QSysInfo::productVersion().toDouble();
+  const double buildVersion = QSysInfo::productVersion().toDouble();
 
   // POST_NOTIFICATIONS permission is available from Android 13+
   if ( buildVersion < ANDROID_VERSION_13 )
@@ -83,7 +78,7 @@ bool AndroidUtils::requestNotificationPermission()
     return true;
   }
 
-  QString notificationPermission = QStringLiteral( "android.permission.POST_NOTIFICATIONS" );
+  const QString notificationPermission = QStringLiteral( "android.permission.POST_NOTIFICATIONS" );
 
   auto r = QtAndroidPrivate::checkPermission( notificationPermission ).result();
   if ( r == QtAndroidPrivate::Authorized )
@@ -103,13 +98,13 @@ bool AndroidUtils::requestNotificationPermission()
 QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID
-  QJniObject jFilePath = QJniObject::fromString( filePath );
-  QJniObject jTag = QJniObject::fromString( tag );
-  QJniObject attribute = QJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
-                         "getEXIFAttribute",
-                         "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
-                         jFilePath.object<jstring>(),
-                         jTag.object<jstring>() );
+  const QJniObject jFilePath = QJniObject::fromString( filePath );
+  const QJniObject jTag = QJniObject::fromString( tag );
+  const QJniObject attribute = QJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
+                               "getEXIFAttribute",
+                               "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+                               jFilePath.object<jstring>(),
+                               jTag.object<jstring>() );
   return attribute.toString();
 #else
   Q_UNUSED( filePath )
@@ -123,13 +118,13 @@ void AndroidUtils::turnBluetoothOn()
 #ifdef ANDROID
   if ( !isBluetoothTurnedOn() )
   {
-    QJniObject ACTION_BT = QJniObject::getStaticObjectField(
-                             "android/bluetooth/BluetoothAdapter",
-                             "ACTION_REQUEST_ENABLE",
-                             "Ljava/lang/String;"
-                           );
+    const QJniObject ACTION_BT = QJniObject::getStaticObjectField(
+                                   "android/bluetooth/BluetoothAdapter",
+                                   "ACTION_REQUEST_ENABLE",
+                                   "Ljava/lang/String;"
+                                 );
 
-    QJniObject intent(
+    const QJniObject intent(
       "android/content/Intent",
       "(Ljava/lang/String;)V",
       ACTION_BT.object()
@@ -143,7 +138,7 @@ void AndroidUtils::turnBluetoothOn()
 #endif
 }
 
-bool AndroidUtils::isBluetoothTurnedOn()
+bool AndroidUtils::isBluetoothTurnedOn() const
 {
 #ifdef ANDROID
   return mBluetooth.hostMode() != QBluetoothLocalDevice::HostPoweredOff;
@@ -167,7 +162,7 @@ QString AndroidUtils::getManufacturer()
 {
   QString manufacturer = "";
 #ifdef ANDROID
-  QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   manufacturer = activity.callObjectMethod( "getManufacturer", "()Ljava/lang/String;" ).toString().toUpper();
 #endif
   return manufacturer;
@@ -177,7 +172,7 @@ QString AndroidUtils::getDeviceModel()
 {
   QString deviceModel = "";
 #ifdef ANDROID
-  QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
   deviceModel = activity.callObjectMethod( "getDeviceModel", "()Ljava/lang/String;" ).toString();
 #endif
   return deviceModel;
@@ -188,12 +183,12 @@ QVector<int> AndroidUtils::getSafeArea()
   QVector<int> ret;
 
 #ifdef ANDROID
-  auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-  auto safeArrayStringObj = activity.callMethod<jintArray>( "getSafeArea", "()Ljava/lang/String;" );
+  const auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  const auto safeArrayStringObj = activity.callMethod<jintArray>( "getSafeArea", "()Ljava/lang/String;" );
 
   if ( safeArrayStringObj.isValid() )
   {
-    QString safeArrayString = safeArrayStringObj.toString();
+    const QString safeArrayString = safeArrayStringObj.toString();
 
     QStringList stringParts = safeArrayString.split( "," );
     if ( stringParts.length() != 4 )
@@ -202,19 +197,17 @@ QVector<int> AndroidUtils::getSafeArea()
       return ret;
     }
 
-    int top = stringParts[0].toInt(); // top inset
-    int right = stringParts[1].toInt(); // right inset
-    int bottom = stringParts[2].toInt(); // bottom inset
-    int left = stringParts[3].toInt(); // left inset
+    const int top = stringParts[0].toInt(); // top inset
+    const int right = stringParts[1].toInt(); // right inset
+    const int bottom = stringParts[2].toInt(); // bottom inset
+    const int left = stringParts[3].toInt(); // left inset
 
     ret << top << right << bottom << left;
     return ret;
   }
-  else
-  {
-    CoreUtils::log( "SafeArea", "Android returned null from getSafeArea method" );
-    return ret;
-  }
+
+  CoreUtils::log( "SafeArea", "Android returned null from getSafeArea method" );
+  return ret;
 #endif
   return ret;
 }
@@ -232,7 +225,7 @@ bool AndroidUtils::openFile( const QString &filePath )
   bool result = false;
 #ifdef ANDROID
   auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-  QJniObject jFilePath = QJniObject::fromString( filePath );
+  const QJniObject jFilePath = QJniObject::fromString( filePath );
   result = activity.callMethod<jboolean>( "openFile", "(Ljava/lang/String;)Z", jFilePath.object<jstring>() );
 #endif
   return result;
@@ -241,22 +234,17 @@ bool AndroidUtils::openFile( const QString &filePath )
 bool AndroidUtils::requestStoragePermission()
 {
 #ifdef ANDROID
-  double buildVersion = QSysInfo::productVersion().toDouble();
+  const double buildVersion = QSysInfo::productVersion().toDouble();
 
   //
   // Android SDK 33 has a new set of permissions when reading external storage.
   // See https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE
   //
-  QString storagePermissionType = QStringLiteral( "android.permission.READ_MEDIA_IMAGES" );
-  if ( buildVersion < ANDROID_VERSION_13 )
-  {
-    storagePermissionType = QStringLiteral( "android.permission.READ_EXTERNAL_STORAGE" );
-  }
 
-  if ( !checkAndAcquirePermissions( storagePermissionType ) )
+  if ( buildVersion < ANDROID_VERSION_13 && !checkAndAcquirePermissions( QStringLiteral( "android.permission.READ_EXTERNAL_STORAGE" ) ) )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
+    const jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.WRITE_EXTERNAL_STORAGE" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -278,7 +266,7 @@ bool AndroidUtils::requestCameraPermission()
   if ( checkAndAcquirePermissions( "android.permission.CAMERA" ) == false )
   {
     auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.CAMERA" ).object() );
+    const jboolean res = activity.callMethod<jboolean>( "shouldShowRequestPermissionRationale", "(Ljava/lang/String;)Z", QJniObject::fromString( "android.permission.CAMERA" ).object() );
     if ( !res )
     {
       // permanently denied permission, user needs to go to settings to allow permission
@@ -297,13 +285,17 @@ bool AndroidUtils::requestCameraPermission()
 bool AndroidUtils::requestMediaLocationPermission()
 {
 #ifdef ANDROID
+  const double buildVersion = QSysInfo::productVersion().toDouble();
   // ACCESS_MEDIA_LOCATION is a runtime permission without UI dialog (User do not need to click anything to grant it, it is granted automatically)
-  return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+  if ( buildVersion < ANDROID_VERSION_13 )
+  {
+    return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+  }
 #endif
   return true;
 }
 
-void AndroidUtils::callImagePicker( const QString &code )
+void AndroidUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
 #ifdef ANDROID
 
@@ -313,19 +305,21 @@ void AndroidUtils::callImagePicker( const QString &code )
   }
 
   mLastCode = code;
+  mTargetPath = targetPath;
 
-  // request media location permission to be able to read EXIF metadata from gallery image
+  // request media location permission to be able to read EXIF metadata from gallery image (only necessary for android < 14)
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
-  QJniObject ACTION_PICK = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_PICK", "Ljava/lang/String;" );
-  QJniObject EXTERNAL_CONTENT_URI = QJniObject::getStaticObjectField( "android/provider/MediaStore$Images$Media", "EXTERNAL_CONTENT_URI", "Landroid/net/Uri;" );
+  // we use ACTION_OPEN_DOCUMENT instead of ACTION_GET_CONTENT, because the new image picker redacted EXIF metadata on
+  // some devices
+  const QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_OPEN_DOCUMENT", "Ljava/lang/String;" );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_OPEN_DOCUMENT.object<jstring>() );
 
-  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;Landroid/net/Uri;)V", ACTION_PICK.object<jstring>(), EXTERNAL_CONTENT_URI.object<jobject>() );
-
-  if ( ACTION_PICK.isValid() && intent.isValid() )
+  if ( ACTION_OPEN_DOCUMENT.isValid() && intent.isValid() )
   {
-    intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
+    intent = intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( "image/*" ).object<jstring>() );
+    intent = intent.callObjectMethod( "putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", QJniObject::fromString( "EXTRA_LOCAL_ONLY" ).object<jstring>(), true );
     QtAndroidPrivate::startActivity( intent.object<jobject>(), MEDIA_CODE, this ); // this as receiver
   }
 #endif
@@ -345,18 +339,16 @@ void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
-  const QString IMAGE_CAPTURE_ACTION = QString( "android.media.action.IMAGE_CAPTURE" );
+  const QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+  const QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
 
-  QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
-  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
-
-  QJniObject packageName = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
-  QJniObject className = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
+  const QJniObject packageName = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting" ) );
+  const QJniObject className = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
 
   intent.callObjectMethod( "setClassName", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;", packageName.object<jstring>(), className.object<jstring>() );
 
-  QJniObject extra = QJniObject::fromString( "targetPath" );
-  QJniObject my_prefix = QJniObject::fromString( targetPath );
+  const QJniObject extra = QJniObject::fromString( "targetPath" );
+  const QJniObject my_prefix = QJniObject::fromString( targetPath );
 
   intent.callObjectMethod( "putExtra",
                            "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
@@ -373,10 +365,10 @@ void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
 }
 
 #ifdef ANDROID
-void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data )
+void AndroidUtils::handleActivityResult( const int receiverRequestCode, const int resultCode, const QJniObject &data )
 {
-  jint RESULT_OK = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
-  jint RESULT_CANCELED = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
+  const jint RESULT_OK = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_OK" );
+  const jint RESULT_CANCELED = QJniObject::getStaticField<jint>( "android/app/Activity", "RESULT_CANCELED" );
 
   if ( receiverRequestCode == BLUETOOTH_CODE )
   {
@@ -394,51 +386,45 @@ void AndroidUtils::handleActivityResult( int receiverRequestCode, int resultCode
 
   if ( resultCode == RESULT_CANCELED )
   {
-    QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    const QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
     // User has triggered cancel, result has no data.
     if ( !data.isValid() )
     {
       return;
     }
 
-    QJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
-    // Internal cancelation due to an error
-    QString errorMsg = errorJNI.toString();
+    const QJniObject errorJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    // Internal cancellation due to an error
+    const QString errorMsg = errorJNI.toString();
     emit notifyError( errorMsg );
     return;
   }
 
   if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
   {
-    QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
-    QJniObject mediaStore = QJniObject::getStaticObjectField( "android/provider/MediaStore$MediaColumns", "DATA", "Ljava/lang/String;" );
-    QJniEnvironment env;
-    jobjectArray projection = ( jobjectArray )env->NewObjectArray( 1, env->FindClass( "java/lang/String" ), NULL );
-    jobject projectionDataAndroid = env->NewStringUTF( mediaStore.toString().toStdString().c_str() );
-    env->SetObjectArrayElement( projection, 0, projectionDataAndroid );
-    auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-    QJniObject contentResolver = activity.callObjectMethod( "getContentResolver", "()Landroid/content/ContentResolver;" );
-    QJniObject cursor = contentResolver.callObjectMethod( "query", "(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;", uri.object<jobject>(), projection, NULL, NULL, NULL );
-    jint columnIndex = cursor.callMethod<jint>( "getColumnIndex", "(Ljava/lang/String;)I", mediaStore.object<jstring>() );
-    cursor.callMethod<jboolean>( "moveToFirst", "()Z" );
-    QJniObject result = cursor.callObjectMethod( "getString", "(I)Ljava/lang/String;", columnIndex );
-    QString selectedImagePath = "file://" + result.toString();
-    emit imageSelected( selectedImagePath, mLastCode );
+    // we call importImage method which copies the image from gallery to project and returns the project image path
+    // as we can't keep the access to images outside the app
+    const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
+    const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+    const QString newUri = activity.callObjectMethod( "importImage",
+                           "(Landroid/net/Uri;Ljava/lang/String;)Ljava/lang/String;",
+                           uri.object(),
+                           QJniObject::fromString( mTargetPath ).object<jstring>() )
+                           .toString();
+    emit imageSelected( newUri, mLastCode );
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {
-    QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
-    QJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
-    QString absolutePath = absolutePathJNI.toString();
-
-    QString selectedImagePath = "file://" + absolutePath;
+    const QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
+    const QJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
+    const QString absolutePath = absolutePathJNI.toString();
 
     emit imageSelected( absolutePath, mLastCode );
   }
   else
   {
-    QString msg( "Something went wrong with media store activity" );
-    qDebug() << msg;
+    const QString msg( "Something went wrong with media store activity" );
+    CoreUtils::log( "Android utils", msg );
     emit notifyError( msg );
   }
 

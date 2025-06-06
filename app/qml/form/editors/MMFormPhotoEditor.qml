@@ -266,7 +266,7 @@ MMFormPhotoViewer {
      */
     function chooseFromGallery() {
       if ( __androidUtils.isAndroid ) {
-        __androidUtils.callImagePicker( root._fieldIndex )
+        __androidUtils.callImagePicker( targetDir, root._fieldIndex )
       }
       else if ( __iosUtils.isIos ) {
         __iosUtils.callImagePicker( targetDir, root._fieldIndex )
