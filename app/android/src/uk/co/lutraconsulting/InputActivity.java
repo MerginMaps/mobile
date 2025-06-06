@@ -215,6 +215,7 @@ public class InputActivity extends QtActivity
 
   public String getFileName(Uri uri) {
     String result = null;
+    // try to get the file name from DISPLAY_NAME column in URI data
     if (uri.getScheme().equals("content")) {
       Cursor cursor = getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
       try {
@@ -225,6 +226,7 @@ public class InputActivity extends QtActivity
         cursor.close();
       }
     }
+    // if the previous approach fails just grab the name from URI, the last segment is the file name without suffix
     if (result == null) {
       result = uri.getPath();
       int cut = result.lastIndexOf('/');
