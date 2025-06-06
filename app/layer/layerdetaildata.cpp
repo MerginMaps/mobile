@@ -34,6 +34,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   emit layerTreeNodeChanged( mLayerTreeNode );
 
   mName = QString();
+  mLayerId = QString();
   mIsVisible = false;
   mIsSpatial = false;
   mIsVectorLayer = false;
@@ -44,6 +45,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   if ( !mLayerTreeNode || QgsLayerTree::isGroup( mLayerTreeNode ) )
   {
     emit nameChanged( mName );
+    emit layerIdChanged( mLayerId );
     emit isVisibleChanged( mIsVisible );
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
@@ -57,6 +59,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   if ( !nodeLayer || !nodeLayer->layer() )
   {
     emit nameChanged( mName );
+    emit layerIdChanged( mLayerId );
     emit isVisibleChanged( mIsVisible );
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
@@ -70,6 +73,9 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
 
   mName = nodeLayer->name();
   emit nameChanged( mName );
+
+  mLayerId = nodeLayer->layerId();
+  emit layerIdChanged( mLayerId );
 
   mIsSpatial = nodeLayer->layer()->isSpatial();
   emit isSpatialChanged( mIsSpatial );
@@ -119,6 +125,11 @@ QgsLayerTreeNode *LayerDetailData::layerTreeNode() const
 const QString &LayerDetailData::name() const
 {
   return mName;
+}
+
+const QString &LayerDetailData::layerId() const
+{
+  return mLayerId;
 }
 
 QgsVectorLayer *LayerDetailData::vectorLayer() const

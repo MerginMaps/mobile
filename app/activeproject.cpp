@@ -192,6 +192,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit localProjectChanged( mLocalProject );
     emit projectReloaded( mQgsProject );
     emit positionTrackingSupportedChanged();
+    emit mapAnnotationsEnabledChanged();
   }
 
   bool foundErrorsInLoadedProject = validateProject();
@@ -563,7 +564,7 @@ bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
   if ( layer->readOnly() )
     return false;
 
-  return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId();
+  return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId() && layer->id() != mapAnnotationsLayerId();
 }
 
 QString ActiveProject::positionTrackingLayerId() const
@@ -601,4 +602,22 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
   }
 
   return visibleLayers;
+}
+
+bool ActiveProject::mapAnnotationsEnabled() const
+{
+  if ( !isProjectLoaded() )
+  {
+    return false;
+  }
+
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Enabled" ), false );
+}
+
+QString ActiveProject::mapAnnotationsLayerId() const
+{
+  if ( !mQgsProject )
+    return QString();
+
+  return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ), QString() );
 }

@@ -131,6 +131,7 @@ set(MM_QML
     layers/MMLayersListPage.qml
     layers/MMLayersListSearchPage.qml
     layers/MMLayersController.qml
+    map/MMAnnotationsDrawer.qml
     map/MMHighlight.qml
     map/MMMapCanvas.qml
     map/MMMapThemeDrawer.qml

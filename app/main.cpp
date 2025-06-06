@@ -101,6 +101,7 @@
 #include "guidelinecontroller.h"
 #include "multieditmanager.h"
 #include "mixedattributevalue.h"
+#include "annotationscontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -339,6 +340,7 @@ void initDeclarative()
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
+  qmlRegisterType< AnnotationsController >( "mm", 1, 0, "AnnotationsController" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );
