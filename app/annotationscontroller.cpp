@@ -99,7 +99,7 @@ void AnnotationsController::finishDigitizing()
   }
   else
   {
-    mScreenPoints = mScreenPoints.simplify( 5 );
+    mScreenPoints = mScreenPoints.simplify( 1 );
     QgsVertexIterator it = mScreenPoints.vertices();
     QgsLineString *simplifiedMapPoints = new QgsLineString;
     while ( it.hasNext() )
