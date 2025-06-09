@@ -12,6 +12,7 @@ import QtQuick
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
 import "../components/photo" as MMPhotoComponents
+import "../components"as MMFormComponents
 
 /*
  * Photo viewer for feature form.
@@ -33,6 +34,7 @@ MMPrivateComponents.MMBaseInput {
   signal trashClicked()
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
+  signal drawOnPhotoClicked()
 
   StateGroup {
     id: photoStateGroup
@@ -105,6 +107,30 @@ MMPrivateComponents.MMBaseInput {
 
         onClicked: root.trashClicked()
       }
+
+      MMComponents.MMRoundButton {
+        anchors {
+          right: parent.right
+          top: parent.top
+          rightMargin: __style.margin10
+          topMargin: __style.margin10
+        }
+
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.drawIcon
+        iconColor: __style.forestColor
+
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
+
+        onClicked: {
+          if ( !drawingLoader.active ){
+            drawingLoader.active = true
+          } else {
+            drawingLoader.item.open()
+          }
+          drawingLoader.focus = true
+        }
+      }
     }
 
     MMPhotoComponents.MMPhotoAttachment {
@@ -134,6 +160,23 @@ MMPrivateComponents.MMBaseInput {
 
     MMPhotoComponents.MMPhotoPreview {
       photoUrl: root.photoUrl
+    }
+  }
+
+  Loader {
+    id: drawingLoader
+
+    active: false
+    sourceComponent: drawingComponent
+  }
+
+  Component {
+    id: drawingComponent
+
+    MMFormComponents.MMFormPhotoDrawingPageDialog {
+      photoUrl: root.photoUrl
+
+      Component.onCompleted: open()
     }
   }
 }
