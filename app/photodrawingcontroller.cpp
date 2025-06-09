@@ -11,6 +11,9 @@
 
 #include <QColor>
 #include <QPointF>
+#include <QPainterPath>
+#include <QPainter>
+#include <QUrl>
 
 #include "coreutils.h"
 
@@ -42,6 +45,11 @@ void PhotoDrawingController::addPoint(const QPointF newPoint, const double xOffs
                  QString::number(offsetPoint.x()).append(", ").append(QString::number(offsetPoint.y())).append(
                   ") to current line")));
  mCurrentLine.mPoints.append( offsetPoint );
+ if ( xOffset != mAnnotationOffsets.first || yOffset != mAnnotationOffsets.second )
+ {
+  mAnnotationOffsets.first = xOffset;
+  mAnnotationOffsets.second = yOffset;
+ }
 }
 
 void PhotoDrawingController::setActiveColor(const QColor newColor)
@@ -86,7 +94,61 @@ void PhotoDrawingController::clear()
 
 void PhotoDrawingController::saveDrawings()
 {
- CoreUtils::log( "Photo annotations", "I'm not empty!");
+ const QString photoPath = QUrl(mPhotoSource).toLocalFile();
+ QImage image(photoPath);
+ if (image.isNull()) {
+  CoreUtils::log( "Photo annotations", "Failed to load image from: " + photoPath );
+  return;
+ }
+ CoreUtils::log( "Photo annotations", "Image size: [" + QString::number(image.width()) + ", " + QString::number(image.height()) + "]" );
+ CoreUtils::log( "Photo annotations", "Photo scale ratio: " + QString::number(mPhotoScaleRatio) );
+
+ QPainter painter(&image);
+ painter.setRenderHint(QPainter::Antialiasing);
+
+ const int rowCount = mColorPathModel->rowCount();
+ const qreal offsetX = mAnnotationOffsets.first;
+ const qreal offsetY = mAnnotationOffsets.second;
+
+ for (int i = 0; i < rowCount; ++i) {
+  QVariant pathVariant = mColorPathModel->getPath(i);
+  QVariantMap pathMap = pathVariant.toMap();
+
+  QColor color = pathMap["color"].value<QColor>();
+  QVector<QPointF> points = pathMap["points"].value<QVector<QPointF>>();
+
+  if (points.isEmpty())
+   continue;
+
+  // if you are adjusting width here don't forget to adjust it also in MMFormPhotoDrawingPageDialog shapePathComponent
+  QPen pen(color, 2 * mPhotoScaleRatio );
+  CoreUtils::log( "Photo annotations", "Pen color: " + pen.color().name() );
+  painter.setPen(pen);
+
+  // the reason for the recalculation of positions: the path is stored in ColorPathModel which is directly used by
+  // ShapePath, thus the coordinates are moved by offset ( to take in mind the padding around the photo ) and they are
+  // scaled to the painted image size, however here we need to scale back to the real size of the photo
+  QPainterPath path;
+  path.moveTo( ( points.first().x() - offsetX ) * mPhotoScaleRatio, ( points.first().y() - offsetY ) * mPhotoScaleRatio );
+  CoreUtils::log( "Photo annotations", "Starting position of path: [" + QString::number(path.currentPosition().x()) + ", " + QString::number(path.currentPosition().y()) + "]" );
+  for (int j = 1; j < points.size(); ++j) {
+   path.lineTo( ( points[j].x() - offsetX ) * mPhotoScaleRatio, ( points[j].y() - offsetY ) * mPhotoScaleRatio );
+   CoreUtils::log( "Photo annotations", "Current position of path: [" + QString::number(path.currentPosition().x()) + ", " + QString::number(path.currentPosition().y()) + "]" );
+  }
+
+  painter.drawPath(path);
+ }
+
+ if (!image.save(photoPath)) {
+  CoreUtils::log( "Photo annotations", "Failed to save image to: " + photoPath );
+ } else {
+  CoreUtils::log( "Photo annotations", "Image saved to: " + photoPath );
+ }
+}
+
+void PhotoDrawingController::setPhotoScaleRatio( const double ratio)
+{
+ mPhotoScaleRatio = ratio;
 }
 
 ColorPathModel *PhotoDrawingController::annotations() const
