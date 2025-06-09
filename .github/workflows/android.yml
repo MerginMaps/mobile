@@ -10,10 +10,6 @@ on:
     - 'CMakeLists.txt'
     - '.github/workflows/android.yml'
 
-  release:
-    types:
-      - published
-
 concurrency:
   group: ci-${{github.ref}}-android
   cancel-in-progress: true
