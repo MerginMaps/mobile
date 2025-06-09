@@ -123,11 +123,7 @@ MMPrivateComponents.MMBaseInput {
         visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
 
         onClicked: {
-          if ( !drawingLoader.active ){
-            drawingLoader.active = true
-          } else {
-            drawingLoader.item.open()
-          }
+          drawingLoader.active = true
           drawingLoader.focus = true
         }
       }
@@ -177,6 +173,10 @@ MMPrivateComponents.MMBaseInput {
       photoUrl: root.photoUrl
 
       Component.onCompleted: open()
+
+      onClosed: {
+        drawingLoader.active = false
+      }
     }
   }
 }

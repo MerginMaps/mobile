@@ -44,6 +44,9 @@ class PhotoDrawingController: public QObject {
         // saves the drawings into the image
         Q_INVOKABLE void saveDrawings();
 
+        // saves the ratio by which the actual image was scaled in app
+        Q_INVOKABLE void setPhotoScaleRatio( double ratio );
+
     signals:
         void canUndoChanged();
         void activeColorChanged();
@@ -52,6 +55,8 @@ class PhotoDrawingController: public QObject {
     private:
         ColorPathModel *annotations() const;
 
+        std::pair<double, double> mAnnotationOffsets = std::make_pair( 0.0, 0.0 );
+        double mPhotoScaleRatio = 1.0;
         QString mPhotoSource;
         QColor mPenColor = QColor::fromString("#FFFFFF");
         bool mCanUndo = false;
