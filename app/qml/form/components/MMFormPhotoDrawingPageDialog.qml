@@ -34,10 +34,6 @@ Dialog {
   height: parent.height
   anchors.centerIn: parent
 
-  function save() {
-    console.log( "Changes saved" )
-  }
-
   function draw(){
     // centroid gets set to (0, 0) when drag stops
     if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
@@ -99,7 +95,9 @@ Dialog {
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       onClicked: {
-        root.save()
+        annotationsController.saveDrawings()
+        root.close()
+        annotationsController.clear()
       }
     }
   }
@@ -129,6 +127,19 @@ Dialog {
           isLocalFile: root.photoUrl.startsWith("file://")
 
           fillMode: Image.PreserveAspectFit
+
+          onPaintedWidthChanged: updateScaleRatio()
+          onPaintedHeightChanged: updateScaleRatio()
+          onStatusChanged: {
+            if (status === Image.Ready) updateScaleRatio()
+          }
+
+          function updateScaleRatio() {
+            if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
+              const scaleRatio = sourceSize.width / paintedWidth
+              annotationsController.setPhotoScaleRatio( scaleRatio )
+            }
+          }
 
           Item {
             width: parent.paintedWidth
@@ -189,31 +200,12 @@ Dialog {
             shape.shapePaths.splice( shapePathsIndex, 1 )
             console.log( "Shape children count after removal: " + shape.data.length)
             console.log( "Shape children after removal: " + shape.data )
-            // const item = shape.data.pop();
-            // const stringArray = shape.data.toString().split(",")
-            // const itemIndex = stringArray.findLastIndex( element => element.toString().includes("QQuickShapePath") );
-            // if ( itemIndex > -1 ) {
-            //   // console.log( "Modified data array: " + shape.data.toSpliced( itemIndex, 1 ) )
-            //   console.log("Removed item: " + shape.data[itemIndex] )
-            //   const removedItem = shape.data.splice( itemIndex, 1 )
-            //   console.log("Actual removed item: " + removedItem )
-            //   removedItem[0].destroy()
-            //   console.log( "Shape children count after removal: " + shape.data.length)
-            //   console.log( "Shape children after removal: " + shape.data )
-            // }
           }
 
           function onModelReset() {
-            // we delete all the paths in Shape (skipping the first child which should be the photo)
-            // while (shape.data.length > 4) {
-            //   const shapePath = shape.data.pop()
-            //   shapePath.destroy()
-            // }
+            // we delete all the paths in Shape
             console.log( "Shape children count before clearing: " + shape.data.length)
             console.log( "Shape children before clearing: " + shape.data )
-            // const stringArray = shape.data.toString().split(",")
-            // stringArray.reverse()
-            // console.log( "String array: " + stringArray )
             while ( shape.data.findIndex( element => element.toString().includes("QQuickShapePath") ) > -1 )
             {
               const itemIndex = shape.data.findIndex( element => element.toString().includes("QQuickShapePath") )
@@ -280,6 +272,7 @@ Dialog {
       required property var modelData
 
       strokeColor: modelData.color
+      // if you are adjusting width here don't forget to adjust it also in PhotoDrawingController saveDrawings()
       strokeWidth: 2
       fillColor: __style.transparentColor
       startX: shape.photoPaddingWidth + modelData.points[0].x
