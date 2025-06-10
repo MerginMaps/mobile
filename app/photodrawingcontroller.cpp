@@ -133,7 +133,7 @@ void PhotoDrawingController::saveDrawings()
    continue;
 
   // if you are adjusting width here don't forget to adjust it also in MMFormPhotoDrawingPageDialog shapePathComponent
-  QPen pen(color, 2 * mPhotoScaleRatio );
+  QPen pen(color, 4 * mPhotoScaleRatio );
   CoreUtils::log( "Photo annotations", "Pen color: " + pen.color().name() );
   painter.setPen(pen);
 
