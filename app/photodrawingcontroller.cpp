@@ -29,7 +29,7 @@ void PhotoDrawingController::newDrawing()
  {
   mColorPathModel->addPath( mCurrentLine );
   emit annotationsChanged();
-  if ( !mCanUndo )
+  if ( !mCanUndo && mColorPathModel->rowCount() > 1 )
   {
    mCanUndo = true;
    emit canUndoChanged();
@@ -75,17 +75,18 @@ void PhotoDrawingController::setActiveColor(const QColor newColor)
 void PhotoDrawingController::undo()
 {
  CoreUtils::log( "Photo annotations", "Removing the last line");
- if ( !mColorPathModel->isEmpty() )
+ if ( mColorPathModel->rowCount() > 1 )
  {
   CoreUtils::log( "Photo annotations", "Removed the last line saved");
   mColorPathModel->removeLastPath();
+  mColorPathModel->updatePath( mColorPathModel->rowCount() - 1, mCurrentLine );
   emit annotationsChanged();
  }
- if ( !mColorPathModel->isEmpty() && !mCanUndo )
+ if ( mColorPathModel->rowCount() > 1 && !mCanUndo )
  {
   mCanUndo = true;
   emit canUndoChanged();
- } else if ( mColorPathModel->isEmpty() && mCanUndo )
+ } else if ( mColorPathModel->rowCount() <= 1 && mCanUndo )
  {
   mCanUndo = false;
   emit canUndoChanged();

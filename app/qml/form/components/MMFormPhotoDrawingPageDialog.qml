@@ -201,7 +201,9 @@ Dialog {
             const stringArray = shape.data.toString().split(",")
             stringArray.reverse()
             console.log( "String array: " + stringArray )
-            const itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") );
+            let itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") )
+            stringArray.splice( itemReverseIndex, 1 )
+            itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") ) + 1
             const itemIndex = shape.data.length - itemReverseIndex - 1
             removeItemByIndex( itemIndex )
             console.log( "Shape children count after removal: " + shape.data.length)
