@@ -173,7 +173,7 @@ Item {
 
       onPressed: function ( mouse ) {
         initialPosition = Qt.point( mouse.x, mouse.y )
-        // rendererPrivate.freeze( mouseArea.freezeId )
+        rendererPrivate.freeze( mouseArea.freezeId )
 
         dragDifferentiatorTimer.start()
       }

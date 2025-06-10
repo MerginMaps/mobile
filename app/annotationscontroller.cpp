@@ -1,10 +1,4 @@
 /***************************************************************************
-    annotationscontroller.cpp
-    ---------------------
-    begin                : May 2025
-    copyright            : (C) 2025 by Stefanos Natsis
-    email                : uclaros at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,33 +20,39 @@
 
 
 AnnotationsController::AnnotationsController( QObject *parent )
+  : QObject( parent )
 {
 }
 
 AnnotationsController::~AnnotationsController()
 {
-  if ( mLayer )
-    qDebug() << "Annotations layer, commit changes: " << mLayer->commitChanges();
+  if ( !mLayer )
+    return;
+
+  if ( !mLayer->commitChanges() )
+  {
+    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Could not save changes to map annotations layer" ) );
+  }
 }
 
-void AnnotationsController::updateHighlight( QPointF oldPoint, QPointF newPoint )
+void AnnotationsController::updateHighlight( const QPointF &oldPoint, const QPointF &newPoint )
 {
   if ( mHighlight.isEmpty() )
   {
     const QgsPoint p0 = mMapSettings->screenToCoordinate( oldPoint );
-    auto *ls = new QgsLineString( QVector<QgsPoint>() << p0 );
+    QgsLineString *ls = new QgsLineString( QVector<QgsPoint>() << p0 );
     ls->addZValue();
     ls->addMValue();
-    auto *mls = new QgsMultiLineString( QList<QgsLineString *>() << ls );
+    QgsMultiLineString *mls = new QgsMultiLineString( QList<QgsLineString *>() << ls );
     mHighlight = QgsGeometry( mls );
 
     mScreenPoints = QgsGeometry( new QgsLineString( { QgsPointXY( oldPoint.x(), oldPoint.y() ) } ) );
   }
-  mScreenPoints.insertVertex( newPoint.x(), newPoint.y(), 0 );
 
+  // TODO: append instead of insert to zero
+  mScreenPoints.insertVertex( newPoint.x(), newPoint.y(), 0 );
   const QgsPoint p1 = mMapSettings->screenToCoordinate( newPoint );
   mHighlight.insertVertex( p1, 0 );
-
 
   emit highlightGeometryChanged();
 }
@@ -116,13 +116,14 @@ void AnnotationsController::finishDigitizing()
     const QgsGeometry geom = InputUtils::transformGeometry( multiLineGeom, mMapSettings->destinationCrs(), mLayer );
     QgsFeature feature = QgsVectorLayerUtils::createFeature( mLayer, geom );
     feature.setAttribute( QStringLiteral( "color" ), mColor );
+    // TODO: Variable Manager for expressions?
     mLayer->beginEditCommand( QStringLiteral( "Add map annotation" ) );
     mLayer->addFeature( feature );
     mLayer->endEditCommand();
   }
 }
 
-void AnnotationsController::undo()
+void AnnotationsController::undo() const
 {
   if ( !mLayer )
     return;
@@ -137,10 +138,8 @@ QgsGeometry AnnotationsController::highlightGeometry() const
 
 QStringList AnnotationsController::availableColors() const
 {
-  QgsProject *project = mMapSettings->project();
-
   const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
-  return project->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Colors" ), defaultColors );
+  return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Colors" ), defaultColors );
 }
 
 void AnnotationsController::clearHighlight()
@@ -154,7 +153,7 @@ void AnnotationsController::setMapSettings( InputMapSettings *settings )
   if ( !settings )
     return;
 
-  QgsProject *project = settings->project();
+  const QgsProject *project = settings->project();
 
   if ( !project )
   {

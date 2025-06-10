@@ -1,10 +1,4 @@
 /***************************************************************************
-    annotationscontroller.h
-    ---------------------
-    begin                : May 2025
-    copyright            : (C) 2025 by Stefanos Natsis
-    email                : uclaros at gmail dot com
- ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,7 +11,6 @@
 #define ANNOTATIONSCONTROLLER_H
 
 #include <QObject>
-#include <QPointF>
 #include <QColor>
 
 #include "qgsgeometry.h"
@@ -37,13 +30,13 @@ class AnnotationsController : public QObject
 
   public:
     explicit AnnotationsController( QObject *parent = nullptr );
-    ~AnnotationsController();
+    ~AnnotationsController() override;
 
-    Q_INVOKABLE void updateHighlight( QPointF oldPoint, QPointF newPoint );
+    Q_INVOKABLE void updateHighlight( const QPointF &oldPoint, const QPointF &newPoint );
 
     Q_INVOKABLE void finishDigitizing();
 
-    Q_INVOKABLE void undo();
+    Q_INVOKABLE void undo() const;
 
     Q_INVOKABLE QStringList availableColors() const;
 

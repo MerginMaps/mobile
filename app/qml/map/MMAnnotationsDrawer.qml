@@ -69,9 +69,6 @@ MMDrawer {
       ScrollBar.vertical.policy: ScrollBar.AlwaysOff
       ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-      // contentHeight: availableHeight
-      // contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
-
       Row {
         id: scrollRow
         width: parent.width

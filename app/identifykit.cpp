@@ -66,11 +66,12 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
   }
   else
   {
+    const QString annotationLayer = mMapSettings->project()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ) );
     for ( QgsMapLayer *layer : mMapSettings->mapSettings().layers() )
     {
       if ( mMapSettings->project() &&
            ( !layer->flags().testFlag( QgsMapLayer::Identifiable )
-             || layer->id() == mMapSettings->project()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ) ) ) )
+             || layer->id() == annotationLayer ) )
         continue;
 
       QgsVectorLayer *vl = qobject_cast<QgsVectorLayer *>( layer );
