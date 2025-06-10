@@ -285,7 +285,7 @@ Dialog {
 
       strokeColor: modelData.color
       // if you are adjusting width here don't forget to adjust it also in PhotoDrawingController saveDrawings()
-      strokeWidth: 2
+      strokeWidth: 4
       fillColor: __style.transparentColor
       startX: shape.photoPaddingWidth + modelData.points[0].x
       startY: shape.photoPaddingHeight + modelData.points[0].y
