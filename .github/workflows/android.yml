@@ -57,8 +57,7 @@ jobs:
       - name: Delete simulators to reclaim disk space
         shell: bash
         run: |
-          xcrun simctl delete all
-          sudo rm -rf ~/Library/Developer/CoreSimulator/Caches/*
+          rm -rf /__t/CodeQL || echo "CodeQL not found"
 
       - name: Disk space after cleanup
         run: |
