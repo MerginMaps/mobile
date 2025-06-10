@@ -42,7 +42,7 @@ public:
   PointsRole
 };
 
- explicit ColorPathModel(QObject *parent = nullptr) : QAbstractListModel(parent) {}
+ explicit ColorPathModel(QObject *parent = nullptr);
 
  /**
   * Get the qml representation of ColorPath.
@@ -54,6 +54,13 @@ public:
   * \param path the finished ColorPath to add
   */
  void addPath(const ColorPath &path);
+
+ /**
+  * Update path identified by \a row. Emits \a pathUpdated signal.
+  * \param row
+  * \param path
+  */
+ void updatePath(int row, const ColorPath &path);
 
  /**
   * Removes the last added path from the model.
@@ -75,6 +82,9 @@ public:
  QVariant data(const QModelIndex &index, int role) const override;
 
  QHash<int, QByteArray> roleNames() const override;
+
+ signals:
+  void pathUpdated( int row );
 
 private:
  QVector<ColorPath> mPaths;
