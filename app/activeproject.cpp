@@ -617,3 +617,13 @@ QString ActiveProject::mapSketchesLayerId() const
 
   return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Layer" ), QString() );
 }
+
+bool ActiveProject::photoAnnotationsEnabled() const
+{
+  if ( !isProjectLoaded() )
+  {
+    return false;
+  }
+
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoAnnotations/Enabled" ), false );
+}
