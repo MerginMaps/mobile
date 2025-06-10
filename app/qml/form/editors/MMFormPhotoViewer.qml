@@ -120,7 +120,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoAnnotationsEnabled
 
         onClicked: {
           drawingLoader.active = true
