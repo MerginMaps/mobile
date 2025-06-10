@@ -55,7 +55,7 @@ jobs:
       - name: Delete unused XC versions to reclaim disk space
         shell: bash
         run: |
-          find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_${{ XC_VERSION }}.app' -exec rm -rf {} \;
+          find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_${{ env.XC_VERSION }}.app' -exec rm -rf {} \;
 
       - name: Disk space after cleanup
         run: |
