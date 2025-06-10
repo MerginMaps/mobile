@@ -45,6 +45,13 @@ void PhotoDrawingController::addPoint(const QPointF newPoint, const double xOffs
                  QString::number(offsetPoint.x()).append(", ").append(QString::number(offsetPoint.y())).append(
                   ") to current line")));
  mCurrentLine.mPoints.append( offsetPoint );
+ if ( mColorPathModel->rowCount() == 0 )
+ {
+  mColorPathModel->addPath( mCurrentLine );
+ } else
+ {
+  mColorPathModel->updatePath( mColorPathModel->rowCount() - 1, mCurrentLine );
+ }
  if ( xOffset != mAnnotationOffsets.first || yOffset != mAnnotationOffsets.second )
  {
   mAnnotationOffsets.first = xOffset;
@@ -57,6 +64,10 @@ void PhotoDrawingController::setActiveColor(const QColor newColor)
  CoreUtils::log( "Photo annotations", "Setting current color to " + newColor.name() );
  mPenColor = newColor;
  mCurrentLine.mColor = newColor;
+ if ( mColorPathModel->rowCount() > 0 )
+ {
+  mColorPathModel->updatePath( mColorPathModel->rowCount() - 1, mCurrentLine );
+ }
 
  emit activeColorChanged();
 }

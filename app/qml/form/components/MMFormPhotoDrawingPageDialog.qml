@@ -34,16 +34,6 @@ Dialog {
   height: parent.height
   anchors.centerIn: parent
 
-  function draw(){
-    // centroid gets set to (0, 0) when drag stops
-    if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
-      annotationsController.newDrawing()
-    }
-    else {
-      annotationsController.addPoint( dragHandler.centroid.position, shape.photoPaddingWidth, shape.photoPaddingHeight )
-    }
-  }
-
   background: Rectangle {
     color: __style.lightGreenColor
   }
@@ -154,7 +144,13 @@ Dialog {
                 // somehow the drag handler gets notified even when drag continues outside parent on some sides
                 const outsideImageBounds = centroid.position.x > parent.width || centroid.position.y > parent.height
                 if (!outsideImageBounds) {
-                  root.draw()
+                  // centroid gets set to (0, 0) when drag stops
+                  if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
+                    annotationsController.newDrawing()
+                  }
+                  else {
+                    annotationsController.addPoint( dragHandler.centroid.position, shape.photoPaddingWidth, shape.photoPaddingHeight )
+                  }
                 }
               }
             }
@@ -163,6 +159,24 @@ Dialog {
 
         Connections {
           target: annotationsController.annotations
+
+          function onPathUpdated( index ) {
+            console.log( "Shape children count before: " + shape.data.length)
+            console.log( "Shape children before: " + shape.data )
+            const modelData = annotationsController.annotations.getPath( index )
+            const stringArray = shape.data.toString().split(",")
+            stringArray.reverse()
+            console.log( "String array: " + stringArray )
+            const itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") );
+            const itemIndex = shape.data.length - itemReverseIndex - 1
+            console.log( "ShapePath color: " + shape.data[itemIndex].modelData.color )
+            console.log( "ShapePath points count: " + shape.data[itemIndex].modelData.points.length )
+            shape.data[itemIndex].modelData = modelData
+            console.log( "ShapePath color after: " + shape.data[itemIndex].modelData.color )
+            console.log( "ShapePath points count after: " + shape.data[itemIndex].modelData.points.length )
+            console.log( "Shape children count after: " + shape.data.length)
+            console.log( "Shape children after: " + shape.data )
+          }
 
           function onRowsInserted( _, __, last) {
             console.log( "Shape children count before: " + shape.data.length)
@@ -189,15 +203,7 @@ Dialog {
             console.log( "String array: " + stringArray )
             const itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") );
             const itemIndex = shape.data.length - itemReverseIndex - 1
-            console.log( "Shape path to remove: " + shape.data[itemIndex] )
-            const removedItem = shape.data.splice( itemIndex, 1, ...shape.data.slice( itemIndex + 1 ) )
-            console.log("Actual removed item: " + removedItem )
-            console.log( "ShapePaths: " + shape.shapePaths)
-            const shapePathsIndex = shape.shapePaths.findIndex( element => element.toString() === removedItem.toString() )
-            console.log("ShapePaths index: " + shapePathsIndex )
-            console.log("Actual shapePaths item: " + shape.shapePaths[shapePathsIndex] )
-            shape.shapePaths[shapePathsIndex].destroy()
-            shape.shapePaths.splice( shapePathsIndex, 1 )
+            removeItemByIndex( itemIndex )
             console.log( "Shape children count after removal: " + shape.data.length)
             console.log( "Shape children after removal: " + shape.data )
           }
@@ -209,18 +215,22 @@ Dialog {
             while ( shape.data.findIndex( element => element.toString().includes("QQuickShapePath") ) > -1 )
             {
               const itemIndex = shape.data.findIndex( element => element.toString().includes("QQuickShapePath") )
-              console.log("Shape path to remove: " + shape.data[itemIndex])
-              const removedItem = shape.data.splice(itemIndex, 1, ...shape.data.slice(itemIndex + 1))
-              console.log("Actual removed item: " + removedItem)
-              console.log( "ShapePaths: " + shape.shapePaths)
-              const shapePathsIndex = shape.shapePaths.findIndex( element => element.toString() === removedItem.toString() )
-              console.log("ShapePaths index: " + shapePathsIndex )
-              console.log("Actual shapePaths item: " + shape.shapePaths[shapePathsIndex] )
-              shape.shapePaths[shapePathsIndex].destroy()
-              shape.shapePaths.splice( shapePathsIndex, 1 )
+              removeItemByIndex( itemIndex )
             }
             console.log( "Shape children count after removal: " + shape.data.length)
             console.log( "Shape children after removal: " + shape.data )
+          }
+
+          function removeItemByIndex( index ) {
+            console.log( "Shape path to remove: " + shape.data[index] )
+            const removedItem = shape.data.splice( index, 1, ...shape.data.slice( index + 1 ) )
+            console.log("Actual removed item: " + removedItem )
+            console.log( "ShapePaths: " + shape.shapePaths)
+            const shapePathsIndex = shape.shapePaths.findIndex( element => element.toString() === removedItem.toString() )
+            console.log("ShapePaths index: " + shapePathsIndex )
+            console.log("Actual shapePaths item: " + shape.shapePaths[shapePathsIndex] )
+            shape.shapePaths[shapePathsIndex].destroy()
+            shape.shapePaths.splice( shapePathsIndex, 1 )
           }
         }
       }

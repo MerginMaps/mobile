@@ -13,6 +13,8 @@
 
 #include "coreutils.h"
 
+ColorPathModel::ColorPathModel(QObject *parent) : QAbstractListModel(parent) {}
+
 QVariant ColorPathModel::getPath( const int row) const
 {
  if (row < 0 || row >= rowCount()) return {};
@@ -28,6 +30,12 @@ void ColorPathModel::addPath(const ColorPath &path) {
  beginInsertRows(QModelIndex(), mPaths.size(), mPaths.size());
  mPaths.append(path);
  endInsertRows();
+}
+
+void ColorPathModel::updatePath(const int row, const ColorPath &path)
+{
+ mPaths[row] = path;
+ emit pathUpdated( row );
 }
 
 void ColorPathModel::removeLastPath()
