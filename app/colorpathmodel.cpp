@@ -40,11 +40,12 @@ void ColorPathModel::updatePath(const int row, const ColorPath &path)
 
 void ColorPathModel::removeLastPath()
 {
- if (mPaths.isEmpty())
+ if (mPaths.isEmpty() || mPaths.size() == 1 )
   return;
 
- beginRemoveRows(QModelIndex(), mPaths.size() - 1, mPaths.size() - 1);
- mPaths.removeLast();
+ // we remove the last finished path instead of last path as that is the current active path
+ beginRemoveRows(QModelIndex(), mPaths.size() - 2, mPaths.size() - 2 );
+ mPaths.remove( mPaths.size() - 2 );
  endRemoveRows();
 }
 
