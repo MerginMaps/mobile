@@ -39,6 +39,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
     Q_PROPERTY( bool mapAnnotationsEnabled READ mapAnnotationsEnabled NOTIFY mapAnnotationsEnabledChanged )
+    Q_PROPERTY( bool photoAnnotationsEnabled READ photoAnnotationsEnabled NOTIFY photoAnnotationsEnabledChanged )
 
   public:
     explicit ActiveProject(
@@ -138,6 +139,11 @@ class ActiveProject: public QObject
     //! Returns position tracking layer ID if exists
     Q_INVOKABLE QString mapAnnotationsLayerId() const;
 
+    /**
+     * Returns whether the photo annotations are enabled in MM settings
+     */
+    bool photoAnnotationsEnabled() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -168,6 +174,8 @@ class ActiveProject: public QObject
     void projectRoleChanged();
 
     void mapAnnotationsEnabledChanged();
+
+    void photoAnnotationsEnabledChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)
