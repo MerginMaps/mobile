@@ -57,7 +57,8 @@ jobs:
       - name: Delete simulators to reclaim disk space
         shell: bash
         run: |
-          rm -rf /__t/CodeQL || echo "CodeQL not found"
+          find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_16.2.app' -exec rm -rf {} \;
+          find /Applications/Xcode* -name "*.app" -exec du -mcsh {} \;  # Shows Xcode app sizes
 
       - name: Disk space after cleanup
         run: |
