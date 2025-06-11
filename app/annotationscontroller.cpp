@@ -168,7 +168,7 @@ void AnnotationsController::setMapSettings( InputMapSettings *settings )
 
   if ( !mLayer )
   {
-    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Can not initialize map annotations, layer is missing" ) );
+    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Can not initialize map annotations, layer %1 is missing" ).arg( layerId ) );
   }
   else
   {

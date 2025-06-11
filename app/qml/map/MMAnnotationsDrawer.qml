@@ -80,12 +80,16 @@ MMDrawer {
           model: root.annotationsController?.availableColors() ?? null
 
           Button {
-            implicitWidth: 42
-            implicitHeight: 42
+            id: colorButton
+
+            readonly property bool isSelected: root.annotationsController.activeColor.toString().toLowerCase() === modelData.toLowerCase()
+
+            implicitWidth: 40 * __dp
+            implicitHeight: 40 * __dp
             background: Rectangle {
               color: modelData
-              radius: __style.radius30
-              border.width: 1 + ( root.annotationsController.activeColor.toString().toLowerCase() === modelData.toLowerCase() ? 2 : 0 )
+              radius: colorButton.implicitHeight / ( isSelected ? 2.5 : 2 )
+              border.width: isSelected ? 4 * __dp : 0
               border.color: "black"
             }
 

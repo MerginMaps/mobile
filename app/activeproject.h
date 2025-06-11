@@ -135,7 +135,7 @@ class ActiveProject: public QObject
 
     bool mapAnnotationsEnabled() const;
 
-    //! Returns position tracking layer ID if exists
+    //! Returns map annotations layer ID if exists
     Q_INVOKABLE QString mapAnnotationsLayerId() const;
 
   signals:
