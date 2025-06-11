@@ -48,17 +48,15 @@ jobs:
           df -h .
 
       #
-      # Simulators on macOS runners take up a lot of disk space.
-      # We do not use them and are in need of some additional disk space.
+      # Free up space by removing unused XCode versions
       #
-      # See https://github.com/actions/runner-images/issues/10511 and
-      # https://github.com/carbon-language/carbon-lang/pull/4287
+      # See https://github.com/actions/runner-images/issues/10511
+      # Removes all XCode versions, but the one we use
       #
-      - name: Delete simulators to reclaim disk space
+      - name: Delete unused XC versions to reclaim disk space
         shell: bash
         run: |
-          xcrun simctl delete all
-          sudo rm -rf ~/Library/Developer/CoreSimulator/Caches/*
+          find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_${{ env.XC_VERSION }}.app' -exec rm -rf {} \;
 
       - name: Disk space after cleanup
         run: |
