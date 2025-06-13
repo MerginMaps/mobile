@@ -101,8 +101,7 @@
 #include "guidelinecontroller.h"
 #include "multieditmanager.h"
 #include "mixedattributevalue.h"
-#include "photodrawingcontroller.h"
-#include "colorpathmodel.h"
+#include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
 
 #include "projectsmodel.h"
@@ -342,8 +341,7 @@ void initDeclarative()
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
   qmlRegisterType< MapSketchingController >( "mm", 1, 0, "MapSketchingController" );
-  qmlRegisterType< PhotoDrawingController >( "mm", 1, 0, "PhotoDrawingController" );
-  qmlRegisterType< ColorPathModel >("mm", 1, 0, "ColorPathModel");
+  qmlRegisterType< PhotoSketchingController >( "mm", 1, 0, "PhotoSketchingController" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );

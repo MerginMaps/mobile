@@ -39,7 +39,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
     Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
-    Q_PROPERTY( bool photoAnnotationsEnabled READ photoAnnotationsEnabled NOTIFY photoAnnotationsEnabledChanged )
+    Q_PROPERTY( bool photoSketchesEnabled READ photoSketchesEnabled NOTIFY photoSketchesEnabledChanged )
 
   public:
     explicit ActiveProject(
@@ -145,7 +145,7 @@ class ActiveProject: public QObject
     /**
      * Returns whether the photo annotations are enabled in MM settings
      */
-    bool photoAnnotationsEnabled() const;
+    bool photoSketchesEnabled() const;
 
   signals:
     void qgsProjectChanged();
@@ -171,17 +171,17 @@ class ActiveProject: public QObject
 
     void positionTrackingSupportedChanged();
 
-    // Emited when the app (UI) should show tracking because there is a running tracking service
+    // Emitted when the app (UI) should show tracking because there is a running tracking service
     void startPositionTracking();
 
     void projectRoleChanged();
 
     void mapSketchesEnabledChanged();
 
-    void photoAnnotationsEnabledChanged();
+    void photoSketchesEnabledChanged();
 
   public slots:
-    // Reloads project if current project path matches given path (its the same project)
+    // Reloads project if current project path matches given path (it's the same project)
     bool reloadProject( QString projectDir );
 
     void setAutosyncEnabled( bool enabled );
@@ -206,7 +206,7 @@ class ActiveProject: public QObject
      */
     void updateActiveLayer();
 
-    //! Reloads layers in 'recoring layers model'
+    //! Reloads layers in 'recording layers model'
     void updateRecordingLayers();
 
     QgsProject *mQgsProject = nullptr;
