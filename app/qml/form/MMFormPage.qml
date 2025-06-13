@@ -35,12 +35,12 @@ Page {
   signal canceled
 
   /**
-   * Signal emited when relation editor requests to open child feature form
+   * Signal emitted when relation editor requests to open child feature form
    */
   signal openLinkedFeature( var linkedFeature )
 
   /**
-   * Signal emited when relation editor requests to create child feature and open its form
+   * Signal emitted when relation editor requests to create child feature and open its form
    */
   signal createLinkedFeature( var parentController, var relation )
 

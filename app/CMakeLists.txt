@@ -88,6 +88,7 @@ set(MM_SRCS
     variablesmanager.cpp
     workspacesmodel.cpp
     workspacesproxymodel.cpp
+    photosketchingcontroller.cpp
 )
 
 set(MM_HDRS
@@ -178,6 +179,7 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
+    photosketchingcontroller.h
 )
 
 if (HAVE_BLUETOOTH)
