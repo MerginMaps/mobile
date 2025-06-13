@@ -47,12 +47,12 @@ Dialog {
       size: MMButton.Sizes.Small
       bgndColor: __style.polarColor
       bgndColorDisabled: __style.polarColor
-      enabled: annotationsController.canUndo
+      enabled: sketchesController.canUndo
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
       onClicked: {
-        annotationsController.undo()
+        sketchesController.undo()
       }
     }
 
@@ -85,9 +85,9 @@ Dialog {
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       onClicked: {
-        annotationsController.saveDrawings()
+        sketchesController.saveDrawings()
         root.close()
-        annotationsController.clear()
+        sketchesController.clear()
       }
     }
   }
@@ -106,6 +106,14 @@ Dialog {
         property real photoPaddingWidth: ( width - photo.paintedWidth ) / 2
         property real photoPaddingHeight: ( height - photo.paintedHeight ) / 2
         property var shapePaths: []
+
+        onPhotoPaddingWidthChanged: {
+          sketchesController.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+        }
+
+        onPhotoPaddingHeightChanged: {
+          sketchesController.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+        }
 
         MMComponents.MMPhoto {
           id: photo
@@ -126,8 +134,7 @@ Dialog {
 
           function updateScaleRatio() {
             if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
-              const scaleRatio = sourceSize.width / paintedWidth
-              annotationsController.setPhotoScaleRatio( scaleRatio )
+              sketchesController.setPhotoScaleRatio( sourceSize.width / paintedWidth )
             }
           }
 
@@ -146,10 +153,10 @@ Dialog {
                 if (!outsideImageBounds) {
                   // centroid gets set to (0, 0) when drag stops
                   if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
-                    annotationsController.newDrawing()
+                    sketchesController.newDrawing()
                   }
                   else {
-                    annotationsController.addPoint( dragHandler.centroid.position, shape.photoPaddingWidth, shape.photoPaddingHeight )
+                    sketchesController.addPoint( dragHandler.centroid.position )
                   }
                 }
               }
@@ -158,79 +165,52 @@ Dialog {
         }
 
         Connections {
-          target: annotationsController.annotations
+          target: sketchesController
 
-          function onPathUpdated( index ) {
-            console.log( "Shape children count before: " + shape.data.length)
-            console.log( "Shape children before: " + shape.data )
-            const modelData = annotationsController.annotations.getPath( index )
-            const stringArray = shape.data.toString().split(",")
-            stringArray.reverse()
-            console.log( "String array: " + stringArray )
-            const itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") );
-            const itemIndex = shape.data.length - itemReverseIndex - 1
-            console.log( "ShapePath color: " + shape.data[itemIndex].modelData.color )
-            console.log( "ShapePath points count: " + shape.data[itemIndex].modelData.points.length )
-            shape.data[itemIndex].modelData = modelData
-            console.log( "ShapePath color after: " + shape.data[itemIndex].modelData.color )
-            console.log( "ShapePath points count after: " + shape.data[itemIndex].modelData.points.length )
-            console.log( "Shape children count after: " + shape.data.length)
-            console.log( "Shape children after: " + shape.data )
+          function onPathUpdated( indexArray ) {
+            for ( const index of indexArray ) {
+              const modelData = sketchesController.getPath(index)
+              const stringArray = shape.data.toString().split(",")
+              const firstIndex = stringArray.findIndex(element => element.toString().includes("QQuickShapePath"));
+              const itemIndex =  firstIndex + index
+              shape.data[itemIndex].modelData = modelData
+            }
           }
 
-          function onRowsInserted( _, __, last) {
-            console.log( "Shape children count before: " + shape.data.length)
-            console.log( "Shape children before: " + shape.data )
-            const modelData = annotationsController.annotations.getPath( last );
+          function onNewPathAdded() {
+            const modelData = sketchesController.getPath( -1 );
             const newObject = shapePathComponent.createObject( shape, {
               modelData: modelData,
             });
             if ( newObject ) {
               shape.data.push( newObject )
               shape.shapePaths.push( newObject )
-              console.log("ShapePath successfully created")
-              console.log("Current ShapePath offset - X: " + shape.photoPaddingWidth + ", Y: " + shape.photoPaddingHeight )
             }
-            console.log( "Shape children count after: " + shape.data.length)
-            console.log( "Shape children after: " + shape.data )
           }
 
-          function onRowsRemoved( _, __, ___) {
-            console.log( "Shape children count before removal: " + shape.data.length)
-            console.log( "Shape children before removal: " + shape.data )
+          function onLastPathRemoved() {
+            // we don't remove the last ShapePath but the second last, as that is the last painted line on screen
             const stringArray = shape.data.toString().split(",")
             stringArray.reverse()
-            console.log( "String array: " + stringArray )
             let itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") )
             stringArray.splice( itemReverseIndex, 1 )
             itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") ) + 1
             const itemIndex = shape.data.length - itemReverseIndex - 1
             removeItemByIndex( itemIndex )
-            console.log( "Shape children count after removal: " + shape.data.length)
-            console.log( "Shape children after removal: " + shape.data )
           }
 
-          function onModelReset() {
+          function onPathsReset() {
             // we delete all the paths in Shape
-            console.log( "Shape children count before clearing: " + shape.data.length)
-            console.log( "Shape children before clearing: " + shape.data )
             while ( shape.data.findIndex( element => element.toString().includes("QQuickShapePath") ) > -1 )
             {
               const itemIndex = shape.data.findIndex( element => element.toString().includes("QQuickShapePath") )
               removeItemByIndex( itemIndex )
             }
-            console.log( "Shape children count after removal: " + shape.data.length)
-            console.log( "Shape children after removal: " + shape.data )
           }
 
           function removeItemByIndex( index ) {
-            console.log( "Shape path to remove: " + shape.data[index] )
             const removedItem = shape.data.splice( index, 1, ...shape.data.slice( index + 1 ) )
-            console.log("Actual removed item: " + removedItem )
-            console.log( "ShapePaths: " + shape.shapePaths)
             const shapePathsIndex = shape.shapePaths.findIndex( element => element.toString() === removedItem.toString() )
-            console.log("ShapePaths index: " + shapePathsIndex )
-            console.log("Actual shapePaths item: " + shape.shapePaths[shapePathsIndex] )
             shape.shapePaths[shapePathsIndex].destroy()
             shape.shapePaths.splice( shapePathsIndex, 1 )
           }
@@ -264,11 +244,11 @@ Dialog {
               implicitHeight: parent.implicitHeight + 5
               color: __style.transparentColor
               border.width: 2
-              border.color: modelData === annotationsController.activeColor ? __style.grassColor : __style.transparentColor
+              border.color: modelData === sketchesController.activeColor ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
-              annotationsController.setActiveColor( modelData )
+              sketchesController.setActiveColor( modelData )
             }
           }
         }
@@ -287,22 +267,17 @@ Dialog {
       // if you are adjusting width here don't forget to adjust it also in PhotoDrawingController saveDrawings()
       strokeWidth: 4
       fillColor: __style.transparentColor
-      startX: shape.photoPaddingWidth + modelData.points[0].x
-      startY: shape.photoPaddingHeight + modelData.points[0].y
+      startX: modelData.points[0]?.x ?? 0
+      startY: modelData.points[0]?.y ?? 0
 
       PathPolyline {
         path: modelData.points
       }
-
-      Component.onCompleted: {
-        console.log("Created ShapePath with", modelData.points.length, "points and color", modelData.color)
-      }
-
     }
   }
 
-  MM.PhotoDrawingController {
-    id: annotationsController
+  MM.PhotoSketchingController {
+    id: sketchesController
 
     photoSource: root.photoUrl
   }
@@ -330,7 +305,7 @@ Dialog {
     onSecondaryButtonClicked: {
       close()
       root.close()
-      annotationsController.clear()
+      sketchesController.clear()
     }
   }
 }
