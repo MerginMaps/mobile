@@ -622,12 +622,12 @@ QString ActiveProject::mapAnnotationsLayerId() const
   return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ), QString() );
 }
 
-bool ActiveProject::photoAnnotationsEnabled() const
+bool ActiveProject::photoSketchesEnabled() const
 {
   if ( !isProjectLoaded() )
   {
     return false;
   }
 
-  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoAnnotations/Enabled" ), false );
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketches/Enabled" ), true );
 }
