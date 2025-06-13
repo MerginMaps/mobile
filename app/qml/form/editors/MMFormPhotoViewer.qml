@@ -120,11 +120,11 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoAnnotationsEnabled
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchesEnabled
 
         onClicked: {
-          drawingLoader.active = true
-          drawingLoader.focus = true
+          sketchingLoader.active = true
+          sketchingLoader.focus = true
         }
       }
     }
@@ -160,22 +160,22 @@ MMPrivateComponents.MMBaseInput {
   }
 
   Loader {
-    id: drawingLoader
+    id: sketchingLoader
 
     active: false
-    sourceComponent: drawingComponent
+    sourceComponent: sketchingComponent
   }
 
   Component {
-    id: drawingComponent
+    id: sketchingComponent
 
-    MMFormComponents.MMFormPhotoDrawingPageDialog {
+    MMFormComponents.MMFormPhotoSketchingPageDialog {
       photoUrl: root.photoUrl
 
       Component.onCompleted: open()
 
       onClosed: {
-        drawingLoader.active = false
+        sketchingLoader.active = false
       }
     }
   }
