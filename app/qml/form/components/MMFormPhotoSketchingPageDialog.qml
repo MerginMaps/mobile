@@ -41,13 +41,17 @@ Dialog {
   header: RowLayout {
 
     MMComponents.MMButton {
-      type: MMButton.Types.Tertiary
+      type: MMButton.Types.Primary
       text: qsTr( "Undo" )
       iconSourceLeft: __style.undoIcon
       size: MMButton.Sizes.Small
       bgndColor: __style.polarColor
       bgndColorDisabled: __style.polarColor
+      bgndColorHover: __style.mediumGreenColor
+      fontColorHover: __style.forestColor
+      iconColorHover: __style.forestColor
       enabled: sketchesController.canUndo
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
@@ -68,7 +72,12 @@ Dialog {
       bgndColor: __style.polarColor
 
       onClicked: {
-        closeDialog.open()
+        if ( sketchesController.canUndo ) {
+          closeDialog.open()
+        } else {
+          root.close()
+          sketchesController.clear()
+        }
       }
     }
   }
@@ -79,6 +88,7 @@ Dialog {
       text: qsTr( "Save Changes" )
       bgndColor: __style.grassColor
       size: MMButton.Sizes.Small
+      enabled: sketchesController.canUndo
       Layout.fillWidth: true
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
@@ -98,6 +108,8 @@ Dialog {
       id: container
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.leftMargin: __style.pageMargins
+      Layout.rightMargin: __style.pageMargins
 
       Shape {
         id: shape
@@ -223,6 +235,8 @@ Dialog {
     RowLayout {
       Layout.fillWidth: true
       Layout.bottomMargin: closeButton.implicitWidth
+      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
+      Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       Repeater {
         // we use more vibrant versions of our product colors
@@ -234,15 +248,20 @@ Dialog {
           Layout.fillWidth: true
 
           MMComponents.MMRoundButton {
+            anchors.centerIn: parent
+
             contentItem: Rectangle {
               color: modelData
-              radius: __style.radius20
+              radius: width / 2
+              anchors.fill: parent
             }
             background: Rectangle {
-              radius: implicitWidth / 2
-              implicitWidth: parent.implicitWidth + 5
-              implicitHeight: parent.implicitHeight + 5
-              color: __style.transparentColor
+              anchors.verticalCenter: parent.verticalCenter
+              anchors.horizontalCenter: parent.horizontalCenter
+              radius: width / 2
+              width: __style.margin48
+              height: __style.margin48
+              color: modelData === sketchesController.activeColor ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
               border.color: modelData === sketchesController.activeColor ? __style.grassColor : __style.transparentColor
             }
@@ -264,7 +283,7 @@ Dialog {
       required property var modelData
 
       strokeColor: modelData.color
-      // if you are adjusting width here don't forget to adjust it also in PhotoDrawingController saveDrawings()
+      // if you are adjusting width here don't forget to adjust it also in PhotoSketchingController saveDrawings()
       strokeWidth: 4
       fillColor: __style.transparentColor
       startX: modelData.points[0]?.x ?? 0
