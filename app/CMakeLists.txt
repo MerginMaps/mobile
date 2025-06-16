@@ -46,7 +46,7 @@ set(MM_SRCS
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
-    annotationscontroller.cpp
+    mapsketchingcontroller.cpp
     appsettings.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
@@ -134,7 +134,7 @@ set(MM_HDRS
     activelayer.h
     activeproject.h
     androidutils.h
-    annotationscontroller.h
+    mapsketchingcontroller.h
     appsettings.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h

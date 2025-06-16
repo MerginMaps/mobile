@@ -43,7 +43,7 @@ Item {
 
   property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
 
-  property MM.AnnotationsController annotationsController: annotationsLoader.item?.controller ?? null
+  property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
@@ -107,7 +107,7 @@ Item {
       name: "multiSelect"
     },
     State {
-      name: "annotate"
+      name: "sketch"
     },
     State {
       name: "inactive" // ignores touch input
@@ -179,8 +179,8 @@ Item {
         break
       }
 
-      case "annotate": {
-        root.showInfoTextMessage( qsTr( "Draw annotation" ) )
+      case "sketch": {
+        root.showInfoTextMessage( qsTr( "Draw sketches" ) )
         root.drawStarted()
         break
       }
@@ -313,9 +313,9 @@ Item {
 
     onDragged: function( oldPoint, newPoint )
     {
-      if ( root.state === "annotate" )
+      if ( root.state === "sketch" )
       {
-        annotationsLoader.item.controller.updateHighlight( oldPoint, newPoint )
+        sketchesLoader.item.controller.updateHighlight( oldPoint, newPoint )
       }
       else
       {
@@ -325,9 +325,9 @@ Item {
 
     onDragReleased: function( point )
     {
-      if ( root.state === "annotate" )
+      if ( root.state === "sketch" )
       {
-        annotationsLoader.item.controller.finishDigitizing()
+        sketchesLoader.item.controller.finishDigitizing()
       }
     }
 
@@ -612,13 +612,13 @@ Item {
         }
 
         MMMapButton {
-          id: annotationsButton
+          id: sketchesButton
 
-          visible: root.state === "view" && __activeProject.mapAnnotationsEnabled
+          visible: root.state === "view" && __activeProject.mapSketchesEnabled
           iconSource: __style.redrawGeometryIcon
 
           onClicked: {
-            root.state = "annotate"
+            root.state = "sketch"
           }
         }
 
@@ -893,7 +893,7 @@ Item {
       list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        exceptedLayerIds: [ __activeProject.positionTrackingLayerId(), __activeProject.mapAnnotationsLayerId() ]
+        exceptedLayerIds: [ __activeProject.positionTrackingLayerId(), __activeProject.mapSketchesLayerId() ]
         model: MM.LayersModel {}
       }
 
@@ -1035,38 +1035,38 @@ Item {
   }
 
   Loader {
-    id: annotationsLoader
+    id: sketchesLoader
 
     anchors.fill: mapCanvas
 
-    active: root.state === "annotate"
+    active: root.state === "sketch"
 
-    sourceComponent: annotationComponent
+    sourceComponent: sketchesComponent
   }
 
   Component {
-    id: annotationComponent
+    id: sketchesComponent
 
     Item {
-      property alias controller: annotationsController
+      property alias controller: sketchingController
 
-      MM.AnnotationsController {
-        id: annotationsController
+      MM.MapSketchingController {
+        id: sketchingController
 
         mapSettings: mapCanvas.mapSettings
       }
 
       MMHighlight {
-        id: annotationsHighlight
+        id: sketchesHighlight
 
         height: mapCanvas.height
         width: mapCanvas.width
 
-        lineColor: annotationsController.eraserActive ? "red" : annotationsController.activeColor
-        lineWidth: annotationsController.eraserActive ? MMHighlight.LineWidths.Narrow : MMHighlight.LineWidths.Normal
+        lineColor: sketchingController.eraserActive ? "red" : sketchingController.activeColor
+        lineWidth: sketchingController.eraserActive ? MMHighlight.LineWidths.Narrow : MMHighlight.LineWidths.Normal
 
         mapSettings: mapCanvas.mapSettings
-        geometry: annotationsController.highlightGeometry
+        geometry: sketchingController.highlightGeometry
       }
     }
   }

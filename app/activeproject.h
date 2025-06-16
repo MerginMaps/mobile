@@ -38,7 +38,7 @@ class ActiveProject: public QObject
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
-    Q_PROPERTY( bool mapAnnotationsEnabled READ mapAnnotationsEnabled NOTIFY mapAnnotationsEnabledChanged )
+    Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
 
   public:
     explicit ActiveProject(
@@ -124,7 +124,10 @@ class ActiveProject: public QObject
     Q_INVOKABLE QString projectRole() const;
     void setProjectRole( const QString &role );
 
-    //! Returns if project layer allows recording (has geometry, editable, not position tracking layer, not annotations layer) regardless of visibility
+    /**
+     * Returns if project layer allows recording (has geometry, editable, not position tracking layer, not map
+     * sketching layer) regardless of visibility
+     */
     bool recordingAllowed( QgsMapLayer *layer ) const ;
 
     //! Returns position tracking layer ID if exists
@@ -133,10 +136,10 @@ class ActiveProject: public QObject
     //! Returns all visible valid layers in the project
     QList<QgsMapLayer *> getVisibleLayers() const;
 
-    bool mapAnnotationsEnabled() const;
+    bool mapSketchesEnabled() const;
 
-    //! Returns map annotations layer ID if exists
-    Q_INVOKABLE QString mapAnnotationsLayerId() const;
+    //! Returns map sketches layer ID if exists
+    Q_INVOKABLE QString mapSketchesLayerId() const;
 
   signals:
     void qgsProjectChanged();
@@ -167,7 +170,7 @@ class ActiveProject: public QObject
 
     void projectRoleChanged();
 
-    void mapAnnotationsEnabledChanged();
+    void mapSketchesEnabledChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)

@@ -238,8 +238,8 @@ ApplicationWindow {
     }
 
     onDrawStarted: {
-      annotationsPanelLoader.active = true
-      annotationsPanelLoader.focus = true
+      sketchesPanelLoader.active = true
+      sketchesPanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -662,27 +662,27 @@ ApplicationWindow {
   }
 
   Loader {
-    id: annotationsPanelLoader
+    id: sketchesPanelLoader
 
     focus: true
     active: false
     asynchronous: true
 
-    sourceComponent: annotationsPanelComponent
+    sourceComponent: sketchesPanelComponent
   }
 
   Component {
-    id: annotationsPanelComponent
+    id: sketchesPanelComponent
 
-    MMAnnotationsDrawer {
-      id: annotationsPanel
+    MMSketchesDrawer {
+      id: sketchesPanel
 
-      annotationsController: map.annotationsController
+      sketchingController: map.sketchingController
 
       width: window.width
 
       onClosed: {
-        annotationsPanelLoader.active = false
+        sketchesPanelLoader.active = false
         map.state = "view"
       }
     }

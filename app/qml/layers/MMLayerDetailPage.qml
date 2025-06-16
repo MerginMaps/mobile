@@ -274,12 +274,12 @@ Page {
     //       we do not have anything to show for such layers for now (we only
     //       show legend and if the layer is visible on the map - both unrelated)
     //
-    // * there is an exception, we do not want to show features of the annotation layer
+    // * there is an exception, we do not want to show features of the map sketches layer
     //
 
-    const isAnnotationLayer = layerDetailData.layerId === __activeProject.mapAnnotationsLayerId()
+    const isSketchingLayer = layerDetailData.layerId === __activeProject.mapSketchesLayerId()
 
-    if ( layerDetailData.isVectorLayer && !isAnnotationLayer ) {
+    if ( layerDetailData.isVectorLayer && !isSketchingLayer ) {
       content.addItem( featuresListPageComponent.createObject( content, { hasToolbar: internal.withToolbar } ) )
     }
 
