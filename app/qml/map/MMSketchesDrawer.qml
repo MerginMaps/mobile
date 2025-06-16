@@ -73,24 +73,31 @@ MMDrawer {
         id: scrollRow
         width: parent.width
         spacing: __style.margin12
+        leftPadding: __style.margin6
 
         Repeater {
           id: colorsView
 
           model: root.sketchingController?.availableColors() ?? null
 
-          Button {
-            id: colorButton
+          MMRoundButton {
+            anchors.verticalCenter: parent.verticalCenter
 
-            readonly property bool isSelected: root.sketchingController.activeColor.toString().toLowerCase() === modelData.toLowerCase()
-
-            implicitWidth: 40 * __dp
-            implicitHeight: 40 * __dp
-            background: Rectangle {
+            contentItem: Rectangle {
               color: modelData
-              radius: colorButton.implicitHeight / ( isSelected ? 2.5 : 2 )
-              border.width: isSelected ? 4 * __dp : 0
-              border.color: "black"
+              radius: width / 2
+              anchors.fill: parent
+            }
+
+            background: Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              anchors.horizontalCenter: parent.horizontalCenter
+              radius: width / 2
+              width: scrollRow.height
+              height: scrollRow.height
+              color: modelData === root.sketchingController.activeColor.toString() ? __style.transparentColor : __style.lightGreenColor
+              border.width: 2
+              border.color: modelData === root.sketchingController.activeColor.toString() ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
