@@ -37,7 +37,7 @@ MMDrawer {
     PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
   }
 
-  drawerHeader.title: qsTr( "Sketches" )
+  drawerHeader.title: qsTr( "Sketch" )
 
   drawerHeader.topLeftItemContent: MMButton {
     type: MMButton.Types.Primary
