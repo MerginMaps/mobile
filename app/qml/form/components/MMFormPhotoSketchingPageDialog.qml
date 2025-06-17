@@ -28,6 +28,7 @@ Dialog {
   id: root
 
   property string photoUrl: ""
+  property MM.PhotoSketchingController controller
 
   parent: Overlay.overlay
   width: parent.width
@@ -50,13 +51,13 @@ Dialog {
       bgndColorHover: __style.mediumGreenColor
       fontColorHover: __style.forestColor
       iconColorHover: __style.forestColor
-      enabled: sketchesController.canUndo
+      enabled: controller.canUndo
       Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
       onClicked: {
-        sketchesController.undo()
+        controller.undo()
       }
     }
 
@@ -72,12 +73,8 @@ Dialog {
       bgndColor: __style.polarColor
 
       onClicked: {
-        if ( sketchesController.canUndo ) {
-          closeDialog.open()
-        } else {
-          root.close()
-          sketchesController.clear()
-        }
+        root.close()
+        controller.clear()
       }
     }
   }
@@ -85,19 +82,17 @@ Dialog {
   footer: RowLayout {
     MMComponents.MMButton {
       type: MMButton.Types.Primary
-      text: qsTr( "Save Changes" )
+      text: qsTr( "Done" )
       bgndColor: __style.grassColor
       size: MMButton.Sizes.Small
-      enabled: sketchesController.canUndo
+      enabled: controller.canUndo
       Layout.fillWidth: true
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       onClicked: {
-        sketchesController.saveDrawings()
         root.close()
-        sketchesController.clear()
       }
     }
   }
@@ -120,11 +115,15 @@ Dialog {
         property var shapePaths: []
 
         onPhotoPaddingWidthChanged: {
-          sketchesController.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+          if ( shape.data.findIndex(element => element.toString().includes("QQuickShapePath")) > -1 ) {
+            controller.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+          }
         }
 
         onPhotoPaddingHeightChanged: {
-          sketchesController.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+          if ( shape.data.findIndex(element => element.toString().includes("QQuickShapePath")) > -1 ) {
+            controller.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
+          }
         }
 
         MMComponents.MMPhoto {
@@ -146,7 +145,7 @@ Dialog {
 
           function updateScaleRatio() {
             if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
-              sketchesController.setPhotoScaleRatio( sourceSize.width / paintedWidth )
+              controller.setPhotoScaleRatio( sourceSize.width / paintedWidth )
             }
           }
 
@@ -165,10 +164,10 @@ Dialog {
                 if (!outsideImageBounds) {
                   // centroid gets set to (0, 0) when drag stops
                   if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
-                    sketchesController.newDrawing()
+                    controller.newDrawing()
                   }
                   else {
-                    sketchesController.addPoint( dragHandler.centroid.position )
+                    controller.addPoint( dragHandler.centroid.position )
                   }
                 }
               }
@@ -176,12 +175,16 @@ Dialog {
           }
         }
 
+        Component.onCompleted: {
+          controller.redrawPaths()
+        }
+
         Connections {
-          target: sketchesController
+          target: controller
 
           function onPathUpdated( indexArray ) {
             for ( const index of indexArray ) {
-              const modelData = sketchesController.getPath(index)
+              const modelData = controller.getPath(index)
               const stringArray = shape.data.toString().split(",")
               const firstIndex = stringArray.findIndex(element => element.toString().includes("QQuickShapePath"));
               const itemIndex =  firstIndex + index
@@ -189,8 +192,8 @@ Dialog {
             }
           }
 
-          function onNewPathAdded() {
-            const modelData = sketchesController.getPath( -1 );
+          function onNewPathAdded( pathIndex ) {
+            const modelData = controller.getPath( pathIndex );
             const newObject = shapePathComponent.createObject( shape, {
               modelData: modelData,
             });
@@ -261,13 +264,13 @@ Dialog {
               radius: width / 2
               width: __style.margin48
               height: __style.margin48
-              color: modelData === sketchesController.activeColor ? __style.transparentColor : __style.lightGreenColor
+              color: modelData === controller.activeColor ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
-              border.color: modelData === sketchesController.activeColor ? __style.grassColor : __style.transparentColor
+              border.color: modelData === controller.activeColor ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
-              sketchesController.setActiveColor( modelData )
+              controller.setActiveColor( modelData )
             }
           }
         }
@@ -292,39 +295,6 @@ Dialog {
       PathPolyline {
         path: modelData.points
       }
-    }
-  }
-
-  MM.PhotoSketchingController {
-    id: sketchesController
-
-    photoSource: root.photoUrl
-  }
-
-  MMComponents.MMDrawerDialog {
-    id: closeDialog
-
-    imageSource: __style.neutralMMSymbolImage
-    title: qsTr( "Do you wish to exit drawing?" )
-    description: qsTr( "Your sketches will be lost." )
-    primaryButton.text: qsTr( "No" )
-    primaryButton.type: MMComponents.MMButton.Types.Secondary
-    secondaryButton.type: MMComponents.MMButton.Types.Primary
-    secondaryButton.text: qsTr( "Yes" )
-    secondaryButton.fontColor: __style.nightColor
-    secondaryButton.fontColorHover: __style.nightColor
-    secondaryButton.bgndColor: __style.negativeColor
-    secondaryButton.bgndColorHover: __style.negativeColor
-    horizontalbuttons: true
-
-    onPrimaryButtonClicked: {
-      close()
-    }
-
-    onSecondaryButtonClicked: {
-      close()
-      root.close()
-      sketchesController.clear()
     }
   }
 }

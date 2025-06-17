@@ -64,6 +64,9 @@ class PhotoSketchingController: public QObject
     // saves the drawings into the image
     Q_INVOKABLE void saveDrawings() const;
 
+    // redraws all paths in mPaths (used after user comes back to drawing screen)
+    Q_INVOKABLE void redrawPaths();
+
     // sets the annotations offset, which is equivalent to padding around photo
     Q_INVOKABLE void setAnnotationsOffset( double newXOffset, double newYOffset );
 
@@ -79,7 +82,7 @@ class PhotoSketchingController: public QObject
     void annotationsChanged();
     void photoScaleRatioChanged();
 
-    void newPathAdded();
+    void newPathAdded( int pathIndex );
     void pathUpdated( QVector<int> pathIndexes );
     void lastPathRemoved();
     void pathsReset();
