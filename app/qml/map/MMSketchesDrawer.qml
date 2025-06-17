@@ -90,14 +90,16 @@ MMDrawer {
             }
 
             background: Rectangle {
+              property bool isActive: modelData.toLowerCase() === root.sketchingController.activeColor.toString().toLowerCase()
+
               anchors.verticalCenter: parent.verticalCenter
               anchors.horizontalCenter: parent.horizontalCenter
               radius: width / 2
               width: scrollRow.height
               height: scrollRow.height
-              color: modelData === root.sketchingController.activeColor.toString() ? __style.transparentColor : __style.lightGreenColor
+              color: isActive ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
-              border.color: modelData === root.sketchingController.activeColor.toString() ? __style.grassColor : __style.transparentColor
+              border.color: isActive ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
