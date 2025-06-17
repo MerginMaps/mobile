@@ -9,6 +9,8 @@
 
 import QtQuick
 
+import mm 1.0 as MM
+
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
 import "../components/photo" as MMPhotoComponents
@@ -29,6 +31,7 @@ MMPrivateComponents.MMBaseInput {
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
+  property MM.PhotoSketchingController controller
   property alias photoState: photoStateGroup.state
 
   signal trashClicked()
@@ -171,6 +174,7 @@ MMPrivateComponents.MMBaseInput {
 
     MMFormComponents.MMFormPhotoSketchingPageDialog {
       photoUrl: root.photoUrl
+      controller: root.controller
 
       Component.onCompleted: open()
 
