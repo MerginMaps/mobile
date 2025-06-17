@@ -48,7 +48,7 @@ void PhotoSketchingController::newDrawing()
 {
   mCurrentLine = ColorPath( mPenColor, {} );
   mPaths.append( mCurrentLine );
-  emit newPathAdded();
+  emit newPathAdded( -1 );
   if ( !mCanUndo && mPaths.size() > 1 )
   {
     mCanUndo = true;
@@ -64,7 +64,7 @@ void PhotoSketchingController::addPoint( const QPointF newPoint )
   if ( mPaths.isEmpty() )
   {
     mPaths.append( mCurrentLine );
-    emit newPathAdded();
+    emit newPathAdded( -1 );
   }
   else
   {
@@ -163,6 +163,14 @@ void PhotoSketchingController::saveDrawings() const
   else
   {
     CoreUtils::log( "Photo annotations", "Image saved to: " + photoPath );
+  }
+}
+
+void PhotoSketchingController::redrawPaths()
+{
+  for ( int i = 0 ; i < mPaths.size(); ++i )
+  {
+    emit newPathAdded( i );
   }
 }
 
