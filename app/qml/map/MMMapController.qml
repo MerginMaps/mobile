@@ -180,7 +180,7 @@ Item {
       }
 
       case "sketch": {
-        root.showInfoTextMessage( qsTr( "Draw sketches" ) )
+        root.showInfoTextMessage( qsTr( "Select a colour and start sketching on the map. Use two fingers to move or zoom the map." ) )
         root.drawStarted()
         break
       }
