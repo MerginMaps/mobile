@@ -10,6 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -31,7 +32,7 @@ MMPrivateComponents.MMBaseInput {
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
-  property MM.PhotoSketchingController controller
+  property PhotoSketchingController controller
   property alias photoState: photoStateGroup.state
 
   signal trashClicked()
