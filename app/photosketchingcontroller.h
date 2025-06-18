@@ -13,6 +13,7 @@
 #include <QPointF>
 #include <QObject>
 #include <QColor>
+#include <QtQml/qqmlregistration.h>
 
 
 /**
@@ -36,6 +37,7 @@ class ColorPath
 class PhotoSketchingController: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY( QString photoSource MEMBER mPhotoSource REQUIRED );
     Q_PROPERTY( bool canUndo MEMBER mCanUndo NOTIFY canUndoChanged );

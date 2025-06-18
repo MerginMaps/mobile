@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Dialogs
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../dialogs"
 
@@ -141,7 +142,7 @@ MMFormPhotoViewer {
     }
   }
 
-  MM.PhotoSketchingController {
+  PhotoSketchingController {
     id: sketchesController
 
     photoSource: root.photoUrl
