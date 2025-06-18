@@ -60,11 +60,41 @@ MMPage {
         text: __merginApi.userAuth.username
       }
 
+      MMListSpacer {}
+
+      Text {
+        text: __inputUtils.htmlLink(
+          qsTr("By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3"),
+          __style.forestColor,
+          __inputHelp.merginTermsLink,
+          __inputHelp.privacyPolicyLink
+        )
+
+        font: __style.p5
+        color: __style.nightColor
+
+        textFormat: Text.RichText
+
+        width: parent.width
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        lineHeight: 1.5 // mimic line height with factor
+        wrapMode: Text.WordWrap
+
+        onLinkActivated: function ( link ) {
+          Qt.openUrlExternally( link )
+        }
+      }
+
+      MMListSpacer {}
+
       MMButton {
         width: parent.width
 
         text: qsTr( "Sign in" )
 
+        //TODO: this function doesn't exist
         enabled: __inputUtils.isValidEmail( email.length > 0 )
 
         onClicked: {
