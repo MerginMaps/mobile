@@ -13,6 +13,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../dialogs" as MMDialogs
@@ -28,7 +29,7 @@ Dialog {
   id: root
 
   property string photoUrl: ""
-  property MM.PhotoSketchingController controller
+  property PhotoSketchingController controller
 
   parent: Overlay.overlay
   width: parent.width
