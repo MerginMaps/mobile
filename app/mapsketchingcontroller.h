@@ -7,10 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ANNOTATIONSCONTROLLER_H
-#define ANNOTATIONSCONTROLLER_H
+#ifndef MAPSKETCHINGCONTROLLER_H
+#define MAPSKETCHINGCONTROLLER_H
 
-#include <QObject>
 #include <QColor>
 
 #include "qgsgeometry.h"
@@ -18,7 +17,7 @@
 class QgsVectorLayer;
 class InputMapSettings;
 
-class AnnotationsController : public QObject
+class MapSketchingController : public QObject
 {
     Q_OBJECT
 
@@ -29,8 +28,8 @@ class AnnotationsController : public QObject
     Q_PROPERTY( bool eraserActive READ eraserActive WRITE setEraserActive NOTIFY eraserActiveChanged )
 
   public:
-    explicit AnnotationsController( QObject *parent = nullptr );
-    ~AnnotationsController() override;
+    explicit MapSketchingController( QObject *parent = nullptr );
+    ~MapSketchingController() override;
 
     Q_INVOKABLE void updateHighlight( const QPointF &oldPoint, const QPointF &newPoint );
 
@@ -69,4 +68,4 @@ class AnnotationsController : public QObject
     bool mEraserActive = false;
 };
 
-#endif // ANNOTATIONSCONTROLLER_H
+#endif // MAPSKETCHINGCONTROLLER_H

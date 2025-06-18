@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "annotationscontroller.h"
+#include "mapsketchingcontroller.h"
 
 #include "coreutils.h"
 #include "inpututils.h"
@@ -19,23 +19,23 @@
 #include "qgsmultilinestring.h"
 
 
-AnnotationsController::AnnotationsController( QObject *parent )
+MapSketchingController::MapSketchingController( QObject *parent )
   : QObject( parent )
 {
 }
 
-AnnotationsController::~AnnotationsController()
+MapSketchingController::~MapSketchingController()
 {
   if ( !mLayer )
     return;
 
   if ( !mLayer->commitChanges() )
   {
-    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Could not save changes to map annotations layer" ) );
+    CoreUtils::log( QStringLiteral( "Map sketching" ), QStringLiteral( "Could not save changes to map sketching layer" ) );
   }
 }
 
-void AnnotationsController::updateHighlight( const QPointF &oldPoint, const QPointF &newPoint )
+void MapSketchingController::updateHighlight( const QPointF &oldPoint, const QPointF &newPoint )
 {
   if ( mHighlight.isEmpty() )
   {
@@ -57,14 +57,14 @@ void AnnotationsController::updateHighlight( const QPointF &oldPoint, const QPoi
   emit highlightGeometryChanged();
 }
 
-void AnnotationsController::finishDigitizing()
+void MapSketchingController::finishDigitizing()
 {
   clearHighlight();
 
 
   if ( !mLayer || !mLayer->isValid() )
   {
-    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Can not save map annotation, layer is missing or invalid" ) );
+    CoreUtils::log( QStringLiteral( "Map sketching" ), QStringLiteral( "Can not save map sketches, layer is missing or invalid" ) );
     return;
   }
 
@@ -92,7 +92,7 @@ void AnnotationsController::finishDigitizing()
 
     if ( !fids.isEmpty() )
     {
-      mLayer->beginEditCommand( QStringLiteral( "Delete map annotation" ) );
+      mLayer->beginEditCommand( QStringLiteral( "Delete map sketches" ) );
       mLayer->deleteFeatures( fids );
       mLayer->endEditCommand();
     }
@@ -117,13 +117,13 @@ void AnnotationsController::finishDigitizing()
     QgsFeature feature = QgsVectorLayerUtils::createFeature( mLayer, geom );
     feature.setAttribute( QStringLiteral( "color" ), mColor );
     // TODO: Variable Manager for expressions?
-    mLayer->beginEditCommand( QStringLiteral( "Add map annotation" ) );
+    mLayer->beginEditCommand( QStringLiteral( "Add map sketches" ) );
     mLayer->addFeature( feature );
     mLayer->endEditCommand();
   }
 }
 
-void AnnotationsController::undo() const
+void MapSketchingController::undo() const
 {
   if ( !mLayer )
     return;
@@ -131,24 +131,24 @@ void AnnotationsController::undo() const
   mLayer->undoStack()->undo();
 }
 
-QgsGeometry AnnotationsController::highlightGeometry() const
+QgsGeometry MapSketchingController::highlightGeometry() const
 {
   return mHighlight;
 }
 
-QStringList AnnotationsController::availableColors() const
+QStringList MapSketchingController::availableColors() const
 {
   const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
-  return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Colors" ), defaultColors );
+  return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
 }
 
-void AnnotationsController::clearHighlight()
+void MapSketchingController::clearHighlight()
 {
   mHighlight = QgsGeometry( new QgsMultiLineString() );
   emit highlightGeometryChanged();
 }
 
-void AnnotationsController::setMapSettings( InputMapSettings *settings )
+void MapSketchingController::setMapSettings( InputMapSettings *settings )
 {
   if ( !settings )
     return;
@@ -157,35 +157,35 @@ void AnnotationsController::setMapSettings( InputMapSettings *settings )
 
   if ( !project )
   {
-    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Can not save map annotation, missing required properties" ) );
+    CoreUtils::log( QStringLiteral( "Map sketches" ), QStringLiteral( "Can not save map sketches, missing required properties" ) );
     return;
   }
 
   clearHighlight();
 
-  const QString layerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapAnnotations/Layer" ) );
+  const QString layerId = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Layer" ) );
   mLayer = project->mapLayer<QgsVectorLayer *>( layerId );
 
   if ( !mLayer )
   {
-    CoreUtils::log( QStringLiteral( "Map annotations" ), QStringLiteral( "Can not initialize map annotations, layer %1 is missing" ).arg( layerId ) );
+    CoreUtils::log( QStringLiteral( "Map sketches" ), QStringLiteral( "Can not initialize map sketches, layer %1 is missing" ).arg( layerId ) );
   }
   else
   {
     mLayer->startEditing();
-    connect( mLayer->undoStack(), &QUndoStack::canUndoChanged, this, &AnnotationsController::canUndoChanged );
+    connect( mLayer->undoStack(), &QUndoStack::canUndoChanged, this, &MapSketchingController::canUndoChanged );
   }
 
   mMapSettings = settings;
   emit mapSettingsChanged();
 }
 
-InputMapSettings *AnnotationsController::mapSettings() const
+InputMapSettings *MapSketchingController::mapSettings() const
 {
   return mMapSettings;
 }
 
-bool AnnotationsController::canUndo() const
+bool MapSketchingController::canUndo() const
 {
   if ( !mLayer )
     return false;
@@ -193,12 +193,12 @@ bool AnnotationsController::canUndo() const
   return mLayer->undoStack()->canUndo();
 }
 
-bool AnnotationsController::eraserActive() const
+bool MapSketchingController::eraserActive() const
 {
   return mEraserActive;
 }
 
-void AnnotationsController::setEraserActive( bool active )
+void MapSketchingController::setEraserActive( bool active )
 {
   if ( active == mEraserActive )
     return;
@@ -207,7 +207,7 @@ void AnnotationsController::setEraserActive( bool active )
   emit eraserActiveChanged();
 }
 
-void AnnotationsController::setActiveColor( const QColor &color )
+void MapSketchingController::setActiveColor( const QColor &color )
 {
   if ( color == mColor )
     return;
@@ -216,7 +216,7 @@ void AnnotationsController::setActiveColor( const QColor &color )
   emit activeColorChanged();
 }
 
-QColor AnnotationsController::activeColor() const
+QColor MapSketchingController::activeColor() const
 {
   return mColor;
 }

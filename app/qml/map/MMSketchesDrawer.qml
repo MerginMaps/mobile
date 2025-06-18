@@ -23,7 +23,7 @@ MMDrawer {
 
   readonly property alias panelHeight: root.height
 
-  property MM.AnnotationsController annotationsController
+  property MM.MapSketchingController sketchingController
 
   Component.onCompleted: root.open()
 
@@ -37,7 +37,7 @@ MMDrawer {
     PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
   }
 
-  drawerHeader.title: qsTr( "Annotations" )
+  drawerHeader.title: qsTr( "Sketch" )
 
   drawerHeader.topLeftItemContent: MMButton {
     type: MMButton.Types.Primary
@@ -45,7 +45,7 @@ MMDrawer {
     iconSourceLeft: __style.undoIcon
     bgndColor: __style.lightGreenColor
     size: MMButton.Sizes.Small
-    enabled: root.annotationsController?.canUndo ?? false
+    enabled: root.sketchingController?.canUndo ?? false
 
     anchors {
       left: parent.left
@@ -53,7 +53,7 @@ MMDrawer {
       verticalCenter: parent.verticalCenter
     }
 
-    onClicked: root.annotationsController.undo()
+    onClicked: root.sketchingController.undo()
   }
 
   drawerContent: Column {
@@ -73,36 +73,45 @@ MMDrawer {
         id: scrollRow
         width: parent.width
         spacing: __style.margin12
+        leftPadding: __style.margin6
 
         Repeater {
           id: colorsView
 
-          model: root.annotationsController?.availableColors() ?? null
+          model: root.sketchingController?.availableColors() ?? null
 
-          Button {
-            id: colorButton
+          MMRoundButton {
+            anchors.verticalCenter: parent.verticalCenter
 
-            readonly property bool isSelected: root.annotationsController.activeColor.toString().toLowerCase() === modelData.toLowerCase()
-
-            implicitWidth: 40 * __dp
-            implicitHeight: 40 * __dp
-            background: Rectangle {
+            contentItem: Rectangle {
               color: modelData
-              radius: colorButton.implicitHeight / ( isSelected ? 2.5 : 2 )
-              border.width: isSelected ? 4 * __dp : 0
-              border.color: "black"
+              radius: width / 2
+              anchors.fill: parent
+            }
+
+            background: Rectangle {
+              property bool isActive: modelData.toLowerCase() === root.sketchingController.activeColor.toString().toLowerCase()
+
+              anchors.verticalCenter: parent.verticalCenter
+              anchors.horizontalCenter: parent.horizontalCenter
+              radius: width / 2
+              width: scrollRow.height
+              height: scrollRow.height
+              color: isActive ? __style.transparentColor : __style.lightGreenColor
+              border.width: 2
+              border.color: isActive ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
-              root.annotationsController.eraserActive = false
-              root.annotationsController.activeColor = modelData
+              root.sketchingController.eraserActive = false
+              root.sketchingController.activeColor = modelData
             }
 
             Component.onCompleted: {
               // set the initial color to be the first one in the list
               if ( index === 0 )
               {
-                root.annotationsController.activeColor = modelData
+                root.sketchingController.activeColor = modelData
               }
             }
           }
@@ -115,16 +124,16 @@ MMDrawer {
           type: MMButton.Types.Primary
           size: MMButton.Sizes.Small
 
-          fontColor: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
-          iconColor: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
-          bgndColor: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          fontColorHover: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          iconColorHover: root.annotationsController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          bgndColorHover: root.annotationsController?.eraserActive ? __style.negativeColor : __style.grapeColor
+          fontColor: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
+          iconColor: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
+          bgndColor: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          fontColorHover: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          iconColorHover: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
+          bgndColorHover: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
 
           onClicked: {
-            root.annotationsController.activeColor = null
-            root.annotationsController.eraserActive = true
+            root.sketchingController.activeColor = null
+            root.sketchingController.eraserActive = true
           }
         }
       }
