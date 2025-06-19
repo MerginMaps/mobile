@@ -2330,3 +2330,8 @@ bool InputUtils::isValidUrl( const QString &link )
   QUrl url( link );
   return url.isValid();
 }
+
+bool InputUtils::isValidEmail(const QString &email)
+{
+  return CoreUtils::isValidEmail( email );
+}

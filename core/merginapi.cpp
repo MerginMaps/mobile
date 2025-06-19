@@ -954,7 +954,7 @@ void MerginApi::registerUser( const QString &email,
                               bool acceptedTOC )
 {
   // Some very basic checks, so we do not validate everything
-  if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
+  if ( !CoreUtils::isValidEmail( email ) )
   {
     QString msg = tr( "Please enter a valid email" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
@@ -1592,7 +1592,7 @@ bool MerginApi::validateAuth()
     return false;
   }
 
-  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
+  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
   {
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
 
@@ -1600,7 +1600,7 @@ bool MerginApi::validateAuth()
     {
       case MerginUserAuth::AuthMethod::SSO:
         // we need to request auth again
-        emit authRequested();
+        emit ssoLoginExpired();
         return false;
       case MerginUserAuth::AuthMethod::Password:
         refreshAuthToken();

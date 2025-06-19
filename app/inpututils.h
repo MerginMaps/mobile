@@ -627,6 +627,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isValidUrl( const QString &link );
 
+    /**
+     * We do some very basic checks if the string looks like email.
+     */
+    Q_INVOKABLE static bool isValidEmail( const QString &email );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

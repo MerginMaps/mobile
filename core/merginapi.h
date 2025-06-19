@@ -657,6 +657,7 @@ class MerginApi: public QObject
     void notifyInfo( const QString &message );
     void notifyError( const QString &message );
     void authRequested();
+    void ssoLoginExpired();
     void authChanged();
     void authFailed();
     void registrationSucceeded();

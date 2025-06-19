@@ -94,8 +94,7 @@ MMPage {
 
         text: qsTr( "Sign in" )
 
-        //TODO: this function doesn't exist
-        enabled: __inputUtils.isValidEmail( email.length > 0 )
+        enabled: __inputUtils.isValidEmail( email.text )
 
         onClicked: {
           root.signInClicked( email.text )

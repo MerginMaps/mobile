@@ -62,6 +62,7 @@ namespace TestUtils
   void testIsPositionTrackingLayer();
   void testMapLayerFromName();
   void testIsValidUrl();
+  void testIsValidEmail();
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

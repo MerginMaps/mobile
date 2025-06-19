@@ -135,6 +135,11 @@ class CoreUtils
      */
     static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
 
+    /**
+     * We do some very basic checks if the string looks like email.
+     */
+    static bool isValidEmail( const QString &email );
+
   private:
     static QString sLogFile;
     static int CHECKSUM_CHUNK_SIZE;

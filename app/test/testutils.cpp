@@ -301,3 +301,15 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
+
+void TestUtils::testIsValidEmail()
+{
+  // valid emails
+  QVERIFY( InputUtils::isValidEmail( "name@email.com" ));
+  QVERIFY( InputUtils::isValidEmail( "name.surname@email.com" ));
+
+  // invalid emails
+  QVERIFY( !InputUtils::isValidEmail( "broken@email" ) );
+  QVERIFY( !InputUtils::isValidEmail( "brokenemail.com" ) );
+  QVERIFY( !InputUtils::isValidEmail( "" ) );
+}
