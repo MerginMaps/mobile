@@ -117,7 +117,6 @@ void VariablesManager::setUserVariables()
 
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_full_name" ),  mMerginApi->userInfo()->name() );
 }

@@ -837,10 +837,10 @@ void MerginApi::requestSsoConfig()
   }
 
   QNetworkRequest request = getDefaultRequest( false );
-  QUrl url( mApiRoot + QStringLiteral( "/v2/sso/config" ) );
+  const QUrl url( mApiRoot + QStringLiteral( "/v2/sso/config" ) );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager->get( request );
+  const QNetworkReply *reply = mManager->get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConfigReplyFinished );
   CoreUtils::log( "SSO", QStringLiteral( "Requesting sso configuration: " ) + url.toString() );
 }
@@ -853,7 +853,7 @@ void MerginApi::ssoConfigReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
 
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
       const QString clientId = doc.object().value( QStringLiteral( "client_id" ) ).toString();
@@ -903,7 +903,7 @@ void MerginApi::requestSsoConnections( const QString &email )
   url.setQuery( query );
   request.setUrl( url );
 
-  QNetworkReply *reply = mManager->get( request );
+  const QNetworkReply *reply = mManager->get( request );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConnectionsReplyFinished );
   CoreUtils::log( "SSO", QStringLiteral( "Requesting available connections: " ) + url.toString() );
 }
@@ -916,7 +916,7 @@ void MerginApi::ssoConnectionsReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
 
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
       const QString clientId = doc.object().value( QStringLiteral( "id" ) ).toString();
@@ -938,9 +938,8 @@ void MerginApi::ssoConnectionsReplyFinished()
   {
     const QString serverMsg = extractServerErrorMsg( r->readAll() );
     CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    const int status = statusCode.toInt();
-    if ( status == 404 )
+    const int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( statusCode == 404 )
       emit notifyError( tr( "SSO is not supported for the specified domain" ) );
     else
       emit notifyError( tr( "Error getting the SSO configuration from the server" ) );
@@ -956,7 +955,7 @@ void MerginApi::registerUser( const QString &email,
   // Some very basic checks, so we do not validate everything
   if ( !CoreUtils::isValidEmail( email ) )
   {
-    QString msg = tr( "Please enter a valid email" );
+    const QString msg = tr( "Please enter a valid email" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
     return;
   }
@@ -3076,10 +3075,10 @@ void MerginApi::getUserInfoFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "user info", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QJsonObject docObj = doc.object();
+      const QJsonObject docObj = doc.object();
       mUserInfo->setFromJson( docObj );
       if ( mServerType == MerginServerType::OLD )
       {
@@ -3371,7 +3370,7 @@ ProjectDiff MerginApi::compareProjectFiles(
         // L-D
         if ( allowConfig )
         {
-          bool shouldBeExcludedFromSync = MerginApi::excludeFromSync( file.path, config );
+          bool shouldBeExcludedFromSync = excludeFromSync( file.path, config );
           if ( shouldBeExcludedFromSync )
           {
             continue;
@@ -3380,7 +3379,7 @@ ProjectDiff MerginApi::compareProjectFiles(
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
           if ( config.downloadMissingFiles &&
                lastSyncConfig.isValid &&
-               MerginApi::excludeFromSync( file.path, lastSyncConfig ) )
+               excludeFromSync( file.path, lastSyncConfig ) )
           {
             diff.remoteAdded << file.path;
             continue;
@@ -4237,11 +4236,11 @@ void MerginApi::startSsoFlow( const QString &clientId )
 
     connect( &mOauth2Flow, &QAbstractOAuth::authorizeWithBrowser, this, [this]( const QUrl & url )
     {
-      CoreUtils::log( "SSO", QStringLiteral( "Opening browser to autorize: %1" ).arg( url.toString() ) );
+      CoreUtils::log( "SSO", QStringLiteral( "Opening browser to authorize: %1" ).arg( url.toString() ) );
       QDesktopServices::openUrl( url );
     } );
 
-    connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]()
+    connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]
     {
       CoreUtils::log( "SSO", QStringLiteral( "Successfully authorized, token expires at: %1" ).arg( mOauth2Flow.expirationAt().toString() ) );
       mUserAuth->setFromSso( mOauth2Flow.token(), mOauth2Flow.expirationAt() );
@@ -4330,7 +4329,7 @@ bool MerginApi::apiSupportsSso() const
   return mApiSupportsSso;
 }
 
-void MerginApi::setApiSupportsSso( bool ssoSupported )
+void MerginApi::setApiSupportsSso( const bool ssoSupported )
 {
   if ( mApiSupportsSso == ssoSupported )
     return;

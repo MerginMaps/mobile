@@ -112,7 +112,7 @@ void MerginUserAuth::loadAuthData()
     mUserId = userId;
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
-    mMethod = AuthMethod( method );
+    mMethod = static_cast<AuthMethod>( method );
 
     emit authChanged();
     emit credentialsLoaded();

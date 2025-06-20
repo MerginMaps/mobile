@@ -54,6 +54,7 @@ MMDrawer {
         id: additionalContentGroup
 
         width: parent.width
+        // TODO: fix this binding loop
         height: childrenRect.height
 
         visible: children.length > 0
