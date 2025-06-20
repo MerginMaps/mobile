@@ -18,9 +18,11 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
 {
   apiRootChanged();
   setUserVariables();
+  authChanged();
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
+  QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
   QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
