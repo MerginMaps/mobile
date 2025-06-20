@@ -225,12 +225,11 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 ```
 
 ## 4.2. Android on macOS
-
-2. Install Java
+1. Install Java
 
    - `brew install openjdk@17`, then make this java version default ``export JAVA_HOME=`usr/libexec/java_home -v 17` ``. Check if it's default by executing `java --version`
 
-3. Setup Android SDK & NDK [Automatic, via QtCreator]
+2. Setup Android SDK & NDK 
    - This step can now be performed via QtCreator, if it for some reason fails/does not work, skip this step and continue with manual setup
 
    - Open QtCreator and navigate to `settings -> devices -> Android`, here:
@@ -241,36 +240,74 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       - Let QtCreator install openssl
    - QtCreator should now say `Android settings are OK.`
 
-4. Setup Android SDK & NDK [Manual, via sdkmanager]
-   - Proceed with this step only if the previous automatic step did not work for you or you do not want to use QtCreator
+   - If the previous automatic step did not work for you or you do not want to use QtCreator
+     - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
+     - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
+     - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
 
-   - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
-   - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
-   - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
-
-5. Build (update CMake command with the correct Qt and SDK versions)
+3. Configure 
+  
+   We recommended to have RelWithDebInfo builds
+   We assume the structure on the system:
+   
+   ```
+   mm1/
+     build/
+     vcpkg/
+     mobile/ 
+   ```
+   
+   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it 
+   can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
+   binary vcpkg cache.
+   
+   Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
+   development and debugging)
+   
+   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   
 
 ```
-  # Needed Android variables
-  export ANDROID_SDK_ROOT=~/android;
-  export ANDROID_NDK_ROOT=~/android/ndk/<current_version>;
+  ANDROIDAPI=24
+  PATH=+/opt/homebrew/bin
+  PATH=+/opt/homebrew/Cellar/flex/2.6.4_2/bin
+  PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
+  PATH=+/Users/peterpetrik/Projects/quick/build/vcpkg
+  DEPLOYMENT_TARGET=11.0
+  ANDROID_NDK_HOME=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125
+``` 
 
-  # INPUT_SDK_ANDROID_BASE is a path where you stored the two SDKs from the mobile-sdk repo
-  export INPUT_SDK_ANDROID_BASE=~/mobile-sdk;
-
-  # (optional, not needed often) add Java to PATH if you need to use other Java version than your default one
-  export PATH=/opt/homebrew/Cellar/openjdk@17/17.0.11/libexec/openjdk.jdk/Contents/Home/bin:$PATH;
-
+  You can continue with configure step:
+```
   cmake \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DQT_ANDROID_ABIS=arm64-v8a \
-    -DQT_HOST_PATH=/opt/Qt/<current_version>/macos \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/Qt/<current_version>/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
-    -DUSE_MM_SERVER_API_KEY=FALSE \
-    -GNinja \
-    ../input/
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE
+    -DANDROID_ABI=arm64-v8a \
+    -DANDROID_NDK=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125 \ 
+    -DANDROID_PLATFORM=android-24 \
+    -DANDROID_SDK_ROOT=/Users/peterpetrik/Library/Android/sdk \
+    -DANDROID_NDK_VERSION="r26" \
+    -DANDROID_BUILD_TOOLS_VERSION="34.0.0" \
+    -DVCPKG_HOST_TRIPLET=arm64-osx \
+    -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+              -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+              -DANDROID_ARM_NEON=ON \
+              -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
+              -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
+              -DANDROIDAPI=${ANDROIDAPI} \
+              -DANDROID_PLATFORM=android-${ANDROIDAPI} \
+              -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
+              -DANDROID_STL="c++_shared" \
+              -DQT_ANDROID_SIGN_APK=Yes \
+              -DQT_ANDROID_SIGN_AAB=Yes \
+              -DUSE_MM_SERVER_API_KEY=Yes \
+              -DUSE_KEYCHAIN=No \
+              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
+              -GNinja \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -S ../mobile \
+              -B ./
 
-  # If you need to build both ABIS, use -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a"
 ```
 
 ## 4.3. Android on Windows
@@ -383,6 +420,8 @@ Now you can create a build (either on command line or by setting these variables
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
    
    ```
+   export DEPLOYMENT_TARGET=11.0
+   
    mkdir build
    cd build
    cmake \
