@@ -378,7 +378,7 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
   return success;
 }
 
-bool CoreUtils::isValidEmail(const QString &email)
+bool CoreUtils::isValidEmail( const QString &email )
 {
   return !email.isEmpty() && email.contains( '@' ) && email.contains( '.' );
 }

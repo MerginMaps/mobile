@@ -305,8 +305,8 @@ void TestUtils::testIsValidUrl()
 void TestUtils::testIsValidEmail()
 {
   // valid emails
-  QVERIFY( InputUtils::isValidEmail( "name@email.com" ));
-  QVERIFY( InputUtils::isValidEmail( "name.surname@email.com" ));
+  QVERIFY( InputUtils::isValidEmail( "name@email.com" ) );
+  QVERIFY( InputUtils::isValidEmail( "name.surname@email.com" ) );
 
   // invalid emails
   QVERIFY( !InputUtils::isValidEmail( "broken@email" ) );

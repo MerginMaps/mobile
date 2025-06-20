@@ -2331,7 +2331,7 @@ bool InputUtils::isValidUrl( const QString &link )
   return url.isValid();
 }
 
-bool InputUtils::isValidEmail(const QString &email)
+bool InputUtils::isValidEmail( const QString &email )
 {
   return CoreUtils::isValidEmail( email );
 }
