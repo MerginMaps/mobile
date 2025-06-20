@@ -4239,7 +4239,6 @@ void MerginApi::startSsoFlow( const QString &clientId )
     {
       CoreUtils::log( "SSO", QStringLiteral( "Opening browser to autorize: %1" ).arg( url.toString() ) );
       QDesktopServices::openUrl( url );
-      emit ssoAuthorizeUsingBrowser();
     } );
 
     connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]()

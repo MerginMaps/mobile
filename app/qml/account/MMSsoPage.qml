@@ -23,7 +23,7 @@ MMPage {
   signal signInClicked( string email )
   signal loginWithPasswordClicked
 
-  property bool focusOnBrowser: false
+  property alias loadingDialog: loadingDialog
 
   pageHeader {
     title: qsTr( "Sign in with SSO" )
@@ -101,13 +101,6 @@ MMPage {
         }
       }
 
-      MMText {
-        visible: root.focusOnBrowser
-
-        text: qsTr( "Please follow the instructions on your web browser" )
-      }
-
-
       MMListSpacer { height: __style.margin20 }
 
       MMHlineText {
@@ -127,6 +120,18 @@ MMPage {
       }
 
       MMListFooterSpacer {}
+    }
+  }
+
+  MMDrawerDialog {
+    id: loadingDialog
+    title: qsTr( "SSO login" )
+    description: qsTr( "Please follow the instructions in your web browser." )
+    imageSource: __style.neutralMMSymbolImage
+
+    additionalContent: MMBusyIndicator {
+      running: true
+      anchors.centerIn: parent
     }
   }
 

@@ -717,9 +717,6 @@ class MerginApi: public QObject
     //! Emitted when server sso config is returned and server is multi tenant
     void ssoConfigIsMultiTenant();
 
-    //! Emitted when the sso url is opened in the browser and application loses focus
-    void ssoAuthorizeUsingBrowser();
-
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );

@@ -127,7 +127,6 @@ Item {
       }
 
       onContinueWithSsoClicked: {
-        stackView.pending = true
         stackView.push( ssoPanel )
       }
     }
@@ -206,18 +205,18 @@ Item {
 
       onBackClicked: {
         __merginApi.abortSsoFlow()
-        stackView.pending = false
+        loadingDialog.close()
         stackView.popOnePageOrClose()
       }
 
       onLoginWithPasswordClicked: {
         __merginApi.abortSsoFlow()
-        stackView.pending = false
+        loadingDialog.close()
         stackView.popOnePageOrClose()
       }
 
       onSignInClicked: function( email ) {
-        stackView.pending = true
+        loadingDialog.open()
         __merginApi.requestSsoConnections(email)
       }
 
@@ -226,15 +225,11 @@ Item {
         enabled: stackView.currentItem.objectName === "ssoPanel"
 
         function onSsoConfigIsMultiTenant() {
-          stackView.pending = false
-        }
-
-        function onSsoAuthorizeUsingBrowser() {
-          focusOnBrowser = true
+          loadingDialog.close()
         }
 
         function onUserInfoReplyFinished() {
-          stackView.pending = false
+          loadingDialog.close()
           if ( __merginApi.userInfo.hasInvitations ) {
             controller.invitation = __merginApi.userInfo.invitations()[0]
             stackView.push( acceptInvitationsPanelComponent )
@@ -244,7 +239,7 @@ Item {
         }
 
         function onNotifyError() {
-          stackView.pending = false
+          loadingDialog.close()
           focusOnBrowser = false
         }
       }
