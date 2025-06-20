@@ -207,7 +207,7 @@ jobs:
 
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
-              -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
+              -D ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
               -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
               -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
               -DVCPKG_HOST_TRIPLET=arm64-osx \
