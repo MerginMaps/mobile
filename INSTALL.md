@@ -341,29 +341,31 @@ mobile app for Android on Windows, please help us to update this section.
      mobile/ 
    ```
    
-   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it 
-   can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
-   binary vcpkg cache.
+   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local binary vcpkg cache.
    
-   Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
-   development and debugging)
+   Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for development and debugging)
    
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
    
-   ```
-   export DEPLOYMENT_TARGET=14.0
+   Note: make sure you adjust VCPKG_HOST_TRIPLET and CMAKE_SYSTEM_PROCESSOR if you use x64-osx host machine.
    
-   mkdir build
+   ```
    cd build
+   
+   export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
+   export PATH=${PWD}/../vcpkg:$PATH;\
+   export DEPLOYMENT_TARGET=16.0;\
+   PATH=/Applications/CMake.app/Contents/bin/:$PATH
+   
    cmake \
      -DVCPKG_HOST_TRIPLET=arm64-osx \
+     -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
      -DVCPKG_TARGET_TRIPLET=arm64-ios \
      -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
      -D ENABLE_BITCODE=OFF \
      -D ENABLE_ARC=ON \
      -D CMAKE_CXX_VISIBILITY_PRESET=hidden \
      -D CMAKE_SYSTEM_NAME=iOS \
-     -D CMAKE_SYSTEM_PROCESSOR=aarch64 \
      -D CMAKE_OSX_DEPLOYMENT_TARGET=$DEPLOYMENT_TARGET \
      -DIOS=TRUE \
      -DUSE_MM_SERVER_API_KEY=FALSE \
@@ -392,13 +394,16 @@ Now you can create a build (either on command line or by setting these variables
 
 1. Install some dependencies, critically XCode, bison and flex. See "Install Build Dependencies" step in `.github/workflows/macos.yml`
 ```
-   brew install automake bison flex gnu-sed autoconf-archive libtool ninja pkg-config ccache
+   brew install cmake automake bison flex gnu-sed autoconf-archive libtool ninja pkg-config
 ```
    install cmake 3.x
+   
+   Note: 
+   - cmake 4.0.1 is broken (empty -isysroot)
+   - TODO test with cmake 4.0.3 which is today's 
 
 2. Install vcpkg and checkout to correct version from file `VCPKG_BASELINE`
    Read [vcpkg](#vcpkg) section.
-   
  
 3. Configure mobile app
    We assume the structure on the system:
@@ -407,23 +412,25 @@ Now you can create a build (either on command line or by setting these variables
    mm1/
      build/
      vcpkg/
-     mobile/ 
+     mobile/
    ```
    
-   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it 
-   can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
-   binary vcpkg cache.
+   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local binary vcpkg cache.
    
-   Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
-   development and debugging)
+   Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for development and debugging)
    
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+    
+   Note: for x64-osx (intel laptops) build use VCPKG_TARGET_TRIPLET instead of arm64-osx (Mx laptops)
    
    ```
-   export DEPLOYMENT_TARGET=11.0
-   
-   mkdir build
    cd build
+   
+   export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
+   export PATH=${PWD}/../vcpkg:$PATH;\
+   export DEPLOYMENT_TARGET=11.0;\
+   PATH=/Applications/CMake.app/Contents/bin/:$PATH
+
    cmake \
       -DCMAKE_BUILD_TYPE=Debug \
       -DVCPKG_TARGET_TRIPLET=arm64-osx \
@@ -433,6 +440,7 @@ Now you can create a build (either on command line or by setting these variables
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
       -GNinja \
+      -DCMAKE_MAKE_PROGRAM=ninja \
       -S ../mobile
    ```
  
