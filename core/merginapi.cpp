@@ -4247,6 +4247,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
       CoreUtils::log( "SSO", QStringLiteral( "Successfully authorized, token expires at: %1" ).arg( mOauth2Flow.expirationAt().toString() ) );
       mUserAuth->setFromSso( mOauth2Flow.token(), mOauth2Flow.expirationAt() );
       mOauth2ReplyHandler->close();
+      getUserInfo();
     } );
 
     connect( &mOauth2Flow, &QAbstractOAuth2::error, this, [this]( const QString & error, const QString & errorDescription, const QUrl & uri )

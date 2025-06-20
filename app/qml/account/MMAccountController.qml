@@ -233,9 +233,14 @@ Item {
           focusOnBrowser = true
         }
 
-        function onAuthChanged() {
+        function onUserInfoReplyFinished() {
           stackView.pending = false
-          controller.end()
+          if ( __merginApi.userInfo.hasInvitations ) {
+            controller.invitation = __merginApi.userInfo.invitations()[0]
+            stackView.push( acceptInvitationsPanelComponent )
+          } else {
+            controller.end()
+          }
         }
 
         function onNotifyError() {
@@ -277,6 +282,7 @@ Item {
       objectName: "acceptInvitationsPanel"
 
       invitation: controller.invitation
+      showCreate: !__merginApi.userAuth.isUsingSso()
 
       onJoinWorkspaceClicked: function (workspaceUuid) {
         __merginApi.processInvitation( workspaceUuid, true )
