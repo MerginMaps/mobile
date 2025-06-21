@@ -41,6 +41,7 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( QString nameAbbr READ nameAbbr NOTIFY userInfoChanged )
     Q_PROPERTY( QString name READ name NOTIFY userInfoChanged )
     Q_PROPERTY( QString email READ email NOTIFY userInfoChanged )
+    Q_PROPERTY( QString username READ username NOTIFY userInfoChanged )
     Q_PROPERTY( QString activeWorkspaceName READ activeWorkspaceName NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( int activeWorkspaceId READ activeWorkspaceId NOTIFY activeWorkspaceChanged )
     Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY userInfoChanged )
@@ -58,6 +59,7 @@ class MerginUserInfo: public QObject
     QString nameAbbr() const;
     QString name() const;
     QString email() const;
+    QString username() const;
     QString activeWorkspaceName() const;
     int activeWorkspaceId() const;
     QMap<int, QString> workspaces() const;
@@ -86,6 +88,7 @@ class MerginUserInfo: public QObject
     QString mName;
     QString mNameAbbr;
     QString mEmail;
+    QString mUsername;
     QMap<int, QString> mWorkspaces;
     QList<MerginInvitation> mInvitations;
     int mActiveWorkspace = -1;

@@ -159,12 +159,12 @@ jobs:
         run: |
           aqt install-qt \
             mac ios ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
             -O ${{ github.workspace }}/Qt
 
 

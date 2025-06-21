@@ -37,6 +37,11 @@ Item {
 
     controller.inProgress = true;
     stackView.push( loginPageComp, {}, StackView.PushTransition )
+
+    if ( __merginApi.userAuth.isUsingSso() )
+    {
+      stackView.push( ssoPanel )
+    }
   }
 
   // Finish onboarding
@@ -86,6 +91,8 @@ Item {
         }
       }
 
+      supportsSso: __merginApi.apiSupportsSso
+
       onSignInClicked: function ( username, password ) {
         stackView.pending = true
         __merginApi.authorize(username, password)
@@ -119,6 +126,9 @@ Item {
         Qt.openUrlExternally(__merginApi.resetPasswordUrl());
       }
 
+      onContinueWithSsoClicked: {
+        stackView.push( ssoPanel )
+      }
     }
   }
 
@@ -187,6 +197,56 @@ Item {
   }
 
   Component {
+    id: ssoPanel
+
+    MMSsoPage {
+
+      objectName: "ssoPanel"
+
+      onBackClicked: {
+        __merginApi.abortSsoFlow()
+        loadingDialog.close()
+        stackView.popOnePageOrClose()
+      }
+
+      onLoginWithPasswordClicked: {
+        __merginApi.abortSsoFlow()
+        loadingDialog.close()
+        stackView.popOnePageOrClose()
+      }
+
+      onSignInClicked: function( email ) {
+        loadingDialog.open()
+        __merginApi.requestSsoConnections(email)
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "ssoPanel"
+
+        function onSsoConfigIsMultiTenant() {
+          loadingDialog.close()
+        }
+
+        function onUserInfoReplyFinished() {
+          loadingDialog.close()
+          if ( __merginApi.userInfo.hasInvitations ) {
+            controller.invitation = __merginApi.userInfo.invitations()[0]
+            stackView.push( acceptInvitationsPanelComponent )
+          } else {
+            controller.end()
+          }
+        }
+
+        function onNotifyError() {
+          loadingDialog.close()
+          focusOnBrowser = false
+        }
+      }
+    }
+  }
+
+  Component {
     id: createWorkspaceComponent
 
     MMCreateWorkspacePage {
@@ -217,6 +277,7 @@ Item {
       objectName: "acceptInvitationsPanel"
 
       invitation: controller.invitation
+      showCreate: !__merginApi.userAuth.isUsingSso()
 
       onJoinWorkspaceClicked: function (workspaceUuid) {
         __merginApi.processInvitation( workspaceUuid, true )

@@ -140,17 +140,17 @@ jobs:
         run: |
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_arm64_v8a \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_armv7 \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
         
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
           
        # Android SDK & NDK

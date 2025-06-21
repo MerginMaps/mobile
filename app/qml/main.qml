@@ -856,6 +856,15 @@ ApplicationWindow {
     }
   }
 
+  MMSsoExpiredTokenDialog {
+    id: ssoExpiredTokenDialog
+
+    onSingInRequested: {
+      stateManager.state = "projects"
+      projectController.showLogin()
+    }
+  }
+
   MMNotificationView {}
 
   MMListDrawer {
@@ -1010,7 +1019,7 @@ ApplicationWindow {
 
     function onMissingAuthorizationError( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === __activeProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
       {
         missingAuthDialog.open()
       }
@@ -1027,6 +1036,11 @@ ApplicationWindow {
     function onProjectCreationFailed()
     {
       syncButton.iconRotateAnimationRunning = false
+    }
+
+    function onSsoLoginExpired()
+    {
+      ssoExpiredTokenDialog.open()
     }
   }
 
