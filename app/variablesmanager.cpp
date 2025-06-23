@@ -105,7 +105,7 @@ void VariablesManager::apiRootChanged()
 void VariablesManager::authChanged()
 {
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userAuth()->username() );
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userInfo()->name() );
 }
 
 void VariablesManager::setUserVariables()

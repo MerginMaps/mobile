@@ -699,17 +699,20 @@ void TestAttributeController::testPhotoRenaming()
 {
   QString projectName = QStringLiteral( "testPhotoRenaming" );
   QString projectDir = QDir::tempPath() + "/" + projectName;
-  QString projectFileName = "project.qgz";
 
   QDir tempDir( projectDir );
-  tempDir.removeRecursively();
+  QVERIFY( tempDir.removeRecursively() );
 
-  InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir );
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
 
-  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
-  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
-  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image6.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_mynotes.jpg" ) ) );
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/media" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/custom_photo_name_format" ) ) );
 
   QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
 
@@ -718,9 +721,7 @@ void TestAttributeController::testPhotoRenaming()
 
   QVERIFY( surveyLayer && surveyLayer->isValid() );
 
-  QgsFeature feat;
-  feat.setValid( true );
-  feat.setFields( surveyLayer->fields(), true );
+  QgsFeature feat( surveyLayer->fields() );
   FeatureLayerPair pair( feat, surveyLayer );
 
   AttributeController controller;
@@ -728,20 +729,170 @@ void TestAttributeController::testPhotoRenaming()
 
   const TabItem *tab = controller.tabItem( 0 );
   const QVector<QUuid> items = tab->formItems();
-  QCOMPARE( items.size(), 5 );
+  QCOMPARE( items.size(), 9 );
 
-  controller.setFormValue( items.at( 2 ), QStringLiteral( "test" ) );
-  controller.setFormValue( items.at( 3 ), QStringLiteral( "photo.jpg" ) );
-  controller.setFormValue( items.at( 4 ), QStringLiteral( "photo2.jpg" ) );
+  //
+  // Attachment fields:
+  //  - photo
+  //  - photo_with_slash
+  //  - photo_in_subfolder_relative_to_project_path -> subfolder 'media'
+  //  - photo_in_subfolder_relative_to_default_path -> subfolder 'media'
+  //  - photo_with_slash_in_subfolder_relative_to_project_path -> subfolder 'media/with_slash'
+  //  - photo_with_slash_in_subfolder_relative_to_default_path -> subfolder 'media/with_slash'
+  //
+
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "image2.jpg" ) );
+  controller.setFormValue( items.at( 5 ), QStringLiteral( "image3.jpg" ) );
+  controller.setFormValue( items.at( 6 ), QStringLiteral( "image4.jpg" ) );
+  controller.setFormValue( items.at( 7 ), QStringLiteral( "image5.jpg" ) );
+  controller.setFormValue( items.at( 8 ), QStringLiteral( "image6.jpg" ) );
+
   controller.save();
 
-  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo.jpg" ) ) );
-  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_test.jpg" ) ) );
-  QCOMPARE( controller.featureLayerPair().feature().attribute( 3 ), QStringLiteral( "image_test.jpg" ) );
+  struct testcase {
+      QString originalPath;
+      QString expectedNewPath;
+      int fieldIdx;
+      QString expectedNewFieldValue;
+  };
 
-  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photo2.jpg" ) ) );
-  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
-  QCOMPARE( controller.featureLayerPair().feature().attribute( 4 ), QVariant( "photos/Survey.jpg" ) );
+  QList<testcase> testcases;
+
+  QString originalPath;
+  QString expectedNewPath;
+  int fieldIdx;
+  QString expectedNewFieldValue;
+
+  const FormItem *fieldToTest;
+
+  //
+  // Field "photo"
+  //  - Contains custom photo name expression
+  //  - Does not contain any default path definition
+  //  - Stores paths relative to project path
+  //
+
+  fieldIdx = 3;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image1.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/image_mynotes.jpg" );
+  expectedNewFieldValue = QStringLiteral( "image_mynotes.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash"
+  //  - Contains custom photo name expression with subfolder
+  //  - Does not contain any default path definition
+  //  - Stores paths relative to project path
+  //
+
+  fieldIdx = 4;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image2.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/photos/Survey.jpg" );
+  expectedNewFieldValue = QStringLiteral( "photos/Survey.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_in_subfolder_relative_to_project_path"
+  //  - Contains custom photo name expression (no subfolder there)
+  //  - Images should be stored inside folder 'media' (via default path in the field config)
+  //  - Stores paths relative to project path (folder should be part of the field value)
+  //
+
+  fieldIdx = 5;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_project_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image3.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/Survey_1.jpg" );
+  expectedNewFieldValue = QStringLiteral( "media/Survey_1.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_in_subfolder_relative_to_default_path"
+  //  - Contains custom photo name expression (no subfolder there)
+  //  - Images should be stored inside folder 'media' (via default path in the field config)
+  //  - Stores paths relative to default path (folder should not be part of the field value)
+  //
+
+  fieldIdx = 6;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_default_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image4.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/Survey_2.jpg" );
+  expectedNewFieldValue = QStringLiteral( "Survey_2.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash_in_subfolder_relative_to_project_path"
+  //  - Contains custom photo name expression with subfolder 'custom_photo_name_format'
+  //  - Images should be stored inside folder 'media/with_slash' (via default path in the field config)
+  //  - Stores paths relative to project path (folder should be part of the field value)
+  //
+  //  - as a result, image should be stored in 'media/with_slash/custom_photo_name_format/*'
+  //
+
+  fieldIdx = 7;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_project_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image5.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format/Survey_1.jpg" );
+  expectedNewFieldValue = QStringLiteral( "media/with_slash/custom_photo_name_format/Survey_1.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash_in_subfolder_relative_to_default_path"
+  //  - Contains custom photo name expression with subfolder 'custom_photo_name_format'
+  //  - Images should be stored inside folder 'media/with_slash' (via default path in the field config)
+  //  - Stores paths relative to default path (folder should not be part of the field value)
+  //
+  //  - this is kind-of project misconfiguration, the widget is configured to store photos
+  //    in 'media/with_slash', but that is overriden by the custom photo name as it includes
+  //    a subfolder and the project is configured to store paths relative to default path.
+  //    The value in the field will include the photo name format, even though the widget
+  //    will look for images inside 'media/with_slash' folder ... plugin should report this.
+  //
+
+  fieldIdx = 8;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_default_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image5.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/custom_photo_name_format/Survey_1.jpg" );
+  expectedNewFieldValue = QStringLiteral( "custom_photo_name_format/Survey_1.jpg" );
+
+  testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  const QgsFeature &f = controller.featureLayerPair().featureRef();
+
+  for ( const auto &testcase : std::as_const( testcases ) )
+  {
+    qInfo() << QStringLiteral( "Testing field #%1" ).arg( testcase.fieldIdx );
+    QVERIFY( !QFile::exists( testcase.originalPath ) );
+    QVERIFY( QFile::exists( testcase.expectedNewPath ) );
+
+    QCOMPARE( f.attribute( testcase.fieldIdx ), testcase.expectedNewFieldValue );
+  }
+
+  // TODOs:
+  //  - report that people should not use feature IDs in custom photo names!
+  //  - fix issue where email might be used for mm_username variable as this breaks the renaming!
+  //  - fix docs recommending variables with old prefix for photo names
+  //  - report misconfiguration of the use of subfolders & subfolders in the photo naming
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()
