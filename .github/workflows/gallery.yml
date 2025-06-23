@@ -3,7 +3,6 @@ on:
   push:
     paths:
     - 'app/qml/**'
-    - 'app/qmlV2/**'
     - 'gallery/**'
     - '.github/workflows/gallery.yml'
 

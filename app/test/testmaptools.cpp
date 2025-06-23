@@ -33,7 +33,10 @@
 
 #include "featurelayerpair.h"
 #include "streamingintervaltype.h"
+
+#ifdef HAVE_BLUETOOTH
 #include "position/providers/bluetoothpositionprovider.h"
+#endif
 
 void setupMapSettings( InputMapSettings *settings, QgsProject *project, QgsRectangle extent, QSize outputsize )
 {
@@ -2562,6 +2565,7 @@ void TestMapTools::testAntennaHeight()
 
 void TestMapTools::testSmallTracking()
 {
+#ifdef HAVE_BLUETOOTH
   QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
 
   RecordingMapTool mapTool;
@@ -2610,6 +2614,7 @@ void TestMapTools::testSmallTracking()
   QVERIFY( mapTool.hasValidGeometry() );
   QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), mPositionKit->positionCoordinate() );
+#endif
 }
 
 void TestMapTools::testAvoidIntersections()
