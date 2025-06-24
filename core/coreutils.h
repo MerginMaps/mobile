@@ -109,6 +109,7 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
+    static const QString QSETTINGS_CACHED_MAP_EXTENT_GROUP;
 
     /**
      * Returns available device storage
@@ -134,6 +135,12 @@ class CoreUtils
      * Updates a value in a JSON file at the specified top-level key
      */
     static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
+
+    /**
+     * Sanitizes a string by replacing path separators with underscores
+     * Useful to set QSettings group names, avoiding unpredicted behavior caused by slashes
+     */
+    static QString sanitizePathSlashes( const QString &input );
 
   private:
     static QString sLogFile;
