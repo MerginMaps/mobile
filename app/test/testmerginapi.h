@@ -171,6 +171,8 @@ class TestMerginApi: public QObject
 
     void testApiRoot();
 
+    void testServerVersionIsAtLeast();
+
   private:
     MerginApi *mApi = nullptr;
 
