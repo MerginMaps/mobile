@@ -851,7 +851,7 @@ class MerginApi: public QObject
     void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName );
 
     //! Refreshes auth token if it is expired. It does a blocking call to authorize.
-    //! Works only when login, password and token is set in UserAuth
+    //! Works only when login, password and token is set in UserAuth. Does nothing if using SSO.
     void refreshAuthToken();
 
     /**

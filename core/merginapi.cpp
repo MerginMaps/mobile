@@ -3503,7 +3503,6 @@ void MerginApi::refreshAuthToken()
   {
     case MerginUserAuth::AuthMethod::SSO:
       // refresh tokens not implemented yet
-      // TODO: what to do when asking for refresh?
       return;
     case MerginUserAuth::AuthMethod::Password:
       if ( !mUserAuth->hasAuthData() ||
@@ -4218,6 +4217,7 @@ void MerginApi::startSsoFlow( const QString &clientId )
 {
   CoreUtils::log( "SSO", QStringLiteral( "Starting SSO flow for clientId: %1" ).arg( clientId ) );
   mOauth2Flow.setAuthorizationUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/authorize" ) ) );
+  // TODO Qt 6.9: use setTokenUrl() in the abstract parent class instead.
   mOauth2Flow.setAccessTokenUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/token" ) ) );
   mOauth2Flow.setClientIdentifier( clientId );
   mOauth2Flow.setScope( QString() );
