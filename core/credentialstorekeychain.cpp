@@ -204,5 +204,5 @@ void CredentialStore::finishReadingOperation()
   // TODO: pass...
   //
 
-  emit authDataRead( username, password, userid, token, tokenExpiration, METHOD );
+  emit authDataRead( username, password, userid, token, tokenExpiration, method );
 }

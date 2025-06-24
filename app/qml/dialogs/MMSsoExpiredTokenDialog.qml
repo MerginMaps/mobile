@@ -18,7 +18,7 @@ MMDrawerDialog {
 
   imageSource: __style.noPermissionsImage
   title: qsTr( "SSO login has expired" )
-  description: qsTr( "Your SSO login has expired. To access your projects and be able to synchronize, you need to log in again." )
+  description: qsTr( "Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again." )
   primaryButton.text: qsTr( "I want to log in" )
   secondaryButton.text: qsTr( "I'll log in later" )
 

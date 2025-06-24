@@ -380,5 +380,6 @@ bool CoreUtils::replaceValueInJson( const QString &filePath, const QString &key,
 
 bool CoreUtils::isValidEmail( const QString &email )
 {
-  return !email.isEmpty() && email.contains( '@' ) && email.contains( '.' );
+  const thread_local QRegularExpression regEx( "\\S+@\\S+\\.\\S+" );
+  return regEx.match( email ).hasMatch();
 }
