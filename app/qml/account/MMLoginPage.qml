@@ -20,6 +20,7 @@ MMPage {
 
   property string apiRoot
   property bool canSignUp: true
+  property bool supportsSso: false
 
   property string warningMsg
 
@@ -30,6 +31,7 @@ MMPage {
   property bool pending: false // ?
 
   signal signUpClicked
+  signal continueWithSsoClicked()
   signal signInClicked( string username, string password )
   signal changeServerClicked( string newServer )
   signal forgotPasswordClicked
@@ -115,6 +117,19 @@ MMPage {
           enabled: !root.pending
 
           onClicked: root.signInClicked( username.text, password.text )
+        }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Continue with SSO" )
+          type: MMButton.Types.Secondary
+
+          visible: root.supportsSso
+
+          enabled: !root.pending
+
+          onClicked: root.continueWithSsoClicked()
         }
 
         MMListSpacer { height: __style.margin20 }

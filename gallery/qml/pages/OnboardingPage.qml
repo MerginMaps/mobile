@@ -133,6 +133,8 @@ Page {
       width: root.width
       height: root.height
 
+      supportsSso: false
+
       onSignInClicked: function(username, password) {
         pending = true
         console.log("Sign in clicked: " + username + " ; " + password)

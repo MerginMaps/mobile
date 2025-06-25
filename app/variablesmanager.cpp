@@ -104,12 +104,19 @@ void VariablesManager::apiRootChanged()
 
 void VariablesManager::authChanged()
 {
+  // We store the username used in userAuth (might not be logged in if offline)
+  // When logging in with SSO, we do not have the username at this point. We will re-read when userInfo is updated
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userAuth()->username() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userAuth()->username() );
 }
 
 void VariablesManager::setUserVariables()
 {
+  // we re-set the username variables with the data in userInfo when it changes
+  // When doing SSO, we do not have that info yet when userAuth is changed
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userInfo()->username() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userInfo()->username() );
+
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_user_email" ),  mMerginApi->userInfo()->email() );

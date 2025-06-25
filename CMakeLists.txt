@@ -198,6 +198,7 @@ find_package(
              Sensors
              QuickControls2
              Network
+             NetworkAuth
              Svg
              Sql
              Core

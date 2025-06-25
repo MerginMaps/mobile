@@ -15,8 +15,7 @@
 #include <QSettings>
 #include <QJsonObject>
 
-#include "credentialstore.h"
-#include "coreutils.h"
+class CredentialStore;
 
 class MerginUserAuth: public QObject
 {
@@ -25,6 +24,13 @@ class MerginUserAuth: public QObject
     Q_PROPERTY( int userId READ userId NOTIFY authChanged )
 
   public:
+    enum AuthMethod
+    {
+      Password = 0,
+      SSO,
+    };
+    Q_ENUM( AuthMethod )
+
     explicit MerginUserAuth( QObject *parent = nullptr );
     ~MerginUserAuth() = default;
 
@@ -44,8 +50,16 @@ class MerginUserAuth: public QObject
     //! Returns whether user is currently logged in
     Q_INVOKABLE bool isLoggedIn();
 
+    Q_INVOKABLE bool isUsingSso() const { return mMethod == AuthMethod::SSO; }
+
     void clear();
 
+    /**
+     * The username used to login the current user
+     *
+     * For AuthMethod::Password this is the username
+     * For AuthMethod::SSO this is the email address used
+     */
     QString username() const;
     void setUsername( const QString &username );
 
@@ -65,6 +79,9 @@ class MerginUserAuth: public QObject
     void saveAuthData();
     void loadAuthData();
     void setFromJson( QJsonObject docObj );
+    void setFromSso( const QString &authToken, const QDateTime &tokenExpiration );
+
+    AuthMethod authMethod() const;
 
   private:
     QString mUsername;
@@ -74,6 +91,8 @@ class MerginUserAuth: public QObject
     QDateTime mTokenExpiration;
 
     CredentialStore *mCredentialStore = nullptr; // owned by this
+
+    AuthMethod mMethod = AuthMethod::Password;
 };
 
 #endif // MERGINUSERAUTH_H

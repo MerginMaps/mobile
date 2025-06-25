@@ -8,6 +8,8 @@
  ***************************************************************************/
 
 #include "merginuserauth.h"
+#include "credentialstore.h"
+#include "coreutils.h"
 
 MerginUserAuth::MerginUserAuth( QObject *parent )
   : QObject( parent )
@@ -23,6 +25,7 @@ void MerginUserAuth::clear()
   mAuthToken.clear();
   mTokenExpiration = QDateTime();
   mUserId = -1;
+  mMethod = AuthMethod::Password;
 
   emit authChanged();
 }
@@ -37,11 +40,18 @@ void MerginUserAuth::clearTokenData()
 
 bool MerginUserAuth::hasAuthData()
 {
-  return !mUsername.isEmpty() && !mPassword.isEmpty();
+  switch ( mMethod )
+  {
+    case AuthMethod::Password: return !mUsername.isEmpty() && !mPassword.isEmpty();
+    case AuthMethod::SSO: return true;
+  }
+
+  return false;
 }
 
 void MerginUserAuth::setFromJson( QJsonObject docObj )
 {
+  mMethod = AuthMethod::Password;
   // parse profile data
   mUserId = docObj.value( QStringLiteral( "user" ) ).toInt();
   mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
@@ -53,6 +63,23 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
   emit authChanged();
 }
 
+void MerginUserAuth::setFromSso( const QString &authToken, const QDateTime &tokenExpiration )
+{
+  mUsername = QString();
+  mPassword = QString();
+  mAuthToken = authToken.toUtf8();
+  mTokenExpiration = tokenExpiration.toUTC();
+  mUserId = -1;
+  mMethod = AuthMethod::SSO;
+
+  emit authChanged();
+}
+
+MerginUserAuth::AuthMethod MerginUserAuth::authMethod() const
+{
+  return mMethod;
+}
+
 void MerginUserAuth::saveAuthData()
 {
   if ( !mCredentialStore )
@@ -61,7 +88,7 @@ void MerginUserAuth::saveAuthData()
     return;
   }
 
-  mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration );
+  mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration, mMethod );
 }
 
 void MerginUserAuth::loadAuthData()
@@ -77,13 +104,15 @@ void MerginUserAuth::loadAuthData()
              const QString & password,
              int userId,
              const QString & token,
-             const QDateTime & tokenExpiration )
+             const QDateTime & tokenExpiration,
+             int method )
   {
     mUsername = username;
     mPassword = password;
     mUserId = userId;
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
+    mMethod = static_cast<AuthMethod>( method );
 
     emit authChanged();
     emit credentialsLoaded();
@@ -154,5 +183,11 @@ bool MerginUserAuth::hasValidToken() const
 
 bool MerginUserAuth::isLoggedIn()
 {
-  return hasAuthData() && hasValidToken();
+  switch ( mMethod )
+  {
+    case AuthMethod::Password: return hasAuthData() && hasValidToken();
+    case AuthMethod::SSO: return hasValidToken();
+  }
+
+  return false;
 }

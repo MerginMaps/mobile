@@ -381,6 +381,15 @@ if (IOS)
                ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/MMLaunchScreen.storyboard
   )
 
+  if (0)
+    # entitlements file
+    set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+    target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
+    set_source_files_properties(
+      ${ENTITLEMENTS_FILE} PROPERTIES XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
+    )
+  endif()
+
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
@@ -390,6 +399,7 @@ if (IOS)
                MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
                XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+               # XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${ENTITLEMENTS_FILE}"
   )
 
   if (IOS_USE_PRODUCTION_SIGNING)
@@ -433,6 +443,7 @@ target_link_libraries(
          Qt6::Sensors
          Qt6::QuickControls2
          Qt6::Network
+         Qt6::NetworkAuth
          Qt6::Svg
          Qt6::Sql
          Qt6::Core

@@ -963,3 +963,18 @@ void TestUtilsFunctions::testRelevantGeometryCenterToScreenCoordinates()
   ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
   QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.257, 274.5 ), epsilon ), true );
 }
+
+void TestUtilsFunctions::testIsValidEmail()
+{
+  // valid emails
+  QVERIFY( InputUtils::isValidEmail( "name@email.com" ) );
+  QVERIFY( InputUtils::isValidEmail( "name.surname@email.com" ) );
+  QVERIFY( InputUtils::isValidEmail( "name_sur-name+1@email.com" ) );
+
+  // invalid emails
+  QVERIFY( !InputUtils::isValidEmail( "broken@email" ) );
+  QVERIFY( !InputUtils::isValidEmail( "@email.com" ) );
+  QVERIFY( !InputUtils::isValidEmail( "brokenemail.com" ) );
+  QVERIFY( !InputUtils::isValidEmail( "brokenemail" ) );
+  QVERIFY( !InputUtils::isValidEmail( "" ) );
+}

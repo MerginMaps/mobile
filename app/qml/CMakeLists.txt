@@ -13,6 +13,7 @@ set(MM_QML
     account/MMHowYouFoundUsPage.qml
     account/MMLoginPage.qml
     account/MMSignUpPage.qml
+    account/MMSsoPage.qml
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
@@ -77,6 +78,7 @@ set(MM_QML
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
+    dialogs/MMSsoExpiredTokenDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
