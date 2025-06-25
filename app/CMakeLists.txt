@@ -381,12 +381,14 @@ if (IOS)
                ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/MMLaunchScreen.storyboard
   )
 
-  # # entitlements file
-  # set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
-  # target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
-  # set_source_files_properties(
-  #   ${ENTITLEMENTS_FILE} PROPERTIES XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
-  # )
+  if (0)
+    # entitlements file
+    set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+    target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
+    set_source_files_properties(
+      ${ENTITLEMENTS_FILE} PROPERTIES XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
+    )
+  endif()
 
   set_target_properties(
     Input
