@@ -20,9 +20,9 @@ MMDrawerDialog {
   signal ignoreClicked()
 
   imageSource: __style.positiveMMSymbolImage
-  title: qsTr( "Your server will soon be out of date" )
+  title: qsTr( "Your server is out of date" )
   description: qsTr( "Please contact your server administrator to upgrade your server to the latest version. " +
-                     "Subsequent releases of our mobile app may not be compatible with your current server version." )
+                     "The mobile app is not compatible with your current server version." )
 
   link: helpLink
   linkText: qsTr( "Learn more" )
