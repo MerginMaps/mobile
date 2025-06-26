@@ -410,7 +410,7 @@ if (IOS)
     set_target_properties(
       Input
       PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
-                 "LutraConsultingLtd.Input.AppStore"
+                 "LutraConsultingLtd.MM.AppStore"
                  XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
                  "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
                  XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
