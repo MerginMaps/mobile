@@ -22,3 +22,4 @@ CMakeLists.txt.user
 app/android/build.gradle
 app/android/.gradle/*
 app/android/.gradle
+.github/secrets/ios/LutraConsulting*.mobileprovision
