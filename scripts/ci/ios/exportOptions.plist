@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>LutraConsultingLtd.Input</key>
-		<string>LutraConsultingLtd.MM.AppStore</string>
+		<string>LutraConsultingLtd.Input.AppStore</string>
 	</dict>
 	<key>signingCertificate</key>
     <string>iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)</string>

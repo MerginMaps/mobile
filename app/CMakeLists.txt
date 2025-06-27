@@ -383,7 +383,9 @@ if (IOS)
 
   # entitlements file
   set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
-  configure_file(${ENTITLEMENTS_FILE} ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements COPYONLY)
+  configure_file(
+    ${ENTITLEMENTS_FILE} ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements COPYONLY
+  )
   set(ENTITLEMENTS_FILE_IN_BUILD ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements)
   target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
   set_source_files_properties(
@@ -410,7 +412,7 @@ if (IOS)
     set_target_properties(
       Input
       PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
-                 "LutraConsultingLtd.MM.AppStore"
+                 "LutraConsultingLtd.Input.AppStore"
                  XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
                  "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
                  XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
