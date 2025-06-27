@@ -180,6 +180,9 @@ jobs:
             echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
             echo "Build number: ${CF_BUNDLE_VERSION}"
 
+            # add build number to summary
+            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
+
       - name: Create build system with cmake
         run: |
           mkdir -p install-Input
