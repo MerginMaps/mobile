@@ -242,6 +242,9 @@ jobs:
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
+
+            # add build number to summary
+            echo ":rocket: Build number: ${BUILD_NUM}" >> $GITHUB_STEP_SUMMARY
                                     
       - name: Configure Input
         env:
