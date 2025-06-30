@@ -1265,7 +1265,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="89"/>
         <source>Email or username</source>
-        <translation>Email vagy felhasználónév</translation>
+        <translation>E-mail cím vagy felhasználónév</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="98"/>
