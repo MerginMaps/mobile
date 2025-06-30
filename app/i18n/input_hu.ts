@@ -2804,7 +2804,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="1446"/>
         <source>This email address is already registered</source>
-        <translation>Ezzel az e-mail címmel már regisztráltak fiókot</translation>
+        <translation>Ezzel az e-mail címmel már regisztráltak egy fiókot</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1471"/>
