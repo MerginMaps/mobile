@@ -2349,7 +2349,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="72"/>
         <source>Work email</source>
-        <translation>Munkahelyi e-mail</translation>
+        <translation>Működő és használt e-mail cím</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="81"/>
