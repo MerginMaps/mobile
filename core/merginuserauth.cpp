@@ -24,7 +24,6 @@ void MerginUserAuth::clear()
   mPassword = "";
   mAuthToken.clear();
   mTokenExpiration = QDateTime();
-  mUserId = -1;
   mMethod = AuthMethod::Password;
 
   emit authChanged();
@@ -53,7 +52,6 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 {
   mMethod = AuthMethod::Password;
   // parse profile data
-  mUserId = docObj.value( QStringLiteral( "user" ) ).toInt();
   mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
 
   // parse session data
@@ -69,7 +67,6 @@ void MerginUserAuth::setFromSso( const QString &authToken, const QDateTime &toke
   mPassword = QString();
   mAuthToken = authToken.toUtf8();
   mTokenExpiration = tokenExpiration.toUTC();
-  mUserId = -1;
   mMethod = AuthMethod::SSO;
 
   emit authChanged();
@@ -88,7 +85,7 @@ void MerginUserAuth::saveAuthData()
     return;
   }
 
-  mCredentialStore->writeAuthData( mUsername, mPassword, mUserId, mAuthToken, mTokenExpiration, mMethod );
+  mCredentialStore->writeAuthData( mUsername, mPassword, mAuthToken, mTokenExpiration, mMethod );
 }
 
 void MerginUserAuth::loadAuthData()
@@ -102,14 +99,12 @@ void MerginUserAuth::loadAuthData()
   connect( mCredentialStore, &CredentialStore::authDataRead, this, [this]
            ( const QString & username,
              const QString & password,
-             int userId,
              const QString & token,
              const QDateTime & tokenExpiration,
              int method )
   {
     mUsername = username;
     mPassword = password;
-    mUserId = userId;
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
     mMethod = static_cast<AuthMethod>( method );
@@ -140,17 +135,6 @@ QString MerginUserAuth::password() const
 void MerginUserAuth::setPassword( const QString &password )
 {
   mPassword = password;
-  emit authChanged();
-}
-
-int MerginUserAuth::userId() const
-{
-  return mUserId;
-}
-
-void MerginUserAuth::setUserId( int userId )
-{
-  mUserId = userId;
   emit authChanged();
 }
 

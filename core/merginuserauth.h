@@ -20,8 +20,7 @@ class CredentialStore;
 class MerginUserAuth: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString username READ username NOTIFY authChanged )
-    Q_PROPERTY( int userId READ userId NOTIFY authChanged )
+    Q_PROPERTY( QString login READ login NOTIFY authChanged )
 
   public:
     enum AuthMethod
@@ -39,7 +38,7 @@ class MerginUserAuth: public QObject
     void credentialsLoaded();
 
   public:
-    //! Returns true if username/password is set, but that does not
+    //! Returns true if login/password is set, but that does not
     //! necessarily mean that we have managed to log in and get a token.
     Q_INVOKABLE bool hasAuthData();
 
@@ -66,9 +65,6 @@ class MerginUserAuth: public QObject
     QString password() const;
     void setPassword( const QString &password );
 
-    int userId() const;
-    void setUserId( int userId );
-
     QByteArray authToken() const;
     void setAuthToken( const QByteArray &authToken );
 
@@ -86,7 +82,6 @@ class MerginUserAuth: public QObject
   private:
     QString mUsername;
     QString mPassword;
-    int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
 

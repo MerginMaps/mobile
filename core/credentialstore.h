@@ -36,7 +36,6 @@ class CredentialStore : public QObject
 
     static const QString KEY_USERNAME;
     static const QString KEY_PASSWORD;
-    static const QString KEY_USERID;
     static const QString KEY_TOKEN;
     static const QString KEY_EXPIRE;
     static const QString KEY_METHOD;
@@ -44,7 +43,6 @@ class CredentialStore : public QObject
     //! Write authentication values data to keychain
     void writeAuthData( const QString &username,
                         const QString &password,
-                        int userId,
                         const QString &token,
                         const QDateTime &tokenExpiration,
                         int method = 0 );
@@ -56,7 +54,6 @@ class CredentialStore : public QObject
     //! Emitted when authentication data is read, including all authentication key values
     void authDataRead( const QString &username,
                        const QString &password,
-                       int userId,
                        const QString &token,
                        const QDateTime &tokenExpiration,
                        int method = 0 );
