@@ -10,6 +10,9 @@
 import QtQuick
 import QtQuick.Dialogs
 
+import mm 1.0 as MM
+import MMInput
+
 import "../../dialogs"
 
 /*
@@ -101,6 +104,8 @@ MMFormPhotoViewer {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
+  controller: sketchesController
+
   // used only on desktop builds
   FileDialog {
     id: desktopGalleryPicker
@@ -137,6 +142,12 @@ MMFormPhotoViewer {
     }
   }
 
+  PhotoSketchingController {
+    id: sketchesController
+
+    photoSource: root.photoUrl
+  }
+
   Connections {
     target: __androidUtils
 
@@ -164,10 +175,12 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
+    sketchesController.saveDrawings()
   }
 
   function callbackOnFormCanceled() {
     internal.imageSourceToDelete = ""
+    sketchesController.clear()
   }
 
   QtObject {
