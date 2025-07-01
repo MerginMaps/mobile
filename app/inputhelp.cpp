@@ -22,7 +22,6 @@
 #include <QSysInfo>
 
 const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
-const QString reportLogUrl = QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QString helpDeskMail = QStringLiteral( "support@merginmaps.com" );
 const QString mmWeb = QStringLiteral( "https://merginmaps.com" );
 const QString changelogRss = QStringLiteral( "https://wishlist.merginmaps.com/rss/changelog.xml" );
@@ -267,11 +266,11 @@ void InputHelp::submitReport()
   if ( username.isEmpty() )
     username = "unknown";
   QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app ).arg( username );
-  QNetworkRequest req( reportLogUrl + params );
+  QNetworkRequest req( mMerginApi->serverDiagnosticLogsUrl() + params );
   req.setRawHeader( "User-Agent", "InputApp" );
   req.setRawHeader( "Content-Type", "text/plain" );
   QNetworkReply *reply = mManager.post( req, logArr );
-  qDebug() << "Report to " << reportLogUrl;
+  qDebug() << "Report to " << mMerginApi->serverDiagnosticLogsUrl();
 
   mSubmitReportPending = true;
   emit submitReportPendingChanged();

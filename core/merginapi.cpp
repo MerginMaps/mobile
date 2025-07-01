@@ -39,6 +39,7 @@ const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" 
 const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com" );
+const QString MerginApi::sDefaultReportLogUrl =  QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
@@ -132,6 +133,7 @@ void MerginApi::loadCache()
   int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
+  // Should load diag url from cache too ? 
 
   mUserAuth->loadAuthData();
   mUserInfo->loadWorkspacesData();
@@ -3799,6 +3801,7 @@ void MerginApi::getServerConfigReplyFinished()
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();      
       int major = -1;
       int minor = -1;
       bool validVersion = parseVersion( apiVersion, major, minor );
@@ -3831,6 +3834,11 @@ void MerginApi::getServerConfigReplyFinished()
         {
           CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "%1.%2 SAAS" ).arg( major ).arg( minor ) );
         }
+      }
+
+      if ( !diagnosticUrl.isEmpty() )
+      {
+        mServerDiagnosticLogsUrl = diagnosticUrl;
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
@@ -3867,6 +3875,12 @@ MerginServerType::ServerType MerginApi::serverType() const
 {
   return mServerType;
 }
+
+QString MerginApi::serverDiagnosticLogsUrl() const
+{
+  return mServerDiagnosticLogsUrl;
+}
+
 
 void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
 {
