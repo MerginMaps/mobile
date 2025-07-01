@@ -4162,7 +4162,7 @@ void MerginApi::reloadProjectRole( const QString &projectFullName )
   if ( projectFullName.isEmpty() )
     return;
 
-  QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->isLoggedIn() ); //withAuth depends on whether user is logged in or not
+  QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->hasAuthData() );
   if ( !reply )
     return;
 

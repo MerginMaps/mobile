@@ -164,14 +164,3 @@ bool MerginUserAuth::hasValidToken() const
 {
   return !mAuthToken.isEmpty() && mTokenExpiration >= QDateTime().currentDateTimeUtc();
 }
-
-bool MerginUserAuth::isLoggedIn()
-{
-  switch ( mMethod )
-  {
-    case AuthMethod::Password: return hasAuthData() && hasValidToken();
-    case AuthMethod::SSO: return hasValidToken();
-  }
-
-  return false;
-}
