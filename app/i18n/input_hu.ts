@@ -162,7 +162,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="69"/>
+        <location filename="../featuresmodel.cpp" line="70"/>
         <source>Unknown title</source>
         <translation>Ismeretlen cím</translation>
     </message>
@@ -419,17 +419,17 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="80"/>
+        <location filename="../qml/account/MMAccountController.qml" line="85"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Kérjük, frissítse az alkalmazást a legújabb funkciók eléréséhez.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="84"/>
+        <location filename="../qml/account/MMAccountController.qml" line="89"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>A szerver jelenleg nem elérhető, kérjük, ellenőrizze a kapcsolatát vagy próbálja meg később.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="132"/>
+        <location filename="../qml/account/MMAccountController.qml" line="142"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Elfogadom az %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
@@ -1258,52 +1258,57 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMLoginPage</name>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="38"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="40"/>
         <source>Log in</source>
         <translation>Bejelentkezés</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="87"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="89"/>
         <source>Email or username</source>
-        <translation>Email vagy felhasználónév</translation>
+        <translation>E-mail cím vagy felhasználónév</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="96"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="98"/>
         <source>Password</source>
         <translation>Jelszó</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="102"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="104"/>
         <source>Forgot password?</source>
         <translation>Elfelejtett jelszó?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="113"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="115"/>
         <source>Sign in</source>
         <translation>Bejelentkezés</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
+        <source>Continue with SSO</source>
+        <translation>Folytatás egyszeri bejelentkezéssel</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="140"/>
         <source>Don&apos;t have an account?</source>
         <translation>Nincs fiókja?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="132"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="147"/>
         <source>Sign up</source>
         <translation>Regisztráljon</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="183"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="198"/>
         <source>Change server</source>
         <translation>Szerver módosítása</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="202"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="217"/>
         <source>Server address</source>
         <translation>Szerver címe</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="233"/>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
     </message>
@@ -1572,13 +1577,13 @@ Nem lesz hozzáadva a projekthez.</translation>
     <name>MMOutOfDateCustomServerDialog</name>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
-        <source>Your server will soon be out of date</source>
-        <translation>A szervere hamarosan elavult lesz</translation>
+        <source>Your server is out of date</source>
+        <translation>A szervere elavult</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
-        <source>Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.</source>
-        <translation>Kérjük, lépjen kapcsolatba a szerver rendszergazdájával, hogy frissítse a szervert a legújabb verzióra. Előfordulhat, hogy mobilalkalmazásunk későbbi kiadásai nem lesznek kompatibilisek az Ön jelenlegi szerver verziójával.</translation>
+        <source>Please contact your server administrator to upgrade your server to the latest version. The mobile app is not compatible with your current server version.</source>
+        <translation>Kérjük, lépjen kapcsolatba a szerver rendszergazdájával, hogy frissítse a szervert a legújabb verzióra. A mobilalkalmazás nem kompatibilis a jelenlegi szerververzióval.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="28"/>
@@ -2344,7 +2349,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="72"/>
         <source>Work email</source>
-        <translation>Munkahelyi e-mail</translation>
+        <translation>Működő és használt e-mail cím</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSignUpPage.qml" line="81"/>
@@ -2424,6 +2429,72 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Legalább 2 pontra van szükség.</translation>
+    </message>
+</context>
+<context>
+    <name>MMSsoExpiredTokenDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
+        <source>SSO login has expired</source>
+        <translation>Az egyszeri bejelentkezése lejárt</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
+        <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
+        <translation>Az egyszeri bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
+        <source>I want to log in</source>
+        <translation>Be akarok jelentkezni</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="23"/>
+        <source>I&apos;ll log in later</source>
+        <translation>Később szeretnék bejelentkezni</translation>
+    </message>
+</context>
+<context>
+    <name>MMSsoPage</name>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="29"/>
+        <source>Sign in with SSO</source>
+        <translation>Bejelentkezés egyszeri bejelentkezéssel</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="58"/>
+        <source>Work email</source>
+        <translation>Működő és használt e-mail cím</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="67"/>
+        <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Az egyszeri bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="95"/>
+        <source>Sign in</source>
+        <translation>Bejelentkezés</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="109"/>
+        <source>Use password instead?</source>
+        <translation>Inkább a jelszó legyen használva?</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="115"/>
+        <source>Sign in with password</source>
+        <translation>Bejelentkezés jelszóval</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="128"/>
+        <source>SSO login</source>
+        <translation>Egyszeri bejelentkezés</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="129"/>
+        <source>Please follow the instructions in your web browser.</source>
+        <translation>Kérjük kövesse az utasításokat a webböngészőjében</translation>
     </message>
 </context>
 <context>
@@ -2658,90 +2729,118 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="223"/>
+        <location filename="../../core/merginapi.cpp" line="237"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Kérjük, távolítson el néhány projektet, mivel az alkalmazás jelenleg
 legfeljebb %1 letöltött projektet engedélyez.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="824"/>
-        <location filename="../../core/merginapi.cpp" line="1306"/>
+        <location filename="../../core/merginapi.cpp" line="877"/>
+        <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
+        <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="885"/>
+        <location filename="../../core/merginapi.cpp" line="945"/>
+        <source>Error getting the SSO configuration from the server</source>
+        <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="929"/>
+        <location filename="../../core/merginapi.cpp" line="943"/>
+        <source>SSO is not supported for the specified domain</source>
+        <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="958"/>
+        <location filename="../../core/merginapi.cpp" line="1440"/>
         <source>Please enter a valid email</source>
         <translation>Kérjük, egy létező e-mail címet adjon meg</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="831"/>
-        <location filename="../../core/merginapi.cpp" line="1318"/>
+        <location filename="../../core/merginapi.cpp" line="965"/>
+        <location filename="../../core/merginapi.cpp" line="1452"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell a következőket:&lt;ul type=&quot;disc&quot;&gt;%3 kisbetűs karakter (a-z)%4%3 NAGYbetűs karakter (A-Z)%4%3 Legalább egy számjegy (0–9) vagy speciális karakter%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="845"/>
+        <location filename="../../core/merginapi.cpp" line="979"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Kérjük, fogadja el a Felhasználási Feltételeket és az Adatvédelmi szabályzatot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="874"/>
+        <location filename="../../core/merginapi.cpp" line="1008"/>
         <source>Marketing source cannot be empty</source>
         <translation>A marketingforrás nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="882"/>
+        <location filename="../../core/merginapi.cpp" line="1016"/>
         <source>Industry cannot be empty</source>
         <translation>Az iparág nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1173"/>
+        <location filename="../../core/merginapi.cpp" line="1307"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Nincs jogosultsága új projekt létrehozására ezen a munkaterületen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1178"/>
+        <location filename="../../core/merginapi.cpp" line="1312"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Nem sikerült létrehozni a projektet. Próbálja újra később, vagy ha a probléma továbbra is fennáll, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1286"/>
+        <location filename="../../core/merginapi.cpp" line="1420"/>
         <source>Registration successful</source>
         <translation>Sikeres regisztráció</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1308"/>
-        <location filename="../../core/merginapi.cpp" line="1314"/>
-        <location filename="../../core/merginapi.cpp" line="1326"/>
+        <location filename="../../core/merginapi.cpp" line="1442"/>
+        <location filename="../../core/merginapi.cpp" line="1448"/>
+        <location filename="../../core/merginapi.cpp" line="1460"/>
         <source>Registration failed</source>
         <translation>A regisztráció nem sikerült</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1312"/>
+        <location filename="../../core/merginapi.cpp" line="1446"/>
         <source>This email address is already registered</source>
-        <translation>Ezzel az e-mail címmel már regisztráltak fiókot</translation>
+        <translation>Ezzel az e-mail címmel már regisztráltak egy fiókot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1337"/>
+        <location filename="../../core/merginapi.cpp" line="1471"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Az új regisztrációk nem engedélyezettek a kiválasztott szerveren. Kérjük, forduljon az adminisztrátorhoz segítségért.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1369"/>
+        <location filename="../../core/merginapi.cpp" line="1503"/>
         <source>Workspace created</source>
         <translation>Munkaterület létrehozva</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1706"/>
+        <location filename="../../core/merginapi.cpp" line="1850"/>
         <source>Project detached from the server</source>
         <translation>A projekt le van választva a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3903"/>
+        <location filename="../../core/merginapi.cpp" line="4066"/>
         <source>Workspace name contains invalid characters</source>
         <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3969"/>
+        <location filename="../../core/merginapi.cpp" line="4132"/>
         <source>Workspace %1 already exists</source>
         <translation>%1 munkaterület már létezik</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <source>You can now close this page and return to Mergin Maps</source>
+        <translation>Most már bezárhatja ezt az oldalt, és visszatérhet a Mergin Maps alkalmazáshoz</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4257"/>
+        <location filename="../../core/merginapi.cpp" line="4284"/>
+        <source>SSO authorization failed</source>
+        <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
     </message>
 </context>
 <context>
@@ -2974,7 +3073,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="40"/>
+        <location filename="../../core/merginapi.cpp" line="46"/>
         <source>Synchronisation canceled</source>
         <translation>Szinkronizálás megszakítva</translation>
     </message>
@@ -3056,32 +3155,32 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>nincs követés</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="864"/>
+        <location filename="../qml/main.qml" line="873"/>
         <source>Select feature</source>
         <translation>Elem kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="948"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Valaki más is szinkronizál, később újra megpróbáljuk</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="952"/>
+        <location filename="../qml/main.qml" line="961"/>
         <source>Details</source>
         <translation>Részletek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="972"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a szerverrel. Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1023"/>
+        <location filename="../qml/main.qml" line="1032"/>
         <source>Up to date</source>
         <translation>Naprakész</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1086"/>
+        <location filename="../qml/main.qml" line="1100"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Probléma történt a projekt betöltése során. %1Nézze meg a részleteket%2</translation>
     </message>
@@ -3091,22 +3190,22 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Az áthelyezés le van tiltva, mert a helymeghatározás nem elérhető!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="917"/>
+        <location filename="../qml/main.qml" line="926"/>
         <source>Successfully synchronised</source>
         <translation>Sikeresen szinkronizálva</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="955"/>
+        <location filename="../qml/main.qml" line="964"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hiba történt a szinkronizálás során, újra megpróbáljuk. Kattintson a további információért</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1107"/>
+        <location filename="../qml/main.qml" line="1121"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1132"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>
