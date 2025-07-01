@@ -57,7 +57,7 @@ MMPage {
 
         title: qsTr( "Work email" )
         textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
-        text: __merginApi.userAuth.username
+        text: __merginApi.userAuth.login
       }
 
       MMListSpacer {}

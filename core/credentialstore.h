@@ -34,14 +34,14 @@ class CredentialStore : public QObject
     static const QString KEYCHAIN_ENTRY_CREDENTIALS;
     static const QString KEYCHAIN_ENTRY_TOKEN;
 
-    static const QString KEY_USERNAME;
+    static const QString KEY_LOGIN;
     static const QString KEY_PASSWORD;
     static const QString KEY_TOKEN;
     static const QString KEY_EXPIRE;
     static const QString KEY_METHOD;
 
     //! Write authentication values data to keychain
-    void writeAuthData( const QString &username,
+    void writeAuthData( const QString &login,
                         const QString &password,
                         const QString &token,
                         const QDateTime &tokenExpiration,
@@ -52,7 +52,7 @@ class CredentialStore : public QObject
 
   signals:
     //! Emitted when authentication data is read, including all authentication key values
-    void authDataRead( const QString &username,
+    void authDataRead( const QString &login,
                        const QString &password,
                        const QString &token,
                        const QDateTime &tokenExpiration,

@@ -173,7 +173,7 @@ Item {
       __inputUtils.log(
             "Delete project",
             "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
-            ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+            ( __merginApi.userInfo ? __merginApi.userInfo.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
 
       projectlist.projectsModel.removeLocalProject( relatedProjectId )
 

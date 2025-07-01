@@ -42,7 +42,7 @@ const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginma
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
-const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 #ifdef MOBILE_OS
 const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
@@ -1046,7 +1046,12 @@ void MerginApi::getUserInfo()
   QString urlString;
   if ( mServerType == MerginServerType::OLD )
   {
-    urlString = mApiRoot + QStringLiteral( "/v1/user/%1" ).arg( mUserAuth->username() );
+    if ( mUserAuth->authMethod == MerginAuthMethod::SSO )
+    {
+      CoreUtils::log( QStringLiteral("Server API"), QStringLiteral( "SSO user info is not available on old servers" ) );
+      return;
+    }
+    urlString = mApiRoot + QStringLiteral( "/v1/user/%1" ).arg( mUserAuth->login() );
   }
   else
   {
@@ -1360,7 +1365,7 @@ void MerginApi::authorizeFinished()
     }
     else
     {
-      // keep username and password, but clear token
+      // keep login and password, but clear token
       // this is problem with internet connection or server
       // so do not force user to input login credentials again
       mUserAuth->clearTokenData();
@@ -1378,21 +1383,21 @@ void MerginApi::authorizeFinished()
 
     if ( status == 401 )
     {
-      // OK, we have INVALID username or password or
+      // OK, we have INVALID login or password or
       // our user got blocked on the server by admin or owner
       // lets show error to user and let him try different credentials
       emit authFailed();
       emit notifyError( serverMsg );
 
       mUserAuth->blockSignals( true );
-      mUserAuth->setUsername( QString() );
+      mUserAuth->setLogin( QString() );
       mUserAuth->setPassword( QString() );
       mUserAuth->blockSignals( false );
 
     }
     else
     {
-      // keep username and password
+      // keep login and password
       // this is problem with internet connection or server
       // so do not force user to input login credentials again
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
@@ -3089,7 +3094,7 @@ void MerginApi::getUserInfoFinished()
       {
         case MerginUserAuth::AuthMethod::SSO:
           mUserAuth->blockSignals( true );
-          mUserAuth->setUsername( mUserInfo->email() );
+          mUserAuth->setLogin( mUserInfo->email() );
           mUserAuth->saveAuthData();
           mUserAuth->blockSignals( false );
           break;
@@ -3515,7 +3520,7 @@ void MerginApi::refreshAuthToken()
       if ( mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
       {
         CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired, requesting new one" ) );
-        authorize( mUserAuth->username(), mUserAuth->password() );
+        authorize( mUserAuth->login(), mUserAuth->password() );
         mAuthLoopEvent.exec();
       }
   }
@@ -4192,7 +4197,7 @@ void MerginApi::reloadProjectRoleReplyFinished()
   }
   else
   {
-    CoreUtils::log( "metadata", QString( "Failed to update cached role for project %1" ).arg( projectFullName ) );
+    CoreUtils::log( "Metadata", QString( "Failed to update cached role for project %1 - likely due to missing auth or you are offline" ).arg( projectFullName ) );
   }
 
   r->deleteLater();

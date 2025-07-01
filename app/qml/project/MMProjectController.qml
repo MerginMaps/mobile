@@ -240,7 +240,7 @@ Item {
           height: parent.height
 
           text.font: __style.t4
-          hasNotification: false // TODO: link notification
+          hasNotification: __merginApi.userInfo.hasInvitations
 
           abbrv: __merginApi.userInfo.nameAbbr
           visible: abbrv
@@ -450,7 +450,7 @@ Item {
             __inputUtils.log(
                   "Create project",
                   "Local project " + projectName + " created at path: " + projectDir + " by "
-                  + ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) )
+                  + ( __merginApi.userInfo ? __merginApi.userInfo.username : "unknown" ) )
             stackView.popOnePageOrClose()
           }
         }
@@ -512,7 +512,7 @@ Item {
 
       abbrName: __merginApi.userInfo.nameAbbr
       fullName: __merginApi.userInfo.name
-      userName: __merginApi.userAuth.username
+      userName: __merginApi.userInfo.username
       email: __merginApi.userInfo.email
       workspaceName: __merginApi.userInfo.activeWorkspaceName
       invitationsCount: __merginApi.userInfo.invitationsCount
@@ -549,7 +549,7 @@ Item {
 
   MMCloseAccountDialog {
     id: closeAccountDialog
-    username: __merginApi.userAuth.username
+    username: __merginApi.userInfo.username
 
     onCloseAccountClicked: {
       __merginApi.deleteAccount()

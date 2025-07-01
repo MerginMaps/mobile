@@ -32,7 +32,7 @@ MMPage {
 
   signal signUpClicked
   signal continueWithSsoClicked()
-  signal signInClicked( string username, string password )
+  signal signInClicked( string login, string password )
   signal changeServerClicked( string newServer )
   signal forgotPasswordClicked
 
@@ -82,7 +82,7 @@ MMPage {
         }
 
         MMTextInput {
-          id: username
+          id: login
 
           width: parent.width
 
@@ -116,7 +116,7 @@ MMPage {
 
           enabled: !root.pending
 
-          onClicked: root.signInClicked( username.text, password.text )
+          onClicked: root.signInClicked( login.text, password.text )
         }
 
         MMButton {

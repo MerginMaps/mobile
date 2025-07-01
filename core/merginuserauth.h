@@ -51,13 +51,13 @@ class MerginUserAuth: public QObject
     void clear();
 
     /**
-     * The username used to login the current user
+     * The identifier used to sign in the current user 
      *
-     * For AuthMethod::Password this is the username
-     * For AuthMethod::SSO this is the email address used
+     * For AuthMethod::Password this is username
+     * For AuthMethod::SSO this is email address
      */
-    QString username() const;
-    void setUsername( const QString &username );
+    QString login() const;
+    void setLogin( const QString &newLogin );
 
     QString password() const;
     void setPassword( const QString &password );
@@ -77,7 +77,7 @@ class MerginUserAuth: public QObject
     AuthMethod authMethod() const;
 
   private:
-    QString mUsername;
+    QString mLogin;
     QString mPassword;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;

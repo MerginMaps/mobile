@@ -20,7 +20,7 @@ MerginUserAuth::MerginUserAuth( QObject *parent )
 
 void MerginUserAuth::clear()
 {
-  mUsername = "";
+  mLogin = "";
   mPassword = "";
   mAuthToken.clear();
   mTokenExpiration = QDateTime();
@@ -41,7 +41,7 @@ bool MerginUserAuth::hasAuthData()
 {
   switch ( mMethod )
   {
-    case AuthMethod::Password: return !mUsername.isEmpty() && !mPassword.isEmpty();
+    case AuthMethod::Password: return !mLogin.isEmpty() && !mPassword.isEmpty();
     case AuthMethod::SSO: return true;
   }
 
@@ -52,7 +52,7 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 {
   mMethod = AuthMethod::Password;
   // parse profile data
-  mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
+  mLogin = docObj.value( QStringLiteral( "username" ) ).toString();
 
   // parse session data
   QJsonObject session = docObj.value( QStringLiteral( "session" ) ).toObject();
@@ -63,7 +63,7 @@ void MerginUserAuth::setFromJson( QJsonObject docObj )
 
 void MerginUserAuth::setFromSso( const QString &authToken, const QDateTime &tokenExpiration )
 {
-  mUsername = QString();
+  mLogin = QString();
   mPassword = QString();
   mAuthToken = authToken.toUtf8();
   mTokenExpiration = tokenExpiration.toUTC();
@@ -85,7 +85,7 @@ void MerginUserAuth::saveAuthData()
     return;
   }
 
-  mCredentialStore->writeAuthData( mUsername, mPassword, mAuthToken, mTokenExpiration, mMethod );
+  mCredentialStore->writeAuthData( mLogin, mPassword, mAuthToken, mTokenExpiration, mMethod );
 }
 
 void MerginUserAuth::loadAuthData()
@@ -97,13 +97,13 @@ void MerginUserAuth::loadAuthData()
   }
 
   connect( mCredentialStore, &CredentialStore::authDataRead, this, [this]
-           ( const QString & username,
+           ( const QString & login,
              const QString & password,
              const QString & token,
              const QDateTime & tokenExpiration,
              int method )
   {
-    mUsername = username;
+    mLogin = login;
     mPassword = password;
     mAuthToken = token.toUtf8();
     mTokenExpiration = tokenExpiration;
@@ -116,14 +116,14 @@ void MerginUserAuth::loadAuthData()
   mCredentialStore->readAuthData();
 }
 
-QString MerginUserAuth::username() const
+QString MerginUserAuth::login() const
 {
-  return mUsername;
+  return mLogin;
 }
 
-void MerginUserAuth::setUsername( const QString &username )
+void MerginUserAuth::setLogin( const QString &newLogin )
 {
-  mUsername = username;
+  mLogin = newLogin;
   emit authChanged();
 }
 

@@ -16,7 +16,7 @@ const QString CredentialStore::KEYCHAIN_GROUP = QStringLiteral( "Input/" );
 const QString CredentialStore::KEYCHAIN_ENTRY_CREDENTIALS = QStringLiteral( "" ); // unused
 const QString CredentialStore::KEYCHAIN_ENTRY_TOKEN = QStringLiteral( "" ); // unused
 
-const QString CredentialStore::KEY_USERNAME = QStringLiteral( "username" );
+const QString CredentialStore::KEY_LOGIN = QStringLiteral( "login" );
 const QString CredentialStore::KEY_PASSWORD = QStringLiteral( "password" );
 const QString CredentialStore::KEY_TOKEN = QStringLiteral( "token" );
 const QString CredentialStore::KEY_EXPIRE = QStringLiteral( "expire" );
@@ -33,7 +33,7 @@ CredentialStore::CredentialStore( QObject *parent )
 }
 
 void CredentialStore::writeAuthData
-( const QString &username,
+( const QString &login,
   const QString &password,
   const QString &token,
   const QDateTime &tokenExpiration,
@@ -42,7 +42,7 @@ void CredentialStore::writeAuthData
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
 
-  settings.setValue( KEY_USERNAME, username );
+  settings.setValue( KEY_LOGIN, login );
   settings.setValue( KEY_PASSWORD, password );
   settings.setValue( KEY_TOKEN, token );
   settings.setValue( KEY_EXPIRE, tokenExpiration );
@@ -53,7 +53,7 @@ void CredentialStore::writeAuthData
 
 void CredentialStore::readAuthData()
 {
-  QString username, password;
+  QString login, password;
   QByteArray token;
   QDateTime tokenExpiration;
   int method;
@@ -61,7 +61,7 @@ void CredentialStore::readAuthData()
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
 
-  username = settings.value( KEY_USERNAME ).toString();
+  login = settings.value( KEY_LOGIN ).toString();
   password = settings.value( KEY_PASSWORD ).toString();
   token = settings.value( KEY_TOKEN ).toByteArray();
   tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
@@ -69,7 +69,7 @@ void CredentialStore::readAuthData()
 
   settings.endGroup();
 
-  emit authDataRead( username, password, token, tokenExpiration, method );
+  emit authDataRead( login, password, token, tokenExpiration, method );
 }
 
 void CredentialStore::readKeyRecursively( const QString &key )
