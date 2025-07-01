@@ -549,7 +549,7 @@ Item {
 
   MMCloseAccountDialog {
     id: closeAccountDialog
-    username: __merginApi.userAuth.username
+    username: __merginApi.userInfo.username
 
     onCloseAccountClicked: {
       __merginApi.deleteAccount()
