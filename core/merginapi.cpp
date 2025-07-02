@@ -133,7 +133,6 @@ void MerginApi::loadCache()
   int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
-  // Should load diag url from cache too ? 
 
   mUserAuth->loadAuthData();
   mUserInfo->loadWorkspacesData();
@@ -3801,7 +3800,7 @@ void MerginApi::getServerConfigReplyFinished()
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();      
+      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();     
       int major = -1;
       int minor = -1;
       bool validVersion = parseVersion( apiVersion, major, minor );
@@ -3836,7 +3835,7 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( (major >= 2024 && minor >= 4) && diagnosticUrl.isEmpty() )
+      if ( ( major >= 2024 && minor >= 4 ) && diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
       }

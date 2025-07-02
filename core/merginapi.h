@@ -553,7 +553,7 @@ class MerginApi: public QObject
     void setServerType( const MerginServerType::ServerType &serverType );
 
 
-    /** 
+    /**
      * Returns the url used to send Diagnostic logs
      */
     QString serverDiagnosticLogsUrl() const;
