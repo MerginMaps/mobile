@@ -2815,7 +2815,7 @@ void TestMerginApi::testServerDiagnosticLogsUrl()
   mApi->getServerConfig();
 
   // app.dev is configuted tp redirect logs to api.merginmaps.com/logs
-  QCOMPARE( mApi->serverDiagnosticLogsUrl(), QStringLiteral("https://api.merginmaps.com/logs") );
+  QCOMPARE( mApi->serverDiagnosticLogsUrl(), QStringLiteral( "https://api.merginmaps.com/logs" ) );
 }
 
 void TestMerginApi::testServerUpgrade()
