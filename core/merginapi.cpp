@@ -3836,9 +3836,17 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( !diagnosticUrl.isEmpty() )
+      if ( (major >= 2024 && minor >= 4) && diagnosticUrl.isEmpty() )
+      {
+        mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
+      }
+      else if ( !diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = diagnosticUrl;
+      }
+      else
+      {
+        mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
