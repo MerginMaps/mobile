@@ -104,7 +104,7 @@ MMFormPhotoViewer {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  controller: sketchesController
+  controller: photoSketchingLoader.item
 
   // used only on desktop builds
   FileDialog {
@@ -142,10 +142,19 @@ MMFormPhotoViewer {
     }
   }
 
-  PhotoSketchingController {
-    id: sketchesController
+  Loader {
+    id: photoSketchingLoader
+    active: __activeProject.photoSketchingEnabled
 
-    photoSource: root.photoUrl
+    sourceComponent: photoSketchingComponent
+  }
+
+  Component {
+    id: photoSketchingComponent
+
+    PhotoSketchingController {
+      photoSource: root.photoUrl
+    }
   }
 
   Connections {
@@ -175,12 +184,12 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
-    sketchesController.saveDrawings()
+    photoSketchingLoader.item.saveDrawings()
   }
 
   function callbackOnFormCanceled() {
     internal.imageSourceToDelete = ""
-    sketchesController.clear()
+    photoSketchingLoader.item.clear()
   }
 
   QtObject {

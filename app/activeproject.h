@@ -39,7 +39,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
     Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
-    Q_PROPERTY( bool photoSketchesEnabled READ photoSketchesEnabled NOTIFY photoSketchesEnabledChanged )
+    Q_PROPERTY( bool photoSketchingEnabled READ photoSketchingEnabled NOTIFY photoSketchingEnabledChanged )
 
   public:
     explicit ActiveProject(
@@ -143,9 +143,9 @@ class ActiveProject: public QObject
     Q_INVOKABLE QString mapSketchesLayerId() const;
 
     /**
-     * Returns whether the photo annotations are enabled in MM settings
+     * Returns whether the photo sketching is enabled in MM settings
      */
-    bool photoSketchesEnabled() const;
+    bool photoSketchingEnabled() const;
 
   signals:
     void qgsProjectChanged();
@@ -178,7 +178,7 @@ class ActiveProject: public QObject
 
     void mapSketchesEnabledChanged();
 
-    void photoSketchesEnabledChanged();
+    void photoSketchingEnabledChanged();
 
   public slots:
     // Reloads project if current project path matches given path (it's the same project)

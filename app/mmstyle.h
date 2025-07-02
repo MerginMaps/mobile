@@ -469,7 +469,7 @@ class MMStyle: public QObject
     QUrl xTwitterIcon() const {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() const {return QUrl( "qrc:/Youtube.svg" );}
     QUrl formIcon() const {return QUrl( "qrc:/Terms.svg" );}
-    QUrl drawIcon() const {return QUrl( "qrc:/MapThemes.svg" );}
+    QUrl drawIcon() const {return QUrl( "qrc:/Draw.svg" );}
 
     QUrl projectsFilledIcon() const {return QUrl( "qrc:/ProjectsFilled.svg" );}
     QUrl globalFilledIcon() const {return QUrl( "qrc:/GlobalFilled.svg" );}
