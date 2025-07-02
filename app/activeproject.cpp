@@ -622,7 +622,7 @@ QString ActiveProject::mapSketchesLayerId() const
   return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Layer" ), QString() );
 }
 
-bool ActiveProject::photoSketchesEnabled() const
+bool ActiveProject::photoSketchingEnabled() const
 {
   if ( !isProjectLoaded() )
   {
