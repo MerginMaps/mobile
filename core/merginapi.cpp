@@ -3835,7 +3835,7 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( ( major >= 2024 && minor >= 4 ) && diagnosticUrl.isEmpty() )
+      if ( ( major >= 2025 && minor >= 4 ) && diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
       }
