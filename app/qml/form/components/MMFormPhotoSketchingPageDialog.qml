@@ -109,7 +109,6 @@ Dialog {
 
       Shape {
         id: shape
-        anchors.centerIn: parent
         anchors.fill: parent
         property real photoPaddingWidth: ( width - photo.paintedWidth ) / 2
         property real photoPaddingHeight: ( height - photo.paintedHeight ) / 2
@@ -134,7 +133,6 @@ Dialog {
           z: -1
 
           photoUrl: root.photoUrl
-          isLocalFile: root.photoUrl.startsWith("file://")
 
           fillMode: Image.PreserveAspectFit
 

@@ -73,6 +73,7 @@ set(MM_SRCS
     mapthemesmodel.cpp
     multieditmanager.cpp
     notificationmodel.cpp
+    photosketchingcontroller.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
     projectwizard.cpp
@@ -88,7 +89,6 @@ set(MM_SRCS
     variablesmanager.cpp
     workspacesmodel.cpp
     workspacesproxymodel.cpp
-    photosketchingcontroller.cpp
 )
 
 set(MM_HDRS
@@ -162,6 +162,7 @@ set(MM_HDRS
     mapthemesmodel.h
     multieditmanager.h
     notificationmodel.h
+    photosketchingcontroller.h
     projectsmodel.h
     projectsproxymodel.h
     projectwizard.h
@@ -179,7 +180,6 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
-    photosketchingcontroller.h
 )
 
 if (HAVE_BLUETOOTH)
