@@ -3800,7 +3800,7 @@ void MerginApi::getServerConfigReplyFinished()
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();     
+      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
       int major = -1;
       int minor = -1;
       bool validVersion = parseVersion( apiVersion, major, minor );
