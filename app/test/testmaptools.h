@@ -53,6 +53,8 @@ class TestMapTools : public QObject
 
     void testAvoidIntersections();
 
+    void testExtentSaveAndLoad();
+
   private:
     PositionKit *mPositionKit;
     AppSettings *mAppSettings;

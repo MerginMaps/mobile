@@ -14,10 +14,13 @@
 
 #include "qgis.h"
 #include "inputmapsettings.h"
+#include "coreutils.h"
 
 #include "qgsmaplayer.h"
 #include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
+
+static constexpr int EXTENT_SAVE_DELAY_MS = 2000;
 
 InputMapSettings::InputMapSettings( QObject *parent )
   : QObject( parent )
@@ -29,6 +32,12 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::extentChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
+
+  // store map extent to QSettings when extent hasn't changed
+  mSaveExtentTimer.setSingleShot( true );
+  connect( &mSaveExtentTimer, &QTimer::timeout, this, &InputMapSettings::saveExtentToSettings );
+  connect( this, &InputMapSettings::extentChanged, this, [this]() { mSaveExtentTimer.start( EXTENT_SAVE_DELAY_MS ); } );
+  connect( this, &InputMapSettings::projectIdChanged, this, &InputMapSettings::loadSavedExtent );
 }
 
 void InputMapSettings::setProject( QgsProject *project )
@@ -346,3 +355,46 @@ void InputMapSettings::setTemporalEnd( const QDateTime &end )
   mMapSettings.setTemporalRange( QgsDateTimeRange( range.begin(), end ) );
   emit temporalStateChanged();
 }
+
+QString InputMapSettings::projectId() const
+{
+  return mProjectId;
+}
+
+void InputMapSettings::setProjectId( const QString &projectId )
+{
+  if ( projectId == mProjectId )
+    return;
+
+  mProjectId = projectId;
+  emit projectIdChanged();
+}
+
+void InputMapSettings::saveExtentToSettings()
+{
+  QSettings settings;
+  const QgsRectangle extent = this->extent();
+  if ( !extent.isEmpty() && extent.isFinite() && !mProjectId.isEmpty() )
+  {
+    settings.beginGroup( QStringLiteral( "%1/%2" ).arg( mProjectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
+    settings.setValue( "extent", extent );
+    settings.endGroup();
+  }
+}
+
+void InputMapSettings::loadSavedExtent()
+{
+  if ( mProjectId.isEmpty() )
+    return;
+
+  QSettings settings;
+  settings.beginGroup( QStringLiteral( "%1/%2" ).arg( mProjectId, CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP ) );
+  QgsRectangle extent = settings.value( "extent" ).value<QgsRectangle>();
+  settings.endGroup();
+
+  if ( !extent.isEmpty() && extent.isFinite() )
+  {
+    setExtent( extent );
+  }
+}
+
