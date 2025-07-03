@@ -32,6 +32,7 @@ class NotificationType
     {
       NoneIcon,
       WaitingIcon,
+      InfoIcon,
       CheckIcon,
       ExclamationIcon
     };
