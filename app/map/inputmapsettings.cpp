@@ -19,6 +19,8 @@
 #include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
 
+constexpr double MIN_SCALE_DENOMINATOR = 100;
+
 InputMapSettings::InputMapSettings( QObject *parent )
   : QObject( parent )
 {
@@ -256,8 +258,7 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
   {
     mMapSettings.setDestinationCrs( mProject->crs() );
 
-    const double MIN_SCALE_DENOMINATOR = 100;
-    QgsRectangle defaultExtent = mProject->viewSettings()->fullExtent();
+    const QgsReferencedRectangle defaultExtent = mProject->viewSettings()->fullExtent();
 
     mMapSettings.setExtent( defaultExtent );
     if ( mMapSettings.computeScaleForExtent( defaultExtent ) < MIN_SCALE_DENOMINATOR )
