@@ -51,7 +51,7 @@ class MerginUserAuth: public QObject
     void clear();
 
     /**
-     * The identifier used to sign in the current user 
+     * The identifier used to sign in the current user
      *
      * For AuthMethod::Password this is username
      * For AuthMethod::SSO this is email address
@@ -69,8 +69,10 @@ class MerginUserAuth: public QObject
     void setTokenExpiration( const QDateTime &tokenExpiration );
 
     void clearTokenData();
-    void saveAuthData();
-    void loadAuthData();
+
+    void saveData();
+    void loadData();
+
     void setFromJson( QJsonObject docObj );
     void setFromSso( const QString &authToken, const QDateTime &tokenExpiration );
 

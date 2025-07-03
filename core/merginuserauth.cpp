@@ -77,7 +77,7 @@ MerginUserAuth::AuthMethod MerginUserAuth::authMethod() const
   return mMethod;
 }
 
-void MerginUserAuth::saveAuthData()
+void MerginUserAuth::saveData()
 {
   if ( !mCredentialStore )
   {
@@ -88,7 +88,7 @@ void MerginUserAuth::saveAuthData()
   mCredentialStore->writeAuthData( mLogin, mPassword, mAuthToken, mTokenExpiration, mMethod );
 }
 
-void MerginUserAuth::loadAuthData()
+void MerginUserAuth::loadData()
 {
   if ( !mCredentialStore )
   {

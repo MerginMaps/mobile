@@ -133,8 +133,8 @@ void MerginApi::loadCache()
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
 
-  mUserAuth->loadAuthData();
-  mUserInfo->loadWorkspacesData();
+  mUserAuth->loadData();
+  mUserInfo->loadData();
 }
 
 MerginUserAuth *MerginApi::userAuth() const
@@ -325,7 +325,9 @@ QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
   QString deviceId = CoreUtils::deviceUuid();
   request.setRawHeader( "X-Device-Id", QByteArray( deviceId.toUtf8() ) );
   if ( withAuth )
+  {
     request.setRawHeader( "Authorization", QByteArray( "Bearer " + mUserAuth->authToken() ) );
+  }
 
   return request;
 }
@@ -1046,9 +1048,9 @@ void MerginApi::getUserInfo()
   QString urlString;
   if ( mServerType == MerginServerType::OLD )
   {
-    if ( mUserAuth->authMethod == MerginAuthMethod::SSO )
+    if ( mUserAuth->authMethod() == MerginUserAuth::SSO )
     {
-      CoreUtils::log( QStringLiteral("Server API"), QStringLiteral( "SSO user info is not available on old servers" ) );
+      CoreUtils::log( QStringLiteral( "Server API" ), QStringLiteral( "SSO user info is not available on old servers" ) );
       return;
     }
     urlString = mApiRoot + QStringLiteral( "/v1/user/%1" ).arg( mUserAuth->login() );
@@ -1058,7 +1060,7 @@ void MerginApi::getUserInfo()
     urlString = mApiRoot + QStringLiteral( "/v1/user/profile" );
   }
 
-  QNetworkRequest request = getDefaultRequest();
+  QNetworkRequest request = getDefaultRequest( true );
   QUrl url( urlString );
   request.setUrl( url );
 
@@ -1105,6 +1107,12 @@ void MerginApi::getServiceInfo()
 
   if ( mServerType == MerginServerType::SAAS )
   {
+    if ( mUserInfo->activeWorkspaceId() < 0 )
+    {
+      CoreUtils::log( QStringLiteral( "Service Info" ), QStringLiteral( "Skipped calling GET service info, no active workspace detected" ) );
+      return;
+    }
+
     urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
   }
   else if ( mServerType == MerginServerType::OLD )
@@ -1173,9 +1181,10 @@ void MerginApi::clearAuth()
 {
   mUserAuth->clear();
   mUserInfo->clear();
-  mUserInfo->clearCachedWorkspacesInfo();
   mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
+
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Cleared auth and user data cache" ) );
 }
 
 QString MerginApi::resetPasswordUrl()
@@ -1249,8 +1258,7 @@ void MerginApi::saveAuthData()
   settings.setValue( "apiRoot", mApiRoot );
   settings.endGroup();
 
-  mUserAuth->saveAuthData();
-  mUserInfo->clear();
+  mUserAuth->saveData();
 }
 
 void MerginApi::createProjectFinished()
@@ -3095,7 +3103,7 @@ void MerginApi::getUserInfoFinished()
         case MerginUserAuth::AuthMethod::SSO:
           mUserAuth->blockSignals( true );
           mUserAuth->setLogin( mUserInfo->email() );
-          mUserAuth->saveAuthData();
+          mUserAuth->saveData();
           mUserAuth->blockSignals( false );
           break;
         case MerginUserAuth::AuthMethod::Password:
@@ -3108,7 +3116,6 @@ void MerginApi::getUserInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mUserInfo->clear();
 
     // This is an ugly fix for #3261: if the user was logged in, but the token was already expired
     // (e.g. when starting the app the next day), the flow of network requests and handlers gets
@@ -3928,7 +3935,8 @@ void MerginApi::listWorkspacesReplyFinished()
         workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
       }
 
-      mUserInfo->setWorkspaces( workspaces );
+      mUserInfo->updateWorkspacesList( workspaces );
+
       emit listWorkspacesFinished( workspaces );
     }
     else
