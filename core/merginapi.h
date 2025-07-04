@@ -311,9 +311,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void cancelPull( const QString &projectFullName );
 
     /**
-    * Currently no auth service is used, only "username:password" is encoded and asign to mToken.
-    * \param username Login user name to Mergin - either username or registered email
-    * \param password Password to given username to log in to Mergin
+    * Attempts to authorize user with the login and password
     */
     Q_INVOKABLE void authorize( const QString &login, const QString &password );
 
@@ -343,11 +341,9 @@ class MerginApi: public QObject
     Q_INVOKABLE QString resetPasswordUrl();
 
     /**
-    * Registers new user to Mergin service.
-    * \param username Login user name to associate with the new Mergin account
-    * \param email Email to associate with the new Mergin account
-    * \param password Password to associate with the new Mergin account
-    * \param confirmPassword Password to associate with the new Mergin account (should be same as password)
+    * Registers new user.
+    * \param email Email to associate with the new account
+    * \param password Password to associate with the new account
     * \param acceptedTOC Whether user accepted Terms and Conditions
     */
     Q_INVOKABLE void registerUser(

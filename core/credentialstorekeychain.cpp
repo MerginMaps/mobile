@@ -17,9 +17,8 @@ const QString CredentialStore::KEYCHAIN_GROUP = QStringLiteral( "mergin_maps" );
 const QString CredentialStore::KEYCHAIN_ENTRY_CREDENTIALS = QStringLiteral( "credentials" );
 const QString CredentialStore::KEYCHAIN_ENTRY_TOKEN = QStringLiteral( "token" );
 
-const QString CredentialStore::KEY_USERNAME = QStringLiteral( "u" );
+const QString CredentialStore::KEY_LOGIN = QStringLiteral( "u" );
 const QString CredentialStore::KEY_PASSWORD = QStringLiteral( "p" );
-const QString CredentialStore::KEY_USERID = QStringLiteral( "id" );
 const QString CredentialStore::KEY_TOKEN = QStringLiteral( "t" );
 const QString CredentialStore::KEY_EXPIRE = QStringLiteral( "e" );
 const QString CredentialStore::KEY_METHOD = QStringLiteral( "m" );
@@ -36,9 +35,8 @@ CredentialStore::CredentialStore( QObject *parent )
 
 
 void CredentialStore::writeAuthData
-( const QString &username,
+( const QString &login,
   const QString &password,
-  int userId,
   const QString &token,
   const QDateTime &tokenExpiration,
   int method )
@@ -48,9 +46,8 @@ void CredentialStore::writeAuthData
   //
 
   QJsonObject credentialsJsonObj;
-  credentialsJsonObj.insert( KEY_USERNAME, username );
+  credentialsJsonObj.insert( KEY_LOGIN, login );
   credentialsJsonObj.insert( KEY_PASSWORD, password );
-  credentialsJsonObj.insert( KEY_USERID, userId );
   credentialsJsonObj.insert( KEY_METHOD, method );
 
   QJsonDocument credentialsJson( credentialsJsonObj );
@@ -138,8 +135,7 @@ void CredentialStore::finishReadingOperation()
   // 2. Construct JSONs from the intermediary results and emit the data
   //
 
-  QString username, password;
-  int userid = -1;
+  QString login, password;
   QByteArray token;
   QDateTime tokenExpiration;
   int method = 0;
@@ -149,7 +145,7 @@ void CredentialStore::finishReadingOperation()
     CoreUtils::log( QStringLiteral( "Auth" ),
                     QString( "Something ugly happened when reading, invalid size of the intermediary results, size:" ).arg( mReadResults.size() )
                   );
-    emit authDataRead( username, password, userid, token, tokenExpiration, method );
+    emit authDataRead( login, password, token, tokenExpiration, method );
     return;
   }
 
@@ -162,7 +158,7 @@ void CredentialStore::finishReadingOperation()
       QStringLiteral( "Auth" ),
       QString( "Something ugly happened when reading, one of the read jsons is empty (%1, %2)" ).arg( credentialsJsonString.length(), tokenJsonString.length() )
     );
-    emit authDataRead( username, password, userid, token, tokenExpiration, method );
+    emit authDataRead( login, password, token, tokenExpiration, method );
     return;
   }
 
@@ -172,7 +168,7 @@ void CredentialStore::finishReadingOperation()
   if ( parsingError.error != QJsonParseError::NoError )
   {
     CoreUtils::log( QStringLiteral( "Auth" ), QString( "Could not construct credentials JSON when reading, error: %1" ).arg( parsingError.errorString() ) );
-    emit authDataRead( username, password, userid, token, tokenExpiration, method );
+    emit authDataRead( login, password, token, tokenExpiration, method );
     return;
   }
 
@@ -181,16 +177,15 @@ void CredentialStore::finishReadingOperation()
   if ( parsingError.error != QJsonParseError::NoError )
   {
     CoreUtils::log( QStringLiteral( "Auth" ), QString( "Could not construct token JSON when reading, error: %1" ).arg( parsingError.errorString() ) );
-    emit authDataRead( username, password, userid, token, tokenExpiration, method );
+    emit authDataRead( login, password, token, tokenExpiration, method );
     return;
   }
 
   QJsonObject credentialsJsonObject = credentialsJson.object();
   QJsonObject tokenJsonObject = tokenJson.object();
 
-  username = credentialsJsonObject.value( KEY_USERNAME ).toString();
+  login = credentialsJsonObject.value( KEY_LOGIN ).toString();
   password = credentialsJsonObject.value( KEY_PASSWORD ).toString();
-  userid = credentialsJsonObject.value( KEY_USERID ).toInt();
   if ( credentialsJsonObject.contains( KEY_METHOD ) )
     method = credentialsJsonObject.value( KEY_METHOD ).toInt();
 
@@ -204,5 +199,5 @@ void CredentialStore::finishReadingOperation()
   // TODO: pass...
   //
 
-  emit authDataRead( username, password, userid, token, tokenExpiration, method );
+  emit authDataRead( login, password, token, tokenExpiration, method );
 }

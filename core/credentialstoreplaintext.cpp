@@ -16,9 +16,8 @@ const QString CredentialStore::KEYCHAIN_GROUP = QStringLiteral( "Input/" );
 const QString CredentialStore::KEYCHAIN_ENTRY_CREDENTIALS = QStringLiteral( "" ); // unused
 const QString CredentialStore::KEYCHAIN_ENTRY_TOKEN = QStringLiteral( "" ); // unused
 
-const QString CredentialStore::KEY_USERNAME = QStringLiteral( "username" );
+const QString CredentialStore::KEY_LOGIN = QStringLiteral( "login" );
 const QString CredentialStore::KEY_PASSWORD = QStringLiteral( "password" );
-const QString CredentialStore::KEY_USERID = QStringLiteral( "userId" );
 const QString CredentialStore::KEY_TOKEN = QStringLiteral( "token" );
 const QString CredentialStore::KEY_EXPIRE = QStringLiteral( "expire" );
 const QString CredentialStore::KEY_METHOD = QStringLiteral( "method" );
@@ -34,9 +33,8 @@ CredentialStore::CredentialStore( QObject *parent )
 }
 
 void CredentialStore::writeAuthData
-( const QString &username,
+( const QString &login,
   const QString &password,
-  int userId,
   const QString &token,
   const QDateTime &tokenExpiration,
   int method )
@@ -44,9 +42,8 @@ void CredentialStore::writeAuthData
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
 
-  settings.setValue( KEY_USERNAME, username );
+  settings.setValue( KEY_LOGIN, login );
   settings.setValue( KEY_PASSWORD, password );
-  settings.setValue( KEY_USERID, userId );
   settings.setValue( KEY_TOKEN, token );
   settings.setValue( KEY_EXPIRE, tokenExpiration );
   settings.setValue( KEY_METHOD, method );
@@ -56,8 +53,7 @@ void CredentialStore::writeAuthData
 
 void CredentialStore::readAuthData()
 {
-  QString username, password;
-  int userid = -1;
+  QString login, password;
   QByteArray token;
   QDateTime tokenExpiration;
   int method;
@@ -65,16 +61,28 @@ void CredentialStore::readAuthData()
   QSettings settings;
   settings.beginGroup( KEYCHAIN_GROUP );
 
-  username = settings.value( KEY_USERNAME ).toString();
+  login = settings.value( KEY_LOGIN ).toString();
   password = settings.value( KEY_PASSWORD ).toString();
-  userid = settings.value( KEY_USERID ).toInt();
   token = settings.value( KEY_TOKEN ).toByteArray();
   tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
   method = settings.value( KEY_METHOD, 0 ).toInt();
 
+  if ( login.isEmpty() && !password.isEmpty() )
+  {
+    // We migrated the "username" to "login", let's try reading the old key so that
+    // we do not sign out everyone on the first launch after app upgrade. This can be
+    // dropped in a few months time.
+    const QString oldUsernameEntry = settings.value( "username" ).toString();
+    if ( !oldUsernameEntry.isEmpty() )
+    {
+      login = oldUsernameEntry;
+      CoreUtils::log( QStringLiteral( "CredentialStore" ), QStringLiteral( "Read login from the deprecated username key to keep user signed in" ) );
+    }
+  }
+
   settings.endGroup();
 
-  emit authDataRead( username, password, userid, token, tokenExpiration, method );
+  emit authDataRead( login, password, token, tokenExpiration, method );
 }
 
 void CredentialStore::readKeyRecursively( const QString &key )

@@ -15,8 +15,6 @@
 #include <QString>
 #include <QJsonObject>
 
-#include "merginsubscriptionstatus.h"
-
 struct MerginInvitation
 {
     Q_GADGET
@@ -47,44 +45,43 @@ class MerginUserInfo: public QObject
     Q_PROPERTY( bool hasInvitations READ hasInvitations NOTIFY userInfoChanged )
     Q_PROPERTY( bool invitationsCount READ invitationsCount NOTIFY userInfoChanged )
     Q_PROPERTY( bool hasWorkspaces READ hasWorkspaces NOTIFY hasWorkspacesChanged )
-    Q_PROPERTY( bool hasMoreThanOneWorkspace READ hasMoreThanOneWorkspace NOTIFY hasMoreThanOneWorkspaceChanged )
 
   public:
     explicit MerginUserInfo( QObject *parent = nullptr );
     ~MerginUserInfo() = default;
 
-    void clear();
-    void setFromJson( QJsonObject docObj );
-
     QString nameAbbr() const;
-    QString name() const;
+    QString name() const; // fullname, empty if not set on server
     QString email() const;
     QString username() const;
-    QString activeWorkspaceName() const;
+
     int activeWorkspaceId() const;
-    QMap<int, QString> workspaces() const;
-    Q_INVOKABLE QList<MerginInvitation> invitations() const;
-    bool hasInvitations() const;
+    QString activeWorkspaceName() const;
+    Q_INVOKABLE void setActiveWorkspace( int newWorkspaceId );
+
     bool hasWorkspaces() const;
+    QMap<int, QString> workspaces() const;
+    //! Updates workspaces cache with /v1/workspaces endpoint reponse
+    void updateWorkspacesList( QMap<int, QString> workspaces );
+
+    bool hasInvitations() const;
     int invitationsCount() const;
+    Q_INVOKABLE QList<MerginInvitation> invitations() const;
 
-    void saveWorkspacesData();
-    void loadWorkspacesData();
-    void clearCachedWorkspacesInfo();
+    void clear(); // on logout
+    void setFromJson( QJsonObject docObj );
 
-    int findActiveWorkspace( int preferredWorkspace = -1 );
-    Q_INVOKABLE void setActiveWorkspace( int newWorkspace );
-    void setWorkspaces( QMap<int, QString> workspaces );
-
-    bool hasMoreThanOneWorkspace() const;
+    void saveData();
+    void loadData();
 
   signals:
     void userInfoChanged();
     void activeWorkspaceChanged();
     void hasWorkspacesChanged();
-    void hasMoreThanOneWorkspaceChanged();
 
   private:
+    int findActiveWorkspace( int preferredWorkspace = -1 );
+
     QString mName;
     QString mNameAbbr;
     QString mEmail;
@@ -92,7 +89,6 @@ class MerginUserInfo: public QObject
     QMap<int, QString> mWorkspaces;
     QList<MerginInvitation> mInvitations;
     int mActiveWorkspace = -1;
-    bool mHasMoreThanOneWorkspace;
 };
 
 #endif // MERGINUSERINFO_H

@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 #include "inputhelp.h"
-#include "merginuserauth.h"
 #include "merginuserinfo.h"
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"

@@ -66,7 +66,7 @@ MMPage {
         elide: Text.ElideRight
         wrapMode: Text.WrapAnywhere
 
-        text: root.fullName + " (" + root.userName + ")"
+        text: root.fullName ? root.fullName + " (" + root.userName + ")" : root.userName
         color: __style.nightColor
         font: __style.t1
 

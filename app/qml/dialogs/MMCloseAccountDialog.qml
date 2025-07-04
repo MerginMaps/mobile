@@ -101,7 +101,7 @@ MMDrawer {
           fontColorDisabled: __style.negativeColor
           bgndColorDisabled: __style.negativeLightColor
 
-          enabled: usernameInput.text === root.username
+          enabled: usernameInput.text === root.username // todo: toLowerCase comparison?
 
           onClicked: {
             close()

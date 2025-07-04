@@ -93,9 +93,9 @@ Item {
 
       supportsSso: __merginApi.apiSupportsSso
 
-      onSignInClicked: function ( username, password ) {
+      onSignInClicked: function ( login, password ) {
         stackView.pending = true
-        __merginApi.authorize(username, password)
+        __merginApi.authorize(login, password)
       }
 
       onBackClicked: {

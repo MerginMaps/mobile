@@ -84,7 +84,7 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
   }
 
   // wrong user
-  if ( api->userAuth()->username() != username )
+  if ( api->userAuth()->login() != username )
   {
     return true;
   }
