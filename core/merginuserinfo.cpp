@@ -73,9 +73,9 @@ void MerginUserInfo::setActiveWorkspace( int newWorkspace )
   settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
   settings.endGroup();
 
-  QString logMessage = QStringLiteral( "Switched to workspace '%1' with ID %2" )
-                       .arg( activeWorkspaceName() )
-                       .arg( newWorkspace );
+  const QString logMessage = QStringLiteral( "Switched to workspace '%1' with ID %2" )
+                             .arg( activeWorkspaceName() )
+                             .arg( newWorkspace );
 
   CoreUtils::log( QStringLiteral( "Workspace Switch" ), logMessage );
 
@@ -133,11 +133,15 @@ void MerginUserInfo::clear()
   mInvitations.clear();
 
   QSettings settings;
-  settings.remove( "Input/workspaces" );
-  settings.remove( "Input/name" );
-  settings.remove( "Input/email" );
-  settings.remove( "Input/username" );
-  settings.setValue( "Input/lastUsedWorkspace", -1 );
+  settings.beginGroup( "Input/" );
+
+  settings.remove( "name" );
+  settings.remove( "email" );
+  settings.remove( "username" );
+  settings.remove( "workspaces" );
+  settings.setValue( "lastUsedWorkspace", -1 );
+
+  settings.endGroup();
 
   emit activeWorkspaceChanged();
   emit hasWorkspacesChanged();
