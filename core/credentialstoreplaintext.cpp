@@ -67,6 +67,19 @@ void CredentialStore::readAuthData()
   tokenExpiration = settings.value( KEY_EXPIRE ).toDateTime();
   method = settings.value( KEY_METHOD, 0 ).toInt();
 
+  if ( login.isEmpty() && !password.isEmpty() )
+  {
+    // We migrated the "username" to "login", let's try reading the old key so that
+    // we do not sign out everyone on the first launch after app upgrade. This can be
+    // dropped in a few months time.
+    const QString oldUsernameEntry = settings.value( "username" ).toString();
+    if ( !oldUsernameEntry.isEmpty() )
+    {
+      login = oldUsernameEntry;
+      CoreUtils::log( QStringLiteral( "CredentialStore" ), QStringLiteral( "Read login from the deprecated username key to keep user signed in" ) );
+    }
+  }
+
   settings.endGroup();
 
   emit authDataRead( login, password, token, tokenExpiration, method );
