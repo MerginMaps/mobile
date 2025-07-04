@@ -3315,11 +3315,33 @@ void TestMerginApi::testApiRoot()
     { "example.com/", "example.com" }
   };
 
-  for ( auto testcase : testcases )
+  for ( const auto &testcase : std::as_const( testcases ) )
   {
     mApi->setApiRoot( testcase.first );
     QCOMPARE( mApi->apiRoot(), testcase.second );
   }
 
   mApi->setApiRoot( originalRoot );
+}
+
+void TestMerginApi::testOfflineCache()
+{
+  // Sign in via mApi, then create new MerginApi instance and check the userAuth and user Info
+
+  // We should be signed in already by this time (done in the initTestCase)
+  QVERIFY( mApi->userAuth()->hasAuthData() );
+  QVERIFY( mApi->userAuth()->hasValidToken() );
+
+  QSettings cacheCheck;
+  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
+
+  MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
+
+  // Cache should be read right away!
+  QVERIFY( extraApi->userAuth()->hasAuthData() );
+  QVERIFY( extraApi->userAuth()->hasValidToken() );
+  QVERIFY( !extraApi->userInfo()->username().isEmpty() );
+  QVERIFY( !extraApi->userInfo()->email().isEmpty() );
 }
