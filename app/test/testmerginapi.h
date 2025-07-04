@@ -152,6 +152,7 @@ class TestMerginApi: public QObject
     void testMerginConfigFromFile();
     void testHasLocalChangesWithSelectiveSyncEnabled();
     void testHasLocalProjectChanges();
+    void testOfflineCache();
     void testRegisterAndDelete();
     void testCreateWorkspace();
     void testExcludeFromSync();
@@ -161,7 +162,6 @@ class TestMerginApi: public QObject
     void testRegistration();
     void testParseVersion();
     void testApiRoot();
-    void testOfflineCache();
 
   private:
     MerginApi *mApi = nullptr;

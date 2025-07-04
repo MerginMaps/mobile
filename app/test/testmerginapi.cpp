@@ -2417,6 +2417,28 @@ void TestMerginApi::testAutosyncFailure()
   // Will be added with incremental requests
 }
 
+void TestMerginApi::testOfflineCache()
+{
+  // Sign in via mApi, then create new MerginApi instance and check the userAuth and user Info
+
+  // We should be signed in already by this time (done in the initTestCase)
+  QVERIFY( mApi->userAuth()->hasAuthData() );
+  QVERIFY( mApi->userAuth()->hasValidToken() );
+
+  QSettings cacheCheck;
+  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
+
+  MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
+
+  // Cache should be read right away!
+  QVERIFY( extraApi->userAuth()->hasAuthData() );
+  QVERIFY( extraApi->userAuth()->hasValidToken() );
+  QVERIFY( !extraApi->userInfo()->username().isEmpty() );
+  QVERIFY( !extraApi->userInfo()->email().isEmpty() );
+}
+
 void TestMerginApi::testRegisterAndDelete()
 {
 #if defined(USE_MERGIN_DUMMY_API_KEY)
@@ -3322,26 +3344,4 @@ void TestMerginApi::testApiRoot()
   }
 
   mApi->setApiRoot( originalRoot );
-}
-
-void TestMerginApi::testOfflineCache()
-{
-  // Sign in via mApi, then create new MerginApi instance and check the userAuth and user Info
-
-  // We should be signed in already by this time (done in the initTestCase)
-  QVERIFY( mApi->userAuth()->hasAuthData() );
-  QVERIFY( mApi->userAuth()->hasValidToken() );
-
-  QSettings cacheCheck;
-  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
-  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
-  QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
-
-  MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
-
-  // Cache should be read right away!
-  QVERIFY( extraApi->userAuth()->hasAuthData() );
-  QVERIFY( extraApi->userAuth()->hasValidToken() );
-  QVERIFY( !extraApi->userInfo()->username().isEmpty() );
-  QVERIFY( !extraApi->userInfo()->email().isEmpty() );
 }
