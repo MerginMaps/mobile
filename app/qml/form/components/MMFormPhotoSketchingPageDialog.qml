@@ -163,7 +163,7 @@ Dialog {
                 if (!outsideImageBounds) {
                   // centroid gets set to (0, 0) when drag stops
                   if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
-                    controller.newDrawing()
+                    controller.newSketch()
                   }
                   else {
                     controller.addPoint( dragHandler.centroid.position )
@@ -203,12 +203,9 @@ Dialog {
           }
 
           function onLastPathRemoved() {
-            // we don't remove the last ShapePath but the second last, as that is the last painted line on screen
             const stringArray = shape.data.toString().split(",")
             stringArray.reverse()
             let itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") )
-            stringArray.splice( itemReverseIndex, 1 )
-            itemReverseIndex = stringArray.findIndex( element => element.toString().includes("QQuickShapePath") ) + 1
             const itemIndex = shape.data.length - itemReverseIndex - 1
             removeItemByIndex( itemIndex )
           }

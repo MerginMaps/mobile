@@ -44,16 +44,9 @@ bool ColorPath::operator==( const ColorPath &other ) const
  */
 
 
-void PhotoSketchingController::newDrawing()
+void PhotoSketchingController::newSketch()
 {
   mCurrentLine = ColorPath( mPenColor, {} );
-  mPaths.append( mCurrentLine );
-  emit newPathAdded( -1 );
-  if ( !mCanUndo && mPaths.size() > 1 )
-  {
-    mCanUndo = true;
-    emit canUndoChanged();
-  }
 }
 
 void PhotoSketchingController::addPoint( const QPointF newPoint )
@@ -61,10 +54,15 @@ void PhotoSketchingController::addPoint( const QPointF newPoint )
 // we scale up the point to picture's true position
   const QPointF realPoint = QPointF( newPoint.x() * mPhotoScaleRatio, newPoint.y() * mPhotoScaleRatio );
   mCurrentLine.mPoints.append( realPoint );
-  if ( mPaths.isEmpty() )
+  if ( mPaths.isEmpty() || mCurrentLine.mPoints.size() == 1 )
   {
     mPaths.append( mCurrentLine );
     emit newPathAdded( -1 );
+    if ( !mCanUndo && !mPaths.isEmpty() )
+    {
+      mCanUndo = true;
+      emit canUndoChanged();
+    }
   }
   else
   {
@@ -77,31 +75,24 @@ void PhotoSketchingController::setActiveColor( const QColor newColor )
 {
   mPenColor = newColor;
   mCurrentLine.mColor = newColor;
-  if ( !mPaths.isEmpty() )
-  {
-    mPaths[mPaths.size() - 1] = mCurrentLine;
-    emit pathUpdated( {static_cast<int>( mPaths.size() - 1 )} );
-  }
 
   emit activeColorChanged();
 }
 
 void PhotoSketchingController::undo()
 {
-  if ( mPaths.size() > 1 )
+  if ( !mPaths.empty() )
   {
-    // we remove the last finished path instead of last path as that is the current active path
-    mPaths.remove( mPaths.size() - 2 );
+    mPaths.remove( mPaths.size() - 1 );
     emit lastPathRemoved();
-    mPaths[mPaths.size() - 1] = mCurrentLine;
-    emit pathUpdated( {static_cast<int>( mPaths.size() - 1 )} );
   }
-  if ( mPaths.size() > 1 && !mCanUndo )
+
+  if ( !mPaths.empty() && !mCanUndo )
   {
     mCanUndo = true;
     emit canUndoChanged();
   }
-  else if ( mPaths.size() <= 1 && mCanUndo )
+  else if ( mPaths.empty() && mCanUndo )
   {
     mCanUndo = false;
     emit canUndoChanged();
@@ -112,7 +103,7 @@ void PhotoSketchingController::clear()
 {
   mPenColor = QColor::fromString( "#FFFFFF" );
   emit activeColorChanged();
-  newDrawing();
+  newSketch();
   mCanUndo = false;
   emit canUndoChanged();
   mPaths.clear();
@@ -132,7 +123,7 @@ void PhotoSketchingController::saveDrawings() const
   QPainter painter( &image );
   painter.setRenderHint( QPainter::Antialiasing );
 
-  const int pathCount = mPaths.size();
+  const int pathCount = static_cast<int>( mPaths.size() );
 
   for ( int i = 0; i < pathCount; ++i )
   {
@@ -207,12 +198,12 @@ void PhotoSketchingController::setPhotoScaleRatio( const double newRatio )
 
 ColorPath PhotoSketchingController::getPath( const int row ) const
 {
-  if ( row < -mPaths.size() || row >= mPaths.size() ) return ColorPath();
+  if ( row < -mPaths.size() || row >= mPaths.size() ) return {};
 
   int index = row;
   if ( row < 0 )
   {
-    index = mPaths.size() + row;
+    index = static_cast<int>( mPaths.size() ) + row;
   }
 
   ColorPath colorPath( mPaths.at( index ) );
