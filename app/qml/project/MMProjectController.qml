@@ -666,7 +666,9 @@ Item {
     }
 
     function onActiveWorkspaceChanged() {
-      root.refreshProjects()
+      if ( __merginApi.userAuth.hasValidToken() ) {
+        root.refreshProjects()
+      }
     }
   }
 }

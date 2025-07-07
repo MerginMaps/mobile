@@ -834,7 +834,7 @@ void MerginApi::requestSsoConfig()
 {
   if ( !mApiSupportsSso )
   {
-    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "Requested sso auth for server that does not support sso!" ) );
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "User offline or requested sso auth for server that does not support sso!" ) );
     return;
   }
 
@@ -894,7 +894,7 @@ void MerginApi::requestSsoConnections( const QString &email )
 {
   if ( !mApiSupportsSso )
   {
-    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "Requested sso auth for server that does not support sso!" ) );
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "User offline or requested sso auth for server that does not support sso!" ) );
     return;
   }
 
@@ -1179,10 +1179,27 @@ void MerginApi::getServiceInfoReplyFinished()
 
 void MerginApi::clearAuth()
 {
+  mUserAuth->blockSignals( true );
+  mUserInfo->blockSignals( true );
+  mWorkspaceInfo->blockSignals( true );
+  mSubscriptionInfo->blockSignals( true );
+
   mUserAuth->clear();
   mUserInfo->clear();
   mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
+
+  mUserAuth->blockSignals( false );
+  mUserInfo->blockSignals( false );
+  mWorkspaceInfo->blockSignals( false );
+  mSubscriptionInfo->blockSignals( false );
+
+  emit subscriptionInfoChanged();
+  emit workspaceInfoChanged();
+  emit mUserInfo->activeWorkspaceChanged();
+  emit mUserInfo->hasWorkspacesChanged();
+  emit mUserInfo->userInfoChanged();
+  emit authChanged();
 
   CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Cleared auth and user data cache" ) );
 }
@@ -4102,6 +4119,7 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
 
 void MerginApi::signOut()
 {
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "User about to sign out" ) );
   clearAuth();
 }
 
