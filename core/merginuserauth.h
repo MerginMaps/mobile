@@ -35,7 +35,6 @@ class MerginUserAuth: public QObject
 
   signals:
     void authChanged();
-    void credentialsLoaded();
 
   public:
     //! Returns true if login/password is set, but that does not

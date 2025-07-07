@@ -110,7 +110,6 @@ void MerginUserAuth::loadData()
     mMethod = static_cast<AuthMethod>( method );
 
     emit authChanged();
-    emit credentialsLoaded();
   }, Qt::SingleShotConnection );
 
   mCredentialStore->readAuthData();
