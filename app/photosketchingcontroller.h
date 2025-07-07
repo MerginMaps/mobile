@@ -49,7 +49,7 @@ class PhotoSketchingController: public QObject
     ~PhotoSketchingController() override = default;
 
     // starts new line, to store points in
-    Q_INVOKABLE void newDrawing();
+    Q_INVOKABLE void newSketch();
 
     // adds new point to current line
     Q_INVOKABLE void addPoint( QPointF newPoint );
