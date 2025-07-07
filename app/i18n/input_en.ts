@@ -2753,13 +2753,13 @@ only allows up to %1 downloaded projects.</source>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="960"/>
-        <location filename="../../core/merginapi.cpp" line="1453"/>
+        <location filename="../../core/merginapi.cpp" line="1470"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="967"/>
-        <location filename="../../core/merginapi.cpp" line="1465"/>
+        <location filename="../../core/merginapi.cpp" line="1482"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2779,65 +2779,65 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1320"/>
+        <location filename="../../core/merginapi.cpp" line="1337"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1325"/>
+        <location filename="../../core/merginapi.cpp" line="1342"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1433"/>
+        <location filename="../../core/merginapi.cpp" line="1450"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1455"/>
-        <location filename="../../core/merginapi.cpp" line="1461"/>
-        <location filename="../../core/merginapi.cpp" line="1473"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1478"/>
+        <location filename="../../core/merginapi.cpp" line="1490"/>
         <source>Registration failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1459"/>
+        <location filename="../../core/merginapi.cpp" line="1476"/>
         <source>This email address is already registered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1484"/>
+        <location filename="../../core/merginapi.cpp" line="1501"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1516"/>
+        <location filename="../../core/merginapi.cpp" line="1533"/>
         <source>Workspace created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1863"/>
+        <location filename="../../core/merginapi.cpp" line="1880"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4079"/>
+        <location filename="../../core/merginapi.cpp" line="4096"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4145"/>
+        <location filename="../../core/merginapi.cpp" line="4163"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4244"/>
+        <location filename="../../core/merginapi.cpp" line="4262"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4270"/>
-        <location filename="../../core/merginapi.cpp" line="4297"/>
+        <location filename="../../core/merginapi.cpp" line="4288"/>
+        <location filename="../../core/merginapi.cpp" line="4315"/>
         <source>SSO authorization failed</source>
         <translation type="unfinished"></translation>
     </message>
