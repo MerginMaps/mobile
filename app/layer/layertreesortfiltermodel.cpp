@@ -94,5 +94,8 @@ QModelIndex LayerTreeSortFilterModel::node2index( QgsLayerTreeNode *node ) const
 
 void LayerTreeSortFilterModel::onSourceModelInitialized()
 {
-  sort( 0 );
+  bool sortAlphabetical = mLayerTreeModel->qgsProject()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersAlphabetical/Enabled" ), true );
+
+  if ( sortAlphabetical )
+    sort( 0 );
 }
