@@ -19,6 +19,8 @@
 #include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
 
+constexpr double MIN_SCALE_DENOMINATOR = 100;
+
 InputMapSettings::InputMapSettings( QObject *parent )
   : QObject( parent )
 {
@@ -255,7 +257,14 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
   if ( !foundTheMapCanvas )
   {
     mMapSettings.setDestinationCrs( mProject->crs() );
-    mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
+
+    const QgsReferencedRectangle defaultExtent = mProject->viewSettings()->fullExtent();
+
+    mMapSettings.setExtent( defaultExtent );
+    if ( mMapSettings.computeScaleForExtent( defaultExtent ) < MIN_SCALE_DENOMINATOR )
+    {
+      mMapSettings.setExtent( mMapSettings.computeExtentForScale( center(), MIN_SCALE_DENOMINATOR ) );
+    }
   }
 
   mMapSettings.setRotation( 0 );
