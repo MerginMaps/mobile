@@ -116,7 +116,7 @@ void TestLayerTree::testLayerTreeModel()
 
   QVariant firstNode = sortModel->data( sortModel->index( 0, 0 ), Qt::DisplayRole );
   QCOMPARE( firstNode.toString(), QStringLiteral( "FlySector" ) );
-  
+
   // the signal here (in order to sort) manually as we assign the source model later
   project->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersAlphabetical/Enabled" ), true );
   emit model->modelInitialized();
