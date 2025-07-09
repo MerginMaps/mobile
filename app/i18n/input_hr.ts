@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="263"/>
+        <location filename="../activeproject.cpp" line="264"/>
         <source>General</source>
         <translation>Općenito</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="263"/>
+        <location filename="../activeproject.cpp" line="264"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projekt ima definiran nevažeći CRS. Karta i alati bi mogli imati neočekivano ponašanje!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="275"/>
-        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="276"/>
+        <location filename="../activeproject.cpp" line="285"/>
         <source>Layer</source>
         <translation>Sloj</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="275"/>
+        <location filename="../activeproject.cpp" line="276"/>
         <source>Unable to load source </source>
         <translation>Nije moguće učitati izvor</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="285"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Sloj ima definiran nevažeći CRS. Alati za snimanje bi mogli imati neočekivano ponašanje!</translation>
     </message>
@@ -90,22 +90,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="263"/>
+        <location filename="../androidutils.cpp" line="251"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Dozvole za pristup uređaju za pohranu su trajno uklonjene, molimo omogućite ih u postavkama kako bi mogli učitavati slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="267"/>
+        <location filename="../androidutils.cpp" line="255"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps aplikaciji su poxtrebne dozvole pristupa uređaju za pohranu kako bi se učitale slike iz galerije</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="285"/>
+        <location filename="../androidutils.cpp" line="273"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Dozvole za pristup kameri su onemogućene, molimo omogućite ih u postavkama</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="289"/>
+        <location filename="../androidutils.cpp" line="277"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Potrebne su dozvole za pristup kameri za dodavanje fotografija</translation>
     </message>
@@ -162,7 +162,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="69"/>
+        <location filename="../featuresmodel.cpp" line="70"/>
         <source>Unknown title</source>
         <translation>Nepoznati naslov</translation>
     </message>
@@ -274,52 +274,52 @@ Won&apos;t be added to the project.</source>
         <translation>prije %1 godine</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1524"/>
+        <location filename="../inpututils.cpp" line="1535"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rezolucija zaslona: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1525"/>
+        <location filename="../inpututils.cpp" line="1536"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI zaslona: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1526"/>
+        <location filename="../inpututils.cpp" line="1537"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>veličina zaslona: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1527"/>
+        <location filename="../inpututils.cpp" line="1538"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>prijavljeni omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1528"/>
+        <location filename="../inpututils.cpp" line="1539"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>izračunati omjer piksela zaslona uređaja: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1529"/>
+        <location filename="../inpututils.cpp" line="1540"/>
         <source>used dp scale: %1</source>
         <translation>korišteno dp mjerilo: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2058"/>
+        <location filename="../inpututils.cpp" line="2069"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Morate dodati barem %1 točku u svakom od segmenata.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2062"/>
+        <location filename="../inpututils.cpp" line="2073"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Morate dodati barem %1 točku(točaka).</translation>
     </message>
@@ -418,17 +418,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="80"/>
+        <location filename="../qml/account/MMAccountController.qml" line="85"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Molimo nadogradite aplikaciju za korištenje najnovijih mogućnosti.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="84"/>
+        <location filename="../qml/account/MMAccountController.qml" line="89"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Poslužitelj je trenutno nedostupan, provjerite Vašu vezu ili pokušajte kasnije.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="132"/>
+        <location filename="../qml/account/MMAccountController.qml" line="142"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Prihvaćam %1uvjete korištenja%3 i %2politiku privatnosti%3</translation>
     </message>
@@ -900,6 +900,14 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>MMFormRichTextViewer</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormRichTextViewer.qml" line="53"/>
+        <source>Could not open the file. It may not exist, could be invalid, or there might be no application available to open it.</source>
+        <translation>Nije moguće otvoriti datoteku. Možda ne postoji, neispravna je ili nije dostupna aplikacija za njezino otvaranje.</translation>
+    </message>
+</context>
+<context>
     <name>MMFormSaveChangesDialog</name>
     <message>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="21"/>
@@ -920,6 +928,14 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/dialogs/MMFormSaveChangesDialog.qml" line="24"/>
         <source>No, thanks</source>
         <translation>Ne, hvala</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormTextMultilineEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormTextMultilineEditor.qml" line="126"/>
+        <source>Could not open the file. It may not exist, could be invalid, or there might be no application available to open it.</source>
+        <translation>Nije moguće otvoriti datoteku. Možda ne postoji, neispravna je ili nije dostupna aplikacija za njezino otvaranje.</translation>
     </message>
 </context>
 <context>
@@ -1241,52 +1257,57 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMLoginPage</name>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="38"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="40"/>
         <source>Log in</source>
         <translation>Prijava</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="87"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="89"/>
         <source>Email or username</source>
         <translation>Mail adresa ili korisničko ime</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="96"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="98"/>
         <source>Password</source>
         <translation>Zaporka</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="102"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="104"/>
         <source>Forgot password?</source>
         <translation>Zaboravljena zaporka?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="113"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="115"/>
         <source>Sign in</source>
         <translation>Prijava</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
+        <source>Continue with SSO</source>
+        <translation>Nastavi sa SSO</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="140"/>
         <source>Don&apos;t have an account?</source>
         <translation>Nemate korisnički račun?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="132"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="147"/>
         <source>Sign up</source>
         <translation>Registracija</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="183"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="198"/>
         <source>Change server</source>
         <translation>Promjena poslužitelja</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="202"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="217"/>
         <source>Server address</source>
         <translation>Adresa poslužitelja</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="233"/>
         <source>Confirm</source>
         <translation>Potvrdi</translation>
     </message>
@@ -1294,107 +1315,113 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="117"/>
+        <location filename="../qml/map/MMMapController.qml" line="124"/>
         <source>Mark the geometry on the map and click record</source>
         <translation>Označi geometriju na karti i klikni</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="146"/>
+        <location filename="../qml/map/MMMapController.qml" line="153"/>
         <source>Create line to split the selected feature</source>
         <translation>Stvori liniju kako bi razdvojio odabrani objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="163"/>
+        <location filename="../qml/map/MMMapController.qml" line="170"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation>Dodajte točke za mjerenje udaljenosti, zatvorite površinu za mjerenje površine</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="170"/>
+        <location filename="../qml/map/MMMapController.qml" line="177"/>
         <source>Tap on features to add or remove from the selection</source>
         <translation>Klikni na objekte za dodavanje ili uklanjanje iz odabira</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="570"/>
+        <location filename="../qml/map/MMMapController.qml" line="183"/>
+        <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
+        <translation>Odaberite boju i počnite skicirati na karti. Koristite dva prsta za pomicanje ili zumiranje karte.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="629"/>
         <source>streaming</source>
         <translation>kontinuirano snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="646"/>
+        <location filename="../qml/map/MMMapController.qml" line="705"/>
         <source>Connecting to %1</source>
         <translation>Povezivanje na %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="660"/>
+        <location filename="../qml/map/MMMapController.qml" line="719"/>
         <source>Connected, no position</source>
         <translation>Povezano, nema pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="664"/>
+        <location filename="../qml/map/MMMapController.qml" line="723"/>
         <source>Unknown accuracy</source>
         <translation>Nepoznata preciznost</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="806"/>
+        <location filename="../qml/map/MMMapController.qml" line="865"/>
         <source>GPS currently unavailable</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="830"/>
+        <location filename="../qml/map/MMMapController.qml" line="889"/>
         <source>Choose Active Layer</source>
         <translation>Odaberi aktivni sloj</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="864"/>
+        <location filename="../qml/map/MMMapController.qml" line="923"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Nema slojeva predviđenih za snimanje u projektu!</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="865"/>
+        <location filename="../qml/map/MMMapController.qml" line="924"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Pogledajte kako omogućiti snimanje u projektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="891"/>
+        <location filename="../qml/map/MMMapController.qml" line="950"/>
         <source>More options</source>
         <translation>Više mogućnosti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="896"/>
+        <location filename="../qml/map/MMMapController.qml" line="955"/>
         <source>Split geometry</source>
         <translation>Razdvoji geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="908"/>
+        <location filename="../qml/map/MMMapController.qml" line="967"/>
         <source>Redraw geometry</source>
         <translation>Ponovno iscrtaj geometriju</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="920"/>
+        <location filename="../qml/map/MMMapController.qml" line="979"/>
         <source>Streaming mode</source>
         <translation>Kontinuirano snimanje</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="926"/>
+        <location filename="../qml/map/MMMapController.qml" line="985"/>
         <source>Active</source>
         <translation>Aktivno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1101"/>
+        <location filename="../qml/map/MMMapController.qml" line="1197"/>
         <source>Splitting done successfully</source>
         <translation>Razdvajanje uspješno izvršeno</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1192"/>
+        <location filename="../qml/map/MMMapController.qml" line="1288"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Odaberite jednu od točaka za početak izmjene geometrije</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1205"/>
+        <location filename="../qml/map/MMMapController.qml" line="1301"/>
         <source>Record new geometry for the feature</source>
         <translation>Snimi novu geometriju za objekt</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1304"/>
+        <location filename="../qml/map/MMMapController.qml" line="128"/>
+        <location filename="../qml/map/MMMapController.qml" line="1400"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS trenutno nije dostupan</translation>
     </message>
@@ -1549,13 +1576,13 @@ Won&apos;t be added to the project.</source>
     <name>MMOutOfDateCustomServerDialog</name>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
-        <source>Your server will soon be out of date</source>
-        <translation>Vaš poslužitelj će uskoro zastariti</translation>
+        <source>Your server is out of date</source>
+        <translation>Vaš poslužitelj je zastario.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
-        <source>Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.</source>
-        <translation>Obratite se svom administratoru poslužitelja da nadogradi Vaš poslužitelj na najnoviju verziju. Naknadna izdanja naše mobilne aplikacije možda neće biti kompatibilna s vašom trenutnom verzijom poslužitelja.</translation>
+        <source>Please contact your server administrator to upgrade your server to the latest version. The mobile app is not compatible with your current server version.</source>
+        <translation>Molimo, kontaktirajte administratora vašeg poslužitelja radi nadogradnje na najnoviju verziju. Mobilna aplikacija nije kompatibilna s trenutačnom verzijom poslužitelja.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="28"/>
@@ -1859,32 +1886,32 @@ Won&apos;t be added to the project.</source>
         <translation>Nije moguće sinkronizirati projekt, provjerite jeste li prijavljeni i imate li odgovarajuće dozvole.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="212"/>
+        <location filename="../qml/project/MMProjectList.qml" line="214"/>
         <source>Create project</source>
         <translation>Stvori projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="237"/>
+        <location filename="../qml/project/MMProjectList.qml" line="239"/>
         <source>Let&apos;s get started</source>
         <translation>Krenimo!</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="238"/>
+        <location filename="../qml/project/MMProjectList.qml" line="240"/>
         <source>First step is to create your brand new project.</source>
         <translation>Prvi korak je stvaranje novoga projekta.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nije bilo moguće učitati listu projekata.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="246"/>
+        <location filename="../qml/project/MMProjectList.qml" line="248"/>
         <source>No projects found</source>
         <translation>Nema pronađenih projekata</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="275"/>
+        <location filename="../qml/project/MMProjectList.qml" line="277"/>
         <source>Retry</source>
         <translation>Pokušaj ponovno</translation>
     </message>
@@ -2023,28 +2050,38 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="179"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="55"/>
+        <source>Geometry was removed to avoid overlaps with other features. Tap &quot;Edit Geometry&quot; to draw a new one.</source>
+        <translation>Geometrija je uklonjena kako bi se izbjeglo preklapanje s drugim objektima. Dodirnite &quot;Uredi geometriju&quot; da biste nacrtali novu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMRecordingTools.qml" line="61"/>
+        <source>Geometry was adjusted to avoid overlaps with other features.</source>
+        <translation>Geometrija je uklonjena kako bi se izbjeglo preklapanje s drugim objektima.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMRecordingTools.qml" line="194"/>
         <source>Undo</source>
         <translation>Poništi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="186"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="201"/>
         <source>Remove</source>
         <translation>Ukloni</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="200"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="215"/>
         <source>Release</source>
         <translation>Otpusti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="214"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="229"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="231"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="259"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="246"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="274"/>
         <source>Record</source>
         <translation>Snimaj</translation>
     </message>
@@ -2335,6 +2372,24 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>MMSketchesDrawer</name>
+    <message>
+        <location filename="../qml/map/MMSketchesDrawer.qml" line="40"/>
+        <source>Sketch</source>
+        <translation>Skiciraj</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSketchesDrawer.qml" line="44"/>
+        <source>Undo</source>
+        <translation>Poništi</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSketchesDrawer.qml" line="121"/>
+        <source>Eraser</source>
+        <translation>Brisač</translation>
+    </message>
+</context>
+<context>
     <name>MMSplittingFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
@@ -2373,6 +2428,72 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
         <source>You need to add at least 2 points.</source>
         <translation>Morate dodati barem 2 točke.</translation>
+    </message>
+</context>
+<context>
+    <name>MMSsoExpiredTokenDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
+        <source>SSO login has expired</source>
+        <translation>SSO prijava je istekla</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
+        <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
+        <translation>Vaša SSO prijava je istekla. Da biste pristupili svojim udaljenim projektima i mogli ih sinkronizirati, morate se ponovno prijaviti.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
+        <source>I want to log in</source>
+        <translation>Želim se prijaviti</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="23"/>
+        <source>I&apos;ll log in later</source>
+        <translation>Prijaviti ću se kasnije</translation>
+    </message>
+</context>
+<context>
+    <name>MMSsoPage</name>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="29"/>
+        <source>Sign in with SSO</source>
+        <translation>Prijava putem SSO</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="58"/>
+        <source>Work email</source>
+        <translation>Poslovni email</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="67"/>
+        <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Nastavkom putem SSO-a prihvaćate %1uvjete korištenja%3 i %2politiku privatnosti%3.</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="95"/>
+        <source>Sign in</source>
+        <translation>Prijava</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="109"/>
+        <source>Use password instead?</source>
+        <translation>Koristi zaporku</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="115"/>
+        <source>Sign in with password</source>
+        <translation>Prijava zaporkom</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="128"/>
+        <source>SSO login</source>
+        <translation>SSO prijava</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="129"/>
+        <source>Please follow the instructions in your web browser.</source>
+        <translation>Molimo slijedite upute u vašem web pregledniku.</translation>
     </message>
 </context>
 <context>
@@ -2607,80 +2728,118 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="223"/>
+        <location filename="../../core/merginapi.cpp" line="237"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Molim uklonite neke od projekata budući da aplikacija trenutno
 dozvoljava samo %1 preuzetih projekata.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="824"/>
-        <location filename="../../core/merginapi.cpp" line="1298"/>
+        <location filename="../../core/merginapi.cpp" line="879"/>
+        <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
+        <translation>Došlo je do problema s SSO konfiguracijom poslužitelja. Obratite se administratoru.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="887"/>
+        <location filename="../../core/merginapi.cpp" line="947"/>
+        <source>Error getting the SSO configuration from the server</source>
+        <translation>Greška pri dohvaćanju SSO konfiguracije s poslužitelja.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="931"/>
+        <location filename="../../core/merginapi.cpp" line="945"/>
+        <source>SSO is not supported for the specified domain</source>
+        <translation>SSO nije podržan za navedenu domenu.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="960"/>
+        <location filename="../../core/merginapi.cpp" line="1470"/>
         <source>Please enter a valid email</source>
         <translation>Molimo unesite valjani email</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="831"/>
-        <location filename="../../core/merginapi.cpp" line="1310"/>
+        <location filename="../../core/merginapi.cpp" line="967"/>
+        <location filename="../../core/merginapi.cpp" line="1482"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 Zaporka mora biti barem 8 znamenki duga i uključivati:&lt;ul type=&quot;disc&quot;&gt;%3 mala slova (a-z)%4%3 velika slova (A-Z)%4%3 barem jedan broj (0–9) ili specijalne znakove%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="845"/>
+        <location filename="../../core/merginapi.cpp" line="981"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Molimo prihvatite uvjete korištenja i politiku privatnosti</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="874"/>
+        <location filename="../../core/merginapi.cpp" line="1010"/>
         <source>Marketing source cannot be empty</source>
         <translation>Marketinški izvor ne može biti prazan</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="882"/>
+        <location filename="../../core/merginapi.cpp" line="1018"/>
         <source>Industry cannot be empty</source>
         <translation>Djelatnost ne može biti prazna</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1278"/>
+        <location filename="../../core/merginapi.cpp" line="1337"/>
+        <source>You don&apos;t have permission to create new projects in this workspace.</source>
+        <translation>Nemate dopuštenje za stvaranje novih projekata u ovom radnom prostoru.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1342"/>
+        <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
+        <translation>Nije bilo moguće stvoriti projekt. Molimo pokušajte ponovno kasnije ili se obratite podršci ako se problem nastavi.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="1450"/>
         <source>Registration successful</source>
         <translation>Registracija uspješna</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1300"/>
-        <location filename="../../core/merginapi.cpp" line="1306"/>
-        <location filename="../../core/merginapi.cpp" line="1318"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1478"/>
+        <location filename="../../core/merginapi.cpp" line="1490"/>
         <source>Registration failed</source>
         <translation>Registracija neuspješna</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1304"/>
+        <location filename="../../core/merginapi.cpp" line="1476"/>
         <source>This email address is already registered</source>
         <translation>Ova email adresa je već registrirana</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1329"/>
+        <location filename="../../core/merginapi.cpp" line="1501"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Nisu dozvoljene nove registracije na odabranom poslužitelju. Kontaktirajte Vašeg administratora.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1361"/>
+        <location filename="../../core/merginapi.cpp" line="1533"/>
         <source>Workspace created</source>
         <translation>Radni prostor je stvoren</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1698"/>
+        <location filename="../../core/merginapi.cpp" line="1880"/>
         <source>Project detached from the server</source>
         <translation>Projekt nepovezan s poslužiteljem</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3895"/>
+        <location filename="../../core/merginapi.cpp" line="4096"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Ime radnog prostora sadrži nedozvoljene znakove</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3961"/>
+        <location filename="../../core/merginapi.cpp" line="4163"/>
         <source>Workspace %1 already exists</source>
         <translation>Radni prostor %1 već postoji</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4262"/>
+        <source>You can now close this page and return to Mergin Maps</source>
+        <translation>Sada možete zatvoriti ovu stranicu i vratiti se u Mergin Maps</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4288"/>
+        <location filename="../../core/merginapi.cpp" line="4315"/>
+        <source>SSO authorization failed</source>
+        <translation>SSO autorizacija nije uspjela</translation>
     </message>
 </context>
 <context>
@@ -2903,17 +3062,17 @@ dozvoljava samo %1 preuzetih projekata.</translation>
         <translation>Nepoznati fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="546"/>
+        <location filename="../main.cpp" line="554"/>
         <source>Report submitted. Please contact us on %1</source>
         <translation>Obavijest je poslana.%1Molimo kontaktirajte nas na%1%2</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="551"/>
+        <location filename="../main.cpp" line="559"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Obavijest nije poslana. Molimo provjerite Vašu internetsku vezu.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="40"/>
+        <location filename="../../core/merginapi.cpp" line="46"/>
         <source>Synchronisation canceled</source>
         <translation>Sinkronizacija je otkazana</translation>
     </message>
@@ -2934,118 +3093,118 @@ dozvoljava samo %1 preuzetih projekata.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="278"/>
+        <location filename="../qml/main.qml" line="283"/>
         <source>Sync</source>
         <translation>Sinkronizacija</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="288"/>
+        <location filename="../qml/main.qml" line="293"/>
         <source>Add</source>
         <translation>Dodaj</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="297"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>No editable layers found.</source>
         <translation>Nema slojeva za uređivanje.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="303"/>
+        <location filename="../qml/main.qml" line="308"/>
         <source>Layers</source>
         <translation>Slojevi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="312"/>
+        <location filename="../qml/main.qml" line="317"/>
         <source>Projects</source>
         <translation>Projekti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="320"/>
+        <location filename="../qml/main.qml" line="325"/>
         <source>Zoom to project</source>
         <translation>Zumiraj na projekt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="334"/>
         <source>Map themes</source>
         <translation>Teme karte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="340"/>
+        <location filename="../qml/main.qml" line="345"/>
         <source>Position tracking</source>
         <translation>Praćenje pozicije</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="351"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Measure</source>
         <translation>Izmjeri</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="357"/>
+        <location filename="../qml/main.qml" line="362"/>
         <source>Local changes</source>
         <translation>Lokalne izmjene</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="366"/>
+        <location filename="../qml/main.qml" line="371"/>
         <source>Settings</source>
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="561"/>
-        <location filename="../qml/main.qml" line="569"/>
+        <location filename="../qml/main.qml" line="566"/>
+        <location filename="../qml/main.qml" line="574"/>
         <source>not tracking</source>
         <translation>ne pratim</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="832"/>
+        <location filename="../qml/main.qml" line="873"/>
         <source>Select feature</source>
         <translation>Odaberi objekt</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="916"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Netko upravo sinkronizira podatke, pokušati ćemo nešto kasnije</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="920"/>
+        <location filename="../qml/main.qml" line="961"/>
         <source>Details</source>
         <translation>Detalji</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="940"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Neuspješna komunikacija sa poslužiteljem. Provjerite mrežne postavke i kvalitetu signala.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="991"/>
+        <location filename="../qml/main.qml" line="1032"/>
         <source>Up to date</source>
         <translation>Ažurno</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1049"/>
+        <location filename="../qml/main.qml" line="1100"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Došlo je do problema prilikom učitavanja projekta. %1Pogledajte detalje%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="744"/>
+        <location filename="../qml/main.qml" line="776"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Navođenje je onemogućeno zbog nedostupnosti lokacije!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="885"/>
+        <location filename="../qml/main.qml" line="926"/>
         <source>Successfully synchronised</source>
         <translation>Uspješno sinkronizirano</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="923"/>
+        <location filename="../qml/main.qml" line="964"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Došlo je do problema prilikom sinkronizacije, pokušati ćemo ponovno. Klikni za više</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1070"/>
+        <location filename="../qml/main.qml" line="1121"/>
         <source>Could not read the project file:</source>
         <translation>Nije bilo moguće otvoriti datoteku projekta:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1095"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Press back again to quit the app</source>
         <translation>Odaberite &quot;nazad&quot; još jednom za izlaz iz aplikacije</translation>
     </message>
