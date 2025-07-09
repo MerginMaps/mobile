@@ -27,6 +27,7 @@
 #include "qcoreapplication.h"
 
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
+const QString CoreUtils::QSETTINGS_CACHED_MAP_EXTENT_GROUP = QStringLiteral( "mapExtent" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
@@ -382,4 +383,12 @@ bool CoreUtils::isValidEmail( const QString &email )
 {
   const thread_local QRegularExpression regEx( "\\S+@\\S+\\.\\S+" );
   return regEx.match( email ).hasMatch();
+}
+
+QString CoreUtils::sanitizePathSlashes( const QString &name )
+{
+  QString sanitizedName = name;
+  sanitizedName.replace( '/', '_' );
+  sanitizedName.replace( '\\', '_' );
+  return sanitizedName;
 }
