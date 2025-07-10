@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -16,8 +18,6 @@ import mm 1.0 as MM
 import MMInput
 
 import "../../components" as MMComponents
-import "../../dialogs" as MMDialogs
-import "./photo" as MMPhotoComponents
 
 /*
  * Photo drawing editor for feature photos. Opens a new page for drawing on photos.
@@ -52,13 +52,13 @@ Dialog {
       bgndColorHover: __style.mediumGreenColor
       fontColorHover: __style.forestColor
       iconColorHover: __style.forestColor
-      enabled: controller.canUndo
+      enabled: root.controller.canUndo
       Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
       onClicked: {
-        controller.undo()
+        root.controller.undo()
       }
     }
 
@@ -75,18 +75,19 @@ Dialog {
 
       onClicked: {
         root.close()
-        controller.clear()
+        root.controller.clear()
       }
     }
   }
 
+  // RowLayout is not really necessary here, but it's so much easier to position the button with it
   footer: RowLayout {
     MMComponents.MMButton {
       type: MMButton.Types.Primary
       text: qsTr( "Done" )
       bgndColor: __style.grassColor
       size: MMButton.Sizes.Small
-      enabled: controller.canUndo
+      enabled: root.controller.canUndo
       Layout.fillWidth: true
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
@@ -107,83 +108,44 @@ Dialog {
       Layout.leftMargin: __style.pageMargins
       Layout.rightMargin: __style.pageMargins
 
+      MMComponents.MMPhoto {
+        id: photo
+
+        anchors.fill: parent
+
+        photoUrl: root.photoUrl
+        fillMode: Image.PreserveAspectFit
+
+        onPaintedWidthChanged: updateScaleRatio()
+        onPaintedHeightChanged: updateScaleRatio()
+        onStatusChanged: {
+          if (status === Image.Ready) updateScaleRatio()
+        }
+
+        function updateScaleRatio() {
+          if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
+            root.controller.setPhotoScaleRatio( sourceSize.width / paintedWidth )
+          }
+        }
+      }
+
       Shape {
         id: shape
-        anchors.fill: parent
-        property real photoPaddingWidth: ( width - photo.paintedWidth ) / 2
-        property real photoPaddingHeight: ( height - photo.paintedHeight ) / 2
+        anchors.centerIn: parent
+        width: photo.paintedWidth
+        height: photo.paintedHeight
         property var shapePaths: []
 
-        onPhotoPaddingWidthChanged: {
-          if ( shape.data.findIndex(element => element.toString().includes("QQuickShapePath")) > -1 ) {
-            controller.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
-          }
-        }
-
-        onPhotoPaddingHeightChanged: {
-          if ( shape.data.findIndex(element => element.toString().includes("QQuickShapePath")) > -1 ) {
-            controller.setAnnotationsOffset( photoPaddingWidth, photoPaddingHeight )
-          }
-        }
-
-        MMComponents.MMPhoto {
-          id: photo
-
-          anchors.fill: parent
-          z: -1
-
-          photoUrl: root.photoUrl
-
-          fillMode: Image.PreserveAspectFit
-
-          onPaintedWidthChanged: updateScaleRatio()
-          onPaintedHeightChanged: updateScaleRatio()
-          onStatusChanged: {
-            if (status === Image.Ready) updateScaleRatio()
-          }
-
-          function updateScaleRatio() {
-            if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
-              controller.setPhotoScaleRatio( sourceSize.width / paintedWidth )
-            }
-          }
-
-          Item {
-            width: parent.paintedWidth
-            height: parent.paintedHeight
-            anchors.centerIn: parent
-
-            DragHandler {
-              id: dragHandler
-              target: null
-
-              onCentroidChanged: {
-                // somehow the drag handler gets notified even when drag continues outside parent on some sides
-                const outsideImageBounds = centroid.position.x > parent.width || centroid.position.y > parent.height
-                if (!outsideImageBounds) {
-                  // centroid gets set to (0, 0) when drag stops
-                  if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
-                    controller.newSketch()
-                  }
-                  else {
-                    controller.addPoint( dragHandler.centroid.position )
-                  }
-                }
-              }
-            }
-          }
-        }
-
         Component.onCompleted: {
-          controller.redrawPaths()
+          root.controller.redrawPaths()
         }
 
         Connections {
-          target: controller
+          target: root.controller
 
           function onPathUpdated( indexArray ) {
             for ( const index of indexArray ) {
-              const modelData = controller.getPath(index)
+              const modelData = root.controller.getPath(index)
               const stringArray = shape.data.toString().split(",")
               const firstIndex = stringArray.findIndex(element => element.toString().includes("QQuickShapePath"));
               const itemIndex =  firstIndex + index
@@ -192,7 +154,7 @@ Dialog {
           }
 
           function onNewPathAdded( pathIndex ) {
-            const modelData = controller.getPath( pathIndex );
+            const modelData = root.controller.getPath( pathIndex );
             const newObject = shapePathComponent.createObject( shape, {
               modelData: modelData,
             });
@@ -226,10 +188,29 @@ Dialog {
             shape.shapePaths.splice( shapePathsIndex, 1 )
           }
         }
+
+        DragHandler {
+          id: dragHandler
+          target: null
+
+          onCentroidChanged: {
+            // the drag handler gets notified even when drag continues outside parent
+            const outsideImageBounds = centroid.position.x > parent.width || centroid.position.x < 0 || centroid.position.y > parent.height || centroid.position.y < 0
+            if (!outsideImageBounds) {
+              // centroid gets set to (0, 0) when drag stops
+              if ( dragHandler.centroid.position === Qt.point( 0, 0 ) ) {
+                root.controller.newSketch()
+              }
+              else {
+                root.controller.addPoint( dragHandler.centroid.position )
+              }
+            }
+          }
+        }
       }
     }
 
-    MMComponents.MMListSpacer { height: __style.margin20 }
+    MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
     RowLayout {
       Layout.fillWidth: true
@@ -260,13 +241,13 @@ Dialog {
               radius: width / 2
               width: __style.margin48
               height: __style.margin48
-              color: modelData === controller.activeColor ? __style.transparentColor : __style.lightGreenColor
+              color: modelData === root.controller.activeColor ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
-              border.color: modelData === controller.activeColor ? __style.grassColor : __style.transparentColor
+              border.color: modelData === root.controller.activeColor ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
-              controller.setActiveColor( modelData )
+              root.controller.setActiveColor( modelData )
             }
           }
         }
