@@ -26,6 +26,13 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
 
   public:
 
+    enum SortMethodEnum
+    {
+      PreserveQgisOrder = 0,
+      Alphabetical,
+    };
+    Q_ENUM( SortMethodEnum );
+
     explicit LayerTreeSortFilterModel( QObject *parent = nullptr );
     virtual ~LayerTreeSortFilterModel();
 
