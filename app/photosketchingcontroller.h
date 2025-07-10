@@ -69,9 +69,6 @@ class PhotoSketchingController: public QObject
     // redraws all paths in mPaths (used after user comes back to drawing screen)
     Q_INVOKABLE void redrawPaths();
 
-    // sets the annotations offset, which is equivalent to padding around photo
-    Q_INVOKABLE void setAnnotationsOffset( double newXOffset, double newYOffset );
-
     // sets the photo scale ratio ( original size / printed size )
     Q_INVOKABLE void setPhotoScaleRatio( double newRatio );
 

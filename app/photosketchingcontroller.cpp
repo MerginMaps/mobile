@@ -165,22 +165,6 @@ void PhotoSketchingController::redrawPaths()
   }
 }
 
-void PhotoSketchingController::setAnnotationsOffset( const double newXOffset, const double newYOffset )
-{
-  mAnnotationOffsets.first = newXOffset;
-  mAnnotationOffsets.second = newYOffset;
-// we want to update all paths
-  if ( !mPaths.isEmpty() )
-  {
-    QVector<int> changedPathIndexes;
-    for ( int i = 0; i < mPaths.size() - 1; i++ )
-    {
-      changedPathIndexes.append( i );
-    }
-    emit pathUpdated( changedPathIndexes );
-  }
-}
-
 void PhotoSketchingController::setPhotoScaleRatio( const double newRatio )
 {
   mPhotoScaleRatio = newRatio;
@@ -188,7 +172,7 @@ void PhotoSketchingController::setPhotoScaleRatio( const double newRatio )
   if ( !mPaths.isEmpty() )
   {
     QVector<int> changedPathIndexes;
-    for ( int i = 0; i < mPaths.size() - 1; i++ )
+    for ( int i = 0; i < mPaths.size(); i++ )
     {
       changedPathIndexes.append( i );
     }
