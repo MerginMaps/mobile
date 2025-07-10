@@ -216,9 +216,9 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
 
   QgsRenderContext context( QgsRenderContext::fromMapSettings( mMapSettings->mapSettings() ) );
   context.expressionContext() << QgsExpressionContextUtils::globalScope()
-                              << QgsExpressionContextUtils::projectScope( mMapSettings->project() )
-                              << QgsExpressionContextUtils::mapSettingsScope( mMapSettings->mapSettings() )
-                              << QgsExpressionContextUtils::layerScope( layer );
+         << QgsExpressionContextUtils::projectScope( mMapSettings->project() )
+         << QgsExpressionContextUtils::mapSettingsScope( mMapSettings->mapSettings() )
+         << QgsExpressionContextUtils::layerScope( layer );
 
   QgsFeatureRenderer *renderer = layer->renderer();
   if ( renderer && renderer->capabilities() & QgsFeatureRenderer::ScaleDependent )
