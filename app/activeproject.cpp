@@ -587,17 +587,13 @@ QList<QgsMapLayer *> ActiveProject::getVisibleLayers() const
 
   // Get list of all visible valid layers in the project
   QList<QgsMapLayer *> visibleLayers;
-  const QList<QgsLayerTreeLayer *> nodeLayers = root->findLayers();
+  const QList<QgsMapLayer *> layers = root->layerOrder();
 
-  for ( QgsLayerTreeLayer *nodeLayer : nodeLayers )
+  for ( QgsMapLayer *layer : layers )
   {
-    if ( nodeLayer && nodeLayer->isVisible() )
+    if ( InputUtils::isLayerVisible( layer, mQgsProject ) )
     {
-      QgsMapLayer *layer = nodeLayer->layer();
-      if ( layer && layer->isValid() )
-      {
-        visibleLayers << layer;
-      }
+      visibleLayers << layer;
     }
   }
 
