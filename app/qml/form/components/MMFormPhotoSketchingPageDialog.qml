@@ -212,38 +212,47 @@ Dialog {
 
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
-    RowLayout {
+    ScrollView {
       Layout.fillWidth: true
+      Layout.preferredHeight: scrollRow.height
       Layout.bottomMargin: closeButton.implicitWidth
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
-      Repeater {
-        // we use more vibrant versions of our product colors
-        model: ["#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93"]
+      ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-        Rectangle {
-          required property color modelData
-          Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-          Layout.fillWidth: true
+      Row {
+        id: scrollRow
+        width: parent.width
+        spacing: __style.margin12
+        padding: __style.margin6
+        anchors.centerIn: parent
+
+        Repeater {
+          // we use more vibrant versions of our product colors
+          model: ["#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93"]
 
           MMComponents.MMRoundButton {
-            anchors.centerIn: parent
+            id: colorButton
+            required property color modelData
+            anchors.verticalCenter: parent.verticalCenter
 
             contentItem: Rectangle {
-              color: modelData
+              color: colorButton.modelData
               radius: width / 2
               anchors.fill: parent
             }
             background: Rectangle {
-              anchors.verticalCenter: parent.verticalCenter
-              anchors.horizontalCenter: parent.horizontalCenter
+              property bool isActive: colorButton.modelData === root.controller.activeColor
+
+              anchors.centerIn: parent
               radius: width / 2
               width: __style.margin48
               height: __style.margin48
-              color: modelData === root.controller.activeColor ? __style.transparentColor : __style.lightGreenColor
+              color: isActive ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
-              border.color: modelData === root.controller.activeColor ? __style.grassColor : __style.transparentColor
+              border.color: isActive ? __style.grassColor : __style.transparentColor
             }
 
             onClicked: {
@@ -253,13 +262,13 @@ Dialog {
         }
       }
     }
-
   }
 
   Component {
     id: shapePathComponent
 
     ShapePath {
+      id: shapePathElement
       required property var modelData
 
       strokeColor: modelData.color
@@ -270,7 +279,7 @@ Dialog {
       startY: modelData.points[0]?.y ?? 0
 
       PathPolyline {
-        path: modelData.points
+        path: shapePathElement.modelData.points
       }
     }
   }
