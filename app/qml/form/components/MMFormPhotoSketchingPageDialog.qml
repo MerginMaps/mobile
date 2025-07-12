@@ -213,8 +213,10 @@ Dialog {
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
     ScrollView {
-      Layout.fillWidth: true
+      Layout.alignment: Qt.AlignHCenter
       Layout.preferredHeight: scrollRow.height
+      Layout.preferredWidth: scrollRow.width
+      Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
       Layout.bottomMargin: closeButton.implicitWidth
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
