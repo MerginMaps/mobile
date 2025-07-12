@@ -162,7 +162,7 @@
 <context>
     <name>FeaturesModel</name>
     <message>
-        <location filename="../featuresmodel.cpp" line="69"/>
+        <location filename="../featuresmodel.cpp" line="70"/>
         <source>Unknown title</source>
         <translation>Unbekannter Titel</translation>
     </message>
@@ -419,17 +419,17 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="80"/>
+        <location filename="../qml/account/MMAccountController.qml" line="85"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Bitte aktualisieren Sie Mergin Maps, um die neuesten Funktionen nutzen zu können.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="84"/>
+        <location filename="../qml/account/MMAccountController.qml" line="89"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Der Server ist momentan nicht erreichbar. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es später erneut.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="132"/>
+        <location filename="../qml/account/MMAccountController.qml" line="142"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Ich stimme den %1Allgemeinen Geschäftsbedingungen%3 und der %2Datenschutzerklärung%3 zu.</translation>
     </message>
@@ -1257,52 +1257,57 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMLoginPage</name>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="38"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="40"/>
         <source>Log in</source>
         <translation>Log-in</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="87"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="89"/>
         <source>Email or username</source>
         <translation>Email oder Benutzernamen</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="96"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="98"/>
         <source>Password</source>
         <translation>Passwort</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="102"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="104"/>
         <source>Forgot password?</source>
         <translation>Passwort vergessen?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="113"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="115"/>
         <source>Sign in</source>
         <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
+        <source>Continue with SSO</source>
+        <translation>Mit SSO fortfahren</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMLoginPage.qml" line="140"/>
         <source>Don&apos;t have an account?</source>
         <translation>Haben Sie kein Benutzerkonto?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="132"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="147"/>
         <source>Sign up</source>
         <translation>Registrieren</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="183"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="198"/>
         <source>Change server</source>
         <translation>Server ändern</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="202"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="217"/>
         <source>Server address</source>
         <translation>Server-Adresse</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMLoginPage.qml" line="218"/>
+        <location filename="../qml/account/MMLoginPage.qml" line="233"/>
         <source>Confirm</source>
         <translation>Bestätigen</translation>
     </message>
@@ -1571,13 +1576,13 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <name>MMOutOfDateCustomServerDialog</name>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="23"/>
-        <source>Your server will soon be out of date</source>
-        <translation>Ihr Server wird in Kürze veraltet sein.</translation>
+        <source>Your server is out of date</source>
+        <translation>Ihr Server ist nicht auf dem neuestem Stand</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="24"/>
-        <source>Please contact your server administrator to upgrade your server to the latest version. Subsequent releases of our mobile app may not be compatible with your current server version.</source>
-        <translation>Bitte kontaktieren Sie Ihren Serveradministrator, um Ihren Server auf die neueste Version zu aktualisieren. Nachfolgende Versionen unserer mobilen App sind möglicherweise nicht mit Ihrer aktuellen Serverversion kompatibel.</translation>
+        <source>Please contact your server administrator to upgrade your server to the latest version. The mobile app is not compatible with your current server version.</source>
+        <translation>Bitte kontaktieren Sie die Server-Administration, um den Server zu aktualisieren. Diese App-Version ist mit Ihrem aktuellen Server nicht kompatibel.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMOutOfDateCustomServerDialog.qml" line="28"/>
@@ -2425,6 +2430,72 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     </message>
 </context>
 <context>
+    <name>MMSsoExpiredTokenDialog</name>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
+        <source>SSO login has expired</source>
+        <translation>Ihre SSO-Anmeldung ist abgelaufen</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
+        <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
+        <translation>Ihre SSO-Anmeldung ist abgelaufen. Um auf Ihre Projekte zuzugreifen und synchronisieren zu können, müssen Sie sich erneut anmelden.</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
+        <source>I want to log in</source>
+        <translation>Anmelden</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="23"/>
+        <source>I&apos;ll log in later</source>
+        <translation>Später anmelden</translation>
+    </message>
+</context>
+<context>
+    <name>MMSsoPage</name>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="29"/>
+        <source>Sign in with SSO</source>
+        <translation>mit SSO anmelden</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="58"/>
+        <source>Work email</source>
+        <translation>Email geschäftlich</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="67"/>
+        <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
+        <translation>Indem Sie sich per SSO anmelden, akzeptieren Sie die %1Allgemeinen Geschäftsbedingungen%3 und die %2Datenschutzerklärung%3</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="95"/>
+        <source>Sign in</source>
+        <translation>Anmelden</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="109"/>
+        <source>Use password instead?</source>
+        <translation>Stattdessen mit Passwort anmelden?</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="115"/>
+        <source>Sign in with password</source>
+        <translation>Mit Passwort anmelden</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="128"/>
+        <source>SSO login</source>
+        <translation>SSO Anmeldung</translation>
+    </message>
+    <message>
+        <location filename="../qml/account/MMSsoPage.qml" line="129"/>
+        <source>Please follow the instructions in your web browser.</source>
+        <translation>Bitte folgen Sie den Anweisungen in Ihrem Browser.</translation>
+    </message>
+</context>
+<context>
     <name>MMStakeoutDrawer</name>
     <message>
         <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
@@ -2656,89 +2727,117 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="223"/>
+        <location filename="../../core/merginapi.cpp" line="237"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Bitte entfernen Sie einige Projekte, da die App derzeit nur bis zu %1 heruntergeladene Projekte erlaubt.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="824"/>
-        <location filename="../../core/merginapi.cpp" line="1306"/>
+        <location filename="../../core/merginapi.cpp" line="879"/>
+        <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
+        <translation>Es liegt ein Problem mit der SSO-Konfiguration des Servers vor. Bitte wenden Sie sich an die Server-Administration.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="887"/>
+        <location filename="../../core/merginapi.cpp" line="947"/>
+        <source>Error getting the SSO configuration from the server</source>
+        <translation>Fehler beim Abrufen der SSO-Konfiguration vom Server</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="931"/>
+        <location filename="../../core/merginapi.cpp" line="945"/>
+        <source>SSO is not supported for the specified domain</source>
+        <translation> SSO wird für die angegebene Domain nicht unterstützt</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="960"/>
+        <location filename="../../core/merginapi.cpp" line="1470"/>
         <source>Please enter a valid email</source>
         <translation>Bitte eine gültige E-Mail-Adresse eingeben.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="831"/>
-        <location filename="../../core/merginapi.cpp" line="1318"/>
+        <location filename="../../core/merginapi.cpp" line="967"/>
+        <location filename="../../core/merginapi.cpp" line="1482"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 Das Passwort muss mindestens 8 Zeichen lang sein und Folgendes enthalten:%3 Kleinbuchstaben (a-z)%4%3 Großbuchstaben (A-Z)%4%3 Mindestens eine Ziffer (0–9) oder ein Sonderzeichen%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="845"/>
+        <location filename="../../core/merginapi.cpp" line="981"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Bitte den Geschäftsbedingungen und der Datenschutzerklärung zustimmen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="874"/>
+        <location filename="../../core/merginapi.cpp" line="1010"/>
         <source>Marketing source cannot be empty</source>
         <translation>Die Marketingquelle darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="882"/>
+        <location filename="../../core/merginapi.cpp" line="1018"/>
         <source>Industry cannot be empty</source>
         <translation>Die Branche darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1173"/>
+        <location filename="../../core/merginapi.cpp" line="1337"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Sie haben keine Berechtigung, in diesem Arbeitsbereich neue Projekte zu erstellen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1178"/>
+        <location filename="../../core/merginapi.cpp" line="1342"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Das Projekt konnte nicht erstellt werden. Versuchen Sie es später erneut oder wenden Sie sich an den Support, wenn das Problem weiterhin besteht.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1286"/>
+        <location filename="../../core/merginapi.cpp" line="1450"/>
         <source>Registration successful</source>
         <translation>Erfolgreich registriert</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1308"/>
-        <location filename="../../core/merginapi.cpp" line="1314"/>
-        <location filename="../../core/merginapi.cpp" line="1326"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1478"/>
+        <location filename="../../core/merginapi.cpp" line="1490"/>
         <source>Registration failed</source>
         <translation>Registrierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1312"/>
+        <location filename="../../core/merginapi.cpp" line="1476"/>
         <source>This email address is already registered</source>
         <translation>Diese Emailadresse ist bereits registriert</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1337"/>
+        <location filename="../../core/merginapi.cpp" line="1501"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Neue Registrierungen sind auf dem ausgewählten Server nicht zulässig. Bitte überprüfen Sie dies bei Ihrem Administrator.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1369"/>
+        <location filename="../../core/merginapi.cpp" line="1533"/>
         <source>Workspace created</source>
         <translation>Arbeitsbereich wurde erstellt</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1706"/>
+        <location filename="../../core/merginapi.cpp" line="1880"/>
         <source>Project detached from the server</source>
         <translation>Projekt vom Server getrennt</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3903"/>
+        <location filename="../../core/merginapi.cpp" line="4096"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="3969"/>
+        <location filename="../../core/merginapi.cpp" line="4163"/>
         <source>Workspace %1 already exists</source>
         <translation>Arbeitsbereich %1 ist bereits vorhanden.</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4262"/>
+        <source>You can now close this page and return to Mergin Maps</source>
+        <translation> Sie können diese Seite jetzt schließen und zu Mergin Maps zurückkehren</translation>
+    </message>
+    <message>
+        <location filename="../../core/merginapi.cpp" line="4288"/>
+        <location filename="../../core/merginapi.cpp" line="4315"/>
+        <source>SSO authorization failed</source>
+        <translation>SSO-Autorisierung fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -2971,7 +3070,7 @@ only allows up to %1 downloaded projects.</source>
         <translation>Bericht konnte nicht gesendet werden. Bitte Internetverbindung überprüfen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="40"/>
+        <location filename="../../core/merginapi.cpp" line="46"/>
         <source>Synchronisation canceled</source>
         <translation>Synchronisierung abgebrochen</translation>
     </message>
@@ -3053,32 +3152,32 @@ only allows up to %1 downloaded projects.</source>
         <translation>kein Tracking</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="864"/>
+        <location filename="../qml/main.qml" line="873"/>
         <source>Select feature</source>
         <translation>Objekt auswählen</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="948"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Jemand anderes synchronisiert gerade, wir versuchen es später noch einmal.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="952"/>
+        <location filename="../qml/main.qml" line="961"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="972"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Die Kommunikation mit dem Server ist fehlgeschlagen. Versuchen Sie, Ihre Netzwerkverbindung zu verbessern.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1023"/>
+        <location filename="../qml/main.qml" line="1032"/>
         <source>Up to date</source>
         <translation>Auf dem neuesten Stand</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1086"/>
+        <location filename="../qml/main.qml" line="1100"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Beim Laden des Projekts traten Probleme auf. %1Details anzeigen%2</translation>
     </message>
@@ -3088,22 +3187,22 @@ only allows up to %1 downloaded projects.</source>
         <translation>Abstecken ist deaktiviert, weil der Standort nicht verfügbar ist!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="917"/>
+        <location filename="../qml/main.qml" line="926"/>
         <source>Successfully synchronised</source>
         <translation>Synchronisierung erfolgreich</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="955"/>
+        <location filename="../qml/main.qml" line="964"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Bei der Synchronisierung ist ein Problem aufgetreten. Wir werden es erneut versuchen. Klicken Sie hier, um mehr zu erfahren.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1107"/>
+        <location filename="../qml/main.qml" line="1121"/>
         <source>Could not read the project file:</source>
         <translation>Konnte die Projektdatei nicht lesen:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1132"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Press back again to quit the app</source>
         <translation>Drücken Sie erneut auf &quot;Zurück&quot;, um die Anwendung zu beenden.</translation>
     </message>
