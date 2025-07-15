@@ -109,6 +109,7 @@ class CoreUtils
     static QString deviceUuid();
 
     static const QString QSETTINGS_APP_GROUP_NAME;
+    static const QString QSETTINGS_CACHED_MAP_EXTENT_GROUP;
 
     /**
      * Returns available device storage
@@ -139,6 +140,12 @@ class CoreUtils
      * We do some very basic checks if the string looks like email.
      */
     static bool isValidEmail( const QString &email );
+
+    /**
+     * Sanitizes a string by replacing path separators with underscores
+     * Useful to set QSettings group names, avoiding unpredicted behavior caused by slashes
+     */
+    static QString sanitizePathSlashes( const QString &input );
 
   private:
     static QString sLogFile;

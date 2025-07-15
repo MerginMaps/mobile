@@ -185,6 +185,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
 
+    if ( mMapSettings )
+    {
+      mMapSettings->setProjectId( projectFullName() );
+    }
+
     updateMapTheme();
     updateActiveLayer();
     updateMapSettingsLayers();
@@ -346,6 +351,7 @@ void ActiveProject::setMapSettings( InputMapSettings *mapSettings )
 
   mMapSettings = mapSettings;
   updateMapSettingsLayers();
+  mMapSettings->setProjectId( projectFullName() );
 
   emit mapSettingsChanged();
 }
