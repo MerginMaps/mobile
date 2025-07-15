@@ -551,7 +551,7 @@ int main( int argc, char *argv[] )
 
   QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
   {
-    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact us on %1" ).arg( InputHelp::helpdeskMail() ) );
+    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact the support" ) );
   } );
 
   QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [&notificationModel]()
