@@ -16,6 +16,10 @@ import java.lang.Exception;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Build;
+import android.os.VibratorManager;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
+import android.os.CombinedVibration;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -269,6 +273,13 @@ public class InputActivity extends QtActivity
         Log.d( TAG, String.format( "quitGracefully() failed to execute: '%s'", exp.toString() ) );
       }
     }
+  }
+
+  public void vibrate()
+  {
+    VibratorManager vibManager = (VibratorManager) getSystemService(getApplicationContext().VIBRATOR_MANAGER_SERVICE);
+    Vibrator vib = vibManager.getDefaultVibrator();
+    vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK));
   }
 
   @Override
