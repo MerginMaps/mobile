@@ -32,6 +32,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
   QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
   bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
+  int hapticsModeInt = settings.value( "hapticsMode", 0 ).toInt();
+  const HapticsMode hapticsMode = static_cast<HapticsMode>( hapticsModeInt );
 
   settings.endGroup();
 
@@ -48,6 +50,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
+  setUseHaptics( hapticsMode );
 }
 
 QString AppSettings::defaultLayer() const
@@ -248,6 +251,17 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
   settings.endArray();
 }
 
+void AppSettings::setUseHaptics(const HapticsMode useHaptics)
+{
+  if ( mHapticsMode == useHaptics )
+    return;
+
+  mHapticsMode = useHaptics;
+  emit useHapticsChanged( AppSettings::useHaptics() );
+  emit useHapticsVibrationChanged( useHapticsVibration() );
+  emit useHapticsSoundChanged( useHapticsSound() );
+}
+
 void AppSettings::setValue( const QString &key, const QVariant &value )
 {
   QSettings settings;
@@ -294,6 +308,92 @@ void AppSettings::setAutolockPosition( bool autolockPosition )
   mAutolockPosition = autolockPosition;
   setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
   emit autolockPositionChanged( mAutolockPosition );
+}
+
+bool AppSettings::useHaptics() const
+{
+  return mHapticsMode != HapticsMode::Off;
+}
+
+void AppSettings::setUseHaptics(const bool useHaptics)
+{
+  mHapticsMode = useHaptics ? HapticsMode::VibrationSound : HapticsMode::Off;
+  setValue( QStringLiteral( "hapticsMode" ), mHapticsMode );
+  emit useHapticsChanged( useHaptics );
+  emit useHapticsVibrationChanged( useHapticsVibration() );
+  emit useHapticsSoundChanged( useHapticsSound() );
+}
+
+bool AppSettings::useHapticsVibration() const
+{
+  if ( mHapticsMode == HapticsMode::Vibration || mHapticsMode == HapticsMode::VibrationSound )
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void AppSettings::setUseHapticsVibration(const bool useHapticsVibration)
+{
+  if (useHapticsVibration)
+  {
+    if ( mHapticsMode == HapticsMode::Sound )
+    {
+      mHapticsMode = HapticsMode::VibrationSound;
+    } else
+    {
+      mHapticsMode = HapticsMode::Vibration;
+    }
+  } else
+  {
+    if ( mHapticsMode == HapticsMode::VibrationSound )
+    {
+      mHapticsMode = HapticsMode::Sound;
+    } else
+    {
+      mHapticsMode = HapticsMode::Off;
+      emit useHapticsChanged( false );
+    }
+  }
+  setValue( QStringLiteral( "hapticsMode" ), mHapticsMode );
+  emit useHapticsVibrationChanged( useHapticsVibration );
+}
+
+bool AppSettings::useHapticsSound() const
+{
+  if ( mHapticsMode == HapticsMode::Sound || mHapticsMode == HapticsMode::VibrationSound )
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void AppSettings::setUseHapticsSound(const bool useHapticsSound)
+{
+  if (useHapticsSound)
+  {
+    if ( mHapticsMode == HapticsMode::Vibration )
+    {
+      mHapticsMode = HapticsMode::VibrationSound;
+    } else
+    {
+      mHapticsMode = HapticsMode::Sound;
+    }
+  } else
+  {
+    if ( mHapticsMode == HapticsMode::VibrationSound )
+    {
+      mHapticsMode = HapticsMode::Vibration;
+    } else
+    {
+      mHapticsMode = HapticsMode::Off;
+      emit useHapticsChanged( false );
+    }
+  }
+  setValue( QStringLiteral( "hapticsMode" ), mHapticsMode );
+  emit useHapticsSoundChanged( useHapticsSound );
 }
 
 double AppSettings::gpsAntennaHeight() const

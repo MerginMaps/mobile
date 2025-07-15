@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
@@ -183,6 +185,40 @@ MMPage {
         onClicked: __appSettings.autolockPosition = !checked
       }
 
+      MMLine {}
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable haptic feedback")
+        description: qsTr("While recording, using buttons will give haptic feedback")
+        checked: __appSettings.useHaptics
+
+        onClicked: {
+          __appSettings.useHaptics = !checked
+          if ( checked ) {
+            permissionDialog.open()
+          }
+        }
+      }
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable sound ")
+        checked: __appSettings.useHapticsSound
+        visible: __appSettings.useHaptics
+
+        onClicked: __appSettings.useHapticsSound = !checked
+      }
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable vibration")
+        checked: __appSettings.useHapticsVibration
+        visible: __appSettings.useHaptics
+
+        onClicked: __appSettings.useHapticsVibration = !checked
+      }
+
       Item { width: 1; height: 1 }
 
       Text {
@@ -254,6 +290,17 @@ MMPage {
       }
 
       MMListFooterSpacer{}
+    }
+
+    MMDrawerDialog {
+      id: permissionDialog
+      imageSource: __style.warnLogoImage
+      title: qsTr( "Enable system permissions to use haptic feedback" )
+      description: qsTr( "Haptic feedback requires system settings for haptic feedback turned on too, to work properly. Please make sure " )
+        + "<i>" + qsTr( "Settings -> Sound & vibration -> Vibration & haptics" ) + "</i>"
+        + qsTr( " and " )
+        + "<i>" + qsTr( "Settings -> Sound & vibration -> Vibration & haptics -> Touch feedback" ) + "</i>"
+        + qsTr( " are turned on." )
     }
   }
 }
