@@ -251,7 +251,7 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
   settings.endArray();
 }
 
-void AppSettings::setUseHaptics(const HapticsMode useHaptics)
+void AppSettings::setUseHaptics( const HapticsMode useHaptics )
 {
   if ( mHapticsMode == useHaptics )
     return;
@@ -315,7 +315,7 @@ bool AppSettings::useHaptics() const
   return mHapticsMode != HapticsMode::Off;
 }
 
-void AppSettings::setUseHaptics(const bool useHaptics)
+void AppSettings::setUseHaptics( const bool useHaptics )
 {
   mHapticsMode = useHaptics ? HapticsMode::VibrationSound : HapticsMode::Off;
   setValue( QStringLiteral( "hapticsMode" ), mHapticsMode );
@@ -334,23 +334,26 @@ bool AppSettings::useHapticsVibration() const
   return false;
 }
 
-void AppSettings::setUseHapticsVibration(const bool useHapticsVibration)
+void AppSettings::setUseHapticsVibration( const bool useHapticsVibration )
 {
-  if (useHapticsVibration)
+  if ( useHapticsVibration )
   {
     if ( mHapticsMode == HapticsMode::Sound )
     {
       mHapticsMode = HapticsMode::VibrationSound;
-    } else
+    }
+    else
     {
       mHapticsMode = HapticsMode::Vibration;
     }
-  } else
+  }
+  else
   {
     if ( mHapticsMode == HapticsMode::VibrationSound )
     {
       mHapticsMode = HapticsMode::Sound;
-    } else
+    }
+    else
     {
       mHapticsMode = HapticsMode::Off;
       emit useHapticsChanged( false );
@@ -370,23 +373,26 @@ bool AppSettings::useHapticsSound() const
   return false;
 }
 
-void AppSettings::setUseHapticsSound(const bool useHapticsSound)
+void AppSettings::setUseHapticsSound( const bool useHapticsSound )
 {
-  if (useHapticsSound)
+  if ( useHapticsSound )
   {
     if ( mHapticsMode == HapticsMode::Vibration )
     {
       mHapticsMode = HapticsMode::VibrationSound;
-    } else
+    }
+    else
     {
       mHapticsMode = HapticsMode::Sound;
     }
-  } else
+  }
+  else
   {
     if ( mHapticsMode == HapticsMode::VibrationSound )
     {
       mHapticsMode = HapticsMode::Vibration;
-    } else
+    }
+    else
     {
       mHapticsMode = HapticsMode::Off;
       emit useHapticsChanged( false );
