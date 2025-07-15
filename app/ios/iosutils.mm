@@ -92,3 +92,57 @@ bool IosUtils::openFileImpl( const QString &filePath )
 
   return true;
 }
+
+void IosUtils::vibrate()
+{
+  // initialize engine
+  @property (nonatomic, strong) CHHapticEngine* engine;
+  NSError* errorEngine;
+  _engine = [[CHHapticEngine alloc] initAndReturnError:&errorEngine];
+
+  // restart engine handler
+  __weak ViewController* weakViewController = self;
+  [_engine setResetHandler:^{
+    // Try restarting the engine again.
+    NSError* startupError;
+    [weakViewController.engine startAndReturnError:&startupError];
+
+    if (startupError) {
+        NSLog(@"ERROR: Engine couldn't restart!");
+    }
+
+    // Recreate haptic pattern player
+    weakViewController.player = [weakViewController.engine createPlayerWithPattern:pattern error:&errorPlayer];
+  }];
+
+
+  // vibration pattern (single tap)
+  NSDictionary* hapticDict = @{
+    CHHapticPatternKeyPattern: @[
+        @{ CHHapticPatternKeyEvent: @{
+            CHHapticPatternKeyEventType: CHHapticEventTypeHapticTransient,
+            CHHapticPatternKeyTime: @(CHHapticTimeImmediate),
+            CHHapticPatternKeyEventDuration: @1.0 },
+        },
+    ],
+  };
+
+  // initialize patter from dictionary
+  NSError* errorPattern;
+  CHHapticPattern* pattern = [[CHHapticPattern alloc] initWithDictionary:hapticDict error:&errorPattern];
+
+  // create player from engine
+  NSError* errorPlayer = nil;
+  id<CHHapticPatternPlayer> player = [_engine createPlayerWithPattern:pattern error:&errorPlayer];
+
+  // Stop the engine after it completes the playback.
+  [_engine notifyWhenPlayersFinished:^CHHapticEngineFinishedAction(NSError * _Nullable error) {
+    return CHHapticEngineFinishedActionStopEngine;
+  }];
+
+  [_engine startWithCompletionHandler:^(NSError* returnedError) {
+    NSError* error;
+    [self.player startAtTime:0 error:&error];
+  }];
+
+}
