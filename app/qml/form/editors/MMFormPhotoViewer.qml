@@ -15,7 +15,7 @@ import MMInput
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
 import "../components/photo" as MMPhotoComponents
-import "../components"as MMFormComponents
+import "../components" as MMFormComponents
 
 /*
  * Photo viewer for feature form.
@@ -32,7 +32,7 @@ MMPrivateComponents.MMBaseInput {
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
-  property PhotoSketchingController controller
+  property PhotoSketchingController sketchingController
   property alias photoState: photoStateGroup.state
 
   signal trashClicked()
@@ -175,7 +175,7 @@ MMPrivateComponents.MMBaseInput {
 
     MMFormComponents.MMFormPhotoSketchingPageDialog {
       photoUrl: root.photoUrl
-      controller: root.controller
+      controller: root.sketchingController
 
       Component.onCompleted: open()
 

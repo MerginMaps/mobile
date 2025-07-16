@@ -25,7 +25,7 @@ class ColorPath
     Q_PROPERTY( QColor color MEMBER mColor )
     Q_PROPERTY( QVector<QPointF> points MEMBER mPoints )
   public:
-    ColorPath( const QColor color, const QVector<QPointF> &list ): mColor( color ), mPoints( list ) {};
+    ColorPath( const QColor &color, const QVector<QPointF> &list ): mColor( color ), mPoints( list ) {};
     ColorPath();
 
     bool operator==( const ColorPath &other ) const;
@@ -33,6 +33,8 @@ class ColorPath
     QColor mColor;
     QVector<QPointF> mPoints;
 };
+
+static constexpr int SKETCH_WIDTH = 4;
 
 class PhotoSketchingController: public QObject
 {
@@ -42,7 +44,8 @@ class PhotoSketchingController: public QObject
     Q_PROPERTY( QString photoSource MEMBER mPhotoSource REQUIRED );
     Q_PROPERTY( bool canUndo MEMBER mCanUndo NOTIFY canUndoChanged );
     Q_PROPERTY( QColor activeColor MEMBER mPenColor WRITE setActiveColor NOTIFY activeColorChanged );
-    Q_PROPERTY( double photoScaleRatio MEMBER mPhotoScaleRatio WRITE setPhotoScaleRatio NOTIFY photoScaleRatioChanged );
+    Q_PROPERTY( double photoScale MEMBER mPhotoScale WRITE setPhotoScale NOTIFY photoScaleChanged );
+    Q_PROPERTY( int sketchWidth READ sketchWidth NOTIFY sketchWidthChanged );
 
   public:
     explicit PhotoSketchingController( QObject *parent = nullptr ): QObject( parent ) {};
@@ -55,7 +58,7 @@ class PhotoSketchingController: public QObject
     Q_INVOKABLE void addPoint( QPointF newPoint );
 
     // sets color of new line
-    Q_INVOKABLE void setActiveColor( QColor newColor );
+    Q_INVOKABLE void setActiveColor( const QColor &newColor );
 
     // undoes the last line
     Q_INVOKABLE void undo();
@@ -70,16 +73,18 @@ class PhotoSketchingController: public QObject
     Q_INVOKABLE void redrawPaths();
 
     // sets the photo scale ratio ( original size / printed size )
-    Q_INVOKABLE void setPhotoScaleRatio( double newRatio );
+    Q_INVOKABLE void setPhotoScale( double newRatio );
 
     // Get the qml representation of ColorPath.
     Q_INVOKABLE ColorPath getPath( int row ) const;
 
+    static int sketchWidth();
+
   signals:
     void canUndoChanged();
     void activeColorChanged();
-    void annotationsChanged();
-    void photoScaleRatioChanged();
+    void photoScaleChanged();
+    void sketchWidthChanged();
 
     void newPathAdded( int pathIndex );
     void pathUpdated( QVector<int> pathIndexes );
@@ -87,10 +92,9 @@ class PhotoSketchingController: public QObject
     void pathsReset();
 
   private:
-    std::pair<double, double> mAnnotationOffsets = std::make_pair( 0.0, 0.0 );
-    double mPhotoScaleRatio = 1.0;
+    double mPhotoScale = 1.0;
     QString mPhotoSource;
-    QColor mPenColor = QColor::fromString( "#FFFFFF" );
+    QColor mPenColor = QColor( Qt::white );
     bool mCanUndo = false;
     ColorPath mCurrentLine = ColorPath( mPenColor, {} );
     // it's a vector of polylines by color
