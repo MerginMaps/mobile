@@ -51,7 +51,7 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  # set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") # when changed change triplets arm64-ios.cmake
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") #when changed change triplets arm64-ios.cmake
 endif ()
 
 if (APPLE AND NOT IOS)
