@@ -52,7 +52,7 @@ void PhotoSketchingController::newSketch()
 void PhotoSketchingController::addPoint( const QPointF newPoint )
 {
 // we scale up the point to picture's true position
-  const QPointF realPoint = QPointF( newPoint.x() * mPhotoScaleRatio, newPoint.y() * mPhotoScaleRatio );
+  const QPointF realPoint = QPointF( newPoint.x() * mPhotoScale, newPoint.y() * mPhotoScale );
   mCurrentLine.mPoints.append( realPoint );
   if ( mPaths.isEmpty() || mCurrentLine.mPoints.size() == 1 )
   {
@@ -71,7 +71,7 @@ void PhotoSketchingController::addPoint( const QPointF newPoint )
   }
 }
 
-void PhotoSketchingController::setActiveColor( const QColor newColor )
+void PhotoSketchingController::setActiveColor( const QColor &newColor )
 {
   mPenColor = newColor;
   mCurrentLine.mColor = newColor;
@@ -83,7 +83,7 @@ void PhotoSketchingController::undo()
 {
   if ( !mPaths.empty() )
   {
-    mPaths.remove( mPaths.size() - 1 );
+    mPaths.removeLast();
     emit lastPathRemoved();
   }
 
@@ -101,7 +101,7 @@ void PhotoSketchingController::undo()
 
 void PhotoSketchingController::clear()
 {
-  mPenColor = QColor::fromString( "#FFFFFF" );
+  mPenColor = QColor( Qt::white );
   emit activeColorChanged();
   newSketch();
   mCanUndo = false;
@@ -116,7 +116,7 @@ void PhotoSketchingController::saveDrawings() const
   QImage image( photoPath );
   if ( image.isNull() )
   {
-    CoreUtils::log( "Photo annotations", "Failed to load image from: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Failed to load image from: " + photoPath );
     return;
   }
 
@@ -133,15 +133,14 @@ void PhotoSketchingController::saveDrawings() const
     if ( points.isEmpty() )
       continue;
 
-    // if you are adjusting width here don't forget to adjust it also in MMFormPhotoDrawingPageDialog shapePathComponent
-    QPen pen( color, 4 * mPhotoScaleRatio );
+    QPen pen( color, SKETCH_WIDTH * mPhotoScale );
     painter.setPen( pen );
 
     QPainterPath path;
-    path.moveTo( points.first().x(),  points.first().y() );
+    path.moveTo( points.first() );
     for ( int j = 1; j < points.size(); ++j )
     {
-      path.lineTo( points.at( j ).x(),  points.at( j ).y() );
+      path.lineTo( points.at( j ) );
     }
 
     painter.drawPath( path );
@@ -149,11 +148,11 @@ void PhotoSketchingController::saveDrawings() const
 
   if ( !image.save( photoPath ) )
   {
-    CoreUtils::log( "Photo annotations", "Failed to save image to: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Failed to save image to: " + photoPath );
   }
   else
   {
-    CoreUtils::log( "Photo annotations", "Image saved to: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Image saved to: " + photoPath );
   }
 }
 
@@ -165,9 +164,9 @@ void PhotoSketchingController::redrawPaths()
   }
 }
 
-void PhotoSketchingController::setPhotoScaleRatio( const double newRatio )
+void PhotoSketchingController::setPhotoScale( const double newRatio )
 {
-  mPhotoScaleRatio = newRatio;
+  mPhotoScale = newRatio;
 // we want to update all paths
   if ( !mPaths.isEmpty() )
   {
@@ -196,9 +195,14 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
   QVector<QPointF> shapePoints;
   for ( QPointF point : colorPath.mPoints )
   {
-    shapePoints.append( QPointF( ( point.x() / mPhotoScaleRatio ) + mAnnotationOffsets.first, ( point.y() / mPhotoScaleRatio ) + mAnnotationOffsets.second ) );
+    shapePoints.append( QPointF( point.x() / mPhotoScale, point.y() / mPhotoScale ) );
   }
   colorPath.mPoints = shapePoints;
 
   return colorPath;
+}
+
+int PhotoSketchingController::sketchWidth()
+{
+  return SKETCH_WIDTH;
 }

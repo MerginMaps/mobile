@@ -124,7 +124,7 @@ Dialog {
 
         function updateScaleRatio() {
           if ( status === Image.Ready && sourceSize.width > 0 && sourceSize.height > 0 ) {
-            root.controller.setPhotoScaleRatio( sourceSize.width / paintedWidth )
+            root.controller.setPhotoScale( sourceSize.width / paintedWidth )
           }
         }
       }
@@ -274,8 +274,7 @@ Dialog {
       required property var modelData
 
       strokeColor: modelData.color
-      // if you are adjusting width here don't forget to adjust it also in PhotoSketchingController saveDrawings()
-      strokeWidth: 4
+      strokeWidth: root.controller.sketchWidth
       fillColor: __style.transparentColor
       startX: modelData.points[0]?.x ?? 0
       startY: modelData.points[0]?.y ?? 0

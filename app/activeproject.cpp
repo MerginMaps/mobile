@@ -625,5 +625,5 @@ bool ActiveProject::photoSketchingEnabled() const
     return false;
   }
 
-  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketches/Enabled" ), false );
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketching/Enabled" ), true );
 }
