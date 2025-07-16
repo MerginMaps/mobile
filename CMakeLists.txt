@@ -41,16 +41,11 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  # set(DEPLOYMENT_TARGET "16.0")
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") #when changed change triplets arm64-ios.cmake
 endif ()
 
-# iOS and macOS desktop builds
-if (APPLE AND NOT ANDROID_ABI)
-  if (DEFINED ENV{DEPLOYMENT_TARGET})
-    set(CMAKE_OSX_DEPLOYMENT_TARGET $ENV{DEPLOYMENT_TARGET})
-  else ()
-    message(FATAL_ERROR "DEPLOYMENT_TARGET not defined as env variable")
-  endif ()
+if (APPLE AND NOT IOS)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") #when changed change also triplets x64/arm64-osx.cmake
 endif ()
 
 # ########################################################################################
