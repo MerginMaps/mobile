@@ -354,7 +354,6 @@ mobile app for Android on Windows, please help us to update this section.
    
    export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
    export PATH=${PWD}/../vcpkg:$PATH;\
-   export DEPLOYMENT_TARGET=16.0;\
    PATH=/Applications/CMake.app/Contents/bin/:$PATH
    
    cmake \
@@ -366,7 +365,6 @@ mobile app for Android on Windows, please help us to update this section.
      -D ENABLE_ARC=ON \
      -D CMAKE_CXX_VISIBILITY_PRESET=hidden \
      -D CMAKE_SYSTEM_NAME=iOS \
-     -D CMAKE_OSX_DEPLOYMENT_TARGET=$DEPLOYMENT_TARGET \
      -DIOS=TRUE \
      -DUSE_MM_SERVER_API_KEY=FALSE \
      -G "Xcode" \
@@ -428,7 +426,6 @@ Now you can create a build (either on command line or by setting these variables
    
    export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
    export PATH=${PWD}/../vcpkg:$PATH;\
-   export DEPLOYMENT_TARGET=11.0;\
    PATH=/Applications/CMake.app/Contents/bin/:$PATH
 
    cmake \
