@@ -49,7 +49,10 @@ class IosUtils: public QObject
 
     static Q_INVOKABLE QString getManufacturer();
     static Q_INVOKABLE QString getDeviceModel();
+
+    #ifdef Q_OS_IOS
     static Q_INVOKABLE void vibrate();
+    #endif
 
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
