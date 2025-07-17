@@ -567,7 +567,7 @@ if (MACOS OR IOS)
 endif ()
 
 if (IOS)
-  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
+  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation  AppleFrameworks::CoreHaptics)
   qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
 endif ()
 

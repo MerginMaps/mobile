@@ -195,7 +195,7 @@ MMPage {
 
         onClicked: {
           __appSettings.useHaptics = !checked
-          if ( checked ) {
+          if ( checked && __androidUtils.isAndroid ) {
             permissionDialog.open()
           }
         }

@@ -18,6 +18,7 @@ set(APPLE_FRAMEWORKS
     CoreFoundation
     SystemConfiguration
     CoreLocation
+    CoreHaptics
 )
 
 foreach (framework ${APPLE_FRAMEWORKS})
