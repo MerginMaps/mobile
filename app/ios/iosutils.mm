@@ -96,36 +96,36 @@ bool IosUtils::openFileImpl( const QString &filePath )
 
 void IosUtils::vibrate()
 {
-    if ( @available( iOS 13.0, * ) )
+  if ( @available( iOS 13.0, * ) )
+  {
+    // initialize engine
+    NSError *errorEngine;
+    CHHapticEngine *engine = [[CHHapticEngine alloc] initAndReturnError:&errorEngine];
+
+    [engine startWithCompletionHandler: ^ ( NSError * startError )
     {
-        // initialize engine
-        NSError *errorEngine;
-        CHHapticEngine *engine = [[CHHapticEngine alloc] initAndReturnError:&errorEngine];
-        
-        [engine startWithCompletionHandler: ^ ( NSError * startError )
-         {
-            // vibration pattern (single tap)
-            NSDictionary *hapticDict = @
-            {
-                CHHapticPatternKeyPattern: @[
-                    @{
-                        CHHapticPatternKeyEvent: @{
-                            CHHapticPatternKeyEventType: CHHapticEventTypeHapticTransient,
-                            CHHapticPatternKeyTime: @( CHHapticTimeImmediate ),
-                            CHHapticPatternKeyEventDuration: @1.0
-                        },
-                    },
-                ],
-            };
-            
-            // initialize patter from dictionary
-            NSError *error;
-            CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithDictionary:hapticDict error:&error];
-            
-            id<CHHapticPatternPlayer> player = [engine createPlayerWithPattern:pattern error:&error];
-            
-            
-            [player startAtTime:0 error:&error];
-        }];
-    }
+      // vibration pattern (single tap)
+      NSDictionary *hapticDict = @
+      {
+      CHHapticPatternKeyPattern: @[
+        @{
+        CHHapticPatternKeyEvent: @{
+          CHHapticPatternKeyEventType: CHHapticEventTypeHapticTransient,
+          CHHapticPatternKeyTime: @( CHHapticTimeImmediate ),
+          CHHapticPatternKeyEventDuration: @1.0
+          },
+        },
+        ],
+      };
+
+      // initialize patter from dictionary
+      NSError *error;
+      CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithDictionary:hapticDict error:&error];
+
+      id<CHHapticPatternPlayer> player = [engine createPlayerWithPattern:pattern error:&error];
+
+
+      [player startAtTime:0 error:&error];
+    }];
+  }
 }
