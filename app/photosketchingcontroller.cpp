@@ -49,11 +49,10 @@ void PhotoSketchingController::newSketch()
   mCurrentLine = ColorPath( mPenColor, {} );
 }
 
-void PhotoSketchingController::addPoint( const QPointF newPoint )
+void PhotoSketchingController::addPoint( const QPointF &newPoint )
 {
 // we scale up the point to picture's true position
-  const QPointF realPoint = QPointF( newPoint.x() * mPhotoScale, newPoint.y() * mPhotoScale );
-  mCurrentLine.mPoints.append( realPoint );
+  mCurrentLine.mPoints.append( newPoint * mPhotoScale );
   if ( mPaths.isEmpty() || mCurrentLine.mPoints.size() == 1 )
   {
     mPaths.append( mCurrentLine );
@@ -66,7 +65,7 @@ void PhotoSketchingController::addPoint( const QPointF newPoint )
   }
   else
   {
-    mPaths[mPaths.size() - 1] = mCurrentLine;
+    mPaths.last() = mCurrentLine;
     emit pathUpdated( {static_cast<int>( mPaths.size() - 1 ) } );
   }
 }
@@ -127,13 +126,13 @@ void PhotoSketchingController::saveDrawings() const
 
   for ( int i = 0; i < pathCount; ++i )
   {
-    QColor color = mPaths.at( i ).mColor;
-    QVector<QPointF> points = mPaths.at( i ).mPoints;
+    const QColor color = mPaths.at( i ).mColor;
+    const QVector<QPointF> points = mPaths.at( i ).mPoints;
 
     if ( points.isEmpty() )
       continue;
 
-    QPen pen( color, SKETCH_WIDTH * mPhotoScale );
+    const QPen pen( color, SKETCH_WIDTH * mPhotoScale );
     painter.setPen( pen );
 
     QPainterPath path;
@@ -193,9 +192,9 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
 
 // we recalculate stored points into the coordinates of printed picture
   QVector<QPointF> shapePoints;
-  for ( QPointF point : colorPath.mPoints )
+  for ( const QPointF &point : colorPath.mPoints )
   {
-    shapePoints.append( QPointF( point.x() / mPhotoScale, point.y() / mPhotoScale ) );
+    shapePoints.append( point / mPhotoScale );
   }
   colorPath.mPoints = shapePoints;
 

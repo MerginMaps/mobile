@@ -55,7 +55,7 @@ class PhotoSketchingController: public QObject
     Q_INVOKABLE void newSketch();
 
     // adds new point to current line
-    Q_INVOKABLE void addPoint( QPointF newPoint );
+    Q_INVOKABLE void addPoint( const QPointF &newPoint );
 
     // sets color of new line
     Q_INVOKABLE void setActiveColor( const QColor &newColor );
