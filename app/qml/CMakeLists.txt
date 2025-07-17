@@ -79,6 +79,7 @@ set(MM_QML
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
     dialogs/MMSsoExpiredTokenDialog.qml
+    dialogs/MMVibrationPermissionDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml

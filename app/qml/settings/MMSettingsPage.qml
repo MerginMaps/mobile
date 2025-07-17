@@ -16,6 +16,7 @@ import mm 1.0 as MM
 
 import "./components" as MMSettingsComponents
 import "../components"
+import "../dialogs"
 
 MMPage {
   id: root
@@ -292,15 +293,8 @@ MMPage {
       MMListFooterSpacer{}
     }
 
-    MMDrawerDialog {
+    MMVibrationPermissionDialog {
       id: permissionDialog
-      imageSource: __style.warnLogoImage
-      title: qsTr( "Enable system permissions to use haptic feedback" )
-      description: qsTr( "Haptic feedback requires system settings for haptic feedback turned on too, to work properly. Please make sure " )
-        + "<i>" + qsTr( "Settings -> Sound & vibration -> Vibration & haptics" ) + "</i>"
-        + qsTr( " and " )
-        + "<i>" + qsTr( "Settings -> Sound & vibration -> Vibration & haptics -> Touch feedback" ) + "</i>"
-        + qsTr( " are turned on." )
     }
   }
 }
