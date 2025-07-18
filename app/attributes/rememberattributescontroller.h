@@ -34,8 +34,6 @@ class  RememberAttributesController : public QObject
     //! Returns TRUE if remembering values is allowed
     Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
 
-    Q_PROPERTY( QString activeProjectId MEMBER mActiveProjectId )
-
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
@@ -62,8 +60,6 @@ class  RememberAttributesController : public QObject
     void rememberValuesAllowedChanged();
 
   private:
-    QString mActiveProjectId;
-
     //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
     struct RememberedValues
     {
@@ -72,10 +68,9 @@ class  RememberAttributesController : public QObject
     };
 
     bool mRememberValuesAllowed = false;
-    //! Remembered last created feature for each project/layer (key)
-    static QHash<QString, RememberedValues> sRememberedValues;
+    //! Remembered last created feature for each layer (key)
+    QHash<QString, RememberedValues> mRememberedValues;
 
-    QString keyForLayer( const QgsVectorLayer *layer ) const;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H
