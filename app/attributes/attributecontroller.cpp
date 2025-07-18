@@ -183,8 +183,6 @@ void AttributeController::setRememberAttributesController( RememberAttributesCon
   if ( mRememberAttributesController != rememberAttributes )
   {
     mRememberAttributesController = rememberAttributes;
-    if ( mRememberAttributesController && mFeatureLayerPair.layer() )
-      mRememberAttributesController->storeLayerFields( mFeatureLayerPair.layer() );
     emit rememberAttributesChanged();
   }
 }
@@ -514,10 +512,6 @@ void AttributeController::updateOnLayerChange()
 
     createTab( tab );
   }
-
-  if ( mRememberAttributesController )
-    mRememberAttributesController->storeLayerFields( layer );
-
 
   // 2) MODELS
   // for all other models, ownership is managed by Qt parent system
