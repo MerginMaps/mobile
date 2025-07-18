@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
@@ -14,6 +16,7 @@ import mm 1.0 as MM
 
 import "./components" as MMSettingsComponents
 import "../components"
+import "../dialogs"
 
 MMPage {
   id: root
@@ -183,6 +186,40 @@ MMPage {
         onClicked: __appSettings.autolockPosition = !checked
       }
 
+      MMLine {}
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable haptic feedback")
+        description: qsTr("While recording, using buttons will give haptic feedback")
+        checked: __appSettings.useHaptics
+
+        onClicked: {
+          __appSettings.useHaptics = !checked
+          if ( checked && __androidUtils.isAndroid ) {
+            permissionDialog.open()
+          }
+        }
+      }
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable sound ")
+        checked: __appSettings.useHapticsSound
+        visible: __appSettings.useHaptics
+
+        onClicked: __appSettings.useHapticsSound = !checked
+      }
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Enable vibration")
+        checked: __appSettings.useHapticsVibration
+        visible: __appSettings.useHaptics
+
+        onClicked: __appSettings.useHapticsVibration = !checked
+      }
+
       Item { width: 1; height: 1 }
 
       Text {
@@ -254,6 +291,10 @@ MMPage {
       }
 
       MMListFooterSpacer{}
+    }
+
+    MMVibrationPermissionDialog {
+      id: permissionDialog
     }
   }
 }
