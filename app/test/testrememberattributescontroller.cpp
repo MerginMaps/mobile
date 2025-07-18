@@ -21,6 +21,7 @@
 #include "activelayer.h"
 #include "localprojectsmanager.h"
 #include "activeproject.h"
+#include "coreutils.h"
 
 void TestRememberAttributesController::init()
 {

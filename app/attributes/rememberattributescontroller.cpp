@@ -44,7 +44,11 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
       // if key does not exist, default to invalid QVariant, meaning "unchecked"
       // if key value is valid, replace it with the new value from the feature
       if ( mSettings.value( fieldValueKey, QVariant() ).isValid() )
-        mSettings.setValue( fieldValueKey, feature.attribute( fieldIndex ) );
+      {
+        // if the feature has an empty value, we store an empty QString instead, since storing an invalid QVariant would mean "unchecked"
+        const QVariant valueToStore = feature.attribute( fieldIndex ).isValid() ? feature.attribute( fieldIndex ) : QString();
+        mSettings.setValue( fieldValueKey, valueToStore );
+      }
       // else do nothing, keep invalid value in settings, meaning "unchecked"
 
       continue;
@@ -53,7 +57,9 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
     // we still need to store the value when qgis says so, even if mRememberValuesAllowed is false
     if ( enabledInQgis( layer, fieldIndex ) )
     {
-      mSettings.setValue( fieldValueKey, feature.attribute( fieldIndex ) );
+      // if the feature has an empty value, we store an empty QString instead, since storing an invalid QVariant would mean "unchecked"
+      const QVariant valueToStore = feature.attribute( fieldIndex ).isValid() ? feature.attribute( fieldIndex ) : QString();
+      mSettings.setValue( fieldValueKey, valueToStore );
     }
     else
     {
@@ -64,7 +70,7 @@ void RememberAttributesController::storeFeature( const FeatureLayerPair &pair )
 }
 
 
-bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const
+bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex )
 {
   if ( !mRememberValuesAllowed || !layer )
     return false;
@@ -80,6 +86,8 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
   }
   else if ( enabledInQgis( layer, fieldIndex ) )
   {
+    // Store a valid empty string, meaning "checked but no stored value yet"
+    mSettings.setValue( fieldValueKey, QString() );
     return true;
   }
 

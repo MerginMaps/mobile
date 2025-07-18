@@ -47,7 +47,7 @@ class  RememberAttributesController : public QObject
     bool rememberedValue( const QgsVectorLayer *layer, int fieldIndex, QVariant &value ) const;
 
     // Returns false if the value should not be remembered
-    bool shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const;
+    bool shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex );
 
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
