@@ -54,7 +54,7 @@ void TestRememberAttributesController::storedFeatureTest()
   ActiveLayer activeLayer;
   LocalProjectsManager localProjectsManager( QDir::tempPath() );
   ActiveProject activeProject( appSettings, activeLayer, localProjectsManager, this );
-  controller.mActiveProjectId = activeProject.localProject().id();
+  controller.mActiveProjectId = QStringLiteral( "my-fake-project-id" );
   controller.mRememberValuesAllowed = true;
 
   std::unique_ptr<QgsVectorLayer> layer(
@@ -104,6 +104,7 @@ void TestRememberAttributesController::storedFeatureTest()
 
   // one feature is stored, and user does not want to use first field for new feature
   controller.setShouldRememberValue( layer.get(), 0, true );
+  controller.storeFeature( pair );
   QCOMPARE( controller.shouldRememberValue( layer.get(), 0 ), true );
   QCOMPARE( controller.rememberedValue( layer.get(), 0, val ), true );
   QCOMPARE( val, "one" );
@@ -124,6 +125,7 @@ void TestRememberAttributesController::storedFeatureTest()
 
   // user now wants to use field 1 from the second layer
   controller.setShouldRememberValue( layer2.get(), 1, true );
+  controller.storeFeature( pair2 );
   QCOMPARE( controller.shouldRememberValue( layer.get(), 0 ), true );
   QCOMPARE( controller.rememberedValue( layer.get(), 0, val ), true );
   QCOMPARE( val, "one" );
