@@ -111,6 +111,11 @@ void PhotoSketchingController::clear()
 
 void PhotoSketchingController::saveDrawings() const
 {
+  if ( mPaths.isEmpty() )
+  {
+    return;
+  }
+
   const QString photoPath = QUrl( mPhotoSource ).toLocalFile();
   QImage image( photoPath );
   if ( image.isNull() )
