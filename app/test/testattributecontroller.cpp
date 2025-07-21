@@ -706,12 +706,16 @@ void TestAttributeController::testPhotoRenaming()
   QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
 
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
-  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image6.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image2.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image3.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image4.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image5.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image6.jpg" ) ) );
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
 
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_mynotes.jpg" ) ) );
   QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
-  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/media" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format" ) ) );
   QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/custom_photo_name_format" ) ) );
 
   QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
@@ -733,29 +737,32 @@ void TestAttributeController::testPhotoRenaming()
 
   //
   // Attachment fields:
-  //  - photo
-  //  - photo_with_slash
-  //  - photo_in_subfolder_relative_to_project_path -> subfolder 'media'
-  //  - photo_in_subfolder_relative_to_default_path -> subfolder 'media'
-  //  - photo_with_slash_in_subfolder_relative_to_project_path -> subfolder 'media/with_slash'
-  //  - photo_with_slash_in_subfolder_relative_to_default_path -> subfolder 'media/with_slash'
+  // 3 - photo
+  // 4 - photo_with_slash
+  // 5 - photo_in_subfolder_relative_to_project_path -> subfolder 'media'
+  // 6 - photo_in_subfolder_relative_to_default_path -> subfolder 'media'
+  // 7 - photo_with_slash_in_subfolder_relative_to_project_path -> subfolder 'media/with_slash'
+  // 8 - photo_with_slash_in_subfolder_relative_to_default_path -> subfolder 'media/with_slash'
   //
 
   controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes" ) );
+
+  // These are the field values set by QML code after attaching a photo
   controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
   controller.setFormValue( items.at( 4 ), QStringLiteral( "image2.jpg" ) );
-  controller.setFormValue( items.at( 5 ), QStringLiteral( "image3.jpg" ) );
+  controller.setFormValue( items.at( 5 ), QStringLiteral( "media/image3.jpg" ) );
   controller.setFormValue( items.at( 6 ), QStringLiteral( "image4.jpg" ) );
-  controller.setFormValue( items.at( 7 ), QStringLiteral( "image5.jpg" ) );
+  controller.setFormValue( items.at( 7 ), QStringLiteral( "media/with_slash/image5.jpg" ) );
   controller.setFormValue( items.at( 8 ), QStringLiteral( "image6.jpg" ) );
 
   controller.save();
 
-  struct testcase {
-      QString originalPath;
-      QString expectedNewPath;
-      int fieldIdx;
-      QString expectedNewFieldValue;
+  struct testcase
+  {
+    QString originalPath;
+    QString expectedNewPath;
+    int fieldIdx;
+    QString expectedNewFieldValue;
   };
 
   QList<testcase> testcases;
@@ -812,7 +819,7 @@ void TestAttributeController::testPhotoRenaming()
   fieldToTest = controller.formItem( items.at( fieldIdx ) );
   QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_project_path" ) );
 
-  originalPath = projectDir + QStringLiteral( "/image3.jpg" );
+  originalPath = projectDir + QStringLiteral( "/media/image3.jpg" );
   expectedNewPath = projectDir + QStringLiteral( "/media/Survey_1.jpg" );
   expectedNewFieldValue = QStringLiteral( "media/Survey_1.jpg" );
 
@@ -829,7 +836,7 @@ void TestAttributeController::testPhotoRenaming()
   fieldToTest = controller.formItem( items.at( fieldIdx ) );
   QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_default_path" ) );
 
-  originalPath = projectDir + QStringLiteral( "/image4.jpg" );
+  originalPath = projectDir + QStringLiteral( "/media/image4.jpg" );
   expectedNewPath = projectDir + QStringLiteral( "/media/Survey_2.jpg" );
   expectedNewFieldValue = QStringLiteral( "Survey_2.jpg" );
 
@@ -848,7 +855,7 @@ void TestAttributeController::testPhotoRenaming()
   fieldToTest = controller.formItem( items.at( fieldIdx ) );
   QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_project_path" ) );
 
-  originalPath = projectDir + QStringLiteral( "/image5.jpg" );
+  originalPath = projectDir + QStringLiteral( "/media/with_slash/image5.jpg" );
   expectedNewPath = projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format/Survey_1.jpg" );
   expectedNewFieldValue = QStringLiteral( "media/with_slash/custom_photo_name_format/Survey_1.jpg" );
 
@@ -871,9 +878,9 @@ void TestAttributeController::testPhotoRenaming()
   fieldToTest = controller.formItem( items.at( fieldIdx ) );
   QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_default_path" ) );
 
-  originalPath = projectDir + QStringLiteral( "/image5.jpg" );
-  expectedNewPath = projectDir + QStringLiteral( "/custom_photo_name_format/Survey_1.jpg" );
-  expectedNewFieldValue = QStringLiteral( "custom_photo_name_format/Survey_1.jpg" );
+  originalPath = projectDir + QStringLiteral( "/media/with_slash/image6.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format/Survey_2.jpg" );
+  expectedNewFieldValue = QStringLiteral( "custom_photo_name_format/Survey_2.jpg" );
 
   testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
 
@@ -882,6 +889,7 @@ void TestAttributeController::testPhotoRenaming()
   for ( const auto &testcase : std::as_const( testcases ) )
   {
     qInfo() << QStringLiteral( "Testing field #%1" ).arg( testcase.fieldIdx );
+
     QVERIFY( !QFile::exists( testcase.originalPath ) );
     QVERIFY( QFile::exists( testcase.expectedNewPath ) );
 
