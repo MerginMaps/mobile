@@ -1617,10 +1617,11 @@ void AttributeController::renamePhotos()
         const QRegularExpression leadingSlashes( "^/+" );
         newName.remove( leadingSlashes );
 
-        const QString dst = InputUtils::getAbsolutePath( newName, prefix );
+        const QString dst = InputUtils::getAbsolutePath( newName, targetDir );
         if ( InputUtils::renameFile( src, dst ) )
         {
-          mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newName );
+          const QString newValue = InputUtils::getRelativePath( dst, prefix );
+          mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newValue );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else

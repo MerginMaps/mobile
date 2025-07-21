@@ -1051,7 +1051,7 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   if ( prefixPath.isEmpty() ) return modPath;
 
   // Do not use a canonical path for non-existing path
-  if ( !QFileInfo( path ).exists() )
+  if ( !QFileInfo::exists( path ) )
   {
     if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath ) )
     {
