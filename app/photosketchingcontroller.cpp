@@ -10,6 +10,7 @@
 #include "photosketchingcontroller.h"
 
 #include <QColor>
+#include <QImageReader>
 #include <QPointF>
 #include <QPainterPath>
 #include <QPainter>
@@ -117,7 +118,9 @@ void PhotoSketchingController::saveDrawings() const
   }
 
   const QString photoPath = QUrl( mPhotoSource ).toLocalFile();
-  QImage image( photoPath );
+  QImageReader imageReader( photoPath );
+  imageReader.setAutoTransform( true );
+  QImage image = imageReader.read();
   if ( image.isNull() )
   {
     CoreUtils::log( "Photo sketching", "Failed to load image from: " + photoPath );
