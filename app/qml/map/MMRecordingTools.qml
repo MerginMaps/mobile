@@ -12,6 +12,7 @@ import QtQuick.Shapes
 import QtMultimedia
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -73,8 +74,8 @@ Item {
     recordPoint: crosshair.recordPoint
 
     recordingType: MM.RecordingMapTool.Manual
-    recordingInterval: __appSettings.lineRecordingInterval
-    recordingIntervalType: __appSettings.intervalType
+    recordingInterval: AppSettings.lineRecordingInterval
+    recordingIntervalType: AppSettings.intervalType
 
     positionKit: __positionKit
     activeLayer: __activeLayer.vectorLayer
@@ -195,7 +196,7 @@ Item {
         text: qsTr( "Undo" )
         iconSource: __style.undoIcon
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
           mapTool.undo()
         }
         enabled: mapTool.canUndo
@@ -205,7 +206,7 @@ Item {
         text: qsTr( "Remove" )
         iconSource: __style.minusIcon
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
           mapTool.removePoint()
         }
 
@@ -223,7 +224,7 @@ Item {
         visible: mapTool.state === MM.RecordingMapTool.Grab
         iconSource: __style.addIcon
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
 
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
             mapTool.releaseVertex( crosshair.recordPoint )
@@ -242,7 +243,7 @@ Item {
 
         iconSource: __style.addIcon
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
 
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
             mapTool.releaseVertex( crosshair.recordPoint )
@@ -259,7 +260,7 @@ Item {
         iconSource: __style.doneCircleIcon
         iconColor: __style.grassColor
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
 
           if ( mapTool.hasValidGeometry() )
           {
@@ -288,7 +289,7 @@ Item {
         iconSource: __style.doneCircleIcon;
         iconColor: __style.forestColor
         onClicked: {
-          if ( __appSettings.useHaptics ) root.triggerHaptics()
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
 
           if ( mapTool.state === MM.RecordingMapTool.Grab )
           {
@@ -370,7 +371,7 @@ Item {
   SoundEffect {
     id: hapticSound
     source: __style.hapticSound
-    muted: !__appSettings.useHapticsSound
+    muted: AppSettings.hapticsType !== AppSettings.Sound || AppSettings.hapticsType !== AppSettings.VibrationSound
   }
 
   Connections {
@@ -383,7 +384,7 @@ Item {
   }
 
   function triggerHaptics() {
-    if ( __appSettings.useHapticsVibration ) {
+    if ( AppSettings.hapticsType === AppSettings.Vibration || AppSettings.hapticsType === AppSettings.VibrationSound ) {
       if ( __androidUtils.isAndroid ) {
         __androidUtils.vibrate()
       }
@@ -392,7 +393,7 @@ Item {
       }
     }
 
-    if ( __appSettings.useHapticsSound ) {
+    if ( AppSettings.hapticsType === AppSettings.Sound || AppSettings.hapticsType === AppSettings.VibrationSound ) {
       hapticSound.play()
     }
   }

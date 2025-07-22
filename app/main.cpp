@@ -486,15 +486,18 @@ int main( int argc, char *argv[] )
   qDebug() <<  "Setting QGIS_USE_SHARED_MEMORY_KEEP_ALIVE environment variable TRUE";
 #endif
 
-  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
-  AppSettings as;
-
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
   // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
   QgsNetworkAccessManager::instance()->setRequestPreprocessor( []( QNetworkRequest * r )
   {
     r->setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
   } );
+
+  // we define engine sooner as some classes are needed for creation of others, but QML engine is responsible for
+  // creation of those required classes
+  QQmlEngine engine;
+  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
+  AppSettings *as = engine.singletonInstance<AppSettings *>("MMInput", "AppSettings");
 
   // Create Input classes
   GeodiffUtils::init();
@@ -509,7 +512,7 @@ int main( int argc, char *argv[] )
   NotificationModel notificationModel;
 
   ActiveLayer al;
-  ActiveProject activeProject( as, al, localProjectsManager );
+  ActiveProject activeProject( *as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -521,12 +524,12 @@ int main( int argc, char *argv[] )
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
+  QObject::connect( &pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
   {
-    as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
+    as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk.setPositionProvider( pk.constructActiveProvider( &as ) );
-  pk.setAppSettings( &as );
+  pk.setPositionProvider( pk.constructActiveProvider( as ) );
+  pk.setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
@@ -642,7 +645,7 @@ int main( int argc, char *argv[] )
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
-    as.setDefaultProject( QString() );
+    as->setDefaultProject( QString() );
     projectLoadingFile.remove();
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
@@ -651,7 +654,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), &pk, &as );
+    tests.init( ma.get(), &iu, vm.get(), &pk, as );
     return tests.runTest();
   }
 #endif
@@ -671,7 +674,6 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
-  QQmlEngine engine;
   addQmlImportPath( engine );
 
   initDeclarative();
@@ -690,7 +692,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
-  engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
@@ -804,7 +805,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
   // show "new look and feel" welcome dialog on start?
-  QString lastAppVersion = as.appVersion();
+  QString lastAppVersion = as->appVersion();
   bool showWelcomeToNewDesignDialog = false;
   if ( !lastAppVersion.isEmpty() )  // this is not a first run?
   {
@@ -867,7 +868,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // save app version to settings
-  as.setAppVersion( version );
+  as->setAppVersion( version );
 
   // Photos bigger that 512 MB (when uncompressed) will not load
   QImageReader::setAllocationLimit( 512 );

@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../gps"
@@ -19,7 +20,7 @@ import "../gps"
 Item {
   id: root
 
-  property string defaultLayer: __appSettings.defaultLayer
+  property string defaultLayer: AppSettings.defaultLayer
 
   signal closed()
   signal opened()
