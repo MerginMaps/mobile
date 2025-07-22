@@ -1573,7 +1573,8 @@ void AttributeController::renamePhotos()
     {
       QVariantMap config = item->editorWidgetConfig();
       const QgsField field = item->field();
-      if ( !photoNameFormat.contains( field.name() ) )
+      if ( !photoNameFormat.contains( field.name() ) &&
+           !photoNameFormat.contains( field.displayName() ) )
       {
         ++formItemsIterator;
         continue;
