@@ -69,7 +69,6 @@
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
-const thread_local QRegularExpression ILLEGAL_FILENAME_CHARS( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
 
 InputUtils::InputUtils( QObject *parent )
   : QObject( parent )
@@ -1966,7 +1965,8 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 
 void InputUtils::sanitizeFileName( QString &fileName )
 {
-  fileName.replace( ILLEGAL_FILENAME_CHARS, QStringLiteral( "_" ) );
+  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
+  fileName.replace( illegalChars, QStringLiteral( "_" ) );
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
