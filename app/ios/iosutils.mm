@@ -102,6 +102,11 @@ void IosUtils::vibrate()
     NSError *errorEngine;
     CHHapticEngine *engine = [[CHHapticEngine alloc] initAndReturnError:&errorEngine];
 
+    if ( !engine )
+    {
+      NSLog( @"Failed to initialize haptic engine: %@", errorEngine );
+      return;
+    }
     [engine startWithCompletionHandler: ^ ( NSError * startError )
     {
       // vibration pattern (single tap)
