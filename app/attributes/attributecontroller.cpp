@@ -1617,6 +1617,8 @@ void AttributeController::renamePhotos()
         const QRegularExpression leadingSlashes( "^/+" );
         newName.remove( leadingSlashes );
 
+        InputUtils::sanitizeFileName( newName );
+
         const QString dst = InputUtils::getAbsolutePath( newName, targetDir );
         if ( InputUtils::renameFile( src, dst ) )
         {

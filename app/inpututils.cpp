@@ -69,6 +69,7 @@
 
 static const QString DATE_TIME_FORMAT = QStringLiteral( "yyMMdd-hhmmss" );
 static const QString INVALID_DATETIME_STR = QStringLiteral( "Invalid datetime" );
+const thread_local QRegularExpression ILLEGAL_FILENAME_CHARS( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
 
 InputUtils::InputUtils( QObject *parent )
   : QObject( parent )
@@ -992,7 +993,9 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
 
   if ( !expression.isEmpty() )
   {
-    return evaluateExpression( pair, activeProject, expression );
+    QString result = evaluateExpression( pair, activeProject, expression );
+    sanitizeFileName( result );
+    return result;
   }
   else
   {
@@ -1959,6 +1962,11 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
     case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
     default: return MMStyle::tableLayerNoColorOverlayIcon();
   }
+}
+
+void InputUtils::sanitizeFileName( QString &fileName )
+{
+  fileName.replace( ILLEGAL_FILENAME_CHARS, QStringLiteral( "_" ) );
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
