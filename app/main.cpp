@@ -497,7 +497,7 @@ int main( int argc, char *argv[] )
   // creation of those required classes
   QQmlEngine engine;
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
-  AppSettings *as = engine.singletonInstance<AppSettings *>("MMInput", "AppSettings");
+  AppSettings *as = engine.singletonInstance<AppSettings *>( "MMInput", "AppSettings" );
 
   // Create Input classes
   GeodiffUtils::init();

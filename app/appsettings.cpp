@@ -146,7 +146,7 @@ StreamingIntervalType::IntervalType AppSettings::intervalType() const
   return mIntervalType;
 }
 
-void AppSettings::setIntervalType(const StreamingIntervalType::IntervalType intervalType )
+void AppSettings::setIntervalType( const StreamingIntervalType::IntervalType intervalType )
 {
   if ( mIntervalType != intervalType )
   {
@@ -162,7 +162,7 @@ bool AppSettings::reuseLastEnteredValues() const
   return mReuseLastEnteredValues;
 }
 
-void AppSettings::setReuseLastEnteredValues(const bool reuseLastEnteredValues )
+void AppSettings::setReuseLastEnteredValues( const bool reuseLastEnteredValues )
 {
   if ( mReuseLastEnteredValues != reuseLastEnteredValues )
   {
@@ -274,7 +274,7 @@ bool AppSettings::autosyncAllowed() const
   return mAutosyncAllowed;
 }
 
-void AppSettings::setAutosyncAllowed(const bool newAutosyncAllowed )
+void AppSettings::setAutosyncAllowed( const bool newAutosyncAllowed )
 {
   if ( mAutosyncAllowed == newAutosyncAllowed )
     return;
@@ -319,7 +319,7 @@ double AppSettings::gpsAntennaHeight() const
   return mGpsAntennaHeight;
 }
 
-void AppSettings::setGpsAntennaHeight(const double gpsAntennaHeight )
+void AppSettings::setGpsAntennaHeight( const double gpsAntennaHeight )
 {
   double height = gpsAntennaHeight;
   if ( height <= 0 )
