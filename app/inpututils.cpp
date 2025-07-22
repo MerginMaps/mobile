@@ -1965,7 +1965,7 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 
 void InputUtils::sanitizeFileName( QString &fileName )
 {
-  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
+  const QRegularExpression illegalChars( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
   fileName.replace( illegalChars, QStringLiteral( "_" ) );
 }
 
