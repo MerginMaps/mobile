@@ -65,7 +65,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__androidUtils", &iu );
   engine.rootContext()->setContextProperty( "__iosUtils", &iu );
-  engine.rootContext()->setContextProperty( "__appSettings", &iu );
 
   qreal dp = Helper::calculateDpRatio();
 

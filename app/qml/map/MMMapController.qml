@@ -13,6 +13,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -123,7 +124,7 @@ Item {
       case "record": {
         root.showInfoTextMessage( qsTr( "Mark the geometry on the map and click record" ) )
 
-        if ( __appSettings.autolockPosition ) { // center to GPS
+        if ( AppSettings.autolockPosition ) { // center to GPS
           if ( gpsStateGroup.state === "unavailable" ) {
             __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
           }
@@ -202,7 +203,7 @@ Item {
     states: [
       State {
         name: "good" // GPS provides position AND horizontal accuracy is below set tolerance (threshold)
-        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
+        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= AppSettings.gpsAccuracyTolerance
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.positiveColor
@@ -210,7 +211,7 @@ Item {
       },
       State {
         name: "low" // below accuracy tolerance OR GPS does not provide horizontal accuracy
-        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
+        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > AppSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.warningColor
@@ -724,9 +725,9 @@ Item {
             }
 
             let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, __positionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
-            if ( __appSettings.gpsAntennaHeight > 0 )
+            if ( AppSettings.gpsAntennaHeight > 0 )
             {
-              let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
+              let gpsText = Number( AppSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
               return gpsText + " / " + accuracyText
             }
             else

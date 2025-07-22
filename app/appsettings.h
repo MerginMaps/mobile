@@ -10,17 +10,18 @@
 #ifndef APPSETTINGS_H
 #define APPSETTINGS_H
 
-#include <QObject>
-#include <QHash>
 #include <QVariant>
 #include <QString>
+#include <QtQml/qqmlregistration.h>
 
-#include "inputconfig.h"
 #include "streamingintervaltype.h"
 
 class AppSettings: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
     Q_PROPERTY( QString defaultProject READ defaultProject WRITE setDefaultProject NOTIFY defaultProjectChanged )
     Q_PROPERTY( QString activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
     Q_PROPERTY( QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged )
@@ -35,11 +36,19 @@ class AppSettings: public QObject
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
-    Q_PROPERTY( bool useHaptics READ useHaptics WRITE setUseHaptics NOTIFY useHapticsChanged )
-    Q_PROPERTY( bool useHapticsVibration READ useHapticsVibration WRITE setUseHapticsVibration NOTIFY useHapticsVibrationChanged )
-    Q_PROPERTY( bool useHapticsSound READ useHapticsSound WRITE setUseHapticsSound NOTIFY useHapticsSoundChanged )
+    Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
 
   public:
+    // enum of haptic modes we support
+    enum HapticsType
+    {
+      Off = 0,
+      Vibration,
+      Sound,
+      VibrationSound
+    };
+    Q_ENUM( HapticsType )
+
     explicit AppSettings( QObject *parent = nullptr );
 
     QString defaultProject() const;
@@ -89,14 +98,8 @@ class AppSettings: public QObject
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
 
-    bool useHaptics() const;
-    void setUseHaptics( bool useHaptics );
-
-    bool useHapticsVibration() const;
-    void setUseHapticsVibration( bool useHapticsVibration );
-
-    bool useHapticsSound() const;
-    void setUseHapticsSound( bool useHapticsSound );
+    HapticsType hapticsType() const;
+    void setHapticsType( HapticsType hapticsType );
 
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
@@ -116,24 +119,11 @@ class AppSettings: public QObject
 
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
-    void useHapticsChanged( bool useHaptics );
-    void useHapticsVibrationChanged( bool useHapticsVibration );
-    void useHapticsSoundChanged( bool useHapticsSound );
+    void hapticsTypeChanged( HapticsType hapticsType );
 
     void ignoreMigrateVersionChanged();
 
   private:
-    // enum of modes we support
-    enum HapticsMode
-    {
-      Off = 0,
-      Vibration,
-      Sound,
-      VibrationSound
-    };
-
-    void setUseHaptics( HapticsMode useHaptics );
-
     // Projects path
     QString mDefaultProject;
     // Path to active project
@@ -167,7 +157,7 @@ class AppSettings: public QObject
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
 
-    HapticsMode mHapticsMode;
+    HapticsType mHapticsType;
 };
 
 #endif // APPSETTINGS_H
