@@ -890,8 +890,12 @@ void TestAttributeController::testPhotoRenaming()
   {
     qInfo() << QStringLiteral( "Testing field #%1" ).arg( testcase.fieldIdx );
 
+    qInfo() << testcase.originalPath;
     QVERIFY( !QFile::exists( testcase.originalPath ) );
+    qInfo() << testcase.expectedNewPath;
     QVERIFY( QFile::exists( testcase.expectedNewPath ) );
+    qInfo() << testcase.expectedNewFieldValue;
+    qInfo() << f.attribute( testcase.fieldIdx );
 
     QCOMPARE( f.attribute( testcase.fieldIdx ), testcase.expectedNewFieldValue );
   }
