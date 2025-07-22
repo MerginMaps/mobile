@@ -1615,7 +1615,7 @@ void AttributeController::renamePhotos()
         QString newName = QStringLiteral( "%1.%2" ).arg( val.toString(), fi.completeSuffix() );
 
         // Remove leading slashes from newName following issue #3415
-        const thread_local QRegularExpression leadingSlashes( QStringLiteral( "^/+" ) );
+        const QRegularExpression leadingSlashes( QStringLiteral( "^/+" ) );
         newName.remove( leadingSlashes );
 
         InputUtils::sanitizeFileName( newName );
