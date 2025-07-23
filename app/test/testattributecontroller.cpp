@@ -884,7 +884,7 @@ void TestAttributeController::testPhotoRenaming()
 
   testcases << testcase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
 
-  const QgsFeature &f = controller.featureLayerPair().featureRef();
+  const QgsFeature f = controller.featureLayerPair().feature();
 
   for ( const auto &testcase : std::as_const( testcases ) )
   {
