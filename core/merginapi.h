@@ -675,6 +675,7 @@ class MerginApi: public QObject
   private slots:
     void listProjectsReplyFinished( const QString &requestId );
     void listProjectsByNameReplyFinished( const QString &requestId );
+    void getProjectsDetailsReplyFinished();
 
     // Pull slots
     void pullInfoReplyFinished();
@@ -788,7 +789,7 @@ class MerginApi: public QObject
      * \param projectFullName Project full name to use for request
      * \param projectId project ID
      * \param withAuth Specifies if the request will have authentication token
-     * \see getProjectDetails
+     * \see getProjectDetails, getProjectsDetails
      */
     QNetworkReply *getProjectInfo( const QString &projectFullName, const QString &projectId, bool withAuth = true );
 
@@ -798,9 +799,19 @@ class MerginApi: public QObject
      * information for synchronization workflow. Thus, for synchronization use \a getProjectInfo.
      * \param projectId project ID to use for request
      * \param withAuth Specifies if the request will have authentication token
-     * \see getProjectInfo
+     * \see getProjectInfo, getProjectsDetails
      */
     QNetworkReply *getProjectDetails( const QString &projectId, bool withAuth = true );
+
+    /**
+     * Similar to getProjectDetails, but it can fetch multiple projects in one call. Also, we use it as a fallback for
+     * getProjectInfo during syncing. The reason we use this instead of getProjectDetails is that this response is
+     * lighter and doesn't include file history.
+     * \param projectIds project IDs to use for request
+     * \param withAuth Specifies if the request will have authentication token
+     * \see getProjectInfo, getProjectDetails
+     */
+    QNetworkReply *getProjectsDetails( const QStringList &projectIds, bool withAuth = true );
 
     //! Called when pull of project data has finished to finalize things and emit sync finished signal
     void finalizeProjectPull( const QString &projectId );
@@ -866,7 +877,8 @@ class MerginApi: public QObject
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
       AttrAcceptFlag      = QNetworkRequest::User + 3,
-      AttrProjectId       = QNetworkRequest::User + 4
+      AttrProjectId       = QNetworkRequest::User + 4,
+      AttrAuthUsed        = QNetworkRequest::User + 5
     };
 
     Transactions mTransactionalStatus; //projectId -> transactionStatus

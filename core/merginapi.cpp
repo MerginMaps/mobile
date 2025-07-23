@@ -1642,6 +1642,7 @@ QNetworkReply *MerginApi::getProjectInfo( const QString &projectFullName, const 
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectId ), projectId );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrAuthUsed ), withAuth );
 
   return mManager->get( request );
 }
@@ -1659,26 +1660,42 @@ QNetworkReply *MerginApi::getProjectDetails( const QString &projectId, const boo
     return nullptr;
   }
 
-  int sinceVersion = -1;
-  const LocalProject projectInfo = mLocalProjects.projectFromProjectId( projectId );
-  if ( projectInfo.isValid() )
-  {
-    // let's also fetch the recent history of diffable files
-    // (the "since" is inclusive, so if we are on v2, we want to use since=v3 which will include v2->v3, v3->v4, ...)
-    sinceVersion = projectInfo.localVersion + 1;
-  }
-
-  QUrlQuery query;
-  if ( sinceVersion != -1 )
-    query.addQueryItem( QStringLiteral( "since" ), QStringLiteral( "v%1" ).arg( sinceVersion ) );
-
   QUrl url{};
   url.setUrl( mApiRoot + QStringLiteral( "/v1/project/by_uuid/%1" ).arg( projectId ) );
-  url.setQuery( query );
 
   QNetworkRequest request = getDefaultRequest( withAuth );
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectId ), projectId );
+
+  return mManager->get( request );
+}
+
+QNetworkReply *MerginApi::getProjectsDetails( const QStringList &projectIds, const bool withAuth )
+{
+  if ( withAuth && !validateAuth() )
+  {
+    for ( const QString& projectId : projectIds )
+    {
+      emit missingAuthorizationError( projectId );
+    }
+    return nullptr;
+  }
+
+  if ( mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return nullptr;
+  }
+
+  QUrlQuery query;
+  query.addQueryItem( QStringLiteral( "uuids" ), projectIds.join(",") );
+
+  QUrl url{};
+  url.setUrl( mApiRoot + QStringLiteral( "/v1/project/by_uuids" ) );
+  url.setQuery( query );
+
+  QNetworkRequest request = getDefaultRequest( withAuth );
+  request.setUrl( url );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrAuthUsed ), withAuth );
 
   return mManager->get( request );
 }
@@ -2046,6 +2063,39 @@ void MerginApi::listProjectsByNameReplyFinished( const QString &requestId )
   r->deleteLater();
 
   emit listProjectsByNameFinished( projectList, requestId );
+}
+
+void MerginApi::getProjectsDetailsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      const QJsonObject response = doc.object();
+      for ( const QString key : response.keys() )
+      {
+        // if the selected project ID is in pending transactions we need to restart the whole process as this call
+        // was a fallback
+        if ( mTransactionalStatus.contains( key ) )
+        {
+          QJsonObject project = response.value( key ).toObject();
+          QString projectFullName = QString("%1/%2").arg( project.value("namespace").toString(), project.value("name").toString());
+          const bool withAuth = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAuthUsed ) ).toBool();
+          if (mTransactionalStatus[key].type == TransactionStatus::Pull )
+          {
+            pullProject( projectFullName, key, withAuth);
+          } else
+          {
+            pushProject( projectFullName, key, withAuth);
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -2471,20 +2521,33 @@ void MerginApi::pullInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    // if the operation was cancelled we finish pull, but if something failed we try fetching project info by project ID
     if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = sSyncCanceledMessage;
+    {
+      const QString serverMsg = sSyncCanceledMessage;
+      const QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
+      CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    const QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
-    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
+      const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit networkErrorOccurred( serverMsg, httpCode, projectId );
 
-    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, httpCode, projectId );
+      transaction.replyPullProjectInfo->deleteLater();
+      transaction.replyPullProjectInfo = nullptr;
 
-    transaction.replyPullProjectInfo->deleteLater();
-    transaction.replyPullProjectInfo = nullptr;
+      finishProjectSync( projectFullName, projectId, false );
+    } else
+    {
+      const QString serverMsg = extractServerErrorMsg( r->readAll() );
+      const QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
+      CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
+      CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Triggering info look up by project ID" ) );
 
-    finishProjectSync( projectFullName, projectId, false );
+      const bool withAuth = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAuthUsed ) ).toBool();
+      const QNetworkReply *reply = getProjectsDetails( {projectId}, withAuth );
+      connect( reply, &QNetworkReply::finished, this, &MerginApi::getProjectsDetailsReplyFinished );
+    }
+
+
   }
 }
 
