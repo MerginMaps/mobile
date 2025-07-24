@@ -371,7 +371,6 @@ Item {
   SoundEffect {
     id: hapticSound
     source: __style.hapticSound
-    muted: AppSettings.hapticsType !== AppSettings.Sound || AppSettings.hapticsType !== AppSettings.VibrationSound
   }
 
   Connections {
