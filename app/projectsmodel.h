@@ -165,6 +165,7 @@ class ProjectsModel : public QAbstractListModel
     // MerginAPI - project list signals
     void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, const QString &requestId );
     void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, const QString &requestId );
+    void onRefetchBrokenProjectsFinished( const MerginProjectsList &merginProjects );
 
     // Synchronization signals
     void onProjectSyncStarted( const QString &projectId );
@@ -203,7 +204,7 @@ class ProjectsModel : public QAbstractListModel
     void activeProjectIdChanged( QString projectId );
 
   private:
-
+    QStringList filterBrokenProjects( const MerginProjectsList &list );
     int projectIndexFromId( const QString &projectId ) const;
 
     void setModelIsLoading( bool state );

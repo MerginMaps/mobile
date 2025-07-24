@@ -265,6 +265,14 @@ class MerginApi: public QObject
     QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
+     * Fallback method for listProjectsByName, which tries to request projects by IDs instead of names.
+     * Uses getProjectsDetails internally.
+     * \param projectIds QStringList of project IDs
+     * \see listProjectsByName
+     */
+    void refetchBrokenProjects( const QStringList &projectIds );
+
+    /**
      * Sends non-blocking POST request to the server to pull (download) a project with a given name.
      * On pullProjectReplyFinished, when a response is received, parses data-stream to files and rewrites local files
      * with them. Extra files which don't match server files are removed. Emits syncProjectFinished at the end.
@@ -633,6 +641,7 @@ class MerginApi: public QObject
     void projectDataChanged( const QString &projectFullName, const QString &projectId );
     void projectDetached( const QString &projectId );
     void projectAttachedToMergin( const QString &projectId );
+    void refetchBrokenProjectsFinished( const MerginProjectsList &projectList );
 
     void projectAlreadyOnLatestVersion( const QString &projectId );
     void missingAuthorizationError( const QString &projectId );
@@ -676,6 +685,7 @@ class MerginApi: public QObject
     void listProjectsReplyFinished( const QString &requestId );
     void listProjectsByNameReplyFinished( const QString &requestId );
     void getProjectsDetailsReplyFinished();
+    void refetchBrokenProjectsReplyFinished();
 
     // Pull slots
     void pullInfoReplyFinished();

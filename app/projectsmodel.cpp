@@ -39,6 +39,7 @@ void ProjectsModel::initializeProjectsModel()
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
     connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &ProjectsModel::onListProjectsByNameFinished );
+    connect( mBackend, &MerginApi::refetchBrokenProjectsFinished, this, &ProjectsModel::onRefetchBrokenProjectsFinished );
     loadLocalProjects();
   }
   else if ( mModelType != ProjectModelTypes::RecentProjectsModel )
@@ -268,11 +269,30 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
     return;
   }
 
+  // filter out projects which returned errors and refetch them by ID
+  const QStringList brokenProjects = filterBrokenProjects( merginProjects );
+  if ( !brokenProjects.isEmpty() )
+  {
+    mBackend->refetchBrokenProjects( brokenProjects );
+  }
+
   beginResetModel();
   mergeProjects( merginProjects );
   endResetModel();
 
   setModelIsLoading( false );
+}
+
+void ProjectsModel::onRefetchBrokenProjectsFinished( const MerginProjectsList &merginProjects )
+{
+  if ( merginProjects.isEmpty() )
+  {
+    return;
+  }
+
+  beginResetModel();
+  mergeProjects( merginProjects, MergeStrategy::KeepPrevious );
+  endResetModel();
 }
 
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy )
@@ -649,6 +669,26 @@ void ProjectsModel::loadLocalProjects()
     mergeProjects( MerginProjectsList() ); // Fills model with local projects
     endResetModel();
   }
+}
+
+QStringList ProjectsModel::filterBrokenProjects( const MerginProjectsList &list )
+{
+  QStringList errorProjects;
+  for ( MerginProject project : list )
+  {
+    if ( !project.remoteError.isEmpty() )
+    {
+      const auto res = std::find_if( mProjects.begin(), mProjects.end(), [&project]( const Project & localProject )
+      {
+        return project.fullName() == localProject.fullName();
+      } );
+      if ( res != mProjects.end() )
+      {
+        errorProjects.append( res->id() );
+      }
+    }
+  }
+  return errorProjects;
 }
 
 int ProjectsModel::projectIndexFromId( const QString &projectId ) const

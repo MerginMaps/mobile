@@ -268,6 +268,12 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   return requestId;
 }
 
+void MerginApi::refetchBrokenProjects( const QStringList &projectIds )
+{
+  const QNetworkReply *reply = getProjectsDetails( projectIds );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::refetchBrokenProjectsReplyFinished );
+}
+
 
 void MerginApi::downloadNextItem( const QString &projectId )
 {
@@ -1674,7 +1680,7 @@ QNetworkReply *MerginApi::getProjectsDetails( const QStringList &projectIds, con
 {
   if ( withAuth && !validateAuth() )
   {
-    for ( const QString& projectId : projectIds )
+    for ( const QString &projectId : projectIds )
     {
       emit missingAuthorizationError( projectId );
     }
@@ -1687,7 +1693,7 @@ QNetworkReply *MerginApi::getProjectsDetails( const QStringList &projectIds, con
   }
 
   QUrlQuery query;
-  query.addQueryItem( QStringLiteral( "uuids" ), projectIds.join(",") );
+  query.addQueryItem( QStringLiteral( "uuids" ), projectIds.join( "," ) );
 
   QUrl url{};
   url.setUrl( mApiRoot + QStringLiteral( "/v1/project/by_uuids" ) );
@@ -2083,19 +2089,47 @@ void MerginApi::getProjectsDetailsReplyFinished()
         if ( mTransactionalStatus.contains( key ) )
         {
           QJsonObject project = response.value( key ).toObject();
-          QString projectFullName = QString("%1/%2").arg( project.value("namespace").toString(), project.value("name").toString());
+          QString projectFullName = QString( "%1/%2" ).arg( project.value( "namespace" ).toString(), project.value( "name" ).toString() );
           const bool withAuth = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAuthUsed ) ).toBool();
-          if (mTransactionalStatus[key].type == TransactionStatus::Pull )
+          if ( mTransactionalStatus[key].type == TransactionStatus::Pull )
           {
-            pullProject( projectFullName, key, withAuth);
-          } else
+            pullProject( projectFullName, key, withAuth );
+          }
+          else
           {
-            pushProject( projectFullName, key, withAuth);
+            pushProject( projectFullName, key, withAuth );
           }
         }
       }
     }
   }
+}
+
+void MerginApi::refetchBrokenProjectsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  MerginProjectsList projectList;
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    const QByteArray data = r->readAll();
+    const QJsonDocument json = QJsonDocument::fromJson( data );
+    projectList = parseProjectsFromJson( json );
+    CoreUtils::log( "refetch broken projects", QStringLiteral( "Success - got %1 projects" ).arg( projectList.count() ) );
+  }
+  else
+  {
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "refetchBrokenProjects" ), r->errorString(), serverMsg );
+    emit networkErrorOccurred( serverMsg );
+    CoreUtils::log( "refetch broken projects", QStringLiteral( "FAILED - %1" ).arg( message ) );
+  }
+
+  r->deleteLater();
+
+  emit refetchBrokenProjectsFinished( projectList );
 }
 
 
@@ -2535,7 +2569,8 @@ void MerginApi::pullInfoReplyFinished()
       transaction.replyPullProjectInfo = nullptr;
 
       finishProjectSync( projectFullName, projectId, false );
-    } else
+    }
+    else
     {
       const QString serverMsg = extractServerErrorMsg( r->readAll() );
       const QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
