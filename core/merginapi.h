@@ -399,6 +399,7 @@ class MerginApi: public QObject
     static const QString sMerginConfigFile;
     static const QString sDefaultApiRoot;
     static const QString sSyncCanceledMessage;
+    static const QString sDefaultReportLogUrl;
 
     static QString defaultApiRoot() { return sDefaultApiRoot; }
 
@@ -546,6 +547,12 @@ class MerginApi: public QObject
 
     MerginServerType::ServerType serverType() const;
     void setServerType( const MerginServerType::ServerType &serverType );
+
+
+    /**
+     * Returns the url used to send Diagnostic logs
+     */
+    QString serverDiagnosticLogsUrl() const;
 
     /**
      * Reads server details and user details from QSettings.
@@ -910,6 +917,7 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
+    QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS
