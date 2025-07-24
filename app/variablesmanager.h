@@ -65,7 +65,7 @@ class VariablesManager : public QObject
   private slots:
     void apiRootChanged();
     void setUserVariables();
-    void setVersionVariable( const QString &projectFullName );
+    void setVersionVariable( const QString &projectFullName, const QString &projectId );
 
   private:
     MerginApi *mMerginApi = nullptr;

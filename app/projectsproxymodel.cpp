@@ -37,7 +37,7 @@ ProjectsModel *ProjectsProxyModel::projectSourceModel() const
   return mModel;
 }
 
-void ProjectsProxyModel::setActiveProjectAlwaysFirst( bool value )
+void ProjectsProxyModel::setActiveProjectAlwaysFirst( const bool value )
 {
   mActiveProjectAlwaysFirst = value;
   invalidate();
@@ -48,7 +48,7 @@ bool ProjectsProxyModel::activeProjectAlwaysFirst() const
   return mActiveProjectAlwaysFirst;
 }
 
-void ProjectsProxyModel::setSearchExpression( QString searchExpression )
+void ProjectsProxyModel::setSearchExpression( const QString &searchExpression )
 {
   if ( mSearchExpression == searchExpression )
     return;
@@ -64,7 +64,7 @@ void ProjectsProxyModel::setProjectSourceModel( ProjectsModel *sourceModel )
     return;
 
   mModel = sourceModel;
-  QObject::connect( mModel, &ProjectsModel::modelInitialized, this, &ProjectsProxyModel::initialize );
+  connect( mModel, &ProjectsModel::modelInitialized, this, &ProjectsProxyModel::initialize );
 }
 
 bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
@@ -73,14 +73,14 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
   {
     if ( mActiveProjectAlwaysFirst )
     {
-      bool lProjectIsActive = mModel->data( left, ProjectsModel::ProjectIsActiveProject ).toBool();
-      bool rProjectIsActive = mModel->data( right, ProjectsModel::ProjectIsActiveProject ).toBool();
+      const bool lProjectIsActive = mModel->data( left, ProjectsModel::ProjectIsActiveProject ).toBool();
+      const bool rProjectIsActive = mModel->data( right, ProjectsModel::ProjectIsActiveProject ).toBool();
       if ( lProjectIsActive || rProjectIsActive )
         return lProjectIsActive;
     }
 
-    bool lProjectIsMergin = mModel->data( left, ProjectsModel::ProjectIsMergin ).toBool();
-    bool rProjectIsMergin = mModel->data( right, ProjectsModel::ProjectIsMergin ).toBool();
+    const bool lProjectIsMergin = mModel->data( left, ProjectsModel::ProjectIsMergin ).toBool();
+    const bool rProjectIsMergin = mModel->data( right, ProjectsModel::ProjectIsMergin ).toBool();
 
     /**
      * Ordering of local projects: first non-mergin projects (using folder name),
@@ -89,8 +89,8 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
 
     if ( !lProjectIsMergin && !rProjectIsMergin )
     {
-      QString lProjectFullName = mModel->data( left, ProjectsModel::ProjectFullName ).toString();
-      QString rProjectFullName = mModel->data( right, ProjectsModel::ProjectFullName ).toString();
+      const QString lProjectFullName = mModel->data( left, ProjectsModel::ProjectFullName ).toString();
+      const QString rProjectFullName = mModel->data( right, ProjectsModel::ProjectFullName ).toString();
 
       return lProjectFullName.compare( rProjectFullName, Qt::CaseInsensitive ) < 0;
     }
@@ -105,10 +105,10 @@ bool ProjectsProxyModel::lessThan( const QModelIndex &left, const QModelIndex &r
   }
 
   // comparing 2 mergin projects
-  QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
-  QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
-  QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
-  QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
+  const QString lNamespace = mModel->data( left, ProjectsModel::ProjectNamespace ).toString();
+  const QString lProjectName = mModel->data( left, ProjectsModel::ProjectName ).toString();
+  const QString rNamespace = mModel->data( right, ProjectsModel::ProjectNamespace ).toString();
+  const QString rProjectName = mModel->data( right, ProjectsModel::ProjectName ).toString();
 
   if ( lNamespace == rNamespace )
   {

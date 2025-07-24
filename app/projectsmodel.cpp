@@ -27,44 +27,45 @@ void ProjectsModel::initializeProjectsModel()
   if ( !mSyncManager || !mBackend || !mLocalProjectsManager || mModelType == EmptyProjectsModel ) // Model is not set up properly yet
     return;
 
-  QObject::connect( mSyncManager, &SynchronizationManager::syncStarted, this, &ProjectsModel::onProjectSyncStarted );
-  QObject::connect( mSyncManager, &SynchronizationManager::syncFinished, this, &ProjectsModel::onProjectSyncFinished );
-  QObject::connect( mSyncManager, &SynchronizationManager::syncCancelled, this, &ProjectsModel::onProjectSyncCancelled );
-  QObject::connect( mSyncManager, &SynchronizationManager::syncProgressChanged, this, &ProjectsModel::onProjectSyncProgressChanged );
+  connect( mSyncManager, &SynchronizationManager::syncStarted, this, &ProjectsModel::onProjectSyncStarted );
+  connect( mSyncManager, &SynchronizationManager::syncFinished, this, &ProjectsModel::onProjectSyncFinished );
+  connect( mSyncManager, &SynchronizationManager::syncCancelled, this, &ProjectsModel::onProjectSyncCancelled );
+  connect( mSyncManager, &SynchronizationManager::syncProgressChanged, this, &ProjectsModel::onProjectSyncProgressChanged );
 
-  QObject::connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
-  QObject::connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
-  QObject::connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
+  connect( mBackend, &MerginApi::projectDetached, this, &ProjectsModel::onProjectDetachedFromMergin );
+  connect( mBackend, &MerginApi::projectAttachedToMergin, this, &ProjectsModel::onProjectAttachedToMergin );
+  connect( mBackend, &MerginApi::authChanged, this, &ProjectsModel::onAuthChanged );
 
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
-    QObject::connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &ProjectsModel::onListProjectsByNameFinished );
+    connect( mBackend, &MerginApi::listProjectsByNameFinished, this, &ProjectsModel::onListProjectsByNameFinished );
+    connect( mBackend, &MerginApi::refetchBrokenProjectsFinished, this, &ProjectsModel::onRefetchBrokenProjectsFinished );
     loadLocalProjects();
   }
   else if ( mModelType != ProjectModelTypes::RecentProjectsModel )
   {
-    QObject::connect( mBackend, &MerginApi::listProjectsFinished, this, &ProjectsModel::onListProjectsFinished );
+    connect( mBackend, &MerginApi::listProjectsFinished, this, &ProjectsModel::onListProjectsFinished );
   }
   else
   {
     // Implement RecentProjectsModel type
   }
 
-  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel::onProjectAdded );
-  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::aboutToRemoveLocalProject, this, &ProjectsModel::onAboutToRemoveProject );
-  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel::onProjectDataChanged );
-  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::dataDirReloaded, this, &ProjectsModel::loadLocalProjects );
+  connect( mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel::onProjectAdded );
+  connect( mLocalProjectsManager, &LocalProjectsManager::aboutToRemoveLocalProject, this, &ProjectsModel::onAboutToRemoveProject );
+  connect( mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel::onProjectDataChanged );
+  connect( mLocalProjectsManager, &LocalProjectsManager::dataDirReloaded, this, &ProjectsModel::loadLocalProjects );
 
   emit modelInitialized();
 }
 
-QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
+QVariant ProjectsModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+    return {};
 
   if ( index.row() < 0 || index.row() >= mProjects.size() )
-    return QVariant();
+    return {};
 
   const Project project = mProjects.at( index.row() );
 
@@ -95,7 +96,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
         }
         else
         {
-          ProjectStatus::Status status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+          const ProjectStatus::Status status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
 
           if ( status == ProjectStatus::NeedsSync )
           {
@@ -108,7 +109,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
           }
         }
 
-        QFileInfo fi( project.local.projectDir );
+        const QFileInfo fi( project.local.projectDir );
 
         // Up to date
         // lastModified of projectDir is not reliable - gpkg file may have modified header after opening it. See more #1320
@@ -121,7 +122,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
 
       // This should not happen
       CoreUtils::log( "Project error", "Found project that is not downloaded nor remote" );
-      return QVariant();
+      return {};
     }
     case ProjectIsActiveProject:
     {
@@ -129,20 +130,20 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
     }
     default:
     {
-      if ( !project.isMergin() ) return QVariant();
+      if ( !project.isMergin() ) return {};
 
       // Roles only for projects that has mergin part
       if ( role == ProjectSyncPending ) return QVariant( mSyncManager->hasPendingSync( project.fullName() ) );
       else if ( role == ProjectSyncProgress ) return QVariant( mSyncManager->syncProgress( project.fullName() ) );
       else if ( role == ProjectRemoteError ) return QVariant( project.mergin.remoteError );
-      return QVariant();
+      return {};
     }
   }
 }
 
-QModelIndex ProjectsModel::index( int row, int col, const QModelIndex &parent ) const
+QModelIndex ProjectsModel::index( const int row, const int column, const QModelIndex &parent ) const
 {
-  Q_UNUSED( col )
+  Q_UNUSED( column )
   Q_UNUSED( parent )
   return createIndex( row, 0, nullptr );
 }
@@ -170,14 +171,14 @@ QHash<int, QByteArray> ProjectsModel::roleNames() const
 
 int ProjectsModel::rowCount( const QModelIndex & ) const
 {
-  return mProjects.count();
+  return static_cast<int>( mProjects.count() );
 }
 
-void ProjectsModel::listProjects( const QString &searchExpression, int page )
+void ProjectsModel::listProjects( const QString &searchExpression, const int page )
 {
   if ( mModelType == LocalProjectsModel )
   {
-    listProjectsByName();
+    fetchProjectsByProjectId();
     return;
   }
 
@@ -192,14 +193,29 @@ void ProjectsModel::listProjects( const QString &searchExpression, int page )
   }
 }
 
-void ProjectsModel::listProjectsByName()
+void ProjectsModel::fetchProjectsByProjectId( const QStringList &projectIds )
 {
   if ( mModelType != LocalProjectsModel )
   {
     return;
   }
 
-  mLastRequestId = mBackend->listProjectsByName( projectNames() );
+  QStringList projectNamesList{};
+  if ( projectIds.isEmpty() )
+  {
+    for ( auto project : mLocalProjectsManager->projects().values() )
+    {
+      projectNamesList << project.fullName();
+    }
+  }
+  else
+  {
+    for ( auto key : projectIds )
+    {
+      projectNamesList << mLocalProjectsManager->projectFromProjectId( key ).fullName();
+    }
+  }
+  mLastRequestId = mBackend->listProjectsByName( projectNamesList );
 
   if ( !mLastRequestId.isEmpty() )
   {
@@ -218,7 +234,7 @@ void ProjectsModel::fetchAnotherPage( const QString &searchExpression )
   listProjects( searchExpression, mPaginatedPage + 1 );
 }
 
-void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, QString requestId )
+void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProjects, const int projectsCount, const int page, const QString &requestId )
 {
   if ( mLastRequestId != requestId )
   {
@@ -235,7 +251,7 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   else
   {
     // paginating next page, keep previous projects and emit model add items
-    beginInsertRows( QModelIndex(), mProjects.size(), mProjects.size() + merginProjects.size() - 1 );
+    beginInsertRows( QModelIndex(), static_cast<int>( mProjects.size() ), static_cast<int>( mProjects.size() ) + merginProjects.size() - 1 );
     mergeProjects( merginProjects, MergeStrategy::KeepPrevious );
     endInsertRows();
   }
@@ -246,11 +262,18 @@ void ProjectsModel::onListProjectsFinished( const MerginProjectsList &merginProj
   setModelIsLoading( false );
 }
 
-void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId )
+void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merginProjects, const QString &requestId )
 {
   if ( mLastRequestId != requestId )
   {
     return;
+  }
+
+  // filter out projects which returned errors and refetch them by ID
+  const QStringList brokenProjects = filterBrokenProjects( merginProjects );
+  if ( !brokenProjects.isEmpty() )
+  {
+    mBackend->refetchBrokenProjects( brokenProjects );
   }
 
   beginResetModel();
@@ -260,9 +283,21 @@ void ProjectsModel::onListProjectsByNameFinished( const MerginProjectsList &merg
   setModelIsLoading( false );
 }
 
+void ProjectsModel::onRefetchBrokenProjectsFinished( const MerginProjectsList &merginProjects )
+{
+  if ( merginProjects.isEmpty() )
+  {
+    return;
+  }
+
+  beginResetModel();
+  mergeProjects( merginProjects, MergeStrategy::KeepPrevious );
+  endResetModel();
+}
+
 void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, MergeStrategy mergeStrategy )
 {
-  const LocalProjectsList localProjects = mLocalProjectsManager->projects();
+  const LocalProjectsDict localProjects = mLocalProjectsManager->projects();
 
   if ( mergeStrategy == DiscardPrevious )
   {
@@ -272,7 +307,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
   if ( mModelType == ProjectModelTypes::LocalProjectsModel )
   {
     // Keep all local projects and ignore all not downloaded remote projects
-    for ( const LocalProject &localProject : localProjects )
+    for ( const LocalProject &localProject : localProjects.values() )
     {
       Project project;
       project.local = localProject;
@@ -301,7 +336,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       mProjects << project;
     }
 
-    // lets check also for projects that are currently being downloaded and add them to local projects list
+    // let's check also for projects that are currently being downloaded and add them to local projects list
     QList<QString> pendingProjects = mSyncManager->pendingProjects();
 
     for ( const QString &pendingProjectName : pendingProjects )
@@ -316,7 +351,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       {
         Project project;
 
-        MerginApi::extractProjectName( pendingProjectName, project.mergin.projectNamespace, project.mergin.projectName );
+        CoreUtils::extractProjectName( pendingProjectName, project.mergin.projectNamespace, project.mergin.projectName );
         project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
 
         mProjects << project;
@@ -349,7 +384,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
 
 void ProjectsModel::syncProject( const QString &projectId )
 {
-  int ix = projectIndexFromId( projectId );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
@@ -367,7 +402,7 @@ void ProjectsModel::syncProject( const QString &projectId )
   }
 }
 
-void ProjectsModel::stopProjectSync( const QString &projectId )
+void ProjectsModel::stopProjectSync( const QString &projectId ) const
 {
   if ( mSyncManager )
   {
@@ -375,46 +410,46 @@ void ProjectsModel::stopProjectSync( const QString &projectId )
   }
 }
 
-void ProjectsModel::removeLocalProject( const QString &projectId )
+void ProjectsModel::removeLocalProject( const QString &projectId ) const
 {
   mLocalProjectsManager->removeLocalProject( projectId );
 }
 
 void ProjectsModel::migrateProject( const QString &projectId )
 {
-  int ix = projectIndexFromId( projectId );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
 
-  mSyncManager->migrateProjectToMergin( mProjects[ix].local.projectName );
+  mSyncManager->migrateProjectToMergin( mProjects[ix].local.projectName, projectId );
 }
 
-void ProjectsModel::onProjectSyncStarted( const QString &projectFullName )
+void ProjectsModel::onProjectSyncStarted( const QString &projectId )
 {
-  int ix = projectIndexFromId( projectFullName );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
 
-  QModelIndex changeIndex = index( ix );
+  const QModelIndex changeIndex = index( ix );
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress } );
 }
 
-void ProjectsModel::onProjectSyncCancelled( const QString &projectFullName )
+void ProjectsModel::onProjectSyncCancelled( const QString &projectId )
 {
-  int ix = projectIndexFromId( projectFullName );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
 
-  QModelIndex changeIndex = index( ix );
+  const QModelIndex changeIndex = index( ix );
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress, ProjectStatus } );
 }
 
-void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion )
+void ProjectsModel::onProjectSyncFinished( const QString &projectId, const bool successfully, const int newVersion )
 {
-  int ix = projectIndexFromId( projectFullName );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
@@ -431,7 +466,7 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool 
 
   project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
 
-  QModelIndex changeIndex = index( ix );
+  const QModelIndex changeIndex = index( ix );
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress, ProjectStatus } );
 
   // remove project from list of projects if this was a first-time download of remote project in local projects list
@@ -446,11 +481,11 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool 
   }
 }
 
-void ProjectsModel::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
+void ProjectsModel::onProjectSyncProgressChanged( const QString &projectId, const qreal progress )
 {
   Q_UNUSED( progress )
 
-  int ix = projectIndexFromId( projectFullName );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
@@ -458,14 +493,14 @@ void ProjectsModel::onProjectSyncProgressChanged( const QString &projectFullName
   if ( !mProjects[ix].isMergin() )
     return;
 
-  QModelIndex changeIndex = index( ix );
+  const QModelIndex changeIndex = index( ix );
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress } );
 }
 
 void ProjectsModel::onProjectAdded( const LocalProject &localProject )
 {
   // Check if such project is already in project list
-  int ix = projectIndexFromId( localProject.id() );
+  const int ix = projectIndexFromId( localProject.id() );
   if ( ix >= 0 )
   {
     // add local information ~ project downloaded
@@ -477,7 +512,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &localProject )
       project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
     }
 
-    QModelIndex modelIx = index( ix );
+    const QModelIndex modelIx = index( ix );
     emit dataChanged( modelIx, modelIx );
   }
   else if ( mModelType == LocalProjectsModel )
@@ -486,7 +521,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &localProject )
     Project project;
     project.local = localProject;
 
-    int insertIndex = mProjects.size();
+    const int insertIndex = static_cast<int>( mProjects.size() );
 
     beginInsertRows( QModelIndex(), insertIndex, insertIndex );
     mProjects << project;
@@ -496,7 +531,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &localProject )
 
 void ProjectsModel::onAboutToRemoveProject( const LocalProject &localProject )
 {
-  int ix = projectIndexFromId( localProject.id() );
+  const int ix = projectIndexFromId( localProject.id() );
 
   if ( ix >= 0 )
   {
@@ -512,7 +547,7 @@ void ProjectsModel::onAboutToRemoveProject( const LocalProject &localProject )
       mProjects[ix].local = LocalProject();
       mProjects[ix].mergin.status = ProjectStatus::projectStatus( mProjects[ix], mBackend->supportsSelectiveSync() );
 
-      QModelIndex modelIx = index( ix );
+      const QModelIndex modelIx = index( ix );
       emit dataChanged( modelIx, modelIx );
     }
   }
@@ -520,7 +555,7 @@ void ProjectsModel::onAboutToRemoveProject( const LocalProject &localProject )
 
 void ProjectsModel::onProjectDataChanged( const LocalProject &localProject )
 {
-  int ix = projectIndexFromId( localProject.id() );
+  const int ix = projectIndexFromId( localProject.id() );
 
   if ( ix < 0 )
     return;
@@ -534,13 +569,13 @@ void ProjectsModel::onProjectDataChanged( const LocalProject &localProject )
     project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
   }
 
-  QModelIndex editIndex = index( ix );
+  const QModelIndex editIndex = index( ix );
   emit dataChanged( editIndex, editIndex );
 }
 
-void ProjectsModel::onProjectDetachedFromMergin( const QString &projectFullName )
+void ProjectsModel::onProjectDetachedFromMergin( const QString &projectId )
 {
-  int ix = projectIndexFromId( projectFullName );
+  const int ix = projectIndexFromId( projectId );
 
   if ( ix < 0 )
     return;
@@ -549,21 +584,20 @@ void ProjectsModel::onProjectDetachedFromMergin( const QString &projectFullName 
   project.mergin = MerginProject();
   project.local.projectNamespace = QLatin1String();
 
-  QModelIndex editIndex = index( ix );
+  const QModelIndex editIndex = index( ix );
   emit dataChanged( editIndex, editIndex );
 
   // This project should also be removed from project list for remote project model types,
   // however, currently one needs to click on "My projects/Shared/Explore" and that sends
   // another listProjects request. In new list this project will not be shown.
-  // However, this option is not allowed in GUI anyways.
+  // However, this option is not allowed in GUI anyway.
 
 }
 
-void ProjectsModel::onProjectAttachedToMergin( const QString & )
+void ProjectsModel::onProjectAttachedToMergin( const QString &projectId )
 {
-  // To ensure project will be in sync with server, send listProjectByName request.
-  // In theory we could send that request only for this one project.
-  listProjectsByName();
+  // To ensure project will be in sync with server, send fetchProjectsByProjectId request.
+  fetchProjectsByProjectId( { projectId } );
 }
 
 void ProjectsModel::onAuthChanged()
@@ -595,7 +629,7 @@ void ProjectsModel::setLocalProjectsManager( LocalProjectsManager *localProjects
   emit localProjectsManagerChanged( mLocalProjectsManager );
 }
 
-void ProjectsModel::setModelType( ProjectsModel::ProjectModelTypes modelType )
+void ProjectsModel::setModelType( const ProjectsModel::ProjectModelTypes modelType )
 {
   if ( mModelType == modelType )
     return;
@@ -615,20 +649,6 @@ QString ProjectsModel::modelTypeToFlag() const
     default:
       return QLatin1String();
   }
-}
-
-QStringList ProjectsModel::projectNames() const
-{
-  QStringList projectNames;
-  const LocalProjectsList projects = mLocalProjectsManager->projects();
-
-  for ( const auto &proj : projects )
-  {
-    if ( !proj.projectName.isEmpty() && !proj.projectNamespace.isEmpty() )
-      projectNames << proj.id();
-  }
-
-  return projectNames;
 }
 
 void ProjectsModel::clearProjects()
@@ -651,6 +671,26 @@ void ProjectsModel::loadLocalProjects()
   }
 }
 
+QStringList ProjectsModel::filterBrokenProjects( const MerginProjectsList &list )
+{
+  QStringList errorProjects;
+  for ( MerginProject project : list )
+  {
+    if ( !project.remoteError.isEmpty() )
+    {
+      const auto res = std::find_if( mProjects.begin(), mProjects.end(), [&project]( const Project & localProject )
+      {
+        return project.fullName() == localProject.fullName();
+      } );
+      if ( res != mProjects.end() )
+      {
+        errorProjects.append( res->id() );
+      }
+    }
+  }
+  return errorProjects;
+}
+
 int ProjectsModel::projectIndexFromId( const QString &projectId ) const
 {
   for ( int i = 0; i < mProjects.count(); i++ )
@@ -671,12 +711,12 @@ Project ProjectsModel::projectFromId( const QString &projectId ) const
       return project;
     }
   }
-  return Project();
+  return {};
 }
 
 QModelIndex ProjectsModel::projectModelIndexFromId( const QString &projectId ) const
 {
-  int row = projectIndexFromId( projectId );
+  const int row = projectIndexFromId( projectId );
   return index( row );
 }
 
@@ -685,7 +725,7 @@ bool ProjectsModel::isLoading() const
   return mModelIsLoading;
 }
 
-void ProjectsModel::setModelIsLoading( bool state )
+void ProjectsModel::setModelIsLoading( const bool state )
 {
   mModelIsLoading = state;
   emit isLoadingChanged( mModelIsLoading );

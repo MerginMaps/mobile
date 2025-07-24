@@ -12,22 +12,16 @@
 
 #include <memory>
 
-#include <QObject>
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QEventLoop>
-#include <QFile>
-#include <QFileInfo>
-#include <QUuid>
 #include <QPointer>
 #include <QSet>
 #include <QByteArray>
-#include <QDateTime>
+#include <utility>
 #include <QOAuth2AuthorizationCodeFlow>
 
 #include "merginapistatus.h"
 #include "merginservertype.h"
-#include "merginsubscriptionstatus.h"
 #include "merginerrortypes.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
@@ -107,7 +101,7 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
+  DownloadQueueItem( QString fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
 
   QString filePath;          //!< path within the project
   qint64 size;               //!< size of the item in bytes
@@ -133,8 +127,8 @@ struct PullTask
     Delete,         //!< remove files that have been removed from the server
   };
 
-  PullTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
-    : method( m ), filePath( fp ), data( d ) {}
+  PullTask( const Method m, QString fp, const QList<DownloadQueueItem> &d )
+    : method( m ), filePath( std::move( fp ) ), data( d ) {}
 
   Method method;                  //!< what to do with the file
   QString filePath;               //!< what is the file path within project
@@ -175,7 +169,7 @@ struct TransactionStatus
 
   // retry handling
   int retryCount = 0;  //!< current number of retry attempts for failed network requests
-  static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
+  static constexpr int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
 
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
@@ -230,7 +224,7 @@ class MerginApi: public QObject
   public:
 
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
-    ~MerginApi() = default;
+    ~MerginApi() override = default;
 
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
@@ -239,7 +233,7 @@ class MerginApi: public QObject
 
     /**
      * Returns path of the local directory in which all projects are stored.
-     * Each project is one sub-directory.
+     * Each project is one subdirectory.
      * \note returns the directory without a trailing slash
      */
     QString projectsPath() const { return mDataDir; }
@@ -253,62 +247,70 @@ class MerginApi: public QObject
      * for "exploring" all public projects. However, it can be applied to fetch more results.
      * Eventually emits listProjectsFinished on which ProjectPanel (qml component) updates content.
      * \param searchExpression Search filter on projects name.
-     * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with a authorized user
+     * \param flag If defined, it is used to filter out projects tagged as 'created' or 'shared' with an authorized user
      * \param page Requested page of projects.
      * \returns unique id of a request
      */
-    Q_INVOKABLE QString listProjects( const QString &searchExpression = QStringLiteral(),
-                                      const QString &flag = QStringLiteral(),
-                                      const int page = 1 );
+    QString listProjects( const QString &searchExpression = QString(),
+                          const QString &flag = QString(),
+                          int page = 1 );
 
     /**
-     * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in listProjectsByNameFinished
-     * method. Projects are parsed from response JSON.
+     * Sends non-blocking GET request to the server to listProjectsByName API. Response is handled in
+     * listProjectsByNameFinished method. Projects are parsed from response JSON.
      *
      * \param projectNames QStringList of project full names (namespace/name)
-     * \returns unique id of a sent request
+     * \returns unique id of sent request
      */
-    Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
+    QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
-     * Sends non-blocking POST request to the server to pull (download) a project with a given name. On pullProjectReplyFinished,
-     * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Emits syncProjectFinished at the end.
+     * Fallback method for listProjectsByName, which tries to request projects by IDs instead of names.
+     * Uses getProjectsDetails internally.
+     * \param projectIds QStringList of project IDs
+     * \see listProjectsByName
+     */
+    void refetchBrokenProjects( const QStringList &projectIds );
+
+    /**
+     * Sends non-blocking POST request to the server to pull (download) a project with a given name.
+     * On pullProjectReplyFinished, when a response is received, parses data-stream to files and rewrites local files
+     * with them. Extra files which don't match server files are removed. Emits syncProjectFinished at the end.
      * If update has been successful, updates metadata file of the project.
-     * \param projectNamespace Project's namespace used in request.
-     * \param projectName  Project's name used in request.
+     * \param projectFullName Project's "namespace/name" full name used for requests
+     * \param projectId Project's ID used for internal processing
      * \param withAuth If True, request is constructed with current authorization
      * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
+    bool pullProject( const QString &projectFullName, const QString &projectId, bool withAuth = true );
 
     /**
      * Sends non-blocking POST request to the server to push changes in a project with a given name.
-     * At the begining it checks if there are any changes on server and pulls them if so.
-     * If the pull was successful, it sends post request with list of local changes and modified/newly added files in JSON.
+     * At the beginning it checks if there are any changes on server and pulls them if so. If the pull was successful,
+     * it sends post request with list of local changes and modified/newly added files in JSON.
      * Emits syncProjectFinished at the end.
-     * \param projectNamespace Project's namespace used in request.
-     * \param projectName Project's name used in request.
+     * \param projectFullName Project's "namespace/name" full name used for requests
+     * \param projectId Project's ID used for internal processing
      * \param isInitialPush indicates if this is first push of the project (project creation)
      * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE bool pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
+    bool pushProject( const QString &projectFullName, const QString &projectId, bool isInitialPush = false );
 
     /**
      * Sends non-blocking POST request to the server to cancel a running push of a project with a given name.
-     * If push has not started yet and a client is waiting for transaction UUID, it cancels the procedure just on client side
-     * without sending cancel request to the server.
-     * \param projectFullName Project's full name to cancel its 4
+     * If push has not started yet and a client is waiting for transaction UUID, it cancels the procedure just
+     * on client side without sending cancel request to the server.
+     * \param projectId ID of project to cancel push for
      * \note pushCanceled() signal is emitted when the reply to the cancel request is received
      */
-    Q_INVOKABLE void cancelPush( const QString &projectFullName );
+    void cancelPush( const QString &projectId );
 
     /**
      * Cancels pull either (1) before project data download starts or
      * (2) when data transfer has begun - connections are aborted.
-     * \param projectFullName Project's full name to cancel
+     * \param projectId Project's ID to cancel
      */
-    Q_INVOKABLE void cancelPull( const QString &projectFullName );
+    void cancelPull( const QString &projectId );
 
     /**
     * Attempts to authorize user with the login and password
@@ -337,8 +339,8 @@ class MerginApi: public QObject
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
-    Q_INVOKABLE void clearAuth();
-    Q_INVOKABLE QString resetPasswordUrl();
+    void clearAuth();
+    Q_INVOKABLE QString resetPasswordUrl() const;
 
     /**
     * Registers new user.
@@ -372,28 +374,21 @@ class MerginApi: public QObject
     Q_INVOKABLE void pingMergin();
 
     /**
-    * Uploads and registers a local project to Mergin.
-    * \param projectName Project name that will be migrated
-    * \param projectNamespace If empty, username of current user auth session is used.
-    */
-    Q_INVOKABLE void migrateProjectToMergin( const QString &projectName, const QString &projectNamespace = QString() );
-
-    /**
     * Makes a mergin project to be local by removing .mergin folder. Updates project's info and related models accordingly.
-    * \param projectNamespace Project namespace that will be detached from Mergin
-    * \param projectName Project name that will be detached from Mergin
+    * \param projectId Project id of project that will be detached from Mergin
+    * \param informUser Whether we notify user with notification about success
     */
-    Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser = true );
+    void detachProjectFromMergin( const QString &projectId, bool informUser = true );
 
     /**
     * Deletes all local projects and then tries to remove user account.
     */
     Q_INVOKABLE void deleteAccount();
 
-    static const int MERGIN_API_VERSION_MAJOR = 2020;
-    static const int MERGIN_API_VERSION_MINOR = 4;
-    static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
-    static const int MINIMUM_SERVER_VERSION_MINOR = 2;
+    static constexpr int MERGIN_API_VERSION_MAJOR = 2020;
+    static constexpr int MERGIN_API_VERSION_MINOR = 4;
+    static constexpr int MINIMUM_SERVER_VERSION_MAJOR = 2023;
+    static constexpr int MINIMUM_SERVER_VERSION_MINOR = 2;
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
@@ -403,9 +398,6 @@ class MerginApi: public QObject
     static QString defaultApiRoot() { return sDefaultApiRoot; }
 
     static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
-
-    //! Get a list of all files that can be used with geodiff
-    QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
     static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
@@ -420,36 +412,20 @@ class MerginApi: public QObject
     static bool parseVersion( const QString &version, int &major, int &minor );
 
     /**
-    * Finds project in merginProjects list according its full name.
-    * \param projectPath Full path to project's folder
-    * \param metadataFile Relative path of metafile to project's folder
-    */
-    Q_INVOKABLE static QString getFullProjectName( QString projectNamespace, QString projectName );
-
-    /**
     * Creates an empty project on Mergin server. isPublic determines if the new project will be visible to all or private
-    * \param projectNamespace
-    * \param projectName
-    * \param isPublic
     * \return true when project creation has started, false otherwise (e.g. due to a missing authorization)
     */
-    bool createProject( const QString &projectNamespace, const QString &projectName, bool isPublic = false );
+    bool createProject( const QString &projectNamespace, const QString &projectName, const QString &projectId, bool isPublic = false );
 
     // Test functions
     /**
-    * Deletes the project of given namespace and name on Mergin server.
-    * Note that this deletion is not immediately done,
-    * but only scheduled to be deleted in few days.
-    *
-    * TODO - we should use DEL /v2/projects/ if possible, see
-    * TestMerginApi::deleteRemoteProjectNow()
-    *
-    * \param projectNamespace
-    * \param projectName
+    * Deletes the project of given projectId on Mergin server.
+    * \note This deletion is immediately done, if you want to schedule project for deletion use
+    * \code /v2/projects/{id}/scheduleDelete \endcode
     */
-    void deleteProject( const QString &projectNamespace, const QString &projectName, bool informUser = true );
+    void deleteProject( const QString &projectId, bool informUser = true );
 
-    LocalProject getLocalProject( const QString &projectFullName );
+    LocalProject getLocalProject( const QString &projectId ) const;
 
     // Production and Test functions (therefore not private)
 
@@ -494,7 +470,7 @@ class MerginApi: public QObject
       const QList<MerginFile> &oldServerFiles,
       const QList<MerginFile> &localFiles,
       const QString &projectDir,
-      const MerginConfig config
+      const MerginConfig &config
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -513,9 +489,9 @@ class MerginApi: public QObject
 
     /**
      * Performs checks and returns if a given file is excluded from the sync.
-     * If selective-sync-enabled is true, it checks if a file extension is from exlcudeSync extension list.
-     * If selective-sync-dir is defined, additionally checks, if the file is located in selective-sync-dir or in its subdir,
-     * otherwise a project dir is considered as selective-sync-dir and therefore the path check is redundant
+     * If selective-sync-enabled is true, it checks if a file extension is from excludeSync extension list.
+     * If selective-sync-dir is defined, additionally checks, if the file is located in selective-sync-dir or in its
+     * subdir, otherwise a project dir is considered as selective-sync-dir and therefore the path check is redundant
      * (since given filePath is relative to the project dir.).
      * @param filePath Relative path of a file to project directory.
      * @param config MerginConfig parsed from JSON, selective-sync properties are read from it.
@@ -525,15 +501,6 @@ class MerginApi: public QObject
 
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
-
-    /**
-    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
-    * and the previous of last (namespace) substring after splitting sourceString with slash.
-    * \param sourceString QString either url or fullname of a project
-    * \param projectNamespace QString to be set as namespace, might not change original value
-    * \param projectName QString to be set to name of a project
-    */
-    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
     bool supportsSelectiveSync() const;
     void setSupportsSelectiveSync( bool supportsSelectiveSync );
@@ -569,7 +536,7 @@ class MerginApi: public QObject
     void listInvitations();
 
     /**
-    * Accepts or discards an invitaion to join workspace.
+    * Accepts or discards an invitation to join workspace.
     * \param uuid Invitation UUID
     * \param accept Whether user accepted invitation
     */
@@ -594,7 +561,7 @@ class MerginApi: public QObject
     /**
      * Returns true if server supports workspaces
      */
-    bool apiSupportsWorkspaces();
+    bool apiSupportsWorkspaces() const;
 
     /**
      * Returns true if the configured server has SSO enabled
@@ -604,7 +571,7 @@ class MerginApi: public QObject
     /**
      * Reloads project metadata role by fetching latest information from server.
      */
-    Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
+    void reloadProjectRole( const QString &projectId );
 
     /**
      * Returns the network manager used for Mergin API requests
@@ -629,20 +596,19 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
-    void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
-    void projectReloadNeededAfterSync( const QString &projectFullName );
+    void syncProjectFinished( const QString &projectId, bool successfully, int version );
+    void projectReloadNeededAfterSync( const QString &projectId );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get pushed or pulled.
      * With no pending sync, progress is set to -1
      */
-    void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
+    void syncProjectStatusChanged( const QString &projectId, qreal progress );
 
     void networkErrorOccurred(
       const QString &message,
-      const QString &topic,
       int httpCode = -1,
-      const QString &projectFullName = QLatin1String()
+      const QString &projectId = QString()
     );
 
     void storageLimitReached( qreal uploadSize );
@@ -662,8 +628,7 @@ class MerginApi: public QObject
     void postRegistrationFailed( const QString &msg );
     void apiRootChanged();
     void apiVersionStatusChanged();
-    void projectCreated( const QString &projectFullName, bool result );
-    void serverProjectDeleted( const QString &projecFullName, bool result );
+    void projectCreated( const QString &projectId, bool result );
     void userInfoChanged();
     void workspaceInfoChanged();
     void subscriptionInfoChanged();
@@ -672,13 +637,14 @@ class MerginApi: public QObject
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     void pushFilesStarted();
-    void pushCanceled( const QString &projectFullName, bool result );
-    void projectDataChanged( const QString &projectFullName );
-    void projectDetached( const QString &projectFullName );
-    void projectAttachedToMergin( const QString &projectFullName, const QString &previousProjectName );
+    void pushCanceled( const QString &projectId );
+    void projectDataChanged( const QString &projectFullName, const QString &projectId );
+    void projectDetached( const QString &projectId );
+    void projectAttachedToMergin( const QString &projectId );
+    void refetchBrokenProjectsFinished( const MerginProjectsList &projectList );
 
-    void projectAlreadyOnLatestVersion( const QString &projectFullName );
-    void missingAuthorizationError( const QString &projectFullName );
+    void projectAlreadyOnLatestVersion( const QString &projectId );
+    void missingAuthorizationError( const QString &projectId );
     void accountDeleted( bool result );
     void userIsAnOrgOwnerError();
 
@@ -702,11 +668,13 @@ class MerginApi: public QObject
 
     void serverWasUpgraded();
 
-    void projectRoleUpdated( const QString &projectFullName, const QString &role );
+    void projectRoleUpdated( const QString &projectId, const QString &role );
 
     void networkManagerChanged();
 
-    void downloadItemRetried( const QString &projectFullName, int retryCount );
+    void downloadItemRetried( const QString &projectId, int retryCount );
+
+    void projectIdChanged( const QString &projectFullName, QString projectId );
 
     void apiSupportsSsoChanged();
 
@@ -714,12 +682,14 @@ class MerginApi: public QObject
     void ssoConfigIsMultiTenant();
 
   private slots:
-    void listProjectsReplyFinished( QString requestId );
-    void listProjectsByNameReplyFinished( QString requestId );
+    void listProjectsReplyFinished( const QString &requestId );
+    void listProjectsByNameReplyFinished( const QString &requestId );
+    void getProjectsDetailsReplyFinished();
+    void refetchBrokenProjectsReplyFinished();
 
     // Pull slots
     void pullInfoReplyFinished();
-    void downloadItemReplyFinished( DownloadQueueItem item );
+    void downloadItemReplyFinished( const DownloadQueueItem &item );
     void cacheServerConfig();
 
     // Push slots
@@ -732,11 +702,11 @@ class MerginApi: public QObject
     void getUserInfoFinished();
     void getWorkspaceInfoReplyFinished();
     void getServiceInfoReplyFinished();
-    void saveAuthData();
+    void saveAuthData() const;
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
     void authorizeFinished();
-    void registrationFinished( const QString &login = QStringLiteral(), const QString &password = QStringLiteral() );
+    void registrationFinished( const QString &login = QString(), const QString &password = QString() );
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
@@ -762,32 +732,34 @@ class MerginApi: public QObject
     static QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
-    void abortPullItems( const QString &projectFullName );
+    void abortPullItems( const QString &projectId );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
      * \param projectFullName Namespace/name
+     * \param projectId ID of project
      * \param json project info containing metadata for upload
      */
-    void pushStart( const QString &projectFullName, const QByteArray &json );
+    void pushStart( const QString &projectFullName, const QString &projectId, const QByteArray &json );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
      * \param projectFullName Namespace/name
+     * \param projectId ID of project
      * \param transactionUUID Transaction ID which servers sends on uploadStart
      * \param file Mergin file to upload
      * \param chunkNo Chunk number of given file to be uploaded
      */
-    void pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
+    void pushFile( const QString &projectFullName, const QString &projectId, const QString &transactionUUID, const MerginFile &file, int chunkNo = 0 );
 
     /**
      * Closing request after successful push.
      * \param projectFullName Namespace/name
+     * \param projectId ID of project
      * \param transactionUUID transaction UUID to match upload process on the server
      */
-    void pushFinish( const QString &projectFullName, const QString &transactionUUID );
-
-    void sendPushCancelRequest( const QString &projectFullName, const QString &transactionUUID );
+    void pushFinish( const QString &projectFullName, const QString &projectId, const QString &transactionUUID );
+    void sendPushCancelRequest( const QString &projectFullName, const QString &projectId, const QString &transactionUUID );
 
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
@@ -795,21 +767,21 @@ class MerginApi: public QObject
     static QSet<QString> listFiles( const QString &projectPath );
 
     bool validateAuth();
-    void checkMerginVersion( QString apiVersion, bool serverSupportsSubscriptions, QString msg = QStringLiteral() );
+    void checkMerginVersion( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg = QStringLiteral() );
 
     /**
-    * Extracts string code of an error json. If its not json or value cannot be parsed, QString() is return;
+    * Extracts string code of an error json. If it's not json or value cannot be parsed, QString() is return;
     * \param data Data received from mergin server on a request failed.
     */
     QString extractServerErrorCode( const QByteArray &data );
     /**
-    * Extracts value of an error json. If its not json or value cannot be parsed, QVariant() is return;
+    * Extracts value of an error json. If it's not json or value cannot be parsed, QVariant() is return;
     * \param data Data received from mergin server on a request failed.
     * \param key Where should be a value from data
     */
     QVariant extractServerErrorValue( const QByteArray &data, const QString &key );
     /**
-    * Extracts detail (message) of an error json. If its not json or detail cannot be parsed, the whole data are return;
+    * Extracts detail (message) of an error json. If it's not json or detail cannot be parsed, the whole data are return;
     * \param data Data received from mergin server on a request failed.
     */
     QString extractServerErrorMsg( const QByteArray &data );
@@ -817,34 +789,59 @@ class MerginApi: public QObject
     * Returns a temporary project path.
     * \param projectFullName
     */
-    QString getTempProjectDir( const QString &projectFullName );
+    QString getTempProjectDir( const QString &projectFullName ) const;
 
-    /** Creates a request to get project details (list of project files).
+    /**
+     * Creates a request to get project details with list of project files. The reason why we use both variants is
+     * the limitation of API, currently the endpoint which uses project ID doesn't return necessary versioning
+     * information for synchronization workflow. Thus, for synchronization use this method and for basic project details
+     * use \a getProjectDetails.
+     * \param projectFullName Project full name to use for request
+     * \param projectId project ID
+     * \param withAuth Specifies if the request will have authentication token
+     * \see getProjectDetails, getProjectsDetails
      */
-    QNetworkReply *getProjectInfo( const QString &projectFullName, bool withAuth = true );
+    QNetworkReply *getProjectInfo( const QString &projectFullName, const QString &projectId, bool withAuth = true );
+
+    /**
+     * Creates a request to get project details. The reason why we use both variants is
+     * the limitation of API, currently the endpoint which uses project ID doesn't return necessary versioning
+     * information for synchronization workflow. Thus, for synchronization use \a getProjectInfo.
+     * \param projectId project ID to use for request
+     * \param withAuth Specifies if the request will have authentication token
+     * \see getProjectInfo, getProjectsDetails
+     */
+    QNetworkReply *getProjectDetails( const QString &projectId, bool withAuth = true );
+
+    /**
+     * Similar to getProjectDetails, but it can fetch multiple projects in one call. Also, we use it as a fallback for
+     * getProjectInfo during syncing. The reason we use this instead of getProjectDetails is that this response is
+     * lighter and doesn't include file history.
+     * \param projectIds project IDs to use for request
+     * \param withAuth Specifies if the request will have authentication token
+     * \see getProjectInfo, getProjectDetails
+     */
+    QNetworkReply *getProjectsDetails( const QStringList &projectIds, bool withAuth = true );
 
     //! Called when pull of project data has finished to finalize things and emit sync finished signal
-    void finalizeProjectPull( const QString &projectFullName );
-
+    void finalizeProjectPull( const QString &projectId );
     void finalizeProjectPullCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
-    bool finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
+    bool finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectId, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
 
     //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
-    void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
-
-    void prepareProjectPull( const QString &projectFullName, const QByteArray &data );
-
-    void startProjectPull( const QString &projectFullName );
+    void finishProjectSync( const QString &projectFullName, const QString &projectId, bool syncSuccessful );
+    void prepareProjectPull( const QString &projectId, const QByteArray &data );
+    void startProjectPull( const QString &projectId );
 
     //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project pull
-    void prepareDownloadConfig( const QString &projectFullName, bool downloaded = false );
-    void requestServerConfig( const QString &projectFullName );
+    void prepareDownloadConfig( const QString &projectId, bool downloaded = false );
+    void requestServerConfig( const QString &projectId );
 
     //! Starts download request of another item
-    void downloadNextItem( const QString &projectFullName );
+    void downloadNextItem( const QString &projectId );
 
     //! Removes temp folder for project
-    void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName );
+    void removeProjectsTempFolder( const QString &projectNamespace, const QString &projectName ) const;
 
     //! Refreshes auth token if it is expired. It does a blocking call to authorize.
     //! Works only when login, password and token is set in UserAuth. Does nothing if using SSO.
@@ -855,9 +852,9 @@ class MerginApi: public QObject
      * \param reply Network reply to check for retryable errors
      * \returns True if the error should trigger a retry, false otherwise
      */
-    bool isRetryableNetworkError( QNetworkReply *reply );
+    bool isRetryableNetworkError( const QNetworkReply *reply );
 
-    QNetworkRequest getDefaultRequest( bool withAuth = true );
+    QNetworkRequest getDefaultRequest( bool withAuth = true ) const;
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
@@ -866,10 +863,10 @@ class MerginApi: public QObject
     void reloadProjectRoleReplyFinished();
 
     //! Updates project role in metadata file
-    bool updateCachedProjectRole( const QString &projectFullName, const QString &newRole );
+    bool updateCachedProjectRole( const QString &projectId, const QString &newRole ) const;
 
     //! Retrieves cached role from metadata file
-    QString getCachedProjectRole( const QString &projectFullName ) const;
+    QString getCachedProjectRole( const QString &projectId ) const;
 
     void startSsoFlow( const QString &clientId );
 
@@ -889,10 +886,12 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3
+      AttrAcceptFlag      = QNetworkRequest::User + 3,
+      AttrProjectId       = QNetworkRequest::User + 4,
+      AttrAuthUsed        = QNetworkRequest::User + 5
     };
 
-    Transactions mTransactionalStatus; //projectFullname -> transactionStatus
+    Transactions mTransactionalStatus; //projectId -> transactionStatus
     static const QSet<QString> sIgnoreExtensions;
     static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;

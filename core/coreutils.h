@@ -14,8 +14,6 @@
 #define STR(x)  STR1(x)
 
 #include <QObject>
-#include <QtGlobal>
-#include <QUuid>
 
 
 class CoreUtils
@@ -28,12 +26,11 @@ class CoreUtils
     static QString appVersion();
     static QString appVersionCode();
 
-    static QString localizedDateFromUTFString( QString timestamp );
+    static QString localizedDateFromUTFString( const QString &timestamp );
     static bool removeDir( const QString &projectDir );
 
     /**
      * Returns name of temporary file indicating first time download of project is in progress
-     * \param projectName
      */
     static QString downloadInProgressFilePath( const QString &projectDir );
 
@@ -86,10 +83,10 @@ class CoreUtils
     static void log( const QString &topic, const QString &info );
 
     //! Checks whether file path has a QGIS project suffix (qgs or qgz)
-    static bool hasProjectFileExtension( const QString filePath );
+    static bool hasProjectFileExtension( const QString &filePath );
 
     /**
-     * Check whether given project/user name is valid
+     * Check whether given project/username is valid
      */
     static bool isValidName( const QString &name );
 
@@ -121,19 +118,33 @@ class CoreUtils
     static QString getTotalDeviceStorage();
 
     /**
-     * Converts bytes to human readable size (e.g. 1GB, 500MB)
+     * Converts bytes to human-readable size (e.g. 1GB, 500MB)
      */
     static QString bytesToHumanSize( double bytes );
 
     /**
      * Returns path to project metadata file for a given project directory
      */
-    static QString getProjectMetadataPath( QString projectDir );
+    static QString getProjectMetadataPath( const QString &projectDir );
 
     /**
      * Updates a value in a JSON file at the specified top-level key
      */
     static bool replaceValueInJson( const QString &filePath, const QString &key, const QJsonValue &value );
+
+    /**
+     * Creates the full project name, which essentially means joining \a projectNamespace and \a projectName with "/"
+     */
+    static QString getFullProjectName( const QString &projectNamespace, const QString &projectName );
+
+    /**
+    * Sets projectNamespace and projectName from sourceString - url or any string from which takes last (name)
+    * and the previous of last (namespace) substring after splitting sourceString with slash.
+    * \param sourceString QString either url or fullname of a project
+    * \param projectNamespace QString to be set as namespace, might not change original value
+    * \param projectName QString to be set to name of a project
+    */
+    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
 
     /**
      * We do some very basic checks if the string looks like email.

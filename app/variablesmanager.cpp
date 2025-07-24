@@ -9,6 +9,7 @@
 
 #include "variablesmanager.h"
 
+#include "coreutils.h"
 #include "qgsexpressioncontextutils.h"
 #include "inputexpressionfunctions.h"
 
@@ -19,9 +20,9 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
   apiRootChanged();
   setUserVariables();
 
-  QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
-  QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
-  QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
+  connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
+  connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
+  connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
 VariablesManager::~VariablesManager() = default;
@@ -112,8 +113,10 @@ void VariablesManager::setUserVariables()
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
 }
 
-void VariablesManager::setVersionVariable( const QString &projectFullName )
+void VariablesManager::setVersionVariable( const QString &projectFullName, const QString &projectId )
 {
+  Q_UNUSED( projectId );
+
   if ( !mCurrentProject )
     return;
 
@@ -191,10 +194,10 @@ void VariablesManager::setProjectVariables()
   {
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_version" ), metadata.version );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_name" ),  metadata.name );
-    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  CoreUtils::getFullProjectName( metadata.projectNamespace,  metadata.name ) );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_version" ), metadata.version );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_name" ),  metadata.name );
-    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  CoreUtils::getFullProjectName( metadata.projectNamespace,  metadata.name ) );
   }
   else
   {

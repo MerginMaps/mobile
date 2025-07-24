@@ -907,17 +907,17 @@ ApplicationWindow {
     target: __syncManager
     enabled: stateManager.state === "map"
 
-    function onSyncStarted( projectFullName )
+    function onSyncStarted( projectId )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectId === __activeProject.projectId() )
       {
         syncButton.iconRotateAnimationRunning = true
       }
     }
 
-    function onSyncFinished( projectFullName, success )
+    function onSyncFinished( projectId, success )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectId === __activeProject.projectId() )
       {
         syncButton.iconRotateAnimationRunning = false
 
@@ -931,17 +931,17 @@ ApplicationWindow {
       }
     }
 
-    function onSyncCancelled( projectFullName )
+    function onSyncCancelled( projectId )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectId === __activeProject.projectId() )
       {
         syncButton.iconRotateAnimationRunning = false
       }
     }
 
-    function onSyncError( projectFullName, errorType, willRetry, errorMessage )
+    function onSyncError( projectId, errorType, willRetry, errorMessage )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectId === __activeProject.projectId() )
       {
         if ( errorType === MM.SyncError.NotAMerginProject )
         {
@@ -975,10 +975,10 @@ ApplicationWindow {
 
   Connections {
     target: __merginApi
-    function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
+    function onNetworkErrorOccurred( message, httpCode, _ ) {
       if ( stateManager.state === "projects" )
       {
-        var msg = message ? message : qsTr( "Failed to communicate with server. Try improving your network connection." )
+        const msg = message ? message : qsTr("Failed to communicate with server. Try improving your network connection.");
         __notificationModel.addError( msg )
       }
     }
@@ -1003,9 +1003,9 @@ ApplicationWindow {
       syncButton.iconRotateAnimationRunning = false
     }
 
-    function onProjectDataChanged( projectFullName ) {
+    function onProjectDataChanged( _, projectId ) {
       //! if current project has been updated, refresh canvas
-      if ( projectFullName === projectController.activeProjectId ) {
+      if ( projectId === projectController.activeProjectId ) {
         map.mapSettings.extentChanged()
       }
     }
@@ -1017,17 +1017,17 @@ ApplicationWindow {
       }
     }
 
-    function onMissingAuthorizationError( projectFullName )
+    function onMissingAuthorizationError( projectId )
     {
-      if ( projectFullName === __activeProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
+      if ( projectId === __activeProject.projectId() && !__merginApi.userAuth.isUsingSso() )
       {
         missingAuthDialog.open()
       }
     }
 
-    function onProjectAlreadyOnLatestVersion( projectFullName )
+    function onProjectAlreadyOnLatestVersion( projectId )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectId === __activeProject.projectId() )
       {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }

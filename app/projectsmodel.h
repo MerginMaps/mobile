@@ -11,9 +11,7 @@
 #define PROJECTSMODEL_H
 
 #include <QAbstractListModel>
-#include <memory>
 
-#include "inputconfig.h"
 #include "project.h"
 #include "merginapi.h"
 #include "synchronizationmanager.h"
@@ -21,24 +19,29 @@
 class LocalProjectsManager;
 
 /**
- * \brief The ProjectsModel class holds projects (both local and mergin). Model loads local projects from LocalProjectsManager that hold them
-   during runtime. Remote (Mergin) projects are fetched from MerginAPI calling listProjects or listProjectsByName (based on the type of the model).
+ * \brief The ProjectsModel class holds projects (both local and mergin). Model loads local projects from
+ * LocalProjectsManager that hold them during runtime. Remote (Mergin) projects are fetched from MerginAPI
+ * calling listProjects or listProjectsByName (based on the type of the model).
  *
- * The main job of the model is to merge projects coming from MerginAPI and LocalProjectsManager. By merging it means Each time new response is received from MerginAPI, model erases
- * old remembered projects and fetches new. Merge logic depends on the model type (described below).
+ * The main job of the model is to merge projects coming from MerginAPI and LocalProjectsManager. By merging it means
+ * each time new response is received from MerginAPI, model erases old remembered projects and fetches new.
+ * Merge logic depends on the model type (described below).
  *
  * Model can have different types that affect handling of the projects.
- *  - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
- *  - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+ *  - LocalProjectsModel always keeps all local projects and seeks their mergin part when listProjectsByNameFinished
+ *  - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part
+ *    in projects from LocalProjectsManager
  *  - EmptyProjectsModel is default state
  *
- *  To avoid overriding of requests, model remembers last sent request ID and upon receiving signal from MerginAPI about listProjectsFinished, it firsts compares
- *  the remembered ID with returned ID. If they do not match, response is ignored.
+ *  To avoid overriding of requests, model remembers last sent request ID and upon receiving signal from MerginAPI
+ *  about listProjectsFinished, it firsts compares the remembered ID with returned ID. If they do not match, response
+ *  is ignored.
  *
  *  Model also support pagination. To fetch another page call fetchAnotherPage.
  *
- *  This is a QML type with 3 required properties (pointer to merginApi, pointer to localProjectsManager and modelType). Without these properties model does nothing.
- *  After setting all of these properties, model is initialized, starts listening to various signals and offers data.
+ *  This is a QML type with 3 required properties (pointer to merginApi, pointer to localProjectsManager and modelType).
+ *  Without these properties model does nothing. After setting all of these properties, model is initialized,
+ *  starts listening to various signals and offers data.
  */
 class ProjectsModel : public QAbstractListModel
 {
@@ -69,7 +72,8 @@ class ProjectsModel : public QAbstractListModel
     /**
      * \brief The ProjectModelTypes enum:
      * - LocalProjectsModel always keeps all local projects and seek their mergin part when listProjectsByNameFinished
-     * - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part in projects from LocalProjectsManager
+     * - Workspace-, and PublicProjectsModel does the opposite, keeps all mergin projects and seeks their local part
+     *  in projects from LocalProjectsManager
      * - EmptyProjectsModel is default state
      */
     enum ProjectModelTypes
@@ -88,10 +92,10 @@ class ProjectsModel : public QAbstractListModel
       DiscardPrevious
     };
 
-    ProjectsModel( QObject *parent = nullptr );
-    ~ProjectsModel() override {};
+    explicit ProjectsModel( QObject *parent = nullptr );
+    ~ProjectsModel() override = default;
 
-    // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will be always instantiated from QML with these mandatory properties
+    // From Qt 5.15 we can use REQUIRED keyword here, that will ensure object will always be instantiated from QML with these mandatory properties
     Q_PROPERTY( MerginApi *merginApi READ merginApi WRITE setMerginApi NOTIFY merginApiChanged )
     Q_PROPERTY( ProjectModelTypes modelType READ modelType WRITE setModelType NOTIFY modelTypeChanged )
     Q_PROPERTY( SynchronizationManager *syncManager READ syncManager WRITE setSyncManager NOTIFY syncManagerChanged )
@@ -116,17 +120,21 @@ class ProjectsModel : public QAbstractListModel
     //! lists projects, either fetch more or get first, search expression
     Q_INVOKABLE void listProjects( const QString &searchExpression = QString(), int page = 1 );
 
-    //! lists projects via listProjectsByName API, used in LocalProjectsModel
-    Q_INVOKABLE void listProjectsByName();
+    /**
+     * Lists projects via listProjectsByName API, used in LocalProjectsModel. If projectIds is empty fetches all local
+     * projects else fetches only specified projects.
+     * \param projectIds List of project IDs to fetch, by default empty
+     */
+    Q_INVOKABLE void fetchProjectsByProjectId( const QStringList &projectIds = QStringList() );
 
     //! Syncs specified project - upload or update
     Q_INVOKABLE void syncProject( const QString &projectId );
 
     //! Stops running project upload or update
-    Q_INVOKABLE void stopProjectSync( const QString &projectId );
+    Q_INVOKABLE void stopProjectSync( const QString &projectId ) const;
 
     //! Forwards call to LocalProjectsManager to remove local project
-    Q_INVOKABLE void removeLocalProject( const QString &projectId );
+    Q_INVOKABLE void removeLocalProject( const QString &projectId ) const;
 
     //! Migrates local project to mergin
     Q_INVOKABLE void migrateProject( const QString &projectId );
@@ -155,22 +163,23 @@ class ProjectsModel : public QAbstractListModel
 
   public slots:
     // MerginAPI - project list signals
-    void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, QString requestId );
-    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
+    void onListProjectsFinished( const MerginProjectsList &merginProjects, int projectsCount, int page, const QString &requestId );
+    void onListProjectsByNameFinished( const MerginProjectsList &merginProjects, const QString &requestId );
+    void onRefetchBrokenProjectsFinished( const MerginProjectsList &merginProjects );
 
-    // Synchonization signals
-    void onProjectSyncStarted( const QString &projectFullName );
-    void onProjectSyncCancelled( const QString &projectFullName );
-    void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
-    void onProjectSyncFinished( const QString &projectFullName, bool successfully, int newVersion );
+    // Synchronization signals
+    void onProjectSyncStarted( const QString &projectId );
+    void onProjectSyncCancelled( const QString &projectId );
+    void onProjectSyncProgressChanged( const QString &projectId, qreal progress );
+    void onProjectSyncFinished( const QString &projectId, bool successfully, int newVersion );
 
-    void onProjectDetachedFromMergin( const QString &projectFullName );
-    void onProjectAttachedToMergin( const QString &projectFullName );
+    void onProjectDetachedFromMergin( const QString &projectId );
+    void onProjectAttachedToMergin( const QString &projectId );
 
     // LocalProjectsManager signals
-    void onProjectAdded( const LocalProject &project );
-    void onAboutToRemoveProject( const LocalProject &project );
-    void onProjectDataChanged( const LocalProject &project );
+    void onProjectAdded( const LocalProject &localProject );
+    void onAboutToRemoveProject( const LocalProject &localProject );
+    void onProjectDataChanged( const LocalProject &localProject );
 
     void onAuthChanged();
 
@@ -195,13 +204,12 @@ class ProjectsModel : public QAbstractListModel
     void activeProjectIdChanged( QString projectId );
 
   private:
-
+    QStringList filterBrokenProjects( const MerginProjectsList &list );
     int projectIndexFromId( const QString &projectId ) const;
 
     void setModelIsLoading( bool state );
 
     QString modelTypeToFlag() const;
-    QStringList projectNames() const;
     void clearProjects();
     void loadLocalProjects();
     void initializeProjectsModel();
