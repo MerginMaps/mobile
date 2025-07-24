@@ -43,10 +43,10 @@ class AppSettings: public QObject
     // enum of haptic modes we support
     enum HapticsType
     {
-      Off = 0,
-      Vibration,
-      Sound,
-      VibrationSound
+      HapticsOff = 0,
+      HapticsVibration,
+      HapticsSound,
+      HapticsVibrationSound
     };
     Q_ENUM( HapticsType )
 

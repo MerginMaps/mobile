@@ -383,7 +383,7 @@ Item {
   }
 
   function triggerHaptics() {
-    if ( AppSettings.hapticsType === AppSettings.Vibration || AppSettings.hapticsType === AppSettings.VibrationSound ) {
+    if ( AppSettings.hapticsType === AppSettings.HapticsVibration || AppSettings.hapticsType === AppSettings.HapticsVibrationSound ) {
       if ( __androidUtils.isAndroid ) {
         __androidUtils.vibrate()
       }
@@ -392,7 +392,7 @@ Item {
       }
     }
 
-    if ( AppSettings.hapticsType === AppSettings.Sound || AppSettings.hapticsType === AppSettings.VibrationSound ) {
+    if ( AppSettings.hapticsType === AppSettings.HapticsSound || AppSettings.hapticsType === AppSettings.HapticsVibrationSound ) {
       hapticSound.play()
     }
   }
