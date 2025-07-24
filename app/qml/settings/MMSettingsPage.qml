@@ -39,17 +39,6 @@ MMPage {
     }
   }
 
-  ListModel {
-    id: hapticsTypeModel
-
-    Component.onCompleted: {
-      hapticsTypeModel.append({ value: AppSettings.Off, text: qsTr("Off") });
-      hapticsTypeModel.append({ value: AppSettings.Vibration, text: qsTr("Vibration") });
-      hapticsTypeModel.append({ value: AppSettings.Sound, text: qsTr("Sound") });
-      hapticsTypeModel.append({ value: AppSettings.VibrationSound, text: qsTr("Vibration & Sound") });
-    }
-  }
-
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
   pageContent: MMScrollView {
@@ -207,27 +196,45 @@ MMPage {
         title: qsTr("Haptic feedback type")
         description: qsTr("Choose a type of haptic feedback while recording")
 
-        // value: () => model.get(currentIndex).text
         currentIndex: AppSettings.hapticsType
 
-        // To dynamically assign values like "HapticsType.Off," derived from a C++ enum or even from if-else blocks,
-        // to a ListElement field, you need to build the model using a function. This function should append
-        // the required data to the model and then return the fully assembled model, ready for use.
-        model: hapticsTypeModel
+        model: ListModel {
+          id: hapticsTypeModel
+
+          ListElement {
+            value: AppSettings.HapticsOff
+            text: qsTr("Off")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsVibration
+            text: qsTr("Vibration")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsSound
+            text: qsTr("Sound")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsVibrationSound
+            text: qsTr("Vibration & Sound")
+          }
+        }
 
         onCurrentIndexChanged: {
           AppSettings.hapticsType = currentIndex
           switch ( currentIndex ){
-            case AppSettings.Off:
+            case AppSettings.HapticsOff:
               hapticDropdown.value = "Off"
               break
-            case AppSettings.Vibration:
+            case AppSettings.HapticsVibration:
               hapticDropdown.value = "Vibration"
               break
-            case AppSettings.Sound:
+            case AppSettings.HapticsSound:
               hapticDropdown.value = "Sound"
               break
-            case AppSettings.VibrationSound:
+            case AppSettings.HapticsVibrationSound:
               hapticDropdown.value = "Vibration & Sound"
               break
           }
