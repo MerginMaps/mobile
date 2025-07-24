@@ -15,6 +15,7 @@
 #include "valuerelationfeaturesmodel.h"
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
+#include "coreutils.h"
 
 #include <QtTest/QtTest>
 

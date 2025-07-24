@@ -9,6 +9,7 @@
 
 #include "variablesmanager.h"
 
+#include "coreutils.h"
 #include "qgsexpressioncontextutils.h"
 #include "inputexpressionfunctions.h"
 

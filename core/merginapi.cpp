@@ -1380,7 +1380,6 @@ void MerginApi::createProjectFinished()
     {
       emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
       emit projectCreationFailed();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectId );
     }
   }
   r->deleteLater();
