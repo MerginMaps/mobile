@@ -31,6 +31,8 @@ ApplicationWindow {
   id: window
 
   visible: true
+  x:  __appwindowx
+  y:  __appwindowy
   width:  __appwindowwidth
   height: __appwindowheight
   visibility: __appwindowvisibility
@@ -52,6 +54,12 @@ ApplicationWindow {
                                                  || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
 
   onIsPortraitOrientationChanged: recalculateSafeArea()
+
+  // start window where it was closed last time
+  onXChanged: storeWindowPosition()
+  onYChanged: storeWindowPosition()
+  onWidthChanged: storeWindowPosition()
+  onHeightChanged: storeWindowPosition()
 
   Item {
     id: stateManager
@@ -84,14 +92,6 @@ ApplicationWindow {
         map.state = "inactive";
       }
     }
-  }
-
-  Settings {
-    // start window where it was closed last time
-    property alias x: window.x
-    property alias y: window.y
-    property alias width: window.width
-    property alias height: window.height
   }
 
   function showProjError(message) {
@@ -1136,6 +1136,14 @@ ApplicationWindow {
     repeat: false
   }
 
+  Timer {
+    id: storeWindowPositionTimer
+
+    interval: 1000
+
+    onTriggered: __appSettings.windowPosition = [window.x, window.y, window.width, window.height]
+  }
+
   function backButtonPressed() {
 
     if ( closeAppTimer.running ) {
@@ -1169,6 +1177,13 @@ ApplicationWindow {
       __style.safeAreaRight = safeArea[1]
       __style.safeAreaBottom = safeArea[2]
       __style.safeAreaLeft = safeArea[3]
+    }
+  }
+
+  function storeWindowPosition() {
+    if ( Qt.platform.os !== "ios" && Qt.platform.os !== "android")
+    {
+      storeWindowPositionTimer.restart()
     }
   }
 }
