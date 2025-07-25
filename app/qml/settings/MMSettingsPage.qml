@@ -7,13 +7,17 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "./components" as MMSettingsComponents
 import "../components"
+import "../dialogs"
 
 MMPage {
   id: root
@@ -63,11 +67,11 @@ MMPage {
         title: qsTr("GPS accuracy threshold")
         description: qsTr("Determines when the accuracy indicator turns yellow")
         valueDescription: qsTr("GPS accuracy threshold, in meters")
-        value: __appSettings.gpsAccuracyTolerance
+        value: AppSettings.gpsAccuracyTolerance
         suffix: " m"
 
         onValueWasChanged: function( newValue ) {
-          __appSettings.gpsAccuracyTolerance = newValue
+          AppSettings.gpsAccuracyTolerance = newValue
         }
       }
 
@@ -88,11 +92,11 @@ MMPage {
         title: qsTr("GPS antenna height")
         description: qsTr("Includes pole height and GPS receiver’s antenna height")
         valueDescription: qsTr("GPS antenna height, in meters")
-        value: __appSettings.gpsAntennaHeight
+        value: AppSettings.gpsAntennaHeight
         suffix: " m"
 
         onValueWasChanged: function( newValue ) {
-          __appSettings.gpsAntennaHeight = newValue
+          AppSettings.gpsAntennaHeight = newValue
         }
       }
 
@@ -114,15 +118,15 @@ MMPage {
         title: qsTr("Interval threshold type")
         description: qsTr("Choose a type of threshold for streaming mode")
 
-        value: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
-        currentIndex: __appSettings.intervalType
+        value: AppSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Distance Traveled") : qsTr("Time elapsed")
+        currentIndex: AppSettings.intervalType
 
         // To dynamically assign values like "MM.StreamingIntervalType.Distance," derived from a C++ enum or even from if-else blocks,
         // to a ListElement field, you need to build the model using a function. This function should append the required data to the model
         // and then return the fully assembled model, ready for use.
         model: intervalTypeModel
 
-        onCurrentIndexChanged: __appSettings.intervalType = currentIndex
+        onCurrentIndexChanged: AppSettings.intervalType = currentIndex
       }
 
       MMLine {}
@@ -131,12 +135,12 @@ MMPage {
         width: parent.width
         title: qsTr("Threshold interval")
         description: qsTr("Streaming mode will add a point to the object at each interval")
-        valueDescription:  __appSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
-        value: __appSettings.lineRecordingInterval
-        suffix: __appSettings.intervalType === MM.StreamingIntervalType.Distance ? " m" : " s"
+        valueDescription:  AppSettings.intervalType === MM.StreamingIntervalType.Distance ? qsTr("Threshold interval, in meters") : qsTr("Threshold interval, in seconds")
+        value: AppSettings.lineRecordingInterval
+        suffix: AppSettings.intervalType === MM.StreamingIntervalType.Distance ? " m" : " s"
 
         onValueWasChanged: function( newValue ) {
-          __appSettings.lineRecordingInterval = newValue
+          AppSettings.lineRecordingInterval = newValue
         }
       }
 
@@ -156,9 +160,9 @@ MMPage {
         width: parent.width
         title: qsTr("Reuse last entered value")
         description: qsTr("Each field offers an option to reuse its value on the next feature")
-        checked: __appSettings.reuseLastEnteredValues
+        checked: AppSettings.reuseLastEnteredValues
 
-        onClicked: __appSettings.reuseLastEnteredValues = !checked
+        onClicked: AppSettings.reuseLastEnteredValues = !checked
       }
 
       MMLine {}
@@ -167,9 +171,9 @@ MMPage {
         width: parent.width
         title: qsTr("Automatically sync changes")
         description: qsTr("Each time you save changes, the app will sync automatically")
-        checked: __appSettings.autosyncAllowed
+        checked: AppSettings.autosyncAllowed
 
-        onClicked: __appSettings.autosyncAllowed = !checked
+        onClicked: AppSettings.autosyncAllowed = !checked
       }
 
       MMLine {}
@@ -178,9 +182,63 @@ MMPage {
         width: parent.width
         title: qsTr("Auto-lock position")
         description: qsTr("Each time you start recording, the app centers to GPS")
-        checked: __appSettings.autolockPosition
+        checked: AppSettings.autolockPosition
 
-        onClicked: __appSettings.autolockPosition = !checked
+        onClicked: AppSettings.autolockPosition = !checked
+      }
+
+      MMLine {}
+
+      MMSettingsComponents.MMSettingsDropdown {
+        id: hapticDropdown
+        width: parent.width
+
+        title: qsTr("Haptic feedback type")
+        description: qsTr("Choose a type of haptic feedback while recording")
+
+        currentIndex: AppSettings.hapticsType
+
+        model: ListModel {
+          id: hapticsTypeModel
+
+          ListElement {
+            value: AppSettings.HapticsOff
+            text: qsTr("Off")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsVibration
+            text: qsTr("Vibration")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsSound
+            text: qsTr("Sound")
+          }
+
+          ListElement {
+            value: AppSettings.HapticsVibrationSound
+            text: qsTr("Vibration & Sound")
+          }
+        }
+
+        onCurrentIndexChanged: {
+          AppSettings.hapticsType = currentIndex
+          switch ( currentIndex ){
+            case AppSettings.HapticsOff:
+              hapticDropdown.value = "Off"
+              break
+            case AppSettings.HapticsVibration:
+              hapticDropdown.value = "Vibration"
+              break
+            case AppSettings.HapticsSound:
+              hapticDropdown.value = "Sound"
+              break
+            case AppSettings.HapticsVibrationSound:
+              hapticDropdown.value = "Vibration & Sound"
+              break
+          }
+        }
       }
 
       Item { width: 1; height: 1 }

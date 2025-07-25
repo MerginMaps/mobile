@@ -234,6 +234,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
     Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
 
+    // Sounds
+    Q_PROPERTY( QUrl hapticSound READ hapticSound CONSTANT )
+
     /*
      * Pixel sizes used across the app
      */
@@ -522,6 +525,8 @@ class MMStyle: public QObject
     QUrl crosshairForegroundImage() const {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
     QUrl crosshairPlusImage() const {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
     QUrl noWorkspaceImage() const {return QUrl( "qrc:/images/NoWorkspace.svg" );}
+
+    QUrl hapticSound() {return QUrl( "qrc:/sounds/haptic_sound.wav" );}
 
     double toolbarHeight() const
     {

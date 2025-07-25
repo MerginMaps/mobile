@@ -286,6 +286,7 @@ qt_add_resources(
   images/images.qrc
   i18n/input_i18n.qrc
   fonts/fonts.qrc
+  sounds/sounds.qrc
 )
 
 # ########################################################################################
@@ -566,7 +567,9 @@ if (MACOS OR IOS)
 endif ()
 
 if (IOS)
-  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
+  target_link_libraries(
+    Input PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
+  )
   qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
 endif ()
 
@@ -599,5 +602,5 @@ qt_add_qml_module(
   URI MMInput
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
-  RESOURCE_PREFIX /com.merginmaps/imports NO_GENERATE_QMLTYPES
+  RESOURCE_PREFIX /com.merginmaps/imports
 )

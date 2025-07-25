@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <file>haptic_sound.wav</file>
+    </qresource>
+</RCC>
