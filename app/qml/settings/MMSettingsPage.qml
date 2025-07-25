@@ -193,8 +193,8 @@ MMPage {
         id: hapticDropdown
         width: parent.width
 
-        title: qsTr("Haptic feedback type")
-        description: qsTr("Choose a type of haptic feedback while recording")
+        title: qsTr("Touch Feedback")
+        description: qsTr("The app can vibrate and play a sound when adding a feature")
 
         currentIndex: AppSettings.hapticsType
 

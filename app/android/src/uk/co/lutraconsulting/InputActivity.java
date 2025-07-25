@@ -281,12 +281,26 @@ public class InputActivity extends QtActivity
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
     {
       vib = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
-    } else {
+    } else
+    {
       VibratorManager vibManager = (VibratorManager) getSystemService(getApplicationContext().VIBRATOR_MANAGER_SERVICE);
       vib = vibManager.getDefaultVibrator();
     }
-    vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK),
-      VibrationAttributes.createForUsage(VibrationAttributes.USAGE_CLASS_FEEDBACK));
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+    {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+      {
+        vib.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE));
+      } else
+      {
+        vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK));
+      }
+    } else
+    {
+      vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK),
+        VibrationAttributes.createForUsage(VibrationAttributes.USAGE_CLASS_FEEDBACK));
+    }
   }
 
   @Override
