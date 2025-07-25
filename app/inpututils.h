@@ -632,6 +632,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isValidEmail( const QString &email );
 
+    /**
+     * Replaces invalid filename characters with underscores (_)
+     */
+    static void sanitizeFileName( QString &fileName );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

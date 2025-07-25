@@ -992,7 +992,9 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
 
   if ( !expression.isEmpty() )
   {
-    return evaluateExpression( pair, activeProject, expression );
+    QString result = evaluateExpression( pair, activeProject, expression );
+    sanitizeFileName( result );
+    return result;
   }
   else
   {
@@ -1051,7 +1053,7 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   if ( prefixPath.isEmpty() ) return modPath;
 
   // Do not use a canonical path for non-existing path
-  if ( !QFileInfo( path ).exists() )
+  if ( !QFileInfo::exists( path ) )
   {
     if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath ) )
     {
@@ -1959,6 +1961,12 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
     case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
     default: return MMStyle::tableLayerNoColorOverlayIcon();
   }
+}
+
+void InputUtils::sanitizeFileName( QString &fileName )
+{
+  const QRegularExpression illegalChars( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
+  fileName.replace( illegalChars, QStringLiteral( "_" ) );
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
