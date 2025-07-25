@@ -114,31 +114,6 @@ MMPage {
           sourceSize.height: height
         }
       }
-
-      Item {
-        Layout.preferredHeight: __style.margin40
-        Layout.fillWidth: true
-      }
-
-      RowLayout {
-        Layout.fillWidth: true
-
-        Text {
-          text: qsTr("Haptic sound: ")
-          font: __style.p5
-          color: __style.nightColor
-          Layout.fillWidth: true
-        }
-
-        Text {
-          text: "<a href=\"https://freesound.org/s/244656/\">Pop 6 -- D.S.G.</a>"
-          onLinkActivated: ( link ) => Qt.openUrlExternally( link )
-          font: __style.p5
-          color: __style.nightColor
-          Layout.alignment: Qt.AlignRight
-          Layout.fillWidth: true
-        }
-      }
     }
   }
 }
