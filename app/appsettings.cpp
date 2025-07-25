@@ -256,7 +256,7 @@ void AppSettings::setValue( const QString &key, const QVariant &value )
   settings.endGroup();
 }
 
-QVariant AppSettings::value( const QString &key, const QVariant &defaultValue )
+QVariant AppSettings::value( const QString &key, const QVariant &defaultValue ) const
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
@@ -335,4 +335,22 @@ void AppSettings::setIgnoreMigrateVersion( const QString &version )
   mIgnoreMigrateVersion = version;
   setValue( QStringLiteral( "ignoreMigrateVersion" ), version );
   emit ignoreMigrateVersionChanged();
+}
+
+QList<QVariant> AppSettings::windowPosition() const
+{
+  QVariantList windowPosition = value( QStringLiteral( "windowPosition" ), QVariantList() ).toList();
+  if ( windowPosition.size() != 4 )
+  {
+    return {};
+  }
+
+  return windowPosition;
+}
+
+void AppSettings::setWindowPosition( const QList<QVariant> &newWindowPosition )
+{
+  setValue( QStringLiteral( "windowPosition" ), QVariant::fromValue( newWindowPosition ) );
+
+  emit windowPositionChanged();
 }

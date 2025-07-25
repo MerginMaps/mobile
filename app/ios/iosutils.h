@@ -36,8 +36,6 @@ class IosUtils: public QObject
     explicit IosUtils( QObject *parent = nullptr );
     bool isIos() const;
 
-    void rotateScreenToPortrait();
-
     Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
     IOSImagePicker *imagePicker() const;
@@ -68,8 +66,6 @@ class IosUtils: public QObject
     void setIdleTimerDisabled();
 
     QVector<int> getSafeAreaImpl();
-
-    void rotateScreenToPortraitImpl();
 
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();
