@@ -240,7 +240,3 @@ jobs:
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
-
-          # Add comment to GitHub
-          GITHUB_API=https://api.github.com/repos/MerginMaps/mobile/commits/${GITHUB_SHA}/comments
-          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "iOS - version '${CF_BUNDLE_VERSION}' just submitted!"}' ${GITHUB_API}
