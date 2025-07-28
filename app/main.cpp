@@ -737,7 +737,7 @@ int main( int argc, char *argv[] )
 #ifdef DESKTOP_OS
   appWindowVisibility = QWindow::Windowed;
 
-  QVariantList windowCachedPosition = as.windowPosition();
+  QVariantList windowCachedPosition = as->windowPosition();
   if ( !windowCachedPosition.isEmpty() )
   {
     appWindowX = windowCachedPosition.at( 0 ).toInt();

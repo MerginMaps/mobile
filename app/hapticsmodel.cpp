@@ -16,8 +16,8 @@ HapticsModel::HapticsModel( QObject *parent ) : QAbstractListModel( parent )
   mHapticsTypes.append( {AppSettings::HapticsType::HapticsSound, tr( "Sound" )} );
 #else
   mHapticsTypes.append( {AppSettings::HapticsType::HapticsOff, tr( "Off" )} );
-  mHapticsTypes.append( {AppSettings::HapticsType::HapticsVibration, tr( "Vibration" )} );
   mHapticsTypes.append( {AppSettings::HapticsType::HapticsSound, tr( "Sound" )} );
+  mHapticsTypes.append( {AppSettings::HapticsType::HapticsVibration, tr( "Vibration" )} );
   mHapticsTypes.append( {AppSettings::HapticsType::HapticsVibrationSound, tr( "Vibration & Sound" )} );
 #endif
 }
