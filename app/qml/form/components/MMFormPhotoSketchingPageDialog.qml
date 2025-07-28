@@ -47,12 +47,15 @@ Dialog {
       text: qsTr( "Undo" )
       iconSourceLeft: __style.undoIcon
       size: MMButton.Sizes.Small
+
       bgndColor: __style.polarColor
       bgndColorDisabled: __style.polarColor
       bgndColorHover: __style.mediumGreenColor
       fontColorHover: __style.forestColor
       iconColorHover: __style.forestColor
+
       enabled: root.controller.canUndo
+
       Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
@@ -105,8 +108,8 @@ Dialog {
       id: container
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.leftMargin: __style.pageMargins
-      Layout.rightMargin: __style.pageMargins
+      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
+      Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       MMComponents.MMPhoto {
         id: photo
@@ -217,7 +220,7 @@ Dialog {
       Layout.preferredHeight: scrollRow.height
       Layout.preferredWidth: scrollRow.width
       Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
-      Layout.bottomMargin: closeButton.implicitWidth
+      Layout.bottomMargin: __style.margin20
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
@@ -226,9 +229,8 @@ Dialog {
 
       Row {
         id: scrollRow
-        width: parent.width
         spacing: __style.margin12
-        padding: __style.margin6
+        padding: __style.margin4
         anchors.centerIn: parent
 
         Repeater {
