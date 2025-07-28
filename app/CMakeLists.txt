@@ -57,6 +57,7 @@ set(MM_SRCS
     featuresmodel.cpp
     fieldsmodel.cpp
     guidelinecontroller.cpp
+    hapticsmodel.cpp
     identifykit.cpp
     imageutils.cpp
     inputexpressionfunctions.cpp
@@ -146,6 +147,7 @@ set(MM_HDRS
     featuresmodel.h
     fieldsmodel.h
     guidelinecontroller.h
+    hapticsmodel.h
     identifykit.h
     imageutils.h
     inputexpressionfunctions.h
