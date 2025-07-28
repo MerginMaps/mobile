@@ -198,29 +198,7 @@ MMPage {
 
         currentIndex: AppSettings.hapticsType
 
-        model: ListModel {
-          id: hapticsTypeModel
-
-          ListElement {
-            value: AppSettings.HapticsOff
-            text: qsTr("Off")
-          }
-
-          ListElement {
-            value: AppSettings.HapticsVibration
-            text: qsTr("Vibration")
-          }
-
-          ListElement {
-            value: AppSettings.HapticsSound
-            text: qsTr("Sound")
-          }
-
-          ListElement {
-            value: AppSettings.HapticsVibrationSound
-            text: qsTr("Vibration & Sound")
-          }
-        }
+        model: HapticsModel {}
 
         onCurrentIndexChanged: {
           AppSettings.hapticsType = currentIndex
