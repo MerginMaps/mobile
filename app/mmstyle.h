@@ -540,6 +540,12 @@ class MMStyle: public QObject
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };
 
+    // Default (startup) window sizes on desktop platforms
+    const int DEFAULT_WINDOW_X = 0;
+    const int DEFAULT_WINDOW_Y = 0;
+    const int DEFAULT_WINDOW_WIDTH = 640;
+    const int DEFAULT_WINDOW_HEIGHT = 1136;
+
     //Numbers from 1 to 150 and number 720
     double number1() const {return qMax<double>( 1 * mDp, 1 ); } // make sure these sizes are visible if mDP < 1
     double number2() const {return qMax<double>( 2 * mDp, 1 ); } // make sure these sizes are visible if mDP < 1
