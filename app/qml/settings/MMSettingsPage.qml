@@ -7,8 +7,6 @@
  *                                                                         *
  ***************************************************************************/
 
-pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 
@@ -202,20 +200,7 @@ MMPage {
 
         onCurrentIndexChanged: {
           AppSettings.hapticsType = currentIndex
-          switch ( currentIndex ){
-            case AppSettings.HapticsOff:
-              hapticDropdown.value = "Off"
-              break
-            case AppSettings.HapticsVibration:
-              hapticDropdown.value = "Vibration"
-              break
-            case AppSettings.HapticsSound:
-              hapticDropdown.value = "Sound"
-              break
-            case AppSettings.HapticsVibrationSound:
-              hapticDropdown.value = "Vibration & Sound"
-              break
-          }
+          hapticDropdown.value = hapticDropdown.model.data( hapticDropdown.model.index( currentIndex, 0 ), HapticsModel.TextRole )
         }
       }
 
