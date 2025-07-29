@@ -151,7 +151,7 @@ jobs:
           echo "path to keystore $PATH_TO_KEYSTORE"
           echo "QT_ANDROID_KEYSTORE_PATH=$PATH_TO_KEYSTORE" >> $GITHUB_ENV
 
-      - name: Get vcpkg
+      - name: Install vcpkg
         shell: bash
         run: |
           mkdir -p "${{ env.VCPKG_ROOT }}"
@@ -159,13 +159,8 @@ jobs:
           git init
           git remote add origin https://github.com/microsoft/vcpkg.git
           git pull origin master
-          VCPKG_TAG=`cat ${{ github.workspace }}/VCPKG_BASELINE`
-          echo "using VCPKG_TAG ${VCPKG_TAG}"
+          VCPKG_TAG=`cat ${{ github.workspace }}/mm/VCPKG_BASELINE`
           git checkout ${VCPKG_TAG}
-
-      - name: Install vcpkg
-        run: |
-          echo "install vcpkg"
           cd "${{ env.VCPKG_ROOT }}"
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
