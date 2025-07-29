@@ -26,12 +26,6 @@ if (NOT DEFINED ENV{ANDROID_SDK_ROOT})
 endif ()
 set(ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
 
-if(DEFINED ENV{ANDROIDAPI})
-  set(VCPKG_CMAKE_SYSTEM_VERSION $ENV{ANDROIDAPI})
-else()
-  message(FATAL_ERROR "ANDROIDAPI not defined as env variable")
-endif()
-
 set(VCPKG_CXX_FLAGS "-fstack-protector-strong")
 set(VCPKG_C_FLAGS "-fstack-protector-strong")
 set(VCPKG_LINKER_FLAGS "-lunwind -Wl,--exclude-libs=libunwind.a")

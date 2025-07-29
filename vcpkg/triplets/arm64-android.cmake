@@ -27,10 +27,3 @@ set(ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
 
 set(VCPKG_CXX_FLAGS "-fstack-protector-strong")
 set(VCPKG_C_FLAGS "-fstack-protector-strong")
-
-if(DEFINED ENV{ANDROIDAPI})
-  set(VCPKG_CMAKE_SYSTEM_VERSION $ENV{ANDROIDAPI})
-else()
-    message(FATAL_ERROR "$ENV{ANDROIDAPI} not defined as env variable")
-endif()
-
