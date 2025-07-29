@@ -421,6 +421,16 @@ class MerginApi: public QObject
     static bool parseVersion( const QString &version, int &major, int &minor );
 
     /**
+    * Parse major, minor and patch version number from version string.
+    * \param version full server version string
+    * \param major parsed major number
+    * \param minor parsed minor number
+    * \param patch parsed patch number
+    * @return true when parsing was successful
+    */
+    static bool parseVersion( const QString &version, int &major, int &minor, int &patch );
+
+    /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
     * \param metadataFile Relative path of metafile to project's folder
@@ -629,6 +639,17 @@ class MerginApi: public QObject
      */
     void setApiSupportsSso( bool ssoSupported );
 
+    /**
+     * Returns server API version string (e.g. "2023.4.0")
+     */
+    QString apiVersion() const;
+    void setApiVersion( const QString &apiVersion );
+
+    /**
+     * Checks if server version meets or exceeds a required minimum version
+     */
+    bool serverVersionIsAtLeast( int requiredMajor, int requiredMinor, int requiredPatch ) const;
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -698,6 +719,7 @@ class MerginApi: public QObject
     void listInvitationsFinished( const QList<MerginInvitation> &invitations );
 
     void processInvitationFailed();
+    void processInvitationSuccess();
     void processInvitationFinished( bool accepted );
 
     void workspaceCreated( const QString &workspaceName );
@@ -908,6 +930,7 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
     bool mApiSupportsSso = false;
+    QString mApiVersion;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;

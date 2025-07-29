@@ -21,12 +21,14 @@ struct MerginInvitation
 
   public:
     Q_PROPERTY( QString workspace MEMBER workspace )
+    Q_PROPERTY( int workspaceId MEMBER workspaceId )
     Q_PROPERTY( QString uuid MEMBER uuid )
     Q_PROPERTY( QString role MEMBER role )
     Q_PROPERTY( QDateTime expiration MEMBER expiration )
 
     QString uuid;
     QString workspace;
+    int workspaceId;
     QString role;
     QDateTime expiration;
 

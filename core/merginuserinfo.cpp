@@ -18,6 +18,7 @@ MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitation
   MerginInvitation merginInvitation;
   merginInvitation.uuid = invitationInfo.value( QStringLiteral( "uuid" ) ).toString();
   merginInvitation.workspace = invitationInfo.value( QStringLiteral( "workspace" ) ).toString();
+  merginInvitation.workspaceId = invitationInfo.value( QStringLiteral( "workspace_id" ) ).toInt();
   merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
   merginInvitation.expiration = invitationInfo.value( QStringLiteral( "expire" ) ).toVariant().toDateTime();
 
