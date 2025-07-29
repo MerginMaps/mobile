@@ -422,6 +422,16 @@ class MerginApi: public QObject
     static bool parseVersion( const QString &version, int &major, int &minor );
 
     /**
+    * Parse major, minor and patch version number from version string.
+    * \param version full server version string
+    * \param major parsed major number
+    * \param minor parsed minor number
+    * \param patch parsed patch number
+    * @return true when parsing was successful
+    */
+    static bool parseVersion( const QString &version, int &major, int &minor, int &patch );
+
+    /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
     * \param metadataFile Relative path of metafile to project's folder
@@ -742,8 +752,6 @@ class MerginApi: public QObject
     void ssoConfigIsMultiTenant();
 
     void userSelfRegistrationEnabledChanged();
-
-    void apiVersionChanged( const QString &apiVersion );
 
   private slots:
     void listProjectsReplyFinished( QString requestId );

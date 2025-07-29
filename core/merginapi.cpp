@@ -1796,6 +1796,27 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor, int &patch )
+{
+  if ( version.isNull() || version.isEmpty() )
+    return false;
+
+  QStringList versionParts = version.split( '.' );
+
+  if ( versionParts.size() != 3 )
+    return false;
+
+  bool majorOk, minorOk, patchOk;
+  major = versionParts[0].toInt( &majorOk );
+  minor = versionParts[1].toInt( &minorOk );
+  patch = versionParts[2].toInt( &patchOk );
+
+  if ( !majorOk || !minorOk || !patchOk )
+    return false;
+
+  return true;
+}
+
 bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
@@ -3823,12 +3844,12 @@ void MerginApi::getServerConfigReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "Config", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
-      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
+      const QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      const QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      const QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
       int major = -1;
       int minor = -1;
 
@@ -3868,7 +3889,7 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( ( major >= 2025 && minor >= 4 ) && diagnosticUrl.isEmpty() )
+      if ( serverVersionIsAtLeast( 2025, 4, 0 ) && diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
       }
@@ -3882,7 +3903,7 @@ void MerginApi::getServerConfigReplyFinished()
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
-      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      if ( serverVersionIsAtLeast( MINIMUM_SERVER_VERSION_MAJOR, MINIMUM_SERVER_VERSION_MINOR + 1, 0 ) )
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
@@ -4447,7 +4468,6 @@ void MerginApi::setApiVersion( const QString &apiVersion )
   if ( mApiVersion != apiVersion )
   {
     mApiVersion = apiVersion;
-    emit apiVersionChanged( mApiVersion );
   }
 }
 
@@ -4455,18 +4475,10 @@ bool MerginApi::serverVersionIsAtLeast( const int requiredMajor, const int requi
 {
   int serverMajor = -1;
   int serverMinor = -1;
-  const bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor );
+  int serverPatch = -1;
+  const bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor, serverPatch );
 
   if ( !validVersion )
-    return false;
-
-  // let‘s extract patch version ( parseVersion only extracts major and minor )
-  int serverPatch = -1;
-  bool patchOk;
-  QStringList versionParts = mApiVersion.split( '.' );
-  serverPatch = versionParts[2].toInt( &patchOk );
-
-  if ( !patchOk )
     return false;
 
   // check major
