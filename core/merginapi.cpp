@@ -3829,15 +3829,17 @@ void MerginApi::getServerConfigReplyFinished()
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
       QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
-      setApiVersion( apiVersion );
-
       int major = -1;
       int minor = -1;
-      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      const bool validVersion = parseVersion( apiVersion, major, minor );
 
       if ( !validVersion )
       {
         CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      } else
+      {
+        setApiVersion( apiVersion );
       }
 
       if ( serverType == QStringLiteral( "ee" ) )
@@ -4083,7 +4085,7 @@ void MerginApi::processInvitationReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
+  const bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
 
   if ( r->error() == QNetworkReply::NoError )
   {
@@ -4093,15 +4095,15 @@ void MerginApi::processInvitationReplyFinished()
     // emit processInvitationSuccess to navigate to project's page in qml
     if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
     {
-      QByteArray data = r->readAll();
-      QJsonDocument doc = QJsonDocument::fromJson( data );
+      const QByteArray data = r->readAll();
+      const QJsonDocument doc = QJsonDocument::fromJson( data );
 
       if ( doc.isObject() )
       {
-        QJsonObject responseObj = doc.object();
+        const QJsonObject responseObj = doc.object();
         if ( responseObj.contains( "workspace_id" ) )
         {
-          int workspaceId = responseObj.value( "workspace_id" ).toInt();
+          const int workspaceId = responseObj.value( "workspace_id" ).toInt();
           mUserInfo->setActiveWorkspace( workspaceId );
           emit processInvitationSuccess();
         }
@@ -4448,11 +4450,11 @@ void MerginApi::setApiVersion( const QString &apiVersion )
   }
 }
 
-bool MerginApi::serverVersionIsAtLeast( int requiredMajor, int requiredMinor, int requiredPatch ) const
+bool MerginApi::serverVersionIsAtLeast(const int requiredMajor, const int requiredMinor, const int requiredPatch ) const
 {
   int serverMajor = -1;
   int serverMinor = -1;
-  bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor );
+  const bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor );
 
   if ( !validVersion )
     return false;
