@@ -745,7 +745,7 @@ void TestAttributeController::testPhotoRenaming()
   // 8 - photo_with_slash_in_subfolder_relative_to_default_path -> subfolder 'media/with_slash'
   //
 
-  controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes" ) );
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes " ) );
 
   // These are the field values set by QML code after attaching a photo
   controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
@@ -890,21 +890,11 @@ void TestAttributeController::testPhotoRenaming()
   {
     qInfo() << QStringLiteral( "Testing field #%1" ).arg( testcase.fieldIdx );
 
-    qInfo() << testcase.originalPath;
     QVERIFY( !QFile::exists( testcase.originalPath ) );
-    qInfo() << testcase.expectedNewPath;
     QVERIFY( QFile::exists( testcase.expectedNewPath ) );
-    qInfo() << testcase.expectedNewFieldValue;
-    qInfo() << f.attribute( testcase.fieldIdx );
 
     QCOMPARE( f.attribute( testcase.fieldIdx ), testcase.expectedNewFieldValue );
   }
-
-  // TODOs:
-  //  - report that people should not use feature IDs in custom photo names!
-  //  - fix issue where email might be used for mm_username variable as this breaks the renaming!
-  //  - fix docs recommending variables with old prefix for photo names
-  //  - report misconfiguration of the use of subfolders & subfolders in the photo naming
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()

@@ -1611,14 +1611,16 @@ void AttributeController::renamePhotos()
         const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
         const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
-        const QFileInfo fi( src );
-        QString newName = QStringLiteral( "%1.%2" ).arg( val.toString(), fi.completeSuffix() );
+        QString newName = val.toString();
 
         // Remove leading slashes from newName following issue #3415
-        const QRegularExpression leadingSlashes( QStringLiteral( "^/+" ) );
+        const thread_local QRegularExpression leadingSlashes( QStringLiteral( "^/+" ) );
         newName.remove( leadingSlashes );
 
         InputUtils::sanitizeFileName( newName );
+
+        const QFileInfo fi( src );
+        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.completeSuffix() );
 
         const QString dst = InputUtils::getAbsolutePath( newName, targetDir );
         if ( InputUtils::renameFile( src, dst ) )

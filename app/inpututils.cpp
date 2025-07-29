@@ -1965,8 +1965,10 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 
 void InputUtils::sanitizeFileName( QString &fileName )
 {
-  const QRegularExpression illegalChars( QStringLiteral( "[\x00-\x20<>:|?*\"]" ) );
+  // regex captures ascii codes 0 to 31 and windows path forbidden characters <>:|?*"
+  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x19<>:|?*\"]" ) );
   fileName.replace( illegalChars, QStringLiteral( "_" ) );
+  fileName = fileName.trimmed();
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
