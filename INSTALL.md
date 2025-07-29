@@ -268,12 +268,10 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    
 
 ```
-  ANDROIDAPI=24
   PATH=+/opt/homebrew/bin
   PATH=+/opt/homebrew/Cellar/flex/2.6.4_2/bin
   PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
   PATH=+/Users/peterpetrik/Projects/quick/build/vcpkg
-  DEPLOYMENT_TARGET=11.0
   ANDROID_NDK_HOME=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125
 ``` 
 
@@ -281,33 +279,31 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 ```
   cmake \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DCMAKE_BUILD_TYPE
     -DANDROID_ABI=arm64-v8a \
+    -DVCPKG_HOST_TRIPLET=arm64-osx \
+    -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
     -DANDROID_NDK=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125 \ 
     -DANDROID_PLATFORM=android-24 \
     -DANDROID_SDK_ROOT=/Users/peterpetrik/Library/Android/sdk \
     -DANDROID_NDK_VERSION="r26" \
     -DANDROID_BUILD_TOOLS_VERSION="34.0.0" \
-    -DVCPKG_HOST_TRIPLET=arm64-osx \
-    -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
-              -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
-              -DANDROID_ARM_NEON=ON \
-              -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
-              -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
-              -DANDROIDAPI=${ANDROIDAPI} \
-              -DANDROID_PLATFORM=android-${ANDROIDAPI} \
-              -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
-              -DANDROID_STL="c++_shared" \
-              -DQT_ANDROID_SIGN_APK=Yes \
-              -DQT_ANDROID_SIGN_AAB=Yes \
-              -DUSE_MM_SERVER_API_KEY=Yes \
-              -DUSE_KEYCHAIN=No \
-              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
-              -GNinja \
-              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-              -S ../mobile \
-              -B ./
-
+    -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+    -DANDROID_ARM_NEON=ON \
+    -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
+    -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
+    -DANDROIDAPI=${ANDROIDAPI} \
+    -DANDROID_PLATFORM=android-${ANDROIDAPI} \
+    -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
+    -DANDROID_STL="c++_shared" \
+    -DQT_ANDROID_SIGN_APK=Yes \
+    -DQT_ANDROID_SIGN_AAB=Yes \
+    -DUSE_MM_SERVER_API_KEY=Yes \
+    -DUSE_KEYCHAIN=No \
+    -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
+    -GNinja \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+    -S ../mobile \
+    -B ./
 ```
 
 ## 4.3. Android on Windows
