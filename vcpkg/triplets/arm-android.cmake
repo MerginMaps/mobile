@@ -15,6 +15,11 @@ set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
 set(VCPKG_CMAKE_SYSTEM_VERSION "${ANDROIDAPI}")
 set(ANDROID_STL "c++_shared")
  
+if (NOT DEFINED ENV{ANDROID_SDK_ROOT})
+  message(FATAL_ERROR "Set required environment variable ANDROID_SDK_ROOT.")
+endif ()
+set(ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
+ 
 set(VCPKG_CXX_FLAGS "-fstack-protector-strong")
 set(VCPKG_C_FLAGS "-fstack-protector-strong")
 set(VCPKG_LINKER_FLAGS "-lunwind -Wl,--exclude-libs=libunwind.a")
