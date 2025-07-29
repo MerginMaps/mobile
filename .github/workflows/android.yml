@@ -213,21 +213,16 @@ jobs:
 
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
-              -D ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
-              -D ANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
-              -D ANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
+              -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
+              -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
+              -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
               -DVCPKG_HOST_TRIPLET=arm64-osx \
-              -D VCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
-              -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+              -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+              -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
               -DANDROID_ARM_NEON=ON \
               -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
-              -DANDROIDAPI=${ANDROIDAPI} \
-              -DANDROID_PLATFORM=android-${ANDROIDAPI} \
-              -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
-              -DANDROID_STL="c++_shared" \
               -DQT_ANDROID_SIGN_APK=Yes \
-              -DQT_ANDROID_SIGN_AAB=Yes \
               -DUSE_MM_SERVER_API_KEY=Yes \
               -DUSE_KEYCHAIN=No \
               -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
