@@ -713,17 +713,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__haveBluetooth", false );
 #endif
 
-#ifdef MOBILE_OS
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", QVariant( 0 ) );
-  engine.rootContext()->setContextProperty( "__appwindowheight", QVariant( 0 ) );
-#else
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Windowed );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
-  engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
-#endif
-  engine.rootContext()->setContextProperty( "__version", version );
-
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
@@ -733,6 +722,37 @@ int main( int argc, char *argv[] )
 
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
+
+  // App window settings
+  // - Mobile app is always maximized - size and position is ignored
+  // - Desktop app is windowed and the default values might be overridden by the last saved position
+  int appWindowX = style->DEFAULT_WINDOW_X;
+  int appWindowY = style->DEFAULT_WINDOW_Y;
+  int appWindowWidth = style->DEFAULT_WINDOW_WIDTH;
+  int appWindowHeight = style->DEFAULT_WINDOW_HEIGHT;
+
+  QWindow::Visibility appWindowVisibility = QWindow::Maximized;
+
+#ifdef DESKTOP_OS
+  appWindowVisibility = QWindow::Windowed;
+
+  QVariantList windowCachedPosition = as.windowPosition();
+  if ( !windowCachedPosition.isEmpty() )
+  {
+    appWindowX = windowCachedPosition.at( 0 ).toInt();
+    appWindowY = windowCachedPosition.at( 1 ).toInt();
+    appWindowWidth = windowCachedPosition.at( 2 ).toInt();
+    appWindowHeight = windowCachedPosition.at( 3 ).toInt();
+  }
+#endif
+
+  engine.rootContext()->setContextProperty( "__appwindowx", appWindowX );
+  engine.rootContext()->setContextProperty( "__appwindowy", appWindowY );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", appWindowWidth );
+  engine.rootContext()->setContextProperty( "__appwindowheight", appWindowHeight );
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", appWindowVisibility );
+
+  engine.rootContext()->setContextProperty( "__version", version );
 
   // Set safe areas for mobile devices
 #ifdef ANDROID
@@ -771,25 +791,6 @@ int main( int argc, char *argv[] )
       style->setSafeAreaBottom( safeAreaInsets[2] );
       style->setSafeAreaLeft( safeAreaInsets[3] );
     }
-  } );
-
-  //
-  // Workaround for Qt bug <link> on iOS.
-  // ApplicationWindow's height and width are not properly updated (updated without signals),
-  // causing visual layout issues throughout the app.
-  // Forcing the screen to portrait mode triggers a recalculation and repaint of visual items,
-  // resolving the layout problems.
-  //
-  // Therefore, as a temporary fix, we rotate the screen to portrait mode on iOS when the app
-  // starts in landscape mode. It's crucial to execute this code after a short delay using
-  // QTimer, ensuring that the UIScene has been properly initialized.
-  //
-
-  const int SHORT_STARTUP_DELAY = 1;
-
-  QTimer::singleShot( SHORT_STARTUP_DELAY, &lambdaContext, [&iosUtils]()
-  {
-    iosUtils.rotateScreenToPortrait();
   } );
 
 #endif
