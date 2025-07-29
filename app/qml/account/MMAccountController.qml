@@ -75,7 +75,13 @@ Item {
       pending: stackView.pending
       height: root.height
       width: root.width
-      canSignUp:  (__merginApi.serverType === MM.MerginServerType.EE ) || ( __merginApi.serverType === MM.MerginServerType.SAAS )
+      canSignUp: {
+        if ( __merginApi.serverType === MM.MerginServerType.EE || __merginApi.serverType === MM.MerginServerType.SAAS ) {
+          return __merginApi.userSelfRegistrationEnabled
+        }
+        return false
+      }
+
       warningMsg: {
         if (__merginApi.apiVersionStatus === MM.MerginApiStatus.OK) {
           ""

@@ -3885,6 +3885,9 @@ void MerginApi::getServerConfigReplyFinished()
 
       const bool ssoEnabled = doc.object().value( QStringLiteral( "sso_enabled" ) ).toBool( false );
       setApiSupportsSso( ssoEnabled );
+
+      const bool userSelfRegistrationEnabled = doc.object().value( QStringLiteral( "user_self_registration" ) ).toBool( false );
+      setUserSelfRegistrationEnabled( userSelfRegistrationEnabled );
     }
   }
   else
@@ -4388,4 +4391,18 @@ void MerginApi::setApiSupportsSso( const bool ssoSupported )
 
   mApiSupportsSso = ssoSupported;
   emit apiSupportsSsoChanged();
+}
+
+bool MerginApi::userSelfRegistrationEnabled() const
+{
+  return mUserSelfRegistrationEnabled;
+}
+
+void MerginApi::setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled )
+{
+  if ( mUserSelfRegistrationEnabled == userSelfRegistrationEnabled )
+    return;
+
+  mUserSelfRegistrationEnabled = userSelfRegistrationEnabled;
+  emit userSelfRegistrationEnabledChanged();
 }
