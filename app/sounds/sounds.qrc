@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <!-- Pop 6 by D.S.G. - https://freesound.org/s/244656/ - License: Creative Commons 0 -->
+        <file>haptic_sound.wav</file>
+    </qresource>
+</RCC>

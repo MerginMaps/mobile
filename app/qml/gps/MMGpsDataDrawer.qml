@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components" as MMComponents
 import "./components" as MMGpsComponents
@@ -311,7 +312,7 @@ MMComponents.MMDrawer {
             width: parent.width / 2
 
             title: qsTr( "GPS antenna height" )
-            value: __appSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(__appSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
+            value: AppSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(AppSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
 
             alignmentRight: Positioner.index % 2 === 1
           }

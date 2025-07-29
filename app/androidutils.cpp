@@ -95,6 +95,14 @@ bool AndroidUtils::requestNotificationPermission()
   return false;
 }
 
+void AndroidUtils::vibrate()
+{
+#ifdef ANDROID
+  QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
+  activity.callMethod<void>( "vibrate", "()V" );
+#endif
+}
+
 QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
 {
 #ifdef ANDROID

@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components" as MMComponents
 import "../dialogs" as MMDialogs
@@ -42,7 +43,7 @@ MMComponents.MMPage {
       model: MM.PositionProvidersModel {
         id: providersModel
 
-        appSettings: __appSettings
+        appSettings: AppSettings
       }
 
       header: MMComponents.MMText {
@@ -64,7 +65,7 @@ MMComponents.MMPage {
       delegate: MMComponents.MMListDelegate {
         id: listdelegate
 
-        property bool isActive: __appSettings.activePositionProviderId === model.ProviderId
+        property bool isActive: AppSettings.activePositionProviderId === model.ProviderId
 
         leftContent: MMComponents.MMRadioButton {
           checked: listdelegate.isActive
@@ -166,7 +167,7 @@ MMComponents.MMPage {
           return
         }
 
-        if ( __appSettings.activePositionProviderId === removeDialog.providerId )
+        if ( AppSettings.activePositionProviderId === removeDialog.providerId )
         {
           // we are removing an active provider, replace it with internal provider
           root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
@@ -246,7 +247,7 @@ MMComponents.MMPage {
       }
     }
 
-    if ( __appSettings.activePositionProviderId === id ) {
+    if ( AppSettings.activePositionProviderId === id ) {
       return // do not construct the same provider again
     }
 
