@@ -3837,7 +3837,8 @@ void MerginApi::getServerConfigReplyFinished()
       if ( !validVersion )
       {
         CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
-      } else
+      }
+      else
       {
         setApiVersion( apiVersion );
       }
@@ -4091,7 +4092,7 @@ void MerginApi::processInvitationReplyFinished()
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
 
-    // if server version is at least 2025.4.1, let‘s get workspaceId from response and switch to it
+    // if server version is at least 2025.4.1, let's get workspaceId from response and switch to it
     // emit processInvitationSuccess to navigate to project's page in qml
     if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
     {
@@ -4101,19 +4102,19 @@ void MerginApi::processInvitationReplyFinished()
       if ( doc.isObject() )
       {
         const QJsonObject responseObj = doc.object();
-        if ( responseObj.contains( "workspace_id" ) )
-        {
-          const int workspaceId = responseObj.value( "workspace_id" ).toInt();
-          mUserInfo->setActiveWorkspace( workspaceId );
-          emit processInvitationSuccess();
-        }
+        const MerginInvitation invitation = MerginInvitation::fromJsonObject( responseObj );
+        QMap<int, QString> workspaces = mUserInfo->workspaces();
+        workspaces.insert( invitation.workspaceId, invitation.workspace );
+        mUserInfo->updateWorkspacesList( workspaces );
+        mUserInfo->setActiveWorkspace( invitation.workspaceId );
+        emit processInvitationSuccess();
       }
     }
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
     CoreUtils::log( "process invitation", QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
     emit processInvitationFailed();
@@ -4450,7 +4451,7 @@ void MerginApi::setApiVersion( const QString &apiVersion )
   }
 }
 
-bool MerginApi::serverVersionIsAtLeast(const int requiredMajor, const int requiredMinor, const int requiredPatch ) const
+bool MerginApi::serverVersionIsAtLeast( const int requiredMajor, const int requiredMinor, const int requiredPatch ) const
 {
   int serverMajor = -1;
   int serverMinor = -1;
