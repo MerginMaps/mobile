@@ -15,15 +15,10 @@ if (ANDROID_ABI)
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  if (DEFINED ENV{ANDROIDAPI})
-    set(ANDROIDAPI $ENV{ANDROIDAPI})
-  else ()
-    message(FATAL_ERROR "ANDROIDAPI not defined as env variable")
-  endif ()
-  # set(ANDROIDAPI "28")
+  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
 
-  set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
-  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
+  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
+  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
   set(ANDROID_STL "c++_shared")
 
   # Target/Minimum API levels for Android, used as Input target properties
@@ -33,6 +28,7 @@ if (ANDROID_ABI)
   if (NOT INPUT_ANDROID_NDK_PATH)
     message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
   endif ()
+
 endif ()
 
 if (IOS)
@@ -41,11 +37,11 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") #when changed change triplets arm64-ios.cmake
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") # when changed change triplets arm64-ios.cmake
 endif ()
 
 if (APPLE AND NOT IOS)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") #when changed change also triplets x64/arm64-osx.cmake
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") # when changed change also triplets *-osx.cmake
 endif ()
 
 # ########################################################################################
