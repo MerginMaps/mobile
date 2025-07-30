@@ -214,7 +214,6 @@ jobs:
               -DVCPKG_HOST_TRIPLET=arm64-osx \
               -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
               -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
-              -DANDROID_ARM_NEON=ON \
               -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_SIGN_APK=Yes \
