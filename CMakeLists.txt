@@ -15,11 +15,17 @@ if (ANDROID_ABI)
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
+  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets
+                       # *-android.cmake
 
-  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
-  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
+  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change
+                                                # VCPKG_CMAKE_SYSTEM_VERSION in triplets
+                                                # *-android.cmake
+  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") # when changed change
+                                                    # VCPKG_CMAKE_SYSTEM_VERSION in
+                                                    # triplets *-android.cmake
   set(ANDROID_STL "c++_shared")
+  set(ANDROID_ARM_NEON ON)
 
   # Target/Minimum API levels for Android, used as Input target properties
   set(INPUT_ANDROID_TARGET_SDK_VERSION "34")
@@ -28,7 +34,9 @@ if (ANDROID_ABI)
   if (NOT INPUT_ANDROID_NDK_PATH)
     message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
   endif ()
-
+  set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
+      "${INPUT_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
+  )
 endif ()
 
 if (IOS)

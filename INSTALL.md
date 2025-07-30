@@ -193,6 +193,8 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 
 ## 4.1. Android on Linux
 
+!TODO - merge with android on macos!
+
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
    - Java 17 (on Ubuntu 22.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
@@ -261,50 +263,51 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
    binary vcpkg cache.
    
+   ```
+     cmake \
+       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+       -DANDROID_ABI=arm64-v8a \
+       -DVCPKG_HOST_TRIPLET=arm64-osx \
+       -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+       -DANDROID_NDK=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125 \ 
+       -DANDROID_PLATFORM=android-24 \
+       -DANDROID_SDK_ROOT=/Users/peterpetrik/Library/Android/sdk \
+       -DANDROID_NDK_VERSION="r26" \
+       -DANDROID_BUILD_TOOLS_VERSION="34.0.0" \
+       -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+       -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
+       -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
+       -DCMAKE_TOOLCHAIN_FILE:PATH="../vcpkg/scripts/buildsystems/vcpkg.cmake" \
+       -GNinja \
+       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+       -S ../mobile \
+       -B ./
+   ```
+   
    Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
    development and debugging)
    
+
+   Add this to build env.
+   ```
+     PATH=+/opt/homebrew/bin
+     PATH=+/opt/homebrew/Cellar/flex/2.6.4_2/bin
+     PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
+     PATH=+/Users/peterpetrik/Projects/quick/build/vcpkg
+     ANDROID_NDK_HOME=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125
+   ```
+   And this to cmake options
+   ```
+     ANDROID_PLATFORM=android-24
+     VCPKG_HOST_TRIPLET=arm64-osx
+     VCPKG_TARGET_TRIPLET=arm64-android
+     CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+     VCPKG_INSTALL_OPTIONS="--allow-unsupported"
+   ```
+   
+   
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
    
-
-```
-  PATH=+/opt/homebrew/bin
-  PATH=+/opt/homebrew/Cellar/flex/2.6.4_2/bin
-  PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
-  PATH=+/Users/peterpetrik/Projects/quick/build/vcpkg
-  ANDROID_NDK_HOME=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125
-``` 
-
-  You can continue with configure step:
-```
-  cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DANDROID_ABI=arm64-v8a \
-    -DVCPKG_HOST_TRIPLET=arm64-osx \
-    -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
-    -DANDROID_NDK=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125 \ 
-    -DANDROID_PLATFORM=android-24 \
-    -DANDROID_SDK_ROOT=/Users/peterpetrik/Library/Android/sdk \
-    -DANDROID_NDK_VERSION="r26" \
-    -DANDROID_BUILD_TOOLS_VERSION="34.0.0" \
-    -D VCPKG_INSTALL_OPTIONS="--allow-unsupported" \
-    -DANDROID_ARM_NEON=ON \
-    -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
-    -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
-    -DANDROIDAPI=${ANDROIDAPI} \
-    -DANDROID_PLATFORM=android-${ANDROIDAPI} \
-    -DANDROID_NDK_PLATFORM=android-${ANDROIDAPI} \
-    -DANDROID_STL="c++_shared" \
-    -DQT_ANDROID_SIGN_APK=Yes \
-    -DQT_ANDROID_SIGN_AAB=Yes \
-    -DUSE_MM_SERVER_API_KEY=Yes \
-    -DUSE_KEYCHAIN=No \
-    -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
-    -GNinja \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-    -S ../mobile \
-    -B ./
-```
 
 ## 4.3. Android on Windows
 
