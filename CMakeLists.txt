@@ -15,7 +15,8 @@ if (ANDROID_ABI)
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets *-android.cmake
+  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets
+                       # *-android.cmake
 
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change
                                                 # VCPKG_CMAKE_SYSTEM_VERSION in triplets
