@@ -17,12 +17,12 @@
 #define REMEMBERATTRIBUTESCONTROLLER_H
 
 
-#include "qgsfeature.h"
-#include "qgsvectorlayer.h"
-#include "inputconfig.h"
-#include <QHash>
+#include <QObject>
+#include <QString>
+#include <QSettings>
 
 class FeatureLayerPair;
+class QgsVectorLayer;
 
 /**
  * \note QML Type: RememberAttributes
@@ -32,50 +32,42 @@ class  RememberAttributesController : public QObject
     Q_OBJECT
 
     //! Returns TRUE if remembering values is allowed
-    Q_PROPERTY( bool rememberValuesAllowed READ rememberValuesAllowed WRITE setRememberValuesAllowed NOTIFY rememberValuesAllowedChanged )
+    Q_PROPERTY( bool rememberValuesAllowed MEMBER mRememberValuesAllowed )
 
+    //! Provides context for creating project-specific settings keys
     Q_PROPERTY( QString activeProjectId MEMBER mActiveProjectId )
 
   public:
     RememberAttributesController( QObject *parent = nullptr );
     ~RememberAttributesController() override;
 
-    //! Restore clean/initial state: no layers, no features!
-    Q_INVOKABLE void reset();
-
-    bool rememberValuesAllowed() const;
-    void setRememberValuesAllowed( bool rememberValuesAllowed );
-
-    void storeLayerFields( const QgsVectorLayer *layer );
     void storeFeature( const FeatureLayerPair &pair );
 
     // Returns false if the value is not remembered
     bool rememberedValue( const QgsVectorLayer *layer, int fieldIndex, QVariant &value ) const;
 
     // Returns false if the value should not be remembered
-    bool shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex ) const;
+    bool shouldRememberValue( const QgsVectorLayer *layer, int fieldIndex );
 
     // Returns whether value was changed
     bool setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember );
 
   signals:
     void rememberValuesAllowedChanged();
+    void activeProjectChanged();
 
   private:
+    // Helper method to retrieve settings value keys;
+    QString keyForField( const QgsVectorLayer *layer, int fieldIndex ) const;
+
+    // Returns if remember values is enabled in QGIS form config
+    bool enabledInQgis( const QgsVectorLayer *layer, int fieldIndex ) const;
+
     QString mActiveProjectId;
-
-    //! Remembered values struct contains last created feature instance and a boolean vector masking attributes that should be remembered
-    struct RememberedValues
-    {
-      QgsFeature feature;
-      QVector<bool> attributeFilter;
-    };
-
     bool mRememberValuesAllowed = false;
-    //! Remembered last created feature for each project/layer (key)
-    static QHash<QString, RememberedValues> sRememberedValues;
+    QSettings mSettings;
 
-    QString keyForLayer( const QgsVectorLayer *layer ) const;
+    friend class TestRememberAttributesController;
 };
 
 #endif // REMEMBERATTRIBUTESCONTROLLER_H

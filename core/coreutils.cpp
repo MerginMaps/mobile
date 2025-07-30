@@ -27,6 +27,7 @@
 #include "qcoreapplication.h"
 
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
+const QString CoreUtils::CACHED_ATTRIBUTES_GROUP = QStringLiteral( "cachedAttributesValue" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
