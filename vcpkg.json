@@ -61,6 +61,10 @@
           "default-features": false
         },
         {
+          "name": "gles2",
+          "platform": "android"
+        },
+        {
           "name": "qca",
           "default-features": false,
           "features": [
