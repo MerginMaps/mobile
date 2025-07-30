@@ -631,7 +631,7 @@ class MerginApi: public QObject
     void setApiSupportsSso( bool ssoSupported );
 
     /**
-     * Returns true if the configured server allows user self-registration
+     * Returns whether the configured server allows user self‑registration
      */
     bool userSelfRegistrationEnabled() const;
     void setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled );
