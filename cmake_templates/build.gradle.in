@@ -1,4 +1,4 @@
-/* keep in sync with /opt/Qt/<ver>/android//src/android/templates/build.gradle */
+/* keep in sync with /opt/Qt/<ver>/android/src/android/templates/build.gradle */
 
 buildscript {
     ext {
@@ -14,7 +14,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
     }
 }
 
@@ -23,13 +23,13 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'com.android.application'
+apply plugin: qtGradlePluginType
 
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "androidx.appcompat:appcompat:1.4.1"
-    implementation "androidx.core:core:1.8.0"
+    implementation "androidx.core:core:1.13.1"
     implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     implementation "androidx.exifinterface:exifinterface:1.3.3"
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -50,6 +50,7 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
+    namespace androidPackageName
     compileSdkVersion androidCompileSdkVersion.toInteger()
     buildToolsVersion androidBuildToolsVersion
     ndkVersion androidNdkVersion
