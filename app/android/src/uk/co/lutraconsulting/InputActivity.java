@@ -84,22 +84,22 @@ public class InputActivity extends QtActivity
       Log.d( TAG, "Unsupported Android version for painting behind system bars." );
       return;
     } 
-    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-      return;
-    }
     else {
       WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
       Window window = getWindow();
 
-      // draw app edge-to-edge
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      
-      // make the status bar background color transparent
-      window.setStatusBarColor(Color.TRANSPARENT);
-      
-      // make the navigation button background color transparent
-      window.setNavigationBarColor(Color.TRANSPARENT);
+      // on Android 15+ all apps are edge-to-edge
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+        // draw app edge-to-edge
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // make the status bar background color transparent
+        window.setStatusBarColor(Color.TRANSPARENT);
+
+        // make the navigation button background color transparent
+        window.setNavigationBarColor(Color.TRANSPARENT);
+      }
 
       // do not show background dim for the navigation buttons
       window.setNavigationBarContrastEnforced(false); 
