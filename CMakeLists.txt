@@ -149,6 +149,7 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # FIND PACKAGES
 # ########################################################################################
 
+
 find_package(
   Qt6
   COMPONENTS Quick
@@ -350,6 +351,24 @@ if (IOS)
   # Disabling warnings in qgis qgswkbptr.h
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
 endif ()
+
+
+if (ANDROID)
+  if(VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a")
+  else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong")
+  endif()
+
+  link_libraries("-ljnigraphics")
+
+  # Make sure the generator for android_deployment_settings.json can figure out the architecture
+  list(APPEND CMAKE_FIND_ROOT_PATH /)
+
+  # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
+endif()
 
 if (ANDROID)
   if (VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
