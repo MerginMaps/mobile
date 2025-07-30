@@ -83,6 +83,9 @@ public class InputActivity extends QtActivity
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
       Log.d( TAG, "Unsupported Android version for painting behind system bars." );
       return;
+    } 
+    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      return;
     }
     else {
       WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
