@@ -978,3 +978,21 @@ void TestUtilsFunctions::testIsValidEmail()
   QVERIFY( !InputUtils::isValidEmail( "brokenemail" ) );
   QVERIFY( !InputUtils::isValidEmail( "" ) );
 }
+
+void TestUtilsFunctions::testSanitizeFileName()
+{
+  // unchanged
+  QString str = QStringLiteral( "/simple/valid/filename.ext" );
+  InputUtils::sanitizeFileName( str );
+  QCOMPARE( str, QStringLiteral( "/simple/valid/filename.ext" ) );
+
+  // unchanged
+  str = QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" );
+  InputUtils::sanitizeFileName( str );
+  QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" ) );
+
+  // sanitized
+  str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e.ext " );
+  InputUtils::sanitizeFileName( str );
+  QCOMPARE( str, QStringLiteral( "/sa ni_tized/f_i_l_n_a_m_e.ext" ) );
+}
