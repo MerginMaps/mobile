@@ -226,6 +226,7 @@ class MerginApi: public QObject
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
     Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
     Q_PROPERTY( bool apiSupportsSso READ apiSupportsSso WRITE setApiSupportsSso NOTIFY apiSupportsSsoChanged )
+    Q_PROPERTY( bool userSelfRegistrationEnabled READ userSelfRegistrationEnabled NOTIFY userSelfRegistrationEnabledChanged )
 
   public:
 
@@ -629,6 +630,12 @@ class MerginApi: public QObject
      */
     void setApiSupportsSso( bool ssoSupported );
 
+    /**
+     * Returns whether the configured server allows user self‑registration
+     */
+    bool userSelfRegistrationEnabled() const;
+    void setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled );
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -719,6 +726,8 @@ class MerginApi: public QObject
 
     //! Emitted when server sso config is returned and server is multi tenant
     void ssoConfigIsMultiTenant();
+
+    void userSelfRegistrationEnabledChanged();
 
   private slots:
     void listProjectsReplyFinished( QString requestId );
@@ -908,6 +917,7 @@ class MerginApi: public QObject
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;
     bool mApiSupportsSso = false;
+    bool mUserSelfRegistrationEnabled = false;
 
     static const int UPLOAD_CHUNK_SIZE;
     const int PROJECT_PER_PAGE = 50;
