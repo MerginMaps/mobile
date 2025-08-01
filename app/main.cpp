@@ -593,7 +593,11 @@ int main( int argc, char *argv[] )
   {
     if ( activeProject.isProjectLoaded() )
     {
-      merginApi->reloadProjectRole( activeProject.projectFullName() );
+      // if you are logged in or if you just logged out
+      if ( merginApi->userAuth()->hasValidToken() || !merginApi->userAuth()->hasAuthData() )
+      {
+        merginApi->reloadProjectRole( activeProject.projectFullName() );
+      }
     }
   } );
 
