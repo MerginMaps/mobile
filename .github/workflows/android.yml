@@ -246,7 +246,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
+          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
