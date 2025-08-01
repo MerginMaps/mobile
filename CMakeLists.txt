@@ -28,11 +28,11 @@ if (ANDROID_ABI)
   set(ANDROID_ARM_NEON ON)
 
   # Target/Minimum API levels for Android, used as Input target properties
-  set(INPUT_ANDROID_TARGET_SDK_VERSION "34")
+  set(INPUT_ANDROID_TARGET_SDK_VERSION "35")
   set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
-  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_ROOT}")
+  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
   if (NOT INPUT_ANDROID_NDK_PATH)
-    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
+    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_HOME.")
   endif ()
   set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
       "${INPUT_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"

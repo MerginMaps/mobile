@@ -193,8 +193,6 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 
 ## 4.1. Android on Linux
 
-!TODO - merge with android on macos!
-
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
    - Java 17 (on Ubuntu 22.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
@@ -203,28 +201,83 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
       - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools`
    - flex and bison
+   - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line 
+     with `keytool -genkeypair`.
 
-4. Build mobile app (update CMake command with the correct Qt and Android NDK versions)
-```
-  mkdir build
-  cd build
+2. Build mobile app (update CMake command with the correct Qt and Android NDK versions)
 
-  export ANDROID_SDK_ROOT=~/android;
-  export ANDROID_NDK_ROOT=~/android/ndk/<current_version>;
-  export QT_BASE=~/Qt/<current_version>;
-  export INPUT_SDK_ANDROID_BASE=~/mobile-sdk;
+   We recommended to have **RelWithDebInfo** builds, which requires signing the APK with your key. 
+
+   We assume the structure on the system:
+
+   ```
+   mm1/
+     build/
+     vcpkg/
+     mobile/ 
+   ```
+
+   This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it
+   can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local
+   binary vcpkg cache.
+
+   ```
+     export ANDROID_NDK_HOME=/home/<user>/android/ndk/<current_version>
+     export ANDROID_SDK_ROOT=/home/<user>/android
+     export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
+     export QT_ANDROID_KEYSTORE_KEY_PASS=<password>
+     export QT_ANDROID_KEYSTORE_STORE_PASS=<password>
+     export QT_ANDROID_KEYSTORE_PATH=<keystore-path>
+   
+     cmake \
+       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+       -DANDROID_ABI=arm64-v8a \
+       -DQT_ANDROID_ABIS=arm64-v8a \
+       -DVCPKG_HOST_TRIPLET=x64-linux \
+       -DVCPKG_TARGET_TRIPLET=arm64-android \
+       -DCMAKE_TOOLCHAIN_FILE=<path-to-directory>/vcpkg/scripts/buildsystems/vcpkg.cmake \
+       -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+       -DUSE_MM_SERVER_API_KEY=TRUE \
+       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+       -DANDROID_SDK_ROOT=/home/<user>/android \
+       -DQT_ANDROID_SIGN_APK=Yes
+       -GNinja \
+       -S ../mobile \
+       -B ./
+   ```
+
+  Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
+  development and debugging)
+
+
+  Add this to build env.
+     
+  ```
+       PATH=+/Users/<user>/Projects/quick/build/vcpkg
+       ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+       ANDROID_SDK_ROOT=/Users/<user>/android
+       QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
+       QT_ANDROID_KEYSTORE_KEY_PASS=<password>
+       QT_ANDROID_KEYSTORE_STORE_PASS=<password>
+       QT_ANDROID_KEYSTORE_PATH=<keystore-path>
+  ```
+  And this to cmake options
+     
+  ```
+       ANDROID_ABI=arm64-v8a 
+       QT_ANDROID_ABIS=arm64-v8a 
+       VCPKG_HOST_TRIPLET=x64-linux 
+       VCPKG_TARGET_TRIPLET=arm64-android 
+       CMAKE_TOOLCHAIN_FILE="../vcpkg/scripts/buildsystems/vcpkg.cmake" 
+       VCPKG_INSTALL_OPTIONS="--allow-unsupported" 
+       CMAKE_CXX_COMPILER_LAUNCHER=ccache 
+       ANDROID_SDK_ROOT=/Users/<user>/android 
+       QT_ANDROID_SIGN_APK=Yes 
+  ```
   
-  cmake \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DQT_ANDROID_ABIS="arm64-v8a" \
-    -DQT_HOST_PATH=$QT_BASE/gcc_64 \
-    -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
-    -DUSE_MM_SERVER_API_KEY=FALSE \
-    -GNinja \
-    ../input/
   
-  ninja apk
-```
+  To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+
 
 ## 4.2. Android on macOS
 1. Install Java
@@ -249,7 +302,8 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 
 3. Configure 
   
-   We recommended to have RelWithDebInfo builds
+   We recommended to have **RelWithDebInfo** builds
+
    We assume the structure on the system:
    
    ```
@@ -264,22 +318,25 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    binary vcpkg cache.
    
    ```
+     export ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+     export ANDROID_SDK_ROOT=/Users/<user>/android
+     export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
+     export QT_ANDROID_KEYSTORE_KEY_PASS=<password>
+     export QT_ANDROID_KEYSTORE_STORE_PASS=<password>
+     export QT_ANDROID_KEYSTORE_PATH=<keystore-path>
+
      cmake \
        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DANDROID_ABI=arm64-v8a \
+       -DQT_ANDROID_ABIS=arm64-v8a \
        -DVCPKG_HOST_TRIPLET=arm64-osx \
-       -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
-       -DANDROID_NDK=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125 \ 
-       -DANDROID_PLATFORM=android-24 \
-       -DANDROID_SDK_ROOT=/Users/peterpetrik/Library/Android/sdk \
-       -DANDROID_NDK_VERSION="r26" \
-       -DANDROID_BUILD_TOOLS_VERSION="34.0.0" \
+       -DVCPKG_TARGET_TRIPLET=arm64-android \
+       -DCMAKE_TOOLCHAIN_FILE="../vcpkg/scripts/buildsystems/vcpkg.cmake" \
        -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
-       -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
-       -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
-       -DCMAKE_TOOLCHAIN_FILE:PATH="../vcpkg/scripts/buildsystems/vcpkg.cmake" \
-       -GNinja \
        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+       -DANDROID_SDK_ROOT=/Users/<user>/android \
+       -DQT_ANDROID_SIGN_APK=Yes \
+       -GNinja \
        -S ../mobile \
        -B ./
    ```
@@ -293,16 +350,25 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      PATH=+/opt/homebrew/bin
      PATH=+/opt/homebrew/Cellar/flex/2.6.4_2/bin
      PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
-     PATH=+/Users/peterpetrik/Projects/quick/build/vcpkg
-     ANDROID_NDK_HOME=/Users/peterpetrik/Library/Android/sdk/ndk/26.1.10909125
+     PATH=+/Users/<user>/Projects/quick/build/vcpkg
+     ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+     ANDROID_SDK_ROOT=/Users/<user>/android
+     QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
+     QT_ANDROID_KEYSTORE_KEY_PASS=<password>
+     QT_ANDROID_KEYSTORE_STORE_PASS=<password>
+     QT_ANDROID_KEYSTORE_PATH=<keystore-path>
    ```
    And this to cmake options
    ```
-     ANDROID_PLATFORM=android-24
-     VCPKG_HOST_TRIPLET=arm64-osx
-     VCPKG_TARGET_TRIPLET=arm64-android
-     CMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
-     VCPKG_INSTALL_OPTIONS="--allow-unsupported"
+     ANDROID_ABI=arm64-v8a 
+     QT_ANDROID_ABIS=arm64-v8a 
+     VCPKG_HOST_TRIPLET=arm64-osx 
+     VCPKG_TARGET_TRIPLET=arm64-android 
+     CMAKE_TOOLCHAIN_FILE="../vcpkg/scripts/buildsystems/vcpkg.cmake" 
+     VCPKG_INSTALL_OPTIONS="--allow-unsupported" 
+     CMAKE_CXX_COMPILER_LAUNCHER=ccache 
+     ANDROID_SDK_ROOT=/Users/<user>/android 
+     QT_ANDROID_SIGN_APK=Yes 
    ```
    
    
