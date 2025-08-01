@@ -1621,7 +1621,7 @@ bool MerginApi::validateAuth()
     return false;
   }
 
-  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
+  if ( !mUserAuth->hasValidToken() )
   {
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
 
@@ -3534,16 +3534,15 @@ void MerginApi::refreshAuthToken()
       // refresh tokens not implemented yet
       return;
     case MerginUserAuth::AuthMethod::Password:
-      if ( !mUserAuth->hasAuthData() ||
-           mUserAuth->authToken().isEmpty() )
+      if ( !mUserAuth->hasAuthData() )
       {
         CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
         return;
       }
 
-      if ( mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
+      if ( !mUserAuth->hasValidToken() )
       {
-        CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired, requesting new one" ) );
+        CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired or is empty, requesting new one" ) );
         authorize( mUserAuth->login(), mUserAuth->password() );
         mAuthLoopEvent.exec();
       }
@@ -4197,6 +4196,8 @@ void MerginApi::reloadProjectRole( const QString &projectFullName )
   if ( !reply )
     return;
 
+  CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Requesting metadata update for project - %1" ).arg( projectFullName ) );
+
   reply->request().setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::reloadProjectRoleReplyFinished );
 }
@@ -4215,15 +4216,20 @@ void MerginApi::reloadProjectRoleReplyFinished()
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
     QString role = serverProject.role;
 
+    CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Success, project role %1, cached role %2" ).arg( role, cachedRole ) );
+
     if ( role != cachedRole )
     {
       if ( updateCachedProjectRole( projectFullName, role ) )
+      {
         emit projectRoleUpdated( projectFullName, role );
+        CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Project role updated to %1" ).arg( role ) );
+      }
     }
   }
   else
   {
-    CoreUtils::log( "Metadata", QString( "Failed to update cached role for project %1 - likely due to missing auth or you are offline" ).arg( projectFullName ) );
+    CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Request failed, the project is not available, you are offline or missing auth" ) );
   }
 
   r->deleteLater();
