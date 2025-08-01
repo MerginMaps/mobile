@@ -193,8 +193,6 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 
 ## 4.1. Android on Linux
 
-!TODO - merge with android on macos!
-
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
    - Java 17 (on Ubuntu 22.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
