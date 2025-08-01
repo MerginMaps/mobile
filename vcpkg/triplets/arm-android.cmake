@@ -16,7 +16,7 @@ set(VCPKG_MAKE_BUILD_TRIPLET "--host=armv7a-linux-androideabi")
 
 set(VCPKG_CMAKE_CONFIGURE_OPTIONS -DANDROID_ABI=armeabi-v7a -DANDROID_ARM_NEON=ON)
 
-set(ANDROIDAPI "28") # when changed change CMakeLists.cmake
+set(ANDROIDAPI "28") # when changed change CMakeLists.txt
 set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
 set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
 set(VCPKG_CMAKE_SYSTEM_VERSION "${ANDROIDAPI}")
