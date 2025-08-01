@@ -1,13 +1,6 @@
 /* keep in sync with /opt/Qt/<ver>/android/src/android/templates/build.gradle */
 
 buildscript {
-    ext {
-        buildToolsVersion = androidBuildToolsVersion
-        compileSdkVersion = androidCompileSdkVersion.toInteger()
-        targetSdkVersion = androidCompileSdkVersion.toInteger()
-        ndkVersion = androidNdkVersion
-    }
-    
     repositories {
         google()
         mavenCentral()
@@ -49,8 +42,8 @@ android {
      * Changing them manually might break the compilation!
      *******************************************************/
 
-    namespace androidPackageName
-    compileSdkVersion androidCompileSdkVersion.toInteger()
+    namespace 'uk.co.lutraconsulting'
+    compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
     ndkVersion androidNdkVersion
     ndkPath '@INPUT_ANDROID_NDK_PATH@'
