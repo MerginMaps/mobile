@@ -256,6 +256,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   QSettings rawSettings;
   rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
 
+#ifdef HAVE_BLUETOOTH
   positionKit->setPositionProvider( positionKit->constructProvider( "external", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
 
   QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
@@ -263,6 +264,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   QCOMPARE( positionKit->positionProvider()->type(), "external" );
 
   QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
+#endif
 
   positionKit->setPositionProvider( positionKit->constructProvider( "internal", "devicegps" ) );
 

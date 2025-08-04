@@ -471,7 +471,8 @@ target_link_libraries(
   Input
   PUBLIC mm_core
          Geodiff::Geodiff
-         Proj::Proj
+         PROJ::proj
+         ZXing::Core
          ZXing::ZXing
 )
 
@@ -502,55 +503,41 @@ endif ()
 
 target_link_libraries(
   Input
-  PUBLIC Qtkeychain::Qtkeychain
-         Qca::Qca
-         Gdal::Gdal
-         Pq::Pq
-         Pq::Pgcommon
-         Pq::Pgport
+  PUBLIC Qt6Keychain::Qt6Keychain
+         qca
+         GDAL::GDAL
+         PostgreSQL::PostgreSQL
          Spatialite::Spatialite
 )
 
-if (NOT LNX)
-  target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
-endif ()
+# if (NOT LNX) target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv) endif ()
 
-target_link_libraries(Input PUBLIC Xml2::Xml2)
+# target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
   PUBLIC Spatialindex::Spatialindex
-         Geos::Geos-c
-         Geos::Geos
-         Protobuf::Protobuf-lite
-         Utf8::utf8_range
-         Utf8::utf8_validity
-         Expat::Expat
-         Freexl::Freexl
-         Exiv2::Exiv2
-         Inih::Inireader
-         Inih::Inih
-         Tiff::Tiff
-         Sqlite3::Sqlite3
-         MiniZip::MiniZip
+         GEOS::geos_c
+         # Geos::Geos
+         protobuf::libprotobuf-lite
+         # Utf8::utf8_range Utf8::utf8_validity Expat::Expat Freexl::Freexl
+         Exiv2::exiv2lib
+         # Inih::Inireader Inih::Inih Tiff::Tiff
+         unofficial::sqlite3::sqlite3
+         unofficial::minizip::minizip
          ZLIB::ZLIB
-         Zip::Zip
-         WebP::WebP
-         WebP::Sharpyuv
-         Curl::Curl
-         Jpeg::Jpeg
-         Geotiff::Geotiff
-         Lzma::Lzma
-         Zstd::Zstd
-         Bz2::Bz2
-         Absl::Absl
+         libzip::zip
+         # WebP::WebP WebP::Sharpyuv Curl::Curl Jpeg::Jpeg Geotiff::Geotiff Lzma::Lzma
+         # Zstd::Zstd Bz2::Bz2 Absl::Absl
+         poly2tri::poly2tri
+         meshoptimizer::meshoptimizer
 )
 
 if (IOS OR MACOS)
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
-target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
+# target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
   set_property(
     TARGET Input PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
@@ -567,7 +554,22 @@ endif ()
 
 if (IOS)
   target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
-  qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+  # TODO is this needed? qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+endif ()
+
+if (WIN)
+  target_link_libraries(
+    Input
+    PUBLIC WinLibraries::avcodec
+           WinLibraries::avdevice
+           WinLibraries::avformat
+           WinLibraries::avutil
+           WinLibraries::swresample
+           WinLibraries::swscale
+           WinLibraries::openh264
+  )
+
+  target_link_libraries(Input PUBLIC expat::expat)
 endif ()
 
 if (ENABLE_TESTS)
