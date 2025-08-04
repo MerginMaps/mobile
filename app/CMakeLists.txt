@@ -577,6 +577,8 @@ if (WIN)
            WinLibraries::swscale
            WinLibraries::openh264
   )
+
+  target_link_libraries(Input PUBLIC expat::expat)
 endif ()
 
 if (ENABLE_TESTS)
