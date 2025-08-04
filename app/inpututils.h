@@ -632,6 +632,13 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static bool isValidEmail( const QString &email );
 
+    /**
+     * Replaces invalid filename characters with underscores (_)
+     * Also trims whitespaces at the start and end of \a filename. If \a filename has an extension and
+     * last character before the . is a whitespace, it does not get trimmed.
+     */
+    static void sanitizeFileName( QString &fileName );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
