@@ -1142,7 +1142,7 @@ ApplicationWindow {
 
     interval: 1000
 
-    onTriggered: __appSettings.windowPosition = [window.x, window.y, window.width, window.height]
+    onTriggered: AppSettings.windowPosition = [window.x, window.y, window.width, window.height]
   }
 
   function backButtonPressed() {
