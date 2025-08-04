@@ -198,6 +198,7 @@ Dialog {
 
           onCentroidChanged: {
             // the drag handler gets notified even when drag continues outside parent
+            console.log("Current position: " + dragHandler.centroid.position)
             const outsideImageBounds = centroid.position.x > parent.width || centroid.position.x < 0 || centroid.position.y > parent.height || centroid.position.y < 0
             if (!outsideImageBounds) {
               // centroid gets set to (0, 0) when drag stops
