@@ -47,6 +47,7 @@ bool ColorPath::operator==( const ColorPath &other ) const
 
 void PhotoSketchingController::newSketch()
 {
+  CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "New sketch started" ) );
   mCurrentLine = ColorPath( mPenColor, {} );
 }
 
@@ -58,6 +59,7 @@ void PhotoSketchingController::addPoint( const QPointF &newPoint )
   {
     mPaths.append( mCurrentLine );
     emit newPathAdded( -1 );
+    CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "New sketch added to mPaths" ) );
     if ( !mCanUndo && !mPaths.isEmpty() )
     {
       mCanUndo = true;
@@ -68,6 +70,7 @@ void PhotoSketchingController::addPoint( const QPointF &newPoint )
   {
     mPaths.last() = mCurrentLine;
     emit pathUpdated( {static_cast<int>( mPaths.size() - 1 ) } );
+    CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "Updated last sketch" ) );
   }
 }
 
@@ -118,6 +121,7 @@ void PhotoSketchingController::saveDrawings() const
   }
 
   const QString photoPath = QUrl( mPhotoSource ).toLocalFile();
+  CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "Reading image from: %1" ).arg( photoPath ) );
   QImageReader imageReader( photoPath );
   imageReader.setAutoTransform( true );
   QImage image = imageReader.read();
