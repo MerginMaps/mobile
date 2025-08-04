@@ -10,17 +10,18 @@
 #ifndef APPSETTINGS_H
 #define APPSETTINGS_H
 
-#include <QObject>
-#include <QHash>
 #include <QVariant>
 #include <QString>
+#include <QtQml/qqmlregistration.h>
 
-#include "inputconfig.h"
 #include "streamingintervaltype.h"
 
 class AppSettings: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
     Q_PROPERTY( QString defaultProject READ defaultProject WRITE setDefaultProject NOTIFY defaultProjectChanged )
     Q_PROPERTY( QString activeProject READ activeProject WRITE setActiveProject NOTIFY activeProjectChanged )
     Q_PROPERTY( QString defaultProjectName READ defaultProjectName NOTIFY defaultProjectChanged )
@@ -36,8 +37,24 @@ class AppSettings: public QObject
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
+    Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
 
   public:
+    // enum of haptic modes we support
+    enum HapticsType
+    {
+#ifdef DESKTOP_OS
+      HapticsOff = 0,
+      HapticsSound,
+#else
+      HapticsOff = 0,
+      HapticsVibration,
+      HapticsSound,
+      HapticsVibrationSound
+#endif
+    };
+    Q_ENUM( HapticsType )
+
     explicit AppSettings( QObject *parent = nullptr );
 
     QString defaultProject() const;
@@ -90,6 +107,9 @@ class AppSettings: public QObject
     QList<QVariant> windowPosition() const;
     void setWindowPosition( const QList<QVariant> &newWindowPosition );
 
+    HapticsType hapticsType() const;
+    void setHapticsType( HapticsType hapticsType );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -108,6 +128,7 @@ class AppSettings: public QObject
 
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
+    void hapticsTypeChanged( HapticsType hapticsType );
 
     void ignoreMigrateVersionChanged();
 
@@ -146,6 +167,8 @@ class AppSettings: public QObject
     bool mAutolockPosition = true;
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
+
+    HapticsType mHapticsType;
 };
 
 #endif // APPSETTINGS_H

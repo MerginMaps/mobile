@@ -19,19 +19,21 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  QString path = settings.value( "defaultProject", "" ).toString();
-  QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
-  double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
-  int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
+  const QString path = settings.value( "defaultProject", "" ).toString();
+  const QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
+  const double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
+  const int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
   int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
-  StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
-  bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
-  QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QStringLiteral() ).toString();
-  QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
-  bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
-  double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
-  QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
-  bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
+  const StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
+  const bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
+  const QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QString() ).toString();
+  const QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
+  const bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
+  const double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
+  const QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
+  const bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
+  int hapticsTypeInt = settings.value( "hapticsType", 0 ).toInt();
+  const HapticsType hapticsType = static_cast<HapticsType>( hapticsTypeInt );
 
   settings.endGroup();
 
@@ -48,6 +50,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
+  setHapticsType( hapticsType );
 }
 
 QString AppSettings::defaultLayer() const
@@ -100,10 +103,10 @@ QString AppSettings::defaultProjectName() const
 {
   if ( !mDefaultProject.isEmpty() )
   {
-    QFileInfo info( mDefaultProject );
+    const QFileInfo info( mDefaultProject );
     return info.baseName();
   }
-  return QString( "" );
+  return { "" };
 }
 
 double AppSettings::gpsAccuracyTolerance() const
@@ -143,7 +146,7 @@ StreamingIntervalType::IntervalType AppSettings::intervalType() const
   return mIntervalType;
 }
 
-void AppSettings::setIntervalType( StreamingIntervalType::IntervalType intervalType )
+void AppSettings::setIntervalType( const StreamingIntervalType::IntervalType intervalType )
 {
   if ( mIntervalType != intervalType )
   {
@@ -159,7 +162,7 @@ bool AppSettings::reuseLastEnteredValues() const
   return mReuseLastEnteredValues;
 }
 
-void AppSettings::setReuseLastEnteredValues( bool reuseLastEnteredValues )
+void AppSettings::setReuseLastEnteredValues( const bool reuseLastEnteredValues )
 {
   if ( mReuseLastEnteredValues != reuseLastEnteredValues )
   {
@@ -204,7 +207,7 @@ QVariantList AppSettings::savedPositionProviders() const
   QSettings settings;
   QVariantList providers;
 
-  int size = settings.beginReadArray( POSITION_PROVIDERS_GROUP );
+  const int size = settings.beginReadArray( POSITION_PROVIDERS_GROUP );
 
   for ( int i = 0; i < size; i++ )
   {
@@ -271,7 +274,7 @@ bool AppSettings::autosyncAllowed() const
   return mAutosyncAllowed;
 }
 
-void AppSettings::setAutosyncAllowed( bool newAutosyncAllowed )
+void AppSettings::setAutosyncAllowed( const bool newAutosyncAllowed )
 {
   if ( mAutosyncAllowed == newAutosyncAllowed )
     return;
@@ -296,12 +299,27 @@ void AppSettings::setAutolockPosition( bool autolockPosition )
   emit autolockPositionChanged( mAutolockPosition );
 }
 
+AppSettings::HapticsType AppSettings::hapticsType() const
+{
+  return mHapticsType;
+}
+
+void AppSettings::setHapticsType( const HapticsType hapticsType )
+{
+  if ( mHapticsType == hapticsType )
+    return;
+
+  setValue( QStringLiteral( "hapticsType" ), hapticsType );
+  mHapticsType = hapticsType;
+  emit hapticsTypeChanged( hapticsType );
+}
+
 double AppSettings::gpsAntennaHeight() const
 {
   return mGpsAntennaHeight;
 }
 
-void AppSettings::setGpsAntennaHeight( double gpsAntennaHeight )
+void AppSettings::setGpsAntennaHeight( const double gpsAntennaHeight )
 {
   double height = gpsAntennaHeight;
   if ( height <= 0 )

@@ -16,6 +16,10 @@ import java.lang.Exception;
 import android.util.Log;
 import android.os.Bundle;
 import android.os.Build;
+import android.os.VibratorManager;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
+import android.os.VibrationAttributes;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -268,6 +272,34 @@ public class InputActivity extends QtActivity
         exp.printStackTrace();
         Log.d( TAG, String.format( "quitGracefully() failed to execute: '%s'", exp.toString() ) );
       }
+    }
+  }
+
+  public void vibrate()
+  {
+    Vibrator vib;
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+    {
+      vib = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
+    } else
+    {
+      VibratorManager vibManager = (VibratorManager) getSystemService(getApplicationContext().VIBRATOR_MANAGER_SERVICE);
+      vib = vibManager.getDefaultVibrator();
+    }
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+    {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+      {
+        vib.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE));
+      } else
+      {
+        vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK));
+      }
+    } else
+    {
+      vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK),
+        VibrationAttributes.createForUsage(VibrationAttributes.USAGE_CLASS_FEEDBACK));
     }
   }
 

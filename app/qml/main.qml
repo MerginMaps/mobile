@@ -17,6 +17,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "./map"
 import "./dialogs"
@@ -114,15 +115,15 @@ ApplicationWindow {
   Component.onCompleted: {
 
     // load default project
-    if ( __appSettings.defaultProject ) {
-      let path = __appSettings.defaultProject
+    if ( AppSettings.defaultProject ) {
+      let path = AppSettings.defaultProject
 
       if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
-        __appSettings.activeProject = path
+        AppSettings.activeProject = path
       }
       else {
         // if default project load failed, delete default setting
-        __appSettings.defaultProject = ""
+        AppSettings.defaultProject = ""
         stateManager.state = "projects"
       }
     }
@@ -820,7 +821,7 @@ ApplicationWindow {
     property string version
 
     onIgnoreClicked: {
-      __appSettings.ignoreMigrateVersion = version
+      AppSettings.ignoreMigrateVersion = version
     }
   }
 
@@ -1011,7 +1012,7 @@ ApplicationWindow {
     }
 
     function onMigrationRequested( version ) {
-      if( __appSettings.ignoreMigrateVersion !== version ) {
+      if( AppSettings.ignoreMigrateVersion !== version ) {
         migrationDialog.version = version
         migrationDialog.open()
       }
@@ -1109,8 +1110,8 @@ ApplicationWindow {
     function onProjectReloaded( project ) {
       map.clear()
 
-      __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
-      __appSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
     }
 
     function onProjectWillBeReloaded() {

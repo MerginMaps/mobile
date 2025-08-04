@@ -17,6 +17,7 @@
 #include <sys/utsname.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#include <CoreHaptics/CoreHaptics.h>
 #include <QString>
 #include "iosutils.h"
 
@@ -91,4 +92,45 @@ bool IosUtils::openFileImpl( const QString &filePath )
   }
 
   return true;
+}
+
+void IosUtils::vibrate()
+{
+  if ( @available( iOS 13.0, * ) )
+  {
+    // initialize engine
+    NSError *errorEngine;
+    CHHapticEngine *engine = [[CHHapticEngine alloc] initAndReturnError:&errorEngine];
+
+    if ( !engine )
+    {
+      NSLog( @"Failed to initialize haptic engine: %@", errorEngine );
+      return;
+    }
+    [engine startWithCompletionHandler: ^ ( NSError * startError )
+    {
+      // vibration pattern (single tap)
+      NSDictionary *hapticDict = @
+      {
+      CHHapticPatternKeyPattern: @[
+        @{
+        CHHapticPatternKeyEvent: @{
+          CHHapticPatternKeyEventType: CHHapticEventTypeHapticTransient,
+          CHHapticPatternKeyTime: @( CHHapticTimeImmediate ),
+          CHHapticPatternKeyEventDuration: @1.0
+          },
+        },
+        ],
+      };
+
+      // initialize patter from dictionary
+      NSError *error;
+      CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithDictionary:hapticDict error:&error];
+
+      id<CHHapticPatternPlayer> player = [engine createPlayerWithPattern:pattern error:&error];
+
+
+      [player startAtTime:0 error:&error];
+    }];
+  }
 }

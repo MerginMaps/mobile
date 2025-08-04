@@ -13,6 +13,7 @@ import QtQuick.Controls
 import "../components" as MMComponents
 
 import mm 1.0 as MM
+import MMInput
 
 // Wraps preview panel and feature form
 Item {
@@ -185,7 +186,7 @@ Item {
         variablesManager: __variablesManager
 
         rememberAttributesController: MM.RememberAttributesController {
-          rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+          rememberValuesAllowed: AppSettings.reuseLastEnteredValues
           activeProjectId: __activeProject.localProject.id()
         }
         // NOTE: order matters, we want to init variables manager before

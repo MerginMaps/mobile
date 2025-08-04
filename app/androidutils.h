@@ -37,6 +37,8 @@ class AndroidUtils: public QObject
     // Android 13+ needs permission for sending notifications
     static bool requestNotificationPermission();
 
+    Q_INVOKABLE static void vibrate();
+
     /**
      * Reads EXIF and returns value for given parameters.
      * @param filePath Absolute path to a file
