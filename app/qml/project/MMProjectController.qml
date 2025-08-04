@@ -81,13 +81,6 @@ Item {
     stackView.push( workspaceListComponent )
   }
 
-  function showProjectsPage() {
-    if ( stackView.depth > 1 )
-      stackView.pop( null ) // gets back to workspaceProjectsPanelComp (initialItem)
-
-    stackView.currentItem.state = "workspace"
-  }
-
   visible: false
   focus: true
 
@@ -676,11 +669,6 @@ Item {
       if ( __merginApi.userAuth.hasValidToken() ) {
         root.refreshProjects()
       }
-    }
-
-    function onProcessInvitationSuccess() {
-      root.showProjectsPage()
-      __notificationModel.addInfo( qsTr( "Download a project and start collecting." ), MM.NotificationType.NoAction, 10 ) // 10 seconds
     }
   }
 }
