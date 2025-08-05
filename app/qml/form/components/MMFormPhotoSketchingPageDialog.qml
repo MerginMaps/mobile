@@ -42,6 +42,23 @@ Dialog {
 
   header: RowLayout {
 
+    MMComponents.MMRoundButton {
+      id: backButton
+
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+      Layout.topMargin: __style.pageMargins + __style.safeAreaTop
+      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
+
+      iconSource: __style.closeIcon
+      iconColor: __style.forestColor
+      bgndColor: __style.polarColor
+
+      onClicked: {
+        root.close()
+        root.controller.clear()
+      }
+    }
+
     MMComponents.MMButton {
       type: MMButton.Types.Primary
       text: qsTr( "Undo" )
@@ -56,9 +73,8 @@ Dialog {
 
       enabled: root.controller.canUndo
 
-      Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
-      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
       onClicked: {
         root.controller.undo()
@@ -66,35 +82,15 @@ Dialog {
     }
 
     MMComponents.MMRoundButton {
-      id: closeButton
+      id: doneButton
 
       Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
-      iconSource: __style.closeIcon
+      iconSource: __style.checkmarkIcon
       iconColor: __style.forestColor
-      bgndColor: __style.polarColor
-
-      onClicked: {
-        root.close()
-        root.controller.clear()
-      }
-    }
-  }
-
-  // RowLayout is not really necessary here, but it's so much easier to position the button with it
-  footer: RowLayout {
-    MMComponents.MMButton {
-      type: MMButton.Types.Primary
-      text: qsTr( "Done" )
       bgndColor: __style.grassColor
-      size: MMButton.Sizes.Small
-      enabled: root.controller.canUndo
-      Layout.fillWidth: true
-      Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
-      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
-      Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       onClicked: {
         root.close()
