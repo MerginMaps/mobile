@@ -49,6 +49,11 @@ void PhotoSketchingController::newSketch()
 {
   CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "New sketch started" ) );
   mCurrentLine = ColorPath( mPenColor, {} );
+  // drawing with stylus adds these shadow sketches with just one point, which break the undo user experience
+  if ( mPaths.last().mPoints.size() == 1 )
+  {
+    mPaths.removeLast();
+  }
 }
 
 void PhotoSketchingController::addPoint( const QPointF &newPoint )
@@ -128,6 +133,7 @@ void PhotoSketchingController::saveDrawings() const
   if ( image.isNull() )
   {
     CoreUtils::log( "Photo sketching", "Failed to load image from: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Error: " + imageReader.errorString() );
     return;
   }
 
