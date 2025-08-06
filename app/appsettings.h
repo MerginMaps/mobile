@@ -48,8 +48,8 @@ class AppSettings: public QObject
       HapticsSound,
 #else
       HapticsOff = 0,
-      HapticsVibration,
       HapticsSound,
+      HapticsVibration,
       HapticsVibrationSound
 #endif
     };
