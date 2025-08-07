@@ -101,6 +101,7 @@
 #include "guidelinecontroller.h"
 #include "multieditmanager.h"
 #include "mixedattributevalue.h"
+#include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
 
 #include "projectsmodel.h"
