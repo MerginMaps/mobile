@@ -90,22 +90,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="251"/>
+        <location filename="../androidutils.cpp" line="259"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>L&apos;enregistrement n&apos;est pas accepté, veuillez l&apos;autoriser dans les paramètres afin de pouvoir charger les images de la gallerie</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="255"/>
+        <location filename="../androidutils.cpp" line="263"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps a besoin d&apos;une autorisation de stockage pour charger des images depuis la galerie.</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="273"/>
+        <location filename="../androidutils.cpp" line="281"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>L&apos;autorisation de la caméra est refusée en permanence, veuillez l&apos;autoriser dans les paramètres</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="277"/>
+        <location filename="../androidutils.cpp" line="285"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Nous avons besoin d&apos;une autorisation pour prendre une photo</translation>
     </message>
@@ -185,6 +185,31 @@
 Won&apos;t be added to the project.</source>
         <translation>Le champ %1 existe déjà.
 Ne sera pas ajouté au projet.</translation>
+    </message>
+</context>
+<context>
+    <name>HapticsModel</name>
+    <message>
+        <location filename="../hapticsmodel.cpp" line="15"/>
+        <location filename="../hapticsmodel.cpp" line="18"/>
+        <source>Off</source>
+        <translation>Off</translation>
+    </message>
+    <message>
+        <location filename="../hapticsmodel.cpp" line="16"/>
+        <location filename="../hapticsmodel.cpp" line="19"/>
+        <source>Sound</source>
+        <translation>Son</translation>
+    </message>
+    <message>
+        <location filename="../hapticsmodel.cpp" line="20"/>
+        <source>Vibration</source>
+        <translation>Vibration</translation>
+    </message>
+    <message>
+        <location filename="../hapticsmodel.cpp" line="21"/>
+        <source>Vibration &amp; Sound</source>
+        <translation>Vibration et son</translation>
     </message>
 </context>
 <context>
@@ -275,52 +300,52 @@ Ne sera pas ajouté au projet.</translation>
         <translation>il y a %1 an</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1535"/>
+        <location filename="../inpututils.cpp" line="1537"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>résolution de l&apos;écran : %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1536"/>
+        <location filename="../inpututils.cpp" line="1538"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de l&apos;écran : %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1537"/>
+        <location filename="../inpututils.cpp" line="1539"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>taille de l&apos;écran : %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1538"/>
+        <location filename="../inpututils.cpp" line="1540"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>Ratio rapporté de pixels de l&apos;appareil: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1539"/>
+        <location filename="../inpututils.cpp" line="1541"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>Ratio calculé de pixels de l&apos;appareil: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1540"/>
+        <location filename="../inpututils.cpp" line="1542"/>
         <source>used dp scale: %1</source>
         <translation>Échelle dp utilisée: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2069"/>
+        <location filename="../inpututils.cpp" line="2079"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Vous devez ajouter au moins %1 point(s) à chaque partie.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2073"/>
+        <location filename="../inpututils.cpp" line="2083"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Vous devez ajouter au moins %1 point(s).</translation>
     </message>
@@ -419,17 +444,17 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="85"/>
+        <location filename="../qml/account/MMAccountController.qml" line="91"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Veuillez mettre à jour l&apos;application pour utiliser les dernières fonctionnalités.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="89"/>
+        <location filename="../qml/account/MMAccountController.qml" line="95"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Le serveur est actuellement indisponible, vérifiez votre connexion ou essayer de nouveau plus tard.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="142"/>
+        <location filename="../qml/account/MMAccountController.qml" line="148"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>J&apos;accepte les %1Terms and Conditions%3 et %2Privacy Policy%3</translation>
     </message>
@@ -942,127 +967,127 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMGpsDataDrawer</name>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
         <source>GPS info</source>
         <translation>Informations GPS</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="63"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
         <source>No receiver</source>
         <translation>Aucun récepteur</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="76"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="77"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="93"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="94"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="96"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="103"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="115"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="122"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="134"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="149"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="164"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="179"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="194"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="226"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="97"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="116"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="123"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="135"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="150"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="165"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="180"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="195"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="209"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="227"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="242"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="259"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="113"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="131"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="132"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="146"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="147"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="161"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="162"/>
         <source>Horizontal accuracy</source>
         <translation>Précision horizontale</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="176"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="177"/>
         <source>Vertical accuracy</source>
         <translation>Précision verticale</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="191"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="192"/>
         <source>Altitude</source>
         <translation>Altitude</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="205"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
         <source>Fix quality</source>
         <translation>Corriger la qualité</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="222"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="223"/>
         <source>Satellites (in use/view)</source>
         <translation>Satellites (utilisés/visibles)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="238"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="239"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="255"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="256"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="272"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="273"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="289"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="290"/>
         <source>Speed</source>
         <translation>Vitesse</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="304"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
         <source>Last Fix</source>
         <translation>Dernière correction</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
         <source>GPS antenna height</source>
         <translation>Hauteur de l&apos;antenne GPS</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="315"/>
         <source>Not set</source>
         <translation>Non défini</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="327"/>
         <source>Manage GPS receivers</source>
         <translation>Gérer les récepteurs GPS</translation>
     </message>
@@ -1316,113 +1341,113 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="124"/>
+        <location filename="../qml/map/MMMapController.qml" line="125"/>
         <source>Mark the geometry on the map and click record</source>
         <translation>Marquez la géométrie sur la carte et cliquez sur Enregistrer.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="153"/>
+        <location filename="../qml/map/MMMapController.qml" line="154"/>
         <source>Create line to split the selected feature</source>
         <translation>Créer une ligne pour diviser l&apos;élément sélectionné</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="170"/>
+        <location filename="../qml/map/MMMapController.qml" line="171"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation>Ajouter des points pour mesurer une distance, fermer le polygone pour mesurer une surface</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="177"/>
+        <location filename="../qml/map/MMMapController.qml" line="178"/>
         <source>Tap on features to add or remove from the selection</source>
         <translation>Appuyez sur les entités pour les ajouter ou les retirer de la sélection</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="183"/>
+        <location filename="../qml/map/MMMapController.qml" line="184"/>
         <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
         <translation>Sélectionne une couleur et dessine sur la carte. Utiliser deux doigts pour se déplacer ou zoomé la carte.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="629"/>
+        <location filename="../qml/map/MMMapController.qml" line="630"/>
         <source>streaming</source>
         <translation>streaming</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="705"/>
+        <location filename="../qml/map/MMMapController.qml" line="706"/>
         <source>Connecting to %1</source>
         <translation>Connexion à %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="719"/>
+        <location filename="../qml/map/MMMapController.qml" line="720"/>
         <source>Connected, no position</source>
         <translation>Connecté, aucune position</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="723"/>
+        <location filename="../qml/map/MMMapController.qml" line="724"/>
         <source>Unknown accuracy</source>
         <translation>Précision inconnue</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="865"/>
+        <location filename="../qml/map/MMMapController.qml" line="866"/>
         <source>GPS currently unavailable</source>
         <translation>GPS actuellement indisponible</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="889"/>
+        <location filename="../qml/map/MMMapController.qml" line="890"/>
         <source>Choose Active Layer</source>
         <translation>Choisir la couche active</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="923"/>
+        <location filename="../qml/map/MMMapController.qml" line="924"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Aucune couche éditable n&apos;a été trouvée dans le projet.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="924"/>
+        <location filename="../qml/map/MMMapController.qml" line="925"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Découvrez comment activer la digitalisation dans votre projet.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="950"/>
+        <location filename="../qml/map/MMMapController.qml" line="951"/>
         <source>More options</source>
         <translation>Plus d&apos;options</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="955"/>
+        <location filename="../qml/map/MMMapController.qml" line="956"/>
         <source>Split geometry</source>
         <translation>Fractionner la géométrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="967"/>
+        <location filename="../qml/map/MMMapController.qml" line="968"/>
         <source>Redraw geometry</source>
         <translation>Redessiner la géométrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="979"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Streaming mode</source>
         <translation>Mode streaming</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="985"/>
+        <location filename="../qml/map/MMMapController.qml" line="986"/>
         <source>Active</source>
         <translation>Active</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1197"/>
+        <location filename="../qml/map/MMMapController.qml" line="1198"/>
         <source>Splitting done successfully</source>
         <translation>Le fractionnement a été effectué avec succès</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1288"/>
+        <location filename="../qml/map/MMMapController.qml" line="1289"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Sélectionner un point pour commencer à modifier la géométrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1301"/>
+        <location filename="../qml/map/MMMapController.qml" line="1302"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistrer une nouvelle géométrie pour l&apos;élément</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="128"/>
-        <location filename="../qml/map/MMMapController.qml" line="1400"/>
+        <location filename="../qml/map/MMMapController.qml" line="129"/>
+        <location filename="../qml/map/MMMapController.qml" line="1401"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS actuellement indisponible.</translation>
     </message>
@@ -1612,42 +1637,42 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMPositionProviderPage</name>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="82"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="83"/>
         <source>Unknown device</source>
         <translation>Appareil non reconnu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
         <source>Internal receivers</source>
         <translation>Récepteurs internes</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="110"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
         <source>External receivers</source>
         <translation>Récepteurs externes</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="135"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="136"/>
         <source>Connect new receiver</source>
         <translation>Connecter un nouveau récepteur</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="146"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation>La connexion à des récepteurs externes via Bluetooth n&apos;est pas prise en charge.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="148"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>Cette fonction n&apos;est pas disponible sur iOS. Votre fournisseur de matériels peut vous proposer une application personnalisée qui se connecte au récepteur GPS et mesure la position. L&apos;application permettra de faire croire que la position est toujours mesurée par le GPS interne de l&apos;appareil.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="172"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
         <source>Internal</source>
         <translation>Interne</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="237"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="238"/>
         <source>Manage GPS receivers</source>
         <translation>Gérer les récepteurs GPS</translation>
     </message>
@@ -2051,38 +2076,38 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="55"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="57"/>
         <source>Geometry was removed to avoid overlaps with other features. Tap &quot;Edit Geometry&quot; to draw a new one.</source>
         <translation>La géométrie a été retirée pour éviter la superposition avec une autre entité. Clique sur &quot;Editer la géométrie&quot; pour en dessiner une nouvelle</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="61"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="63"/>
         <source>Geometry was adjusted to avoid overlaps with other features.</source>
         <translation>La géométrie a été ajustée pour éviter la superposition avec d&apos;autres entités.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="194"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="196"/>
         <source>Undo</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="201"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="206"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="215"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="223"/>
         <source>Release</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="229"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="239"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="246"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="274"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="258"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="288"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
     </message>
@@ -2161,7 +2186,7 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMSettingsController</name>
     <message>
-        <location filename="../qml/settings/MMSettingsController.qml" line="98"/>
+        <location filename="../qml/settings/MMSettingsController.qml" line="99"/>
         <source>Changelog could not be loaded</source>
         <translation>Le journal des modifications n&apos;a pu être chargé</translation>
     </message>
@@ -2177,163 +2202,173 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMSettingsPage</name>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="33"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="35"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
         <source>Time elapsed</source>
         <translation>Temps écoulé</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="34"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
         <source>Distance traveled</source>
         <translation>Distance parcourue</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="52"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="54"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="63"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold</source>
         <translation>Seuil de précision du GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="64"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Déterminez quand l&apos;indicateur de précision devient jaune</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="67"/>
         <source>GPS accuracy threshold, in meters</source>
         <translation>Seuil de précision du GPS, en mètres</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="78"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="80"/>
         <source>Manage GPS receivers</source>
         <translation>Gérer les récepteurs GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
         <source>GPS antenna height</source>
         <translation>Hauteur de l&apos;antenne GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="89"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="91"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Inclut la hauteur de la canne et la hauteur de l&apos;antenne du récepteur GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
         <source>GPS antenna height, in meters</source>
         <translation>Hauteur de l&apos;antenne GPS, en mètres</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="102"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
         <source>Streaming mode</source>
         <translation>Mode d&apos;enregistrement en continu</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="114"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
         <source>Interval threshold type</source>
         <translation>Type d&apos;intervalle</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="115"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Choose a type of threshold for streaming mode</source>
         <translation>Choisir un type d&apos;intervalle pour le mode d&apos;enregistrement en continu</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
         <source>Distance Traveled</source>
         <translation>Distance parcourue</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="132"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval</source>
         <translation>Intervalle d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="133"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
         <source>Streaming mode will add a point to the object at each interval</source>
         <translation>Le mode d&apos;enregistrement en continu ajoutera à l&apos;objet un point à chaque intervalle</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in meters</source>
         <translation>Intervalle d&apos;enregistrement, en mètres</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in seconds</source>
         <translation>Intervalle d&apos;enregistrement, en secondes</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="146"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="157"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
         <source>Reuse last entered value</source>
         <translation>Réutiliser la dernière valeur saisie</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="158"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="160"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Une case à cocher sur chaque champ permet de réutiliser la dernière valeur saisie sur l&apos;entité suivante.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="170"/>
         <source>Automatically sync changes</source>
         <translation>Synchronisation automatique des modifications</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="169"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Each time you save changes, the app will sync automatically</source>
         <translation>À chaque enregistrement, l&apos;application&lt;br&gt;synchronisera automatiquement</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
         <source>Auto-lock position</source>
         <translation>Verrouillage de la position</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="180"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="182"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>À chaque enregistrement, la carte se centrera sur votre position</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
+        <source>Touch Feedback</source>
+        <translation>Retour tactile</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
+        <source>The app can vibrate and play a sound when adding a feature</source>
+        <translation>L&apos;application peut vibrer et émettre du son à l&apos;ajout d&apos;une entité </translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="200"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="221"/>
         <source>About</source>
         <translation>À propos&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
         <source>Changelog</source>
         <translation>Journal de modifications</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="220"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="241"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="251"/>
         <source>Privacy policy</source>
         <translation>Politique de confidentialité</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="240"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="261"/>
         <source>Terms of service</source>
         <translation>Conditions d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="250"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="271"/>
         <source>Diagnostic log</source>
         <translation>Journal de diagnostic</translation>
     </message>
@@ -2729,115 +2764,115 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="237"/>
+        <location filename="../../core/merginapi.cpp" line="238"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Veuillez supprimer certains de vos projets car l&apos;application n&apos;autorise actuellement que %1 projets téléchargés.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="879"/>
+        <location filename="../../core/merginapi.cpp" line="880"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Il y a un problème avec la configuration du serveur de connexion SSO. Contacter l&apos;administrateur</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="887"/>
-        <location filename="../../core/merginapi.cpp" line="947"/>
+        <location filename="../../core/merginapi.cpp" line="888"/>
+        <location filename="../../core/merginapi.cpp" line="948"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Erreur lors de l&apos;obtention de la configuration de connexion SSO du serveur</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="931"/>
-        <location filename="../../core/merginapi.cpp" line="945"/>
+        <location filename="../../core/merginapi.cpp" line="932"/>
+        <location filename="../../core/merginapi.cpp" line="946"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>La connexion SSO n&apos;est pas supportée pour ce domaine spécifique</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="960"/>
-        <location filename="../../core/merginapi.cpp" line="1470"/>
+        <location filename="../../core/merginapi.cpp" line="961"/>
+        <location filename="../../core/merginapi.cpp" line="1471"/>
         <source>Please enter a valid email</source>
         <translation>Veuillez saisir une adresse e-mail valide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="967"/>
-        <location filename="../../core/merginapi.cpp" line="1482"/>
+        <location filename="../../core/merginapi.cpp" line="968"/>
+        <location filename="../../core/merginapi.cpp" line="1483"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>Le mot de passe doit avoir au minimum 8 caractères et contenir des minuscules, des majuscules et a minima un chiffre ou un caractère spécial.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="981"/>
+        <location filename="../../core/merginapi.cpp" line="982"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Veuillez accepter les termes et la politique de confidentialité</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1010"/>
+        <location filename="../../core/merginapi.cpp" line="1011"/>
         <source>Marketing source cannot be empty</source>
         <translation>Le champ marketing ne peut être vide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1018"/>
+        <location filename="../../core/merginapi.cpp" line="1019"/>
         <source>Industry cannot be empty</source>
         <translation>Le champ industrie ne peut être vide</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1337"/>
+        <location filename="../../core/merginapi.cpp" line="1338"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Vous ne disposez pas des droits nécessaires pour créer de nouveaux projets dans cet espace de travail.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1342"/>
+        <location filename="../../core/merginapi.cpp" line="1343"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Le projet n&apos;a pas pu être créé. Veuillez réessayer plus tard ou contacter le support si le problème persiste.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1450"/>
+        <location filename="../../core/merginapi.cpp" line="1451"/>
         <source>Registration successful</source>
         <translation>Inscription réussie</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1472"/>
-        <location filename="../../core/merginapi.cpp" line="1478"/>
-        <location filename="../../core/merginapi.cpp" line="1490"/>
+        <location filename="../../core/merginapi.cpp" line="1473"/>
+        <location filename="../../core/merginapi.cpp" line="1479"/>
+        <location filename="../../core/merginapi.cpp" line="1491"/>
         <source>Registration failed</source>
         <translation>L&apos;enregistrement a échoué</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1476"/>
+        <location filename="../../core/merginapi.cpp" line="1477"/>
         <source>This email address is already registered</source>
         <translation>Cette adresse mail est déjà enregistrée</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1501"/>
+        <location filename="../../core/merginapi.cpp" line="1502"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Les nouveaux enregistrements sur le serveur sélectionné ne sont pas autorisés. Veuillez vérifier auprès de votre administrateur.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1533"/>
+        <location filename="../../core/merginapi.cpp" line="1534"/>
         <source>Workspace created</source>
         <translation>Espace de travail créé</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1880"/>
+        <location filename="../../core/merginapi.cpp" line="1881"/>
         <source>Project detached from the server</source>
         <translation>Projet séparé du serveur</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4096"/>
+        <location filename="../../core/merginapi.cpp" line="4119"/>
         <source>Workspace name contains invalid characters</source>
         <translation>L&apos;espace de travail contient des caractères invalides</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4163"/>
+        <location filename="../../core/merginapi.cpp" line="4186"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espace de travail %1 est déjà existant</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4262"/>
+        <location filename="../../core/merginapi.cpp" line="4292"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Vous pouvez fermer cette page et revenir sur Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4288"/>
-        <location filename="../../core/merginapi.cpp" line="4315"/>
+        <location filename="../../core/merginapi.cpp" line="4318"/>
+        <location filename="../../core/merginapi.cpp" line="4345"/>
         <source>SSO authorization failed</source>
         <translation>L&apos;autorisation de connexion SSO a échoué</translation>
     </message>
@@ -3062,17 +3097,17 @@ only allows up to %1 downloaded projects.</source>
         <translation>Fix inconnu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="554"/>
-        <source>Report submitted. Please contact us on %1</source>
-        <translation>Rapport transmis. Merci de nous contacter par courriel à l&apos;adresse %1</translation>
+        <location filename="../main.cpp" line="556"/>
+        <source>Report submitted. Please contact the support</source>
+        <translation>Rapport soumis. Merci de contacter le support</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="559"/>
+        <location filename="../main.cpp" line="561"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Impossible de transmettre le rapport. Merci de vérifier votre connexion à Internet</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="46"/>
+        <location filename="../../core/merginapi.cpp" line="47"/>
         <source>Synchronisation canceled</source>
         <translation>Synchronisation annulée</translation>
     </message>
@@ -3093,118 +3128,118 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="283"/>
+        <location filename="../qml/main.qml" line="284"/>
         <source>Sync</source>
         <translation>Synchroniser</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="293"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="302"/>
+        <location filename="../qml/main.qml" line="303"/>
         <source>No editable layers found.</source>
         <translation>Aucune couche éditable n&apos;a pu être trouvée.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="308"/>
+        <location filename="../qml/main.qml" line="309"/>
         <source>Layers</source>
         <translation>Couches</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="317"/>
+        <location filename="../qml/main.qml" line="318"/>
         <source>Projects</source>
         <translation>Projets</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="325"/>
+        <location filename="../qml/main.qml" line="326"/>
         <source>Zoom to project</source>
         <translation>Se localiser</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="334"/>
+        <location filename="../qml/main.qml" line="335"/>
         <source>Map themes</source>
         <translation>Thèmes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="345"/>
+        <location filename="../qml/main.qml" line="346"/>
         <source>Position tracking</source>
         <translation>Enregistrement de la position</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="356"/>
+        <location filename="../qml/main.qml" line="357"/>
         <source>Measure</source>
         <translation>Mesure</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="362"/>
+        <location filename="../qml/main.qml" line="363"/>
         <source>Local changes</source>
         <translation>Changements locaux</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="371"/>
+        <location filename="../qml/main.qml" line="372"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="566"/>
-        <location filename="../qml/main.qml" line="574"/>
+        <location filename="../qml/main.qml" line="567"/>
+        <location filename="../qml/main.qml" line="575"/>
         <source>not tracking</source>
         <translation>Pas d&apos;enregistrement de la position</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="873"/>
+        <location filename="../qml/main.qml" line="874"/>
         <source>Select feature</source>
         <translation>Sélectionner une entité</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="958"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Quelqu&apos;un d&apos;autre est une train de synchroniser, veuillez réessayer plus tard</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="961"/>
+        <location filename="../qml/main.qml" line="962"/>
         <source>Details</source>
         <translation>Détails</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="982"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>La connexion avec le serveur a échoué. Essayez avec un meilleur réseau</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1032"/>
+        <location filename="../qml/main.qml" line="1033"/>
         <source>Up to date</source>
         <translation>À jour</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1100"/>
+        <location filename="../qml/main.qml" line="1101"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Il y a eu des problèmes au chargement du projet. %1 Voir les détails %2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="777"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Le piquetage est désactivé car aucune position n&apos;est disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="926"/>
+        <location filename="../qml/main.qml" line="927"/>
         <source>Successfully synchronised</source>
         <translation>Synchronisation effectuée avec succès</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="964"/>
+        <location filename="../qml/main.qml" line="965"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Il y a eu un problème lors de la synchronisation, nous allons réessayer. Cliquez pour en savoir plus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1121"/>
+        <location filename="../qml/main.qml" line="1122"/>
         <source>Could not read the project file:</source>
         <translation>Le fichier du projet n&apos;a pu être lu</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1146"/>
+        <location filename="../qml/main.qml" line="1155"/>
         <source>Press back again to quit the app</source>
         <translation>Appuyer à nouveau sur retour pour quitter l&apos;application</translation>
     </message>
