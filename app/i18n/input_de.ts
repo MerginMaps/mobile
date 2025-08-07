@@ -2333,7 +2333,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
-        <translation> Die App kann beim Hinzufügen eines Features vibrieren und einen Ton abspielen</translation>
+        <translation>Die App kann beim Hinzufügen eines Features vibrieren und einen Ton abspielen</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
