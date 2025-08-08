@@ -10,12 +10,9 @@
 #include "inputhelp.h"
 #include "merginuserinfo.h"
 #include "merginsubscriptioninfo.h"
-#include "merginsubscriptionstatus.h"
 #include "merginapi.h"
 #include "inpututils.h"
 #include "coreutils.h"
-
-#include "inpututils.h"
 
 #include <QNetworkReply>
 #include <QSysInfo>
@@ -39,12 +36,12 @@ InputHelp::InputHelp( MerginApi *merginApi ):
   emit linkChanged();
 }
 
-QString InputHelp::helpRootLink() const
+QString InputHelp::helpRootLink()
 {
   return helpRoot + "/" + utmTagHelp;
 }
 
-QString InputHelp::mmWebLink() const
+QString InputHelp::mmWebLink()
 {
   return mmWeb + "/" +  utmTagOther;
 }
@@ -55,7 +52,7 @@ QString InputHelp::merginLinkHelper( const QString &subpath, const QString &utmT
 
   if ( mMerginApi && mMerginApi->apiSupportsWorkspaces() )
   {
-    int activeWS = mMerginApi->userInfo()->activeWorkspaceId();
+    const int activeWS = mMerginApi->userInfo()->activeWorkspaceId();
     if ( activeWS >= 0 )
     {
       activeWorkspacePathPart = QStringLiteral( "?workspace=%1" ).arg( activeWS );
@@ -98,63 +95,60 @@ QString InputHelp::merginSubscriptionLink() const
   {
     return merginLinkHelper( "subscription", utmTagSubscription );
   }
-  else
-  {
-    return merginDashboardLink();
-  }
+  return merginDashboardLink();
 }
 
-QString InputHelp::privacyPolicyLink() const
+QString InputHelp::privacyPolicyLink()
 {
   return mmWeb + "/privacy-policy" + utmTagOther;
 }
 
-QString InputHelp::merginSubscriptionDetailsLink() const
+QString InputHelp::merginSubscriptionDetailsLink()
 {
   return helpRoot + "/setup/subscriptions/" + utmTagSubscription;
 }
 
-QString InputHelp::howToEnableDigitizingLink() const
+QString InputHelp::howToEnableDigitizingLink()
 {
   return helpRoot + "/gis/enable_digitising/" + utmTagHelp;
 }
 
-QString InputHelp::howToEnableBrowsingDataLink() const
+QString InputHelp::howToEnableBrowsingDataLink()
 {
   return helpRoot + "/gis/enable_browsing/" + utmTagHelp;
 }
 
-QString InputHelp::howToSetupThemesLink() const
+QString InputHelp::howToSetupThemesLink()
 {
   return helpRoot + "/gis/setup_themes/" + utmTagHelp;
 }
 
-QString InputHelp::howToSetupProj() const
+QString InputHelp::howToSetupProj()
 {
   return helpRoot + "/gis/proj/" + utmTagHelp;
 }
 
-QString InputHelp::gpsAccuracyHelpLink() const
+QString InputHelp::gpsAccuracyHelpLink()
 {
   return helpRoot + "/field/gps_accuracy/" + utmTagHelp; // NOTE: keeping here for future use
 }
 
-QString InputHelp::howToConnectGPSLink() const
+QString InputHelp::howToConnectGPSLink()
 {
   return helpRoot + "/field/external_gps/" + utmTagHelp;
 }
 
-QString InputHelp::merginTermsLink() const
+QString InputHelp::merginTermsLink()
 {
   return mmWeb + "/terms-of-service" + utmTagOther;
 }
 
-QString InputHelp::projectLoadingErrorHelpLink() const
+QString InputHelp::projectLoadingErrorHelpLink()
 {
   return helpRoot + "/field/broken-project/" + utmTagHelp;
 }
 
-QString InputHelp::whatsNewPostLink() const
+QString InputHelp::whatsNewPostLink()
 {
   return mmWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
@@ -169,7 +163,7 @@ QString InputHelp::helpdeskMail()
   return helpDeskMail;
 }
 
-QString InputHelp::migrationGuides() const
+QString InputHelp::migrationGuides()
 {
   return helpRoot + "/dev/ce-migration/" + utmTagHelp;
 }
@@ -179,15 +173,15 @@ bool InputHelp::submitReportPending() const
   return mSubmitReportPending;
 }
 
-QString InputHelp::fullLog( bool isHtml )
+QString InputHelp::fullLog( const bool isHtml ) const
 {
-  qint64 limit = 8000000;
+  constexpr qint64 limit = 5000000;
   QVector<QString> retLines = logHeader( isHtml );
 
   QFile file( CoreUtils::logFilename() );
   if ( file.open( QIODevice::ReadOnly ) )
   {
-    qint64 fileSize = file.size();
+    const qint64 fileSize = file.size();
     if ( fileSize > limit )
       file.seek( file.size() - limit );
 
@@ -219,10 +213,10 @@ QString InputHelp::fullLog( bool isHtml )
   return ret;
 }
 
-QVector<QString> InputHelp::logHeader( bool isHtml )
+QVector<QString> InputHelp::logHeader( const bool isHtml ) const
 {
   QVector<QString> retLines;
-  retLines.push_back( QStringLiteral( "Input App: %1 - %2 (%3)" ).arg( CoreUtils::appVersion() ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersionCode() ) );
+  retLines.push_back( QStringLiteral( "Input App: %1 - %2 (%3)" ).arg( CoreUtils::appVersion(), InputUtils::appPlatform(), CoreUtils::appVersionCode() ) );
   retLines.push_back( QStringLiteral( "Device UUID: %1" ).arg( CoreUtils::deviceUuid() ) );
   retLines.push_back( QStringLiteral( "Data Dir: %1" ).arg( InputUtils::appDataDir() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
@@ -234,21 +228,20 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
     retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
-                        .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ) )
-                        .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
+                        .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ), InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
     retLines.push_back( QStringLiteral( "Workspace Name: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceName() ) );
     retLines.push_back( QStringLiteral( "Workspace ID: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceId() ) );
   }
   else
   {
-    retLines.push_back( QStringLiteral( "%1Mergin User Profile not available. To include it, open you Profile Page in InputApp%2" ).arg( isHtml ? "<b>" : "" ).arg( isHtml ? "</b>" : "" ) );
+    retLines.push_back( QStringLiteral( "%1Mergin User Profile not available. To include it, open you Profile Page in InputApp%2" ).arg( isHtml ? "<b>" : "", isHtml ? "</b>" : "" ) );
   }
   retLines.push_back( QStringLiteral( "------------------------------------------" ) );
   retLines.push_back( QStringLiteral( "Screen Info:" ) );
   retLines.append( InputUtils().dumpScreenInfo().split( "\n" ).toVector() );
   retLines.push_back( QStringLiteral( "------------------------------------------" ) );
   retLines.push_back( QStringLiteral( "Profiler Data:" ) );
-  retLines.append( InputUtils().qgisProfilerLog() );
+  retLines.append( InputUtils::qgisProfilerLog() );
   retLines.push_back( QStringLiteral( "------------------------------------------" ) );
 
   return retLines;
@@ -257,18 +250,18 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
 
 void InputHelp::submitReport()
 {
-  // There is a limit of 10MB on the remote service, send less, let say 8MB
-  QString log = fullLog( false );
-  QByteArray logArr = log.toUtf8();
-  QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersion() );
+  // There is a limit of 6MB on the remote service, send less, let say 5MB
+  const QString log = fullLog( false );
+  const QByteArray logArr = log.toUtf8();
+  const QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform(), CoreUtils::appVersion() );
   QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
   if ( username.isEmpty() )
     username = "unknown";
-  QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app ).arg( username );
+  const QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app, username );
   QNetworkRequest req( mMerginApi->serverDiagnosticLogsUrl() + params );
   req.setRawHeader( "User-Agent", "InputApp" );
   req.setRawHeader( "Content-Type", "text/plain" );
-  QNetworkReply *reply = mManager.post( req, logArr );
+  const QNetworkReply *reply = mManager.post( req, logArr );
 
   mSubmitReportPending = true;
   emit submitReportPendingChanged();
@@ -280,7 +273,7 @@ void InputHelp::onSubmitReportReplyFinished()
   mSubmitReportPending = false;
   emit submitReportPendingChanged();
 
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  const QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
   if ( r->error() == QNetworkReply::NoError )

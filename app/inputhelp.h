@@ -14,8 +14,6 @@
 #include <QString>
 #include <QNetworkAccessManager>
 
-#include "inputconfig.h"
-
 class MerginApi;
 class InputUtils;
 
@@ -57,44 +55,45 @@ class InputHelp: public QObject
   public:
     explicit InputHelp( MerginApi *merginApi );
 
-    QString helpRootLink() const;
-    QString mmWebLink() const;
+    static QString helpRootLink() ;
+    static QString mmWebLink() ;
     QString merginDashboardLink() const;
     QString merginSubscriptionLink() const;
-    QString privacyPolicyLink() const;
-    QString merginSubscriptionDetailsLink() const;
-    QString howToEnableDigitizingLink() const;
-    QString howToEnableBrowsingDataLink() const;
-    QString howToSetupThemesLink() const;
-    QString howToSetupProj() const;
-    QString gpsAccuracyHelpLink() const;
-    QString howToConnectGPSLink() const;
-    QString merginTermsLink() const;
-    QString projectLoadingErrorHelpLink() const;
-    QString whatsNewPostLink() const;
+    static QString privacyPolicyLink() ;
+    static QString merginSubscriptionDetailsLink() ;
+    static QString howToEnableDigitizingLink() ;
+    static QString howToEnableBrowsingDataLink() ;
+    static QString howToSetupThemesLink() ;
+    static QString howToSetupProj() ;
+    static QString gpsAccuracyHelpLink() ;
+    static QString howToConnectGPSLink() ;
+    static QString merginTermsLink() ;
+    static QString projectLoadingErrorHelpLink() ;
+    static QString whatsNewPostLink() ;
     static QString changelogLink();
     static QString helpdeskMail();
-    QString migrationGuides() const;
+    static QString migrationGuides() ;
 
     bool submitReportPending() const;
     /**
      * Reads and returns the internal text log file content.
      *
-     * The latest messages in the log come at the beginning. Only last 0.5MB are read.
+     * The latest messages in the log come at the beginning. Only last 5MB are read.
      * Prepends the information about screen, device, logged user and application
      *
      * \see log()
      */
-    Q_INVOKABLE QString fullLog( bool isHtml );
+    Q_INVOKABLE QString fullLog( bool isHtml ) const;
 
-    /** Submit user log*/
+    /**
+     * Submit user log
+     */
     Q_INVOKABLE void submitReport( );
 
   private:
-    QVector<QString> logHeader( bool isHtml );
+    QVector<QString> logHeader( bool isHtml ) const;
     QString merginLinkHelper( const QString &subpath, const QString &utmTag ) const;
 
-  private:
     MerginApi *mMerginApi = nullptr;
     QNetworkAccessManager mManager;
     bool mSubmitReportPending = false;
