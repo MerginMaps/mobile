@@ -181,7 +181,7 @@ bool InputHelp::submitReportPending() const
 
 QString InputHelp::fullLog( bool isHtml )
 {
-  qint64 limit = 8000000;
+  qint64 limit = 5000000;
   QVector<QString> retLines = logHeader( isHtml );
 
   QFile file( CoreUtils::logFilename() );
@@ -257,7 +257,7 @@ QVector<QString> InputHelp::logHeader( bool isHtml )
 
 void InputHelp::submitReport()
 {
-  // There is a limit of 10MB on the remote service, send less, let say 8MB
+  // There is a limit of 6MB on the remote service, send less, let say 5MB
   QString log = fullLog( false );
   QByteArray logArr = log.toUtf8();
   QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform() ).arg( CoreUtils::appVersion() );

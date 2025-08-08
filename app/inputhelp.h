@@ -80,7 +80,7 @@ class InputHelp: public QObject
     /**
      * Reads and returns the internal text log file content.
      *
-     * The latest messages in the log come at the beginning. Only last 0.5MB are read.
+     * The latest messages in the log come at the beginning. Only last 5MB are read.
      * Prepends the information about screen, device, logged user and application
      *
      * \see log()
