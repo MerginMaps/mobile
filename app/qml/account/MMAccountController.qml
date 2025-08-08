@@ -303,6 +303,8 @@ Item {
 
         function onProcessInvitationFinished( accepted ) {
           controller.end()
+          stackView.currentItem.state = "workspace"
+          __notificationModel.addInfo( qsTr( "Download a project and start collecting." ), MM.NotificationType.NoAction, 10 )
         }
       }
     }
