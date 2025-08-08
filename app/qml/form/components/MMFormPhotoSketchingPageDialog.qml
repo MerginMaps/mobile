@@ -49,10 +49,6 @@ Dialog {
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
 
-      iconSource: __style.closeIcon
-      iconColor: __style.forestColor
-      bgndColor: __style.polarColor
-
       onClicked: {
         root.close()
         root.controller.clear()
@@ -94,6 +90,7 @@ Dialog {
 
       onClicked: {
         root.close()
+        root.controller.backupSketches()
       }
     }
   }
@@ -194,7 +191,6 @@ Dialog {
 
           onCentroidChanged: {
             // the drag handler gets notified even when drag continues outside parent
-            console.log("Current position: " + dragHandler.centroid.position)
             const outsideImageBounds = centroid.position.x > parent.width || centroid.position.x < 0 || centroid.position.y > parent.height || centroid.position.y < 0
             if (!outsideImageBounds) {
               // centroid gets set to (0, 0) when drag stops

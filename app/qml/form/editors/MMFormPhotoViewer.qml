@@ -52,6 +52,9 @@ MMPrivateComponents.MMBaseInput {
       },
       State {
         name: "notAvailable"
+      },
+      State {
+        name: "sketched"
       }
     ]
 

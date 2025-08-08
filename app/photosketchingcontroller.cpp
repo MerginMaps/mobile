@@ -12,11 +12,10 @@
 #include <QColor>
 #include <QImageReader>
 #include <QPointF>
-#include <QPainterPath>
-#include <QPainter>
 #include <QUrl>
 
 #include "coreutils.h"
+#include "inpututils.h"
 
 /**
  * ColorPath declarations
@@ -47,12 +46,12 @@ bool ColorPath::operator==( const ColorPath &other ) const
 
 void PhotoSketchingController::newSketch()
 {
-  CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "New sketch started" ) );
   mCurrentLine = ColorPath( mPenColor, {} );
   // drawing with stylus adds these shadow sketches with just one point, which break the undo user experience
-  if ( mPaths.last().mPoints.size() == 1 )
+  if ( !mActivePaths.isEmpty() && mActivePaths.last().mPoints.size() == 1 )
   {
     mPaths.removeLast();
+    mActivePaths.removeLast();
   }
 }
 
@@ -60,11 +59,11 @@ void PhotoSketchingController::addPoint( const QPointF &newPoint )
 {
 // we scale up the point to picture's true position
   mCurrentLine.mPoints.append( newPoint * mPhotoScale );
-  if ( mPaths.isEmpty() || mCurrentLine.mPoints.size() == 1 )
+  if ( mActivePaths.isEmpty() || mCurrentLine.mPoints.size() == 1 )
   {
     mPaths.append( mCurrentLine );
+    mActivePaths.append( mCurrentLine );
     emit newPathAdded( -1 );
-    CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "New sketch added to mPaths" ) );
     if ( !mCanUndo && !mPaths.isEmpty() )
     {
       mCanUndo = true;
@@ -74,8 +73,8 @@ void PhotoSketchingController::addPoint( const QPointF &newPoint )
   else
   {
     mPaths.last() = mCurrentLine;
+    mActivePaths.last() = mCurrentLine;
     emit pathUpdated( {static_cast<int>( mPaths.size() - 1 ) } );
-    CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "Updated last sketch" ) );
   }
 }
 
@@ -89,18 +88,19 @@ void PhotoSketchingController::setActiveColor( const QColor &newColor )
 
 void PhotoSketchingController::undo()
 {
-  if ( !mPaths.empty() )
+  if ( !mActivePaths.empty() )
   {
     mPaths.removeLast();
+    mActivePaths.removeLast();
     emit lastPathRemoved();
   }
 
-  if ( !mPaths.empty() && !mCanUndo )
+  if ( !mActivePaths.empty() && !mCanUndo )
   {
     mCanUndo = true;
     emit canUndoChanged();
   }
-  else if ( mPaths.empty() && mCanUndo )
+  else if ( mActivePaths.empty() && mCanUndo )
   {
     mCanUndo = false;
     emit canUndoChanged();
@@ -114,19 +114,42 @@ void PhotoSketchingController::clear()
   newSketch();
   mCanUndo = false;
   emit canUndoChanged();
-  mPaths.clear();
+  if ( !mPaths.isEmpty() ) mPaths.clear();
+  if ( !mActivePaths.isEmpty() ) mActivePaths.clear();
   emit pathsReset();
 }
 
-void PhotoSketchingController::saveDrawings() const
+void PhotoSketchingController::saveSketches()
 {
-  if ( mPaths.isEmpty() )
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+
+  if ( photoFileName.isEmpty() || !QDir::temp().exists( photoFileName ) )
   {
     return;
   }
 
-  const QString photoPath = QUrl( mPhotoSource ).toLocalFile();
-  CoreUtils::log( QStringLiteral( "Photo sketching" ), QStringLiteral( "Reading image from: %1" ).arg( photoPath ) );
+  if ( QFile::remove( mOriginalPhotoSource ) )
+  {
+    if ( InputUtils::copyFile( QDir::temp().absolutePath() + "/" + photoFileName, mOriginalPhotoSource ) )
+    {
+      CoreUtils::log( "Photo sketching", "Image saved to: " + mOriginalPhotoSource );
+      emit tempPhotoSourceChanged( mOriginalPhotoSource );
+      return;
+    }
+  }
+  CoreUtils::log( "Photo sketching", "Failed to save image to: " + mOriginalPhotoSource );
+}
+
+void PhotoSketchingController::backupSketches()
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  const QString photoPath = QDir::temp().absolutePath() + "/" + photoFileName;
+  if ( !QDir::temp().exists( photoFileName ) )
+  {
+    // create new temp file
+    InputUtils::copyFile( mPhotoSource, photoPath );
+  }
+
   QImageReader imageReader( photoPath );
   imageReader.setAutoTransform( true );
   QImage image = imageReader.read();
@@ -140,12 +163,12 @@ void PhotoSketchingController::saveDrawings() const
   QPainter painter( &image );
   painter.setRenderHint( QPainter::Antialiasing );
 
-  const int pathCount = static_cast<int>( mPaths.size() );
+  const int pathCount = static_cast<int>( mActivePaths.size() );
 
   for ( int i = 0; i < pathCount; ++i )
   {
-    const QColor color = mPaths.at( i ).mColor;
-    const QVector<QPointF> points = mPaths.at( i ).mPoints;
+    const QColor color = mActivePaths.at( i ).mColor;
+    const QVector<QPointF> points = mActivePaths.at( i ).mPoints;
 
     if ( points.isEmpty() )
       continue;
@@ -165,12 +188,16 @@ void PhotoSketchingController::saveDrawings() const
 
   if ( !image.save( photoPath ) )
   {
-    CoreUtils::log( "Photo sketching", "Failed to save image to: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Failed to save temporary image to: " + photoPath );
   }
   else
   {
-    CoreUtils::log( "Photo sketching", "Image saved to: " + photoPath );
+    CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
+    emit tempPhotoSourceChanged( QUrl( photoPath ).toString() );
   }
+
+  mActivePaths.clear();
+  mCanUndo = false;
 }
 
 void PhotoSketchingController::redrawPaths()
@@ -217,6 +244,28 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
   colorPath.mPoints = shapePoints;
 
   return colorPath;
+}
+
+QUrl PhotoSketchingController::getCurrentPhotoPath() const
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  if ( QDir::temp().exists( photoFileName ) )
+  {
+    return { QDir::temp().absolutePath() + "/" + photoFileName };
+  }
+
+  return { mOriginalPhotoSource };
+}
+
+void PhotoSketchingController::prepareController()
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  if ( !photoFileName.isEmpty() && QDir::temp().exists( photoFileName ) )
+  {
+    QDir::temp().remove( photoFileName );
+  }
+
+  mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
 }
 
 int PhotoSketchingController::sketchWidth()

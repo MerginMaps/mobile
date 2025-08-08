@@ -66,8 +66,11 @@ class PhotoSketchingController: public QObject
     // resets the controller to default state ( removes all lines, sets white color... )
     Q_INVOKABLE void clear();
 
-    // saves the drawings into the image
-    Q_INVOKABLE void saveDrawings() const;
+    // saves the drawings into the original image
+    Q_INVOKABLE void saveSketches();
+
+    // saves the drawings into temporary image
+    Q_INVOKABLE void backupSketches();
 
     // redraws all paths in mPaths (used after user comes back to drawing screen)
     Q_INVOKABLE void redrawPaths();
@@ -78,6 +81,15 @@ class PhotoSketchingController: public QObject
     // Get the qml representation of ColorPath.
     Q_INVOKABLE ColorPath getPath( int row ) const;
 
+    // returns the temporary photo path if it exists and if not original path
+    Q_INVOKABLE QUrl getCurrentPhotoPath() const;
+
+    /**
+     * gets triggered on creation and removes file with same name as mPhotoSource from temp folder and
+     * saves the original mPhotoSource to mOriginalPhotoSource
+     */
+    Q_INVOKABLE void prepareController();
+
     static int sketchWidth();
 
   signals:
@@ -85,6 +97,7 @@ class PhotoSketchingController: public QObject
     void activeColorChanged();
     void photoScaleChanged();
     void sketchWidthChanged();
+    void tempPhotoSourceChanged( const QString &newPath );
 
     void newPathAdded( int pathIndex );
     void pathUpdated( QVector<int> pathIndexes );
@@ -94,11 +107,14 @@ class PhotoSketchingController: public QObject
   private:
     double mPhotoScale = 1.0;
     QString mPhotoSource;
+    QString mOriginalPhotoSource;
     QColor mPenColor = QColor( Qt::white );
     bool mCanUndo = false;
     ColorPath mCurrentLine = ColorPath( mPenColor, {} );
     // it's a vector of polylines by color
     QVector<ColorPath> mPaths;
+    // the difference is that active paths are those that can be undone in current session
+    QVector<ColorPath> mActivePaths;
 };
 
 

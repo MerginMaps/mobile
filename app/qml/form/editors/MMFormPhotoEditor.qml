@@ -147,6 +147,10 @@ MMFormPhotoViewer {
     active: __activeProject.photoSketchingEnabled
 
     sourceComponent: photoSketchingComponent
+
+    onLoaded: {
+      item.prepareController()
+    }
   }
 
   Component {
@@ -154,6 +158,16 @@ MMFormPhotoViewer {
 
     PhotoSketchingController {
       photoSource: root.photoUrl
+    }
+  }
+
+  Connections {
+    target: root.sketchingController
+
+    function onTempPhotoSourceChanged( newPath ){
+      root.photoState = "sketched"
+      // to force the changed signal emitting
+      root._fieldValue = newPath
     }
   }
 
@@ -184,7 +198,7 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
-    root.sketchingController.saveDrawings()
+    root.sketchingController.saveSketches()
   }
 
   function callbackOnFormCanceled() {
@@ -235,6 +249,14 @@ MMFormPhotoViewer {
       if ( !root._fieldValue || root._fieldValueIsNull ) {
         root.photoState = "notSet"
         resolvedImageSource = ""
+        return
+      }
+
+      if ( root.photoState === "sketched" ) {
+        if ( resolvedImageSource === "file://" + root._fieldValue ) {
+          resolvedImageSource = ""
+        }
+        resolvedImageSource = "file://" + root._fieldValue
         return
       }
 
@@ -369,6 +391,9 @@ MMFormPhotoViewer {
         let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
+        if ( photoSketchingLoader.active ) {
+          sketchingController.prepareController()
+        }
       }
     }
   }
