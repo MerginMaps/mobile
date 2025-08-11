@@ -90,7 +90,7 @@ MMFormPhotoViewer {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  photoUrl: internal.resolvedImageSource
+  photoUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
   on_FieldValueChanged: internal.setImageSource()
@@ -165,9 +165,10 @@ MMFormPhotoViewer {
     target: root.sketchingController
 
     function onTempPhotoSourceChanged( newPath ){
-      root.photoState = "sketched"
-      // to force the changed signal emitting
-      root._fieldValue = newPath
+      if ( internal.tempSketchedImageSource === "file://" + newPath ) {
+        internal.tempSketchedImageSource = ""
+      }
+      internal.tempSketchedImageSource = "file://" + newPath
     }
   }
 
@@ -238,6 +239,8 @@ MMFormPhotoViewer {
 
     property string resolvedImageSource
 
+    property string tempSketchedImageSource
+
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
     //
@@ -252,19 +255,12 @@ MMFormPhotoViewer {
         return
       }
 
-      if ( root.photoState === "sketched" ) {
-        if ( resolvedImageSource === "file://" + root._fieldValue ) {
-          resolvedImageSource = ""
-        }
-        resolvedImageSource = "file://" + root._fieldValue
-        return
-      }
-
       let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
         resolvedImageSource = "file://" + absolutePath
+        tempSketchedImageSource = ""
       }
       else if ( __inputUtils.isValidUrl( absolutePath ) ) {
           root.photoState = "valid";

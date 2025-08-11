@@ -52,9 +52,6 @@ MMPrivateComponents.MMBaseInput {
       },
       State {
         name: "notAvailable"
-      },
-      State {
-        name: "sketched"
       }
     ]
 
@@ -79,6 +76,7 @@ MMPrivateComponents.MMBaseInput {
 
       photoUrl: root.photoUrl
       isLocalFile: root.photoUrl.startsWith( "file://" )
+      cache: false
 
       fillMode: Image.PreserveAspectCrop
 

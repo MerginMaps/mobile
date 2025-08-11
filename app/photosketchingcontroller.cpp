@@ -121,23 +121,39 @@ void PhotoSketchingController::clear()
 
 void PhotoSketchingController::saveSketches()
 {
-  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  const QString photoFileName = QUrl( mOriginalPhotoSource ).fileName();
 
+  // no need to save sketches when no sketches were done
   if ( photoFileName.isEmpty() || !QDir::temp().exists( photoFileName ) )
   {
     return;
   }
 
-  if ( QFile::remove( mOriginalPhotoSource ) )
+  bool isDeleted;
+  // photo source changed and it's not temporary sketched image path
+  const bool hasPhotoSourceChanged = QUrl( mOriginalPhotoSource ) != QUrl( mPhotoSource ) && !QUrl( mPhotoSource ).toLocalFile().startsWith( QDir::temp().absolutePath() );
+  if ( hasPhotoSourceChanged )
   {
-    if ( InputUtils::copyFile( QDir::temp().absolutePath() + "/" + photoFileName, mOriginalPhotoSource ) )
+    isDeleted = QFile::remove( QUrl( mPhotoSource ).toLocalFile() );
+  }
+  else
+  {
+    isDeleted = QFile::remove( mOriginalPhotoSource );
+  }
+
+  const QString newDest = hasPhotoSourceChanged ? QUrl( mPhotoSource ).toLocalFile() : mOriginalPhotoSource;
+  if ( isDeleted )
+  {
+    if ( InputUtils::copyFile( QDir::temp().absolutePath() + "/" + photoFileName, newDest ) )
     {
-      CoreUtils::log( "Photo sketching", "Image saved to: " + mOriginalPhotoSource );
-      emit tempPhotoSourceChanged( mOriginalPhotoSource );
+      CoreUtils::log( "Photo sketching", "Image saved to: " + newDest );
+      emit tempPhotoSourceChanged( newDest );
+      QFile::remove( QDir::temp().absolutePath() + "/" + photoFileName );
       return;
     }
   }
-  CoreUtils::log( "Photo sketching", "Failed to save image to: " + mOriginalPhotoSource );
+
+  CoreUtils::log( "Photo sketching", "Failed to save image to: " + newDest );
 }
 
 void PhotoSketchingController::backupSketches()
