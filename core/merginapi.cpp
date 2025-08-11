@@ -318,12 +318,12 @@ void MerginApi::removeProjectsTempFolder( const QString &projectNamespace, const
   QDir( path ).removeRecursively();
 }
 
-QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
+QNetworkRequest MerginApi::getDefaultRequest( const bool withAuth ) const
 {
   QNetworkRequest request;
-  QString info = CoreUtils::appInfo();
+  const QString info = CoreUtils::appInfo();
   request.setRawHeader( "User-Agent", QByteArray( info.toUtf8() ) );
-  QString deviceId = CoreUtils::deviceUuid();
+  const QString deviceId = CoreUtils::deviceUuid();
   request.setRawHeader( "X-Device-Id", QByteArray( deviceId.toUtf8() ) );
   if ( withAuth )
   {

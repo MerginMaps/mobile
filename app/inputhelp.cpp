@@ -254,14 +254,25 @@ void InputHelp::submitReport()
   const QString log = fullLog( false );
   const QByteArray logArr = log.toUtf8();
   const QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform(), CoreUtils::appVersion() );
-  QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
-  if ( username.isEmpty() )
-    username = "unknown";
-  const QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app, username );
-  QNetworkRequest req( mMerginApi->serverDiagnosticLogsUrl() + params );
-  req.setRawHeader( "User-Agent", "InputApp" );
-  req.setRawHeader( "Content-Type", "text/plain" );
-  const QNetworkReply *reply = mManager.post( req, logArr );
+  QNetworkRequest request;
+  QString params;
+
+  if ( mMerginApi->serverDiagnosticLogsUrl() == MerginApi::sDefaultReportLogUrl )
+  {
+    QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
+    if ( username.isEmpty() )
+      username = "unknown";
+    params = QStringLiteral( "?app=%1&username=%2" ).arg( app, username );
+    request = mMerginApi->getDefaultRequest( false );
+  }
+  else
+  {
+    params = QStringLiteral( "?app=%1" ).arg( app );
+    request = mMerginApi->getDefaultRequest();
+  }
+  request.setRawHeader( "Content-Type", "text/plain" );
+  request.setUrl( mMerginApi->serverDiagnosticLogsUrl() + params );
+  const QNetworkReply *reply = mManager.post( request, logArr );
 
   mSubmitReportPending = true;
   emit submitReportPendingChanged();
