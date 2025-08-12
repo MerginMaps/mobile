@@ -61,6 +61,7 @@ MMComponents.MMPage {
 
         useAttributeTableSortOrder: true
         layer: root.selectedLayer
+        attributeList: __inputUtils.referencedAttributeIndexes( layer, layer.displayExpression )
       }
 
       clip: true

@@ -48,6 +48,8 @@ class LayerFeaturesModel : public FeaturesModel
     // Returns if the model should be sorted according to the layer's attribute table configuration sort order
     Q_PROPERTY( bool useAttributeTableSortOrder MEMBER mUseAttributeTableSortOrder )
 
+    Q_PROPERTY( QgsAttributeList attributeList MEMBER mAttributeList )
+
   public:
 
     enum LayerModelRoles
@@ -94,6 +96,9 @@ class LayerFeaturesModel : public FeaturesModel
 
     virtual void populate();
     void reset() override;
+
+    //! These are the attributes that will be fetched from the data source when populating the model
+    QgsAttributeList mAttributeList;
 
   private slots:
     void onFutureFinished();

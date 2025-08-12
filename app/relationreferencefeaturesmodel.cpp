@@ -18,35 +18,50 @@ RelationReferenceFeaturesModel::RelationReferenceFeaturesModel( QObject *parent 
 
 RelationReferenceFeaturesModel::~RelationReferenceFeaturesModel() = default;
 
-QVariant RelationReferenceFeaturesModel::foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue )
+QVariant RelationReferenceFeaturesModel::foreignKeyFromReferencedFeatureId( QgsFeatureId fid )
 {
-  if ( mPrimaryKeyField.isEmpty() )
+  if ( !mRelation.isValid() )
     return QVariant();
 
-  for ( int i = 0; i < FeaturesModel::rowCount(); ++i )
-  {
-    if ( FeaturesModel::data( index( i, 0 ), fromAttribute ) == attributeValue )
-    {
-      QgsFeature feature = FeaturesModel::data( index( i, 0 ), FeaturesModel::Feature ).value<QgsFeature>();
-      return feature.attribute( mPrimaryKeyField );
-    }
-  }
+  const QgsAttributeList refFields = mRelation.referencedFields();
+  QgsFeatureRequest request( fid );
+  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
+  request.setSubsetOfAttributes( refFields );
+
+  QgsFeatureIterator it = mRelation.referencedLayer()->getFeatures( request );
+  QgsFeature f;
+
+  if ( it.nextFeature( f ) )
+    return f.attribute( refFields.constFirst() ); // TODO: multiple keys support
 
   return QVariant();
 }
 
 QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute )
 {
-  if ( mPrimaryKeyField.isEmpty() )
+  if ( !mRelation.isValid() )
     return QVariant();
 
-  for ( int i = 0; i < FeaturesModel::rowCount(); ++i )
+  // Attributes from the referencing layer
+  QgsAttributes attrs = QgsAttributes( mRelation.referencingLayer()->fields().count() );
+  // Set the value on the foreign key field of the referencing record
+  const QgsAttributeList refFields = mRelation.referencingFields();
+  for ( int fieldIndex : refFields )
+    attrs[ fieldIndex ] = fkValue; // TODO: multiple keys support
+
+  QgsFeatureRequest request = mRelation.getReferencedFeatureRequest( attrs );
+  QgsVectorLayer *reffedLayer = mRelation.referencedLayer();
+  QgsFeatureIterator it = reffedLayer->getFeatures( request );
+  QgsFeature f;
+
+  if ( it.nextFeature( f ) )
   {
-    QgsFeature feature = FeaturesModel::data( index( i, 0 ), FeaturesModel::Feature ).value<QgsFeature>();
-    if ( feature.attribute( mPrimaryKeyField ) == fkValue )
-    {
-      return FeaturesModel::data( index( i, 0 ), expectedAttribute );
-    }
+    FeatureLayerPair pair( f, reffedLayer );
+
+    if ( expectedAttribute == FeaturesModel::FeaturePair )
+      return QVariant::fromValue<FeatureLayerPair>( pair );
+    if ( expectedAttribute == FeaturesModel::FeatureTitle )
+      return featureTitle( pair );
   }
 
   return QVariant();
@@ -65,24 +80,35 @@ void RelationReferenceFeaturesModel::setup()
 
   QgsRelationManager *rManager = mProject->relationManager();
   QString relationId = mConfig.value( QStringLiteral( "Relation" ) ).toString();
-  QgsRelation relation = rManager->relation( relationId );
+  mRelation = rManager->relation( relationId );
 
-  if ( !relation.isValid() )
+  if ( !mRelation.isValid() )
   {
     CoreUtils::log( "RelationReference", "Relation from config is not valid! Editor will not work." );
     return;
   }
 
-  mPrimaryKeyField = relation.fieldPairs().at( 0 ).second;
-
-  QString layerId = mConfig.value( QStringLiteral( "ReferencedLayerId" ) ).toString();
-  QgsVectorLayer *layer = mProject->mapLayer<QgsVectorLayer *>( layerId );
-
-  if ( !layer ) return;
+  QgsVectorLayer *layer = mRelation.referencedLayer();
+  if ( !layer )
+    return;
 
   LayerFeaturesModel::setLayer( layer );
 
   populate();
+}
+
+void RelationReferenceFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
+{
+  // We only need to fetch fields used in the layer's display expression and those used as relation keys
+  QgsVectorLayer *layer = mRelation.referencedLayer();
+  QgsExpression expr( layer->displayExpression() );
+  QSet<int> attrs = expr.referencedAttributeIndexes( layer->fields() );
+  const QgsAttributeList reffedFields = mRelation.referencedFields();
+  for ( int fieldIndex : reffedFields )
+    attrs.insert( fieldIndex );
+  mAttributeList = qgis::setToList( attrs );
+
+  LayerFeaturesModel::setupFeatureRequest( request );
 }
 
 QVariantMap RelationReferenceFeaturesModel::config() const

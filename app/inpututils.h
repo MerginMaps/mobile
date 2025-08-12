@@ -639,6 +639,11 @@ class InputUtils: public QObject
      */
     static void sanitizeFileName( QString &fileName );
 
+    /**
+     * Returns the indexes of fields that are referenced in an expression
+     */
+    Q_INVOKABLE static QSet<int> referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

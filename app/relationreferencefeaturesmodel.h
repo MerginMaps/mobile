@@ -37,8 +37,8 @@ class RelationReferenceFeaturesModel : public LayerFeaturesModel
     explicit RelationReferenceFeaturesModel( QObject *parent = nullptr );
     ~RelationReferenceFeaturesModel() override;
 
-    //! Returns foreign key of feature that matches given role with attributeValue
-    Q_INVOKABLE QVariant foreignKeyFromAttribute( FeaturesModel::ModelRoles fromAttribute, const QVariant &attributeValue );
+    //! Returns foreign key of referenced feature with specified \a fid
+    Q_INVOKABLE QVariant foreignKeyFromReferencedFeatureId( QgsFeatureId fid );
 
     //! Returns role value from feature with fkValue in foreign key
     Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute );
@@ -52,6 +52,7 @@ class RelationReferenceFeaturesModel : public LayerFeaturesModel
 
     //! Reads config and with project instance queries all features from parent layer. Emits populated signal after loading features.
     void setup() override;
+    void setupFeatureRequest( QgsFeatureRequest &request ) override;
 
   signals:
     void configChanged( QVariantMap config );
@@ -60,8 +61,7 @@ class RelationReferenceFeaturesModel : public LayerFeaturesModel
 
   private:
 
-    QString mFeatureTitle;
-    QString mPrimaryKeyField; // primary key field of referenced layer
+    QgsRelation mRelation;
     QVariantMap mConfig;
     QgsProject *mProject = nullptr;
     bool mAllowNull = false;
