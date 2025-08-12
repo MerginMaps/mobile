@@ -9,9 +9,13 @@
 
 import QtQuick
 
+import mm 1.0 as MM
+import MMInput
+
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
 import "../components/photo" as MMPhotoComponents
+import "../components" as MMFormComponents
 
 /*
  * Photo viewer for feature form.
@@ -28,11 +32,13 @@ MMPrivateComponents.MMBaseInput {
   property bool hasCameraCapability: true
 
   property var photoComponent: photo
+  property PhotoSketchingController sketchingController
   property alias photoState: photoStateGroup.state
 
   signal trashClicked()
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
+  signal drawOnPhotoClicked()
 
   StateGroup {
     id: photoStateGroup
@@ -70,6 +76,7 @@ MMPrivateComponents.MMBaseInput {
 
       photoUrl: root.photoUrl
       isLocalFile: root.photoUrl.startsWith( "file://" )
+      cache: false
 
       fillMode: Image.PreserveAspectCrop
 
@@ -105,6 +112,26 @@ MMPrivateComponents.MMBaseInput {
 
         onClicked: root.trashClicked()
       }
+
+      MMComponents.MMRoundButton {
+        anchors {
+          right: parent.right
+          top: parent.top
+          rightMargin: __style.margin10
+          topMargin: __style.margin10
+        }
+
+        bgndColor: __style.lightGreenColor
+        iconSource: __style.drawIcon
+        iconColor: __style.forestColor
+
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file://")
+
+        onClicked: {
+          sketchingLoader.active = true
+          sketchingLoader.focus = true
+        }
+      }
     }
 
     MMPhotoComponents.MMPhotoAttachment {
@@ -134,6 +161,28 @@ MMPrivateComponents.MMBaseInput {
 
     MMPhotoComponents.MMPhotoPreview {
       photoUrl: root.photoUrl
+    }
+  }
+
+  Loader {
+    id: sketchingLoader
+
+    active: false
+    sourceComponent: sketchingComponent
+  }
+
+  Component {
+    id: sketchingComponent
+
+    MMFormComponents.MMFormPhotoSketchingPageDialog {
+      photoUrl: root.photoUrl
+      controller: root.sketchingController
+
+      Component.onCompleted: open()
+
+      onClosed: {
+        sketchingLoader.active = false
+      }
     }
   }
 }
