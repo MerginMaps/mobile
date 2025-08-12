@@ -636,6 +636,8 @@ class MerginApi: public QObject
     bool userSelfRegistrationEnabled() const;
     void setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled );
 
+    QNetworkRequest getDefaultRequest( bool withAuth = true ) const;
+
   signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
@@ -872,8 +874,6 @@ class MerginApi: public QObject
      * \returns True if the error should trigger a retry, false otherwise
      */
     bool isRetryableNetworkError( QNetworkReply *reply );
-
-    QNetworkRequest getDefaultRequest( bool withAuth = true );
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
