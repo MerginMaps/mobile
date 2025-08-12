@@ -257,6 +257,7 @@ void InputHelp::submitReport()
   QNetworkRequest request;
   QString params;
 
+  // log storage on old AWS lambda doesn't support any user authentication thus we pass username as parameter to "sign" the log
   if ( mMerginApi->serverDiagnosticLogsUrl() == MerginApi::sDefaultReportLogUrl )
   {
     QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
