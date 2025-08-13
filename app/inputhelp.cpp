@@ -254,23 +254,11 @@ void InputHelp::submitReport()
   const QString log = fullLog( false );
   const QByteArray logArr = log.toUtf8();
   const QString app = QStringLiteral( "input-%1-%2" ).arg( InputUtils::appPlatform(), CoreUtils::appVersion() );
-  QNetworkRequest request;
-  QString params;
+  QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
+  if ( username.isEmpty() ) username = "unknown";
+  const QString params = QStringLiteral( "?app=%1&username=%2" ).arg( app, username );
 
-  // log storage on old AWS lambda doesn't support any user authentication thus we pass username as parameter to "sign" the log
-  if ( mMerginApi->serverDiagnosticLogsUrl() == MerginApi::sDefaultReportLogUrl )
-  {
-    QString username = mMerginApi->userInfo()->username().toHtmlEscaped();
-    if ( username.isEmpty() )
-      username = "unknown";
-    params = QStringLiteral( "?app=%1&username=%2" ).arg( app, username );
-    request = mMerginApi->getDefaultRequest( false );
-  }
-  else
-  {
-    params = QStringLiteral( "?app=%1" ).arg( app );
-    request = mMerginApi->getDefaultRequest();
-  }
+  QNetworkRequest request = mMerginApi->getDefaultRequest();
   request.setRawHeader( "Content-Type", "text/plain" );
   request.setUrl( mMerginApi->serverDiagnosticLogsUrl() + params );
   const QNetworkReply *reply = mManager.post( request, logArr );
