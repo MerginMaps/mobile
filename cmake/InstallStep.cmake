@@ -4,8 +4,7 @@ if (IOS OR ANDROID)
   message(FATAL_ERROR "Install step cannot be called on IOS and Android")
 endif ()
 
-# TODO is ${Qt6_DIR} defined?
-set(Qt6_base_dir ${Qt6_DIR}/../../..)
+set(Qt6_base_dir ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/Qt6)
 
 # ########################################################################################
 # Binary
@@ -14,13 +13,13 @@ set(Qt6_base_dir ${Qt6_DIR}/../../..)
 if (WIN)
   install(
     TARGETS Input
-    LIBRARY DESTINATION lib/
+    LIBRARY DESTINATION lib64/
     RUNTIME DESTINATION .
   )
 else ()
   install(
     TARGETS Input
-    LIBRARY DESTINATION lib/
+    LIBRARY DESTINATION lib64/
     BUNDLE DESTINATION .
   )
 endif ()
@@ -62,38 +61,32 @@ endif ()
 # ########################################################################################
 if (WIN)
   install(
-    DIRECTORY ${INPUT_SDK_PATH_MULTI}/bin/
+    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/
     DESTINATION .
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "Qca" EXCLUDE
   )
   install(
-    DIRECTORY ${INPUT_SDK_PATH_MULTI}/bin/Qca/crypto/
+    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qca/crypto/
     DESTINATION .
     FILES_MATCHING
     PATTERN "*.dll"
   )
   install(
-    DIRECTORY ${INPUT_SDK_PATH_MULTI}/tools/qgis/plugins/
+    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/qgis/plugins/
     DESTINATION .
     FILES_MATCHING
     PATTERN "*.dll"
   )
 elseif (LNX)
   install(
-    DIRECTORY ${INPUT_SDK_PATH_MULTI}/lib/
-    DESTINATION lib/
+    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/
+    DESTINATION lib64
     FILES_MATCHING
-    PATTERN "*.so"
-    PATTERN "qca-qt6" EXCLUDE
+    PATTERN "*.so*"
   )
-  install(
-    DIRECTORY ${INPUT_SDK_PATH_MULTI}/lib/qca-qt6/crypto/
-    DESTINATION lib/
-    FILES_MATCHING
-    PATTERN "*.so"
-  )
+
 endif ()
 
 # ########################################################################################
@@ -145,7 +138,7 @@ foreach (plugins_dir ${plugins_dirs})
   elseif (LNX)
     install(
       DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir}
-      DESTINATION plugins/
+      DESTINATION ${CMAKE_INSTALL_BINDIR}
       PATTERN "*d.so" EXCLUDE
     )
   endif ()
@@ -161,7 +154,7 @@ if (WIN)
 elseif (LNX)
   install(
     DIRECTORY ${Qt6_base_dir}/plugins/tls
-    DESTINATION plugins/
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
     PATTERN "*dd.so" EXCLUDE
   )
 endif ()
@@ -175,7 +168,6 @@ set(qt_libs
     Designer
     DesignerComponents
     Gui
-    Help
     LabsAnimation
     LabsFolderListModel
     LabsQmlModels
@@ -201,7 +193,6 @@ set(qt_libs
     QmlWorkerScript
     QmlXmlListModel
     Quick
-    Quick3DSpatialAudio
     QuickControls2
     QuickControls2Basic
     QuickControls2BasicStyleImpl
@@ -230,14 +221,14 @@ set(qt_libs
 
 foreach (qt_lib ${qt_libs})
   if (WIN)
-    install(FILES ${Qt6_base_dir}/bin/Qt6${qt_lib}.dll DESTINATION .)
+    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qt6${qt_lib}.dll DESTINATION .)
   elseif (LNX)
-    install(FILES ${Qt6_base_dir}/lib/libQt6${qt_lib}.so DESTINATION .)
+    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libQt6${qt_lib}.so DESTINATION lib64)
   endif ()
 endforeach ()
 
 if (WIN)
-  install(FILES ${Qt6_base_dir}/bin/d3dcompiler_47.dll ${Qt6_base_dir}/bin/opengl32sw.dll
+  install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/d3dcompiler_47.dll ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/opengl32sw.dll
           DESTINATION .
   )
 endif ()
