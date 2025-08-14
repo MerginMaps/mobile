@@ -166,7 +166,7 @@ Steps to build and run mobile app:
       -DCMAKE_BUILD_TYPE=Debug \
       -DVCPKG_TARGET_TRIPLET=x64-linux \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
-      -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/mobile/app/android/assets/qgis-data \
+      -DQGIS_QUICK_DATA_PATH=<absolute-path-to-mm1>/build/app/android/assets/qgis-data \
       -DUSE_MM_SERVER_API_KEY=FALSE \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
@@ -498,7 +498,7 @@ Now you can create a build (either on command line or by setting these variables
       -DVCPKG_TARGET_TRIPLET=arm64-osx \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
       -DUSE_MM_SERVER_API_KEY=FALSE \
-      -DQGIS_QUICK_DATA_PATH=../mobile/app/android/assets/qgis-data \
+      -DQGIS_QUICK_DATA_PATH=app/android/assets/qgis-data \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
       -GNinja \
@@ -581,7 +581,10 @@ Now you can create a build (either on command line or by setting these variables
     ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
 - If for all projects the OSM layer fails to load the `QGIS_QUICK_DATA_PATH` is probably wrong
   - Check where the projects are getting created
-  - Either change the path to point to `app/android/assets/qgis-data` of the project directory
+  - And change the path to point to `app/android/assets/qgis-data` of the build directory
+- If images in feature forms are not getting loaded it's again probably problem with `QGIS_QUICK_DATA_PATH`
+  - Use absolute path instead of relative path
+  - Make sure it's targeting **build** directory
 
 # 9. Auto Testing
 
