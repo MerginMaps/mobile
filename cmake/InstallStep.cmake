@@ -221,14 +221,19 @@ set(qt_libs
 
 foreach (qt_lib ${qt_libs})
   if (WIN)
-    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qt6${qt_lib}.dll DESTINATION .)
+    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qt6${qt_lib}.dll
+            DESTINATION .
+    )
   elseif (LNX)
-    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libQt6${qt_lib}.so DESTINATION lib64)
+    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libQt6${qt_lib}.so
+            DESTINATION lib64
+    )
   endif ()
 endforeach ()
 
 if (WIN)
-  install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/d3dcompiler_47.dll ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/opengl32sw.dll
+  install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/d3dcompiler_47.dll
+                ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/opengl32sw.dll
           DESTINATION .
   )
 endif ()
