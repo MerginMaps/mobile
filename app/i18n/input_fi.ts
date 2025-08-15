@@ -2264,7 +2264,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Valitse nauhoitustilan raja-arvon tyyppi</translation>
+        <translation>Valitse nauhoitustilan tyyppi</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
