@@ -34,4 +34,10 @@ echo "patching $CITATION_FILE"
 sed -i.orig -E "s|cff-version: [0-9]+\.[0-9]+\.[0-9]+|cff-version: $MAJOR\.$MINOR\.$BUILD|g" $CITATION_FILE
 rm -f $CITATION_FILE.orig
 
+# vcpkg.json
+VCPKG_FILE=$DIR/../vcpkg.json
+echo "patching $VCPKG_FILE"
+sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\.$MINOR\.$BUILD\"|g" $VCPKG_FILE
+rm -f $CITATION_FILE.orig
+
 echo "patching done"
