@@ -2082,7 +2082,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="63"/>
         <source>Geometry was adjusted to avoid overlaps with other features.</source>
-        <translation>Geometriaa on muutettu päällekkäisyyksien välttämiseksi muiden kohteiden kanssa.</translation>
+        <translation>Geometriaa on muokattu, jotta se ei olisi päällekkäin muiden kohteiden kanssa.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="196"/>
