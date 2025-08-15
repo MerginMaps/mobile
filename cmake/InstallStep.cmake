@@ -267,7 +267,9 @@ elseif (MACOS)
   set(assets_dir "Input.app/Contents/Resources/INPUT")
 endif ()
 
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/app/android/assets/qgis-data DESTINATION ${assets_dir})
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/app/android/assets/qgis-data
+        DESTINATION ${assets_dir}
+)
 
 # ########################################################################################
 # Platform
