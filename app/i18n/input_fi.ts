@@ -2249,7 +2249,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
         <source>GPS antenna height, in meters</source>
-        <translation>GPS antennin korkeus metreinä</translation>
+        <translation>GPS antennin korkeus, metreinä</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
