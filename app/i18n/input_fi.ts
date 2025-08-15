@@ -2874,7 +2874,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <location filename="../../core/merginapi.cpp" line="4318"/>
         <location filename="../../core/merginapi.cpp" line="4345"/>
         <source>SSO authorization failed</source>
-        <translation>Kertakirjautmis (SSO) valtuutus epäonnistui</translation>
+        <translation>Kertakirjautmisvaltuutus (SSO) epäonnistui</translation>
     </message>
 </context>
 <context>
