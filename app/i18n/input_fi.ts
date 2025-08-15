@@ -2259,7 +2259,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
         <source>Interval threshold type</source>
-        <translation>Tallennusvälin raja-arvon tyyppi</translation>
+        <translation>Tallennusvälin tyyppi</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
