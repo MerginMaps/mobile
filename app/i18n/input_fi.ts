@@ -2801,7 +2801,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="982"/>
         <source>Please accept Terms and Privacy Policy</source>
-        <translation>Ole hyvä ja hyäksy Terms and Privacy Policy</translation>
+        <translation>Hyväksy käyttöehdot ja tietosuojakäytäntö</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1011"/>
