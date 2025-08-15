@@ -2077,7 +2077,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="57"/>
         <source>Geometry was removed to avoid overlaps with other features. Tap &quot;Edit Geometry&quot; to draw a new one.</source>
-        <translation>Geometria poistettiin päällekkäisyyksien välttämiseksi muiden kohteiden kanssa. Napauta &quot;Muokkaa geometriaa&quot; piirtääksesi uuden.</translation>
+        <translation>Geometria poistettiin, jotta se ei olisi päällekkäin muiden kohteiden kanssa. Napauta &quot;Muokkaa geometriaa&quot; piirtääksesi uuden.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMRecordingTools.qml" line="63"/>
