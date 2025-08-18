@@ -20,6 +20,8 @@ Item {
   property bool inProgress: false
   property MM.MerginInvitation invitation
 
+  signal projectsListRequested()
+
   QtObject {
     //! Data to send to postRegister endpoint
     id: postRegisterData
@@ -303,8 +305,7 @@ Item {
 
         function onProcessInvitationFinished( accepted ) {
           controller.end()
-          stackView.currentItem.state = "workspace"
-          __notificationModel.addInfo( qsTr( "Download a project and start collecting." ), MM.NotificationType.NoAction, 10 )
+          controller.projectsListRequested()
         }
       }
     }
