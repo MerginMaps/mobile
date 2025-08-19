@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2025.4.1",
+    "version": "2025.6.0",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
@@ -54,7 +54,15 @@
         },
         "geodiff",
         "nu-book-zxing-cpp",
-        "gdal",
+        {
+          "name": "gdal",
+          "features": [
+            {
+              "name": "tools",
+              "platform": "linux | osx"
+            }
+          ]
+        },
         {
           "name": "qca",
           "host": true,

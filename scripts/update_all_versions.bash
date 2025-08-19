@@ -41,3 +41,6 @@ sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\
 rm -f $VCPKG_FILE.orig
 
 echo "patching done"
+
+$DIR/update_supported_formats.bash
+echo "Updated supported formats"
