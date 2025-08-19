@@ -38,6 +38,6 @@ rm -f $CITATION_FILE.orig
 VCPKG_FILE=$DIR/../vcpkg.json
 echo "patching $VCPKG_FILE"
 sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\.$MINOR\.$BUILD\"|g" $VCPKG_FILE
-rm -f $CITATION_FILE.orig
+rm -f $VCPKG_FILE.orig
 
 echo "patching done"
