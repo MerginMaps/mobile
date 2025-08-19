@@ -15,6 +15,7 @@
 #include <QUrl>
 
 #include "coreutils.h"
+#include "imageutils.h"
 #include "inpututils.h"
 
 /**
@@ -146,10 +147,13 @@ void PhotoSketchingController::saveSketches()
   {
     if ( InputUtils::copyFile( QDir::temp().absolutePath() + "/" + photoFileName, newDest ) )
     {
-      CoreUtils::log( "Photo sketching", "Image saved to: " + newDest );
-      emit tempPhotoSourceChanged( newDest );
-      QFile::remove( QDir::temp().absolutePath() + "/" + photoFileName );
-      return;
+      if ( ImageUtils::copyExifMetadata( QDir::temp().absolutePath() + "/" + photoFileName, newDest ) )
+      {
+        CoreUtils::log( "Photo sketching", "Image saved to: " + newDest );
+        emit tempPhotoSourceChanged( newDest );
+        QFile::remove( QDir::temp().absolutePath() + "/" + photoFileName );
+        return;
+      }
     }
   }
 
@@ -208,8 +212,15 @@ void PhotoSketchingController::backupSketches()
   }
   else
   {
-    CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
-    emit tempPhotoSourceChanged( QUrl( photoPath ).toString() );
+    if ( ImageUtils::copyExifMetadata( QUrl( mPhotoSource ).toLocalFile(), photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
+    {
+      CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
+      emit tempPhotoSourceChanged( QUrl( photoPath ).toString() );
+    }
+    else
+    {
+      CoreUtils::log( "Photo sketching", "Failed to copy metadata to: " + photoPath );
+    }
   }
 
   mActivePaths.clear();
