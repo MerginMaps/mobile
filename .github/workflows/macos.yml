@@ -21,7 +21,7 @@ env:
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
-  XC_VERSION: ${{ '16.4' }}
+  XC_VERSION: ${{ '15.2' }}
 
 concurrency:
   group: ci-${{github.ref}}-macos
@@ -30,7 +30,7 @@ concurrency:
 jobs:
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-15-large
+    runs-on: macos-13
     steps:
       - name: Checkout Input
         uses: actions/checkout@v3
