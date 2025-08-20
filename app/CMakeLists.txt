@@ -182,6 +182,18 @@ set(MM_HDRS
     mmstyle.h
 )
 
+set(MM_ANDROID_GRADLE_RESOURCES
+    android/AndroidManifest.xml
+    android/build.gradle
+    android/res/values/libs.xml
+    android/res/xml/qtprovider_paths.xml
+    android/gradle/wrapper/gradle-wrapper.jar
+    android/gradle/wrapper/gradle-wrapper.properties
+    android/gradle.properties
+    android/gradlew
+    android/gradlew.bat
+)
+
 if (HAVE_BLUETOOTH)
   set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
@@ -598,6 +610,12 @@ foreach (src ${MM_QML})
   set_source_files_properties(qml/${src} PROPERTIES QT_RESOURCE_ALIAS ${src})
 endforeach ()
 
+#gardle resources in use, only for android
+set(MM_GRADLE_RESOURCES)
+if (ANDROID)
+  set(MM_GRADLE_RESOURCES ${MM_ANDROID_GRADLE_RESOURCES})
+endif()
+
 # For some reason, this call cannot be in qml/CMakeLists.txt
 qt_add_qml_module(
   Input
@@ -605,5 +623,6 @@ qt_add_qml_module(
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
-  RESOURCES android/AndroidManifest.xml android/build.gradle android/res/values/libs.xml android/res/xml/qtprovider_paths.xml android/gradle/wrapper/gradle-wrapper.jar android/gradle/wrapper/gradle-wrapper.properties android/gradle.properties android/gradlew android/gradlew.bat
+  #this gradle resources remains empty if configuring for anything other than android
+  RESOURCES ${MM_GRADLE_RESOURCES}
 )
