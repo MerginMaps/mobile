@@ -219,3 +219,28 @@ Supported Formats: (ro:read-only, rw:read-write, +:update, v:virtual-I/O s:subda
   AVCBin -vector- (rov): Arc/Info Binary Coverage
   AVCE00 -vector- (rov): Arc/Info E00 (ASCII) Coverage (*.e00)
   HTTP -raster,vector- (ro): HTTP Fetching Wrapper
+
+===== QGIS Formats =====
+OGC API - Features data provider
+WFS data provider
+ArcGIS Feature Service data provider
+ArcGIS Map Service data provider
+ArcGIS Vector Tile Service data provider
+Cesium 3D Tiles data provider
+Delimited text data provider
+GDAL data provider
+MBTile Vector Tiles data provider
+Memory provider
+Mesh memory provider
+OGR data provider
+PostgreSQL/PostGIS data provider
+Cesium Quantized Mesh tiles
+OGC SensorThings API data provider
+SpatiaLite data provider
+Tiled scene provider
+Vector tile provider
+Virtual layer data provider
+VTPK Vector Tiles data provider
+OGC Web Coverage Service version 1.0/1.1 data provider
+OGC Web Map Service version 1.3 data provider
+XYZ Vector Tiles data provider
