@@ -481,6 +481,21 @@ int main( int argc, char *argv[] )
 
   init_qgis( appBundleDir );
 
+#ifdef DESKTOP_OS
+  if ( argc > 0 )
+  {
+    for ( int i = 1; i < argc; ++i )
+    {
+      QString arg( argv[i] );
+      if ( arg.compare( "--generate_QGIS_formats" ) == 0 )
+      {
+        InputUtils::updateQgisFormats( QgsProviderRegistry::instance()->pluginList().toUtf8() );
+        return 0;
+      }
+    }
+  }
+#endif
+
 #ifdef ANDROID
   // See issue #3431 -> disable Android accessibility features to prevent ANRs
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );

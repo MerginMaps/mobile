@@ -40,4 +40,6 @@ check_command "$OGRINFO"
     "$OGRINFO" --formats
 } > "$OUTPUT_FILE"
 
+$PROJECT_DIR/build/app/Input --generate_QGIS_formats
+
 echo "Formats info saved to $OUTPUT_FILE"
