@@ -17,7 +17,7 @@ on:
 
 env:   
   QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  XC_VERSION: ${{ '16.2' }}
+  XC_VERSION: ${{ '16.4' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
   INPUT_SDK_VERSION: arm64-ios-20250326-198
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610

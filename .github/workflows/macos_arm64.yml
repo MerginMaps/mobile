@@ -21,7 +21,7 @@ env:
   CCACHE_DIR: /Users/runner/work/ccache
   CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
-  XC_VERSION: ${{ '16.2' }}
+  XC_VERSION: ${{ '16.4' }}
 
 concurrency:
   group: ci-${{github.ref}}-macos-arm64
