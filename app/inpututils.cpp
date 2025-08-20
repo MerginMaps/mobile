@@ -1971,20 +1971,21 @@ void InputUtils::sanitizeFileName( QString &fileName )
   fileName = fileName.trimmed();
 }
 
-void InputUtils::updateQgisFormats( const QByteArray& output )
+void InputUtils::updateQgisFormats( const QByteArray &output )
 {
 #ifdef MM_FORMATS_PATH
   const QString sourcePath( STR( MM_FORMATS_PATH ) );
-  QFile file(sourcePath);
+  QFile file( sourcePath );
 
-  if (!file.open(QIODevice::Append | QIODevice::Text) || !file.exists()) {
+  if ( !file.open( QIODevice::Append | QIODevice::Text ) || !file.exists() )
+  {
     qWarning() << "Cannot open file for writing:" << file.errorString();
     return;
   }
 
   QByteArray finalOutput{"\n===== QGIS Formats =====\n"};
-  finalOutput.append(output);
-  file.write(finalOutput);
+  finalOutput.append( output );
+  file.write( finalOutput );
 
   file.close();
   qDebug() << "Supported formats succesfully updated with QGIS formats";
