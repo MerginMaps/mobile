@@ -1,0 +1,117 @@
+{
+    "vcpkg-configuration": {
+      "overlay-ports": [
+        "vcpkg/ports"
+      ],
+      "overlay-triplets": [
+        "vcpkg/triplets"
+      ]
+    },
+    "name": "merginmaps-mobile-app",
+    "description": "Collect. Share. Publish.",
+    "version": "2025.6.0",
+    "homepage": "https://github.com/merginmaps/mobile",
+    "dependencies": [
+        {
+          "name": "ffmpeg",
+          "default-features": false,
+          "features": [
+            "avcodec",
+            "avdevice",
+            "avformat",
+            {
+              "name": "openh264",
+              "platform": "linux | windows"
+            },
+            "swresample",
+            "swscale"
+          ],
+          "platform": "linux | android | windows"
+        },
+        {
+            "name": "sqlite3",
+            "default-features": false,
+            "features": [ "rtree", "json1", "fts3" ]
+        },
+        {
+            "name": "exiv2",
+            "features": ["xmp"]
+        },
+        {
+            "name": "proj",
+            "default-features": false,
+            "features": ["tiff"]
+        },
+        {
+            "name": "libspatialite",
+            "default-features": false,
+            "features": ["freexl"]
+        },
+        {
+            "name": "tiff",
+            "default-features": false,
+            "features": ["webp", "zip", "lzma", "jpeg", "zstd"]
+        },
+        "geodiff",
+        "nu-book-zxing-cpp",
+        {
+          "name": "gdal",
+          "features": [
+            {
+              "name": "tools",
+              "platform": "linux | osx"
+            }
+          ]
+        },
+        {
+          "name": "qca",
+          "host": true,
+          "default-features": false
+        },
+        {
+          "name": "qca",
+          "default-features": false,
+          "features": [
+            "ossl"
+          ]
+        },
+        "qtkeychain-qt6",
+        "qgis",
+        {
+          "name": "qgis",
+          "host": true,
+          "default-features": false
+        },
+        {
+          "name": "qtbase",
+          "default-features": false
+        },
+        "qtconnectivity",
+        "qtdeclarative",
+        "qtimageformats",
+        "qtnetworkauth",
+        "qtlocation",
+        {
+          "name": "qtmultimedia",
+          "features": [
+            {
+              "name": "ffmpeg",
+              "platform": "linux | android | windows"
+            },
+            "qml"
+          ]
+        },
+        "qtremoteobjects",
+        {
+          "name": "qtsensors",
+          "features": [
+            "qml"
+          ]
+        },
+        {
+          "name": "qttools",
+          "host": true,
+          "default-features": false
+        }
+    ]
+}

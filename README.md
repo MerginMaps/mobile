@@ -11,7 +11,6 @@ Platform builds:
 [![iOS Build](https://github.com/MerginMaps/mobile/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22iOS+Build%22)
 [![win64 Build](https://github.com/MerginMaps/mobile/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/win.yml)
 [![macOS Build](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml)
-[![macOS (arm64) Build](https://github.com/MerginMaps/mobile/actions/workflows/macos_arm64.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/macos_arm64.yml)
 [![linux Build](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml)
 
 Other Checks:
