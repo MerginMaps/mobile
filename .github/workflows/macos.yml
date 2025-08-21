@@ -2,17 +2,17 @@ name: macOS Build
 on:
   push:
     paths:
-    - 'vcpkg/**'
-    - 'vcpkg.json'
-    - 'VCPKG_BASELINE'
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'test/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/macos.yml'
+      - 'vcpkg/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'test/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/macos.yml'
 
   release:
     types:
@@ -21,8 +21,8 @@ on:
 env:
   CMAKE_VERSION: '3.31.6'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
-  VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
-  XC_VERSION: ${{ '16.2' }}
+  VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
+  XC_VERSION: ${{ '16.4' }}
   DEPLOYMENT_TARGET: '11.0'
   TRIPLET: arm64-osx
 
@@ -107,15 +107,14 @@ jobs:
 
       - name: Calculate build number
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
-            echo "Version code: ${BUILD_NUM}"
-
+          BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
+          echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+          echo "Version code: ${BUILD_NUM}"
       - name: build app (debug)
         run: |
           mkdir -p build-mm-db
           cd build-mm-db
-          
+
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
