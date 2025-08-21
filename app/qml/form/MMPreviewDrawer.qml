@@ -102,7 +102,7 @@ Item {
 
         Item {
           Layout.fillWidth: true
-          Layout.minimumWidth: __style.margin16
+          Layout.minimumWidth: __style.margin10
           height: 1
         }
 
@@ -148,77 +148,89 @@ Item {
 
         visible: internal.showButtons
 
-        ScrollView {
+        RowLayout {
+          id: formMenu
           width: parent.width
-          height: scrollRow.height
+          height: editButton.height
+          //spacing: 12 * __dp
 
-          ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-          ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+          MMComponents.MMButton {
+            id: editButton
 
-          contentHeight: availableHeight
-          contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+            text: qsTr( "Edit" )
+            iconSourceLeft: __style.editIcon
+            Layout.fillWidth: parent.width
+            visible: internal.showEditButton
 
-          // Scrollview does not propagate clicks to items beneath
-          MouseArea {
-            anchors.fill: parent
-            onClicked: function( mouse ) {
-              mouse.accepted = true
-              root.contentClicked()
-            }
+            onClicked: root.editClicked()
           }
 
-          Row {
-            id: scrollRow
+          MMComponents.MMRoundButton {
+            id: formOptionBtn
 
-            height: stakeOutButton.height
-            spacing: 12 * __dp
-
-            MMComponents.MMButton {
-              id: editButton
-
-              text: qsTr( "Edit" )
-              iconSourceLeft: __style.editIcon
-
-              visible: internal.showEditButton
-
-              onClicked: root.editClicked()
-            }
-
-            MMComponents.MMButton {
-              id: formButton
-
-              text: qsTr( "Open form" )
-              iconSourceLeft: __style.formIcon
-
-              visible: !internal.showEditButton
-
-              onClicked: root.openFormClicked()
-            }
-
-            MMComponents.MMButton {
-              id: selectMoreButton
-
-              text: qsTr( "Select more" )
-              iconSourceLeft: __style.workspacesIcon
-              type: MMComponents.MMButton.Secondary
-
-              visible: internal.showSelectMoreButton
-
-              onClicked: root.selectMoreClicked( controller.featureLayerPair )
-            }
-
-            MMComponents.MMButton {
-              id: stakeOutButton
-
-              text: qsTr( "Stake out" )
-              iconSourceLeft: __style.gpsAntennaHeightIcon
-              type: MMComponents.MMButton.Secondary
-
-              visible: internal.showStakeoutButton
-
-              onClicked: root.stakeoutClicked( controller.featureLayerPair )
-            }
+            iconSource: __style.closeIcon
+            bgndColor: __style.lightGreenColor
+            height: editButton.height
+            width: editButton.height
+            //onClicked: root.closeClicked()
           }
+
+        //   MMComponents.MMButton {
+        //     id: formButton
+
+        //     text: qsTr( "Open form" )
+        //     iconSourceLeft: __style.formIcon
+
+        //     visible: !internal.showEditButton
+
+        //     onClicked: root.openFormClicked()
+        //   }
+
+        //   MMComponents.MMButton {
+        //     id: selectMoreButton
+
+        //     text: qsTr( "Select more" )
+        //     iconSourceLeft: __style.workspacesIcon
+        //     type: MMComponents.MMButton.Secondary
+
+        //     visible: internal.showSelectMoreButton
+
+        //     onClicked: root.selectMoreClicked( controller.featureLayerPair )
+        //   }
+
+        //   MMComponents.MMButton {
+        //     id: stakeOutButton
+
+        //     text: qsTr( "Stake out" )
+        //     iconSourceLeft: __style.gpsAntennaHeightIcon
+        //     type: MMComponents.MMButton.Secondary
+
+        //     visible: internal.showStakeoutButton
+
+        //     onClicked: root.stakeoutClicked( controller.featureLayerPair )
+        //   }
+        // }
+
+        // ScrollView {
+        //   width: parent.width
+        //   height: scrollRow.height
+
+        //   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+        //   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+        //   contentHeight: availableHeight
+        //   contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+
+        //   // Scrollview does not propagate clicks to items beneath
+        //   MouseArea {
+        //     anchors.fill: parent
+        //     onClicked: function( mouse ) {
+        //       mouse.accepted = true
+        //       root.contentClicked()
+        //     }
+        //   }
+
+        //   //Here were the bbuttons
         }
       }
 
