@@ -177,7 +177,14 @@ Item {
 
         MMComponents.MMPopup {
           id: overflowMenu
+          parent: formOptionBtn
+          x: parent.width - width
+          y: parent.height + __style.margin12
+
+          transformOrigin: Item.TopRight
+
           contentItem: Column {
+            id: menuColumn
             spacing: 0
 
             MMComponents.MMButton {
@@ -191,6 +198,7 @@ Item {
                 radius: __style.radius30
                 color: (formButton.hovered || formButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
+                width: menuColumn.width
               }
 
               //visible: !internal.showEditButton //commented for testing
@@ -215,6 +223,7 @@ Item {
                 radius: __style.radius30
                 color: (selectMoreButton.hovered || selectMoreButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
+                width: menuColumn.width
               }
 
               visible: internal.showSelectMoreButton
@@ -238,7 +247,9 @@ Item {
                 radius: __style.radius30
                 color: (stakeOutButton.hovered || stakeOutButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
+                width: menuColumn.width
               }
+
 
               visible: internal.showStakeoutButton
 
