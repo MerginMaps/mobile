@@ -1796,6 +1796,27 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor, int &patch )
+{
+  if ( version.isNull() || version.isEmpty() )
+    return false;
+
+  QStringList versionParts = version.split( '.' );
+
+  if ( versionParts.size() != 3 )
+    return false;
+
+  bool majorOk, minorOk, patchOk;
+  major = versionParts[0].toInt( &majorOk );
+  minor = versionParts[1].toInt( &minorOk );
+  patch = versionParts[2].toInt( &patchOk );
+
+  if ( !majorOk || !minorOk || !patchOk )
+    return false;
+
+  return true;
+}
+
 bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
@@ -3823,19 +3844,24 @@ void MerginApi::getServerConfigReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "Config", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
-      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
+      const QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      const QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      const QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
       int major = -1;
       int minor = -1;
-      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      const bool validVersion = parseVersion( apiVersion, major, minor );
 
       if ( !validVersion )
       {
         CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      }
+      else
+      {
+        setApiVersion( apiVersion );
       }
 
       if ( serverType == QStringLiteral( "ee" ) )
@@ -3863,7 +3889,7 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( ( major >= 2025 && minor >= 4 ) && diagnosticUrl.isEmpty() )
+      if ( serverVersionIsAtLeast( 2025, 4, 0 ) && diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
       }
@@ -3877,7 +3903,7 @@ void MerginApi::getServerConfigReplyFinished()
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
-      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      if ( serverVersionIsAtLeast( MINIMUM_SERVER_VERSION_MAJOR, MINIMUM_SERVER_VERSION_MINOR + 1, 0 ) )
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
@@ -4081,16 +4107,35 @@ void MerginApi::processInvitationReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
+  const bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
 
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
+
+    // if server version is at least 2025.4.1, let's get workspaceId from response and switch to it
+    // emit processInvitationSuccess to navigate to project's page in qml
+    if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
+    {
+      const QByteArray data = r->readAll();
+      const QJsonDocument doc = QJsonDocument::fromJson( data );
+
+      if ( doc.isObject() )
+      {
+        const QJsonObject responseObj = doc.object();
+        const MerginInvitation invitation = MerginInvitation::fromJsonObject( responseObj );
+        QMap<int, QString> workspaces = mUserInfo->workspaces();
+        workspaces.insert( invitation.workspaceId, invitation.workspace );
+        mUserInfo->updateWorkspacesList( workspaces );
+        mUserInfo->setActiveWorkspace( invitation.workspaceId );
+        emit processInvitationSuccess();
+      }
+    }
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
     CoreUtils::log( "process invitation", QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
     emit processInvitationFailed();
@@ -4411,4 +4456,43 @@ void MerginApi::setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled
 
   mUserSelfRegistrationEnabled = userSelfRegistrationEnabled;
   emit userSelfRegistrationEnabledChanged();
+}
+
+QString MerginApi::apiVersion() const
+{
+  return mApiVersion;
+}
+
+void MerginApi::setApiVersion( const QString &apiVersion )
+{
+  if ( mApiVersion != apiVersion )
+  {
+    mApiVersion = apiVersion;
+  }
+}
+
+bool MerginApi::serverVersionIsAtLeast( const int requiredMajor, const int requiredMinor, const int requiredPatch ) const
+{
+  int serverMajor = -1;
+  int serverMinor = -1;
+  int serverPatch = -1;
+  const bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor, serverPatch );
+
+  if ( !validVersion )
+    return false;
+
+  // check major
+  if ( serverMajor > requiredMajor )
+    return true;
+  if ( serverMajor < requiredMajor )
+    return false;
+
+  // check minor
+  if ( serverMinor > requiredMinor )
+    return true;
+  if ( serverMinor < requiredMinor )
+    return false;
+
+  // check patch
+  return serverPatch >= requiredPatch;
 }

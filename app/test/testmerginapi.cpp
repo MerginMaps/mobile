@@ -3353,3 +3353,40 @@ void TestMerginApi::testApiRoot()
 
   mApi->setApiRoot( originalRoot );
 }
+
+void TestMerginApi::testServerVersionIsAtLeast()
+{
+  mApi->setApiVersion( "2024.4.3" );
+
+  // required version is lower than server version
+  QVERIFY( mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // lower major
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 3, 3 ) );  // same major, lower minor
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 4, 2 ) );  // same major and minor, lower patch
+
+  // required version equals server version
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 4, 3 ) );  // exact match
+
+  // required version is higher than server version
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2025, 4, 3 ) );  // higher major
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2024, 5, 3 ) );  // same major, higher minor
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2024, 4, 4 ) );  // same major and minor, higher patch
+
+  // invalid API versions
+  mApi->setApiVersion( "invalid.version" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // non-parseable version
+  mApi->setApiVersion( "" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // empty version string
+
+  // missing patch version
+  mApi->setApiVersion( "2024.4" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );
+
+  // non-numeric patch version
+  mApi->setApiVersion( "2024.4.a" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );
+
+  // very large version numbers
+  mApi->setApiVersion( "9999.9999.9999" );
+  QVERIFY( mApi->serverVersionIsAtLeast( 9999, 9999, 9999 ) );  // equal
+  QVERIFY( !mApi->serverVersionIsAtLeast( 10000, 0, 0 ) ); // higher major
+}

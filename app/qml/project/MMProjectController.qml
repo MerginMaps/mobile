@@ -462,6 +462,11 @@ Item {
     id: accountController
     enabled: root.visible
     stackView: stackView
+
+    onProjectsListRequested: function() {
+      stackView.currentItem.state = "workspace"
+      __notificationModel.addInfo( qsTr( "Download a project and start collecting." ), MM.NotificationType.NoAction, 10 )
+    }
   }
 
   MMCreateWorkspaceController {
