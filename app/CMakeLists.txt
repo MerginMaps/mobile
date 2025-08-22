@@ -74,6 +74,7 @@ set(MM_SRCS
     mapthemesmodel.cpp
     multieditmanager.cpp
     notificationmodel.cpp
+    photosketchingcontroller.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
     projectwizard.cpp
@@ -163,6 +164,7 @@ set(MM_HDRS
     mapthemesmodel.h
     multieditmanager.h
     notificationmodel.h
+    photosketchingcontroller.h
     projectsmodel.h
     projectsproxymodel.h
     projectwizard.h

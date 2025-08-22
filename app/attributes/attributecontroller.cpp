@@ -1626,7 +1626,7 @@ void AttributeController::renamePhotos()
         if ( InputUtils::renameFile( src, dst ) )
         {
           const QString newValue = InputUtils::getRelativePath( dst, prefix );
-          mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newValue );
+          setFormValue( item->id(), newValue );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else

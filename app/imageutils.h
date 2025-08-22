@@ -30,6 +30,13 @@ class ImageUtils
      * and preserving EXIF metadata.
      */
     static bool rescale( const QString &path, int quality );
+
+    /**
+     * Removes orientation metadata, which is necessary when copying an image which is already rotated.
+     * \param sourceImage path to image
+     * \return bool if successful
+     */
+    static bool clearOrientationMetadata( const QString &sourceImage );
 };
 
 #endif // IMAGEUTILS_H
