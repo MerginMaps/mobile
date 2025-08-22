@@ -27,7 +27,7 @@ Item {
   property var parentController
 
   // intermediate store for properties that will be assigned to linked feature when it is created.
-  // these properties are set only while future linked feature is beign digitized
+  // these properties are set only while future linked feature is being digitized
   property var relationToApply
   property var controllerToApply
 
@@ -190,7 +190,7 @@ Item {
           activeProjectId: __activeProject.localProject.id()
         }
         // NOTE: order matters, we want to init variables manager before
-        // assingning FeatureLayerPair, as VariablesManager is required
+        // assigning FeatureLayerPair, as VariablesManager is required
         // for correct expression evaluation
         featureLayerPair: root.featureLayerPair
       }
