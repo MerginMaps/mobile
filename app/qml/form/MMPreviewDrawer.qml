@@ -185,7 +185,13 @@ Item {
 
               text: qsTr( "Open form" )
               iconSourceLeft: __style.formIcon
+              type: MMComponents.MMButton.Secondary
+              background: Rectangle {
+                color: "transparent"
+                border.width: 0
+              }
 
+              //visible: !internal.showEditButton //commented for testing
               visible: internal.showEditButton
 
               onClicked: {
@@ -201,8 +207,11 @@ Item {
 
               text: qsTr("Select more")
               iconSourceLeft: __style.workspacesIcon
-              //type: MMComponents.MMButton.Secondary
-              flat: true
+              type: MMComponents.MMButton.Secondary
+              background: Rectangle {
+                color: "transparent"
+                border.width: 0
+              }
 
               visible: internal.showSelectMoreButton
 
@@ -219,8 +228,11 @@ Item {
 
               text: qsTr("Stake out")
               iconSourceLeft: __style.gpsAntennaHeightIcon
-              //type: MMComponents.MMButton.Secondary
-              flat: true
+              type: MMComponents.MMButton.Secondary
+              background: Rectangle {
+                color: "transparent"
+                border.width: 0
+              }
 
               visible: internal.showStakeoutButton
 
