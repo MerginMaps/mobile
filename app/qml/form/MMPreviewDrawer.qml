@@ -186,8 +186,10 @@ Item {
               text: qsTr( "Open form" )
               iconSourceLeft: __style.formIcon
               type: MMComponents.MMButton.Secondary
+              hoverEnabled: true
               background: Rectangle {
-                color: "transparent"
+                radius: __style.radius30
+                color: (formButton.hovered || formButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
               }
 
@@ -195,7 +197,7 @@ Item {
               visible: internal.showEditButton
 
               onClicked: {
-                verflowMenu.close()
+                overflowMenu.close()
                 root.openFormClicked()
               }
             }
@@ -208,8 +210,10 @@ Item {
               text: qsTr("Select more")
               iconSourceLeft: __style.workspacesIcon
               type: MMComponents.MMButton.Secondary
+              hoverEnabled: true
               background: Rectangle {
-                color: "transparent"
+                radius: __style.radius30
+                color: (selectMoreButton.hovered || selectMoreButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
               }
 
@@ -229,8 +233,10 @@ Item {
               text: qsTr("Stake out")
               iconSourceLeft: __style.gpsAntennaHeightIcon
               type: MMComponents.MMButton.Secondary
+              hoverEnabled: true
               background: Rectangle {
-                color: "transparent"
+                radius: __style.radius30
+                color: (stakeOutButton.hovered || stakeOutButton.down) ? __style.grassColor : "transparent"
                 border.width: 0
               }
 
