@@ -180,51 +180,55 @@ Item {
           parent: formOptionBtn
           x: parent.width - width
           y: parent.height + __style.margin12
+          width: menuColumn.width
 
           transformOrigin: Item.TopRight
 
           contentItem: Column {
             id: menuColumn
             spacing: 0
+            width: 155 * __dp
 
-            MMComponents.MMButton {
+            MMComponents.MMListDelegate {
               id: formButton
 
-              text: qsTr( "Open form" )
-              iconSourceLeft: __style.formIcon
-              type: MMComponents.MMButton.Secondary
-              hoverEnabled: true
-              background: Rectangle {
-                radius: __style.radius30
-                color: (formButton.hovered || formButton.down) ? __style.grassColor : "transparent"
-                border.width: 0
-                width: menuColumn.width
-              }
+              width: menuColumn.width
+              text: qsTr("Open form")
+              verticalSpacing: __style.margin6
+              hasLine: true
 
-              //visible: !internal.showEditButton //commented for testing
-              visible: internal.showEditButton
+              // visible: !internal.showEditButton
+              visible: internal.showEditButton //Only for testing
 
               onClicked: {
                 overflowMenu.close()
                 root.openFormClicked()
               }
+
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
+
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.formIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
 
-            MMComponents.MMLine { visible: internal.showSelectMoreButton && internal.showStakeoutButton }
-
-            MMComponents.MMButton {
+            MMComponents.MMListDelegate {
               id: selectMoreButton
 
+              width: menuColumn.width
               text: qsTr("Select more")
-              iconSourceLeft: __style.workspacesIcon
-              type: MMComponents.MMButton.Secondary
-              hoverEnabled: true
-              background: Rectangle {
-                radius: __style.radius30
-                color: (selectMoreButton.hovered || selectMoreButton.down) ? __style.grassColor : "transparent"
-                border.width: 0
-                width: menuColumn.width
-              }
+              verticalSpacing: __style.margin6
+              hasLine: true
 
               visible: internal.showSelectMoreButton
 
@@ -232,24 +236,31 @@ Item {
                 overflowMenu.close()
                 root.selectMoreClicked(controller.featureLayerPair)
               }
+
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
+
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.workspacesIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
 
-            MMComponents.MMLine { visible: internal.showSelectMoreButton && internal.showStakeoutButton }
-
-            MMComponents.MMButton {
+            MMComponents.MMListDelegate {
               id: stakeOutButton
 
+              width: menuColumn.width
               text: qsTr("Stake out")
-              iconSourceLeft: __style.gpsAntennaHeightIcon
-              type: MMComponents.MMButton.Secondary
-              hoverEnabled: true
-              background: Rectangle {
-                radius: __style.radius30
-                color: (stakeOutButton.hovered || stakeOutButton.down) ? __style.grassColor : "transparent"
-                border.width: 0
-                width: menuColumn.width
-              }
-
+              verticalSpacing: __style.margin6
+              hasLine: false
 
               visible: internal.showStakeoutButton
 
@@ -257,28 +268,24 @@ Item {
                 overflowMenu.close()
                 root.stakeoutClicked(controller.featureLayerPair)
               }
+
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
+
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.gpsAntennaHeightIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
           }
-          // ScrollView {
-          //   width: parent.width
-          //   height: scrollRow.height
-
-          //   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-          //   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-          //   contentHeight: availableHeight
-          //   contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
-
-          //   // Scrollview does not propagate clicks to items beneath
-          //   MouseArea {
-          //     anchors.fill: parent
-          //     onClicked: function( mouse ) {
-          //       mouse.accepted = true
-          //       root.contentClicked()
-          //     }
-          //   }
-
-          //   //Here were the bbuttons
         }
       }
 
