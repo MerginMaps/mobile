@@ -144,22 +144,20 @@ Item {
 
       Item {
         width: parent.width - contentLayout.rightMaxPagePadding
-        height: childrenRect.height
+        height: buttonRow.implicitHeight
 
         visible: internal.showButtons
 
         RowLayout {
-          id: formMenu
+          id: buttonRow
           width: parent.width
-          height: editButton.height
-          //spacing: 12 * __dp
+          spacing: __style.margin12
 
           MMComponents.MMButton {
-            id: editButton
-
+            id: mainBtn
+            Layout.fillWidth: true
             text: qsTr( "Edit" )
             iconSourceLeft: __style.editIcon
-            Layout.fillWidth: parent.width
             visible: internal.showEditButton
 
             onClicked: root.editClicked()
@@ -168,69 +166,90 @@ Item {
           MMComponents.MMRoundButton {
             id: formOptionBtn
 
-            iconSource: __style.closeIcon
+            // visible: internal.showSelectMoreButton || internal.showStakeoutButton
+            iconSource: __style.moreIcon
             bgndColor: __style.lightGreenColor
-            height: editButton.height
-            width: editButton.height
-            //onClicked: root.closeClicked()
+            // width: mainBtn.height
+            // height: mainBtn.height
+            onClicked: overflowMenu.opened ? overflowMenu.close() : overflowMenu.open()
           }
+        }
 
-        //   MMComponents.MMButton {
-        //     id: formButton
+        MMComponents.MMPopup {
+          id: overflowMenu
+          contentItem: Column {
+            spacing: 0
 
-        //     text: qsTr( "Open form" )
-        //     iconSourceLeft: __style.formIcon
+            MMComponents.MMButton {
+              id: formButton
 
-        //     visible: !internal.showEditButton
+              text: qsTr( "Open form" )
+              iconSourceLeft: __style.formIcon
 
-        //     onClicked: root.openFormClicked()
-        //   }
+              visible: internal.showEditButton
 
-        //   MMComponents.MMButton {
-        //     id: selectMoreButton
+              onClicked: {
+                verflowMenu.close()
+                root.openFormClicked()
+              }
+            }
 
-        //     text: qsTr( "Select more" )
-        //     iconSourceLeft: __style.workspacesIcon
-        //     type: MMComponents.MMButton.Secondary
+            MMComponents.MMLine { visible: internal.showSelectMoreButton && internal.showStakeoutButton }
 
-        //     visible: internal.showSelectMoreButton
+            MMComponents.MMButton {
+              id: selectMoreButton
 
-        //     onClicked: root.selectMoreClicked( controller.featureLayerPair )
-        //   }
+              text: qsTr("Select more")
+              iconSourceLeft: __style.workspacesIcon
+              //type: MMComponents.MMButton.Secondary
+              flat: true
 
-        //   MMComponents.MMButton {
-        //     id: stakeOutButton
+              visible: internal.showSelectMoreButton
 
-        //     text: qsTr( "Stake out" )
-        //     iconSourceLeft: __style.gpsAntennaHeightIcon
-        //     type: MMComponents.MMButton.Secondary
+              onClicked: {
+                overflowMenu.close()
+                root.selectMoreClicked(controller.featureLayerPair)
+              }
+            }
 
-        //     visible: internal.showStakeoutButton
+            MMComponents.MMLine { visible: internal.showSelectMoreButton && internal.showStakeoutButton }
 
-        //     onClicked: root.stakeoutClicked( controller.featureLayerPair )
-        //   }
-        // }
+            MMComponents.MMButton {
+              id: stakeOutButton
 
-        // ScrollView {
-        //   width: parent.width
-        //   height: scrollRow.height
+              text: qsTr("Stake out")
+              iconSourceLeft: __style.gpsAntennaHeightIcon
+              //type: MMComponents.MMButton.Secondary
+              flat: true
 
-        //   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-        //   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+              visible: internal.showStakeoutButton
 
-        //   contentHeight: availableHeight
-        //   contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+              onClicked: {
+                overflowMenu.close()
+                root.stakeoutClicked(controller.featureLayerPair)
+              }
+            }
+          }
+          // ScrollView {
+          //   width: parent.width
+          //   height: scrollRow.height
 
-        //   // Scrollview does not propagate clicks to items beneath
-        //   MouseArea {
-        //     anchors.fill: parent
-        //     onClicked: function( mouse ) {
-        //       mouse.accepted = true
-        //       root.contentClicked()
-        //     }
-        //   }
+          //   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+          //   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-        //   //Here were the bbuttons
+          //   contentHeight: availableHeight
+          //   contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+
+          //   // Scrollview does not propagate clicks to items beneath
+          //   MouseArea {
+          //     anchors.fill: parent
+          //     onClicked: function( mouse ) {
+          //       mouse.accepted = true
+          //       root.contentClicked()
+          //     }
+          //   }
+
+          //   //Here were the bbuttons
         }
       }
 
