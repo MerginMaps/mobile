@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Layouts
 
 MMDrawer {
   id: root
@@ -24,6 +25,7 @@ MMDrawer {
   property alias secondaryButton: secondaryBtn
 
   property real spaceBeforeAdditionalContent: __style.margin20
+  property bool horizontalbuttons: false
 
   signal primaryButtonClicked
   signal secondaryButtonClicked
@@ -62,28 +64,37 @@ MMDrawer {
 
       MMListSpacer { height: __style.margin40; visible: primaryBtn.visible || secondaryBtn.visible }
 
-      MMButton {
-        id: primaryBtn
-
+      GridLayout {
+        //changes the button positions either above or next to each other
+        flow: root.horizontalbuttons ? GridLayout.LeftToRight : GridLayout.TopToBottom
         width: parent.width
-        visible: text.length > 0
 
-        onClicked: primaryButtonClicked()
-      }
+        MMButton {
+          id: primaryBtn
 
-      MMListSpacer { height: __style.margin20; visible: primaryBtn.visible && secondaryBtn.visible }
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+          visible: text.length > 0
 
-      MMButton {
-        id: secondaryBtn
+          onClicked: primaryButtonClicked()
+        }
 
-        width: parent.width
-        visible: text.length > 0
+        MMListSpacer {
+          height: __style.margin20
+          visible: primaryBtn.visible && secondaryBtn.visible
+        }
 
-        type: MMButton.Types.Tertiary
+        MMButton {
+          id: secondaryBtn
 
-        topPadding: 0
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+          visible: text.length > 0
 
-        onClicked: secondaryButtonClicked()
+          type: MMButton.Types.Tertiary
+
+          onClicked: secondaryButtonClicked()
+        }
       }
     }
   }

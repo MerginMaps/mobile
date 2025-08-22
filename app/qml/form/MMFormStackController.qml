@@ -34,7 +34,7 @@ Item {
       let form = formsStack.get( i )
       if ( form ) {
         if ( form.panelState === "form" ) {
-          return root.height // form is the heighest always
+          return root.height // form is the highest always
         }
         else if ( form.panelState === "preview" ) {
           if ( form.drawerHeight > maxHeight ) {
