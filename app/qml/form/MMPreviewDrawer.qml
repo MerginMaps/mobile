@@ -102,7 +102,7 @@ Item {
 
         Item {
           Layout.fillWidth: true
-          Layout.minimumWidth: __style.margin16
+          Layout.minimumWidth: __style.margin10
           height: 1
         }
 
@@ -143,80 +143,301 @@ Item {
       MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showButtons }
 
       Item {
+        id: buttonsBox
         width: parent.width - contentLayout.rightMaxPagePadding
-        height: childrenRect.height
 
         visible: internal.showButtons
+        property real gap: __style.margin12
 
-        ScrollView {
-          width: parent.width
-          height: scrollRow.height
+        //for visibility
+        readonly property bool showEdit:   internal.showEditButton
+        readonly property bool showSelect: internal.showSelectMoreButton
+        readonly property bool showStake:  internal.showStakeoutButton
+        readonly property bool hasExtras:  showSelect || showStake
 
-          ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-          ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        Row {
+          id: measureRow
+          visible: true
+          enabled: false
+          opacity: 0
+          spacing: buttonsBox.gap
 
-          contentHeight: availableHeight
-          contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+          MMComponents.MMButton
+          {
+            text: qsTr( "Edit" )
+            iconSourceLeft: __style.editIcon
 
-          // Scrollview does not propagate clicks to items beneath
-          MouseArea {
-            anchors.fill: parent
-            onClicked: function( mouse ) {
-              mouse.accepted = true
-              root.contentClicked()
-            }
+            visible: internal.showEditButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.editClicked()
           }
 
-          Row {
-            id: scrollRow
+          MMComponents.MMButton {
 
-            height: stakeOutButton.height
-            spacing: 12 * __dp
+            text: qsTr( "Open form" )
+            iconSourceLeft: __style.formIcon
+            type: MMComponents.MMButton.Secondary
 
-            MMComponents.MMButton {
-              id: editButton
+            visible: !internal.showEditButton
+            //visible: internal.showEditButton //for testing
 
-              text: qsTr( "Edit" )
-              iconSourceLeft: __style.editIcon
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
 
-              visible: internal.showEditButton
+            onClicked: root.openFormClicked()
+          }
 
-              onClicked: root.editClicked()
+          MMComponents.MMButton {
+
+            text: qsTr( "Select more" )
+            iconSourceLeft: __style.workspacesIcon
+            type: MMComponents.MMButton.Secondary
+
+            visible: internal.showSelectMoreButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.selectMoreClicked( controller.featureLayerPair )
+          }
+
+          MMComponents.MMButton {
+
+            text: qsTr( "Stake out" )
+            iconSourceLeft: __style.gpsAntennaHeightIcon
+            type: MMComponents.MMButton.Secondary
+
+            visible: internal.showStakeoutButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.stakeoutClicked( controller.featureLayerPair )
+          }
+        }
+
+        // collapse logic
+        readonly property real inlineWidthNeeded: Math.ceil(measureRow.implicitWidth)
+        readonly property real outlineBleed:
+            (internal.showSelectMoreButton ? 2*__dp : 0) +
+            (internal.showStakeoutButton   ? 2*__dp : 0)
+        readonly property real avail: Math.floor(width) - outlineBleed
+        readonly property bool collapse: hasExtras && (inlineWidthNeeded + __style.margin8 >= avail)
+
+        clip: buttonsBox.collapse
+
+        height: collapse ? collapsedRow.implicitHeight : inlineRow.implicitHeight
+
+        Row {
+          id: inlineRow
+          visible: !buttonsBox.collapse
+          spacing: buttonsBox.gap
+          anchors.left: parent.left
+          width: childrenRect.width
+
+          MMComponents.MMButton
+          {
+            id: editButton
+
+            text: qsTr( "Edit" )
+            iconSourceLeft: __style.editIcon
+
+            visible: internal.showEditButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.editClicked()
+          }
+
+          MMComponents.MMButton {
+            id: formButton
+
+            text: qsTr( "Open form" )
+            iconSourceLeft: __style.formIcon
+            type: MMComponents.MMButton.Secondary
+
+            visible: !internal.showEditButton
+            //visible: internal.showEditButton //for testing
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.openFormClicked()
+          }
+
+          MMComponents.MMButton {
+            id: selectMoreButton
+
+            text: qsTr( "Select more" )
+            iconSourceLeft: __style.workspacesIcon
+            type: MMComponents.MMButton.Secondary
+
+            visible: internal.showSelectMoreButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.selectMoreClicked( controller.featureLayerPair )
+          }
+
+          MMComponents.MMButton
+          {
+            id: stakeOutButton
+
+            text: qsTr( "Stake out" )
+            iconSourceLeft: __style.gpsAntennaHeightIcon
+            type: MMComponents.MMButton.Secondary
+
+            visible: internal.showStakeoutButton
+
+            Layout.fillWidth: false
+            Layout.minimumWidth: implicitWidth
+            Layout.maximumWidth: implicitWidth
+
+            onClicked: root.stakeoutClicked( controller.featureLayerPair )
+          }
+        }
+
+        RowLayout {
+          id: collapsedRow
+          anchors.left: parent.left
+          anchors.right: parent.right
+          visible: buttonsBox.collapse
+          spacing: buttonsBox.gap
+
+          MMComponents.MMButton {
+            id: mainBtn
+            text: qsTr( "Edit" )
+            iconSourceLeft: __style.editIcon
+
+            visible: internal.showEditButton
+
+            Layout.fillWidth: true
+
+            onClicked: root.editClicked()
+          }
+
+          MMComponents.MMRoundButton {
+            id: formOptionBtn
+            iconSource: __style.moreIcon
+            bgndColor: __style.lightGreenColor
+            onClicked: overflowMenu.opened ? overflowMenu.close() : overflowMenu.open()
+          }
+        }
+
+        MMComponents.MMPopup {
+          id: overflowMenu
+          parent: formOptionBtn
+          x: parent.width - width
+          y: parent.height + __style.margin12
+          width: menuColumn.width
+
+          transformOrigin: Item.TopRight
+
+          contentItem: Column {
+            id: menuColumn
+            spacing: 0
+            width: 155 * __dp
+
+            MMComponents.MMListDelegate {
+              id: formButtonPopup
+
+              width: menuColumn.width
+              text: qsTr("Open form")
+              verticalSpacing: __style.margin6
+              hasLine: true
+
+              onClicked: {
+                overflowMenu.close()
+                root.openFormClicked()
+              }
+
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
+
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.formIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
 
-            MMComponents.MMButton {
-              id: formButton
+            MMComponents.MMListDelegate {
+              id: selectMoreButtonPopup
 
-              text: qsTr( "Open form" )
-              iconSourceLeft: __style.formIcon
+              width: menuColumn.width
+              text: qsTr("Select more")
+              verticalSpacing: __style.margin6
+              hasLine: true
 
-              visible: !internal.showEditButton
+              onClicked: {
+                overflowMenu.close()
+                root.selectMoreClicked(controller.featureLayerPair)
+              }
 
-              onClicked: root.openFormClicked()
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
+
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.workspacesIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
 
-            MMComponents.MMButton {
-              id: selectMoreButton
+            MMComponents.MMListDelegate {
+              id: stakeOutButtonPopup
 
-              text: qsTr( "Select more" )
-              iconSourceLeft: __style.workspacesIcon
-              type: MMComponents.MMButton.Secondary
+              width: menuColumn.width
+              text: qsTr("Stake out")
+              verticalSpacing: __style.margin6
+              hasLine: false
 
-              visible: internal.showSelectMoreButton
+              onClicked: {
+                overflowMenu.close()
+                root.stakeoutClicked(controller.featureLayerPair)
+              }
 
-              onClicked: root.selectMoreClicked( controller.featureLayerPair )
-            }
+              leftContent: [
+                Item {
+                width: 28 * __dp
+                height: 28 * __dp
+                anchors.verticalCenter: parent.verticalCenter
 
-            MMComponents.MMButton {
-              id: stakeOutButton
-
-              text: qsTr( "Stake out" )
-              iconSourceLeft: __style.gpsAntennaHeightIcon
-              type: MMComponents.MMButton.Secondary
-
-              visible: internal.showStakeoutButton
-
-              onClicked: root.stakeoutClicked( controller.featureLayerPair )
+                  MMComponents.MMIcon {
+                    anchors.centerIn: parent
+                    source: __style.gpsAntennaHeightIcon
+                    width: 20 * __dp
+                    height: 20 * __dp
+                    color: __style.nightColor
+                  }
+                }
+              ]
             }
           }
         }
