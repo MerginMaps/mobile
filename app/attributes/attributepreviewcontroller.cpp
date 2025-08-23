@@ -12,19 +12,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include <QDate>
+#include <QTime>
+#include <QDateTime>
+#include <QLocale>
 
 #include "attributepreviewcontroller.h"
 #include "featurelayerpair.h"
 #include "qgsfield.h"
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
-
-// Needed for date-time parsing anD formatting and for accessing display_format
 #include "qgseditorwidgetsetup.h"
-#include <QDate>
-#include <QTime>
-#include <QDateTime>
-#include <QLocale>
+
 
 AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString>> &items )
   : QAbstractListModel( nullptr )
@@ -129,99 +128,106 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   return lst;
 }
 
-QString AttributePreviewController::formatDateForPreview( const QgsField& field, const QVariant& value, const QVariantMap& fieldCfg )
+QString AttributePreviewController::formatDateForPreview( const QgsField& field,
+                                                          const QVariant& value,
+                                                          const QVariantMap& fieldCfg ) const
 {
     const QString displayFmt = fieldCfg.value( QStringLiteral( "display_format" ) ).toString();
-    auto fallback = [&]() -> QString { return value.toString(); };
+
+    //fallback value as raw QString
+    const QString fallback = value.toString();
 
     //QDate
     if ( field.type() == QMetaType::QDate )
     {
-        QDate d;
+        QDate date;
         if ( value.canConvert<QDate>() )
         {
-            d = value.toDate();
+            date = value.toDate();
         }
 
         else if ( value.userType() == QMetaType::QString )
         {
-            d = QDate::fromString( value.toString(), Qt::ISODate );
+            date = QDate::fromString( value.toString(), Qt::ISODate );
         }
 
-        if ( !d.isValid() )
+        if ( !date.isValid() )
         {
-            return fallback();
+            return fallback;
         }
 
-        return displayFmt.isEmpty() ? QLocale().toString( d, QLocale::ShortFormat ) : d.toString( displayFmt );
+        if ( displayFmt.isEmpty() )
+        {
+            return QLocale().toString( date, QLocale::ShortFormat );
+        }
+
+        return date.toString( displayFmt );
     }
 
     //QTime
     if ( field.type() == QMetaType::QTime )
     {
-        QTime t;
+        QTime time;
         if ( value.canConvert<QTime>() )
         {
-            t = value.toTime();
+            time = value.toTime();
         }
 
         else if ( value.userType() == QMetaType::QString )
         {
-            t = QTime::fromString( value.toString(), Qt::ISODate );
+            time = QTime::fromString( value.toString(), Qt::ISODate );
         }
 
-        if ( !t.isValid() )
+        if ( !time.isValid() )
         {
-            return fallback();
+            return fallback;
         }
 
         const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "HH:mm:ss" ) : displayFmt;
-        return t.toString( fmt );
+        return time.toString( fmt );
     }
 
     //QDateTime
     if ( field.type() == QMetaType::QDateTime )
     {
-        QDateTime dt;
+        QDateTime dateTime;
         if ( value.canConvert<QDateTime>() )
         {
-            dt = value.toDateTime();
+            dateTime = value.toDateTime();
         }
         else if ( value.userType() == QMetaType::QString )
         {
-            dt = QDateTime::fromString( value.toString(), Qt::ISODateWithMs );
+            dateTime = QDateTime::fromString( value.toString(), Qt::ISODateWithMs );
 
-            if ( !dt.isValid() )
+            if ( !dateTime.isValid() )
             {
-                dt = QDateTime::fromString( value.toString(), Qt::ISODate );
+                dateTime = QDateTime::fromString( value.toString(), Qt::ISODate );
             }
         }
 
-        if ( !dt.isValid() )
+        if ( !dateTime.isValid() )
         {
-            return fallback();
+            return fallback;
         }
 
         // IMPORTANT If the source was UTC (ex., "...Z"), convert to local so the preview
-        if ( dt.timeSpec() != Qt::LocalTime )
+        if ( dateTime.timeSpec() != Qt::LocalTime )
         {
-            dt = dt.toLocalTime();
+            dateTime = dateTime.toLocalTime();
         }
 
         //force LocalTime to prevent Qt from re-attaching an offset during format
         // on some platforms the spec remains "OffsetFromUTC" or "UTC".
-        dt.setTimeSpec( Qt::LocalTime );
+        dateTime.setTimeSpec( Qt::LocalTime );
 
         // We use the editor widget's display format so the preview obeys the same way
         // formatting rules as the form editor "keeps UX consistent".
         const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "yyyy-MM-dd HH:mm:ss" ) : displayFmt;
-        return dt.toString( fmt );
+        return dateTime.toString( fmt );
     }
 
-    return fallback();
+    return fallback;
 }
-
-
 
 QString AttributePreviewController::mapTipImage()
 {
