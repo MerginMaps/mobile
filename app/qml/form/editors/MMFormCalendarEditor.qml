@@ -181,6 +181,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
     else {
       let jsDate = dateTransformer.toJsDate(qtDate)
+      console.log("DATETETETETTE: ", jsDate);
       return Qt.formatDateTime(jsDate, root._fieldConfig['display_format'])
     }
   }
