@@ -22,6 +22,7 @@ class TestImageUtils : public QObject
     void cleanup(); // will be called after every testfunction.
 
     void testRescale();
+    void testClearOrientationMetadata();
 };
 
 #endif // TESTIMAGEUTILS_H
