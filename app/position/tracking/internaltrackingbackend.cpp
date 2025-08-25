@@ -11,10 +11,12 @@
 #include "positionkit.h"
 
 InternalTrackingBackend::InternalTrackingBackend(
+  QReadWriteLock *fileLock,
   PositionKit *positionKit,
-  UpdateFrequency updateFrequency,
+  TrackingUtils::UpdateFrequency updateFrequency,
   QObject *parent )
   : AbstractTrackingBackend(
+      fileLock,
       updateFrequency,
       parent
     )
@@ -23,13 +25,13 @@ InternalTrackingBackend::InternalTrackingBackend(
 {
   switch ( updateFrequency )
   {
-    case UpdateFrequency::Often:
+    case TrackingUtils::UpdateFrequency::BestAccuracy:
       mUpdateInterval = 1000;
       break;
-    case UpdateFrequency::Normal:
+    case TrackingUtils::UpdateFrequency::LessAccuracy:
       mUpdateInterval = 2000;
       break;
-    case UpdateFrequency::Occasional:
+    case TrackingUtils::UpdateFrequency::EvenWorseAccuracy:
       mUpdateInterval = 5000;
       break;
   }

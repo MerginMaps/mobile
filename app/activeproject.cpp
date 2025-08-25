@@ -18,8 +18,13 @@
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 
+#include "position/tracking/trackingutils.h"
+
 #include "activeproject.h"
 #include "coreutils.h"
+
+#include "variablesmanager.h"
+#include "positionkit.h"
 
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
@@ -28,6 +33,8 @@ const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
 ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
                               , LocalProjectsManager &localProjectsManager
+                              , VariablesManager *variablesManager
+                              , PositionKit *positionKit
                               , QObject *parent ) :
 
   QObject( parent )
@@ -35,6 +42,8 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   , mActiveLayer( activeLayer )
   , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
+  , mVariablesManager( variablesManager )
+  , mPositionKit( positionKit )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
@@ -101,7 +110,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   // clear autosync
   setAutosyncEnabled( false );
 
-  // TODO: stop tracking here if it is running?
+  if ( mTrackingManager.isRunning() )
+  {
+    // TODO: store the tracked geometry & notify user that tracking has stopped
+    mTrackingManager.stopTracking();
+  }
+
+  mTrackingManager.reset();
 
   // Just clear project if empty
   if ( filePath.isEmpty() )
@@ -222,31 +237,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     setAutosyncEnabled( true );
   }
 
-  // in case tracking is running, we want to show the UI
-  /*
-  #ifdef ANDROID
-    if ( positionTrackingSupported() )
-    {
-      connect(
-        &AndroidTrackingBroadcast::getInstance(),
-        &AndroidTrackingBroadcast::aliveResponse,
-        this,
-        [this]( bool isAlive )
-      {
-        if ( isAlive )
-        {
-          emit startPositionTracking();
-        }
-      },
-      Qt::SingleShotConnection
-      );
-
-      // note: order matters in the following calls
-      AndroidTrackingBroadcast::registerBroadcast();
-      AndroidTrackingBroadcast::sendAliveRequestAsync();
-    }
-  #endif
-  */
+  // TODO: we might want to check if there is anything written in the tracking file and continue tracking if so
 
   return res;
 }
@@ -523,7 +514,31 @@ bool ActiveProject::positionTrackingSupported() const
     return false;
   }
 
-  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/Enabled" ), false );
+  return TrackingUtils::projectHasTrackingCapability( mQgsProject );
+}
+
+TrackingManager *ActiveProject::trackingManager()
+{
+  return &mTrackingManager;
+}
+
+void ActiveProject::togglePositionTracking()
+{
+  if ( !isProjectLoaded() || !positionTrackingSupported() )
+  {
+    return;
+  }
+
+  if ( !mTrackingManager.isRunning() )
+  {
+    mTrackingManager.startTracking( "", TrackingUtils::getTrackingUpdateFrequency( mQgsProject ), mPositionKit );
+  }
+  else
+  {
+    // Store the track and stop
+    TrackingUtils::storeTrack( TrackingUtils::getTrackingLayer( mQgsProject ), &mTrackingManager, mVariablesManager );
+    mTrackingManager.stopTracking();
+  }
 }
 
 bool ActiveProject::projectHasRecordingLayers() const

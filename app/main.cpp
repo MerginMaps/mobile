@@ -112,8 +112,8 @@
 #include "position/mapposition.h"
 #include "position/providers/positionprovidersmodel.h"
 #include "position/providers/abstractpositionprovider.h"
-#include "position/tracking/positiontrackingmanager.h"
-#include "position/tracking/positiontrackinghighlight.h"
+#include "position/tracking/trackingmanager.h"
+#include "position/tracking/trackinghighlight.h"
 #include "synchronizationmanager.h"
 #include "synchronizationerror.h"
 
@@ -337,10 +337,10 @@ void initDeclarative()
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "mm", 1, 0, "BluetoothDiscoveryModel" );
   qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
-  qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
-  qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
   qmlRegisterType< MapSketchingController >( "mm", 1, 0, "MapSketchingController" );
+  qmlRegisterType< TrackingManager >( "mm", 1, 0, "TrackingManager" );
+  qmlRegisterType< TrackingHighlight >( "mm", 1, 0, "TrackingHighlight" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );
@@ -532,16 +532,8 @@ int main( int argc, char *argv[] )
   ProjectWizard pw( projectDir );
   NotificationModel notificationModel;
 
-  ActiveLayer al;
-  ActiveProject activeProject( *as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
-
-  SynchronizationManager syncManager( ma.get() );
-
-  LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
-  LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
-  LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
@@ -551,6 +543,15 @@ int main( int argc, char *argv[] )
   } );
   pk.setPositionProvider( pk.constructActiveProvider( as ) );
   pk.setAppSettings( as );
+
+  ActiveLayer al;
+  ActiveProject activeProject( as, al, localProjectsManager, vm.get(), pk );
+
+  SynchronizationManager syncManager( ma.get() );
+
+  LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
+  LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
+  LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.

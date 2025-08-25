@@ -14,10 +14,12 @@
 #include <QGuiApplication>
 
 AbstractTrackingBackend::AbstractTrackingBackend(
-  UpdateFrequency updateFrequency,
+  QReadWriteLock *fileLock,
+  TrackingUtils::UpdateFrequency updateFrequency,
   QObject *parent
 )
   : QObject( parent )
+  , mFileLock( fileLock )
   , mUpdateFrequency( updateFrequency )
 {
   QDir appData( QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) );
@@ -27,40 +29,52 @@ AbstractTrackingBackend::AbstractTrackingBackend(
 
   // TODO: store tracking file in project data directory instead of standard location
   mFile.setFileName( trackingFilePath );
+
+  if ( !mFileLock )
+  {
+    qCritical() << "Error, received invalid file lock!";
+  }
 }
 
-AbstractTrackingBackend::UpdateFrequency AbstractTrackingBackend::updateFrequency() const
+AbstractTrackingBackend::~AbstractTrackingBackend()
 {
-  return mUpdateFrequency;
-}
-
-void AbstractTrackingBackend::setUpdateFrequency( const UpdateFrequency &newUpdateFrequency )
-{
-  if ( mUpdateFrequency == newUpdateFrequency )
-    return;
-  mUpdateFrequency = newUpdateFrequency;
-  emit updateFrequencyChanged( mUpdateFrequency );
+  if ( mFile.isOpen() )
+  {
+    mFile.close();
+  }
 }
 
 void AbstractTrackingBackend::storeDataAndNotify( double x, double y, double z, double m )
 {
   //
-  // TODO: keep the file opened
+  // In the future we might want to store data in binary to optimize the file size and read/write
   //
 
-  if ( !mFile.open( QFile::Append ) )
+  if ( !mFile.isOpen() )
   {
-    qDebug() << "Could not open tracking file when storing data!";
+    if ( !mFile.open( QFile::Append ) )
+    {
+      qCritical() << "Error, could not open tracking file for writing!";
+      return;
+    }
   }
 
-  //
-  // In the future we might want to store in binary to optimize the file size and read/write
-  //
+  if ( !mFileLock )
+  {
+    qCritical() << "Error, file lock is invalid!";
+    return;
+  }
+
+  qDebug() << "--> W: Using file lock" << mFileLock;
 
   QString trackline = QStringLiteral("%1 %2 %3 %4\n").arg(x).arg(y).arg(z).arg(m);
-  mFile.write( trackline.toUtf8() );
 
-  mFile.close();
+  // QWriteLocker unlocks the lock once it goes out of scope
+  {
+    QWriteLocker writeLocker( mFileLock );
+
+    mFile.write( trackline.toUtf8() );
+  }
 
   // now let's notify the manager
 

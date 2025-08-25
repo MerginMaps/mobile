@@ -32,15 +32,12 @@ Item {
   readonly property alias mapSettings: mapCanvas.mapSettings
   readonly property alias compass: deviceCompass
 
-  property bool isTrackingPosition: trackingManager?.isTrackingPosition ?? false
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
   property var mapToolComponent: {
     measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
   }
-
-  property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
 
@@ -370,7 +367,7 @@ Item {
   }
 
   Loader {
-    id: tracking
+    id: trackingUiLoader
 
     anchors.fill: mapCanvas
     asynchronous: true
@@ -378,23 +375,16 @@ Item {
 
     sourceComponent: Component {
       Item {
-        property alias manager: trackingManager
 
-        MM.PositionTrackingManager {
-          id: trackingManager
-
-          variablesManager: __variablesManager
-          qgsProject: __activeProject.qgsProject
-
-          onAbort: () => root.setTracking( false )
-          onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
-        }
-
-        MM.PositionTrackingHighlight {
+        MM.TrackingHighlight {
           id: trackingHighlight
 
           mapPosition: mapPositionSource.mapPosition
-          trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+          mapSettings: mapCanvas.mapSettings
+          trackedGeometry: __activeProject.trackingManager.geometry
+
+          // TODO: do just -> trackedGeometry: __activeProject.trackingManager?.geometry
+          // trackedGeometry: __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
         }
 
         MMHighlight {

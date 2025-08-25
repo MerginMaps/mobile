@@ -2189,44 +2189,6 @@ QVector<QString> InputUtils::qgisProfilerLog()
   return lines;
 }
 
-void InputUtils::parseAndAppendPositionUpdates( const QString &data, QgsGeometry &geometry )
-{
-  // We currently support tracking only fro linestrings
-  QgsLineString *line = qgsgeometry_cast<QgsLineString *>( geometry.constGet() );
-  if ( !line )
-  {
-    qCritical() << "Error, could not cast tracked geometry to a line!";
-    return;
-  }
-
-  QStringList positions = data.split( '\n', Qt::SkipEmptyParts );
-
-  if ( positions.isEmpty() )
-  {
-    return;
-  }
-
-  for ( int ix = 0; ix < positions.size(); ix++ )
-  {
-    QStringList coordinates = positions[ix].split( ' ', Qt::SkipEmptyParts );
-
-    if ( coordinates.size() != 4 )
-    {
-      continue;
-    }
-
-    QgsPoint geop(
-      coordinates[0].toDouble(), // long
-      coordinates[1].toDouble(), // lat
-      coordinates[2].toDouble(), // alt
-      coordinates[3].toDouble(), // UTC time in secs
-      Qgis::WkbType::PointZM // explicitly mention the point type
-    );
-
-    line->addVertex( geop );
-  }
-}
-
 QString InputUtils::getManufacturer()
 {
 #ifdef Q_OS_ANDROID

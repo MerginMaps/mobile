@@ -13,33 +13,26 @@
 #include <QObject>
 #include <QFile>
 
+#include "trackingutils.h"
+
 class AbstractTrackingBackend : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( UpdateFrequency updateFrequency READ updateFrequency WRITE setUpdateFrequency NOTIFY updateFrequencyChanged )
-
   public:
-    enum UpdateFrequency // TODO: here we want to drop the time-based aspect and only use the distance-based approach (like in iOS)
-    {
-      Often = 0,
-      Normal,
-      Occasional,
-    };
-    Q_ENUM( UpdateFrequency );
 
     explicit AbstractTrackingBackend(
-      UpdateFrequency updateFrequency = Often,
+      QReadWriteLock *fileLock,
+      TrackingUtils::UpdateFrequency updateFrequency = TrackingUtils::BestAccuracy,
       QObject *parent = nullptr
     );
 
-    UpdateFrequency updateFrequency() const;
-    void setUpdateFrequency( const UpdateFrequency &newUpdateFrequency );
+    virtual ~AbstractTrackingBackend();
 
   signals:
     void positionUpdated();
 
-    void updateFrequencyChanged( AbstractTrackingBackend::UpdateFrequency updateFrequency );
+    void updateFrequencyChanged( TrackingUtils::UpdateFrequency updateFrequency );
 
   protected:
 
@@ -48,8 +41,9 @@ class AbstractTrackingBackend : public QObject
 
   private:
     QFile mFile; // File for storing position updates
+    QReadWriteLock *mFileLock = nullptr; // not owned
 
-    UpdateFrequency mUpdateFrequency;
+    TrackingUtils::UpdateFrequency mUpdateFrequency;
 };
 
 #endif // ABSTRACTTRACKINGBACKEND_H

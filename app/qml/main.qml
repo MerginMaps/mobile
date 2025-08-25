@@ -345,7 +345,7 @@ ApplicationWindow {
 
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
-        active: map.isTrackingPosition
+        active: __activeProject.trackingManager.isRunning
         visible: __activeProject.positionTrackingSupported
 
         onClicked: {
@@ -542,15 +542,16 @@ ApplicationWindow {
     sourceComponent: Component {
 
       MMPositionTrackingDialog {
+        id: trackingDialog
 
         width: window.width
 
-        trackingActive: map.isTrackingPosition
+        trackingActive: __activeProject.trackingManager.isRunning
 
         distanceTraveled: trackingPrivate.getDistance()
         trackingStartedAt: trackingPrivate.getStartingTime()
 
-        onTrackingBtnClicked: map.setTracking( !trackingActive )
+        onTrackingBtnClicked: __activeProject.togglePositionTracking()
 
         onClosed: {
           trackingPanelLoader.active = false
@@ -560,16 +561,16 @@ ApplicationWindow {
           id: trackingPrivate
 
           function getDistance() {
-            if ( map.isTrackingPosition ) {
-              return __inputUtils.geometryLengthAsString( map.trackingManager?.trackedGeometry )
+            if ( trackingDialog.trackingActive ) {
+              return __inputUtils.geometryLengthAsString( __activeProject.trackingManager.geometry ) // TODO: move to the tracking manager!
             }
             return qsTr( "not tracking" )
           }
 
           function getStartingTime() {
-            if ( map.isTrackingPosition )
+            if ( trackingDialog.trackingActive )
             {
-              return map.trackingManager?.elapsedTimeText
+              return __activeProject.trackingManager.elapsedTimeText
             }
             return qsTr( "not tracking" )
           }
@@ -1148,7 +1149,7 @@ ApplicationWindow {
     }
 
     function onPositionTrackingSupportedChanged() {
-      positionTrackingButton.visible = __activeProject.positionTrackingSupported
+      // positionTrackingButton.visible = __activeProject.positionTrackingSupported
       mapToolbar.recalculate()
     }
   }
