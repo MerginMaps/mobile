@@ -269,13 +269,17 @@ Page {
 
     //
     // LayerDetail can show (a) features list and (b) layer info
-    //  - a: shown if the selected layer is vector layer (can have features)
+    //  - a: shown if the selected layer is vector layer (can have features) *
     //  - b: shown for all types of layers except for no-geometry vector layers,
     //       we do not have anything to show for such layers for now (we only
     //       show legend and if the layer is visible on the map - both unrelated)
     //
+    // * there is an exception, we do not want to show features of the map sketches layer
+    //
 
-    if ( layerDetailData.isVectorLayer ) {
+    const isSketchingLayer = layerDetailData.layerId === __activeProject.mapSketchesLayerId()
+
+    if ( layerDetailData.isVectorLayer && !isSketchingLayer ) {
       content.addItem( featuresListPageComponent.createObject( content, { hasToolbar: internal.withToolbar } ) )
     }
 
@@ -288,7 +292,7 @@ Page {
   QtObject {
     id: internal
 
-    property bool withToolbar: layerDetailData.isVectorLayer && ( !layerDetailData.isVectorLayer || layerDetailData.isSpatial )
+    property bool withToolbar: content.count > 1
   }
 
   function closePage() {

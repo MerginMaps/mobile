@@ -13,6 +13,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -41,6 +42,10 @@ Item {
 
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
+  property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
+
+  property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
+
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -65,6 +70,10 @@ Item {
   signal accuracyButtonClicked()
 
   signal measureStarted()
+
+  signal multiSelectStarted()
+
+  signal drawStarted()
 
   signal localChangesPanelRequested()
 
@@ -96,6 +105,12 @@ Item {
       name: "measure"
     },
     State {
+      name: "multiSelect"
+    },
+    State {
+      name: "sketch"
+    },
+    State {
       name: "inactive" // ignores touch input
     }
   ]
@@ -109,9 +124,9 @@ Item {
       case "record": {
         root.showInfoTextMessage( qsTr( "Mark the geometry on the map and click record" ) )
 
-        if ( __appSettings.autolockPosition ) { // center to GPS
+        if ( AppSettings.autolockPosition ) { // center to GPS
           if ( gpsStateGroup.state === "unavailable" ) {
-            __notificationModel.addError( "GPS currently unavailable." )
+            __notificationModel.addError( qsTr( "GPS currently unavailable." ) )
           }
           else {
             root.centeredToGPS = true
@@ -159,6 +174,18 @@ Item {
         break
       }
 
+      case "multiSelect": {
+        root.showInfoTextMessage( qsTr( "Tap on features to add or remove from the selection" ) )
+        root.multiSelectStarted()
+        break
+      }
+
+      case "sketch": {
+        root.showInfoTextMessage( qsTr( "Select a colour and start sketching on the map. Use two fingers to move or zoom the map." ) )
+        root.drawStarted()
+        break
+      }
+
       case "inactive": {
         break
       }
@@ -176,7 +203,7 @@ Item {
     states: [
       State {
         name: "good" // GPS provides position AND horizontal accuracy is below set tolerance (threshold)
-        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= __appSettings.gpsAccuracyTolerance
+        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= AppSettings.gpsAccuracyTolerance
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.positiveColor
@@ -184,7 +211,7 @@ Item {
       },
       State {
         name: "low" // below accuracy tolerance OR GPS does not provide horizontal accuracy
-        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > __appSettings.gpsAccuracyTolerance )
+        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > AppSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.warningColor
@@ -222,12 +249,16 @@ Item {
     }
 
     onClicked: function( point ) {
-      if ( root.state === "view" )
+      if ( root.state === "view" || root.state === "multiSelect" )
       {
         let screenPoint = Qt.point( point.x, point.y )
         let pair = identifyKit.identifyOne( screenPoint )
 
-        if ( pair.valid )
+        if ( root.state === "multiSelect" )
+        {
+          multiEditManager.toggleSelect( pair )
+        }
+        else if ( pair.valid )  // root.state === "view"
         {
           root.highlightPair( pair )
           root.featureIdentified( pair )
@@ -263,6 +294,41 @@ Item {
           root.hideHighlight()
           root.nothingIdentified()
         }
+      }
+    }
+
+    onDoubleClicked: function( point )
+    {
+      zoom( point, 0.4 )
+    }
+
+    onWheelTurned: function( point, angle )
+    {
+      if ( angle > 0 ) {
+        zoom( Qt.point( point.x, point.y ), 0.67 )
+      }
+      else {
+        zoom( Qt.point( point.x, point.y ), 1.5 )
+      }
+    }
+
+    onDragged: function( oldPoint, newPoint )
+    {
+      if ( root.state === "sketch" )
+      {
+        sketchesLoader.item.controller.updateHighlight( oldPoint, newPoint )
+      }
+      else
+      {
+        pan( oldPoint, newPoint )
+      }
+    }
+
+    onDragReleased: function( point )
+    {
+      if ( root.state === "sketch" )
+      {
+        sketchesLoader.item.controller.finishDigitizing()
       }
     }
 
@@ -527,10 +593,10 @@ Item {
 
       anchors.bottom: parent.bottom
 
-      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" ? root.mapExtentOffset : 0
+      anchors.bottomMargin: root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" ? root.mapExtentOffset : 0
 
       visible: {
-        if ( root.state === "stakeout" || root.state === "measure" )
+        if ( root.state === "stakeout" || root.state === "measure" || root.state === "multiSelect" )
           return true
         else
           return root.mapExtentOffset > 0 ? false : true
@@ -544,6 +610,17 @@ Item {
         anchors {
           left: parent.left
           bottom: parent.bottom
+        }
+
+        MMMapButton {
+          id: sketchesButton
+
+          visible: root.state === "view" && __activeProject.mapSketchesEnabled
+          iconSource: __style.redrawGeometryIcon
+
+          onClicked: {
+            root.state = "sketch"
+          }
         }
 
         MMMapLabel {
@@ -648,9 +725,9 @@ Item {
             }
 
             let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, __positionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
-            if ( __appSettings.gpsAntennaHeight > 0 )
+            if ( AppSettings.gpsAntennaHeight > 0 )
             {
-              let gpsText = Number( __appSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
+              let gpsText = Number( AppSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
               return gpsText + " / " + accuracyText
             }
             else
@@ -814,11 +891,10 @@ Item {
 
       onClosed: activeLayerPanelLoader.active = false
 
-      list.model: MM.LayersProxyModel {
+      list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        qgsProject: __activeProject.qgsProject
-        modelType: MM.LayersProxyModel.ActiveLayerSelection
+        exceptedLayerIds: [ __activeProject.positionTrackingLayerId(), __activeProject.mapSketchesLayerId() ]
         model: MM.LayersModel {}
       }
 
@@ -848,6 +924,14 @@ Item {
         description: qsTr( "Could not find any editable layers in the project." )
         linkText: qsTr( "See how to enable digitizing in your project." )
         link: __inputHelp.howToEnableDigitizingLink
+      }
+
+      Connections {
+        target: __activeProject
+
+        function onProjectReloaded( qgsProject ) {
+          recordingLayersModel.qgsProject = __activeProject.qgsProject
+        }
       }
     }
   }
@@ -910,6 +994,80 @@ Item {
             moreToolsMenu.close()
           }
         }
+      }
+    }
+  }
+
+
+  Loader {
+    id: multiEditLoader
+
+    anchors.fill: mapCanvas
+
+    active: root.state === "multiSelect"
+
+    sourceComponent: multiEditComponent
+  }
+
+  Component {
+    id: multiEditComponent
+
+    Item {
+      property alias manager: multiEditManager
+
+      MM.MultiEditManager {
+        id: multiEditManager
+
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      MMHighlight {
+        id: multiEditHighlight
+
+        height: mapCanvas.height
+        width: mapCanvas.width
+        visible: root.state === "multiSelect"
+
+        markerType: MMHighlight.MarkerTypes.Circle
+        mapSettings: mapCanvas.mapSettings
+        geometry: multiEditManager.geometry
+      }
+    }
+  }
+
+  Loader {
+    id: sketchesLoader
+
+    anchors.fill: mapCanvas
+
+    active: root.state === "sketch"
+
+    sourceComponent: sketchesComponent
+  }
+
+  Component {
+    id: sketchesComponent
+
+    Item {
+      property alias controller: sketchingController
+
+      MM.MapSketchingController {
+        id: sketchingController
+
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      MMHighlight {
+        id: sketchesHighlight
+
+        height: mapCanvas.height
+        width: mapCanvas.width
+
+        lineColor: sketchingController.eraserActive ? "red" : sketchingController.activeColor
+        lineWidth: sketchingController.eraserActive ? MMHighlight.LineWidths.Narrow : MMHighlight.LineWidths.Normal
+
+        mapSettings: mapCanvas.mapSettings
+        geometry: sketchingController.highlightGeometry
       }
     }
   }
@@ -1175,6 +1333,15 @@ Item {
     state = "measure"
   }
 
+  function startMultiSelect( featurepair ) {
+    state = "multiSelect"
+    multiEditManager.initialize( featurepair )
+  }
+
+  function finishMultiSelect() {
+    state = "view"
+  }
+
   function toggleStreaming() {
     // start/stop the streaming mode
     if ( recordingToolsLoader.active ) {
@@ -1202,8 +1369,8 @@ Item {
   function jumpToHighlighted( mapOffset ) {
     if ( identifyHighlight.geometry === null )
       return
+    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
 
-    let screenPt = __inputUtils.geometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
     screenPt.y += mapOffset / 2
     mapCanvas.jumpTo( screenPt )
   }
@@ -1257,6 +1424,7 @@ Item {
         break
       }
 
+      case "multiSelect":
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position

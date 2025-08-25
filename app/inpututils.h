@@ -84,10 +84,22 @@ class InputUtils: public QObject
     Q_INVOKABLE void setExtentToFeature( const FeatureLayerPair &pair, InputMapSettings *mapSettings );
 
     /**
-     * Returns the screen coordinates for a geometry's bounding box centroid
-     * Geometry must be in canvas CRS
+     * Set the extent around a geometry.
+     * The extent is also zoomed out of the actual geometry using a buffer of 18% around their bounding box.
+     * In the case the geometry have no bounding box (e.g a point geometry) The extent is simply panned to the geometry
+     *
+     * Assume \a geom and \a mapSetting are the same CRS
      */
-    Q_INVOKABLE QPointF geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE void setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
+
+    /**
+     * Returns the center point of the \a geom currently displayed on screen
+     *
+     * Fall back to \see setExtentToGeom in case we don't find any geometry relevant
+     *
+     * Nota Bene: Assume geometry and map canvas CRS are the same
+     */
+    Q_INVOKABLE QPointF relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
@@ -392,7 +404,7 @@ class InputUtils: public QObject
       * \param config map coming from QGIS describing this field
       * \param field qgsfield instance of this field
       */
-    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation(), const QString &editorTitle = QString() );
+    Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation(), const QString &editorTitle = QString(), bool isMultiEdit = false );
 
     /**
      * \copydoc QgsCoordinateFormatter::format()
@@ -592,7 +604,7 @@ class InputUtils: public QObject
     /**
      * filters if input layer is visible in current map theme
      */
-    static bool layerVisible( QgsMapLayer *layer, QgsProject *project );
+    static bool isLayerVisible( QgsMapLayer *layer, QgsProject *project );
 
     /**
      * Returns if layer is not NoGeo and not Unknown
@@ -605,15 +617,27 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *project );
 
     /**
-     * Returns true if the layer allows recording
-     */
-    static bool recordingAllowed( QgsMapLayer *layer, QgsProject *project );
-
-    /**
      * Returns QgsMapLayer pointer for given layer name and project.
      * If layer with given name does not exist or there is no project, returns nullptr.
      */
     static QgsMapLayer *mapLayerFromName( const QString &layerName, QgsProject *project );
+
+    /**
+     * Checks if the given string is a valid URL
+     */
+    Q_INVOKABLE static bool isValidUrl( const QString &link );
+
+    /**
+     * We do some very basic checks if the string looks like email.
+     */
+    Q_INVOKABLE static bool isValidEmail( const QString &email );
+
+    /**
+     * Replaces invalid filename characters with underscores (_)
+     * Also trims whitespaces at the start and end of \a filename. If \a filename has an extension and
+     * last character before the . is a whitespace, it does not get trimmed.
+     */
+    static void sanitizeFileName( QString &fileName );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

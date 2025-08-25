@@ -6,9 +6,9 @@ cmake_minimum_required(VERSION 3.22)
 
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2025")
-set(MM_VERSION_MINOR "2")
+set(MM_VERSION_MINOR "5")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.6.3")
+set(QT_VERSION_DEFAULT "6.8.3")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
@@ -16,7 +16,7 @@ if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
   set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "24")
+  set(ANDROIDAPI "28")
   set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
   set(ANDROID_STL "c++_shared")
@@ -36,7 +36,7 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "14.0")
+  set(DEPLOYMENT_TARGET "16.0")
 endif ()
 
 if (APPLE
@@ -132,7 +132,7 @@ set(INPUT_SDK_PATH
     ${INPUT_SDK_PATH_DEFAULT}
     CACHE
       PATH
-      "Path to the Mergin Maps Input SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
+      "Path to the Mergin Maps Mobile-SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
 )
 set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
@@ -147,7 +147,7 @@ set(USE_KEYCHAIN
     FALSE
     CACHE
       BOOL
-      "Wheter to use keychains/wallets to store credentials. If false, we use QSettings"
+      "Whether to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
 set(QT6_VERSION
@@ -161,7 +161,7 @@ set(INPUT_VERSION_CODE
 )
 
 mm_detect_version()
-message(STATUS "Mergin Maps Input ${version_desc} - ${platform_desc}")
+message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 
 # ########################################################################################
 # FIND PACKAGES
@@ -198,6 +198,7 @@ find_package(
              Sensors
              QuickControls2
              Network
+             NetworkAuth
              Svg
              Sql
              Core
@@ -228,6 +229,7 @@ endif ()
 find_package(ZLIB REQUIRED)
 find_package(Bz2 REQUIRED)
 find_package(Curl REQUIRED)
+find_package(Inih REQUIRED)
 find_package(Exiv2 REQUIRED)
 find_package(Expat REQUIRED)
 find_package(Freexl REQUIRED)
@@ -254,6 +256,8 @@ find_package(Geotiff REQUIRED)
 find_package(Lzma REQUIRED)
 find_package(Zstd REQUIRED)
 find_package(MiniZip REQUIRED)
+find_package(Utf8 REQUIRED)
+find_package(Absl REQUIRED QUIET)
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)

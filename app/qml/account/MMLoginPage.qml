@@ -20,6 +20,7 @@ MMPage {
 
   property string apiRoot
   property bool canSignUp: true
+  property bool supportsSso: false
 
   property string warningMsg
 
@@ -30,7 +31,8 @@ MMPage {
   property bool pending: false // ?
 
   signal signUpClicked
-  signal signInClicked( string username, string password )
+  signal continueWithSsoClicked()
+  signal signInClicked( string login, string password )
   signal changeServerClicked( string newServer )
   signal forgotPasswordClicked
 
@@ -80,7 +82,7 @@ MMPage {
         }
 
         MMTextInput {
-          id: username
+          id: login
 
           width: parent.width
 
@@ -114,7 +116,20 @@ MMPage {
 
           enabled: !root.pending
 
-          onClicked: root.signInClicked( username.text, password.text )
+          onClicked: root.signInClicked( login.text, password.text )
+        }
+
+        MMButton {
+          width: parent.width
+
+          text: qsTr( "Continue with SSO" )
+          type: MMButton.Types.Secondary
+
+          visible: root.supportsSso
+
+          enabled: !root.pending
+
+          onClicked: root.continueWithSsoClicked()
         }
 
         MMListSpacer { height: __style.margin20 }
@@ -204,7 +219,7 @@ MMPage {
             textFieldBackground.color: __style.lightGreenColor
 
             text: root.apiRoot
-            placeholderText: "https://my-server-app.com/"
+            placeholderText: "https://app.merginmaps.com"
 
             // Qt.ImhNoPredictiveText must be accompanied by Qt.ImhSensitiveData, see https://bugreports.qt.io/browse/QTBUG-86982
             textField.inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData | Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly

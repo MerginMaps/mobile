@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QSet>
 
+#include "qgis.h"
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
 #include "qgsattributeeditorfield.h"
@@ -35,6 +36,7 @@
 #include "qgsrelation.h"
 #include "inpututils.h"
 #include "coreutils.h"
+#include "mixedattributevalue.h"
 
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
@@ -561,7 +563,7 @@ void AttributeController::updateOnLayerChange()
         mExpressionFieldsOutsideForm << i;
       }
 
-      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == QgsFields::OriginExpression )
+      if ( mFeatureLayerPair.layer()->fields().fieldOrigin( i ) == Qgis::FieldOrigin::Expression )
       {
         mVirtualFieldsOutsideForm << i;
       }
@@ -718,7 +720,7 @@ void AttributeController::evaluateExpressionAndUpdateValue( QSet<QUuid> &changed
     if ( formItem )
     {
       formItem->setRawValue( val );
-      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull } );
+      emit formDataChanged( formItem->id(), { AttributeFormModel::RawValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
       changedFormItems.insert( formItem->id() );
     }
 
@@ -830,7 +832,7 @@ void AttributeController::recalculateVirtualFields( QSet<QUuid> &changedFormItem
 
     const QgsField field = item->field();
 
-    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == QgsFields::OriginExpression )
+    if ( mFeatureLayerPair.layer()->fields().fieldOrigin( item->fieldIndex() ) == Qgis::FieldOrigin::Expression )
     {
       QString expressionString = mFeatureLayerPair.layer()->expressionField( item->fieldIndex() );
       evaluateExpressionAndUpdateValue( changedFormItems,
@@ -1227,6 +1229,15 @@ bool AttributeController::save()
   }
   else
   {
+    // Change any MixedAttributeValues to null or they'll be implicitly converted to their string representation
+    for ( int i = 0; i < feat.attributeCount(); ++i )
+    {
+      if ( feat.attribute( i ).userType() == qMetaTypeId< MixedAttributeValue >() )
+      {
+        feat.setAttribute( i, QVariant() );
+      }
+    }
+
     // update it instead of adding
     if ( !mFeatureLayerPair.layer()->updateFeature( feat, true ) )
     {
@@ -1469,7 +1480,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     else
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
-      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull } );
+      emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
     }
     recalculateDerivedItems( true, false );
     return true;
@@ -1554,15 +1565,16 @@ void AttributeController::renamePhotos()
   expressionContext.setFeature( mFeatureLayerPair.featureRef() );
 
   // check for new photos
-  QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-  while ( formItemsIterator != mFormItems.end() )
+  QMap<QUuid, std::shared_ptr<FormItem>>::const_iterator formItemsIterator = mFormItems.constBegin();
+  while ( formItemsIterator != mFormItems.constEnd() )
   {
     std::shared_ptr<FormItem> item = formItemsIterator.value();
     if ( item->type() == FormItem::Field && item->editorWidgetType() == QStringLiteral( "ExternalResource" ) )
     {
-      QVariantMap config = item->editorWidgetConfig();
+      const QVariantMap config = item->editorWidgetConfig();
       const QgsField field = item->field();
-      if ( !photoNameFormat.contains( field.name() ) )
+      if ( !photoNameFormat.contains( field.name() ) &&
+           !photoNameFormat.contains( field.displayName() ) )
       {
         ++formItemsIterator;
         continue;
@@ -1570,20 +1582,20 @@ void AttributeController::renamePhotos()
 
       if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
       {
-        QString expString = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( mFeatureLayerPair.layer()->id() ).arg( field.name() ) );
+        const QString expString = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( mFeatureLayerPair.layer()->id(), field.name() ) );
         QgsExpression exp( expString );
         exp.prepare( &expressionContext );
         if ( exp.hasParserError() )
         {
-          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has parser error: %3" ).arg( mFeatureLayerPair.layer()->name() ).arg( field.name() ).arg( exp.parserErrorString() ) );
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has parser error: %3" ).arg( mFeatureLayerPair.layer()->name(), field.name(), exp.parserErrorString() ) );
           ++formItemsIterator;
           continue;
         }
 
-        QVariant value = exp.evaluate( &expressionContext );
+        const QVariant value = exp.evaluate( &expressionContext );
         if ( exp.hasEvalError() )
         {
-          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has evaluation error: %3" ).arg( mFeatureLayerPair.layer()->name() ).arg( field.name() ).arg( exp.evalErrorString() ) );
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 has evaluation error: %3" ).arg( mFeatureLayerPair.layer()->name(), field.name(), exp.evalErrorString() ) );
           ++formItemsIterator;
           continue;
         }
@@ -1591,7 +1603,7 @@ void AttributeController::renamePhotos()
         QVariant val( value );
         if ( !field.convertCompatible( val ) )
         {
-          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2 (%3)." ).arg( value.toString() ).arg( field.name() ).arg( field.typeName() ).arg( value.isNull() ? "NULL" : "NOT NULL" ) );
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Value \"%1\" %4 could not be converted to a compatible value for field %2 (%3)." ).arg( value.toString(), field.name(), field.typeName(), value.isNull() ? "NULL" : "NOT NULL" ) );
           ++formItemsIterator;
           continue;
         }
@@ -1599,22 +1611,27 @@ void AttributeController::renamePhotos()
         const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
         const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
-        QFileInfo fi( src );
-        QString newName = QStringLiteral( "%1.%2" ).arg( val.toString() ).arg( fi.completeSuffix() );
+        QString newName = val.toString();
 
         // Remove leading slashes from newName following issue #3415
-        const QRegularExpression leadingSlashes( "^/+" );
+        const thread_local QRegularExpression leadingSlashes( QStringLiteral( "^/+" ) );
         newName.remove( leadingSlashes );
 
-        const QString dst = InputUtils::getAbsolutePath( newName, prefix );
+        InputUtils::sanitizeFileName( newName );
+
+        const QFileInfo fi( src );
+        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.completeSuffix() );
+
+        const QString dst = InputUtils::getAbsolutePath( newName, targetDir );
         if ( InputUtils::renameFile( src, dst ) )
         {
-          mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newName );
+          const QString newValue = InputUtils::getRelativePath( dst, prefix );
+          mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), newValue );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else
         {
-          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Could not rename file from %1 to %2" ).arg( src ).arg( dst ) );
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Could not rename file from %1 to %2" ).arg( src, dst ) );
         }
       }
     }

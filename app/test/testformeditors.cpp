@@ -221,7 +221,7 @@ void TestFormEditors::testRelationsEditor()
 
   // test relation features model - should fetch one feature
   RelationFeaturesModel mainRelationModel;
-  QSignalSpy modelSpy( &mainRelationModel, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy modelSpy( &mainRelationModel, &LayerFeaturesModel::fetchingResultsChanged );
   mainRelationModel.setRelation( mainRelation->relation() );
   mainRelationModel.setParentFeatureLayerPair( mainPair );
 
@@ -348,7 +348,7 @@ void TestFormEditors::testRelationsReferenceEditor()
 
   // We want to test if relation reference models are filled with correct data
   RelationReferenceFeaturesModel subRelationRefModel;
-  QSignalSpy subSpy( &subRelationRefModel, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy subSpy( &subRelationRefModel, &LayerFeaturesModel::fetchingResultsChanged );
   subRelationRefModel.setConfig( subRelationRef->editorWidgetConfig() );
   subRelationRefModel.setProject( QgsProject::instance() );
 
@@ -506,7 +506,7 @@ void TestFormEditors::testValueRelationsEditor()
   const FormItem *subFkItem = controller.formItem( items.at( 2 ) );
 
   ValueRelationFeaturesModel subVRModel;
-  QSignalSpy subSpy( &subVRModel, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy subSpy( &subVRModel, &LayerFeaturesModel::fetchingResultsChanged );
 
   subVRModel.setConfig( subFkItem->editorWidgetConfig() );
   subVRModel.setPair( pair );
@@ -520,7 +520,7 @@ void TestFormEditors::testValueRelationsEditor()
   const FormItem *subsubFkItem = controller.formItem( items.at( 4 ) );
 
   ValueRelationFeaturesModel subsubVRModel;
-  QSignalSpy subsubSpy( &subsubVRModel, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy subsubSpy( &subsubVRModel, &LayerFeaturesModel::fetchingResultsChanged );
   subsubVRModel.setConfig( subsubFkItem->editorWidgetConfig() );
   subsubVRModel.setPair( pair );
 
@@ -552,7 +552,7 @@ void TestFormEditors::testValueRelationsEditor()
   const FormItem *anotherFkItem = controller.formItem( items.at( 3 ) );
 
   ValueRelationFeaturesModel anotherVRModel;
-  QSignalSpy anotherSpy( &subsubVRModel, &FeaturesModel::fetchingResultsChanged );
+  QSignalSpy anotherSpy( &subsubVRModel, &LayerFeaturesModel::fetchingResultsChanged );
   anotherVRModel.setConfig( anotherFkItem->editorWidgetConfig() );
   anotherVRModel.setPair( pair );
 

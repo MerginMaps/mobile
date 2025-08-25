@@ -16,10 +16,10 @@ on:
       - published
 
 env:
-  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  INPUT_SDK_VERSION: x64-osx-20240517-205
+  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+  INPUT_SDK_VERSION: x64-osx-20250326-218
   CCACHE_DIR: /Users/runner/work/ccache
-  CACHE_VERSION: 1
+  CACHE_VERSION: 0
   CMAKE_VERSION: '3.29.0'
   XC_VERSION: ${{ '15.2' }}
 
@@ -102,7 +102,7 @@ jobs:
           version: ${{ env.QT_VERSION }}
           target: desktop
           dir: ${{ github.workspace }}
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-mac
 

@@ -18,7 +18,7 @@
 #include "inputconfig.h"
 #include "appsettings.h"
 #include "activelayer.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
@@ -38,6 +38,7 @@ class ActiveProject: public QObject
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
+    Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
 
   public:
     explicit ActiveProject(
@@ -116,11 +117,29 @@ class ActiveProject: public QObject
 
     //! Returns true if the project has at least one layer that allows recording
     Q_INVOKABLE bool projectHasRecordingLayers() const;
+
     /**
      * Returns role/permission level of current user for this project
      */
     Q_INVOKABLE QString projectRole() const;
     void setProjectRole( const QString &role );
+
+    /**
+     * Returns if project layer allows recording (has geometry, editable, not position tracking layer, not map
+     * sketching layer) regardless of visibility
+     */
+    bool recordingAllowed( QgsMapLayer *layer ) const ;
+
+    //! Returns position tracking layer ID if exists
+    Q_INVOKABLE QString positionTrackingLayerId() const;
+
+    //! Returns all visible valid layers in the project
+    QList<QgsMapLayer *> getVisibleLayers() const;
+
+    bool mapSketchesEnabled() const;
+
+    //! Returns map sketches layer ID if exists
+    Q_INVOKABLE QString mapSketchesLayerId() const;
 
   signals:
     void qgsProjectChanged();
@@ -150,6 +169,8 @@ class ActiveProject: public QObject
     void startPositionTracking();
 
     void projectRoleChanged();
+
+    void mapSketchesEnabledChanged();
 
   public slots:
     // Reloads project if current project path matches given path (its the same project)

@@ -17,6 +17,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "./map"
 import "./dialogs"
@@ -31,6 +32,8 @@ ApplicationWindow {
   id: window
 
   visible: true
+  x:  __appwindowx
+  y:  __appwindowy
   width:  __appwindowwidth
   height: __appwindowheight
   visibility: __appwindowvisibility
@@ -52,6 +55,12 @@ ApplicationWindow {
                                                  || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
 
   onIsPortraitOrientationChanged: recalculateSafeArea()
+
+  // start window where it was closed last time
+  onXChanged: storeWindowPosition()
+  onYChanged: storeWindowPosition()
+  onWidthChanged: storeWindowPosition()
+  onHeightChanged: storeWindowPosition()
 
   Item {
     id: stateManager
@@ -86,20 +95,12 @@ ApplicationWindow {
     }
   }
 
-  Settings {
-    // start window where it was closed last time
-    property alias x: window.x
-    property alias y: window.y
-    property alias width: window.width
-    property alias height: window.height
-  }
-
   function showProjError(message) {
     projDialog.detailedDescription = message
     projDialog.open()
   }
 
-  function selectFeature( pair ) {
+  function identifyFeature( pair ) {
     let hasNullGeometry = pair.feature.geometry.isNull
 
     if ( hasNullGeometry ) {
@@ -114,15 +115,15 @@ ApplicationWindow {
   Component.onCompleted: {
 
     // load default project
-    if ( __appSettings.defaultProject ) {
-      let path = __appSettings.defaultProject
+    if ( AppSettings.defaultProject ) {
+      let path = AppSettings.defaultProject
 
       if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
-        __appSettings.activeProject = path
+        AppSettings.activeProject = path
       }
       else {
         // if default project load failed, delete default setting
-        __appSettings.defaultProject = ""
+        AppSettings.defaultProject = ""
         stateManager.state = "projects"
       }
     }
@@ -161,6 +162,10 @@ ApplicationWindow {
       else if ( measurePanelLoader.active )
       {
         return measurePanelLoader.item.panelHeight - mapToolbar.height
+      }
+      else if ( multiSelectPanelLoader.active )
+      {
+        return multiSelectPanelLoader.item.panelHeight - mapToolbar.height
       }
       else if ( formsStackManager.takenVerticalSpace > 0 )
       {
@@ -226,6 +231,16 @@ ApplicationWindow {
     onMeasureStarted: function( pair ) {
       measurePanelLoader.active = true
       measurePanelLoader.focus = true
+    }
+
+    onMultiSelectStarted: {
+      multiSelectPanelLoader.active = true
+      multiSelectPanelLoader.focus = true
+    }
+
+    onDrawStarted: {
+      sketchesPanelLoader.active = true
+      sketchesPanelLoader.focus = true
     }
 
     onLocalChangesPanelRequested: {
@@ -446,7 +461,7 @@ ApplicationWindow {
           close()
         }
 
-        window.selectFeature( featurePair )
+        window.identifyFeature( featurePair )
       }
 
       onAddFeature: function( targetLayer ) {
@@ -615,6 +630,66 @@ ApplicationWindow {
   }
 
   Loader {
+    id: multiSelectPanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: multiSelectPanelComponent
+  }
+
+  Component {
+    id: multiSelectPanelComponent
+
+    MMSelectionDrawer {
+      id: multiSelectPanel
+
+      model: map.multiEditManager?.model
+      layer: map.multiEditManager?.layer
+      width: window.width
+
+      onEditSelected: {
+        let pair = map.multiEditManager.editableFeature()
+        formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
+        multiSelectPanel.formOpened = true
+      }
+
+      onSelectionFinished: {
+        multiSelectPanelLoader.active = false
+        map.finishMultiSelect()
+      }
+    }
+  }
+
+  Loader {
+    id: sketchesPanelLoader
+
+    focus: true
+    active: false
+    asynchronous: true
+
+    sourceComponent: sketchesPanelComponent
+  }
+
+  Component {
+    id: sketchesPanelComponent
+
+    MMSketchesDrawer {
+      id: sketchesPanel
+
+      sketchingController: map.sketchingController
+
+      width: window.width
+
+      onClosed: {
+        sketchesPanelLoader.active = false
+        map.state = "view"
+      }
+    }
+  }
+
+  Loader {
     id: measurePanelLoader
 
     focus: true
@@ -681,6 +756,17 @@ ApplicationWindow {
       }
 
       map.hideHighlight()
+
+      if ( multiSelectPanelLoader.active && multiSelectPanelLoader.item.formOpened )
+      {
+        multiSelectPanelLoader.active = false
+        map.finishMultiSelect()
+      }
+    }
+
+    onMultiSelectFeature: function( feature ) {
+      closeDrawer()
+      map.startMultiSelect( feature )
     }
 
     onStakeoutFeature: function( feature ) {
@@ -735,7 +821,7 @@ ApplicationWindow {
     property string version
 
     onIgnoreClicked: {
-      __appSettings.ignoreMigrateVersion = version
+      AppSettings.ignoreMigrateVersion = version
     }
   }
 
@@ -771,13 +857,22 @@ ApplicationWindow {
     }
   }
 
+  MMSsoExpiredTokenDialog {
+    id: ssoExpiredTokenDialog
+
+    onSingInRequested: {
+      stateManager.state = "projects"
+      projectController.showLogin()
+    }
+  }
+
   MMNotificationView {}
 
   MMListDrawer {
     id: featurePairSelection
 
     drawerHeader.title: qsTr( "Select feature" )
-    list.model: MM.FeaturesModel {}
+    list.model: MM.StaticFeaturesModel {}
 
     list. delegate: MMListDelegate {
       text: model.FeatureTitle
@@ -794,7 +889,7 @@ ApplicationWindow {
     function showPairs( pairs ) {
       if ( pairs.length > 0 )
       {
-        list.model.populateStaticModel( pairs )
+        list.model.populate( pairs )
         open()
       }
     }
@@ -917,7 +1012,7 @@ ApplicationWindow {
     }
 
     function onMigrationRequested( version ) {
-      if( __appSettings.ignoreMigrateVersion !== version ) {
+      if( AppSettings.ignoreMigrateVersion !== version ) {
         migrationDialog.version = version
         migrationDialog.open()
       }
@@ -925,7 +1020,7 @@ ApplicationWindow {
 
     function onMissingAuthorizationError( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === __activeProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
       {
         missingAuthDialog.open()
       }
@@ -937,6 +1032,16 @@ ApplicationWindow {
       {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
+    }
+
+    function onProjectCreationFailed()
+    {
+      syncButton.iconRotateAnimationRunning = false
+    }
+
+    function onSsoLoginExpired()
+    {
+      ssoExpiredTokenDialog.open()
     }
   }
 
@@ -1005,8 +1110,8 @@ ApplicationWindow {
     function onProjectReloaded( project ) {
       map.clear()
 
-      __appSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
-      __appSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
     }
 
     function onProjectWillBeReloaded() {
@@ -1030,6 +1135,14 @@ ApplicationWindow {
     interval: 3000
     running: false
     repeat: false
+  }
+
+  Timer {
+    id: storeWindowPositionTimer
+
+    interval: 1000
+
+    onTriggered: AppSettings.windowPosition = [window.x, window.y, window.width, window.height]
   }
 
   function backButtonPressed() {
@@ -1065,6 +1178,13 @@ ApplicationWindow {
       __style.safeAreaRight = safeArea[1]
       __style.safeAreaBottom = safeArea[2]
       __style.safeAreaLeft = safeArea[3]
+    }
+  }
+
+  function storeWindowPosition() {
+    if ( Qt.platform.os !== "ios" && Qt.platform.os !== "android")
+    {
+      storeWindowPositionTimer.restart()
     }
   }
 }

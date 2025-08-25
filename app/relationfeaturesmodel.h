@@ -11,7 +11,7 @@
 #define RELATIONFEATURESMODEL_H
 
 #include "inputconfig.h"
-#include "featuresmodel.h"
+#include "layerfeaturesmodel.h"
 #include "featurelayerpair.h"
 
 #include "qgsrelation.h"
@@ -22,7 +22,7 @@
  * RelationFeaturesModel class lists features from a specific layer based on provided QgsRelation.
  * It is used as a model in Relation QML editors and offers helpful methods for manipulation with features.
  */
-class RelationFeaturesModel : public FeaturesModel
+class RelationFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
 
@@ -36,11 +36,11 @@ class RelationFeaturesModel : public FeaturesModel
 
   public:
 
-    enum relationModelRoles
+    enum RelationModelRoles
     {
-      PhotoPath = Qt::UserRole + 100,
+      PhotoPath = LayerModelRoles::LastRole + 1,
     };
-    Q_ENUM( relationModelRoles );
+    Q_ENUM( RelationModelRoles );
 
     explicit RelationFeaturesModel( QObject *parent = nullptr );
     ~RelationFeaturesModel() override;

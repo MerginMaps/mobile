@@ -764,7 +764,7 @@ void TestMerginApi::testPushNoChanges()
   QCOMPARE( project2.mergin.status, ProjectStatus::UpToDate );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testUpdateAddedFile()
@@ -1103,7 +1103,7 @@ void TestMerginApi::testDiffUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // replace gpkg with a new version with a modified geometry
   // but make sure time it gets a different timestamp or its checksum will be read from the cache
@@ -1115,7 +1115,7 @@ void TestMerginApi::testDiffUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1126,7 +1126,7 @@ void TestMerginApi::testDiffUpload()
   uploadRemoteProject( mApi, mWorkspaceName, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffSubdirsUpload()
@@ -1142,7 +1142,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/" + base ) );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // replace gpkg with a new version with a modified geometry
   // but make sure time it gets a different timestamp or its checksum will be read from the cache
@@ -1154,7 +1154,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << base ;
   QVERIFY2( diff == expectedDiff, diff.dump().toStdString().c_str() );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   GeodiffUtils::ChangesetSummary expectedSummary;
   expectedSummary["simple"] = GeodiffUtils::TableSummary( 0, 1, 0 );
@@ -1165,7 +1165,7 @@ void TestMerginApi::testDiffSubdirsUpload()
   uploadRemoteProject( mApi, mWorkspaceName, projectName );
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffUpdateBasic()
@@ -1183,7 +1183,7 @@ void TestMerginApi::testDiffUpdateBasic()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   QgsVectorLayer *vl0 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl0->isValid() );
@@ -1213,7 +1213,7 @@ void TestMerginApi::testDiffUpdateBasic()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
@@ -1233,7 +1233,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1267,7 +1267,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   ProjectDiff expectedDiff;
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   QCOMPARE( diff, expectedDiff );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // check that geodiff knows there was one added feature
   GeodiffUtils::ChangesetSummary expectedSummary;
@@ -1291,7 +1291,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   // like before the update - there should be locally modified base.gpkg with the changes we did
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiff );
   QCOMPARE( GeodiffUtils::parseChangesetSummary( changes ), expectedSummary );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testDiffUpdateWithRebaseFailed()
@@ -1312,7 +1312,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1338,7 +1338,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   expectedDiff.localUpdated = QSet<QString>() << "base.gpkg";
   qDebug() << diff.dump();
   QCOMPARE( diff, expectedDiff );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   // check that geodiff knows there was one added feature
   QString changes = GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true );
@@ -1364,7 +1364,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   ProjectDiff expectedDiffFinal;
   expectedDiffFinal.localAdded = QSet<QString>() << conflictFilename;
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), expectedDiffFinal );
-  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
 void TestMerginApi::testUpdateWithDiffs()
@@ -1382,7 +1382,7 @@ void TestMerginApi::testUpdateWithDiffs()
 
   QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );  // no local changes expected
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 
   //
   // download with mApiExtra + modify + upload
@@ -1413,7 +1413,7 @@ void TestMerginApi::testUpdateWithDiffs()
   delete vl;
 
   QCOMPARE( MerginApi::localProjectChanges( projectDir ), ProjectDiff() );
-  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir ) );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
   QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
 }
 
@@ -2417,6 +2417,28 @@ void TestMerginApi::testAutosyncFailure()
   // Will be added with incremental requests
 }
 
+void TestMerginApi::testOfflineCache()
+{
+  // Sign in via mApi, then create new MerginApi instance and check the userAuth and user Info
+
+  // We should be signed in already by this time (done in the initTestCase)
+  QVERIFY( mApi->userAuth()->hasAuthData() );
+  QVERIFY( mApi->userAuth()->hasValidToken() );
+
+  QSettings cacheCheck;
+  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
+
+  MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
+
+  // Cache should be read right away!
+  QVERIFY( extraApi->userAuth()->hasAuthData() );
+  QVERIFY( extraApi->userAuth()->hasValidToken() );
+  QVERIFY( !extraApi->userInfo()->username().isEmpty() );
+  QVERIFY( !extraApi->userInfo()->email().isEmpty() );
+}
+
 void TestMerginApi::testRegisterAndDelete()
 {
 #if defined(USE_MERGIN_DUMMY_API_KEY)
@@ -2426,16 +2448,15 @@ void TestMerginApi::testRegisterAndDelete()
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
-  QString username = "test_" + quiteRandom;
-  QString email = username + "@nonexistant.email.com";
+  QString email = "test_" + quiteRandom + "@nonexistant.email.com";
 
-  qDebug() << "username:" << username;
+  qDebug() << "email:" << email;
   // do not want to be authorized
   mApi->clearAuth();
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
@@ -2443,9 +2464,8 @@ void TestMerginApi::testRegisterAndDelete()
     QVERIFY( false );
   }
 
-
   QSignalSpy spyAuth( mApi->userAuth(),  &MerginUserAuth::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
 
   // now delete user
@@ -2466,11 +2486,11 @@ void TestMerginApi::testCreateWorkspace()
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
 
-  qDebug() << "REGISTERING NEW TEST USER:" << username;
+  qDebug() << "REGISTERING NEW TEST USER WITH EMAIL:" << email;
 
   QSignalSpy spy( mApi,  &MerginApi::registrationSucceeded );
   QSignalSpy spy2( mApi,  &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, password, true );
+  mApi->registerUser( email, password, true );
   bool success = spy.wait( TestUtils::LONG_REPLY );
   if ( !success )
   {
@@ -2479,7 +2499,7 @@ void TestMerginApi::testCreateWorkspace()
   }
 
   QSignalSpy authSpy( mApi, &MerginApi::authChanged );
-  mApi->authorize( username, password );
+  mApi->authorize( email, password );
   QVERIFY( authSpy.wait( TestUtils::LONG_REPLY ) );
   QVERIFY( !authSpy.isEmpty() );
 
@@ -2746,6 +2766,7 @@ void TestMerginApi::writeFileContent( const QString &filename, const QByteArray 
   bool ok = f.open( QIODeviceBase::WriteOnly );
   Q_ASSERT( ok );
   f.write( data );
+  f.flush();
   f.close();
 }
 
@@ -2811,6 +2832,14 @@ void TestMerginApi::testServerType()
   QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
 }
 
+void TestMerginApi::testServerDiagnosticLogsUrl()
+{
+  mApi->getServerConfig();
+
+  // app.dev is configuted tp redirect logs to api.merginmaps.com/logs
+  QCOMPARE( mApi->serverDiagnosticLogsUrl(), QStringLiteral( "https://api.merginmaps.com/logs" ) );
+}
+
 void TestMerginApi::testServerUpgrade()
 {
   QSignalSpy spy( mApi, &MerginApi::serverWasUpgraded );
@@ -2854,41 +2883,27 @@ void TestMerginApi::testServerError()
 
 void TestMerginApi::testRegistration()
 {
-  QString username = "?";
   QString email = "broken@email";
   QString password = "pwd";
-  QString confirm_password = password;
 
   // do not want to be authorized
   mApi->clearAuth();
 
-  // wrong username test
-  QSignalSpy spy( mApi, &MerginApi::registrationFailed );
-  mApi->registerUser( username, email, password, confirm_password, true );
-  QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::USERNAME );
-
   // wrong email test
-  username = "username";
-  mApi->registerUser( username, email, password, confirm_password, true );
+  QSignalSpy spy( mApi, &MerginApi::registrationFailed );
+  mApi->registerUser( email, password, true );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::EMAIL );
 
   // wrong password test
   email = "username@email.com";
-  mApi->registerUser( username, email, password, confirm_password, true );
+  mApi->registerUser( email, password, true );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::PASSWORD );
 
-  // wrong confirm password test
-  password = "Lutra123:)";
-  mApi->registerUser( username, email, password, confirm_password, true );
-  QCOMPARE( spy.count(), 1 );
-  QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-
   // unchecked TOC test
-  confirm_password = "Lutra123:)";
-  mApi->registerUser( username, email, password, confirm_password, false );
+  password = "Lutra123:)";
+  mApi->registerUser( email, password, false );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toInt(), RegistrationError::RegistrationErrorType::TOC );
 }
@@ -3115,4 +3130,226 @@ void TestMerginApi::testDownloadWithNetworkErrorRecovery()
   // Clean up
   mApi->setNetworkManager( originalManager );
   delete failingManager;
+}
+
+void TestMerginApi::testMerginConfigFromFile()
+{
+  QString tempFilePath;
+  MerginConfig config;
+
+  // 1 => valid JSON
+  tempFilePath = QDir::tempPath() + "/test_valid_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    QByteArray data = "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}";
+    file.write( data );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, true );
+  QCOMPARE( config.selectiveSyncDir, QString( "photos" ) );
+  QFile::remove( tempFilePath );
+
+  // 2 => invalid JSON (non-JSON content)
+  tempFilePath = QDir::tempPath() + "/test_invalid_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    QByteArray data = "this is not valid JSON";
+    file.write( data );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
+  QFile::remove( tempFilePath );
+
+  // 3 => empty file
+  tempFilePath = QDir::tempPath() + "/test_empty_config.json";
+  {
+    QFile file( tempFilePath );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+    file.write( "" );
+    file.close();
+  }
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
+  QFile::remove( tempFilePath );
+
+  // 4 => file-not-found
+  tempFilePath = QDir::tempPath() + "/nonexistent_config.json";
+  config = MerginConfig::fromFile( tempFilePath );
+  QVERIFY( !config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, false );
+}
+
+void TestMerginApi::testHasLocalChangesWithSelectiveSyncEnabled()
+{
+  // temporary project directory
+  QTemporaryDir tempDir;
+  QVERIFY( tempDir.isValid() );
+  QString projectDir = tempDir.path();
+
+  // create a mergin‑config file enabling selective sync,
+  // so that files under "photos" are excluded from the sync
+  QString configPath = projectDir + "/mergin-config.json";
+  {
+    QFile configFile( configPath );
+    QVERIFY( configFile.open( QIODevice::WriteOnly ) );
+    configFile.write( "{\"input-selective-sync\": true, \"input-selective-sync-dir\": \"photos\"}" );
+    configFile.close();
+  }
+
+  // create two server files => one in "photos" folder (excluded), one in root folder (not excluded)
+  MerginFile serverExcluded;
+  serverExcluded.path = "photos/photo.jpg";
+  serverExcluded.checksum = "img_checksum";
+
+  MerginFile serverIncluded;
+  serverIncluded.path = "data.txt";
+  serverIncluded.checksum = "data_checksum";
+
+  QList<MerginFile> oldServerFiles;
+  oldServerFiles.append( serverExcluded );
+  oldServerFiles.append( serverIncluded );
+
+  // retrieve config file we wrote
+  MerginConfig config = MerginConfig::fromFile( configPath );
+  QVERIFY( config.isValid );
+  QCOMPARE( config.selectiveSyncEnabled, true );
+  QCOMPARE( config.selectiveSyncDir, QString( "photos" ) ); // verify selective sync folder
+
+  // first scenario => local files list exactly matches the non‑excluded server file
+  // the excluded file ("photos/photo.jpg") is ignored, and no local changes should be detected
+  QList<MerginFile> localFilesNoChange;
+  localFilesNoChange.append( serverIncluded );
+
+  bool result = mApi->hasLocalChanges( oldServerFiles, localFilesNoChange, projectDir, config );
+  QVERIFY( !result );
+
+  // second scenario => local file list contains a modified version of non‑excluded file
+  // the checksum of "data.txt" is different, and local changes should be detected
+  QList<MerginFile> localFilesChanged;
+  {
+    MerginFile modifiedIncluded = serverIncluded;
+    modifiedIncluded.checksum = "different_checksum";
+    localFilesChanged.append( modifiedIncluded );
+  }
+
+  result = mApi->hasLocalChanges( oldServerFiles, localFilesChanged, projectDir, config );
+  QVERIFY( result );
+}
+
+void TestMerginApi::testHasLocalProjectChanges()
+{
+  // temporary project directory
+  QString projectName = "testHasLocalProjectChanges";
+  QTemporaryDir tempDir;
+  QVERIFY( tempDir.isValid() );
+  QString projectDir = tempDir.path();
+
+  QDir dir( projectDir );
+  QVERIFY( dir.mkdir( ".mergin" ) );
+
+  // 1: first scenario => empty metadata and no local files, selective sync not supported
+  // create empty metadata
+  MerginProjectMetadata emptyMetadata;
+  QJsonDocument emptyDoc;
+  QJsonObject emptyObj;
+  emptyObj["files"] = QJsonArray();
+  emptyObj["name"] = projectName;
+  emptyObj["namespace"] = mWorkspaceName;
+  emptyObj["version"] = "v1";
+  emptyDoc.setObject( emptyObj );
+
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, emptyDoc.toJson() );
+  mApi->setSupportsSelectiveSync( false );
+  QVERIFY( !mApi->supportsSelectiveSync() );
+
+  // expected results: no changes
+  QVERIFY( !mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // 2: second scenario => metadata has files and no local files, selective sync not supported
+  // add an entry to metadata file
+  MerginProjectMetadata metadata;
+  QJsonDocument doc;
+  QJsonObject obj;
+  QJsonArray filesArray;
+  QJsonObject fileObj;
+  fileObj["path"] = "test.txt";
+  fileObj["checksum"] = "abc123";
+  fileObj["size"] = 100;
+  fileObj["mtime"] = QDateTime::currentDateTime().toString( Qt::ISODateWithMs );
+  filesArray.append( fileObj );
+  obj["files"] = filesArray;
+  obj["name"] = projectName;
+  obj["namespace"] = mWorkspaceName;
+  obj["version"] = "v1";
+  doc.setObject( obj );
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, doc.toJson() );
+
+  // expected results: has changes
+  QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // 3: third scenario => metadata files equals local files, selective sync supported
+  writeFileContent( projectDir + "/test.txt", QByteArray( "test content" ) );
+
+  // update checksum in metadata file to match local file
+  QFileInfo fileInfo( projectDir + "/test.txt" );
+  QByteArray checksum = CoreUtils::calculateChecksum( projectDir + "/test.txt" );
+  fileObj["checksum"] = QString( checksum );
+  fileObj["size"] = fileInfo.size();
+  fileObj["mtime"] = fileInfo.lastModified().toString( Qt::ISODateWithMs );
+  filesArray = QJsonArray();
+  filesArray.append( fileObj );
+  obj["files"] = filesArray;
+  doc.setObject( obj );
+  writeFileContent( projectDir + "/" + MerginApi::sMetadataFile, doc.toJson() );
+
+  mApi->setSupportsSelectiveSync( true );
+  QVERIFY( mApi->supportsSelectiveSync() );
+
+  // expected results: no changes
+  QVERIFY( !mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // 4: fourth scenario => local files differs from metadata, selective sync supported
+  writeFileContent( projectDir + "/new_file.txt", QByteArray( "new content" ) );
+
+  QTest::qSleep( 1000 );
+
+  // expected results: has changes
+  QVERIFY( mApi->hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // clean up
+  QDir( projectDir ).removeRecursively();
+}
+
+void TestMerginApi::testApiRoot()
+{
+  QString originalRoot = mApi->apiRoot();
+
+  QVector< QPair<QString, QString> > testcases =
+  {
+    { "https://app.merginmaps.com/", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "http://app.merginmaps.com/", "http://app.merginmaps.com" },
+    { "http://app.merginmaps.com", "http://app.merginmaps.com" },
+    { "https://app.merginmaps.com//", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com///", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com////", "https://app.merginmaps.com" },
+    { "https://app.merginmaps.com", "https://app.merginmaps.com" },
+    { "https://example.com", "https://example.com" },
+    { "example.com/", "example.com" }
+  };
+
+  for ( const auto &testcase : std::as_const( testcases ) )
+  {
+    mApi->setApiRoot( testcase.first );
+    QCOMPARE( mApi->apiRoot(), testcase.second );
+  }
+
+  mApi->setApiRoot( originalRoot );
 }

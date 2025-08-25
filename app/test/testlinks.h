@@ -49,9 +49,9 @@ class TestLinks: public QObject
     void initTestCase() {}
     void cleanupTestCase() {}
 
-    void testInputWebLink()
+    void testMMWebLink()
     {
-      _run( mHelp.inputWebLink() );
+      _run( mHelp.mmWebLink() );
     }
 
     void testPrivacyPolicy()
@@ -77,11 +77,6 @@ class TestLinks: public QObject
     void testHelpRootLink()
     {
       _run( mHelp.helpRootLink() );
-    }
-
-    void testMerginWebLink()
-    {
-      _run( mHelp.merginWebLink() );
     }
 
     void testMerginDashboardLink()

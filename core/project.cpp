@@ -33,7 +33,7 @@ QString MerginProject::id() const
   return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
 
-ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
+ProjectStatus::Status ProjectStatus::projectStatus( const Project &project, const bool supportsSelectiveSync )
 {
   if ( !project.isMergin() || !project.isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus::NoVersion;
@@ -50,7 +50,7 @@ ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
     return ProjectStatus::NeedsSync;
   }
 
-  if ( ProjectStatus::hasLocalChanges( project.local ) )
+  if ( ProjectStatus::hasLocalChanges( project.local, supportsSelectiveSync ) )
   {
     return ProjectStatus::NeedsSync;
   }
@@ -58,7 +58,7 @@ ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
   return ProjectStatus::UpToDate;
 }
 
-bool ProjectStatus::hasLocalChanges( const LocalProject &project )
+bool ProjectStatus::hasLocalChanges( const LocalProject &project, bool supportsSelectiveSync )
 {
   QString metadataFilePath = project.projectDir + "/" + MerginApi::sMetadataFile;
 
@@ -68,5 +68,5 @@ bool ProjectStatus::hasLocalChanges( const LocalProject &project )
     return true;
   }
 
-  return MerginApi::hasLocalProjectChanges( project.projectDir );
+  return MerginApi::hasLocalProjectChanges( project.projectDir, supportsSelectiveSync );
 }

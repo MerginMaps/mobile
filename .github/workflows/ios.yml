@@ -16,10 +16,10 @@ on:
       - published
 
 env:   
-  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-  XC_VERSION: ${{ '15.2' }}
+  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+  XC_VERSION: ${{ '16.2' }}
   IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20240517-182
+  INPUT_SDK_VERSION: arm64-ios-20250326-198
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
   CCACHE_DIR: /Users/runner/work/ccache
@@ -33,15 +33,15 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
  
       - name: Download ios-cmake toolchain
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
             repository: leetal/ios-cmake
             ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
@@ -75,11 +75,11 @@ jobs:
 
       - name: Install brew deps
         run: |
-          pip3 install -U pip
-          pip3 install aqtinstall
+          brew update
+          brew install aqtinstall
 
           brew install gnupg
-          brew install openssl@1.1
+          brew install openssl
           brew install ccache
           brew install ninja
         
@@ -99,7 +99,7 @@ jobs:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
           cd core/
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          /opt/homebrew/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
@@ -159,12 +159,12 @@ jobs:
         run: |
           aqt install-qt \
             mac ios ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
             -O ${{ github.workspace }}/Qt
 
 
@@ -179,6 +179,9 @@ jobs:
 
             echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
             echo "Build number: ${CF_BUNDLE_VERSION}"
+
+            # add build number to summary
+            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
 
       - name: Create build system with cmake
         run: |
@@ -237,7 +240,3 @@ jobs:
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
-
-          # Add comment to GitHub
-          GITHUB_API=https://api.github.com/repos/MerginMaps/mobile/commits/${GITHUB_SHA}/comments
-          curl -u inputapp-bot:${INPUTAPP_BOT_GITHUB_TOKEN} -X POST --data '{"body": "iOS - version '${CF_BUNDLE_VERSION}' just submitted!"}' ${GITHUB_API}

@@ -11,6 +11,7 @@ set(MM_SRCS
     attributes/attributetabmodel.cpp
     attributes/attributetabproxymodel.cpp
     attributes/fieldvalidator.cpp
+    attributes/mixedattributevalue.cpp
     attributes/rememberattributescontroller.cpp
     layer/layerdetaildata.cpp
     layer/layerdetaillegendimageprovider.cpp
@@ -45,6 +46,7 @@ set(MM_SRCS
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
+    mapsketchingcontroller.cpp
     appsettings.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
@@ -55,6 +57,7 @@ set(MM_SRCS
     featuresmodel.cpp
     fieldsmodel.cpp
     guidelinecontroller.cpp
+    hapticsmodel.cpp
     identifykit.cpp
     imageutils.cpp
     inputexpressionfunctions.cpp
@@ -64,10 +67,12 @@ set(MM_SRCS
     inpututils_p.cpp
     invitationsmodel.cpp
     invitationsproxymodel.cpp
+    layerfeaturesmodel.cpp
     layersmodel.cpp
-    layersproxymodel.cpp
+    recordinglayersproxymodel.cpp
     main.cpp
     mapthemesmodel.cpp
+    multieditmanager.cpp
     notificationmodel.cpp
     projectsmodel.cpp
     projectsproxymodel.cpp
@@ -76,6 +81,7 @@ set(MM_SRCS
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
     snaputils.cpp
+    staticfeaturesmodel.cpp
     streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
@@ -94,6 +100,7 @@ set(MM_HDRS
     attributes/attributetabmodel.h
     attributes/attributetabproxymodel.h
     attributes/fieldvalidator.h
+    attributes/mixedattributevalue.h
     attributes/rememberattributescontroller.h
     layer/layerdetaildata.h
     layer/layerdetaillegendimageprovider.h
@@ -128,6 +135,7 @@ set(MM_HDRS
     activelayer.h
     activeproject.h
     androidutils.h
+    mapsketchingcontroller.h
     appsettings.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
@@ -139,6 +147,7 @@ set(MM_HDRS
     featuresmodel.h
     fieldsmodel.h
     guidelinecontroller.h
+    hapticsmodel.h
     identifykit.h
     imageutils.h
     inputexpressionfunctions.h
@@ -148,9 +157,11 @@ set(MM_HDRS
     inpututils_p.h
     invitationsmodel.h
     invitationsproxymodel.h
+    layerfeaturesmodel.h
     layersmodel.h
-    layersproxymodel.h
+    recordinglayersproxymodel.h
     mapthemesmodel.h
+    multieditmanager.h
     notificationmodel.h
     projectsmodel.h
     projectsproxymodel.h
@@ -159,6 +170,7 @@ set(MM_HDRS
     relationreferencefeaturesmodel.h
     scalebarkit.h
     snaputils.h
+    staticfeaturesmodel.h
     streamingintervaltype.h
     synchronizationerror.h
     synchronizationmanager.h
@@ -270,6 +282,7 @@ qt_add_resources(
   images/images.qrc
   i18n/input_i18n.qrc
   fonts/fonts.qrc
+  sounds/sounds.qrc
 )
 
 # ########################################################################################
@@ -293,6 +306,8 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
          ${CMAKE_CURRENT_SOURCE_DIR}/position
 )
+
+qt_policy(SET QTP0002 NEW)
 
 if (ANDROID)
   if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
@@ -363,6 +378,19 @@ if (IOS)
                ${CMAKE_CURRENT_SOURCE_DIR}/ios/launchscreen/MMLaunchScreen.storyboard
   )
 
+  # entitlements file
+  set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+  configure_file(
+    ${ENTITLEMENTS_FILE} ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements COPYONLY
+  )
+  set(ENTITLEMENTS_FILE_IN_BUILD ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements)
+  target_sources(Input PRIVATE ${ENTITLEMENTS_FILE})
+  set_source_files_properties(
+    ${ENTITLEMENTS_FILE} PROPERTIES XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
+  )
+
+  message(STATUS "iOS signing entitlements file: ${ENTITLEMENTS_FILE_IN_BUILD}")
+
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
@@ -372,6 +400,7 @@ if (IOS)
                MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
                XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
                XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+               XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${ENTITLEMENTS_FILE_IN_BUILD}"
   )
 
   if (IOS_USE_PRODUCTION_SIGNING)
@@ -415,6 +444,7 @@ target_link_libraries(
          Qt6::Sensors
          Qt6::QuickControls2
          Qt6::Network
+         Qt6::NetworkAuth
          Qt6::Svg
          Qt6::Sql
          Qt6::Core
@@ -490,10 +520,13 @@ target_link_libraries(
          Geos::Geos-c
          Geos::Geos
          Protobuf::Protobuf-lite
+         Utf8::utf8_range
+         Utf8::utf8_validity
          Expat::Expat
          Freexl::Freexl
          Exiv2::Exiv2
-         Exiv2::Exiv2-xmp
+         Inih::Inireader
+         Inih::Inih
          Tiff::Tiff
          Sqlite3::Sqlite3
          MiniZip::MiniZip
@@ -507,6 +540,7 @@ target_link_libraries(
          Lzma::Lzma
          Zstd::Zstd
          Bz2::Bz2
+         Absl::Absl
 )
 
 if (IOS OR MACOS)
@@ -529,7 +563,10 @@ if (MACOS OR IOS)
 endif ()
 
 if (IOS)
-  target_link_libraries(Input PUBLIC AppleFrameworks::CoreLocation)
+  target_link_libraries(
+    Input PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
+  )
+  qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
 endif ()
 
 if (ENABLE_TESTS)
@@ -546,8 +583,7 @@ target_compile_definitions(
 
 add_subdirectory(qml)
 
-# register Singleton TODO REMOVE!
-set_source_files_properties(qml/InputStyle.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+qt_policy(SET QTP0004 NEW)
 
 # make sure the QML files are not prefixed with "qml/" in the qmldir
 set(MM_QML_SRCS)
@@ -562,5 +598,5 @@ qt_add_qml_module(
   URI MMInput
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
-  RESOURCE_PREFIX /com.merginmaps/imports NO_GENERATE_QMLTYPES
+  RESOURCE_PREFIX /com.merginmaps/imports
 )

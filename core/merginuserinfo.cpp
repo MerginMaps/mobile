@@ -13,10 +13,113 @@
 #include "merginuserinfo.h"
 #include "coreutils.h"
 
+MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitationInfo )
+{
+  MerginInvitation merginInvitation;
+  merginInvitation.uuid = invitationInfo.value( QStringLiteral( "uuid" ) ).toString();
+  merginInvitation.workspace = invitationInfo.value( QStringLiteral( "workspace" ) ).toString();
+  merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
+  merginInvitation.expiration = invitationInfo.value( QStringLiteral( "expire" ) ).toVariant().toDateTime();
+
+  return merginInvitation;
+}
+
 MerginUserInfo::MerginUserInfo( QObject *parent )
   : QObject( parent )
 {
-  clear();
+}
+
+QString MerginUserInfo::nameAbbr() const
+{
+  return mNameAbbr;
+}
+
+QString MerginUserInfo::name() const
+{
+  return mName;
+}
+
+QString MerginUserInfo::email() const
+{
+  return mEmail;
+}
+
+QString MerginUserInfo::username() const
+{
+  return mUsername;
+}
+
+int MerginUserInfo::activeWorkspaceId() const
+{
+  return mActiveWorkspace;
+}
+
+QString MerginUserInfo::activeWorkspaceName() const
+{
+  return mWorkspaces.value( mActiveWorkspace );
+}
+
+void MerginUserInfo::setActiveWorkspace( int newWorkspace )
+{
+  if ( mActiveWorkspace == newWorkspace )
+  {
+    return;
+  }
+
+  mActiveWorkspace = newWorkspace;
+
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+  settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
+  settings.endGroup();
+
+  const QString logMessage = QStringLiteral( "Switched to workspace '%1' with ID %2" )
+                             .arg( activeWorkspaceName() )
+                             .arg( newWorkspace );
+
+  CoreUtils::log( QStringLiteral( "Workspace Switch" ), logMessage );
+
+  emit activeWorkspaceChanged();
+}
+
+bool MerginUserInfo::hasWorkspaces() const
+{
+  return mWorkspaces.count() > 0;
+}
+
+QMap<int, QString> MerginUserInfo::workspaces() const
+{
+  return mWorkspaces;
+}
+
+void MerginUserInfo::updateWorkspacesList( QMap<int, QString> workspaces )
+{
+  if ( mWorkspaces == workspaces )
+  {
+    return;
+  }
+
+  mWorkspaces = workspaces;
+
+  saveData();
+
+  emit hasWorkspacesChanged();
+  emit userInfoChanged();
+}
+
+bool MerginUserInfo::hasInvitations() const
+{
+  return mInvitations.count() > 0;
+}
+
+int MerginUserInfo::invitationsCount() const
+{
+  return mInvitations.count();
+}
+
+QList<MerginInvitation> MerginUserInfo::invitations() const
+{
+  return mInvitations;
 }
 
 void MerginUserInfo::clear()
@@ -24,12 +127,24 @@ void MerginUserInfo::clear()
   mName = "";
   mNameAbbr = "";
   mEmail = "";
+  mUsername = "";
   mActiveWorkspace = -1;
   mWorkspaces.clear();
   mInvitations.clear();
 
+  QSettings settings;
+  settings.beginGroup( "Input/" );
+
+  settings.remove( "name" );
+  settings.remove( "email" );
+  settings.remove( "username" );
+  settings.remove( "workspaces" );
+  settings.setValue( "lastUsedWorkspace", -1 );
+
+  settings.endGroup();
+
+  emit activeWorkspaceChanged();
   emit hasWorkspacesChanged();
-  emit hasMoreThanOneWorkspaceChanged();
   emit userInfoChanged();
 }
 
@@ -38,6 +153,7 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
   // parse profile data
   mEmail = docObj.value( QStringLiteral( "email" ) ).toString();
   mName = docObj.value( QStringLiteral( "name" ) ).toString();
+  mUsername = docObj.value( QStringLiteral( "username" ) ).toString();
   mNameAbbr = CoreUtils::nameAbbr( mName, mEmail );
 
   int preferredWorkspace = -1;
@@ -67,76 +183,23 @@ void MerginUserInfo::setFromJson( QJsonObject docObj )
     }
   }
 
-  saveWorkspacesData();
   int workspace = findActiveWorkspace( preferredWorkspace );
   setActiveWorkspace( workspace );
 
+  saveData();
+
   emit userInfoChanged();
   emit hasWorkspacesChanged();
-  emit hasMoreThanOneWorkspaceChanged();
 }
 
-QString MerginUserInfo::nameAbbr() const
-{
-  return mNameAbbr;
-}
-
-QString MerginUserInfo::email() const
-{
-  return mEmail;
-}
-
-QString MerginUserInfo::activeWorkspaceName() const
-{
-  return mWorkspaces.value( mActiveWorkspace );
-}
-
-int MerginUserInfo::activeWorkspaceId() const
-{
-  return mActiveWorkspace;
-}
-
-QMap<int, QString> MerginUserInfo::workspaces() const
-{
-  return mWorkspaces;
-}
-
-void MerginUserInfo::setWorkspaces( QMap<int, QString> workspaces )
-{
-  if ( mWorkspaces == workspaces )
-  {
-    return;
-  }
-
-  mWorkspaces = workspaces;
-  emit hasWorkspacesChanged();
-  emit userInfoChanged();
-}
-
-QList<MerginInvitation> MerginUserInfo::invitations() const
-{
-  return mInvitations;
-}
-
-bool MerginUserInfo::hasInvitations() const
-{
-  return mInvitations.count() > 0;
-}
-
-bool MerginUserInfo::hasWorkspaces() const
-{
-  return mWorkspaces.count() > 0;
-}
-
-int MerginUserInfo::invitationsCount() const
-{
-  return mInvitations.count();
-}
-
-void MerginUserInfo::saveWorkspacesData()
+void MerginUserInfo::saveData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
+
+  settings.setValue( "name", mName );
+  settings.setValue( "email", mEmail );
+  settings.setValue( "username", mUsername );
 
   settings.beginGroup( "workspaces" );
   QMap<int, QString>::const_iterator it = mWorkspaces.constBegin();
@@ -147,25 +210,37 @@ void MerginUserInfo::saveWorkspacesData()
   }
   settings.endGroup();
 
+  settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
+
   settings.endGroup();
 }
 
-void MerginUserInfo::loadWorkspacesData()
+void MerginUserInfo::loadData()
 {
   QSettings settings;
   settings.beginGroup( "Input/" );
 
+  mName = settings.value( "name", QString() ).toString();
+  mEmail = settings.value( "email", QString() ).toString();
+  mUsername = settings.value( "username", QString() ).toString();
+
   settings.beginGroup( "workspaces" );
+
   QStringList keys = settings.childKeys();
-  for ( const QString &key : keys )
+  for ( const QString &key : std::as_const( keys ) )
   {
     mWorkspaces[ key.toInt() ] = settings.value( key ).toString();
   }
-  settings.endGroup();
 
   settings.endGroup();
 
   mActiveWorkspace = findActiveWorkspace();
+
+  settings.endGroup();
+
+  emit hasWorkspacesChanged();
+  emit activeWorkspaceChanged();
+  emit userInfoChanged();
 }
 
 int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
@@ -205,59 +280,4 @@ int MerginUserInfo::findActiveWorkspace( int preferredWorkspace )
   }
 
   return workspace;
-}
-
-void MerginUserInfo::setActiveWorkspace( int newWorkspace )
-{
-  if ( mActiveWorkspace == newWorkspace )
-  {
-    return;
-  }
-
-  mActiveWorkspace = newWorkspace;
-
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.setValue( "lastUsedWorkspace", mActiveWorkspace );
-  settings.endGroup();
-
-  QString logMessage = QStringLiteral( "Switched to workspace '%1' with ID %2" )
-                       .arg( activeWorkspaceName() )
-                       .arg( newWorkspace );
-
-  CoreUtils::log( QStringLiteral( "Workspace Switch" ), logMessage );
-
-  emit activeWorkspaceChanged();
-}
-
-void MerginUserInfo::clearCachedWorkspacesInfo()
-{
-  QSettings settings;
-  settings.beginGroup( "Input/" );
-  settings.setValue( "lastUsedWorkspace", -1 );
-  settings.remove( "workspaces" );
-  settings.endGroup();
-
-  emit userInfoChanged();
-}
-
-MerginInvitation MerginInvitation::fromJsonObject( const QJsonObject &invitationInfo )
-{
-  MerginInvitation merginInvitation;
-  merginInvitation.uuid = invitationInfo.value( QStringLiteral( "uuid" ) ).toString();
-  merginInvitation.workspace = invitationInfo.value( QStringLiteral( "workspace" ) ).toString();
-  merginInvitation.role = invitationInfo.value( QStringLiteral( "role" ) ).toString();
-  merginInvitation.expiration = invitationInfo.value( QStringLiteral( "expire" ) ).toVariant().toDateTime();
-
-  return merginInvitation;
-}
-
-QString MerginUserInfo::name() const
-{
-  return mName;
-}
-
-bool MerginUserInfo::hasMoreThanOneWorkspace() const
-{
-  return mWorkspaces.size() > 1;
 }

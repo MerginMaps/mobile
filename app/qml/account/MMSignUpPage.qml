@@ -33,10 +33,8 @@ MMPage {
 
   signal signInClicked
   signal signUpClicked(
-    string username,
     string email,
     string password,
-    string passwordConfirm,
     bool tocAccept,
     bool newsletterSubscribe
   )
@@ -67,20 +65,11 @@ MMPage {
       }
 
       MMTextInput {
-        id: username
-
-        width: parent.width
-
-        title: qsTr( "Username" )
-        textField.inputMethodHints: Qt.ImhNoAutoUppercase
-      }
-
-      MMTextInput {
         id: email
 
         width: parent.width
 
-        title: qsTr( "Email" )
+        title: qsTr( "Work email" )
         textField.inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
       }
 
@@ -90,14 +79,6 @@ MMPage {
         width: parent.width
 
         title: qsTr( "Password" )
-      }
-
-      MMPasswordInput {
-        id: passwordConfirm
-
-        width: parent.width
-
-        title: qsTr( "Confirm password" )
       }
 
       MMCheckBox {
@@ -126,10 +107,8 @@ MMPage {
 
         onClicked: {
           root.signUpClicked(
-                username.text,
                 email.text,
                 password.text,
-                passwordConfirm.text,
                 tocCheck.checked,
                 newsletterCheck.checked
                 )
@@ -160,27 +139,17 @@ MMPage {
   function showErrorMessage( msg, field ) {
 
     // clear previous error messages
-    username.errorMsg = ""
     email.errorMsg = ""
     password.errorMsg = ""
-    passwordConfirm.errorMsg = ""
     tocCheck.hasError = false
 
-    if( field === MM.RegistrationError.USERNAME ) {
-      username.errorMsg = msg
-      username.focus = true
-    }
-    else if( field === MM.RegistrationError.EMAIL ) {
+    if( field === MM.RegistrationError.EMAIL ) {
       email.errorMsg = msg
       email.focus = true
     }
     else if( field === MM.RegistrationError.PASSWORD ) {
       password.errorMsg = msg
       password.focus = true
-    }
-    else if( field === MM.RegistrationError.CONFIRM_PASSWORD ) {
-      passwordConfirm.errorMsg = msg
-      passwordConfirm.focus = true
     }
     else if( field === MM.RegistrationError.TOC ) {
        tocCheck.hasError = true

@@ -149,22 +149,21 @@ class TestMerginApi: public QObject
     void testAutosync();
     void testAutosyncFailure();
     void testUpdateProjectMetadataRole();
-
+    void testMerginConfigFromFile();
+    void testHasLocalChangesWithSelectiveSyncEnabled();
+    void testHasLocalProjectChanges();
+    void testOfflineCache();
     void testRegisterAndDelete();
     void testCreateWorkspace();
-
-    // mergin functions
     void testExcludeFromSync();
-
     void testServerType();
-
     void testServerUpgrade();
-
     void testServerError();
-
     void testRegistration();
-
     void testParseVersion();
+    void testApiRoot();
+
+    void testServerDiagnosticLogsUrl();
 
   private:
     MerginApi *mApi = nullptr;

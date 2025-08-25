@@ -64,7 +64,7 @@ QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
 QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
 {
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
-    return QVector<QPair<QString, QString>>();
+    return QVector<QPair<QString, QString>> ();
 
   QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
   QVector<QPair<QString, QString>> lst;
@@ -135,7 +135,25 @@ QString AttributePreviewController::featureTitle( )
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
   QgsExpression expr( mFeatureLayerPair.layer()->displayExpression() );
-  return expr.evaluate( &context ).toString();
+
+  QString title = expr.evaluate( &context ).toString();
+
+  if ( title.isEmpty() )
+  {
+    // let's use a default format with layer name as user did not set any specific display expression
+    if ( mFeatureLayerPair.layer() && mFeatureLayerPair.layer()->isValid() && mFeatureLayerPair.feature().isValid() )
+    {
+      QString layerName = mFeatureLayerPair.layer()->name();
+      if ( layerName.isEmpty() )
+      {
+        layerName = tr( "Unnamed Layer" );
+      }
+
+      title = QStringLiteral( "%1 (%2)" ).arg( layerName ).arg( mFeatureLayerPair.feature().id() );
+    }
+  }
+
+  return title;
 }
 
 QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( QgsMapLayer *layer )

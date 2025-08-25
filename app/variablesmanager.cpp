@@ -18,11 +18,9 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
 {
   apiRootChanged();
   setUserVariables();
-  authChanged();
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
-  QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::authChanged );
   QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
@@ -33,7 +31,9 @@ void VariablesManager::removeMerginProjectVariables( QgsProject *project )
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_name" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_full_name" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_version" ) );
-  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mergin_project_owner" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_full_name" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_version" ) );
 }
 
 void VariablesManager::registerInputExpressionFunctions()
@@ -63,7 +63,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
     providerType = mPositionKit->positionProvider()->type();
   }
 
-  GeoPosition position = mPositionKit->position();
+  const GeoPosition position = mPositionKit->position();
   const QgsGeometry point = QgsGeometry( new QgsPoint( position.longitude, position.latitude, position.elevation ) );
 
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "Position" ) );
@@ -78,7 +78,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "vertical_speed" ), getGeoPositionAttribute( position.verticalSpeed ) );
   addPositionVariable( scope, QStringLiteral( "magnetic_variation" ), getGeoPositionAttribute( position.magneticVariation ) );
   addPositionVariable( scope, QStringLiteral( "timestamp" ), position.utcDateTime );
-  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + int( direction ) ) % 360 );
+  addPositionVariable( scope, QStringLiteral( "direction" ), ( 360 + static_cast<int>( direction ) ) % 360 );
   addPositionVariable( scope, QStringLiteral( "from_gps" ), mUseGpsPoint );
   addPositionVariable( scope, QStringLiteral( "satellites_visible" ), position.satellitesVisible );
   addPositionVariable( scope, QStringLiteral( "satellites_used" ), position.satellitesUsed );
@@ -97,16 +97,19 @@ QgsExpressionContextScope *VariablesManager::positionScope()
 void VariablesManager::apiRootChanged()
 {
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_url" ),  mMerginApi->apiRoot() );
-}
-
-void VariablesManager::authChanged()
-{
-  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userAuth()->username() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_url" ),  mMerginApi->apiRoot() );
 }
 
 void VariablesManager::setUserVariables()
 {
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_username" ),  mMerginApi->userInfo()->username() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_username" ),  mMerginApi->userInfo()->username() );
+
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_user_email" ),  mMerginApi->userInfo()->email() );
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_user_email" ),  mMerginApi->userInfo()->email() );
+
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mm_full_name" ),  mMerginApi->userInfo()->name() );
+  QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
 }
 
 void VariablesManager::setVersionVariable( const QString &projectFullName )
@@ -114,7 +117,10 @@ void VariablesManager::setVersionVariable( const QString &projectFullName )
   if ( !mCurrentProject )
     return;
 
-  if ( mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString() == projectFullName )
+  const QString oldVariableName = mCurrentProject->customVariables().value( QStringLiteral( "mergin_project_full_name" ) ).toString();
+  const QString newVariableName = mCurrentProject->customVariables().value( QStringLiteral( "mm_project_full_name" ) ).toString();
+
+  if ( oldVariableName == projectFullName  && newVariableName == projectFullName )
     setProjectVariables();
 }
 
@@ -123,7 +129,7 @@ bool VariablesManager::useGpsPoint() const
   return mUseGpsPoint;
 }
 
-void VariablesManager::setUseGpsPoint( bool useGpsPoint )
+void VariablesManager::setUseGpsPoint( const bool useGpsPoint )
 {
   if ( mUseGpsPoint != useGpsPoint )
   {
@@ -172,21 +178,23 @@ void VariablesManager::setProjectVariables()
     return;
 
 
-  QString filePath = mCurrentProject->fileName();
-  QString projectDir = mMerginApi->localProjectsManager().projectFromProjectFilePath( filePath ).projectDir;
+  const QString filePath = mCurrentProject->fileName();
+  const QString projectDir = mMerginApi->localProjectsManager().projectFromProjectFilePath( filePath ).projectDir;
   if ( projectDir.isEmpty() )
   {
     removeMerginProjectVariables( mCurrentProject );
     return;
   }
 
-  MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + MerginApi::sMetadataFile );
+  const MerginProjectMetadata metadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + MerginApi::sMetadataFile );
   if ( metadata.isValid() )
   {
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_version" ), metadata.version );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_name" ),  metadata.name );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
-    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mergin_project_owner" ),   metadata.projectNamespace );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_version" ), metadata.version );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_name" ),  metadata.name );
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
   }
   else
   {
@@ -206,7 +214,7 @@ void VariablesManager::addPositionVariable( QgsExpressionContextScope *scope, co
   }
 }
 
-QVariant VariablesManager::getGeoPositionAttribute( double attributeValue, int precision )
+QVariant VariablesManager::getGeoPositionAttribute( const double attributeValue, const int precision )
 {
   if ( attributeValue >= 0 )
   {

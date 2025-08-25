@@ -135,7 +135,7 @@ static QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath )
 
   idx = layer->fields().indexFromName( "tracked_by" );
   QgsDefaultValue user_default;
-  user_default.setExpression( "@mergin_username" );
+  user_default.setExpression( "@mm_username" );
   layer->setDefaultValueDefinition( idx, user_default );
 
   QVariantMap symbolProps;

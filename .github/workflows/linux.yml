@@ -17,10 +17,10 @@ on:
 
 env:
   CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20240517-184
-  QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
+  INPUT_SDK_VERSION: x64-linux-20250327-197
+  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
   CMAKE_VERSION: '3.29.0'
-  CACHE_VERSION: 1
+  CACHE_VERSION: 0
       
 concurrency:
   group: ci-${{github.ref}}-linux
@@ -56,7 +56,7 @@ jobs:
         with:
           version: ${{ env.QT_VERSION }}
           setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools'
+          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
           dir: ${{ github.workspace }}
           cache: true
           cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx

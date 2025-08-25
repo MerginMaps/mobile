@@ -67,6 +67,9 @@ Page {
       name: "edit"
     },
     State {
+      name: "multiEdit"
+    },
+    State {
       name: "add"
     }
   ]
@@ -105,6 +108,7 @@ Page {
     title: {
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
+      else if ( root.state === "multiEdit" ) return qsTr( "Edit selected features" )
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
@@ -112,7 +116,7 @@ Page {
 
       anchors.verticalCenter: parent.verticalCenter
 
-      visible: root.state === "add" || root.state === "edit"
+      visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
 
       iconSource: __style.checkmarkIcon
       iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
@@ -201,7 +205,7 @@ Page {
 
   footer: MMComponents.MMToolbar {
 
-    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader" && root.state !== "multiEdit"
 
     ObjectModel {
       id: readStateButtons
@@ -290,6 +294,8 @@ Page {
 
         property var fieldValue: model.RawValue
         property bool fieldValueIsNull: model.RawValueIsNull ?? true
+        property bool fieldHasMixedValues: model.HasMixedValues ?? false
+        property bool fieldFormIsMultiEdit: root.state === "multiEdit"
 
         property var field: model.Field
         property var fieldIndex: model.FieldIndex
@@ -317,7 +323,7 @@ Page {
 
         source: {
           if ( model.EditorWidget !== undefined ) {
-            return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field, model.Relation, model.Name )
+            return __inputUtils.getFormEditorType( model.EditorWidget, model.EditorWidgetConfig, model.Field, model.Relation, model.Name, fieldFormIsMultiEdit )
           }
 
           return ''
@@ -380,13 +386,13 @@ Page {
         ignoreUnknownSignals: true
 
         function onSaved() {
-          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnSave === "function" ) {
+          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnFormSaved === "function" ) {
             formEditorsLoader.item.callbackOnFormSaved()
           }
         }
 
         function onCanceled() {
-          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnCancel === "function" ) {
+          if ( formEditorsLoader.item && typeof formEditorsLoader.item.callbackOnFormCanceled === "function" ) {
             formEditorsLoader.item.callbackOnFormCanceled()
           }
         }

@@ -29,6 +29,7 @@ MMPrivateComponents.MMBaseInput {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -66,8 +67,9 @@ MMPrivateComponents.MMBaseInput {
     width: parent.width
     height: Math.max( implicitHeight, internal.minHeight )
 
-    text: _fieldValue === undefined ? '' : _fieldValue
+    text: _fieldValue === undefined || _fieldHasMixedValues ? '' : _fieldValue
     textFormat: root._fieldConfig['UseHtml'] ? TextEdit.RichText : TextEdit.PlainText
+    placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
     topPadding: __style.margin12
     bottomPadding: __style.margin12
@@ -121,7 +123,7 @@ MMPrivateComponents.MMBaseInput {
     onLinkActivated: function ( link ) {
       if ( !__inputUtils.openLink( root._fieldHomePath, link.toString( ) ) )
       {
-        __notificationModel.addError( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." )
+        __notificationModel.addError( qsTr( "Could not open the file. It may not exist, could be invalid, or there might be no application available to open it." ) )
       }
     }
 

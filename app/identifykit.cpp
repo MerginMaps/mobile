@@ -66,9 +66,12 @@ FeatureLayerPairs IdentifyKit::identify( const QPointF &point, QgsVectorLayer *l
   }
   else
   {
+    const QString sketchesLayer = mMapSettings->project() ? mMapSettings->project()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Layer" ) ) : QString();
     for ( QgsMapLayer *layer : mMapSettings->mapSettings().layers() )
     {
-      if ( mMapSettings->project() && !layer->flags().testFlag( QgsMapLayer::Identifiable ) )
+      if ( mMapSettings->project() &&
+           ( !layer->flags().testFlag( QgsMapLayer::Identifiable )
+             || layer->id() == sketchesLayer ) )
         continue;
 
       QgsVectorLayer *vl = qobject_cast<QgsVectorLayer *>( layer );
@@ -196,7 +199,7 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
     QgsFeatureRequest req;
     req.setFilterRect( r );
     req.setLimit( mFeaturesLimit );
-    req.setFlags( QgsFeatureRequest::ExactIntersect );
+    req.setFlags( Qgis::FeatureRequestFlag::ExactIntersect );
 
     QgsFeatureIterator fit = layer->getFeatures( req );
     QgsFeature f;
@@ -212,7 +215,11 @@ QgsFeatureList IdentifyKit::identifyVectorLayer( QgsVectorLayer *layer, const Qg
   bool filter = false;
 
   QgsRenderContext context( QgsRenderContext::fromMapSettings( mMapSettings->mapSettings() ) );
-  context.expressionContext() << QgsExpressionContextUtils::layerScope( layer );
+  context.expressionContext() << QgsExpressionContextUtils::globalScope()
+         << QgsExpressionContextUtils::projectScope( mMapSettings->project() )
+         << QgsExpressionContextUtils::mapSettingsScope( mMapSettings->mapSettings() )
+         << QgsExpressionContextUtils::layerScope( layer );
+
   QgsFeatureRenderer *renderer = layer->renderer();
   if ( renderer && renderer->capabilities() & QgsFeatureRenderer::ScaleDependent )
   {

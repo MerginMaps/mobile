@@ -34,6 +34,7 @@ NOTE: icon must be without transparency
 ## iOS dist certificates
 
 1. Create new iOS distribution certificate
+- Keychain Access is either in /Application/Utilities or in folder "/System/Library/CoreServices/Applications/" (macos 15.3+)
 - open Keychain Access -> Certificate Assistant -> Request certificate (see https://help.apple.com/developer-account/#/devbfa00fef7)
    - User email: peter.petrik@lutraconsulting.co.uk
    - Common name: LUTRA CONSULTING LIMITED
@@ -43,7 +44,6 @@ NOTE: icon must be without transparency
 - click + on https://developer.apple.com/account/resources/certificates/list and create new iOS Distribution Certificate
 - Download it (`ios_distribution.cer`) and double click to open in Keychain Access
 - In Keychain Access, right click and export p12 file (`iPhone Distribution: LUTRA CONSULTING LIMITED (xxxxxxxxx)`), with passport (IOS_CERT_KEY). You need to have it imported to "login" or personal space to be able to export p12 file.
-- Store request and cer file, p12 in passbolt.lutraconsulting.co.uk (files in google drive in PP's MerginMaps/dev folder)
 
 2. Create/Update provisioning profile
 - Go to https://developer.apple.com/account/resources/profiles

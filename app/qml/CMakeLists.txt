@@ -13,6 +13,7 @@ set(MM_QML
     account/MMHowYouFoundUsPage.qml
     account/MMLoginPage.qml
     account/MMSignUpPage.qml
+    account/MMSsoPage.qml
     account/MMSwitchWorkspacePage.qml
     account/MMWhichIndustryPage.qml
     components/MMAvatarLettersItem.qml
@@ -77,6 +78,7 @@ set(MM_QML
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
+    dialogs/MMSsoExpiredTokenDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml
     form/MMFormStackController.qml
@@ -97,6 +99,7 @@ set(MM_QML
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
+    form/editors/MMFormNotAvailable.qml
     form/editors/MMFormNumberEditor.qml
     form/editors/MMFormPhotoEditor.qml
     form/editors/MMFormPhotoViewer.qml
@@ -117,6 +120,7 @@ set(MM_QML
     gps/MMPositionProviderPage.qml
     gps/MMStakeoutDrawer.qml
     gps/MMMeasureDrawer.qml
+    gps/MMSelectionDrawer.qml
     gps/components/MMGpsDataText.qml
     inputs/MMComboboxInput.qml
     inputs/MMPasswordInput.qml
@@ -129,6 +133,7 @@ set(MM_QML
     layers/MMLayersListPage.qml
     layers/MMLayersListSearchPage.qml
     layers/MMLayersController.qml
+    map/MMSketchesDrawer.qml
     map/MMHighlight.qml
     map/MMMapCanvas.qml
     map/MMMapThemeDrawer.qml

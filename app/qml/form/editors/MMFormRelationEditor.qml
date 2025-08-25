@@ -56,6 +56,7 @@ MMPrivateComponents.MMBaseInput {
         listLoader.active = true
         listLoader.focus = true
       }
+      enabled: repeater.count > 0 || newRelation.visible
     }
 
     Flow {
@@ -73,10 +74,13 @@ MMPrivateComponents.MMBaseInput {
       clip: true
 
       Rectangle {
+        id: newRelation
+
         width: 40 * __dp
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
+        visible: __activeProject.projectRole !== "reader"
 
         MMComponents.MMIcon {
           anchors.centerIn: parent

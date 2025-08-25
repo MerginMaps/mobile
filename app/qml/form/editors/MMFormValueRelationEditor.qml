@@ -28,6 +28,7 @@ MMFormComboboxBaseEditor {
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
+  property bool _fieldHasMixedValues: parent.fieldHasMixedValues
   property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -45,6 +46,8 @@ MMFormComboboxBaseEditor {
   signal rememberValueBoxClicked( bool state )
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
+
+  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
@@ -133,6 +136,10 @@ MMFormComboboxBaseEditor {
     pair: root._fieldFeatureLayerPair
 
     onInvalidate: {
+      if ( root._fieldHasMixedValues )
+      {
+        return // ignore invalidate signal if value is MixedAttributeValue
+      }
       if ( root._fieldValueIsNull )
       {
         return // ignore invalidate signal if value is already NULL

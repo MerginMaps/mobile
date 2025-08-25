@@ -25,6 +25,14 @@ Item {
 
   signal longPressed( point p )
 
+  signal doubleClicked( point p )
+
+  signal wheelTurned( point p, double angle )
+
+  signal dragged( point oldPoint, point newPoint )
+
+  signal dragReleased( point p )
+
   // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
@@ -56,6 +64,16 @@ Item {
     jumpAnimator.enabled = true
     jumpAnimator.percentage = 100
     rendererPrivate.unfreeze('jumpTo')
+  }
+
+  function zoom( center, scale )
+  {
+    mapRenderer.zoom( center, scale )
+  }
+
+  function pan( oldPos, newPos )
+  {
+    mapRenderer.pan( oldPos, newPos )
   }
 
   Item {
@@ -182,7 +200,7 @@ Item {
             // do not emit clicked signal when zooming
             clickDifferentiatorTimer.ignoreNextTrigger = true
 
-            mapRenderer.zoom( Qt.point( mouse.x, mouse.y ), 0.4 )
+            mapRoot.doubleClicked( Qt.point( mouse.x, mouse.y ) )
           }
 
           clickDifferentiatorTimer.restart()
@@ -200,6 +218,8 @@ Item {
           // this was a pressAndHold or a drag release
 
           clickDifferentiatorTimer.ignoreNextTrigger = false
+
+          mapRoot.dragReleased( clickPosition )
         }
 
         previousPosition = null
@@ -220,12 +240,7 @@ Item {
       }
 
       onWheel: function ( wheel ) {
-        if ( wheel.angleDelta.y > 0 ) {
-          mapRenderer.zoom( Qt.point( wheel.x, wheel.y ), 0.67 )
-        }
-        else {
-          mapRenderer.zoom( Qt.point( wheel.x, wheel.y ), 1.5 )
-        }
+        mapRoot.wheelTurned( Qt.point( wheel.x, wheel.y), wheel.angleDelta.y )
       }
 
       // drag map canvas
@@ -242,7 +257,7 @@ Item {
         let reverted_x = previousPosition.x - ( mouse.x - previousPosition.x )
         let reverted_y = previousPosition.y - ( mouse.y - previousPosition.y )
 
-        mapRenderer.pan( previousPosition, Qt.point( reverted_x, reverted_y ) )
+        mapRoot.dragged( previousPosition, Qt.point( reverted_x, reverted_y ) )
 
         previousPosition = target
 

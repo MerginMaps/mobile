@@ -50,6 +50,9 @@ class TestUtilsFunctions: public QObject
     void testParsePositionUpdates();
     void testFormatDistanceInProjectUnit();
     void testFormatAreaInProjectUnit();
+    void testRelevantGeometryCenterToScreenCoordinates();
+    void testIsValidEmail();
+    void testSanitizeFileName();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

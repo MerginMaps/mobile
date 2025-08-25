@@ -183,10 +183,12 @@ Item {
     id: loadingSpinnerComponent
 
     Item {
-      width:listview.width
-      height: listview.height
+      width: listview.width
+      height: controllerModel.isLoading ? busyIndicator.height : root.spacing
+      visible: controllerModel.isLoading
 
       MMComponents.MMBusyIndicator {
+        id: busyIndicator
         anchors.centerIn: parent
         running: controllerModel.isLoading
       }
@@ -296,7 +298,7 @@ Item {
       __inputUtils.log(
             "Delete project",
             "Project " + __localProjectsManager.projectName( relatedProjectId ) + " deleted by " +
-            ( __merginApi.userAuth ? __merginApi.userAuth.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+            ( __merginApi.userInfo ? __merginApi.userInfo.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
 
       controllerModel.removeLocalProject( relatedProjectId )
 

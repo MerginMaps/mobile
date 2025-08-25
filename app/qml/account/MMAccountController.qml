@@ -37,6 +37,11 @@ Item {
 
     controller.inProgress = true;
     stackView.push( loginPageComp, {}, StackView.PushTransition )
+
+    if ( __merginApi.userAuth.isUsingSso() )
+    {
+      stackView.push( ssoPanel )
+    }
   }
 
   // Finish onboarding
@@ -70,7 +75,13 @@ Item {
       pending: stackView.pending
       height: root.height
       width: root.width
-      canSignUp:  (__merginApi.serverType === MM.MerginServerType.EE ) || ( __merginApi.serverType === MM.MerginServerType.SAAS )
+      canSignUp: {
+        if ( __merginApi.serverType === MM.MerginServerType.EE || __merginApi.serverType === MM.MerginServerType.SAAS ) {
+          return __merginApi.userSelfRegistrationEnabled
+        }
+        return false
+      }
+
       warningMsg: {
         if (__merginApi.apiVersionStatus === MM.MerginApiStatus.OK) {
           ""
@@ -86,9 +97,11 @@ Item {
         }
       }
 
-      onSignInClicked: function ( username, password ) {
+      supportsSso: __merginApi.apiSupportsSso
+
+      onSignInClicked: function ( login, password ) {
         stackView.pending = true
-        __merginApi.authorize(username, password)
+        __merginApi.authorize(login, password)
       }
 
       onBackClicked: {
@@ -112,12 +125,6 @@ Item {
       }
 
       onChangeServerClicked: function ( newServer ) {
-        // Ensure the newServer string ends with a '/'
-        // to format it as "https://my-server-app.com/"
-        if ( newServer && newServer.slice( -1 ) !== '/' ) {
-          newServer += '/';
-        }
-
         __merginApi.apiRoot = newServer
       }
 
@@ -125,6 +132,9 @@ Item {
         Qt.openUrlExternally(__merginApi.resetPasswordUrl());
       }
 
+      onContinueWithSsoClicked: {
+        stackView.push( ssoPanel )
+      }
     }
   }
 
@@ -152,16 +162,14 @@ Item {
         stackView.popOnePageOrClose()
       }
 
-      onSignUpClicked: function ( username, email, password, passwordConfirm, tocAccept, newsletterSubscribe ) {
+      onSignUpClicked: function ( email, password, tocAccept, newsletterSubscribe ) {
         if ( __merginApi.serverType !== MM.MerginServerType.SAAS ) {
           return; //should not happen
         }
         else {
           stackView.pending = true
-          __merginApi.registerUser( username,
-                                   email,
+          __merginApi.registerUser( email,
                                    password,
-                                   passwordConfirm,
                                    tocAccept )
 
           postRegisterData.wantNewsletter = newsletterSubscribe
@@ -189,6 +197,56 @@ Item {
               stackView.push( createWorkspaceComponent )
             }
           }
+        }
+      }
+    }
+  }
+
+  Component {
+    id: ssoPanel
+
+    MMSsoPage {
+
+      objectName: "ssoPanel"
+
+      onBackClicked: {
+        __merginApi.abortSsoFlow()
+        loadingDialog.close()
+        stackView.popOnePageOrClose()
+      }
+
+      onLoginWithPasswordClicked: {
+        __merginApi.abortSsoFlow()
+        loadingDialog.close()
+        stackView.popOnePageOrClose()
+      }
+
+      onSignInClicked: function( email ) {
+        loadingDialog.open()
+        __merginApi.requestSsoConnections(email)
+      }
+
+      Connections {
+        target: __merginApi
+        enabled: stackView.currentItem.objectName === "ssoPanel"
+
+        function onSsoConfigIsMultiTenant() {
+          loadingDialog.close()
+        }
+
+        function onUserInfoReplyFinished() {
+          loadingDialog.close()
+          if ( __merginApi.userInfo.hasInvitations ) {
+            controller.invitation = __merginApi.userInfo.invitations()[0]
+            stackView.push( acceptInvitationsPanelComponent )
+          } else {
+            controller.end()
+          }
+        }
+
+        function onNotifyError() {
+          loadingDialog.close()
+          focusOnBrowser = false
         }
       }
     }
@@ -225,6 +283,7 @@ Item {
       objectName: "acceptInvitationsPanel"
 
       invitation: controller.invitation
+      showCreate: !__merginApi.userAuth.isUsingSso()
 
       onJoinWorkspaceClicked: function (workspaceUuid) {
         __merginApi.processInvitation( workspaceUuid, true )

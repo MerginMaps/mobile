@@ -9,8 +9,10 @@
 
 import QtQuick
 import QtQuick.Shapes
+import QtMultimedia
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -47,6 +49,21 @@ Item {
     }
   }
 
+  Connections {
+    target: mapTool
+
+    function onFinalEmptyGeometry() {
+      __notificationModel.addError(
+        qsTr( "Geometry was removed to avoid overlaps with other features. Tap \"Edit Geometry\" to draw a new one." ),
+        MM.NotificationType.NoAction,
+        Number.MAX_SAFE_INTEGER)
+    }
+
+    function onFinalSingleGeometry() {
+      __notificationModel.addWarning( qsTr( "Geometry was adjusted to avoid overlaps with other features." ) )
+    }
+  }
+
   MM.RecordingMapTool {
     id: mapTool
 
@@ -57,8 +74,8 @@ Item {
     recordPoint: crosshair.recordPoint
 
     recordingType: MM.RecordingMapTool.Manual
-    recordingInterval: __appSettings.lineRecordingInterval
-    recordingIntervalType: __appSettings.intervalType
+    recordingInterval: AppSettings.lineRecordingInterval
+    recordingIntervalType: AppSettings.intervalType
 
     positionKit: __positionKit
     activeLayer: __activeLayer.vectorLayer
@@ -178,14 +195,20 @@ Item {
       MMToolbarButton {
         text: qsTr( "Undo" )
         iconSource: __style.undoIcon
-        onClicked: mapTool.undo()
+        onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+          mapTool.undo()
+        }
         enabled: mapTool.canUndo
       }
 
       MMToolbarButton {
         text: qsTr( "Remove" )
         iconSource: __style.minusIcon
-        onClicked: mapTool.removePoint()
+        onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+          mapTool.removePoint()
+        }
 
         enabled: {
            if ( mapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
@@ -201,6 +224,8 @@ Item {
         visible: mapTool.state === MM.RecordingMapTool.Grab
         iconSource: __style.addIcon
         onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
             mapTool.releaseVertex( crosshair.recordPoint )
           }
@@ -218,6 +243,8 @@ Item {
 
         iconSource: __style.addIcon
         onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+
           if ( mapTool.state === MM.RecordingMapTool.Grab ) {
             mapTool.releaseVertex( crosshair.recordPoint )
           }
@@ -233,6 +260,8 @@ Item {
         iconSource: __style.doneCircleIcon
         iconColor: __style.grassColor
         onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+
           if ( mapTool.hasValidGeometry() )
           {
             // If we currently grab a point
@@ -260,6 +289,8 @@ Item {
         iconSource: __style.doneCircleIcon;
         iconColor: __style.forestColor
         onClicked: {
+          if ( AppSettings.hapticsType !== AppSettings.Off ) root.triggerHaptics()
+
           if ( mapTool.state === MM.RecordingMapTool.Grab )
           {
             // editing existing point geometry
@@ -337,12 +368,32 @@ Item {
     }
   }
 
+  SoundEffect {
+    id: hapticSound
+    source: __style.hapticSound
+  }
+
   Connections {
     target: map
     function onClicked( point ) {
       let screenPoint = Qt.point( point.x, point.y )
 
       mapTool.lookForVertex( screenPoint )
+    }
+  }
+
+  function triggerHaptics() {
+    if ( AppSettings.hapticsType === AppSettings.HapticsVibration || AppSettings.hapticsType === AppSettings.HapticsVibrationSound ) {
+      if ( __androidUtils.isAndroid ) {
+        __androidUtils.vibrate()
+      }
+      else if ( __iosUtils.isIos ) {
+        __iosUtils.vibrate()
+      }
+    }
+
+    if ( AppSettings.hapticsType === AppSettings.HapticsSound || AppSettings.hapticsType === AppSettings.HapticsVibrationSound ) {
+      hapticSound.play()
     }
   }
 

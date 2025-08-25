@@ -83,7 +83,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
 
   bool syncHasStarted = false;
 
-  if ( ProjectStatus::hasLocalChanges( project ) )
+  if ( ProjectStatus::hasLocalChanges( project, mMerginApi->supportsSelectiveSync() ) )
   {
     syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
   }
@@ -132,7 +132,7 @@ void SynchronizationManager::migrateProjectToMergin( const QString &projectName 
 
     if ( mMerginApi->serverType() == MerginServerType::OLD )
     {
-      hasStarted = mMerginApi->createProject( mMerginApi->userAuth()->username(), projectName );
+      hasStarted = mMerginApi->createProject( mMerginApi->userInfo()->username(), projectName );
     }
     else
     {

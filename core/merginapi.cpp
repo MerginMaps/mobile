@@ -19,6 +19,12 @@
 #include <QUuid>
 #include <QtMath>
 #include <QElapsedTimer>
+#include <QDesktopServices>
+#ifdef MOBILE_OS
+#include <QOAuthUriSchemeReplyHandler>
+#else
+#include <QOAuthHttpServerReplyHandler>
+#endif
 
 #include "projectchecksumcache.h"
 #include "coreutils.h"
@@ -32,14 +38,21 @@
 const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" );
 const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
-const QString MerginApi::sMarketingPageRoot = QStringLiteral( "https://merginmaps.com/" );
-const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com/" );
+const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com" );
+const QString MerginApi::sDefaultReportLogUrl =  QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
-const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on Mergin server
+const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
-
+#ifdef MOBILE_OS
+const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
+#else
+// We use QHostAddress::Null so that LocalHost is used and if that fails try LocalHostIPv6
+// see https://doc.qt.io/qt-6/qoauthhttpserverreplyhandler.html#listen
+const QHostAddress MerginApi::OAUTH2_LISTEN_ADDRESS = QHostAddress::Null;
+constexpr int MerginApi::OAUTH2_LISTEN_PORT = 10042;
+#endif
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
@@ -116,13 +129,13 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
 void MerginApi::loadCache()
 {
   QSettings settings;
-  mApiRoot = settings.value( QStringLiteral( "Input/apiRoot" ) ).toString();
+  setApiRoot( settings.value( QStringLiteral( "Input/apiRoot" ) ).toString() );
   int serverType = settings.value( QStringLiteral( "Input/serverType" ) ).toInt();
 
   mServerType = static_cast<MerginServerType::ServerType>( serverType );
 
-  mUserAuth->loadAuthData();
-  mUserInfo->loadWorkspacesData();
+  mUserAuth->loadData();
+  mUserInfo->loadData();
 }
 
 MerginUserAuth *MerginApi::userAuth() const
@@ -305,15 +318,17 @@ void MerginApi::removeProjectsTempFolder( const QString &projectNamespace, const
   QDir( path ).removeRecursively();
 }
 
-QNetworkRequest MerginApi::getDefaultRequest( bool withAuth )
+QNetworkRequest MerginApi::getDefaultRequest( const bool withAuth ) const
 {
   QNetworkRequest request;
-  QString info = CoreUtils::appInfo();
+  const QString info = CoreUtils::appInfo();
   request.setRawHeader( "User-Agent", QByteArray( info.toUtf8() ) );
-  QString deviceId = CoreUtils::deviceUuid();
+  const QString deviceId = CoreUtils::deviceUuid();
   request.setRawHeader( "X-Device-Id", QByteArray( deviceId.toUtf8() ) );
   if ( withAuth )
+  {
     request.setRawHeader( "Authorization", QByteArray( "Bearer " + mUserAuth->authToken() ) );
+  }
 
   return request;
 }
@@ -592,7 +607,7 @@ void MerginApi::pushStart( const QString &projectFullName, const QByteArray &jso
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/%1" ).arg( projectFullName ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/%1" ).arg( projectFullName ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -656,7 +671,7 @@ void MerginApi::cancelPush( const QString &projectFullName )
 void MerginApi::sendPushCancelRequest( const QString &projectFullName, const QString &transactionUUID )
 {
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/cancel/%1" ).arg( transactionUUID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/cancel/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -709,7 +724,7 @@ void MerginApi::pushFinish( const QString &projectFullName, const QString &trans
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "v1/project/push/finish/%1" ).arg( transactionUUID ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/finish/%1" ).arg( transactionUUID ) );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
@@ -799,7 +814,7 @@ void MerginApi::authorize( const QString &login, const QString &password )
   mUserAuth->blockSignals( false );
 
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/login" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/auth/login" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -816,52 +831,150 @@ void MerginApi::authorize( const QString &login, const QString &password )
   CoreUtils::log( "auth", QStringLiteral( "Requesting authorization: " ) + url.toString() );
 }
 
-void MerginApi::registerUser( const QString &username,
-                              const QString &email,
+void MerginApi::requestSsoConfig()
+{
+  if ( !mApiSupportsSso )
+  {
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "User offline or requested sso auth for server that does not support sso!" ) );
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( false );
+  const QUrl url( mApiRoot + QStringLiteral( "/v2/sso/config" ) );
+  request.setUrl( url );
+
+  const QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConfigReplyFinished );
+  CoreUtils::log( "SSO", QStringLiteral( "Requesting sso configuration: " ) + url.toString() );
+}
+
+void MerginApi::ssoConfigReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      const QString clientId = doc.object().value( QStringLiteral( "client_id" ) ).toString();
+      const QString flowType = doc.object().value( QStringLiteral( "tenant_flow_type" ) ).toString();
+
+      if ( flowType == QLatin1String( "multi" ) )
+      {
+        // Multi tenant server, ask for email
+        CoreUtils::log( "SSO", QStringLiteral( "Configuration retrieved, server is multi tenant" ) );
+        emit ssoConfigIsMultiTenant();
+      }
+      else if ( !clientId.isEmpty() )
+      {
+        // Single tenant, proceed with oauth2 flow
+        CoreUtils::log( "SSO", QStringLiteral( "Configuration retrieved, server is single tenant" ) );
+        startSsoFlow( clientId );
+      }
+      else
+      {
+        CoreUtils::log( "SSO", QStringLiteral( "Server is single tenant but did not return a clientId, not good!" ) );
+        emit notifyError( tr( "There is a problem with the server's SSO configuration. Contact the administrator." ) );
+      }
+    }
+  }
+  else
+  {
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    emit notifyError( tr( "Error getting the SSO configuration from the server" ) );
+  }
+
+  r->deleteLater();
+}
+
+void MerginApi::requestSsoConnections( const QString &email )
+{
+  if ( !mApiSupportsSso )
+  {
+    CoreUtils::log( QStringLiteral( "SSO Auth" ), QStringLiteral( "User offline or requested sso auth for server that does not support sso!" ) );
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest( false );
+  QUrl url( mApiRoot + QStringLiteral( "/v2/sso/connections" ) );
+  QUrlQuery query;
+  query.addQueryItem( QStringLiteral( "email" ), email.toUtf8().toPercentEncoding() );
+  url.setQuery( query );
+  request.setUrl( url );
+
+  const QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::ssoConnectionsReplyFinished );
+  CoreUtils::log( "SSO", QStringLiteral( "Requesting available connections: " ) + url.toString() );
+}
+
+void MerginApi::ssoConnectionsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    if ( doc.isObject() )
+    {
+      const QString clientId = doc.object().value( QStringLiteral( "id" ) ).toString();
+
+      if ( clientId.isEmpty() )
+      {
+        // no connection found for requested domain
+        // should not happen, as the server would return 404 in that case
+        CoreUtils::log( "SSO", QStringLiteral( "No Connections available for the specified domain" ) );
+        emit notifyError( tr( "SSO is not supported for the specified domain" ) );
+      }
+      else
+      {
+        startSsoFlow( clientId );
+      }
+    }
+  }
+  else
+  {
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    CoreUtils::log( "SSO", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+    const int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( statusCode == 404 )
+      emit notifyError( tr( "SSO is not supported for the specified domain" ) );
+    else
+      emit notifyError( tr( "Error getting the SSO configuration from the server" ) );
+  }
+
+  r->deleteLater();
+}
+
+void MerginApi::registerUser( const QString &email,
                               const QString &password,
-                              const QString &confirmPassword,
                               bool acceptedTOC )
 {
   // Some very basic checks, so we do not validate everything
-  if ( username.isEmpty() || username.length() < 4 )
+  if ( !CoreUtils::isValidEmail( email ) )
   {
-    QString msg = tr( "Username must have at least 4 characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
-  if ( !CoreUtils::isValidName( username ) )
-  {
-    QString msg = tr( "Username contains invalid characters" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::USERNAME );
-    return;
-  }
-
-  if ( email.isEmpty() || !email.contains( '@' ) || !email.contains( '.' ) )
-  {
-    QString msg = tr( "Please enter a valid email" );
+    const QString msg = tr( "Please enter a valid email" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
     return;
   }
 
   if ( password.isEmpty() || password.length() < 8 )
   {
-    QString msg = tr( "Password not strong enough. It must"
-                      "%1 be at least 8 characters long"
-                      "%1 contain lowercase characters"
-                      "%1 contain uppercase characters"
-                      "%1 contain digits or special characters" )
-                  .arg( "<br />  -" );
+    const QString msg = tr( "%1%3 Password must be at least 8 characters long and include:"
+                            "<ul type=\"disc\">"
+                            "%3 Lowercase characters (a-z)%4"
+                            "%3 Uppercase characters (A-Z)%4"
+                            "%3 At least one digit (0–9) or special character%4"
+                            "%2%4%2" )
+                        .arg( "<ul>", "</ul>", "<li>", "</li>" );
     emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
     return;
 
-  }
-
-  if ( confirmPassword != password )
-  {
-    QString msg = tr( "Passwords do not match" );
-    emit registrationFailed( msg, RegistrationError::RegistrationErrorType::CONFIRM_PASSWORD );
-    return;
   }
 
   if ( !acceptedTOC )
@@ -873,21 +986,20 @@ void MerginApi::registerUser( const QString &username,
 
   // request
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/auth/register" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/auth/register" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
 
   QJsonDocument jsonDoc;
   QJsonObject jsonObject;
-  jsonObject.insert( QStringLiteral( "username" ), username );
   jsonObject.insert( QStringLiteral( "email" ), email );
   jsonObject.insert( QStringLiteral( "password" ), password );
   jsonObject.insert( QStringLiteral( "api_key" ), getApiKey( mApiRoot ) );
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( username, password ); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( email, password ); } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -910,7 +1022,7 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   }
   // request
   QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "v1/post-register" );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -937,14 +1049,19 @@ void MerginApi::getUserInfo()
   QString urlString;
   if ( mServerType == MerginServerType::OLD )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/%1" ).arg( mUserAuth->username() );
+    if ( mUserAuth->authMethod() == MerginUserAuth::SSO )
+    {
+      CoreUtils::log( QStringLiteral( "Server API" ), QStringLiteral( "SSO user info is not available on old servers" ) );
+      return;
+    }
+    urlString = mApiRoot + QStringLiteral( "/v1/user/%1" ).arg( mUserAuth->login() );
   }
   else
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/profile" );
+    urlString = mApiRoot + QStringLiteral( "/v1/user/profile" );
   }
 
-  QNetworkRequest request = getDefaultRequest();
+  QNetworkRequest request = getDefaultRequest( true );
   QUrl url( urlString );
   request.setUrl( url );
 
@@ -970,7 +1087,7 @@ void MerginApi::getWorkspaceInfo()
     return;
   }
 
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1" ).arg( mUserInfo->activeWorkspaceId() );
   QNetworkRequest request = getDefaultRequest();
   QUrl url( urlString );
   request.setUrl( url );
@@ -991,11 +1108,17 @@ void MerginApi::getServiceInfo()
 
   if ( mServerType == MerginServerType::SAAS )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
+    if ( mUserInfo->activeWorkspaceId() < 0 )
+    {
+      CoreUtils::log( QStringLiteral( "Service Info" ), QStringLiteral( "Skipped calling GET service info, no active workspace detected" ) );
+      return;
+    }
+
+    urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
   }
   else if ( mServerType == MerginServerType::OLD )
   {
-    urlString = mApiRoot + QStringLiteral( "v1/user/service" );
+    urlString = mApiRoot + QStringLiteral( "/v1/user/service" );
   }
   else
   {
@@ -1057,19 +1180,29 @@ void MerginApi::getServiceInfoReplyFinished()
 
 void MerginApi::clearAuth()
 {
+  mUserAuth->blockSignals( true );
+  mUserInfo->blockSignals( true );
+  mWorkspaceInfo->blockSignals( true );
+  mSubscriptionInfo->blockSignals( true );
+
   mUserAuth->clear();
   mUserInfo->clear();
-  mUserInfo->clearCachedWorkspacesInfo();
   mWorkspaceInfo->clear();
   mSubscriptionInfo->clear();
-}
 
-void MerginApi::resetApiRoot()
-{
-  QSettings settings;
-  settings.beginGroup( QStringLiteral( "Input/" ) );
-  setApiRoot( defaultApiRoot() );
-  settings.endGroup();
+  mUserAuth->blockSignals( false );
+  mUserInfo->blockSignals( false );
+  mWorkspaceInfo->blockSignals( false );
+  mSubscriptionInfo->blockSignals( false );
+
+  emit subscriptionInfoChanged();
+  emit workspaceInfoChanged();
+  emit mUserInfo->activeWorkspaceChanged();
+  emit mUserInfo->hasWorkspacesChanged();
+  emit mUserInfo->userInfoChanged();
+  emit authChanged();
+
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Cleared auth and user data cache" ) );
 }
 
 QString MerginApi::resetPasswordUrl()
@@ -1143,8 +1276,7 @@ void MerginApi::saveAuthData()
   settings.setValue( "apiRoot", mApiRoot );
   settings.endGroup();
 
-  mUserAuth->saveAuthData();
-  mUserInfo->clear();
+  mUserAuth->saveData();
 }
 
 void MerginApi::createProjectFinished()
@@ -1185,7 +1317,9 @@ void MerginApi::createProjectFinished()
     QString code = extractServerErrorCode( data );
     QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
+    bool userMissingPermissions = ( httpCode == 403 );
 
     CoreUtils::log( "create " + projectFullName, message );
 
@@ -1199,9 +1333,15 @@ void MerginApi::createProjectFinished()
         maxProjects = maxProjectVariant.toInt();
       emit projectLimitReached( maxProjects, serverMsg );
     }
+    else if ( userMissingPermissions )
+    {
+      emit notifyError( tr( "You don't have permission to create new projects in this workspace." ) );
+      emit projectCreationFailed();
+    }
     else
     {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
+      emit projectCreationFailed();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
     }
   }
@@ -1251,7 +1391,7 @@ void MerginApi::authorizeFinished()
     }
     else
     {
-      // keep username and password, but clear token
+      // keep login and password, but clear token
       // this is problem with internet connection or server
       // so do not force user to input login credentials again
       mUserAuth->clearTokenData();
@@ -1269,21 +1409,21 @@ void MerginApi::authorizeFinished()
 
     if ( status == 401 )
     {
-      // OK, we have INVALID username or password or
+      // OK, we have INVALID login or password or
       // our user got blocked on the server by admin or owner
       // lets show error to user and let him try different credentials
       emit authFailed();
       emit notifyError( serverMsg );
 
       mUserAuth->blockSignals( true );
-      mUserAuth->setUsername( QString() );
+      mUserAuth->setLogin( QString() );
       mUserAuth->setPassword( QString() );
       mUserAuth->blockSignals( false );
 
     }
     else
     {
-      // keep username and password
+      // keep login and password
       // this is problem with internet connection or server
       // so do not force user to input login credentials again
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: authorize" ) );
@@ -1300,7 +1440,7 @@ void MerginApi::authorizeFinished()
   r->deleteLater();
 }
 
-void MerginApi::registrationFinished( const QString &username, const QString &password )
+void MerginApi::registrationFinished( const QString &login, const QString &password )
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -1311,32 +1451,61 @@ void MerginApi::registrationFinished( const QString &username, const QString &pa
     QString msg = tr( "Registration successful" );
     emit notifySuccess( msg );
 
-    if ( !username.isEmpty() && !password.isEmpty() ) // log in immediately
-      authorize( username, password );
+    if ( !login.isEmpty() && !password.isEmpty() ) // log in immediately
+      authorize( login, password );
 
     emit registrationSucceeded();
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    QString serverMsg = extractServerErrorMsg( data );
     CoreUtils::log( "register", QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
-    QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
-    int status = statusCode.toInt();
+    const QVariant statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+    const int status = statusCode.toInt();
     if ( status == 401 || status == 400 )
     {
-      emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
-      emit notifyError( serverMsg );
+      if ( serverErrorCode == "InvalidUsername" || serverErrorCode == "InvalidEmail" )
+      {
+        const QString msg = tr( "Please enter a valid email" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
+        emit notifyError( tr( "Registration failed" ) );
+      }
+      else if ( serverErrorCode == "ExistingEmail" )
+      {
+        const QString msg = tr( "This email address is already registered" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::EMAIL );
+        emit notifyError( tr( "Registration failed" ) );
+      }
+      else if ( serverErrorCode == "InvalidPassword" )
+      {
+        const QString msg = tr( "%1%3 Password must be at least 8 characters long and include:"
+                                "<ul type=\"disc\">"
+                                "%3 Lowercase characters (a-z)%4"
+                                "%3 Uppercase characters (A-Z)%4"
+                                "%3 At least one digit (0–9) or special character%4"
+                                "%2%4%2" )
+                            .arg( "<ul>", "</ul>", "<li>", "</li>" );
+        emit registrationFailed( msg, RegistrationError::RegistrationErrorType::PASSWORD );
+        emit notifyError( tr( "Registration failed" ) );
+      }
+      else
+      {
+        emit registrationFailed( serverMsg, RegistrationError::RegistrationErrorType::OTHER );
+        emit notifyError( serverMsg );
+      }
     }
     else if ( status == 404 )
     {
       // the self-registration is not allowed on the server
-      QString msg = tr( "New registrations are not allowed on the selected server. Please check with your administrator." );
+      const QString msg = tr( "New registrations are not allowed on the selected server. Please check with your administrator." );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
       emit notifyError( msg );
     }
     else
     {
-      QString msg = QStringLiteral( "Mergin API error: register" );
+      const QString msg = QStringLiteral( "Mergin API error: register" );
       emit registrationFailed( msg, RegistrationError::RegistrationErrorType::OTHER );
       emit networkErrorOccurred( serverMsg, msg );
     }
@@ -1453,12 +1622,22 @@ bool MerginApi::validateAuth()
     return false;
   }
 
-  if ( mUserAuth->authToken().isEmpty() || mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
+  if ( !mUserAuth->hasValidToken() )
   {
-    authorize( mUserAuth->username(), mUserAuth->password() );
     CoreUtils::log( QStringLiteral( "MerginApi" ), QStringLiteral( "Requesting authorization because of missing or expired token." ) );
-    mAuthLoopEvent.exec();
+
+    switch ( mUserAuth->authMethod() )
+    {
+      case MerginUserAuth::AuthMethod::SSO:
+        // we need to request auth again
+        emit ssoLoginExpired();
+        return false;
+      case MerginUserAuth::AuthMethod::Password:
+        refreshAuthToken();
+        return true;
+    }
   }
+
   return true;
 }
 
@@ -1617,14 +1796,18 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir )
+bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
 {
   MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
   QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
 
-  MerginConfig config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  MerginConfig config;
+  if ( supportsSelectiveSync )
+  {
+    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+  }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir );
+  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -1671,7 +1854,7 @@ void MerginApi::migrateProjectToMergin( const QString &projectName, const QStrin
   CoreUtils::log( "migrate project", projectName );
   if ( projectNamespace.isEmpty() )
   {
-    createProject( mUserAuth->username(), projectName );
+    createProject( mUserInfo->username(), projectName );
   }
   else
   {
@@ -1715,6 +1898,12 @@ void MerginApi::setApiRoot( const QString &apiRoot )
   else
   {
     newApiRoot = apiRoot;
+  }
+
+  // Api root should not include the trailing slash!
+  while ( newApiRoot.endsWith( "/" ) )
+  {
+    newApiRoot.chop( 1 );
   }
 
   if ( newApiRoot != mApiRoot )
@@ -1887,7 +2076,7 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
 
   // add conflict files to project dir so they can be synced
-  QString conflictfile = CoreUtils::findUniquePath( CoreUtils::generateEditConflictFileName( dest, mUserAuth->username(), info.localVersion ) );
+  QString conflictfile = CoreUtils::findUniquePath( CoreUtils::generateEditConflictFileName( dest, mUserInfo->username(), info.localVersion ) );
 
   createPathIfNotExists( src );
   createPathIfNotExists( dest );
@@ -1942,7 +2131,7 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
     // let's put them into a conflict file and use the server version
     hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-    QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserAuth->username(), info.localVersion ) );
+    QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserInfo->username(), info.localVersion ) );
     if ( !QFile::rename( dest, newDest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
@@ -1997,7 +2186,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         // move local file to conflict file
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
-        QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserAuth->username(), info.localVersion ) );
+        QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserInfo->username(), info.localVersion ) );
         if ( !QFile::rename( origPath, newPath ) )
         {
           CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
@@ -2917,14 +3106,26 @@ void MerginApi::getUserInfoFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "user info", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QJsonObject docObj = doc.object();
+      const QJsonObject docObj = doc.object();
       mUserInfo->setFromJson( docObj );
       if ( mServerType == MerginServerType::OLD )
       {
         mWorkspaceInfo->setFromJson( docObj );
+      }
+
+      switch ( mUserAuth->authMethod() )
+      {
+        case MerginUserAuth::AuthMethod::SSO:
+          mUserAuth->blockSignals( true );
+          mUserAuth->setLogin( mUserInfo->email() );
+          mUserAuth->saveData();
+          mUserAuth->blockSignals( false );
+          break;
+        case MerginUserAuth::AuthMethod::Password:
+          break;
       }
     }
   }
@@ -2933,7 +3134,6 @@ void MerginApi::getUserInfoFinished()
     QString serverMsg = extractServerErrorMsg( r->readAll() );
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getUserInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "user info", QStringLiteral( "FAILED - %1" ).arg( message ) );
-    mUserInfo->clear();
 
     // This is an ugly fix for #3261: if the user was logged in, but the token was already expired
     // (e.g. when starting the app the next day), the flow of network requests and handlers gets
@@ -2991,17 +3191,33 @@ void MerginApi::getWorkspaceInfoReplyFinished()
 bool MerginApi::hasLocalChanges(
   const QList<MerginFile> &oldServerFiles,
   const QList<MerginFile> &localFiles,
-  const QString &projectDir
+  const QString &projectDir,
+  const MerginConfig config
 )
 {
-  if ( localFiles.count() != oldServerFiles.count() )
+  QList<MerginFile> resolvedOldServerFiles;
+
+  if ( config.isValid ) // if a config was set, selective sync is supported
+  {
+    for ( const MerginFile &file : oldServerFiles )
+    {
+      if ( !excludeFromSync( file.path, config ) )
+        resolvedOldServerFiles.append( file );
+    }
+  }
+  else
+  {
+    resolvedOldServerFiles = oldServerFiles;
+  }
+
+  if ( localFiles.count() != resolvedOldServerFiles.count() )
   {
     return true;
   }
 
   QHash<QString, MerginFile> oldServerFilesMap;
 
-  for ( const MerginFile &file : oldServerFiles )
+  for ( const MerginFile &file : resolvedOldServerFiles )
   {
     oldServerFilesMap.insert( file.path, file );
   }
@@ -3184,19 +3400,16 @@ ProjectDiff MerginApi::compareProjectFiles(
         // L-D
         if ( allowConfig )
         {
-          bool shouldBeExcludedFromSync = MerginApi::excludeFromSync( file.path, config );
+          bool shouldBeExcludedFromSync = excludeFromSync( file.path, config );
           if ( shouldBeExcludedFromSync )
           {
             continue;
           }
 
           // check if we should download missing files that were previously ignored (e.g. selective sync has been disabled)
-          bool previouslyIgnoredButShouldDownload = \
-            config.downloadMissingFiles &&
-            lastSyncConfig.isValid &&
-            MerginApi::excludeFromSync( file.path, lastSyncConfig );
-
-          if ( previouslyIgnoredButShouldDownload )
+          if ( config.downloadMissingFiles &&
+               lastSyncConfig.isValid &&
+               excludeFromSync( file.path, lastSyncConfig ) )
           {
             diff.remoteAdded << file.path;
             continue;
@@ -3316,18 +3529,24 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
 
 void MerginApi::refreshAuthToken()
 {
-  if ( !mUserAuth->hasAuthData() ||
-       mUserAuth->authToken().isEmpty() )
+  switch ( mUserAuth->authMethod() )
   {
-    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
-    return;
-  }
+    case MerginUserAuth::AuthMethod::SSO:
+      // refresh tokens not implemented yet
+      return;
+    case MerginUserAuth::AuthMethod::Password:
+      if ( !mUserAuth->hasAuthData() )
+      {
+        CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
+        return;
+      }
 
-  if ( mUserAuth->tokenExpiration() < QDateTime::currentDateTimeUtc() )
-  {
-    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired, requesting new one" ) );
-    authorize( mUserAuth->username(), mUserAuth->password() );
-    mAuthLoopEvent.exec();
+      if ( !mUserAuth->hasValidToken() )
+      {
+        CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Token has expired or is empty, requesting new one" ) );
+        authorize( mUserAuth->login(), mUserAuth->password() );
+        mAuthLoopEvent.exec();
+      }
   }
 }
 
@@ -3540,7 +3759,7 @@ void MerginApi::deleteAccount()
   request.setUrl( url );
   QNetworkReply *reply = mManager->deleteResource( request );
   connect( reply, &QNetworkReply::finished, this, [this]() { this->deleteAccountFinished();} );
-  CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
+  CoreUtils::log( "delete account " + mUserInfo->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
 }
 
 void MerginApi::deleteAccountFinished()
@@ -3550,7 +3769,7 @@ void MerginApi::deleteAccountFinished()
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "Success" ) );
+    CoreUtils::log( "delete account " + mUserInfo->username(), QStringLiteral( "Success" ) );
 
     // remove all local projects from the device
     LocalProjectsList projects = mLocalProjects.projects();
@@ -3567,7 +3786,7 @@ void MerginApi::deleteAccountFinished()
   {
     int statusCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     QString serverMsg = extractServerErrorMsg( r->readAll() );
-    CoreUtils::log( "delete account " + mUserAuth->username(), QStringLiteral( "FAILED - %1 %2. %3" ).arg( statusCode ).arg( r->errorString() ).arg( serverMsg ) );
+    CoreUtils::log( "delete account " + mUserInfo->username(), QStringLiteral( "FAILED - %1 %2. %3" ).arg( statusCode ).arg( r->errorString() ).arg( serverMsg ) );
     if ( statusCode == 422 )
     {
       emit userIsAnOrgOwnerError();
@@ -3609,6 +3828,7 @@ void MerginApi::getServerConfigReplyFinished()
     {
       QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
       QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
       int major = -1;
       int minor = -1;
       bool validVersion = parseVersion( apiVersion, major, minor );
@@ -3643,11 +3863,30 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
+      if ( ( major >= 2025 && minor >= 4 ) && diagnosticUrl.isEmpty() )
+      {
+        mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
+      }
+      else if ( !diagnosticUrl.isEmpty() )
+      {
+        mServerDiagnosticLogsUrl = diagnosticUrl;
+      }
+      else
+      {
+        mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
+      }
+
       // will be dropped support for old servers (mostly CE servers without workspaces)
       if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
+
+      const bool ssoEnabled = doc.object().value( QStringLiteral( "sso_enabled" ) ).toBool( false );
+      setApiSupportsSso( ssoEnabled );
+
+      const bool userSelfRegistrationEnabled = doc.object().value( QStringLiteral( "user_self_registration" ) ).toBool( false );
+      setUserSelfRegistrationEnabled( userSelfRegistrationEnabled );
     }
   }
   else
@@ -3674,6 +3913,12 @@ MerginServerType::ServerType MerginApi::serverType() const
 {
   return mServerType;
 }
+
+QString MerginApi::serverDiagnosticLogsUrl() const
+{
+  return mServerDiagnosticLogsUrl;
+}
+
 
 void MerginApi::setServerType( const MerginServerType::ServerType &serverType )
 {
@@ -3730,7 +3975,8 @@ void MerginApi::listWorkspacesReplyFinished()
         workspaces.insert( ws.value( QStringLiteral( "id" ) ).toInt(), ws.value( QStringLiteral( "name" ) ).toString() );
       }
 
-      mUserInfo->setWorkspaces( workspaces );
+      mUserInfo->updateWorkspacesList( workspaces );
+
       emit listWorkspacesFinished( workspaces );
     }
     else
@@ -3814,7 +4060,7 @@ void MerginApi::processInvitation( const QString &uuid, bool accept )
   }
 
   QNetworkRequest request = getDefaultRequest( true );
-  QString urlString = mApiRoot + QStringLiteral( "v1/workspace/invitation/%1" ).arg( uuid );
+  QString urlString = mApiRoot + QStringLiteral( "/v1/workspace/invitation/%1" ).arg( uuid );
   QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
@@ -3896,6 +4142,7 @@ bool MerginApi::createWorkspace( const QString &workspaceName )
 
 void MerginApi::signOut()
 {
+  CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "User about to sign out" ) );
   clearAuth();
 }
 
@@ -3969,9 +4216,11 @@ void MerginApi::reloadProjectRole( const QString &projectFullName )
   if ( projectFullName.isEmpty() )
     return;
 
-  QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->isLoggedIn() ); //withAuth depends on whether user is logged in or not
+  QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->hasAuthData() );
   if ( !reply )
     return;
+
+  CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Requesting metadata update for project - %1" ).arg( projectFullName ) );
 
   reply->request().setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::reloadProjectRoleReplyFinished );
@@ -3991,15 +4240,20 @@ void MerginApi::reloadProjectRoleReplyFinished()
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
     QString role = serverProject.role;
 
+    CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Success, project role %1, cached role %2" ).arg( role, cachedRole ) );
+
     if ( role != cachedRole )
     {
       if ( updateCachedProjectRole( projectFullName, role ) )
+      {
         emit projectRoleUpdated( projectFullName, role );
+        CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Project role updated to %1" ).arg( role ) );
+      }
     }
   }
   else
   {
-    CoreUtils::log( "metadata", QString( "Failed to update cached role for project %1" ).arg( projectFullName ) );
+    CoreUtils::log( QStringLiteral( "Project metadata" ), QStringLiteral( "Request failed, the project is not available, you are offline or missing auth" ) );
   }
 
   r->deleteLater();
@@ -4018,6 +4272,85 @@ QString MerginApi::getCachedProjectRole( const QString &projectFullName ) const
   MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
 
   return cachedProjectMetadata.role;
+}
+
+void MerginApi::startSsoFlow( const QString &clientId )
+{
+  CoreUtils::log( "SSO", QStringLiteral( "Starting SSO flow for clientId: %1" ).arg( clientId ) );
+  mOauth2Flow.setAuthorizationUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/authorize" ) ) );
+  // TODO Qt 6.9: use setTokenUrl() in the abstract parent class instead.
+  mOauth2Flow.setAccessTokenUrl( QUrl( mApiRoot + QStringLiteral( "/v2/sso/token" ) ) );
+  mOauth2Flow.setClientIdentifier( clientId );
+  mOauth2Flow.setScope( QString() );
+
+  if ( !mOauth2ReplyHandler )
+  {
+#ifdef MOBILE_OS
+    mOauth2ReplyHandler = new QOAuthUriSchemeReplyHandler( CALLBACK_URL, &mOauth2Flow );
+#else
+    mOauth2ReplyHandler = new QOAuthHttpServerReplyHandler( OAUTH2_LISTEN_ADDRESS, OAUTH2_LISTEN_PORT, &mOauth2Flow );
+    const QString msg = tr( "You can now close this page and return to Mergin Maps" );
+    mOauth2ReplyHandler->setCallbackText( msg );
+#endif
+
+    mOauth2Flow.setReplyHandler( mOauth2ReplyHandler );
+
+    connect( &mOauth2Flow, &QAbstractOAuth::authorizeWithBrowser, this, [this]( const QUrl & url )
+    {
+      CoreUtils::log( "SSO", QStringLiteral( "Opening browser to authorize: %1" ).arg( url.toString() ) );
+      QDesktopServices::openUrl( url );
+    } );
+
+    connect( &mOauth2Flow, &QAbstractOAuth::granted, this, [this]
+    {
+      CoreUtils::log( "SSO", QStringLiteral( "Successfully authorized, token expires at: %1" ).arg( mOauth2Flow.expirationAt().toString() ) );
+      mUserAuth->setFromSso( mOauth2Flow.token(), mOauth2Flow.expirationAt() );
+      mOauth2ReplyHandler->close();
+      getUserInfo();
+    } );
+
+    connect( &mOauth2Flow, &QAbstractOAuth2::error, this, [this]( const QString & error, const QString & errorDescription, const QUrl & uri )
+    {
+      Q_UNUSED( uri )
+      CoreUtils::log( "SSO", QStringLiteral( "OAuth2 error %1: %2" ).arg( error, errorDescription ) );
+      mOauth2ReplyHandler->close();
+      emit authFailed();
+      emit notifyError( tr( "SSO authorization failed" ) );
+    } );
+  }
+
+  if ( !mOauth2ReplyHandler->isListening() )
+  {
+#ifdef MOBILE_OS
+    mOauth2ReplyHandler->listen();
+#else
+    mOauth2ReplyHandler->listen( OAUTH2_LISTEN_ADDRESS, OAUTH2_LISTEN_PORT );
+#endif
+  }
+
+  if ( mOauth2ReplyHandler->isListening() )
+  {
+    // Initiate the authorization
+#ifdef MOBILE_OS
+    CoreUtils::log( "SSO", QStringLiteral( "Listening for callback" ) );
+#else
+    CoreUtils::log( "SSO", QStringLiteral( "Listening for callback on port: %1" ).arg( mOauth2ReplyHandler->port() ) );
+#endif
+    mOauth2Flow.grant();
+  }
+  else
+  {
+    CoreUtils::log( "SSO", QStringLiteral( "Could not start listening for callback" ) );
+    emit authFailed();
+    emit notifyError( tr( "SSO authorization failed" ) );
+  }
+}
+
+void MerginApi::abortSsoFlow()
+{
+  CoreUtils::log( "SSO", QStringLiteral( "SSO flow aborted" ) );
+  if ( mOauth2ReplyHandler && mOauth2ReplyHandler->isListening() )
+    mOauth2ReplyHandler->close();
 }
 
 bool MerginApi::isRetryableNetworkError( QNetworkReply *reply )
@@ -4050,4 +4383,32 @@ void MerginApi::setNetworkManager( QNetworkAccessManager *manager )
   mManager = manager;
 
   emit networkManagerChanged();
+}
+
+bool MerginApi::apiSupportsSso() const
+{
+  return mApiSupportsSso;
+}
+
+void MerginApi::setApiSupportsSso( const bool ssoSupported )
+{
+  if ( mApiSupportsSso == ssoSupported )
+    return;
+
+  mApiSupportsSso = ssoSupported;
+  emit apiSupportsSsoChanged();
+}
+
+bool MerginApi::userSelfRegistrationEnabled() const
+{
+  return mUserSelfRegistrationEnabled;
+}
+
+void MerginApi::setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled )
+{
+  if ( mUserSelfRegistrationEnabled == userSelfRegistrationEnabled )
+    return;
+
+  mUserSelfRegistrationEnabled = userSelfRegistrationEnabled;
+  emit userSelfRegistrationEnabledChanged();
 }

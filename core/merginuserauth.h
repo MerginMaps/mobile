@@ -15,25 +15,29 @@
 #include <QSettings>
 #include <QJsonObject>
 
-#include "credentialstore.h"
-#include "coreutils.h"
+class CredentialStore;
 
 class MerginUserAuth: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( QString username READ username NOTIFY authChanged )
-    Q_PROPERTY( int userId READ userId NOTIFY authChanged )
+    Q_PROPERTY( QString login READ login NOTIFY authChanged )
 
   public:
+    enum AuthMethod
+    {
+      Password = 0,
+      SSO,
+    };
+    Q_ENUM( AuthMethod )
+
     explicit MerginUserAuth( QObject *parent = nullptr );
     ~MerginUserAuth() = default;
 
   signals:
     void authChanged();
-    void credentialsLoaded();
 
   public:
-    //! Returns true if username/password is set, but that does not
+    //! Returns true if login/password is set, but that does not
     //! necessarily mean that we have managed to log in and get a token.
     Q_INVOKABLE bool hasAuthData();
 
@@ -41,19 +45,21 @@ class MerginUserAuth: public QObject
     //! i.e. we should be good to do authenticated requests.
     Q_INVOKABLE bool hasValidToken() const;
 
-    //! Returns whether user is currently logged in
-    Q_INVOKABLE bool isLoggedIn();
+    Q_INVOKABLE bool isUsingSso() const { return mMethod == AuthMethod::SSO; }
 
     void clear();
 
-    QString username() const;
-    void setUsername( const QString &username );
+    /**
+     * The identifier used to sign in the current user
+     *
+     * For AuthMethod::Password this is username
+     * For AuthMethod::SSO this is email address
+     */
+    QString login() const;
+    void setLogin( const QString &newLogin );
 
     QString password() const;
     void setPassword( const QString &password );
-
-    int userId() const;
-    void setUserId( int userId );
 
     QByteArray authToken() const;
     void setAuthToken( const QByteArray &authToken );
@@ -62,18 +68,24 @@ class MerginUserAuth: public QObject
     void setTokenExpiration( const QDateTime &tokenExpiration );
 
     void clearTokenData();
-    void saveAuthData();
-    void loadAuthData();
+
+    void saveData();
+    void loadData();
+
     void setFromJson( QJsonObject docObj );
+    void setFromSso( const QString &authToken, const QDateTime &tokenExpiration );
+
+    AuthMethod authMethod() const;
 
   private:
-    QString mUsername;
+    QString mLogin;
     QString mPassword;
-    int mUserId = -1;
     QByteArray mAuthToken;
     QDateTime mTokenExpiration;
 
     CredentialStore *mCredentialStore = nullptr; // owned by this
+
+    AuthMethod mMethod = AuthMethod::Password;
 };
 
 #endif // MERGINUSERAUTH_H

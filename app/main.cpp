@@ -46,7 +46,7 @@
 #include "merginsubscriptioninfo.h"
 #include "merginsubscriptionstatus.h"
 #include "merginprojectstatusmodel.h"
-#include "layersproxymodel.h"
+#include "recordinglayersproxymodel.h"
 #include "layersmodel.h"
 #include "activelayer.h"
 #include "merginuserauth.h"
@@ -91,12 +91,17 @@
 #include "position/positionkit.h"
 #include "scalebarkit.h"
 #include "featuresmodel.h"
+#include "staticfeaturesmodel.h"
+#include "layerfeaturesmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
 #include "snaputils.h"
 #include "guidelinecontroller.h"
+#include "multieditmanager.h"
+#include "mixedattributevalue.h"
+#include "mapsketchingcontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -255,7 +260,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<ActiveProject>( "mm", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "mm", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<SynchronizationError>( "mm", 1, 0, "SyncError", "SyncError Enum" );
-  qmlRegisterUncreatableType<AppSettings>( "mm", 1, 0, "AppSettings", "" );
   qmlRegisterUncreatableType<MerginApiStatus>( "mm", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginServerType>( "mm", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "mm", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -325,6 +329,8 @@ void initDeclarative()
   qmlRegisterType< MapThemesModel >( "mm", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "mm", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "mm", 1, 0, "FeaturesModel" );
+  qmlRegisterType< StaticFeaturesModel >( "mm", 1, 0, "StaticFeaturesModel" );
+  qmlRegisterType< LayerFeaturesModel >( "mm", 1, 0, "LayerFeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "mm", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "mm", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
@@ -332,6 +338,8 @@ void initDeclarative()
   qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
+  qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
+  qmlRegisterType< MapSketchingController >( "mm", 1, 0, "MapSketchingController" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );
@@ -350,8 +358,10 @@ void initDeclarative()
   qmlRegisterType< MeasurementMapTool >( "mm", 1, 0, "MeasurementMapTool" );
 
   // layers model
-  qmlRegisterType<LayersProxyModel>( "mm", 1, 0, "LayersProxyModel" );
+  qmlRegisterType<RecordingLayersProxyModel>( "mm", 1, 0, "RecordingLayersProxyModel" );
   qmlRegisterType<LayersModel>( "mm", 1, 0, "LayersModel" );
+
+  QMetaType::registerConverter( &MixedAttributeValue::toString );
 }
 
 void addQmlImportPath( QQmlEngine &engine )
@@ -390,6 +400,12 @@ int main( int argc, char *argv[] )
   QCoreApplication::setOrganizationDomain( "lutraconsulting.co.uk" );
   QCoreApplication::setApplicationName( "Input" ); // used by QSettings
   QCoreApplication::setApplicationVersion( version );
+
+
+#ifdef ANDROID
+  // Fix rendering problems on some Android devices - see https://bugreports.qt.io/browse/QTBUG-134089
+  QCoreApplication::setAttribute( Qt::AA_DisableShaderDiskCache );
+#endif
 
 
 #ifdef INPUT_TEST
@@ -469,15 +485,18 @@ int main( int argc, char *argv[] )
   qDebug() <<  "Setting QGIS_USE_SHARED_MEMORY_KEEP_ALIVE environment variable TRUE";
 #endif
 
-  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
-  AppSettings as;
-
   // there seem to be issues with HTTP/2 server support (QTBUG-111417)
   // so let's stick to HTTP/1 for the time being (Qt5 has HTTP/2 disabled by default)
   QgsNetworkAccessManager::instance()->setRequestPreprocessor( []( QNetworkRequest * r )
   {
     r->setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
   } );
+
+  // we define engine sooner as some classes are needed for creation of others, but QML engine is responsible for
+  // creation of those required classes
+  QQmlEngine engine;
+  // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
+  AppSettings *as = engine.singletonInstance<AppSettings *>( "MMInput", "AppSettings" );
 
   // Create Input classes
   GeodiffUtils::init();
@@ -492,7 +511,7 @@ int main( int argc, char *argv[] )
   NotificationModel notificationModel;
 
   ActiveLayer al;
-  ActiveProject activeProject( as, al, localProjectsManager );
+  ActiveProject activeProject( *as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -504,12 +523,12 @@ int main( int argc, char *argv[] )
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, &as, [&as]( AbstractPositionProvider * provider )
+  QObject::connect( &pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
   {
-    as.setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
+    as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk.setPositionProvider( pk.constructActiveProvider( &as ) );
-  pk.setAppSettings( &as );
+  pk.setPositionProvider( pk.constructActiveProvider( as ) );
+  pk.setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
@@ -534,7 +553,7 @@ int main( int argc, char *argv[] )
 
   QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
   {
-    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact us on %1" ).arg( InputHelp::helpdeskMail() ) );
+    notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact the support" ) );
   } );
 
   QObject::connect( &help, &InputHelp::submitReportFailed, &lambdaContext, [&notificationModel]()
@@ -576,7 +595,11 @@ int main( int argc, char *argv[] )
   {
     if ( activeProject.isProjectLoaded() )
     {
-      merginApi->reloadProjectRole( activeProject.projectFullName() );
+      // if you are logged in or if you just logged out
+      if ( merginApi->userAuth()->hasValidToken() || !merginApi->userAuth()->hasAuthData() )
+      {
+        merginApi->reloadProjectRole( activeProject.projectFullName() );
+      }
     }
   } );
 
@@ -625,7 +648,7 @@ int main( int argc, char *argv[] )
   if ( projectLoadingFile.exists() )
   {
     // Cleaning default project due to a project loading has crashed during the last run.
-    as.setDefaultProject( QString() );
+    as->setDefaultProject( QString() );
     projectLoadingFile.remove();
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
@@ -634,7 +657,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), &pk, &as );
+    tests.init( ma.get(), &iu, vm.get(), &pk, as );
     return tests.runTest();
   }
 #endif
@@ -654,7 +677,6 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
-  QQmlEngine engine;
   addQmlImportPath( engine );
 
   initDeclarative();
@@ -673,7 +695,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
-  engine.rootContext()->setContextProperty( "__appSettings", &as );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
@@ -696,17 +717,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__haveBluetooth", false );
 #endif
 
-#ifdef MOBILE_OS
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Maximized );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", QVariant( 0 ) );
-  engine.rootContext()->setContextProperty( "__appwindowheight", QVariant( 0 ) );
-#else
-  engine.rootContext()->setContextProperty( "__appwindowvisibility", QWindow::Windowed );
-  engine.rootContext()->setContextProperty( "__appwindowwidth", 640 );
-  engine.rootContext()->setContextProperty( "__appwindowheight", 1136 );
-#endif
-  engine.rootContext()->setContextProperty( "__version", version );
-
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
@@ -716,6 +726,37 @@ int main( int argc, char *argv[] )
 
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
+
+  // App window settings
+  // - Mobile app is always maximized - size and position is ignored
+  // - Desktop app is windowed and the default values might be overridden by the last saved position
+  int appWindowX = style->DEFAULT_WINDOW_X;
+  int appWindowY = style->DEFAULT_WINDOW_Y;
+  int appWindowWidth = style->DEFAULT_WINDOW_WIDTH;
+  int appWindowHeight = style->DEFAULT_WINDOW_HEIGHT;
+
+  QWindow::Visibility appWindowVisibility = QWindow::Maximized;
+
+#ifdef DESKTOP_OS
+  appWindowVisibility = QWindow::Windowed;
+
+  QVariantList windowCachedPosition = as->windowPosition();
+  if ( !windowCachedPosition.isEmpty() )
+  {
+    appWindowX = windowCachedPosition.at( 0 ).toInt();
+    appWindowY = windowCachedPosition.at( 1 ).toInt();
+    appWindowWidth = windowCachedPosition.at( 2 ).toInt();
+    appWindowHeight = windowCachedPosition.at( 3 ).toInt();
+  }
+#endif
+
+  engine.rootContext()->setContextProperty( "__appwindowx", appWindowX );
+  engine.rootContext()->setContextProperty( "__appwindowy", appWindowY );
+  engine.rootContext()->setContextProperty( "__appwindowwidth", appWindowWidth );
+  engine.rootContext()->setContextProperty( "__appwindowheight", appWindowHeight );
+  engine.rootContext()->setContextProperty( "__appwindowvisibility", appWindowVisibility );
+
+  engine.rootContext()->setContextProperty( "__version", version );
 
   // Set safe areas for mobile devices
 #ifdef ANDROID
@@ -731,15 +772,31 @@ int main( int argc, char *argv[] )
     style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
   }
 #elif defined( Q_OS_IOS )
-  auto safeAreaInsets = iosUtils.getSafeArea();
 
-  if ( safeAreaInsets.length() == 4 )
+  //
+  // After migration to Qt 6.8.3, we can no longer reliably read the safe area on app startup (on iOS).
+  // It appears the UIWindow is not fully initialized, returning zero safe area insets.
+  // However, the window is correctly initialized once the event loop begins processing events.
+  // Therefore, we delay the safe area retrieval until after the event loop starts.
+  // This is a temporary workaround and might be replaced in the future by
+  // the more robust approach described in https://www.qt.io/blog/expanded-client-areas-and-safe-areas-in-qt-6.9.
+  //
+
+  const int SAFE_AREA_REFRESH_DELAY_MS = 10;
+
+  QTimer::singleShot( SAFE_AREA_REFRESH_DELAY_MS, &lambdaContext, [&iosUtils, &style]()
   {
-    style->setSafeAreaTop( safeAreaInsets[0] );
-    style->setSafeAreaRight( safeAreaInsets[1] );
-    style->setSafeAreaBottom( safeAreaInsets[2] );
-    style->setSafeAreaLeft( safeAreaInsets[3] );
-  }
+    auto safeAreaInsets = iosUtils.getSafeArea();
+
+    if ( safeAreaInsets.length() == 4 )
+    {
+      style->setSafeAreaTop( safeAreaInsets[0] );
+      style->setSafeAreaRight( safeAreaInsets[1] );
+      style->setSafeAreaBottom( safeAreaInsets[2] );
+      style->setSafeAreaLeft( safeAreaInsets[3] );
+    }
+  } );
+
 #endif
 
   // Set simulated position for desktop builds
@@ -751,7 +808,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__use_simulated_position", use_simulated_position );
 
   // show "new look and feel" welcome dialog on start?
-  QString lastAppVersion = as.appVersion();
+  QString lastAppVersion = as->appVersion();
   bool showWelcomeToNewDesignDialog = false;
   if ( !lastAppVersion.isEmpty() )  // this is not a first run?
   {
@@ -814,7 +871,7 @@ int main( int argc, char *argv[] )
 #endif
 
   // save app version to settings
-  as.setAppVersion( version );
+  as->setAppVersion( version );
 
   // Photos bigger that 512 MB (when uncompressed) will not load
   QImageReader::setAllocationLimit( 512 );

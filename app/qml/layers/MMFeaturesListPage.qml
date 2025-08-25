@@ -56,7 +56,7 @@ MMComponents.MMPage {
         topMargin: __style.spacing20
       }
 
-      model: MM.FeaturesModel {
+      model: MM.LayerFeaturesModel {
         id: featuresModel
 
         useAttributeTableSortOrder: true

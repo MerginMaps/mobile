@@ -13,6 +13,7 @@ import QtQuick.Controls
 import "../components" as MMComponents
 
 import mm 1.0 as MM
+import MMInput
 
 // Wraps preview panel and feature form
 Item {
@@ -30,7 +31,7 @@ Item {
   property var relationToApply
   property var controllerToApply
 
-  property alias formState: featureForm.state // add, edit or ReadOnly
+  property alias formState: featureForm.state // add, edit, readOnly or multiEdit
   property alias panelState: statesManager.state
 
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
@@ -42,6 +43,7 @@ Item {
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
+  signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
   signal previewPanelChanged( var panelHeight )
 
@@ -149,11 +151,17 @@ Item {
 
       width: root.width
 
+      onSelectMoreClicked: function( feature ) {
+        root.multiSelectFeature( feature )
+      }
+
       onStakeoutClicked: function( feature ) {
         root.stakeoutFeature( feature )
       }
 
       onContentClicked: root.panelState = "form"
+
+      onOpenFormClicked: root.panelState = "form"
 
       onEditClicked: {
         root.panelState = "form"
@@ -178,7 +186,8 @@ Item {
         variablesManager: __variablesManager
 
         rememberAttributesController: MM.RememberAttributesController {
-          rememberValuesAllowed: __appSettings.reuseLastEnteredValues
+          rememberValuesAllowed: AppSettings.reuseLastEnteredValues
+          activeProjectId: __activeProject.localProject.id()
         }
         // NOTE: order matters, we want to init variables manager before
         // assingning FeatureLayerPair, as VariablesManager is required

@@ -130,6 +130,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl moreIcon READ moreIcon CONSTANT )
     Q_PROPERTY( QUrl moreVerticalIcon READ moreVerticalIcon CONSTANT )
     Q_PROPERTY( QUrl morePhotosIcon READ morePhotosIcon CONSTANT )
+    Q_PROPERTY( QUrl remoteImageLoadErrorIcon READ remoteImageLoadErrorIcon CONSTANT )
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
@@ -170,6 +171,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl cloudIcon READ cloudIcon CONSTANT )
     Q_PROPERTY( QUrl measurementToolIcon READ measurementToolIcon CONSTANT )
     Q_PROPERTY( QUrl closeShapeIcon READ closeShapeIcon CONSTANT )
+    Q_PROPERTY( QUrl formIcon READ formIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -232,6 +234,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl crosshairPlusImage READ crosshairPlusImage CONSTANT )
     Q_PROPERTY( QUrl noWorkspaceImage READ noWorkspaceImage CONSTANT )
 
+    // Sounds
+    Q_PROPERTY( QUrl hapticSound READ hapticSound CONSTANT )
 
     /*
      * Pixel sizes used across the app
@@ -426,6 +430,7 @@ class MMStyle: public QObject
     QUrl moreIcon() const {return QUrl( "qrc:/More.svg" );}
     QUrl moreVerticalIcon() const {return QUrl( "qrc:/MoreVertical.svg" );}
     QUrl morePhotosIcon() const {return QUrl( "qrc:/MorePhotos.svg" );}
+    QUrl remoteImageLoadErrorIcon() const {return QUrl( "qrc:/RemoteImageLoadError.svg" );}
     QUrl mouthIcon() const {return QUrl( "qrc:/Mouth.svg" );}
     QUrl measurementToolIcon() const {return QUrl( "qrc:/Measure.svg" );}
     QUrl closeShapeIcon() const {return QUrl( "qrc:/CloseShape.svg" );}
@@ -462,6 +467,7 @@ class MMStyle: public QObject
     QUrl studentIcon() const {return QUrl( "qrc:/Student.svg" );}
     QUrl xTwitterIcon() const {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() const {return QUrl( "qrc:/Youtube.svg" );}
+    QUrl formIcon() const {return QUrl( "qrc:/Terms.svg" );}
 
     QUrl projectsFilledIcon() const {return QUrl( "qrc:/ProjectsFilled.svg" );}
     QUrl globalFilledIcon() const {return QUrl( "qrc:/GlobalFilled.svg" );}
@@ -520,6 +526,8 @@ class MMStyle: public QObject
     QUrl crosshairPlusImage() const {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
     QUrl noWorkspaceImage() const {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
+    QUrl hapticSound() {return QUrl( "qrc:/sounds/haptic_sound.wav" );}
+
     double toolbarHeight() const
     {
       if ( mSafeAreaBottom > 2 )
@@ -536,6 +544,12 @@ class MMStyle: public QObject
     double safeAreaRight() const { return mSafeAreaRight; };
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };
+
+    // Default (startup) window sizes on desktop platforms
+    const int DEFAULT_WINDOW_X = 0;
+    const int DEFAULT_WINDOW_Y = 0;
+    const int DEFAULT_WINDOW_WIDTH = 640;
+    const int DEFAULT_WINDOW_HEIGHT = 1136;
 
     //Numbers from 1 to 150 and number 720
     double number1() const {return qMax<double>( 1 * mDp, 1 ); } // make sure these sizes are visible if mDP < 1

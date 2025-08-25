@@ -289,30 +289,61 @@ void InputUtils::setExtentToFeature( const FeatureLayerPair &pair, InputMapSetti
   if ( geom.isNull() || !geom.constGet() )
     return;
 
-  QgsRectangle bbox = mapSettings->mapSettings().layerExtentToOutputExtent( pair.layer(), geom.boundingBox() );
-  QgsRectangle currentExtent = mapSettings->mapSettings().extent();
-  QgsPointXY currentExtentCenter = currentExtent.center();
-  QgsPointXY featureCenter = bbox.center();
+  geom = transformGeometryToMapWithLayer( geom, pair.layer(), mapSettings );
+  setExtentToGeom( geom, mapSettings );
+}
 
-  double offsetX = currentExtentCenter.x() - featureCenter.x();
-  double offsetY = currentExtentCenter.y() - featureCenter.y();
-  currentExtent.setXMinimum( currentExtent.xMinimum() - offsetX );
-  currentExtent.setXMaximum( currentExtent.xMaximum() - offsetX );
-  currentExtent.setYMinimum( currentExtent.yMinimum() - offsetY );
-  currentExtent.setYMaximum( currentExtent.yMaximum() - offsetY );
+void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings )
+{
+  if ( geom.isNull() || !geom.constGet() )
+    return;
+
+  const QgsRectangle bbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+
+  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  {
+    const QgsVector offset = currentExtent.center() - bbox.center();
+    currentExtent -= offset;
+  }
+  else
+  {
+    currentExtent = bbox;
+
+    // Add a offset to encompass handles etc..
+    // This number is based on what feel confortable for the user
+    constexpr double SCALE_FACTOR = 1.18;
+    currentExtent.scale( SCALE_FACTOR );
+  }
+
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::geometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
 {
   QPointF screenPoint;
-
+  QgsPoint target;
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return screenPoint;
 
-  QgsRectangle bbox = geom.boundingBox();
-  screenPoint = mapSettings->coordinateToScreen( QgsPoint( bbox.center() ) );
+  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
+  // Cut the geometry to current extent
+  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
+  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+
+  if ( !intersectedGeom.isEmpty() )
+  {
+    target = QgsPoint( intersectedGeom.boundingBox().center() );
+  }
+  else
+  {
+    // The geometry is outside the current viewed extent
+    setExtentToGeom( geom, mapSettings );
+    target = QgsPoint( geom.boundingBox().center() );
+  }
+
+  screenPoint = mapSettings->coordinateToScreen( target );
   return screenPoint;
 }
 
@@ -899,7 +930,18 @@ double InputUtils::screenUnitsToMeters( InputMapSettings *mapSettings, int baseL
   QPoint pointCenter( s.width() / 2, s.height() / 2 );
   QgsPointXY p1 = mapSettings->screenToCoordinate( pointCenter );
   QgsPointXY p2 = mapSettings->screenToCoordinate( pointCenter + QPoint( baseLengthPixels, 0 ) );
-  return mDistanceArea.measureLine( p1, p2 );
+
+  try
+  {
+    return mDistanceArea.measureLine( p1, p2 );
+  }
+  catch ( QgsCsException &e )
+  {
+    Q_UNUSED( e );
+    CoreUtils::log( "screenUnitsToMeters", QString( "Coordinate transformation failed: %1" ).arg( e.what() ) );
+  }
+
+  return 0.0;
 }
 
 QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSettings )
@@ -950,7 +992,9 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
 
   if ( !expression.isEmpty() )
   {
-    return evaluateExpression( pair, activeProject, expression );
+    QString result = evaluateExpression( pair, activeProject, expression );
+    sanitizeFileName( result );
+    return result;
   }
   else
   {
@@ -1009,7 +1053,7 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   if ( prefixPath.isEmpty() ) return modPath;
 
   // Do not use a canonical path for non-existing path
-  if ( !QFileInfo( path ).exists() )
+  if ( !QFileInfo::exists( path ) )
   {
     if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath ) )
     {
@@ -1049,7 +1093,7 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
-const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle )
+const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle, bool isMultiEdit )
 {
   QString widgetName = widgetNameIn.toLower();
 
@@ -1100,7 +1144,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "externalresource" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
   {
@@ -1112,6 +1159,9 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relation" ) )
   {
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+
     // check if we should use gallery or word tags
     bool useGallery = false;
 
@@ -1148,7 +1198,10 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   }
   else if ( widgetName == QStringLiteral( "relationreference" ) )
   {
-    return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
+    if ( isMultiEdit )
+      return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else
+      return QUrl( path.arg( QLatin1String( "MMFormRelationReferenceEditor" ) ) );
   }
 
   return QUrl( path.arg( QLatin1String( "MMFormTextEditor" ) ) );
@@ -1160,7 +1213,7 @@ const QgsEditorWidgetSetup InputUtils::getEditorWidgetSetup( const QgsField &fie
     return getEditorWidgetSetup( field, QStringLiteral( "Range" ) );
   else if ( field.isDateOrTime() )
     return getEditorWidgetSetup( field, QStringLiteral( "DateTime" ) );
-  else if ( field.type() == QVariant::Bool )
+  else if ( field.type() == QMetaType::Type::Bool )
     return getEditorWidgetSetup( field, QStringLiteral( "CheckBox" ) );
   else
     return getEditorWidgetSetup( field, QStringLiteral( "TextEdit" ) );
@@ -1510,7 +1563,7 @@ QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject
 
 QString InputUtils::fieldType( const QgsField &field )
 {
-  return QVariant( field.type() ).typeName();
+  return QMetaType::typeName( field.type() );
 }
 
 QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
@@ -1910,6 +1963,14 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
   }
 }
 
+void InputUtils::sanitizeFileName( QString &fileName )
+{
+  // regex captures ascii codes 0 to 31 and windows path forbidden characters <>:|?*"
+  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x19<>:|?*\"]" ) );
+  fileName.replace( illegalChars, QStringLiteral( "_" ) );
+  fileName = fileName.trimmed();
+}
+
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
@@ -2084,17 +2145,17 @@ static double qgsRuntimeProfilerExtractModelAsText( QStringList &lines, const QS
   for ( int r = 0; r < rc; r++ )
   {
     QModelIndex rowIndex = QgsApplication::profiler()->index( r, 0, parent );
-    if ( QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Group ).toString() != group )
+    if ( QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Group ) ).toString() != group )
       continue;
     bool ok;
-    double elapsed = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Elapsed ).toDouble( &ok );
+    double elapsed = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Elapsed ) ).toDouble( &ok );
     if ( !ok )
       elapsed = 0.0;
     total_elapsed += elapsed;
 
     if ( elapsed > PROFILER_THRESHOLD )
     {
-      QString name = QgsApplication::profiler()->data( rowIndex, QgsRuntimeProfilerNode::Name ).toString();
+      QString name = QgsApplication::profiler()->data( rowIndex, static_cast<int>( QgsRuntimeProfilerNode::CustomRole::Name ) ).toString();
       lines << QStringLiteral( "  %1 %2: %3 sec" ).arg( QStringLiteral( ">" ).repeated( level + 1 ),  name, QString::number( elapsed, 'f', 3 ) );
     }
     total_elapsed += qgsRuntimeProfilerExtractModelAsText( lines, group, rowIndex, level + 1 );
@@ -2230,7 +2291,7 @@ bool InputUtils::layerHasGeometry( const QgsVectorLayer *layer )
   return layer->wkbType() != Qgis::WkbType::NoGeometry && layer->wkbType() != Qgis::WkbType::Unknown;
 }
 
-bool InputUtils::layerVisible( QgsMapLayer *layer, QgsProject *project )
+bool InputUtils::isLayerVisible( QgsMapLayer *layer, QgsProject *project )
 {
   if ( !layer || !layer->isValid() || !project )
     return false;
@@ -2257,20 +2318,6 @@ bool InputUtils::isPositionTrackingLayer( QgsMapLayer *layer, QgsProject *projec
   return layer->id() == trackingLayerId;
 }
 
-bool InputUtils::recordingAllowed( QgsMapLayer *layer, QgsProject *project )
-{
-  if ( !layer || !layer->isValid() || !project )
-    return false;
-
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-
-  return ( vectorLayer &&
-           !vectorLayer->readOnly() &&
-           layerHasGeometry( vectorLayer ) &&
-           layerVisible( layer, project ) &&
-           !isPositionTrackingLayer( layer, project ) );
-}
-
 QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject *project )
 {
   if ( !project || layerName.isEmpty() )
@@ -2283,4 +2330,18 @@ QgsMapLayer *InputUtils::mapLayerFromName( const QString &layerName, QgsProject 
   }
 
   return nullptr;
+}
+
+bool InputUtils::isValidUrl( const QString &link )
+{
+  if ( link.isEmpty() )
+    return false;
+
+  QUrl url( link );
+  return url.isValid();
+}
+
+bool InputUtils::isValidEmail( const QString &email )
+{
+  return CoreUtils::isValidEmail( email );
 }

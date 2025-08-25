@@ -21,16 +21,16 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-13
+    runs-on: macos-15
     env:
-      QT_VERSION: '6.6.3' # use scripts/update_qt_version.bash to change
-      NDK_VERSION: r25
-      NDK_VERSION_FULL: r25b
-      JDK_VERSION: 11
+      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+      NDK_VERSION: 'r26' # '26.1.10909125'
+      NDK_VERSION_FULL: r26b
+      JDK_VERSION: 17
       SDK_PLATFORM: android-34
       SDK_BUILD_TOOLS: 34.0.0
-      INPUT_SDK_VERSION_ARM: arm-android-20240517-224
-      INPUT_SDK_VERSION_ARM64: arm64-android-20240517-224
+      INPUT_SDK_VERSION_ARM: arm-android-20250326-241
+      INPUT_SDK_VERSION_ARM64: arm64-android-20250326-241
       CCACHE_DIR: /Users/runner/work/ccache
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 0
@@ -38,13 +38,29 @@ jobs:
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      XC_VERSION: ${{ '15.2' }}
+      XC_VERSION: ${{ '16.2' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+      - name: Disk space before cleanup
+        run: |
+          df -h .
+
+      #
+      # Free up space by removing unused XCode versions
+      #
+      # See https://github.com/actions/runner-images/issues/10511
+      # Removes all XCode versions, but the one we use
+      #
+      - name: Delete unused XC versions to reclaim disk space
+        shell: bash
+        run: |
+          find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_${{ env.XC_VERSION }}.app' -exec rm -rf {} \;
+
+      - name: Disk space after cleanup
+        run: |
+          df -h .
 
       # CCache
       - name: Prepare build cache for pull request
@@ -81,12 +97,12 @@ jobs:
 
       - name: Install Build Dependencies
         run: |
-          pip3 install -U pip
-          pip3 install aqtinstall
+          brew update
           
           brew install gnupg
-          brew install openssl@1.1
+          brew install openssl
           brew install ninja
+          brew install aqtinstall
           
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -107,6 +123,11 @@ jobs:
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
 
+      - name: Setup compiler
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ env.XC_VERSION }}
+
       - name: Cache Qt
         id: cache-qt
         uses: pat-s/always-upload-cache@v3.0.11
@@ -119,17 +140,17 @@ jobs:
         run: |
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_arm64_v8a \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
             
           aqt install-qt \
             mac android ${{ env.QT_VERSION }} android_armv7 \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
         
           aqt install-qt \
             mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools \
+            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
             -O ${{ github.workspace }}/Qt
           
        # Android SDK & NDK
@@ -146,11 +167,11 @@ jobs:
          distribution: zulu
 
       - name: Setup Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.4
+        uses: malinskiy/action-android/install-sdk@release/0.1.7
 
       - name: Install Android Tools
         run: |
-          sdkmanager --licenses && sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
+          sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
 
       # Input SDK
       - name: Cache Input-SDK
@@ -189,7 +210,7 @@ jobs:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
           cd core/
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          /opt/homebrew/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
@@ -201,7 +222,7 @@ jobs:
           INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
 
         run: |
-          /usr/local/opt/openssl@1.1/bin/openssl \
+          /opt/homebrew/bin/openssl \
            aes-256-cbc -d \
            -in Input_keystore.keystore.enc \
            -out Input_keystore.keystore \
@@ -221,6 +242,9 @@ jobs:
             echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
+
+            # add build number to summary
+            echo ":rocket: Build number: ${BUILD_NUM}" >> $GITHUB_STEP_SUMMARY
                                     
       - name: Configure Input
         env:

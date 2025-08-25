@@ -27,6 +27,7 @@ class TestActiveProject : public QObject
     void testProjectValidations();
     void testProjectLoadFailure();
     void testPositionTrackingFlag();
+    void testRecordingAllowed();
 
   private:
     MerginApi *mApi;

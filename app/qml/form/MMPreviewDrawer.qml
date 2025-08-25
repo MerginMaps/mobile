@@ -28,6 +28,8 @@ Item {
 
   signal contentClicked()
   signal editClicked()
+  signal openFormClicked()
+  signal selectMoreClicked( var feature )
   signal stakeoutClicked( var feature )
   signal closeClicked()
 
@@ -89,6 +91,7 @@ Item {
           Layout.preferredHeight: implicitHeight
 
           text: root.controller.title
+          textFormat: Text.PlainText
 
           font: __style.t1
           color: __style.forestColor
@@ -182,6 +185,29 @@ Item {
             }
 
             MMComponents.MMButton {
+              id: formButton
+
+              text: qsTr( "Open form" )
+              iconSourceLeft: __style.formIcon
+
+              visible: !internal.showEditButton
+
+              onClicked: root.openFormClicked()
+            }
+
+            MMComponents.MMButton {
+              id: selectMoreButton
+
+              text: qsTr( "Select more" )
+              iconSourceLeft: __style.workspacesIcon
+              type: MMComponents.MMButton.Secondary
+
+              visible: internal.showSelectMoreButton
+
+              onClicked: root.selectMoreClicked( controller.featureLayerPair )
+            }
+
+            MMComponents.MMButton {
               id: stakeOutButton
 
               text: qsTr( "Stake out" )
@@ -237,6 +263,7 @@ Item {
                 width: parent.width
 
                 text: model.Value
+                textFormat: Text.PlainText
                 font: __style.t3
                 color: __style.nightColor
 
@@ -296,8 +323,9 @@ Item {
     property bool isEmptyType: root.controller.type === MM.AttributePreviewController.Empty
 
     property bool showEditButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    property bool showSelectMoreButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
     property bool showStakeoutButton: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-    property bool showButtons: showEditButton || showStakeoutButton
+    property bool showButtons: showEditButton || showSelectMoreButton || showStakeoutButton
 
     property bool showPhoto: isPhotoType && windowHasEnoughHeightToShowContent
     property bool showFields: isFieldsType && windowHasEnoughHeightToShowContent
