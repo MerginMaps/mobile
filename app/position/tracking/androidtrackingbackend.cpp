@@ -36,7 +36,10 @@ void servicePositionUpdated( JNIEnv *env, jclass clazz, jobject locationObj )
 
   // TODO: add time as well?
   QgsPoint pt( longitude, latitude );
+  // let's save to a file here
 
+
+  // TODO: invoke only if the app is in foreground! --> the same for iOS/desktop
   QMetaObject::invokeMethod( sBackend, "positionChanged",
                              Qt::AutoConnection, Q_ARG( QgsPoint, pt ) );
 }

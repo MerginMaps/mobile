@@ -15,11 +15,14 @@
 
 #include "qgsgeometry.h"
 
-class PositionTrackingHighlight : public QObject
+class InputMapSettings;
+
+class TrackingHighlight : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY( QgsPoint mapPosition READ mapPosition WRITE setMapPosition NOTIFY mapPositionChanged )
+    Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
 
     // Geometry in
     Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry WRITE setTrackedGeometry NOTIFY trackedGeometryChanged )
@@ -28,7 +31,7 @@ class PositionTrackingHighlight : public QObject
     Q_PROPERTY( QgsGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
 
   public:
-    explicit PositionTrackingHighlight( QObject *parent = nullptr );
+    explicit TrackingHighlight( QObject *parent = nullptr );
 
     QgsGeometry trackedGeometry() const;
     void setTrackedGeometry( const QgsGeometry &newTrackedGeometry );
@@ -38,21 +41,28 @@ class PositionTrackingHighlight : public QObject
     QgsPoint mapPosition() const;
     void setMapPosition( QgsPoint newMapPosition );
 
+    InputMapSettings *mapSettings() const;
+    void setMapSettings( InputMapSettings *newMapSettings );
+
   public slots:
-    void recalculate();
+    void onPositionChanged();
+    void onTrackedGeometryChanged();
 
   signals:
     void trackedGeometryChanged( QgsGeometry trackedGeometry );
     void highlightGeometryChanged( QgsGeometry highlightGeometry );
 
     void mapPositionChanged( QgsPoint mapPosition );
+    void mapSettingsChanged();
 
   private:
     void setHighlightGeometry( const QgsGeometry &newHighlightGeometry );
 
+    QgsPoint mMapPosition;
+    InputMapSettings* mMapSettings = nullptr; // not owned
+
     QgsGeometry mTrackedGeometry;
     QgsGeometry mHighlightGeometry;
-    QgsPoint mMapPosition;
 };
 
 #endif // POSITIONTRACKINGHIGHLIGHT_H
