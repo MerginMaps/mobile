@@ -15,8 +15,6 @@
 #include <QImage>
 #include <exiv2/exiv2.hpp>
 
-#include <QtTest/QtTest>
-
 void TestImageUtils::init()
 {
 }
@@ -27,17 +25,17 @@ void TestImageUtils::cleanup()
 
 void TestImageUtils::testRescale()
 {
-  QTemporaryDir dir;
-  QString testPhotoName = QStringLiteral( "photo.jpg" );
+  const QTemporaryDir dir;
+  const QString testPhotoName = QStringLiteral( "photo.jpg" );
   QFile::copy( TestUtils::testDataDir() + '/' + testPhotoName, dir.filePath( testPhotoName ) );
 
   QVERIFY( ImageUtils::rescale( dir.filePath( testPhotoName ), 3 ) );
 
-  QImage img( dir.filePath( testPhotoName ) );
+  const QImage img( dir.filePath( testPhotoName ) );
   QCOMPARE( img.height(), 1000 );
 
   // check EXIF tags
-  std::unique_ptr< Exiv2::Image > image( Exiv2::ImageFactory::open( dir.filePath( testPhotoName ).toStdString() ) );
+  const std::unique_ptr image( Exiv2::ImageFactory::open( dir.filePath( testPhotoName ).toStdString() ) );
 
   image->readMetadata();
   Exiv2::ExifData &exifData = image->exifData();
@@ -45,7 +43,7 @@ void TestImageUtils::testRescale()
 
   const Exiv2::ExifData::iterator itElevVal = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSAltitude" ) );
   const Exiv2::Rational rational = itElevVal->value().toRational( 0 );
-  double val = static_cast< double >( rational.first ) / rational.second;
+  const double val = static_cast< double >( rational.first ) / rational.second;
   QCOMPARE( val, 133 );
 }
 
