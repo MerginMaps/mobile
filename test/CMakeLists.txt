@@ -25,6 +25,7 @@ set(MM_TESTS
     testActiveProject
     testProjectChecksumCache
     testVariablesManager
+    testSketching
 )
 
 foreach (test ${MM_TESTS})

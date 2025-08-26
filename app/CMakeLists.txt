@@ -208,6 +208,7 @@ if (ENABLE_TESTS)
       test/testposition.cpp
       test/testrememberattributescontroller.cpp
       test/testscalebarkit.cpp
+      test/testsketching.cpp
       test/testutils.cpp
       test/testutilsfunctions.cpp
       test/testvariablesmanager.cpp
@@ -232,6 +233,7 @@ if (ENABLE_TESTS)
       test/testposition.h
       test/testrememberattributescontroller.h
       test/testscalebarkit.h
+      test/testsketching.h
       test/testutils.h
       test/testutilsfunctions.h
       test/testvariablesmanager.h
