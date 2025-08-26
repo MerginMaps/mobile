@@ -3903,7 +3903,7 @@ void MerginApi::getServerConfigReplyFinished()
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
-      if ( serverVersionIsAtLeast( MINIMUM_SERVER_VERSION_MAJOR, MINIMUM_SERVER_VERSION_MINOR + 1, 0 ) )
+      if ( !serverVersionIsAtLeast( MINIMUM_SERVER_VERSION_MAJOR, MINIMUM_SERVER_VERSION_MINOR + 1, 0 ) )
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
