@@ -19,9 +19,12 @@ import "../dialogs"
 Item {
   id: root
 
+  // TODO (in future): refactor to ColumnLayout (to avoid the dynamic reparenting)
+
   property string activeProjectId: ""
   property alias list: projectlist
   property alias noWorkspaceBannerVisible: noWorkspaceBanner.visible
+  property alias deviceSharingPolicyViolationBannerVisible: deviceSharingPolicyViolationBanner.visible
 
   signal openProjectRequested( string projectFilePath )
   signal showLocalChangesRequested( string projectId )
@@ -50,27 +53,6 @@ Item {
   }
 
   MMInfoBox {
-    id: attentionRequiredBanner
-
-    visible: !noWorkspaceBanner.visible && (__merginApi.subscriptionInfo ? __merginApi.subscriptionInfo.actionRequired : false)
-    width: root.width - 2 * root.hPadding
-    anchors {
-      top: searchBar.bottom
-      left: parent.left
-      right: parent.right
-      topMargin: root.spacing
-    }
-    title: qsTr("Your attention is required")
-    description: qsTr("Click here to access the dashboard")
-    imageSource: __style.warnLogoImage
-
-    color: __style.nightColor
-    textColor: __style.polarColor
-
-    onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
-  }
-
-  MMInfoBox {
     id: noWorkspaceBanner
 
     visible: false // Set from parent
@@ -91,6 +73,27 @@ Item {
     onClicked: root.createWorkspaceRequested()
   }
 
+  MMInfoBox {
+    id: deviceSharingPolicyViolationBanner
+
+    visible: !noWorkspaceBanner.visible && __merginApi.workspaceInfo.serviceState === MMerginWorkspaceInfo.DeviceSharePolicyViolation
+    width: root.width - 2 * root.hPadding
+    anchors {
+      top: searchBar.bottom
+      left: parent.left
+      right: parent.right
+      topMargin: root.spacing
+    }
+    title: qsTr("Device sharing policy violation")
+    description: qsTr("One or more devices from your workspace are used across multiple accounts. Act now to avoid losing access to your data.")
+    imageSource: __style.warnLogoImage
+
+    color: __style.nightColor
+    textColor: __style.polarColor
+
+    onClicked: Qt.openUrlExternally( __inputHelp.merginDashboardLink )
+  }
+
   MMProjectList {
     id: projectlist
 
@@ -104,8 +107,8 @@ Item {
       left: parent.left
       right: parent.right
       top: {
-        if( attentionRequiredBanner.visible )
-          return attentionRequiredBanner.bottom
+        if( deviceSharingPolicyViolationBanner.visible )
+          return deviceSharingPolicyViolationBanner.bottom
         if( noWorkspaceBanner.visible )
           return noWorkspaceBanner.bottom
         return searchBar.bottom

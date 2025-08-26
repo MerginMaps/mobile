@@ -27,12 +27,10 @@
 
 #include "merginapistatus.h"
 #include "merginservertype.h"
-#include "merginsubscriptionstatus.h"
 #include "merginerrortypes.h"
 #include "merginprojectmetadata.h"
 #include "localprojectsmanager.h"
 #include "project.h"
-#include "merginsubscriptioninfo.h"
 #include "merginuserinfo.h"
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
@@ -217,7 +215,6 @@ class MerginApi: public QObject
     Q_PROPERTY( MerginUserAuth *userAuth READ userAuth NOTIFY authChanged )
     Q_PROPERTY( MerginUserInfo *userInfo READ userInfo NOTIFY userInfoChanged )
     Q_PROPERTY( MerginWorkspaceInfo *workspaceInfo READ workspaceInfo NOTIFY workspaceInfoChanged )
-    Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
     // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
@@ -236,7 +233,6 @@ class MerginApi: public QObject
     MerginUserAuth *userAuth() const;
     MerginUserInfo *userInfo() const;
     MerginWorkspaceInfo *workspaceInfo() const;
-    MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
      * Returns path of the local directory in which all projects are stored.
@@ -337,7 +333,7 @@ class MerginApi: public QObject
 
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
-    Q_INVOKABLE void getServiceInfo();
+    void getServiceInfo();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE QString resetPasswordUrl();
 
@@ -682,7 +678,6 @@ class MerginApi: public QObject
     void serverProjectDeleted( const QString &projecFullName, bool result );
     void userInfoChanged();
     void workspaceInfoChanged();
-    void subscriptionInfoChanged();
     void activeWorkspaceChanged();
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
@@ -897,7 +892,6 @@ class MerginApi: public QObject
 
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
     MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
-    MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
 
     enum CustomAttribute

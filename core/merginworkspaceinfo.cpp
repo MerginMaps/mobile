@@ -23,6 +23,14 @@ void MerginWorkspaceInfo::clear()
   mDiskUsage = 0;
   mStorageLimit = 0;
   mRole = "";
+  clearService();
+
+  emit workspaceInfoChanged();
+}
+
+void MerginWorkspaceInfo::clearService()
+{
+  mServiceState = ServiceState::Unknown;
 
   emit workspaceInfoChanged();
 }
@@ -30,7 +38,7 @@ void MerginWorkspaceInfo::clear()
 void MerginWorkspaceInfo::setFromJson( QJsonObject docObj )
 {
   // parse storage data
-  mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble();
+  mDiskUsage = docObj.value( QStringLiteral( "disk_usage" ) ).toDouble(); // bytes
   mStorageLimit = docObj.value( QStringLiteral( "storage" ) ).toDouble();
 
   // role is not present if this is the old server
@@ -40,6 +48,47 @@ void MerginWorkspaceInfo::setFromJson( QJsonObject docObj )
   }
 
   emit workspaceInfoChanged();
+}
+
+void MerginWorkspaceInfo::setServiceFromJson( QJsonObject docObj )
+{
+  if ( !docObj.contains( QStringLiteral( "service" ) ) )
+    return;  
+
+  const QJsonObject serviceObj = docObj.value( QStringLiteral( "service" ) ).toObject();
+
+  if ( !serviceObj.contains( QStringLiteral( "state" ) ) )
+    return;
+
+  const QString newStateRaw = serviceObj.value( QStringLiteral( "state" ) ).toString();
+  ServiceState newState = mServiceState;
+
+  if ( newStateRaw == QStringLiteral( "active" ) )
+  {
+    newState = ServiceState::Active;
+  }
+  else if ( newStateRaw == QStringLiteral( "expired" ) )
+  {
+    newState = ServiceState::Expired;
+  }
+  else if ( newStateRaw == QStringLiteral( "payment_profile_issues" ) )
+  {
+    newState = ServiceState::PaymentProfileIssues;
+  }
+  else if ( newStateRaw == QStringLiteral( "device_share_policy_violation" ) )
+  {
+    newState = ServiceState::DeviceSharePolicyViolation;
+  }
+  else
+  {
+    newState = ServiceState::Unknown;
+  }
+
+  if ( newState != mServiceState )
+  {
+    mServiceState = newState;
+    emit workspaceInfoChanged();
+  }
 }
 
 double MerginWorkspaceInfo::diskUsage() const
@@ -55,4 +104,9 @@ double MerginWorkspaceInfo::storageLimit() const
 QString MerginWorkspaceInfo::role() const
 {
   return mRole;
+}
+
+MerginWorkspaceInfo::ServiceState MerginWorkspaceInfo::serviceState() const
+{
+  return mServiceState;
 }

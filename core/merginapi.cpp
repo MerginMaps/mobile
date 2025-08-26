@@ -60,7 +60,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mDataDir( localProjects.dataDir() )
   , mUserInfo( new MerginUserInfo )
   , mWorkspaceInfo( new MerginWorkspaceInfo )
-  , mSubscriptionInfo( new MerginSubscriptionInfo )
   , mUserAuth( new MerginUserAuth )
   , mManager( new QNetworkAccessManager( this ) )
 {
@@ -97,8 +96,6 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::activeWorkspaceChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::getWorkspaceInfo );
   QObject::connect( mUserInfo, &MerginUserInfo::hasWorkspacesChanged, this, &MerginApi::hasWorkspacesChanged );
-  QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::subscriptionInfoChanged, this, &MerginApi::subscriptionInfoChanged );
-  QObject::connect( mSubscriptionInfo, &MerginSubscriptionInfo::planProductIdChanged, this, &MerginApi::onPlanProductIdChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, &MerginApi::authChanged );
   QObject::connect( mUserAuth, &MerginUserAuth::authChanged, this, [this]()
   {
@@ -151,11 +148,6 @@ MerginUserInfo *MerginApi::userInfo() const
 MerginWorkspaceInfo *MerginApi::workspaceInfo() const
 {
   return mWorkspaceInfo;
-}
-
-MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
-{
-  return mSubscriptionInfo;
 }
 
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const int page )
@@ -1099,34 +1091,29 @@ void MerginApi::getWorkspaceInfo()
 
 void MerginApi::getServiceInfo()
 {
+  //
+  // TODO: Would be better if it was a part of the workspace detail response from the server
+  // TODO: /v1 can return 404 (at least from the mobile perspective)
+  //
+
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
     return;
   }
 
-  QString urlString;
-
-  if ( mServerType == MerginServerType::SAAS )
-  {
-    if ( mUserInfo->activeWorkspaceId() < 0 )
-    {
-      CoreUtils::log( QStringLiteral( "Service Info" ), QStringLiteral( "Skipped calling GET service info, no active workspace detected" ) );
-      return;
-    }
-
-    urlString = mApiRoot + QStringLiteral( "/v1/workspace/%1/service" ).arg( mUserInfo->activeWorkspaceId() );
-  }
-  else if ( mServerType == MerginServerType::OLD )
-  {
-    urlString = mApiRoot + QStringLiteral( "/v1/user/service" );
-  }
-  else
+  if ( mServerType != MerginServerType::SAAS )
   {
     return;
   }
 
+  if ( mUserInfo->activeWorkspaceId() < 0 )
+  {
+    CoreUtils::log( QStringLiteral( "Service Info" ), QStringLiteral( "Skipped calling GET service info, no active workspace detected" ) );
+    return;
+  }
+
   QNetworkRequest request = getDefaultRequest( true );
-  QUrl url( urlString );
+  QUrl url( mApiRoot + QStringLiteral( "/v2/workspaces/%1/service" ).arg( mUserInfo->activeWorkspaceId() ) );
   request.setUrl( url );
 
   QNetworkReply *reply = mManager->get( request );
@@ -1149,7 +1136,7 @@ void MerginApi::getServiceInfoReplyFinished()
     if ( doc.isObject() )
     {
       QJsonObject docObj = doc.object();
-      mSubscriptionInfo->setFromJson( docObj );
+      mWorkspaceInfo->setServiceFromJson( docObj );
     }
   }
   else
@@ -1158,21 +1145,7 @@ void MerginApi::getServiceInfoReplyFinished()
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "getServiceInfo" ), r->errorString(), serverMsg );
     CoreUtils::log( "Service info", QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    mSubscriptionInfo->clear();
-
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    if ( httpCode == 404 )
-    {
-      // no such API on the server, do not emit anything
-    }
-    else if ( httpCode == 403 )
-    {
-      // forbidden - I do not have enough rights to see this, do not emit anything
-    }
-    else
-    {
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getServiceInfo" ) );
-    }
+    mWorkspaceInfo->clearService();
   }
 
   r->deleteLater();
@@ -1183,19 +1156,15 @@ void MerginApi::clearAuth()
   mUserAuth->blockSignals( true );
   mUserInfo->blockSignals( true );
   mWorkspaceInfo->blockSignals( true );
-  mSubscriptionInfo->blockSignals( true );
 
   mUserAuth->clear();
   mUserInfo->clear();
   mWorkspaceInfo->clear();
-  mSubscriptionInfo->clear();
 
   mUserAuth->blockSignals( false );
   mUserInfo->blockSignals( false );
   mWorkspaceInfo->blockSignals( false );
-  mSubscriptionInfo->blockSignals( false );
 
-  emit subscriptionInfoChanged();
   emit workspaceInfoChanged();
   emit mUserInfo->activeWorkspaceChanged();
   emit mUserInfo->hasWorkspacesChanged();
@@ -4153,11 +4122,6 @@ void MerginApi::refreshUserData()
   if ( apiSupportsWorkspaces() )
   {
     getWorkspaceInfo();
-    // getServiceInfo is called automatically when workspace info finishes
-  }
-  else if ( mServerType == MerginServerType::OLD )
-  {
-    getServiceInfo();
   }
 }
 

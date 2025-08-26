@@ -43,8 +43,6 @@
 #include "merginapi.h"
 #include "merginapistatus.h"
 #include "merginservertype.h"
-#include "merginsubscriptioninfo.h"
-#include "merginsubscriptionstatus.h"
 #include "merginprojectstatusmodel.h"
 #include "recordinglayersproxymodel.h"
 #include "layersmodel.h"
@@ -256,13 +254,11 @@ void initDeclarative()
 {
   qmlRegisterUncreatableType<MerginUserAuth>( "mm", 1, 0, "MerginUserAuth", "" );
   qmlRegisterUncreatableType<MerginUserInfo>( "mm", 1, 0, "MerginUserInfo", "" );
-  qmlRegisterUncreatableType<MerginSubscriptionInfo>( "mm", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<ActiveProject>( "mm", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "mm", 1, 0, "SynchronizationManager", "" );
   qmlRegisterUncreatableType<SynchronizationError>( "mm", 1, 0, "SyncError", "SyncError Enum" );
   qmlRegisterUncreatableType<MerginApiStatus>( "mm", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginServerType>( "mm", 1, 0, "MerginServerType", "MerginServerType Enum" );
-  qmlRegisterUncreatableType<MerginSubscriptionStatus>( "mm", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
   qmlRegisterUncreatableType<MerginProjectStatusModel>( "mm", 1, 0, "MerginProjectStatusModel", "Enum" );
   qmlRegisterUncreatableType<ActiveLayer>( "mm", 1, 0, "ActiveLayer", "" );
   qmlRegisterUncreatableType<StreamingIntervalType>( "mm", 1, 0, "StreamingIntervalType", "StreamingIntervalType Enum" );

@@ -34,7 +34,6 @@ Item {
   function openPanel() {
     root.visible = true
     stackView.visible = true
-    getServiceInfo() // ensure attention banner status is refreshed
   }
 
   function hidePanel() {
@@ -54,12 +53,6 @@ Item {
     else
     {
       openProjectRequested( projectPath )
-    }
-  }
-
-  function getServiceInfo() {
-    if (__merginApi.userAuth.hasAuthData() && __merginApi.apiVersionStatus === MM.MerginApiStatus.OK && __merginApi.apiSupportsSubscriptions) {
-        __merginApi.getServiceInfo()
     }
   }
 
@@ -518,8 +511,8 @@ Item {
       invitationsCount: __merginApi.userInfo.invitationsCount
 
       workspaceRole: __merginApi.workspaceInfo.role
+      subscription: __merginApi.workspaceInfo.serviceState
 
-      subscription: __merginApi.subscriptionInfo.planAlias
       storage: "%1/%2".arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.diskUsage)).arg(__inputUtils.bytesToHumanSize(__merginApi.workspaceInfo.storageLimit))
       storageFill: {
         if (__merginApi.workspaceInfo.storageLimit > 0 )

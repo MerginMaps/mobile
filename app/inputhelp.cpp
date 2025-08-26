@@ -9,7 +9,6 @@
 
 #include "inputhelp.h"
 #include "merginuserinfo.h"
-#include "merginsubscriptioninfo.h"
 #include "merginapi.h"
 #include "inpututils.h"
 #include "coreutils.h"
