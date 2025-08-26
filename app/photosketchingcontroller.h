@@ -115,6 +115,8 @@ class PhotoSketchingController: public QObject
     QVector<ColorPath> mPaths;
     // the difference is that active paths are those that can be undone in current session
     QVector<ColorPath> mActivePaths;
+
+    friend class TestSketching;
 };
 
 

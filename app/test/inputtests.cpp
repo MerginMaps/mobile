@@ -9,28 +9,26 @@
 
 #include "inputtests.h"
 
-#include <QTest>
-#include <QDebug>
+#include "testsketching.h"
+#include "testmerginapi.h"
+#include "testlinks.h"
 
-#include "test/testmerginapi.h"
-#include "test/testlinks.h"
-
-#include "test/testutilsfunctions.h"
-#include "test/testattributepreviewcontroller.h"
-#include "test/testattributecontroller.h"
-#include "test/testidentifykit.h"
-#include "test/testposition.h"
-#include "test/testrememberattributescontroller.h"
-#include "test/testscalebarkit.h"
-#include "test/testvariablesmanager.h"
-#include "test/testformeditors.h"
-#include "test/testmodels.h"
-#include "test/testcoreutils.h"
-#include "test/testimageutils.h"
-#include "test/testmaptools.h"
-#include "test/testlayertree.h"
-#include "test/testactiveproject.h"
-#include "test/testprojectchecksumcache.h"
+#include "testutilsfunctions.h"
+#include "testattributepreviewcontroller.h"
+#include "testattributecontroller.h"
+#include "testidentifykit.h"
+#include "testposition.h"
+#include "testrememberattributescontroller.h"
+#include "testscalebarkit.h"
+#include "testvariablesmanager.h"
+#include "testformeditors.h"
+#include "testmodels.h"
+#include "testcoreutils.h"
+#include "testimageutils.h"
+#include "testmaptools.h"
+#include "testlayertree.h"
+#include "testactiveproject.h"
+#include "testprojectchecksumcache.h"
 
 InputTests::InputTests() = default;
 
@@ -181,6 +179,11 @@ int InputTests::runTest() const
   {
     TestProjectChecksumCache projectChecksumTest;
     nFailed = QTest::qExec( &projectChecksumTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testSketching" )
+  {
+    TestSketching sketchingTest;
+    nFailed = QTest::qExec( &sketchingTest, mTestArgs );
   }
   else if ( mTestRequested == "--testMerginApi" )
   {
