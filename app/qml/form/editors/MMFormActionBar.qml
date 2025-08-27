@@ -68,38 +68,6 @@ Item {
     onObjectRemoved: _recalcSoon()
   }
 
-  function _storeWidth(i, w) {
-    const arr = _widths.slice()
-    arr[i] = Math.ceil(w || 0)
-    _widths = arr
-    _recalcSoon()
-  }
-
-  function _ready() {
-    if (_count <= 0) return false
-    if (_widths.length !== _count) return false
-    for (let i = 0; i < _count; ++i) if (!_widths[i] || _widths[i] <= 0) return false
-    return true
-  }
-
-  function _sumWidths() {
-    let s = 0
-    for (let i = 0; i < _count; ++i) s += _widths[i]
-    return s
-  }
-
-  function _maxWidth() {
-    let m = 0
-    for (let i = 0; i < _count; ++i) if (_widths[i] > m) m = _widths[i]
-    return m
-  }
-
-  // width required if ALL inline
-  function _needAllBase() {
-    const gaps = _count > 1 ? (_count - 1) * gap : 0
-    return Math.ceil(_sumWidths() + gaps + Math.max(0, widthPadding) + Math.max(0, allSafety))
-  }
-
   // RECOMPUTE e s
   Timer { id: debounce; interval: debounceMs; onTriggered: decide() }
   function _recalcSoon() { debounce.restart() }
@@ -171,8 +139,10 @@ Item {
   MMComponents.MMPopup {
     id: popup
     parent: hidden
-    x: width - contentItem.width
-    y: height + __style.margin12
+    x: parent.width - width
+    y: parent.height + __style.margin12
+    width: menuColumn.width
+
     transformOrigin: Item.TopRight
 
     contentItem: Column {
@@ -216,6 +186,41 @@ Item {
       if (root._all && allRow.width > root.width) _setMode(root.modeEnum.pair)
     }
   }
+
+  ///////////////////////////////////
+  function _storeWidth(i, w) {
+    const arr = _widths.slice()
+    arr[i] = Math.ceil(w || 0)
+    _widths = arr
+    _recalcSoon()
+  }
+
+  function _ready() {
+    if (_count <= 0) return false
+    if (_widths.length !== _count) return false
+    for (let i = 0; i < _count; ++i) if (!_widths[i] || _widths[i] <= 0) return false
+    return true
+  }
+
+  function _sumWidths() {
+    let s = 0
+    for (let i = 0; i < _count; ++i) s += _widths[i]
+    return s
+  }
+
+  function _maxWidth() {
+    let m = 0
+    for (let i = 0; i < _count; ++i) if (_widths[i] > m) m = _widths[i]
+    return m
+  }
+
+  // width required if ALL inline
+  function _needAllBase() {
+    const gaps = _count > 1 ? (_count - 1) * gap : 0
+    return Math.ceil(_sumWidths() + gaps + Math.max(0, widthPadding) + Math.max(0, allSafety))
+  }
+
+  //////////////////////////////
 
   function _setMode(m) {
     if (_mode === m) return
