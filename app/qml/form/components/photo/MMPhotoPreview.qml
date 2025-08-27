@@ -89,15 +89,48 @@ Popup {
               autoTransform: true
               fillMode: Image.PreserveAspectFit
 
-              PinchArea {
-                anchors.fill: parent
-                pinch.target: imagePreview
-                pinch.minimumRotation: -180
-                pinch.maximumRotation: 180
-                pinch.minimumScale: 0.5
-                pinch.maximumScale: 10
+              transform: Scale {
+                origin.x: imagePreview.width  / 2
+                origin.y: imagePreview.height / 2
+                xScale: photoFrame.scale
+                yScale: photoFrame.scale
               }
             }
+          }
+        }
+        // Keep content in bounds; recenters when content smaller than viewport
+        function _clamp() {
+          const maxX = Math.max(0, contentWidth  - width)
+          const maxY = Math.max(0, contentHeight - height)
+          contentX = Math.max(0, Math.min(maxX, contentX))
+          contentY = Math.max(0, Math.min(maxY, contentY))
+        }
+
+        PinchArea {
+          id: pincher
+          anchors.fill: parent
+          property real _startScale: 1
+
+          onPinchStarted: function(pinch) {
+            pinch.accepted = true
+            _startScale = photoFrame.scale
+          }
+          onPinchUpdated: function(pinch) {
+            var newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, _startScale * pinch.scale))
+            var p = pincher.mapToItem(flick.contentItem, pinch.center.x, pinch.center.y)
+
+            var prevScale = photoFrame.scale
+            photoFrame.scale = newScale
+
+            var ratio = newScale / prevScale
+            flick.contentX = (flick.contentX + p.x) * ratio - p.x
+            flick.contentY = (flick.contentY + p.y) * ratio - p.y
+
+            flick._clamp()
+          }
+
+          onPinchFinished: function(pinch) {
+            flick._clamp()
           }
         }
       }
