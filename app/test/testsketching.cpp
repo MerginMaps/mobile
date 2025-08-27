@@ -155,3 +155,36 @@ void TestSketching::testSaveSketches()
   signalArgs = spy.last();
   QCOMPARE( signalArgs.first().toString(), mTempDir.path() + QStringLiteral( "/photo.jpg" ) );
 }
+
+void TestSketching::testLoadBackupSketch()
+{
+  const QString path = QStringLiteral( "file:///this/is/long/path/to/image/MM_test_image.jpg" );
+  const QString path2 = QStringLiteral( "file:///this/is/long/path/to/image/MM_invalid_test_image.jpg" );
+  QFile tempFile( QDir::temp().absolutePath() + QStringLiteral( "/MM_test_image.jpg" ) );
+  tempFile.open( QIODevice::WriteOnly );
+  tempFile.write( QByteArray( "Nice picture." ) );
+  tempFile.close();
+  QVERIFY( QDir::temp().exists( "MM_test_image.jpg" ) );
+
+  // check for existing backup
+  PhotoSketchingController sketchingController;
+  QSignalSpy spy( &sketchingController, &PhotoSketchingController::tempPhotoSourceChanged );
+  QVERIFY( spy.isValid() );
+  sketchingController.mPhotoSource = path;
+  sketchingController.prepareController();
+  QCOMPARE( sketchingController.mPhotoSource, QDir::temp().absolutePath() + QStringLiteral( "/MM_test_image.jpg" ) );
+  QCOMPARE( sketchingController.mOriginalPhotoSource, QUrl( path ).toLocalFile() );
+  QCOMPARE( spy.count(), 1 );
+  auto signalArgs = spy.takeLast();
+  QCOMPARE( signalArgs.first().toString(), QDir::temp().absolutePath() + QStringLiteral( "/MM_test_image.jpg" ) );
+
+  // check for nonexisting backup
+  PhotoSketchingController sketchingController2;
+  const QSignalSpy spy2( &sketchingController2, &PhotoSketchingController::tempPhotoSourceChanged );
+  QVERIFY( spy2.isValid() );
+  sketchingController2.mPhotoSource = path2;
+  sketchingController2.prepareController();
+  QCOMPARE( sketchingController2.mPhotoSource, path2 );
+  QCOMPARE( sketchingController2.mOriginalPhotoSource, QUrl( path2 ).toLocalFile() );
+  QCOMPARE( spy2.count(), 0 );
+}
