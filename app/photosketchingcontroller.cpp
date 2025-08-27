@@ -286,13 +286,13 @@ QUrl PhotoSketchingController::getCurrentPhotoPath() const
 
 void PhotoSketchingController::prepareController()
 {
+  mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
   if ( !photoFileName.isEmpty() && QDir::temp().exists( photoFileName ) )
   {
-    QDir::temp().remove( photoFileName );
+    mPhotoSource = QUrl( QDir::temp().absolutePath() + "/" + photoFileName ).toString();
+    emit tempPhotoSourceChanged( QUrl( mPhotoSource ).toString() );
   }
-
-  mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
 }
 
 int PhotoSketchingController::sketchWidth()

@@ -153,6 +153,10 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
     }
 
     const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
+    if ( iterator == exifData.end() )
+    {
+      return true;
+    }
     exifData.erase( iterator );
 
     srcImage->setExifData( exifData );
