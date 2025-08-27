@@ -262,3 +262,50 @@ void TestAttributePreviewController::testFeatureTitle()
   controller.setFeatureLayerPair( pair2 );
   QCOMPARE( controller.title(), QStringLiteral( "Unnamed Layer (2)" ) );
 }
+
+
+void TestAttributePreviewController::testFormatDateForPreview()
+{
+    //Layer with a single datetime field
+    auto *layer = new QgsVectorLayer(
+        QStringLiteral("Point?field=dt:datetime"),
+        QStringLiteral("layer_dt"), QStringLiteral("memory"));
+    QVERIFY(layer && layer->isValid());
+
+    //Apply display_format so we can assert a deterministic string
+    const int idx = layer->fields().indexFromName(QStringLiteral("dt"));
+    QVariantMap cfg; cfg["display_format"] = QStringLiteral("yyyy-MM-dd HH:mm:ss");
+    layer->setEditorWidgetSetup(idx, QgsEditorWidgetSetup(QStringLiteral("DateTime"), cfg));
+
+    //Valid ISO UTC string → should convert to LOCAL time and format
+    const QString rawUtc = QStringLiteral("2021-06-07T08:09:10Z");
+    QDateTime dt = QDateTime::fromString(rawUtc, Qt::ISODate);
+    QVERIFY(dt.isValid());
+    const QString expected = dt.toLocalTime().toString(cfg["display_format"].toString());
+
+    QgsFeature f(layer->dataProvider()->fields(), 1);
+    f.setAttribute(QStringLiteral("dt"), rawUtc);
+    QVERIFY(layer->dataProvider()->addFeatures(QgsFeatureList() << f));
+
+    layer->setMapTipTemplate(QStringLiteral("# fields\ndt")); // show only that field
+    QgsProject::instance()->addMapLayer(layer);
+
+    AttributePreviewController c; c.setProject(QgsProject::instance());
+    c.setFeatureLayerPair(FeatureLayerPair(f, layer));
+    QCOMPARE(c.type(), AttributePreviewController::Fields);
+    QCOMPARE(c.fieldModel()->rowCount(), 1);
+    QCOMPARE(c.fieldModel()->data(c.fieldModel()->index(0,0), AttributePreviewModel::Value), expected);
+
+    //Invalid string -> should fall back to raw value
+    QgsFeature fBad(layer->dataProvider()->fields(), 2);
+    const QString bad = QStringLiteral("2021-13-40T77:88:99");
+    fBad.setAttribute(QStringLiteral("dt"), bad);
+
+    c.setFeatureLayerPair(FeatureLayerPair(fBad, layer));
+    QCOMPARE(c.type(), AttributePreviewController::Fields);
+    QCOMPARE(c.fieldModel()->rowCount(), 1);
+    QCOMPARE(c.fieldModel()->data(c.fieldModel()->index(0,0), AttributePreviewModel::Value), bad);
+
+    QgsProject::instance()->removeAllMapLayers();
+}
+
