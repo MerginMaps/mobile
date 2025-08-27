@@ -15,7 +15,7 @@ import "../../../components" as MMComponents
 Popup {
   id: root
 
-  property alias photoUrl: imagePreview.source
+  property url photoUrl //passed url externally
 
   parent: Overlay.overlay
   visible: true
@@ -79,7 +79,7 @@ Popup {
 
             Image {
               id: imagePreview
-
+              source: root.photoUrl
               height: root.height / 2
 
               clip: true
@@ -98,6 +98,7 @@ Popup {
             }
           }
         }
+
         // Keep content in bounds; recenters when content smaller than viewport
         function _clamp() {
           const maxX = Math.max(0, contentWidth  - width)
