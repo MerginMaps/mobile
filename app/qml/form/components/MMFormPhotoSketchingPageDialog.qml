@@ -213,7 +213,7 @@ Dialog {
       Layout.preferredHeight: scrollRow.height
       Layout.preferredWidth: scrollRow.width
       Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
-      Layout.bottomMargin: __style.margin20
+      Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 

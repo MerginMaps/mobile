@@ -28,6 +28,7 @@ class TestSketching : public QObject
     void testChangeColor();
     void testChangePhotoSize();
     void testSaveSketches();
+    void testLoadBackupSketch();
 
   private:
     std::unique_ptr<PhotoSketchingController> mController = nullptr;
