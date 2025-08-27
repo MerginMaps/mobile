@@ -45,32 +45,60 @@ Popup {
 
     Item {
       id: photoFrame
+      anchors.fill: parent
+      clip: true
 
-      width: Math.min(imagePreview.width, parent.width)
-      height: Math.min(imagePreview.height, parent.height)
+      //Zoom limits
+      property real minScale: 0.5
+      property real maxScale: 10.0
+      property real scale: 1.0
+      // width: Math.min(imagePreview.width, parent.width)
+      // height: Math.min(imagePreview.height, parent.height)
 
-      y: parent.height / 2 - height / 2
-      x: parent.width / 2 - width / 2
-
-      Image {
-        id: imagePreview
-
-        height: root.height / 2
-
+      Flickable {
+        id: flick
+        anchors.fill: parent
         clip: true
+        interactive: true
+        boundsBehavior: Flickable.StopAtBounds
+        maximumFlickVelocity: 4000
 
-        focus: true
-        asynchronous: true
-        autoTransform: true
-        fillMode: Image.PreserveAspectFit
+        contentWidth:  Math.max(width,  imagePreview.paintedWidth  * photoFrame.scale)
+        contentHeight: Math.max(height, imagePreview.paintedHeight * photoFrame.scale)
 
-        PinchArea {
-          anchors.fill: parent
-          pinch.target: imagePreview
-          pinch.minimumRotation: -180
-          pinch.maximumRotation: 180
-          pinch.minimumScale: 0.5
-          pinch.maximumScale: 10
+        Item {
+          id: canvas
+          width: flick.contentWidth
+          height: flick.contentHeight
+
+          Item {
+            id: imageHolder
+            width: imagePreview.width
+            height: imagePreview.height
+            anchors.centerIn: parent
+
+            Image {
+              id: imagePreview
+
+              height: root.height / 2
+
+              clip: true
+
+              focus: true
+              asynchronous: true
+              autoTransform: true
+              fillMode: Image.PreserveAspectFit
+
+              PinchArea {
+                anchors.fill: parent
+                pinch.target: imagePreview
+                pinch.minimumRotation: -180
+                pinch.maximumRotation: 180
+                pinch.minimumScale: 0.5
+                pinch.maximumScale: 10
+              }
+            }
+          }
         }
       }
     }
