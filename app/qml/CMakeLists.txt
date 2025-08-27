@@ -114,6 +114,7 @@ set(MM_QML
     form/editors/MMFormTextMultilineEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
+    form/editors/MMFormActionBar.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
