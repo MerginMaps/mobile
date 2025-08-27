@@ -165,7 +165,7 @@ Item {
             label: qsTr("Open form"),
             icon: __style.formIcon,
             style: "Secondary",
-            visible: internal.showEditButton,
+            visible: !internal.showEditButton,
             onTrigger: function () { root.openFormClicked() }
           },
           {

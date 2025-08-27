@@ -187,7 +187,9 @@ Item {
     }
   }
 
-  ///////////////////////////////////
+  /* we need the real widths of the actual MMButtons (with icon, font, paddings, style) to know if
+  all buttons fit in one line
+  Those widths are measured by the hidden Instantiator delegate and passed here */
   function _storeWidth(i, w) {
     const arr = _widths.slice()
     arr[i] = Math.ceil(w || 0)
@@ -195,6 +197,8 @@ Item {
     _recalcSoon()
   }
 
+  /* don't make layout decisions until every visible button has reported a non zero width
+  when QML is still measuring, widths may be 0/undefined */
   function _ready() {
     if (_count <= 0) return false
     if (_widths.length !== _count) return false
@@ -202,26 +206,34 @@ Item {
     return true
   }
 
+  /*this is the core size of the “ALL inline” layout, it’ll add gaps and cushions on top of this*/
   function _sumWidths() {
     let s = 0
     for (let i = 0; i < _count; ++i) s += _widths[i]
     return s
   }
 
+  /* when reserveOneMore is true, we require space for “one more typical button” before we expand to “ALL”
+  We use the widest as a conservative stand-in for that “one more”
+  */
   function _maxWidth() {
     let m = 0
     for (let i = 0; i < _count; ++i) if (_widths[i] > m) m = _widths[i]
     return m
   }
 
-  // width required if ALL inline
+  //
+  /* this is the exact threshold we compare against root.width
+  if root.width >= _needAllBase(), plus any extra headroom rules you turned on,
+  we can safely flip to ALL- otherwise we stay in PAIR (first button (edit) + hidden)*/
   function _needAllBase() {
     const gaps = _count > 1 ? (_count - 1) * gap : 0
     return Math.ceil(_sumWidths() + gaps + Math.max(0, widthPadding) + Math.max(0, allSafety))
   }
 
   //////////////////////////////
-
+  //Sets _mode, closes the popup if moving into ALL, and starts collapseGuard when expandinh
+  //-> Centralized state transition with the side-effects you want
   function _setMode(m) {
     if (_mode === m) return
     _mode = m
@@ -230,6 +242,24 @@ Item {
     if (_mode === modeEnum.all) collapseGuard.start()
   }
 
+  /*Decide
+    processes the current mode based on actual widths and the component width
+    0–1 visible actions: always ALL
+    Not ready to measure: stay in PAIR
+
+    process:
+    avail = floor(root.width)
+    needAll = _needAllBase() (sum widths + gaps + paddings)
+    extraOne = (reserveOneMore ? maxButtonWidth + gap : 0)
+
+    If already in ALL:
+      collapse immediately when needAll > avail
+
+    If in PAIR:
+      expand only when needAll + extraOne + lagFix <= avail
+
+    This makes expansion conservative, preventing flaps or jitter
+    */
   function decide() {
     if (_count <= 1) { _setMode(modeEnum.all); return }
     if (!_ready())   { _setMode(modeEnum.pair); return }
@@ -242,7 +272,7 @@ Item {
       // Collapse as soon as ALL no longer fits -> we also have the post-layout guard
       if (needAll > avail) _setMode(modeEnum.pair)
     } else {
-      // Expand only when ALL + extra one + lagFix fits comfortably.
+      // Expand only when ALL + extra one + lagFix fits comfortably
       if (needAll + extraOne + Math.max(0, lagFix) <= avail)
         _setMode(modeEnum.all)
     }
