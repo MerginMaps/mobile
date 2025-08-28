@@ -13,7 +13,6 @@ set(Qt6_base_dir ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/Qt6)
 if (WIN)
   install(
     TARGETS Input
-    LIBRARY DESTINATION lib64/
     RUNTIME DESTINATION .
   )
 else ()
@@ -54,27 +53,30 @@ if (MACOS)
 
   install(SCRIPT ${deploy_script} COMPONENT Runtime)
   include(InstallRequiredSystemLibraries)
-endif ()
+
+elseif (WIN)
+  qt_generate_deploy_qml_app_script(
+    TARGET Input
+    OUTPUT_SCRIPT deploy_script
+    NO_TRANSLATIONS
+    DEPLOY_TOOL_OPTIONS "--libdir . --plugindir . --force-openssl"
+  )
+  install(SCRIPT ${deploy_script} COMPONENT Runtime)
+endif()
 
 # ########################################################################################
 # SDK Shared Libraries
 # ########################################################################################
 if (WIN)
   install(
-    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/
+    DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/"
     DESTINATION .
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "Qca" EXCLUDE
   )
   install(
-    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qca/crypto/
-    DESTINATION .
-    FILES_MATCHING
-    PATTERN "*.dll"
-  )
-  install(
-    DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/qgis/plugins/
+    DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qca/crypto/"
     DESTINATION .
     FILES_MATCHING
     PATTERN "*.dll"
@@ -104,13 +106,7 @@ set(qml_dirs
 )
 
 foreach (qml_dir ${qml_dirs})
-  if (WIN)
-    install(
-      DIRECTORY ${Qt6_base_dir}/qml/${qml_dir}
-      DESTINATION qml
-      PATTERN "*d.dll" EXCLUDE
-    )
-  elseif (LNX)
+  if (LNX)
     install(
       DIRECTORY ${Qt6_base_dir}/qml/${qml_dir}
       DESTINATION qml
@@ -129,13 +125,7 @@ set(plugins_dirs
 )
 
 foreach (plugins_dir ${plugins_dirs})
-  if (WIN)
-    install(
-      DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir}
-      DESTINATION .
-      PATTERN "*d.dll" EXCLUDE
-    )
-  elseif (LNX)
+  if (LNX)
     install(
       DIRECTORY ${Qt6_base_dir}/plugins/${plugins_dir}
       DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -144,14 +134,7 @@ foreach (plugins_dir ${plugins_dirs})
   endif ()
 endforeach ()
 
-# tls has names like *backend[d].dll so excluding *d.dll doesn't work
-if (WIN)
-  install(
-    DIRECTORY ${Qt6_base_dir}/plugins/tls
-    DESTINATION .
-    PATTERN "*dd.dll" EXCLUDE
-  )
-elseif (LNX)
+if (LNX)
   install(
     DIRECTORY ${Qt6_base_dir}/plugins/tls
     DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -220,23 +203,12 @@ set(qt_libs
 )
 
 foreach (qt_lib ${qt_libs})
-  if (WIN)
-    install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qt6${qt_lib}.dll
-            DESTINATION .
-    )
-  elseif (LNX)
+  if (LNX)
     install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libQt6${qt_lib}.so
             DESTINATION lib64
     )
   endif ()
 endforeach ()
-
-if (WIN)
-  install(FILES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/d3dcompiler_47.dll
-                ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/opengl32sw.dll
-          DESTINATION .
-  )
-endif ()
 
 # ########################################################################################
 # Translations
