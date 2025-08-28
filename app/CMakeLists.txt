@@ -299,13 +299,24 @@ qt_add_resources(
 # Mergin Maps Target
 # ########################################################################################
 
-qt_add_executable(
+if (WIN)
+  qt_add_executable(
+  Input
+  WIN32
+  ${MM_SRCS}
+  ${MM_HDRS}
+  $<TARGET_OBJECTS:mm_core>
+  main.cpp
+)
+else ()
+  qt_add_executable(
   Input
   ${MM_SRCS}
   ${MM_HDRS}
   $<TARGET_OBJECTS:mm_core>
   main.cpp
 )
+endif ()
 
 target_include_directories(
   Input
