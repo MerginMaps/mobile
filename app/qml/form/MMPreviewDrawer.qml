@@ -10,10 +10,13 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 import mm 1.0 as MM
+import qgs 1.0 as QGS
 
 import "../components" as MMComponents
+import "./editors" as MMFormEditors
 
 // Content of the preview drawer defined in MMFormController.qml
 
@@ -102,7 +105,7 @@ Item {
 
         Item {
           Layout.fillWidth: true
-          Layout.minimumWidth: __style.margin16
+          Layout.minimumWidth: __style.margin10
           height: 1
         }
 
@@ -142,84 +145,44 @@ Item {
       // buttons
       MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showButtons }
 
-      Item {
+      MMFormEditors.MMFormActionBar {
+        id: actionsBar
         width: parent.width - contentLayout.rightMaxPagePadding
-        height: childrenRect.height
-
         visible: internal.showButtons
+        gap: __style.margin12
 
-        ScrollView {
-          width: parent.width
-          height: scrollRow.height
+        widthPadding: 0
 
-          ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-          ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-          contentHeight: availableHeight
-          contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
-
-          // Scrollview does not propagate clicks to items beneath
-          MouseArea {
-            anchors.fill: parent
-            onClicked: function( mouse ) {
-              mouse.accepted = true
-              root.contentClicked()
-            }
+        actions: [
+          {
+            label: qsTr("Edit"),
+            icon: __style.editIcon,
+            style: "Primary",
+            visible: internal.showEditButton,
+            onTrigger: function () { root.editClicked() }
+          },
+          {
+            label: qsTr("Open form"),
+            icon: __style.formIcon,
+            style: "Secondary",
+            visible: !internal.showEditButton,
+            onTrigger: function () { root.openFormClicked() }
+          },
+          {
+            label: qsTr("Select more"),
+            icon: __style.workspacesIcon,
+            style: "Secondary",
+            visible: internal.showSelectMoreButton,
+            onTrigger: function () { root.selectMoreClicked(controller.featureLayerPair) }
+          },
+          {
+            label: qsTr("Stake out"),
+            icon: __style.gpsAntennaHeightIcon,
+            style: "Secondary",
+            visible: internal.showStakeoutButton,
+            onTrigger: function () { root.stakeoutClicked(controller.featureLayerPair) }
           }
-
-          Row {
-            id: scrollRow
-
-            height: stakeOutButton.height
-            spacing: 12 * __dp
-
-            MMComponents.MMButton {
-              id: editButton
-
-              text: qsTr( "Edit" )
-              iconSourceLeft: __style.editIcon
-
-              visible: internal.showEditButton
-
-              onClicked: root.editClicked()
-            }
-
-            MMComponents.MMButton {
-              id: formButton
-
-              text: qsTr( "Open form" )
-              iconSourceLeft: __style.formIcon
-
-              visible: !internal.showEditButton
-
-              onClicked: root.openFormClicked()
-            }
-
-            MMComponents.MMButton {
-              id: selectMoreButton
-
-              text: qsTr( "Select more" )
-              iconSourceLeft: __style.workspacesIcon
-              type: MMComponents.MMButton.Secondary
-
-              visible: internal.showSelectMoreButton
-
-              onClicked: root.selectMoreClicked( controller.featureLayerPair )
-            }
-
-            MMComponents.MMButton {
-              id: stakeOutButton
-
-              text: qsTr( "Stake out" )
-              iconSourceLeft: __style.gpsAntennaHeightIcon
-              type: MMComponents.MMButton.Secondary
-
-              visible: internal.showStakeoutButton
-
-              onClicked: root.stakeoutClicked( controller.featureLayerPair )
-            }
-          }
-        }
+        ]
       }
 
       // fields
