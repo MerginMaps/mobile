@@ -384,6 +384,11 @@ void addQmlImportPath( QQmlEngine &engine )
   qDebug() << "adding QML import Path: " << qmlBuildImportPath;
 #endif
 
+#ifdef Q_OS_WIN
+  // On windows the import paths are wrong and expect path: app-dir\Qt6\qml
+  engine.addImportPath( QCoreApplication::applicationDirPath() + "/qml" );
+#endif
+
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS - to load Input/*.qml files defined in qmldir
   engine.addImportPath( "qrc:///" );
@@ -496,6 +501,7 @@ int main( int argc, char *argv[] )
   // we define engine sooner as some classes are needed for creation of others, but QML engine is responsible for
   // creation of those required classes
   QQmlEngine engine;
+  addQmlImportPath( engine );
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings *as = engine.singletonInstance<AppSettings *>( "MMInput", "AppSettings" );
 
@@ -678,7 +684,6 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
-  addQmlImportPath( engine );
 
   initDeclarative();
   // QGIS environment variables to set

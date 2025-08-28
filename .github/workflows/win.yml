@@ -149,27 +149,18 @@ jobs:
           
           cmake --build ${{ github.workspace }}\build-mm --config Release --verbose
 
-          IF NOT EXIST Input.exe (echo err_INPUT_BUILD & exit /b 1)
+          IF NOT EXIST Release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
                                           
       - name: Install app
         shell: cmd
         run: |
             cd build-mm
-            nmake install 
+            cmake --install ${{ github.workspace }}\build-mm --config Release --verbose 
             
             mkdir C:\mm-package
             mkdir C:\mm-package\stage
             robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
             dir C:\mm-package\stage
-            
-      - name: Downloading redist
-        shell: bash
-        run: |
-          URL="https://aka.ms/vs/17/release/vc_redist.x64.exe"
-          echo "downloading: $URL"
-          curl -fsSL --connect-timeout 60 -o \
-            /c/mm-package/stage/vc_redist.x64.exe \
-            ${URL}
 
       - name: Get TimeStamp
         id: time
@@ -180,8 +171,8 @@ jobs:
       - name: Create package
         shell: cmd
         run: |
-            makensis.exe mm\scripts\input_win.nsi
-            xcopy C:\mm-package\inputapp-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
+            makensis.exe mm\scripts\MM_win.nsi
+            xcopy C:\mm-package\merginmaps-app-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v4

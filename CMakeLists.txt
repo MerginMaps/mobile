@@ -231,7 +231,7 @@ find_package(poly2tri CONFIG)
 find_package(meshoptimizer CONFIG REQUIRED)
 
 if (WIN)
-  find_package(FFMPEG REQUIRED)
+  find_package(FFmpeg REQUIRED)
   find_package(WinLibraries REQUIRED)
 endif ()
 

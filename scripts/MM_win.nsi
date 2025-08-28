@@ -1,4 +1,4 @@
-!define APPNAME "Mergin Maps Input"
+!define APPNAME "Mergin Maps"
 !define COMPANYNAME "Lutra Consulting Ltd."
 !define DESCRIPTION "Survey made easy"
 !define HELPURL "https://merginmaps.com/docs"
@@ -9,11 +9,11 @@ RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on
  
 InstallDir "$PROGRAMFILES64\${COMPANYNAME}\${APPNAME}"
 
-LicenseData "C:\input-package\stage\license.txt"
+LicenseData "C:\mm-package\stage\license.txt"
 # This will be in the installer/uninstaller's title bar
 Name "${COMPANYNAME} - ${APPNAME}"
-Icon "C:\input-package\stage\images\AppIcon.ico"
-outFile "C:\input-package\inputapp-win-x86_64.exe"
+Icon "C:\mm-package\stage\images\AppIcon.ico"
+outFile "C:\mm-package\merginmaps-app-win-x86_64.exe"
  
 !include LogicLib.nsh
  
@@ -38,14 +38,14 @@ functionEnd
  
 section "Visual Studio Runtime"
   SetOutPath "$INSTDIR"
-  File "C:\input-package\stage\vc_redist.x64.exe"
+  File "C:\mm-package\stage\vc_redist.x64.exe"
   ExecWait "$INSTDIR\vc_redist.x64.exe"
 sectionEnd
 
 section "install"
 	setOutPath $INSTDIR
 	
-    File /r "C:\input-package\stage\*"
+    File /r "C:\mm-package\stage\*"
     
 	writeUninstaller "$INSTDIR\uninstall.exe"
  
