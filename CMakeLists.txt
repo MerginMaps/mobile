@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.22)
 
 # Note: To update version use script/update_all_versions.bash
 set(MM_VERSION_MAJOR "2025")
-set(MM_VERSION_MINOR "5")
+set(MM_VERSION_MINOR "6")
 set(MM_VERSION_PATCH "0")
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
@@ -312,6 +312,8 @@ if (ENABLE_TESTS)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
+
+set(MM_FORMATS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/docs/supported_formats.txt")
 
 configure_file(
   ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h

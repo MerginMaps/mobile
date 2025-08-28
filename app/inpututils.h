@@ -639,6 +639,12 @@ class InputUtils: public QObject
      */
     static void sanitizeFileName( QString &fileName );
 
+    /**
+     * Appends all supported QGIS formats to supported_formats.txt.
+     * \note This function should not be called during normal runtime, as it tries to write to source directory.
+     */
+    static void updateQgisFormats( const QByteArray &output );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

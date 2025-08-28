@@ -3,27 +3,27 @@ name: iOS Build
 on:
   push:
     paths:
-    - 'vcpkg-overlay/**'
-    - 'vcpkg.json'
-    - 'VCPKG_BASELINE'
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/ios.yml'
-    - '.github/secrets/ios/**'
+      - 'vcpkg-overlay/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/ios.yml'
+      - '.github/secrets/ios/**'
 
   release:
     types:
       - published
 
-env:   
+env:
   CMAKE_VERSION: '3.31.6'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
-  VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
-  XC_VERSION: ${{ '16.2' }}
+  VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
+  XC_VERSION: ${{ '16.4' }}
   DEPLOYMENT_TARGET: '14.0'
   TRIPLET: arm64-ios
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
@@ -137,16 +137,16 @@ jobs:
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
 
-            TIMESTAMP=`date "+%y.%-m"`
-            CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
+          TIMESTAMP=`date "+%y.%-m"`
+          CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-            echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
-            echo "Build number: ${CF_BUNDLE_VERSION}"
+          echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+          echo "Build number: ${CF_BUNDLE_VERSION}"
 
-            # add build number to summary
-            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
+          # add build number to summary
+          echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
 
       - name: Create build system with cmake
         run: |
@@ -208,4 +208,7 @@ jobs:
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-mm/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+<<<<<<< HEAD
 
+=======
+>>>>>>> 761352f69dc6a2743313e7e7c87ca59a12deacb8
