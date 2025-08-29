@@ -1,19 +1,9 @@
 # GPLv2 Licence
-find_path(
-  QGIS_INCLUDE_DIR
-  qgis.h
-  "${INPUT_SDK_PATH_MULTI}/include/qgis"
-  NO_DEFAULT_PATH
-)
+find_path(QGIS_INCLUDE_DIR qgis.h PATH_SUFFIXES qgis)
+find_library(QGIS_CORE_LIBRARY NAMES qgis_core)
+find_path(QGIS_RESOURCE_DIR qgis.db PATH_SUFFIXES share/qgis/resources)
 
-find_library(
-  QGIS_CORE_LIBRARY
-  NAMES qgis_core
-  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-  NO_DEFAULT_PATH
-)
-
-set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR)
+set(QGIS_REQUIRED_VARS QGIS_CORE_LIBRARY QGIS_INCLUDE_DIR QGIS_RESOURCE_DIR)
 set(QGIS_PROVIDERS_LIST
     authmethod_basic
     authmethod_esritoken
@@ -33,12 +23,7 @@ set(QGIS_PROVIDERS_LIST
 )
 
 foreach (provider ${QGIS_PROVIDERS_LIST})
-  find_library(
-    QGIS_${provider}_LIBRARY
-    NAMES ${provider}_a
-    PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-    NO_DEFAULT_PATH
-  )
+  find_library(QGIS_${provider}_LIBRARY NAMES ${provider}_a)
   set(QGIS_REQUIRED_VARS ${QGIS_REQUIRED_VARS} QGIS_${provider}_LIBRARY)
 endforeach ()
 
@@ -61,7 +46,7 @@ if (QGIS_FOUND AND NOT TARGET QGIS::Core)
 
 endif ()
 
-mark_as_advanced(QGIS_INCLUDE_DIR QGIS_CORE_LIBRARY)
+mark_as_advanced(QGIS_INCLUDE_DIR QGIS_CORE_LIBRARY QGIS_RESOURCE_DIR)
 foreach (provider ${QGIS_PROVIDERS_LIST})
   mark_as_advanced(QGIS_${provider}_LIBRARY)
 endforeach ()
