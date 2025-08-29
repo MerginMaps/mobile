@@ -208,7 +208,3 @@ jobs:
           CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/Input.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
           xcrun altool --upload-app -t ios -f build-mm/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
-<<<<<<< HEAD
-
-=======
->>>>>>> 761352f69dc6a2743313e7e7c87ca59a12deacb8
