@@ -29,6 +29,8 @@ jobs:
 
     env:
       VS_VERSION: "2022"
+      # we can't reference other variables within, so make sure the year in path is same as VS_VERSION
+      VCINSTALLDIR: "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\"
       CMAKE_VERSION: '3.31.6'
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       TRIPLET: x64-windows

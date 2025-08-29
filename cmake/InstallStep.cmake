@@ -11,10 +11,7 @@ set(Qt6_base_dir ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/Qt6)
 # ########################################################################################
 
 if (WIN)
-  install(
-    TARGETS Input
-    RUNTIME DESTINATION .
-  )
+  install(TARGETS Input RUNTIME DESTINATION .)
 else ()
   install(
     TARGETS Input
@@ -56,13 +53,16 @@ if (MACOS)
 
 elseif (WIN)
   qt_generate_deploy_qml_app_script(
-    TARGET Input
-    OUTPUT_SCRIPT deploy_script
+    TARGET
+    Input
+    OUTPUT_SCRIPT
+    deploy_script
     NO_TRANSLATIONS
-    DEPLOY_TOOL_OPTIONS "--libdir . --plugindir . --force-openssl"
+    DEPLOY_TOOL_OPTIONS
+    "--libdir . --plugindir . --force-openssl"
   )
   install(SCRIPT ${deploy_script} COMPONENT Runtime)
-endif()
+endif ()
 
 # ########################################################################################
 # SDK Shared Libraries
