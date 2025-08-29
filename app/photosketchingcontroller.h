@@ -42,6 +42,7 @@ class PhotoSketchingController: public QObject
     QML_ELEMENT
 
     Q_PROPERTY( QString photoSource MEMBER mPhotoSource REQUIRED );
+    Q_PROPERTY( QString projectName MEMBER mProjectName REQUIRED );
     Q_PROPERTY( bool canUndo MEMBER mCanUndo NOTIFY canUndoChanged );
     Q_PROPERTY( QColor activeColor MEMBER mPenColor WRITE setActiveColor NOTIFY activeColorChanged );
     Q_PROPERTY( double photoScale MEMBER mPhotoScale WRITE setPhotoScale NOTIFY photoScaleChanged );
@@ -85,8 +86,8 @@ class PhotoSketchingController: public QObject
     Q_INVOKABLE QUrl getCurrentPhotoPath() const;
 
     /**
-     * gets triggered on creation and removes file with same name as mPhotoSource from temp folder and
-     * saves the original mPhotoSource to mOriginalPhotoSource
+     * gets triggered on creation and checks if file with same name as mPhotoSource exists in temp folder, if yes set
+     * it as current photoSource. Also saves the original mPhotoSource to mOriginalPhotoSource
      */
     Q_INVOKABLE void prepareController();
 
@@ -108,6 +109,7 @@ class PhotoSketchingController: public QObject
     double mPhotoScale = 1.0;
     QString mPhotoSource;
     QString mOriginalPhotoSource;
+    QString mProjectName;
     QColor mPenColor = QColor( Qt::white );
     bool mCanUndo = false;
     ColorPath mCurrentLine = ColorPath( mPenColor, {} );
