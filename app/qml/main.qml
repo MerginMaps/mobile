@@ -959,7 +959,16 @@ ApplicationWindow {
         }
         else
         {
-          syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
+          //If errorMessage is empty in this condition, we would send boolean flag "hasDetails" = false
+          //to hide the detail section in MMSyncFailedDialog
+          const hasDetails = !!errorMessage && errorMessage.trim().length > 0
+
+          syncFailedDialog.detailedText = hasDetails
+            ? qsTr("Details") + ": " + errorMessage
+            : ""
+
+          syncFailedDialog.hasDetails = hasDetails
+
           if ( willRetry )
           {
             __notificationModel.addError( qsTr( "There was an issue during synchronisation, we will try again. Click to learn more" ),
