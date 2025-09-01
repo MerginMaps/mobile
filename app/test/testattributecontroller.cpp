@@ -1022,27 +1022,27 @@ void TestAttributeController::testPhotoSketchingSave()
 
   //create "sketches"
   InputUtils::copyFile( QStringLiteral( "%1/image1.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
   InputUtils::copyFile( QStringLiteral( "%1/image2.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
   InputUtils::copyFile( QStringLiteral( "%1/media/image3.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
   InputUtils::copyFile( QStringLiteral( "%1/media/image4.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
   InputUtils::copyFile( QStringLiteral( "%1/media/with_slash/image5.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
   InputUtils::copyFile( QStringLiteral( "%1/media/with_slash/image6.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) );
-  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir()) , QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) );
   QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) ) );
 
 
@@ -1218,7 +1218,7 @@ void TestAttributeController::testPhotoSketchingSave()
 
     QVERIFY( !QFile::exists( testCaseResult.originalPath ) );
     QVERIFY( QFile::exists( testCaseResult.expectedNewPath ) );
-    QVERIFY(TestUtils::testExifPositionMetadataExists(testCaseResult.expectedNewPath));
+    QVERIFY( TestUtils::testExifPositionMetadataExists( testCaseResult.expectedNewPath ) );
 
     QCOMPARE( f.attribute( testCaseResult.fieldIdx ), testCaseResult.expectedNewFieldValue );
   }
