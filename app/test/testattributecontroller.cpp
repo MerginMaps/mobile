@@ -25,6 +25,7 @@
 #include "attributetabmodel.h"
 #include "attributeformproxymodel.h"
 #include "attributeformmodel.h"
+#include "imageutils.h"
 #include "inpututils.h"
 
 void TestAttributeController::init()
@@ -698,7 +699,7 @@ void TestAttributeController::testFieldsOutsideForm()
 void TestAttributeController::testPhotoRenaming()
 {
   QString projectName = QStringLiteral( "testPhotoRenaming" );
-  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
 
   QDir tempDir( projectDir );
   QVERIFY( tempDir.removeRecursively() );
@@ -994,4 +995,69 @@ void TestAttributeController::testVirtualFields()
   QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text" );
   controller.setFormValue( field2->id(), "my new text2" );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text2" );
+}
+
+void TestAttributeController::testPhotoSketchingSave()
+{
+  const QString projectName = QStringLiteral( "testPhotoSketchSaving" );
+  const QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image2.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image3.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image4.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image5.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image6.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_mynotes.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/custom_photo_name_format" ) ) );
+
+  //create "sketches"
+  InputUtils::copyFile( QStringLiteral( "%1/image1.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/image1.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+  InputUtils::copyFile( QStringLiteral( "%1/photo.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  const QgsFeature feat( surveyLayer->fields() );
+  const FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 9 );
+
+  // These are the field values set by QML code after attaching a photo
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes " ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "photo.jpg" ) );
+
+  controller.save();
+  // verify sketches for image1.jpg
+  QVERIFY( !QFile::exists( QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+  QVERIFY( !QFile::exists( QStringLiteral( "%1/image1.jpg" ).arg( projectDir ) ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/image_mynotes.jpg" ).arg( projectDir ) ) );
+  QVERIFY( !TestUtils::testExifPositionMetadataExists( QStringLiteral( "%1/image_mynotes.jpg" ).arg( projectDir ) ) );
+  // verify sketches for image3.jpg
+  QVERIFY( !QFile::exists( QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+  QVERIFY( !QFile::exists( QStringLiteral( "%1/photo.jpg" ).arg( projectDir ) ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/photos/Survey.jpg" ).arg( projectDir ) ) );
+  QVERIFY( TestUtils::testExifPositionMetadataExists( QStringLiteral( "%1/photos/Survey.jpg" ).arg( projectDir ) ) );
 }

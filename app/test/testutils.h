@@ -62,6 +62,8 @@ namespace TestUtils
   void testIsPositionTrackingLayer();
   void testMapLayerFromName();
   void testIsValidUrl();
+
+  bool testExifPositionMetadataExists( const QString &imageSource );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

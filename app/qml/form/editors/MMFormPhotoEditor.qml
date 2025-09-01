@@ -200,7 +200,7 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
-    root.sketchingController?.saveSketches()
+    root.sketchingController?.clear()
   }
 
   function callbackOnFormCanceled() {

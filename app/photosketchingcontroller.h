@@ -67,9 +67,6 @@ class PhotoSketchingController: public QObject
     // resets the controller to default state ( removes all lines, sets white color... )
     Q_INVOKABLE void clear();
 
-    // saves the drawings into the original image
-    Q_INVOKABLE void saveSketches();
-
     // saves the drawings into temporary image
     Q_INVOKABLE void backupSketches();
 

@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QSignalSpy>
+#include <exiv2/exiv2.hpp>
 
 #include "testutils.h"
 #include "coreutils.h"
@@ -301,3 +302,37 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
+
+bool TestUtils::testExifPositionMetadataExists( const QString &imageSource )
+{
+  if ( !QFileInfo::exists( imageSource ) )
+    return false;
+
+  try
+  {
+    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( imageSource.toStdString() ) );
+    if ( !srcImage )
+      return false;
+
+    srcImage->readMetadata();
+    Exiv2::ExifData &exifData = srcImage->exifData();
+    if ( exifData.empty() )
+    {
+      return false;
+    }
+
+    const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSLatitude" ) );
+    const auto iterator2 = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSLongitude" ) );
+    if ( iterator == exifData.end() || iterator2 == exifData.end() )
+    {
+      return false;
+    }
+    return true;
+  }
+  catch ( ... )
+  {
+    CoreUtils::log( "TestUtils", QStringLiteral( "Exception, while checking EXIF position metadata" ) );
+    return false;
+  }
+}
+
