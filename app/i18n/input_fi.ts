@@ -2651,7 +2651,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
-        <translation>Näytä lisää</translation>
+        <translation>Enemmän</translation>
     </message>
 </context>
 <context>
