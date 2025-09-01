@@ -21,56 +21,102 @@ Item {
   readonly property var _visible: actions.filter(a => a && a.visible !== false)
   readonly property int _count: _visible.length
 
-  // tiny lag smoother to avoid edge flip-flop- tweak if neede
-  readonly property bool fitsInline: allRow.implicitWidth + 1 <= width
+  // tiny lag smoother to avoid edge flip-flop- tweak if needed
+  property bool fitsInline: true
 
-  Item {
+  implicitHeight: (fitsInline ? allRow.implicitHeight : pairRow.implicitHeight)
+
+  // ReEvaluate when width changes dynamically
+  onWidthChanged: {
+    const need = allRow.implicitWidth
+    if (fitsInline) {
+      if (need > width) {
+        fitsInline = false
+      }
+    }
+    else {
+      if (need + 2 <= width) {
+        fitsInline = true
+      }
+    }
+  }
+  onActionsChanged: {
+    const need = allRow.implicitWidth
+    if (fitsInline) {
+      if (need > width) {
+        fitsInline = false
+      }
+    }
+    else {
+      if (need + 2 <= width) {
+        fitsInline = true
+      }
+    }
+  }
+  Connections {
+    target: allRow
+    function onImplicitWidthChanged() {
+      const need = allRow.implicitWidth
+      if (root.fitsInline) {
+        if (need > root.width) {
+          root.fitsInline = false
+        }
+      }
+      else {
+        if (need + 2 <= root.width) {
+          root.fitsInline = true
+        }
+      }
+    }
+  }
+
+  Row {
+    id: allRow
+    anchors.left: parent.left
+    spacing: __style.margin12
+    // measure content only; don't bind to parent width
+    clip: true
+    height: fitsInline ? allRow.implicitHeight : 0
+    width: childrenRect.width
+
+    Repeater {
+      model: root._visible
+      delegate: MMComponents.MMButton {
+        text: modelData.label
+        iconSourceLeft: modelData.icon
+        type: modelData.style === "Secondary" ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
+        onClicked: if (typeof modelData.onTrigger === "function") modelData.onTrigger()
+      }
+    }
+  }
+
+  RowLayout {
+    id: pairRow
+    visible: !fitsInline && _count > 0
     anchors.left: parent.left
     anchors.right: parent.right
-    height: Math.max(allRow.implicitHeight, pairRow.implicitHeight)
+    spacing: __style.margin12
 
-    Row {
-      id: allRow
-      visible: root.fitsInline
-      anchors.left: parent.left
-      spacing: __style.margin12
-      width: childrenRect.width
-
-      Repeater {
-        model: root._visible
-        delegate: MMComponents.MMButton {
-          text: modelData.label
-          iconSourceLeft: modelData.icon
-          type: modelData.style === "Secondary" ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
-          onClicked: if (typeof modelData.onTrigger === "function") modelData.onTrigger()
+    MMComponents.MMButton {
+      Layout.fillWidth: true
+      text:  _count > 0 ? _visible[0].label : ""
+      iconSourceLeft: _count > 0 ? _visible[0].icon : ""
+      type: (_count > 0 && _visible[0].style === "Secondary")
+                  ? MMComponents.MMButton.Secondary
+                  : MMComponents.MMButton.Primary
+      onClicked: {
+        if (_count > 0) {
+          const a = _visible[0]
+          if (a && typeof a.onTrigger === "function") a.onTrigger()
         }
       }
     }
 
-    RowLayout {
-      id: pairRow
-      visible: root._pair && root._count > 0
-      spacing: __style.margin12
-      anchors.left: parent.left
-      anchors.right: parent.right
-
-      MMComponents.MMButton {
-        Layout.fillWidth: true
-        text:  root._visible[0].label
-        iconSourceLeft: root._visible[0].icon
-        type: (root._visible[0].style === "Secondary") ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
-        onClicked: {
-          const a = root._visible[0]
-          if (a && typeof a.onTrigger === "function") a.onTrigger()
-        }
-      }
-
-      MMComponents.MMRoundButton {
-        id: hidden
-        iconSource: __style.moreIcon
-        bgndColor: __style.lightGreenColor
-        onClicked: popup.opened ? popup.close() : popup.open()
-      }
+    MMComponents.MMRoundButton {
+      id: hidden
+      iconSource: __style.moreIcon
+      bgndColor: __style.lightGreenColor
+      onClicked: popup.opened ? popup.close() : popup.open()
     }
   }
 
@@ -80,7 +126,7 @@ Item {
     parent: hidden
     x: parent.width - width
     y: parent.height + __style.margin12
-    width: menuColumn.width
+    width: 155 * __dp
 
     transformOrigin: Item.TopRight
 
