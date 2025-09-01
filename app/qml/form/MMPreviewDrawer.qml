@@ -149,9 +149,6 @@ Item {
         id: actionsBar
         width: parent.width - contentLayout.rightMaxPagePadding
         visible: internal.showButtons
-        gap: __style.margin12
-
-        widthPadding: 0
 
         actions: [
           {
