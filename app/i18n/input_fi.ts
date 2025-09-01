@@ -2294,7 +2294,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
         <source>Recording</source>
-        <translation>Tallennetaan</translation>
+        <translation>Tallennus</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
@@ -2651,7 +2651,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
         <source>More</source>
-        <translation>Lisää</translation>
+        <translation>Enemmän</translation>
     </message>
 </context>
 <context>
