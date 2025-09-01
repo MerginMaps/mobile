@@ -959,7 +959,7 @@ ApplicationWindow {
         }
         else
         {
-          syncFailedDialog.detailedText = qsTr( "Details" ) + ": " + errorMessage
+          syncFailedDialog.detailedText = errorMessage
           if ( willRetry )
           {
             __notificationModel.addError( qsTr( "There was an issue during synchronisation, we will try again. Click to learn more" ),
