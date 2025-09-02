@@ -24,11 +24,11 @@ jobs:
     runs-on: macos-15
     env:
       QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-      NDK_VERSION: 'r26' # '26.1.10909125'
-      NDK_VERSION_FULL: r26b
+      NDK_VERSION: 'r27' # '27.2.12479018'
+      NDK_VERSION_FULL: r27c
       JDK_VERSION: 17
-      SDK_PLATFORM: android-34
-      SDK_BUILD_TOOLS: 34.0.0
+      SDK_PLATFORM: android-35
+      SDK_BUILD_TOOLS: 35.0.0
       INPUT_SDK_VERSION_ARM: arm-android-20250326-241
       INPUT_SDK_VERSION_ARM64: arm64-android-20250326-241
       CCACHE_DIR: /Users/runner/work/ccache
