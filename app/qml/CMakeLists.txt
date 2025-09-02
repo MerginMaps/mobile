@@ -96,6 +96,7 @@ set(MM_QML
     form/components/calendar/MMTumbler.qml
     form/components/photo/MMPhotoAttachment.qml
     form/components/photo/MMPhotoPreview.qml
+    form/components/MMFormActionBar.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
@@ -114,7 +115,6 @@ set(MM_QML
     form/editors/MMFormTextMultilineEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
-    form/editors/MMFormActionBar.qml
     gps/MMAddPositionProviderDrawer.qml
     gps/MMBluetoothConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml

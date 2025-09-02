@@ -16,7 +16,7 @@ import mm 1.0 as MM
 import qgs 1.0 as QGS
 
 import "../components" as MMComponents
-import "./editors" as MMFormEditors
+import "./components" as MMFormComponents
 
 // Content of the preview drawer defined in MMFormController.qml
 
@@ -145,7 +145,7 @@ Item {
       // buttons
       MMComponents.MMListSpacer { height: __style.margin20; visible: internal.showButtons }
 
-      MMFormEditors.MMFormActionBar {
+      MMFormComponents.MMFormActionBar {
         id: actionsBar
         width: parent.width - contentLayout.rightMaxPagePadding
         visible: internal.showButtons
