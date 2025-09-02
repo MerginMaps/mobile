@@ -23,6 +23,7 @@ Item {
 
   // tiny lag smoother to avoid edge flip-flop- tweak if needed
   property bool fitsInline: true
+  property real smoothSwitching: 2 //if needed this can be tweak
 
   implicitHeight: (fitsInline ? allRow.implicitHeight : pairRow.implicitHeight)
 
@@ -35,7 +36,7 @@ Item {
       }
     }
     else {
-      if (need + 2 <= width) {
+      if (need + smoothSwitching <= width) {
         fitsInline = true
       }
     }
@@ -48,7 +49,7 @@ Item {
       }
     }
     else {
-      if (need + 2 <= width) {
+      if (need + smoothSwitching <= width) {
         fitsInline = true
       }
     }
@@ -63,7 +64,7 @@ Item {
         }
       }
       else {
-        if (need + 2 <= root.width) {
+        if (need + smoothSwitching <= root.width) {
           root.fitsInline = true
         }
       }
@@ -106,8 +107,8 @@ Item {
                   : MMComponents.MMButton.Primary
       onClicked: {
         if (_count > 0) {
-          const a = _visible[0]
-          if (a && typeof a.onTrigger === "function") a.onTrigger()
+          const actionFunction = _visible[0]
+          if (actionFunction && typeof actionFunction.onTrigger === "function") actionFunction.onTrigger()
         }
       }
     }
@@ -132,7 +133,7 @@ Item {
 
     contentItem: Column {
       spacing: 0
-      width: root.popupWidth
+      width: 155 * __dp
 
       Repeater {
         model: root._count > 1 ? root._visible.slice(1) : []
