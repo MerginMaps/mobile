@@ -38,10 +38,6 @@ MMComponents.MMDrawerDialog {
       width: parent.width
       text: qsTr("Details") + ": " + root.detailedText
     }
-    Component.onCompleted:
-    {
-      console.log(detailedText);
-    }
   }
 
   onPrimaryButtonClicked: {
