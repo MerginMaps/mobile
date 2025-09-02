@@ -21,55 +21,7 @@ Item {
   readonly property var _visible: actions.filter(a => a && a.visible !== false)
   readonly property int _count: _visible.length
 
-  // tiny lag smoother to avoid edge flip-flop- tweak if needed
-  property bool fitsInline: true
-  property real smoothSwitching: 2 //if needed this can be tweak
-
-  implicitHeight: (fitsInline ? allRow.implicitHeight : pairRow.implicitHeight)
-
-  // ReEvaluate when width changes dynamically
-  onWidthChanged: {
-    const need = allRow.implicitWidth
-    if (fitsInline) {
-      if (need > width) {
-        fitsInline = false
-      }
-    }
-    else {
-      if (need + smoothSwitching <= width) {
-        fitsInline = true
-      }
-    }
-  }
-  onActionsChanged: {
-    const need = allRow.implicitWidth
-    if (fitsInline) {
-      if (need > width) {
-        fitsInline = false
-      }
-    }
-    else {
-      if (need + smoothSwitching <= width) {
-        fitsInline = true
-      }
-    }
-  }
-  Connections {
-    target: allRow
-    function onImplicitWidthChanged() {
-      const need = allRow.implicitWidth
-      if (root.fitsInline) {
-        if (need > root.width) {
-          root.fitsInline = false
-        }
-      }
-      else {
-        if (need + smoothSwitching <= root.width) {
-          root.fitsInline = true
-        }
-      }
-    }
-  }
+  implicitHeight: allRow.implicitHeight || pairRow.implicitHeight
 
   Row {
     id: allRow
@@ -77,7 +29,7 @@ Item {
     spacing: __style.margin12
     // measure content only; don't bind to parent width
     clip: true
-    height: fitsInline ? allRow.implicitHeight : 0
+    visible: implicitWidth < root.width
     width: childrenRect.width
 
     Repeater {
@@ -93,7 +45,7 @@ Item {
 
   RowLayout {
     id: pairRow
-    visible: !fitsInline && _count > 0
+    visible: !allRow.visible && _count > 0
     anchors.left: parent.left
     anchors.right: parent.right
     spacing: __style.margin12
@@ -121,7 +73,6 @@ Item {
     }
   }
 
-  // Popup -> everything except the first
   MMComponents.MMPopup {
     id: popup
     parent: hidden
