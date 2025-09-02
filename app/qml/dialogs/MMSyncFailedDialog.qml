@@ -23,10 +23,7 @@ MMComponents.MMDrawerDialog {
   id: root
 
   property string detailedText
-  property bool hasDetails: {
-    const t = (root.detailedText ?? "").trim()
-    return t.length > 0
-  }
+  property bool hasDetails: root.detailedText?.trim() ?? false
 
   title: qsTr( "Failed to synchronise your changes" )
   imageSource: __style.syncFailedImage
