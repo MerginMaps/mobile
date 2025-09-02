@@ -158,6 +158,7 @@ MMFormPhotoViewer {
 
     PhotoSketchingController {
       photoSource: root.photoUrl
+      projectName: root._fieldActiveProject.homePath
     }
   }
 
@@ -199,12 +200,10 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
-    root.sketchingController.saveSketches()
   }
 
   function callbackOnFormCanceled() {
     internal.imageSourceToDelete = ""
-    root.sketchingController.clear()
   }
 
   QtObject {

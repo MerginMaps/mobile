@@ -1206,6 +1206,7 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+  saveSketches();
   renamePhotos();
 
   if ( !startEditing() )
@@ -1636,6 +1637,39 @@ void AttributeController::renamePhotos()
       }
     }
 
+    ++formItemsIterator;
+  }
+}
+
+void AttributeController::saveSketches()
+{
+  QMap<QUuid, std::shared_ptr<FormItem>>::const_iterator formItemsIterator = mFormItems.constBegin();
+  while ( formItemsIterator != mFormItems.constEnd() )
+  {
+    const std::shared_ptr<FormItem> item = formItemsIterator.value();
+    if ( item->type() == FormItem::Field && item->editorWidgetType() == QStringLiteral( "ExternalResource" ) )
+    {
+      if ( item->rawValue().isValid() )
+      {
+        const QVariantMap config = item->editorWidgetConfig();
+        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
+        const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+        const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
+
+        const QString tempFilePath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), QUrl::fromLocalFile( QgsProject::instance()->homePath() ).fileName(), src.section( "/", -1 ) );
+        if ( QFile::exists( tempFilePath ) )
+        {
+          if ( InputUtils::removeFile( src ) && InputUtils::renameFile( tempFilePath, src ) )
+          {
+            CoreUtils::log( "Photo Sketching", "Image sketches saved to: " + src );
+          }
+          else
+          {
+            CoreUtils::log( "Photo sketching", "Failed to save sketches to image at: " + src );
+          }
+        }
+      }
+    }
     ++formItemsIterator;
   }
 }

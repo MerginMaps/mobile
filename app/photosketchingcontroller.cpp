@@ -120,51 +120,11 @@ void PhotoSketchingController::clear()
   emit pathsReset();
 }
 
-void PhotoSketchingController::saveSketches()
-{
-  const QString photoFileName = QUrl( mOriginalPhotoSource ).fileName();
-
-  // no need to save sketches when no sketches were done
-  if ( photoFileName.isEmpty() || !QDir::temp().exists( photoFileName ) )
-  {
-    return;
-  }
-
-  bool isDeleted;
-  // photo source changed and it's not temporary sketched image path
-  const bool hasPhotoSourceChanged = QUrl( mOriginalPhotoSource ) != QUrl( mPhotoSource ) && !QUrl( mPhotoSource ).toLocalFile().startsWith( QDir::temp().absolutePath() );
-  if ( hasPhotoSourceChanged )
-  {
-    isDeleted = QFile::remove( QUrl( mPhotoSource ).toLocalFile() );
-  }
-  else
-  {
-    isDeleted = QFile::remove( mOriginalPhotoSource );
-  }
-
-  const QString newDest = hasPhotoSourceChanged ? QUrl( mPhotoSource ).toLocalFile() : mOriginalPhotoSource;
-  if ( isDeleted )
-  {
-    if ( InputUtils::copyFile( QDir::temp().absolutePath() + "/" + photoFileName, newDest ) )
-    {
-      if ( ImageUtils::copyExifMetadata( QDir::temp().absolutePath() + "/" + photoFileName, newDest ) )
-      {
-        CoreUtils::log( "Photo sketching", "Image saved to: " + newDest );
-        emit tempPhotoSourceChanged( newDest );
-        QFile::remove( QDir::temp().absolutePath() + "/" + photoFileName );
-        return;
-      }
-    }
-  }
-
-  CoreUtils::log( "Photo sketching", "Failed to save image to: " + newDest );
-}
-
 void PhotoSketchingController::backupSketches()
 {
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QDir::temp().absolutePath() + "/" + photoFileName;
-  if ( !QDir::temp().exists( photoFileName ) )
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  if ( !QFile::exists( photoPath ) )
   {
     // create new temp file
     InputUtils::copyFile( mPhotoSource, photoPath );
@@ -276,9 +236,10 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
 QUrl PhotoSketchingController::getCurrentPhotoPath() const
 {
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  if ( QDir::temp().exists( photoFileName ) )
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  if ( QFile::exists( photoPath ) )
   {
-    return { QDir::temp().absolutePath() + "/" + photoFileName };
+    return { photoPath };
   }
 
   return { mOriginalPhotoSource };
@@ -286,12 +247,14 @@ QUrl PhotoSketchingController::getCurrentPhotoPath() const
 
 void PhotoSketchingController::prepareController()
 {
+  mProjectName = QUrl::fromLocalFile( mProjectName ).fileName();
   mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  if ( !photoFileName.isEmpty() && QDir::temp().exists( photoFileName ) )
+  const QString savePath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  if ( !photoFileName.isEmpty() && QFile::exists( savePath ) )
   {
-    mPhotoSource = QUrl( QDir::temp().absolutePath() + "/" + photoFileName ).toString();
-    emit tempPhotoSourceChanged( QUrl( mPhotoSource ).toString() );
+    mPhotoSource = QUrl::fromLocalFile( savePath ).toString();
+    emit tempPhotoSourceChanged( mPhotoSource );
   }
 }
 
