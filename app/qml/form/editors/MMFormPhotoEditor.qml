@@ -200,12 +200,10 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
-    root.sketchingController?.clear()
   }
 
   function callbackOnFormCanceled() {
     internal.imageSourceToDelete = ""
-    root.sketchingController?.clear()
   }
 
   QtObject {
