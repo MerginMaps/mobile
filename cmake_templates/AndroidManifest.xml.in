@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uk.co.lutraconsulting"
     android:installLocation="auto"
     android:versionCode="@INPUT_VERSION_CODE@"
     android:versionName="@INPUT_VERSION@">
