@@ -145,7 +145,7 @@ void TestSketching::testSaveSketches()
   mController->backupSketches();
   QCOMPARE( mController->mActivePaths.count(), 0 );
   QCOMPARE( mController->mPaths.count(), 1 );
-  QVERIFY( QFile( QDir::tempPath() + QStringLiteral( "/photo.jpg" ) ).exists() );
+  QVERIFY( QFile( QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), mController->mProjectName ) ).exists());
   QCOMPARE( spy.count(), 1 );
   const auto &signalArgs = spy.last();
   QCOMPARE( signalArgs.first().toString(), QStringLiteral( "%1/%2/photo.jpg" ).arg( QDir::tempPath(), mController->mProjectName ) );
