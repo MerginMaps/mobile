@@ -1363,7 +1363,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="184"/>
         <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
-        <translation>Vali värv ja alusta kaardil joonistamist. Kaardi liigutamiseks või mõõtkava muutmiseks kasuta kahte sõrme.</translation>
+        <translation>Vali värv ja alusta kaardil sirgeldamist. Kaardi liigutamiseks või mõõtkava muutmiseks kasuta kahte sõrme.</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="630"/>
