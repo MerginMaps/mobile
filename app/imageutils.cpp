@@ -133,3 +133,39 @@ bool ImageUtils::rescale( const QString &path, int quality )
   CoreUtils::log( "rescaling image", QStringLiteral( "Can not replace original file with rescaled version" ) );
   return false;
 }
+
+bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
+{
+  if ( !QFileInfo::exists( sourceImage ) )
+    return false;
+
+  try
+  {
+    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
+    if ( !srcImage )
+      return false;
+
+    srcImage->readMetadata();
+    Exiv2::ExifData &exifData = srcImage->exifData();
+    if ( exifData.empty() )
+    {
+      return true;
+    }
+
+    const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
+    if ( iterator == exifData.end() )
+    {
+      return true;
+    }
+    exifData.erase( iterator );
+
+    srcImage->setExifData( exifData );
+    srcImage->writeMetadata();
+    return true;
+  }
+  catch ( ... )
+  {
+    CoreUtils::log( "copying EXIF", QStringLiteral( "Failed to copy EXIF metadata" ) );
+    return false;
+  }
+}

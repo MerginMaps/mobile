@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.22)
 
 # TODO automatically change with the scripts/update version script
 set(MM_VERSION_MAJOR "2025")
-set(MM_VERSION_MINOR "5")
+set(MM_VERSION_MINOR "6")
 set(MM_VERSION_PATCH "0")
 set(QT_VERSION_DEFAULT "6.8.3")
 

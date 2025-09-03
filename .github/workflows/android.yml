@@ -297,7 +297,7 @@ jobs:
           name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
 
       - name: Build AAB
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
@@ -311,14 +311,14 @@ jobs:
             find . | grep .aab
 
       - name: Rename AAB artefacts
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         run: |
           mv \
             ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
 
       - name: Upload AAB to Artifacts
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
