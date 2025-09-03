@@ -299,24 +299,14 @@ qt_add_resources(
 # Mergin Maps Target
 # ########################################################################################
 
-if (WIN)
-  qt_add_executable(
-    Input
-    WIN32
-    ${MM_SRCS}
-    ${MM_HDRS}
-    $<TARGET_OBJECTS:mm_core>
-    main.cpp
-  )
-else ()
-  qt_add_executable(
-    Input
-    ${MM_SRCS}
-    ${MM_HDRS}
-    $<TARGET_OBJECTS:mm_core>
-    main.cpp
-  )
-endif ()
+qt_add_executable(
+  Input
+  ${MM_SRCS}
+  ${MM_HDRS}
+  main.cpp
+)
+
+set_target_properties(Input PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(
   Input
@@ -449,6 +439,8 @@ endif ()
 # LINKING Mergin Maps Target
 # ########################################################################################
 
+target_link_libraries(Input PUBLIC mm_core)
+
 # at least on Linux qgis_core needs to be linked before Qt libs, otherwise one gets "DSO
 # missing from command line" linker error about missing symbol from qt6::core5compat
 # library - probably if our code does not use anything from that library, it is not added
@@ -487,8 +479,7 @@ endif ()
 
 target_link_libraries(
   Input
-  PUBLIC mm_core
-         Geodiff::Geodiff
+  PUBLIC Geodiff::Geodiff
          PROJ::proj
          ZXing::Core
          ZXing::ZXing

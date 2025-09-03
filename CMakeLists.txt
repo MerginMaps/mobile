@@ -9,6 +9,10 @@ set(MM_VERSION_MAJOR "2025")
 set(MM_VERSION_MINOR "6")
 set(MM_VERSION_PATCH "0")
 
+if (VCPKG_TARGET_TRIPLET MATCHES ".*ios.*")
+  set(IOS TRUE)
+endif ()
+
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
 if (ANDROID_ABI)
