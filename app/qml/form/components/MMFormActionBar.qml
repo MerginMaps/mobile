@@ -77,10 +77,14 @@ Item {
     id: popup
     parent: hidden
     x: parent.width - width
-    y: parent.height + __style.margin12
+    property int heightCalculate: hidden.mapToItem(Overlay.overlay, 0, 0).y + hidden.height + __style.margin12 + implicitHeight
+    y: (heightCalculate > ApplicationWindow.window.height)
+       ? (-implicitHeight - __style.margin12)  //Switches above the button
+       : (parent.height + __style.margin12) //remains below the button
+
     width: 155 * __dp
 
-    transformOrigin: Item.TopRight
+    //transformOrigin: Item.TopRight
 
     contentItem: Column {
       spacing: 0
