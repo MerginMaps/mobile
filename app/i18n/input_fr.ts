@@ -858,7 +858,7 @@ Ne sera pas ajouté au projet.</translation>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="227"/>
         <source>Delete</source>
-        <translation>Suprimmer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../qml/form/MMFormPage.qml" line="236"/>
