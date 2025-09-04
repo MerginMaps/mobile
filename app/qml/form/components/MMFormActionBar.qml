@@ -15,7 +15,7 @@ import "../../components" as MMComponents
 Item {
   id: root
 
-  // actions = [{ label, icon, style: "Primary"|"Secondary", visible, onTrigger }]
+  // actions = [{ label, icon, visible, onTrigger }]
   property var  actions: []
 
   readonly property var _visible: actions.filter(a => a && a.visible !== false)
@@ -37,7 +37,9 @@ Item {
       delegate: MMComponents.MMButton {
         text: modelData.label
         iconSourceLeft: modelData.icon
-        type: modelData.style === "Secondary" ? MMComponents.MMButton.Secondary : MMComponents.MMButton.Primary
+        type: (index === 0)
+                    ? MMComponents.MMButton.Primary
+                    : MMComponents.MMButton.Secondary
         onClicked: if (typeof modelData.onTrigger === "function") modelData.onTrigger()
       }
     }

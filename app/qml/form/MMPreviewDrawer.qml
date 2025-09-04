@@ -154,28 +154,24 @@ Item {
           {
             label: qsTr("Edit"),
             icon: __style.editIcon,
-            style: "Primary",
             visible: internal.showEditButton,
             onTrigger: function () { root.editClicked() }
           },
           {
             label: qsTr("Open form"),
             icon: __style.formIcon,
-            style: "Secondary",
             visible: !internal.showEditButton,
             onTrigger: function () { root.openFormClicked() }
           },
           {
             label: qsTr("Select more"),
             icon: __style.workspacesIcon,
-            style: "Secondary",
             visible: internal.showSelectMoreButton,
             onTrigger: function () { root.selectMoreClicked(controller.featureLayerPair) }
           },
           {
             label: qsTr("Stake out"),
             icon: __style.gpsAntennaHeightIcon,
-            style: "Secondary",
             visible: internal.showStakeoutButton,
             onTrigger: function () { root.stakeoutClicked(controller.featureLayerPair) }
           }
