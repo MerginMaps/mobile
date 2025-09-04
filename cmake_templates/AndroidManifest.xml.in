@@ -33,28 +33,25 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true" />
-    <!-- "allowBackup" is suspicious, see https://developer.android.com/guide/topics/manifest/application-element#allowbackup -->
     <application 
         android:name="org.qtproject.qt.android.bindings.QtApplication"
         android:hardwareAccelerated="true"
         android:label="Mergin Maps"
-        android:allowNativeHeapPointerTagging="false"
         android:allowBackup="true"
         android:fullBackupOnly="false"
         android:icon="@mipmap/ic_appicon"
-        android:roundIcon="@mipmap/ic_appicon_round">
+        android:roundIcon="@mipmap/ic_appicon_round" >
         <activity
             android:name="uk.co.lutraconsulting.InputActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
-            android:label="Mergin Maps"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
             >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <!-- Get access to images/videos -->
@@ -78,26 +75,6 @@
             <meta-data 
                 android:name="android.app.arguments" 
                 android:value="-- %%INSERT_APP_ARGUMENTS%% --" />
-
-            <!-- Background running -->
-            <!-- Warning: changing this value to true may cause unexpected crashes if the
-                          application still try to draw after
-                          "applicationStateChanged(Qt::ApplicationSuspended)"
-                          signal is sent! -->
-            <meta-data android:name="android.app.background_running" android:value="false"/>
-            <!-- Background running -->
-
-            <!-- extract android style -->
-            <!-- available android:values :
-                * default - In most cases this will be the same as "full", but it can also be something else if needed, e.g., for compatibility reasons
-                * full - useful QWidget & Quick Controls 1 apps
-                * minimal - useful for Quick Controls 2 apps, it is much faster than "full"
-                * none - useful for apps that don't use any of the above Qt modules
-                -->
-            <meta-data 
-                android:name="android.app.extract_android_style" 
-                android:value="minimal" />
-            <!-- extract android style -->
         </activity>
 
         <!-- Activity Android native camera -->
@@ -107,7 +84,7 @@
             android:parentActivityName="uk.co.lutraconsulting.InputActivity"
             android:configChanges="screenLayout|orientation|screenSize"
             >
-             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --" />
         </activity>
 
         <provider
@@ -116,7 +93,7 @@
             android:exported="false"
             android:grantUriPermissions="true"
             >
-             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths">
+             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" >
              </meta-data>
         </provider>
 

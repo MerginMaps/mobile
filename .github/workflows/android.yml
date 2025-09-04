@@ -35,10 +35,10 @@ jobs:
 
     runs-on: macos-15
     env:
-      NDK_VERSION: 'r26' # '26.1.10909125'
-      NDK_VERSION_FULL: r26b
+      NDK_VERSION: 'r27' # '27.2.12479018'
+      NDK_VERSION_FULL: r27c
       JDK_VERSION: 17
-      SDK_PLATFORM: android-34
+      SDK_PLATFORM: android-35
       ANDROIDAPI: 24
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       SDK_BUILD_TOOLS: 34.0.0
