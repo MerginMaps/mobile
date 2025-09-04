@@ -285,7 +285,7 @@ Item {
     property bool showEditButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
     property bool showSelectMoreButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
     property bool showStakeoutButton: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
-    property bool showButtons: showEditButton || showSelectMoreButton || showStakeoutButton
+    property bool showButtons: true
 
     property bool showPhoto: isPhotoType && windowHasEnoughHeightToShowContent
     property bool showFields: isFieldsType && windowHasEnoughHeightToShowContent
