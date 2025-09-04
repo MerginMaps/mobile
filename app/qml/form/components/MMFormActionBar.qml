@@ -67,6 +67,7 @@ Item {
 
     MMComponents.MMRoundButton {
       id: hidden
+      visible: !allRow.visible && _count > 1
       iconSource: __style.moreIcon
       bgndColor: __style.lightGreenColor
       onClicked: popup.opened ? popup.close() : popup.open()
