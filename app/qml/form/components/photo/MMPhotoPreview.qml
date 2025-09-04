@@ -48,9 +48,11 @@ Popup {
       anchors.fill: parent
       clip: true
 
-      //Zoom limits
+      // //Zoom limits
       property real minScale: 0.5
       property real maxScale: 10.0
+      property real maxRotation: 180
+      property real minRotation: -180
       property real scale: 1.0
       // width: Math.min(imagePreview.width, parent.width)
       // height: Math.min(imagePreview.height, parent.height)
@@ -63,7 +65,7 @@ Popup {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 4000
 
-        contentWidth:  Math.max(width,  imagePreview.paintedWidth  * photoFrame.scale)
+        contentWidth:  Math.max(width,  imagePreview.paintedWidth * photoFrame.scale)
         contentHeight: Math.max(height, imagePreview.paintedHeight * photoFrame.scale)
 
         Item {
@@ -80,7 +82,8 @@ Popup {
             Image {
               id: imagePreview
               source: root.photoUrl
-              height: root.height / 2
+              height: root.height
+              width: root.width
 
               clip: true
 
@@ -111,29 +114,33 @@ Popup {
           id: pincher
           anchors.fill: parent
           pinch.target: imagePreview
-          pinch.minimumRotation: -180
-          pinch.maximumRotation: 180
-          pinch.minimumScale: 0.5
-          pinch.maximumScale: 10
+          pinch.minimumRotation: photoFrame.minRotation
+          pinch.maximumRotation: photoFrame.maxRotation
+          pinch.minimumScale: photoFrame.minScale
+          pinch.maximumScale: photoFrame.maxScale
           property real _startScale: 1
 
           onPinchStarted: function(pinch) {
             pinch.accepted = true
             _startScale = photoFrame.scale
+            console.log("_startScale:"+ _startScale)
           }
-          // onPinchUpdated: function(pinch) {
-          //   var newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, _startScale * pinch.scale))
-          //   var p = pincher.mapToItem(flick.contentItem, pinch.center.x, pinch.center.y)
+          onPinchUpdated: function(pinch) {
+            var newScale = Math.min(photoFrame.scale, _startScale * pinch.scale)
+            var p = pincher.mapToItem(flick.contentItem, pinch.center.x, pinch.center.y)
+            console.log("newScale and p: "+ newScale + "...." + p)
 
-          //   var prevScale = photoFrame.scale
-          //   photoFrame.scale = newScale
+            var prevScale = photoFrame.scale
+            photoFrame.scale = newScale
 
-          //   var ratio = newScale / prevScale
-          //   flick.contentX = (flick.contentX + p.x) * ratio - p.x
-          //   flick.contentY = (flick.contentY + p.y) * ratio - p.y
+            var ratio = newScale / prevScale
+            console.log("ratio"+ ratio)
+            flick.contentX = (flick.contentX + p.x) * ratio
+            flick.contentY = (flick.contentY + p.y) * ratio
+            console.log("flick.contentX and flick.contentY"+ flick.contentX + "....." + flick.contentY)
 
-          //   flick._clamp()
-          // }
+            flick._clamp()
+          }
 
           onPinchFinished: function(pinch) {
             flick._clamp()
