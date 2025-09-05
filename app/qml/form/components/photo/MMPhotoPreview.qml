@@ -51,11 +51,7 @@ Popup {
       // //Zoom limits
       property real minScale: 0.5
       property real maxScale: 10.0
-      property real maxRotation: 180
-      property real minRotation: -180
       property real scale: 1.0
-      // width: Math.min(imagePreview.width, parent.width)
-      // height: Math.min(imagePreview.height, parent.height)
 
       Flickable {
         id: flick
@@ -65,44 +61,26 @@ Popup {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 4000
 
-        contentWidth:  Math.max(width,  imagePreview.paintedWidth * photoFrame.scale)
-        contentHeight: Math.max(height, imagePreview.paintedHeight * photoFrame.scale)
+        contentWidth:  Math.max(width,  imagePreview.width  * photoFrame.scale)
+        contentHeight: Math.max(height, imagePreview.height * photoFrame.scale)
 
-        Item {
-          id: canvas
-          width: flick.contentWidth
-          height: flick.contentHeight
+        Image {
+          id: imagePreview
+          source: root.photoUrl
+          height: root.height
+          width: root.width
 
-          Item {
-            id: imageHolder
-            width: imagePreview.width
-            height: imagePreview.height
-            anchors.centerIn: parent
+          clip: true
 
-            Image {
-              id: imagePreview
-              source: root.photoUrl
-              height: root.height
-              width: root.width
-
-              clip: true
-
-              focus: true
-              asynchronous: true
-              autoTransform: true
-              fillMode: Image.PreserveAspectFit
-
-              transform: Scale {
-                origin.x: imagePreview.width  / 2
-                origin.y: imagePreview.height / 2
-                xScale: photoFrame.scale
-                yScale: photoFrame.scale
-              }
-            }
-          }
+          focus: true
+          asynchronous: true
+          autoTransform: true
+          fillMode: Image.PreserveAspectFit
+          scale: photoFrame.scale
+          transformOrigin: Item.TopLeft
         }
 
-        // Keep content in bounds; recenters when content smaller than viewport
+        // Keep content in bounds; recenters when content smaller or bigger than viewport
         function _clamp() {
           const maxX = Math.max(0, contentWidth  - width)
           const maxY = Math.max(0, contentHeight - height)
@@ -113,38 +91,39 @@ Popup {
         PinchArea {
           id: pincher
           anchors.fill: parent
-          pinch.target: imagePreview
-          pinch.minimumRotation: photoFrame.minRotation
-          pinch.maximumRotation: photoFrame.maxRotation
+          pinch.minimumRotation: 0
+          pinch.maximumRotation: 0
           pinch.minimumScale: photoFrame.minScale
           pinch.maximumScale: photoFrame.maxScale
-          property real _startScale: 1
+          property real startScale: 1
 
+          //holds the value
           onPinchStarted: function(pinch) {
             pinch.accepted = true
-            _startScale = photoFrame.scale
-            console.log("_startScale:"+ _startScale)
+            startScale = photoFrame.scale
           }
+
           onPinchUpdated: function(pinch) {
-            var newScale = Math.min(photoFrame.scale, _startScale * pinch.scale)
-            var p = pincher.mapToItem(flick.contentItem, pinch.center.x, pinch.center.y)
-            console.log("newScale and p: "+ newScale + "...." + p)
+            //to keep the new scaled value after the user zooms in, calculating
+            var newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, startScale * pinch.scale))
+            var local = pincher.mapToItem(imagePreview, pinch.center.x, pinch.center.y)
+            var before = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+            var old = photoFrame.scale
+            if (newScale !== old) {
+              photoFrame.scale = newScale
 
-            var prevScale = photoFrame.scale
-            photoFrame.scale = newScale
+              // same local point sits in content -after- scaling
+              var after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
 
-            var ratio = newScale / prevScale
-            console.log("ratio"+ ratio)
-            flick.contentX = (flick.contentX + p.x) * ratio
-            flick.contentY = (flick.contentY + p.y) * ratio
-            console.log("flick.contentX and flick.contentY"+ flick.contentX + "....." + flick.contentY)
+              //shift scroll so the point stays under the fingers
+              flick.contentX += (after.x - before.x)
+              flick.contentY += (after.y - before.y)
+            }
 
             flick._clamp()
           }
 
-          onPinchFinished: function(pinch) {
-            flick._clamp()
-          }
+          onPinchFinished: function() { flick._clamp() }
         }
       }
     }
