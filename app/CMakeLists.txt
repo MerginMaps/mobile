@@ -303,9 +303,10 @@ qt_add_executable(
   Input
   ${MM_SRCS}
   ${MM_HDRS}
-  $<TARGET_OBJECTS:mm_core>
   main.cpp
 )
+
+set_target_properties(Input PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(
   Input
@@ -361,14 +362,14 @@ endif ()
 
 if (IOS)
   # qgis resources
-  set(IOS_CRS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/resources)
+  set(IOS_CRS_DIR ${CMAKE_CURRENT_BINARY_DIR}/android/assets/qgis-data/resources)
   target_sources(Input PRIVATE ${IOS_CRS_DIR})
   set_source_files_properties(
     ${IOS_CRS_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
   )
 
   # proj
-  set(IOS_PROJ_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/proj)
+  set(IOS_PROJ_DIR ${CMAKE_CURRENT_BINARY_DIR}/android/assets/qgis-data/proj)
   target_sources(Input PRIVATE ${IOS_PROJ_DIR})
   set_source_files_properties(
     ${IOS_PROJ_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
@@ -438,6 +439,8 @@ endif ()
 # LINKING Mergin Maps Target
 # ########################################################################################
 
+target_link_libraries(Input PUBLIC mm_core)
+
 # at least on Linux qgis_core needs to be linked before Qt libs, otherwise one gets "DSO
 # missing from command line" linker error about missing symbol from qt6::core5compat
 # library - probably if our code does not use anything from that library, it is not added
@@ -476,9 +479,9 @@ endif ()
 
 target_link_libraries(
   Input
-  PUBLIC mm_core
-         Geodiff::Geodiff
-         Proj::Proj
+  PUBLIC Geodiff::Geodiff
+         PROJ::proj
+         ZXing::Core
          ZXing::ZXing
 )
 
@@ -509,55 +512,41 @@ endif ()
 
 target_link_libraries(
   Input
-  PUBLIC Qtkeychain::Qtkeychain
-         Qca::Qca
-         Gdal::Gdal
-         Pq::Pq
-         Pq::Pgcommon
-         Pq::Pgport
+  PUBLIC Qt6Keychain::Qt6Keychain
+         qca
+         GDAL::GDAL
+         PostgreSQL::PostgreSQL
          Spatialite::Spatialite
 )
 
-if (NOT LNX)
-  target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv)
-endif ()
+# if (NOT LNX) target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv) endif ()
 
-target_link_libraries(Input PUBLIC Xml2::Xml2)
+# target_link_libraries(Input PUBLIC Xml2::Xml2)
 
 target_link_libraries(
   Input
   PUBLIC Spatialindex::Spatialindex
-         Geos::Geos-c
-         Geos::Geos
-         Protobuf::Protobuf-lite
-         Utf8::utf8_range
-         Utf8::utf8_validity
-         Expat::Expat
-         Freexl::Freexl
-         Exiv2::Exiv2
-         Inih::Inireader
-         Inih::Inih
-         Tiff::Tiff
-         Sqlite3::Sqlite3
-         MiniZip::MiniZip
+         GEOS::geos_c
+         # Geos::Geos
+         protobuf::libprotobuf-lite
+         # Utf8::utf8_range Utf8::utf8_validity Expat::Expat Freexl::Freexl
+         Exiv2::exiv2lib
+         # Inih::Inireader Inih::Inih Tiff::Tiff
+         unofficial::sqlite3::sqlite3
+         unofficial::minizip::minizip
          ZLIB::ZLIB
-         Zip::Zip
-         WebP::WebP
-         WebP::Sharpyuv
-         Curl::Curl
-         Jpeg::Jpeg
-         Geotiff::Geotiff
-         Lzma::Lzma
-         Zstd::Zstd
-         Bz2::Bz2
-         Absl::Absl
+         libzip::zip
+         # WebP::WebP WebP::Sharpyuv Curl::Curl Jpeg::Jpeg Geotiff::Geotiff Lzma::Lzma
+         # Zstd::Zstd Bz2::Bz2 Absl::Absl
+         poly2tri::poly2tri
+         meshoptimizer::meshoptimizer
 )
 
 if (IOS OR MACOS)
   target_link_libraries(Input PUBLIC Tasn1::Tasn1)
 endif ()
 
-target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
+# target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
   set_property(
     TARGET Input PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
@@ -576,7 +565,22 @@ if (IOS)
   target_link_libraries(
     Input PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
   )
-  qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+  # TODO is this needed? qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+endif ()
+
+if (WIN)
+  target_link_libraries(
+    Input
+    PUBLIC WinLibraries::avcodec
+           WinLibraries::avdevice
+           WinLibraries::avformat
+           WinLibraries::avutil
+           WinLibraries::swresample
+           WinLibraries::swscale
+           WinLibraries::openh264
+  )
+
+  target_link_libraries(Input PUBLIC expat::expat)
 endif ()
 
 if (ENABLE_TESTS)

@@ -1,7 +1,10 @@
-name: Android
+name: Android Build
 on:
   push:
     paths:
+    - 'vcpkg/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -21,31 +24,35 @@ concurrency:
 jobs:
   android_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - TRIPLET: 'arm-android'
+            ANDROID_ABI: 'armeabi-v7a'
+          - TRIPLET: 'arm64-android'
+            ANDROID_ABI: 'arm64-v8a'
+
     runs-on: macos-15
     env:
-      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
       NDK_VERSION: 'r27' # '27.2.12479018'
       NDK_VERSION_FULL: r27c
       JDK_VERSION: 17
       SDK_PLATFORM: android-35
-      SDK_BUILD_TOOLS: 35.0.0
-      INPUT_SDK_VERSION_ARM: arm-android-20250326-241
-      INPUT_SDK_VERSION_ARM64: arm64-android-20250326-241
-      CCACHE_DIR: /Users/runner/work/ccache
-      GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
-      CACHE_VERSION: 0
-      CMAKE_VERSION: '3.29.0'
+      ANDROIDAPI: 24
+      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+      SDK_BUILD_TOOLS: 34.0.0
+      CMAKE_VERSION: '3.31.6'
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       XC_VERSION: ${{ '16.2' }}
+      VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Disk space before cleanup
-        run: |
-          df -h .
+        with:
+          path: mm
 
       #
       # Free up space by removing unused XCode versions
@@ -58,51 +65,14 @@ jobs:
         run: |
           find /Applications/Xcode_* -maxdepth 0 -type d ! -name 'Xcode_${{ env.XC_VERSION }}.app' -exec rm -rf {} \;
 
-      - name: Disk space after cleanup
-        run: |
-          df -h .
-
-      # CCache
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-android-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-android-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-android-ccache-refs/heads/${{ github.base_ref }}-
-            build-android-ccache-refs/heads/master-
-
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-android-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-android-ccache-${{ github.ref }}-
-            build-android-ccache-refs/heads/master-
-
-      - name: Install ccache
-        run: |
-          mkdir -p ${CCACHE_DIR}
-          brew install ccache
-          ccache --set-config=max_size=2.0G
-          ccache -s
-
       - name: Install Build Dependencies
         run: |
-          brew update
-          
+          brew uninstall cmake
           brew install gnupg
-          brew install openssl
-          brew install ninja
-          brew install aqtinstall
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl mono
+          echo $(brew --prefix bison)/bin >> $GITHUB_PATH
+          echo $(brew --prefix flex)/bin >> $GITHUB_PATH
+          echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
           
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
@@ -117,43 +87,34 @@ jobs:
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
-
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
 
-      - name: Setup compiler
-        uses: maxim-lobanov/setup-xcode@v1
+      - name: Setup XCode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
         with:
           xcode-version: ${{ env.XC_VERSION }}
 
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v6-${{ env.QT_VERSION }}-android
-          
-      - name: Install Qt
-        if: steps.cache-qt.outputs.cache-hit != 'true'
+      - name: Extract Mergin API_KEY
+        env:
+          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          aqt install-qt \
-            mac android ${{ env.QT_VERSION }} android_arm64_v8a \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
-            -O ${{ github.workspace }}/Qt
-            
-          aqt install-qt \
-            mac android ${{ env.QT_VERSION }} android_armv7 \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
-            -O ${{ github.workspace }}/Qt
-        
-          aqt install-qt \
-            mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth \
-            -O ${{ github.workspace }}/Qt
-          
-       # Android SDK & NDK
+          cd mm/core/
+          $HOMEBREW_PREFIX/bin/openssl \
+              aes-256-cbc -d \
+              -in merginsecrets.cpp.enc \
+              -out merginsecrets.cpp \
+              -k "$MERGINSECRETS_DECRYPT_KEY" \
+              -md md5
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ccache-${{ env.TRIPLET }}
+          max-size: 200M
+
       - uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
@@ -173,67 +134,51 @@ jobs:
         run: |
           sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION_ARM }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          # download
-          wget -O \
-            input-sdk-arm-android.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM }}.tar.gz
-          
-          wget -O \
-            input-sdk-arm64-android.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION_ARM64 }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION_ARM64 }}.tar.gz
-             
-          # unpack
-          mkdir -p ${{ github.workspace }}/input-sdk/arm-android
-          cd ${{ github.workspace }}/input-sdk/arm-android
-          tar -xvzf ${{ github.workspace }}/input-sdk-arm-android.tar.gz
-
-          mkdir -p ${{ github.workspace }}/input-sdk/arm64-android
-          cd ${{ github.workspace }}/input-sdk/arm64-android
-          tar -xvzf ${{ github.workspace }}/input-sdk-arm64-android.tar.gz
-
-          # check
-          ls ${{ github.workspace }}/input-sdk
-
-      - name: Extract Mergin API_KEY
-        env:
-          MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
-        run: |
-          cd core/
-          /opt/homebrew/bin/openssl \
-              aes-256-cbc -d \
-              -in merginsecrets.cpp.enc \
-              -out merginsecrets.cpp \
-              -k "$MERGINSECRETS_DECRYPT_KEY" \
-              -md md5
-
       - name: Extract GPS keystore
         env:
           INPUTKEYSTORE_DECRYPT_KEY: ${{ secrets.INPUTKEYSTORE_DECRYPT_KEY }}
 
         run: |
-          /opt/homebrew/bin/openssl \
+          $HOMEBREW_PREFIX/bin/openssl \
            aes-256-cbc -d \
-           -in Input_keystore.keystore.enc \
-           -out Input_keystore.keystore \
+           -in mm/Input_keystore.keystore.enc \
+           -out mm/Input_keystore.keystore \
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
           
-          PATH_TO_KEYSTORE=`pwd`/Input_keystore.keystore
+          PATH_TO_KEYSTORE=`pwd`/mm/Input_keystore.keystore
           echo "path to keystore $PATH_TO_KEYSTORE"
           echo "QT_ANDROID_KEYSTORE_PATH=$PATH_TO_KEYSTORE" >> $GITHUB_ENV
 
-      # Build Input App
+      - name: Install vcpkg
+        shell: bash
+        run: |
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ github.workspace }}/mm/VCPKG_BASELINE`
+          git checkout ${VCPKG_TAG}
+          cd "${{ env.VCPKG_ROOT }}"
+          chmod +x ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.sh
+
+      - name: Setup NuGet Credentials
+        shell: bash
+        run: |
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "mergin-maps-bot" \
+            -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
+
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json"
+
       - name: Calculate build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
@@ -246,39 +191,45 @@ jobs:
             # add build number to summary
             echo ":rocket: Build number: ${BUILD_NUM}" >> $GITHUB_STEP_SUMMARY
                                     
-      - name: Configure Input
+      - name: Configure app
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
 
         run: |
-            mkdir -p ${{ github.workspace }}/build-Input
-            cd ${{ github.workspace }}/build-Input
+            mkdir -p ${{ github.workspace }}/build-mm
+            cd ${{ github.workspace }}/build-mm
+
+            export PATH=${{ env.VCPKG_ROOT }}:$PATH
+            export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
+            export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
 
             cmake \
               -DCMAKE_BUILD_TYPE=Release \
-              -DQT_ANDROID_ABIS="arm64-v8a;armeabi-v7a" \
-              -DQT_HOST_PATH=$QT_BASE/macos \
+              -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
+              -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
+              -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
+              -DVCPKG_HOST_TRIPLET=arm64-osx \
+              -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+              -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+              -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
+              -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_SIGN_APK=Yes \
-              -DQT_ANDROID_SIGN_AAB=Yes \
               -DUSE_MM_SERVER_API_KEY=Yes \
               -DUSE_KEYCHAIN=No \
-              -DCMAKE_TOOLCHAIN_FILE=$QT_BASE/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake \
+              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
               -GNinja \
               -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-              -S ../ \
+              -S ../mm \
               -B ./
       
       - name: Build APK
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
         run: |
-            cd ${{ github.workspace }}/build-Input
+            cd ${{ github.workspace }}/build-mm
             ninja apk
             
             echo "APKs:"
@@ -287,14 +238,14 @@ jobs:
       - name: Rename APK artefacts
         run: |
           mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
+            ${{ github.workspace }}/build-mm/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [v7 + v8a]
+          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
@@ -302,7 +253,6 @@ jobs:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
-          INPUT_SDK_ANDROID_BASE: ${{ github.workspace }}/input-sdk
         run: |
             cd ${{ github.workspace }}/build-Input
             ninja aab
@@ -314,7 +264,7 @@ jobs:
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         run: |
           mv \
-            ${{ github.workspace }}/build-Input/app/android-build/build/outputs/bundle/release/android-build-release.aab \
+            ${{ github.workspace }}/build-mm/app/android-build/build/outputs/bundle/release/android-build-release.aab \
             ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
 
       - name: Upload AAB to Artifacts

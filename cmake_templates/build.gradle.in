@@ -46,8 +46,7 @@ android {
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
     ndkVersion androidNdkVersion
-    ndkPath '@INPUT_ANDROID_NDK_PATH@'
-    
+
     packagingOptions.jniLibs.useLegacyPackaging true
     
     sourceSets {
