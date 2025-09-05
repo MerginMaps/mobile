@@ -61,17 +61,17 @@ Popup {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 4000
 
+
         contentWidth:  Math.max(width,  imagePreview.width  * photoFrame.scale)
         contentHeight: Math.max(height, imagePreview.height * photoFrame.scale)
 
         Image {
           id: imagePreview
           source: root.photoUrl
-          width: root.width
           anchors.centerIn: parent
-
+          height: root.height * 0.75
+          smooth: true
           clip: true
-
           focus: true
           asynchronous: true
           autoTransform: true
