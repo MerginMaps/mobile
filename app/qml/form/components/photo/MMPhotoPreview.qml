@@ -67,8 +67,8 @@ Popup {
         Image {
           id: imagePreview
           source: root.photoUrl
-          height: root.height
           width: root.width
+          anchors.centerIn: parent
 
           clip: true
 
@@ -77,7 +77,6 @@ Popup {
           autoTransform: true
           fillMode: Image.PreserveAspectFit
           scale: photoFrame.scale
-          transformOrigin: Item.TopLeft
         }
 
         // Keep content in bounds; recenters when content smaller or bigger than viewport
