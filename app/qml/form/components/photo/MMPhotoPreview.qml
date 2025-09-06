@@ -68,9 +68,8 @@ Popup {
           id: imagePreview
           source: root.photoUrl
           anchors.centerIn: parent
-          sourceSize.width: root.width * 0.85
-          sourceSize.height: root.height * 0.85
-
+          width:  (implicitWidth  >= implicitHeight) ? root.width  * 0.85 : undefined
+          height: (implicitHeight >  implicitWidth)  ? root.height * 0.85 : undefined
           smooth: true
           clip: true
           focus: true
@@ -78,17 +77,6 @@ Popup {
           autoTransform: true
           fillMode: Image.PreserveAspectFit
           scale: photoFrame.scale
-          Component.onCompleted:
-          {
-            if(root.width > root.height)
-            {
-              this.height = root.height * 0.85
-            }
-            else
-            {
-              this.width = root.width * 0.85
-            }
-          }
         }
 
         // Keep content in bounds; recenters when content smaller or bigger than viewport
