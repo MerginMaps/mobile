@@ -61,15 +61,16 @@ Popup {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 4000
 
-
-        contentWidth:  Math.max(width,  imagePreview.width  * photoFrame.scale)
-        contentHeight: Math.max(height, imagePreview.height * photoFrame.scale)
+        contentWidth:  Math.max(width,  imagePreview.width  * imagePreview.scale)
+        contentHeight: Math.max(height, imagePreview.height * imagePreview.scale)
 
         Image {
           id: imagePreview
           source: root.photoUrl
           anchors.centerIn: parent
-          height: root.height * 0.75
+          sourceSize.width: root.width * 0.85
+          sourceSize.height: root.height * 0.85
+
           smooth: true
           clip: true
           focus: true
@@ -77,6 +78,17 @@ Popup {
           autoTransform: true
           fillMode: Image.PreserveAspectFit
           scale: photoFrame.scale
+          Component.onCompleted:
+          {
+            if(root.width > root.height)
+            {
+              this.height = root.height * 0.85
+            }
+            else
+            {
+              this.width = root.width * 0.85
+            }
+          }
         }
 
         // Keep content in bounds; recenters when content smaller or bigger than viewport
