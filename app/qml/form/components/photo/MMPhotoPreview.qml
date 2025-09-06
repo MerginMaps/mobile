@@ -15,7 +15,7 @@ import "../../../components" as MMComponents
 Popup {
   id: root
 
-  property alias photoUrl: imagePreview.source
+  property url photoUrl //passed url externally
 
   parent: Overlay.overlay
   visible: true
@@ -45,32 +45,84 @@ Popup {
 
     Item {
       id: photoFrame
+      anchors.fill: parent
+      clip: true
 
-      width: Math.min(imagePreview.width, parent.width)
-      height: Math.min(imagePreview.height, parent.height)
+      // //Zoom limits
+      property real minScale: 0.5
+      property real maxScale: 10.0
+      property real scale: 1.0
 
-      y: parent.height / 2 - height / 2
-      x: parent.width / 2 - width / 2
-
-      Image {
-        id: imagePreview
-
-        height: root.height / 2
-
+      Flickable {
+        id: flick
+        anchors.fill: parent
         clip: true
+        interactive: true
+        boundsBehavior: Flickable.StopAtBounds
+        maximumFlickVelocity: 4000
 
-        focus: true
-        asynchronous: true
-        autoTransform: true
-        fillMode: Image.PreserveAspectFit
+        contentWidth:  Math.max(width,  imagePreview.width  * imagePreview.scale)
+        contentHeight: Math.max(height, imagePreview.height * imagePreview.scale)
+
+        Image {
+          id: imagePreview
+          source: root.photoUrl
+          anchors.centerIn: parent
+          width:  (implicitWidth  >= implicitHeight) ? root.width  * 0.85 : undefined
+          height: (implicitHeight >  implicitWidth)  ? root.height * 0.85 : undefined
+          smooth: true
+          clip: true
+          focus: true
+          asynchronous: true
+          autoTransform: true
+          fillMode: Image.PreserveAspectFit
+          scale: photoFrame.scale
+        }
+
+        // Keep content in bounds; recenters when content smaller or bigger than viewport
+        function _clamp() {
+          const maxX = Math.max(0, contentWidth  - width)
+          const maxY = Math.max(0, contentHeight - height)
+          contentX = Math.max(0, Math.min(maxX, contentX))
+          contentY = Math.max(0, Math.min(maxY, contentY))
+        }
 
         PinchArea {
+          id: pincher
           anchors.fill: parent
-          pinch.target: imagePreview
-          pinch.minimumRotation: -180
-          pinch.maximumRotation: 180
-          pinch.minimumScale: 0.5
-          pinch.maximumScale: 10
+          pinch.minimumRotation: 0
+          pinch.maximumRotation: 0
+          pinch.minimumScale: photoFrame.minScale
+          pinch.maximumScale: photoFrame.maxScale
+          property real startScale: 1
+
+          //holds the value
+          onPinchStarted: function(pinch) {
+            pinch.accepted = true
+            startScale = photoFrame.scale
+          }
+
+          onPinchUpdated: function(pinch) {
+            //to keep the new scaled value after the user zooms in, calculating
+            var newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, startScale * pinch.scale))
+            var local = pincher.mapToItem(imagePreview, pinch.center.x, pinch.center.y)
+            var before = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+            var old = photoFrame.scale
+            if (newScale !== old) {
+              photoFrame.scale = newScale
+
+              // same local point sits in content -after- scaling
+              var after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+
+              //shift scroll so the point stays under the fingers
+              flick.contentX += (after.x - before.x)
+              flick.contentY += (after.y - before.y)
+            }
+
+            flick._clamp()
+          }
+
+          onPinchFinished: function() { flick._clamp() }
         }
       }
     }
