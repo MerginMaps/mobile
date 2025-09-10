@@ -75,7 +75,6 @@ MMDrawer {
 
     onClicked:
     {
-      console.log("Height: " + btnOne.implicitHeight)
       measurementFinalized ? root.mapTool.resetMeasurement() : root.mapTool.removePoint()
     }
   }
