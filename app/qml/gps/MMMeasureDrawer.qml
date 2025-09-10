@@ -54,11 +54,16 @@ MMDrawer {
   drawerHeader.title: qsTr( "Measure" )
 
   drawerHeader.topLeftItemContent: MMButton {
-    type: MMButton.Types.Primary
     text: measurementFinalized ? qsTr( "Repeat" ) : qsTr( "Undo" )
     iconSourceLeft: measurementFinalized ? __style.syncIcon : __style.undoIcon
-    bgndColor: __style.lightGreenColor
+
+    type: MMButton.Types.Primary
     size: MMButton.Sizes.Small
+    bgndColor: __style.lightGreenColor
+    bgndColorDisabled: __style.polarColor
+    bgndColorHover: __style.mediumGreenColor
+    fontColorHover: __style.forestColor
+    iconColorHover: __style.forestColor
     enabled: measurementFinalized || canUndo
 
     anchors {
