@@ -14,12 +14,11 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM
-
-import "../components"
+import "../components" as MMComponents
 import "../map/components"
 import "./components" as MMGpsComponents
 
-MMDrawer {
+MMComponents.MMDrawer {
   id: root
 
   property bool formOpened: false
@@ -51,13 +50,14 @@ MMDrawer {
 
   drawerHeader.title: qsTr( "Select features" )
 
+  MMComponents.MMListSpacer { height: __style.margin20}
+
   drawerContent: Column {
     id: mainColumn
 
     width: parent.width
-    spacing: __style.margin10
 
-    MMText {
+    MMComponents.MMText {
       width: parent.width
 
       text: qsTr( "%n Feature(s) selected", "", root.selectedCount )
@@ -68,7 +68,7 @@ MMDrawer {
       wrapMode: Text.NoWrap
     }
 
-    MMText {
+    MMComponents.MMText {
       width: parent.width
 
       text: qsTr( "on layer %1" ).arg( root.layer?.name )
@@ -78,13 +78,14 @@ MMDrawer {
       elide: Text.ElideRight
       wrapMode: Text.NoWrap
     }
+    MMComponents.MMListSpacer { height: __style.margin20}
 
     Row {
       width: parent.width
       spacing: __style.margin12
       visible: root.selectedCount > 0
 
-      MMButton {
+      MMComponents.MMButton {
         text: qsTr( "Edit" )
         iconSourceLeft: __style.editIcon
         onClicked: editSelected()
