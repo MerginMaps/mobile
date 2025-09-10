@@ -54,6 +54,7 @@ MMDrawer {
   drawerHeader.title: qsTr( "Measure" )
 
   drawerHeader.topLeftItemContent: MMButton {
+    id: btnOne
     text: measurementFinalized ? qsTr( "Repeat" ) : qsTr( "Undo" )
     iconSourceLeft: measurementFinalized ? __style.syncIcon : __style.undoIcon
 
@@ -72,7 +73,11 @@ MMDrawer {
       verticalCenter: parent.verticalCenter
     }
 
-    onClicked: measurementFinalized ? root.mapTool.resetMeasurement() : root.mapTool.removePoint()
+    onClicked:
+    {
+      console.log("Height: " + btnOne.implicitHeight)
+      measurementFinalized ? root.mapTool.resetMeasurement() : root.mapTool.removePoint()
+    }
   }
 
   drawerContent: Column {
