@@ -117,6 +117,8 @@ class LayerFeaturesModel : public FeaturesModel
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
 
+    std::unique_ptr<QgsFeedback> mFeedback;
+
     friend class TestModels;
 };
 

@@ -12,6 +12,7 @@
 #include "inpututils.h"
 #include "qgsproject.h"
 #include "qgsvectorlayerfeatureiterator.h"
+#include "qgsfeedback.h"
 
 #include <QLocale>
 #include <QTimer>
@@ -22,10 +23,15 @@ LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   : FeaturesModel( parent ),
     mLayer( nullptr )
 {
+  mFeedback = std::make_unique<QgsFeedback>();
   connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &LayerFeaturesModel::onFutureFinished );
 }
 
-LayerFeaturesModel::~LayerFeaturesModel() = default;
+LayerFeaturesModel::~LayerFeaturesModel()
+{
+  // cancel any long running request
+  mFeedback->cancel();
+}
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 {
@@ -64,6 +70,8 @@ void LayerFeaturesModel::populate()
 
     QgsFeatureRequest req;
     setupFeatureRequest( req );
+
+    req.setFeedback( mFeedback.get() );
 
     int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
     QgsVectorLayerFeatureSource *source = new QgsVectorLayerFeatureSource( mLayer );
