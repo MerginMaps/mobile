@@ -15,7 +15,7 @@ import "../../../components" as MMComponents
 Popup {
   id: root
 
-  property url photoUrl //passed url externally
+  property url photoUrl
 
   parent: Overlay.overlay
   visible: true
