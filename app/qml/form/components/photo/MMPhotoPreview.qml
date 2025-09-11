@@ -48,7 +48,7 @@ Popup {
       anchors.fill: parent
       clip: true
 
-      // //Zoom limits
+      // Zoom limits
       property real minScale: 0.5
       property real maxScale: 10.0
       property real scale: 1.0
