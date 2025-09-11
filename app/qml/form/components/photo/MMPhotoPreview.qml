@@ -49,8 +49,8 @@ Popup {
       clip: true
 
       // Zoom limits
-      property real minScale: 0.5
-      property real maxScale: 10.0
+      property real minScale: 0.48
+      property real maxScale: 10.2
       property real scale: 1.0
 
       Flickable {
@@ -70,6 +70,8 @@ Popup {
           anchors.centerIn: parent
           width:  (implicitWidth  >= implicitHeight) ? root.width  * 0.85 : undefined
           height: (implicitHeight >  implicitWidth)  ? root.height * 0.85 : undefined
+
+          mipmap: true  // improves quality scaled, but does takes little computing power
           smooth: true
           clip: true
           focus: true
@@ -80,7 +82,7 @@ Popup {
         }
 
         // Keep content in bounds; recenters when content smaller or bigger than viewport
-        function clamp {
+        function clamp() {
           const maxX = Math.max(0, contentWidth  - width)
           const maxY = Math.max(0, contentHeight - height)
           contentX = Math.max(0, Math.min(maxX, contentX))
@@ -100,29 +102,33 @@ Popup {
           onPinchStarted: function(pinch) {
             pinch.accepted = true
             startScale = photoFrame.scale
+            flick.interactive = false
+            imagePreview.smooth = false
           }
 
           onPinchUpdated: function(pinch) {
             //to keep the new scaled value after the user zooms in, calculating
             const newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, startScale * pinch.scale))
+
             const local = pincher.mapToItem(imagePreview, pinch.center.x, pinch.center.y)
             const before = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+
             const old = photoFrame.scale
-            if (newScale !== old) {
-              photoFrame.scale = newScale
+            if (Math.abs(newScale - old) < 0.002) return;  // ignore tiny diffs
 
-              // same local point sits in content -after- scaling
-              const after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+            photoFrame.scale = newScale
 
-              //shift scroll so the point stays under the fingers
-              flick.contentX += (after.x - before.x)
-              flick.contentY += (after.y - before.y)
-            }
-
-            flick.clamp
+            const after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+            flick.contentX += (after.x - before.x)
+            flick.contentY += (after.y - before.y)
           }
 
-          onPinchFinished: function() { flick.clamp }
+          onPinchFinished: function() {
+            imagePreview.smooth = true
+            flick.interactive = true
+            flick.clamp()
+            flick.returnToBounds()
+          }
         }
       }
     }
