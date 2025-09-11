@@ -104,15 +104,15 @@ Popup {
 
           onPinchUpdated: function(pinch) {
             //to keep the new scaled value after the user zooms in, calculating
-            var newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, startScale * pinch.scale))
-            var local = pincher.mapToItem(imagePreview, pinch.center.x, pinch.center.y)
-            var before = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
-            var old = photoFrame.scale
+            const newScale = Math.max(photoFrame.minScale, Math.min(photoFrame.maxScale, startScale * pinch.scale))
+            const local = pincher.mapToItem(imagePreview, pinch.center.x, pinch.center.y)
+            const before = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+            const old = photoFrame.scale
             if (newScale !== old) {
               photoFrame.scale = newScale
 
               // same local point sits in content -after- scaling
-              var after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
+              const after = imagePreview.mapToItem(flick.contentItem, local.x, local.y)
 
               //shift scroll so the point stays under the fingers
               flick.contentX += (after.x - before.x)
