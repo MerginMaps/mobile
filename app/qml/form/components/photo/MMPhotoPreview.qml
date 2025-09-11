@@ -80,7 +80,7 @@ Popup {
         }
 
         // Keep content in bounds; recenters when content smaller or bigger than viewport
-        function _clamp() {
+        function clamp {
           const maxX = Math.max(0, contentWidth  - width)
           const maxY = Math.max(0, contentHeight - height)
           contentX = Math.max(0, Math.min(maxX, contentX))
@@ -119,10 +119,10 @@ Popup {
               flick.contentY += (after.y - before.y)
             }
 
-            flick._clamp()
+            flick.clamp
           }
 
-          onPinchFinished: function() { flick._clamp() }
+          onPinchFinished: function() { flick.clamp }
         }
       }
     }
