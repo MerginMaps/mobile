@@ -69,9 +69,14 @@ Item {
 
     MMComponents.MMRoundButton {
       id: hidden
+
       visible: !allRow.visible && _count > 1
-      iconSource: __style.moreIcon
+      iconSource: __style.moreVerticalIcon
       bgndColor: __style.lightGreenColor
+
+      borderColor: __style.forestColor
+      borderWidth: __dp * 2
+
       onClicked: popup.opened ? popup.close() : popup.open()
     }
   }
@@ -81,7 +86,7 @@ Item {
     parent: hidden
     x: parent.width - width
     property int heightCalculate: hidden.mapToItem(Overlay.overlay, 0, 0).y + hidden.height + __style.margin12 + implicitHeight
-    y: (heightCalculate > ApplicationWindow.window.height)
+    y: (heightCalculate > window.height)
        ? (-implicitHeight - __style.margin12)  //Switches above the button
        : (parent.height + __style.margin12) //remains below the button
 
