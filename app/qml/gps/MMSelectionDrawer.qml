@@ -29,6 +29,7 @@ MMComponents.MMDrawer {
   readonly property var selectedCount: root.model?.count ?? 0
 
   readonly property alias panelHeight: root.height
+  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
 
   signal selectionFinished()
   signal editSelected()
@@ -50,35 +51,41 @@ MMComponents.MMDrawer {
 
   drawerHeader.title: qsTr( "Select features" )
 
-  MMComponents.MMListSpacer { height: __style.margin20}
-
   drawerContent: Column {
     id: mainColumn
 
     width: parent.width
+    spacing: __style.margin10
 
-    MMComponents.MMText {
+    Column
+    {
       width: parent.width
+      //height: implicitHeight
+      visible: true
+      spacing: 0
 
-      text: qsTr( "%n Feature(s) selected", "", root.selectedCount )
-      font: __style.t3
-      color: __style.nightColor
+      MMComponents.MMText {
+        width: parent.width
 
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
+        text: qsTr( "%n Feature(s) selected", "", root.selectedCount )
+        font: __style.t3
+        color: __style.nightColor
+
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+      }
+
+      MMComponents.MMText {
+        width: parent.width
+
+        text: qsTr( "on layer %1" ).arg( root.layer?.name )
+        font: __style.p6
+        color: __style.nightColor
+
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+      }
     }
-
-    MMComponents.MMText {
-      width: parent.width
-
-      text: qsTr( "on layer %1" ).arg( root.layer?.name )
-      font: __style.p6
-      color: __style.nightColor
-
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
-    }
-    MMComponents.MMListSpacer { height: __style.margin20}
 
     Row {
       width: parent.width
