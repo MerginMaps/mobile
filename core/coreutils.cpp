@@ -64,8 +64,8 @@ QString CoreUtils::appInfo()
 QString CoreUtils::appVersion()
 {
   QString version;
-#ifdef INPUT_VERSION
-  version = STR( INPUT_VERSION );
+#ifdef MM_VERSION
+  version = STR( MM_VERSION );
 #endif
   return version;
 }
@@ -73,8 +73,8 @@ QString CoreUtils::appVersion()
 QString CoreUtils::appVersionCode()
 {
   QString version;
-#ifdef INPUT_VERSION_CODE
-  version = STR( INPUT_VERSION_CODE );
+#ifdef MM_VERSION_CODE
+  version = STR( MM_VERSION_CODE );
 #endif
   return version;
 }

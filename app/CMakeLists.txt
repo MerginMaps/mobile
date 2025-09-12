@@ -325,7 +325,7 @@ if (ANDROID)
     file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml)
   endif ()
   configure_file(
-    ${INPUT_CMAKE_TEMPLATES_PATH}/AndroidManifest.xml.in
+    ${CMAKE_SOURCE_DIR}/cmake_templates/AndroidManifest.xml.in
     ${CMAKE_CURRENT_SOURCE_DIR}/android/AndroidManifest.xml @ONLY
   )
 
@@ -333,17 +333,17 @@ if (ANDROID)
     file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle)
   endif ()
   configure_file(
-    ${INPUT_CMAKE_TEMPLATES_PATH}/build.gradle.in
+    ${CMAKE_SOURCE_DIR}/cmake_templates/build.gradle.in
     ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle @ONLY
   )
 
   set_target_properties(
     Input
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
-               QT_ANDROID_TARGET_SDK_VERSION ${INPUT_ANDROID_TARGET_SDK_VERSION}
-               QT_ANDROID_MIN_SDK_VERSION ${INPUT_ANDROID_MIN_SDK_VERSION}
-               QT_ANDROID_VERSION_CODE ${INPUT_VERSION_CODE}
-               QT_ANDROID_VERSION_NAME ${INPUT_VERSION}
+               QT_ANDROID_TARGET_SDK_VERSION ${MM_ANDROID_TARGET_SDK_VERSION}
+               QT_ANDROID_MIN_SDK_VERSION ${MM_ANDROID_MIN_SDK_VERSION}
+               QT_ANDROID_VERSION_CODE ${MM_VERSION_CODE}
+               QT_ANDROID_VERSION_NAME ${MM_VERSION}
   )
 endif ()
 
@@ -353,8 +353,8 @@ if (MACOS)
     PROPERTIES MACOSX_BUNDLE TRUE
                MACOSX_RPATH TRUE
                MACOSX_BUNDLE_GUI_IDENTIFIER LutraConsultingLtd.Input
-               MACOSX_BUNDLE_INFO_PLIST ${INPUT_CMAKE_TEMPLATES_PATH}/macOsInfo.plist.in
-               MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION_CODE}
+               MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake_templates/macOsInfo.plist.in
+               MACOSX_BUNDLE_SHORT_VERSION_STRING ${MM_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
   )
@@ -390,7 +390,7 @@ if (IOS)
   )
 
   # entitlements file
-  set(ENTITLEMENTS_FILE ${INPUT_CMAKE_TEMPLATES_PATH}/mm.entitlements)
+  set(ENTITLEMENTS_FILE ${CMAKE_SOURCE_DIR}/cmake_templates/mm.entitlements)
   configure_file(
     ${ENTITLEMENTS_FILE} ${CMAKE_CURRENT_BINARY_DIR}/mm.entitlements COPYONLY
   )
@@ -405,10 +405,10 @@ if (IOS)
   set_target_properties(
     Input
     PROPERTIES MACOSX_BUNDLE TRUE
-               MACOSX_BUNDLE_INFO_PLIST ${INPUT_CMAKE_TEMPLATES_PATH}/iOSInfo.plist.in
+               MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake_templates/iOSInfo.plist.in
                MACOSX_BUNDLE_GUI_IDENTIFIER "LutraConsultingLtd.Input"
-               MACOSX_BUNDLE_SHORT_VERSION_STRING ${INPUT_VERSION}
-               MACOSX_BUNDLE_BUNDLE_VERSION ${INPUT_VERSION_CODE}
+               MACOSX_BUNDLE_SHORT_VERSION_STRING ${MM_VERSION}
+               MACOSX_BUNDLE_BUNDLE_VERSION ${MM_VERSION_CODE}
                XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "79QMH2QRAH"
                XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
                XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${ENTITLEMENTS_FILE_IN_BUILD}"

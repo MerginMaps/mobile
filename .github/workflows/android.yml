@@ -184,7 +184,7 @@ jobs:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
 
@@ -234,13 +234,13 @@ jobs:
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
-            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.apk
-          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
@@ -258,11 +258,11 @@ jobs:
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/bundle/release/android-build-release.aab \
-            ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.INPUT_VERSION_CODE }}.aab
-          name: Mergin Maps ${{ env.INPUT_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
