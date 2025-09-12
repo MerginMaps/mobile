@@ -79,7 +79,7 @@ MMDrawer {
     id: mainColumn
 
     width: parent.width
-    spacing: __style.margin10
+    spacing: __style.margin20
 
     Row {
       width: parent.width
