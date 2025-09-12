@@ -32,14 +32,14 @@ if (ANDROID_ABI)
   set(ANDROID_ARM_NEON ON)
 
   # Target/Minimum API levels for Android, used as Input target properties
-  set(INPUT_ANDROID_TARGET_SDK_VERSION "35")
-  set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
-  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
-  if (NOT INPUT_ANDROID_NDK_PATH)
+  set(MM_ANDROID_TARGET_SDK_VERSION "35")
+  set(MM_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(MM_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
+  if (NOT MM_ANDROID_NDK_PATH)
     message(FATAL_ERROR "Set required environment variable ANDROID_NDK_HOME.")
   endif ()
   set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
-      "${INPUT_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
+      "${MM_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
   )
 endif ()
 
@@ -92,15 +92,15 @@ else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
 endif ()
 
-if (DEFINED ENV{INPUT_VERSION_CODE})
-  set(INPUT_VERSION_CODE_DEFAULT "$ENV{INPUT_VERSION_CODE}")
+if (DEFINED ENV{MM_VERSION_CODE})
+  set(MM_VERSION_CODE_DEFAULT "$ENV{MM_VERSION_CODE}")
 else ()
   if (ANDROID)
-    set(INPUT_VERSION_CODE_DEFAULT "0000000")
+    set(MM_VERSION_CODE_DEFAULT "0000000")
   elseif (IOS)
-    set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+    set(MM_VERSION_CODE_DEFAULT "00.00.000000")
   else ()
-    set(INPUT_VERSION_CODE_DEFAULT "000000")
+    set(MM_VERSION_CODE_DEFAULT "000000")
   endif ()
 endif ()
 
@@ -141,8 +141,8 @@ set(USE_KEYCHAIN
       "Whether to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
-set(INPUT_VERSION_CODE
-    "${INPUT_VERSION_CODE_DEFAULT}"
+set(MM_VERSION_CODE
+    "${MM_VERSION_CODE_DEFAULT}"
     CACHE STRING "Build version (for stores)"
 )
 
@@ -312,7 +312,7 @@ add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 # Generate inputconfig.h
 if (ENABLE_TESTS)
-  set(INPUT_TEST TRUE)
+  set(MM_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()

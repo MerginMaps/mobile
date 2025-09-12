@@ -140,7 +140,7 @@ jobs:
           TIMESTAMP=`date "+%y.%-m"`
           CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-          echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+          echo "MM_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
           echo "Build number: ${CF_BUNDLE_VERSION}"
 
           # add build number to summary

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    android:versionCode="@INPUT_VERSION_CODE@"
-    android:versionName="@INPUT_VERSION@">
+    android:versionCode="@MM_VERSION_CODE@"
+    android:versionName="@MM_VERSION@">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/> <!-- Read images from gallery, Android <=12 -->
     <uses-permission android:name="android.permission.INTERNET"/>

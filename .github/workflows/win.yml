@@ -111,7 +111,7 @@ jobs:
         shell: bash
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
             echo "Version code: ${BUILD_NUM}"
 
       - name: Setup compiler
