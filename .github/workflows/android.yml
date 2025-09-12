@@ -254,7 +254,7 @@ jobs:
           ANDROID_NDK_HOST: darwin-x86_64
           QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
         run: |
-            cd ${{ github.workspace }}/build-Input
+            cd ${{ github.workspace }}/build-mm
             ninja aab
 
             echo "AAB:"

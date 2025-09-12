@@ -178,11 +178,11 @@ jobs:
           cd build-mm
 
           xcodebuild \
-            -project Input.xcodeproj/ \
-            -scheme Input \
+            -project MerginMaps.xcodeproj/ \
+            -scheme MerginMaps \
             -sdk iphoneos \
             -configuration Release \
-            archive -archivePath Input.xcarchive \
+            archive -archivePath MerginMaps.xcarchive \
             "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
       - name: Create package
@@ -190,7 +190,7 @@ jobs:
           INPUT_DIR=`pwd`/mm
           cd build-mm
           xcodebuild \
-            -archivePath Input.xcarchive \
+            -archivePath MerginMaps.xcarchive \
             -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
             -exportPath $PWD \
             -allowProvisioningUpdates \
@@ -203,6 +203,6 @@ jobs:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
         if: success()
         run: |
-          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/Input.dir/Info.plist`
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/MerginMaps.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
-          xcrun altool --upload-app -t ios -f build-mm/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+          xcrun altool --upload-app -t ios -f build-mm/MerginMaps.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose

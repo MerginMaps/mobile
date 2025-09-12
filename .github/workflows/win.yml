@@ -151,7 +151,7 @@ jobs:
           
           cmake --build ${{ github.workspace }}\build-mm --config Release --verbose
 
-          IF NOT EXIST Release\Input.exe (echo err_INPUT_BUILD & exit /b 1)
+          IF NOT EXIST Release\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
                                           
       - name: Install app
         shell: cmd

@@ -180,7 +180,7 @@ jobs:
             export API_KEY_PATH=authkey.p8
           fi
 
-          export APP_PATH=${{ github.workspace }}/install-mm/Input.app
+          export APP_PATH=${{ github.workspace }}/install-mm/MerginMaps.app
           export DMG_PATH=merginmaps-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.dmg
           ./mm/scripts/create_dmg.sh
 

@@ -31,7 +31,7 @@ if (ANDROID_ABI)
   set(ANDROID_STL "c++_shared")
   set(ANDROID_ARM_NEON ON)
 
-  # Target/Minimum API levels for Android, used as Input target properties
+  # Target/Minimum API levels for Android, used as MerginMaps target properties
   set(MM_ANDROID_TARGET_SDK_VERSION "35")
   set(MM_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
   set(MM_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
@@ -66,7 +66,7 @@ include(PlatformDetect)
 mm_detect_platform()
 
 project(
-  Input
+  MerginMaps
   VERSION ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH}
   DESCRIPTION "Collect. Share. Publish."
   HOMEPAGE_URL "https://merginmaps.com"
