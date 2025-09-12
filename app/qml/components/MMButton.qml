@@ -165,8 +165,29 @@ Button {
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
   implicitWidth: row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
 
-  topPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
-  bottomPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
+  topPadding: {
+    if ( root.type === MMButton.Types.Tertiary ) {
+      return 0;
+    }
+    else if ( root.size === MMButton.Sizes.Small ) {
+      return 7 * __dp;
+    }
+    else {
+      return 11 * __dp;
+    }
+  }
+
+  bottomPadding: {
+    if ( root.type === MMButton.Types.Tertiary ) {
+      return 0;
+    }
+    else if ( root.size === MMButton.Sizes.Small ) {
+      return 7 * __dp;
+    }
+    else {
+      return 11 * __dp;
+    }
+  }
   rightPadding: 0
   leftPadding: 0
 
