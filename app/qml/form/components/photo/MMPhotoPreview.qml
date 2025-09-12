@@ -127,7 +127,7 @@ Popup {
             imagePreview.smooth = true
             flick.interactive = true
             flick.clamp()
-            flick.returnToBounds()
+            flick.returnToBounds() //builin func- helps rebound to original location after zoom in/out without disorienting picture.
           }
         }
       }
