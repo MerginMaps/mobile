@@ -61,9 +61,6 @@ endif ()
 # ########################################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-# TODO remove this variable
-set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
-
 include(VersionDetect)
 include(PlatformDetect)
 mm_detect_platform()
@@ -379,28 +376,6 @@ if (ANDROID)
   # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
 endif ()
 
-if (ANDROID)
-  if (VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-    set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-  else ()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong")
-  endif ()
-
-  link_libraries("-ljnigraphics")
-
-  # Make sure the generator for android_deployment_settings.json can figure out the
-  # architecture
-  list(APPEND CMAKE_FIND_ROOT_PATH /)
-
-  # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
-endif ()
-
 # ########################################################################################
 # RESOURCES
 # ########################################################################################
@@ -418,25 +393,6 @@ file(
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
 )
-
-# ########################################################################################
-# RESOURCES
-# ########################################################################################
-message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources)
-file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
-)
-file(COPY ${QGIS_RESOURCE_DIR}/srs.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
-)
-file(
-  COPY ${PROJ_DIR}
-  DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/
-  PATTERN "*.cmake" EXCLUDE
-  PATTERN "vcpkg*" EXCLUDE
-)
-
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################
