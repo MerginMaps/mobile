@@ -23,7 +23,7 @@
 #include <QLocale>
 #include <QImageReader>
 #include <QStandardPaths>
-#ifdef INPUT_TEST
+#ifdef MM_TEST
 #include "test/inputtests.h"
 #endif
 #include <qqml.h>
@@ -414,7 +414,7 @@ int main( int argc, char *argv[] )
 #endif
 
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
@@ -426,7 +426,7 @@ int main( int argc, char *argv[] )
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     projectDir = tests.initTestingDir();
@@ -678,7 +678,7 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();

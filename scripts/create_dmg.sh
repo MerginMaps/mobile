@@ -25,11 +25,11 @@ if [[ -n ${API_KEY_ID:-} ]]; then
 fi
 
 create-dmg --volname "Mergin Maps Mobile App Installer" \
-	--hide-extension "Input.app" \
+	--hide-extension "MerginMaps.app" \
 	--window-pos 200 120 \
 	--window-size 512 320 \
 	--icon-size 100 \
-	--icon "Input.app" 130 160 \
+	--icon "MerginMaps.app" 130 160 \
 	--app-drop-link 400 155 \
 	"$DMG_PATH" "$APP_PATH"
 

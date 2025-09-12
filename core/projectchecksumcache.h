@@ -17,7 +17,7 @@
 
 #include "inputconfig.h"
 
-#if defined(INPUT_TEST)
+#if defined(MM_TEST)
 class TestProjectChecksumCache;
 #endif
 
@@ -40,7 +40,7 @@ class ProjectChecksumCache
     //! Name of the file in which the cache for the project is stored
     static const QString sCacheFile;
 
-#if defined(INPUT_TEST)
+#if defined(MM_TEST)
     friend class TestProjectChecksumCache;
 #endif
 
