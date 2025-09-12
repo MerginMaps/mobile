@@ -11,10 +11,10 @@ set(Qt6_base_dir ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/Qt6)
 # ########################################################################################
 
 if (WIN)
-  install(TARGETS Input RUNTIME DESTINATION .)
+  install(TARGETS MerginMaps RUNTIME DESTINATION .)
 else ()
   install(
-    TARGETS Input
+    TARGETS MerginMaps
     LIBRARY DESTINATION lib64/
     BUNDLE DESTINATION .
   )
@@ -26,18 +26,18 @@ endif ()
 if (MACOS)
   get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
   if (isMultiConfig)
-    set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_input_$<CONFIG>.cmake")
+    set(deploy_script "${CMAKE_CURRENT_BINARY_DIR}/deploy_merginmaps_$<CONFIG>.cmake")
   else ()
     set(deploy_script
-        "${CMAKE_CURRENT_BINARY_DIR}/deploy_input_${CMAKE_BUILD_TYPE}.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/deploy_merginmaps_${CMAKE_BUILD_TYPE}.cmake"
     )
   endif ()
 
-  set(executable_path "Input.app/Contents/MacOS/INPUT")
+  set(executable_path "MerginMaps.app/Contents/MacOS/MerginMaps")
 
   qt_generate_deploy_script(
     TARGET
-    Input
+    MerginMaps
     OUTPUT_SCRIPT
     deploy_script
     CONTENT
@@ -54,7 +54,7 @@ if (MACOS)
 elseif (WIN)
   qt_generate_deploy_qml_app_script(
     TARGET
-    Input
+    MerginMaps
     OUTPUT_SCRIPT
     deploy_script
     NO_TRANSLATIONS
@@ -218,7 +218,7 @@ if (WIN)
 elseif (LNX)
   set(translations_dir "share/translations")
 elseif (MACOS)
-  set(translations_dir "Input.app/Contents/Resources/i18n")
+  set(translations_dir "MerginMaps.app/Contents/Resources/i18n")
 endif ()
 
 install(
@@ -236,7 +236,7 @@ if (WIN)
 elseif (LNX)
   set(assets_dir "share/input")
 elseif (MACOS)
-  set(assets_dir "Input.app/Contents/Resources/INPUT")
+  set(assets_dir "MerginMaps.app/Contents/Resources/MerginMaps")
 endif ()
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/app/android/assets/qgis-data
