@@ -86,7 +86,7 @@ Item {
     parent: hidden
     x: parent.width - width
     property int heightCalculate: hidden.mapToItem(Overlay.overlay, 0, 0).y + hidden.height + __style.margin12 + implicitHeight
-    y: (heightCalculate > window.height)
+    y: (heightCalculate > ApplicationWindow.window?.height??0)
        ? (-implicitHeight - __style.margin12)  //Switches above the button
        : (parent.height + __style.margin12) //remains below the button
 
