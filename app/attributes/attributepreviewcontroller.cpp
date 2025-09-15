@@ -66,7 +66,7 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
     return QVector<QPair<QString, QString>> ();
 
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QString() );
   QVector<QPair<QString, QString>> lst;
   const QgsFields fields = mFeatureLayerPair.layer()->fields();
 
@@ -97,7 +97,7 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
     QStringList lines = mapTip.split( '\n' );
     for ( int i = 1; i < lines.count(); ++i ) // starting from index to avoid first line with "# fields"
     {
-      int index = fields.indexFromName( lines[i] );
+      const int index = fields.indexFromName( lines[i] );
       if ( index >= 0 )
       {
         const QString val = mFeatureLayerPair.feature().attribute( index ).toString();
