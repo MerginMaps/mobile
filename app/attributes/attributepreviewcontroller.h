@@ -16,13 +16,10 @@
 #define ATTRIBUTEPREVIEWCONTROLLER_H
 
 #include <QAbstractListModel>
-#include <QPair>
-#include <QVector>
 #include <QString>
 
 #include "qgsproject.h"
 #include "featurelayerpair.h"
-#include "inputconfig.h"
 
 class QgsExpressionContextScope;
 class QgsVectorLayer;
@@ -74,18 +71,18 @@ class AttributePreviewModel : public QAbstractListModel
 *      => PreviewType.Fields
 *      => not supported by QGIS
 *
-*  2. qgis' mapTip constains "# fields", following by one
+*  2. qgis' mapTip contains "# fields", following by one
 *         "display name" per line. Only first mLimit
 *         fields are shown.
 *      => PreviewType.Fields
 *      => not supported by QGIS
 *
-*  3. qgis' mapTip constains "# image", following by relative
+*  3. qgis' mapTip contains "# image", following by relative
 *         path to the image
 *     => PreviewType.Image
 *     => not supported by QGIS
 *
-*  4. qgis' mapTip constains some (html) text
+*  4. qgis' mapTip contains some (html) text
 *     => PreviewType.Html
 *     => supported by QGIS
 *
@@ -101,7 +98,7 @@ class AttributePreviewController: public QObject
     Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
     Q_PROPERTY( QgsProject *project READ project WRITE setProject NOTIFY projectChanged )
 
-    // never nullprt
+    // never nullptr
     Q_PROPERTY( AttributePreviewModel *fieldModel READ fieldModel NOTIFY featureLayerPairChanged )
     Q_PROPERTY( QString html READ html NOTIFY featureLayerPairChanged )
     Q_PROPERTY( QString photo READ photo NOTIFY featureLayerPairChanged )
@@ -139,10 +136,10 @@ class AttributePreviewController: public QObject
     void projectChanged();
 
   private:
-    QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
+    QList<QgsExpressionContextScope *> globalProjectLayerScopes( const QgsMapLayer *layer );
     void recalculate();
     QString mapTipImage();
-    QVector<QPair<QString, QString> > mapTipFields();
+    QVector<QPair<QString, QString>> mapTipFields();
     QString mapTipHtml();
     QString featureTitle();
 
@@ -156,4 +153,4 @@ class AttributePreviewController: public QObject
     const int mLimit = 3;
 };
 
-#endif // ATTRIBUTEPREVIEWMODEL_H
+#endif // ATTRIBUTEPREVIEWCONTROLLER_H
