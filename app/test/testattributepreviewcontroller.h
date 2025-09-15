@@ -32,6 +32,8 @@ class TestAttributePreviewController: public QObject
     void testMultilineMapTips();
     void testFeatureTitle();
 
+    void testFormatDateForPreview();
+
   private:
 };
 
