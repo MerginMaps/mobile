@@ -127,7 +127,9 @@ MMFormPhotoViewer {
 
     onDeleteImage: {
       // schedule the image for deletion
-      internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      const deletedPath = imageDeleteDialog.imagePath + ".deleted"
+      __inputUtils.renameFile( imageDeleteDialog.imagePath, deletedPath )
+      internal.imageSourceToDelete = deletedPath
       resetValueAndClose()
     }
 
@@ -203,6 +205,11 @@ MMFormPhotoViewer {
   }
 
   function callbackOnFormCanceled() {
+    // we remove the ".deleted" suffix
+    if ( internal.imageSourceToDelete ) {
+      const originalPath = internal.imageSourceToDelete.slice( 0, internal.imageSourceToDelete.length - 8 )
+      __inputUtils.renameFile( internal.imageSourceToDelete, originalPath )
+    }
     internal.imageSourceToDelete = ""
   }
 
