@@ -133,6 +133,8 @@ MMFormPhotoViewer {
     onDeleteImage: {
       // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      root.sketchingController.removeBackupSketches()
+      root.sketchingController.clear()
       resetValueAndClose()
     }
 

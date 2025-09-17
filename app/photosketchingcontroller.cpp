@@ -187,6 +187,17 @@ void PhotoSketchingController::backupSketches()
   mCanUndo = false;
 }
 
+void PhotoSketchingController::removeBackupSketches()
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  if ( QFile::exists( photoPath ) )
+  {
+    InputUtils::removeFile( photoPath );
+    CoreUtils::log( "Photo sketching", "Removed temporary image from: " + photoPath );
+  }
+}
+
 void PhotoSketchingController::redrawPaths()
 {
   for ( int i = 0 ; i < mPaths.size(); ++i )
