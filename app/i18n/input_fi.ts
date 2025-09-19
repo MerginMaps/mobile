@@ -2121,7 +2121,7 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/map/MMRecordingTools.qml" line="258"/>
         <location filename="../qml/map/MMRecordingTools.qml" line="288"/>
         <source>Record</source>
-        <translation>Tallenna</translation>
+        <translation>Tallenna sijainti</translation>
     </message>
 </context>
 <context>
