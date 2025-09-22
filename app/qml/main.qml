@@ -654,6 +654,12 @@ ApplicationWindow {
         multiSelectPanel.formOpened = true
       }
 
+      onDeleteSelected: {
+        let pair = map.multiEditManager.editableFeature()
+        formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
+        multiSelectPanel.formOpened = true
+      }
+
       onSelectionFinished: {
         multiSelectPanelLoader.active = false
         map.finishMultiSelect()

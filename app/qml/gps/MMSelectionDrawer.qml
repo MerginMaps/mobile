@@ -33,6 +33,7 @@ MMDrawer {
 
   signal selectionFinished()
   signal editSelected()
+  signal deleteSelected()
   signal selectionChanged()
 
   Component.onCompleted: root.open()
@@ -89,6 +90,12 @@ MMDrawer {
         text: qsTr( "Edit" )
         iconSourceLeft: __style.editIcon
         onClicked: editSelected()
+      }
+
+      MMButton {
+        text: qsTr( "Delete" )
+        iconSourceLeft: __style.deleteIcon
+        onClicked: deleteSelected()
       }
     }
   }
