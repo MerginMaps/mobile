@@ -655,9 +655,10 @@ ApplicationWindow {
       }
 
       onDeleteSelected: {
-        let pair = map.multiEditManager.editableFeature()
-        formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
-        multiSelectPanel.formOpened = true
+        const pair = map.multiEditManager.deleteFeature()
+        // if (!pair.isValid) {
+        //   app.showToast("Delete failed.")
+        // }
       }
 
       onSelectionFinished: {
