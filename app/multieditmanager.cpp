@@ -154,43 +154,44 @@ FeatureLayerPair MultiEditManager::editableFeature()
 
 FeatureLayerPair MultiEditManager::deleteFeature()
 {
-    if ( !mModel || mModel->count() == 0 || !mLayer )
-        return FeatureLayerPair{};
+  if ( !mModel || mModel->count() == 0 || !mLayer )
+    return FeatureLayerPair{};
 
-    if ( !mLayer->isEditable() )
-    {
-        mLayer->startEditing();
-    }
+  if ( !mLayer->isEditable() )
+  {
+    mLayer->startEditing();
+  }
 
-    const FeatureLayerPairs pairs = mModel->features();
-    QgsFeatureIds fids;
-    fids.reserve( pairs.count() );
+  const FeatureLayerPairs pairs = mModel->features();
+  QgsFeatureIds fids;
+  fids.reserve( pairs.count() );
+  for ( const FeatureLayerPair &pair : pairs )
+  {
+    fids.insert( pair.feature().id() );
+  }
+
+  const FeatureLayerPair representative = pairs.first();
+
+  mLayer->beginEditCommand( QStringLiteral( "Delete selected features" ) );
+
+  bool success = mLayer->deleteFeatures( fids );
+
+  if ( success )
+    mLayer->endEditCommand();
+  else
+    mLayer->destroyEditCommand();
+
+  success = success && mLayer->commitChanges( true );
+
+  if ( success )
+  {
     for ( const FeatureLayerPair &pair : pairs )
     {
-        fids.insert( pair.feature().id() );
+      mModel->remove( pair );
     }
+  }
 
-    const FeatureLayerPair representative = pairs.first();
-
-    mLayer->beginEditCommand( QStringLiteral("Delete selected features") );
-
-    bool success = mLayer->deleteFeatures( fids );
-
-    if ( success )
-        mLayer->endEditCommand();
-    else
-        mLayer->destroyEditCommand();
-
-    success = success && mLayer->commitChanges( true );
-
-    if ( success ) {
-        for ( const FeatureLayerPair &pair : pairs )
-        {
-            mModel->remove( pair );
-        }
-    }
-
-    return success ? representative : FeatureLayerPair{};
+  return success ? representative : FeatureLayerPair{};
 }
 
 void MultiEditManager::createTemporaryLayer()
