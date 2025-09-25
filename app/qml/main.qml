@@ -655,16 +655,21 @@ ApplicationWindow {
       }
 
       onDeleteSelected: {
-        const pair = map.multiEditManager.deleteFeature()
-        // if (!pair.isValid) {
-        //   app.showToast("Delete failed.")
-        // }
+        deleteDialog.open()
       }
 
       onSelectionFinished: {
         multiSelectPanelLoader.active = false
         map.finishMultiSelect()
       }
+    }
+  }
+
+  MMFormDeleteFeatureDialog {
+    id: deleteDialog
+
+    onDeleteFeature: {
+      map.multiEditManager.deleteFeature()
     }
   }
 

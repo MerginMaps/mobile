@@ -157,6 +157,7 @@ FeatureLayerPair MultiEditManager::deleteFeature()
   if ( !mModel || mModel->count() == 0 || !mLayer )
     return FeatureLayerPair{};
 
+  //UNDECISIVE OF WHAT HAPPENS IF LAYER IS NOT EDITABLE, TEST CODE
   if ( !mLayer->isEditable() )
   {
     mLayer->startEditing();
@@ -175,11 +176,14 @@ FeatureLayerPair MultiEditManager::deleteFeature()
   mLayer->beginEditCommand( QStringLiteral( "Delete selected features" ) );
 
   bool success = mLayer->deleteFeatures( fids );
-
   if ( success )
+  {
     mLayer->endEditCommand();
+  }
   else
+  {
     mLayer->destroyEditCommand();
+  }
 
   success = success && mLayer->commitChanges( true );
 
