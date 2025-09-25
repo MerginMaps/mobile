@@ -94,6 +94,15 @@ MMDrawer {
 
       MMButton {
         text: qsTr( "Delete" )
+        type: MMButton.Types.Secondary
+        fontColor: __style.earthColor
+        iconColor: __style.earthColor
+        bgndColor: __style.earthColor
+
+        fontColorHover: __style.earthColor
+        iconColorHover: __style.earthColor
+        bgndColorHover: __style.negativeColor
+
         iconSourceLeft: __style.deleteIcon
         onClicked: deleteSelected()
       }
