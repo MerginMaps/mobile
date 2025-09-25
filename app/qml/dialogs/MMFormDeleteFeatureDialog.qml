@@ -19,7 +19,7 @@ MMDrawerDialog {
   drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
 
   imageSource: __style.negativeMMSymbolImage
-  title: qsTr( "Delete feature" )
+  title: qsTr( "Delete feature(s)" )
   description: qsTr( "Are you sure you want to delete this feature(s)?" )
   primaryButton.text: qsTr( "Yes, I want to delete" )
   secondaryButton.text: qsTr( "No, thanks" )
