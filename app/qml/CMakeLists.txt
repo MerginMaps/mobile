@@ -97,6 +97,7 @@ set(MM_QML
     form/components/calendar/MMTumbler.qml
     form/components/photo/MMPhotoAttachment.qml
     form/components/photo/MMPhotoPreview.qml
+    form/components/MMFormActionBar.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml

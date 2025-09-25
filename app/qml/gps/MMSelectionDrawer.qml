@@ -44,6 +44,7 @@ MMDrawer {
 
   dropShadow: true
 
+  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
   onClosed: root.selectionFinished()
 
   Behavior on implicitHeight {
