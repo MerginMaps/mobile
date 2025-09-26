@@ -3,7 +3,7 @@
 # ########################################################################################
 
 macro (add_mm_test testname)
-  add_test(NAME ${testname} COMMAND Input --${testname})
+  add_test(NAME ${testname} COMMAND MerginMaps --${testname})
 endmacro ()
 
 set(MM_TESTS
