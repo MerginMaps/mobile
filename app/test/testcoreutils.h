@@ -12,8 +12,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
-
 class TestCoreUtils : public QObject
 {
     Q_OBJECT

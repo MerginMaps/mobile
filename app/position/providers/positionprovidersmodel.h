@@ -14,7 +14,6 @@
 #include <qglobal.h>
 #include <QAbstractListModel>
 
-#include "inputconfig.h"
 #include "appsettings.h"
 
 

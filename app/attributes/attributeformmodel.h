@@ -20,9 +20,6 @@
 #include <QVariant>
 #include <QUuid>
 
-#include "inputconfig.h"
-
-
 class AttributeController;
 
 /**

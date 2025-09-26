@@ -12,7 +12,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
 #include "merginapi.h"
 #include "qgsproject.h"
 #include "position/positionkit.h"

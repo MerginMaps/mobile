@@ -13,7 +13,6 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "inputconfig.h"
 #include "inputmapsettings.h"
 
 class AbstractMapTool : public QObject

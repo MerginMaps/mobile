@@ -13,7 +13,6 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "inputconfig.h"
 #include "positionkit.h"
 #include "appsettings.h"
 

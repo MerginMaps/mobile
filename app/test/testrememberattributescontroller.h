@@ -12,8 +12,6 @@
 #include <QObject>
 #include <QtTest>
 
-#include "inputconfig.h"
-
 class TestRememberAttributesController: public QObject
 {
     Q_OBJECT

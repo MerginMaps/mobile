@@ -15,7 +15,6 @@
 #include <QOrientationSensor>
 #include <QCompass>
 
-#include "inputconfig.h"
 #include "positionkit.h"
 #include "compass.h"
 

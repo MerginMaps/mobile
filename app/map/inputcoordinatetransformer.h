@@ -17,8 +17,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
-
 #include "qgspoint.h"
 
 #include "qgscoordinatetransformcontext.h"

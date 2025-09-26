@@ -13,6 +13,7 @@
 #include <QSignalSpy>
 #include <exiv2/exiv2.hpp>
 
+#include "mmconfig.h"
 #include "testutils.h"
 #include "coreutils.h"
 #include "inpututils.h"

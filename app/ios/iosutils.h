@@ -18,7 +18,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
 #include "iosimagepicker.h"
 #include "position/positionkit.h"
 #include "compass.h"

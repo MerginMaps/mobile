@@ -300,14 +300,14 @@ if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
 endif ()
 
-# This is for QGIS defined, do not move to inputconfig.h
+# This is for QGIS defined, do not move to mmconfig.h
 add_compile_definitions(HAVE_WIDGETS)
 
 # QGIS defines
 # add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
-# Generate inputconfig.h
+
 if (ENABLE_TESTS)
   set(MM_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
@@ -316,8 +316,9 @@ endif ()
 
 set(MM_FORMATS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/docs/supported_formats.txt")
 
+# Generate mmconfig.h
 configure_file(
-  ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h
+  ${CMAKE_SOURCE_DIR}/cmake_templates/mmconfig.h.in ${CMAKE_BINARY_DIR}/mmconfig.h
 )
 include_directories(${CMAKE_BINARY_DIR})
 

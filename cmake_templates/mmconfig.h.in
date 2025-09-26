@@ -1,5 +1,5 @@
-#ifndef INPUTCONFIG_H
-#define INPUTCONFIG_H
+#ifndef MMCONFIG_H
+#define MMCONFIG_H
 
 #define INPUT_APP
 

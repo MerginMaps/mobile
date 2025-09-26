@@ -22,7 +22,6 @@
 
 #include "qgsproject.h"
 #include "featurelayerpair.h"
-#include "inputconfig.h"
 
 class QgsExpressionContextScope;
 class QgsVectorLayer;

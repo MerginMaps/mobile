@@ -15,7 +15,7 @@
 #include <QDateTime>
 #include <QHash>
 
-#include "inputconfig.h"
+#include "mmconfig.h"
 
 #if defined(MM_TEST)
 class TestProjectChecksumCache;

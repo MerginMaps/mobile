@@ -13,8 +13,6 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "inputconfig.h"
-
 #include "qgslayertreenode.h"
 #include "qgslegendrenderer.h"
 #include "qgsvectorlayer.h"

@@ -13,8 +13,6 @@
 #include <QObject>
 #include <QtGlobal>
 
-#include "inputconfig.h"
-
 /**
  * QGIS uses PROJ library for doing CRS transformations.
  * We currently ship the basic PROJ resources QGIS needs to do most common projections by adding them to the assets in APKs (see https://github.com/MerginMaps/mobile/tree/master/app/android/assets/qgis-data). There could be a custom PROJ datum shifts used by users as part of their mergin projects in the `<project>/proj/` folder.
