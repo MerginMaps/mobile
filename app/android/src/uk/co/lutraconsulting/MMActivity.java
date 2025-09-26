@@ -50,9 +50,9 @@ import android.provider.OpenableColumns;
 import androidx.core.view.WindowCompat;
 import androidx.core.splashscreen.SplashScreen;
 
-public class InputActivity extends QtActivity
+public class MMActivity extends QtActivity
 {
-  private static final String TAG = "Mergin Maps Input Activity";
+  private static final String TAG = "Mergin Maps Activity";
   private static final int MEDIA_CODE = 101;
   private boolean keepSplashScreenVisible = true;
   private String localTargetPath = null;

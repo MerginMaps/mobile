@@ -42,7 +42,7 @@
         android:icon="@mipmap/ic_appicon"
         android:roundIcon="@mipmap/ic_appicon_round" >
         <activity
-            android:name="uk.co.lutraconsulting.InputActivity"
+            android:name="uk.co.lutraconsulting.MMActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
@@ -81,7 +81,7 @@
         <activity
             android:name="uk.co.lutraconsulting.CameraActivity"
             android:label="Mergin Maps"
-            android:parentActivityName="uk.co.lutraconsulting.InputActivity"
+            android:parentActivityName="uk.co.lutraconsulting.MMActivity"
             android:configChanges="screenLayout|orientation|screenSize"
             >
              <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --" />
