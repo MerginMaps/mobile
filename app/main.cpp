@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "inputconfig.h"
+#include "mmconfig.h"
 
 #include <QFontDatabase>
 #include <QGuiApplication>

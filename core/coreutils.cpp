@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 #include "coreutils.h"
-#include "inputconfig.h"
+#include "mmconfig.h"
 
 #include <QDateTime>
 #include <QDebug>
