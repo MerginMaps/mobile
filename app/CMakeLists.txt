@@ -353,7 +353,8 @@ if (MACOS)
     PROPERTIES MACOSX_BUNDLE TRUE
                MACOSX_RPATH TRUE
                MACOSX_BUNDLE_GUI_IDENTIFIER LutraConsultingLtd.Input
-               MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake_templates/macOsInfo.plist.in
+               MACOSX_BUNDLE_INFO_PLIST
+               ${CMAKE_SOURCE_DIR}/cmake_templates/macOsInfo.plist.in
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${MM_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
@@ -405,7 +406,8 @@ if (IOS)
   set_target_properties(
     MerginMaps
     PROPERTIES MACOSX_BUNDLE TRUE
-               MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake_templates/iOSInfo.plist.in
+               MACOSX_BUNDLE_INFO_PLIST
+               ${CMAKE_SOURCE_DIR}/cmake_templates/iOSInfo.plist.in
                MACOSX_BUNDLE_GUI_IDENTIFIER "LutraConsultingLtd.Input"
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${MM_VERSION}
                MACOSX_BUNDLE_BUNDLE_VERSION ${MM_VERSION_CODE}
@@ -430,7 +432,9 @@ if (IOS)
   else ()
 
     # use development profiles - automatically manage signing
-    set_target_properties(MerginMaps PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic")
+    set_target_properties(
+      MerginMaps PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic"
+    )
     message(STATUS "Using automatic code sign")
   endif ()
 endif ()
@@ -550,14 +554,14 @@ endif ()
 if (ANDROID)
   set_property(
     TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
-                          ${KDAB_OpenSSL_LIBRARY}
+                               ${KDAB_OpenSSL_LIBRARY}
   )
 endif ()
 
 if (MACOS OR IOS)
   target_link_libraries(
     MerginMaps PUBLIC AppleFrameworks::Security AppleFrameworks::CoreFoundation
-                 AppleFrameworks::SystemConfiguration
+                      AppleFrameworks::SystemConfiguration
   )
 endif ()
 

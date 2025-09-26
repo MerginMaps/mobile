@@ -307,7 +307,6 @@ add_compile_definitions(HAVE_WIDGETS)
 # add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
-
 if (ENABLE_TESTS)
   set(MM_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
