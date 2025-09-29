@@ -39,9 +39,9 @@ MMPage {
 
       TextEdit {
         id: txt
-        text: "Kaustuv <style>" + "a:link { color: " + __style.earthColor
+        text: "<style>" + "a:link { color: " + __style.earthColor
               + "; text-decoration: underline; }" + "p.odd { color: "
-              + __style.nightColor + "; }" + "</style>" + root.text + "KaustuvLAST"
+              + __style.nightColor + "; }" + "</style>" + root.text
         font: __style.t3
         color: __style.forestColor
         textFormat: Text.RichText
