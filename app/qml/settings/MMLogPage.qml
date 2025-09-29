@@ -37,15 +37,18 @@ MMPage {
 
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
-      Text {
+      TextEdit {
         id: txt
-        text: "<style>" + "a:link { color: " + __style.earthColor
+        text: "Kaustuv <style>" + "a:link { color: " + __style.earthColor
               + "; text-decoration: underline; }" + "p.odd { color: "
-              + __style.nightColor + "; }" + "</style>" + root.text
+              + __style.nightColor + "; }" + "</style>" + root.text + "KaustuvLAST"
         font: __style.t3
         color: __style.forestColor
         textFormat: Text.RichText
         wrapMode: Text.WordWrap
+        readOnly: true
+        selectByMouse: true
+        selectByKeyboard: true
         width: parent.width
       }
 
