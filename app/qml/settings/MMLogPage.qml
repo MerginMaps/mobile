@@ -49,6 +49,7 @@ MMPage {
         readOnly: true
         selectByMouse: true
         selectByKeyboard: true
+        selectionColor: __style.forestColor
         width: parent.width
       }
 
