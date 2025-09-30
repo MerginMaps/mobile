@@ -193,16 +193,12 @@ jobs:
                                     
       - name: Configure app
         env:
-          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_NDK_HOST: darwin-x86_64
-
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
             mkdir -p ${{ github.workspace }}/build-mm
             cd ${{ github.workspace }}/build-mm
 
             export PATH=${{ env.VCPKG_ROOT }}:$PATH
-            export ANDROID_NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}
-            export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
             export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
 
             cmake \
@@ -226,8 +222,7 @@ jobs:
       
       - name: Build APK
         env:
-          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_NDK_HOST: darwin-x86_64
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
             cd ${{ github.workspace }}/build-mm
             ninja apk
@@ -250,11 +245,9 @@ jobs:
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         env:
-          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-          ANDROID_NDK_HOST: darwin-x86_64
-          QT_BASE: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-            cd ${{ github.workspace }}/build-Input
+            cd ${{ github.workspace }}/build-mm
             ninja aab
 
             echo "AAB:"
