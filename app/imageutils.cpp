@@ -11,7 +11,6 @@
 
 #include "coreutils.h"
 
-#include <QFile>
 #include <QFileInfo>
 #include <QImage>
 
@@ -24,20 +23,20 @@ bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &ta
 
   try
   {
-    std::unique_ptr< Exiv2::Image > srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
+    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
     if ( !srcImage )
       return false;
 
-    std::unique_ptr< Exiv2::Image > dstImage( Exiv2::ImageFactory::open( targetImage.toStdString() ) );
-    if ( !dstImage )
-      return false;
-
     srcImage->readMetadata();
-    Exiv2::ExifData &exifData = srcImage->exifData();
+    const Exiv2::ExifData &exifData = srcImage->exifData();
     if ( exifData.empty() )
     {
       return true;
     }
+
+    const std::unique_ptr dstImage( Exiv2::ImageFactory::open( targetImage.toStdString() ) );
+    if ( !dstImage )
+      return false;
 
     dstImage->setExifData( exifData );
     dstImage->writeMetadata();
@@ -163,7 +162,7 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
   }
   catch ( ... )
   {
-    CoreUtils::log( "copying EXIF", QStringLiteral( "Failed to copy EXIF metadata" ) );
+    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation EXIF metadata" ) );
     return false;
   }
 }

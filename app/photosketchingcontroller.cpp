@@ -172,7 +172,7 @@ void PhotoSketchingController::backupSketches()
   }
   else
   {
-    if ( ImageUtils::copyExifMetadata( QUrl( mPhotoSource ).toLocalFile(), photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
+    if ( ImageUtils::copyExifMetadata( mOriginalPhotoSource, photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
     {
       CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
       emit tempPhotoSourceChanged( photoPath );
