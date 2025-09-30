@@ -2084,29 +2084,6 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
   }
 }
 
-void InputUtils::updateFeature( const FeatureLayerPair &pair )
-{
-  if ( !pair.layer() )
-  {
-    return;
-  }
-
-  if ( !pair.feature().isValid() )
-  {
-    return;
-  }
-
-  if ( !pair.layer()->isEditable() )
-  {
-    pair.layer()->startEditing();
-  }
-
-  QgsFeature f( pair.feature() );
-  pair.layer()->updateFeature( f );
-  pair.layer()->commitChanges();
-  pair.layer()->triggerRepaint();
-}
-
 QString InputUtils::imageGalleryLocation()
 {
   QStringList galleryPaths = QStandardPaths::standardLocations( QStandardPaths::PicturesLocation );
