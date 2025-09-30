@@ -444,17 +444,17 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="91"/>
+        <location filename="../qml/account/MMAccountController.qml" line="93"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Päivitä sovellus käyttääksesi viimeisimpiä ominaisuuksia.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="95"/>
+        <location filename="../qml/account/MMAccountController.qml" line="97"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Palvelin ei ole tällä hetkellä käytettävissä, tarkista yhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="148"/>
+        <location filename="../qml/account/MMAccountController.qml" line="150"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Hyväksyn %1 käyttöehdot%3 ja %2 tietosuojakäytännön%3</translation>
     </message>
@@ -873,29 +873,37 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="84"/>
         <source>Photo is missing.</source>
         <translation>Valokuva puuttuu.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="113"/>
         <source>Open Image</source>
         <translation>Avaa valokuva</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="115"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Kuvatiedostot (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="281"/>
         <source>Could not create directory %1.</source>
         <translation>Hakemistoa %1 ei voitu luoda.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="353"/>
         <source>Failed to process the image</source>
         <translation>Kuvan prosessointi epäonnistui</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormPhotoSketchingPageDialog</name>
+    <message>
+        <location filename="../qml/form/components/MMFormPhotoSketchingPageDialog.qml" line="60"/>
+        <source>Undo</source>
+        <translation>Kumoa</translation>
     </message>
 </context>
 <context>
@@ -1780,6 +1788,11 @@ Sitä ei lisätä projektiin.</translation>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Palvelinta ei tueta, ota yhteyttä palvelimen järjestelmänvalvojaan.</translation>
     </message>
+    <message>
+        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <source>Download a project and start collecting.</source>
+        <translation>Lataa projekti ja aloita keräämään dataa.</translation>
+    </message>
 </context>
 <context>
     <name>MMProjectDelegate</name>
@@ -2108,7 +2121,7 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/map/MMRecordingTools.qml" line="258"/>
         <location filename="../qml/map/MMRecordingTools.qml" line="288"/>
         <source>Record</source>
-        <translation>Tallenna</translation>
+        <translation>Tallenna sijainti</translation>
     </message>
 </context>
 <context>
@@ -2851,28 +2864,28 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Työtila luotu</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1881"/>
+        <location filename="../../core/merginapi.cpp" line="1902"/>
         <source>Project detached from the server</source>
         <translation>Projekti irrotettu palvelimelta</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4119"/>
+        <location filename="../../core/merginapi.cpp" line="4164"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Työtilan nimi sisältää virheellisiä merkkejä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4186"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace %1 already exists</source>
         <translation>Työtila %1 on jo olemassa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4292"/>
+        <location filename="../../core/merginapi.cpp" line="4337"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Voit nyt sulkea tämän sivun ja palata Mergin Mapsiin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4318"/>
-        <location filename="../../core/merginapi.cpp" line="4345"/>
+        <location filename="../../core/merginapi.cpp" line="4363"/>
+        <location filename="../../core/merginapi.cpp" line="4390"/>
         <source>SSO authorization failed</source>
         <translation>Kertakirjautmisvaltuutus (SSO) epäonnistui</translation>
     </message>
@@ -3097,12 +3110,12 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Tuntematon sijainti</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="556"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raportti lähetetty. Ota yhteyttä tukeen</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="561"/>
+        <location filename="../main.cpp" line="562"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui. Tarkista internet yhteytesi.</translation>
     </message>

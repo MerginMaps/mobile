@@ -77,7 +77,7 @@ Item {
 
       borderColor: __style.forestColor
       borderWidth: __dp * 2
-
+      
       onClicked: popup.opened ? popup.close() : popup.open()
     }
   }

@@ -93,7 +93,12 @@ MMFormPhotoViewer {
   photoUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
-  on_FieldValueChanged: internal.setImageSource()
+  on_FieldValueChanged: function (){
+    internal.setImageSource()
+    // after editing geometry this needs to be triggered to populate internal.tempSketchedImageSource for components,
+    // which were not in view
+    sketchingController?.prepareController()
+  }
   on_FieldValueIsNullChanged: internal.setImageSource()
 
   onCapturePhotoClicked: internal.capturePhoto()

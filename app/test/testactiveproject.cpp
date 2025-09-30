@@ -166,3 +166,28 @@ void TestActiveProject::testRecordingAllowed()
   mApi->localProjectsManager().removeLocalProject( id );
 }
 
+void TestActiveProject::testLoadingFlagFileExpiration()
+{
+  AppSettings as;
+  ActiveLayer al;
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+
+  // project "planes" - tracking not enabled
+  QString projectDir = TestUtils::testDataDir() + "/planes/";
+  QString projectName = "quickapp_project.qgs";
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectName );
+
+  activeProject.load( projectDir + projectName );
+
+  QSignalSpy spyLoadingStarted( &activeProject, &ActiveProject::loadingStarted );
+
+  // check that loading flag file is created
+  QFile flagFile( ActiveProject::LOADING_FLAG_FILE_PATH );
+  QVERIFY( flagFile.exists() );
+
+  // wait for expiration + some margin
+  QTest::qWait( ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS + 1000 );
+
+  QVERIFY( !flagFile.exists() );
+}
