@@ -21,6 +21,8 @@ RoundButton {
 
   property url iconSource: __style.backIcon
   property color iconColor: __style.forestColor
+  property color borderColor: __style.polarColor
+  property real borderWidth: 0
 
   property color bgndColor: __style.polarColor
   property color iconColorDisabled: __style.mediumGreenColor
@@ -51,5 +53,7 @@ RoundButton {
   background: Rectangle {
     color: root.down || root.hovered ? root.bgndHoverColor : root.bgndColor
     radius: root.implicitHeight / 2
+    border.color: borderColor
+    border.width: borderWidth
   }
 }
