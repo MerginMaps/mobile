@@ -17,6 +17,7 @@ RoundButton {
 
   implicitWidth: 40 * __dp
   implicitHeight: 40 * __dp
+  hoverEnabled: root.enabled
 
   property url iconSource: __style.backIcon
   property color iconColor: __style.forestColor
@@ -24,11 +25,29 @@ RoundButton {
   property real borderWidth: 0
 
   property color bgndColor: __style.polarColor
+  property color iconColorDisabled: __style.mediumGreenColor
+
   property color bgndHoverColor: __style.mediumGreenColor
+  property color bgndColorDisabled: __style.transparentColor
 
   contentItem: MMIcon {
+    anchors.centerIn: parent
     color: root.iconColor
     source: root.iconSource
+  }
+  states: State {
+    name: "disabled"
+    when: !root.enabled
+
+    PropertyChanges {
+      target: root
+      bgndColor: root.bgndColorDisabled
+    }
+
+    PropertyChanges {
+      target: root
+      iconColor: root.iconColorDisabled
+    }
   }
 
   background: Rectangle {
