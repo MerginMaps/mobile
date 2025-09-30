@@ -149,6 +149,7 @@ Item {
         id: actionsBar
         width: parent.width - contentLayout.rightMaxPagePadding
         visible: internal.showButtons
+        popupBelow: !internal.showFields
 
         actions: [
           {

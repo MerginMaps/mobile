@@ -17,6 +17,7 @@ Item {
 
   // actions = [{ label, icon, visible, onTrigger }]
   property var  actions: []
+  property bool popupBelow: false
 
   readonly property var _visible: actions.filter(a => a && a.visible !== false)
   readonly property int _count: _visible.length
@@ -69,9 +70,14 @@ Item {
 
     MMComponents.MMRoundButton {
       id: hidden
+
       visible: !allRow.visible && _count > 1
-      iconSource: __style.moreIcon
+      iconSource: __style.moreVerticalIcon
       bgndColor: __style.lightGreenColor
+
+      borderColor: __style.forestColor
+      borderWidth: __dp * 2
+      
       onClicked: popup.opened ? popup.close() : popup.open()
     }
   }
@@ -80,14 +86,11 @@ Item {
     id: popup
     parent: hidden
     x: parent.width - width
-    property int heightCalculate: hidden.mapToItem(Overlay.overlay, 0, 0).y + hidden.height + __style.margin12 + implicitHeight
-    y: (heightCalculate > ApplicationWindow.window.height)
+    y: root.popupBelow
        ? (-implicitHeight - __style.margin12)  //Switches above the button
        : (parent.height + __style.margin12) //remains below the button
 
     width: 155 * __dp
-
-    //transformOrigin: Item.TopRight
 
     contentItem: Column {
       spacing: 0
