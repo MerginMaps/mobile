@@ -166,7 +166,7 @@ QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLaye
   return scopes;
 }
 
-AttributePreviewModel * AttributePreviewController::fieldModel() const
+AttributePreviewModel *AttributePreviewController::fieldModel() const
 {
   return mFieldModel.get();
 }
@@ -209,7 +209,7 @@ void AttributePreviewController::setProject( QgsProject *project )
   }
 }
 
-QgsProject * AttributePreviewController::project() const
+QgsProject *AttributePreviewController::project() const
 {
   return mProject;
 }
