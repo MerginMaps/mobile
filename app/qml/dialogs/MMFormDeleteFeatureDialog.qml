@@ -20,7 +20,7 @@ MMDrawerDialog {
 
   imageSource: __style.negativeMMSymbolImage
   title: qsTr( "Delete feature" )
-  description: qsTr( "Are you sure you want to delete this feature(s)?" )
+  description: qsTr( "Are you sure you want to delete this feature?" )
   primaryButton.text: qsTr( "Yes, I want to delete" )
   secondaryButton.text: qsTr( "No, thanks" )
 

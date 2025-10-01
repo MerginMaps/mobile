@@ -669,8 +669,13 @@ ApplicationWindow {
   MMFormDeleteFeatureDialog {
     id: deleteDialog
 
+    title: qsTr( "Delete feature(s)" )
+    description: qsTr( "Are you sure you want to delete selected feature(s)?" )
+    primaryButton.text: qsTr( "Yes, I want to delete" )
+    secondaryButton.text: qsTr( "No, thanks" )
+
     onDeleteFeature: {
-      map.multiEditManager.deleteFeature()
+      map.multiEditManager.deleteSelectedFeature()
     }
   }
 

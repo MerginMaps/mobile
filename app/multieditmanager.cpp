@@ -16,6 +16,7 @@
 #include "qgsvectorlayerjoininfo.h"
 #include "qgsauxiliarystorage.h"
 #include "qgis.h"
+#include "coreutils.h"
 
 
 MultiEditManager::MultiEditManager( QObject *parent )
@@ -152,50 +153,37 @@ FeatureLayerPair MultiEditManager::editableFeature()
   return FeatureLayerPair( oneFeature, mTempLayer.get() );
 }
 
-FeatureLayerPair MultiEditManager::deleteFeature()
+void MultiEditManager::deleteSelectedFeature()
 {
-  if ( !mModel || mModel->count() == 0 || !mLayer )
-    return FeatureLayerPair{};
+    if ( !mModel || mModel->count() == 0 || !mLayer )
+        return;
 
-  //UNDECISIVE OF WHAT HAPPENS IF LAYER IS NOT EDITABLE, TEST CODE
-  if ( !mLayer->isEditable() )
-  {
-    mLayer->startEditing();
-  }
-
-  const FeatureLayerPairs pairs = mModel->features();
-  QgsFeatureIds fids;
-  fids.reserve( pairs.count() );
-  for ( const FeatureLayerPair &pair : pairs )
-  {
-    fids.insert( pair.feature().id() );
-  }
-
-  const FeatureLayerPair representative = pairs.first();
-
-  mLayer->beginEditCommand( QStringLiteral( "Delete selected features" ) );
-
-  bool success = mLayer->deleteFeatures( fids );
-  if ( success )
-  {
-    mLayer->endEditCommand();
-  }
-  else
-  {
-    mLayer->destroyEditCommand();
-  }
-
-  success = success && mLayer->commitChanges( true );
-
-  if ( success )
-  {
+    const FeatureLayerPairs pairs = mModel->features();
+    QgsFeatureIds fids;
+    fids.reserve( pairs.count() );
     for ( const FeatureLayerPair &pair : pairs )
     {
-      mModel->remove( pair );
+        fids.insert( pair.feature().id() );
     }
-  }
 
-  return success ? representative : FeatureLayerPair{};
+    if ( fids.isEmpty() )
+    {
+        return;
+    }
+
+    if ( !mLayer->startEditing() )
+    {
+        CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not start editing on layer %1" ).arg( mLayer->name() ) );
+        return;
+    }
+
+    bool success = mLayer->deleteFeatures( fids );
+    if ( success )
+    {
+        mModel->populate( {} );
+        mLayer->triggerRepaint();
+        CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
+    }
 }
 
 void MultiEditManager::createTemporaryLayer()

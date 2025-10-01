@@ -44,7 +44,9 @@ class MultiEditManager : public QObject
 
     //! Returns a FeatureLayerPair with the feature in mTempLayer
     Q_INVOKABLE FeatureLayerPair editableFeature();
-    Q_INVOKABLE FeatureLayerPair deleteFeature();
+
+    //! Deletes selected or toggled features upon called
+    Q_INVOKABLE void deleteSelectedFeature();
 
     //! Returns multipart geometry of all geometries in the model, in map crs
     QgsGeometry collectGeometry() const { return mModel->collectGeometries( mMapSettings ); }
