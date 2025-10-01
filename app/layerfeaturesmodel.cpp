@@ -114,6 +114,8 @@ QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *s
     fl.append( f );
   }
 
+  canceled = canceled || ( req.feedback() && req.feedback()->isCanceled() );
+
   qDebug() << QString( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? "was canceled" : "completed" ).arg( t.elapsed() ).arg( fl.count() );
   return fl;
 }
