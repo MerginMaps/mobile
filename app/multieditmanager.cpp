@@ -155,35 +155,35 @@ FeatureLayerPair MultiEditManager::editableFeature()
 
 void MultiEditManager::deleteSelectedFeature()
 {
-    if ( !mModel || mModel->count() == 0 || !mLayer )
-        return;
+  if ( !mModel || mModel->count() == 0 || !mLayer )
+    return;
 
-    const FeatureLayerPairs pairs = mModel->features();
-    QgsFeatureIds fids;
-    fids.reserve( pairs.count() );
-    for ( const FeatureLayerPair &pair : pairs )
-    {
-        fids.insert( pair.feature().id() );
-    }
+  const FeatureLayerPairs pairs = mModel->features();
+  QgsFeatureIds fids;
+  fids.reserve( pairs.count() );
+  for ( const FeatureLayerPair &pair : pairs )
+  {
+    fids.insert( pair.feature().id() );
+  }
 
-    if ( fids.isEmpty() )
-    {
-        return;
-    }
+  if ( fids.isEmpty() )
+  {
+    return;
+  }
 
-    if ( !mLayer->startEditing() )
-    {
-        CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not start editing on layer %1" ).arg( mLayer->name() ) );
-        return;
-    }
+  if ( !mLayer->startEditing() )
+  {
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not start editing on layer %1" ).arg( mLayer->name() ) );
+    return;
+  }
 
-    bool success = mLayer->deleteFeatures( fids );
-    if ( success )
-    {
-        mModel->populate( {} );
-        mLayer->triggerRepaint();
-        CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
-    }
+  bool success = mLayer->deleteFeatures( fids );
+  if ( success )
+  {
+    mModel->populate( {} );
+    mLayer->triggerRepaint();
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
+  }
 }
 
 void MultiEditManager::createTemporaryLayer()

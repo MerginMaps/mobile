@@ -139,7 +139,7 @@ class AttributePreviewController: public QObject
     void projectChanged();
 
   private:
-    QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer *layer );
+    QList<QgsExpressionContextScope *> globalProjectLayerScopes( QgsMapLayer * layer );
     void recalculate();
     QString mapTipImage();
     QVector<QPair<QString, QString> > mapTipFields();
