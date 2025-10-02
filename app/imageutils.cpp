@@ -42,9 +42,14 @@ bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &ta
     dstImage->writeMetadata();
     return true;
   }
+  catch (Exiv2::Error &error)
+  {
+    CoreUtils::log( "Copying EXIF", error.what() );
+    return false;
+  }
   catch ( ... )
   {
-    CoreUtils::log( "copying EXIF", QStringLiteral( "Failed to copy EXIF metadata" ) );
+    CoreUtils::log( "Copying EXIF", QStringLiteral( "Failed to copy EXIF metadata" ) );
     return false;
   }
 }

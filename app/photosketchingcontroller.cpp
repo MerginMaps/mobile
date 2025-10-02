@@ -180,6 +180,9 @@ void PhotoSketchingController::backupSketches()
     else
     {
       CoreUtils::log( "Photo sketching", "Failed to copy metadata to: " + photoPath );
+      InputUtils::removeFile( photoPath );
+      clear();
+      emit sketchesSavingError();
     }
   }
 

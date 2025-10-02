@@ -105,6 +105,8 @@ class PhotoSketchingController: public QObject
     void lastPathRemoved();
     void pathsReset();
 
+    void sketchesSavingError();
+
   private:
     double mPhotoScale = 1.0;
     QString mPhotoSource;

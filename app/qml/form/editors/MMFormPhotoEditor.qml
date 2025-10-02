@@ -178,6 +178,10 @@ MMFormPhotoViewer {
       }
       internal.tempSketchedImageSource = "file://" + newPath
     }
+
+    function onSketchesSavingError(){
+      __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
+    }
   }
 
   Connections {
