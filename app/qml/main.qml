@@ -656,6 +656,7 @@ ApplicationWindow {
       }
 
       onDeleteSelected: {
+        deleteDialog.countToDelete = selectedCount
         deleteDialog.open()
       }
 
@@ -669,8 +670,10 @@ ApplicationWindow {
   MMFormDeleteFeatureDialog {
     id: deleteDialog
 
-    title: qsTr( "Delete feature(s)" )
-    description: qsTr( "Are you sure you want to delete selected feature(s)?" )
+    property int count: 0
+
+    title: (countToDelete > 1) ? qsTr( "Delete features" ) : qsTr( "Delete feature" )
+    description: (countToDelete > 1) ? qsTr( "Are you sure you want to delete selected features?" ) : qsTr( "Are you sure you want to delete selected feature?" )
     primaryButton.text: qsTr( "Yes, I want to delete" )
     secondaryButton.text: qsTr( "No, thanks" )
 

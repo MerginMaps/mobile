@@ -177,7 +177,7 @@ void MultiEditManager::deleteSelectedFeature()
     return;
   }
 
-  bool success = mLayer->deleteFeatures( fids );
+  const bool success = mLayer->deleteFeatures( fids );
   if ( success )
   {
     mModel->populate( {} );
