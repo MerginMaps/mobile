@@ -172,7 +172,7 @@ void PhotoSketchingController::backupSketches()
   }
   else
   {
-    if ( ImageUtils::copyExifMetadata( QUrl( mPhotoSource ).toLocalFile(), photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
+    if ( ImageUtils::copyExifMetadata( mOriginalPhotoSource, photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
     {
       CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
       emit tempPhotoSourceChanged( photoPath );
@@ -180,11 +180,25 @@ void PhotoSketchingController::backupSketches()
     else
     {
       CoreUtils::log( "Photo sketching", "Failed to copy metadata to: " + photoPath );
+      InputUtils::removeFile( photoPath );
+      clear();
+      emit sketchesSavingError();
     }
   }
 
   mActivePaths.clear();
   mCanUndo = false;
+}
+
+void PhotoSketchingController::removeBackupSketches()
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  if ( QFile::exists( photoPath ) )
+  {
+    InputUtils::removeFile( photoPath );
+    CoreUtils::log( "Photo sketching", "Removed temporary image from: " + photoPath );
+  }
 }
 
 void PhotoSketchingController::redrawPaths()

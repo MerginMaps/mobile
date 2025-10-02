@@ -133,6 +133,8 @@ MMFormPhotoViewer {
     onDeleteImage: {
       // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      root.sketchingController.removeBackupSketches()
+      root.sketchingController.clear()
       resetValueAndClose()
     }
 
@@ -175,6 +177,10 @@ MMFormPhotoViewer {
         internal.tempSketchedImageSource = ""
       }
       internal.tempSketchedImageSource = "file://" + newPath
+    }
+
+    function onSketchesSavingError(){
+      __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
     }
   }
 
