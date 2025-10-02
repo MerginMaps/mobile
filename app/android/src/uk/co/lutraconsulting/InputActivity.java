@@ -50,8 +50,6 @@ import android.provider.OpenableColumns;
 import androidx.core.view.WindowCompat;
 import androidx.core.splashscreen.SplashScreen;
 
-import java.util.Arrays;
-
 public class InputActivity extends QtActivity
 {
   private static final String TAG = "Mergin Maps Input Activity";
