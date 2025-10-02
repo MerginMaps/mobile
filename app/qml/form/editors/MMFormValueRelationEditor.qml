@@ -73,6 +73,9 @@ MMFormComboboxBaseEditor {
       drawerHeader.title: root._fieldTitle
 
       multiSelect: internal.allowMultivalue
+      emptyStateDelegate: MMComponents.MMMessage {
+        description: qsTr( "Could not find any editable layers in the project." )
+      }
       withSearch: vrModel.count > 5
       showFullScreen: multiSelect || withSearch
 
