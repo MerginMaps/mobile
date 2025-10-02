@@ -24,7 +24,6 @@
 
 #include <limits>
 
-#include "inputconfig.h"
 #include "inputhelp.h"
 #include "merginapi.h"
 #include "androidutils.h"

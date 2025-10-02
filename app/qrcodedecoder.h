@@ -16,8 +16,6 @@
 #include <QVideoFrame>
 #include <QFutureWatcher>
 
-#include "inputconfig.h"
-
 /**
  * Converts frames from videoSink (from QML) to images and decodes QR codes from them
  * It ignores most of the frames and process only few of them per second.

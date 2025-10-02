@@ -15,8 +15,6 @@
 #ifndef INPUTMAPTRANSFORM_H
 #define INPUTMAPTRANSFORM_H
 
-#include "inputconfig.h"
-
 #include <QQuickItem>
 #include <QMatrix4x4>
 

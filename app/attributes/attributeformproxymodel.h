@@ -18,8 +18,6 @@
 
 #include <QSortFilterProxyModel>
 
-#include "inputconfig.h"
-
 class AttributeFormModel;
 
 /**

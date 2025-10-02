@@ -19,8 +19,6 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "inputconfig.h"
-
 class PositionKit;
 class Compass;
 

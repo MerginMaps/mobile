@@ -16,7 +16,6 @@
 #include "qgsexpression.h"
 #include "qgsexpressionfunction.h"
 
-#include "inputconfig.h"
 #include "androidutils.h"
 #include "inpututils.h"
 #include "ios/iosimagepicker.h"

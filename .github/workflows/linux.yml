@@ -110,7 +110,7 @@ jobs:
       - name: Calculate build number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
 
@@ -159,7 +159,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build-mm-db/coverage.info
 
-      - name: build Input
+      - name: build app
         run: |
           mkdir -p install-mm
           mkdir -p build-mm
@@ -186,9 +186,9 @@ jobs:
         with:
           format: 'YYYYMMDD'
 
-      - name: package Input
+      - name: package app
         run: |
-          MM_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
+          MM_TAR=input-${{ env.MM_VERSION_CODE }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "MM_TAR=${MM_TAR}" >> $GITHUB_ENV
           
           cd ${{ github.workspace }}/install-mm

@@ -13,7 +13,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
 #include "qgsmaplayer.h"
 #include "qgsvectorlayer.h"
 
