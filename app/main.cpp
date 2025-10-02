@@ -418,7 +418,7 @@ int main( int argc, char *argv[] )
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
-  qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
+  qDebug() << "Mergin Maps App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
   qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
   qDebug() << "Device uuid " << CoreUtils::deviceUuid();
 
