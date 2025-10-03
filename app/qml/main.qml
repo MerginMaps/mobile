@@ -654,10 +654,30 @@ ApplicationWindow {
         multiSelectPanel.formOpened = true
       }
 
+      onDeleteSelected: {
+        deleteDialog.countToDelete = selectedCount
+        deleteDialog.open()
+      }
+
       onSelectionFinished: {
         multiSelectPanelLoader.active = false
         map.finishMultiSelect()
       }
+    }
+  }
+
+  MMFormDeleteFeatureDialog {
+    id: deleteDialog
+
+    property int count: 0
+
+    title: (countToDelete > 1) ? qsTr( "Delete features" ) : qsTr( "Delete feature" )
+    description: (countToDelete > 1) ? qsTr( "Are you sure you want to delete selected features?" ) : qsTr( "Are you sure you want to delete selected feature?" )
+    primaryButton.text: qsTr( "Yes, I want to delete" )
+    secondaryButton.text: qsTr( "No, thanks" )
+
+    onDeleteFeature: {
+      map.multiEditManager.deleteSelectedFeature()
     }
   }
 
