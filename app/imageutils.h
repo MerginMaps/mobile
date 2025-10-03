@@ -22,6 +22,7 @@ class ImageUtils
 
     /**
      * Copies EXIF metadata from sourceImage to targetImage.
+     * \note Developers need to make sure the paths don't reference the same file, it will cause empty metadata
      */
     static bool copyExifMetadata( const QString &sourceImage, const QString &targetImage );
 

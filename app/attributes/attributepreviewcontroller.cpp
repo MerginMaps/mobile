@@ -12,12 +12,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include <QDate>
+#include <QTime>
+#include <QDateTime>
+#include <QLocale>
 
 #include "attributepreviewcontroller.h"
 #include "featurelayerpair.h"
 #include "qgsfield.h"
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
+#include "qgseditorwidgetsetup.h"
+
 
 AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString>> &items )
   : QAbstractListModel( nullptr )
@@ -79,10 +85,16 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
     {
       if ( featureTitleExpression != field.name() )
       {
-        const QPair<QString, QString> item = qMakePair(
-                                               field.displayName(),
-                                               mFeatureLayerPair.feature().attribute( field.name() ).toString()
-                                             );
+        const int idx = fields.indexFromName( field.name() );
+        const QVariant raw = mFeatureLayerPair.feature().attribute( idx );
+
+        // Use the editor widget setup to retrieve the same display format the form uses.
+        // DO NOT use .toString() directly for date-time values- that can show raw UTC/ISO.
+        // This keeps the preview and the editor in perfect sync for locale and timezone.
+        const QgsEditorWidgetSetup ew = mFeatureLayerPair.layer()->editorWidgetSetup( idx );
+        const QString pretty = formatDateForPreview( fields[idx], raw, ew.config() );
+
+        const QPair<QString, QString> item = qMakePair( field.displayName(), pretty );
 
         lst.append( item );
       }
@@ -100,11 +112,12 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
       const int index = fields.indexFromName( lines[i] );
       if ( index >= 0 )
       {
-        const QString val = mFeatureLayerPair.feature().attribute( index ).toString();
-        const QPair<QString, QString> item = qMakePair(
-                                               fields[index].displayName(),
-                                               val
-                                             );
+        // Type-aware formatting (dates in local time, honor display_format)
+        const QVariant raw = mFeatureLayerPair.feature().attribute( index );
+        const QgsEditorWidgetSetup ew = mFeatureLayerPair.layer()->editorWidgetSetup( index );
+        const QString pretty = formatDateForPreview( fields[index], raw, ew.config() );
+
+        const QPair<QString, QString> item = qMakePair( fields[index].displayName(), pretty );
 
         lst.append( item );
       }
@@ -113,6 +126,107 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
     }
   }
   return lst;
+}
+
+QString AttributePreviewController::formatDateForPreview( const QgsField &field,
+    const QVariant &value,
+    const QVariantMap &fieldCfg ) const
+{
+  const QString displayFmt = fieldCfg.value( QStringLiteral( "display_format" ) ).toString();
+
+  //fallback value as raw QString
+  const QString fallback = value.toString();
+
+  //QDate
+  if ( field.type() == QMetaType::QDate )
+  {
+    QDate date;
+    if ( value.canConvert<QDate>() )
+    {
+      date = value.toDate();
+    }
+
+    else if ( value.userType() == QMetaType::QString )
+    {
+      date = QDate::fromString( value.toString(), Qt::ISODate );
+    }
+
+    if ( !date.isValid() )
+    {
+      return fallback;
+    }
+
+    if ( displayFmt.isEmpty() )
+    {
+      return QLocale().toString( date, QLocale::ShortFormat );
+    }
+
+    return date.toString( displayFmt );
+  }
+
+  //QTime
+  if ( field.type() == QMetaType::QTime )
+  {
+    QTime time;
+    if ( value.canConvert<QTime>() )
+    {
+      time = value.toTime();
+    }
+
+    else if ( value.userType() == QMetaType::QString )
+    {
+      time = QTime::fromString( value.toString(), Qt::ISODate );
+    }
+
+    if ( !time.isValid() )
+    {
+      return fallback;
+    }
+
+    const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "HH:mm:ss" ) : displayFmt;
+    return time.toString( fmt );
+  }
+
+  //QDateTime
+  if ( field.type() == QMetaType::QDateTime )
+  {
+    QDateTime dateTime;
+    if ( value.canConvert<QDateTime>() )
+    {
+      dateTime = value.toDateTime();
+    }
+    else if ( value.userType() == QMetaType::QString )
+    {
+      dateTime = QDateTime::fromString( value.toString(), Qt::ISODateWithMs );
+
+      if ( !dateTime.isValid() )
+      {
+        dateTime = QDateTime::fromString( value.toString(), Qt::ISODate );
+      }
+    }
+
+    if ( !dateTime.isValid() )
+    {
+      return fallback;
+    }
+
+    // IMPORTANT If the source was UTC (ex., "...Z"), convert to local so the preview
+    if ( dateTime.timeSpec() != Qt::LocalTime )
+    {
+      dateTime = dateTime.toLocalTime();
+    }
+
+    //force LocalTime to prevent Qt from re-attaching an offset during format
+    // on some platforms the spec remains "OffsetFromUTC" or "UTC".
+    dateTime.setTimeSpec( Qt::LocalTime );
+
+    // We use the editor widget's display format so the preview obeys the same way
+    // formatting rules as the form editor "keeps UX consistent".
+    const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "yyyy-MM-dd HH:mm:ss" ) : displayFmt;
+    return dateTime.toString( fmt );
+  }
+
+  return fallback;
 }
 
 QString AttributePreviewController::mapTipImage()

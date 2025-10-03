@@ -173,7 +173,7 @@ void TestSketching::testLoadBackupSketch()
   QCOMPARE( sketchingController.mOriginalPhotoSource, QUrl( path ).toLocalFile() );
   QCOMPARE( spy.count(), 1 );
   auto signalArgs = spy.takeLast();
-  QCOMPARE( signalArgs.first().toString(), "file://" + QDir::tempPath() + QStringLiteral( "/test_sketching" ) + QStringLiteral( "/MM_test_image.jpg" ) );
+  QCOMPARE( signalArgs.first().toString(), QDir::tempPath() + QStringLiteral( "/test_sketching" ) + QStringLiteral( "/MM_test_image.jpg" ) );
 
   // check for nonexisting backup
   PhotoSketchingController sketchingController2;

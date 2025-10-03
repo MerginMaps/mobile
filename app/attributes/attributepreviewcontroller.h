@@ -142,6 +142,7 @@ class AttributePreviewController: public QObject
     QVector<QPair<QString, QString>> mapTipFields();
     QString mapTipHtml();
     QString featureTitle();
+    QString formatDateForPreview( const QgsField &field, const QVariant &value, const QVariantMap &fieldCfg ) const;
 
     QgsProject *mProject = nullptr;
     FeatureLayerPair mFeatureLayerPair;

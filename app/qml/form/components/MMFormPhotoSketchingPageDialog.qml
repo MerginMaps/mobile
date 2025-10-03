@@ -55,26 +55,18 @@ Dialog {
       }
     }
 
-    MMComponents.MMButton {
-      type: MMButton.Types.Primary
-      text: qsTr( "Undo" )
-      iconSourceLeft: __style.undoIcon
-      size: MMButton.Sizes.Small
+    MMComponents.MMRoundButton {
+      iconSource: __style.undoIcon
 
-      bgndColor: __style.polarColor
-      bgndColorDisabled: __style.polarColor
-      bgndColorHover: __style.mediumGreenColor
-      fontColorHover: __style.forestColor
-      iconColorHover: __style.forestColor
+      bgndColor: __style.lightGreenColor
+
 
       enabled: root.controller.canUndo
 
       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
       Layout.topMargin: __style.pageMargins + __style.safeAreaTop
 
-      onClicked: {
-        root.controller.undo()
-      }
+      onClicked: root.controller.undo()
     }
 
     MMComponents.MMRoundButton {
