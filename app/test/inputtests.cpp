@@ -29,6 +29,7 @@
 #include "testlayertree.h"
 #include "testactiveproject.h"
 #include "testprojectchecksumcache.h"
+#include "multieditmanager.h"
 
 InputTests::InputTests() = default;
 
@@ -198,6 +199,10 @@ int InputTests::runTest() const
     // following line and add function name
     // args << "testRegisterAndDelete";
     nFailed = QTest::qExec( &merginApiTest, args );
+  }
+  else if ( mTestRequested == "--testMultiEditManager")
+  {
+
   }
   else
   {
