@@ -290,19 +290,23 @@ public class InputActivity extends QtActivity
       vib = vibManager.getDefaultVibrator();
     }
 
+    // The reason why we use duplicate calls to vibrate is because some manufacturers (samsung) don't support
+    // the usage of predefined VibrationEffect and vice versa. In the end only one vibration gets executed.
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
     {
       if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
       {
-        vib.vibrate(VibrationEffect.createOneShot(10, VibrationEffect.DEFAULT_AMPLITUDE));
+        vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
       } else
       {
         vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK));
+        vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
       }
     } else
     {
       vib.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK),
         VibrationAttributes.createForUsage(VibrationAttributes.USAGE_CLASS_FEEDBACK));
+      vib.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
     }
   }
 
