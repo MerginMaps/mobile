@@ -30,6 +30,7 @@
 #include "testactiveproject.h"
 #include "testprojectchecksumcache.h"
 #include "multieditmanager.h"
+#include "testmultieditmanager.h"
 
 InputTests::InputTests() = default;
 
@@ -202,7 +203,8 @@ int InputTests::runTest() const
   }
   else if ( mTestRequested == "--testMultiEditManager")
   {
-
+    TestMultiEditManager multiEditManagerTest;
+    nFailed = QTest::qExec( &multiEditManagerTest, mTestArgs );
   }
   else
   {
