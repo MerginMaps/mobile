@@ -573,9 +573,6 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "Application has quit" ) );
   } );
 
-  // this fixes the error dump from C++ defined QML components, when quiting application
-  QObject::connect( &app, &QCoreApplication::aboutToQuit, &engine, &QQmlEngine::deleteLater );
-
   QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
   {
     notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact the support" ) );
@@ -868,6 +865,12 @@ int main( int argc, char *argv[] )
     qDebug() << "FATAL ERROR: unable to create main.qml";
     return EXIT_FAILURE;
   }
+
+  // this fixes the error dump from C++ defined QML components, when quiting application
+  QObject::connect(&app, &QCoreApplication::aboutToQuit, [&] {
+        object->deleteLater();
+        engine.clearComponentCache();
+  });
 
 #ifdef Q_OS_IOS
   QString logoUrl = "qrc:logo.png";
