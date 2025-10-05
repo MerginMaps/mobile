@@ -201,7 +201,7 @@ int InputTests::runTest() const
     // args << "testRegisterAndDelete";
     nFailed = QTest::qExec( &merginApiTest, args );
   }
-  else if ( mTestRequested == "--testMultiEditManager")
+  else if ( mTestRequested == "--testMultiEditManager" )
   {
     TestMultiEditManager multiEditManagerTest;
     nFailed = QTest::qExec( &multiEditManagerTest, mTestArgs );

@@ -6,15 +6,41 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <QObject>
-
 #ifndef TESTMULTIEDITMANAGER_H
 #define TESTMULTIEDITMANAGER_H
 
-class TestMultiEditManager : public QObject {
+#include <QObject>
+
+#include <QObject>
+#include <memory>
+#include <QVector>
+
+#include "qgsfeature.h"
+
+class QgsVectorLayer;
+class MultiEditManager;
+
+class TestMultiEditManager : public QObject
+{
     Q_OBJECT
+
+  public:
+    TestMultiEditManager() = default;
+
+  private:
+    std::unique_ptr<QgsVectorLayer> mLayer;
+    QVector<QgsFeature> mFeatures;
+    std::unique_ptr<MultiEditManager> mManager;
+
   private slots:
-    void check();
+    void init(); // will be called before each testfunction is executed.
+    void cleanup(); // will be called after every testfunction.
+
+    void testInitializeSelection();
+    void testToggleSelectSameLayer();
+    void testToggleSelectDifferentLayer();
+    void testDeleteSelectedFeature();
+
 };
 
 #endif // TESTMULTIEDITMANAGER_H
