@@ -867,10 +867,11 @@ int main( int argc, char *argv[] )
   }
 
   // this fixes the error dump from C++ defined QML components, when quiting application
-  QObject::connect(&app, &QCoreApplication::aboutToQuit, [&] {
-        object->deleteLater();
-        engine.clearComponentCache();
-  });
+  QObject::connect( &app, &QCoreApplication::aboutToQuit, object, [&]
+  {
+    object->deleteLater();
+    engine.clearComponentCache();
+  } );
 
 #ifdef Q_OS_IOS
   QString logoUrl = "qrc:logo.png";
