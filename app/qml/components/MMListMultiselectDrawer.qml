@@ -37,7 +37,11 @@ MMDrawer {
 
   drawerContent: Item {
     width: parent.width
-    height: showFullScreen ? root.drawerContentAvailableHeight : contentLayout.height
+    height: {
+      if ( root.showFullScreen ) return root.drawerContentAvailableHeight
+      if ( listViewComponent.count === 0 ) return emptyStateDelegateLoader.height
+      return listViewComponent.height
+    }
 
     Column {
       id: contentLayout
@@ -64,21 +68,26 @@ MMDrawer {
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
 
       Item {
+        id: featureList
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
-
+          Rectangle
+          {
+              anchors.fill:parent
+              color: "green"
+          }
         MMScrollView {
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-
-          enabled: contentHeight > height
+          anchors.top: parent.top
+          visible: listViewComponent.count === 0
 
           Loader {
             id: emptyStateDelegateLoader
 
             visible: listViewComponent.count === 0
-
             width: parent.width
+            anchors.top: parent.top
           }
         }
 
@@ -87,7 +96,7 @@ MMDrawer {
 
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-
+          visible: count > 0
           interactive: contentHeight > height
 
           clip: true
