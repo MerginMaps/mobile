@@ -670,7 +670,7 @@ ApplicationWindow {
   MMFormDeleteFeatureDialog {
     id: deleteDialog
 
-    property int count: 0
+    property int countToDelete: 0
 
     title: (countToDelete > 1) ? qsTr( "Delete features" ) : qsTr( "Delete feature" )
     description: (countToDelete > 1) ? qsTr( "Are you sure you want to delete selected features?" ) : qsTr( "Are you sure you want to delete selected feature?" )
@@ -679,6 +679,10 @@ ApplicationWindow {
 
     onDeleteFeature: {
       map.multiEditManager.deleteSelectedFeature()
+      if (multiSelectPanelLoader.item)
+      {
+        multiSelectPanelLoader.item.close()
+      }
     }
   }
 
