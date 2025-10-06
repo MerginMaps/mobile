@@ -69,8 +69,12 @@ MMFormComboboxBaseEditor {
   dropdownLoader.sourceComponent: Component {
 
     MMComponents.MMListMultiselectDrawer {
-
       drawerHeader.title: root._fieldTitle
+
+      //Incase when list is empty (ex: no relation value fields)
+      emptyStateDelegate: MMMessage {
+        description: qsTr( "No items" )
+      }
 
       multiSelect: internal.allowMultivalue
       withSearch: vrModel.count > 5
