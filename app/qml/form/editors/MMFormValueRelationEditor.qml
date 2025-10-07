@@ -72,8 +72,8 @@ MMFormComboboxBaseEditor {
       drawerHeader.title: root._fieldTitle
 
       //Incase when list is empty (ex: no relation value fields)
-      emptyStateDelegate: MMMessage {
-        description: qsTr( "No items" )
+      emptyStateDelegate: MMComponents.MMText {
+        text: qsTr( "No items" )
       }
 
       multiSelect: internal.allowMultivalue
