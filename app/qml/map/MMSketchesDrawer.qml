@@ -15,10 +15,10 @@ import QtQuick.Shapes
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
 import "./components"
 
-MMDrawer {
+MMComponents.MMDrawer {
   id: root
 
   readonly property alias panelHeight: root.height
@@ -39,12 +39,10 @@ MMDrawer {
 
   drawerHeader.title: qsTr( "Sketch" )
 
-  drawerHeader.topLeftItemContent: MMButton {
-    type: MMButton.Types.Primary
-    text: qsTr( "Undo" )
-    iconSourceLeft: __style.undoIcon
+  drawerHeader.topLeftItemContent: MMComponents.MMRoundButton {
+    iconSource: __style.undoIcon
     bgndColor: __style.lightGreenColor
-    size: MMButton.Sizes.Small
+
     enabled: root.sketchingController?.canUndo ?? false
 
     anchors {
@@ -80,7 +78,7 @@ MMDrawer {
 
           model: root.sketchingController?.availableColors() ?? null
 
-          MMRoundButton {
+          MMComponents.MMRoundButton {
             anchors.verticalCenter: parent.verticalCenter
 
             contentItem: Rectangle {
@@ -117,7 +115,7 @@ MMDrawer {
           }
         }
 
-        MMButton {
+        MMComponents.MMButton {
           text: qsTr( "Eraser" )
           iconSourceLeft: __style.editIcon
 

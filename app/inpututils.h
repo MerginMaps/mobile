@@ -573,11 +573,6 @@ class InputUtils: public QObject
 
     Q_INVOKABLE static QString invalidGeometryWarning( QgsVectorLayer *layer );
 
-    /**
-     * Updates existing layer feature with new feature data.
-     */
-    Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
-
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
 

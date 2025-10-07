@@ -111,6 +111,7 @@ class ActiveProject: public QObject
 
     //! A File on this path represents that project is loading and exists only during the process.
     static const QString LOADING_FLAG_FILE_PATH;
+    static const int LOADING_FLAG_FILE_EXPIRATION_MS;
 
     const QString &mapTheme() const;
 

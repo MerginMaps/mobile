@@ -93,7 +93,12 @@ MMFormPhotoViewer {
   photoUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
-  on_FieldValueChanged: internal.setImageSource()
+  on_FieldValueChanged: function (){
+    internal.setImageSource()
+    // after editing geometry this needs to be triggered to populate internal.tempSketchedImageSource for components,
+    // which were not in view
+    sketchingController?.prepareController()
+  }
   on_FieldValueIsNullChanged: internal.setImageSource()
 
   onCapturePhotoClicked: internal.capturePhoto()
@@ -128,6 +133,8 @@ MMFormPhotoViewer {
     onDeleteImage: {
       // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      root.sketchingController.removeBackupSketches()
+      root.sketchingController.clear()
       resetValueAndClose()
     }
 
@@ -170,6 +177,10 @@ MMFormPhotoViewer {
         internal.tempSketchedImageSource = ""
       }
       internal.tempSketchedImageSource = "file://" + newPath
+    }
+
+    function onSketchesSavingError(){
+      __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
     }
   }
 

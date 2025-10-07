@@ -123,7 +123,7 @@ void PhotoSketchingController::clear()
 void PhotoSketchingController::backupSketches()
 {
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
   if ( !QFile::exists( photoPath ) )
   {
     // create new temp file
@@ -172,19 +172,33 @@ void PhotoSketchingController::backupSketches()
   }
   else
   {
-    if ( ImageUtils::copyExifMetadata( QUrl( mPhotoSource ).toLocalFile(), photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
+    if ( ImageUtils::copyExifMetadata( mOriginalPhotoSource, photoPath ) && ImageUtils::clearOrientationMetadata( photoPath ) )
     {
       CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
-      emit tempPhotoSourceChanged( QUrl( photoPath ).toString() );
+      emit tempPhotoSourceChanged( photoPath );
     }
     else
     {
       CoreUtils::log( "Photo sketching", "Failed to copy metadata to: " + photoPath );
+      InputUtils::removeFile( photoPath );
+      clear();
+      emit sketchesSavingError();
     }
   }
 
   mActivePaths.clear();
   mCanUndo = false;
+}
+
+void PhotoSketchingController::removeBackupSketches()
+{
+  const QString photoFileName = QUrl( mPhotoSource ).fileName();
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  if ( QFile::exists( photoPath ) )
+  {
+    InputUtils::removeFile( photoPath );
+    CoreUtils::log( "Photo sketching", "Removed temporary image from: " + photoPath );
+  }
 }
 
 void PhotoSketchingController::redrawPaths()
@@ -236,7 +250,7 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
 QUrl PhotoSketchingController::getCurrentPhotoPath() const
 {
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
   if ( QFile::exists( photoPath ) )
   {
     return { photoPath };
@@ -250,11 +264,11 @@ void PhotoSketchingController::prepareController()
   mProjectName = QUrl::fromLocalFile( mProjectName ).fileName();
   mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString savePath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), mProjectName, photoFileName );
+  const QString savePath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
   if ( !photoFileName.isEmpty() && QFile::exists( savePath ) )
   {
     mPhotoSource = QUrl::fromLocalFile( savePath ).toString();
-    emit tempPhotoSourceChanged( mPhotoSource );
+    emit tempPhotoSourceChanged( savePath );
   }
 }
 

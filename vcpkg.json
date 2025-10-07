@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2025.6.0",
+    "version": "2025.7.0",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
@@ -35,7 +35,7 @@
         },
         {
             "name": "exiv2",
-            "features": ["xmp"]
+            "features": ["xmp", "png", "bmff"]
         },
         {
             "name": "proj",

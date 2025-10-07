@@ -444,17 +444,17 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="91"/>
+        <location filename="../qml/account/MMAccountController.qml" line="93"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Zaktualizuj aplikację, aby korzystać z najnowszych funkcji.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="95"/>
+        <location filename="../qml/account/MMAccountController.qml" line="97"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Serwer jest obecnie niedostępny. sprawdź swoje połączenie lub spróbuj ponownie później.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="148"/>
+        <location filename="../qml/account/MMAccountController.qml" line="150"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Akceptuję %1Warunki korzystania%3 z Mergin i %2Politykę prywatności%3</translation>
     </message>
@@ -874,29 +874,37 @@ Nie będzie ono dodane do projektu.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="84"/>
         <source>Photo is missing.</source>
         <translation>Brakuje zdjęcia.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="113"/>
         <source>Open Image</source>
         <translation>Otwórz obraz</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="115"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Pliki obrazów (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="281"/>
         <source>Could not create directory %1.</source>
         <translation>Nie udało się utworzyć katalogu %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="353"/>
         <source>Failed to process the image</source>
         <translation>Nie udało się skopiować obrazu</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormPhotoSketchingPageDialog</name>
+    <message>
+        <location filename="../qml/form/components/MMFormPhotoSketchingPageDialog.qml" line="60"/>
+        <source>Undo</source>
+        <translation>Cofnij</translation>
     </message>
 </context>
 <context>
@@ -1780,6 +1788,11 @@ Nie będzie ono dodane do projektu.</translation>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Ten serwer nie jest wspierany, skontaktuj się ze swoim administratorem.</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <source>Download a project and start collecting.</source>
+        <translation>Pobierz projekt i zacznij pracować.</translation>
     </message>
 </context>
 <context>
@@ -2850,28 +2863,28 @@ only allows up to %1 downloaded projects.</source>
         <translation>Stworzono przestrzeń roboczą</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1881"/>
+        <location filename="../../core/merginapi.cpp" line="1902"/>
         <source>Project detached from the server</source>
         <translation>Projekt został odłączony od serwera</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4119"/>
+        <location filename="../../core/merginapi.cpp" line="4164"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Nazwa przestrzeni roboczej zawiera niedozwolone znaki</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4186"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace %1 already exists</source>
         <translation>Przestrzeń robocza %1 już istnieje</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4292"/>
+        <location filename="../../core/merginapi.cpp" line="4337"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Możesz teraz zamknąć tą stronę i wrócić do Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4318"/>
-        <location filename="../../core/merginapi.cpp" line="4345"/>
+        <location filename="../../core/merginapi.cpp" line="4363"/>
+        <location filename="../../core/merginapi.cpp" line="4390"/>
         <source>SSO authorization failed</source>
         <translation>Autoryzacja SSO się nie powiodła</translation>
     </message>
@@ -3096,12 +3109,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Nieznany fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="556"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raport został przesłany. Skontaktuj się z pomocą techniczną.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="561"/>
+        <location filename="../main.cpp" line="562"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Przekazanie raportu nie powiodło się. Proszę sprawdzić swoje połączenie sieciowe.</translation>
     </message>

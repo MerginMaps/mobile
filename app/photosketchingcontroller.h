@@ -70,6 +70,9 @@ class PhotoSketchingController: public QObject
     // saves the drawings into temporary image
     Q_INVOKABLE void backupSketches();
 
+    // removes sketched file from temporary folder
+    Q_INVOKABLE void removeBackupSketches();
+
     // redraws all paths in mPaths (used after user comes back to drawing screen)
     Q_INVOKABLE void redrawPaths();
 
@@ -101,6 +104,8 @@ class PhotoSketchingController: public QObject
     void pathUpdated( QVector<int> pathIndexes );
     void lastPathRemoved();
     void pathsReset();
+
+    void sketchesSavingError();
 
   private:
     double mPhotoScale = 1.0;

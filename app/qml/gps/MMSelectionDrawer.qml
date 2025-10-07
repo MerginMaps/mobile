@@ -14,12 +14,11 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM
-
-import "../components"
+import "../components" as MMComponents
 import "../map/components"
 import "./components" as MMGpsComponents
 
-MMDrawer {
+MMComponents.MMDrawer {
   id: root
 
   property bool formOpened: false
@@ -43,6 +42,7 @@ MMDrawer {
   closePolicy: Popup.CloseOnEscape
 
   dropShadow: true
+  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
 
   onClosed: root.selectionFinished()
 
@@ -58,26 +58,39 @@ MMDrawer {
     width: parent.width
     spacing: __style.margin10
 
-    MMText {
+    Column
+    {
       width: parent.width
+      visible: true
+      spacing: 0
 
-      text: qsTr( "%n Feature(s) selected", "", root.selectedCount )
-      font: __style.t3
-      color: __style.nightColor
+      Column
+      {
+        width: parent.width
+        topPadding: __style.margin8
+        bottomPadding: __style.margin8
+        spacing: 0
 
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
-    }
+        MMComponents.MMText {
+          width: parent.width
+          text: qsTr( "%n Feature(s) selected", "", root.selectedCount )
+          font: __style.t3
+          color: __style.nightColor
 
-    MMText {
-      width: parent.width
+          elide: Text.ElideRight
+          wrapMode: Text.NoWrap
+        }
 
-      text: qsTr( "on layer %1" ).arg( root.layer?.name )
-      font: __style.p6
-      color: __style.nightColor
+        MMComponents.MMText {
+          width: parent.width
+          text: qsTr( "on layer %1" ).arg( root.layer?.name )
+          font: __style.p6
+          color: __style.nightColor
 
-      elide: Text.ElideRight
-      wrapMode: Text.NoWrap
+          elide: Text.ElideRight
+          wrapMode: Text.NoWrap
+        }
+      }
     }
 
     Row {
@@ -85,7 +98,7 @@ MMDrawer {
       spacing: __style.margin12
       visible: root.selectedCount > 0
 
-      MMButton {
+      MMComponents.MMButton {
         text: qsTr( "Edit" )
         iconSourceLeft: __style.editIcon
         onClicked: editSelected()
