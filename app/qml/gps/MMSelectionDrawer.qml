@@ -41,7 +41,8 @@ MMComponents.MMDrawer {
   closePolicy: Popup.CloseOnEscape
 
   dropShadow: true
-  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
+  //We do not required bottom Margin for drawer here: uncomment if truely needed
+  //drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
 
   onClosed: root.selectionFinished()
 
