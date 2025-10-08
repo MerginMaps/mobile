@@ -33,7 +33,7 @@ MMDrawer {
 
   interactive: !listViewComponent.interactive
 
-  drawerBottomMargin: 0
+  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
 
   drawerContent: Item {
     width: parent.width
@@ -71,23 +71,17 @@ MMDrawer {
         id: featureList
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
-          Rectangle
-          {
-              anchors.fill:parent
-              color: "green"
-          }
+
         MMScrollView {
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-          anchors.top: parent.top
-          visible: listViewComponent.count === 0
+          enabled: contentHeight > height
 
           Loader {
             id: emptyStateDelegateLoader
 
             visible: listViewComponent.count === 0
-            width: parent.width
-            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
           }
         }
 
