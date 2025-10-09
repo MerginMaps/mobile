@@ -9,7 +9,7 @@
 
 #include "position/positionkit.h"
 #include "coreutils.h"
-
+#include "mmconfig.h"
 #include "qgis.h"
 
 #ifdef HAVE_BLUETOOTH

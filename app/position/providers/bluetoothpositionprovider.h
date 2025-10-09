@@ -10,7 +10,6 @@
 #ifndef BLUETOOTHPOSITIONPROVIDER_H
 #define BLUETOOTHPOSITIONPROVIDER_H
 
-#include "inputconfig.h"
 #include "abstractpositionprovider.h"
 
 #include "qgsnmeaconnection.h"

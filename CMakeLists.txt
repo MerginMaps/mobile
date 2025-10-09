@@ -31,15 +31,15 @@ if (ANDROID_ABI)
   set(ANDROID_STL "c++_shared")
   set(ANDROID_ARM_NEON ON)
 
-  # Target/Minimum API levels for Android, used as Input target properties
-  set(INPUT_ANDROID_TARGET_SDK_VERSION "35")
-  set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
-  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
-  if (NOT INPUT_ANDROID_NDK_PATH)
+  # Target/Minimum API levels for Android, used as MerginMaps target properties
+  set(MM_ANDROID_TARGET_SDK_VERSION "35")
+  set(MM_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(MM_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
+  if (NOT MM_ANDROID_NDK_PATH)
     message(FATAL_ERROR "Set required environment variable ANDROID_NDK_HOME.")
   endif ()
   set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
-      "${INPUT_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
+      "${MM_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
   )
 endif ()
 
@@ -61,15 +61,12 @@ endif ()
 # ########################################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-# TODO remove this variable
-set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
-
 include(VersionDetect)
 include(PlatformDetect)
 mm_detect_platform()
 
 project(
-  Input
+  MerginMaps
   VERSION ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH}
   DESCRIPTION "Collect. Share. Publish."
   HOMEPAGE_URL "https://merginmaps.com"
@@ -92,15 +89,15 @@ else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
 endif ()
 
-if (DEFINED ENV{INPUT_VERSION_CODE})
-  set(INPUT_VERSION_CODE_DEFAULT "$ENV{INPUT_VERSION_CODE}")
+if (DEFINED ENV{MM_VERSION_CODE})
+  set(MM_VERSION_CODE_DEFAULT "$ENV{MM_VERSION_CODE}")
 else ()
   if (ANDROID)
-    set(INPUT_VERSION_CODE_DEFAULT "0000000")
+    set(MM_VERSION_CODE_DEFAULT "0000000")
   elseif (IOS)
-    set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+    set(MM_VERSION_CODE_DEFAULT "00.00.000000")
   else ()
-    set(INPUT_VERSION_CODE_DEFAULT "000000")
+    set(MM_VERSION_CODE_DEFAULT "000000")
   endif ()
 endif ()
 
@@ -141,8 +138,8 @@ set(USE_KEYCHAIN
       "Whether to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
-set(INPUT_VERSION_CODE
-    "${INPUT_VERSION_CODE_DEFAULT}"
+set(MM_VERSION_CODE
+    "${MM_VERSION_CODE_DEFAULT}"
     CACHE STRING "Build version (for stores)"
 )
 
@@ -303,24 +300,24 @@ if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
 endif ()
 
-# This is for QGIS defined, do not move to inputconfig.h
+# This is for QGIS defined, do not move to mmconfig.h
 add_compile_definitions(HAVE_WIDGETS)
 
 # QGIS defines
 # add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
-# Generate inputconfig.h
 if (ENABLE_TESTS)
-  set(INPUT_TEST TRUE)
+  set(MM_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
 
 set(MM_FORMATS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/docs/supported_formats.txt")
 
+# Generate mmconfig.h
 configure_file(
-  ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h
+  ${CMAKE_SOURCE_DIR}/cmake_templates/mmconfig.h.in ${CMAKE_BINARY_DIR}/mmconfig.h
 )
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -379,28 +376,6 @@ if (ANDROID)
   # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
 endif ()
 
-if (ANDROID)
-  if (VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-    set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-  else ()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong")
-  endif ()
-
-  link_libraries("-ljnigraphics")
-
-  # Make sure the generator for android_deployment_settings.json can figure out the
-  # architecture
-  list(APPEND CMAKE_FIND_ROOT_PATH /)
-
-  # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
-endif ()
-
 # ########################################################################################
 # RESOURCES
 # ########################################################################################
@@ -418,25 +393,6 @@ file(
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
 )
-
-# ########################################################################################
-# RESOURCES
-# ########################################################################################
-message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources)
-file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
-)
-file(COPY ${QGIS_RESOURCE_DIR}/srs.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
-)
-file(
-  COPY ${PROJ_DIR}
-  DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/
-  PATTERN "*.cmake" EXCLUDE
-  PATTERN "vcpkg*" EXCLUDE
-)
-
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################

@@ -14,8 +14,6 @@
 #include <QVariant>
 #include <QObject>
 
-#include "inputconfig.h"
-
 class FormItem;
 class FeatureLayerPair;
 

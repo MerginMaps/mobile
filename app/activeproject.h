@@ -15,7 +15,6 @@
 
 #include "qgsproject.h"
 
-#include "inputconfig.h"
 #include "appsettings.h"
 #include "activelayer.h"
 #include "recordinglayersproxymodel.h"

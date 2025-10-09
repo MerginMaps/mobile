@@ -20,8 +20,6 @@
 #include <QUuid>
 #include <QVector>
 
-#include "inputconfig.h"
-
 class AttributeController;
 class AttributeFormProxyModel;
 

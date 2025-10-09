@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    android:versionCode="@INPUT_VERSION_CODE@"
-    android:versionName="@INPUT_VERSION@">
+    android:versionCode="@MM_VERSION_CODE@"
+    android:versionName="@MM_VERSION@">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/> <!-- Read images from gallery, Android <=12 -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -42,7 +42,7 @@
         android:icon="@mipmap/ic_appicon"
         android:roundIcon="@mipmap/ic_appicon_round" >
         <activity
-            android:name="uk.co.lutraconsulting.InputActivity"
+            android:name="uk.co.lutraconsulting.MMActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
@@ -81,7 +81,7 @@
         <activity
             android:name="uk.co.lutraconsulting.CameraActivity"
             android:label="Mergin Maps"
-            android:parentActivityName="uk.co.lutraconsulting.InputActivity"
+            android:parentActivityName="uk.co.lutraconsulting.MMActivity"
             android:configChanges="screenLayout|orientation|screenSize"
             >
              <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --" />
