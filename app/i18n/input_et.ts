@@ -2170,7 +2170,7 @@ Seda ei lisata projektile.</translation>
     <message numerus="yes">
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
-        <translation><numerusform>%n nähtust valitud</numerusform><numerusform>%n nähtus(t) valitud</numerusform></translation>
+        <translation><numerusform>%n nähtus(t) valitud</numerusform><numerusform>%n nähtus(t) valitud</numerusform></translation>
     </message>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
