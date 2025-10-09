@@ -2954,7 +2954,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Jälgimist ei õnnestunud sisse lülitada, palun pöördu abi poole</translation>
+        <translation>Jälgimist ei õnnestunud sisse lülitada, palun pöördu kasutajatoe poole</translation>
     </message>
 </context>
 <context>
