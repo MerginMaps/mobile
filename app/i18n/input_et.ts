@@ -891,7 +891,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
         <source>Photo sketches could not be saved, please contact support.</source>
-        <translation>Pildi sketsi ei õnnestunud salvestada, palun pöördu abi poole.</translation>
+        <translation>Pildi sketsi ei õnnestunud salvestada, palun pöördu kasutajatoe poole.</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
