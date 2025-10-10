@@ -50,6 +50,11 @@ MMComponents.MMPage {
 
       width: parent.width
 
+      onFlickEnded: positionViewAtEnd()
+      onMovementEnded: positionViewAtEnd()
+      highlightMoveDuration: 120
+      cacheBuffer: height
+
       anchors {
         top: searchBar.bottom
         bottom: parent.bottom
