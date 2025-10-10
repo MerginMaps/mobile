@@ -71,11 +71,17 @@ MMFormComboboxBaseEditor {
     MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root._fieldTitle
 
-      //Incase when list is empty (ex: no relation value fields)
-      emptyStateDelegate: MMComponents.MMText {
-        text: qsTr( "No items" )
-        topPadding: __style.margin20
-        bottomPadding: __style.margin20
+      emptyStateDelegate: Item {
+        width: parent.width
+        height: noItemsText.implicitHeight
+        anchors.centerIn: parent
+
+        MMComponents.MMText {
+          id: noItemsText
+          text: qsTr( "No items" )
+          anchors.centerIn: parent
+          topPadding: __style.margin20
+        }
       }
 
       multiSelect: internal.allowMultivalue
