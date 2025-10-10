@@ -80,10 +80,16 @@ MMComponents.MMPage {
         visible: !isMobile
         interactive: !isMobile
         anchors.right: listView.right
-        thickness: 8
         implicitHeight: listView.height
         opacity: active ? 1.0 : 0.0
-        Behavior on opacity { NumberAnimation { duration: 120 } }
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+
+        contentItem: Rectangle {
+          implicitWidth: 5
+          radius: width / 2
+          color: __style.darkGreenColor
+          opacity: verticalScrollBar.pressed ? 0.5 : 0.3
+        }
       }
 
       footer: MMComponents.MMListSpacer {
