@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQml
 
 import mm 1.0 as MM
 
@@ -22,6 +23,7 @@ MMComponents.MMPage {
   property var selectedLayer: null
   property bool hasToolbar: false
   property bool layerIsReadOnly: selectedLayer?.readOnly ?? false
+  readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
@@ -70,6 +72,24 @@ MMComponents.MMPage {
         secondaryText: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
 
         onClicked: root.featureClicked( model.FeaturePair )
+      }
+
+      ScrollBar.vertical: ScrollBar {
+        id: verticalScrollBar
+        policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AsNeeded
+        visible: !isMobile
+        interactive: !isMobile
+        anchors.right: listView.right
+        implicitHeight: listView.height
+        opacity: active ? 1.0 : 0.0
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+
+        contentItem: Rectangle {
+          implicitWidth: 5
+          radius: width / 2
+          color: __style.darkGreenColor
+          opacity: verticalScrollBar.pressed ? 0.5 : 0.3
+        }
       }
 
       footer: MMComponents.MMListSpacer {
