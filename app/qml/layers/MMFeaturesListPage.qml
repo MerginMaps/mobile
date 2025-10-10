@@ -50,10 +50,11 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      onFlickEnded: positionViewAtEnd()
-      onMovementEnded: positionViewAtEnd()
       highlightMoveDuration: 120
       cacheBuffer: height
+      footerPositioning: ListView.InlineFooter
+      bottomMargin: spacer.height
+      snapMode: ListView.SnapToItem
 
       anchors {
         top: searchBar.bottom
@@ -79,6 +80,7 @@ MMComponents.MMPage {
       }
 
       footer: MMComponents.MMListSpacer {
+        id: spacer
         height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
       }
     }
