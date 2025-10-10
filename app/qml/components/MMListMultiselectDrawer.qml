@@ -37,11 +37,7 @@ MMDrawer {
 
   drawerContent: Item {
     width: parent.width
-    height: {
-      if ( root.showFullScreen ) return root.drawerContentAvailableHeight
-      if ( listViewComponent.count === 0 ) return emptyStateDelegateLoader.height
-      return listViewComponent.height
-    }
+    height: showFullScreen ? root.drawerContentAvailableHeight : contentLayout.height
 
     Column {
       id: contentLayout
@@ -81,7 +77,8 @@ MMDrawer {
             id: emptyStateDelegateLoader
 
             visible: listViewComponent.count === 0
-            anchors.horizontalCenter: parent.horizontalCenter
+
+            width: parent.width
           }
         }
 
