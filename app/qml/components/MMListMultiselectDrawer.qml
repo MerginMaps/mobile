@@ -33,7 +33,9 @@ MMDrawer {
 
   interactive: !listViewComponent.interactive
 
-  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
+  drawerBottomMargin: listViewComponent.count === 0
+                      ? (__style.margin20 + __style.safeAreaBottom)
+                      : 0
 
   drawerContent: Item {
     width: parent.width
