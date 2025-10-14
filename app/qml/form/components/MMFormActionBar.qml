@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+
 import "../../components" as MMComponents
 
 Item {
@@ -73,12 +74,14 @@ Item {
 
       visible: !allRow.visible && _count > 1
       iconSource: __style.moreVerticalIcon
-      bgndColor: __style.lightGreenColor
-
       borderColor: __style.forestColor
+
+      hoverEnabled: true
+      bgndColor: (popup.opened || popup.visible) ? __style.lightGreenColor : __style.transparentColor
+      bgndHoverColor: (popup.opened || popup.visible) ? __style.lightGreenColor : __style.transparentColor
       borderWidth: __dp * 2
-      
-      onClicked: popup.opened ? popup.close() : popup.open()
+
+      onClicked: popup.visible ? popup.close() : popup.open()
     }
   }
 

@@ -4,7 +4,7 @@
   <source media="(prefers-color-scheme: dark)" width=350 srcset="https://raw.githubusercontent.com/MerginMaps/.github/main/images/MM_logo_HORIZ_COLOR_INVERSE_VECTOR.svg">
   <img width=350 src="https://raw.githubusercontent.com/MerginMaps/.github/main/images/MM_logo_HORIZ_COLOR_VECTOR.svg" alt="Mergin Maps logo">
 </picture>
-
+  
 Platform builds:
 
 [![Android Build](https://github.com/MerginMaps/mobile/workflows/Android/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22Android%22)
