@@ -14,7 +14,6 @@ input.pro.user*
 app/android/assets
 app/android/AndroidManifest.xml
 app/android/build.gradle
-app/android/.gradle/*
 app/android/.gradle
 *.gpkg-wal
 *.gpkg-shm
