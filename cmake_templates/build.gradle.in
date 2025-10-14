@@ -47,7 +47,7 @@ android {
     buildToolsVersion androidBuildToolsVersion
     ndkVersion androidNdkVersion
     // don't get rid of this line as it inflates the final bundle size 5x
-    ndkPath '@INPUT_ANDROID_NDK_PATH@'
+    ndkPath '@MM_ANDROID_NDK_PATH@'
 
     packagingOptions.jniLibs.useLegacyPackaging true
     
