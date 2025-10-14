@@ -380,16 +380,16 @@ endif ()
 # RESOURCES
 # ########################################################################################
 message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources)
 file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
+     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources/
 )
 file(COPY ${QGIS_RESOURCE_DIR}/srs.db
-     DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/resources/
+     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources/
 )
 file(
   COPY ${PROJ_DIR}
-  DESTINATION ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data/
+  DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
 )
