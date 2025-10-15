@@ -381,9 +381,9 @@ endif ()
 # ########################################################################################
 message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
 
-# On android we need to copy the resources into the source tree and then Qt will copy it to
-# the android build directory with QT_ANDROID_PACKAGE_SOURCE_DIR
-if(ANDROID)
+# On android we need to copy the resources into the source tree and then Qt will copy it
+# to the android build directory with QT_ANDROID_PACKAGE_SOURCE_DIR
+if (ANDROID)
   set(ASSETS_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 else ()
   set(ASSETS_DIR_PATH ${CMAKE_BINARY_DIR})
