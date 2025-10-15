@@ -380,16 +380,25 @@ endif ()
 # RESOURCES
 # ########################################################################################
 message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources)
+
+# On android we need to copy the resources into the source tree and then Qt will copy it to
+# the android build directory with QT_ANDROID_PACKAGE_SOURCE_DIR
+if(ANDROID)
+  set(ASSETS_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+else ()
+  set(ASSETS_DIR_PATH ${CMAKE_BINARY_DIR})
+endif ()
+
+file(MAKE_DIRECTORY ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources)
 file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
-     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources/
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources/
 )
 file(COPY ${QGIS_RESOURCE_DIR}/srs.db
-     DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/resources/
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources/
 )
 file(
   COPY ${PROJ_DIR}
-  DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app/android/assets/qgis-data/
+  DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
 )

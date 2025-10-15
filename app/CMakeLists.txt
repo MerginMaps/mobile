@@ -363,14 +363,14 @@ endif ()
 
 if (IOS)
   # qgis resources
-  set(IOS_CRS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/resources)
+  set(IOS_CRS_DIR ${CMAKE_CURRENT_BINARY_DIR}/android/assets/qgis-data/resources)
   target_sources(MerginMaps PRIVATE ${IOS_CRS_DIR})
   set_source_files_properties(
     ${IOS_CRS_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
   )
 
   # proj
-  set(IOS_PROJ_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/assets/qgis-data/proj)
+  set(IOS_PROJ_DIR ${CMAKE_CURRENT_BINARY_DIR}/android/assets/qgis-data/proj)
   target_sources(MerginMaps PRIVATE ${IOS_PROJ_DIR})
   set_source_files_properties(
     ${IOS_PROJ_DIR} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/qgis-data
