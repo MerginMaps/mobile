@@ -48,6 +48,8 @@ jobs:
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       XC_VERSION: ${{ '16.2' }}
       VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+      LC_ALL: 'en_US.UTF-8' #fastlane
+      LANG: 'en_US.UTF-8' #fastlane
 
     steps:
       - uses: actions/checkout@v4
@@ -267,8 +269,9 @@ jobs:
           cd ${{ github.workspace }}/mm
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
           
-          echo "Google play store APK link: $FASTLANE_OUTPUT"
-          echo "Google play store APK link: $FASTLANE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/Internal App Sharing URL:/ {print $NF}')
+          echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
 
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
