@@ -25,3 +25,5 @@ app/android/build.gradle
 app/android/.gradle/*
 app/android/.gradle
 .github/secrets/ios/LutraConsulting*.mobileprovision
+google_play_key.json
+fastlane/report.xml

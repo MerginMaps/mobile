@@ -179,6 +179,25 @@ jobs:
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
 
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 'head'
+          bundler-cache: true
+
+      - name: Decode Google Play JSON Key
+        run: |
+          $HOMEBREW_PREFIX/bin/openssl \
+           aes-256-cbc -d \
+           -in mm/google_play_key.json.enc \
+           -out mm/google_play_key.json \
+           -k ${{ secrets.MM_GOOGLE_SERVICE_ACCOUNT_DECRYPTION_KEY }} \
+           -md md5
+
+          MM_GOOGLE_KEY_PATH=`pwd`/mm/google_play_key.json
+          echo "path to keystore $MM_GOOGLE_KEY_PATH"
+          echo "MM_GOOGLE_KEY_PATH=$MM_GOOGLE_KEY_PATH" >> $GITHUB_ENV
+
       - name: Calculate build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
@@ -242,6 +261,13 @@ jobs:
           path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
+      - name: Deploy App to Google play - Internal app sharing
+        run: |
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
+          
+          echo "Google play store APK link: $FASTLANE_OUTPUT"
+          echo "Google play store APK link: $FASTLANE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         env:
@@ -266,3 +292,11 @@ jobs:
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
+
+      - name: Deploy App to Google play - Internal app sharing
+        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
+        run: |
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
+          
+          echo "Google play store AAB link: $FASTLANE_OUTPUT"
+          echo "Google play store AAB link: $FASTLANE_OUTPUT" >> $GITHUB_STEP_SUMMARY
