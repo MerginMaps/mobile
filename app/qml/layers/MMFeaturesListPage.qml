@@ -23,7 +23,6 @@ MMComponents.MMPage {
   property var selectedLayer: null
   property bool hasToolbar: false
   property bool layerIsReadOnly: selectedLayer?.readOnly ?? false
-  readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
@@ -76,9 +75,12 @@ MMComponents.MMPage {
 
       ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
+
+        readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
         policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AsNeeded
         visible: !isMobile
         interactive: !isMobile
+
         anchors.right: listView.right
         implicitHeight: listView.height
         opacity: active ? 1.0 : 0.0
