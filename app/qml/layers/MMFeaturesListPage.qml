@@ -50,10 +50,7 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      highlightMoveDuration: 120
       cacheBuffer: height
-      footerPositioning: ListView.InlineFooter
-      bottomMargin: spacer.height
       snapMode: ListView.SnapToItem
 
       anchors {
