@@ -29,7 +29,6 @@
 #include "testlayertree.h"
 #include "testactiveproject.h"
 #include "testprojectchecksumcache.h"
-#include "multieditmanager.h"
 #include "testmultieditmanager.h"
 
 InputTests::InputTests() = default;

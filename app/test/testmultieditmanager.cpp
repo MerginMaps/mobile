@@ -8,21 +8,9 @@
  ***************************************************************************/
 #include "testmultieditmanager.h"
 
-#include <QtTest/QtTest>
-#include <memory>
-
-#include "multieditmanager.h"
-#include "featurelayerpair.h"
-
-#include "qgsvectorlayer.h"
-#include "qgsfeature.h"
-#include "qgsfields.h"
-#include "qgsgeometry.h"
-#include "qgspoint.h"
-
 void TestMultiEditManager::init()
 {
-  mLayer.reset( new QgsVectorLayer( QStringLiteral( "point?field=id:integer" ), QStringLiteral( "mem" ), QStringLiteral( "memory" ) ) );
+  mLayer = std::make_unique<QgsVectorLayer>( QStringLiteral( "point?field=id:integer" ), QStringLiteral( "mem" ), QStringLiteral( "memory" ) );
   QVERIFY( mLayer && mLayer->isValid() );
 
   QgsFeatureList addFeats;
@@ -70,11 +58,6 @@ void TestMultiEditManager::testToggleSelectSameLayer()
 
   mManager->deleteSelectedFeature();
   QCOMPARE( static_cast<int>( mLayer->featureCount() ), 5 );
-}
-
-void TestMultiEditManager::testToggleSelectDifferentLayer()
-{
-  //Skipped for now but will work on the testing later after approbal
 }
 
 void TestMultiEditManager::testDeleteSelectedFeature()
