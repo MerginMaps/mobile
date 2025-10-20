@@ -232,6 +232,26 @@ ScrollView {
         spacing: 20
         anchors.fill: parent
 
+        MMNotificationBox
+        {
+          width: page.width - 64
+          type: MMNotificationBox.Warning
+          title: "Your payment is not working"
+          description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
+
+          onButtonClicked: console.log("No workspaces brooo")
+        }
+
+        MMNotificationBox
+        {
+          width: page.width - 64
+          type: MMNotificationBox.Error
+          title: "Your payment is not working"
+          description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
+
+          onButtonClicked: console.log("No workspaces brooo")
+        }
+
         MMInfoBox {
           width: page.width - 64
           title: "A tip from us"
