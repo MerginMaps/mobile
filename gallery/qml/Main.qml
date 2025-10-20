@@ -85,11 +85,11 @@ ApplicationWindow {
 
   Action {
     id: switchOrientationAction
-    onTriggered: {
+    onTriggered: Qt.callLater(() => {
      let s = window.width
      window.width = window.height
      window.height = s
-    }
+    })
   }
 
   header: ToolBar {
@@ -159,11 +159,10 @@ ApplicationWindow {
         onClicked: {
           window.currentPageSource = model.source
           listView.currentIndex = index
-          if (__isMobile)
-            stackView.push("qrc:/qml/pages/" + model.source)
-          else
-            stackView.push("file://" + _qmlWrapperPath + model.source)
-          stackView.pop()
+          const url = __isMobile
+                    ? "qrc:/qml/pages/" + model.source
+                    : "file://" + _qmlWrapperPath + model.source
+          stackView.replace(url)
           drawer.close()
         }
       }
@@ -266,10 +265,11 @@ ApplicationWindow {
   StackView {
     id: stackView
     anchors.fill: parent
-
     initialItem: Loader {
       id: mainLoader
-      source: (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + currentPageSource
+      source: (__isMobile
+               ? "qrc:/qml/pages/" + currentPageSource
+               : "file://" + _qmlWrapperPath + currentPageSource)
       scale: 1.0
     }
   }
