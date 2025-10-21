@@ -239,6 +239,7 @@ ScrollView {
           title: "Your payment is not working"
           description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
 
+          buttonText: "Upgrade Now"
           onButtonClicked: console.log("No workspaces brooo")
         }
 
@@ -249,6 +250,7 @@ ScrollView {
           title: "Your payment is not working"
           description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
 
+          buttonText: "Service Cancled"
           onButtonClicked: console.log("No workspaces brooo")
         }
 
