@@ -16,19 +16,10 @@ Rectangle {
 
   property alias title: titleText.text
   property alias description: descriptionText.text
+  property alias buttonText: actionButton.text
+
   enum Types { Warning, Error }
   property int type: MMNotificationBox.Types.Warning
-
-  property color textColor: __style.nightColor
-
-  signal buttonClicked()
-
-  // Please set width
-  // Height is calculated automatically based on the text wrapping
-
-  implicitHeight: dynamicContentGroup.implicitHeight + 2 * __style.margin20
-
-  radius: __style.radius12
 
   property color bgndColor: {
     if ( type === MMNotificationBox.Types.Warning ) return __style.sandColor
@@ -40,9 +31,15 @@ Rectangle {
     if ( type === MMNotificationBox.Types.Error ) return __style.grapeColor
   }
 
+  signal buttonClicked()
+
+  property color textColor: __style.nightColor
+
   color: bgndColor
   border.width: 1 * __dp
   border.color: borderColor
+  implicitHeight: dynamicContentGroup.implicitHeight + 2 * __style.margin20
+  radius: __style.radius12
 
   RowLayout {
     id: dynamicContentGroup
@@ -71,10 +68,7 @@ Rectangle {
           width: parent.width
           height: implicitHeight
 
-          //elide: Text.ElideRight
-
-          wrapMode: descriptionText.text ? Text.NoWrap : Text.Wrap
-          maximumLineCount: descriptionText.text ? 1 : 2
+          wrapMode: Label.Wrap
 
           font: __style.t3
           color: root.textColor
@@ -95,7 +89,6 @@ Rectangle {
           color: root.textColor
 
           wrapMode: Label.Wrap
-          elide: Text.ElideRight
 
           lineHeight: __style.fontLineHeight24
           lineHeightMode: Text.FixedHeight
@@ -109,12 +102,10 @@ Rectangle {
 
         fontColor: root.type === MMNotificationBox.Types.Warning ? __style.earthColor : __style.roseColor
         bgndColor: root.type === MMNotificationBox.Types.Warning ? __style.sunsetColor : __style.grapeColor
-        // fontColorHover: __style.negativeColor
-        // bgndColorHover: __style.grapeColor
+        fontColorHover: root.type === MMNotificationBox.Types.Warning ? __style.sunsetColor : __style.grapeColor
+        bgndColorHover: root.type === MMNotificationBox.Types.Warning ? __style.earthColor : __style.roseColor
 
         size: MMButton.Sizes.Small
-
-        text: "Upgrade Now"
 
         onClicked: root.buttonClicked()
       }
