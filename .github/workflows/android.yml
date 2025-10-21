@@ -271,7 +271,7 @@ jobs:
           
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
-          echo "$SHARE_URL"
+          echo "$SHARE_URL" 
           echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
 
       - name: Build AAB
