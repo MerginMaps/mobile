@@ -17,6 +17,8 @@ Rectangle {
   property alias title: titleText.text
   property alias description: descriptionText.text
 
+  property int descriptionMaxLines: 2
+
   property string linkText
 
   property color textColor: __style.deepOceanColor
@@ -90,7 +92,7 @@ Rectangle {
         color: root.textColor
 
         wrapMode: Label.Wrap
-        maximumLineCount: 2
+        maximumLineCount: descriptionMaxLines
         elide: Text.ElideRight
 
         lineHeight: __style.fontLineHeight24
