@@ -18,11 +18,12 @@ default_platform(:android)
 platform :android do
   desc "Deploy a new version to the Google Play internal app sharing"
   lane :deploy do |options|
-    upload_to_play_store_internal_app_sharing(
+    share_url = upload_to_play_store_internal_app_sharing(
       package_name: 'uk.co.lutraconsulting',
       json_key: ENV['MM_GOOGLE_KEY_PATH'],
       apk: options[:mm_path]
     )
+    puts "APP_SHARE_URL:#{share_url}"
   end
 
   desc "Deploy a new version to the Google Play internal beta"

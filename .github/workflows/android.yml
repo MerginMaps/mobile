@@ -270,7 +270,8 @@ jobs:
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
           
           echo "$FASTLANE_OUTPUT"
-          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/Internal App Sharing URL:/ {print $NF}' | xargs)
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "$SHARE_URL"
           echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
 
       - name: Build AAB
