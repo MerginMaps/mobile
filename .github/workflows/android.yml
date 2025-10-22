@@ -143,7 +143,7 @@ jobs:
         run: |
           $HOMEBREW_PREFIX/bin/openssl \
            aes-256-cbc -d \
-           -in mm/Input_keystore.keystore.enc \
+           -in mm/scripts/ci/android/Input_keystore.keystore.enc \
            -out mm/Input_keystore.keystore \
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
@@ -184,7 +184,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          working-directory: mm
+          working-directory: mm/fastlane
           ruby-version: '3.3'
           bundler-cache: true
 
@@ -192,7 +192,7 @@ jobs:
         run: |
           $HOMEBREW_PREFIX/bin/openssl \
            aes-256-cbc -d \
-           -in mm/google_play_key.json.enc \
+           -in mm/scripts/ci/android/google_play_key.json.enc \
            -out mm/google_play_key.json \
            -k ${{ secrets.MM_GOOGLE_SERVICE_ACCOUNT_DECRYPTION_KEY }} \
            -md md5
