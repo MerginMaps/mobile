@@ -265,6 +265,7 @@ jobs:
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
       - name: Deploy App to Google play - Internal app sharing
+        if: ${{ !(github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag') }}
         run: |
           cd ${{ github.workspace }}/mm
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)

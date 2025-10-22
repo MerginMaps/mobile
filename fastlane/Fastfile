@@ -26,12 +26,12 @@ platform :android do
   end
 
   desc "Deploy a new version to the Google Play internal beta"
-  lane :deploy_beta do
+  lane :deploy_beta do # TODO
     upload_to_play_store
   end
 
   desc "Deploy a new version to the Google Play production"
-  lane :deploy_prod do
+  lane :deploy_prod do # TODO
     upload_to_play_store
   end
 end
