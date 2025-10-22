@@ -20,3 +20,5 @@ app/android/.gradle
 Input_keystore.keystore
 CMakeLists.txt.user
 .github/secrets/ios/LutraConsulting*.mobileprovision
+google_play_key.json
+fastlane/report.xml
