@@ -267,7 +267,7 @@ jobs:
       - name: Deploy App to Google play - Internal app sharing
         if: ${{ !(github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag') }}
         run: |
-          cd ${{ github.workspace }}/mm
+          cd ${{ github.workspace }}/mm/fastlane
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
           
           echo "$FASTLANE_OUTPUT"
@@ -302,7 +302,7 @@ jobs:
       - name: Deploy App to Google play - Internal app sharing
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         run: |
-          cd ${{ github.workspace }}/mm
+          cd ${{ github.workspace }}/mm/fastlane
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
           
           echo "$FASTLANE_OUTPUT"
