@@ -30,7 +30,9 @@ class PositionKit : public QObject
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
+
     Q_PROPERTY( double altitude READ altitude NOTIFY altitudeChanged )
+    Q_PROPERTY( double geoidSeparation READ geoidSeparation NOTIFY geoidSeparationChanged )
 
     // auxiliary property providing QgsPoint for lat/long/alt instead of separate properties
     Q_PROPERTY( QgsPoint positionCoordinate READ positionCoordinate NOTIFY positionCoordinateChanged )
@@ -84,6 +86,7 @@ class PositionKit : public QObject
     double latitude() const;
     double longitude() const;
     double altitude() const;
+    double geoidSeparation() const;
     QgsPoint positionCoordinate() const;
     bool hasPosition() const;
 
@@ -127,6 +130,7 @@ class PositionKit : public QObject
     void latitudeChanged( double );
     void longitudeChanged( double );
     void altitudeChanged( double );
+    void geoidSeparationChanged( double );
     void positionCoordinateChanged( QgsPoint );
     void hasPositionChanged( bool );
 
