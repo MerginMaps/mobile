@@ -77,20 +77,17 @@ MMComponents.MMPage {
         id: verticalScrollBar
 
         readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
-        policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AsNeeded
+        policy: ScrollBar.AlwaysOn
         visible: !isMobile
         interactive: !isMobile
+        opacity: (pressed || listView.moving) ? 0.7 : 0.4
 
-        anchors.right: listView.right
         implicitHeight: listView.height
-        opacity: active ? 1.0 : 0.0
-        Behavior on opacity { NumberAnimation { duration: 150 } }
 
         contentItem: Rectangle {
           implicitWidth: 5
           radius: width / 2
           color: __style.darkGreenColor
-          opacity: verticalScrollBar.pressed ? 0.5 : 0.3
         }
       }
 
