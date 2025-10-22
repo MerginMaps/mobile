@@ -79,7 +79,6 @@ MMComponents.MMPage {
         readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
         policy: ScrollBar.AlwaysOn
         visible: !isMobile
-        interactive: !isMobile
         opacity: (pressed || listView.moving) ? 0.7 : 0.4
 
         implicitHeight: listView.height
