@@ -267,11 +267,10 @@ jobs:
       - name: Deploy App to Google play - Internal app sharing
         run: |
           cd ${{ github.workspace }}/mm
-          FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
           
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
-          echo "$SHARE_URL" 
           echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
 
       - name: Build AAB
@@ -303,7 +302,8 @@ jobs:
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         run: |
           cd ${{ github.workspace }}/mm
-          FASTLANE_OUTPUT=$(bundle exec fastlane deploy mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
           
-          echo "Google play store AAB link: $FASTLANE_OUTPUT"
-          echo "Google play store AAB link: $FASTLANE_OUTPUT" >> $GITHUB_STEP_SUMMARY
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "Google play store AAB link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
