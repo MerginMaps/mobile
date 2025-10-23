@@ -17,6 +17,8 @@
 #define IOSVIEWDELEGATE_H
 
 #include <UIKit/UIKit.h>
+#include <PhotosUI/PhotosUI.h>
+#import <Photos/Photos.h>
 
 #include "iosimagepicker.h"
 /**
@@ -34,6 +36,10 @@ UINavigationControllerDelegate>
   void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );
 }
 - ( id ) initWithHandler:( IOSImagePicker * )handler;
+@end
+
+@interface IOSGalleryViewController : NSObject<PHPickerViewControllerDelegate>
+- (void)openPHPicker;
 @end
 
 #endif // IOSVIEWDELEGATE_H

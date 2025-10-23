@@ -19,6 +19,7 @@
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
 #include "inpututils.h"
+#include "imageutils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #include "position/positionkit.h"
 #include "compass.h"
@@ -38,9 +39,11 @@ NSMutableDictionary *mGpsData = [[NSMutableDictionary alloc]init];
 
 static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
 {
+  NSLog(@"%@",imagePath);
   NSData *data = [NSData dataWithContentsOfFile:imagePath];
   CGImageSourceRef source = CGImageSourceCreateWithData( ( __bridge CFDataRef )data, NULL );
   NSDictionary *metadata = [( NSDictionary * )CGImageSourceCopyPropertiesAtIndex( source, 0, NULL )autorelease];
+  NSLog(@"%@",metadata);
 
   NSMutableDictionary *dict = nil;
   NSString *key = nil;
@@ -54,6 +57,8 @@ static NSObject *readExifAttribute( NSString *imagePath, NSString *tag )
     key = tag;
     dict = [metadata objectForKey:( NSString * )kCGImagePropertyExifDictionary];
   }
+  NSLog(@"%@",key);
+  NSLog(@"%@",dict);
 
   if ( !dict )
   {

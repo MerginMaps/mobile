@@ -18,12 +18,17 @@
 
 bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &targetImage )
 {
-  if ( !QFileInfo::exists( sourceImage ) || !QFileInfo::exists( targetImage ) )
+  CoreUtils::log("exif metadata", "sourceImage: " + sourceImage + "\ntargetImage: " + targetImage);
+  QString modSrcPath = sourceImage;
+  if ( sourceImage.startsWith( "file://" ) )
+  {
+    modSrcPath = modSrcPath.replace( "file://", "" );
+  }
+  if ( !QFileInfo::exists( modSrcPath ) || !QFileInfo::exists( targetImage ) )
     return false;
-
+  CoreUtils::log("exif metadata", "files exist");
   try
   {
-    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
     if ( !srcImage )
       return false;
 
