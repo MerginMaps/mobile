@@ -20,4 +20,5 @@ ScrollView {
 
   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
 }
