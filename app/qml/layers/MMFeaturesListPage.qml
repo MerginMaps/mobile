@@ -73,23 +73,6 @@ MMComponents.MMPage {
         onClicked: root.featureClicked( model.FeaturePair )
       }
 
-      ScrollBar.vertical: ScrollBar {
-        id: verticalScrollBar
-
-        readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
-        policy: ScrollBar.AlwaysOn
-        visible: !isMobile
-        opacity: (pressed || listView.moving) ? 0.7 : 0.4
-
-        implicitHeight: listView.height
-
-        contentItem: Rectangle {
-          implicitWidth: 5
-          radius: width / 2
-          color: __style.darkGreenColor
-        }
-      }
-
       footer: MMComponents.MMListSpacer {
         height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
       }
