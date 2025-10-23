@@ -33,7 +33,9 @@ MMDrawer {
 
   interactive: !listViewComponent.interactive
 
-  drawerBottomMargin: 0
+  drawerBottomMargin: listViewComponent.count === 0
+                      ? (__style.margin20 + __style.safeAreaBottom)
+                      : 0
 
   drawerContent: Item {
     width: parent.width
@@ -64,13 +66,13 @@ MMDrawer {
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
 
       Item {
+        id: featureList
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
 
         MMScrollView {
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-
           enabled: contentHeight > height
 
           Loader {
@@ -87,7 +89,7 @@ MMDrawer {
 
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-
+          visible: count > 0
           interactive: contentHeight > height
 
           clip: true
