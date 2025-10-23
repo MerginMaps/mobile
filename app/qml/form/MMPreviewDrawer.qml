@@ -198,7 +198,7 @@ Item {
           model: root.controller.fieldModel
 
           delegate: Item {
-            width: ListView.view.width
+            width: ListView.view.width - ListView.view.width
             height: childrenRect.height
 
             Column {
