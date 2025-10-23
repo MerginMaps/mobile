@@ -17,7 +17,7 @@ RoundButton {
 
   implicitWidth: 40 * __dp
   implicitHeight: 40 * __dp
-  hoverEnabled: root.enabled && Qt.styleHints.useHoverEffects
+  hoverEnabled: root.enabled && Application.styleHints.useHoverEffects
 
   property url iconSource: __style.backIcon
   property color iconColor: __style.forestColor
