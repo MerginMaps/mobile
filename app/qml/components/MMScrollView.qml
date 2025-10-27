@@ -16,9 +16,29 @@ import QtQuick.Controls
 ScrollView {
   id: root
 
-  contentWidth: availableWidth // to only scroll vertically
+  readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
+  property int scrollSpace: !isMobile ? 10 : 0
 
-  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+  contentWidth: availableWidth - scrollSpace // to only scroll vertically
+
+  ScrollBar.horizontal: null
+
+  ScrollBar.vertical: ScrollBar {
+    id: verticalScrollBar
+
+    policy: ScrollBar.AsNeeded
+    visible: !isMobile && (root.contentHeight > root.height)
+    opacity: (pressed || root.moving) ? 0.7 : 0.4
+
+    anchors.right: root.right
+
+    implicitHeight: root.height
+
+    contentItem: Rectangle {
+      implicitWidth: 5
+      radius: width / 2
+      color: __style.darkGreenColor
+    }
+  }
 
 }
