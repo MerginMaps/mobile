@@ -111,6 +111,7 @@ Item {
           else
           {
             __notificationModel.addWarning( qsTr( "You need to add at least 2 points." ) )
+            //__notificationModel.addWarning( __inputUtils.invalidGeometryWarning( mapTool.activeLayer ) )
           }
         }
       }
