@@ -46,7 +46,7 @@ class MultiEditManager : public QObject
     Q_INVOKABLE FeatureLayerPair editableFeature();
 
     //! Deletes selected or toggled features upon called
-    Q_INVOKABLE void deleteSelectedFeature();
+    Q_INVOKABLE void deleteSelectedFeatures();
 
     //! Returns multipart geometry of all geometries in the model, in map crs
     QgsGeometry collectGeometry() const { return mModel->collectGeometries( mMapSettings ); }

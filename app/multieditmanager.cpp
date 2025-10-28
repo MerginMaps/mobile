@@ -153,17 +153,16 @@ FeatureLayerPair MultiEditManager::editableFeature()
   return FeatureLayerPair( oneFeature, mTempLayer.get() );
 }
 
-void MultiEditManager::deleteSelectedFeature()
+void MultiEditManager::deleteSelectedFeatures()
 {
   if ( !mModel || mModel->count() == 0 || !mLayer )
     return;
 
-  const FeatureLayerPairs pairs = mModel->features();
   QgsFeatureIds fids;
-  fids.reserve( pairs.count() );
-  for ( const FeatureLayerPair &pair : pairs )
+  fids.reserve(mModel->rowCount());
+  for (int i = 0; i < mModel->rowCount(); ++i)
   {
-    fids.insert( pair.feature().id() );
+    fids.insert(mModel->data(mModel->index(i, 0), FeaturesModel::FeatureId).value<QgsFeatureId>());
   }
 
   if ( fids.isEmpty() )

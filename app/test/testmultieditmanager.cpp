@@ -46,7 +46,7 @@ void TestMultiEditManager::cleanup()
 void TestMultiEditManager::testInitializeSelection()
 {
   mManager->initialize( FeatureLayerPair( mFeatures.at( 0 ), mLayer.get() ) );
-  mManager->deleteSelectedFeature();
+  mManager->deleteSelectedFeatures();
   QCOMPARE( static_cast<int>( mLayer->featureCount() ), 5 );
 }
 
@@ -56,17 +56,17 @@ void TestMultiEditManager::testToggleSelectSameLayer()
   mManager->toggleSelect( FeatureLayerPair( mFeatures.at( 1 ), mLayer.get() ) ); // added f2 and,
   mManager->toggleSelect( FeatureLayerPair( mFeatures.at( 1 ), mLayer.get() ) ); // removed f2
 
-  mManager->deleteSelectedFeature();
+  mManager->deleteSelectedFeatures();
   QCOMPARE( static_cast<int>( mLayer->featureCount() ), 5 );
 }
 
-void TestMultiEditManager::testDeleteSelectedFeature()
+void TestMultiEditManager::testDeleteSelectedFeatures()
 {
   mManager->initialize( FeatureLayerPair( mFeatures.at( 0 ), mLayer.get() ) );
   mManager->toggleSelect( FeatureLayerPair( mFeatures.at( 1 ), mLayer.get() ) );
   mManager->toggleSelect( FeatureLayerPair( mFeatures.at( 2 ), mLayer.get() ) );
 
-  mManager->deleteSelectedFeature();
+  mManager->deleteSelectedFeatures();
 
   // three removed out-of 6
   QCOMPARE( static_cast<int>( mLayer->featureCount() ), 3 );
