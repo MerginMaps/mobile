@@ -74,7 +74,6 @@ MMFormComboboxBaseEditor {
       emptyStateDelegate: Item {
         width: parent.width
         height: noItemsText.implicitHeight
-        anchors.centerIn: parent
 
         MMComponents.MMText {
           id: noItemsText
