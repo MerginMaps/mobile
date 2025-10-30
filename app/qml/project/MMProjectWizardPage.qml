@@ -70,7 +70,7 @@ MMComponents.MMPage {
         delegate: MMProjectComponents.MMProjectWizardDelegate {
           id: fieldDelegate
 
-          width: ListView.view.width - ListView.view.width
+          width: ListView.view.width - ListView.view.scrollSpace
 
           // find current index in the model
           comboboxField.comboboxModel: typesmodel

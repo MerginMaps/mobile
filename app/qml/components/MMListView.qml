@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml
 
 //
 // Hot-fix for hotfix https://github.com/MerginMaps/mobile/issues/3417
@@ -28,10 +29,6 @@ ListView {
     policy: ScrollBar.AlwaysOn
     visible: !isMobile && (root.contentHeight > root.height)
     opacity: (pressed || root.moving) ? 0.7 : 0.4
-
-    anchors.right: root.right
-
-    implicitHeight: root.height
 
     contentItem: Rectangle {
       implicitWidth: 5

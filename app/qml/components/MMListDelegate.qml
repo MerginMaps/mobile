@@ -24,7 +24,6 @@ Item {
   property string text
   property string secondaryText
 
-  readonly property int scrollSpace: (ListView.view && ListView.view.scrollSpace) ? ListView.view.scrollSpace : 0
   property alias leftContent: leftContentGroup.children
   property alias rightContent: rightContentGroup.children
 
@@ -44,7 +43,7 @@ Item {
   implicitWidth: ListView?.view?.width ?? 0  // in case ListView is injected as attached property (usually it is)
   implicitHeight: contentLayout.implicitHeight
   height: visible ? implicitHeight : 0.1 // hide invisible items, for some reason setting 0 does not work ¯\_(ツ)_/¯
-  width: implicitWidth - ListView.view.scrollSpace
+  width: implicitWidth - ( ListView?.view?.scrollSpace ?? 0 )
 
   MouseArea {
     anchors.fill: contentLayout

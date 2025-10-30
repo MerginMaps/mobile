@@ -53,7 +53,15 @@ MMPage {
         width: parent.width
       }
 
-      ScrollBar.vertical: ScrollBar { }
+      ScrollBar.vertical: ScrollBar {
+        opacity: (root.pressed || root.moving) ? 0.7 : 0.4
+
+        contentItem: Rectangle {
+          implicitWidth: 5
+          radius: width / 2
+          color: __style.darkGreenColor
+        }
+      }
     }
 
     MMButton {
