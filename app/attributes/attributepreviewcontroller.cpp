@@ -44,17 +44,17 @@ AttributePreviewModel::~AttributePreviewModel() = default;
 int AttributePreviewModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
-  return mItems.size();
+  return static_cast<int>( mItems.size() );
 }
 
-QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
+QVariant AttributePreviewModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+    return {};
 
   const int row = index.row();
   if ( row < 0 || row >= mItems.size() )
-    return QVariant();
+    return {};
 
   switch ( role )
   {
@@ -63,16 +63,16 @@ QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
     case AttributePreviewModel::Value:
       return mItems.at( row ).second;
     default:
-      return QVariant();
+      return {};
   }
 }
 
 QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
 {
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
-    return QVector<QPair<QString, QString>> ();
+    return {};
 
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QString() );
   QVector<QPair<QString, QString>> lst;
   const QgsFields fields = mFeatureLayerPair.layer()->fields();
 
@@ -80,7 +80,7 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   {
     // user has not provided any map tip - let's use first two fields to show
     // at least something.
-    QString featureTitleExpression = mFeatureLayerPair.layer()->displayExpression();
+    const QString featureTitleExpression = mFeatureLayerPair.layer()->displayExpression();
     for ( const QgsField &field : fields )
     {
       if ( featureTitleExpression != field.name() )
@@ -109,7 +109,7 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
     QStringList lines = mapTip.split( '\n' );
     for ( int i = 1; i < lines.count(); ++i ) // starting from index to avoid first line with "# fields"
     {
-      int index = fields.indexFromName( lines[i] );
+      const int index = fields.indexFromName( lines[i] );
       if ( index >= 0 )
       {
         // Type-aware formatting (dates in local time, honor display_format)
@@ -233,7 +233,7 @@ QString AttributePreviewController::mapTipImage()
 {
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
   return QgsExpression::replaceExpressionText( mapTip, &context );
 }
 
@@ -270,7 +270,7 @@ QString AttributePreviewController::featureTitle( )
   return title;
 }
 
-QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( QgsMapLayer *layer )
+QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( const QgsMapLayer *layer )
 {
   // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
   QList<QgsExpressionContextScope *> scopes;
@@ -287,7 +287,7 @@ AttributePreviewModel *AttributePreviewController::fieldModel() const
 
 AttributePreviewController::AttributePreviewController( QObject *parent )
   : QObject( parent )
-  , mFieldModel( new AttributePreviewModel() )
+  , mFieldModel( std::make_unique<AttributePreviewModel>() )
 {
 }
 
@@ -334,7 +334,7 @@ void AttributePreviewController::recalculate()
   mPhoto.clear();
   mTitle.clear();
   mType = AttributePreviewController::Empty;
-  mFieldModel.reset( new AttributePreviewModel() );
+  mFieldModel = std::make_unique<AttributePreviewModel>();
 
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
     return;
@@ -342,7 +342,7 @@ void AttributePreviewController::recalculate()
   mTitle = featureTitle();
 
   // Stripping extra CR char to unify Windows lines with Unix.
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QString() );
   if ( mapTip.startsWith( "# image\n" ) )
   {
     mType = AttributePreviewController::Photo;
@@ -354,7 +354,7 @@ void AttributePreviewController::recalculate()
     if ( !items.empty() )
     {
       mType = AttributePreviewController::Fields;
-      mFieldModel.reset( new AttributePreviewModel( items ) );
+      mFieldModel = std::make_unique<AttributePreviewModel>( items );
     }
   }
   else

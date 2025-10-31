@@ -1,18 +1,8 @@
 # GPLv2 Licence
 
-find_path(
-  Spatialindex_INCLUDE_DIR
-  spatialindex/RTree.h
-  "${INPUT_SDK_PATH_MULTI}/include"
-  NO_DEFAULT_PATH
-)
+find_path(Spatialindex_INCLUDE_DIR spatialindex/RTree.h)
 
-find_library(
-  Spatialindex_LIBRARY
-  NAMES spatialindex spatialindex-64
-  PATHS "${INPUT_SDK_PATH_MULTI}/lib"
-  NO_DEFAULT_PATH
-)
+find_library(Spatialindex_LIBRARY NAMES spatialindex spatialindex-64)
 
 find_package_handle_standard_args(
   Spatialindex REQUIRED_VARS Spatialindex_LIBRARY Spatialindex_INCLUDE_DIR

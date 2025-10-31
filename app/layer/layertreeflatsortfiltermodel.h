@@ -14,7 +14,6 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "inputconfig.h"
 #include "layer/layertreeflatmodel.h"
 
 class LayerTreeFlatSortFilterModel : public QSortFilterProxyModel

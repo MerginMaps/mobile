@@ -4,30 +4,43 @@ cmake_minimum_required(VERSION 3.22)
 # GLOBAL SETTINGS (call before "project()")
 # ########################################################################################
 
-# TODO automatically change with the scripts/update version script
+# Note: To update version use script/update_all_versions.bash
 set(MM_VERSION_MAJOR "2025")
-set(MM_VERSION_MINOR "6")
+set(MM_VERSION_MINOR "7")
 set(MM_VERSION_PATCH "0")
-set(QT_VERSION_DEFAULT "6.8.3")
+
+if (VCPKG_TARGET_TRIPLET MATCHES ".*ios.*")
+  set(IOS TRUE)
+endif ()
 
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
-if (DEFINED ENV{INPUT_SDK_ANDROID_BASE})
+if (ANDROID_ABI)
   # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
-  set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
+  # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
 
-  set(ANDROIDAPI "28")
-  set(ANDROID_PLATFORM "android-${ANDROIDAPI}")
-  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}")
+  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets
+                       # *-android.cmake
+
+  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change
+                                                # VCPKG_CMAKE_SYSTEM_VERSION in triplets
+                                                # *-android.cmake
+  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") # when changed change
+                                                    # VCPKG_CMAKE_SYSTEM_VERSION in
+                                                    # triplets *-android.cmake
   set(ANDROID_STL "c++_shared")
+  set(ANDROID_ARM_NEON ON)
 
-  # Target/Minimum API levels for Android, used as Input target properties
-  set(INPUT_ANDROID_TARGET_SDK_VERSION "34")
-  set(INPUT_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
-  set(INPUT_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_ROOT}")
-  if (NOT INPUT_ANDROID_NDK_PATH)
-    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_ROOT.")
+  # Target/Minimum API levels for Android, used as MerginMaps target properties
+  set(MM_ANDROID_TARGET_SDK_VERSION "35")
+  set(MM_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
+  set(MM_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
+  if (NOT MM_ANDROID_NDK_PATH)
+    message(FATAL_ERROR "Set required environment variable ANDROID_NDK_HOME.")
   endif ()
+  set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE
+      "${MM_ANDROID_NDK_PATH}/build/cmake/android.toolchain.cmake"
+  )
 endif ()
 
 if (IOS)
@@ -36,31 +49,26 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(DEPLOYMENT_TARGET "16.0")
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") # when changed change triplets arm64-ios.cmake
 endif ()
 
-if (APPLE
-    AND NOT IOS
-    AND NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE}
-)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15.0")
+if (APPLE AND NOT IOS)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") # when changed change also triplets *-osx.cmake
 endif ()
 
 # ########################################################################################
 # PROJECT SETUP
 # ########################################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-set(INPUT_CMAKE_TEMPLATES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_templates)
-set(INPUT_SCRIPTS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
 
 include(VersionDetect)
 include(PlatformDetect)
 mm_detect_platform()
 
 project(
-  Input
+  MerginMaps
   VERSION ${MM_VERSION_MAJOR}.${MM_VERSION_MINOR}.${MM_VERSION_PATCH}
-  DESCRIPTION "The easiest way to take your QGIS projects into the field"
+  DESCRIPTION "Collect. Share. Publish."
   HOMEPAGE_URL "https://merginmaps.com"
   LANGUAGES CXX
 )
@@ -81,30 +89,15 @@ else ()
   set(HAVE_BLUETOOTH_DEFAULT TRUE)
 endif ()
 
-# on android in multi-ABI build, command line variables are NOT passed to
-# ExternalProject_Add called by QT. Therefore we need to pass the variables through ENV
-if (ANDROID)
-  if (NOT DEFINED ENV{INPUT_SDK_ANDROID_BASE})
-    message(
-      FATAL_ERROR
-        "On Android, you need to define INPUT_SDK_ANDROID_BASE as environment variable. Clean build directory and run cmake again!"
-    )
-  else ()
-    set(INPUT_SDK_PATH_DEFAULT $ENV{INPUT_SDK_ANDROID_BASE})
-  endif ()
-else ()
-  set(INPUT_SDK_PATH_DEFAULT "")
-endif ()
-
-if (DEFINED ENV{INPUT_VERSION_CODE})
-  set(INPUT_VERSION_CODE_DEFAULT "$ENV{INPUT_VERSION_CODE}")
+if (DEFINED ENV{MM_VERSION_CODE})
+  set(MM_VERSION_CODE_DEFAULT "$ENV{MM_VERSION_CODE}")
 else ()
   if (ANDROID)
-    set(INPUT_VERSION_CODE_DEFAULT "0000000")
+    set(MM_VERSION_CODE_DEFAULT "0000000")
   elseif (IOS)
-    set(INPUT_VERSION_CODE_DEFAULT "00.00.000000")
+    set(MM_VERSION_CODE_DEFAULT "00.00.000000")
   else ()
-    set(INPUT_VERSION_CODE_DEFAULT "000000")
+    set(MM_VERSION_CODE_DEFAULT "000000")
   endif ()
 endif ()
 
@@ -128,12 +121,7 @@ set(IOS_USE_PRODUCTION_SIGNING
       BOOL
       "Whether to sign the ios build with production certificate. Used in CI, leave false when building locally to automatically manage signing"
 )
-set(INPUT_SDK_PATH
-    ${INPUT_SDK_PATH_DEFAULT}
-    CACHE
-      PATH
-      "Path to the Mergin Maps Mobile-SDK on host machine; on android define ENV variable instead and without the ABI suffix (armeabi-v7a, arm64-v8a)"
-)
+
 set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
     CACHE BOOL "Whether to build tests"
@@ -150,13 +138,8 @@ set(USE_KEYCHAIN
       "Whether to use keychains/wallets to store credentials. If false, we use QSettings"
 )
 
-set(QT6_VERSION
-    ${QT_VERSION_DEFAULT}
-    CACHE STRING "QT6 version to use"
-)
-
-set(INPUT_VERSION_CODE
-    "${INPUT_VERSION_CODE_DEFAULT}"
+set(MM_VERSION_CODE
+    "${MM_VERSION_CODE_DEFAULT}"
     CACHE STRING "Build version (for stores)"
 )
 
@@ -167,29 +150,8 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # FIND PACKAGES
 # ########################################################################################
 
-if (ANDROID)
-  set(INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a ${INPUT_SDK_PATH}/arm-android)
-
-  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_armeabi-v7a})
-    message(WARNING "INPUT_SDK_PATH arm-android directory does not exist!")
-  endif ()
-
-  set(INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a ${INPUT_SDK_PATH}/arm64-android)
-  if (NOT EXISTS ${INPUT_SDK_PATH_ANDROID_ABI_arm64-v8a})
-    message(WARNING "INPUT_SDK_PATH arm64-android directory does not exist!")
-  endif ()
-
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH_ANDROID_ABI_${ANDROID_ABI}})
-  # allow libraries outside of SDK/NDK directory
-  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
-  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
-  set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE BOTH)
-else ()
-  set(INPUT_SDK_PATH_MULTI ${INPUT_SDK_PATH})
-endif ()
-
 find_package(
-  Qt6 ${QT6_VERSION}
+  Qt6
   COMPONENTS Quick
              Qml
              Xml
@@ -203,61 +165,76 @@ find_package(
              Sql
              Core
              Core5Compat
-  REQUIRED
-)
-find_package(
-  Qt6 ${QT6_VERSION}
-  COMPONENTS Multimedia Widgets
+             Multimedia
+             Widgets
   REQUIRED
 )
 
+# Qt by default assumes that cmake files live in `lib/cmake`. Point to `share` instead.
+# See
+# https://github.com/qt/qtbase/blob/39290c508e2c7fa816c6f79b3eb284adc0cad3c0/src/corelib/Qt6AndroidMacros.cmake#L1016C16-L1026
+if (ANDROID)
+  get_filename_component(
+    QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI} "${Qt6_DIR}/.." ABSOLUTE
+  )
+  message(
+    STATUS
+      "QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI}: ${QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI}}"
+  )
+endif ()
+
 if (NOT IOS)
   # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
-  # iOS.
+  # iOS
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS PrintSupport
     REQUIRED
   )
 endif ()
 
 if (NOT LNX)
-  find_package(Charset REQUIRED)
+  # find_package(Charset CONFIG REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
 
 find_package(ZLIB REQUIRED)
-find_package(Bz2 REQUIRED)
-find_package(Curl REQUIRED)
-find_package(Inih REQUIRED)
-find_package(Exiv2 REQUIRED)
-find_package(Expat REQUIRED)
-find_package(Freexl REQUIRED)
-find_package(Gdal REQUIRED)
-find_package(Geodiff REQUIRED)
-find_package(Geos REQUIRED)
-find_package(Jpeg REQUIRED)
-find_package(Pq REQUIRED)
-find_package(Proj REQUIRED)
+# find_package(Bz2 CONFIG REQUIRED) find_package(bzip2 CONFIG REQUIRED)
+find_package(CURL CONFIG REQUIRED)
+# find_package(Inih CONFIG REQUIRED)
+find_package(exiv2 CONFIG REQUIRED)
+find_package(expat CONFIG REQUIRED)
+# find_package(freexl CONFIG REQUIRED)
+find_package(GDAL CONFIG REQUIRED)
+find_package(Geodiff CONFIG REQUIRED)
+find_package(GEOS CONFIG REQUIRED)
+# find_package(Jpeg CONFIG REQUIRED)
+find_package(PostgreSQL REQUIRED)
+find_package(PROJ CONFIG REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(QGIS REQUIRED)
-find_package(Qca REQUIRED)
-find_package(Qtkeychain REQUIRED)
+find_package(Qca CONFIG REQUIRED)
+find_package(Qt6Keychain CONFIG REQUIRED)
 find_package(Spatialindex REQUIRED)
 find_package(Spatialite REQUIRED)
-find_package(Sqlite3 REQUIRED)
-find_package(Tiff REQUIRED)
-find_package(WebP REQUIRED)
-find_package(Xml2 REQUIRED)
-find_package(ZXing REQUIRED)
-find_package(Zip REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(Geotiff REQUIRED)
-find_package(Lzma REQUIRED)
-find_package(Zstd REQUIRED)
-find_package(MiniZip REQUIRED)
-find_package(Utf8 REQUIRED)
-find_package(Absl REQUIRED QUIET)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+# find_package(Tiff CONFIG REQUIRED)
+find_package(WebP CONFIG REQUIRED)
+# find_package(Xml2 CONFIG REQUIRED)
+find_package(ZXing CONFIG REQUIRED)
+find_package(libzip CONFIG REQUIRED)
+find_package(OpenSSL CONFIG REQUIRED)
+find_package(GeoTIFF CONFIG REQUIRED)
+# find_package(Lzma CONFIG REQUIRED) find_package(Zstd CONFIG REQUIRED)
+find_package(unofficial-minizip CONFIG REQUIRED)
+# find_package(Utf8 CONFIG REQUIRED) find_package(Absl CONFIG REQUIRED)
+find_package(poly2tri CONFIG)
+find_package(meshoptimizer CONFIG REQUIRED)
+
+if (WIN)
+  find_package(FFmpeg REQUIRED)
+  find_package(WinLibraries REQUIRED)
+endif ()
 
 if (IOS OR MACOS)
   find_package(AppleFrameworks REQUIRED)
@@ -266,7 +243,7 @@ endif ()
 
 if (HAVE_BLUETOOTH)
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS Bluetooth
     REQUIRED
   )
@@ -274,7 +251,7 @@ endif ()
 
 if (ENABLE_TESTS)
   find_package(
-    Qt6 ${QT6_VERSION}
+    Qt6
     COMPONENTS Test
     REQUIRED
   )
@@ -323,22 +300,24 @@ if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
 endif ()
 
-# This is for QGIS defined, do not move to inputconfig.h
+# This is for QGIS defined, do not move to mmconfig.h
 add_compile_definitions(HAVE_WIDGETS)
 
 # QGIS defines
 # add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
-# Generate inputconfig.h
 if (ENABLE_TESTS)
-  set(INPUT_TEST TRUE)
+  set(MM_TEST TRUE)
   file(COPY test/test_data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/test/)
   set(TEST_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/test/test_data")
 endif ()
 
+set(MM_FORMATS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/docs/supported_formats.txt")
+
+# Generate mmconfig.h
 configure_file(
-  ${CMAKE_SOURCE_DIR}/cmake_templates/inputconfig.h.in ${CMAKE_BINARY_DIR}/inputconfig.h
+  ${CMAKE_SOURCE_DIR}/cmake_templates/mmconfig.h.in ${CMAKE_BINARY_DIR}/mmconfig.h
 )
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -375,6 +354,54 @@ if (IOS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
 endif ()
 
+if (ANDROID)
+  if (VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
+    set(CMAKE_C_FLAGS
+        "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
+    )
+    set(CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
+    )
+  else ()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong")
+  endif ()
+
+  link_libraries("-ljnigraphics")
+
+  # Make sure the generator for android_deployment_settings.json can figure out the
+  # architecture
+  list(APPEND CMAKE_FIND_ROOT_PATH /)
+
+  # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
+endif ()
+
+# ########################################################################################
+# RESOURCES
+# ########################################################################################
+message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
+
+# On android we need to copy the resources into the source tree and then Qt will copy it
+# to the android build directory with QT_ANDROID_PACKAGE_SOURCE_DIR
+if (ANDROID)
+  set(ASSETS_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+else ()
+  set(ASSETS_DIR_PATH ${CMAKE_BINARY_DIR})
+endif ()
+
+file(MAKE_DIRECTORY ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources)
+file(COPY ${QGIS_RESOURCE_DIR}/qgis.db
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources/
+)
+file(COPY ${QGIS_RESOURCE_DIR}/srs.db
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/resources/
+)
+file(
+  COPY ${PROJ_DIR}
+  DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/
+  PATTERN "*.cmake" EXCLUDE
+  PATTERN "vcpkg*" EXCLUDE
+)
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################
@@ -393,7 +420,7 @@ if (WIN
     OR LNX
     OR MACOS
 )
-  # qt_add_executable on Android automatically creates target for apk/aab on IOS we use
-  # xcodebuild to build ipa
+  # qt_add_executable - on Android automatically creates target for apk/aab - on IOS we
+  # use xcodebuild to build ipa
   include(InstallStep)
 endif ()

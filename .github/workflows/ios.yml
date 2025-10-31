@@ -1,30 +1,33 @@
 name: iOS Build
+
 on:
   push:
     paths:
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/ios.yml'
-    - '.github/secrets/ios/**'
+      - 'vcpkg/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/ios.yml'
+      - '.github/secrets/ios/**'
 
   release:
     types:
       - published
 
-env:   
-  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+env:
+  CMAKE_VERSION: '3.31.6'
+  VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+  VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
   XC_VERSION: ${{ '16.4' }}
-  IOS_CMAKE_TOOLCHAIN_VERSION: "4.4.0" 
-  INPUT_SDK_VERSION: arm64-ios-20250326-198
+  DEPLOYMENT_TARGET: '14.0'
+  TRIPLET: arm64-ios
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
-  CCACHE_DIR: /Users/runner/work/ccache
-  CMAKE_VERSION: '3.29.0'
-  CACHE_VERSION: 0
 
 concurrency:
   group: ci-${{github.ref}}-ios
@@ -35,71 +38,70 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: macos-15
     steps:
-      - name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
-
-      - uses: actions/checkout@v4
- 
-      - name: Download ios-cmake toolchain
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-            repository: leetal/ios-cmake
-            ref: ${{ env.IOS_CMAKE_TOOLCHAIN_VERSION }}
-            path: ios-cmake
-      
-      # CCache
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-ios-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-ios-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-ios-ccache-refs/heads/${{ github.base_ref }}-
-            build-ios-ccache-refs/heads/master-
-
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-ios-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-ios-ccache-${{ github.ref }}-
-            build-ios-ccache-refs/heads/master-
+          path: mm
 
       - name: Install brew deps
         run: |
-          brew update
-          brew install aqtinstall
-
+          brew uninstall cmake
+          brew install automake bison flex gnu-sed autoconf-archive libtool gettext lcov openssl create-dmg mono
           brew install gnupg
-          brew install openssl
-          brew install ccache
-          brew install ninja
-        
+          echo $(brew --prefix bison)/bin >> $GITHUB_PATH
+          echo $(brew --prefix flex)/bin >> $GITHUB_PATH
+          echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
-     
-      - name: Install ccache
+
+      - name: Setup XCode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: ${{ env.XC_VERSION }}
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ccache-${{ env.TRIPLET }}
+          max-size: 200M
+
+      - name: Install vcpkg
+        shell: bash
         run: |
-          mkdir -p ${CCACHE_DIR}
-          ccache --set-config=max_size=2.0G
-          ccache -s
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ github.workspace }}/mm/VCPKG_BASELINE`
+          git checkout ${VCPKG_TAG}
+          cd "${{ env.VCPKG_ROOT }}"
+          chmod +x ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.sh
+
+      - name: Setup NuGet Credentials
+        shell: bash
+        run: |
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "mergin-maps-bot" \
+            -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
+
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json"
 
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd core/
-          /opt/homebrew/bin/openssl \
+          cd mm/core/
+          $HOMEBREW_PREFIX/bin/openssl \
               aes-256-cbc -d \
               -in merginsecrets.cpp.enc \
               -out merginsecrets.cpp \
@@ -120,111 +122,75 @@ jobs:
           IOS_GPG_KEY: ${{ secrets.IOS_GPG_KEY }}
           IOS_CERT_KEY: ${{ secrets.IOS_CERT_KEY }}
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/Certificates_ios_dist.p12 ./.github/secrets/ios/Certificates_ios_dist.p12.gpg
-          security import "./.github/secrets/ios/Certificates_ios_dist.p12" -k "$KEYCHAIN" -P "$IOS_CERT_KEY" -A
+          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./mm/.github/secrets/ios/Certificates_ios_dist.p12 ./mm/.github/secrets/ios/Certificates_ios_dist.p12.gpg
+          security import "./mm/.github/secrets/ios/Certificates_ios_dist.p12" -k "$KEYCHAIN" -P "$IOS_CERT_KEY" -A
           security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
-          cp ./.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
-        run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/arm64-ios
-          cd ${{ github.workspace }}/input-sdk/arm64-ios
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
-
-      # Qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-QtCache-v3-${{ env.QT_VERSION }}-ios
-          
-      - name: Install Qt
-        if: steps.cache-qt.outputs.cache-hit != 'true'
-        run: |
-          aqt install-qt \
-            mac ios ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
-            -O ${{ github.workspace }}/Qt
-            
-          aqt install-qt \
-            mac desktop ${{ env.QT_VERSION }} \
-            -m qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth\
-            -O ${{ github.workspace }}/Qt
-
+          gpg --quiet --batch --yes --decrypt --passphrase="$IOS_GPG_KEY" --output ./mm/.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ./mm/.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision.gpg
+          cp ./mm/.github/secrets/ios/LutraConsultingLtdInputAppStore.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${IOS_PROVISIONING_PROFILE_UUID}.mobileprovision
 
       - name: Calculate a build number
         env:
           OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
 
-            TIMESTAMP=`date "+%y.%-m"`
-            CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
+          TIMESTAMP=`date "+%y.%-m"`
+          CF_BUNDLE_VERSION=${TIMESTAMP}.${BUILD_NUM}
 
-            echo "INPUT_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
-            echo "Build number: ${CF_BUNDLE_VERSION}"
+          echo "MM_VERSION_CODE=${CF_BUNDLE_VERSION}" >> $GITHUB_ENV
+          echo "Build number: ${CF_BUNDLE_VERSION}"
 
-            # add build number to summary
-            echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
+          # add build number to summary
+          echo ":rocket: Build number: ${CF_BUNDLE_VERSION}" >> $GITHUB_STEP_SUMMARY
 
       - name: Create build system with cmake
         run: |
-          mkdir -p install-Input
-          mkdir -p build-INPUT
-          cd build-INPUT
-
-          ls -1 ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}
+          mkdir -p install-mm
+          mkdir -p build-mm
+          cd build-mm
 
           # run cmake
           cmake \
-            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ github.workspace }}/ios-cmake/ios.toolchain.cmake" \
-            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/ios \
             -DIOS_USE_PRODUCTION_SIGNING=TRUE \
-            -DQT_HOST_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/macos \
+            -DVCPKG_HOST_TRIPLET=arm64-osx \
+            -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
+            -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
+            -D ENABLE_BITCODE=OFF \
+            -D ENABLE_ARC=ON \
+            -D CMAKE_CXX_VISIBILITY_PRESET=hidden \
+            -D CMAKE_SYSTEM_NAME=iOS \
+            -D CMAKE_SYSTEM_PROCESSOR=aarch64 \
+            -D CMAKE_OSX_DEPLOYMENT_TARGET=${{ env.DEPLOYMENT_TARGET }} \
             -DIOS=TRUE \
             -DUSE_MM_SERVER_API_KEY=TRUE \
             -DUSE_KEYCHAIN=No \
-            -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-            -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/arm64-ios \
+            -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
             -G "Xcode" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -S ${{ github.workspace }} \
+            -S ${{ github.workspace }}/mm \
             -B ./
- 
-      - name: Build Input
+
+      - name: Build app (release)
         run: |
-          cd build-INPUT
+          cd build-mm
 
           xcodebuild \
-            -project Input.xcodeproj/ \
-            -scheme Input \
+            -project MerginMaps.xcodeproj/ \
+            -scheme MerginMaps \
             -sdk iphoneos \
             -configuration Release \
-            archive -archivePath Input.xcarchive \
+            archive -archivePath MerginMaps.xcarchive \
             "OTHER_CODE_SIGN_FLAGS=--keychain '$KEYCHAIN'"
 
-      - name: Create Input Package
+      - name: Create package
         run: |
-          INPUT_DIR=`pwd`
-          cd build-INPUT
+          INPUT_DIR=`pwd`/mm
+          cd build-mm
           xcodebuild \
-            -archivePath Input.xcarchive \
+            -archivePath MerginMaps.xcarchive \
             -exportOptionsPlist $INPUT_DIR/scripts/ci/ios/exportOptions.plist \
             -exportPath $PWD \
             -allowProvisioningUpdates \
@@ -237,6 +203,6 @@ jobs:
           INPUTAPP_BOT_GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
         if: success()
         run: |
-          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-INPUT/app/CMakeFiles/Input.dir/Info.plist`
+          CF_BUNDLE_VERSION=`/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" build-mm/app/CMakeFiles/MerginMaps.dir/Info.plist`
           echo "Publishing ios ${CF_BUNDLE_VERSION}"
-          xcrun altool --upload-app -t ios -f build-INPUT/Input.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose
+          xcrun altool --upload-app -t ios -f build-mm/MerginMaps.ipa -u "$INPUTAPP_BOT_APPLEID_USER" -p "$INPUTAPP_BOT_APPLEID_PASS" --verbose

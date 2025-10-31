@@ -10,7 +10,6 @@
 #ifndef VALUERELATIONFEATURESMODEL_H
 #define VALUERELATIONFEATURESMODEL_H
 
-#include "inputconfig.h"
 #include "layerfeaturesmodel.h"
 #include "featurelayerpair.h"
 

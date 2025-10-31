@@ -19,7 +19,7 @@
 
 #include "qgsfeature.h"
 #include "qgsvectorlayer.h"
-#include "inputconfig.h"
+
 #include <QHash>
 
 class FeatureLayerPair;

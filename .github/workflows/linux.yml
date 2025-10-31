@@ -1,7 +1,11 @@
 name: linux Build
+
 on:
   push:
     paths:
+    - 'vcpkg/**'
+    - 'vcpkg.json'
+    - 'VCPKG_BASELINE'
     - 'app/**'
     - 'core/**'
     - 'scripts/**'
@@ -16,12 +20,11 @@ on:
       - published
 
 env:
-  CCACHE_DIR: ~/.ccache
-  INPUT_SDK_VERSION: x64-linux-20250327-197
-  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  CMAKE_VERSION: '3.29.0'
-  CACHE_VERSION: 0
-      
+  CMAKE_VERSION: '3.31.6'
+  VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+  VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+  TRIPLET: x64-linux
+
 concurrency:
   group: ci-${{github.ref}}-linux
   cancel-in-progress: true
@@ -31,10 +34,13 @@ jobs:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Input
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          path: input
+          path: mm
+
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
 
       - name: Install Build Dependencies
         run: |
@@ -44,28 +50,21 @@ jobs:
             gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa libegl1-mesa-dev \
             libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
             autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2 \
-            bison flex ccache lcov
+            bison flex lcov nasm libxrandr-dev xvfb
+            
+            # Required to run unit tests on linux
+            echo "QT_QPA_PLATFORM=offscreen" >> $GITHUB_ENV
 
       - name: Install CMake and Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
-          
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: ${{ env.QT_VERSION }}
-          setup-python: 'false'
-          modules: 'qtsensors qtconnectivity qt5compat qtmultimedia qtpositioning qtshadertools qtnetworkauth'
-          dir: ${{ github.workspace }}
-          cache: true
-          cache-key-prefix: ${{ runner.os }}-QtCache-v0-${{ env.QT_VERSION }}-lnx
 
       - name: Extract Mergin API_KEY
         env:
           MERGINSECRETS_DECRYPT_KEY: ${{ secrets.MERGINSECRETS_DECRYPT_KEY }}
         run: |
-          cd input/core/
+          cd mm/core/
           openssl \
             aes-256-cbc -d \
             -in merginsecrets.cpp.enc \
@@ -73,84 +72,65 @@ jobs:
             -k "$MERGINSECRETS_DECRYPT_KEY" \
             -md md5
 
-      # CCache
-      - name: Prepare build cache for pull request
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name == 'pull_request'
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
         with:
-          path: ${{ env.CCACHE_DIR }}
-          key: build-linux-ccache-${{ github.actor }}-${{ github.head_ref }}-${{ github.sha }}
-          # The head_ref or source branch of the pull request in a workflow run.
-          # The base_ref or target branch of the pull request in a workflow run.
-          restore-keys: |
-            build-linux-ccache-${{ github.actor }}-${{ github.head_ref }}-
-            build-linux-ccache-refs/heads/${{ github.base_ref }}-
-            build-linux-ccache-refs/heads/master-
+          key: ccache-${{ env.TRIPLET }}
+          max-size: 200M
 
-      - name: Prepare build cache for branch/tag
-        # use a fork of actions/cache@v2 to upload cache even when the build or test failed
-        uses: pat-s/always-upload-cache@v3.0.11
-        if: github.event_name != 'pull_request'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # The branch or tag ref that triggered the workflow run. For branches this in the format refs/heads/<branch_name>, and for tags it is refs/tags/<tag_name>
-          key: build-linux-ccache-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            build-linux-ccache-${{ github.ref }}-
-            build-linux-ccache-refs/heads/master-
-
-      - name: Install ccache
+      - name: Install vcpkg
+        shell: bash
         run: |
-          mkdir -p ${CCACHE_DIR}
-          ccache --set-config=max_size=2.0G
-          ccache -s
+          mkdir -p "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git pull origin master
+          VCPKG_TAG=`cat ${{ github.workspace }}/mm/VCPKG_BASELINE`
+          git checkout ${VCPKG_TAG}
+          cd "${{ env.VCPKG_ROOT }}"
+          chmod +x ./bootstrap-vcpkg.sh
+          ./bootstrap-vcpkg.sh
 
-      # Input SDK
-      - name: Cache Input-SDK
-        id: cache-input-sdk
-        uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ${{ github.workspace }}/input-sdk
-          key: ${{ runner.os }}-input-sdk-v0-${{ env.INPUT_SDK_VERSION }}-${{ env.CACHE_VERSION }}
-
-      - name: Install Input-SDK
-        if: steps.cache-input-sdk.outputs.cache-hit != 'true'
+      - name: Setup NuGet Credentials
+        shell: bash
         run: |
-          wget -O \
-            ${{ github.workspace }}/input-sdk.tar.gz \
-            https://github.com/MerginMaps/mobile-sdk/releases/download/${{ env.INPUT_SDK_VERSION }}/mergin-maps-input-sdk-qt-${{ env.QT_VERSION }}-${{ env.INPUT_SDK_VERSION }}.tar.gz
-          mkdir -p ${{ github.workspace }}/input-sdk/x64-linux
-          cd ${{ github.workspace }}/input-sdk/x64-linux
-          tar -xvzf ${{ github.workspace }}/input-sdk.tar.gz
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            sources add \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json" \
+            -storepasswordincleartext \
+            -name "GitHub" \
+            -username "mergin-maps-bot" \
+            -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
 
-      # Build Input App
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+            setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
+            -source "https://nuget.pkg.github.com/merginmaps/index.json"
+
       - name: Calculate build number
         run: |
             BUILD_NUM=$GITHUB_RUN_NUMBER$GITHUB_RUN_ATTEMPT
-            echo "INPUT_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+            echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
             echo "Version code: ${BUILD_NUM}"
 
-
-      # Do Tests
-      - name: build Input (Debug)
+      - name: build app (debug)
         run: |
-          mkdir -p build-Input-db
-          cd build-Input-db
+          mkdir -p build-mm-db
+          cd build-mm-db
 
           cmake \
              -DCMAKE_BUILD_TYPE=Debug \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
-             -DUSE_SERVER_API_KEY=TRUE \
+             -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
+             -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_KEYCHAIN=No \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-db/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -DENABLE_TESTS=TRUE \
              -GNinja \
-             -S ../input
+             -S ../mm
 
           ninja
 
@@ -161,12 +141,12 @@ jobs:
           TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
           QT_QPA_PLATFORM: "offscreen"
         run: |
-          cd build-Input-db/
+          cd build-mm-db/
           xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
 
       - name: build lcov summary
         run: |
-          cd build-Input-db
+          cd build-mm-db
 
           lcov --directory . --capture --output-file coverage.info
 
@@ -177,28 +157,28 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: build-Input-db/coverage.info
+          path-to-lcov: build-mm-db/coverage.info
 
-      - name: build Input
+      - name: build app
         run: |
-          mkdir -p install-Input
-          mkdir -p build-Input
-          cd build-Input
+          mkdir -p install-mm
+          mkdir -p build-mm
+          cd build-mm
           
           cmake \
              -DCMAKE_BUILD_TYPE=Release \
-             -DCMAKE_PREFIX_PATH=${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/gcc_64 \
-             -DCMAKE_INSTALL_PREFIX:PATH=../install-Input \
-             -DINPUT_SDK_PATH=${{ github.workspace }}/input-sdk/x64-linux \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/input/app/android/assets/qgis-data \
+             -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
+             -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
+             -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
+             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -GNinja \
-             -S ../input
+             -S ../mm
              
           ninja
-          ninja install          
+          ninja install
 
       - name: Get TimeStamp
         id: time
@@ -206,16 +186,16 @@ jobs:
         with:
           format: 'YYYYMMDD'
 
-      - name: package Input
+      - name: package app
         run: |
-          INPUT_TAR=input-${{ env.INPUT_SDK_VERSION }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
-          echo "INPUT_TAR=${INPUT_TAR}" >> $GITHUB_ENV
+          MM_TAR=input-${{ env.MM_VERSION_CODE }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
+          echo "MM_TAR=${MM_TAR}" >> $GITHUB_ENV
           
-          cd ${{ github.workspace }}/install-Input
+          cd ${{ github.workspace }}/install-mm
           find .
-          tar -c -z -f ${{ github.workspace }}/${INPUT_TAR} ./
+          tar -c -z -f ${{ github.workspace }}/${MM_TAR} ./
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/${{ env.INPUT_TAR }}
+          path: ${{ github.workspace }}/${{ env.MM_TAR }}

@@ -15,7 +15,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-FILES=`find .. -name \*.cmake\* -print -o -name \CMakeLists.txt -print | grep -v build`
+FILES=`find .. -name \*.cmake\* -print -o -name \CMakeLists.txt -print | grep -v build | grep -v vcpkg/`
 
 for FILE in $FILES; do
     cmake-format -c cmake_format_config.py --check $FILE
