@@ -1,0 +1,37 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Deploy a new version to the Google Play internal app sharing"
+  lane :deploy_app_sharing do |options|
+    share_url = upload_to_play_store_internal_app_sharing(
+      json_key: ENV['MM_GOOGLE_KEY_PATH'],
+      apk: options[:mm_path]
+    )
+    puts "APP_SHARE_URL: #{share_url}"
+  end
+
+  desc "Deploy a new version to the Google Play internal beta"
+  lane :deploy_beta do # TODO
+    upload_to_play_store
+  end
+
+  desc "Deploy a new version to the Google Play production"
+  lane :deploy_prod do # TODO
+    upload_to_play_store
+  end
+end

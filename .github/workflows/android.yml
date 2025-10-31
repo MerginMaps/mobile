@@ -48,6 +48,8 @@ jobs:
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       XC_VERSION: ${{ '16.2' }}
       VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+      LC_ALL: 'en_US.UTF-8' #fastlane
+      LANG: 'en_US.UTF-8' #fastlane
 
     steps:
       - uses: actions/checkout@v4
@@ -141,7 +143,7 @@ jobs:
         run: |
           $HOMEBREW_PREFIX/bin/openssl \
            aes-256-cbc -d \
-           -in mm/Input_keystore.keystore.enc \
+           -in mm/scripts/ci/android/Input_keystore.keystore.enc \
            -out mm/Input_keystore.keystore \
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
@@ -178,6 +180,26 @@ jobs:
           mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: mm/fastlane
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Decode Google Play JSON Key
+        run: |
+          $HOMEBREW_PREFIX/bin/openssl \
+           aes-256-cbc -d \
+           -in mm/scripts/ci/android/google_play_key.json.enc \
+           -out mm/google_play_key.json \
+           -k ${{ secrets.MM_GOOGLE_SERVICE_ACCOUNT_DECRYPTION_KEY }} \
+           -md md5
+
+          MM_GOOGLE_KEY_PATH=`pwd`/mm/google_play_key.json
+          echo "path to keystore $MM_GOOGLE_KEY_PATH"
+          echo "MM_GOOGLE_KEY_PATH=$MM_GOOGLE_KEY_PATH" >> $GITHUB_ENV
 
       - name: Calculate build number
         env:
@@ -243,6 +265,16 @@ jobs:
           path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
+      - name: Deploy App to Google play - Internal app sharing
+        if: ${{ !(github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag') }}
+        run: |
+          cd ${{ github.workspace }}/mm/fastlane
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
+          
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
+
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
         env:
@@ -267,3 +299,13 @@ jobs:
         with:
           path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
+
+      - name: Deploy App to Google play - Internal app sharing
+        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
+        run: |
+          cd ${{ github.workspace }}/mm/fastlane
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing mm_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
+          
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "Google play store AAB link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
