@@ -212,6 +212,7 @@ jobs:
               -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
               -DQT_ANDROID_SIGN_APK=Yes \
+              -DQT_ANDROID_SIGN_AAB=Yes \
               -DUSE_MM_SERVER_API_KEY=Yes \
               -DUSE_KEYCHAIN=No \
               -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
