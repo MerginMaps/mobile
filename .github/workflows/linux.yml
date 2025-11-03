@@ -124,7 +124,6 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_KEYCHAIN=No \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-db/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -170,7 +169,6 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \

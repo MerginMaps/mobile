@@ -101,6 +101,17 @@ else ()
   endif ()
 endif ()
 
+if (IOS)
+  # Important, if QGIS_QUICK_DATA_PATH value is changed, old projects may not be found after release on iOS devices
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (ANDROID) 
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (WIN)
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (LNX OR MACOS)
+  set(QGIS_QUICK_DATA_PATH_DEFAULT ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data)
+endif()
+
 set(COVERAGE
     FALSE
     CACHE BOOL "Compile with coverage flags"
@@ -112,8 +123,8 @@ set(USE_MM_SERVER_API_KEY
       "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it."
 )
 set(QGIS_QUICK_DATA_PATH
-    "INPUT"
-    CACHE STRING "The internal variable pointing to the application storage folder"
+    ${QGIS_QUICK_DATA_PATH_DEFAULT}
+    CACHE STRING "Path for QGIS-related data (e.g. proj) and projects. A correct value is set for each platform if not overridden."
 )
 set(IOS_USE_PRODUCTION_SIGNING
     FALSE
@@ -402,6 +413,8 @@ file(
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
 )
+
+message(STATUS "QGIS_QUICK_DATA_PATH set to ${QGIS_QUICK_DATA_PATH}")
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################
