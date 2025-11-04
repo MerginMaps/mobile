@@ -64,7 +64,7 @@
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation>Ilmaantui virhe ja sijainnin nauhoitus ei alkanut, ota yhteys tukeen</translation>
+        <translation>Ilmaantui virhe ja reitin nauhoitus ei alkanut, ota yhteys tukeen</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
