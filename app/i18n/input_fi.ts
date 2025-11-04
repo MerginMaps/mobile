@@ -2953,7 +2953,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Sijainnin nauhoitus epäonnistu, ota yhteys tukeen</translation>
+        <translation>Reitin nauhoitus epäonnistu, ota yhteys tukeen</translation>
     </message>
 </context>
 <context>
