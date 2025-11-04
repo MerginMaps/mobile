@@ -64,22 +64,22 @@
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="159"/>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="173"/>
         <source>There was an error and tracking could not start, please contact support</source>
-        <translation>Ilmaantui virhe ja sijainnin nauhoitus ei alkanut, ota yhteys tukeen</translation>
+        <translation>Ilmaantui virhe ja reitin nauhoitus ei alkanut, ota yhteys tukeen</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Laitteesi ei tue sijainnin nauhoitusta, saatavilla alkaen Android 8.0</translation>
+        <translation>Laitteesi ei tue reitin nauhoitusta, saatavilla alkaen Android 8.0</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Salli sijaintisi käyttö ennen kuin aloitat sijainnin nauhoittamisen</translation>
+        <translation>Salli sijaintisi käyttö ennen kuin aloitat reitin nauhoittamisen</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
         <source>Please enable location services on your device before starting tracking</source>
-        <translation>Salli sijaintipalveluiden käyttö laitteessasi ennen kuin aloitat sijainnin nauhoittamisen</translation>
+        <translation>Salli sijaintipalveluiden käyttö laitteessasi ennen kuin aloitat reitin nauhoittamisen</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="198"/>
@@ -1676,7 +1676,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="23"/>
         <source>Position tracking</source>
-        <translation>Sijainnin nauhoitus</translation>
+        <translation>Reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="25"/>
@@ -1691,12 +1691,12 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Stop tracking</source>
-        <translation>Lopeta sijainnin nauhoitus</translation>
+        <translation>Lopeta reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Start tracking</source>
-        <translation>Aloita sijainnin nauhoitus</translation>
+        <translation>Aloita reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="43"/>
@@ -2953,7 +2953,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../position/tracking/positiontrackingmanager.cpp" line="342"/>
         <source>Failed to start tracking, please contact support</source>
-        <translation>Sijainnin nauhoitus epäonnistu, ota yhteys tukeen</translation>
+        <translation>Reitin nauhoitus epäonnistu, ota yhteys tukeen</translation>
     </message>
 </context>
 <context>
@@ -3165,7 +3165,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../qml/main.qml" line="346"/>
         <source>Position tracking</source>
-        <translation>Sijainnin nauhoitus</translation>
+        <translation>Reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="357"/>
@@ -3186,7 +3186,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <location filename="../qml/main.qml" line="566"/>
         <location filename="../qml/main.qml" line="574"/>
         <source>not tracking</source>
-        <translation>Sijainnin nauhoitus ei ole päällä</translation>
+        <translation>Reitin nauhoitus ei ole päällä</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="873"/>
