@@ -1696,7 +1696,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Start tracking</source>
-        <translation>Aloita sijainnin nauhoitus</translation>
+        <translation>Aloita reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="43"/>
