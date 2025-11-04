@@ -525,7 +525,7 @@ target_link_libraries(
 )
 
 if (WIN)
-  target_link_libraries(MerginMaps PUBLIC GEOS::geos_c)
+  target_link_libraries(MerginMaps PUBLIC GEOS::geos_c Qt6::Core5Compat)
 endif ()
 
 if (IOS OR MACOS)
