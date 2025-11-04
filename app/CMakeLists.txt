@@ -524,6 +524,10 @@ target_link_libraries(
          meshoptimizer::meshoptimizer
 )
 
+if (WIN)
+  target_link_libraries(MerginMaps PUBLIC GEOS::geos_c)
+endif ()
+
 if (IOS OR MACOS)
   target_link_libraries(MerginMaps PUBLIC Tasn1::Tasn1)
 endif ()
