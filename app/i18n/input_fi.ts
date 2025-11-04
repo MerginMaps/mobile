@@ -69,12 +69,12 @@
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="144"/>
         <source>Your device does not support tracking, available from Android 8.0</source>
-        <translation>Laitteesi ei tue sijainnin nauhoitusta, saatavilla alkaen Android 8.0</translation>
+        <translation>Laitteesi ei tue reitin nauhoitusta, saatavilla alkaen Android 8.0</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="149"/>
         <source>Please enable location permission before starting tracking</source>
-        <translation>Salli sijaintisi käyttö ennen kuin aloitat sijainnin nauhoittamisen</translation>
+        <translation>Salli sijaintisi käyttö ennen kuin aloitat reitin nauhoittamisen</translation>
     </message>
     <message>
         <location filename="../position/tracking/androidtrackingbackend.cpp" line="154"/>
