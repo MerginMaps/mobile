@@ -3165,7 +3165,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../qml/main.qml" line="346"/>
         <source>Position tracking</source>
-        <translation>Sijainnin nauhoitus</translation>
+        <translation>Reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="357"/>
@@ -3186,7 +3186,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <location filename="../qml/main.qml" line="566"/>
         <location filename="../qml/main.qml" line="574"/>
         <source>not tracking</source>
-        <translation>Sijainnin nauhoitus ei ole päällä</translation>
+        <translation>Reitin nauhoitus ei ole päällä</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="873"/>
