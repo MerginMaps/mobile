@@ -1691,7 +1691,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
         <source>Stop tracking</source>
-        <translation>Lopeta sijainnin nauhoitus</translation>
+        <translation>Lopeta reitin nauhoitus</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMPositionTrackingDialog.qml" line="26"/>
