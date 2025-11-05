@@ -30,8 +30,10 @@ jobs:
         include:
           - TRIPLET: 'arm-android'
             ANDROID_ABI: 'armeabi-v7a'
+            BUILD_OFFSET: 10
           - TRIPLET: 'arm64-android'
             ANDROID_ABI: 'arm64-v8a'
+            BUILD_OFFSET: 50
 
     runs-on: macos-15
     env:
@@ -202,10 +204,8 @@ jobs:
           echo "MM_GOOGLE_KEY_PATH=$MM_GOOGLE_KEY_PATH" >> $GITHUB_ENV
 
       - name: Calculate build number
-        env:
-          OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
         run: |
-          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + ${{ matrix.BUILD_OFFSET }}))
           echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
 
           echo "Version code: ${BUILD_NUM}"
@@ -257,19 +257,19 @@ jobs:
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
-            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
       - name: Deploy App to Google play - Internal app sharing
         if: ${{ !(github.ref_name == 'master' || github.ref_type == 'tag') }}
         run: |
           cd ${{ github.workspace }}/mm/fastlane
-          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing apk_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk)
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing apk_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk)
 
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
@@ -291,20 +291,20 @@ jobs:
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/bundle/release/android-build-release.aab \
-            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab
 
       - name: Upload AAB to Artifacts
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
 
       - name: Deploy App to Google play - Internal app sharing
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         run: |
           cd ${{ github.workspace }}/mm/fastlane
-          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing aab_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab)
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing aab_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab)
 
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
