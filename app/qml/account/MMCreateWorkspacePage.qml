@@ -110,6 +110,7 @@ MMPage {
 
       title: qsTr( "A tip from us" )
       description: qsTr( "A good candidate for a workspace name is the name of your team or organisation" )
+      descriptionMaxLines: 3
 
       imageSource: __style.bubbleImage
     }
