@@ -97,13 +97,7 @@
              </meta-data>
         </provider>
 
-        <service
-            android:process=":trackingThread"
-            android:name=".PositionTrackingService"
-            android:foregroundServiceType="location"
-            android:stopWithTask="true"
-            android:exported="false"
-            />
+        <service android:name=".PositionTrackingService" android:foregroundServiceType="location" android:exported="false" />
     </application>
 
     <!-- Explicitly mention that we need to use external app for capturing an image and open file-->
