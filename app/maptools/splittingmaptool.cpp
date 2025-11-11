@@ -42,6 +42,29 @@ bool SplittingMapTool::hasValidGeometry() const
   return mPoints.count() >= 2;
 }
 
+bool SplittingMapTool::canCommitSplit() const
+{
+  if ( !mFeatureToSplit.isValid() || !hasValidGeometry() )
+    return false;
+
+  const QgsGeometry featureGeom = mFeatureToSplit.feature().geometry();
+  if ( featureGeom.isNull() || featureGeom.isEmpty() )
+    return false;
+
+  // split line must intersect the feature's geometry
+  if ( !mRecordedGeometry.intersects( featureGeom ) )
+    return false;
+
+  QgsPointXY firstPoint( mPoints.first() );
+  QgsPointXY lastPoint( mPoints.last() );
+
+  // start and end points of the line must be outside the feature, ensuring line properly crosses the feature
+  if ( featureGeom.contains( &firstPoint ) || featureGeom.contains( &lastPoint ) )
+    return false;
+
+  return true;
+}
+
 bool SplittingMapTool::commitSplit() const
 {
   if ( !mFeatureToSplit.isValid() )

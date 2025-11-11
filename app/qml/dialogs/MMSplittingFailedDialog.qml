@@ -16,7 +16,7 @@ MMDrawerDialog {
 
   imageSource: __style.negativeMMSymbolImage
   title: qsTr( "We could not split the feature" )
-  description: qsTr( "Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it." )
+  description: qsTr( "Ensure that your split line intersects the feature properly and that the feature’s geometry is valid." )
   primaryButton.text: qsTr( "Ok, I understand" )
 
   onPrimaryButtonClicked: close()

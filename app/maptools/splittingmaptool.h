@@ -44,6 +44,12 @@ class SplittingMapTool : public AbstractMapTool
     Q_INVOKABLE bool hasValidGeometry() const;
 
     /**
+     * Validates if the recorded geometry can successfully split the feature
+     * Returns true if the split line properly crosses the feature boundary
+     */
+    Q_INVOKABLE bool canCommitSplit() const;
+
+    /**
      * Splits the feature with recorded geometry and commits the changes to the layer
      * Returns true if splitting was successful, false otherwise
      */
