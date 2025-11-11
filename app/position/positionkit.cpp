@@ -35,7 +35,7 @@ PositionKit::PositionKit( QObject *parent )
 
 QgsCoordinateReferenceSystem PositionKit::positionCRS()
 {
-  return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
 void PositionKit::startUpdates()
@@ -110,7 +110,10 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
       return provider;
     }
 #ifdef ANDROID
-    else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
+    else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" )
+      // this is a workaround for https://github.com/MerginMaps/mobile/issues/4165
+      // we use the android implementation on android 15+ to report correct altitudes
+      || (id == QStringLiteral( "devicegps" ) && QNativeInterface::QAndroidApplication::sdkVersion() >= 35))
     {
       bool fused = ( id == QStringLiteral( "android_fused" ) );
       if ( fused && !AndroidPositionProvider::isFusedAvailable() )

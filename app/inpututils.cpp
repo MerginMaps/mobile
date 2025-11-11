@@ -476,7 +476,7 @@ QString InputUtils::geometryLengthAsString( const QgsGeometry &geometry )
 {
   QgsDistanceArea distanceArea;
   distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  distanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
+  distanceArea.setSourceCrs( PositionKit::positionCRS(), QgsCoordinateTransformContext() );
 
   qreal length = distanceArea.measureLength( geometry );
 
@@ -953,11 +953,10 @@ QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSe
     return QgsPoint();
 
   QgsPoint positionMapCrs = mapSettings->screenToCoordinate( mapPosition );
-  QgsCoordinateReferenceSystem crsGPS = coordinateReferenceSystemFromEpsgId( 4326 );
 
   const QgsPointXY transformedXY = transformPoint(
                                      mapSettings->destinationCrs(),
-                                     crsGPS,
+                                     PositionKit::positionCRS(),
                                      QgsCoordinateTransformContext(),
                                      positionMapCrs
                                    );
@@ -1715,7 +1714,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     PositionKit::positionCRS(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPosition
@@ -1763,7 +1762,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     PositionKit::positionCRS(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPoint

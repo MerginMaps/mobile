@@ -198,6 +198,7 @@ MMComponents.MMDrawer {
             }
 
             alignmentRight: Positioner.index % 2 === 1
+            desc: qsTr("Final value calculated with EGM96_15 geoid model.")
           }
 
           MMGpsComponents.MMGpsDataText {

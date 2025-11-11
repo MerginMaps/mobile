@@ -112,7 +112,7 @@ class PositionKit : public QObject
     double vdop() const;
     double pdop() const;
 
-    // Coordinate reference system of position - WGS84 (constant)
+    // Coordinate reference system of position - WGS84 + egm96_15(constant)
     Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
