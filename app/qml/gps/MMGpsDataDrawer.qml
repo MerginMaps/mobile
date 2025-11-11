@@ -198,7 +198,7 @@ MMComponents.MMDrawer {
             }
 
             alignmentRight: Positioner.index % 2 === 1
-            desc: qsTr("Orthometric height, using EGM96 geoid")
+            desc: __iosUtils.isIos? qsTr("Final value calculated with EGM2008 geoid model.") : qsTr("Orthometric height, using EGM96 geoid")
           }
 
           MMGpsComponents.MMGpsDataText {
