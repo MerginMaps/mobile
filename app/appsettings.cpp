@@ -200,10 +200,11 @@ void AppSettings::setActivePositionProviderId( const QString &id )
 
 #ifdef ANDROID
   // this is a workaround for android 15+, check PositionKit::constructProvider for more info
-  if (id == QStringLiteral( "android_gps" ) && QNativeInterface::QAndroidApplication::sdkVersion() >= 35)
+  if ( id == QStringLiteral( "android_gps" ) && QNativeInterface::QAndroidApplication::sdkVersion() >= 35 )
   {
     mActivePositionProviderId = QStringLiteral( "devicegps" );
-  } else
+  }
+  else
   {
     mActivePositionProviderId = id;
   }

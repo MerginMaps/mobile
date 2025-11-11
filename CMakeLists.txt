@@ -403,7 +403,8 @@ file(
   PATTERN "vcpkg*" EXCLUDE
 )
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/app/assets/us_nga_egm96_15.tif
-  DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/proj)
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/proj
+)
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################
