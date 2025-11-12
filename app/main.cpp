@@ -545,7 +545,7 @@ int main( int argc, char *argv[] )
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit *pk = engine.singletonInstance<PositionKit *>( "MMInput", "PositionKit" );
-  QObject::connect( pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
+  QObject::connect( pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider *provider )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
