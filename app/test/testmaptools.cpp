@@ -195,6 +195,74 @@ void TestMapTools::testSplitting()
   delete splitTool;
 }
 
+void TestMapTools::testCanCommitSplit()
+{
+  // splitting environment setup
+  SplittingMapTool *splitTool = new SplittingMapTool();
+
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QString projectTempDir = QDir::tempPath() + "/" + QUuid::createUuid().toString();
+  QString projectName = "quickapp_project.qgs";
+
+  QVERIFY( InputUtils::cpDir( projectDir, projectTempDir ) );
+
+  QgsProject *project = new QgsProject();
+
+  QVERIFY( project->read( projectTempDir + "/" + projectName ) );
+
+  QgsMapLayer *sectorL = project->mapLayersByName( QStringLiteral( "FlySector" ) ).at( 0 );
+  QgsVectorLayer *flySectorLayer = static_cast<QgsVectorLayer *>( sectorL );
+
+  QVERIFY( flySectorLayer && flySectorLayer->isValid() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  ms->setProject( project );
+  ms->setDestinationCrs( project->crs() );
+  ms->setOutputSize( QSize( 600, 1096 ) );
+  ms->setLayers( project->layers<QgsMapLayer *>().toList() );
+
+  QgsRectangle extent = QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 );
+  ms->setExtent( extent );
+
+  splitTool->setMapSettings( ms );
+
+  // set feature to split
+  int fidToSplit = 1;
+  QgsFeature featureToSplit = flySectorLayer->getFeature( fidToSplit );
+  FeatureLayerPair pairToSplit( featureToSplit, flySectorLayer );
+  splitTool->setFeatureToSplit( pairToSplit );
+
+  // not enough points
+  QVERIFY( !splitTool->canCommitSplit() );
+
+  // line doesnt intersect feature
+  splitTool->addPoint( QgsPoint( -104.751, 32.448 ) );
+  QVERIFY( !splitTool->canCommitSplit() );
+
+  // valid split line, endpoints outside and line intersects feature
+  splitTool->addPoint( QgsPoint( -120.844, 32.592 ) );
+  QVERIFY( splitTool->canCommitSplit() );
+
+  // line doesnt intersect feature
+  splitTool->removePoint();
+  splitTool->removePoint();
+  splitTool->addPoint( QgsPoint( -130.0, 10.0 ) );
+  splitTool->addPoint( QgsPoint( -140.0, 15.0 ) );
+  QVERIFY( !splitTool->canCommitSplit() );
+
+  // endpoint inside feature boundary
+  QgsPointXY centerPoint = featureToSplit.geometry().centroid().asPoint();
+  splitTool->removePoint();
+  splitTool->removePoint();
+  splitTool->addPoint( QgsPoint( centerPoint.x(), centerPoint.y() ) );
+  splitTool->addPoint( QgsPoint( -120.844, 32.592 ) );
+  QVERIFY( !splitTool->canCommitSplit() );
+
+  delete project;
+  delete splitTool;
+}
+
 void TestMapTools::testRecording()
 {
   RecordingMapTool *recordTool = new RecordingMapTool();
