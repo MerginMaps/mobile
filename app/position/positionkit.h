@@ -15,6 +15,7 @@
 #include "qgspoint.h"
 #include "qgscoordinatereferencesystem.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AppSettings;
 
@@ -27,6 +28,8 @@ class AppSettings;
 class PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
