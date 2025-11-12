@@ -2,16 +2,16 @@ name: Android Build
 on:
   push:
     paths:
-    - 'vcpkg/**'
-    - 'vcpkg.json'
-    - 'VCPKG_BASELINE'
-    - 'app/**'
-    - 'core/**'
-    - 'scripts/**'
-    - 'cmake/**'
-    - 'cmake_templates/**'
-    - 'CMakeLists.txt'
-    - '.github/workflows/android.yml'
+      - 'vcpkg/**'
+      - 'vcpkg.json'
+      - 'VCPKG_BASELINE'
+      - 'app/**'
+      - 'core/**'
+      - 'scripts/**'
+      - 'cmake/**'
+      - 'cmake_templates/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/android.yml'
 
   release:
     types:
@@ -30,8 +30,10 @@ jobs:
         include:
           - TRIPLET: 'arm-android'
             ANDROID_ABI: 'armeabi-v7a'
+            BUILD_OFFSET: 10
           - TRIPLET: 'arm64-android'
             ANDROID_ABI: 'arm64-v8a'
+            BUILD_OFFSET: 50
 
     runs-on: macos-15
     env:
@@ -47,7 +49,9 @@ jobs:
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       XC_VERSION: ${{ '16.2' }}
-      VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
+      VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
+      LC_ALL: 'en_US.UTF-8' #fastlane
+      LANG: 'en_US.UTF-8' #fastlane
 
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +77,7 @@ jobs:
           echo $(brew --prefix bison)/bin >> $GITHUB_PATH
           echo $(brew --prefix flex)/bin >> $GITHUB_PATH
           echo $(brew --prefix gettext)/bin >> $GITHUB_PATH
-          
+
           if  [[ ${{ github.ref }} == refs/tags/* ]]
           then
               export GIT_TAG="${GITHUB_REF//refs\/tags\//}"
@@ -124,8 +128,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-         java-version: ${{ env.JDK_VERSION }}
-         distribution: zulu
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: zulu
 
       - name: Setup Android SDK
         uses: malinskiy/action-android/install-sdk@release/0.1.7
@@ -141,11 +145,11 @@ jobs:
         run: |
           $HOMEBREW_PREFIX/bin/openssl \
            aes-256-cbc -d \
-           -in mm/Input_keystore.keystore.enc \
+           -in mm/scripts/ci/android/Input_keystore.keystore.enc \
            -out mm/Input_keystore.keystore \
            -k $INPUTKEYSTORE_DECRYPT_KEY \
            -md md5
-          
+
           PATH_TO_KEYSTORE=`pwd`/mm/Input_keystore.keystore
           echo "path to keystore $PATH_TO_KEYSTORE"
           echo "QT_ANDROID_KEYSTORE_PATH=$PATH_TO_KEYSTORE" >> $GITHUB_ENV
@@ -179,91 +183,129 @@ jobs:
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
 
-      - name: Calculate build number
-        env:
-          OFFFSET: 10 # offset for build number - due to previous builds ~ new builds must always have a higher number
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: mm/fastlane
+          ruby-version: '3.3'
+          bundler-cache: true
+
+      - name: Decode Google Play JSON Key
         run: |
-            BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + OFFFSET))
-            echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+          $HOMEBREW_PREFIX/bin/openssl \
+           aes-256-cbc -d \
+           -in mm/scripts/ci/android/google_play_key.json.enc \
+           -out mm/google_play_key.json \
+           -k ${{ secrets.MM_GOOGLE_SERVICE_ACCOUNT_DECRYPTION_KEY }} \
+           -md md5
 
-            echo "Version code: ${BUILD_NUM}"
+          MM_GOOGLE_KEY_PATH=`pwd`/mm/google_play_key.json
+          echo "path to keystore $MM_GOOGLE_KEY_PATH"
+          echo "MM_GOOGLE_KEY_PATH=$MM_GOOGLE_KEY_PATH" >> $GITHUB_ENV
 
-            # add build number to summary
-            echo ":rocket: Build number: ${BUILD_NUM}" >> $GITHUB_STEP_SUMMARY
-                                    
+      - name: Calculate build number
+        run: |
+          BUILD_NUM=$GITHUB_RUN_NUMBER$((GITHUB_RUN_ATTEMPT + ${{ matrix.BUILD_OFFSET }}))
+          echo "MM_VERSION_CODE=${BUILD_NUM}" >> $GITHUB_ENV
+
+          echo "Version code: ${BUILD_NUM}"
+
+          # add build number to summary
+          echo ":rocket: Build number: ${BUILD_NUM}" >> $GITHUB_STEP_SUMMARY
+
       - name: Configure app
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-            mkdir -p ${{ github.workspace }}/build-mm
-            cd ${{ github.workspace }}/build-mm
+          mkdir -p ${{ github.workspace }}/build-mm
+          cd ${{ github.workspace }}/build-mm
 
-            export PATH=${{ env.VCPKG_ROOT }}:$PATH
-            export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
+          export PATH=${{ env.VCPKG_ROOT }}:$PATH
+          export ANDROID_ABI=${{ matrix.ANDROID_ABI }}
 
-            cmake \
-              -DCMAKE_BUILD_TYPE=Release \
-              -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
-              -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
-              -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
-              -DVCPKG_HOST_TRIPLET=arm64-osx \
-              -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
-              -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
-              -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
-              -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
-              -DQT_ANDROID_SIGN_APK=Yes \
-              -DQT_ANDROID_SIGN_AAB=Yes \
-              -DUSE_MM_SERVER_API_KEY=Yes \
-              -DUSE_KEYCHAIN=No \
-              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
-              -GNinja \
-              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-              -S ../mm \
-              -B ./
-      
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DANDROID_SDK_ROOT=${ANDROID_SDK_ROOT} \
+            -DANDROID_NDK_VERSION="${ANDROID_NDK_VERSION}" \
+            -DANDROID_BUILD_TOOLS_VERSION="${ANDROID_BUILD_TOOLS_VERSION}" \
+            -DVCPKG_HOST_TRIPLET=arm64-osx \
+            -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" \
+            -DVCPKG_INSTALL_OPTIONS="--allow-unsupported" \
+            -DANDROID_ABI=${{ matrix.ANDROID_ABI }} \
+            -DQT_ANDROID_ABIS=${{ matrix.ANDROID_ABI }} \
+            -DQT_ANDROID_SIGN_APK=Yes \
+            -DQT_ANDROID_SIGN_AAB=Yes \
+            -DUSE_MM_SERVER_API_KEY=Yes \
+            -DUSE_KEYCHAIN=No \
+            -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
+            -GNinja \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -S ../mm \
+            -B ./
+
       - name: Build APK
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-            cd ${{ github.workspace }}/build-mm
-            ninja apk
-            
-            echo "APKs:"
-            find . | grep .apk
+          cd ${{ github.workspace }}/build-mm
+          ninja apk
+
+          echo "APKs:"
+          find . | grep .apk
 
       - name: Rename APK artefacts
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/apk/release/android-build-release-signed.apk \
-            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.apk
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
+      - name: Deploy App to Google play - Internal app sharing
+        if: ${{ !(github.ref_name == 'master' || github.ref_type == 'tag') }}
+        run: |
+          cd ${{ github.workspace }}/mm/fastlane
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing apk_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk)
+
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
+
       - name: Build AAB
-        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
-            cd ${{ github.workspace }}/build-mm
-            ninja aab
+          cd ${{ github.workspace }}/build-mm
+          ninja aab
 
-            echo "AAB:"
-            find . | grep .aab
+          echo "AAB:"
+          find . | grep .aab
 
       - name: Rename AAB artefacts
-        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/bundle/release/android-build-release.aab \
-            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
+            ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab
 
       - name: Upload AAB to Artifacts
-        if: ${{ github.ref_name == 'master' || startsWith( github.ref_name, 'dev/' ) || github.ref_type == 'tag' }}
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         uses: actions/upload-artifact@v4
         with:
-          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}.aab
+          path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
+
+      - name: Deploy App to Google play - Internal app sharing
+        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
+        run: |
+          cd ${{ github.workspace }}/mm/fastlane
+          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing aab_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab)
+
+          echo "$FASTLANE_OUTPUT"
+          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+          echo "Google play store AAB link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
