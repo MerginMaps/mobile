@@ -166,7 +166,6 @@ Steps to build and run mobile app:
       -DCMAKE_BUILD_TYPE=Debug \
       -DVCPKG_TARGET_TRIPLET=x64-linux \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
-      -DQGIS_QUICK_DATA_PATH=<absolute-path-to-mm1>/build/app/android/assets/qgis-data \
       -DUSE_MM_SERVER_API_KEY=FALSE \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
@@ -498,7 +497,6 @@ Now you can create a build (either on command line or by setting these variables
       -DVCPKG_TARGET_TRIPLET=arm64-osx \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
       -DUSE_MM_SERVER_API_KEY=FALSE \
-      -DQGIS_QUICK_DATA_PATH=app/android/assets/qgis-data \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
       -GNinja \
