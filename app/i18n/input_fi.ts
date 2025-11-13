@@ -340,12 +340,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation>käytetty dp mittakaava: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2079"/>
+        <location filename="../inpututils.cpp" line="2102"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Sinun tulee lisätä vähintään %1 piste(ttä) jokaiseen osaan.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2083"/>
+        <location filename="../inpututils.cpp" line="2106"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Sinun tulee lisätä vähintään %1 piste(ttä).</translation>
     </message>
@@ -724,12 +724,12 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Klikkaamalla ‘Kyllä’ hylkäät geometria muutokset. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘Ei’ ja sitten ‘Tehty’ työkalupalkissa.</translation>
+        <translation>Valitsemalla ‘Kyllä’ hylkäät geometria muutokset. Jos haluat tallentaa muutokset, napauta ‘Ei’ ja sitten ‘Tallenna’ työkalupalkissa.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Klikkaamalla ‘Kyllä’ hylkäät geometria muutokset eikä kohdetta tallenneta. Jos haluat sen sijaan tallentaa muutokset, napsauta ‘Ei’ ja sen jälkeen ‘Tehty’ työkalupalkissa.</translation>
+        <translation>Valitsealla ‘Kyllä’ hylkäät geometria muutokset eikä kohdetta tallenneta. Jos haluat tallentaa muutokset, napauta ‘Ei’ ja sen jälkeen ‘Tallenna’ työkalupalkissa.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
@@ -1274,12 +1274,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Diagnostiikka loki</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Sending...</source>
         <translation>Lähetetään...</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Send to developers</source>
         <translation>Lähetä kehittäjille</translation>
     </message>
@@ -2991,63 +2991,63 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
         <translation>Arvon tulee olla numero</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
         <translation>Arvon tulee olla pienempi kuin %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
         <translation>Arvon tulee olla suurempi kuin %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="62"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
         <translation>Arvo on liian suuri</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
         <translation>Tieto ei voi sisältää desimaaleja</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Ei voi olla pidempi kuin %1 merkkiä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
         <translation>Kentän ei tulisi olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
         <translation>Kenttä ei saa olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
         <translation>Arvon tulisi olla yksilöllinen</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
         <translation>Arvon tulee olla yksilöllinen</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="71"/>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Ei täytä QGIS lausekkeen rajoitteita</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="74"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>Ei kelvollinen arvo</translation>
     </message>
@@ -3097,12 +3097,12 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Tuntematon sijainti</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="557"/>
+        <location filename="../main.cpp" line="578"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raportti lähetetty. Ota yhteyttä tukeen</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="562"/>
+        <location filename="../main.cpp" line="583"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui. Tarkista internet yhteytesi.</translation>
     </message>
