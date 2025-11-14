@@ -5,6 +5,7 @@ set(${PORT}_PATCHES
     devendor-poly2tri.patch
     foregroundservice.patch
     ios_wgs84_ellipsoid.patch
+    # TODO: The android patch should be removed after migration to Qt 6.9+ as it is a backport of their bugfix
     android15_altitude_fix.patch)
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
