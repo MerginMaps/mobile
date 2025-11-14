@@ -141,14 +141,12 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  CoreUtils::log("Internal location", QString("Ellipsoid elevation: %1").arg(position.coordinate().altitude()));
   // transform the altitude from WGS84 ellipsoid to specified geoid model
   const QgsPoint geoidPosition = InputUtils::transformPoint3D(
-                                     QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
-                                     PositionKit::positionCRS(),
-                                     QgsCoordinateTransformContext(),
-    {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()} );
-  CoreUtils::log("Internal location", QString("Geoid elevation: %1").arg(geoidPosition.z()));
+                                   QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
+                                   PositionKit::positionCRS(),
+                                   QgsCoordinateTransformContext(),
+  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()} );
   if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
   {
     mLastPosition.elevation = geoidPosition.z();
