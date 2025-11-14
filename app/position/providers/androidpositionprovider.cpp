@@ -57,11 +57,11 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     if ( !qFuzzyIsNull( value ) )
     {
       // transform the altitude from WGS84 ellipsoid to specified geoid model
-      const QgsPoint geoidPosition = InputUtils::transformPoint(
+      const QgsPoint geoidPosition = InputUtils::transformPoint3D(
                                        QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
                                        PositionKit::positionCRS(),
                                        QgsCoordinateTransformContext(),
-      {latitude, longitude, value} );
+      {longitude, latitude, value} );
       pos.elevation = geoidPosition.z();
     }
   }
