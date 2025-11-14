@@ -155,5 +155,6 @@
         <file>../app/qml/dialogs/MMDiscardGeometryChangesDialog.qml</file>
         <file>../app/qml/dialogs/MMProviderRemoveReceiverDialog.qml</file>
         <file>../app/qml/dialogs/components/MMDialogAdditionalText.qml</file>
+        <file>../app/qml/components/MMNotificationBox.qml</file>
     </qresource>
 </RCC>
