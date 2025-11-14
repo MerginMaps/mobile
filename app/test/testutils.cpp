@@ -29,23 +29,34 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   Q_ASSERT( api );
 
   // Test server url needs to be set
-  Q_ASSERT( ::getenv( "TEST_MERGIN_URL" ) );
-
-  apiRoot = ::getenv( "TEST_MERGIN_URL" );
-  api->setApiRoot( apiRoot );
+  if (::getenv("TEST_MERGIN_URL") == nullptr)
+  {
+    // if there is none, just default to the dev one
+    apiRoot = "https://app.dev.merginmaps.com/";
+  }
+  else
+  {
+    apiRoot = ::getenv("TEST_MERGIN_URL");
+    // let's make sure we do not mess with the public instance
+    Q_ASSERT(apiRoot != MerginApi::sDefaultApiRoot);
+  }
+  api->setApiRoot(apiRoot);
   qDebug() << "MERGIN API ROOT:" << apiRoot;
 
-  // let's make sure we do not mess with the public instance
-  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
-
   // Test user needs to be set
-  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
-
-  // Test password needs to be set
-  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
-
-  username = ::getenv( "TEST_API_USERNAME" );
-  password = ::getenv( "TEST_API_PASSWORD" );
+  // Check if there are environmental variables for the username and the password
+  if (::getenv("TEST_API_USERNAME") == nullptr && ::getenv("TEST_API_PASSWORD") == nullptr)
+  {
+    // generate a random email and pasword
+    // create the user on the server
+    // create a workspace for the user
+    generateRandomUser(api, username, password);
+  }
+  else
+  {
+    username = ::getenv("TEST_API_USERNAME");
+    password = ::getenv("TEST_API_PASSWORD");
+  }
 }
 
 void TestUtils::authorizeUser( MerginApi *api, const QString &username, const QString &password )
@@ -126,6 +137,68 @@ QString TestUtils::generatePassword()
 {
   QString pass = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   return QStringLiteral( "_Pass12%1" ).arg( pass );
+}
+
+void TestUtils::generateRandomUser(MerginApi* api, QString &username, QString &password)
+{
+    // generate a test run-specific user
+    QString email = generateEmail();
+    password = generatePassword();
+    username = email.split('@').first();
+    username.remove("+");
+
+    // create the account
+    api->clearAuth();
+    QSignalSpy spy(api, &MerginApi::registrationSucceeded);
+    QSignalSpy spy2(api, &MerginApi::registrationFailed);
+    api->registerUser(email, password, true);
+    // check that the account has been created.
+    bool success = spy.wait(TestUtils::LONG_REPLY);
+    if (!success)
+    {
+      qDebug() << "Failed registration" << spy2.takeFirst();
+      QVERIFY(false);
+    }
+
+    // check that the user can be authorized
+    QSignalSpy spyAuth(api->userAuth(), &MerginUserAuth::authChanged);
+    api->authorize(email, password);
+    QVERIFY(spyAuth.wait(TestUtils::LONG_REPLY * 5));
+
+    // create workspace
+    QSignalSpy wsSpy(api, &MerginApi::workspaceCreated);
+    // change the workspace-to-have the same name
+    //like mergin auto test
+    QString workspaceId = username.right(10); // Gets last 3 characters
+    QString workspace = "mmAT-" + workspaceId;
+    api->createWorkspace(workspace);
+    bool workspaceSuccess = wsSpy.wait(TestUtils::LONG_REPLY);
+    if (workspaceSuccess)
+    {
+      qDebug() << "CREATED NEW WORKSPACE:" << workspace;
+
+      // call userInfo to set active workspace
+      QSignalSpy infoSpy(api, &MerginApi::userInfoReplyFinished);
+      api->getUserInfo();
+      QVERIFY(infoSpy.wait(TestUtils::LONG_REPLY));
+      QVERIFY(api->userInfo()->activeWorkspaceId() >= 0);
+
+      // add a project for this workspace
+      // api->createProject(workspace, "first-project", true);
+
+      // change the data plan
+      QString workspaceId = QString::number(api->userInfo()->activeWorkspaceId());
+      QSignalSpy wsStorageSpy(api, &MerginApi::updateWorkspaceStorageProjectLimit);
+      api->updateWorkspaceStorageProjectLimit(workspaceId, 1073741824, 100);
+      bool workspaceStorageModified = wsStorageSpy.wait(TestUtils::LONG_REPLY);
+      if(workspaceStorageModified)
+      {
+         qDebug() << "Updated the storage limit" << workspace;
+      }
+
+      // this needs to be cleared, as the user will be authorized in the test cases.
+      api->clearAuth();
+    }
 }
 
 QString TestUtils::testDataDir()

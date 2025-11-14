@@ -24,6 +24,11 @@ TestActiveProject::~TestActiveProject() = default;
 
 void TestActiveProject::init()
 {
+  QString username = TestUtils::generateUsername();
+  QString email = TestUtils::generateEmail();
+  QString password = TestUtils::generatePassword();
+  mApi->userAuth()->setPassword(password);
+  //mApi->userInfo()->email
 }
 
 void TestActiveProject::cleanup()

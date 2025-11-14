@@ -391,6 +391,11 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void deleteAccount();
 
+    /**
+     * Increase storage for running tests
+     */
+    Q_INVOKABLE void updateWorkspaceStorageProjectLimit(const QString &workspaceId, int storageLimit, int projectLimit);
+
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
@@ -780,6 +785,7 @@ class MerginApi: public QObject
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
+    void updateWorkspaceStorageLimitFinished(QNetworkReply *reply);
 
     /**
      * @brief When plan has been changed, an extra userInfo request is needed to update also storage.

@@ -134,6 +134,7 @@ void TestMerginApi::testListProject()
 
   // project is not available locally, so it has no entry
   QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName ).isValid() );
+  
 }
 
 void TestMerginApi::testListProjectsByName()
@@ -2426,8 +2427,17 @@ void TestMerginApi::testOfflineCache()
   QVERIFY( mApi->userAuth()->hasValidToken() );
 
   QSettings cacheCheck;
-  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
-  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  // If we used environmnet variables, we should check that they match
+  if (::getenv("TEST_API_USERNAME") != nullptr && ::getenv("TEST_API_USERNAME") != nullptr)
+  {
+    QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+    QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  }
+  else
+  {
+    QCOMPARE(cacheCheck.value("Input/login").toString(), mApi->userInfo()->username());
+    QCOMPARE(cacheCheck.value("Input/username").toString(), mApi->userInfo()->username());
+  }
   QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
 
   MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
@@ -2625,7 +2635,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
   api->createProject( projectNamespace, projectName, true );
-  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 

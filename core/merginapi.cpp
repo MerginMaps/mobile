@@ -3823,6 +3823,58 @@ void MerginApi::deleteAccountFinished()
   r->deleteLater();
 }
 
+void MerginApi::updateWorkspaceStorageProjectLimit(const QString &workspaceId, int storageLimit, int projectLimit)
+{
+    if (!validateAuth() || mApiVersionStatus != MerginApiStatus::OK)
+    {
+        return;
+    }
+    
+    QNetworkRequest request = getDefaultRequest();
+    QUrl url(mApiRoot + QStringLiteral("/v1/tests/workspaces/%1").arg(workspaceId));
+    request.setUrl(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    
+    // Create JSON payload
+    QJsonObject limitsOverride;
+    limitsOverride["storage"] = storageLimit;
+    limitsOverride["projects"] = projectLimit;
+    limitsOverride["api_allowed"] = true;
+    
+    QJsonObject payload;
+    payload["limits_override"] = limitsOverride;
+    
+    QJsonDocument doc(payload);
+    QByteArray data = doc.toJson();
+    
+    // Send PATCH request
+    QNetworkReply *reply = mManager->sendCustomRequest(request, "PATCH", data);
+    
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        this->updateWorkspaceStorageLimitFinished(reply);
+    });
+    
+    CoreUtils::log("update workspace storage limit", 
+                   QStringLiteral("Updating workspace: ") + url.toString());
+}
+
+void MerginApi::updateWorkspaceStorageLimitFinished(QNetworkReply *reply)
+{
+    reply->deleteLater();
+    
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        CoreUtils::log("update workspace storage limit", "Successfully updated workspace limits");
+        // Handle success
+    }
+    else
+    {
+        CoreUtils::log("update workspace storage limit", 
+                       QStringLiteral("Error: ") + reply->errorString());
+        // Handle error
+    }
+}
+
 void MerginApi::getServerConfig()
 {
   QNetworkRequest request = getDefaultRequest();
