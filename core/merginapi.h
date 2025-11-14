@@ -45,59 +45,59 @@ class QOAuthHttpServerReplyHandler;
 
 struct ProjectDiff
 {
-  // changes that should be pushed
-  QSet<QString> localAdded;
-  QSet<QString> localUpdated;
-  QSet<QString> localDeleted;
+    // changes that should be pushed
+    QSet<QString> localAdded;
+    QSet<QString> localUpdated;
+    QSet<QString> localDeleted;
 
-  // changes that should be pulled
-  QSet<QString> remoteAdded;
-  QSet<QString> remoteUpdated;
-  QSet<QString> remoteDeleted;
+    // changes that should be pulled
+    QSet<QString> remoteAdded;
+    QSet<QString> remoteUpdated;
+    QSet<QString> remoteDeleted;
 
-  // to resolve conflict: we make a copy of the file
-  QSet<QString> conflictRemoteUpdatedLocalUpdated;
-  QSet<QString> conflictRemoteAddedLocalAdded;
+    // to resolve conflict: we make a copy of the file
+    QSet<QString> conflictRemoteUpdatedLocalUpdated;
+    QSet<QString> conflictRemoteAddedLocalAdded;
 
-  // to resolve conflict: we keep the updated version
-  QSet<QString> conflictRemoteDeletedLocalUpdated;
-  QSet<QString> conflictRemoteUpdatedLocalDeleted;
+    // to resolve conflict: we keep the updated version
+    QSet<QString> conflictRemoteDeletedLocalUpdated;
+    QSet<QString> conflictRemoteUpdatedLocalDeleted;
 
-  // TODO: non-conflicting changes? R-A/L-A, R-U/L-U, R-D/L-D
+    // TODO: non-conflicting changes? R-A/L-A, R-U/L-U, R-D/L-D
 
-  bool operator==( const ProjectDiff &other ) const
-  {
-    return localAdded == other.localAdded &&
-           localUpdated == other.localUpdated &&
-           localDeleted == other.localDeleted &&
-           remoteAdded == other.remoteAdded &&
-           remoteUpdated == other.remoteUpdated &&
-           remoteDeleted == other.remoteDeleted &&
-           conflictRemoteUpdatedLocalUpdated == other.conflictRemoteUpdatedLocalUpdated &&
-           conflictRemoteAddedLocalAdded == other.conflictRemoteAddedLocalAdded &&
-           conflictRemoteDeletedLocalUpdated == other.conflictRemoteDeletedLocalUpdated &&
-           conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
-  }
+    bool operator==( const ProjectDiff &other ) const
+    {
+        return localAdded == other.localAdded &&
+               localUpdated == other.localUpdated &&
+               localDeleted == other.localDeleted &&
+               remoteAdded == other.remoteAdded &&
+               remoteUpdated == other.remoteUpdated &&
+               remoteDeleted == other.remoteDeleted &&
+               conflictRemoteUpdatedLocalUpdated == other.conflictRemoteUpdatedLocalUpdated &&
+               conflictRemoteAddedLocalAdded == other.conflictRemoteAddedLocalAdded &&
+               conflictRemoteDeletedLocalUpdated == other.conflictRemoteDeletedLocalUpdated &&
+               conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
+    }
 
-  QString dump() const
-  {
-    QStringList lines;
-    lines << "--- project diff ---";
-    lines << QString( "local: %1 added, %2 updated, %3 deleted" )
-          .arg( localAdded.count() )
-          .arg( localUpdated.count() )
-          .arg( localDeleted.count() );
-    lines << QString( "remote: %1 added, %2 updated, %3 deleted" )
-          .arg( remoteAdded.count() )
-          .arg( remoteUpdated.count() )
-          .arg( remoteDeleted.count() );
-    lines << QString( "conflicts: %1 RU-LU, %2 RA-LA, %3 RD-LU, %4 RU-LD" )
-          .arg( conflictRemoteUpdatedLocalUpdated.count() )
-          .arg( conflictRemoteAddedLocalAdded.count() )
-          .arg( conflictRemoteDeletedLocalUpdated.count() )
-          .arg( conflictRemoteUpdatedLocalDeleted.count() );
-    return lines.join( "\n" );
-  }
+    QString dump() const
+    {
+        QStringList lines;
+        lines << "--- project diff ---";
+        lines << QString( "local: %1 added, %2 updated, %3 deleted" )
+              .arg( localAdded.count() )
+              .arg( localUpdated.count() )
+              .arg( localDeleted.count() );
+        lines << QString( "remote: %1 added, %2 updated, %3 deleted" )
+              .arg( remoteAdded.count() )
+              .arg( remoteUpdated.count() )
+              .arg( remoteDeleted.count() );
+        lines << QString( "conflicts: %1 RU-LU, %2 RA-LA, %3 RD-LU, %4 RU-LD" )
+              .arg( conflictRemoteUpdatedLocalUpdated.count() )
+              .arg( conflictRemoteAddedLocalAdded.count() )
+              .arg( conflictRemoteDeletedLocalUpdated.count() )
+              .arg( conflictRemoteUpdatedLocalDeleted.count() );
+        return lines.join( "\n" );
+    }
 };
 
 
@@ -107,15 +107,15 @@ struct ProjectDiff
  */
 struct DownloadQueueItem
 {
-  DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
+    DownloadQueueItem( const QString &fp, qint64 s, int v, qint64 rf = -1, qint64 rt = -1, bool diff = false );
 
-  QString filePath;          //!< path within the project
-  qint64 size;               //!< size of the item in bytes
-  int version = -1;          //!< what version to download  (for ordinary files it will be the target version, for diffs it can be different version)
-  qint64 rangeFrom = -1;     //!< what range of bytes to download (-1 if downloading the whole file)
-  qint64 rangeTo = -1;       //!< what range of bytes to download (-1 if downloading the whole file)
-  bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
-  QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
+    QString filePath;          //!< path within the project
+    qint64 size;               //!< size of the item in bytes
+    int version = -1;          //!< what version to download  (for ordinary files it will be the target version, for diffs it can be different version)
+    qint64 rangeFrom = -1;     //!< what range of bytes to download (-1 if downloading the whole file)
+    qint64 rangeTo = -1;       //!< what range of bytes to download (-1 if downloading the whole file)
+    bool downloadDiff = false; //!< whether to download just the diff between the previous version and the current one
+    QString tempFileName;      //!< relative filename of the temporary file where the downloaded content will be stored
 };
 
 
@@ -125,73 +125,73 @@ struct DownloadQueueItem
  */
 struct PullTask
 {
-  enum Method
-  {
-    Copy,           //!< simply write a new version of the file
-    CopyConflict,   //!< like Copy, but also create a conflict file of the locally modified file
-    ApplyDiff,      //!< apply diffs
-    Delete,         //!< remove files that have been removed from the server
-  };
+    enum Method
+    {
+        Copy,           //!< simply write a new version of the file
+        CopyConflict,   //!< like Copy, but also create a conflict file of the locally modified file
+        ApplyDiff,      //!< apply diffs
+        Delete,         //!< remove files that have been removed from the server
+    };
 
-  PullTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
-    : method( m ), filePath( fp ), data( d ) {}
+    PullTask( Method m, const QString &fp, const QList<DownloadQueueItem> &d )
+        : method( m ), filePath( fp ), data( d ) {}
 
-  Method method;                  //!< what to do with the file
-  QString filePath;               //!< what is the file path within project
-  QList<DownloadQueueItem> data;  //!< list of chunks / list of diffs to apply
+    Method method;                  //!< what to do with the file
+    QString filePath;               //!< what is the file path within project
+    QList<DownloadQueueItem> data;  //!< list of chunks / list of diffs to apply
 };
 
 struct TransactionStatus
 {
-  enum TransactionType
-  {
-    Push = 0,
-    Pull
-  };
+    enum TransactionType
+    {
+        Push = 0,
+        Pull
+    };
 
-  qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
-  qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
-  QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
+    qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
+    qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
+    QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
 
-  // pull replies
-  QPointer<QNetworkReply> replyPullProjectInfo;
-  QPointer<QNetworkReply> replyPullServerConfig;
-  QSet<QNetworkReply *> replyPullItems;
+    // pull replies
+    QPointer<QNetworkReply> replyPullProjectInfo;
+    QPointer<QNetworkReply> replyPullServerConfig;
+    QSet<QNetworkReply *> replyPullItems;
 
-  // push replies
-  QPointer<QNetworkReply> replyPushProjectInfo;
-  QPointer<QNetworkReply> replyPushStart;
-  QPointer<QNetworkReply> replyPushFile;
-  QPointer<QNetworkReply> replyPushFinish;
+    // push replies
+    QPointer<QNetworkReply> replyPushProjectInfo;
+    QPointer<QNetworkReply> replyPushStart;
+    QPointer<QNetworkReply> replyPushFile;
+    QPointer<QNetworkReply> replyPushFinish;
 
-  // pull-related data
-  QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
-  QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
-  bool pullItemsAborting = false;   //!< indicates whether we have started to abort requests in replyPullItems
+    // pull-related data
+    QList<DownloadQueueItem> downloadQueue;  //!< pending list of stuff to download - chunks of project files or diff files (at the end of transaction it is empty)
+    QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
+    bool pullItemsAborting = false;   //!< indicates whether we have started to abort requests in replyPullItems
 
-  // push-related data
-  QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
-  QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
+    // push-related data
+    QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
+    QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
 
-  // retry handling
-  int retryCount = 0;  //!< current number of retry attempts for failed network requests
-  static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
+    // retry handling
+    int retryCount = 0;  //!< current number of retry attempts for failed network requests
+    static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
 
-  QString projectDir;
-  QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
-  bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
-  bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
-  bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
-  bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
+    QString projectDir;
+    QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
+    bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
+    bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
+    bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
+    bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
 
-  int version = -1;  //!< version to which we are updating / the version which we have uploaded
+    int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
-  ProjectDiff diff;
+    ProjectDiff diff;
 
-  bool configAllowed = false; //!< if true, seeks for mergin-config and alters synchronization process based on it
-  MerginConfig config; //!< defines additional behavior of the transaction (e.g. selective sync)
+    bool configAllowed = false; //!< if true, seeks for mergin-config and alters synchronization process based on it
+    MerginConfig config; //!< defines additional behavior of the transaction (e.g. selective sync)
 
-  TransactionType type;
+    TransactionType type;
 };
 
 typedef QHash<QString, TransactionStatus> Transactions;
@@ -201,12 +201,12 @@ Q_DECLARE_METATYPE( Transactions );
 class ErrorCode
 {
     Q_GADGET
-  public:
+public:
     enum Value
     {
-      Unknown = 0,
-      ProjectsLimitHit,
-      StorageLimitHit
+        Unknown = 0,
+        ProjectsLimitHit,
+        StorageLimitHit
     };
     Q_ENUM( Value );
 };
@@ -228,7 +228,7 @@ class MerginApi: public QObject
     Q_PROPERTY( bool apiSupportsSso READ apiSupportsSso WRITE setApiSupportsSso NOTIFY apiSupportsSsoChanged )
     Q_PROPERTY( bool userSelfRegistrationEnabled READ userSelfRegistrationEnabled NOTIFY userSelfRegistrationEnabledChanged )
 
-  public:
+public:
 
     explicit MerginApi( LocalProjectsManager &localProjects, QObject *parent = nullptr );
     ~MerginApi() = default;
@@ -243,10 +243,14 @@ class MerginApi: public QObject
      * Each project is one sub-directory.
      * \note returns the directory without a trailing slash
      */
-    QString projectsPath() const { return mDataDir; }
+    QString projectsPath() const {
+        return mDataDir;
+    }
 
     //! Returns reference to the cache of local projects
-    LocalProjectsManager &localProjectsManager() const { return mLocalProjects; }
+    LocalProjectsManager &localProjectsManager() const {
+        return mLocalProjects;
+    }
 
     /**
      * Sends non-blocking GET request to the server to listProjects. On listProjectsReplyFinished,
@@ -348,9 +352,9 @@ class MerginApi: public QObject
     * \param acceptedTOC Whether user accepted Terms and Conditions
     */
     Q_INVOKABLE void registerUser(
-      const QString &email,
-      const QString &password,
-      bool acceptedTOC
+        const QString &email,
+        const QString &password,
+        bool acceptedTOC
     );
 
     /**
@@ -360,9 +364,9 @@ class MerginApi: public QObject
     * \param wantsNewsletter Whether user wants to receive newsletter
     */
     Q_INVOKABLE void postRegisterUser(
-      const QString &marketingChannel,
-      const QString &industry,
-      bool wantsNewsletter
+        const QString &marketingChannel,
+        const QString &industry,
+        bool wantsNewsletter
     );
 
     /**
@@ -407,9 +411,13 @@ class MerginApi: public QObject
     static const QString sSyncCanceledMessage;
     static const QString sDefaultReportLogUrl;
 
-    static QString defaultApiRoot() { return sDefaultApiRoot; }
+    static QString defaultApiRoot() {
+        return sDefaultApiRoot;
+    }
 
-    static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
+    static bool isFileDiffable( const QString &fileName ) {
+        return fileName.endsWith( ".gpkg" );
+    }
 
     //! Get a list of all files that can be used with geodiff
     QStringList projectDiffableFiles( const QString &projectFullName );
@@ -487,13 +495,13 @@ class MerginApi: public QObject
      * Without the three sources it is possible to miss some of the updates that need to be handled (e.g. conflicts)
      */
     static ProjectDiff compareProjectFiles(
-      const QList<MerginFile> &oldServerFiles,
-      const QList<MerginFile> &newServerFiles,
-      const QList<MerginFile> &localFiles,
-      const QString &projectDir,
-      bool allowConfig = false,
-      const MerginConfig &config = MerginConfig(),
-      const MerginConfig &lastSyncConfig = MerginConfig()
+        const QList<MerginFile> &oldServerFiles,
+        const QList<MerginFile> &newServerFiles,
+        const QList<MerginFile> &localFiles,
+        const QString &projectDir,
+        bool allowConfig = false,
+        const MerginConfig &config = MerginConfig(),
+        const MerginConfig &lastSyncConfig = MerginConfig()
     );
 
     /**
@@ -508,10 +516,10 @@ class MerginApi: public QObject
      *   - there is different content of any diffable file (e.g. GeoPackage)
      */
     static bool hasLocalChanges(
-      const QList<MerginFile> &oldServerFiles,
-      const QList<MerginFile> &localFiles,
-      const QString &projectDir,
-      const MerginConfig config
+        const QList<MerginFile> &oldServerFiles,
+        const QList<MerginFile> &localFiles,
+        const QString &projectDir,
+        const MerginConfig config
     );
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
@@ -523,7 +531,9 @@ class MerginApi: public QObject
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
     //! Returns details about currently active transactions (both push and pull). Useful for tests
-    Transactions transactions() const { return mTransactionalStatus; }
+    Transactions transactions() const {
+        return mTransactionalStatus;
+    }
 
     // Returns true for files that are under .mergin folder or contains ignored extension from sIgnoreExtensions
     static bool isInIgnore( const QFileInfo &info );
@@ -632,7 +642,9 @@ class MerginApi: public QObject
     /**
      * Returns the network manager used for Mergin API requests
      */
-    QNetworkAccessManager *networkManager() const { return mManager; }
+    QNetworkAccessManager *networkManager() const {
+        return mManager;
+    }
 
     /**
      * Sets the network manager to be used for Mergin API requests
@@ -664,7 +676,7 @@ class MerginApi: public QObject
      */
     bool serverVersionIsAtLeast( int requiredMajor, int requiredMinor, int requiredPatch ) const;
 
-  signals:
+signals:
     void apiSupportsSubscriptionsChanged();
     void supportsSelectiveSyncChanged();
 
@@ -681,10 +693,10 @@ class MerginApi: public QObject
     void syncProjectStatusChanged( const QString &projectFullName, qreal progress );
 
     void networkErrorOccurred(
-      const QString &message,
-      const QString &topic,
-      int httpCode = -1,
-      const QString &projectFullName = QLatin1String()
+        const QString &message,
+        const QString &topic,
+        int httpCode = -1,
+        const QString &projectFullName = QLatin1String()
     );
 
     void storageLimitReached( qreal uploadSize );
@@ -758,7 +770,7 @@ class MerginApi: public QObject
 
     void userSelfRegistrationEnabledChanged();
 
-  private slots:
+private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
 
@@ -802,7 +814,7 @@ class MerginApi: public QObject
     void ssoConfigReplyFinished();
     void ssoConnectionsReplyFinished();
 
-  private:
+private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
     MerginProjectsList parseProjectsFromJson( const QJsonDocument &object );
     static QStringList generateChunkIdsForSize( qint64 fileSize );
@@ -930,10 +942,10 @@ class MerginApi: public QObject
 
     enum CustomAttribute
     {
-      AttrProjectFullName = QNetworkRequest::User,
-      AttrTempFileName    = QNetworkRequest::User + 1,
-      AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3
+        AttrProjectFullName = QNetworkRequest::User,
+        AttrTempFileName    = QNetworkRequest::User + 1,
+        AttrWorkspaceName   = QNetworkRequest::User + 2,
+        AttrAcceptFlag      = QNetworkRequest::User + 3
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
