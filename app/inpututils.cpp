@@ -906,9 +906,9 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
 }
 
 QgsPoint InputUtils::transformPoint3D( const QgsCoordinateReferenceSystem &srcCrs,
-                                     const QgsCoordinateReferenceSystem &destCrs,
-                                     const QgsCoordinateTransformContext &context,
-                                     const QgsPoint &srcPoint )
+                                       const QgsCoordinateReferenceSystem &destCrs,
+                                       const QgsCoordinateTransformContext &context,
+                                       const QgsPoint &srcPoint )
 {
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
@@ -924,7 +924,7 @@ QgsPoint InputUtils::transformPoint3D( const QgsCoordinateReferenceSystem &srcCr
     {
       if ( !ct.isShortCircuited() )
       {
-        const QgsVector3D transformed = ct.transform( QgsVector3D(srcPoint.x(), srcPoint.y(), srcPoint.z()) );
+        const QgsVector3D transformed = ct.transform( QgsVector3D( srcPoint.x(), srcPoint.y(), srcPoint.z() ) );
         const QgsPoint pt( transformed.x(), transformed.y(), transformed.z(), srcPoint.m() );
         return pt;
       }
