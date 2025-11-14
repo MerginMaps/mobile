@@ -100,6 +100,9 @@ void TestMerginApi::initTestCase()
   // Note: projects on the server are deleted in createRemoteProject function when needed
 
   qRegisterMetaType<LocalProject>();
+  // wait for the server to finish up the creation of the new user
+  qDebug() << "Workspace initialized - waiting for server-side setup to complete...";
+  QTest::qWait(3000); // Give server 3 seconds to fully initialize the workspace
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -2635,7 +2638,7 @@ void TestMerginApi::createRemoteProject( MerginApi *api, const QString &projectN
   // create a project
   QSignalSpy spy( api, &MerginApi::projectCreated );
   api->createProject( projectNamespace, projectName, true );
-  QVERIFY( spy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( spy.wait( TestUtils::SHORT_REPLY ) );
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 1 ).toBool(), true );
 
