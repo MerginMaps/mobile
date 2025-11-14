@@ -14,6 +14,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../map/components"
@@ -26,7 +27,7 @@ MMDrawer {
 
   property var targetPair: null
   property real remainingDistance: targetPair ? __inputUtils.distanceBetweenGpsAndFeature(
-                                                  __positionKit.positionCoordinate,
+                                                  PositionKit.positionCoordinate,
                                                   targetPair,
                                                   mapCanvas.mapSettings ) : -1
   property var extent
@@ -220,7 +221,7 @@ MMDrawer {
             MM.PositionDirection {
               id: positionDirection
 
-              positionKit: __positionKit
+              positionKit: PositionKit
               compass: MM.Compass { id: ccompass }
             }
 
@@ -228,7 +229,7 @@ MMDrawer {
               id: positionMarker
 
               property real bearing: root.targetPair ? __inputUtils.angleBetweenGpsAndFeature(
-                                                         __positionKit.positionCoordinate,
+                                                         PositionKit.positionCoordinate,
                                                          root.targetPair,
                                                          root.mapCanvas.mapSettings ) : 0
 
@@ -238,9 +239,9 @@ MMDrawer {
               hasDirection: positionDirection.hasDirection
 
               direction: positionDirection.direction
-              hasPosition: __positionKit.hasPosition
+              hasPosition: PositionKit.hasPosition
 
-              horizontalAccuracy: __positionKit.horizontalAccuracy
+              horizontalAccuracy: PositionKit.horizontalAccuracy
               accuracyRingSize: 0 // do not show any accuracy ring in stakeout mode
 
               trackingMode: closeRangeModeComponent.state === "notAtTarget"

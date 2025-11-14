@@ -10,6 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
+import MMInput
 
 Item {
   id: root
@@ -34,7 +35,7 @@ Item {
     id: mapPositioning
 
     mapSettings: map.mapSettings
-    positionKit: __positionKit
+    positionKit: PositionKit
     onMapPositionChanged: updateStakeout()
   }
 
