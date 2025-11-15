@@ -153,6 +153,13 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
+  const double geoidSeparation = position.coordinate().altitude() - geoidPosition.z();
+  if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
+  {
+    mLastPosition.elevation_diff = geoidSeparation;
+    positionDataHasChanged = true;
+  }
+
   bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );
   if ( hasSpeedInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )
   {
