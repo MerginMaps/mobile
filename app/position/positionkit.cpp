@@ -35,7 +35,7 @@ PositionKit::PositionKit( QObject *parent )
 
 QgsCoordinateReferenceSystem PositionKit::positionCRS()
 {
-  return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
 void PositionKit::startUpdates()
@@ -212,6 +212,13 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( !qgsDoubleNear( newPosition.elevation_diff, mPosition.elevation_diff ) )
+  {
+    mPosition.elevation_diff = newPosition.elevation_diff;
+    emit geoidSeparationChanged( mPosition.elevation_diff );
+    hasAnythingChanged = true;
+  }
+
   if ( newPosition.hasValidPosition() != mHasPosition )
   {
     mHasPosition = newPosition.hasValidPosition();
@@ -347,6 +354,11 @@ double PositionKit::longitude() const
 double PositionKit::altitude() const
 {
   return mPosition.elevation;
+}
+
+double PositionKit::geoidSeparation() const
+{
+  return mPosition.elevation_diff;
 }
 
 QgsPoint PositionKit::positionCoordinate() const

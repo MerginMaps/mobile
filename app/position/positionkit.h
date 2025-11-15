@@ -15,6 +15,7 @@
 #include "qgspoint.h"
 #include "qgscoordinatereferencesystem.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AppSettings;
 
@@ -27,10 +28,14 @@ class AppSettings;
 class PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
+
     Q_PROPERTY( double altitude READ altitude NOTIFY altitudeChanged )
+    Q_PROPERTY( double geoidSeparation READ geoidSeparation NOTIFY geoidSeparationChanged )
 
     // auxiliary property providing QgsPoint for lat/long/alt instead of separate properties
     Q_PROPERTY( QgsPoint positionCoordinate READ positionCoordinate NOTIFY positionCoordinateChanged )
@@ -84,6 +89,7 @@ class PositionKit : public QObject
     double latitude() const;
     double longitude() const;
     double altitude() const;
+    double geoidSeparation() const;
     QgsPoint positionCoordinate() const;
     bool hasPosition() const;
 
@@ -112,7 +118,7 @@ class PositionKit : public QObject
     double vdop() const;
     double pdop() const;
 
-    // Coordinate reference system of position - WGS84 (constant)
+    // Coordinate reference system of position - WGS84 + egm96_15(constant)
     Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
@@ -127,6 +133,7 @@ class PositionKit : public QObject
     void latitudeChanged( double );
     void longitudeChanged( double );
     void altitudeChanged( double );
+    void geoidSeparationChanged( double );
     void positionCoordinateChanged( QgsPoint );
     void hasPositionChanged( bool );
 
