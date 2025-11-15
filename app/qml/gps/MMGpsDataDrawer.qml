@@ -323,10 +323,10 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Geoid separation" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.geoidSeparation ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.geoidSeparation ) ) {
                 return qsTr( "N/A" )
               }
-              __inputUtils.formatNumber( __positionKit.geoidSeparation, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.geoidSeparation, 2 ) + " m"
             }
 
             alignmentRight: Positioner.index % 2 === 1
