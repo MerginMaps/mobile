@@ -8,6 +8,8 @@
  ***************************************************************************/
 
 #include "simulatedpositionprovider.h"
+
+#include "inpututils.h"
 #include "qgspoint.h"
 
 SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
@@ -84,10 +86,16 @@ void SimulatedPositionProvider::generateRadiusPosition()
   position.latitude = latitude;
   position.longitude = longitude;
 
-  double altitude = ( *mGenerator )() % 40 + 20; // rand altitude <20,55>m and lost (0)
-  if ( altitude <= 55 )
+  double altitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,120>m and lost (0)
+  if ( altitude <= 120 )
   {
-    position.elevation = altitude;
+    const QgsPoint geoidPosition = InputUtils::transformPoint3D(
+                                   QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
+                                   PositionKit::positionCRS(),
+                                   QgsCoordinateTransformContext(),
+    {longitude, latitude, altitude} );
+    position.elevation = geoidPosition.z();
+    position.elevation_diff = altitude - position.elevation;
   }
 
   QDateTime timestamp = QDateTime::currentDateTime();
@@ -115,7 +123,14 @@ void SimulatedPositionProvider::generateConstantPosition()
   GeoPosition position;
   position.latitude = mLatitude;
   position.longitude = mLongitude;
-  position.elevation = 20;
+  // we take 100 as elevation returned by WGS84 ellipsoid and recalculate it to geoid
+  const QgsPoint geoidPosition = InputUtils::transformPoint3D(
+                                   QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
+                                   PositionKit::positionCRS(),
+                                   QgsCoordinateTransformContext(),
+  {mLongitude, mLatitude, 100} );
+  position.elevation = geoidPosition.z();
+  position.elevation_diff = 100 - position.elevation;
   position.utcDateTime = QDateTime::currentDateTime();
   position.direction = 360 - int( mAngle ) % 360;
   position.hacc = ( *mGenerator )() % 20;

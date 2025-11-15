@@ -63,6 +63,9 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
                                        QgsProject::instance()->transformContext(),
       {longitude, latitude, value} );
       pos.elevation = geoidPosition.z();
+
+      const double geoidSeparation = value - geoidPosition.z();
+      pos.elevation_diff = geoidSeparation;
     }
   }
 
