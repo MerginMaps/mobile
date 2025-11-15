@@ -35,7 +35,7 @@ PositionKit::PositionKit( QObject *parent )
 
 QgsCoordinateReferenceSystem PositionKit::positionCRS()
 {
-  return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
 void PositionKit::startUpdates()

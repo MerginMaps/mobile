@@ -12,13 +12,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components" as MMComponents
 
 MMComponents.MMDrawer {
   id: root
 
-  property var positionProvider: __positionKit.positionProvider
+  property var positionProvider: PositionKit.positionProvider
   property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
 
   property string titleText: {
@@ -52,7 +53,7 @@ MMComponents.MMDrawer {
     }
     else if ( rootstate.state === "waitingToReconnect" )
     {
-      return __positionKit.positionProvider.stateMessage + "<br><br>" +
+      return PositionKit.positionProvider.stateMessage + "<br><br>" +
           qsTr( "You can close this message, we will try to repeatedly connect to your device." )
     }
 
