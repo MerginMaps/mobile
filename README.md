@@ -12,7 +12,7 @@
   <a href="https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22iOS+Build%22"><img src="https://github.com/MerginMaps/mobile/workflows/iOS%20Build/badge.svg"></a>
   <a href="https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22Code+Layout%22"><img src="https://github.com/MerginMaps/mobile/workflows/Code%20Layout/badge.svg"></a>
   <a href="https://coveralls.io/github/MerginMaps/mobile?branch=master"><img src="https://coveralls.io/repos/github/MerginMaps/mobile/badge.svg?branch=master"></a>
-  <a href="https://zenodo.org/badge/46554390.svg"><img src="https://zenodo.org/badge/latestdoi/46554390"></a>
+  <a href="https://zenodo.org/badge/latestdoi/46554390"><img src="https://zenodo.org/badge/46554390.svg"></a>
 </p>
   
 ## About
