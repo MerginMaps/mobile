@@ -43,8 +43,8 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   api->setApiRoot( apiRoot );
   qDebug() << "MERGIN API ROOT:" << apiRoot;
 
-  // Test user needs to be set
-  // Check if there are environmental variables for the username and the password
+  // test user needs to be set
+  // check if there are environmental variables for the username and the password
   if ( ::getenv( "TEST_API_USERNAME" ) == nullptr && ::getenv( "TEST_API_PASSWORD" ) == nullptr )
   {
     // generate a random email and pasword
@@ -139,15 +139,33 @@ QString TestUtils::generatePassword()
   return QStringLiteral( "_Pass12%1" ).arg( pass );
 }
 
+QString TestUtils::generateWorkspaceName( const QString &username )
+{
+  /*
+  * Create a workspace name from the generated username
+  * Output: a workspace name: mmta-DayMonthYear-HourSeconds
+  */
+  QRegularExpression regex( R"(merginautotest(\d{6})-(\d{4})\d{2}-\d{3})" );
+  QRegularExpressionMatch match = regex.match( username );
+
+  if ( match.hasMatch() )
+  {
+    QString date = match.captured( 1 ); // Day Month Year
+    QString time = match.captured( 2 ); // Hour Second
+    return QString( "mmat-%1-%2" ).arg( date ).arg( time );
+  }
+  return QString();
+}
+
 void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &password )
 {
-  // generate a test run-specific user
+  // generate the test run-specific user details
   QString email = generateEmail();
   password = generatePassword();
   username = email.split( '@' ).first();
   username.remove( "+" );
 
-  // create the account
+  // create the account for the test run user
   api->clearAuth();
   QSignalSpy spy( api, &MerginApi::registrationSucceeded );
   QSignalSpy spy2( api, &MerginApi::registrationFailed );
@@ -167,10 +185,8 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
 
   // create workspace
   QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
-  // change the workspace-to-have the same name
-  //like mergin auto test
-  QString workspaceId = username.right( 10 ); // Gets last 3 characters
-  QString workspace = "mmAT-" + workspaceId;
+  // create the workspace name
+  QString workspace = TestUtils::generateWorkspaceName( username );
   api->createWorkspace( workspace );
   bool workspaceSuccess = wsSpy.wait( TestUtils::LONG_REPLY );
   if ( workspaceSuccess )

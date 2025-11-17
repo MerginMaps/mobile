@@ -33,6 +33,7 @@ namespace TestUtils
    *  - TEST_MERGIN_URL
    *  - TEST_API_USERNAME
    *  - TEST_API_PASSWORD
+   *  And if not found, generate a test run-specific user
    */
   void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
@@ -43,6 +44,7 @@ namespace TestUtils
   QString generateUsername();
   QString generateEmail();
   QString generatePassword();
+  QString generateWorkspaceName( const QString &username );
 
   QString testDataDir();
 
