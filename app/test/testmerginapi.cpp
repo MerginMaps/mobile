@@ -2438,11 +2438,11 @@ void TestMerginApi::testOfflineCache()
   QVERIFY( mApi->userAuth()->hasValidToken() );
 
   QSettings cacheCheck;
-  // If we used environmnet variables, we should check that they match
-  if ( ::getenv( "TEST_API_USERNAME" ) != nullptr && ::getenv( "TEST_API_USERNAME" ) != nullptr )
+  // If we used environment variables, we should check that they match
+  if ( getenv( "TEST_API_USERNAME" ) != nullptr && getenv( "TEST_API_USERNAME" ) != nullptr )
   {
-    QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
-    QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+    QCOMPARE( cacheCheck.value( "Input/login" ).toString(), getenv( "TEST_API_USERNAME" ) );
+    QCOMPARE( cacheCheck.value( "Input/username" ).toString(), getenv( "TEST_API_USERNAME" ) );
   }
   else
   {

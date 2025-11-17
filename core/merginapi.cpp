@@ -3847,7 +3847,7 @@ void MerginApi::deleteAccountFinished()
   r->deleteLater();
 }
 
-void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, int storageLimit, int projectLimit )
+void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, const int storageLimit, const int projectLimit )
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -3855,7 +3855,7 @@ void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, 
   }
 
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "/v1/tests/workspaces/%1" ).arg( workspaceId ) );
+  const QUrl url( mApiRoot + QStringLiteral( "/v1/tests/workspaces/%1" ).arg( workspaceId ) );
   request.setUrl( url );
   request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
 
@@ -3868,35 +3868,31 @@ void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, 
   QJsonObject payload;
   payload["limits_override"] = limitsOverride;
 
-  QJsonDocument doc( payload );
-  QByteArray data = doc.toJson();
+  const QJsonDocument doc( payload );
+  const QByteArray data = doc.toJson();
 
   // Send PATCH request
   QNetworkReply *reply = mManager->sendCustomRequest( request, "PATCH", data );
 
-  connect( reply, &QNetworkReply::finished, this, [this, reply]()
-  {
-    this->updateWorkspaceStorageLimitFinished( reply );
-  } );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::updateWorkspaceStorageLimitFinished );
 
   CoreUtils::log( "update workspace storage limit",
                   QStringLiteral( "Updating workspace: " ) + url.toString() );
 }
 
-void MerginApi::updateWorkspaceStorageLimitFinished( QNetworkReply *reply )
+void MerginApi::updateWorkspaceStorageLimitFinished()
 {
-  reply->deleteLater();
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
 
-  if ( reply->error() == QNetworkReply::NoError )
+  if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "update workspace storage limit", "Successfully updated workspace limits" );
-    // Handle success
   }
   else
   {
     CoreUtils::log( "update workspace storage limit",
-                    QStringLiteral( "Error: " ) + reply->errorString() );
-    // Handle error
+                    QStringLiteral( "Error: " ) + r->errorString() );
   }
 }
 

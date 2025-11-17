@@ -400,7 +400,7 @@ class MerginApi: public QObject
     /**
      * Increase storage for running tests
      */
-    Q_INVOKABLE void updateWorkspaceStorageProjectLimit( const QString &workspaceId, int storageLimit, int projectLimit );
+    void updateWorkspaceStorageProjectLimit( const QString &workspaceId, const int storageLimit, const int projectLimit );
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
@@ -803,7 +803,7 @@ class MerginApi: public QObject
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
-    void updateWorkspaceStorageLimitFinished( QNetworkReply *reply );
+    void updateWorkspaceStorageLimitFinished();
 
     /**
      * @brief When plan has been changed, an extra userInfo request is needed to update also storage.

@@ -145,16 +145,16 @@ QString TestUtils::generateWorkspaceName( const QString &username )
   * Create a workspace name from the generated username
   * Output: a workspace name: mmta-DayMonthYear-HourSeconds
   */
-  QRegularExpression regex( R"(merginautotest(\d{6})-(\d{4})\d{2}-\d{3})" );
-  QRegularExpressionMatch match = regex.match( username );
+  static const QRegularExpression regex( R"(merginautotest(\d{6})-(\d{4})\d{2}-\d{3})" );
+  const QRegularExpressionMatch match = regex.match( username );
 
   if ( match.hasMatch() )
   {
-    QString date = match.captured( 1 ); // Day Month Year
-    QString time = match.captured( 2 ); // Hour Second
-    return QString( "mmat-%1-%2" ).arg( date ).arg( time );
+    const QString date = match.captured( 1 ); // Day Month Year
+    const QString time = match.captured( 2 ); // Hour Second
+    return QString( "mmat-%1-%2" ).arg( date, time );
   }
-  return QString();
+  return {};
 }
 
 void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &password )
@@ -186,7 +186,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   // create workspace
   QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
   // create the workspace name
-  QString workspace = TestUtils::generateWorkspaceName( username );
+  QString workspace = generateWorkspaceName( username );
   api->createWorkspace( workspace );
   bool workspaceSuccess = wsSpy.wait( TestUtils::LONG_REPLY );
   if ( workspaceSuccess )
@@ -199,13 +199,10 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
     QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
     QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
 
-    // add a project for this workspace
-    // api->createProject(workspace, "first-project", true);
-
     // change the data plan
     QString workspaceId = QString::number( api->userInfo()->activeWorkspaceId() );
     QSignalSpy wsStorageSpy( api, &MerginApi::updateWorkspaceStorageProjectLimit );
-    api->updateWorkspaceStorageProjectLimit( workspaceId, 1073741824, 100 );
+    api->updateWorkspaceStorageProjectLimit( workspaceId, TestUtils::TEST_WORKSPACE_STORAGE_SIZE, TestUtils::TEST_WORKSPACE_PROJECT_NUMER );
     bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
     if ( workspaceStorageModified )
     {
