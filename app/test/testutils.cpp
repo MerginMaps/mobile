@@ -143,7 +143,7 @@ QString TestUtils::generateWorkspaceName( const QString &username )
 {
   /*
   * Create a workspace name from the generated username
-  * Output: a workspace name: mmta-DayMonthYear-HourSeconds
+  * Output: a workspace name: mmat-DayMonthYear-HourMinutes
   */
   static const QRegularExpression regex( R"(merginautotest(\d{6})-(\d{4})\d{2}-\d{3})" );
   const QRegularExpressionMatch match = regex.match( username );
