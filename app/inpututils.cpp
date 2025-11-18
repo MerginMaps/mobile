@@ -476,7 +476,7 @@ QString InputUtils::geometryLengthAsString( const QgsGeometry &geometry )
 {
   QgsDistanceArea distanceArea;
   distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  distanceArea.setSourceCrs( PositionKit::positionCRS(), QgsCoordinateTransformContext() );
+  distanceArea.setSourceCrs( PositionKit::positionCrs2D(), QgsCoordinateTransformContext() );
 
   qreal length = distanceArea.measureLength( geometry );
 
@@ -879,43 +879,6 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
   // QGIS would convert them to a valid (0, 0) points
   if ( srcPoint.isEmpty() )
   {
-    return QgsPoint();
-  }
-
-  try
-  {
-    QgsCoordinateTransform ct( srcCrs, destCrs, context );
-    if ( ct.isValid() )
-    {
-      if ( !ct.isShortCircuited() )
-      {
-        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
-        return pt;
-      }
-      else
-      {
-        return srcPoint;
-      }
-    }
-  }
-  catch ( QgsCsException &cse )
-  {
-    Q_UNUSED( cse )
-  }
-
-  return QgsPoint();
-}
-
-QgsPoint InputUtils::transformPoint3D( const QgsCoordinateReferenceSystem &srcCrs,
-                                       const QgsCoordinateReferenceSystem &destCrs,
-                                       const QgsCoordinateTransformContext &context,
-                                       const QgsPoint &srcPoint )
-{
-  // we do not want to transform empty points,
-  // QGIS would convert them to a valid (0, 0) points
-  if ( srcPoint.isEmpty() )
-  {
     return {};
   }
 
@@ -991,7 +954,7 @@ QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSe
 
   const QgsPointXY transformedXY = transformPoint(
                                      mapSettings->destinationCrs(),
-                                     PositionKit::positionCRS(),
+                                     PositionKit::positionCrs2D(),
                                      QgsCoordinateTransformContext(),
                                      positionMapCrs
                                    );
@@ -1749,7 +1712,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     PositionKit::positionCRS(),
+                                     PositionKit::positionCrs3D(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPosition
@@ -1797,7 +1760,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     PositionKit::positionCRS(),
+                                     PositionKit::positionCrs3D(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPoint

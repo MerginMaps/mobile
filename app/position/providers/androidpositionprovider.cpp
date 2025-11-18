@@ -56,10 +56,10 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     const jdouble value = location.callMethod<jdouble>( "getAltitude" );
     if ( !qFuzzyIsNull( value ) )
     {
-      // transform the altitude from WGS84 ellipsoid to specified geoid model
-      const QgsPoint geoidPosition = InputUtils::transformPoint3D(
-                                       QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
-                                       PositionKit::positionCRS(),
+      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                       PositionKit::positionCrs3DEllipsoidHeight(),
+                                       PositionKit::positionCrs3D(),
                                        QgsCoordinateTransformContext(),
       {longitude, latitude, value} );
       pos.elevation = geoidPosition.z();

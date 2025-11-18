@@ -20,7 +20,7 @@
 InputCoordinateTransformer::InputCoordinateTransformer( QObject *parent )
   : QObject( parent )
 {
-  mCoordinateTransform.setSourceCrs( PositionKit::positionCRS() );
+  mCoordinateTransform.setSourceCrs( PositionKit::positionCrs3D() );
 }
 
 QgsPoint InputCoordinateTransformer::projectedPosition() const
