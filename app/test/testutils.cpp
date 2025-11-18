@@ -32,7 +32,7 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   if ( ::getenv( "TEST_MERGIN_URL" ) == nullptr )
   {
     // if there is none, just default to the dev one
-    apiRoot = "https://app.dev.merginmaps.com/";
+    apiRoot = QStringLiteral( "https://app.dev.merginmaps.com/" );
   }
   else
   {
