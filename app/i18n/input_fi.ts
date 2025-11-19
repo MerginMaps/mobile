@@ -347,7 +347,7 @@ Sitä ei lisätä projektiin.</translation>
     <message>
         <location filename="../inpututils.cpp" line="2106"/>
         <source>You need to add at least %1 point(s).</source>
-        <translation>Sinun tulee lisätä vähintään %1 piste(ttä).</translation>
+        <translation>Sinun tulee lisätä vähintään %1 pistettä.</translation>
     </message>
 </context>
 <context>
