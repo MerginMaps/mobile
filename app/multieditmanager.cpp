@@ -159,10 +159,10 @@ void MultiEditManager::deleteSelectedFeatures()
     return;
 
   QgsFeatureIds fids;
-  fids.reserve(mModel->rowCount());
-  for (int i = 0; i < mModel->rowCount(); ++i)
+  fids.reserve( mModel->rowCount() );
+  for ( int i = 0; i < mModel->rowCount(); ++i )
   {
-    fids.insert(mModel->data(mModel->index(i, 0), FeaturesModel::FeatureId).value<QgsFeatureId>());
+    fids.insert( mModel->data( mModel->index( i, 0 ), FeaturesModel::FeatureId ).value<QgsFeatureId>() );
   }
 
   if ( fids.isEmpty() )
