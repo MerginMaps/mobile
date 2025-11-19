@@ -72,6 +72,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "longitude" ), position.longitude );
   addPositionVariable( scope, QStringLiteral( "latitude" ), position.latitude );
   addPositionVariable( scope, QStringLiteral( "altitude" ), position.elevation );
+  addPositionVariable( scope, QStringLiteral( "geoid_separation" ), position.elevation_diff );
   addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( position.hacc ) );
   addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( position.vacc ) );
   addPositionVariable( scope, QStringLiteral( "ground_speed" ), getGeoPositionAttribute( position.speed ) );
