@@ -15,8 +15,6 @@
 #ifndef INPUTMAPCANVASMAP_H
 #define INPUTMAPCANVASMAP_H
 
-#include "inputconfig.h"
-
 #include "inputmapsettings.h"
 
 #include <QFutureSynchronizer>

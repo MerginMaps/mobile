@@ -12,12 +12,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include <QDate>
+#include <QTime>
+#include <QDateTime>
+#include <QLocale>
 
 #include "attributepreviewcontroller.h"
 #include "featurelayerpair.h"
 #include "qgsfield.h"
 #include "qgsvectorlayer.h"
 #include "qgsexpressioncontextutils.h"
+#include "qgseditorwidgetsetup.h"
+
 
 AttributePreviewModel::AttributePreviewModel( const QVector<QPair<QString, QString>> &items )
   : QAbstractListModel( nullptr )
@@ -38,17 +44,17 @@ AttributePreviewModel::~AttributePreviewModel() = default;
 int AttributePreviewModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
-  return mItems.size();
+  return static_cast<int>( mItems.size() );
 }
 
-QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
+QVariant AttributePreviewModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+    return {};
 
   const int row = index.row();
   if ( row < 0 || row >= mItems.size() )
-    return QVariant();
+    return {};
 
   switch ( role )
   {
@@ -57,16 +63,16 @@ QVariant AttributePreviewModel::data( const QModelIndex &index, int role ) const
     case AttributePreviewModel::Value:
       return mItems.at( row ).second;
     default:
-      return QVariant();
+      return {};
   }
 }
 
 QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
 {
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
-    return QVector<QPair<QString, QString>> ();
+    return {};
 
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate();
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QString() );
   QVector<QPair<QString, QString>> lst;
   const QgsFields fields = mFeatureLayerPair.layer()->fields();
 
@@ -74,15 +80,21 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   {
     // user has not provided any map tip - let's use first two fields to show
     // at least something.
-    QString featureTitleExpression = mFeatureLayerPair.layer()->displayExpression();
+    const QString featureTitleExpression = mFeatureLayerPair.layer()->displayExpression();
     for ( const QgsField &field : fields )
     {
       if ( featureTitleExpression != field.name() )
       {
-        const QPair<QString, QString> item = qMakePair(
-                                               field.displayName(),
-                                               mFeatureLayerPair.feature().attribute( field.name() ).toString()
-                                             );
+        const int idx = fields.indexFromName( field.name() );
+        const QVariant raw = mFeatureLayerPair.feature().attribute( idx );
+
+        // Use the editor widget setup to retrieve the same display format the form uses.
+        // DO NOT use .toString() directly for date-time values- that can show raw UTC/ISO.
+        // This keeps the preview and the editor in perfect sync for locale and timezone.
+        const QgsEditorWidgetSetup ew = mFeatureLayerPair.layer()->editorWidgetSetup( idx );
+        const QString pretty = formatDateForPreview( fields[idx], raw, ew.config() );
+
+        const QPair<QString, QString> item = qMakePair( field.displayName(), pretty );
 
         lst.append( item );
       }
@@ -97,14 +109,15 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
     QStringList lines = mapTip.split( '\n' );
     for ( int i = 1; i < lines.count(); ++i ) // starting from index to avoid first line with "# fields"
     {
-      int index = fields.indexFromName( lines[i] );
+      const int index = fields.indexFromName( lines[i] );
       if ( index >= 0 )
       {
-        const QString val = mFeatureLayerPair.feature().attribute( index ).toString();
-        const QPair<QString, QString> item = qMakePair(
-                                               fields[index].displayName(),
-                                               val
-                                             );
+        // Type-aware formatting (dates in local time, honor display_format)
+        const QVariant raw = mFeatureLayerPair.feature().attribute( index );
+        const QgsEditorWidgetSetup ew = mFeatureLayerPair.layer()->editorWidgetSetup( index );
+        const QString pretty = formatDateForPreview( fields[index], raw, ew.config() );
+
+        const QPair<QString, QString> item = qMakePair( fields[index].displayName(), pretty );
 
         lst.append( item );
       }
@@ -115,11 +128,112 @@ QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )
   return lst;
 }
 
+QString AttributePreviewController::formatDateForPreview( const QgsField &field,
+    const QVariant &value,
+    const QVariantMap &fieldCfg ) const
+{
+  const QString displayFmt = fieldCfg.value( QStringLiteral( "display_format" ) ).toString();
+
+  //fallback value as raw QString
+  const QString fallback = value.toString();
+
+  //QDate
+  if ( field.type() == QMetaType::QDate )
+  {
+    QDate date;
+    if ( value.canConvert<QDate>() )
+    {
+      date = value.toDate();
+    }
+
+    else if ( value.userType() == QMetaType::QString )
+    {
+      date = QDate::fromString( value.toString(), Qt::ISODate );
+    }
+
+    if ( !date.isValid() )
+    {
+      return fallback;
+    }
+
+    if ( displayFmt.isEmpty() )
+    {
+      return QLocale().toString( date, QLocale::ShortFormat );
+    }
+
+    return date.toString( displayFmt );
+  }
+
+  //QTime
+  if ( field.type() == QMetaType::QTime )
+  {
+    QTime time;
+    if ( value.canConvert<QTime>() )
+    {
+      time = value.toTime();
+    }
+
+    else if ( value.userType() == QMetaType::QString )
+    {
+      time = QTime::fromString( value.toString(), Qt::ISODate );
+    }
+
+    if ( !time.isValid() )
+    {
+      return fallback;
+    }
+
+    const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "HH:mm:ss" ) : displayFmt;
+    return time.toString( fmt );
+  }
+
+  //QDateTime
+  if ( field.type() == QMetaType::QDateTime )
+  {
+    QDateTime dateTime;
+    if ( value.canConvert<QDateTime>() )
+    {
+      dateTime = value.toDateTime();
+    }
+    else if ( value.userType() == QMetaType::QString )
+    {
+      dateTime = QDateTime::fromString( value.toString(), Qt::ISODateWithMs );
+
+      if ( !dateTime.isValid() )
+      {
+        dateTime = QDateTime::fromString( value.toString(), Qt::ISODate );
+      }
+    }
+
+    if ( !dateTime.isValid() )
+    {
+      return fallback;
+    }
+
+    // IMPORTANT If the source was UTC (ex., "...Z"), convert to local so the preview
+    if ( dateTime.timeSpec() != Qt::LocalTime )
+    {
+      dateTime = dateTime.toLocalTime();
+    }
+
+    //force LocalTime to prevent Qt from re-attaching an offset during format
+    // on some platforms the spec remains "OffsetFromUTC" or "UTC".
+    dateTime.setTimeSpec( Qt::LocalTime );
+
+    // We use the editor widget's display format so the preview obeys the same way
+    // formatting rules as the form editor "keeps UX consistent".
+    const QString fmt = displayFmt.isEmpty() ? QStringLiteral( "yyyy-MM-dd HH:mm:ss" ) : displayFmt;
+    return dateTime.toString( fmt );
+  }
+
+  return fallback;
+}
+
 QString AttributePreviewController::mapTipImage()
 {
   QgsExpressionContext context( globalProjectLayerScopes( mFeatureLayerPair.layer() ) );
   context.setFeature( mFeatureLayerPair.feature() );
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().remove( "# image\n" ); // first line is "# image"
   return QgsExpression::replaceExpressionText( mapTip, &context );
 }
 
@@ -156,7 +270,7 @@ QString AttributePreviewController::featureTitle( )
   return title;
 }
 
-QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( QgsMapLayer *layer )
+QList<QgsExpressionContextScope *> AttributePreviewController::globalProjectLayerScopes( const QgsMapLayer *layer )
 {
   // can't use QgsExpressionContextUtils::globalProjectLayerScopes() because it uses QgsProject::instance()
   QList<QgsExpressionContextScope *> scopes;
@@ -173,7 +287,7 @@ AttributePreviewModel *AttributePreviewController::fieldModel() const
 
 AttributePreviewController::AttributePreviewController( QObject *parent )
   : QObject( parent )
-  , mFieldModel( new AttributePreviewModel() )
+  , mFieldModel( std::make_unique<AttributePreviewModel>() )
 {
 }
 
@@ -220,7 +334,7 @@ void AttributePreviewController::recalculate()
   mPhoto.clear();
   mTitle.clear();
   mType = AttributePreviewController::Empty;
-  mFieldModel.reset( new AttributePreviewModel() );
+  mFieldModel = std::make_unique<AttributePreviewModel>();
 
   if ( !mFeatureLayerPair.layer() || !mFeatureLayerPair.feature().isValid() )
     return;
@@ -228,7 +342,7 @@ void AttributePreviewController::recalculate()
   mTitle = featureTitle();
 
   // Stripping extra CR char to unify Windows lines with Unix.
-  QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QStringLiteral( "" ) );
+  const QString mapTip = mFeatureLayerPair.layer()->mapTipTemplate().replace( QStringLiteral( "\r" ), QString() );
   if ( mapTip.startsWith( "# image\n" ) )
   {
     mType = AttributePreviewController::Photo;
@@ -240,7 +354,7 @@ void AttributePreviewController::recalculate()
     if ( !items.empty() )
     {
       mType = AttributePreviewController::Fields;
-      mFieldModel.reset( new AttributePreviewModel( items ) );
+      mFieldModel = std::make_unique<AttributePreviewModel>( items );
     }
   }
   else

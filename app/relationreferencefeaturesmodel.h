@@ -12,7 +12,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
 #include "qgsproject.h"
 #include "layerfeaturesmodel.h"
 

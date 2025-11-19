@@ -444,17 +444,17 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="91"/>
+        <location filename="../qml/account/MMAccountController.qml" line="93"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Aktualizujte aplikáciu, aby ste mohli používať najnovšie funkcie.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="95"/>
+        <location filename="../qml/account/MMAccountController.qml" line="97"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Server je dočasne nedostupný,  skontrolujte svoje pripojenie alebo to skúste znova neskôr..</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="148"/>
+        <location filename="../qml/account/MMAccountController.qml" line="150"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Súhlasím s %1Podmienkami používania%3 a %2Ochranou súkromia%3</translation>
     </message>
@@ -874,29 +874,37 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="84"/>
         <source>Photo is missing.</source>
         <translation>Chýba fotografia.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="113"/>
         <source>Open Image</source>
         <translation>Otvoriť obrázok</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="115"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Obrázky (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="281"/>
         <source>Could not create directory %1.</source>
         <translation>Nepodarilo sa vytvoriť adresár %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="353"/>
         <source>Failed to process the image</source>
         <translation>Nepodarilo sa spracovať obrázok</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormPhotoSketchingPageDialog</name>
+    <message>
+        <location filename="../qml/form/components/MMFormPhotoSketchingPageDialog.qml" line="60"/>
+        <source>Undo</source>
+        <translation>Späť</translation>
     </message>
 </context>
 <context>
@@ -1780,6 +1788,11 @@ a preto nebude pridaný do projektu.</translation>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Nepodporovaný server, kontaktujte správcu servera.</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <source>Download a project and start collecting.</source>
+        <translation>Stiahnite si projekt a začnite zbierať údaje.</translation>
     </message>
 </context>
 <context>
@@ -2852,28 +2865,28 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Pracovný priestor vytvorený</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1881"/>
+        <location filename="../../core/merginapi.cpp" line="1902"/>
         <source>Project detached from the server</source>
         <translation>Projekt bol odpojený z Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4119"/>
+        <location filename="../../core/merginapi.cpp" line="4164"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Názov projektu obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4186"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace %1 already exists</source>
         <translation>Stĺpec s názvom %1 už existuje.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4292"/>
+        <location filename="../../core/merginapi.cpp" line="4337"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Teraz môžte túto stránku zavrieť a vrátiť sa do Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4318"/>
-        <location filename="../../core/merginapi.cpp" line="4345"/>
+        <location filename="../../core/merginapi.cpp" line="4363"/>
+        <location filename="../../core/merginapi.cpp" line="4390"/>
         <source>SSO authorization failed</source>
         <translation>SSO autorizácia prebehla neúspešne</translation>
     </message>
@@ -3098,12 +3111,12 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Neznámy fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="556"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Vaša požiadavka bola zaznamenaná. Prosím kontaktujte podporu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="561"/>
+        <location filename="../main.cpp" line="562"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku. Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>

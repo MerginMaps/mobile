@@ -4,14 +4,13 @@
   <source media="(prefers-color-scheme: dark)" width=350 srcset="https://raw.githubusercontent.com/MerginMaps/.github/main/images/MM_logo_HORIZ_COLOR_INVERSE_VECTOR.svg">
   <img width=350 src="https://raw.githubusercontent.com/MerginMaps/.github/main/images/MM_logo_HORIZ_COLOR_VECTOR.svg" alt="Mergin Maps logo">
 </picture>
-
+  
 Platform builds:
 
 [![Android Build](https://github.com/MerginMaps/mobile/workflows/Android/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22Android%22)
 [![iOS Build](https://github.com/MerginMaps/mobile/workflows/iOS%20Build/badge.svg)](https://github.com/MerginMaps/mobile/actions?query=workflow%3A%22iOS+Build%22)
 [![win64 Build](https://github.com/MerginMaps/mobile/actions/workflows/win.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/win.yml)
 [![macOS Build](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/macos.yml)
-[![macOS (arm64) Build](https://github.com/MerginMaps/mobile/actions/workflows/macos_arm64.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/macos_arm64.yml)
 [![linux Build](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml/badge.svg)](https://github.com/MerginMaps/mobile/actions/workflows/linux.yml)
 
 Other Checks:
@@ -33,7 +32,7 @@ Click below to download the app on your mobile device:
 <p>
 <a href='https://play.google.com/store/apps/details?id=uk.co.lutraconsulting&ah=GSqwibzO2n63iMlCjHmMuBk89t4&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/google-play-store.png' height="57" /></a>
 <a href='https://apps.apple.com/us/app/input/id1478603559?ls=1'><img alt='Download it from TestFlight' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app-store.png' width="170" /></a>
-<a href='https://github.com/MerginMaps/mobile/releases/latest'><img alt='Available on Windows' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app_download_windows.png' height="57" /></a>
+<a href='https://github.com/MerginMaps/mobile/releases/tag/2025.3.0'><img alt='Available on Windows' src='https://raw.githubusercontent.com/MerginMaps/.github/main/images/app_download_windows.png' height="57" /></a>
 </p>
 
 **Beta Release**

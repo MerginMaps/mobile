@@ -15,8 +15,6 @@
 #ifndef INPUTMAPSETTINGS_H
 #define INPUTMAPSETTINGS_H
 
-#include "inputconfig.h"
-
 #include <QObject>
 
 #include "qgscoordinatetransformcontext.h"

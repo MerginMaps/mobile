@@ -10,7 +10,6 @@
 #ifndef RELATIONFEATURESMODEL_H
 #define RELATIONFEATURESMODEL_H
 
-#include "inputconfig.h"
 #include "layerfeaturesmodel.h"
 #include "featurelayerpair.h"
 

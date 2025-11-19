@@ -15,8 +15,6 @@
 #include <QOrientationSensor>
 #include <QCompass>
 
-#include "inputconfig.h"
-
 class Compass: public QObject
 {
     Q_OBJECT

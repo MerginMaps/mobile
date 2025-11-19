@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QSignalSpy>
 
-#include "inputconfig.h"
 #include <qgsvectorlayer.h>
 #include <merginapi.h>
 #include <projectsmodel.h>
@@ -162,8 +161,8 @@ class TestMerginApi: public QObject
     void testRegistration();
     void testParseVersion();
     void testApiRoot();
-
     void testServerDiagnosticLogsUrl();
+    void testServerVersionIsAtLeast();
 
   private:
     MerginApi *mApi = nullptr;

@@ -12,8 +12,6 @@
 
 #include <QString>
 
-#include "inputconfig.h"
-
 class ImageUtils
 {
   public:
@@ -22,6 +20,7 @@ class ImageUtils
 
     /**
      * Copies EXIF metadata from sourceImage to targetImage.
+     * \note Developers need to make sure the paths don't reference the same file, it will cause empty metadata
      */
     static bool copyExifMetadata( const QString &sourceImage, const QString &targetImage );
 
@@ -30,6 +29,13 @@ class ImageUtils
      * and preserving EXIF metadata.
      */
     static bool rescale( const QString &path, int quality );
+
+    /**
+     * Removes orientation metadata, which is necessary when copying an image which is already rotated.
+     * \param sourceImage path to image
+     * \return bool if successful
+     */
+    static bool clearOrientationMetadata( const QString &sourceImage );
 };
 
 #endif // IMAGEUTILS_H

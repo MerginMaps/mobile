@@ -10,9 +10,6 @@
 #define TESTATTRIBUTECONTROLLER_H
 
 #include <QObject>
-#include <QtTest>
-
-#include "inputconfig.h"
 
 class TestAttributeController: public QObject
 {
@@ -33,6 +30,12 @@ class TestAttributeController: public QObject
     void testPhotoRenaming();
     void testHtmlAndTextWidgets();
     void testVirtualFields();
+
+    /**
+     * Test that if any photo sketches exist, saving form will save them to original photo. Specifically test
+     * the sketches play nicely with renaming expressions and metadata gets copied too.
+     */
+    void testPhotoSketchingSave();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

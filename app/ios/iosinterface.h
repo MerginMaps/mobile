@@ -20,7 +20,6 @@
 
 #include <QVariantMap>
 
-#include "inputconfig.h"
 #include "iosimagepicker.h"
 
 /**

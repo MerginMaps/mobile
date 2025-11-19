@@ -15,11 +15,11 @@ import QtQuick.Shapes
 
 import mm 1.0 as MM
 
-import "../components"
+import "../components" as MMComponents
 import "../map/components"
 import "./components" as MMGpsComponents
 
-MMDrawer {
+MMComponents.MMDrawer {
   id: root
 
   property var mapTool
@@ -53,12 +53,11 @@ MMDrawer {
 
   drawerHeader.title: qsTr( "Measure" )
 
-  drawerHeader.topLeftItemContent: MMButton {
-    type: MMButton.Types.Primary
-    text: measurementFinalized ? qsTr( "Repeat" ) : qsTr( "Undo" )
-    iconSourceLeft: measurementFinalized ? __style.syncIcon : __style.undoIcon
+  drawerHeader.topLeftItemContent: MMComponents.MMRoundButton {
+    iconSource: measurementFinalized ? __style.syncIcon : __style.undoIcon
+
     bgndColor: __style.lightGreenColor
-    size: MMButton.Sizes.Small
+
     enabled: measurementFinalized || canUndo
 
     anchors {
@@ -74,7 +73,7 @@ MMDrawer {
     id: mainColumn
 
     width: parent.width
-    spacing: __style.margin10
+    spacing: __style.margin20
 
     Row {
       width: parent.width
@@ -101,13 +100,13 @@ MMDrawer {
       spacing: __style.margin12
       visible: !root.measurementFinalized
 
-      MMButton {
+      MMComponents.MMButton {
         text: root.canCloseShape ? qsTr( "Close shape" ) : qsTr( "Add point" )
         iconSourceLeft: canCloseShape ? __style.closeShapeIcon : __style.plusIcon
         onClicked: canCloseShape ? root.mapTool.finalizeMeasurement( true ) : root.mapTool.addPoint()
       }
 
-      MMButton {
+      MMComponents.MMButton {
         type: MMButton.Types.Secondary
         text: qsTr( "Done" )
         iconSourceLeft: __style.doneCircleIcon

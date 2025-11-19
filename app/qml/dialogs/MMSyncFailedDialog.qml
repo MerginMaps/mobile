@@ -23,6 +23,7 @@ MMComponents.MMDrawerDialog {
   id: root
 
   property string detailedText
+  property bool hasDetails: root.detailedText?.trim() ?? false
 
   title: qsTr( "Failed to synchronise your changes" )
   imageSource: __style.syncFailedImage
@@ -30,9 +31,13 @@ MMComponents.MMDrawerDialog {
   description: qsTr( "Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project." )
   primaryButton.text: qsTr( "Ok, I understand" )
 
-  additionalContent: MMDialogComponents.MMDialogAdditionalText {
+  additionalContent: Loader {
     width: parent.width
-    text: root.detailedText
+    active: root.hasDetails //status we receive if there is no data connection, either True or False
+    sourceComponent: MMDialogComponents.MMDialogAdditionalText {
+      width: parent.width
+      text: qsTr("Details") + ": " + root.detailedText
+    }
   }
 
   onPrimaryButtonClicked: {

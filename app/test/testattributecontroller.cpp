@@ -25,6 +25,7 @@
 #include "attributetabmodel.h"
 #include "attributeformproxymodel.h"
 #include "attributeformmodel.h"
+#include "imageutils.h"
 #include "inpututils.h"
 
 void TestAttributeController::init()
@@ -698,7 +699,7 @@ void TestAttributeController::testFieldsOutsideForm()
 void TestAttributeController::testPhotoRenaming()
 {
   QString projectName = QStringLiteral( "testPhotoRenaming" );
-  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
 
   QDir tempDir( projectDir );
   QVERIFY( tempDir.removeRecursively() );
@@ -994,4 +995,231 @@ void TestAttributeController::testVirtualFields()
   QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text" );
   controller.setFormValue( field2->id(), "my new text2" );
   QCOMPARE( controller.featureLayerPair().feature().attribute( 1 ), "my new text2" );
+}
+
+void TestAttributeController::testPhotoSketchingSave()
+{
+  const QString projectName = QStringLiteral( "testPhotoSketchSaving" );
+  const QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image2.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image3.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/image4.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image5.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/media/with_slash/image6.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_mynotes.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/photos/Survey.jpg" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format" ) ) );
+  QVERIFY( !QDir().exists( projectDir + QStringLiteral( "/custom_photo_name_format" ) ) );
+
+  //create "sketches"
+  InputUtils::copyFile( QStringLiteral( "%1/image1.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image1.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  InputUtils::copyFile( QStringLiteral( "%1/image2.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image2.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  InputUtils::copyFile( QStringLiteral( "%1/media/image3.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image3.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  InputUtils::copyFile( QStringLiteral( "%1/media/image4.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image4.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  InputUtils::copyFile( QStringLiteral( "%1/media/with_slash/image5.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image5.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+  InputUtils::copyFile( QStringLiteral( "%1/media/with_slash/image6.jpg" ).arg( projectDir ), QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) );
+  ImageUtils::copyExifMetadata( QStringLiteral( "%1/photo.jpg" ).arg( TestUtils::testDataDir() ), QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) );
+  QVERIFY( QFile::exists( QStringLiteral( "%1/%2/image6.jpg" ).arg( QDir::tempPath(), projectName ) ) );
+
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  const QgsFeature feat( surveyLayer->fields() );
+  const FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+  QCOMPARE( items.size(), 9 );
+
+  //
+  // Attachment fields:
+  // 3 - photo
+  // 4 - photo_with_slash
+  // 5 - photo_in_subfolder_relative_to_project_path -> subfolder 'media'
+  // 6 - photo_in_subfolder_relative_to_default_path -> subfolder 'media'
+  // 7 - photo_with_slash_in_subfolder_relative_to_project_path -> subfolder 'media/with_slash'
+  // 8 - photo_with_slash_in_subfolder_relative_to_default_path -> subfolder 'media/with_slash'
+  //
+
+  // These are the field values set by QML code after attaching a photo
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "mynotes " ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller.setFormValue( items.at( 4 ), QStringLiteral( "image2.jpg" ) );
+  controller.setFormValue( items.at( 5 ), QStringLiteral( "media/image3.jpg" ) );
+  controller.setFormValue( items.at( 6 ), QStringLiteral( "image4.jpg" ) );
+  controller.setFormValue( items.at( 7 ), QStringLiteral( "media/with_slash/image5.jpg" ) );
+  controller.setFormValue( items.at( 8 ), QStringLiteral( "image6.jpg" ) );
+
+  controller.save();
+
+  struct testCase
+  {
+    QString originalPath;
+    QString expectedNewPath;
+    int fieldIdx;
+    QString expectedNewFieldValue;
+  };
+
+  QList<testCase> testCases;
+
+  QString originalPath;
+  QString expectedNewPath;
+  int fieldIdx;
+  QString expectedNewFieldValue;
+
+  const FormItem *fieldToTest;
+
+  //
+  // Field "photo"
+  //  - Contains custom photo name expression
+  //  - Does not contain any default path definition
+  //  - Stores paths relative to project path
+  //
+
+  fieldIdx = 3;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image1.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/image_mynotes.jpg" );
+  expectedNewFieldValue = QStringLiteral( "image_mynotes.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash"
+  //  - Contains custom photo name expression with subfolder
+  //  - Does not contain any default path definition
+  //  - Stores paths relative to project path
+  //
+
+  fieldIdx = 4;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash" ) );
+
+  originalPath = projectDir + QStringLiteral( "/image2.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/photos/Survey.jpg" );
+  expectedNewFieldValue = QStringLiteral( "photos/Survey.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_in_subfolder_relative_to_project_path"
+  //  - Contains custom photo name expression (no subfolder there)
+  //  - Images should be stored inside folder 'media' (via default path in the field config)
+  //  - Stores paths relative to project path (folder should be part of the field value)
+  //
+
+  fieldIdx = 5;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_project_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/media/image3.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/Survey_1.jpg" );
+  expectedNewFieldValue = QStringLiteral( "media/Survey_1.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_in_subfolder_relative_to_default_path"
+  //  - Contains custom photo name expression (no subfolder there)
+  //  - Images should be stored inside folder 'media' (via default path in the field config)
+  //  - Stores paths relative to default path (folder should not be part of the field value)
+  //
+
+  fieldIdx = 6;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_in_subfolder_relative_to_default_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/media/image4.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/Survey_2.jpg" );
+  expectedNewFieldValue = QStringLiteral( "Survey_2.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash_in_subfolder_relative_to_project_path"
+  //  - Contains custom photo name expression with subfolder 'custom_photo_name_format'
+  //  - Images should be stored inside folder 'media/with_slash' (via default path in the field config)
+  //  - Stores paths relative to project path (folder should be part of the field value)
+  //
+  //  - as a result, image should be stored in 'media/with_slash/custom_photo_name_format/*'
+  //
+
+  fieldIdx = 7;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_project_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/media/with_slash/image5.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format/Survey_1.jpg" );
+  expectedNewFieldValue = QStringLiteral( "media/with_slash/custom_photo_name_format/Survey_1.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  //
+  // Field "photo_with_slash_in_subfolder_relative_to_default_path"
+  //  - Contains custom photo name expression with subfolder 'custom_photo_name_format'
+  //  - Images should be stored inside folder 'media/with_slash' (via default path in the field config)
+  //  - Stores paths relative to default path (folder should not be part of the field value)
+  //
+  //  - this is kind-of project misconfiguration, the widget is configured to store photos
+  //    in 'media/with_slash', but that is overridden by the custom photo name as it includes
+  //    a subfolder and the project is configured to store paths relative to default path.
+  //    The value in the field will include the photo name format, even though the widget
+  //    will look for images inside 'media/with_slash' folder ... plugin should report this.
+  //
+
+  fieldIdx = 8;
+  fieldToTest = controller.formItem( items.at( fieldIdx ) );
+  QCOMPARE( fieldToTest->name(), QStringLiteral( "photo_with_slash_in_subfolder_relative_to_default_path" ) );
+
+  originalPath = projectDir + QStringLiteral( "/media/with_slash/image6.jpg" );
+  expectedNewPath = projectDir + QStringLiteral( "/media/with_slash/custom_photo_name_format/Survey_2.jpg" );
+  expectedNewFieldValue = QStringLiteral( "custom_photo_name_format/Survey_2.jpg" );
+
+  testCases << testCase{ originalPath, expectedNewPath, fieldIdx, expectedNewFieldValue };
+
+  const QgsFeature f = controller.featureLayerPair().feature();
+
+  for ( const auto &testCaseResult : std::as_const( testCases ) )
+  {
+    qInfo() << QStringLiteral( "Testing field #%1" ).arg( testCaseResult.fieldIdx );
+
+    QVERIFY( !QFile::exists( testCaseResult.originalPath ) );
+    QVERIFY( QFile::exists( testCaseResult.expectedNewPath ) );
+    QVERIFY( TestUtils::testExifPositionMetadataExists( testCaseResult.expectedNewPath ) );
+
+    QCOMPARE( f.attribute( testCaseResult.fieldIdx ), testCaseResult.expectedNewFieldValue );
+  }
 }

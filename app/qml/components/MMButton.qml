@@ -165,8 +165,29 @@ Button {
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
   implicitWidth: row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
 
-  topPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
-  bottomPadding: ( root.type === MMButton.Types.Tertiary ) ? 0 : 11 * __dp
+  topPadding: {
+    if ( root.type === MMButton.Types.Tertiary ) {
+      return 0;
+    }
+    else if ( root.size === MMButton.Sizes.Small ) {
+      return 7 * __dp;
+    }
+    else {
+      return 11 * __dp;
+    }
+  }
+
+  bottomPadding: {
+    if ( root.type === MMButton.Types.Tertiary ) {
+      return 0;
+    }
+    else if ( root.size === MMButton.Sizes.Small ) {
+      return 7 * __dp;
+    }
+    else {
+      return 11 * __dp;
+    }
+  }
   rightPadding: 0
   leftPadding: 0
 
@@ -189,7 +210,7 @@ Button {
       spacing: {
         if ( ( root.size === MMButton.Sizes.Small ) )
           return __style.spacing2;
-        else if ( ( buttonIconRight.visible || buttonIconLeft.visible ) )
+        else if ( ( root.iconSourceRight || root.iconSourceLeft ) )
           return __style.spacing12;
         else
           return 0;
@@ -198,12 +219,12 @@ Button {
       MMIcon {
         id: buttonIconLeft
 
-        property real paintedWidth: visible ? ( width + parent.spacing ) : 0
+        property real paintedWidth: root.iconSourceLeft ? ( width + parent.spacing ) : 0
 
         source: root.iconSourceLeft
 
         visible: root.iconSourceLeft
-        width: visible ? __style.icon24 : 0
+        width: root.iconSourceLeft ? __style.icon24 : 0
       }
 
       MMText {
@@ -218,12 +239,12 @@ Button {
       MMIcon {
         id: buttonIconRight
 
-        property real paintedWidth: visible ? ( width + parent.spacing ) : 0
+        property real paintedWidth: root.iconSourceRight ? ( width + parent.spacing ) : 0
 
         source: root.iconSourceRight
 
         visible: root.iconSourceRight
-        width: visible ? __style.icon24 : 0
+        width: root.iconSourceRight ? __style.icon24 : 0
       }
     }
 
