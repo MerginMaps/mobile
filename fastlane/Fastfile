@@ -20,7 +20,8 @@ platform :android do
   lane :deploy_app_sharing do |options|
     share_url = upload_to_play_store_internal_app_sharing(
       json_key: ENV['MM_GOOGLE_KEY_PATH'],
-      apk: options[:mm_path]
+      apk: options[:apk_path],
+      aab: options[:aab_path]
     )
     puts "APP_SHARE_URL: #{share_url}"
   end

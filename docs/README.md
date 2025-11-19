@@ -4,6 +4,10 @@ For user documentation, please read [merginmaps.com/docs](https://merginmaps.com
 
 For setup of development environment, please see [INSTALL](../INSTALL.md).
 
+For code convention, please see [code convention](./code_convention.md).
+
+For day-to-day development procedure, please see [how we work](./how_we_work.md).
+
 For translations, please see [translation docs](translations.md).
 
 For various how-tos, please see [howto dev docs](howto.md).

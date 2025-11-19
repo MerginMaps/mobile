@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2025.7.0",
+    "version": "2025.8.0",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
@@ -112,6 +112,13 @@
           "name": "qttools",
           "host": true,
           "default-features": false
+        }
+    ],
+    "builtin-baseline": "d6995a0cf3cafda5e9e52749fad075dd62bfd90c",
+    "overrides": [
+        {
+            "name": "openssl",
+            "version": "3.3.2"
         }
     ]
 }
