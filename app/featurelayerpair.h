@@ -21,8 +21,6 @@
 #include "qgsfeature.h"
 #include "qgsvectorlayer.h"
 
-#include "inputconfig.h"
-
 /**
  * \ingroup quick
  * \brief Pair of QgsFeature and QgsVectorLayer

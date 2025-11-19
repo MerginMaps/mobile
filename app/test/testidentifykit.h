@@ -12,8 +12,6 @@
 #include <QObject>
 #include <QtTest>
 
-#include "inputconfig.h"
-
 class TestIdentifyKit: public QObject
 {
     Q_OBJECT

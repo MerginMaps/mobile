@@ -6,13 +6,13 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include <QObject>
-#include <QtTest>
 
 #ifndef TESTPOSITION_H
 #define TESTPOSITION_H
 
-#include "inputconfig.h"
+#include <QtTest>
+
+#include "mmconfig.h"
 #include "position/positionkit.h"
 
 class TestPosition: public QObject

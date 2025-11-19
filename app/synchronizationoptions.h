@@ -10,8 +10,6 @@
 #ifndef SYNCHRONIZATIONOPTIONS_H
 #define SYNCHRONIZATIONOPTIONS_H
 
-#include "inputconfig.h"
-
 #include <QObject>
 #include <QNetworkReply>
 

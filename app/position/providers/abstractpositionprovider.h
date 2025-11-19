@@ -10,7 +10,6 @@
 #ifndef ABSTRACTPOSITIONPROVIDER_H
 #define ABSTRACTPOSITIONPROVIDER_H
 
-#include "inputconfig.h"
 #include "qobject.h"
 
 #include "position/geoposition.h"

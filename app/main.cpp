@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "inputconfig.h"
+#include "mmconfig.h"
 
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -23,7 +23,7 @@
 #include <QLocale>
 #include <QImageReader>
 #include <QStandardPaths>
-#ifdef INPUT_TEST
+#ifdef MM_TEST
 #include "test/inputtests.h"
 #endif
 #include <qqml.h>
@@ -414,11 +414,11 @@ int main( int argc, char *argv[] )
 #endif
 
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
-  qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
+  qDebug() << "Mergin Maps App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
   qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
   qDebug() << "Device uuid " << CoreUtils::deviceUuid();
 
@@ -426,7 +426,7 @@ int main( int argc, char *argv[] )
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     projectDir = tests.initTestingDir();
@@ -573,9 +573,6 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "Application has quit" ) );
   } );
 
-  // this fixes the error dump from C++ defined QML components, when quiting application
-  QObject::connect( &app, &QCoreApplication::aboutToQuit, &engine, &QQmlEngine::deleteLater );
-
   QObject::connect( &help, &InputHelp::submitReportSuccessful, &lambdaContext, [&notificationModel]()
   {
     notificationModel.addSuccess( QObject::tr( "Report submitted. Please contact the support" ) );
@@ -678,7 +675,7 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
@@ -868,6 +865,13 @@ int main( int argc, char *argv[] )
     qDebug() << "FATAL ERROR: unable to create main.qml";
     return EXIT_FAILURE;
   }
+
+  // this fixes the error dump from C++ defined QML components, when quiting application
+  QObject::connect( &app, &QCoreApplication::aboutToQuit, object, [&]
+  {
+    object->deleteLater();
+    engine.clearComponentCache();
+  } );
 
 #ifdef Q_OS_IOS
   QString logoUrl = "qrc:logo.png";

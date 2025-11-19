@@ -12,8 +12,6 @@
 
 #include <QString>
 
-#include "inputconfig.h"
-
 class ImageUtils
 {
   public:

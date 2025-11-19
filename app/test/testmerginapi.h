@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QSignalSpy>
 
-#include "inputconfig.h"
 #include <qgsvectorlayer.h>
 #include <merginapi.h>
 #include <projectsmodel.h>

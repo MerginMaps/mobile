@@ -151,7 +151,7 @@ public class PositionTrackingService extends Service implements LocationListener
         manager.createNotificationChannel( serviceChannel );
 
         // Build notification for position tracking
-        Intent notificationIntent = new Intent( this, InputActivity.class );
+        Intent notificationIntent = new Intent( this, MMActivity.class );
 
         PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE );
 

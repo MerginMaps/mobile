@@ -12,7 +12,6 @@
 
 #include <QObject>
 
-#include "inputconfig.h"
 #include "fieldsmodel.h"
 #include "qgsfieldmodel.h"
 #include "qgsvectorlayer.h"
