@@ -33,9 +33,19 @@ PositionKit::PositionKit( QObject *parent )
 {
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCRS()
+QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
+{
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs2D()
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs3DEllipsoidHeight()
+{
+  return QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
 }
 
 void PositionKit::startUpdates()

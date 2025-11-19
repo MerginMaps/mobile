@@ -13,12 +13,14 @@
  */
 
 #include "inputcoordinatetransformer.h"
+
+#include "positionkit.h"
 #include "qgslogger.h"
 
 InputCoordinateTransformer::InputCoordinateTransformer( QObject *parent )
   : QObject( parent )
 {
-  mCoordinateTransform.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+  mCoordinateTransform.setSourceCrs( PositionKit::positionCrs3D() );
 }
 
 QgsPoint InputCoordinateTransformer::projectedPosition() const

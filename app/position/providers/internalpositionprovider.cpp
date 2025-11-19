@@ -9,6 +9,7 @@
 
 #include "internalpositionprovider.h"
 #include "coreutils.h"
+#include "inpututils.h"
 
 #include "qgis.h"
 
@@ -140,9 +141,15 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  if ( !qgsDoubleNear( position.coordinate().altitude(), mLastPosition.elevation ) )
+  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+  const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                   PositionKit::positionCrs3DEllipsoidHeight(),
+                                   PositionKit::positionCrs3D(),
+                                   QgsProject::instance()->transformContext(),
+  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()} );
+  if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
   {
-    mLastPosition.elevation = position.coordinate().altitude();
+    mLastPosition.elevation = geoidPosition.z();
     positionDataHasChanged = true;
   }
 

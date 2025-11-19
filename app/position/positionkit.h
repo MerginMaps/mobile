@@ -15,6 +15,7 @@
 #include "qgspoint.h"
 #include "qgscoordinatereferencesystem.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AppSettings;
 
@@ -27,6 +28,8 @@ class AppSettings;
 class PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
@@ -115,8 +118,12 @@ class PositionKit : public QObject
     double vdop() const;
     double pdop() const;
 
-    // Coordinate reference system of position - WGS84 (constant)
-    Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
+    // Coordinate reference system - WGS84 (EPSG:4326)
+    static QgsCoordinateReferenceSystem positionCrs2D();
+    // Coordinate reference system - WGS84 + ellipsoid height (EPSG:4979)
+    static QgsCoordinateReferenceSystem positionCrs3DEllipsoidHeight();
+    // Coordinate reference system of position - WGS84 + geoid height - egm96_15 (EPSG:9707)
+    static QgsCoordinateReferenceSystem positionCrs3D();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );

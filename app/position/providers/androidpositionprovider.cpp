@@ -19,6 +19,8 @@
 
 #include <QTimeZone>
 
+#include "inpututils.h"
+
 
 int AndroidPositionProvider::sLastInstanceId = 0;
 QMap<int, AndroidPositionProvider *> AndroidPositionProvider::sInstances;
@@ -53,13 +55,16 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
   {
     const jdouble value = location.callMethod<jdouble>( "getAltitude" );
     if ( !qFuzzyIsNull( value ) )
-      pos.elevation = value;
+    {
+      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                       PositionKit::positionCrs3DEllipsoidHeight(),
+                                       PositionKit::positionCrs3D(),
+                                       QgsCoordinateTransformContext(),
+      {longitude, latitude, value} );
+      pos.elevation = geoidPosition.z();
+    }
   }
-
-  // TODO: we are getting ellipsoid elevation here. From API level 34 (Android 14),
-  // there is AltitudeConverter() class in Java that can be used to add MSL altitude
-  // to Location object. How to deal with this correctly? (we could also convert
-  // to MSL (orthometric) altitude ourselves if we add geoid model to our APK
 
   // horizontal accuracy
   if ( location.callMethod<jboolean>( "hasAccuracy" ) )

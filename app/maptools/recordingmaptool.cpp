@@ -59,7 +59,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     pointToAdd = mPositionKit->positionCoordinate();
 
     QgsPoint transformed = InputUtils::transformPoint(
-                             PositionKit::positionCRS(),
+                             PositionKit::positionCrs3D(),
                              mActiveLayer->crs(),
                              mActiveLayer->transformContext(),
                              pointToAdd
@@ -594,7 +594,7 @@ void RecordingMapTool::onPositionChanged()
       QgsPoint position = mPositionKit->positionCoordinate();
 
       QgsPointXY transformed = InputUtils::transformPoint(
-                                 PositionKit::positionCRS(),
+                                 PositionKit::positionCrs3D(),
                                  mActiveLayer->sourceCrs(),
                                  mActiveLayer->transformContext(),
                                  position
