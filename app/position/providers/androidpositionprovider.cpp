@@ -60,7 +60,7 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
       const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        PositionKit::positionCrs3DEllipsoidHeight(),
                                        PositionKit::positionCrs3D(),
-                                       QgsCoordinateTransformContext(),
+                                       QgsProject::instance()->transformContext(),
       {longitude, latitude, value} );
       pos.elevation = geoidPosition.z();
     }

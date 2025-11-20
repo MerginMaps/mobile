@@ -476,7 +476,7 @@ QString InputUtils::geometryLengthAsString( const QgsGeometry &geometry )
 {
   QgsDistanceArea distanceArea;
   distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  distanceArea.setSourceCrs( PositionKit::positionCrs2D(), QgsCoordinateTransformContext() );
+  distanceArea.setSourceCrs( PositionKit::positionCrs2D(), QgsProject::instance()->transformContext() );
 
   qreal length = distanceArea.measureLength( geometry );
 
@@ -955,7 +955,7 @@ QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSe
   const QgsPointXY transformedXY = transformPoint(
                                      mapSettings->destinationCrs(),
                                      PositionKit::positionCrs2D(),
-                                     QgsCoordinateTransformContext(),
+                                     mapSettings->transformContext(),
                                      positionMapCrs
                                    );
 
