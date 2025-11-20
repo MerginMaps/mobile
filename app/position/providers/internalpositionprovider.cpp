@@ -153,7 +153,14 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  const double geoidSeparation = position.coordinate().altitude() - geoidPosition.z();
+  // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
+  // but that's not really true in our case:
+  // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
+  //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
+  // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
+  //   ellipsoid altitude (so we do not rely on geoid model of unknown quality/resolution)
+  const double ellipsoidAltitude = position.coordinate().altitude();
+  const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
   if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
   {
     mLastPosition.elevation_diff = geoidSeparation;

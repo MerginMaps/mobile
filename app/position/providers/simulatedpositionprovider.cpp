@@ -10,6 +10,7 @@
 #include "simulatedpositionprovider.h"
 
 #include <memory>
+#include <QtNumeric>
 
 #include "inpututils.h"
 #include "qgspoint.h"
@@ -88,16 +89,21 @@ void SimulatedPositionProvider::generateRadiusPosition()
   position.latitude = latitude;
   position.longitude = longitude;
 
-  double altitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,120>m and lost (0)
-  if ( altitude <= 120 )
+  double ellipsoidAltitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,115>m and lost (NaN)
+  if ( ellipsoidAltitude <= 115 )
   {
     const QgsPoint geoidPosition = InputUtils::transformPoint(
                                      PositionKit::positionCrs3DEllipsoidHeight(),
                                      PositionKit::positionCrs3D(),
                                      QgsCoordinateTransformContext(),
-    {longitude, latitude, altitude} );
+    {longitude, latitude, ellipsoidAltitude} );
     position.elevation = geoidPosition.z();
-    position.elevation_diff = altitude - position.elevation;
+    position.elevation_diff = ellipsoidAltitude - position.elevation;
+  }
+  else
+  {
+    position.elevation = qQNaN();
+    position.elevation_diff = qQNaN();
   }
 
   const QDateTime timestamp = QDateTime::currentDateTime();
