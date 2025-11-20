@@ -102,15 +102,15 @@ else ()
 endif ()
 
 if (IOS)
-  # Important, if QGIS_QUICK_DATA_PATH value is changed, old projects may not be found after release on iOS devices
+  # Important, if QGIS_QUICK_DATA_PATH value is changed, old projects may not be found
+  # after release on iOS devices
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
-elseif (ANDROID) 
-  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (ANDROID)
 elseif (WIN)
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
 elseif (LNX OR MACOS)
   set(QGIS_QUICK_DATA_PATH_DEFAULT ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data)
-endif()
+endif ()
 
 set(COVERAGE
     FALSE
@@ -124,7 +124,9 @@ set(USE_MM_SERVER_API_KEY
 )
 set(QGIS_QUICK_DATA_PATH
     ${QGIS_QUICK_DATA_PATH_DEFAULT}
-    CACHE STRING "Path for QGIS-related data (e.g. proj) and projects. A correct value is set for each platform if not overridden."
+    CACHE
+      STRING
+      "Path for QGIS-related data (e.g. proj) and projects. A correct value is set for each platform if not overridden."
 )
 set(IOS_USE_PRODUCTION_SIGNING
     FALSE
