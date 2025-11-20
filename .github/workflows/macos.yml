@@ -122,7 +122,6 @@ jobs:
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DHAVE_BLUETOOTH=FALSE \
              -DUSE_KEYCHAIN=No \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-db/app/android/assets/qgis-data \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -DENABLE_TESTS=TRUE \
@@ -154,7 +153,6 @@ jobs:
              -DUSE_SERVER_API_KEY=TRUE \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-rel/app/android/assets/qgis-data \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
              -GNinja \
              -S ../mm
