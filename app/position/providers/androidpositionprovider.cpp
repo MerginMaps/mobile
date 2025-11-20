@@ -57,7 +57,7 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     if ( !qFuzzyIsNull( value ) )
     {
       // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-      const QgsPoint geoidPosition = InputUtils::transformPoint3D(
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        PositionKit::positionCrs3DEllipsoidHeight(),
                                        PositionKit::positionCrs3D(),
                                        QgsProject::instance()->transformContext(),

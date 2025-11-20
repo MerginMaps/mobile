@@ -10,7 +10,6 @@
 #include "appsettings.h"
 #include "coreutils.h"
 
-#include <qcoreapplication_platform.h>
 #include <QSettings>
 #include <QFileInfo>
 
@@ -199,7 +198,7 @@ void AppSettings::setActivePositionProviderId( const QString &id )
     return;
 
   mActivePositionProviderId = id;
-  setValue( QStringLiteral( "activePositionProviderId" ), mActivePositionProviderId );
+  setValue( QStringLiteral( "activePositionProviderId" ), id );
   emit activePositionProviderIdChanged( mActivePositionProviderId );
 }
 

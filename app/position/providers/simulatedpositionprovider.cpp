@@ -91,9 +91,9 @@ void SimulatedPositionProvider::generateRadiusPosition()
   double altitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,120>m and lost (0)
   if ( altitude <= 120 )
   {
-    const QgsPoint geoidPosition = InputUtils::transformPoint3D(
-                                     QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
-                                     PositionKit::positionCRS(),
+    const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                     PositionKit::positionCrs3DEllipsoidHeight(),
+                                     PositionKit::positionCrs3D(),
                                      QgsCoordinateTransformContext(),
     {longitude, latitude, altitude} );
     position.elevation = geoidPosition.z();
@@ -126,9 +126,9 @@ void SimulatedPositionProvider::generateConstantPosition()
   position.latitude = mLatitude;
   position.longitude = mLongitude;
   // we take 100 as elevation returned by WGS84 ellipsoid and recalculate it to geoid
-  const QgsPoint geoidPosition = InputUtils::transformPoint3D(
-                                   QgsCoordinateReferenceSystem::fromEpsgId( 4979 ),
-                                   PositionKit::positionCRS(),
+  const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                   PositionKit::positionCrs3DEllipsoidHeight(),
+                                   PositionKit::positionCrs3D(),
                                    QgsCoordinateTransformContext(),
   {mLongitude, mLatitude, 100} );
   position.elevation = geoidPosition.z();

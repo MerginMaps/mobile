@@ -396,7 +396,6 @@ void TestPosition::testPositionTracking()
   QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
 
   trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
-  qDebug() << manager.trackedGeometry().asWkt( 3 );
   QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 133.331" ) ) );
 
   // store the geometry

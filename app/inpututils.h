@@ -299,18 +299,8 @@ class InputUtils: public QObject
     /**
       * Transforms point between different crs
       * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
-      * \note This function only does 2D crs transformation, use \a transformPoint3D for 3D transformation!
       */
     Q_INVOKABLE static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-        const QgsCoordinateReferenceSystem &destCrs,
-        const QgsCoordinateTransformContext &context,
-        const QgsPoint &srcPoint );
-
-    /**
-      * Transforms point between different crs
-      * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
-      */
-    Q_INVOKABLE static QgsPoint transformPoint3D( const QgsCoordinateReferenceSystem &srcCrs,
         const QgsCoordinateReferenceSystem &destCrs,
         const QgsCoordinateTransformContext &context,
         const QgsPoint &srcPoint );

@@ -40,7 +40,7 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs2D()
 {
-  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3DEllipsoidHeight()
