@@ -21,8 +21,8 @@ namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 90000;
-  const int TEST_WORKSPACE_STORAGE_SIZE = 1073741824; // 1 GB
-  const int TEST_WORKSPACE_PROJECT_NUMER = 100;
+  const int TEST_WORKSPACE_STORAGE_SIZE = 1 * 1024 * 1024 * 1024; // 1 GB
+  const int TEST_WORKSPACE_PROJECT_NUMBER = 100;
 
   //! authorize user and select the active workspace
   void authorizeUser( MerginApi *api, const QString &username, const QString &password );
@@ -46,6 +46,10 @@ namespace TestUtils
   QString generateUsername();
   QString generateEmail();
   QString generatePassword();
+  /*
+  * Create a workspace name from the generated username
+  * Output: a workspace name: mmat-DayMonthYear-HourMinutes
+  */
   QString generateWorkspaceName( const QString &username );
 
   QString testDataDir();

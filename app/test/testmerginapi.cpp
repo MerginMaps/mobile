@@ -2000,10 +2000,7 @@ void TestMerginApi::testSelectiveSyncDisabledInConfig()
     photoDirExtra.mkpath( photoPathClient2 );
 
   // simulate some traffic, let both clients create few photos several times (so that project has longer history)
-  for ( int i :
-        {
-          1, 2, 3, 4, 5
-        } )
+  for ( int i : { 1, 2, 3, 4, 5 } )
   {
     QFile f1( photoPathClient1 + "/" + QString( "photoC1-%1.png" ).arg( i ) );
     f1.open( QIODevice::WriteOnly );

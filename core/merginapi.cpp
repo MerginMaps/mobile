@@ -3847,7 +3847,7 @@ void MerginApi::deleteAccountFinished()
   r->deleteLater();
 }
 
-void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, const int storageLimit, const int projectLimit )
+void MerginApi::updateWorkspaceService( const QString &workspaceId, const QString &payload )
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -3859,16 +3859,7 @@ void MerginApi::updateWorkspaceStorageProjectLimit( const QString &workspaceId, 
   request.setUrl( url );
   request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
 
-  // Create JSON payload
-  QJsonObject limitsOverride;
-  limitsOverride["storage"] = storageLimit;
-  limitsOverride["projects"] = projectLimit;
-  limitsOverride["api_allowed"] = true;
-
-  QJsonObject payload;
-  payload["limits_override"] = limitsOverride;
-
-  const QJsonDocument doc( payload );
+  const QJsonDocument doc = QJsonDocument::fromJson( payload.toUtf8() );
   const QByteArray data = doc.toJson();
 
   // Send PATCH request

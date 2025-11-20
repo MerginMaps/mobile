@@ -123,14 +123,14 @@ QString TestUtils::generateUsername()
 {
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "input-%1" ).arg( uniqename );
+  return QStringLiteral( "mobile-%1" ).arg( uniqename );
 }
 
 QString TestUtils::generateEmail()
 {
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "mergin+autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
+  return QStringLiteral( "mobile-autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
 }
 
 QString TestUtils::generatePassword()
@@ -141,11 +141,7 @@ QString TestUtils::generatePassword()
 
 QString TestUtils::generateWorkspaceName( const QString &username )
 {
-  /*
-  * Create a workspace name from the generated username
-  * Output: a workspace name: mmat-DayMonthYear-HourMinutes
-  */
-  static const QRegularExpression regex( R"(merginautotest(\d{6})-(\d{4})\d{2}-\d{3})" );
+  static const QRegularExpression regex( R"(mobile-autotest(\d{6})-(\d{4})\d{2}-\d{3})" );
   const QRegularExpressionMatch match = regex.match( username );
 
   if ( match.hasMatch() )
@@ -189,29 +185,38 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   QString workspace = generateWorkspaceName( username );
   api->createWorkspace( workspace );
   bool workspaceSuccess = wsSpy.wait( TestUtils::LONG_REPLY );
-  if ( workspaceSuccess )
+  QVERIFY( workspaceSuccess );
+  qDebug() << "CREATED NEW WORKSPACE:" << workspace;
+
+  // call userInfo to set active workspace
+  QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
+  api->getUserInfo();
+  QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
+
+  // change the data plan
+  QString workspaceId = QString::number( api->userInfo()->activeWorkspaceId() );
+  QSignalSpy wsStorageSpy( api, &MerginApi::updateWorkspaceService );
+
+  // Create JSON payload to change the data plan
+  QString payload = QString( R"({
+                             "limits_override": {
+                             "storage": %1,
+                             "projects" : %2,
+                             "api_allowed" : true
+                             }
+  })" ).arg( TEST_WORKSPACE_STORAGE_SIZE ).arg( TEST_WORKSPACE_PROJECT_NUMBER );
+
+  api->updateWorkspaceService( workspaceId, payload );
+  bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
+  if ( workspaceStorageModified )
   {
-    qDebug() << "CREATED NEW WORKSPACE:" << workspace;
-
-    // call userInfo to set active workspace
-    QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
-    api->getUserInfo();
-    QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
-    QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
-
-    // change the data plan
-    QString workspaceId = QString::number( api->userInfo()->activeWorkspaceId() );
-    QSignalSpy wsStorageSpy( api, &MerginApi::updateWorkspaceStorageProjectLimit );
-    api->updateWorkspaceStorageProjectLimit( workspaceId, TestUtils::TEST_WORKSPACE_STORAGE_SIZE, TestUtils::TEST_WORKSPACE_PROJECT_NUMER );
-    bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
-    if ( workspaceStorageModified )
-    {
-      qDebug() << "Updated the storage limit" << workspace;
-    }
-
-    // this needs to be cleared, as the user will be authorized in the test cases.
-    api->clearAuth();
+    qDebug() << "Updated the storage limit" << workspace;
   }
+
+// this needs to be cleared, as the user will be authorized in the test cases.
+  api->clearAuth();
+
 }
 
 QString TestUtils::testDataDir()

@@ -399,8 +399,9 @@ class MerginApi: public QObject
 
     /**
      * Increase storage for running tests
+     * Available only on dev server environments!
      */
-    void updateWorkspaceStorageProjectLimit( const QString &workspaceId, const int storageLimit, const int projectLimit );
+    void updateWorkspaceService( const QString &workspaceId, const QString &payload );
 
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
