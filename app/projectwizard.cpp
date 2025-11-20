@@ -88,7 +88,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   return l;
 }
 
-static QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath )
+QgsVectorLayer *ProjectWizard::createTrackingLayer( const QString &trackingGpkgPath )
 {
   // based on the code in https://github.com/MerginMaps/qgis-plugin/blob/master/Mergin/utils.py
   // (create_tracking_layer(), setup_tracking_layer(), set_tracking_layer_flags())
@@ -108,7 +108,7 @@ static QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath )
                                   fields,
                                   Qgis::WkbType::LineStringZM,
                                   QgsCoordinateReferenceSystem( "EPSG:4326" ),
-                                  QgsCoordinateTransformContext(),
+                                  mSettings->transformContext(),
                                   options );
   delete writer;
 
