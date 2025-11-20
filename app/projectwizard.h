@@ -48,7 +48,7 @@ class ProjectWizard : public QObject
     void notifySuccess( const QString &message );
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
-    QgsVectorLayer *createTrackingLayer(const QString &trackingGpkgPath);
+    QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath );
     QgsFields createFields( const QList<FieldConfiguration> fieldsConfig ) const;
     QgsSingleSymbolRenderer *surveyLayerRenderer();
     QVariant::Type parseType( const QString &type ) const;
