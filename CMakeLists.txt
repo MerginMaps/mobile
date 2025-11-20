@@ -106,6 +106,8 @@ if (IOS)
   # after release on iOS devices
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
 elseif (ANDROID)
+  # Android sets this up automatically at runtime
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "")
 elseif (WIN)
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
 elseif (LNX OR MACOS)
