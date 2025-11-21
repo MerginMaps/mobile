@@ -1,0 +1,17 @@
+#ifndef MMCONFIG_H
+#define MMCONFIG_H
+
+#cmakedefine VERSTR "@ESCAPED_VERSTR@"
+#cmakedefine MM_VERSION @MM_VERSION@
+#cmakedefine MM_VERSION_CODE @MM_VERSION_CODE@
+
+#cmakedefine QGIS_QUICK_DATA_PATH @QGIS_QUICK_DATA_PATH@
+#cmakedefine MM_FORMATS_PATH @MM_FORMATS_PATH@
+
+#cmakedefine MM_TEST
+#cmakedefine TEST_DATA_DIR "@TEST_DATA_DIR@"
+  
+#cmakedefine HAVE_BLUETOOTH
+
+#endif
+

@@ -10,8 +10,6 @@
 #ifndef LAYERTREEFLATMODELPIXMAPPROVIDER_H
 #define LAYERTREEFLATMODELPIXMAPPROVIDER_H
 
-#include "inputconfig.h"
-
 #include "layer/layertreeflatmodel.h"
 
 #include <QQuickImageProvider>

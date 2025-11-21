@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="264"/>
+        <location filename="../activeproject.cpp" line="271"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="264"/>
+        <location filename="../activeproject.cpp" line="271"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A térképnek és az eszközöknek meghatározatlan viselkedése lesz!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="276"/>
-        <location filename="../activeproject.cpp" line="285"/>
+        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Layer</source>
         <translation>Réteg</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="276"/>
+        <location filename="../activeproject.cpp" line="283"/>
         <source>Unable to load source </source>
         <translation>Nem lehet betölteni a forrást </translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="285"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A rögzítés eszközöknek meghatározatlan viselkedése lesz.</translation>
     </message>
@@ -113,7 +113,7 @@
 <context>
     <name>AttributePreviewController</name>
     <message>
-        <location filename="../attributes/attributepreviewcontroller.cpp" line="149"/>
+        <location filename="../attributes/attributepreviewcontroller.cpp" line="263"/>
         <source>Unnamed Layer</source>
         <translation>Névtelen réteg</translation>
     </message>
@@ -444,17 +444,17 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="91"/>
+        <location filename="../qml/account/MMAccountController.qml" line="93"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Kérjük, frissítse az alkalmazást a legújabb funkciók eléréséhez.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="95"/>
+        <location filename="../qml/account/MMAccountController.qml" line="97"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>A szerver jelenleg nem elérhető, kérjük, ellenőrizze a kapcsolatát vagy próbálja meg később.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="148"/>
+        <location filename="../qml/account/MMAccountController.qml" line="150"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Elfogadom az %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
@@ -874,27 +874,32 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="84"/>
         <source>Photo is missing.</source>
         <translation>A fénykép hiányzik.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="118"/>
         <source>Open Image</source>
         <translation>Kép megnyitása</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="120"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Kép fájlok (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
+        <source>Photo sketches could not be saved, please contact support.</source>
+        <translation>A fotóvázlatok mentése nem sikerült, kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
         <source>Could not create directory %1.</source>
         <translation>%1 mappát nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
         <source>Failed to process the image</source>
         <translation>Nem sikerült feldolgozni a képet</translation>
     </message>
@@ -1486,42 +1491,32 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Mérés</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
-        <source>Repeat</source>
-        <translation>Ismét</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
-        <source>Undo</source>
-        <translation>Mégsem</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Perimeter</source>
         <translation>Kerület</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Length</source>
         <translation>Hosszúság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="92"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="91"/>
         <source>Area</source>
         <translation>Terület</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Close shape</source>
         <translation>Alakzat zárása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Add point</source>
         <translation>Pont hozzáadása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="111"/>
         <source>Done</source>
         <translation>Kész</translation>
     </message>
@@ -1718,22 +1713,22 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMPreviewDrawer</name>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="179"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="156"/>
         <source>Edit</source>
         <translation>Szerkesztés</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="190"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="162"/>
         <source>Open form</source>
         <translation>Űrlap megnyitása</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="201"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="168"/>
         <source>Select more</source>
         <translation>Több kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="213"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="174"/>
         <source>Stake out</source>
         <translation>Áthelyezés</translation>
     </message>
@@ -1780,6 +1775,11 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Nem támogatott szerver, kérjük, lépjen kapcsolatba a szerver rendszergazdájával.</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <source>Download a project and start collecting.</source>
+        <translation>Projekt letöltése és adatgyűjtés indítása.</translation>
     </message>
 </context>
 <context>
@@ -2163,22 +2163,22 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
         <source>Select features</source>
         <translation>Elemek kiválasztása</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="63"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n elem kiválasztva</numerusform><numerusform>%n elem kiválasztva</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
         <source>on layer %1</source>
         <translation>%1 rétegen</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="88"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
         <source>Edit</source>
         <translation>Szerkesztés</translation>
     </message>
@@ -2415,12 +2415,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Vázlat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="44"/>
-        <source>Undo</source>
-        <translation>Mégsem</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="121"/>
+        <location filename="../qml/map/MMSketchesDrawer.qml" line="119"/>
         <source>Eraser</source>
         <translation>Radír</translation>
     </message>
@@ -2627,19 +2622,24 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMSyncFailedDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="28"/>
         <source>Failed to synchronise your changes</source>
         <translation>Nem sikerült szinkronizálni a módosításait</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="30"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project.</source>
         <translation>Nem sikerült elküldeni a módositásait a szerverhez. Ellenőrizze az internet kapcsolatát, és győződjön meg arról, hogy rendelkezik a megfelelő írási engedéllyel a projekthez.</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="32"/>
         <source>Ok, I understand</source>
         <translation>Ok, értem</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="39"/>
+        <source>Details</source>
+        <translation>Részletek</translation>
     </message>
 </context>
 <context>
@@ -2852,28 +2852,28 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Munkaterület létrehozva</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1881"/>
+        <location filename="../../core/merginapi.cpp" line="1902"/>
         <source>Project detached from the server</source>
         <translation>A projekt le van választva a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4119"/>
+        <location filename="../../core/merginapi.cpp" line="4164"/>
         <source>Workspace name contains invalid characters</source>
         <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4186"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace %1 already exists</source>
         <translation>%1 munkaterület már létezik</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4292"/>
+        <location filename="../../core/merginapi.cpp" line="4337"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Most már bezárhatja ezt az oldalt, és visszatérhet a Mergin Maps alkalmazáshoz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4318"/>
-        <location filename="../../core/merginapi.cpp" line="4345"/>
+        <location filename="../../core/merginapi.cpp" line="4363"/>
+        <location filename="../../core/merginapi.cpp" line="4390"/>
         <source>SSO authorization failed</source>
         <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
     </message>
@@ -3098,12 +3098,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Ismeretlen javítás</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="556"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="561"/>
+        <location filename="../main.cpp" line="562"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
@@ -3184,63 +3184,58 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="567"/>
-        <location filename="../qml/main.qml" line="575"/>
+        <location filename="../qml/main.qml" line="566"/>
+        <location filename="../qml/main.qml" line="574"/>
         <source>not tracking</source>
         <translation>nincs követés</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="874"/>
+        <location filename="../qml/main.qml" line="873"/>
         <source>Select feature</source>
         <translation>Elem kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="958"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Valaki más is szinkronizál, később újra megpróbáljuk</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="962"/>
-        <source>Details</source>
-        <translation>Részletek</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="982"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a szerverrel. Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1033"/>
+        <location filename="../qml/main.qml" line="1032"/>
         <source>Up to date</source>
         <translation>Naprakész</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1101"/>
+        <location filename="../qml/main.qml" line="1100"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Probléma történt a projekt betöltése során. %1Nézze meg a részleteket%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="777"/>
+        <location filename="../qml/main.qml" line="776"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Az áthelyezés le van tiltva, mert a helymeghatározás nem elérhető!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="927"/>
+        <location filename="../qml/main.qml" line="926"/>
         <source>Successfully synchronised</source>
         <translation>Sikeresen szinkronizálva</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="965"/>
+        <location filename="../qml/main.qml" line="964"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hiba történt a szinkronizálás során, újra megpróbáljuk. Kattintson a további információért</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1122"/>
+        <location filename="../qml/main.qml" line="1121"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1155"/>
+        <location filename="../qml/main.qml" line="1154"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>

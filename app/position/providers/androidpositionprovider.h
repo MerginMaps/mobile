@@ -10,7 +10,6 @@
 #ifndef ANDROIDPOSITIONPROVIDER_H
 #define ANDROIDPOSITIONPROVIDER_H
 
-#include "inputconfig.h"
 #include "abstractpositionprovider.h"
 
 #include <QJniObject>

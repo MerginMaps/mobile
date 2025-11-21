@@ -23,6 +23,7 @@
 
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
+const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
 
 ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
@@ -190,7 +191,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
   bool foundErrorsInLoadedProject = validateProject();
 
-  flagFile.remove();
+  // Remove the loading flag file after a while, in case the app crashes not during load, but during the first renderings
+  QTimer::singleShot( LOADING_FLAG_FILE_EXPIRATION_MS, this, []()
+  {
+    QFile::remove( ActiveProject::LOADING_FLAG_FILE_PATH );
+    CoreUtils::log( QStringLiteral( "Project loading" ), QStringLiteral( "Removed project loading flag" ) );
+  } );
+
   if ( !force )
   {
     emit loadingFinished();
@@ -611,4 +618,14 @@ QString ActiveProject::mapSketchesLayerId() const
     return {};
 
   return mQgsProject->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Layer" ), QString() );
+}
+
+bool ActiveProject::photoSketchingEnabled() const
+{
+  if ( !isProjectLoaded() )
+  {
+    return false;
+  }
+
+  return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketching/Enabled" ), false );
 }

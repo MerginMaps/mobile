@@ -10,8 +10,6 @@
 #ifndef RECORDINGMAPTOOL_H
 #define RECORDINGMAPTOOL_H
 
-#include "inputconfig.h"
-
 #include "abstractmaptool.h"
 
 #include <QObject>

@@ -100,6 +100,9 @@ void TestMerginApi::initTestCase()
   // Note: projects on the server are deleted in createRemoteProject function when needed
 
   qRegisterMetaType<LocalProject>();
+  // wait for the server to finish up the creation of the new user
+  qDebug() << "Workspace initialized - waiting for server-side setup to complete...";
+  QTest::qWait( 3000 ); // Give server 3 seconds to fully initialize the workspace
 }
 
 void TestMerginApi::cleanupTestCase()
@@ -134,6 +137,7 @@ void TestMerginApi::testListProject()
 
   // project is not available locally, so it has no entry
   QVERIFY( !mApi->localProjectsManager().projectFromMerginName( mWorkspaceName, projectName ).isValid() );
+
 }
 
 void TestMerginApi::testListProjectsByName()
@@ -2145,7 +2149,10 @@ void TestMerginApi::testSelectiveSyncChangeSyncFolder()
     photoDirExtra.mkpath( photoPathClient2 );
 
   // simulate some traffic, let both clients create few photos several times (so that project has longer history)
-  for ( int i : { 1, 2, 3, 4, 5 } )
+  for ( int i :
+        {
+          1, 2, 3, 4, 5
+        } )
   {
     QFile f1( photoPathClient1 + "/" + QString( "photoC1-%1.png" ).arg( i ) );
     f1.open( QIODevice::WriteOnly );
@@ -2367,7 +2374,9 @@ void TestMerginApi::testAutosync()
 
   InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectdir );
 
-  MapThemesModel mtm; AppSettings as; ActiveLayer al;
+  MapThemesModel mtm;
+  AppSettings as;
+  ActiveLayer al;
   ActiveProject activeProject( as, al, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
@@ -2426,8 +2435,17 @@ void TestMerginApi::testOfflineCache()
   QVERIFY( mApi->userAuth()->hasValidToken() );
 
   QSettings cacheCheck;
-  QCOMPARE( cacheCheck.value( "Input/login" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
-  QCOMPARE( cacheCheck.value( "Input/username" ).toString(), ::getenv( "TEST_API_USERNAME" ) );
+  // If we used environment variables, we should check that they match
+  if ( getenv( "TEST_API_USERNAME" ) != nullptr && getenv( "TEST_API_USERNAME" ) != nullptr )
+  {
+    QCOMPARE( cacheCheck.value( "Input/login" ).toString(), getenv( "TEST_API_USERNAME" ) );
+    QCOMPARE( cacheCheck.value( "Input/username" ).toString(), getenv( "TEST_API_USERNAME" ) );
+  }
+  else
+  {
+    QCOMPARE( cacheCheck.value( "Input/login" ).toString(), mApi->userInfo()->username() );
+    QCOMPARE( cacheCheck.value( "Input/username" ).toString(), mApi->userInfo()->username() );
+  }
   QVERIFY( !cacheCheck.value( "Input/email" ).toString().isEmpty() );
 
   MerginApi *extraApi = new MerginApi( *mLocalProjectsExtra, this );
@@ -3352,4 +3370,41 @@ void TestMerginApi::testApiRoot()
   }
 
   mApi->setApiRoot( originalRoot );
+}
+
+void TestMerginApi::testServerVersionIsAtLeast()
+{
+  mApi->setApiVersion( "2024.4.3" );
+
+  // required version is lower than server version
+  QVERIFY( mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // lower major
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 3, 3 ) );  // same major, lower minor
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 4, 2 ) );  // same major and minor, lower patch
+
+  // required version equals server version
+  QVERIFY( mApi->serverVersionIsAtLeast( 2024, 4, 3 ) );  // exact match
+
+  // required version is higher than server version
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2025, 4, 3 ) );  // higher major
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2024, 5, 3 ) );  // same major, higher minor
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2024, 4, 4 ) );  // same major and minor, higher patch
+
+  // invalid API versions
+  mApi->setApiVersion( "invalid.version" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // non-parseable version
+  mApi->setApiVersion( "" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );  // empty version string
+
+  // missing patch version
+  mApi->setApiVersion( "2024.4" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );
+
+  // non-numeric patch version
+  mApi->setApiVersion( "2024.4.a" );
+  QVERIFY( !mApi->serverVersionIsAtLeast( 2023, 4, 3 ) );
+
+  // very large version numbers
+  mApi->setApiVersion( "9999.9999.9999" );
+  QVERIFY( mApi->serverVersionIsAtLeast( 9999, 9999, 9999 ) );  // equal
+  QVERIFY( !mApi->serverVersionIsAtLeast( 10000, 0, 0 ) ); // higher major
 }

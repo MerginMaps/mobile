@@ -16,6 +16,7 @@
 #include "qgsvectorlayerjoininfo.h"
 #include "qgsauxiliarystorage.h"
 #include "qgis.h"
+#include "coreutils.h"
 
 
 MultiEditManager::MultiEditManager( QObject *parent )
@@ -150,6 +151,38 @@ FeatureLayerPair MultiEditManager::editableFeature()
   }
 
   return FeatureLayerPair( oneFeature, mTempLayer.get() );
+}
+
+void MultiEditManager::deleteSelectedFeatures()
+{
+  if ( !mModel || mModel->count() == 0 || !mLayer )
+    return;
+
+  QgsFeatureIds fids;
+  fids.reserve( mModel->rowCount() );
+  for ( int i = 0; i < mModel->rowCount(); ++i )
+  {
+    fids.insert( mModel->data( mModel->index( i, 0 ), FeaturesModel::FeatureId ).value<QgsFeatureId>() );
+  }
+
+  if ( fids.isEmpty() )
+  {
+    return;
+  }
+
+  if ( !mLayer->startEditing() )
+  {
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not start editing on layer %1" ).arg( mLayer->name() ) );
+    return;
+  }
+
+  const bool success = mLayer->deleteFeatures( fids );
+  if ( success )
+  {
+    mModel->populate( {} );
+    mLayer->triggerRepaint();
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
+  }
 }
 
 void MultiEditManager::createTemporaryLayer()

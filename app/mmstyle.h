@@ -172,6 +172,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl measurementToolIcon READ measurementToolIcon CONSTANT )
     Q_PROPERTY( QUrl closeShapeIcon READ closeShapeIcon CONSTANT )
     Q_PROPERTY( QUrl formIcon READ formIcon CONSTANT )
+    Q_PROPERTY( QUrl drawIcon READ drawIcon CONSTANT )
 
     // Filled Icons - for visualizing of selected item in toolbar
     Q_PROPERTY( QUrl projectsFilledIcon READ projectsFilledIcon CONSTANT )
@@ -468,6 +469,7 @@ class MMStyle: public QObject
     QUrl xTwitterIcon() const {return QUrl( "qrc:/XTwitter.svg" );}
     QUrl youtubeIcon() const {return QUrl( "qrc:/Youtube.svg" );}
     QUrl formIcon() const {return QUrl( "qrc:/Terms.svg" );}
+    QUrl drawIcon() const {return QUrl( "qrc:/Draw.svg" );}
 
     QUrl projectsFilledIcon() const {return QUrl( "qrc:/ProjectsFilled.svg" );}
     QUrl globalFilledIcon() const {return QUrl( "qrc:/GlobalFilled.svg" );}

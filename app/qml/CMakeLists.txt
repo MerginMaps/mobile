@@ -87,6 +87,7 @@ set(MM_QML
     form/components/MMFormTabBar.qml
     form/components/MMCalendarDrawer.qml
     form/components/MMFeaturesListPageDrawer.qml
+    form/components/MMFormPhotoSketchingPageDialog.qml
     form/components/calendar/MMAmPmSwitch.qml
     form/components/calendar/MMDateTimePicker.qml
     form/components/calendar/MMDateTumbler.qml
@@ -96,6 +97,7 @@ set(MM_QML
     form/components/calendar/MMTumbler.qml
     form/components/photo/MMPhotoAttachment.qml
     form/components/photo/MMPhotoPreview.qml
+    form/components/MMFormActionBar.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml

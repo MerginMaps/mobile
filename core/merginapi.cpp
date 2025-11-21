@@ -215,7 +215,10 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
 
   QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]()
+  {
+    this->listProjectsReplyFinished( requestId );
+  } );
 
   return requestId;
 }
@@ -264,7 +267,10 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   QNetworkReply *reply = mManager->post( request, body.toJson() );
   CoreUtils::log( "list projects by name", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsByNameReplyFinished( requestId );} );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]()
+  {
+    this->listProjectsByNameReplyFinished( requestId );
+  } );
 
   return requestId;
 }
@@ -301,7 +307,10 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
   }
 
   QNetworkReply *reply = mManager->get( request );
-  connect( reply, &QNetworkReply::finished, this, [this, item]() { downloadItemReplyFinished( item ); } );
+  connect( reply, &QNetworkReply::finished, this, [this, item]()
+  {
+    downloadItemReplyFinished( item );
+  } );
 
   transaction.replyPullItems.insert( reply );
 
@@ -999,7 +1008,10 @@ void MerginApi::registerUser( const QString &email,
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( email, password ); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]()
+  {
+    this->registrationFinished( email, password );
+  } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -1035,7 +1047,10 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->postRegistrationFinished(); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]()
+  {
+    this->postRegistrationFinished();
+  } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
 }
 
@@ -1265,7 +1280,10 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   QNetworkReply *reply = mManager->deleteResource( request );
-  connect( reply, &QNetworkReply::finished, this, [this, informUser]() { this->deleteProjectFinished( informUser );} );
+  connect( reply, &QNetworkReply::finished, this, [this, informUser]()
+  {
+    this->deleteProjectFinished( informUser );
+  } );
   CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Requesting project deletion: " ) + url.toString() );
 }
 
@@ -1791,6 +1809,27 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor )
   minor = versionParts[1].toInt( &minorOk );
 
   if ( !majorOk || !minorOk )
+    return false;
+
+  return true;
+}
+
+bool MerginApi::parseVersion( const QString &version, int &major, int &minor, int &patch )
+{
+  if ( version.isNull() || version.isEmpty() )
+    return false;
+
+  QStringList versionParts = version.split( '.' );
+
+  if ( versionParts.size() != 3 )
+    return false;
+
+  bool majorOk, minorOk, patchOk;
+  major = versionParts[0].toInt( &majorOk );
+  minor = versionParts[1].toInt( &minorOk );
+  patch = versionParts[2].toInt( &patchOk );
+
+  if ( !majorOk || !minorOk || !patchOk )
     return false;
 
   return true;
@@ -2614,7 +2653,10 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   // work with parallel downloads
   std::sort(
     transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
-  []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
+    []( const DownloadQueueItem & a, const DownloadQueueItem & b )
+  {
+    return a.size > b.size;
+  }
   );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 of available device storage, %2 of total device storage" )
@@ -3758,7 +3800,10 @@ void MerginApi::deleteAccount()
   QUrl url( mApiRoot + QStringLiteral( "/v1/user" ) );
   request.setUrl( url );
   QNetworkReply *reply = mManager->deleteResource( request );
-  connect( reply, &QNetworkReply::finished, this, [this]() { this->deleteAccountFinished();} );
+  connect( reply, &QNetworkReply::finished, this, [this]()
+  {
+    this->deleteAccountFinished();
+  } );
   CoreUtils::log( "delete account " + mUserInfo->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
 }
 
@@ -3802,6 +3847,46 @@ void MerginApi::deleteAccountFinished()
   r->deleteLater();
 }
 
+void MerginApi::updateWorkspaceService( const QString &workspaceId, const QString &payload )
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  const QUrl url( mApiRoot + QStringLiteral( "/v1/tests/workspaces/%1" ).arg( workspaceId ) );
+  request.setUrl( url );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+
+  const QJsonDocument doc = QJsonDocument::fromJson( payload.toUtf8() );
+  const QByteArray data = doc.toJson();
+
+  // Send PATCH request
+  QNetworkReply *reply = mManager->sendCustomRequest( request, "PATCH", data );
+
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::updateWorkspaceStorageLimitFinished );
+
+  CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
+                  QStringLiteral( "Updating workspace: " ).arg( url.toString() ) );
+}
+
+void MerginApi::updateWorkspaceStorageLimitFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( QStringLiteral( "update workspace storage limit" ), QStringLiteral( "Successfully updated workspace limits" ) );
+  }
+  else
+  {
+    CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
+                    QStringLiteral( "Error: " ).arg( r->errorString() ) );
+  }
+}
+
 void MerginApi::getServerConfig()
 {
   QNetworkRequest request = getDefaultRequest();
@@ -3823,19 +3908,24 @@ void MerginApi::getServerConfigReplyFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "Config", QStringLiteral( "Success" ) );
-    QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
+    const QJsonDocument doc = QJsonDocument::fromJson( r->readAll() );
     if ( doc.isObject() )
     {
-      QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
-      QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
-      QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
+      const QString serverType = doc.object().value( QStringLiteral( "server_type" ) ).toString();
+      const QString apiVersion = doc.object().value( QStringLiteral( "version" ) ).toString();
+      const QString diagnosticUrl = doc.object().value( QStringLiteral( "diagnostic_logs_url" ) ).toString();
       int major = -1;
       int minor = -1;
-      bool validVersion = parseVersion( apiVersion, major, minor );
+
+      const bool validVersion = parseVersion( apiVersion, major, minor );
 
       if ( !validVersion )
       {
         CoreUtils::log( QStringLiteral( "Server version" ), QStringLiteral( "Cannot parse server version" ) );
+      }
+      else
+      {
+        setApiVersion( apiVersion );
       }
 
       if ( serverType == QStringLiteral( "ee" ) )
@@ -3863,7 +3953,7 @@ void MerginApi::getServerConfigReplyFinished()
         }
       }
 
-      if ( ( major >= 2025 && minor >= 4 ) && diagnosticUrl.isEmpty() )
+      if ( serverVersionIsAtLeast( 2025, 4, 0 ) && diagnosticUrl.isEmpty() )
       {
         mServerDiagnosticLogsUrl = mApiRoot + QStringLiteral( "/v2/diagnostic-logs" );
       }
@@ -3877,7 +3967,7 @@ void MerginApi::getServerConfigReplyFinished()
       }
 
       // will be dropped support for old servers (mostly CE servers without workspaces)
-      if ( ( MINIMUM_SERVER_VERSION_MAJOR == major && MINIMUM_SERVER_VERSION_MINOR > minor ) || ( MINIMUM_SERVER_VERSION_MAJOR > major ) )
+      if ( !serverVersionIsAtLeast( MINIMUM_SERVER_VERSION_MAJOR, MINIMUM_SERVER_VERSION_MINOR + 1, 0 ) )
       {
         emit migrationRequested( QString( "%1.%2" ).arg( major ).arg( minor ) );
       }
@@ -4081,16 +4171,35 @@ void MerginApi::processInvitationReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
+  const bool accept = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrAcceptFlag ) ).toBool();
 
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "process invitation", QStringLiteral( "Success" ) );
+
+    // if server version is at least 2025.4.1, let's get workspaceId from response and switch to it
+    // emit processInvitationSuccess to navigate to project's page in qml
+    if ( serverVersionIsAtLeast( 2025, 4, 1 ) && accept )
+    {
+      const QByteArray data = r->readAll();
+      const QJsonDocument doc = QJsonDocument::fromJson( data );
+
+      if ( doc.isObject() )
+      {
+        const QJsonObject responseObj = doc.object();
+        const MerginInvitation invitation = MerginInvitation::fromJsonObject( responseObj );
+        QMap<int, QString> workspaces = mUserInfo->workspaces();
+        workspaces.insert( invitation.workspaceId, invitation.workspace );
+        mUserInfo->updateWorkspacesList( workspaces );
+        mUserInfo->setActiveWorkspace( invitation.workspaceId );
+        emit processInvitationSuccess();
+      }
+    }
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
+    const QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "processInvitation" ), r->errorString(), serverMsg );
     CoreUtils::log( "process invitation", QStringLiteral( "FAILED - %1" ).arg( message ) );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: processInvitation" ) );
     emit processInvitationFailed();
@@ -4411,4 +4520,43 @@ void MerginApi::setUserSelfRegistrationEnabled( bool userSelfRegistrationEnabled
 
   mUserSelfRegistrationEnabled = userSelfRegistrationEnabled;
   emit userSelfRegistrationEnabledChanged();
+}
+
+QString MerginApi::apiVersion() const
+{
+  return mApiVersion;
+}
+
+void MerginApi::setApiVersion( const QString &apiVersion )
+{
+  if ( mApiVersion != apiVersion )
+  {
+    mApiVersion = apiVersion;
+  }
+}
+
+bool MerginApi::serverVersionIsAtLeast( const int requiredMajor, const int requiredMinor, const int requiredPatch ) const
+{
+  int serverMajor = -1;
+  int serverMinor = -1;
+  int serverPatch = -1;
+  const bool validVersion = parseVersion( mApiVersion, serverMajor, serverMinor, serverPatch );
+
+  if ( !validVersion )
+    return false;
+
+  // check major
+  if ( serverMajor > requiredMajor )
+    return true;
+  if ( serverMajor < requiredMajor )
+    return false;
+
+  // check minor
+  if ( serverMinor > requiredMinor )
+    return true;
+  if ( serverMinor < requiredMinor )
+    return false;
+
+  // check patch
+  return serverPatch >= requiredPatch;
 }

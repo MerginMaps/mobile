@@ -13,7 +13,6 @@
 #include <QSortFilterProxyModel>
 #include <qglobal.h>
 
-#include "inputconfig.h"
 #include "qgslayertreenode.h"
 
 #include "layer/layertreemodel.h"

@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="264"/>
+        <location filename="../activeproject.cpp" line="271"/>
         <source>General</source>
         <translation>Yleiset</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="264"/>
+        <location filename="../activeproject.cpp" line="271"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Kartta ja työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="276"/>
-        <location filename="../activeproject.cpp" line="285"/>
+        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Layer</source>
         <translation>Taso</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="276"/>
+        <location filename="../activeproject.cpp" line="283"/>
         <source>Unable to load source </source>
         <translation>Lähteen avaaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="285"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Nauhoitus työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
@@ -113,7 +113,7 @@
 <context>
     <name>AttributePreviewController</name>
     <message>
-        <location filename="../attributes/attributepreviewcontroller.cpp" line="149"/>
+        <location filename="../attributes/attributepreviewcontroller.cpp" line="263"/>
         <source>Unnamed Layer</source>
         <translation>Nimetön taso</translation>
     </message>
@@ -444,17 +444,17 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMAccountController</name>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="91"/>
+        <location filename="../qml/account/MMAccountController.qml" line="93"/>
         <source>Please update the app to use the latest features.</source>
         <translation>Päivitä sovellus käyttääksesi viimeisimpiä ominaisuuksia.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="95"/>
+        <location filename="../qml/account/MMAccountController.qml" line="97"/>
         <source>Server is currently unavailable, check your connection or try again later.</source>
         <translation>Palvelin ei ole tällä hetkellä käytettävissä, tarkista yhteytesi tai yritä myöhemmin uudelleen.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMAccountController.qml" line="148"/>
+        <location filename="../qml/account/MMAccountController.qml" line="150"/>
         <source>I accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
         <translation>Hyväksyn %1 käyttöehdot%3 ja %2 tietosuojakäytännön%3</translation>
     </message>
@@ -873,27 +873,32 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormPhotoEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="81"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="84"/>
         <source>Photo is missing.</source>
         <translation>Valokuva puuttuu.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="108"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="118"/>
         <source>Open Image</source>
         <translation>Avaa valokuva</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="110"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="120"/>
         <source>Image files (*.gif *.png *.jpg)</source>
         <translation>Kuvatiedostot (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="242"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
+        <source>Photo sketches could not be saved, please contact support.</source>
+        <translation>Valokuvapiirroksia ei voitu tallentaa, ota yhteyttä tukeen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
         <source>Could not create directory %1.</source>
         <translation>Hakemistoa %1 ei voitu luoda.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="314"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
         <source>Failed to process the image</source>
         <translation>Kuvan prosessointi epäonnistui</translation>
     </message>
@@ -1485,42 +1490,32 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Mittaa</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
-        <source>Repeat</source>
-        <translation>Toista</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="58"/>
-        <source>Undo</source>
-        <translation>Kumoa</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Perimeter</source>
         <translation>Ympärysmitta</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Length</source>
         <translation>Pituus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="92"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="91"/>
         <source>Area</source>
         <translation>Pinta-ala</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Close shape</source>
         <translation>Sulje muoto</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Add point</source>
         <translation>Lisää piste</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="111"/>
         <source>Done</source>
         <translation>Valmis</translation>
     </message>
@@ -1717,22 +1712,22 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMPreviewDrawer</name>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="179"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="156"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="190"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="162"/>
         <source>Open form</source>
         <translation>Avaa lomake</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="201"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="168"/>
         <source>Select more</source>
         <translation>Valitse lisää</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMPreviewDrawer.qml" line="213"/>
+        <location filename="../qml/form/MMPreviewDrawer.qml" line="174"/>
         <source>Stake out</source>
         <translation>Merkintä</translation>
     </message>
@@ -1779,6 +1774,11 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/project/MMProjectController.qml" line="261"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Palvelinta ei tueta, ota yhteyttä palvelimen järjestelmänvalvojaan.</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <source>Download a project and start collecting.</source>
+        <translation>Lataa projekti ja aloita keräämään dataa.</translation>
     </message>
 </context>
 <context>
@@ -2162,22 +2162,22 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
         <source>Select features</source>
         <translation>Valitse kohteita</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="63"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n kohde(tta) valittu</numerusform><numerusform>%n kohde(tta) valittu</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
         <source>on layer %1</source>
         <translation>Tasolla %1</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="88"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
@@ -2414,12 +2414,7 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Luonnos</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="44"/>
-        <source>Undo</source>
-        <translation>Kumoa</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="121"/>
+        <location filename="../qml/map/MMSketchesDrawer.qml" line="119"/>
         <source>Eraser</source>
         <translation>Pyyhekumi</translation>
     </message>
@@ -2626,19 +2621,24 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMSyncFailedDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="27"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="28"/>
         <source>Failed to synchronise your changes</source>
         <translation>Muutostesi synkronointi epäonnistui</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="30"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
         <source>Your changes could not be sent to the server, make sure you have a data connection and have permission to edit this project.</source>
         <translation>Muutoksiasi ei voitu lähettää palvelimelle, varmista että yhteys on kunnossa ja sinulla on muokkausoikeudet tähän projektiin.</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="31"/>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="32"/>
         <source>Ok, I understand</source>
         <translation>Ok, ymmärsin</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMSyncFailedDialog.qml" line="39"/>
+        <source>Details</source>
+        <translation>Tiedot</translation>
     </message>
 </context>
 <context>
@@ -2851,28 +2851,28 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Työtila luotu</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1881"/>
+        <location filename="../../core/merginapi.cpp" line="1902"/>
         <source>Project detached from the server</source>
         <translation>Projekti irrotettu palvelimelta</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4119"/>
+        <location filename="../../core/merginapi.cpp" line="4164"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Työtilan nimi sisältää virheellisiä merkkejä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4186"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace %1 already exists</source>
         <translation>Työtila %1 on jo olemassa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4292"/>
+        <location filename="../../core/merginapi.cpp" line="4337"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Voit nyt sulkea tämän sivun ja palata Mergin Mapsiin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4318"/>
-        <location filename="../../core/merginapi.cpp" line="4345"/>
+        <location filename="../../core/merginapi.cpp" line="4363"/>
+        <location filename="../../core/merginapi.cpp" line="4390"/>
         <source>SSO authorization failed</source>
         <translation>Kertakirjautmis (SSO) valtuutus epäonnistui</translation>
     </message>
@@ -3097,12 +3097,12 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Tuntematon sijainti</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="556"/>
+        <location filename="../main.cpp" line="557"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raportti lähetetty. Ota yhteyttä tukeen</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="561"/>
+        <location filename="../main.cpp" line="562"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui. Tarkista internet yhteytesi.</translation>
     </message>
@@ -3183,63 +3183,58 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="567"/>
-        <location filename="../qml/main.qml" line="575"/>
+        <location filename="../qml/main.qml" line="566"/>
+        <location filename="../qml/main.qml" line="574"/>
         <source>not tracking</source>
         <translation>Reitin tallennus ei ole päällä</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="874"/>
+        <location filename="../qml/main.qml" line="873"/>
         <source>Select feature</source>
         <translation>Valitse kohde</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="958"/>
+        <location filename="../qml/main.qml" line="957"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Joku toinen synkronoi parhaillaan, yritämme uudelleen myöhemmin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="962"/>
-        <source>Details</source>
-        <translation>Yksityiskohdat</translation>
-    </message>
-    <message>
-        <location filename="../qml/main.qml" line="982"/>
+        <location filename="../qml/main.qml" line="981"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Palvelin yhteys epäonnistui. Yritä parantaa verkkoyhteyttäsi.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1033"/>
+        <location filename="../qml/main.qml" line="1032"/>
         <source>Up to date</source>
         <translation>Ajantasalla</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1101"/>
+        <location filename="../qml/main.qml" line="1100"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Ongelmia ladattaessa projektia. %1Näytä yksityiskohdat%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="777"/>
+        <location filename="../qml/main.qml" line="776"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Merkintä on poistettu käytöstä, koska sijainti ei ole saatavilla!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="927"/>
+        <location filename="../qml/main.qml" line="926"/>
         <source>Successfully synchronised</source>
         <translation>Synkronoitu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="965"/>
+        <location filename="../qml/main.qml" line="964"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa lukeaksesi lisää.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1122"/>
+        <location filename="../qml/main.qml" line="1121"/>
         <source>Could not read the project file:</source>
         <translation>Ei voitu lukea projektitiedostoa:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1155"/>
+        <location filename="../qml/main.qml" line="1154"/>
         <source>Press back again to quit the app</source>
         <translation>Paina takaisin uudestaan sulkeaksesi sovelluksen.</translation>
     </message>

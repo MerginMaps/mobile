@@ -10,6 +10,9 @@
 import QtQuick
 import QtQuick.Dialogs
 
+import mm 1.0 as MM
+import MMInput
+
 import "../../dialogs"
 
 /*
@@ -87,10 +90,15 @@ MMFormPhotoViewer {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  photoUrl: internal.resolvedImageSource
+  photoUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
 
-  on_FieldValueChanged: internal.setImageSource()
+  on_FieldValueChanged: function (){
+    internal.setImageSource()
+    // after editing geometry this needs to be triggered to populate internal.tempSketchedImageSource for components,
+    // which were not in view
+    sketchingController?.prepareController()
+  }
   on_FieldValueIsNullChanged: internal.setImageSource()
 
   onCapturePhotoClicked: internal.capturePhoto()
@@ -100,6 +108,8 @@ MMFormPhotoViewer {
   onCheckboxCheckedChanged: {
     root.rememberValueBoxClicked( checkboxChecked )
   }
+
+  sketchingController: photoSketchingLoader.item
 
   // used only on desktop builds
   FileDialog {
@@ -123,6 +133,8 @@ MMFormPhotoViewer {
     onDeleteImage: {
       // schedule the image for deletion
       internal.imageSourceToDelete = imageDeleteDialog.imagePath
+      root.sketchingController.removeBackupSketches()
+      root.sketchingController.clear()
       resetValueAndClose()
     }
 
@@ -134,6 +146,41 @@ MMFormPhotoViewer {
       errorMsg = ""
       imagePath = ""
       close()
+    }
+  }
+
+  Loader {
+    id: photoSketchingLoader
+    active: __activeProject.photoSketchingEnabled
+
+    sourceComponent: photoSketchingComponent
+
+    onLoaded: {
+      item.prepareController()
+    }
+  }
+
+  Component {
+    id: photoSketchingComponent
+
+    PhotoSketchingController {
+      photoSource: root.photoUrl
+      projectName: root._fieldActiveProject.homePath
+    }
+  }
+
+  Connections {
+    target: root.sketchingController
+
+    function onTempPhotoSourceChanged( newPath ){
+      if ( internal.tempSketchedImageSource === "file://" + newPath ) {
+        internal.tempSketchedImageSource = ""
+      }
+      internal.tempSketchedImageSource = "file://" + newPath
+    }
+
+    function onSketchesSavingError(){
+      __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
     }
   }
 
@@ -202,6 +249,8 @@ MMFormPhotoViewer {
 
     property string resolvedImageSource
 
+    property string tempSketchedImageSource
+
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
     //
@@ -221,6 +270,7 @@ MMFormPhotoViewer {
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
         resolvedImageSource = "file://" + absolutePath
+        tempSketchedImageSource = ""
       }
       else if ( __inputUtils.isValidUrl( absolutePath ) ) {
           root.photoState = "valid";
@@ -347,6 +397,9 @@ MMFormPhotoViewer {
         let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
+        if ( photoSketchingLoader.active ) {
+          sketchingController.prepareController()
+        }
       }
     }
   }
