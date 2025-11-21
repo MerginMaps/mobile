@@ -1969,6 +1969,17 @@ void InputUtils::sanitizeFileName( QString &fileName )
   const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x19<>:|?*\"]" ) );
   fileName.replace( illegalChars, QStringLiteral( "_" ) );
   fileName = fileName.trimmed();
+
+  // Trim whitespace immediately before the final extension, e.g. "name  .jpg" -> "name.jpg"
+  int lastDot = fileName.lastIndexOf( QChar( '.' ) );
+  if ( lastDot > 0 )
+  {
+    QString base = fileName.first( lastDot );
+    QString ext = fileName.sliced( lastDot );
+    base = base.trimmed();
+    fileName = base + ext;
+  }
+}
 }
 
 void InputUtils::updateQgisFormats( const QByteArray &output )
