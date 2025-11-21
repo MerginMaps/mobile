@@ -39,16 +39,16 @@ class SimulatedPositionProvider : public AbstractPositionProvider
       double updateTimeout = 1000,
       QObject *parent = nullptr
     );
-    virtual ~SimulatedPositionProvider() override;
+    ~SimulatedPositionProvider() override;
 
-    virtual void setUpdateInterval( double msecs ) override;
+    void setUpdateInterval( double msecs ) override;
 
   public slots:
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
-    virtual void setPosition( QgsPoint position ) override;
+    void setPosition( QgsPoint position ) override;
 
     void generateNextPosition();
 
