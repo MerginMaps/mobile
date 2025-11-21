@@ -1994,6 +1994,15 @@ void InputUtils::updateQgisFormats( const QByteArray &output )
 #endif
 }
 
+QSet<int> InputUtils::referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression )
+{
+  if ( !layer )
+    return {};
+
+  const QgsExpression expr( expression );
+  return expr.referencedAttributeIndexes( layer->fields() );
+}
+
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
