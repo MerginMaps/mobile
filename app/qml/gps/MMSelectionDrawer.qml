@@ -32,6 +32,7 @@ MMComponents.MMDrawer {
 
   signal selectionFinished()
   signal editSelected()
+  signal deleteSelected()
   signal selectionChanged()
 
   Component.onCompleted: root.open()
@@ -91,16 +92,45 @@ MMComponents.MMDrawer {
       }
     }
 
-    Row {
-      width: parent.width
-      spacing: __style.margin12
-      visible: root.selectedCount > 0
+    ScrollView {
+        width: parent.width
+        height: scrollRow.height
 
-      MMComponents.MMButton {
-        text: qsTr( "Edit" )
-        iconSourceLeft: __style.editIcon
-        onClicked: editSelected()
-      }
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.horizontal.interactive: true
+
+        contentHeight: scrollRow.height
+        contentWidth: scrollRow.width > parent.width ? scrollRow.width : availableWidth
+
+        clip: true
+
+        Row {
+          id: scrollRow
+          spacing: __style.margin12
+          visible: root.selectedCount > 0
+
+          MMComponents.MMButton {
+            text: qsTr("Edit")
+            iconSourceLeft: __style.editIcon
+            onClicked: editSelected()
+          }
+
+          MMButton {
+            text: qsTr("Delete")
+            type: MMButton.Types.Secondary
+            fontColor: __style.earthColor
+            iconColor: __style.earthColor
+            bgndColor: __style.earthColor
+
+            fontColorHover: __style.earthColor
+            iconColorHover: __style.earthColor
+            bgndColorHover: __style.negativeColor
+
+            iconSourceLeft: __style.deleteIcon
+            onClicked: deleteSelected()
+            }
+        }
     }
   }
 }
