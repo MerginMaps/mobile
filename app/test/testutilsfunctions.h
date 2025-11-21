@@ -52,6 +52,7 @@ class TestUtilsFunctions: public QObject
     void testRelevantGeometryCenterToScreenCoordinates();
     void testIsValidEmail();
     void testSanitizeFileName();
+    void testSanitizePath();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
