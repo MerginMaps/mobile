@@ -30,7 +30,7 @@
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
 
-ActiveProject::ActiveProject( AppSettings &appSettings
+ActiveProject::ActiveProject( AppSettings *appSettings
                               , ActiveLayer &activeLayer
                               , LocalProjectsManager &localProjectsManager
                               , VariablesManager *variablesManager
@@ -76,9 +76,9 @@ ActiveProject::ActiveProject( AppSettings &appSettings
     }
   } );
 
-  setAutosyncEnabled( mAppSettings.autosyncAllowed() );
+  setAutosyncEnabled( mAppSettings->autosyncAllowed() );
 
-  QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
+  QObject::connect( mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -232,7 +232,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     }
   }
 
-  if ( mAppSettings.autosyncAllowed() )
+  if ( mAppSettings->autosyncAllowed() )
   {
     setAutosyncEnabled( true );
   }
@@ -454,7 +454,7 @@ void ActiveProject::updateActiveLayer()
 
   if ( !visibleLayers.contains( mActiveLayer.layer() ) )
   {
-    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
+    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings->defaultLayer(), mQgsProject );
 
     if ( !recordingAllowed( defaultLayer ) )
     {
@@ -486,7 +486,7 @@ void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
   else
   {
     mActiveLayer.setActiveLayer( layer );
-    mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
+    mAppSettings->setDefaultLayer( mActiveLayer.layerName() );
   }
 }
 
@@ -519,7 +519,8 @@ bool ActiveProject::positionTrackingSupported() const
 
 TrackingManager *ActiveProject::trackingManager()
 {
-  return &mTrackingManager;
+  // return &mTrackingManager;
+  return nullptr;
 }
 
 void ActiveProject::togglePositionTracking()

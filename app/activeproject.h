@@ -46,11 +46,11 @@ class ActiveProject: public QObject
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
     Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
     Q_PROPERTY( bool photoSketchingEnabled READ photoSketchingEnabled NOTIFY photoSketchingEnabledChanged )
-    Q_PROPERTY( TrackingManager trackingManager READ trackingManager NOTIFY trackingManagerChanged )
+    Q_PROPERTY( TrackingManager *trackingManager READ trackingManager NOTIFY trackingManagerChanged )
 
   public:
     explicit ActiveProject(
-      AppSettings &appSettings
+      AppSettings *appSettings
       , ActiveLayer &activeLayer
       , LocalProjectsManager &localProjectsManager
       , VariablesManager *variablesManager = nullptr
@@ -182,6 +182,8 @@ class ActiveProject: public QObject
 
     void syncActiveProject( const LocalProject &project );
 
+    void trackingManagerChanged();
+
     void mapThemeChanged( const QString &mapTheme );
 
     void positionTrackingSupportedChanged();
@@ -227,7 +229,7 @@ class ActiveProject: public QObject
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
 
-    AppSettings &mAppSettings;
+    AppSettings *mAppSettings;
     ActiveLayer &mActiveLayer;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;

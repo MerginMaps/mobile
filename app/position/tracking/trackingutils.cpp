@@ -17,6 +17,7 @@
 #include "trackingmanager.h"
 #include "featurelayerpair.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 QgsCoordinateReferenceSystem TrackingUtils::crs()
 {

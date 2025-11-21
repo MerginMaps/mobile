@@ -12,42 +12,42 @@
 TrackingHighlight::TrackingHighlight( QObject *parent )
   : QObject( parent )
 {
-  connect( this, &TrackingHighlight::trackedGeometryChanged, this, &TrackingHighlight::recalculate );
-  connect( this, &TrackingHighlight::mapPositionChanged, this, &TrackingHighlight::recalculate );
+  // connect( this, &TrackingHighlight::trackedGeometryChanged, this, &TrackingHighlight::recalculate );
+  // connect( this, &TrackingHighlight::mapPositionChanged, this, &TrackingHighlight::recalculate );
 }
 
-void TrackingHighlight::recalculate() // TODO: do the recalculations here - note be wise about updates ! when position was updated and when tracked geometry is updated are two different use cases
-{
-  // onTrackedGeometryUpdated:
-  // - transform the whole geometryin
-  // - ditch the whole old geometryout
-  // - add the new position
+// void TrackingHighlight::recalculate() // TODO: do the recalculations here - note be wise about updates ! when position was updated and when tracked geometry is updated are two different use cases
+// {
+//   // onTrackedGeometryUpdated:
+//   // - transform the whole geometryin
+//   // - ditch the whole old geometryout
+//   // - add the new position
 
-  // onPositionUpdated (save yourself from transforming the geometry): -- how do we know the position was there previously though?
-  // - pop the last point
-  // - add position to the end
+//   // onPositionUpdated (save yourself from transforming the geometry): -- how do we know the position was there previously though?
+//   // - pop the last point
+//   // - add position to the end
 
-  // __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
+//   // __inputUtils.transformGeometryToMapWithCRS( trackingManager.trackedGeometry, trackingManager.crs(), mapCanvas.mapSettings )
 
-  if ( mMapPosition.isEmpty() || mTrackedGeometry.isEmpty() )
-  {
-    setHighlightGeometry( QgsGeometry() );
-    return;
-  }
+//   if ( mMapPosition.isEmpty() || mTrackedGeometry.isEmpty() )
+//   {
+//     setHighlightGeometry( QgsGeometry() );
+//     return;
+//   }
 
-  // add map position to the end of the tracked geometry
-  // note - map position must be in the same CRS as the tracked geometry
+//   // add map position to the end of the tracked geometry
+//   // note - map position must be in the same CRS as the tracked geometry
 
 
-  QgsGeometry highlightGeometry( mTrackedGeometry );
+//   QgsGeometry highlightGeometry( mTrackedGeometry );
 
-  // mTrackedGeometry.constGet()->addPoint( mMapPosition );
+//   // mTrackedGeometry.constGet()->addPoint( mMapPosition );
 
-  QgsVertexId lastVertex( 0, 0, highlightGeometry.constGet()->vertexCount() );
-  highlightGeometry.get()->insertVertex( lastVertex, mMapPosition );
+//   QgsVertexId lastVertex( 0, 0, highlightGeometry.constGet()->vertexCount() );
+//   highlightGeometry.get()->insertVertex( lastVertex, mMapPosition );
 
-  setHighlightGeometry( highlightGeometry );
-}
+//   setHighlightGeometry( highlightGeometry );
+// }
 
 QgsGeometry TrackingHighlight::trackedGeometry() const
 {

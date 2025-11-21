@@ -545,7 +545,7 @@ int main( int argc, char *argv[] )
   pk.setAppSettings( as );
 
   ActiveLayer al;
-  ActiveProject activeProject( as, al, localProjectsManager, vm.get(), pk );
+  ActiveProject activeProject( as, al, localProjectsManager, vm.get(), &pk );
 
   SynchronizationManager syncManager( ma.get() );
 

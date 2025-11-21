@@ -45,8 +45,8 @@ class TrackingHighlight : public QObject
     void setMapSettings( InputMapSettings *newMapSettings );
 
   public slots:
-    void onPositionChanged();
-    void onTrackedGeometryChanged();
+    // void onPositionChanged();
+    // void onTrackedGeometryChanged();
 
   signals:
     void trackedGeometryChanged( QgsGeometry trackedGeometry );

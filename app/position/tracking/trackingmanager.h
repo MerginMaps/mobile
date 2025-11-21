@@ -75,7 +75,7 @@ class TrackingManager : public QObject
     qint64 mFileOffset; // Remembers the last read position from the tracking file
     QReadWriteLock mFileLock; // Locks the tracking file for read/write as backends might work in a different thread
 
-    QgsGeometry mGeometry; // Constructed geometry from positions within the tracking file, in GNSS CRS (WGS84)
+    QgsGeometry mGeometry; // Constructed geometry from positions within the tracking file, in WGS84
 
     QDateTime mStartTime;
     QTimer mElapsedTimeTextTimer; // timer to make sure we are periodically updating tracking elapsed time
