@@ -23,6 +23,12 @@
 #include "inputmapsettings.h"
 #include "merginprojectmetadata.h"
 
+#include "position/tracking/trackingmanager.h"
+
+class VariablesManager;
+class PositionKit;
+
+
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
  */
@@ -36,15 +42,19 @@ class ActiveProject: public QObject
     Q_PROPERTY( QString projectRole READ projectRole WRITE setProjectRole NOTIFY projectRoleChanged )
 
     Q_PROPERTY( QString mapTheme READ mapTheme WRITE setMapTheme NOTIFY mapThemeChanged )
+
     Q_PROPERTY( bool positionTrackingSupported READ positionTrackingSupported NOTIFY positionTrackingSupportedChanged )
     Q_PROPERTY( bool mapSketchesEnabled READ mapSketchesEnabled NOTIFY mapSketchesEnabledChanged )
     Q_PROPERTY( bool photoSketchingEnabled READ photoSketchingEnabled NOTIFY photoSketchingEnabledChanged )
+    Q_PROPERTY( TrackingManager trackingManager READ trackingManager NOTIFY trackingManagerChanged )
 
   public:
     explicit ActiveProject(
       AppSettings &appSettings
       , ActiveLayer &activeLayer
       , LocalProjectsManager &localProjectsManager
+      , VariablesManager *variablesManager = nullptr
+      , PositionKit *positionKit = nullptr
       , QObject *parent = nullptr );
 
     virtual ~ActiveProject();
@@ -115,6 +125,11 @@ class ActiveProject: public QObject
     const QString &mapTheme() const;
 
     bool positionTrackingSupported() const;
+
+    TrackingManager *trackingManager();
+
+
+    Q_INVOKABLE void togglePositionTracking();
 
     //! Returns true if the project has at least one layer that allows recording
     Q_INVOKABLE bool projectHasRecordingLayers() const;
@@ -217,6 +232,10 @@ class ActiveProject: public QObject
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
     std::unique_ptr<AutosyncController> mAutosyncController;
+
+    VariablesManager *mVariablesManager; // not owned TODO: would it be better as Q_PROPERTY?
+    PositionKit *mPositionKit; // not owned TODO: would it be better as Q_PROPERTY?
+    TrackingManager mTrackingManager;
 
     QString mProjectLoadingLog;
     QString mProjectRole;

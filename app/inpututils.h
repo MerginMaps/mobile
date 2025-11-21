@@ -576,11 +576,6 @@ class InputUtils: public QObject
     Q_INVOKABLE static QString imageGalleryLocation();
 
     /**
-     * Parses position updates in format "<long> <lat> <alt> <time_in_secs>\n<long>..." into list of QgsPoints
-     */
-    static QList<QgsPoint> parsePositionUpdates( const QString &data );
-
-    /**
      * Returns string containing attribution information for a given layer
      */
     Q_INVOKABLE static QString layerAttribution( QgsMapLayer *layer );

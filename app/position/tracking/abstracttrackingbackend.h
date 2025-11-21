@@ -11,78 +11,39 @@
 #define ABSTRACTTRACKINGBACKEND_H
 
 #include <QObject>
-#include <qglobal.h>
+#include <QFile>
 
-#include "qgspoint.h"
+#include "trackingutils.h"
 
 class AbstractTrackingBackend : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( UpdateFrequency updateFrequency READ updateFrequency WRITE setUpdateFrequency NOTIFY updateFrequencyChanged )
-
   public:
-    enum UpdateFrequency
-    {
-      Often = 0,
-      Normal,
-      Occasional,
-    };
-    Q_ENUM( UpdateFrequency );
-
-    enum SignalSlotSupport
-    {
-      Supported = 0,
-      NotSupported
-    };
-    Q_ENUM( SignalSlotSupport );
-
-    enum TrackingMethod
-    {
-      UpdatesThroughDirectCall = 0, // iOS/Desktop sends position updates directly from source
-      UpdatesThroughFile // Android saves position updates to a file
-    };
-    Q_ENUM( TrackingMethod );
 
     explicit AbstractTrackingBackend(
-      UpdateFrequency updateFrequency = Often,
-      SignalSlotSupport signalSlotSupport = Supported,
-      TrackingMethod trackingMethod = UpdatesThroughDirectCall,
+      QReadWriteLock *fileLock,
+      TrackingUtils::UpdateFrequency updateFrequency = TrackingUtils::BestAccuracy,
       QObject *parent = nullptr
     );
 
-    UpdateFrequency updateFrequency() const;
-    void setUpdateFrequency( const UpdateFrequency &newUpdateFrequency );
-
-    SignalSlotSupport signalSlotSupport() const;
-
-    TrackingMethod trackingMethod() const;
-
-    void setNotifyFunction( std::function<void( const QgsPoint &position )> );
-
-    // Backends with UpdatesThroughFile tracking method can return all previous updates by reading the tracking file
-    virtual QList<QgsPoint> getAllUpdates() { return QList<QgsPoint>(); };
+    virtual ~AbstractTrackingBackend();
 
   signals:
-    void positionChanged( const QgsPoint &position );
-    void multiplePositionChanges( QList<QgsPoint> positions );
+    void positionUpdated();
 
-    void errorOccured( const QString &error );
-    void abort();
-
-    void updateFrequencyChanged( AbstractTrackingBackend::UpdateFrequency updateFrequency );
+    void updateFrequencyChanged( TrackingUtils::UpdateFrequency updateFrequency );
 
   protected:
-    void notifyListeners( const QgsPoint &position );
-    void setSignalSlotSupport( SignalSlotSupport support );
+
+    //! Stores the point to the tracking file and notifies tracking manager in case the app is in foreground
+    void storeDataAndNotify( double x, double y, double z, double m );
 
   private:
-    UpdateFrequency mUpdateFrequency;
-    SignalSlotSupport mSignalSlotSupport;
-    TrackingMethod mTrackingMethod;
+    QFile mFile; // File for storing position updates
+    QReadWriteLock *mFileLock = nullptr; // not owned
 
-    //! Function to call when this provider does not support signal/slot connection
-    std::function<void( const QgsPoint &position )> mNotifyFunction;
+    TrackingUtils::UpdateFrequency mUpdateFrequency;
 };
 
 #endif // ABSTRACTTRACKINGBACKEND_H

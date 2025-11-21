@@ -9,63 +9,78 @@
 
 #include "abstracttrackingbackend.h"
 
+#include <QStandardPaths>
+#include <QDir>
+#include <QGuiApplication>
+
 AbstractTrackingBackend::AbstractTrackingBackend(
-  UpdateFrequency updateFrequency,
-  SignalSlotSupport signalSlotSupport,
-  TrackingMethod trackingMethod,
+  QReadWriteLock *fileLock,
+  TrackingUtils::UpdateFrequency updateFrequency,
   QObject *parent
 )
   : QObject( parent )
+  , mFileLock( fileLock )
   , mUpdateFrequency( updateFrequency )
-  , mTrackingMethod( trackingMethod )
-  , mSignalSlotSupport( signalSlotSupport )
 {
+  QDir appData( QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) );
+  QString trackingFilePath = appData.absoluteFilePath( QStringLiteral( "tracking_data.txt" ) );
 
-}
+  qDebug() << "Position Tracking --> file path:" << trackingFilePath;
 
-void AbstractTrackingBackend::notifyListeners( const QgsPoint &position )
-{
-  if ( mSignalSlotSupport == SignalSlotSupport::Supported )
+  // TODO: store tracking file in project data directory instead of standard location
+  mFile.setFileName( trackingFilePath );
+
+  if ( !mFileLock )
   {
-    emit positionChanged( position );
-    return;
-  }
-
-  if ( mNotifyFunction )
-  {
-    mNotifyFunction( position );
+    qCritical() << "Error, received invalid file lock!";
   }
 }
 
-AbstractTrackingBackend::UpdateFrequency AbstractTrackingBackend::updateFrequency() const
+AbstractTrackingBackend::~AbstractTrackingBackend()
 {
-  return mUpdateFrequency;
+  if ( mFile.isOpen() )
+  {
+    mFile.close();
+  }
 }
 
-void AbstractTrackingBackend::setUpdateFrequency( const UpdateFrequency &newUpdateFrequency )
+void AbstractTrackingBackend::storeDataAndNotify( double x, double y, double z, double m )
 {
-  if ( mUpdateFrequency == newUpdateFrequency )
+  //
+  // In the future we might want to store data in binary to optimize the file size and read/write
+  //
+
+  if ( !mFile.isOpen() )
+  {
+    if ( !mFile.open( QFile::Append ) )
+    {
+      qCritical() << "Error, could not open tracking file for writing!";
+      return;
+    }
+  }
+
+  if ( !mFileLock )
+  {
+    qCritical() << "Error, file lock is invalid!";
     return;
-  mUpdateFrequency = newUpdateFrequency;
-  emit updateFrequencyChanged( mUpdateFrequency );
-}
+  }
 
-AbstractTrackingBackend::SignalSlotSupport AbstractTrackingBackend::signalSlotSupport() const
-{
-  return mSignalSlotSupport;
-}
+  qDebug() << "--> W: Using file lock" << mFileLock;
 
-AbstractTrackingBackend::TrackingMethod AbstractTrackingBackend::trackingMethod() const
-{
-  return mTrackingMethod;
-}
+  QString trackline = QStringLiteral("%1 %2 %3 %4\n").arg(x).arg(y).arg(z).arg(m);
 
-void AbstractTrackingBackend::setNotifyFunction( std::function<void ( const QgsPoint & )> fn )
-{
-  mNotifyFunction = fn;
-}
+  // QWriteLocker unlocks the lock once it goes out of scope
+  {
+    QWriteLocker writeLocker( mFileLock );
 
-void AbstractTrackingBackend::setSignalSlotSupport( SignalSlotSupport support )
-{
-  mSignalSlotSupport = support;
+    mFile.write( trackline.toUtf8() );
+  }
+
+  // now let's notify the manager
+
+  // TODO: is it ok to use QGuiApplication here? It runs in android thread
+  if ( QGuiApplication::applicationState() == Qt::ApplicationState::ApplicationActive )
+  {
+    emit positionUpdated();
+  }
 }

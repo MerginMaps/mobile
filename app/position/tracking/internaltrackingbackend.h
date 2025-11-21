@@ -12,15 +12,21 @@
 
 #include "abstracttrackingbackend.h"
 #include <QDateTime>
-#include <qglobal.h>
 
 class PositionKit;
 
 class InternalTrackingBackend : public AbstractTrackingBackend
 {
     Q_OBJECT
+
   public:
-    explicit InternalTrackingBackend( PositionKit *positionKit, AbstractTrackingBackend::UpdateFrequency updateFrequency, QObject *parent = nullptr );
+
+    explicit InternalTrackingBackend(
+      QReadWriteLock *fileLock,
+      PositionKit *positionKit,
+      TrackingUtils::UpdateFrequency updateFrequency,
+      QObject *parent = nullptr
+    );
 
   private:
 

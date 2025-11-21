@@ -11,13 +11,13 @@
 #include "positionkit.h"
 
 InternalTrackingBackend::InternalTrackingBackend(
+  QReadWriteLock *fileLock,
   PositionKit *positionKit,
-  UpdateFrequency updateFrequency,
+  TrackingUtils::UpdateFrequency updateFrequency,
   QObject *parent )
   : AbstractTrackingBackend(
+      fileLock,
       updateFrequency,
-      AbstractTrackingBackend::SignalSlotSupport::Supported,
-      AbstractTrackingBackend::TrackingMethod::UpdatesThroughDirectCall,
       parent
     )
   , mLastUpdate( QDateTime::currentDateTime() )
@@ -25,13 +25,13 @@ InternalTrackingBackend::InternalTrackingBackend(
 {
   switch ( updateFrequency )
   {
-    case UpdateFrequency::Often:
+    case TrackingUtils::UpdateFrequency::BestAccuracy:
       mUpdateInterval = 1000;
       break;
-    case UpdateFrequency::Normal:
+    case TrackingUtils::UpdateFrequency::LessAccuracy:
       mUpdateInterval = 2000;
       break;
-    case UpdateFrequency::Occasional:
+    case TrackingUtils::UpdateFrequency::EvenWorseAccuracy:
       mUpdateInterval = 5000;
       break;
   }
@@ -42,8 +42,7 @@ InternalTrackingBackend::InternalTrackingBackend(
     {
       if ( mLastUpdate.addMSecs( mUpdateInterval ) <= QDateTime::currentDateTime() )
       {
-        QgsPoint p( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
-        notifyListeners( p );
+        storeDataAndNotify( position.longitude, position.latitude, position.elevation, QDateTime::currentDateTime().toSecsSinceEpoch() );
       }
     } );
   }

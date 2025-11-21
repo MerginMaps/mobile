@@ -2189,39 +2189,6 @@ QVector<QString> InputUtils::qgisProfilerLog()
   return lines;
 }
 
-QList<QgsPoint> InputUtils::parsePositionUpdates( const QString &data )
-{
-  QList<QgsPoint> parsedUpdates;
-  QStringList positions = data.split( '\n', Qt::SkipEmptyParts );
-
-  if ( positions.isEmpty() )
-  {
-    return parsedUpdates;
-  }
-
-  for ( int ix = 0; ix < positions.size(); ix++ )
-  {
-    QStringList coordinates = positions[ix].split( ' ', Qt::SkipEmptyParts );
-
-    if ( coordinates.size() != 4 )
-    {
-      continue;
-    }
-
-    QgsPoint geop(
-      coordinates[0].toDouble(), // long
-      coordinates[1].toDouble(), // lat
-      coordinates[2].toDouble(), // alt
-      coordinates[3].toDouble(), // UTC time in secs
-      Qgis::WkbType::PointZM // explicitly mention the point type
-    );
-
-    parsedUpdates << geop;
-  }
-
-  return parsedUpdates;
-}
-
 QString InputUtils::getManufacturer()
 {
 #ifdef Q_OS_ANDROID
