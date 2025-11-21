@@ -1998,7 +1998,7 @@ void InputUtils::sanitizePath( QString &path )
 
   for ( int i = 0; i < parts.size(); ++i )
   {
-    QString part = parts.at(i);
+    QString part = parts.at( i );
     sanitizeFileName( part );
 
     if ( i > 0 )
