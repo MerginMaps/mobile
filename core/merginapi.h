@@ -243,10 +243,16 @@ class MerginApi: public QObject
      * Each project is one sub-directory.
      * \note returns the directory without a trailing slash
      */
-    QString projectsPath() const { return mDataDir; }
+    QString projectsPath() const
+    {
+      return mDataDir;
+    }
 
     //! Returns reference to the cache of local projects
-    LocalProjectsManager &localProjectsManager() const { return mLocalProjects; }
+    LocalProjectsManager &localProjectsManager() const
+    {
+      return mLocalProjects;
+    }
 
     /**
      * Sends non-blocking GET request to the server to listProjects. On listProjectsReplyFinished,
@@ -391,6 +397,12 @@ class MerginApi: public QObject
     */
     Q_INVOKABLE void deleteAccount();
 
+    /**
+     * Increase storage for running tests
+     * Available only on dev server environments!
+     */
+    void updateWorkspaceService( const QString &workspaceId, const QString &payload );
+
     static const int MERGIN_API_VERSION_MAJOR = 2020;
     static const int MERGIN_API_VERSION_MINOR = 4;
     static const int MINIMUM_SERVER_VERSION_MAJOR = 2023;
@@ -402,9 +414,15 @@ class MerginApi: public QObject
     static const QString sSyncCanceledMessage;
     static const QString sDefaultReportLogUrl;
 
-    static QString defaultApiRoot() { return sDefaultApiRoot; }
+    static QString defaultApiRoot()
+    {
+      return sDefaultApiRoot;
+    }
 
-    static bool isFileDiffable( const QString &fileName ) { return fileName.endsWith( ".gpkg" ); }
+    static bool isFileDiffable( const QString &fileName )
+    {
+      return fileName.endsWith( ".gpkg" );
+    }
 
     //! Get a list of all files that can be used with geodiff
     QStringList projectDiffableFiles( const QString &projectFullName );
@@ -518,7 +536,10 @@ class MerginApi: public QObject
     void setApiVersionStatus( const MerginApiStatus::VersionStatus &apiVersionStatus );
 
     //! Returns details about currently active transactions (both push and pull). Useful for tests
-    Transactions transactions() const { return mTransactionalStatus; }
+    Transactions transactions() const
+    {
+      return mTransactionalStatus;
+    }
 
     // Returns true for files that are under .mergin folder or contains ignored extension from sIgnoreExtensions
     static bool isInIgnore( const QFileInfo &info );
@@ -627,7 +648,10 @@ class MerginApi: public QObject
     /**
      * Returns the network manager used for Mergin API requests
      */
-    QNetworkAccessManager *networkManager() const { return mManager; }
+    QNetworkAccessManager *networkManager() const
+    {
+      return mManager;
+    }
 
     /**
      * Sets the network manager to be used for Mergin API requests
@@ -780,6 +804,7 @@ class MerginApi: public QObject
     void postRegistrationFinished();
     void pingMerginReplyFinished();
     void deleteAccountFinished();
+    void updateWorkspaceStorageLimitFinished();
 
     /**
      * @brief When plan has been changed, an extra userInfo request is needed to update also storage.

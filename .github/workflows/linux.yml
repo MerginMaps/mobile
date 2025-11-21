@@ -134,11 +134,8 @@ jobs:
           ninja
 
       - name: run tests
-        env:
-          TEST_MERGIN_URL: https://app.dev.merginmaps.com/
-          TEST_API_USERNAME: test_mobileapp
-          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
-          QT_QPA_PLATFORM: "offscreen"
+        env: 
+          QT_QPA_PLATFORM: "offscreen"  
         run: |
           cd build-mm-db/
           xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
