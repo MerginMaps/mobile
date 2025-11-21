@@ -1001,4 +1001,51 @@ void TestUtilsFunctions::testSanitizeFileName()
   InputUtils::sanitizeFileName( str );
   QCOMPARE( str, QStringLiteral( "/sa ni_tized/.f_i_l_n_a_m_e .co.ext" ) );
 }
+
+void TestUtilsFunctions::testSanitizePath()
+{
+  // unchanged
+  QString str = QStringLiteral( "/simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "/simple/valid/filename.ext" ) );
+
+  // unchanged - no leading slash
+  str = QStringLiteral( "simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "simple/valid/filename.ext" ) );
+
+  // unchanged - url prefix
+  str = QStringLiteral( "file://simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "file://simple/valid/filename.ext" ) );
+
+  // unchanged - url prefix with slash
+  str = QStringLiteral( "file:///simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "file:///simple/valid/filename.ext" ) );
+
+  // unchanged
+  str = QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" ) );
+
+  // sanitized
+  str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e.ext " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "/sa ni_tized/f_i_l_n_a_m_e.ext" ) );
+
+  // sanitized
+  str = QStringLiteral( "  /  sa ni*tized / f<i>l?n\"a:m|e.ext " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "/sa ni_tized/f_i_l_n_a_m_e.ext" ) );
+
+  // sanitized
+  str = QStringLiteral( "file:///  sa ni*tized /f<i>l?n\"a:m|e .ext " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "file:///sa ni_tized/f_i_l_n_a_m_e.ext" ) );
+
+  // sanitized
+  str = QStringLiteral( "project name / project .qgz " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "project name/project.qgz" ) );
 }

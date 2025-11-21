@@ -1980,6 +1980,48 @@ void InputUtils::sanitizeFileName( QString &fileName )
     fileName = base + ext;
   }
 }
+
+void InputUtils::sanitizePath( QString &path )
+{
+  const bool pathStartsWithFileURL = path.startsWith( "file://" );
+
+  if ( pathStartsWithFileURL )
+  {
+    // remove file:// prefix before sanitization
+    path.remove( 0, 7 );
+  }
+
+  const bool pathStartsWithSlash = path.startsWith( '/' );
+
+  QStringList parts = path.split( '/', Qt::SkipEmptyParts );
+  QString sanitizedPath;
+
+  for ( int i = 0; i < parts.size(); ++i )
+  {
+    QString part = parts.at(i);
+    sanitizeFileName( part );
+
+    if ( i > 0 )
+    {
+      sanitizedPath += '/';
+    }
+
+    sanitizedPath += part;
+  }
+
+  if ( pathStartsWithSlash )
+  {
+    // restore leading slash
+    sanitizedPath = '/' + sanitizedPath;
+  }
+
+  if ( pathStartsWithFileURL )
+  {
+    // restore file:// prefix
+    sanitizedPath = "file://" + sanitizedPath;
+  }
+
+  path = sanitizedPath;
 }
 
 void InputUtils::updateQgisFormats( const QByteArray &output )
