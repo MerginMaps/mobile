@@ -149,7 +149,7 @@ jobs:
 
           lcov --directory . --capture --output-file coverage.info
 
-          lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
+          lcov --remove coverage.info '*/vcpkg_installed/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-mm-db/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Coveralls
