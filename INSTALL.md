@@ -323,6 +323,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      export QT_ANDROID_KEYSTORE_KEY_PASS=<password>
      export QT_ANDROID_KEYSTORE_STORE_PASS=<password>
      export QT_ANDROID_KEYSTORE_PATH=<keystore-path>
+     export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;
 
      cmake \
        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -372,6 +373,11 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    
    
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+
+   To build the project, go to the build folder and run the following command:
+   ```
+   ninja
+   ```
    
 
 ## 4.3. Android on Windows
