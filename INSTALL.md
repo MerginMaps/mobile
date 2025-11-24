@@ -445,11 +445,11 @@ Now you can create a build (either on command line or by setting these variables
   cd build
 
   xcodebuild \
-    -project Input.xcodeproj/ \
-    -scheme Input \
+    -project MerginMaps.xcodeproj/ \
+    -scheme MerginMaps \
     -sdk iphoneos \
     -configuration Release \
-    archive -archivePath Input.xcarchive
+    archive -archivePath MerginMaps.xcarchive
 ```
 
 # 6. Building macOS
