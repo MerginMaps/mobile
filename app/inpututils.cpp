@@ -1971,12 +1971,11 @@ void InputUtils::sanitizeFileName( QString &fileName )
   fileName = fileName.trimmed();
 
   // Trim whitespace immediately before the final extension, e.g. "name  .jpg" -> "name.jpg"
-  int lastDot = fileName.lastIndexOf( QChar( '.' ) );
+  const int lastDot = fileName.lastIndexOf( QChar( '.' ) );
   if ( lastDot > 0 )
   {
-    QString base = fileName.first( lastDot );
-    QString ext = fileName.sliced( lastDot );
-    base = base.trimmed();
+    const QString base = fileName.first( lastDot ).trimmed();
+    const QString ext = fileName.sliced( lastDot );
     fileName = base + ext;
   }
 }
@@ -1993,7 +1992,7 @@ void InputUtils::sanitizePath( QString &path )
 
   const bool pathStartsWithSlash = path.startsWith( '/' );
 
-  QStringList parts = path.split( '/', Qt::SkipEmptyParts );
+  const QStringList parts = path.split( '/', Qt::SkipEmptyParts );
   QString sanitizedPath;
 
   for ( int i = 0; i < parts.size(); ++i )
