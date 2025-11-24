@@ -75,6 +75,7 @@ class PositionKit : public QObject
 
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
+    Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
@@ -110,6 +111,7 @@ class PositionKit : public QObject
     QString fix() const;
 
     const GeoPosition &position() const;
+    bool isMockPosition() const;
 
     AbstractPositionProvider *positionProvider() const;
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
@@ -163,6 +165,7 @@ class PositionKit : public QObject
     void positionProviderChanged( AbstractPositionProvider *provider );
 
     void positionChanged( const GeoPosition & );
+    void isMockPositionChanged( bool );
 
     void appSettingsChanged();
 

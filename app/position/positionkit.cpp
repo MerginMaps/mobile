@@ -333,6 +333,13 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( newPosition.isMock != mPosition.isMock )
+  {
+    mPosition.isMock = newPosition.isMock;
+    emit isMockPositionChanged( mPosition.isMock );
+    hasAnythingChanged = true;
+  }
+
   if ( hasAnythingChanged )
   {
     emit positionChanged( mPosition );
@@ -457,6 +464,11 @@ AbstractPositionProvider *PositionKit::positionProvider() const
 const GeoPosition &PositionKit::position() const
 {
   return mPosition;
+}
+
+bool PositionKit::isMockPosition() const
+{
+  return mPosition.isMock;
 }
 
 AppSettings *PositionKit::appSettings() const

@@ -62,7 +62,17 @@ MMComponents.MMDrawer {
             width: parent.width / 2
 
             title: qsTr( "Source" )
-            value: PositionKit.positionProvider ? PositionKit.positionProvider.name() : qsTr( "No receiver" )
+            value: {
+              if ( PositionKit.positionProvider ) {
+                if ( PositionKit.isMockPosition ) {
+                  qsTr( "Mocked position provider" )
+                } else {
+                  PositionKit.positionProvider.name()
+                }
+              } else {
+                qsTr( "No receiver" )
+              }
+            }
 
             alignmentRight: Positioner.index % 2 === 1
           }
