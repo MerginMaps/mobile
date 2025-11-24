@@ -108,8 +108,18 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     // could also use getBearingAccuracyDegrees() since API level 26 (Android 8.0)
   }
 
-  // could also use isMock() to detect if location is mocked
-  // (may useful to check if 3rd party app is setting it for external GNSS receiver)
+  // detect if location is mocked (useful to check if 3rd party app is setting it for external GNSS receiver)
+  // we only use this to show users that the mock location is active
+  jboolean isMock = false;
+  if ( QtAndroidPrivate::androidSdkVersion() >= 31 )
+  {
+    isMock = location.callMethod<jboolean>( "isMock" );
+  }
+  else
+  {
+    isMock = location.callMethod<jboolean>( "isFromMockProvider" );
+  }
+  pos.isMock = isMock;
 
   // could also use getExtras() to get further details from mocked location
   // (the key/value pairs are vendor-specific, and could include things like DOP,
