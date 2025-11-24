@@ -65,13 +65,16 @@ bool SplittingMapTool::canCommitSplit() const
   return true;
 }
 
-bool SplittingMapTool::commitSplit() const
+int SplittingMapTool::commitSplit() const
 {
   if ( !mFeatureToSplit.isValid() )
-    return false;
+    return 2;
 
   if ( !hasValidGeometry() )
-    return false;
+    return 2;
+
+  if ( !canCommitSplit() )
+    return 1;
 
   // only the specified featureToSplit shall be split, so we select
   // it here in order to avoid other features being split
@@ -85,9 +88,9 @@ bool SplittingMapTool::commitSplit() const
 
   if ( result == Qgis::GeometryOperationResult::Success )
   {
-    return true;
+    return 0;
   }
-  return false;
+  return 2;
 }
 
 void SplittingMapTool::rebuildGeometry()

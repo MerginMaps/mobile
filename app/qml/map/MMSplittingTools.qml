@@ -105,14 +105,15 @@ Item {
         onClicked: {
           if ( mapTool.hasValidGeometry() )
           {
-            if ( !mapTool.canCommitSplit() )
+            let result = mapTool.commitSplit()
+
+            if ( result === 1 )
             {
               __notificationModel.addWarning( qsTr( "The split line does not properly cross the feature. Please adjust the line to cross the feature boundary." ) )
               return
             }
 
-            let result = mapTool.commitSplit()
-            root.done( result )
+            root.done( result === 0 )
           }
           else
           {
