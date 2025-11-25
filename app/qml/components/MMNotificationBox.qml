@@ -22,18 +22,42 @@ Rectangle {
   property int type: MMNotificationBox.Types.Warning
 
   property color bgndColor: {
-    if ( type === MMNotificationBox.Types.Warning ) return __style.sandColor
-    if ( type === MMNotificationBox.Types.Error ) return __style.negativeLightColor
+    switch (type) {
+    case MMNotificationBox.Types.Warning:
+        return __style.sandColor
+    case MMNotificationBox.Types.Error:
+        return __style.negativeLightColor
+    }
   }
 
   property color borderColor: {
-    if ( type === MMNotificationBox.Types.Warning ) return __style.sunsetColor
-    if ( type === MMNotificationBox.Types.Error ) return __style.grapeColor
+    switch (type) {
+    case MMNotificationBox.Types.Warning:
+        return __style.sunsetColor
+    case MMNotificationBox.Types.Error:
+        return __style.grapeColor
+    }
+  }
+
+  property color buttonBgndColor: {
+    switch(type) {
+      case MMNotificationBox.Types.Warning:
+        return __style.sunsetColor
+      case MMNotificationBox.Types.Error:
+        return __style.grapeColor
+    }
+  }
+
+  property color buttonFontColor: {
+    switch(type) {
+      case MMNotificationBox.Types.Warning:
+        return __style.earthColor
+      case MMNotificationBox.Types.Error:
+        return __style.roseColor
+    }
   }
 
   signal buttonClicked()
-
-  property color textColor: __style.nightColor
 
   color: bgndColor
   border.width: 1 * __dp
@@ -41,7 +65,7 @@ Rectangle {
   implicitHeight: dynamicContentGroup.implicitHeight + 2 * __style.margin20
   radius: __style.radius12
 
-  RowLayout {
+    ColumnLayout {
     id: dynamicContentGroup
 
     width: parent.width - 2 * __style.margin20
@@ -51,12 +75,6 @@ Rectangle {
     y: __style.margin20
 
     spacing: __style.spacing12
-
-    Column {
-
-      Layout.fillWidth: true
-      Layout.preferredHeight: implicitHeight
-      spacing: 12 * __dp
 
       Column {
         width:parent.width
@@ -71,7 +89,7 @@ Rectangle {
           wrapMode: Label.Wrap
 
           font: __style.t3
-          color: root.textColor
+          color: __style.nightColor
 
           lineHeight: __style.fontLineHeight24
           lineHeightMode: Text.FixedHeight
@@ -86,7 +104,7 @@ Rectangle {
           height: text ? implicitHeight : 0
 
           font: __style.p6
-          color: root.textColor
+          color: __style.nightColor
 
           wrapMode: Label.Wrap
 
@@ -96,19 +114,18 @@ Rectangle {
           verticalAlignment: Text.AlignVCenter
         }
       }
-
       MMButton {
         id: actionButton
-
-        fontColor: root.type === MMNotificationBox.Types.Warning ? __style.earthColor : __style.roseColor
-        bgndColor: root.type === MMNotificationBox.Types.Warning ? __style.sunsetColor : __style.grapeColor
-        fontColorHover: root.type === MMNotificationBox.Types.Warning ? __style.sunsetColor : __style.grapeColor
-        bgndColorHover: root.type === MMNotificationBox.Types.Warning ? __style.earthColor : __style.roseColor
+        Layout.alignment: Qt.AlignRight
+        fontColor: buttonFontColor
+        bgndColor: buttonBgndColor
+        // reverse the color properties when the button is hovered
+        fontColorHover: buttonBgndColor
+        bgndColorHover: buttonFontColor
 
         size: MMButton.Sizes.Small
 
         onClicked: root.buttonClicked()
       }
     }
-  }
 }
