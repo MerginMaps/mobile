@@ -243,7 +243,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
     else if ( secsDiff < 60 * 60 * 24 )
     {
       int period = secsDiff / ( 60 * 60 );
-      return tr( "%n hours(s) ago", "", period );
+      return tr( "%n hour(s) ago", "", period );
     }
     else
     {
@@ -252,7 +252,7 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
   }
   else if ( daysDiff < 7 )
   {
-    return tr( "%n days(s) ago", "", daysDiff );
+    return tr( "%n day(s) ago", "", daysDiff );
   }
   else if ( daysDiff < 31 )
   {
