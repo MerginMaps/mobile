@@ -24,18 +24,18 @@ Rectangle {
   property color bgndColor: {
     switch (type) {
     case MMNotificationBox.Types.Warning:
-        return __style.sandColor
+      return __style.sandColor
     case MMNotificationBox.Types.Error:
-        return __style.negativeLightColor
+      return __style.negativeLightColor
     }
   }
 
   property color borderColor: {
     switch (type) {
     case MMNotificationBox.Types.Warning:
-        return __style.sunsetColor
+      return __style.sunsetColor
     case MMNotificationBox.Types.Error:
-        return __style.grapeColor
+      return __style.grapeColor
     }
   }
 
@@ -65,7 +65,7 @@ Rectangle {
   implicitHeight: dynamicContentGroup.implicitHeight + 2 * __style.margin20
   radius: __style.radius12
 
-    ColumnLayout {
+  ColumnLayout {
     id: dynamicContentGroup
 
     width: parent.width - 2 * __style.margin20
@@ -76,56 +76,60 @@ Rectangle {
 
     spacing: __style.spacing12
 
-      Column {
-        width:parent.width
+    Column {
+      width: parent.width
+      height: implicitHeight
+
+      Text {
+        id: titleText
+
+        width: parent.width
         height: implicitHeight
 
-        Text {
-          id: titleText
+        wrapMode: Label.Wrap
 
-          width: parent.width
-          height: implicitHeight
+        font: __style.t3
+        color: __style.nightColor
 
-          wrapMode: Label.Wrap
+        lineHeight: __style.fontLineHeight24
+        lineHeightMode: Text.FixedHeight
 
-          font: __style.t3
-          color: __style.nightColor
-
-          lineHeight: __style.fontLineHeight24
-          lineHeightMode: Text.FixedHeight
-
-          verticalAlignment: Text.AlignVCenter
-        }
-
-        Text {
-          id: descriptionText
-
-          width: parent.width
-          height: text ? implicitHeight : 0
-
-          font: __style.p6
-          color: __style.nightColor
-
-          wrapMode: Label.Wrap
-
-          lineHeight: __style.fontLineHeight24
-          lineHeightMode: Text.FixedHeight
-
-          verticalAlignment: Text.AlignVCenter
-        }
+        verticalAlignment: Text.AlignVCenter
       }
-      MMButton {
-        id: actionButton
-        Layout.alignment: Qt.AlignRight
-        fontColor: buttonFontColor
-        bgndColor: buttonBgndColor
-        // reverse the color properties when the button is hovered
-        fontColorHover: buttonBgndColor
-        bgndColorHover: buttonFontColor
 
-        size: MMButton.Sizes.Small
+      Text {
+        id: descriptionText
 
-        onClicked: root.buttonClicked()
+        width: parent.width
+        height: text ? implicitHeight : 0
+
+        font: __style.p6
+        color: __style.nightColor
+
+        wrapMode: Label.Wrap
+
+        lineHeight: __style.fontLineHeight24
+        lineHeightMode: Text.FixedHeight
+
+        verticalAlignment: Text.AlignVCenter
       }
     }
+
+    MMButton {
+      id: actionButton
+
+      Layout.alignment: Qt.AlignLeft
+
+      fontColor: buttonFontColor
+      bgndColor: buttonBgndColor
+
+      // reverse the color properties when the button is hovered
+      fontColorHover: buttonBgndColor
+      bgndColorHover: buttonFontColor
+
+      size: MMButton.Sizes.Small
+
+      onClicked: root.buttonClicked()
+    }
+  }
 }
