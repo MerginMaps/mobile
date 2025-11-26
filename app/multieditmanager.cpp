@@ -180,10 +180,10 @@ void MultiEditManager::deleteSelectedFeatures()
   if ( success )
   {
     mModel->populate( {} );
-    mLayer->triggerRepaint();
-    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
     // commit the changes to stop editing the layer
     mLayer->commitChanges();
+    mLayer->triggerRepaint();
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
   }
 }
 
