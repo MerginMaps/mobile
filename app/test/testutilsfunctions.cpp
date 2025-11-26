@@ -52,18 +52,18 @@ void TestUtilsFunctions::testFormatDuration()
   testFormatDuration( t0, -1, QStringLiteral( "Invalid datetime" ) );
   testFormatDuration( t0, 0, QStringLiteral( "just now" ) );
   testFormatDuration( t0, 1, QStringLiteral( "just now" ) );
-  testFormatDuration( t0, 60, QStringLiteral( "1 minute ago" ) );
-  testFormatDuration( t0, 2 * 60, QStringLiteral( "2 minutes ago" ) );
-  testFormatDuration( t0, 1 * 60 * 60, QStringLiteral( "1 hour ago" ) );
-  testFormatDuration( t0, 2 * 60 * 60, QStringLiteral( "2 hours ago" ) );
-  testFormatDuration( t0, 1 * DAY_IN_SECS, QStringLiteral( "1 day ago" ) );
-  testFormatDuration( t0, 2 * DAY_IN_SECS, QStringLiteral( "2 days ago" ) );
-  testFormatDuration( t0, 7 * DAY_IN_SECS, QStringLiteral( "1 week ago" ) );
-  testFormatDuration( t0, 14 * DAY_IN_SECS, QStringLiteral( "2 weeks ago" ) );
-  testFormatDuration( t0, MONTH_IN_SECS, QStringLiteral( "1 month ago" ) );
-  testFormatDuration( t0, 2 * MONTH_IN_SECS, QStringLiteral( "2 months ago" ) );
-  testFormatDuration( t0, 12 * MONTH_IN_SECS, QStringLiteral( "1 year ago" ) );
-  testFormatDuration( t0, 24 * MONTH_IN_SECS, QStringLiteral( "2 years ago" ) );
+  testFormatDuration( t0, 60, QStringLiteral( "1 minute(s) ago" ) );
+  testFormatDuration( t0, 2 * 60, QStringLiteral( "2 minute(s) ago" ) );
+  testFormatDuration( t0, 1 * 60 * 60, QStringLiteral( "1 hour(s) ago" ) );
+  testFormatDuration( t0, 2 * 60 * 60, QStringLiteral( "2 hour(s) ago" ) );
+  testFormatDuration( t0, 1 * DAY_IN_SECS, QStringLiteral( "1 day(s) ago" ) );
+  testFormatDuration( t0, 2 * DAY_IN_SECS, QStringLiteral( "2 day(s) ago" ) );
+  testFormatDuration( t0, 7 * DAY_IN_SECS, QStringLiteral( "1 week(s) ago" ) );
+  testFormatDuration( t0, 14 * DAY_IN_SECS, QStringLiteral( "2 week(s) ago" ) );
+  testFormatDuration( t0, MONTH_IN_SECS, QStringLiteral( "1 month(s) ago" ) );
+  testFormatDuration( t0, 2 * MONTH_IN_SECS, QStringLiteral( "2 month(s) ago" ) );
+  testFormatDuration( t0, 12 * MONTH_IN_SECS, QStringLiteral( "1 year(s) ago" ) );
+  testFormatDuration( t0, 24 * MONTH_IN_SECS, QStringLiteral( "2 year(s) ago" ) );
 }
 
 void TestUtilsFunctions::testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult )

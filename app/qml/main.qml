@@ -671,7 +671,7 @@ ApplicationWindow {
 
     property int countToDelete: 0
 
-    title: qsTr( "Delete feature(s)", "", countToDelete )
+    title: qsTr( "Delete %n feature(s)", "", countToDelete )
     description: qsTr( "Delete %n selected feature(s)?", "", countToDelete )
 
     primaryButton.text: qsTr( "Yes, I want to delete" )
