@@ -13,7 +13,6 @@
 #include <QObject>
 #include <qglobal.h>
 
-#include "inputconfig.h"
 #include "qgspoint.h"
 #include "qgsproject.h"
 #include "qgscoordinatereferencesystem.h"

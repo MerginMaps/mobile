@@ -14,7 +14,6 @@
 #include <QObject>
 #include <QPointer>
 
-#include "inputconfig.h"
 #include "inpututils.h"
 #include "qgsmaplayer.h"
 #include "qgsmaplayermodel.h"

@@ -1980,6 +1980,29 @@ QSet<int> InputUtils::referencedAttributeIndexes( QgsVectorLayer *layer, const Q
   return expr.referencedAttributeIndexes( layer->fields() );
 }
 
+void InputUtils::updateQgisFormats( const QByteArray &output )
+{
+#ifdef MM_FORMATS_PATH
+  const QString sourcePath( STR( MM_FORMATS_PATH ) );
+  QFile file( sourcePath );
+
+  if ( !file.open( QIODevice::Append | QIODevice::Text ) || !file.exists() )
+  {
+    qWarning() << "Cannot open file for writing:" << file.errorString();
+    return;
+  }
+
+  QByteArray finalOutput{"\n===== QGIS Formats =====\n"};
+  finalOutput.append( output );
+  file.write( finalOutput );
+
+  file.close();
+  qDebug() << "Supported formats succesfully updated with QGIS formats";
+#else
+  qDebug( "== MM_FORMATS_PATH must be set by CMakeLists.txt in order to update QGIS supported formats ==" );
+#endif
+}
+
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
@@ -2091,29 +2114,6 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
   {
     return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
   }
-}
-
-void InputUtils::updateFeature( const FeatureLayerPair &pair )
-{
-  if ( !pair.layer() )
-  {
-    return;
-  }
-
-  if ( !pair.feature().isValid() )
-  {
-    return;
-  }
-
-  if ( !pair.layer()->isEditable() )
-  {
-    pair.layer()->startEditing();
-  }
-
-  QgsFeature f( pair.feature() );
-  pair.layer()->updateFeature( f );
-  pair.layer()->commitChanges();
-  pair.layer()->triggerRepaint();
 }
 
 QString InputUtils::imageGalleryLocation()

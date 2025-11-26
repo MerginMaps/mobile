@@ -24,7 +24,6 @@
 
 #include <limits>
 
-#include "inputconfig.h"
 #include "inputhelp.h"
 #include "merginapi.h"
 #include "androidutils.h"
@@ -573,11 +572,6 @@ class InputUtils: public QObject
 
     Q_INVOKABLE static QString invalidGeometryWarning( QgsVectorLayer *layer );
 
-    /**
-     * Updates existing layer feature with new feature data.
-     */
-    Q_INVOKABLE static void updateFeature( const FeatureLayerPair &pair );
-
     // Returns default path to images in this system
     Q_INVOKABLE static QString imageGalleryLocation();
 
@@ -643,6 +637,12 @@ class InputUtils: public QObject
      * Returns the indexes of fields that are referenced in an expression
      */
     Q_INVOKABLE static QSet<int> referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression );
+
+    /**
+     * Appends all supported QGIS formats to supported_formats.txt.
+     * \note This function should not be called during normal runtime, as it tries to write to source directory.
+     */
+    static void updateQgisFormats( const QByteArray &output );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

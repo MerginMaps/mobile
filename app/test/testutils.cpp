@@ -11,7 +11,9 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QSignalSpy>
+#include <exiv2/exiv2.hpp>
 
+#include "mmconfig.h"
 #include "testutils.h"
 #include "coreutils.h"
 #include "inpututils.h"
@@ -27,23 +29,34 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   Q_ASSERT( api );
 
   // Test server url needs to be set
-  Q_ASSERT( ::getenv( "TEST_MERGIN_URL" ) );
-
-  apiRoot = ::getenv( "TEST_MERGIN_URL" );
+  if ( ::getenv( "TEST_MERGIN_URL" ) == nullptr )
+  {
+    // if there is none, just default to the dev one
+    apiRoot = QStringLiteral( "https://app.dev.merginmaps.com/" );
+  }
+  else
+  {
+    apiRoot = ::getenv( "TEST_MERGIN_URL" );
+    // let's make sure we do not mess with the public instance
+    Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
+  }
   api->setApiRoot( apiRoot );
   qDebug() << "MERGIN API ROOT:" << apiRoot;
 
-  // let's make sure we do not mess with the public instance
-  Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
-
-  // Test user needs to be set
-  Q_ASSERT( ::getenv( "TEST_API_USERNAME" ) );
-
-  // Test password needs to be set
-  Q_ASSERT( ::getenv( "TEST_API_PASSWORD" ) );
-
-  username = ::getenv( "TEST_API_USERNAME" );
-  password = ::getenv( "TEST_API_PASSWORD" );
+  // test user needs to be set
+  // check if there are environmental variables for the username and the password
+  if ( ::getenv( "TEST_API_USERNAME" ) == nullptr && ::getenv( "TEST_API_PASSWORD" ) == nullptr )
+  {
+    // generate a random email and pasword
+    // create the user on the server
+    // create a workspace for the user
+    generateRandomUser( api, username, password );
+  }
+  else
+  {
+    username = ::getenv( "TEST_API_USERNAME" );
+    password = ::getenv( "TEST_API_PASSWORD" );
+  }
 }
 
 void TestUtils::authorizeUser( MerginApi *api, const QString &username, const QString &password )
@@ -110,20 +123,100 @@ QString TestUtils::generateUsername()
 {
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "input-%1" ).arg( uniqename );
+  return QStringLiteral( "mobile-%1" ).arg( uniqename );
 }
 
 QString TestUtils::generateEmail()
 {
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "mergin+autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
+  return QStringLiteral( "mobile-autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
 }
 
 QString TestUtils::generatePassword()
 {
   QString pass = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
   return QStringLiteral( "_Pass12%1" ).arg( pass );
+}
+
+QString TestUtils::generateWorkspaceName( const QString &username )
+{
+  static const QRegularExpression regex( R"(mobile-autotest(\d{6})-(\d{4})\d{2}-\d{3})" );
+  const QRegularExpressionMatch match = regex.match( username );
+
+  if ( match.hasMatch() )
+  {
+    const QString date = match.captured( 1 ); // Day Month Year
+    const QString time = match.captured( 2 ); // Hour Second
+    return QString( "mmat-%1-%2" ).arg( date, time );
+  }
+  return {};
+}
+
+void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &password )
+{
+  // generate the test run-specific user details
+  QString email = generateEmail();
+  password = generatePassword();
+  username = email.split( '@' ).first();
+  username.remove( "+" );
+
+  // create the account for the test run user
+  api->clearAuth();
+  QSignalSpy spy( api, &MerginApi::registrationSucceeded );
+  QSignalSpy spy2( api, &MerginApi::registrationFailed );
+  api->registerUser( email, password, true );
+  // check that the account has been created.
+  bool success = spy.wait( TestUtils::LONG_REPLY );
+  if ( !success )
+  {
+    qDebug() << "Failed registration" << spy2.takeFirst();
+    QVERIFY( false );
+  }
+
+  // check that the user can be authorized
+  QSignalSpy spyAuth( api->userAuth(), &MerginUserAuth::authChanged );
+  api->authorize( email, password );
+  QVERIFY( spyAuth.wait( TestUtils::LONG_REPLY * 5 ) );
+
+  // create workspace
+  QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
+  // create the workspace name
+  QString workspace = generateWorkspaceName( username );
+  api->createWorkspace( workspace );
+  bool workspaceSuccess = wsSpy.wait( TestUtils::LONG_REPLY );
+  QVERIFY( workspaceSuccess );
+  qDebug() << "CREATED NEW WORKSPACE:" << workspace;
+
+  // call userInfo to set active workspace
+  QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
+  api->getUserInfo();
+  QVERIFY( infoSpy.wait( TestUtils::LONG_REPLY ) );
+  QVERIFY( api->userInfo()->activeWorkspaceId() >= 0 );
+
+  // change the data plan
+  QString workspaceId = QString::number( api->userInfo()->activeWorkspaceId() );
+  QSignalSpy wsStorageSpy( api, &MerginApi::updateWorkspaceService );
+
+  // Create JSON payload to change the data plan
+  QString payload = QString( R"({
+                             "limits_override": {
+                             "storage": %1,
+                             "projects" : %2,
+                             "api_allowed" : true
+                             }
+  })" ).arg( TEST_WORKSPACE_STORAGE_SIZE ).arg( TEST_WORKSPACE_PROJECT_NUMBER );
+
+  api->updateWorkspaceService( workspaceId, payload );
+  bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
+  if ( workspaceStorageModified )
+  {
+    qDebug() << "Updated the storage limit" << workspace;
+  }
+
+// this needs to be cleared, as the user will be authorized in the test cases.
+  api->clearAuth();
+
 }
 
 QString TestUtils::testDataDir()
@@ -301,3 +394,37 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
+
+bool TestUtils::testExifPositionMetadataExists( const QString &imageSource )
+{
+  if ( !QFileInfo::exists( imageSource ) )
+    return false;
+
+  try
+  {
+    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( imageSource.toStdString() ) );
+    if ( !srcImage )
+      return false;
+
+    srcImage->readMetadata();
+    Exiv2::ExifData &exifData = srcImage->exifData();
+    if ( exifData.empty() )
+    {
+      return false;
+    }
+
+    const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSLatitude" ) );
+    const auto iterator2 = exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSLongitude" ) );
+    if ( iterator == exifData.end() || iterator2 == exifData.end() )
+    {
+      return false;
+    }
+    return true;
+  }
+  catch ( ... )
+  {
+    CoreUtils::log( "TestUtils", QStringLiteral( "Exception, while checking EXIF position metadata" ) );
+    return false;
+  }
+}
+

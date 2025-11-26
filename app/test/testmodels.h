@@ -10,8 +10,6 @@
 #ifndef TESTMODELS_H
 #define TESTMODELS_H
 
-#include "inputconfig.h"
-
 #include <QObject>
 
 class TestModels : public QObject

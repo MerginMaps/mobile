@@ -7,7 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "inputconfig.h"
+#include "mmconfig.h"
 
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -23,7 +23,7 @@
 #include <QLocale>
 #include <QImageReader>
 #include <QStandardPaths>
-#ifdef INPUT_TEST
+#ifdef MM_TEST
 #include "test/inputtests.h"
 #endif
 #include <qqml.h>
@@ -101,6 +101,7 @@
 #include "guidelinecontroller.h"
 #include "multieditmanager.h"
 #include "mixedattributevalue.h"
+#include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
 
 #include "projectsmodel.h"
@@ -383,6 +384,11 @@ void addQmlImportPath( QQmlEngine &engine )
   qDebug() << "adding QML import Path: " << qmlBuildImportPath;
 #endif
 
+#ifdef Q_OS_WIN
+  // On windows the import paths are wrong and expect path: app-dir\Qt6\qml
+  engine.addImportPath( QCoreApplication::applicationDirPath() + "/qml" );
+#endif
+
 #ifdef Q_OS_IOS
   // REQUIRED FOR IOS - to load Input/*.qml files defined in qmldir
   engine.addImportPath( "qrc:///" );
@@ -408,11 +414,11 @@ int main( int argc, char *argv[] )
 #endif
 
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   InputTests tests;
   tests.parseArgs( argc, argv );
 #endif
-  qDebug() << "Mergin Maps Input App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
+  qDebug() << "Mergin Maps App" << version << InputUtils::appPlatform() << "(" << CoreUtils::appVersionCode() << ")";
   qDebug() << "Built with QGIS " << VERSION_INT << " and QT " << qVersion();
   qDebug() << "Device uuid " << CoreUtils::deviceUuid();
 
@@ -420,7 +426,7 @@ int main( int argc, char *argv[] )
   QString dataDir = getDataDir();
   QString projectDir = dataDir + "/projects";
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     projectDir = tests.initTestingDir();
@@ -475,6 +481,21 @@ int main( int argc, char *argv[] )
 
   init_qgis( appBundleDir );
 
+#ifdef DESKTOP_OS
+  if ( argc > 0 )
+  {
+    for ( int i = 1; i < argc; ++i )
+    {
+      QString arg( argv[i] );
+      if ( arg.compare( "--generate_QGIS_formats" ) == 0 )
+      {
+        InputUtils::updateQgisFormats( QgsProviderRegistry::instance()->pluginList().toUtf8() );
+        return 0;
+      }
+    }
+  }
+#endif
+
 #ifdef ANDROID
   // See issue #3431 -> disable Android accessibility features to prevent ANRs
   qputenv( "QT_ANDROID_DISABLE_ACCESSIBILITY", "1" );
@@ -495,6 +516,7 @@ int main( int argc, char *argv[] )
   // we define engine sooner as some classes are needed for creation of others, but QML engine is responsible for
   // creation of those required classes
   QQmlEngine engine;
+  addQmlImportPath( engine );
   // AppSettings has to be initialized after QGIS app init (because of correct reading/writing QSettings).
   AppSettings *as = engine.singletonInstance<AppSettings *>( "MMInput", "AppSettings" );
 
@@ -653,7 +675,7 @@ int main( int argc, char *argv[] )
     CoreUtils::log( QStringLiteral( "Loading project error" ), QStringLiteral( "Application has been unexpectedly finished during the last run." ) );
   }
 
-#ifdef INPUT_TEST
+#ifdef MM_TEST
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
@@ -677,7 +699,6 @@ int main( int argc, char *argv[] )
   app.setFont( QFont( "Inter" ) );
 
   QQuickStyle::setStyle( "Basic" );
-  addQmlImportPath( engine );
 
   initDeclarative();
   // QGIS environment variables to set
@@ -844,6 +865,13 @@ int main( int argc, char *argv[] )
     qDebug() << "FATAL ERROR: unable to create main.qml";
     return EXIT_FAILURE;
   }
+
+  // this fixes the error dump from C++ defined QML components, when quiting application
+  QObject::connect( &app, &QCoreApplication::aboutToQuit, object, [&]
+  {
+    object->deleteLater();
+    engine.clearComponentCache();
+  } );
 
 #ifdef Q_OS_IOS
   QString logoUrl = "qrc:logo.png";

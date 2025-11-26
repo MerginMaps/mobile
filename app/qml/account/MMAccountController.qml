@@ -20,6 +20,8 @@ Item {
   property bool inProgress: false
   property MM.MerginInvitation invitation
 
+  signal projectsListRequested()
+
   QtObject {
     //! Data to send to postRegister endpoint
     id: postRegisterData
@@ -303,6 +305,7 @@ Item {
 
         function onProcessInvitationFinished( accepted ) {
           controller.end()
+          controller.projectsListRequested()
         }
       }
     }

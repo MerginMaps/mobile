@@ -12,7 +12,6 @@
 
 #include <QObject>
 #include <qglobal.h>
-#include "inputconfig.h"
 
 #include "position/positionkit.h"
 #include "inputmapsettings.h"

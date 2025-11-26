@@ -24,7 +24,6 @@
 #include <QVector>
 #include <QUuid>
 
-#include "inputconfig.h"
 #include "featurelayerpair.h"
 #include "attributedata.h"
 #include "attributeformproxymodel.h"
@@ -225,6 +224,8 @@ class  AttributeController : public QObject
 
     //! renames photos if necessary
     void renamePhotos();
+    //! save temporary sketched image to original image
+    void saveSketches();
 
     bool mConstraintsHardValid = false;
     bool mConstraintsSoftValid = false;
