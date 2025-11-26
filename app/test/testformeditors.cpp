@@ -354,7 +354,7 @@ void TestFormEditors::testRelationsReferenceEditor()
 
   subSpy.wait();
   QgsFeature parentFeat = mainLayer->getFeature( 1 ); // this is parent feature
-  QVariant fk = subRelationRefModel.foreignKeyFromAttribute( FeaturesModel::FeatureId, parentFeat.id() );
+  QVariant fk = subRelationRefModel.foreignKeyFromReferencedFeatureId( parentFeat.id() );
 
   QCOMPARE( fk, parentFeat.attribute( "pk" ) );
 
@@ -374,7 +374,7 @@ void TestFormEditors::testRelationsReferenceEditor()
   subsubRelationRefModel.setProject( QgsProject::instance() );
 
   QgsFeature parentSubFeat = subLayer->getFeature( 1 ); // this is parent feature
-  QVariant subsubFk = subRelationRefModel.foreignKeyFromAttribute( FeaturesModel::FeatureId, parentSubFeat.id() );
+  QVariant subsubFk = subRelationRefModel.foreignKeyFromReferencedFeatureId( parentSubFeat.id() );
 
   QCOMPARE( subsubFk, parentSubFeat.attribute( "pk" ) );
 }

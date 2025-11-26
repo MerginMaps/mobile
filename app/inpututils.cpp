@@ -1971,6 +1971,15 @@ void InputUtils::sanitizeFileName( QString &fileName )
   fileName = fileName.trimmed();
 }
 
+QSet<int> InputUtils::referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression )
+{
+  if ( !layer )
+    return {};
+
+  const QgsExpression expr( expression );
+  return expr.referencedAttributeIndexes( layer->fields() );
+}
+
 void InputUtils::updateQgisFormats( const QByteArray &output )
 {
 #ifdef MM_FORMATS_PATH
