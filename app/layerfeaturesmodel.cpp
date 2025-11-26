@@ -48,7 +48,7 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
 
   if ( role == FeaturePair )
   {
-    QgsFeature f = pair.layer()->getFeature( pair.feature().id() );
+    const QgsFeature f = pair.layer()->getFeature( pair.feature().id() );
     return QVariant::fromValue<FeatureLayerPair>( FeatureLayerPair( f, pair.layer() ) );
   }
 

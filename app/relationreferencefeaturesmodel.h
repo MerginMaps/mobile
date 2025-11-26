@@ -41,7 +41,7 @@ class RelationReferenceFeaturesModel : public LayerFeaturesModel
     Q_INVOKABLE QVariant foreignKeyFromReferencedFeatureId( QgsFeatureId fid );
 
     //! Returns role value from feature with fkValue in foreign key
-    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute );
+    Q_INVOKABLE QVariant attributeFromForeignKey( const QVariant &fkValue, const ModelRoles expectedAttribute );
 
     QVariantMap config() const;
     QgsProject *project() const;

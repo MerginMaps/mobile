@@ -21,7 +21,7 @@ RelationReferenceFeaturesModel::~RelationReferenceFeaturesModel() = default;
 QVariant RelationReferenceFeaturesModel::foreignKeyFromReferencedFeatureId( QgsFeatureId fid )
 {
   if ( !mRelation.isValid() )
-    return QVariant();
+    return {};
 
   const QgsAttributeList refFields = mRelation.referencedFields();
   QgsFeatureRequest request( fid );
@@ -34,29 +34,29 @@ QVariant RelationReferenceFeaturesModel::foreignKeyFromReferencedFeatureId( QgsF
   if ( it.nextFeature( f ) )
     return f.attribute( refFields.constFirst() ); // TODO: multiple keys support
 
-  return QVariant();
+  return {};
 }
 
-QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant &fkValue, FeaturesModel::ModelRoles expectedAttribute )
+QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant &fkValue, const FeaturesModel::ModelRoles expectedAttribute )
 {
   if ( !mRelation.isValid() )
-    return QVariant();
+    return {};
 
   // Attributes from the referencing layer
   QgsAttributes attrs = QgsAttributes( mRelation.referencingLayer()->fields().count() );
   // Set the value on the foreign key field of the referencing record
   const QgsAttributeList refFields = mRelation.referencingFields();
-  for ( int fieldIndex : refFields )
+  for ( const int fieldIndex : refFields )
     attrs[ fieldIndex ] = fkValue; // TODO: multiple keys support
 
-  QgsFeatureRequest request = mRelation.getReferencedFeatureRequest( attrs );
+  const QgsFeatureRequest request = mRelation.getReferencedFeatureRequest( attrs );
   QgsVectorLayer *reffedLayer = mRelation.referencedLayer();
   QgsFeatureIterator it = reffedLayer->getFeatures( request );
   QgsFeature f;
 
   if ( it.nextFeature( f ) )
   {
-    FeatureLayerPair pair( f, reffedLayer );
+    const FeatureLayerPair pair( f, reffedLayer );
 
     if ( expectedAttribute == FeaturesModel::FeaturePair )
       return QVariant::fromValue<FeatureLayerPair>( pair );
@@ -64,7 +64,7 @@ QVariant RelationReferenceFeaturesModel::attributeFromForeignKey( const QVariant
       return featureTitle( pair );
   }
 
-  return QVariant();
+  return {};
 }
 
 void RelationReferenceFeaturesModel::setup()
@@ -100,11 +100,11 @@ void RelationReferenceFeaturesModel::setup()
 void RelationReferenceFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
   // We only need to fetch fields used in the layer's display expression and those used as relation keys
-  QgsVectorLayer *layer = mRelation.referencedLayer();
-  QgsExpression expr( layer->displayExpression() );
+  const QgsVectorLayer *layer = mRelation.referencedLayer();
+  const QgsExpression expr( layer->displayExpression() );
   QSet<int> attrs = expr.referencedAttributeIndexes( layer->fields() );
   const QgsAttributeList reffedFields = mRelation.referencedFields();
-  for ( int fieldIndex : reffedFields )
+  for ( const int fieldIndex : reffedFields )
     attrs.insert( fieldIndex );
   mAttributeList = qgis::setToList( attrs );
 
