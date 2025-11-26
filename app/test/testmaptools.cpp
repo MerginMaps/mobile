@@ -195,7 +195,7 @@ void TestMapTools::testSplitting()
   delete splitTool;
 }
 
-void TestMapTools::testCanCommitSplit()
+void TestMapTools::testValidSplit()
 {
   // splitting environment setup
   SplittingMapTool *splitTool = new SplittingMapTool();
@@ -234,22 +234,22 @@ void TestMapTools::testCanCommitSplit()
   splitTool->setFeatureToSplit( pairToSplit );
 
   // not enough points
-  QCOMPARE( splitTool->commitSplit(), 2 );
+  QCOMPARE( splitTool->commitSplit(), SplittingMapTool::Failed );
 
   // line doesnt intersect feature
   splitTool->addPoint( QgsPoint( -104.751, 32.448 ) );
-  QCOMPARE( splitTool->commitSplit(), 2 );
+  QCOMPARE( splitTool->commitSplit(), SplittingMapTool::Failed );
 
   // valid split line, endpoints outside and line intersects feature
   splitTool->addPoint( QgsPoint( -120.844, 32.592 ) );
-  QCOMPARE( splitTool->commitSplit(), 0 );
+  QCOMPARE( splitTool->commitSplit(), SplittingMapTool::Success );
 
   // line doesnt intersect feature
   splitTool->removePoint();
   splitTool->removePoint();
   splitTool->addPoint( QgsPoint( -130.0, 10.0 ) );
   splitTool->addPoint( QgsPoint( -140.0, 15.0 ) );
-  QCOMPARE( splitTool->commitSplit(), 1 );
+  QCOMPARE( splitTool->commitSplit(), SplittingMapTool::InvalidSplit );
 
   // endpoint inside feature boundary
   QgsPointXY centerPoint = featureToSplit.geometry().centroid().asPoint();
@@ -257,7 +257,7 @@ void TestMapTools::testCanCommitSplit()
   splitTool->removePoint();
   splitTool->addPoint( QgsPoint( centerPoint.x(), centerPoint.y() ) );
   splitTool->addPoint( QgsPoint( -120.844, 32.592 ) );
-  QCOMPARE( splitTool->commitSplit(), 1 );
+  QCOMPARE( splitTool->commitSplit(), SplittingMapTool::InvalidSplit );
 
   delete project;
   delete splitTool;

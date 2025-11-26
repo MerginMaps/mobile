@@ -107,13 +107,13 @@ Item {
           {
             let result = mapTool.commitSplit()
 
-            if ( result === 1 )
+            if ( result === MM.SplittingMapTool.InvalidSplit )
             {
               __notificationModel.addWarning( qsTr( "The split line does not properly cross the feature. Please adjust the line to cross the feature boundary." ) )
               return
             }
 
-            root.done( result === 0 )
+            root.done( result === MM.SplittingMapTool.Success )
           }
           else
           {
