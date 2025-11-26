@@ -21,66 +21,26 @@ Rectangle {
   enum Types { Warning, Error }
   property int type: MMNotificationBox.Types.Warning
 
-  property color bgndColor: {
-    switch (type) {
-    case MMNotificationBox.Types.Warning:
-      return __style.sandColor
-    case MMNotificationBox.Types.Error:
-      return __style.negativeLightColor
-    }
-  }
-
-  property color borderColor: {
-    switch (type) {
-    case MMNotificationBox.Types.Warning:
-      return __style.sunsetColor
-    case MMNotificationBox.Types.Error:
-      return __style.grapeColor
-    }
-  }
-
-  property color buttonBgndColor: {
-    switch(type) {
-      case MMNotificationBox.Types.Warning:
-        return __style.sunsetColor
-      case MMNotificationBox.Types.Error:
-        return __style.grapeColor
-    }
-  }
-
-  property color buttonFontColor: {
-    switch(type) {
-      case MMNotificationBox.Types.Warning:
-        return __style.earthColor
-      case MMNotificationBox.Types.Error:
-        return __style.roseColor
-    }
-  }
-
   signal buttonClicked()
 
-  color: bgndColor
+  color: internal.bgndColor
   border.width: 1 * __dp
-  border.color: borderColor
-  implicitHeight: dynamicContentGroup.implicitHeight + 2 * __style.margin20
-  radius: __style.radius12
+  border.color: internal.borderColor
+  implicitHeight: dynamicContentGroup.implicitHeight + __style.margin20
+  radius: __style.radius8
 
-  ColumnLayout {
+  Column {
     id: dynamicContentGroup
 
     width: parent.width - 2 * __style.margin20
     height: implicitHeight
 
-    x: __style.margin20
-    y: __style.margin20
+    topPadding: __style.margin20
+    leftPadding: __style.margin20
 
     spacing: __style.spacing12
 
-    Column {
-      width: parent.width
-      height: implicitHeight
-
-      Text {
+    Text {
         id: titleText
 
         width: parent.width
@@ -88,7 +48,7 @@ Rectangle {
 
         wrapMode: Label.Wrap
 
-        font: __style.t3
+        font: __style.t4
         color: __style.nightColor
 
         lineHeight: __style.fontLineHeight24
@@ -113,23 +73,60 @@ Rectangle {
 
         verticalAlignment: Text.AlignVCenter
       }
-    }
 
     MMButton {
       id: actionButton
 
-      Layout.alignment: Qt.AlignLeft
-
-      fontColor: buttonFontColor
-      bgndColor: buttonBgndColor
+      fontColor: internal.buttonFontColor
+      bgndColor: internal.buttonBgndColor
 
       // reverse the color properties when the button is hovered
-      fontColorHover: buttonBgndColor
-      bgndColorHover: buttonFontColor
+      fontColorHover: internal.buttonBgndColor
+      bgndColorHover: internal.buttonFontColor
 
       size: MMButton.Sizes.Small
 
       onClicked: root.buttonClicked()
+    }
+  }
+
+  QtObject {
+    id: internal
+
+    property color bgndColor: {
+      switch (root.type) {
+      case MMNotificationBox.Types.Warning:
+        return __style.sandColor
+      case MMNotificationBox.Types.Error:
+        return __style.negativeLightColor
+      }
+    }
+
+    property color borderColor: {
+      switch (root.type) {
+      case MMNotificationBox.Types.Warning:
+        return __style.sunsetColor
+      case MMNotificationBox.Types.Error:
+        return __style.grapeColor
+      }
+    }
+
+    property color buttonBgndColor: {
+      switch(root.type) {
+        case MMNotificationBox.Types.Warning:
+          return __style.sunsetColor
+        case MMNotificationBox.Types.Error:
+          return __style.grapeColor
+      }
+    }
+
+    property color buttonFontColor: {
+      switch(root.type) {
+        case MMNotificationBox.Types.Warning:
+          return __style.earthColor
+        case MMNotificationBox.Types.Error:
+          return __style.roseColor
+      }
     }
   }
 }
