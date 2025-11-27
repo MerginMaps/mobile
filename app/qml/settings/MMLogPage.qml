@@ -54,7 +54,7 @@ MMPage {
       }
 
       ScrollBar.vertical: ScrollBar {
-        opacity: (root.pressed || root.moving) ? 0.7 : 0.4
+        opacity: active ? 0.7 : 0.4
 
         contentItem: Rectangle {
           implicitWidth: 5

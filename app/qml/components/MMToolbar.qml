@@ -43,6 +43,7 @@ Rectangle {
 
     MMListView {
       id: toolbar
+      showScrollBar : false
 
       onWidthChanged: root.recalculate()
       model: toolbarModel
