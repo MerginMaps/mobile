@@ -200,8 +200,8 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
       - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools`
    - flex and bison
-   - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line 
-     with `keytool -genkeypair`.
+   - - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line with this command: `keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000` 
+     (customise the validity argument if needed).
 
 2. Build mobile app (update CMake command with the correct Qt and Android NDK versions)
 
