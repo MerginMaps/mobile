@@ -33,10 +33,10 @@ Rectangle {
     id: dynamicContentGroup
 
     width: parent.width - 2 * __style.margin20
-    height: implicitHeight
 
     topPadding: __style.margin20
     leftPadding: __style.margin20
+    
 
     spacing: __style.spacing12
 
@@ -44,7 +44,6 @@ Rectangle {
         id: titleText
 
         width: parent.width
-        height: implicitHeight
 
         wrapMode: Label.Wrap
 
@@ -61,7 +60,6 @@ Rectangle {
         id: descriptionText
 
         width: parent.width
-        height: text ? implicitHeight : 0
 
         font: __style.p6
         color: __style.nightColor
@@ -72,6 +70,8 @@ Rectangle {
         lineHeightMode: Text.FixedHeight
 
         verticalAlignment: Text.AlignVCenter
+
+        visible: text ? true : false
       }
 
     MMButton {

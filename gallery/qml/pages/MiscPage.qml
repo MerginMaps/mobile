@@ -240,7 +240,7 @@ ScrollView {
           description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
 
           buttonText: "Upgrade Now"
-          onButtonClicked: console.log("No workspaces brooo")
+          onButtonClicked: console.log("No workspaces")
         }
 
         MMNotificationBox
@@ -251,7 +251,17 @@ ScrollView {
           description: "We would like to inform you that MerginMaps will undergo scheduled maintance on 1st of october 2025. As a result of this upgrade you will be able to see better performance on our servers."
 
           buttonText: "Service Cancelled"
-          onButtonClicked: console.log("No workspaces brooo")
+          onButtonClicked: console.log("No workspaces")
+        }
+
+        MMNotificationBox
+        {
+          width: page.width - 64
+          type: MMNotificationBox.Error
+          title: "Your payment is not working"
+          description: ""
+          buttonText: "Service Cancelled"
+          onButtonClicked: console.log("Empty description")
         }
 
         MMInfoBox {
