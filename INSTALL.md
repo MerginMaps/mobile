@@ -14,7 +14,7 @@
 - [5. Building iOS](#5-building-ios)
 - [6. Building macOS](#6-building-macos)
 - [7. Building Windows](#7-building-windows)
-- [8. Common problems](#8-common-problems)
+- [8. FAQ](#8-faq)
 - [9. Auto Testing](#9-auto-testing)
 
 # 1. Introduction
@@ -295,7 +295,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    build_folder/
       vcpkg_installed/
          Qt6/
-            <computer-distribution-vcpkg>/
+            <x64-linus/arm64-osx>/
                tools/
                   Qt6/
                      bin/
@@ -343,7 +343,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    ```
    
    To find your QT_ANDROID_KEYSTORE_ALIAS, run this command: 
-   `keytool -list -v -keystore /Users/gabrielbolbotina/development/repos/mm/my-release-key.keystore`.
+   `keytool -list -v -keystore /<path-to-keystore>/my-release-key.keystore`.
    This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it 
    can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
    binary vcpkg cache.
@@ -639,10 +639,10 @@ Once the project is opened, build it from Xcode.
 
 5. Run the mobile app
    ```
-   ./app/input.exe
+   ./app/MerginMaps.exe
    ```
 
-# 8. Common problems
+# 8. FAQ
 
 - If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
     ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
@@ -652,6 +652,7 @@ Once the project is opened, build it from Xcode.
 - If images in feature forms are not getting loaded it's again probably problem with `QGIS_QUICK_DATA_PATH`
   - Use absolute path instead of relative path
   - Make sure it's targeting **build** directory
+- If using Visual Studio Code to configure and build the project, check the  template in the `docs` folder.
 
 # 9. Auto Testing
 
@@ -669,8 +670,4 @@ TEST_API_PASSWORD=<your_password>
 ```
 
 Build binary, and you can run tests either with `ctest` or you can run individual tests by adding `--test<TestName>`
-e.g. ` ./input --testMerginApi`
-
-# 10. CMakePresets template
-
-If using Visual Studio Code to configure and build the project, check the  template in the `docs` folder.
+e.g. ` ./MerginMaps --testMerginApi`
