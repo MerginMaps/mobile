@@ -94,6 +94,7 @@ Item {
     delegate: MMProjectComponents.MMProjectDelegate {
       id: projectDelegate
 
+      width: ListView.view.width - ListView.view.scrollSpace
       height: visible ? implicitHeight : 0
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
