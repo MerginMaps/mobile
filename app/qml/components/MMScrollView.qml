@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml
 
 // Convenient class to use as a pageContent or drawerContent
 // base element to make the content scroll
@@ -16,8 +17,26 @@ import QtQuick.Controls
 ScrollView {
   id: root
 
-  contentWidth: availableWidth // to only scroll vertically
+  readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
+  readonly property int scrollBarWidth: !isMobile ? 10 : 0
+  property alias showScrollBar:  verticalScrollBar.policy
 
-  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+  contentWidth: availableWidth - scrollBarWidth
+
   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+  ScrollBar.vertical : ScrollBar {
+    id: verticalScrollBar
+
+    policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
+    //visible: showScrollBar
+    opacity: active ? 0.7 : 0.4
+
+    contentItem: Rectangle {
+      implicitWidth: 5
+      radius: width / 2
+      color: __style.darkGreenColor
+    }
+  }
 }
+

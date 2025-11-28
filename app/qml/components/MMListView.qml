@@ -8,6 +8,8 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
+import QtQml
 
 //
 // Hot-fix for hotfix https://github.com/MerginMaps/mobile/issues/3417
@@ -15,6 +17,24 @@ import QtQuick
 //
 
 ListView {
+  id: root
 
   cacheBuffer: 0
+  readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
+  readonly property int scrollBarWidth: !isMobile ? __style.margin10 : 0
+  property alias showScrollBar: verticalScrollBar.policy
+
+  ScrollBar.vertical: ScrollBar{
+    id: verticalScrollBar
+
+    policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
+    //visible: !isMobile && (root.contentHeight > root.height)
+    opacity: active ? 0.7 : 0.4
+
+    contentItem: Rectangle {
+      implicitWidth: 5
+      radius: width / 2
+      color: __style.darkGreenColor
+    }
+  }
 }

@@ -193,8 +193,6 @@ Page {
                     wrapMode: Text.WordWrap
                     text: __inputUtils.layerAttribution(layerDetailData.mapLayer)
                   }
-
-                  ScrollBar.vertical: ScrollBar {}
                 }
               }
             }
