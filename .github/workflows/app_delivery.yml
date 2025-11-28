@@ -7,7 +7,8 @@ on:
     # multiple workflows the first that finishes triggers this workflow, so we pick the "longest". Linux sometimes takes
     # longer to build, but we ship Windows, so it has higher priority.
     workflows:
-      - "win64 Build"
+#      - "win64 Build"
+      - "Android Build"
 
 permissions:
   actions: read
@@ -26,12 +27,13 @@ jobs:
           # that ran on the same commit (head_sha) as this PR.
           script: |
             const buildWorkflowNames = ['macOS Build', 'linux Build', 'win64 Build', 'Android Build', 'iOS Build'];
-            const headSha = context.payload.pull_request.head.sha;
+            const headSha = context.payload.workflow_run.head.sha;
             let commentBody = '## 📦 Build Artifacts Ready\n\n';
             let artifactsFound = false;
             
+            // 1. Construct the body of comment with links
             for (const workflowName of buildWorkflowNames) {
-              // 1. Find the latest successful run for the specific workflow and commit SHA
+              // Find the latest successful run for the specific workflow and commit SHA
               const runsResponse = await github.rest.actions.listWorkflowRunsForRepo({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -51,7 +53,7 @@ jobs:
                 continue;
               }
             
-              // 2. List artifacts for that specific run
+              // List artifacts for that specific run
               const artifactsResponse = await github.rest.actions.listWorkflowRunArtifacts({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -73,15 +75,33 @@ jobs:
             }
             
             if (artifactsFound) {
-                // Set the output for the next step
                 core.setOutput('comment_body', commentBody);
             } else {
                 core.setOutput('comment_body', 'No artifacts found for this PR commit.');
             }
+            
+            // 2. Get PR number for posting the comment
+            const prsResponse = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                head: `${context.repo.owner}:${headSha}`,
+                per_page: 5
+            });
+              
+            const pullRequest = prsResponse.data.find(pr => pr.head.sha === headSha);
+              
+            if (!pullRequest) {
+              console.log(`No open Pull Request found for commit SHA: ${headSha}`);
+              core.setOutput('pr_number', '');
+              return;
+            } else {
+              core.setOutput('pr_number', pullRequest.number);
+            }
 
       - name: Update Comment
-        if: steps.artifact_finder.outputs.comment_body != 'No artifacts found for this PR commit.'
+        if: steps.artifact_finder.outputs.pr_number != ''
         uses: peter-evans/create-or-update-comment@v5
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ steps.artifact_finder.outputs.pr_number }}
           body: ${{ steps.artifact_finder.outputs.comment_body }}
