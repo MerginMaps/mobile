@@ -63,8 +63,8 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
                                        PositionKit::positionCrs3D(),
                                        QgsProject::instance()->transformContext(),
       {longitude, latitude, ellipsoidHeight},
-      positionOutsideGeoidModelArea);
-      if (!positionOutsideGeoidModelArea)
+      positionOutsideGeoidModelArea );
+      if ( !positionOutsideGeoidModelArea )
       {
         pos.elevation = geoidPosition.z();
 

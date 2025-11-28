@@ -905,10 +905,10 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
   return {};
 }
 
-QgsPoint InputUtils::transformPoint(const QgsCoordinateReferenceSystem &srcCrs,
-                                    const QgsCoordinateReferenceSystem &destCrs,
-                                    const QgsCoordinateTransformContext &context,
-                                    const QgsPoint &srcPoint, bool &fallbackOperationOccurred)
+QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                     const QgsCoordinateReferenceSystem &destCrs,
+                                     const QgsCoordinateTransformContext &context,
+                                     const QgsPoint &srcPoint, bool &fallbackOperationOccurred )
 {
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
