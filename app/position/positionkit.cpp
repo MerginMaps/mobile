@@ -35,7 +35,27 @@ PositionKit::PositionKit( QObject *parent )
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
+  bool crsExists = false;
+  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral("Mergin"), QStringLiteral("TargetVerticalCRS"), QString(), &crsExists );
+  if (crsExists)
+  {
+    const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+    QString compoundCrsError{};
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
+    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+    {
+      return compoundCrs;
+    }
+    CoreUtils::log( QStringLiteral("PositionKit"), QStringLiteral( "Failed to create custom compound crs: %1" ).arg(compoundCrsError ) );
+  }
+
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+}
+
+QString PositionKit::positionCrs3DGeoidModelName()
+{
+  const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
+  return crs.description();
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs2D()
