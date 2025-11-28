@@ -56,16 +56,21 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     const jdouble ellipsoidHeight = location.callMethod<jdouble>( "getAltitude" );
     if ( !qFuzzyIsNull( ellipsoidHeight ) )
     {
+      bool positionOutsideGeoidModelArea = false;
       // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
       const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        PositionKit::positionCrs3DEllipsoidHeight(),
                                        PositionKit::positionCrs3D(),
                                        QgsProject::instance()->transformContext(),
-      {longitude, latitude, ellipsoidHeight} );
-      pos.elevation = geoidPosition.z();
+      {longitude, latitude, ellipsoidHeight},
+      positionOutsideGeoidModelArea);
+      if (!positionOutsideGeoidModelArea)
+      {
+        pos.elevation = geoidPosition.z();
 
-      const double geoidSeparation = ellipsoidHeight - geoidPosition.z();
-      pos.elevation_diff = geoidSeparation;
+        const double geoidSeparation = ellipsoidHeight - geoidPosition.z();
+        pos.elevation_diff = geoidSeparation;
+      }
     }
   }
 

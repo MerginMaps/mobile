@@ -301,9 +301,17 @@ class InputUtils: public QObject
       * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
       */
     Q_INVOKABLE static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
-        const QgsCoordinateReferenceSystem &destCrs,
-        const QgsCoordinateTransformContext &context,
-        const QgsPoint &srcPoint );
+                                               const QgsCoordinateReferenceSystem &destCrs,
+                                               const QgsCoordinateTransformContext &context,
+                                               const QgsPoint &srcPoint );
+
+    /**
+     * Overload of transformPoint function, which also notifies the caller if PROJ fallback operation occurred
+     */
+    static QgsPoint transformPoint(const QgsCoordinateReferenceSystem &srcCrs,
+                                   const QgsCoordinateReferenceSystem &destCrs,
+                                   const QgsCoordinateTransformContext &context,
+                                   const QgsPoint &srcPoint, bool &fallbackOperationOccurred);
 
     /**
       * Transforms point between CRS and screen pixels

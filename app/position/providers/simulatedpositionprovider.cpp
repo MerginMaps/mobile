@@ -92,13 +92,23 @@ void SimulatedPositionProvider::generateRadiusPosition()
   double ellipsoidAltitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,115>m and lost (NaN)
   if ( ellipsoidAltitude <= 115 )
   {
+    bool positionOutsideGeoidModelArea = false;
     const QgsPoint geoidPosition = InputUtils::transformPoint(
                                      PositionKit::positionCrs3DEllipsoidHeight(),
                                      PositionKit::positionCrs3D(),
                                      QgsCoordinateTransformContext(),
-    {longitude, latitude, ellipsoidAltitude} );
-    position.elevation = geoidPosition.z();
-    position.elevation_diff = ellipsoidAltitude - position.elevation;
+    {longitude, latitude, ellipsoidAltitude},
+    positionOutsideGeoidModelArea);
+    if ( !positionOutsideGeoidModelArea )
+    {
+      position.elevation = geoidPosition.z();
+      position.elevation_diff = ellipsoidAltitude - position.elevation;
+    }
+    else
+    {
+      position.elevation = qQNaN();
+      position.elevation_diff = qQNaN();
+    }
   }
   else
   {
@@ -132,13 +142,23 @@ void SimulatedPositionProvider::generateConstantPosition()
   position.latitude = mLatitude;
   position.longitude = mLongitude;
   // we take 100 as elevation returned by WGS84 ellipsoid and recalculate it to geoid
+  bool positionOutsideGeoidModelArea = false;
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
                                    PositionKit::positionCrs3D(),
                                    QgsCoordinateTransformContext(),
-  {mLongitude, mLatitude, 100} );
-  position.elevation = geoidPosition.z();
-  position.elevation_diff = 100 - position.elevation;
+  {mLongitude, mLatitude, 100},
+  positionOutsideGeoidModelArea);
+  if ( !positionOutsideGeoidModelArea )
+  {
+    position.elevation = geoidPosition.z();
+    position.elevation_diff = 100 - position.elevation;
+  }
+  else
+  {
+    position.elevation = qQNaN();
+    position.elevation_diff = qQNaN();
+  }
   position.utcDateTime = QDateTime::currentDateTime();
   position.direction = 360 - static_cast<int>( mAngle ) % 360;
   position.hacc = ( *mGenerator )() % 20;
