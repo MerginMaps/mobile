@@ -289,20 +289,6 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       app/
          MerginMaps
    ```
-   Alternatively, navigate to the following path:
-
-   ```
-   build_folder/
-      vcpkg_installed/
-         Qt6/
-            <x64-linus/arm64-osx>/
-               tools/
-                  Qt6/
-                     bin/
-   ```
-   And run the following command:
-   `python qt-android-runner.py -b <path_to_the_android-build_folder>`.
-
 
 ## 4.2. Android on macOS
 1. Install Java
@@ -419,21 +405,6 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       app/
          MerginMaps
    ```
-   Alternatively, navigate to the following path:
-
-   ```
-   build_folder/
-      vcpkg_installed/
-         Qt6/
-            <computer-distribution-vcpkg>/
-               tools/
-                  Qt6/
-                     bin/
-   ```
-   And run the following command:
-   `python qt-android-runner.py -b <path_to_the_android-build_folder>`.
-
-   
 
 ## 4.3. Android on Windows
 
