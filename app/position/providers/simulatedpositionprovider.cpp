@@ -98,7 +98,7 @@ void SimulatedPositionProvider::generateRadiusPosition()
                                      PositionKit::positionCrs3D(),
                                      QgsCoordinateTransformContext(),
     {longitude, latitude, ellipsoidAltitude},
-    positionOutsideGeoidModelArea);
+    positionOutsideGeoidModelArea );
     if ( !positionOutsideGeoidModelArea )
     {
       position.elevation = geoidPosition.z();
@@ -148,7 +148,7 @@ void SimulatedPositionProvider::generateConstantPosition()
                                    PositionKit::positionCrs3D(),
                                    QgsCoordinateTransformContext(),
   {mLongitude, mLatitude, 100},
-  positionOutsideGeoidModelArea);
+  positionOutsideGeoidModelArea );
   if ( !positionOutsideGeoidModelArea )
   {
     position.elevation = geoidPosition.z();

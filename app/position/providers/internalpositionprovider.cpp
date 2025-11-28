@@ -149,7 +149,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
                                    PositionKit::positionCrs3D(),
                                    QgsProject::instance()->transformContext(),
   {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
-  positionOutsideGeoidModelArea);
+  positionOutsideGeoidModelArea );
   if ( !positionOutsideGeoidModelArea )
   {
     if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )

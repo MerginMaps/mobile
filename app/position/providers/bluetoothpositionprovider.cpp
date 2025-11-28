@@ -222,7 +222,7 @@ void BluetoothPositionProvider::positionUpdateReceived()
                                      PositionKit::positionCrs3D(),
                                      QgsProject::instance()->transformContext(),
     {positionData.longitude, positionData.latitude, ellipsoidElevation},
-    positionOutsideGeoidModelArea);
+    positionOutsideGeoidModelArea );
     if ( !positionOutsideGeoidModelArea )
     {
       positionData.elevation = geoidPosition.z();
