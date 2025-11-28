@@ -3,12 +3,11 @@ on:
   workflow_run:
     types:
       - "completed"
+    # Unfortunately we can't specify multiple workflows after which this workflow is triggered. If we specify
+    # multiple workflows the first that finishes triggers this workflow, so we pick the "longest". Linux sometimes takes
+    # longer to build, but we ship Windows, so it has higher priority.
     workflows:
-      - "macOS Build"
-      - "linux Build"
       - "win64 Build"
-      - "Android Build"
-      - "iOS Build"
 
 permissions:
   actions: read
