@@ -36,8 +36,8 @@ PositionKit::PositionKit( QObject *parent )
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
   bool crsExists = false;
-  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral("Mergin"), QStringLiteral("TargetVerticalCRS"), QString(), &crsExists );
-  if (crsExists)
+  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+  if ( crsExists )
   {
     const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
     QString compoundCrsError{};
@@ -46,7 +46,7 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
     {
       return compoundCrs;
     }
-    CoreUtils::log( QStringLiteral("PositionKit"), QStringLiteral( "Failed to create custom compound crs: %1" ).arg(compoundCrsError ) );
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
   }
 
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
