@@ -94,7 +94,7 @@ Item {
     delegate: MMProjectComponents.MMProjectDelegate {
       id: projectDelegate
 
-      width: ListView.view.width - ListView.view.scrollSpace
+      width: ListView.view.width - ListView.view.scrollBarWidth
       height: visible ? implicitHeight : 0
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
@@ -202,7 +202,7 @@ Item {
 
       topPadding: noLocalProjectsMessageContainer.visible ? noLocalProjectsMessageContainer.height + __style.margin40 : 0
 
-      width: ListView.view.width - ListView.view.scrollSpace
+      width: ListView.view.width - ListView.view.scrollBarWidth
 
       Item {
         width: parent.width

@@ -18,20 +18,19 @@ ScrollView {
   id: root
 
   readonly property bool isMobile: (Qt.platform.os === "android" || Qt.platform.os === "ios")
-  property int scrollSpace: !isMobile ? 10 : 0
-  property bool showScrollBar: true
+  readonly property int scrollBarWidth: !isMobile ? 10 : 0
+  property alias showScrollBar:  verticalScrollBar.policy
 
-  contentWidth: availableWidth - scrollSpace
+  contentWidth: availableWidth - scrollBarWidth
 
   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-  ScrollBar.vertical: ScrollBar {
+
+  ScrollBar.vertical : ScrollBar {
     id: verticalScrollBar
 
     policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-    visible: showScrollBar
+    //visible: showScrollBar
     opacity: active ? 0.7 : 0.4
-    implicitHeight: root.height
-    anchors.right: parent.right
 
     contentItem: Rectangle {
       implicitWidth: 5
@@ -40,3 +39,4 @@ ScrollView {
     }
   }
 }
+

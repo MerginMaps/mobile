@@ -276,7 +276,7 @@ Page {
 
     Item {
 
-      width: ListView.view.width - ListView.view.scrollSpace
+      width: ListView.view.width - ListView.view.scrollBarWidth
       implicitHeight: childrenRect.height
 
       // In future, better to filter such fields in the field proxy model instead
