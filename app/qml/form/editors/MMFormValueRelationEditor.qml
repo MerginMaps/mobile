@@ -69,8 +69,20 @@ MMFormComboboxBaseEditor {
   dropdownLoader.sourceComponent: Component {
 
     MMComponents.MMListMultiselectDrawer {
-
       drawerHeader.title: root._fieldTitle
+
+      emptyStateDelegate: Item {
+        width: parent.width
+        height: noItemsText.implicitHeight
+        anchors.centerIn: parent
+
+        MMComponents.MMText {
+          id: noItemsText
+          text: qsTr( "No items" )
+          anchors.centerIn: parent
+          topPadding: __style.margin20
+        }
+      }
 
       multiSelect: internal.allowMultivalue
       withSearch: vrModel.count > 5
