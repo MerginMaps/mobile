@@ -634,6 +634,11 @@ class InputUtils: public QObject
     static void sanitizeFileName( QString &fileName );
 
     /**
+     * Splits path into components and sanitizes each component using sanitizeFileName().
+     */
+    static void sanitizePath( QString &path );
+
+    /**
      * Appends all supported QGIS formats to supported_formats.txt.
      * \note This function should not be called during normal runtime, as it tries to write to source directory.
      */
