@@ -27,21 +27,21 @@ jobs:
           # that ran on the same commit (head_sha) as this PR.
           script: |
             const buildWorkflowNames = ['macOS Build', 'linux Build', 'win64 Build', 'Android Build', 'iOS Build'];
-            const headSha = context.payload.workflow_run.head.sha;
+            const headSha = context.payload.workflow_run.head_sha;
             let commentBody = '## 📦 Build Artifacts Ready\n\n';
             let artifactsFound = false;
             
             // 1. Construct the body of comment with links
-            for (const workflowName of buildWorkflowNames) {
-              // Find the latest successful run for the specific workflow and commit SHA
-              const runsResponse = await github.rest.actions.listWorkflowRunsForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                head_sha: headSha,
-                status: 'success',
-                per_page: 10
-              });
             
+            const runsResponse = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head_sha: headSha,
+              status: 'success',
+              per_page: 50
+            });
+            
+            for (const workflowName of buildWorkflowNames) {
               // Filter to find the run matching the exact workflow name
               const latestRun = runsResponse.data.workflow_runs.find(run => 
                 run.name === workflowName && run.conclusion === 'success'
