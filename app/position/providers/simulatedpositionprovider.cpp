@@ -106,14 +106,14 @@ void SimulatedPositionProvider::generateRadiusPosition()
     }
     else
     {
-      position.elevation = qQNaN();
-      position.elevation_diff = qQNaN();
+      position.elevation = std::numeric_limits<double>::quiet_NaN();
+      position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
     }
   }
   else
   {
-    position.elevation = qQNaN();
-    position.elevation_diff = qQNaN();
+    position.elevation = std::numeric_limits<double>::quiet_NaN();
+    position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
   }
 
   const QDateTime timestamp = QDateTime::currentDateTime();
@@ -156,8 +156,8 @@ void SimulatedPositionProvider::generateConstantPosition()
   }
   else
   {
-    position.elevation = qQNaN();
-    position.elevation_diff = qQNaN();
+    position.elevation = std::numeric_limits<double>::quiet_NaN();
+    position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
   }
   position.utcDateTime = QDateTime::currentDateTime();
   position.direction = 360 - static_cast<int>( mAngle ) % 360;
