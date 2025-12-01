@@ -16,9 +16,6 @@ endif ()
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
 if (ANDROID_ABI)
-  # Workaround for bug https://bugreports.qt.io/browse/QTBUG-112885 in Qt6.5.0
-  # set(QT_NO_COLLECT_IMPORTED_TARGET_APK_DEPS TRUE)
-
   set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets
                        # *-android.cmake
 
@@ -101,6 +98,19 @@ else ()
   endif ()
 endif ()
 
+if (IOS)
+  # Important, if QGIS_QUICK_DATA_PATH value is changed, old projects may not be found
+  # after release on iOS devices
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (ANDROID)
+  # Android sets this up automatically at runtime
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "")
+elseif (WIN)
+  set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
+elseif (LNX OR MACOS)
+  set(QGIS_QUICK_DATA_PATH_DEFAULT ${CMAKE_BINARY_DIR}/app/android/assets/qgis-data)
+endif ()
+
 set(COVERAGE
     FALSE
     CACHE BOOL "Compile with coverage flags"
@@ -112,8 +122,10 @@ set(USE_MM_SERVER_API_KEY
       "Determines whether we should use server API key. Decrypt file with secrets on disk if you want to use it."
 )
 set(QGIS_QUICK_DATA_PATH
-    "INPUT"
-    CACHE STRING "The internal variable pointing to the application storage folder"
+    ${QGIS_QUICK_DATA_PATH_DEFAULT}
+    CACHE
+      STRING
+      "Path for QGIS-related data (e.g. proj) and projects. A correct value is set for each platform if not overridden."
 )
 set(IOS_USE_PRODUCTION_SIGNING
     FALSE
@@ -194,21 +206,16 @@ if (NOT IOS)
 endif ()
 
 if (NOT LNX)
-  # find_package(Charset CONFIG REQUIRED)
   find_package(Iconv REQUIRED)
 endif ()
 
 find_package(ZLIB REQUIRED)
-# find_package(Bz2 CONFIG REQUIRED) find_package(bzip2 CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
-# find_package(Inih CONFIG REQUIRED)
 find_package(exiv2 CONFIG REQUIRED)
 find_package(expat CONFIG REQUIRED)
-# find_package(freexl CONFIG REQUIRED)
 find_package(GDAL CONFIG REQUIRED)
 find_package(Geodiff CONFIG REQUIRED)
 find_package(GEOS CONFIG REQUIRED)
-# find_package(Jpeg CONFIG REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(PROJ CONFIG REQUIRED)
 find_package(Protobuf REQUIRED)
@@ -218,16 +225,12 @@ find_package(Qt6Keychain CONFIG REQUIRED)
 find_package(Spatialindex REQUIRED)
 find_package(Spatialite REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
-# find_package(Tiff CONFIG REQUIRED)
 find_package(WebP CONFIG REQUIRED)
-# find_package(Xml2 CONFIG REQUIRED)
 find_package(ZXing CONFIG REQUIRED)
 find_package(libzip CONFIG REQUIRED)
 find_package(OpenSSL CONFIG REQUIRED)
 find_package(GeoTIFF CONFIG REQUIRED)
-# find_package(Lzma CONFIG REQUIRED) find_package(Zstd CONFIG REQUIRED)
 find_package(unofficial-minizip CONFIG REQUIRED)
-# find_package(Utf8 CONFIG REQUIRED) find_package(Absl CONFIG REQUIRED)
 find_package(poly2tri CONFIG)
 find_package(meshoptimizer CONFIG REQUIRED)
 
@@ -355,25 +358,9 @@ if (IOS)
 endif ()
 
 if (ANDROID)
-  if (VCPKG_TARGET_TRIPLET STREQUAL "arm-android")
-    set(CMAKE_C_FLAGS
-        "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-    set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong -lunwind -Wl,--exclude-libs=libunwind.a"
-    )
-  else ()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -fstack-protector-strong")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fstack-protector-strong")
-  endif ()
-
-  link_libraries("-ljnigraphics")
-
   # Make sure the generator for android_deployment_settings.json can figure out the
   # architecture
   list(APPEND CMAKE_FIND_ROOT_PATH /)
-
-  # set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_BINARY_DIR}/android-template)
 endif ()
 
 # ########################################################################################
@@ -405,6 +392,8 @@ file(
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/app/assets/us_nga_egm96_15.tif
      DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/proj
 )
+
+message(STATUS "QGIS_QUICK_DATA_PATH set to ${QGIS_QUICK_DATA_PATH}")
 # ########################################################################################
 # SUBDIRECTORIES
 # ########################################################################################

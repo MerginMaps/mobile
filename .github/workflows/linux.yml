@@ -124,7 +124,6 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_KEYCHAIN=No \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm-db/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
@@ -135,11 +134,8 @@ jobs:
           ninja
 
       - name: run tests
-        env:
-          TEST_MERGIN_URL: https://app.dev.merginmaps.com/
-          TEST_API_USERNAME: test_mobileapp
-          TEST_API_PASSWORD: ${{ secrets.TEST_API_PASSWORD }}
-          QT_QPA_PLATFORM: "offscreen"
+        env: 
+          QT_QPA_PLATFORM: "offscreen"  
         run: |
           cd build-mm-db/
           xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
@@ -150,7 +146,7 @@ jobs:
 
           lcov --directory . --capture --output-file coverage.info
 
-          lcov --remove coverage.info '*/input-sdk/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-Input-db/*' --output-file coverage.info
+          lcov --remove coverage.info '*/vcpkg_installed/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-mm-db/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Coveralls
@@ -170,7 +166,6 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
-             -DQGIS_QUICK_DATA_PATH=${{ github.workspace }}/build-mm/app/android/assets/qgis-data \
              -DUSE_MM_SERVER_API_KEY=TRUE \
              -DUSE_KEYCHAIN=No \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \

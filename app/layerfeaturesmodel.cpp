@@ -47,6 +47,17 @@ QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
   if ( role == SearchResult )
     return searchResultPair( pair );
 
+  if ( role == Feature )
+  {
+    return pair.layer()->getFeature( pair.feature().id() );
+  }
+
+  if ( role == FeaturePair )
+  {
+    const QgsFeature f = pair.layer()->getFeature( pair.feature().id() );
+    return QVariant::fromValue<FeatureLayerPair>( FeatureLayerPair( f, pair.layer() ) );
+  }
+
   return FeaturesModel::data( index, role );
 }
 
@@ -223,6 +234,8 @@ void LayerFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
     } ) );
   }
 
+  request.setSubsetOfAttributes( mAttributeList );
+
   request.setLimit( FEATURES_LIMIT );
 }
 
@@ -288,6 +301,9 @@ void LayerFeaturesModel::setLayer( QgsVectorLayer *newLayer )
       connect( mLayer, &QgsVectorLayer::featureAdded, this, &LayerFeaturesModel::populate );
       connect( mLayer, &QgsVectorLayer::featuresDeleted, this, &LayerFeaturesModel::populate );
       connect( mLayer, &QgsVectorLayer::attributeValueChanged, this, &LayerFeaturesModel::populate );
+
+      // by default use all attributes
+      mAttributeList = mLayer->attributeList();
     }
 
     emit layerFeaturesCountChanged( layerFeaturesCount() );

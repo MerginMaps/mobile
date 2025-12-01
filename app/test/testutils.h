@@ -21,6 +21,8 @@ namespace TestUtils
 {
   const int SHORT_REPLY = 5000;
   const int LONG_REPLY = 90000;
+  const int TEST_WORKSPACE_STORAGE_SIZE = 1 * 1024 * 1024 * 1024; // 1 GB
+  const int TEST_WORKSPACE_PROJECT_NUMBER = 100;
 
   //! authorize user and select the active workspace
   void authorizeUser( MerginApi *api, const QString &username, const QString &password );
@@ -33,15 +35,22 @@ namespace TestUtils
    *  - TEST_MERGIN_URL
    *  - TEST_API_USERNAME
    *  - TEST_API_PASSWORD
+   *  And if not found, generate a test run-specific user
    */
   void merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password );
 
   //! Whether we need to auth again
   bool needsToAuthorizeAgain( MerginApi *api, const QString &username );
+  void generateRandomUser( MerginApi *api, QString &username, QString &password );
 
   QString generateUsername();
   QString generateEmail();
   QString generatePassword();
+  /*
+  * Create a workspace name from the generated username
+  * Output: a workspace name: mmat-DayMonthYear-HourMinutes
+  */
+  QString generateWorkspaceName( const QString &username );
 
   QString testDataDir();
 
