@@ -8,6 +8,9 @@
  ***************************************************************************/
 
 #include "bluetoothpositionprovider.h"
+
+#include <qgsproject.h>
+
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"

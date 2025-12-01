@@ -8,10 +8,11 @@
  ***************************************************************************/
 
 #include "internalpositionprovider.h"
+
+#include <qgsproject.h>
+
 #include "coreutils.h"
 #include "inpututils.h"
-
-#include "qgis.h"
 
 InternalPositionProvider::InternalPositionProvider( QObject *parent )
   : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), tr( "Internal" ), parent )

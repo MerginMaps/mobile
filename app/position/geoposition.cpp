@@ -15,6 +15,7 @@ GeoPosition::GeoPosition() : QgsGpsInformation()
   latitude = std::numeric_limits<double>::quiet_NaN();
   longitude = std::numeric_limits<double>::quiet_NaN();
   elevation = std::numeric_limits<double>::quiet_NaN();
+  elevation_diff = std::numeric_limits<double>::quiet_NaN();
   direction = -1;
   speed = -1;
   pdop = -1;
@@ -46,6 +47,11 @@ GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
   if ( !qgsDoubleNear( other.elevation, 0 ) )
   {
     out.elevation = other.elevation;
+  }
+
+  if ( !qgsDoubleNear( other.elevation_diff, 0 ) )
+  {
+    out.elevation_diff = other.elevation_diff;
   }
 
   if ( !std::isnan( other.direction ) )
@@ -88,7 +94,6 @@ GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
     out.vdop = other.vdop;
   }
 
-  out.elevation_diff = other.elevation_diff;
   out.satellitesVisible = other.satellitesInView.count();
   out.satellitesInView = other.satellitesInView;
   out.satellitesUsed = other.satellitesUsed;
