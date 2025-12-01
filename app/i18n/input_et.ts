@@ -340,12 +340,12 @@ Seda ei lisata projektile.</translation>
         <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2079"/>
+        <location filename="../inpututils.cpp" line="2102"/>
         <source>You need to add at least %1 point(s) to every part.</source>
         <translation>Pead lisama vähemalt %1 punkti iga osa kohta.</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="2083"/>
+        <location filename="../inpututils.cpp" line="2106"/>
         <source>You need to add at least %1 point(s).</source>
         <translation>Pead lisama vähemalt %1 punkti.</translation>
     </message>
@@ -1275,12 +1275,12 @@ Seda ei lisata projektile.</translation>
         <translation>Diagnostika logi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Sending...</source>
         <translation>Saadan...</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Send to developers</source>
         <translation>Saada arendajatele</translation>
     </message>
@@ -2163,22 +2163,22 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
         <source>Select features</source>
         <translation>Vali nähtusi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n nähtus(t) valitud</numerusform><numerusform>%n nähtus(t) valitud</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
         <source>on layer %1</source>
         <translation>kihil %1</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="101"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
         <source>Edit</source>
         <translation>Muuda</translation>
     </message>
@@ -2330,7 +2330,7 @@ Seda ei lisata projektile.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
         <source>Touch Feedback</source>
-        <translation>Vajuta Tagasiside</translation>
+        <translation>Seadme tagasiside</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
@@ -2992,63 +2992,63 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
         <translation>Väärtus peab olema number</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
         <translation>Väärtus peab olema alla %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
         <translation>Väärtus peab olema üle %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="62"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
         <translation>Väärtus on liiga suur</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
         <translation>Väljal ei tohi olla kümnendmurd</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Ei tohi olla pikem kui %1 tähemärki</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
         <translation>Väli ei tohiks olla tühi</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
         <translation>Väli ei tohi olla tühi</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
         <translation>Väärtus peaks olema unikaalne</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
         <translation>Väärtus peab olema unikaalne</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="71"/>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Täitmata QGIS lausendi tingimus</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="74"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>Kehtetu väärtus</translation>
     </message>
@@ -3098,12 +3098,12 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Teadmata positsioneering</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="557"/>
+        <location filename="../main.cpp" line="578"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Teavitus edastatud. Palun võta ühendust kasutajatoega</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="562"/>
+        <location filename="../main.cpp" line="583"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Teavitust ei õnnestunud saata. Palun kontrolli oma interneti ühendust.</translation>
     </message>
