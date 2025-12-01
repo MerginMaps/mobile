@@ -634,6 +634,11 @@ class InputUtils: public QObject
     static void sanitizeFileName( QString &fileName );
 
     /**
+     * Returns the indexes of fields that are referenced in an expression
+     */
+    Q_INVOKABLE static QSet<int> referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression );
+
+    /**
      * Appends all supported QGIS formats to supported_formats.txt.
      * \note This function should not be called during normal runtime, as it tries to write to source directory.
      */

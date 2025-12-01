@@ -107,7 +107,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
       onClosed: listLoader.active = false
       onSearchTextChanged: ( searchText ) => rModel.searchExpression = searchText
       onFeatureClicked: function( selectedFeatures ) {
-        let fk = rModel.foreignKeyFromAttribute( MM.FeaturesModel.FeatureId, selectedFeatures.feature.id )
+        const fk = rModel.foreignKeyFromReferencedFeatureId( selectedFeatures.feature.id )
         root.editorValueChanged( fk, false )
         close()
       }
