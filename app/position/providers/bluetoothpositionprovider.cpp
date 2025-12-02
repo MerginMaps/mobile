@@ -216,14 +216,18 @@ void BluetoothPositionProvider::positionUpdateReceived()
     // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
     // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
     const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
+    bool positionOutsideGeoidModelArea = false;
     const QgsPoint geoidPosition = InputUtils::transformPoint(
                                      PositionKit::positionCrs3DEllipsoidHeight(),
                                      PositionKit::positionCrs3D(),
                                      QgsProject::instance()->transformContext(),
-    {positionData.longitude, positionData.latitude, ellipsoidElevation} );
-    positionData.elevation = geoidPosition.z();
-    positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
-
+    {positionData.longitude, positionData.latitude, ellipsoidElevation},
+    positionOutsideGeoidModelArea );
+    if ( !positionOutsideGeoidModelArea )
+    {
+      positionData.elevation = geoidPosition.z();
+      positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
+    }
     emit positionChanged( positionData );
   }
 }

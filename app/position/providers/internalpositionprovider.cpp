@@ -143,29 +143,34 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+  bool positionOutsideGeoidModelArea = false;
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
                                    PositionKit::positionCrs3D(),
                                    QgsProject::instance()->transformContext(),
-  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()} );
-  if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
+  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
+  positionOutsideGeoidModelArea );
+  if ( !positionOutsideGeoidModelArea )
   {
-    mLastPosition.elevation = geoidPosition.z();
-    positionDataHasChanged = true;
-  }
+    if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
+    {
+      mLastPosition.elevation = geoidPosition.z();
+      positionDataHasChanged = true;
+    }
 
-  // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
-  // but that's not really true in our case:
-  // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
-  //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
-  // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
-  //   ellipsoid altitude (so we do not rely on geoid model of unknown quality/resolution)
-  const double ellipsoidAltitude = position.coordinate().altitude();
-  const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
-  if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
-  {
-    mLastPosition.elevation_diff = geoidSeparation;
-    positionDataHasChanged = true;
+    // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
+    // but that's not really true in our case:
+    // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
+    //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
+    // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
+    //   ellipsoid altitude (so we do not rely on geoid model of unknown quality/resolution)
+    const double ellipsoidAltitude = position.coordinate().altitude();
+    const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
+    if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
+    {
+      mLastPosition.elevation_diff = geoidSeparation;
+      positionDataHasChanged = true;
+    }
   }
 
   bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );

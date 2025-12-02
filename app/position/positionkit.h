@@ -124,8 +124,13 @@ class PositionKit : public QObject
     static QgsCoordinateReferenceSystem positionCrs2D();
     // Coordinate reference system - WGS84 + ellipsoid height (EPSG:4979)
     static QgsCoordinateReferenceSystem positionCrs3DEllipsoidHeight();
-    // Coordinate reference system of position - WGS84 + geoid height - egm96_15 (EPSG:9707)
+    /**
+     * Coordinate reference system of position (WGS84 + geoid height) - can use custom geoid model
+     * \note by default we use egm96_15 model (EPSG:9707)
+     */
     static QgsCoordinateReferenceSystem positionCrs3D();
+    // Returns the model name used for elevation transformations
+    Q_INVOKABLE static QString positionCrs3DGeoidModelName();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );

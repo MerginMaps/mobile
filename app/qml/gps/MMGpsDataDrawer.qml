@@ -208,7 +208,7 @@ MMComponents.MMDrawer {
             }
 
             alignmentRight: Positioner.index % 2 === 1
-            desc: qsTr("Orthometric height, using EGM96 geoid")
+            desc: qsTr(("Orthometric height, using %1 geoid").arg(PositionKit.positionCrs3DGeoidModelName()))
           }
 
           MMGpsComponents.MMGpsDataText {
