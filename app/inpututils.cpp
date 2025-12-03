@@ -238,36 +238,36 @@ QString InputUtils::formatDateTimeDiff( const QDateTime &tMin, const QDateTime &
     else if ( secsDiff < 60 * 60 )
     {
       int period = secsDiff / 60 ;
-      return ( period > 1 ) ? tr( "%1 minutes ago" ).arg( period ) : tr( "%1 minute ago" ).arg( period );
+      return tr( "%n minute(s) ago", "", period );
     }
     else if ( secsDiff < 60 * 60 * 24 )
     {
       int period = secsDiff / ( 60 * 60 );
-      return ( period > 1 ) ? tr( "%1 hours ago" ).arg( period ) : tr( "%1 hour ago" ).arg( period );
+      return tr( "%n hour(s) ago", "", period );
     }
     else
     {
-      return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
+      return tr( "%n day(s) ago", "", daysDiff );
     }
   }
   else if ( daysDiff < 7 )
   {
-    return ( daysDiff > 1 ) ? tr( "%1 days ago" ).arg( daysDiff ) : tr( "%1 day ago" ).arg( daysDiff );
+    return tr( "%n day(s) ago", "", daysDiff );
   }
   else if ( daysDiff < 31 )
   {
     int period = daysDiff / 7;
-    return ( period > 1 ) ? tr( "%1 weeks ago" ).arg( period ) : tr( "%1 week ago" ).arg( period );
+    return tr( "%n week(s) ago", "", period );
   }
   else if ( daysDiff < 365 )
   {
     int period = daysDiff / 31;
-    return ( period > 1 ) ? tr( "%1 months ago" ).arg( period ) : tr( "%1 month ago" ).arg( period );
+    return tr( "%n month(s) ago", "", period );
   }
   else
   {
     int period = daysDiff / 365;
-    return ( period > 1 ) ? tr( "%1 years ago" ).arg( period ) : tr( "%1 year ago" ).arg( period );
+    return tr( "%n year(s) ago", "", period );
   }
 
   return INVALID_DATETIME_STR;
@@ -2141,11 +2141,11 @@ QString InputUtils::invalidGeometryWarning( QgsVectorLayer *layer )
 
   if ( QgsWkbTypes::isMultiType( layer->wkbType() ) )
   {
-    return tr( "You need to add at least %1 point(s) to every part." ).arg( nPoints );
+    return tr( "You need to add at least %n point(s) to every part.", "", nPoints );
   }
   else
   {
-    return tr( "You need to add at least %1 point(s)." ).arg( nPoints );
+    return tr( "You need to add at least %n point(s).", "", nPoints );
   }
 }
 
