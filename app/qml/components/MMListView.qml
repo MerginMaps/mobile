@@ -28,13 +28,6 @@ ListView {
     id: verticalScrollBar
 
     policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-    //visible: !isMobile && (root.contentHeight > root.height)
-    opacity: active ? 0.7 : 0.4
-
-    contentItem: Rectangle {
-      implicitWidth: 5
-      radius: width / 2
-      color: __style.darkGreenColor
-    }
+    opacity: active ? 0.7 : 0.2
   }
 }
