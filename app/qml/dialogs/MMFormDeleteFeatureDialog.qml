@@ -16,6 +16,8 @@ MMDrawerDialog {
 
   signal deleteFeature()
 
+  drawerBottomMargin: __style.margin20 + __style.safeAreaBottom
+
   imageSource: __style.negativeMMSymbolImage
   title: qsTr( "Delete feature" )
   description: qsTr( "Are you sure you want to delete this feature?" )

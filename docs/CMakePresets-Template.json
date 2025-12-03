@@ -1,0 +1,241 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+        "USE_MM_SERVER_API_KEY": "FALSE"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "displayName": "Linux Debug",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-linux",
+        "ENABLE_TESTS": "TRUE"
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-linux-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
+      }
+    },
+    {
+      "name": "android-base",
+      "hidden": true,
+      "inherits": "default",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ANDROID_ABI": "arm64-v8a",
+        "QT_ANDROID_ABIS": "arm64-v8a",
+        "VCPKG_TARGET_TRIPLET": "arm64-android",
+        "VCPKG_INSTALL_OPTIONS": "--allow-unsupported",
+        "QT_ANDROID_SIGN_APK": "Yes"
+      },
+      "environment": {
+        "ANDROID_NDK_HOME": "<add_the_path_to_NDK_home>",
+        "ANDROID_SDK_ROOT": "<add_the_path_to_SDK_root>",
+        "QT_ANDROID_KEYSTORE_PATH": "<add_the_path_to_the_ketstore",
+        "QT_ANDROID_KEYSTORE_ALIAS": "<add_the_keystore_alias>",
+        "QT_ANDROID_KEYSTORE_STORE_PASS": "<add_the_keystore_password",
+        "QT_ANDROID_KEYSTORE_KEY_PASS": "<add_the_key_password>"
+      }
+    },
+    {
+      "name": "android-linux",
+      "displayName": "Android (Linux Host)",
+      "inherits": "android-base",
+      "binaryDir": "${sourceDir}/../build-android",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "x64-linux"
+      }
+    },
+    {
+      "name": "android-macos",
+      "displayName": "Android (macOS Host - ARM)",
+      "inherits": "android-base",
+      "binaryDir": "${sourceDir}/../build-android",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "arm64-osx"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "android-macos-intel",
+      "displayName": "Android (macOS Host - Intel)",
+      "inherits": "android-base",
+      "binaryDir": "${sourceDir}/../build-android",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "x64-osx"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "ios-release",
+      "displayName": "iOS Release",
+      "inherits": "default",
+      "generator": "Xcode",
+      "binaryDir": "${sourceDir}/../build-ios",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_HOST_TRIPLET": "arm64-osx",
+        "CMAKE_SYSTEM_PROCESSOR": "aarch64",
+        "VCPKG_TARGET_TRIPLET": "arm64-ios",
+        "ENABLE_BITCODE": "OFF",
+        "ENABLE_ARC": "ON",
+        "CMAKE_CXX_VISIBILITY_PRESET": "hidden",
+        "CMAKE_SYSTEM_NAME": "iOS",
+        "IOS": "TRUE"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "macos-debug-arm",
+      "displayName": "macOS Debug (Apple Silicon)",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-macos",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx",
+        "ENABLE_TESTS": "TRUE"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "macos-release-arm",
+      "displayName": "macOS Release (Apple Silicon)",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-macos-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "arm64-osx"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "macos-debug-intel",
+      "displayName": "macOS Debug (Intel)",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-macos-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-osx",
+        "ENABLE_TESTS": "TRUE"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "macos-release-intel",
+      "displayName": "macOS Release (Intel)",
+      "inherits": "default",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build-macos-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-osx"
+      },
+      "environment": {
+        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+      }
+    },
+    {
+      "name": "windows-debug",
+      "displayName": "Windows Debug",
+      "inherits": "default",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/../build-windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_TARGET_TRIPLET": "x64-windows",
+        "ENABLE_TESTS": "TRUE"
+      }
+    },
+    {
+      "name": "windows-release",
+      "displayName": "Windows Release",
+      "inherits": "default",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/../build-windows-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "android-linux",
+      "configurePreset": "android-linux"
+    },
+    {
+      "name": "android-macos",
+      "configurePreset": "android-macos"
+    },
+    {
+      "name": "ios-release",
+      "configurePreset": "ios-release"
+    },
+    {
+      "name": "macos-debug-arm",
+      "configurePreset": "macos-debug-arm"
+    },
+    {
+      "name": "macos-release-arm",
+      "configurePreset": "macos-release-arm"
+    },
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "configurePreset": "windows-release",
+      "configuration": "Release"
+    }
+  ]
+}

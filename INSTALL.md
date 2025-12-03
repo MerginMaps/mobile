@@ -14,7 +14,7 @@
 - [5. Building iOS](#5-building-ios)
 - [6. Building macOS](#6-building-macos)
 - [7. Building Windows](#7-building-windows)
-- [8. Common problems](#8-common-problems)
+- [8. FAQ](#8-faq)
 - [9. Auto Testing](#9-auto-testing)
 
 # 1. Introduction
@@ -166,7 +166,6 @@ Steps to build and run mobile app:
       -DCMAKE_BUILD_TYPE=Debug \
       -DVCPKG_TARGET_TRIPLET=x64-linux \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
-      -DQGIS_QUICK_DATA_PATH=<absolute-path-to-mm1>/build/app/android/assets/qgis-data \
       -DUSE_MM_SERVER_API_KEY=FALSE \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
@@ -201,8 +200,8 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
       - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
       - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools`
    - flex and bison
-   - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line 
-     with `keytool -genkeypair`.
+   - - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line with this command: `keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000` 
+     (customise the validity argument if needed).
 
 2. Build mobile app (update CMake command with the correct Qt and Android NDK versions)
 
@@ -278,6 +277,18 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
   
   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
 
+  4. Build and Run
+
+   To build the project, go to the build folder and run the following command:
+   ```
+   ninja
+   ```
+   Once built, navigate to the path and run MerginMaps:
+   ```
+   build_folder/
+      app/
+         MerginMaps
+   ```
 
 ## 4.2. Android on macOS
 1. Install Java
@@ -299,6 +310,10 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      - Get Android `sdkmanager` by following these steps https://developer.android.com/tools/sdkmanager
      - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
      - Now perform `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools` to install all needed Android tools, make sure to double-check if the version numbers are correct
+   - After this step, check that you have:
+     - installed flex and bison
+     - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line with this command: `keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000` 
+     (customise the validity argument if needed).
 
 3. Configure 
   
@@ -313,9 +328,12 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      mobile/ 
    ```
    
+   To find your QT_ANDROID_KEYSTORE_ALIAS, run this command: 
+   `keytool -list -v -keystore /<path-to-keystore>/my-release-key.keystore`.
    This is command line to setup build system. As part of the cmake configure step it will compile all the deps (Qt, GDAL, QGIS), so it 
    can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local 
    binary vcpkg cache.
+  
    
    ```
      export ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
@@ -324,6 +342,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      export QT_ANDROID_KEYSTORE_KEY_PASS=<password>
      export QT_ANDROID_KEYSTORE_STORE_PASS=<password>
      export QT_ANDROID_KEYSTORE_PATH=<keystore-path>
+     export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;
 
      cmake \
        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -373,7 +392,19 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    
    
    To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
-   
+
+4. Build and Run
+
+   To build the project, go to the build folder and run the following command:
+   ```
+   ninja
+   ```
+   Once built, navigate to the path and run MerginMaps:
+   ```
+   build_folder/
+      app/
+         MerginMaps
+   ```
 
 ## 4.3. Android on Windows
 
@@ -446,12 +477,20 @@ Now you can create a build (either on command line or by setting these variables
   cd build
 
   xcodebuild \
-    -project Input.xcodeproj/ \
-    -scheme Input \
+    -project MerginMaps.xcodeproj/ \
+    -scheme MerginMaps \
     -sdk iphoneos \
     -configuration Release \
-    archive -archivePath Input.xcarchive
+    archive -archivePath MerginMaps.xcarchive
 ```
+Alternatively, navigate to the build folder and open the Xcode Project:
+
+   ```
+   build_folder/
+      MerginMaps.xcodeproj
+   ```
+Once the project is opened, build it from Xcode.
+
 
 # 6. Building macOS
 
@@ -498,7 +537,6 @@ Now you can create a build (either on command line or by setting these variables
       -DVCPKG_TARGET_TRIPLET=arm64-osx \
       -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
       -DUSE_MM_SERVER_API_KEY=FALSE \
-      -DQGIS_QUICK_DATA_PATH=app/android/assets/qgis-data \
       -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
       -DENABLE_TESTS=TRUE \
       -GNinja \
@@ -514,7 +552,7 @@ Now you can create a build (either on command line or by setting these variables
 
 5. Run the mobile app
    ```
-   ./app/Input.app/Contents/MacOS/Input
+   ./app/MerginMaps.app/Contents/MacOS/MerginMaps
    ```
 
 # 7. Building Windows
@@ -572,10 +610,10 @@ Now you can create a build (either on command line or by setting these variables
 
 5. Run the mobile app
    ```
-   ./app/input.exe
+   ./app/MerginMaps.exe
    ```
 
-# 8. Common problems
+# 8. FAQ
 
 - If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
     ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
@@ -585,6 +623,7 @@ Now you can create a build (either on command line or by setting these variables
 - If images in feature forms are not getting loaded it's again probably problem with `QGIS_QUICK_DATA_PATH`
   - Use absolute path instead of relative path
   - Make sure it's targeting **build** directory
+- If using Visual Studio Code to configure and build the project, check the  template in the `docs` folder.
 
 # 9. Auto Testing
 
@@ -602,4 +641,4 @@ TEST_API_PASSWORD=<your_password>
 ```
 
 Build binary, and you can run tests either with `ctest` or you can run individual tests by adding `--test<TestName>`
-e.g. ` ./input --testMerginApi`
+e.g. ` ./MerginMaps --testMerginApi`

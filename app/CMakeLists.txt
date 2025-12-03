@@ -214,6 +214,7 @@ if (ENABLE_TESTS)
       test/testvariablesmanager.cpp
       test/testactiveproject.cpp
       test/testprojectchecksumcache.cpp
+      test/testmultieditmanager.cpp
   )
 
   set(MM_HDRS
@@ -239,6 +240,7 @@ if (ENABLE_TESTS)
       test/testvariablesmanager.h
       test/testactiveproject.h
       test/testprojectchecksumcache.h
+      test/testmultieditmanager.h
   )
 
   if (NOT USE_MM_SERVER_API_KEY)
@@ -465,29 +467,19 @@ target_link_libraries(
          Qt6::Svg
          Qt6::Sql
          Qt6::Core
-         Qt6::Core5Compat
+         Qt6::Multimedia
+         Qt6::Widgets
 )
 
 if (HAVE_BLUETOOTH)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
 endif ()
 
-target_link_libraries(MerginMaps PUBLIC Qt6::Multimedia Qt6::Widgets)
 if (NOT IOS)
   target_link_libraries(MerginMaps PUBLIC Qt6::PrintSupport)
 endif ()
 
-if (ANDROID)
-  target_link_libraries(MerginMaps PUBLIC Qt6::CorePrivate)
-endif ()
-
-target_link_libraries(
-  MerginMaps
-  PUBLIC Geodiff::Geodiff
-         PROJ::proj
-         ZXing::Core
-         ZXing::ZXing
-)
+target_link_libraries(MerginMaps PUBLIC PROJ::proj ZXing::ZXing)
 
 target_link_libraries(
   MerginMaps
@@ -523,38 +515,29 @@ target_link_libraries(
          Spatialite::Spatialite
 )
 
-# if (NOT LNX) target_link_libraries(Input PUBLIC Charset::Charset Iconv::Iconv) endif ()
-
-# target_link_libraries(Input PUBLIC Xml2::Xml2)
-
 target_link_libraries(
   MerginMaps
   PUBLIC Spatialindex::Spatialindex
-         GEOS::geos_c
-         # Geos::Geos
          protobuf::libprotobuf-lite
-         # Utf8::utf8_range Utf8::utf8_validity Expat::Expat Freexl::Freexl
          Exiv2::exiv2lib
-         # Inih::Inireader Inih::Inih Tiff::Tiff
-         unofficial::sqlite3::sqlite3
-         unofficial::minizip::minizip
          ZLIB::ZLIB
          libzip::zip
-         # WebP::WebP WebP::Sharpyuv Curl::Curl Jpeg::Jpeg Geotiff::Geotiff Lzma::Lzma
-         # Zstd::Zstd Bz2::Bz2 Absl::Absl
          poly2tri::poly2tri
          meshoptimizer::meshoptimizer
 )
+
+if (WIN)
+  target_link_libraries(MerginMaps PUBLIC GEOS::geos_c Qt6::Core5Compat)
+endif ()
 
 if (IOS OR MACOS)
   target_link_libraries(MerginMaps PUBLIC Tasn1::Tasn1)
 endif ()
 
-# target_link_libraries(Input PUBLIC OpenSSL::OpenSSL OpenSSL::Crypto)
 if (ANDROID)
   set_property(
-    TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${KDAB_OpenSSL_CRYPTO_LIBRARY}
-                               ${KDAB_OpenSSL_LIBRARY}
+    TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
+                               ${OpenSSL_CRYPTO_LIBRARY}
   )
 endif ()
 
@@ -569,7 +552,8 @@ if (IOS)
   target_link_libraries(
     MerginMaps PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
   )
-  # TODO is this needed? qt_add_ios_ffmpeg_libraries(Input) # Qt Multimedia
+  # TODO is this needed? this change requires cmake 3.28+
+  # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
 endif ()
 
 if (WIN)
@@ -589,6 +573,10 @@ endif ()
 
 if (ENABLE_TESTS)
   target_link_libraries(MerginMaps PUBLIC Qt6::Test)
+endif ()
+
+if (ANDROID)
+  target_link_libraries(MerginMaps PUBLIC "-ljnigraphics")
 endif ()
 
 # ########################################################################################

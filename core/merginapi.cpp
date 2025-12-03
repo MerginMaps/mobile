@@ -215,7 +215,10 @@ QString MerginApi::listProjects( const QString &searchExpression, const QString 
 
   QNetworkReply *reply = mManager->get( request );
   CoreUtils::log( "list projects", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsReplyFinished( requestId );} );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]()
+  {
+    this->listProjectsReplyFinished( requestId );
+  } );
 
   return requestId;
 }
@@ -264,7 +267,10 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   QNetworkReply *reply = mManager->post( request, body.toJson() );
   CoreUtils::log( "list projects by name", QStringLiteral( "Requesting: " ) + url.toString() );
-  connect( reply, &QNetworkReply::finished, this, [this, requestId]() {this->listProjectsByNameReplyFinished( requestId );} );
+  connect( reply, &QNetworkReply::finished, this, [this, requestId]()
+  {
+    this->listProjectsByNameReplyFinished( requestId );
+  } );
 
   return requestId;
 }
@@ -301,7 +307,10 @@ void MerginApi::downloadNextItem( const QString &projectFullName )
   }
 
   QNetworkReply *reply = mManager->get( request );
-  connect( reply, &QNetworkReply::finished, this, [this, item]() { downloadItemReplyFinished( item ); } );
+  connect( reply, &QNetworkReply::finished, this, [this, item]()
+  {
+    downloadItemReplyFinished( item );
+  } );
 
   transaction.replyPullItems.insert( reply );
 
@@ -999,7 +1008,10 @@ void MerginApi::registerUser( const QString &email,
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->registrationFinished( email, password ); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]()
+  {
+    this->registrationFinished( email, password );
+  } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting registration: " ) + url.toString() );
 }
 
@@ -1035,7 +1047,10 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   jsonDoc.setObject( jsonObject );
   QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
   QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]() { this->postRegistrationFinished(); } );
+  connect( reply, &QNetworkReply::finished, this, [ = ]()
+  {
+    this->postRegistrationFinished();
+  } );
   CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
 }
 
@@ -1265,7 +1280,10 @@ void MerginApi::deleteProject( const QString &projectNamespace, const QString &p
   request.setUrl( url );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
   QNetworkReply *reply = mManager->deleteResource( request );
-  connect( reply, &QNetworkReply::finished, this, [this, informUser]() { this->deleteProjectFinished( informUser );} );
+  connect( reply, &QNetworkReply::finished, this, [this, informUser]()
+  {
+    this->deleteProjectFinished( informUser );
+  } );
   CoreUtils::log( "delete " + projectFullName, QStringLiteral( "Requesting project deletion: " ) + url.toString() );
 }
 
@@ -2635,7 +2653,10 @@ void MerginApi::startProjectPull( const QString &projectFullName )
   // work with parallel downloads
   std::sort(
     transaction.downloadQueue.begin(), transaction.downloadQueue.end(),
-  []( const DownloadQueueItem & a, const DownloadQueueItem & b ) { return a.size > b.size; }
+    []( const DownloadQueueItem & a, const DownloadQueueItem & b )
+  {
+    return a.size > b.size;
+  }
   );
 
   CoreUtils::log( "pull " + projectFullName, QStringLiteral( "%1 of available device storage, %2 of total device storage" )
@@ -3779,7 +3800,10 @@ void MerginApi::deleteAccount()
   QUrl url( mApiRoot + QStringLiteral( "/v1/user" ) );
   request.setUrl( url );
   QNetworkReply *reply = mManager->deleteResource( request );
-  connect( reply, &QNetworkReply::finished, this, [this]() { this->deleteAccountFinished();} );
+  connect( reply, &QNetworkReply::finished, this, [this]()
+  {
+    this->deleteAccountFinished();
+  } );
   CoreUtils::log( "delete account " + mUserInfo->username(), QStringLiteral( "Requesting account deletion: " ) + url.toString() );
 }
 
@@ -3821,6 +3845,46 @@ void MerginApi::deleteAccountFinished()
   }
 
   r->deleteLater();
+}
+
+void MerginApi::updateWorkspaceService( const QString &workspaceId, const QString &payload )
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  const QUrl url( mApiRoot + QStringLiteral( "/v1/tests/workspaces/%1" ).arg( workspaceId ) );
+  request.setUrl( url );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+
+  const QJsonDocument doc = QJsonDocument::fromJson( payload.toUtf8() );
+  const QByteArray data = doc.toJson();
+
+  // Send PATCH request
+  QNetworkReply *reply = mManager->sendCustomRequest( request, "PATCH", data );
+
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::updateWorkspaceStorageLimitFinished );
+
+  CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
+                  QStringLiteral( "Updating workspace: " ).arg( url.toString() ) );
+}
+
+void MerginApi::updateWorkspaceStorageLimitFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    CoreUtils::log( QStringLiteral( "update workspace storage limit" ), QStringLiteral( "Successfully updated workspace limits" ) );
+  }
+  else
+  {
+    CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
+                    QStringLiteral( "Error: " ).arg( r->errorString() ) );
+  }
 }
 
 void MerginApi::getServerConfig()
