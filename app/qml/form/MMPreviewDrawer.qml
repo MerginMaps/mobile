@@ -193,12 +193,12 @@ Item {
           height: contentHeight
 
           spacing: __style.margin8
-          interactive: false
+          showScrollBar: ScrollBar.AsNeeded
 
           model: root.controller.fieldModel
 
           delegate: Item {
-            width: ListView.view.width - ListView.view.scrollBarWidth
+            width: ListView.view.width
             height: childrenRect.height
 
             Column {
