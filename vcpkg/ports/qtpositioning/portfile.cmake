@@ -4,7 +4,7 @@ include("${SCRIPT_PATH}/qt_install_submodule.cmake")
 set(${PORT}_PATCHES
     devendor-poly2tri.patch
     foregroundservice.patch
-    ios_wgs84_ellipsoid.patch
+    ios_orthometric_altitude.patch
     # TODO: The android patch should be removed after migration to Qt 6.9+ as it is a backport of their bugfix
     android15_altitude_fix.patch)
 

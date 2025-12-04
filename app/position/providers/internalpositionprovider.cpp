@@ -153,11 +153,11 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   {
     // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     geoidPosition = InputUtils::transformPoint(
-                                   PositionKit::positionCrs3DEllipsoidHeight(),
-                                   PositionKit::positionCrs3D(),
-                                   QgsProject::instance()->transformContext(),
-  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
-  positionOutsideGeoidModelArea );
+                      PositionKit::positionCrs3DEllipsoidHeight(),
+                      PositionKit::positionCrs3D(),
+                      QgsProject::instance()->transformContext(),
+    {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
+    positionOutsideGeoidModelArea );
   }
   else
   {
@@ -188,7 +188,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
 #ifdef Q_OS_IOS
-    if (isTransformRequired)
+    if ( isTransformRequired )
     {
 #endif
       const double ellipsoidAltitude = position.coordinate().altitude();
