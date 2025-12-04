@@ -28,6 +28,7 @@ ListView {
     id: verticalScrollBar
 
     policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-    opacity: active ? 0.7 : 0.2
+    visible: contentHeight > availableHeight ? true  : false
+    opacity: active ? 0.7 : 0.4
   }
 }

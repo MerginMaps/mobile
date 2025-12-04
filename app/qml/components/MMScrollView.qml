@@ -1,5 +1,3 @@
-
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,6 +22,9 @@ ScrollView {
     contentWidth: availableWidth - scrollBarWidth
 
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+    // vertical scroll bar should appear only when needed
     ScrollBar.vertical.policy: isMobile ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-    ScrollBar.vertical.opacity: active ? 0.7 : 0.2
+    ScrollBar.vertical.visible: contentHeight > availableHeight ? true  : false
+    ScrollBar.vertical.opacity: active ? 0.7 : 0.4
 }
