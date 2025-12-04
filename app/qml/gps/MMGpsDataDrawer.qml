@@ -204,7 +204,7 @@ MMComponents.MMDrawer {
               if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.altitude ) ) {
                 return qsTr( "N/A" )
               }
-              __inputUtils.formatNumber( PositionKit.altitude, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.altitude - AppSettings.gpsAntennaHeight, 2 ) + " m"
             }
 
             alignmentRight: Positioner.index % 2 === 1
