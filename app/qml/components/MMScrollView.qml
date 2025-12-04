@@ -15,7 +15,7 @@ ScrollView {
 
     readonly property bool isMobile: (Qt.platform.os === "android"
                                       || Qt.platform.os === "ios")
-    readonly property int scrollBarWidth: !isMobile ? 10 : 0
+    readonly property int scrollBarWidth: !isMobile ? __style.margin10 : 0
     property bool showScrollBar:  root.ScrollBar.vertical.policy
 
 
