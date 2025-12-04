@@ -20,7 +20,7 @@ index 95d51a86..c3944019 100644
      QGeoPositionInfo location(QGeoCoordinate(newLocation.coordinate.latitude,
                                               newLocation.coordinate.longitude,
 -                                             newLocation.altitude),
-+                                             newLocation.availableAltitude),
++                                             availableAltitude),
                                               timeStamp);
 +    // we abuse the QGeoPositionInfo API here a bit, but we want to inform our app if we are using ellipsoidal or geoid
 +    // elevation and if a transform should be applied
