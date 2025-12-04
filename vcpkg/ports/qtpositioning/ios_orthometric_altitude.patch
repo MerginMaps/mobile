@@ -1,0 +1,35 @@
+diff --git a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm b/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
+index 95d51a86..c3944019 100644
+--- a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
++++ b/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
+@@ -47,12 +47,28 @@
+     NSTimeInterval locationTimeStamp = [newLocation.timestamp timeIntervalSince1970];
+     const QDateTime timeStamp = QDateTime::fromMSecsSinceEpoch(qRound64(locationTimeStamp * 1000),
+                                                                QTimeZone::UTC);
+-
++    // The ellipsoidalAltitude property can be populated depending on the manufacturer, we either use this and apply
++    // transformation with our geoid model or just propagate the geoid elevation from the mocked location
++    double availableAltitude
++    if (newLocation.ellipsoidalAltitude) {
++      availableAltitude = newLocation.ellipsoidalAltitude;
++    }
++    else {
++      availableAltitude = newLocation.altitude;
++    }
+     // Construct position info from location data
+     QGeoPositionInfo location(QGeoCoordinate(newLocation.coordinate.latitude,
+                                              newLocation.coordinate.longitude,
+-                                             newLocation.altitude),
++                                             newLocation.availableAltitude),
+                                              timeStamp);
++    // we abuse the QGeoPositionInfo API here a bit, but we want to inform our app if we are using ellipsoidal or geoid
++    // elevation and if a transform should be applied
++    if (newLocation.ellipsoidalAltitude) {
++      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 1);
++    }
++    else {
++      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 0);
++    }
+     if (newLocation.horizontalAccuracy >= 0)
+         location.setAttribute(QGeoPositionInfo::HorizontalAccuracy, newLocation.horizontalAccuracy);
+     if (newLocation.verticalAccuracy >= 0)

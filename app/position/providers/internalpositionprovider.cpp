@@ -142,14 +142,36 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
   bool positionOutsideGeoidModelArea = false;
+#ifdef Q_OS_IOS
+  // on ios we can get both ellipsoid and geoid altitude, depending on what is available (e.g. with mocked location we might
+  // not be able to get the ellipsoid altitude only the geoid) we transform the altitude or not
+  double isTransformRequired = position.attribute( QGeoPositionInfo::VerticalSpeed );
+  position.removeAttribute( QGeoPositionInfo::VerticalSpeed );
+  QgsPoint geoidPosition;
+  if ( isTransformRequired )
+  {
+    // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+    geoidPosition = InputUtils::transformPoint(
+                                   PositionKit::positionCrs3DEllipsoidHeight(),
+                                   PositionKit::positionCrs3D(),
+                                   QgsProject::instance()->transformContext(),
+  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
+  positionOutsideGeoidModelArea );
+  }
+  else
+  {
+    geoidPosition = {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()};
+  }
+#else
+  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
                                    PositionKit::positionCrs3D(),
                                    QgsProject::instance()->transformContext(),
   {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
   positionOutsideGeoidModelArea );
+#endif
   if ( !positionOutsideGeoidModelArea )
   {
     if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
@@ -163,14 +185,22 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
     //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
-    //   ellipsoid altitude (so we do not rely on geoid model of unknown quality/resolution)
-    const double ellipsoidAltitude = position.coordinate().altitude();
-    const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
-    if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
+    //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
+    //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
+#ifdef Q_OS_IOS
+    if (isTransformRequired)
     {
-      mLastPosition.elevation_diff = geoidSeparation;
-      positionDataHasChanged = true;
+#endif
+      const double ellipsoidAltitude = position.coordinate().altitude();
+      const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
+      if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
+      {
+        mLastPosition.elevation_diff = geoidSeparation;
+        positionDataHasChanged = true;
+      }
+#ifdef Q_OS_IOS
     }
+#endif
   }
 
   bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );
