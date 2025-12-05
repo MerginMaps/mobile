@@ -85,6 +85,19 @@ MMFormComboboxBaseEditor {
 
       drawerHeader.title: root._fieldTitle
 
+      emptyStateDelegate: Item {
+        width: parent.width
+        height: noItemsText.implicitHeight
+        anchors.centerIn: parent
+
+        MMComponents.MMText {
+          id: noItemsText
+          text: qsTr( "No items" )
+          anchors.centerIn: parent
+          topPadding: __style.margin20
+        }
+      }
+
       list.model: listModel
 
       selected: root.preselectedItems
