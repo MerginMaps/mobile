@@ -634,6 +634,11 @@ class InputUtils: public QObject
     static void sanitizeFileName( QString &fileName );
 
     /**
+     * Splits path into components and sanitizes each component using sanitizeFileName().
+     */
+    static void sanitizePath( QString &path );
+
+    /**
      * Returns the indexes of fields that are referenced in an expression
      */
     Q_INVOKABLE static QSet<int> referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression );

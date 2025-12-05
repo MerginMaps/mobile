@@ -154,13 +154,16 @@ static QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath )
   return layer;
 }
 
-void ProjectWizard::createProject( QString const &projectName, FieldsModel *fieldsModel )
+void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *fieldsModel )
 {
-  if ( !CoreUtils::isValidName( projectName ) )
+  if ( !CoreUtils::isValidName( projectNameRaw ) )
   {
     emit projectCreationFailed( tr( "Project name contains invalid characters" ) );
     return;
   }
+
+  QString projectName( projectNameRaw );
+  InputUtils::sanitizeFileName( projectName );
 
   QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
   QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
