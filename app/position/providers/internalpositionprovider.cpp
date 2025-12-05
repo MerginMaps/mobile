@@ -115,13 +115,13 @@ void InternalPositionProvider::closeProvider()
     mGpsSatellitesSource->stopUpdates();
 }
 
-void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &position )
+void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
 {
   // if by any chance we are in wrong state (QML thinking that provider is not connected)
   // emit connected signal here to know that the connection is OK
   setState( tr( "Connected" ), State::Connected );
 
-  bool hasPosition = position.coordinate().isValid();
+  const bool hasPosition = position.coordinate().isValid();
   if ( !hasPosition )
   {
     return;
@@ -203,42 +203,42 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
 #endif
   }
 
-  bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );
+  const bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );
   if ( hasSpeedInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )
   {
     mLastPosition.speed = position.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6; // convert from m/s to km/h
     positionDataHasChanged = true;
   }
 
-  bool hasVerticalSpeedInfo = position.hasAttribute( QGeoPositionInfo::VerticalSpeed );
+  const bool hasVerticalSpeedInfo = position.hasAttribute( QGeoPositionInfo::VerticalSpeed );
   if ( hasVerticalSpeedInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::VerticalSpeed ), mLastPosition.verticalSpeed ) )
   {
     mLastPosition.verticalSpeed = position.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6; // convert from m/s to km/h
     positionDataHasChanged = true;
   }
 
-  bool hasDirectionInfo = position.hasAttribute( QGeoPositionInfo::Direction );
+  const bool hasDirectionInfo = position.hasAttribute( QGeoPositionInfo::Direction );
   if ( hasDirectionInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::Direction ), mLastPosition.direction ) )
   {
     mLastPosition.direction = position.attribute( QGeoPositionInfo::Direction );
     positionDataHasChanged = true;
   }
 
-  bool hasMagneticVariation = position.hasAttribute( QGeoPositionInfo::MagneticVariation );
+  const bool hasMagneticVariation = position.hasAttribute( QGeoPositionInfo::MagneticVariation );
   if ( hasMagneticVariation && !qgsDoubleNear( position.attribute( QGeoPositionInfo::MagneticVariation ), mLastPosition.magneticVariation ) )
   {
     mLastPosition.magneticVariation = position.attribute( QGeoPositionInfo::MagneticVariation );
     positionDataHasChanged = true;
   }
 
-  bool hasHacc = position.hasAttribute( QGeoPositionInfo::HorizontalAccuracy );
+  const bool hasHacc = position.hasAttribute( QGeoPositionInfo::HorizontalAccuracy );
   if ( hasHacc && !qgsDoubleNear( position.attribute( QGeoPositionInfo::HorizontalAccuracy ), mLastPosition.hacc ) )
   {
     mLastPosition.hacc = position.attribute( QGeoPositionInfo::HorizontalAccuracy );
     positionDataHasChanged = true;
   }
 
-  bool hasVacc = position.hasAttribute( QGeoPositionInfo::VerticalAccuracy );
+  const bool hasVacc = position.hasAttribute( QGeoPositionInfo::VerticalAccuracy );
   if ( hasVacc && !qgsDoubleNear( position.attribute( QGeoPositionInfo::VerticalAccuracy ), mLastPosition.vacc ) )
   {
     mLastPosition.vacc = position.attribute( QGeoPositionInfo::VerticalAccuracy );
