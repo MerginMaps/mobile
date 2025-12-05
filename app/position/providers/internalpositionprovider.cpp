@@ -115,13 +115,17 @@ void InternalPositionProvider::closeProvider()
     mGpsSatellitesSource->stopUpdates();
 }
 
-void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
+void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &position )
 {
   // if by any chance we are in wrong state (QML thinking that provider is not connected)
   // emit connected signal here to know that the connection is OK
   setState( tr( "Connected" ), State::Connected );
 
-  const bool hasPosition = position.coordinate().isValid();
+  // we create a local copy of position because on iOS we use QGeoPositionInfo::VerticalSpeed attribute as helper value
+  // for transformation, we need to remove it afterwards
+  QGeoPositionInfo localPosition( position );
+
+  const bool hasPosition = localPosition.coordinate().isValid();
   if ( !hasPosition )
   {
     return;
@@ -130,15 +134,15 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
   // go over attributes and find if there are any changes from previous position, emit position update if so
   bool positionDataHasChanged = false;
 
-  if ( !qgsDoubleNear( position.coordinate().latitude(), mLastPosition.latitude ) )
+  if ( !qgsDoubleNear( localPosition.coordinate().latitude(), mLastPosition.latitude ) )
   {
-    mLastPosition.latitude = position.coordinate().latitude();
+    mLastPosition.latitude = localPosition.coordinate().latitude();
     positionDataHasChanged = true;
   }
 
-  if ( !qgsDoubleNear( position.coordinate().longitude(), mLastPosition.longitude ) )
+  if ( !qgsDoubleNear( localPosition.coordinate().longitude(), mLastPosition.longitude ) )
   {
-    mLastPosition.longitude = position.coordinate().longitude();
+    mLastPosition.longitude = localPosition.coordinate().longitude();
     positionDataHasChanged = true;
   }
 
@@ -146,8 +150,8 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
 #ifdef Q_OS_IOS
   // on ios we can get both ellipsoid and geoid altitude, depending on what is available (e.g. with mocked location we might
   // not be able to get the ellipsoid altitude only the geoid) we transform the altitude or not
-  double isTransformRequired = position.attribute( QGeoPositionInfo::VerticalSpeed );
-  position.removeAttribute( QGeoPositionInfo::VerticalSpeed );
+  double isTransformRequired = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
+  localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
   QgsPoint geoidPosition;
   if ( isTransformRequired )
   {
@@ -156,12 +160,12 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
                       PositionKit::positionCrs3DEllipsoidHeight(),
                       PositionKit::positionCrs3D(),
                       QgsProject::instance()->transformContext(),
-    {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
+    {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
     positionOutsideGeoidModelArea );
   }
   else
   {
-    geoidPosition = {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()};
+    geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
   }
 #else
   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
@@ -169,7 +173,7 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
                                    PositionKit::positionCrs3DEllipsoidHeight(),
                                    PositionKit::positionCrs3D(),
                                    QgsProject::instance()->transformContext(),
-  {position.coordinate().longitude(), position.coordinate().latitude(), position.coordinate().altitude()},
+  {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
   positionOutsideGeoidModelArea );
 #endif
   if ( !positionOutsideGeoidModelArea )
@@ -191,7 +195,7 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
     if ( isTransformRequired )
     {
 #endif
-      const double ellipsoidAltitude = position.coordinate().altitude();
+      const double ellipsoidAltitude = localPosition.coordinate().altitude();
       const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
       if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
       {
@@ -203,51 +207,51 @@ void InternalPositionProvider::parsePositionUpdate( QGeoPositionInfo &position )
 #endif
   }
 
-  const bool hasSpeedInfo = position.hasAttribute( QGeoPositionInfo::GroundSpeed );
-  if ( hasSpeedInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )
+  const bool hasSpeedInfo = localPosition.hasAttribute( QGeoPositionInfo::GroundSpeed );
+  if ( hasSpeedInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )
   {
-    mLastPosition.speed = position.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6; // convert from m/s to km/h
+    mLastPosition.speed = localPosition.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6; // convert from m/s to km/h
     positionDataHasChanged = true;
   }
 
-  const bool hasVerticalSpeedInfo = position.hasAttribute( QGeoPositionInfo::VerticalSpeed );
-  if ( hasVerticalSpeedInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::VerticalSpeed ), mLastPosition.verticalSpeed ) )
+  const bool hasVerticalSpeedInfo = localPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed );
+  if ( hasVerticalSpeedInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::VerticalSpeed ), mLastPosition.verticalSpeed ) )
   {
-    mLastPosition.verticalSpeed = position.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6; // convert from m/s to km/h
+    mLastPosition.verticalSpeed = localPosition.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6; // convert from m/s to km/h
     positionDataHasChanged = true;
   }
 
-  const bool hasDirectionInfo = position.hasAttribute( QGeoPositionInfo::Direction );
-  if ( hasDirectionInfo && !qgsDoubleNear( position.attribute( QGeoPositionInfo::Direction ), mLastPosition.direction ) )
+  const bool hasDirectionInfo = localPosition.hasAttribute( QGeoPositionInfo::Direction );
+  if ( hasDirectionInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::Direction ), mLastPosition.direction ) )
   {
-    mLastPosition.direction = position.attribute( QGeoPositionInfo::Direction );
+    mLastPosition.direction = localPosition.attribute( QGeoPositionInfo::Direction );
     positionDataHasChanged = true;
   }
 
-  const bool hasMagneticVariation = position.hasAttribute( QGeoPositionInfo::MagneticVariation );
-  if ( hasMagneticVariation && !qgsDoubleNear( position.attribute( QGeoPositionInfo::MagneticVariation ), mLastPosition.magneticVariation ) )
+  const bool hasMagneticVariation = localPosition.hasAttribute( QGeoPositionInfo::MagneticVariation );
+  if ( hasMagneticVariation && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::MagneticVariation ), mLastPosition.magneticVariation ) )
   {
-    mLastPosition.magneticVariation = position.attribute( QGeoPositionInfo::MagneticVariation );
+    mLastPosition.magneticVariation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
     positionDataHasChanged = true;
   }
 
-  const bool hasHacc = position.hasAttribute( QGeoPositionInfo::HorizontalAccuracy );
-  if ( hasHacc && !qgsDoubleNear( position.attribute( QGeoPositionInfo::HorizontalAccuracy ), mLastPosition.hacc ) )
+  const bool hasHacc = localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy );
+  if ( hasHacc && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ), mLastPosition.hacc ) )
   {
-    mLastPosition.hacc = position.attribute( QGeoPositionInfo::HorizontalAccuracy );
+    mLastPosition.hacc = localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy );
     positionDataHasChanged = true;
   }
 
-  const bool hasVacc = position.hasAttribute( QGeoPositionInfo::VerticalAccuracy );
-  if ( hasVacc && !qgsDoubleNear( position.attribute( QGeoPositionInfo::VerticalAccuracy ), mLastPosition.vacc ) )
+  const bool hasVacc = localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy );
+  if ( hasVacc && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ), mLastPosition.vacc ) )
   {
-    mLastPosition.vacc = position.attribute( QGeoPositionInfo::VerticalAccuracy );
+    mLastPosition.vacc = localPosition.attribute( QGeoPositionInfo::VerticalAccuracy );
     positionDataHasChanged = true;
   }
 
-  if ( position.timestamp() != mLastPosition.utcDateTime )
+  if ( localPosition.timestamp() != mLastPosition.utcDateTime )
   {
-    mLastPosition.utcDateTime = position.timestamp();
+    mLastPosition.utcDateTime = localPosition.timestamp();
     positionDataHasChanged = true;
   }
 

@@ -35,7 +35,7 @@ class InternalPositionProvider : public AbstractPositionProvider
     virtual void closeProvider() override;
 
   public slots:
-    void parsePositionUpdate( QGeoPositionInfo &position );
+    void parsePositionUpdate( const QGeoPositionInfo &position );
     void parseVisibleSatellitesUpdate( const QList<QGeoSatelliteInfo> &satellites );
     void parseUsedSatellitesUpdate( const QList<QGeoSatelliteInfo> &satellites );
 
