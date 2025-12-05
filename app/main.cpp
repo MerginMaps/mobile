@@ -544,13 +544,13 @@ int main( int argc, char *argv[] )
   LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
   // build position kit, save active provider to QSettings and load previously active provider
-  PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
+  PositionKit *pk = engine.singletonInstance<PositionKit *>( "MMInput", "PositionKit" );
+  QObject::connect( pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk.setPositionProvider( pk.constructActiveProvider( as ) );
-  pk.setAppSettings( as );
+  pk->setPositionProvider( PositionKit::constructActiveProvider( as ) );
+  pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
@@ -648,7 +648,7 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
   // Direct connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, pk, &PositionKit::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
@@ -679,7 +679,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), &pk, as );
+    tests.init( ma.get(), &iu, vm.get(), pk, as );
     return tests.runTest();
   }
 #endif
@@ -722,7 +722,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
-  engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
   // add image provider to pass QIcons/QImages from C++ to QML
   engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );

@@ -12,10 +12,13 @@
 
 #include <QObject>
 #include <QString>
+#include <QtQml/qqmlregistration.h>
 
 class  PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude CONSTANT )
     Q_PROPERTY( double longitude READ longitude CONSTANT )
