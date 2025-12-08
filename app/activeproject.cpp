@@ -227,6 +227,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mAppSettings.autosyncAllowed() )
   {
     setAutosyncEnabled( true );
+    requestSync();
   }
 
   // in case tracking is running, we want to show the UI
@@ -330,6 +331,8 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
     mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
 
     connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, &ActiveProject::requestSync );
+    connect( mAutosyncController.get(), &AutosyncController::projectSyncRequired, this, &ActiveProject::requestSync );
+    connect( this, &ActiveProject::appStateChanged, mAutosyncController.get(), &AutosyncController::checkSyncRequiredAfterAppStateChange );
   }
   else
   {

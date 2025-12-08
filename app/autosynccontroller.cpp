@@ -13,12 +13,19 @@
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
 
+// 1 minute
+constexpr int SYNC_INTERVAL = 20000;
+// 10 seconds
+constexpr int SYNC_CHECK_TIMEOUT = 10000;
+
 AutosyncController::AutosyncController(
   QgsProject *openedQgsProject,
   QObject *parent
 )
   : QObject( parent )
   , mQgsProject( openedQgsProject )
+// we set the current timestamp as we sync on project open
+  , mLastUpdateTime( QDateTime::currentDateTime() )
 {
   if ( !mQgsProject )
   {
@@ -35,10 +42,39 @@ AutosyncController::AutosyncController(
     {
       if ( !vecLayer->readOnly() )
       {
-        QObject::connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, &AutosyncController::projectChangeDetected );
+        connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, [&]
+        {
+          mLastUpdateTime = QDateTime::currentDateTime();
+          emit projectChangeDetected();
+        } );
       }
     }
   }
+
+  //every 10 seconds check if last sync was more than a minute ago and sync if it's true
+  mTimer = std::make_unique<QTimer>( this );
+  connect( mTimer.get(), &QTimer::timeout, this, [&]
+  {
+    if ( QDateTime::currentDateTime() - mLastUpdateTime >= std::chrono::milliseconds( SYNC_INTERVAL ) )
+    {
+      mLastUpdateTime = QDateTime::currentDateTime();
+      emit projectSyncRequired();
+    }
+  } );
+  mTimer->start( SYNC_CHECK_TIMEOUT );
 }
 
-AutosyncController::~AutosyncController() = default;
+void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::ApplicationState state )
+{
+  if ( state != Qt::ApplicationState::ApplicationActive )
+  {
+    mTimer->stop();
+    return;
+  }
+  const bool isLongerThanSyncInterval = QDateTime::currentDateTime() - mLastUpdateTime >= std::chrono::milliseconds( SYNC_INTERVAL );
+  if ( isLongerThanSyncInterval )
+  {
+    mLastUpdateTime = QDateTime::currentDateTime();
+    emit projectSyncRequired();
+  }
+}

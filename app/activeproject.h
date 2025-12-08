@@ -180,6 +180,8 @@ class ActiveProject: public QObject
 
     void photoSketchingEnabledChanged();
 
+    void appStateChanged( Qt::ApplicationState state );
+
   public slots:
     // Reloads project if current project path matches given path (it's the same project)
     bool reloadProject( QString projectDir );
