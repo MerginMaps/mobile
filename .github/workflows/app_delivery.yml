@@ -53,22 +53,34 @@ jobs:
                 continue;
               }
             
-              // List artifacts for that specific run
-              const artifactsResponse = await github.rest.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: latestRun.id,
-              });
-            
-              const artifacts = artifactsResponse.data.artifacts;
-            
-              if (artifacts.length > 0) {
-                commentBody += `### ${workflowName} (Run #${latestRun.id})\n`;
-            
-                for (const artifact of artifacts) {
-                  const apiDownloadUrl = `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts/${artifact.id}/zip`;
-            
-                  commentBody += `- [📥 **${artifact.name}**](${apiDownloadUrl}) (Expires: ${new Date(artifact.expires_at).toLocaleDateString()})\n`;
+              // for iOS we post only build number as the build is on testflight, for others we link artifacts
+              if (workflowName !== 'iOS Build') {
+                // List artifacts for that specific run
+                const artifactsResponse = await github.rest.actions.listWorkflowRunArtifacts({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: latestRun.id,
+                });
+              
+                let artifacts = [];
+                if (workflowName === 'Android Build'){
+                  artifacts = artifactsResponse.data.artifacts.filter((artifact) => artifact.name.includes(' APK '));
+                } else {
+                  artifacts = artifactsResponse.data.artifacts;
+                }
+              
+                if (artifacts.length > 0) {
+                  commentBody += `### ${workflowName} (Run #${latestRun.id})\n`;
+              
+                  for (const artifact of artifacts) {
+                    commentBody += `- [📥 **${artifact.name}**](${artifact.archive_download_url}) (Expires: ${new Date(artifact.expires_at).toLocaleDateString()})\n`;
+                    artifactsFound = true;
+                  }
+                }
+              } else {
+                if (latestRun.conclusion) {
+                  commentBody += `### ${workflowName} (Run #${latestRun.id})\n`;
+                  commentBody += `- 📥 ${latestRun.conclusion}\n`;
                   artifactsFound = true;
                 }
               }
