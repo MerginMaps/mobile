@@ -235,9 +235,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation, mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - antennaHeight(), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation;
+    mPosition.elevation = newPosition.elevation - antennaHeight();
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
