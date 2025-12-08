@@ -65,6 +65,7 @@ Item {
 
         TapHandler{
           gesturePolicy: TapHandler.ReleaseWithinBounds
+          margin: __style.margin10
           onTapped: () => infoPopup.open()
         }
       }
