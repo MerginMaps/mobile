@@ -27,7 +27,7 @@ jobs:
           script: |
             const buildWorkflowNames = ['macOS Build', 'linux Build', 'win64 Build', 'Android Build', 'iOS Build'];
             const headSha = context.payload.workflow_run.head_sha;
-            let commentBody = '## 📦 Build Artifacts Ready\n\n';
+            let commentBody = '## 📦 Build Artifacts Ready\n\n|OS|Status|Build|Info|Workflow run|\n|-----|-----|-----|-----|-----|\n';
             let artifactsFound = false;
             
             // 1. Construct the body of comment with links
@@ -48,7 +48,7 @@ jobs:
             
               if (!latestRun) {
                 console.log(`Could not find a successful run for workflow: ${workflowName}`);
-                commentBody += `- 📭 **${workflowName}**: Build not yet complete or failed.\n`;
+                commentBody += `|**${workflowName}**| 📭 | Build not yet complete or failed.| | |\n`;
                 continue;
               }
             
@@ -72,7 +72,7 @@ jobs:
                   commentBody += `### ${workflowName} (Run #${latestRun.run_number})\n`;
               
                   for (const artifact of artifacts) {
-                    commentBody += `- 📬 [**${artifact.name}**](${artifact.archive_download_url}) (Expires: ${new Date(artifact.expires_at).toLocaleDateString()})\n`;
+                    commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifact.archive_download_url}) | (Expires: ${new Date(artifact.expires_at).toLocaleDateString()}) | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     artifactsFound = true;
                   }
                 }
@@ -81,8 +81,7 @@ jobs:
                   const currentYear = String(new Date().getFullYear()).slice(-2)
                   const currentMonth = (new Date().getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
                   const buildId = `${latestRun.run_number}1${latestRun.run_attempt}`
-                  commentBody += `### ${workflowName} (Run #${latestRun.run_number})\n`;
-                  commentBody += `- 📬 Build number: ${currentYear}.${currentMonth}.${buildId}\n`;
+                  commentBody += `|**${workflowName}**| 📬 |  | Build number: ${currentYear}.${currentMonth}.${buildId} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                   artifactsFound = true;
                 }
               }
