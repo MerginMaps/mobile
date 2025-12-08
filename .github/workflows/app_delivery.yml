@@ -7,8 +7,7 @@ on:
     # multiple workflows the first that finishes triggers this workflow, so we pick the "longest". Linux sometimes takes
     # longer to build, but we ship Windows, so it has higher priority.
     workflows:
-#      - "win64 Build"
-      - "Android Build"
+      - "win64 Build"
 
 permissions:
   actions: read
@@ -97,7 +96,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 state: 'open',
-                head: `${context.repo.owner}:${headSha}`,
+                head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`,
                 per_page: 5
             });
               
