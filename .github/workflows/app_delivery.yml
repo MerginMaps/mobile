@@ -48,7 +48,7 @@ jobs:
             
               if (!latestRun) {
                 console.log(`Could not find a successful run for workflow: ${workflowName}`);
-                commentBody += `- :x: **${workflowName}**: Build not yet complete or failed.\n`;
+                commentBody += `- 📭 **${workflowName}**: Build not yet complete or failed.\n`;
                 continue;
               }
             
@@ -69,17 +69,20 @@ jobs:
                 }
               
                 if (artifacts.length > 0) {
-                  commentBody += `### ${workflowName} (Run #${latestRun.id})\n`;
+                  commentBody += `### ${workflowName} (Run #${latestRun.run_number})\n`;
               
                   for (const artifact of artifacts) {
-                    commentBody += `- [📥 **${artifact.name}**](${artifact.archive_download_url}) (Expires: ${new Date(artifact.expires_at).toLocaleDateString()})\n`;
+                    commentBody += `- 📬 [**${artifact.name}**](${artifact.archive_download_url}) (Expires: ${new Date(artifact.expires_at).toLocaleDateString()})\n`;
                     artifactsFound = true;
                   }
                 }
               } else {
                 if (latestRun.conclusion) {
-                  commentBody += `### ${workflowName} (Run #${latestRun.id})\n`;
-                  commentBody += `- 📥 ${latestRun.conclusion}\n`;
+                  const currentYear = String(new Date().getFullYear()).slice(-2)
+                  const currentMonth = (new Date().getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+                  const buildId = `${latestRun.run_number}1${latestRun.run_attempt}`
+                  commentBody += `### ${workflowName} (Run #${latestRun.run_number})\n`;
+                  commentBody += `- 📬 Build number: ${currentYear}.${currentMonth}.${buildId}\n`;
                   artifactsFound = true;
                 }
               }
