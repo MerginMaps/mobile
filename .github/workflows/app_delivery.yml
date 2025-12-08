@@ -67,12 +67,12 @@ jobs:
                 }
               
                 if (artifacts.length > 0) {
-                  commentBody += `### ${workflowName} (Run #${latestRun.run_number})\n`;
-              
                   for (const artifact of artifacts) {
                     commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifact.archive_download_url}) | Expires: ${new Date(artifact.expires_at).toLocaleDateString('en-GB')} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     artifactsFound = true;
                   }
+                } else {
+                  commentBody += `|**${workflowName}**| 📭 |  |  | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                 }
               } else {
                 const currentYear = String(new Date().getFullYear()).slice(-2)
