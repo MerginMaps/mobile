@@ -44,7 +44,7 @@ Rectangle {
 
     MMListView {
       id: toolbar
-      showScrollBar : ScrollBar.AlwaysOff
+      scrollBarPolicy : ScrollBar.AlwaysOff
 
       onWidthChanged: root.recalculate()
       model: toolbarModel
