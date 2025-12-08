@@ -20,6 +20,7 @@
 
 #include "activeproject.h"
 #include "coreutils.h"
+#include "authsync.h"
 
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
@@ -185,6 +186,18 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
+
+    if ( mLocalProject.isValid() )
+    {
+      AuthSync authSync( mLocalProject.projectDir, mQgsProject );
+      authSync.importAuth();
+    }
+
+    QString workspaceUuid =  MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).projectId;
+
+    if ( workspaceUuid != nullptr )
+    {
+    }
 
     updateMapTheme();
     updateActiveLayer();

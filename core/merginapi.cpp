@@ -3691,6 +3691,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
 
+  // TODO check if the xml configuration has been changed
   if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) )
   {
     emit projectReloadNeededAfterSync( projectFullName );
