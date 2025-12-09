@@ -31,7 +31,7 @@ void AuthSync::importAuth()
       bool isSet = mAuthMngr->setMasterPassword( true );
       if ( !isSet )
       {
-        CoreUtils::log("AuthSync manager", "Master password is not set. Could not import auth config." );
+        CoreUtils::log( "AuthSync manager", "Master password is not set. Could not import auth config." );
         QString userMsg = "Could not import authentication configuration for the protected layer(s). Set the master password and reload the project if you want to access the protected layer(s).";
         QMessageBox::warning( nullptr, "Could not load protected layer", userMsg, QMessageBox::Close );
 
