@@ -23,10 +23,6 @@ class AuthSync : public QObject
 
   public:
     explicit AuthSync( const QString &projectDir = QString(), QObject *parent = nullptr );
-
-    QStringList getLayersAuthIds() const;
-    QString getAuthConfigHash( const QStringList &authIds ) const;
-    void exportAuth( const LocalProject &localProject );
     void importAuth();
 
   private:
@@ -37,7 +33,4 @@ class AuthSync : public QObject
 
 
     QString getProjectUuid( const QString &projectDir ) const;
-    void logError( const QString &message )  const;
-    void logInfo( const QString &message ) const ;
-    void logWarning( const QString &message ) const ;
 };
