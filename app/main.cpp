@@ -155,6 +155,8 @@
 #include "qgsapplication.h"
 #include "activeproject.h"
 #include "appsettings.h"
+#include <QtPlugin>
+Q_IMPORT_PLUGIN(opensslPlugin)
 
 static QString getDataDir()
 {

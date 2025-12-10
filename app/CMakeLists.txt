@@ -508,10 +508,29 @@ if (LNX)
   target_link_libraries(MerginMaps PUBLIC QGIS::Core)
 endif ()
 
+# We search in 'lib/Qca/crypto' and 'plugins/crypto'
+find_library(QCA_OSSL_PLUGIN_LIB
+   NAMES qca-ossl libqca-ossl
+    HINTS ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES 
+        lib/Qca/crypto
+        lib/crypto
+        plugins/crypto
+        Qca/crypto
+    NO_DEFAULT_PATH
+)
+
+if (QCA_OSSL_PLUGIN_LIB)
+    message(STATUS "Found QCA OpenSSL Plugin: ${QCA_OSSL_PLUGIN_LIB}")
+else()
+    message(WARNING "Could not find 'qca-ossl'. Authentication might fail.")
+endif()
+
 target_link_libraries(
   MerginMaps
   PUBLIC Qt6Keychain::Qt6Keychain
          qca
+         ${QCA_OSSL_PLUGIN_LIB}
          GDAL::GDAL
          PostgreSQL::PostgreSQL
          Spatialite::Spatialite
