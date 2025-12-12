@@ -27,10 +27,10 @@ SynchronizationManager::SynchronizationManager(
     connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
-    connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&](const QString &projectFullName)
+    connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&]( const QString & projectFullName )
     {
       const SyncProcess &process = mSyncProcesses[projectFullName];
-      if ( process.requestOrigin == SyncOptions::ManualRequest)
+      if ( process.requestOrigin == SyncOptions::ManualRequest )
       {
         emit projectAlreadyOnLatestVersion( projectFullName );
       }
