@@ -10,12 +10,8 @@
 #include "qgsproject.h"
 #include "qgsauthmanager.h"
 #include "qgsapplication.h"
-#include "qgsmaplayer.h"
-#include "qgsproviderregistry.h"
 #include "coreutils.h"
-#include "activeproject.h"
 #include "merginprojectmetadata.h"
-#include "appsettings.h"
 
 class AuthSync : public QObject
 {
@@ -31,7 +27,6 @@ class AuthSync : public QObject
     QString mProjectDir;
     QString mAuthFile;
     QgsAuthManager *mAuthMngr;
-
 
     QString getProjectUuid( const QString &projectDir ) const;
 };
