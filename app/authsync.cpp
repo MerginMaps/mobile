@@ -1,8 +1,5 @@
 #include "authsync.h"
 #include <QFile>
-#include <QRegularExpression>
-#include <QMessageBox>
-#include <QCryptographicHash>
 
 const QString AUTH_CONFIG_FILENAME = "qgis_cfg.xml";
 
@@ -23,7 +20,7 @@ QString AuthSync::getProjectUuid( const QString &projectDir ) const
 bool AuthSync::fileExists( QString path )
 {
   QFileInfo check_file( path );
-  // check if path exists and if yes: Is it really a file and not a directory
+  // check if path exists and it is indeed a file
   if ( check_file.exists() || check_file.isFile() )
   {
     return check_file.isWritable();
@@ -38,10 +35,6 @@ void AuthSync::importAuth()
 {
   if ( fileExists( mAuthFile ) )
   {
-
-    mAuthMngr->setPasswordHelperEnabled( false );
-    mAuthMngr->setMasterPassword( QStringLiteral( "merginMaps" ) );
-
     QString projectId = getProjectUuid( mProjectDir );
 
     bool ok = mAuthMngr->importAuthenticationConfigsFromXml( mAuthFile, projectId, true );

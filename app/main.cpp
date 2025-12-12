@@ -27,6 +27,7 @@
 #include "test/inputtests.h"
 #endif
 #include <qqml.h>
+#include "qgsauthmanager.h"
 #include <qgsmessagelog.h>
 #include "qgsconfig.h"
 #include "qgsproviderregistry.h"
@@ -544,6 +545,12 @@ int main( int argc, char *argv[] )
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
   LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
+
+  // setting up the master password for authentication database retrieval
+  QgsAuthManager *authManager = QgsApplication::authManager();
+  authManager->setPasswordHelperEnabled( false );
+  authManager->setMasterPassword( QStringLiteral( "merginMaps" ) );
+
 
   // build position kit, save active provider to QSettings and load previously active provider
   PositionKit pk;
