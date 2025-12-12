@@ -42,13 +42,39 @@ bool SplittingMapTool::hasValidGeometry() const
   return mPoints.count() >= 2;
 }
 
-bool SplittingMapTool::commitSplit() const
+bool SplittingMapTool::isValidSplit() const
 {
-  if ( !mFeatureToSplit.isValid() )
+  if ( !mFeatureToSplit.isValid() || !hasValidGeometry() )
     return false;
 
-  if ( !hasValidGeometry() )
+  const QgsGeometry featureGeom = mFeatureToSplit.feature().geometry();
+  if ( featureGeom.isNull() || featureGeom.isEmpty() )
     return false;
+
+  // split line must intersect the feature's geometry
+  if ( !mRecordedGeometry.intersects( featureGeom ) )
+    return false;
+
+  QgsPointXY firstPoint( mPoints.first() );
+  QgsPointXY lastPoint( mPoints.last() );
+
+  // start and end points of the line must be outside the feature, ensuring line properly crosses the feature
+  if ( featureGeom.contains( &firstPoint ) || featureGeom.contains( &lastPoint ) )
+    return false;
+
+  return true;
+}
+
+SplittingMapTool::SplitResult SplittingMapTool::commitSplit() const
+{
+  if ( !mFeatureToSplit.isValid() )
+    return Failed;
+
+  if ( !hasValidGeometry() )
+    return Failed;
+
+  if ( !isValidSplit() )
+    return InvalidSplit;
 
   // only the specified featureToSplit shall be split, so we select
   // it here in order to avoid other features being split
@@ -62,9 +88,9 @@ bool SplittingMapTool::commitSplit() const
 
   if ( result == Qgis::GeometryOperationResult::Success )
   {
-    return true;
+    return Success;
   }
-  return false;
+  return Failed;
 }
 
 void SplittingMapTool::rebuildGeometry()

@@ -25,6 +25,15 @@ class SplittingMapTool : public AbstractMapTool
     Q_PROPERTY( FeatureLayerPair featureToSplit READ featureToSplit WRITE setFeatureToSplit NOTIFY featureToSplitChanged )
 
   public:
+
+    enum SplitResult
+    {
+      Success = 0,
+      InvalidSplit = 1, // Split line does not properly cross the feature boundary
+      Failed = 2
+    };
+    Q_ENUM( SplitResult )
+
     explicit SplittingMapTool( QObject *parent = nullptr );
     virtual ~SplittingMapTool() override;
 
@@ -43,11 +52,8 @@ class SplittingMapTool : public AbstractMapTool
     //! Returns true if the captured geometry has enought points for the specified layer
     Q_INVOKABLE bool hasValidGeometry() const;
 
-    /**
-     * Splits the feature with recorded geometry and commits the changes to the layer
-     * Returns true if splitting was successful, false otherwise
-     */
-    Q_INVOKABLE bool commitSplit() const;
+    //! Splits the feature with recorded geometry and commits the changes to the layer
+    Q_INVOKABLE SplittingMapTool::SplitResult commitSplit() const;
 
     // Getters/setters
     const QgsGeometry &recordedGeometry() const;
@@ -64,6 +70,12 @@ class SplittingMapTool : public AbstractMapTool
     void rebuildGeometry();
 
   private:
+    /**
+     * Validates if the recorded geometry can successfully split the feature
+     * Returns true if the split line properly crosses the feature boundary
+     */
+    bool isValidSplit() const;
+
     QVector<QgsPoint> mPoints;
 
     QgsGeometry mRecordedGeometry;
