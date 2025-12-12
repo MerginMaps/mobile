@@ -46,7 +46,6 @@ set(MM_SRCS
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
-    authsync.cpp
     mapsketchingcontroller.cpp
     appsettings.cpp
     autosynccontroller.cpp
@@ -140,7 +139,6 @@ set(MM_HDRS
     mapsketchingcontroller.h
     appsettings.h
     autosynccontroller.h
-    authsync.h
     bluetoothdiscoverymodel.h
     qrcodedecoder.h
     changelogmodel.h
@@ -206,6 +204,7 @@ if (ENABLE_TESTS)
       test/testlinks.cpp
       test/testmaptools.cpp
       test/testmerginapi.cpp
+      test/testauthimport.cpp
       test/testmodels.cpp
       test/testposition.cpp
       test/testrememberattributescontroller.cpp
@@ -232,6 +231,7 @@ if (ENABLE_TESTS)
       test/testlinks.h
       test/testmaptools.h
       test/testmerginapi.h
+      test/testauthimport.cpp
       test/testmodels.h
       test/testposition.h
       test/testrememberattributescontroller.h

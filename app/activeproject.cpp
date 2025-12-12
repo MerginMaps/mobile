@@ -17,14 +17,17 @@
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
+#include "qgsauthmanager.h"
+#include "qgsapplication.h"
 
 #include "activeproject.h"
 #include "coreutils.h"
-#include "authsync.h"
 
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
 #endif
+
+const QString AUTH_CONFIG_FILENAME = "qgis_cfg.xml";
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
@@ -157,8 +160,13 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     mActiveLayer.resetActiveLayer();
 
     // import authentication database before loading the layers
-    AuthSync authSync( mLocalProjectsManager.projectFromProjectFilePath( filePath ).projectDir, mQgsProject );
-    authSync.importAuth();
+    QgsAuthManager *authMngr = QgsApplication::authManager();
+    QString projectDir = mLocalProjectsManager.projectFromProjectFilePath( filePath ).projectDir ;
+    QString authFile = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
+    QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
+
+    bool ok = authMngr->importAuthenticationConfigsFromXml( authFile, projectId, true );
+    CoreUtils::log( "AuthSync manager", QString( "QGIS auth imported: %1" ).arg( ok ? "true" : "false" ) );
 
     res = mQgsProject->read( filePath );
     if ( !res )
