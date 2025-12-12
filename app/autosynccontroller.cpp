@@ -45,7 +45,7 @@ AutosyncController::AutosyncController(
         connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, [&]
         {
           mLastUpdateTime = QDateTime::currentDateTime();
-          emit projectChangeDetected();
+          emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
         } );
       }
     }
@@ -58,7 +58,7 @@ AutosyncController::AutosyncController(
     if ( QDateTime::currentDateTime() - mLastUpdateTime >= std::chrono::milliseconds( SYNC_INTERVAL ) )
     {
       mLastUpdateTime = QDateTime::currentDateTime();
-      emit projectSyncRequired();
+      emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
     }
   } );
   mTimer->start( SYNC_CHECK_TIMEOUT );
@@ -80,6 +80,6 @@ void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::Applica
   if ( isLongerThanSyncInterval )
   {
     mLastUpdateTime = QDateTime::currentDateTime();
-    emit projectSyncRequired();
+    emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
   }
 }

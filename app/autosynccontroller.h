@@ -30,9 +30,7 @@ class AutosyncController : public QObject
     void updateLastUpdateTime();
 
   signals:
-
-    void projectChangeDetected( SyncOptions::RequestOrigin origin = SyncOptions::RequestOrigin::AutomaticRequest );
-    void projectSyncRequired( SyncOptions::RequestOrigin origin = SyncOptions::RequestOrigin::AutomaticRequest );
+    void projectSyncRequested( SyncOptions::RequestOrigin origin );
 
   public slots:
     void checkSyncRequiredAfterAppStateChange( Qt::ApplicationState state );

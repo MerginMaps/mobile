@@ -330,8 +330,7 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
 
     mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
 
-    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, &ActiveProject::requestSync );
-    connect( mAutosyncController.get(), &AutosyncController::projectSyncRequired, this, &ActiveProject::requestSync );
+    connect( mAutosyncController.get(), &AutosyncController::projectSyncRequested, this, &ActiveProject::requestSync );
     connect( this, &ActiveProject::appStateChanged, mAutosyncController.get(), &AutosyncController::checkSyncRequiredAfterAppStateChange );
   }
   else

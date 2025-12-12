@@ -2400,7 +2400,7 @@ void TestMerginApi::testAutosync()
 
   AutosyncController *autosyncController = activeProject.autosyncController();
 
-  QSignalSpy changesSpy( autosyncController, &AutosyncController::projectChangeDetected );
+  QSignalSpy changesSpy( autosyncController, &AutosyncController::projectSyncRequested );
 
   planes->commitChanges();
 
