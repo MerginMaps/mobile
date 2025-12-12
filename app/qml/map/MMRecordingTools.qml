@@ -77,7 +77,7 @@ Item {
     recordingInterval: AppSettings.lineRecordingInterval
     recordingIntervalType: AppSettings.intervalType
 
-    positionKit: __positionKit
+    positionKit: PositionKit
     activeLayer: __activeLayer.vectorLayer
     activeFeature: root.activeFeature
 

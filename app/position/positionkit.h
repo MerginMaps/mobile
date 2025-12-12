@@ -15,6 +15,7 @@
 #include "qgspoint.h"
 #include "qgscoordinatereferencesystem.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AppSettings;
 
@@ -27,10 +28,14 @@ class AppSettings;
 class PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
+
     Q_PROPERTY( double altitude READ altitude NOTIFY altitudeChanged )
+    Q_PROPERTY( double geoidSeparation READ geoidSeparation NOTIFY geoidSeparationChanged )
 
     // auxiliary property providing QgsPoint for lat/long/alt instead of separate properties
     Q_PROPERTY( QgsPoint positionCoordinate READ positionCoordinate NOTIFY positionCoordinateChanged )
@@ -70,6 +75,7 @@ class PositionKit : public QObject
 
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
+    Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
@@ -84,6 +90,7 @@ class PositionKit : public QObject
     double latitude() const;
     double longitude() const;
     double altitude() const;
+    double geoidSeparation() const;
     QgsPoint positionCoordinate() const;
     bool hasPosition() const;
 
@@ -104,6 +111,7 @@ class PositionKit : public QObject
     QString fix() const;
 
     const GeoPosition &position() const;
+    bool isMockPosition() const;
 
     AbstractPositionProvider *positionProvider() const;
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
@@ -112,8 +120,17 @@ class PositionKit : public QObject
     double vdop() const;
     double pdop() const;
 
-    // Coordinate reference system of position - WGS84 (constant)
-    Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
+    // Coordinate reference system - WGS84 (EPSG:4326)
+    static QgsCoordinateReferenceSystem positionCrs2D();
+    // Coordinate reference system - WGS84 + ellipsoid height (EPSG:4979)
+    static QgsCoordinateReferenceSystem positionCrs3DEllipsoidHeight();
+    /**
+     * Coordinate reference system of position (WGS84 + geoid height) - can use custom geoid model
+     * \note by default we use egm96_15 model (EPSG:9707)
+     */
+    static QgsCoordinateReferenceSystem positionCrs3D();
+    // Returns the model name used for elevation transformations
+    Q_INVOKABLE static QString positionCrs3DGeoidModelName();
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
@@ -127,6 +144,7 @@ class PositionKit : public QObject
     void latitudeChanged( double );
     void longitudeChanged( double );
     void altitudeChanged( double );
+    void geoidSeparationChanged( double );
     void positionCoordinateChanged( QgsPoint );
     void hasPositionChanged( bool );
 
@@ -152,6 +170,7 @@ class PositionKit : public QObject
     void positionProviderChanged( AbstractPositionProvider *provider );
 
     void positionChanged( const GeoPosition & );
+    void isMockPositionChanged( bool );
 
     void appSettingsChanged();
 

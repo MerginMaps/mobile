@@ -19,6 +19,8 @@
 
 #include <QTimeZone>
 
+#include "inpututils.h"
+
 
 int AndroidPositionProvider::sLastInstanceId = 0;
 QMap<int, AndroidPositionProvider *> AndroidPositionProvider::sInstances;
@@ -51,15 +53,26 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 
   if ( location.callMethod<jboolean>( "hasAltitude" ) )
   {
-    const jdouble value = location.callMethod<jdouble>( "getAltitude" );
-    if ( !qFuzzyIsNull( value ) )
-      pos.elevation = value;
-  }
+    const jdouble ellipsoidHeight = location.callMethod<jdouble>( "getAltitude" );
+    if ( !qFuzzyIsNull( ellipsoidHeight ) )
+    {
+      bool positionOutsideGeoidModelArea = false;
+      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                       PositionKit::positionCrs3DEllipsoidHeight(),
+                                       PositionKit::positionCrs3D(),
+                                       QgsProject::instance()->transformContext(),
+      {longitude, latitude, ellipsoidHeight},
+      positionOutsideGeoidModelArea );
+      if ( !positionOutsideGeoidModelArea )
+      {
+        pos.elevation = geoidPosition.z();
 
-  // TODO: we are getting ellipsoid elevation here. From API level 34 (Android 14),
-  // there is AltitudeConverter() class in Java that can be used to add MSL altitude
-  // to Location object. How to deal with this correctly? (we could also convert
-  // to MSL (orthometric) altitude ourselves if we add geoid model to our APK
+        const double geoidSeparation = ellipsoidHeight - geoidPosition.z();
+        pos.elevation_diff = geoidSeparation;
+      }
+    }
+  }
 
   // horizontal accuracy
   if ( location.callMethod<jboolean>( "hasAccuracy" ) )
@@ -100,8 +113,18 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     // could also use getBearingAccuracyDegrees() since API level 26 (Android 8.0)
   }
 
-  // could also use isMock() to detect if location is mocked
-  // (may useful to check if 3rd party app is setting it for external GNSS receiver)
+  // detect if location is mocked (useful to check if 3rd party app is setting it for external GNSS receiver)
+  // we only use this to show users that the mock location is active
+  jboolean isMock = false;
+  if ( QtAndroidPrivate::androidSdkVersion() >= 31 )
+  {
+    isMock = location.callMethod<jboolean>( "isMock" );
+  }
+  else
+  {
+    isMock = location.callMethod<jboolean>( "isFromMockProvider" );
+  }
+  pos.isMock = isMock;
 
   // could also use getExtras() to get further details from mocked location
   // (the key/value pairs are vendor-specific, and could include things like DOP,
