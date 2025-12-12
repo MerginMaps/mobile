@@ -20,23 +20,27 @@ QString AuthSync::getProjectUuid( const QString &projectDir ) const
   return MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
 }
 
+bool AuthSync::fileExists( QString path )
+{
+  QFileInfo check_file( path );
+  // check if path exists and if yes: Is it really a file and not a directory
+  if ( check_file.exists() || check_file.isFile() )
+  {
+    return check_file.isWritable();
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void AuthSync::importAuth()
 {
-  QFile authFile( mAuthFile );
-
-  if ( authFile.exists() && QFileInfo::exists( mAuthFile ) )
+  if ( fileExists( mAuthFile ) )
   {
-    if ( !mAuthMngr->masterPasswordIsSet() )
-    {
-      bool isSet = mAuthMngr->setMasterPassword( true );
-      if ( !isSet )
-      {
-        CoreUtils::log( "AuthSync manager", "Master password is not set. Could not import auth config." );
-        QString userMsg = "Could not import authentication configuration for the protected layer(s). Set the master password and reload the project if you want to access the protected layer(s).";
-        QMessageBox::warning( nullptr, "Could not load protected layer", userMsg, QMessageBox::Close );
 
-      }
-    }
+    mAuthMngr->setPasswordHelperEnabled( false );
+    mAuthMngr->setMasterPassword( QStringLiteral( "merginMaps" ) );
 
     QString projectId = getProjectUuid( mProjectDir );
 

@@ -156,6 +156,10 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit projectWillBeReloaded();
     mActiveLayer.resetActiveLayer();
 
+    // import authentication database before loading the layers
+    AuthSync authSync( mLocalProjectsManager.projectFromProjectFilePath( filePath ).projectDir, mQgsProject );
+    authSync.importAuth();
+
     res = mQgsProject->read( filePath );
     if ( !res )
     {
@@ -187,17 +191,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
 
-    if ( mLocalProject.isValid() )
-    {
-      AuthSync authSync( mLocalProject.projectDir, mQgsProject );
-      authSync.importAuth();
-    }
-
-    QString workspaceUuid =  MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).projectId;
-
-    if ( workspaceUuid != nullptr )
-    {
-    }
 
     updateMapTheme();
     updateActiveLayer();

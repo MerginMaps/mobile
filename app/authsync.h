@@ -24,6 +24,7 @@ class AuthSync : public QObject
   public:
     explicit AuthSync( const QString &projectDir = QString(), QObject *parent = nullptr );
     void importAuth();
+    bool fileExists( QString path );
 
   private:
     QgsProject *mProject;
