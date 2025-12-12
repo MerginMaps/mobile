@@ -204,6 +204,7 @@ if (ENABLE_TESTS)
       test/testlinks.cpp
       test/testmaptools.cpp
       test/testmerginapi.cpp
+      test/testauthimport.cpp
       test/testmodels.cpp
       test/testposition.cpp
       test/testrememberattributescontroller.cpp
@@ -230,6 +231,7 @@ if (ENABLE_TESTS)
       test/testlinks.h
       test/testmaptools.h
       test/testmerginapi.h
+      test/testauthimport.cpp
       test/testmodels.h
       test/testposition.h
       test/testrememberattributescontroller.h
@@ -506,10 +508,23 @@ if (LNX)
   target_link_libraries(MerginMaps PUBLIC QGIS::Core)
 endif ()
 
+find_library(
+  QCA_OSSL_PLUGIN_LIB
+  NAMES qca-ossl
+  PATH_SUFFIXES lib/Qca/crypto
+)
+
+if (QCA_OSSL_PLUGIN_LIB)
+  message(STATUS "Found QCA OpenSSL Plugin: ${QCA_OSSL_PLUGIN_LIB}")
+else ()
+  message(WARNING "Could not find 'qca-ossl'. Authentication might fail.")
+endif ()
+
 target_link_libraries(
   MerginMaps
   PUBLIC Qt6Keychain::Qt6Keychain
          qca
+         ${QCA_OSSL_PLUGIN_LIB}
          GDAL::GDAL
          PostgreSQL::PostgreSQL
          Spatialite::Spatialite

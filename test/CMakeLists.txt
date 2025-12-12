@@ -10,6 +10,7 @@ set(MM_TESTS
     testLinks
     testUtils
     testAttributePreviewController
+    testAuthImport
     testMerginApi
     testAttributeController
     testIdentifyKit
