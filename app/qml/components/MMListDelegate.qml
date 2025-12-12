@@ -40,7 +40,7 @@ Item {
 
   property real verticalSpacing: root.secondaryText ? __style.margin8 : __style.margin20
 
-  implicitWidth: ListView?.view?.width ?? 0 // in case ListView is injected as attached property (usually it is)
+  implicitWidth: ListView?.view?.width - ListView?.view?.scrollBarWidth ?? 0  // in case ListView is injected as attached property (usually it is)
   implicitHeight: contentLayout.implicitHeight
   height: visible ? implicitHeight : 0.1 // hide invisible items, for some reason setting 0 does not work ¯\_(ツ)_/¯
 
