@@ -64,6 +64,7 @@ class SynchronizationManager : public QObject
     void syncFinished( const QString &projectFullName, bool success, int newVersion, bool reloadNeeded );
 
     void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
+    void projectAlreadyOnLatestVersion( const QString &projectFullName );
 
   public slots:
 

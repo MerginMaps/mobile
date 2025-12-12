@@ -20,13 +20,21 @@ SynchronizationManager::SynchronizationManager(
 {
   if ( mMerginApi )
   {
-    QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
-    QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
-    QObject::connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
-    QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
-    QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
+    connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
+    connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
+    connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
+    connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
+    connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&](const QString &projectFullName)
+    {
+      const SyncProcess &process = mSyncProcesses[projectFullName];
+      if ( process.requestOrigin == SyncOptions::ManualRequest)
+      {
+        emit projectAlreadyOnLatestVersion( projectFullName );
+      }
+    } );
   }
 }
 
