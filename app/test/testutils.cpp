@@ -121,8 +121,8 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 
 QString TestUtils::generateUsername()
 {
-  const char* ciId = getenv( "CI_JOB_ID" );
-  QString prefix = ciId == nullptr ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId);
+  const char *ciId = getenv( "CI_JOB_ID" );
+  QString prefix = ciId == nullptr ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId );
 
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
@@ -133,7 +133,7 @@ QString TestUtils::generateUsername()
 QString TestUtils::generateEmail()
 {
   QString ciId = getenv( "CI_JOB_ID" );
-  QString prefix = ciId.isEmpty() ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId);
+  QString prefix = ciId.isEmpty() ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId );
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
   return QStringLiteral( "%1-autotest+%2@lutraconsulting.co.uk" ).arg( prefix, uniqename );
