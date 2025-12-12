@@ -603,9 +603,9 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
   {
-    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()

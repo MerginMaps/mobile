@@ -28,6 +28,7 @@ struct SyncProcess
   bool awaitsRetry; // not currently being synced, but awaits to be synced
   int retriesCount = 0;
   SyncOptions::Strategy strategy = SyncOptions::Singleshot;
+  SyncOptions::RequestOrigin requestOrigin;
   // In future: current state (push/pull)
 };
 
@@ -70,13 +71,17 @@ class SynchronizationManager : public QObject
      * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
      *
      * \param project Project struct instance
-     * \param withAut Bears an information whether authorization should be included in sync requests.
+     * \param auth Bears an information whether authorization should be included in sync requests.
      *                Authorization can be omitted for pull of public projects
+     * \param strategy Describes whether sync will be tried again after temporary error
+     * \param requestOrigin Flags if the request is coming from user or autosync controller
      */
-    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
+    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
+                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
 
     //! Overloaded method, allows to sync with Project instance. Can be used in case of first download of remote project (it has invalid LocalProject info).
-    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot );
+    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
+                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
 
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );

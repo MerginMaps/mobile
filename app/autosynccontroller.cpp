@@ -24,7 +24,7 @@ AutosyncController::AutosyncController(
 )
   : QObject( parent )
   , mQgsProject( openedQgsProject )
-// we set the current timestamp as we sync on project open
+// set to current timestamp as we sync with project open
   , mLastUpdateTime( QDateTime::currentDateTime() )
 {
   if ( !mQgsProject )
@@ -51,7 +51,7 @@ AutosyncController::AutosyncController(
     }
   }
 
-  //every 10 seconds check if last sync was more than a minute ago and sync if it's true
+  //every 10 seconds check if last sync was a 60 seconds or more ago and sync if it's true
   mTimer = std::make_unique<QTimer>( this );
   connect( mTimer.get(), &QTimer::timeout, this, [&]
   {
@@ -62,6 +62,11 @@ AutosyncController::AutosyncController(
     }
   } );
   mTimer->start( SYNC_CHECK_TIMEOUT );
+}
+
+void AutosyncController::updateLastUpdateTime()
+{
+  mLastUpdateTime = QDateTime::currentDateTime();
 }
 
 void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::ApplicationState state )

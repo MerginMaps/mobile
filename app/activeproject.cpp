@@ -344,9 +344,13 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
   }
 }
 
-void ActiveProject::requestSync()
+void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin )
 {
-  emit syncActiveProject( mLocalProject );
+  if ( requestOrigin == SyncOptions::RequestOrigin::ManualRequest )
+  {
+    mAutosyncController->updateLastUpdateTime();
+  }
+  emit syncActiveProject( mLocalProject, requestOrigin );
 }
 
 void ActiveProject::setMapSettings( InputMapSettings *mapSettings )

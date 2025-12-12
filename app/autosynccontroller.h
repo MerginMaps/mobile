@@ -13,6 +13,8 @@
 #include <QDateTime>
 #include <QTimer>
 
+#include "synchronizationoptions.h"
+
 class QgsProject;
 
 class AutosyncController : public QObject
@@ -24,10 +26,13 @@ class AutosyncController : public QObject
     explicit AutosyncController( QgsProject *openedQgsProject, QObject *parent = nullptr );
     ~AutosyncController() override = default;
 
+    // Set mLastUpdateTime to "now", triggered by manual sync
+    void updateLastUpdateTime();
+
   signals:
 
-    void projectChangeDetected();
-    void projectSyncRequired();
+    void projectChangeDetected( SyncOptions::RequestOrigin origin = SyncOptions::RequestOrigin::AutomaticRequest );
+    void projectSyncRequired( SyncOptions::RequestOrigin origin = SyncOptions::RequestOrigin::AutomaticRequest );
 
   public slots:
     void checkSyncRequiredAfterAppStateChange( Qt::ApplicationState state );

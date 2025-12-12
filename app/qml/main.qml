@@ -1052,7 +1052,7 @@ ApplicationWindow {
 
     function onProjectAlreadyOnLatestVersion( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === __activeProject.projectFullName() && !AppSettings.autosyncAllowed )
       {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
