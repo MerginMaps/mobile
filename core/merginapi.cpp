@@ -64,6 +64,9 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   , mUserAuth( new MerginUserAuth )
   , mManager( new QNetworkAccessManager( this ) )
 {
+  // set transfer timeout (30s) for network manager, so there isn't endless hang in offline mode
+  mManager->setTransferTimeout();
+
   // load cached data if there are any
   QSettings cache;
   if ( cache.contains( QStringLiteral( "Input/apiRoot" ) ) )
