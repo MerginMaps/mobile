@@ -347,7 +347,10 @@ void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin 
 {
   if ( requestOrigin == SyncOptions::RequestOrigin::ManualRequest )
   {
-    mAutosyncController->updateLastUpdateTime();
+    if ( mAutosyncController )
+    {
+      mAutosyncController->updateLastUpdateTime();
+    }
   }
   emit syncActiveProject( mLocalProject, requestOrigin );
 }
