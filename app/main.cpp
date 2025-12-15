@@ -560,10 +560,10 @@ int main( int argc, char *argv[] )
   // after server ping is done
   if ( activeProject.autosyncController() )
   {
-    QObject::connect(ma.get(), &MerginApi::pingMerginFinished, &lambdaContext, [&activeProject]
+    QObject::connect( ma.get(), &MerginApi::pingMerginFinished, &lambdaContext, [&activeProject]
     {
-      activeProject.requestSync(SyncOptions::AutomaticRequest);
-    }, Qt::SingleShotConnection);
+      activeProject.requestSync( SyncOptions::AutomaticRequest );
+    }, Qt::SingleShotConnection );
   }
 
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
