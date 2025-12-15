@@ -327,6 +327,7 @@ MMComponents.MMDrawer {
               }
               __inputUtils.formatNumber( __positionKit.geoidSeparation, 2 ) + " m"
             }
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
 
             alignmentRight: Positioner.index % 2 === 1
           }
