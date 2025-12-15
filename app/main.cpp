@@ -156,6 +156,7 @@
 #include "qgsapplication.h"
 #include "activeproject.h"
 #include "appsettings.h"
+// required for QGIS authentication manager API
 #include <QtPlugin>
 Q_IMPORT_PLUGIN( opensslPlugin )
 
