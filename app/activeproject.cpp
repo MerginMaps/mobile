@@ -328,7 +328,7 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
       mAutosyncController.reset();
     }
 
-    mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
+    mAutosyncController = std::make_unique<AutosyncController>( mQgsProject, this );
 
     connect( mAutosyncController.get(), &AutosyncController::projectSyncRequested, this, &ActiveProject::requestSync );
     connect( this, &ActiveProject::appStateChanged, mAutosyncController.get(), &AutosyncController::checkSyncRequiredAfterAppStateChange );
@@ -347,7 +347,10 @@ void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin 
 {
   if ( requestOrigin == SyncOptions::RequestOrigin::ManualRequest )
   {
-    mAutosyncController->updateLastUpdateTime();
+    if ( mAutosyncController )
+    {
+      mAutosyncController->updateLastUpdateTime();
+    }
   }
   emit syncActiveProject( mLocalProject, requestOrigin );
 }
