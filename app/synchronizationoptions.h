@@ -11,7 +11,6 @@
 #define SYNCHRONIZATIONOPTIONS_H
 
 #include <QObject>
-#include <QNetworkReply>
 
 class SyncOptions
 {
@@ -25,14 +24,21 @@ class SyncOptions
       Singleshot = 0, //! try to sync once, finishes on first failure
       Retry //! retries up to 2 times to repeat sync on failure
     };
-    Q_ENUMS( Strategy );
+    Q_ENUM( Strategy );
 
     enum Authorization
     {
       Authorized = 0, //! Use authorization for synchronization
       AuthOptional //! Use authorization only when we have it, otherwise continue sync even signed out
     };
-    Q_ENUMS( Authorization );
+    Q_ENUM( Authorization );
+
+    enum RequestOrigin
+    {
+      ManualRequest = 0, //! the sync request was triggered by user
+      AutomaticRequest //! the sync request was triggered by autosync
+    };
+    Q_ENUM( RequestOrigin );
 };
 
 #endif // SYNCHRONIZATIONOPTIONS_H

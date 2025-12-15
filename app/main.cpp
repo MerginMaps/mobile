@@ -603,9 +603,9 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
   {
-    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -649,6 +649,7 @@ int main( int argc, char *argv[] )
   } );
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &activeProject, &ActiveProject::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );

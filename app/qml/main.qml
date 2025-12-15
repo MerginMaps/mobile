@@ -996,6 +996,14 @@ ApplicationWindow {
         }
       }
     }
+
+    function onProjectAlreadyOnLatestVersion( projectFullName )
+    {
+      if ( projectFullName === __activeProject.projectFullName() )
+      {
+        __notificationModel.addSuccess( qsTr( "Up to date" ) )
+      }
+    }
   }
 
   Connections {
@@ -1047,14 +1055,6 @@ ApplicationWindow {
       if ( projectFullName === __activeProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
       {
         missingAuthDialog.open()
-      }
-    }
-
-    function onProjectAlreadyOnLatestVersion( projectFullName )
-    {
-      if ( projectFullName === __activeProject.projectFullName() )
-      {
-        __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
     }
 

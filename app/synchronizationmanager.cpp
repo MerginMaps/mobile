@@ -20,23 +20,32 @@ SynchronizationManager::SynchronizationManager(
 {
   if ( mMerginApi )
   {
-    QObject::connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
-    QObject::connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
-    QObject::connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
-    QObject::connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
-    QObject::connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
-    QObject::connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
+    connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
+    connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
+    connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
+    connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
+    connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&]( const QString & projectFullName )
+    {
+      const SyncProcess &process = mSyncProcesses[projectFullName];
+      if ( process.requestOrigin == SyncOptions::ManualRequest )
+      {
+        emit projectAlreadyOnLatestVersion( projectFullName );
+      }
+    } );
   }
 }
 
 SynchronizationManager::~SynchronizationManager() = default;
 
-void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
+void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy, const SyncOptions::RequestOrigin
+    requestOrigin )
 {
   if ( project.isLocal() )
   {
-    syncProject( project.local, auth, strategy );
+    syncProject( project.local, auth, strategy, requestOrigin );
     return;
   }
 
@@ -48,12 +57,14 @@ void SynchronizationManager::syncProject( const Project &project, SyncOptions::A
     SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
     process.pending = true;
     process.strategy = strategy;
+    process.requestOrigin = requestOrigin;
 
     emit syncStarted( project.fullName() );
   }
 }
 
-void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy )
+void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy, const SyncOptions::
+    RequestOrigin requestOrigin )
 {
   if ( !project.isValid() )
   {
@@ -62,7 +73,10 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
 
   if ( !project.hasMerginMetadata() )
   {
-    emit syncError( project.id(), SynchronizationError::NotAMerginProject );
+    if ( requestOrigin == SyncOptions::ManualRequest )
+    {
+      emit syncError( project.id(), SynchronizationError::NotAMerginProject );
+    }
     return;
   }
 
@@ -97,6 +111,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
     SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
     process.pending = true;
     process.strategy = strategy;
+    process.requestOrigin = requestOrigin;
 
     emit syncStarted( projectFullName );
   }
@@ -247,7 +262,7 @@ void SynchronizationManager::onProjectCreated( const QString &projectFullName, b
 void SynchronizationManager::onProjectSyncFailure(
   const QString &message,
   const QString &topic,
-  int errorCode,
+  const int errorCode,
   const QString &projectFullName )
 {
   if ( projectFullName.isEmpty() )
@@ -264,14 +279,18 @@ void SynchronizationManager::onProjectSyncFailure(
 
   SyncProcess &process = mSyncProcesses[projectFullName];
 
-  SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
+  const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
 
-  // We only retry twice
-  bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
-                          process.retriesCount < 2 &&
-                          !SynchronizationError::isPermanent( error );
+  // We only retry twice for synchronization requested by user
+  const bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
+                                process.retriesCount < 2 &&
+                                !SynchronizationError::isPermanent( error ) &&
+                                process.requestOrigin == SyncOptions::ManualRequest;
 
-  emit syncError( projectFullName, error, eligibleForRetry, message );
+  if ( process.requestOrigin == SyncOptions::ManualRequest )
+  {
+    emit syncError( projectFullName, error, eligibleForRetry, message );
+  }
 
   if ( eligibleForRetry )
   {
@@ -288,8 +307,6 @@ void SynchronizationManager::onProjectSyncFailure(
   {
     mSyncProcesses.remove( projectFullName );
     emit syncFinished( projectFullName, false, -1, false );
-
-    return;
   }
 }
 
