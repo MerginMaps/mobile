@@ -11,7 +11,6 @@
 
 #include "testsketching.h"
 #include "testmerginapi.h"
-#include "testauthimport.h"
 #include "testlinks.h"
 
 #include "testutilsfunctions.h"
@@ -205,11 +204,6 @@ int InputTests::runTest() const
   {
     TestMultiEditManager multiEditManagerTest;
     nFailed = QTest::qExec( &multiEditManagerTest, mTestArgs );
-  }
-  else if ( mTestRequested == "--testAuthImport" )
-  {
-    TestAuthImport authImportTest;
-    nFailed = QTest::qExec( &authImportTest, mTestArgs );
   }
   else
   {

@@ -159,14 +159,22 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit projectWillBeReloaded();
     mActiveLayer.resetActiveLayer();
 
-    // import authentication database before loading the layers
-    QgsAuthManager *authMngr = QgsApplication::authManager();
-    QString projectDir = mLocalProjectsManager.projectFromProjectFilePath( filePath ).projectDir ;
+    // path to the authenticationn configuration file
+    QFileInfo fileInfo( filePath );
+    QString projectDir  = fileInfo.absolutePath();
     QString authFile = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
-    QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
+    QFileInfo cfgFile( authFile );
+    if ( cfgFile.exists() && cfgFile.isFile() )
+    {
+      // clear the authentication database before importing a new one, if it exists
+      QgsAuthManager *authMngr = QgsApplication::authManager();
+      authMngr->removeAllAuthenticationConfigs();
 
-    bool ok = authMngr->importAuthenticationConfigsFromXml( authFile, projectId, true );
-    CoreUtils::log( "AuthSync manager", QString( "QGIS auth imported: %1" ).arg( ok ? "true" : "false" ) );
+      // import the new configuration, if it exists.
+      QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
+      bool ok = authMngr->importAuthenticationConfigsFromXml( authFile, projectId, true );
+      CoreUtils::log( "Database authentication: ", QString( "QGIS auth imported: %1" ).arg( ok ? "true" : "false" ) );
+    }
 
     res = mQgsProject->read( filePath );
     if ( !res )
