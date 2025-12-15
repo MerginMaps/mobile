@@ -227,7 +227,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mAppSettings.autosyncAllowed() )
   {
     setAutosyncEnabled( true );
-    requestSync();
+    requestSync( SyncOptions::AutomaticRequest );
   }
 
   // in case tracking is running, we want to show the UI

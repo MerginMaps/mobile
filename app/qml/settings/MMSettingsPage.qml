@@ -168,7 +168,7 @@ MMPage {
       MMSettingsComponents.MMSettingsSwitch {
         width: parent.width
         title: qsTr("Automatically sync changes")
-        description: qsTr("Each time you save changes, the app will sync automatically")
+        description: qsTr("Your project is synced automatically to keep you up to date")
         checked: AppSettings.autosyncAllowed
 
         onClicked: AppSettings.autosyncAllowed = !checked
