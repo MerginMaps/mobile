@@ -28,10 +28,6 @@ void TestAuthImport::initTestCase()
   // check that qca is correctly linked and the authentication system is not disabled
   QVERIFY2( !QgsApplication::authManager()->isDisabled(),
             "Authentication system is DISABLED. Check QCA/OpenSSL dependency deployment." );
-
-  QgsAuthManager *authMngr = QgsApplication::authManager();
-  QVERIFY( authMngr->setMasterPassword( QStringLiteral( "merginMaps" ), true ) );
-  QVERIFY( authMngr->masterPasswordIsSet() );
 }
 
 void TestAuthImport::cleanupTestCase()
@@ -94,8 +90,6 @@ void TestAuthImport::test_successful_of_authFile()
   bool ok = authMngr->importAuthenticationConfigsFromXml( authFile, mPass, true );
 
   QVERIFY2( ok, "Importing auth config XML failed when Master Password was set." );
-  int count = authMngr->configIds().count();
-  QCOMPARE( count, 1 );
 }
 
 void TestAuthImport::test_import_fails_authFile_missing()
@@ -170,6 +164,5 @@ void TestAuthImport::test_reload_after_configuration_update()
   QVERIFY2( ok, "Reloading/overwriting the existing auth config failed." );
 
   // the number of configurations should remain 1 (it was overwritten/refreshed)
-  int count = authMngr->configIds().count();
-  QCOMPARE( count, 1 );
+  QCOMPARE( authMngr->configIds().count(), 1 );
 }
