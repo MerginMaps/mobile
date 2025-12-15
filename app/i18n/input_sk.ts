@@ -2145,7 +2145,7 @@ a preto nebude pridaný do projektu.</translation>
     <message numerus="yes">
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
-        <translation><numerusform>%n vybraný objekt</numerusform><numerusform>%n vybraných objektov</numerusform><numerusform>%n vybraných objektov</numerusform><numerusform>%n vybraných objektov</numerusform></translation>
+        <translation><numerusform>%n vybraný objekt</numerusform><numerusform>%n vybrané objekty</numerusform><numerusform>%n vybraných objektov</numerusform><numerusform>%n vybraných objektov</numerusform></translation>
     </message>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
