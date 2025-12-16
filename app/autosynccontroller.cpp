@@ -76,7 +76,7 @@ void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::Applica
     mTimer->stop();
     return;
   }
-  if ( !mTimer->isActive())
+  if ( !mTimer->isActive() )
   {
     mTimer->start();
   }
