@@ -87,14 +87,12 @@ MMFormComboboxBaseEditor {
 
       emptyStateDelegate: Item {
         width: parent.width
-        height: noItemsText.implicitHeight
-        anchors.centerIn: parent
-
+        height: noItemsText.implicitHeight + __style.margin40
+      
         MMComponents.MMText {
           id: noItemsText
           text: qsTr( "No items" )
           anchors.centerIn: parent
-          topPadding: __style.margin20
         }
       }
 

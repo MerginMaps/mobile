@@ -66,7 +66,6 @@ MMDrawer {
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
 
       Item {
-        id: featureList
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
 
