@@ -2502,7 +2502,7 @@ void TestMerginApi::testCreateWorkspace()
   // we need to register new user for tests and assign its credentials to env vars
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
-  QString username = email.left(email.lastIndexOf('@'));
+  QString username = email.left( email.lastIndexOf( '@' ) );
 
   qDebug() << "REGISTERING NEW TEST USER WITH EMAIL:" << email;
 
