@@ -556,6 +556,16 @@ int main( int argc, char *argv[] )
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
 
+  // the automatic sync request on cold start will fail on MerginApiStatus not being initialized yet, so we call it again
+  // after server ping is done
+  if ( activeProject.autosyncController() )
+  {
+    QObject::connect( ma.get(), &MerginApi::pingMerginFinished, &lambdaContext, [&activeProject]
+    {
+      activeProject.requestSync( SyncOptions::AutomaticRequest );
+    }, Qt::SingleShotConnection );
+  }
+
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
   {
     QString msg;
