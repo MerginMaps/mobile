@@ -157,6 +157,11 @@ if(VCPKG_CROSSCOMPILING)
    list(APPEND QGIS_OPTIONS -DQT_HOST_PATH_CMAKE_DIR:PATH=${CURRENT_HOST_INSTALLED_DIR}/share)
 endif()
 
+# For desktop builds, build QGIS as RelWithDebInfo for better debugging 
+if (TARGET_TRIPLET STREQUAL "arm64-osx" OR TARGET_TRIPLET STREQUAL "x64-linux")
+    list(APPEND QGIS_OPTIONS_RELEASE -DCMAKE_BUILD_TYPE=RelWithDebInfo)
+endif ()
+
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
     #PREFER_NINJA
