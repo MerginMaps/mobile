@@ -76,6 +76,11 @@ void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::Applica
     mTimer->stop();
     return;
   }
+  if ( !mTimer->isActive())
+  {
+    mTimer->start();
+  }
+
   const bool isLongerThanSyncInterval = QDateTime::currentDateTime() - mLastUpdateTime >= std::chrono::milliseconds( SYNC_INTERVAL );
   if ( isLongerThanSyncInterval )
   {
