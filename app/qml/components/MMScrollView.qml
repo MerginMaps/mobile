@@ -13,8 +13,8 @@ import QtQml
 ScrollView {
     id: root
 
-    readonly property int scrollBarWidth: __inputUtils.isMobilePlatform ? 0 : __style.margin10 
-    property bool scrollBarPolicy:  root.ScrollBar.vertical.policy
+    readonly property int scrollBarWidth: __inputUtils.isMobilePlatform() ? 0 : __style.margin10 
+    property bool scrollBarPolicy:  verticalScrollBar.policy
 
 
     contentWidth: availableWidth - scrollBarWidth
@@ -25,8 +25,11 @@ ScrollView {
     // - both 'policy' and 'visible' properties need to be set, with 'policy' set to AlwaysOn.
     // - the use the 'AsNeeded' policy will make the scroll bar hide when not focused or in use,
     // and only appear after the user starts scrolling.
-    ScrollBar.vertical.policy: __inputUtils.isMobilePlatform ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
-    ScrollBar.vertical.visible: contentHeight > availableHeight ? true  : false
-    ScrollBar.vertical.opacity: active ? 0.7 : 0.4
-    ScrollBar.vertical.width: scrollBarWidth
+     ScrollBar.vertical {
+      id : verticalScrollBar
+      policy: __inputUtils.isMobilePlatform() ? ScrollBar.AlwaysOff : ScrollBar.AlwaysOn
+      visible: contentHeight > availableHeight ? true  : false
+      opacity: active ? 0.7 : 0.4
+      width: scrollBarWidth
+    }
 }
