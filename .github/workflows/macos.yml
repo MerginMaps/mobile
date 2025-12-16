@@ -25,7 +25,6 @@ env:
   XC_VERSION: ${{ '16.4' }}
   DEPLOYMENT_TARGET: '11.0'
   TRIPLET: arm64-osx
-  CI_JOB_ID: macos
 
 concurrency:
   group: ci-${{github.ref}}-macos

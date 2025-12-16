@@ -43,7 +43,6 @@ namespace TestUtils
   bool needsToAuthorizeAgain( MerginApi *api, const QString &username );
   void generateRandomUser( MerginApi *api, QString &username, QString &password );
 
-  QString generateUsername();
   QString generateEmail();
   QString generatePassword();
   /*

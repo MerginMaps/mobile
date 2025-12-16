@@ -118,25 +118,19 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
   return false;
 }
 
-
-QString TestUtils::generateUsername()
-{
-  const char *ciId = getenv( "CI_JOB_ID" );
-  QString prefix = ciId == nullptr ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId );
-
-  QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-
-  return QStringLiteral( "%1-%2" ).arg( prefix, uniqename );
-}
-
 QString TestUtils::generateEmail()
 {
-  QString ciId = getenv( "CI_JOB_ID" );
+    #ifdef Q_OS_MACOS
+  QString ciId = "mc";
+  #elif Q_OS_LINUX
+  QString ciId = "lx";
+  #else
+  QString ciId = "";
+  #endif
   QString prefix = ciId.isEmpty() ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId );
   QDateTime time = QDateTime::currentDateTime();
   QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "%1-autotest+%2@lutraconsulting.co.uk" ).arg( prefix, uniqename );
+  return QStringLiteral( "%1-%2@lutraconsulting.co.uk" ).arg( prefix, uniqename );
 }
 
 QString TestUtils::generatePassword()
@@ -150,7 +144,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   // generate the test run-specific user details
   QString email = generateEmail();
   password = generatePassword();
-  username = generateUsername();
+  username = email.left(email.lastIndexOf('@'));
 
   // create the account for the test run user
   api->clearAuth();
@@ -198,7 +192,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   })" ).arg( TEST_WORKSPACE_STORAGE_SIZE ).arg( TEST_WORKSPACE_PROJECT_NUMBER );
 
   api->updateWorkspaceService( workspaceId, payload );
-  bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
+  bool workspaceStorageModified = wsStorageSpy. wait( TestUtils::LONG_REPLY );
   if ( workspaceStorageModified )
   {
     qDebug() << "Updated the storage limit" << username;
