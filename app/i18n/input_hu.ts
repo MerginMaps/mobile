@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A térképnek és az eszközöknek meghatározatlan viselkedése lesz!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer</source>
         <translation>Réteg</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Unable to load source </source>
         <translation>Nem lehet betölteni a forrást </translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A rögzítés eszközöknek meghatározatlan viselkedése lesz.</translation>
     </message>
@@ -237,67 +237,36 @@ Nem lesz hozzáadva a projekthez.</translation>
         <source>just now</source>
         <translation>éppen most</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minutes ago</source>
-        <translation>%1 perccel ezelőtt</translation>
+        <source>%n minute(s) ago</source>
+        <translation><numerusform>%n perccel ezelőtt</numerusform><numerusform>%n perccel ezelőtt</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minute ago</source>
-        <translation>%1 perccel ezelőtt</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hours ago</source>
-        <translation>%1 órával ezelőtt</translation>
+        <source>%n hour(s) ago</source>
+        <translation><numerusform>%n órával ezelőtt</numerusform><numerusform>%n órával ezelőtt</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hour ago</source>
-        <translation>%1 órával ezelőtt</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 days ago</source>
-        <translation>%1 nappal ezelőtt</translation>
+        <source>%n day(s) ago</source>
+        <translation><numerusform>%n nappal ezelőtt</numerusform><numerusform>%n nappal ezelőtt</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 day ago</source>
-        <translation>%1 nappal ezelőtt</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 weeks ago</source>
-        <translation>%1 héttel ezelőtt</translation>
+        <source>%n week(s) ago</source>
+        <translation><numerusform>%n héttel ezelőtt</numerusform><numerusform>%n héttel ezelőtt</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 week ago</source>
-        <translation>%1 héttel ezelőtt</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 months ago</source>
-        <translation>%1 hónappal ezelőtt</translation>
+        <source>%n month(s) ago</source>
+        <translation><numerusform>%n hónappal ezelőtt</numerusform><numerusform>%n hónappal ezelőtt</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 month ago</source>
-        <translation>%1 hónappal ezelőtt</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 years ago</source>
-        <translation>%1 évvel ezelőtt</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 year ago</source>
-        <translation>%1 évvel ezelőtt</translation>
+        <source>%n year(s) ago</source>
+        <translation><numerusform>%n évvel ezelőtt</numerusform><numerusform>%n évvel ezelőtt</numerusform></translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1537"/>
@@ -339,15 +308,15 @@ Nem lesz hozzáadva a projekthez.</translation>
         <source>used dp scale: %1</source>
         <translation>használt dp skála: %1</translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2079"/>
-        <source>You need to add at least %1 point(s) to every part.</source>
-        <translation>Minden részhez legalább %1 pontot kell hozzáadnia.</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2163"/>
+        <source>You need to add at least %n point(s) to every part.</source>
+        <translation><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2083"/>
-        <source>You need to add at least %1 point(s).</source>
-        <translation>Legalább %1 pontot kell hozzáadnia.</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2167"/>
+        <source>You need to add at least %n point(s).</source>
+        <translation><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform></translation>
     </message>
 </context>
 <context>
@@ -701,7 +670,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A munkaterület nevére jó ötlet lehet a csapatának vagy szervezetének a neve</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="126"/>
         <source>Create workspace</source>
         <translation>Munkaterület létrehozása</translation>
     </message>
@@ -770,7 +739,7 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
         <source>Add feature</source>
         <translation>Elem hozzáadása</translation>
     </message>
@@ -791,22 +760,22 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormDeleteFeatureDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Delete feature</source>
         <translation>Elem törlése</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Biztos törölni szeretné ezt az elemet?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="24"/>
         <source>Yes, I want to delete</source>
         <translation>Igen, törlöm</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="25"/>
         <source>No, thanks</source>
         <translation>Nem, köszönöm</translation>
     </message>
@@ -1013,6 +982,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
@@ -1092,7 +1062,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Nincs beállítva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="327"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <source>Geoid separation</source>
+        <translation>Geoid elválasztás</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
@@ -1275,12 +1250,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Diagnosztikai napló</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Sending...</source>
         <translation>Küldés...</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Send to developers</source>
         <translation>Küldés a fejlesztőknek</translation>
     </message>
@@ -2163,24 +2138,29 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
         <source>Select features</source>
         <translation>Elemek kiválasztása</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n elem kiválasztva</numerusform><numerusform>%n elem kiválasztva</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
         <source>on layer %1</source>
         <translation>%1 rétegen</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="114"/>
         <source>Edit</source>
         <translation>Szerkesztés</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="120"/>
+        <source>Delete</source>
+        <translation>Törlés</translation>
     </message>
 </context>
 <context>
@@ -2314,8 +2294,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
-        <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Minden alkalommal, amikor menti a módosításokat, az alkalmazás automatikusan szinkronizálja azokat</translation>
+        <source>Your project is synced automatically to keep you up to date</source>
+        <translation>A projektje automatikusan szinkronizálódik, hogy naprakész maradhasson</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
@@ -2429,8 +2409,8 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
-        <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Kérjük, győződjön meg arról, hogy a felosztó vonal keresztezi az elemet. Az elem geometriájának érvényesnek kell lennie a felosztáshoz.</translation>
+        <source>Ensure that your split line intersects the feature properly and that the feature’s geometry is valid.</source>
+        <translation>Győződjön meg arról, hogy a felosztó vonal megfelelően metszi az elemet, és hogy az elem geometriája érvényes.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
@@ -2456,7 +2436,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Kész</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="112"/>
+        <source>The split line does not properly cross the feature. Please adjust the line to cross the feature boundary.</source>
+        <translation>Az felosztó vonal nem metszi megfelelően az elemet. Kérjük, igazítsa a vonalat, hogy átmenjen az elem határán.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSplittingTools.qml" line="120"/>
         <source>You need to add at least 2 points.</source>
         <translation>Legalább 2 pontra van szükség.</translation>
     </message>
@@ -2764,116 +2749,116 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="238"/>
+        <location filename="../../core/merginapi.cpp" line="244"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Kérjük, távolítson el néhány projektet, mivel az alkalmazás jelenleg
 legfeljebb %1 letöltött projektet engedélyez.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="880"/>
+        <location filename="../../core/merginapi.cpp" line="892"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="888"/>
-        <location filename="../../core/merginapi.cpp" line="948"/>
+        <location filename="../../core/merginapi.cpp" line="900"/>
+        <location filename="../../core/merginapi.cpp" line="960"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="932"/>
-        <location filename="../../core/merginapi.cpp" line="946"/>
+        <location filename="../../core/merginapi.cpp" line="944"/>
+        <location filename="../../core/merginapi.cpp" line="958"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="961"/>
-        <location filename="../../core/merginapi.cpp" line="1471"/>
+        <location filename="../../core/merginapi.cpp" line="973"/>
+        <location filename="../../core/merginapi.cpp" line="1492"/>
         <source>Please enter a valid email</source>
         <translation>Kérjük, egy létező e-mail címet adjon meg</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="968"/>
-        <location filename="../../core/merginapi.cpp" line="1483"/>
+        <location filename="../../core/merginapi.cpp" line="980"/>
+        <location filename="../../core/merginapi.cpp" line="1504"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell a következőket:&lt;ul type=&quot;disc&quot;&gt;%3 kisbetűs karakter (a-z)%4%3 NAGYbetűs karakter (A-Z)%4%3 Legalább egy számjegy (0–9) vagy speciális karakter%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="982"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Kérjük, fogadja el a Felhasználási Feltételeket és az Adatvédelmi szabályzatot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1011"/>
+        <location filename="../../core/merginapi.cpp" line="1026"/>
         <source>Marketing source cannot be empty</source>
         <translation>A marketingforrás nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1019"/>
+        <location filename="../../core/merginapi.cpp" line="1034"/>
         <source>Industry cannot be empty</source>
         <translation>Az iparág nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1338"/>
+        <location filename="../../core/merginapi.cpp" line="1359"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Nincs jogosultsága új projekt létrehozására ezen a munkaterületen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1343"/>
+        <location filename="../../core/merginapi.cpp" line="1364"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Nem sikerült létrehozni a projektet. Próbálja újra később, vagy ha a probléma továbbra is fennáll, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1451"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
         <source>Registration successful</source>
         <translation>Sikeres regisztráció</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1473"/>
-        <location filename="../../core/merginapi.cpp" line="1479"/>
-        <location filename="../../core/merginapi.cpp" line="1491"/>
+        <location filename="../../core/merginapi.cpp" line="1494"/>
+        <location filename="../../core/merginapi.cpp" line="1500"/>
+        <location filename="../../core/merginapi.cpp" line="1512"/>
         <source>Registration failed</source>
         <translation>A regisztráció nem sikerült</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1477"/>
+        <location filename="../../core/merginapi.cpp" line="1498"/>
         <source>This email address is already registered</source>
         <translation>Ezzel az e-mail címmel már regisztráltak egy fiókot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1502"/>
+        <location filename="../../core/merginapi.cpp" line="1523"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Az új regisztrációk nem engedélyezettek a kiválasztott szerveren. Kérjük, forduljon az adminisztrátorhoz segítségért.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1555"/>
         <source>Workspace created</source>
         <translation>Munkaterület létrehozva</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1902"/>
+        <location filename="../../core/merginapi.cpp" line="1923"/>
         <source>Project detached from the server</source>
         <translation>A projekt le van választva a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4164"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace name contains invalid characters</source>
         <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4298"/>
         <source>Workspace %1 already exists</source>
         <translation>%1 munkaterület már létezik</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4337"/>
+        <location filename="../../core/merginapi.cpp" line="4404"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Most már bezárhatja ezt az oldalt, és visszatérhet a Mergin Maps alkalmazáshoz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4363"/>
-        <location filename="../../core/merginapi.cpp" line="4390"/>
+        <location filename="../../core/merginapi.cpp" line="4430"/>
+        <location filename="../../core/merginapi.cpp" line="4457"/>
         <source>SSO authorization failed</source>
         <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
     </message>
@@ -2965,7 +2950,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>A projekt neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="212"/>
+        <location filename="../projectwizard.cpp" line="215"/>
         <source>Project %1 created</source>
         <translation>%1 projekt létrehozva</translation>
     </message>
@@ -2992,63 +2977,63 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
         <translation>Az értéknek számnak kell lennie</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
         <translation>Az értéknek kisebbnek kell lennie, mint %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
         <translation>Az értéknek nagyobbnak kell lennie, mint %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="62"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
         <translation>Az érték túl nagy</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
         <translation>A mező nem tartalmazhat tizedesjegyet</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Nem lehet hosszabb %1 karakternél</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
         <translation>A mező nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
         <translation>A mezőnek nem szabad üresnek lennie</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
         <translation>Az értéknek egyedinek kell lennie</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
         <translation>Az értéknek egyedinek kell lennie</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="71"/>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Nem teljesített QGIS kifejezés korlátozás</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="74"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>Érvénytelen érték</translation>
     </message>
@@ -3098,12 +3083,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Ismeretlen javítás</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="557"/>
+        <location filename="../main.cpp" line="578"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="562"/>
+        <location filename="../main.cpp" line="583"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
@@ -3189,53 +3174,73 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <source>not tracking</source>
         <translation>nincs követés</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="674"/>
+        <source>Delete %n feature(s)</source>
+        <translation><numerusform>%n elem törlése</numerusform><numerusform>%n elem törlése</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="675"/>
+        <source>Delete %n selected feature(s)?</source>
+        <translation><numerusform>Valóban törölni kíván %n elemet?</numerusform><numerusform>Valóban törölni kíván %n elemet?</numerusform></translation>
+    </message>
     <message>
-        <location filename="../qml/main.qml" line="873"/>
+        <location filename="../qml/main.qml" line="677"/>
+        <source>Yes, I want to delete</source>
+        <translation>Igen, törlöm</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="678"/>
+        <source>No, thanks</source>
+        <translation>Nem, köszönöm</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="898"/>
         <source>Select feature</source>
         <translation>Elem kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="982"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Valaki más is szinkronizál, később újra megpróbáljuk</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="1014"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a szerverrel. Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1032"/>
+        <location filename="../qml/main.qml" line="1004"/>
         <source>Up to date</source>
         <translation>Naprakész</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1100"/>
+        <location filename="../qml/main.qml" line="1125"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Probléma történt a projekt betöltése során. %1Nézze meg a részleteket%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="801"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Az áthelyezés le van tiltva, mert a helymeghatározás nem elérhető!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="926"/>
+        <location filename="../qml/main.qml" line="951"/>
         <source>Successfully synchronised</source>
         <translation>Sikeresen szinkronizálva</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="964"/>
+        <location filename="../qml/main.qml" line="989"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hiba történt a szinkronizálás során, újra megpróbáljuk. Kattintson a további információért</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1121"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1154"/>
+        <location filename="../qml/main.qml" line="1179"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>
