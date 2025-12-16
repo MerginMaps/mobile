@@ -240,7 +240,7 @@ a preto nebude pridaný do projektu.</translation>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="241"/>
         <source>%n minute(s) ago</source>
-        <translation><numerusform>pred %1 minútou </numerusform><numerusform>pred %1 minútami</numerusform><numerusform>pred %1 minútami</numerusform><numerusform>pred %1 minútami</numerusform></translation>
+        <translation><numerusform>pred %n minútou </numerusform><numerusform>pred %n minútami</numerusform><numerusform>pred %n minútami</numerusform><numerusform>pred %n minútami</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="246"/>
@@ -3083,12 +3083,12 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Neznámy fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="578"/>
+        <location filename="../main.cpp" line="588"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Vaša požiadavka bola zaznamenaná. Prosím kontaktujte podporu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="583"/>
+        <location filename="../main.cpp" line="593"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku. Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>
