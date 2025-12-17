@@ -120,9 +120,9 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 
 QString TestUtils::generateEmail()
 {
-#ifdef Q_OS_MACOS
+#if defined(Q_OS_MACOS)
   QString ciId = "m";
-#elif Q_OS_LINUX
+#elif defined(Q_OS_LINUX)
   QString ciId = "l";
 #else
   QString ciId = "";
