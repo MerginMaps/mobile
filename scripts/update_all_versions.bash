@@ -2,7 +2,10 @@
 
 set -e
 
-echo "update_all_versions.bash MAJOR.MINOR.BUILD"
+if [ -z "$1" ]; then
+    echo "Error => Supply version in format: MAJOR.MINOR.BUILD"
+    exit 1
+fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VERSION=$1
@@ -37,7 +40,7 @@ rm -f $CITATION_FILE.orig
 # vcpkg.json
 VCPKG_FILE=$DIR/../vcpkg.json
 echo "patching $VCPKG_FILE"
-sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\.$MINOR\.$BUILD\"|g" $VCPKG_FILE
+sed -i.orig -E "0,/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/{s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\.$MINOR\.$BUILD\"|}" $VCPKG_FILE
 rm -f $VCPKG_FILE.orig
 
 echo "patching done"

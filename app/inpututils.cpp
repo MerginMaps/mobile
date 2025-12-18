@@ -15,6 +15,7 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QPermissions>
+#include "mmconfig.h"
 
 #include "ios/iosutils.h"
 
