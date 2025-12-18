@@ -45,12 +45,6 @@ namespace TestUtils
 
   QString generateEmail();
   QString generatePassword();
-  /*
-  * Create a workspace name from the generated username
-  * Output: a workspace name: mmat-DayMonthYear-HourMinutes
-  */
-  QString generateWorkspaceName( const QString &username );
-
   QString testDataDir();
 
   QgsProject *loadPlanesTestProject();

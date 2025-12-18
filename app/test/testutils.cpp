@@ -121,16 +121,16 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 QString TestUtils::generateEmail()
 {
 #if defined(Q_OS_MACOS)
-  QString ciId = "m";
+  QString prefix = QStringLiteral( "ac" );
 #elif defined(Q_OS_LINUX)
-  QString ciId = "l";
+  QString prefix = QStringLiteral( "lin" );
 #else
-  QString ciId = "";
+  QString prefix = QStringLiteral( "mob" );
 #endif
-  QString prefix = ciId.isEmpty() ? QStringLiteral( "mobile" ) : QStringLiteral( "%1" ).arg( ciId );
   QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "%1-%2@lutraconsulting.co.uk" ).arg( prefix, uniqename );
+  QString uniqeName = time.toString( QStringLiteral( "ddMMyy-hhmmss" ) );
+  // adding the prefix and the uniqueName
+  return QStringLiteral( "%1-%2@lutraconsulting.co.uk" ).arg( prefix, uniqeName );
 }
 
 QString TestUtils::generatePassword()
@@ -188,11 +188,11 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
                              "storage": %1,
                              "projects" : %2,
                              "api_allowed" : true
-                             }
+                             }ˆ
   })" ).arg( TEST_WORKSPACE_STORAGE_SIZE ).arg( TEST_WORKSPACE_PROJECT_NUMBER );
 
   api->updateWorkspaceService( workspaceId, payload );
-  bool workspaceStorageModified = wsStorageSpy. wait( TestUtils::LONG_REPLY );
+  bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
   if ( workspaceStorageModified )
   {
     qDebug() << "Updated the storage limit" << username;
