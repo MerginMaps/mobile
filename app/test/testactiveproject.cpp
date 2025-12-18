@@ -36,8 +36,8 @@ void TestActiveProject::testProjectValidations()
   QString projectFilename = "bad_layer.qgz";
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   QSignalSpy spyReportIssues( &activeProject, &ActiveProject::reportIssue );
   QSignalSpy spyErrorsFound( &activeProject, &ActiveProject::loadingErrorFound );
@@ -61,8 +61,8 @@ void TestActiveProject::testProjectLoadFailure()
   InputUtils::cpDir( TestUtils::testDataDir() + "/load_failure", projectdir );
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 
@@ -81,8 +81,8 @@ void TestActiveProject::testPositionTrackingFlag()
   // the position tracking availability is correctly set
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -121,8 +121,8 @@ void TestActiveProject::testRecordingAllowed()
   QString projectFilename = "tracking-project.qgz";
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
   QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
@@ -169,8 +169,8 @@ void TestActiveProject::testRecordingAllowed()
 void TestActiveProject::testLoadingFlagFileExpiration()
 {
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -194,16 +194,16 @@ void TestActiveProject::testLoadingFlagFileExpiration()
 
 void TestActiveProject::testLoadingAuthFileFromConfiguration()
 {
-  AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
-  QString projectDir = TestUtils::testDataDir() + "/project_auth_file/";
+  AppSettings appSettings;
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( appSettings, activeLayer, mApi->localProjectsManager() );
+  QString projectDir = TestUtils::testDataDir() + QStringLiteral( "/project_auth_file/" );
   QString projectName = QStringLiteral( "auth-test.qgz" );
   QString af = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
 
   QgsApplication::initQgis();
 
-  QgsAuthManager *am = QgsApplication::authManager();
+  QgsAuthManager *authManager = QgsApplication::authManager();
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectName );
   activeProject.load( projectDir + projectName );
@@ -211,18 +211,18 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
   QSignalSpy spyLoadingStarted( &activeProject, &ActiveProject::loadingStarted );
 
   // we expect the configuration import to fail as the password for the cfg xml is not the project's id
-  int count = am->configIds().count();
+  int count = authManager->configIds().count();
   QCOMPARE( count, 0 );
 
-  am->removeAllAuthenticationConfigs();
+  authManager->removeAllAuthenticationConfigs();
   QFileInfo cfgFile( af );
   if ( cfgFile.exists() && cfgFile.isFile() )
   {
     // we still check that the configuration can be imported
-    bool ok = am->importAuthenticationConfigsFromXml( af, AUTH_CONFIG_PASSWORD, true );
+    bool ok = authManager->importAuthenticationConfigsFromXml( af, AUTH_CONFIG_PASSWORD, true );
 
     QVERIFY2( ok, "Importing the authentication database from XML failed" );
-    count = am->configIds().count();
+    count = authManager->configIds().count();
     QCOMPARE( count, 1 );
   }
 }
