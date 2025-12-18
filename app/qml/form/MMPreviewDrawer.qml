@@ -193,7 +193,7 @@ Item {
           height: contentHeight
 
           spacing: __style.margin8
-          interactive: false
+          scrollBarPolicy: ScrollBar.AsNeeded
 
           model: root.controller.fieldModel
 

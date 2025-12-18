@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
 
 import "./private"
 
@@ -43,6 +44,7 @@ Rectangle {
 
     MMListView {
       id: toolbar
+      scrollBarPolicy : ScrollBar.AlwaysOff
 
       onWidthChanged: root.recalculate()
       model: toolbarModel
