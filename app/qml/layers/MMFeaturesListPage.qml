@@ -50,7 +50,6 @@ MMComponents.MMPage {
 
       width: parent.width
 
-
       anchors {
         top: searchBar.bottom
         bottom: parent.bottom
