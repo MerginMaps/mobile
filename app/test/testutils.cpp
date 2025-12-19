@@ -188,7 +188,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
                              "storage": %1,
                              "projects" : %2,
                              "api_allowed" : true
-                             }ˆ
+                             }
   })" ).arg( TEST_WORKSPACE_STORAGE_SIZE ).arg( TEST_WORKSPACE_PROJECT_NUMBER );
 
   api->updateWorkspaceService( workspaceId, payload );
