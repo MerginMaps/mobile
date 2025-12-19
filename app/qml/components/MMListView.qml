@@ -9,12 +9,14 @@
 
 import QtQuick
 
-//
-// Hot-fix for hotfix https://github.com/MerginMaps/mobile/issues/3417
-// Seems like there is some issue with cache in ListView
-//
-
 ListView {
 
-  cacheBuffer: 0
+  id: root
+  // when flicking up really fast, we should go back to the first item
+  onVerticalOvershootChanged: {
+    if (verticalOvershoot < -200) {
+      root.contentY= -root.topMargin
+      root.returnToBounds();
+    }
+  }
 }

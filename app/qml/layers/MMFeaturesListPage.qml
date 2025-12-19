@@ -50,8 +50,6 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      cacheBuffer: height
-      snapMode: ListView.SnapToItem
 
       anchors {
         top: searchBar.bottom
@@ -77,7 +75,6 @@ MMComponents.MMPage {
       }
 
       footer: MMComponents.MMListSpacer {
-        id: spacer
         height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
       }
     }
