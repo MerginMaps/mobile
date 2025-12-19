@@ -121,7 +121,7 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
 QString TestUtils::generateEmail()
 {
 #if defined(Q_OS_MACOS)
-  QString prefix = QStringLiteral( "ac" );
+  QString prefix = QStringLiteral( "mac" );
 #elif defined(Q_OS_LINUX)
   QString prefix = QStringLiteral( "lin" );
 #else
