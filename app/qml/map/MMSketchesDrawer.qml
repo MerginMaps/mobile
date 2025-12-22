@@ -54,24 +54,24 @@ MMComponents.MMDrawer {
     onClicked: root.sketchingController.undo()
   }
 
-  drawerContent: Column {
-    id: mainColumn
-
-    width: parent.width
-    spacing: __style.margin10
+  drawerContent: ColumnLayout {
+    anchors {
+        left: parent.left
+        right: parent.right
+    }
 
     ScrollView {
-      width: parent.width
-      height: scrollRow.height
-
+      Layout.fillWidth: true
+      Layout.preferredHeight: scrollRow.height
+      
       ScrollBar.vertical.policy: ScrollBar.AlwaysOff
       ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
       Row {
         id: scrollRow
-        width: parent.width
         spacing: __style.margin12
-        leftPadding: __style.margin6
+        padding: __style.margin4
+        anchors.centerIn: parent
 
         Repeater {
           id: colorsView
@@ -93,8 +93,8 @@ MMComponents.MMDrawer {
               anchors.verticalCenter: parent.verticalCenter
               anchors.horizontalCenter: parent.horizontalCenter
               radius: width / 2
-              width: scrollRow.height
-              height: scrollRow.height
+              width: __style.margin48
+              height: __style.margin48
               color: isActive ? __style.transparentColor : __style.lightGreenColor
               border.width: 2
               border.color: isActive ? __style.grassColor : __style.transparentColor
