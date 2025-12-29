@@ -29,6 +29,9 @@ class AutosyncController : public QObject
     // Set mLastUpdateTime to "now", triggered by manual sync
     void updateLastUpdateTime();
 
+    // This triggers sync after a change has been saved to layer via attributeController
+    Q_INVOKABLE void syncLayerChange();
+
   signals:
     void projectSyncRequested( SyncOptions::RequestOrigin origin );
 
