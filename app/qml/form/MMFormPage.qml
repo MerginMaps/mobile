@@ -15,6 +15,7 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 import qgs 1.0 as QGS
+import MMInput
 
 import "../components" as MMComponents
 import "./components" as MMFormComponents
@@ -109,7 +110,7 @@ Page {
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
       else if ( root.state === "multiEdit" ) return qsTr( "Edit selected features" )
-      return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
+      return __inputUtils.featureTitle( root.controller.featureLayerPair, ActiveProject.qgsProject )
     }
 
     rightItemContent: MMComponents.MMRoundButton {
@@ -205,7 +206,7 @@ Page {
 
   footer: MMComponents.MMToolbar {
 
-    visible: !root.layerIsReadOnly && __activeProject.projectRole !== "reader" && root.state !== "multiEdit"
+    visible: !root.layerIsReadOnly && ActiveProject.projectRole !== "reader" && root.state !== "multiEdit"
 
     ObjectModel {
       id: readStateButtons
@@ -235,7 +236,7 @@ Page {
         id: editGeometry
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
-        visible: root.layerIsSpatial && __activeProject.projectRole !== "reader"
+        visible: root.layerIsSpatial && ActiveProject.projectRole !== "reader"
         onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
       }
     }

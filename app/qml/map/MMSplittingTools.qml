@@ -12,6 +12,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -78,7 +79,7 @@ Item {
 
     anchors.fill: parent
 
-    qgsProject: __activeProject.qgsProject
+    qgsProject: ActiveProject.qgsProject
     mapSettings: root.map.mapSettings
   }
 

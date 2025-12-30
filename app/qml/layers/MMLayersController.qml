@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../inputs"
@@ -28,7 +29,7 @@ Item {
 
     layerTreeModel: MM.LayerTreeModel {
       id: layerTreeModel
-      qgsProject: __activeProject.qgsProject
+      qgsProject: ActiveProject.qgsProject
     }
   }
 
@@ -37,7 +38,7 @@ Item {
 
     layerTreeFlatModel: MM.LayerTreeFlatModel {
       id: layerTreeFlatModel
-      qgsProject: __activeProject.qgsProject
+      qgsProject: ActiveProject.qgsProject
     }
   }
 
@@ -90,7 +91,7 @@ Item {
       }
 
       onNodeVisibilityClicked: function( node ) {
-        __activeProject.switchLayerTreeNodeVisibility( node )
+        ActiveProject.switchLayerTreeNodeVisibility( node )
       }
 
       onBackClicked: function() {
@@ -168,7 +169,7 @@ Item {
       }
 
       onNodeVisibilityClicked: function( node ) {
-        __activeProject.switchLayerTreeNodeVisibility( node )
+        ActiveProject.switchLayerTreeNodeVisibility( node )
       }
 
       onBackClicked: function() {
@@ -183,7 +184,7 @@ Item {
   }
 
   Connections {
-    target: __activeProject
+    target: ActiveProject
 
     function onProjectWillBeReloaded() {
       layerTreeModel.reset()
@@ -191,8 +192,8 @@ Item {
     }
 
     function onProjectReloaded( qgsProject ) {
-      layerTreeModel.qgsProject = __activeProject.qgsProject
-      layerTreeFlatModel.qgsProject = __activeProject.qgsProject
+      layerTreeModel.qgsProject = ActiveProject.qgsProject
+      layerTreeFlatModel.qgsProject = ActiveProject.qgsProject
     }
   }
 

@@ -38,7 +38,8 @@ void TestActiveProject::testProjectValidations()
 
   AppSettings as;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, activeLayer, mApi->localProjectsManager() );
 
   QSignalSpy spyReportIssues( &activeProject, &ActiveProject::reportIssue );
   QSignalSpy spyErrorsFound( &activeProject, &ActiveProject::loadingErrorFound );
@@ -63,7 +64,8 @@ void TestActiveProject::testProjectLoadFailure()
 
   AppSettings as;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 
@@ -83,7 +85,8 @@ void TestActiveProject::testPositionTrackingFlag()
 
   AppSettings as;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -123,7 +126,8 @@ void TestActiveProject::testRecordingAllowed()
 
   AppSettings as;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
   QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
@@ -171,7 +175,8 @@ void TestActiveProject::testLoadingFlagFileExpiration()
 {
   AppSettings as;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -197,7 +202,8 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
 {
   AppSettings appSettings;
   ActiveLayer activeLayer;
-  ActiveProject activeProject( appSettings, activeLayer, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup(appSettings, activeLayer, mApi->localProjectsManager());
   QString projectDir = TestUtils::testDataDir() + QStringLiteral( "/project_auth_file/" );
   QString projectName = QStringLiteral( "auth-test.qgz" );
   QString authFile = QDir( projectDir ).filePath( CoreUtils::AUTH_CONFIG_FILENAME );

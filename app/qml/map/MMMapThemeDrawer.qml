@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 
@@ -32,7 +33,7 @@ MMListDrawer {
 
   list.model: MM.MapThemesModel {
       id: mapThemesModel
-      qgsProject: __activeProject.qgsProject
+      qgsProject: ActiveProject.qgsProject
   }
 
   list.delegate: MMListDelegate {
@@ -40,24 +41,24 @@ MMListDrawer {
 
     rightContent: MMIcon {
       source: __style.doneCircleIcon
-      visible: __activeProject.mapTheme === model.display
+      visible: ActiveProject.mapTheme === model.display
     }
 
     onClicked: {
-      __activeProject.mapTheme = model.display
+      ActiveProject.mapTheme = model.display
       root.close()
     }
   }
 
   Connections {
-    target: __activeProject
+    target: ActiveProject
 
     function onProjectWillBeReloaded() {
       mapThemesModel.reset()
     }
 
     function onProjectReloaded( qgsProject ) {
-      mapThemesModel.qgsProject = __activeProject.qgsProject
+      mapThemesModel.qgsProject = ActiveProject.qgsProject
     }
   }
 }

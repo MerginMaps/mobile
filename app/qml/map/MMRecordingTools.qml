@@ -168,7 +168,7 @@ Item {
 
     visible: mapTool.state !== MM.RecordingMapTool.View && mapTool.recordingType !== MM.RecordingMapTool.StreamMode
 
-    qgsProject: __activeProject.qgsProject
+    qgsProject: ActiveProject.qgsProject
     mapSettings: root.map.mapSettings
     shouldUseSnapping: !mapTool.isUsingPosition
   }

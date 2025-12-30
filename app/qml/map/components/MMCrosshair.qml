@@ -11,6 +11,7 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 
 import mm 1.0 as MM
+import MMInput
 
 Item {
     id: root
@@ -241,7 +242,7 @@ Item {
     }
 
     Connections {
-      target: __activeProject
+      target: ActiveProject
 
       function onProjectWillBeReloaded() {
         snapUtils.clear()
@@ -251,7 +252,7 @@ Item {
         // We need to re-assign qgs project to snaputils, because
         // even though we loaded a different project,
         // internally we keep the same pointer for QgsProject.
-        snapUtils.qgsProject = __activeProject.qgsProject
+        snapUtils.qgsProject = ActiveProject.qgsProject
         snapUtils.mapSettings = root.mapSettings
       }
     }

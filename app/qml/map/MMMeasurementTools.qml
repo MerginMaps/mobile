@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -89,11 +90,11 @@ Item {
     id: crosshair
 
     anchors.fill: parent
-    qgsProject: __activeProject.qgsProject
+    qgsProject: ActiveProject.qgsProject
     mapSettings: root.map.mapSettings
     visible: !mapTool.measurementFinalized
 
-    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, 1, __activeProject.qgsProject )
+    text: __inputUtils.formatDistanceInProjectUnit( mapTool.lengthWithGuideline, 1, ActiveProject.qgsProject )
     canCloseShape: mapTool.canCloseShape
 
     onCloseShapeClicked: root.mapTool.finalizeMeasurement( true )

@@ -14,6 +14,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Dialogs
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../inputs"
@@ -46,7 +47,7 @@ Item {
   }
 
   function setupProjectOpen( projectPath ) {
-    if ( projectPath === __activeProject.localProject.qgisProjectFilePath )
+    if ( projectPath === ActiveProject.localProject.qgisProjectFilePath )
     {
       // just hide the panel - project already loaded
       hidePanel()

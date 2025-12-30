@@ -14,6 +14,7 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 import qgs 1.0 as QGS
+import MMInput
 
 import "../components" as MMComponents
 import "./components" as MMFormComponents
@@ -279,8 +280,8 @@ Item {
     property bool isHTMLType: root.controller.type === MM.AttributePreviewController.HTML
     property bool isEmptyType: root.controller.type === MM.AttributePreviewController.Empty
 
-    property bool showEditButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
-    property bool showSelectMoreButton: !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+    property bool showEditButton: !root.layerIsReadOnly && ActiveProject.projectRole !== "reader"
+    property bool showSelectMoreButton: !root.layerIsReadOnly && ActiveProject.projectRole !== "reader"
     property bool showStakeoutButton: __inputUtils.isPointLayerFeature( controller.featureLayerPair )
     property bool showButtons: true
 

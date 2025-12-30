@@ -239,7 +239,7 @@ Item {
 
     anchors.fill: parent
 
-    mapSettings.project: __activeProject.qgsProject
+    mapSettings.project: ActiveProject.qgsProject
 
     MM.IdentifyKit {
       id: identifyKit
@@ -384,7 +384,7 @@ Item {
           id: trackingManager
 
           variablesManager: __variablesManager
-          qgsProject: __activeProject.qgsProject
+          qgsProject: ActiveProject.qgsProject
 
           onAbort: () => root.setTracking( false )
           onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
@@ -410,11 +410,11 @@ Item {
         }
 
         Component.onCompleted: {
-          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, PositionKit )
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( ActiveProject.qgsProject, PositionKit )
         }
 
         Connections {
-          target: __activeProject
+          target: ActiveProject
 
           function onProjectWillBeReloaded() {
             // simply stop tracking
@@ -615,7 +615,7 @@ Item {
         MMMapButton {
           id: sketchesButton
 
-          visible: root.state === "view" && __activeProject.mapSketchesEnabled
+          visible: root.state === "view" && ActiveProject.mapSketchesEnabled
           iconSource: __style.redrawGeometryIcon
 
           onClicked: {
@@ -894,7 +894,7 @@ Item {
       list.model: MM.RecordingLayersProxyModel {
         id: recordingLayersModel
 
-        exceptedLayerIds: [ __activeProject.positionTrackingLayerId(), __activeProject.mapSketchesLayerId() ]
+        exceptedLayerIds: [ ActiveProject.positionTrackingLayerId(), ActiveProject.mapSketchesLayerId() ]
         model: MM.LayersModel {}
       }
 
@@ -914,7 +914,7 @@ Item {
         }
 
         onClicked: {
-          __activeProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
+          ActiveProject.setActiveLayer( recordingLayersModel.layerFromLayerId( model.layerId ) )
           activeLayerPanel.close()
         }
       }
@@ -927,10 +927,10 @@ Item {
       }
 
       Connections {
-        target: __activeProject
+        target: ActiveProject
 
         function onProjectReloaded( qgsProject ) {
-          recordingLayersModel.qgsProject = __activeProject.qgsProject
+          recordingLayersModel.qgsProject = ActiveProject.qgsProject
         }
       }
     }
@@ -1227,7 +1227,7 @@ Item {
   }
 
   Connections {
-    target: __activeProject
+    target: ActiveProject
 
     function onStartPositionTracking() {
 
@@ -1278,13 +1278,13 @@ Item {
   }
 
   function recordInLayer( layer, parentpair ) {
-    __activeProject.setActiveLayer( layer )
+    ActiveProject.setActiveLayer( layer )
     root.centerToPair( parentpair )
     state = "recordInLayer"
   }
 
   function edit( featurepair ) {
-    __activeProject.setActiveLayer( featurepair.layer )
+    ActiveProject.setActiveLayer( featurepair.layer )
     root.centerToPair( featurepair )
     root.showInfoTextMessage( qsTr( "Select some point to start editing the geometry" ) )
 
@@ -1297,7 +1297,7 @@ Item {
   }
 
   function redraw( featurepair ) {
-    __activeProject.setActiveLayer( featurepair.layer )
+    ActiveProject.setActiveLayer( featurepair.layer )
     root.centerToPair( featurepair )
     root.showInfoTextMessage( qsTr( "Record new geometry for the feature" ) )
 

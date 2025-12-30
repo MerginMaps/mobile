@@ -29,27 +29,27 @@
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
 
-ActiveProject::ActiveProject( AppSettings &appSettings
-                              , ActiveLayer &activeLayer
-                              , LocalProjectsManager &localProjectsManager
-                              , QObject *parent ) :
-
-  QObject( parent )
-  , mAppSettings( appSettings )
-  , mActiveLayer( activeLayer )
-  , mAuthManager( QgsApplication::authManager() )
-  , mLocalProjectsManager( localProjectsManager )
-  , mProjectLoadingLog( "" )
+ActiveProject::ActiveProject( QObject *parent ) : QObject( parent )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
   // still work with QgsProject::instance() singleton hardcoded (e.g. vector layer's feature
   // iterator uses it for virtual fields, causing minor bugs with expressions)
   // so for the time being let's just stick to using the singleton until qgis_core is completely fixed
   mQgsProject = QgsProject::instance();
+  mAuthManager = QgsApplication::authManager();
+  mProjectLoadingLog = QLatin1String();
+}
+
+void ActiveProject::setup( AppSettings &appSettings, ActiveLayer &activeLayer,
+                           LocalProjectsManager &localProjectsManager )
+{
+  mAppSettings = &appSettings;
+  mActiveLayer = &activeLayer;
+  mLocalProjectsManager = &localProjectsManager;
 
   // listen to local project removal event to invalidate mProject
-  QObject::connect(
-    &mLocalProjectsManager,
+  connect(
+    mLocalProjectsManager,
     &LocalProjectsManager::aboutToRemoveLocalProject,
     this, [this]( const LocalProject & project )
   {
@@ -60,8 +60,8 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   } );
 
   // listen to metadata changes of opened LocalProject (e.g. local version update or namespace update)
-  QObject::connect(
-    &mLocalProjectsManager,
+  connect(
+    mLocalProjectsManager,
     &LocalProjectsManager::localProjectDataChanged,
     this, [this]( const LocalProject & project )
   {
@@ -72,12 +72,10 @@ ActiveProject::ActiveProject( AppSettings &appSettings
     }
   } );
 
-  setAutosyncEnabled( mAppSettings.autosyncAllowed() );
+  setAutosyncEnabled( mAppSettings->autosyncAllowed() );
 
-  QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
+  connect( mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
 }
-
-ActiveProject::~ActiveProject() = default;
 
 QgsProject *ActiveProject::qgsProject() const
 {
@@ -120,7 +118,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
 
-    whileBlocking( &mActiveLayer )->resetActiveLayer();
+    whileBlocking( mActiveLayer )->resetActiveLayer();
     mLocalProject = LocalProject();
     mQgsProject->clear();
 
@@ -158,7 +156,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mQgsProject->fileName() != filePath || force )
   {
     emit projectWillBeReloaded();
-    mActiveLayer.resetActiveLayer();
+    mActiveLayer->resetActiveLayer();
 
     // path to the authentication configuration file
     const QDir projectDir = QFileInfo( filePath ).dir();
@@ -192,7 +190,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       return res;
     }
 
-    mLocalProject = mLocalProjectsManager.projectFromProjectFilePath( filePath );
+    mLocalProject = mLocalProjectsManager->projectFromProjectFilePath( filePath );
 
     if ( !mLocalProject.isValid() )
     {
@@ -201,7 +199,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     QString role = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( mLocalProject.projectDir ) ).role;
     setProjectRole( role );
-
 
     updateMapTheme();
     updateActiveLayer();
@@ -241,7 +238,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     }
   }
 
-  if ( mAppSettings.autosyncAllowed() )
+  if ( mAppSettings->autosyncAllowed() )
   {
     setAutosyncEnabled( true );
     requestSync( SyncOptions::AutomaticRequest );
@@ -492,9 +489,9 @@ void ActiveProject::updateActiveLayer()
     return;
   }
 
-  if ( !visibleLayers.contains( mActiveLayer.layer() ) )
+  if ( !visibleLayers.contains( mActiveLayer->layer() ) )
   {
-    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings.defaultLayer(), mQgsProject );
+    QgsMapLayer *defaultLayer = InputUtils::mapLayerFromName( mAppSettings->defaultLayer(), mQgsProject );
 
     if ( !recordingAllowed( defaultLayer ) )
     {
@@ -529,12 +526,12 @@ void ActiveProject::setActiveLayer( QgsMapLayer *layer ) const
 {
   if ( !layer || !layer->isValid() )
   {
-    mActiveLayer.resetActiveLayer();
+    mActiveLayer->resetActiveLayer();
   }
   else
   {
-    mActiveLayer.setActiveLayer( layer );
-    mAppSettings.setDefaultLayer( mActiveLayer.layerName() );
+    mActiveLayer->setActiveLayer( layer );
+    mAppSettings->setDefaultLayer( mActiveLayer->layerName() );
   }
 }
 

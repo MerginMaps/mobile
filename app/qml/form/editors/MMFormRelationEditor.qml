@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -80,7 +81,7 @@ MMPrivateComponents.MMBaseInput {
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
-        visible: __activeProject.projectRole !== "reader"
+        visible: ActiveProject.projectRole !== "reader"
 
         MMComponents.MMIcon {
           anchors.centerIn: parent

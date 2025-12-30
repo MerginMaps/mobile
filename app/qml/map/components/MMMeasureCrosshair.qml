@@ -11,6 +11,8 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 
 import mm 1.0 as MM
+import MMInput
+
 import "../../components"
 
 Item {
@@ -41,7 +43,7 @@ Item {
     id: crosshair
 
     anchors.fill: parent
-    qgsProject: __activeProject.qgsProject
+    qgsProject: ActiveProject.qgsProject
     mapSettings: root.mapSettings
   }
 

@@ -14,6 +14,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components" as MMComponents
 import "../map/components"
@@ -82,14 +83,14 @@ MMComponents.MMDrawer {
         width: ( parent.width + parent.spacing ) / 2
 
         title: measurementFinalized && root.isPolygon ? qsTr( "Perimeter" ) : qsTr( "Length" ) //Perimeter only if its a polygon
-        value: __inputUtils.formatDistanceInProjectUnit( root.perimeter, 1, __activeProject.qgsProject )
+        value: __inputUtils.formatDistanceInProjectUnit( root.perimeter, 1, ActiveProject.qgsProject )
       }
 
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
         title: qsTr( "Area" )
-        value: __inputUtils.formatAreaInProjectUnit( root.area, 1, __activeProject.qgsProject )
+        value: __inputUtils.formatAreaInProjectUnit( root.area, 1, ActiveProject.qgsProject )
         alignmentRight: true
         visible: measurementFinalized && root.isPolygon
       }
