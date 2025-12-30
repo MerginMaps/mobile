@@ -180,5 +180,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64
           if-no-files-found: error
 

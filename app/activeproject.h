@@ -22,6 +22,7 @@
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
 #include "merginprojectmetadata.h"
+#include "synchronizationoptions.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -165,7 +166,7 @@ class ActiveProject: public QObject
 
     void mapSettingsChanged();
 
-    void syncActiveProject( const LocalProject &project );
+    void syncActiveProject( const LocalProject &project, SyncOptions::RequestOrigin requestOrigin );
 
     void mapThemeChanged( const QString &mapTheme );
 
@@ -180,13 +181,15 @@ class ActiveProject: public QObject
 
     void photoSketchingEnabledChanged();
 
+    void appStateChanged( Qt::ApplicationState state );
+
   public slots:
     // Reloads project if current project path matches given path (it's the same project)
     bool reloadProject( QString projectDir );
 
     void setAutosyncEnabled( bool enabled );
 
-    void requestSync();
+    void requestSync( SyncOptions::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
 
   private:
 

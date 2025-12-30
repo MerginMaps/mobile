@@ -316,6 +316,21 @@ MMComponents.MMDrawer {
 
             alignmentRight: Positioner.index % 2 === 1
           }
+
+          MMGpsComponents.MMGpsDataText {
+            width: parent.width / 2
+
+            title: qsTr( "Geoid separation" )
+            value: {
+              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.geoidSeparation ) ) {
+                return qsTr( "N/A" )
+              }
+              __inputUtils.formatNumber( __positionKit.geoidSeparation, 2 ) + " m"
+            }
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+
+            alignmentRight: Positioner.index % 2 === 1
+          }
         }
       }
 

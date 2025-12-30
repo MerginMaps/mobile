@@ -194,3 +194,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: ${{ github.workspace }}/${{ env.MM_TAR }}
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} x86_64

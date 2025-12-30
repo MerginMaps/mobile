@@ -10,7 +10,10 @@
 #ifndef AUTOSYNCCONTROLLER_H
 #define AUTOSYNCCONTROLLER_H
 
-#include <QObject>
+#include <QDateTime>
+#include <QTimer>
+
+#include "synchronizationoptions.h"
 
 class QgsProject;
 
@@ -21,15 +24,22 @@ class AutosyncController : public QObject
   public:
 
     explicit AutosyncController( QgsProject *openedQgsProject, QObject *parent = nullptr );
-    virtual ~AutosyncController();
+    ~AutosyncController() override = default;
+
+    // Set mLastUpdateTime to "now", triggered by manual sync
+    void updateLastUpdateTime();
 
   signals:
+    void projectSyncRequested( SyncOptions::RequestOrigin origin );
 
-    void projectChangeDetected();
+  public slots:
+    void checkSyncRequiredAfterAppStateChange( Qt::ApplicationState state );
 
   private:
 
     QgsProject *mQgsProject = nullptr; // not owned
+    QDateTime mLastUpdateTime;
+    std::unique_ptr<QTimer> mTimer = nullptr;
 };
 
 #endif // AUTOSYNCCONTROLLER_H

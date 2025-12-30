@@ -26,7 +26,10 @@ class TestMapTools : public QObject
     void cleanup();
 
     void testSnapping();
+
     void testSplitting();
+    void testValidSplit();
+
     void testRecording();
     void testMeasuring();
 
