@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -67,7 +68,7 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: __activeProject.projectRole !== "reader" ? addFeatureComponent : null
+    header: ActiveProject.projectRole !== "reader" ? addFeatureComponent : null
   }
 
   Component {

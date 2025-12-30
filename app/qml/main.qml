@@ -83,7 +83,7 @@ ApplicationWindow {
         map.state = "view"
 
         // Stop/Start sync animation when user goes to map
-        syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
+        syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( ActiveProject.projectFullName() ) )
       }
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
@@ -118,7 +118,7 @@ ApplicationWindow {
     if ( AppSettings.defaultProject ) {
       let path = AppSettings.defaultProject
 
-      if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
+      if ( __localProjectsManager.projectIsValid( path ) && ActiveProject.load( path ) ) {
         AppSettings.activeProject = path
       }
       else {
@@ -245,7 +245,7 @@ ApplicationWindow {
 
     onLocalChangesPanelRequested: {
       stateManager.state = "projects"
-      projectController.openChangesPanel( __activeProject.projectFullName(), true )
+      projectController.openChangesPanel( ActiveProject.projectFullName(), true )
     }
 
     onOpenTrackingPanel: {
@@ -257,7 +257,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-      __activeProject.mapSettings = map.mapSettings
+      ActiveProject.mapSettings = map.mapSettings
       __iosUtils.positionKit = __positionKit
       __iosUtils.compass = map.compass
       __variablesManager.compass = map.compass
@@ -284,7 +284,7 @@ ApplicationWindow {
         text: qsTr("Sync")
         iconSource: __style.syncIcon
         onClicked: {
-          __activeProject.requestSync()
+          ActiveProject.requestSync()
         }
       }
 
@@ -293,9 +293,9 @@ ApplicationWindow {
 
         text: qsTr("Add")
         iconSource: __style.addIcon
-        visible: __activeProject.projectRole !== "reader"
+        visible: ActiveProject.projectRole !== "reader"
         onClicked: {
-          if ( __activeProject.projectHasRecordingLayers() ) {
+          if ( ActiveProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
             map.record()
           }
@@ -327,7 +327,7 @@ ApplicationWindow {
         iconSource: __style.zoomToProjectIcon
         onClicked: {
           map.centeredToGPS = false
-          __inputUtils.zoomToProject( __activeProject.qgsProject, map.mapSettings )
+          __inputUtils.zoomToProject( ActiveProject.qgsProject, map.mapSettings )
         }
       }
 
@@ -346,7 +346,7 @@ ApplicationWindow {
         text: qsTr("Position tracking")
         iconSource: __style.positionTrackingIcon
         active: map.isTrackingPosition
-        visible: __activeProject.positionTrackingSupported
+        visible: ActiveProject.positionTrackingSupported
 
         onClicked: {
           trackingPanelLoader.active = true
@@ -364,7 +364,7 @@ ApplicationWindow {
         iconSource: __style.localChangesIcon
         onClicked: {
           stateManager.state = "projects"
-          projectController.openChangesPanel( __activeProject.projectFullName(), true )
+          projectController.openChangesPanel( ActiveProject.projectFullName(), true )
         }
       }
 
@@ -396,7 +396,7 @@ ApplicationWindow {
     height: window.height
     width: window.width
 
-    activeProjectId: __activeProject.localProject.id() ?? ""
+    activeProjectId: ActiveProject.localProject.id() ?? ""
 
     onVisibleChanged: {
       if ( projectController.visible ) {
@@ -405,7 +405,7 @@ ApplicationWindow {
     }
 
     onOpenProjectRequested: function( projectPath ) {
-      __activeProject.load( projectPath )
+      ActiveProject.load( projectPath )
     }
 
     onClosed: stateManager.state = "map"
@@ -745,7 +745,7 @@ ApplicationWindow {
     height: window.height
     width: window.width
 
-    project: __activeProject.qgsProject
+    project: ActiveProject.qgsProject
 
     onCreateLinkedFeatureRequested: function( targetLayer, parentPair )  {
       if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
@@ -861,7 +861,7 @@ ApplicationWindow {
   MMMigrateToMerginDialog {
     id: migrateToMerginDialog
 
-    onMigrationRequested: __syncManager.migrateProjectToMergin( __activeProject.projectFullName() )
+    onMigrationRequested: __syncManager.migrateProjectToMergin( ActiveProject.projectFullName() )
   }
 
   MMNoPermissionsDialog {
@@ -934,7 +934,7 @@ ApplicationWindow {
 
     function onSyncStarted( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === ActiveProject.projectFullName() )
       {
         syncButton.iconRotateAnimationRunning = true
       }
@@ -942,7 +942,7 @@ ApplicationWindow {
 
     function onSyncFinished( projectFullName, success )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === ActiveProject.projectFullName() )
       {
         syncButton.iconRotateAnimationRunning = false
 
@@ -958,7 +958,7 @@ ApplicationWindow {
 
     function onSyncCancelled( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === ActiveProject.projectFullName() )
       {
         syncButton.iconRotateAnimationRunning = false
       }
@@ -966,7 +966,7 @@ ApplicationWindow {
 
     function onSyncError( projectFullName, errorType, willRetry, errorMessage )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === ActiveProject.projectFullName() )
       {
         if ( errorType === MM.SyncError.NotAMerginProject )
         {
@@ -999,7 +999,7 @@ ApplicationWindow {
 
     function onProjectAlreadyOnLatestVersion( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() )
+      if ( projectFullName === ActiveProject.projectFullName() )
       {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
@@ -1052,7 +1052,7 @@ ApplicationWindow {
 
     function onMissingAuthorizationError( projectFullName )
     {
-      if ( projectFullName === __activeProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
+      if ( projectFullName === ActiveProject.projectFullName() && !__merginApi.userAuth.isUsingSso() )
       {
         missingAuthDialog.open()
       }
@@ -1079,7 +1079,7 @@ ApplicationWindow {
   Connections {
     target: __notificationModel
     function onShowProjectIssuesActionClicked() {
-      projectIssuesPage.projectLoadingLog = __activeProject.projectLoadingLog();
+      projectIssuesPage.projectLoadingLog = ActiveProject.projectLoadingLog();
       projectIssuesPage.visible = true;
     }
     function onShowSwitchWorkspaceActionClicked() {
@@ -1092,7 +1092,7 @@ ApplicationWindow {
   }
 
   Connections {
-    target: __activeProject
+    target: ActiveProject
 
     function onLoadingStarted() {
       projectLoadingPage.visible = true;
@@ -1102,7 +1102,7 @@ ApplicationWindow {
     function onLoadingFinished() {
       projectLoadingPage.visible = false
 
-      if ( __activeProject.isProjectLoaded() )
+      if ( ActiveProject.isProjectLoaded() )
       {
         projectController.hidePanel()
       }
@@ -1134,8 +1134,8 @@ ApplicationWindow {
     function onProjectReloaded( project ) {
       map.clear()
 
-      AppSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
-      AppSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.defaultProject = ActiveProject.localProject.qgisProjectFilePath ?? ""
+      AppSettings.activeProject = ActiveProject.localProject.qgisProjectFilePath ?? ""
     }
 
     function onProjectWillBeReloaded() {
@@ -1148,7 +1148,7 @@ ApplicationWindow {
     }
 
     function onPositionTrackingSupportedChanged() {
-      positionTrackingButton.visible = __activeProject.positionTrackingSupported
+      positionTrackingButton.visible = ActiveProject.positionTrackingSupported
       mapToolbar.recalculate()
     }
   }

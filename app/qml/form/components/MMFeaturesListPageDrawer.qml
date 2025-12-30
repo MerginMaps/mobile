@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import MMInput
+
 import "../../inputs" as MMInputs
 import "../../components" as MMComponents
 
@@ -103,7 +105,7 @@ Drawer {
         }
 
         text: qsTr( "Add feature" )
-        visible: __activeProject.projectRole !== "reader"
+        visible: ActiveProject.projectRole !== "reader"
 
         onClicked: root.buttonClicked()
       }

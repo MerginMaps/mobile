@@ -533,7 +533,9 @@ int main( int argc, char *argv[] )
   NotificationModel notificationModel;
 
   ActiveLayer al;
-  ActiveProject activeProject( *as, al, localProjectsManager );
+  // ActiveProject activeProject( *as, al, localProjectsManager );
+  ActiveProject *activeProject = engine.singletonInstance<ActiveProject *>( "MMInput", "ActiveProject" );
+  activeProject->setup( *as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -558,11 +560,11 @@ int main( int argc, char *argv[] )
 
   // the automatic sync request on cold start will fail on MerginApiStatus not being initialized yet, so we call it again
   // after server ping is done
-  if ( activeProject.autosyncController() )
+  if ( activeProject->autosyncController() )
   {
     QObject::connect( ma.get(), &MerginApi::pingMerginFinished, &lambdaContext, [&activeProject]
     {
-      activeProject.requestSync( SyncOptions::AutomaticRequest );
+      activeProject->requestSync( SyncOptions::AutomaticRequest );
     }, Qt::SingleShotConnection );
   }
 
@@ -613,33 +615,33 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
+  QObject::connect( activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  QObject::connect( activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {
-    merginApi->reloadProjectRole( activeProject.projectFullName() );
+    merginApi->reloadProjectRole( activeProject->projectFullName() );
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {
-    if ( activeProject.isProjectLoaded() )
+    if ( activeProject->isProjectLoaded() )
     {
       // if you are logged in or if you just logged out
       if ( merginApi->userAuth()->hasValidToken() || !merginApi->userAuth()->hasAuthData() )
       {
-        merginApi->reloadProjectRole( activeProject.projectFullName() );
+        merginApi->reloadProjectRole( activeProject->projectFullName() );
       }
     }
   } );
 
-  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, &activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
+  QObject::connect( ma.get(), &MerginApi::projectRoleUpdated, activeProject, [&activeProject]( const QString & projectFullName, const QString & role )
   {
-    if ( projectFullName == activeProject.projectFullName() )
+    if ( projectFullName == activeProject->projectFullName() )
     {
-      activeProject.setProjectRole( role );
+      activeProject->setProjectRole( role );
     }
   } );
 
@@ -659,17 +661,17 @@ int main( int argc, char *argv[] )
   } );
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &activeProject, &ActiveProject::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, activeProject, &ActiveProject::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
-  QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
-  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
+  QObject::connect( activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
+  QObject::connect( activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );
     Q_UNUSED( version );
-    if ( reloadNeeded && activeProject.projectFullName() == projectFullName )
+    if ( reloadNeeded && activeProject->projectFullName() == projectFullName )
     {
-      activeProject.reloadProject( activeProject.qgsProject()->homePath() );
+      activeProject->reloadProject( activeProject->qgsProject()->homePath() );
     }
   } );
   QObject::connect( QgsApplication::messageLog(),
@@ -725,7 +727,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputUtils", &iu );
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
-  engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
+  // engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );

@@ -37,7 +37,8 @@ void TestActiveProject::testProjectValidations()
 
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, al, mApi->localProjectsManager() );
 
   QSignalSpy spyReportIssues( &activeProject, &ActiveProject::reportIssue );
   QSignalSpy spyErrorsFound( &activeProject, &ActiveProject::loadingErrorFound );
@@ -62,7 +63,8 @@ void TestActiveProject::testProjectLoadFailure()
 
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, al, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 
@@ -82,7 +84,8 @@ void TestActiveProject::testPositionTrackingFlag()
 
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, al, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -122,7 +125,8 @@ void TestActiveProject::testRecordingAllowed()
 
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, al, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
   QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
@@ -170,7 +174,8 @@ void TestActiveProject::testLoadingFlagFileExpiration()
 {
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject;
+  activeProject.setup( as, al, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";

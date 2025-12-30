@@ -14,6 +14,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../map/components"
@@ -102,14 +103,14 @@ MMDrawer {
         width: ( parent.width + parent.spacing ) / 2
 
         title: qsTr( "Feature" )
-        value: root.targetPair ? __inputUtils.featureTitle( root.targetPair, __activeProject.qgsProject ) : ""
+        value: root.targetPair ? __inputUtils.featureTitle( root.targetPair, ActiveProject.qgsProject ) : ""
       }
 
       MMGpsComponents.MMGpsDataText{
         width: ( parent.width + parent.spacing ) / 2
 
         title: qsTr( "Distance" )
-        value: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2, __activeProject.qgsProject ) : qsTr( "N/A" )
+        value: remainingDistance >= 0 ?__inputUtils.formatDistanceInProjectUnit( remainingDistance, 2, ActiveProject.qgsProject ) : qsTr( "N/A" )
         alignmentRight: true
       }
     }

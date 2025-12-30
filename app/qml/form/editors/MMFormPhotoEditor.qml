@@ -151,7 +151,7 @@ MMFormPhotoViewer {
 
   Loader {
     id: photoSketchingLoader
-    active: __activeProject.photoSketchingEnabled
+    active: ActiveProject.photoSketchingEnabled
 
     sourceComponent: photoSketchingComponent
 
@@ -393,7 +393,7 @@ MMFormPhotoViewer {
      */
     function confirmImage( prefixToRelativePath, imgPath ) {
       if ( imgPath ) {
-        __inputUtils.rescaleImage( imgPath, __activeProject.qgsProject )
+        __inputUtils.rescaleImage( imgPath, ActiveProject.qgsProject )
         let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )

@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../inputs"
 import "../components" as MMComponents
@@ -90,7 +91,7 @@ MMComponents.MMPage {
       anchors.bottom: parent.bottom
       anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
 
-      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer ) && !root.layerIsReadOnly && __activeProject.projectRole !== "reader"
+      visible: __inputUtils.isNoGeometryLayer( root.selectedLayer ) && !root.layerIsReadOnly && ActiveProject.projectRole !== "reader"
 
       text: qsTr("Add feature")
 

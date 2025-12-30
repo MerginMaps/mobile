@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components" as MMComponents
 import "../inputs"
@@ -80,7 +81,7 @@ Page {
             checked: layerDetailData.isVisible
 
             onToggled: {
-              __activeProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
+              ActiveProject.switchLayerTreeNodeVisibility( layerDetailData.layerTreeNode )
             }
           }
 
@@ -277,7 +278,7 @@ Page {
     // * there is an exception, we do not want to show features of the map sketches layer
     //
 
-    const isSketchingLayer = layerDetailData.layerId === __activeProject.mapSketchesLayerId()
+    const isSketchingLayer = layerDetailData.layerId === ActiveProject.mapSketchesLayerId()
 
     if ( layerDetailData.isVectorLayer && !isSketchingLayer ) {
       content.addItem( featuresListPageComponent.createObject( content, { hasToolbar: internal.withToolbar } ) )

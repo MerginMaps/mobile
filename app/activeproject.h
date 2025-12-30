@@ -14,6 +14,7 @@
 #include <QObject>
 
 #include "qgsproject.h"
+#include "qgslayertreenode.h"
 
 #include "appsettings.h"
 #include "activelayer.h"
@@ -21,7 +22,6 @@
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
 #include "inputmapsettings.h"
-#include "merginprojectmetadata.h"
 #include "synchronizationoptions.h"
 
 /**
@@ -30,6 +30,9 @@
 class ActiveProject: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
     Q_PROPERTY( LocalProject localProject READ localProject NOTIFY localProjectChanged ) // LocalProject instance of active project, changes when project is loaded
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
@@ -42,13 +45,12 @@ class ActiveProject: public QObject
     Q_PROPERTY( bool photoSketchingEnabled READ photoSketchingEnabled NOTIFY photoSketchingEnabledChanged )
 
   public:
-    explicit ActiveProject(
-      AppSettings &appSettings
-      , ActiveLayer &activeLayer
-      , LocalProjectsManager &localProjectsManager
-      , QObject *parent = nullptr );
+    explicit ActiveProject( QObject *parent = nullptr );
 
-    virtual ~ActiveProject();
+    ~ActiveProject() override = default;
+
+    // Initialize values
+    void setup( AppSettings &appSettings, ActiveLayer &activeLayer, LocalProjectsManager &localProjectsManager );
 
     //! Returns active project's QgsProject instance to do QGIS API magic
     QgsProject *qgsProject() const;
@@ -215,9 +217,9 @@ class ActiveProject: public QObject
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
 
-    AppSettings &mAppSettings;
-    ActiveLayer &mActiveLayer;
-    LocalProjectsManager &mLocalProjectsManager;
+    AppSettings *mAppSettings = nullptr;
+    ActiveLayer *mActiveLayer = nullptr;
+    LocalProjectsManager *mLocalProjectsManager = nullptr;
     InputMapSettings *mMapSettings = nullptr;
     std::unique_ptr<AutosyncController> mAutosyncController;
 
