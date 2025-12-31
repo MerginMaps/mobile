@@ -2365,25 +2365,25 @@ void TestMerginApi::testAutosync()
   // 2. allow autosync controller
   // 3. load the project
   // 4. make some changes in the project
-  // 5. make sure autosync controller triggers that data has changed
+  // 5. mock UI form done trigger for autosync
   //
 
-  QString projectname = QStringLiteral( "testAutosync" );
-  QString projectdir = QDir::tempPath() + "/" + projectname;
-  QString projectfilename = "quickapp_project.qgs";
+  QString projectName = QStringLiteral( "testAutosync" );
+  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QString projectFilename = QStringLiteral( "quickapp_project.qgs" );
 
-  InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectdir );
+  InputUtils::cpDir( TestUtils::testDataDir() + QStringLiteral( "/planes" ), projectDir );
 
   MapThemesModel mtm;
   AppSettings as;
   ActiveLayer al;
   ActiveProject activeProject( as, al, mApi->localProjectsManager() );
 
-  mApi->localProjectsManager().addLocalProject( projectdir, projectname );
+  mApi->localProjectsManager().addLocalProject( projectDir, projectName );
 
   as.setAutosyncAllowed( true );
 
-  QVERIFY( activeProject.load( projectdir + "/" + projectfilename ) );
+  QVERIFY( activeProject.load( projectDir + QStringLiteral( "/" ) + projectFilename ) );
   QVERIFY( activeProject.localProject().isValid() );
 
   QSignalSpy syncSpy( &activeProject, &ActiveProject::syncActiveProject );
@@ -2403,6 +2403,7 @@ void TestMerginApi::testAutosync()
   QSignalSpy changesSpy( autosyncController, &AutosyncController::projectSyncRequested );
 
   planes->commitChanges();
+  autosyncController->syncLayerChange();
 
   QVERIFY( changesSpy.count() );
   QVERIFY( syncSpy.count() );
