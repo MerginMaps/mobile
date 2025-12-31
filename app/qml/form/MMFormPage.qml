@@ -71,6 +71,9 @@ Page {
     },
     State {
       name: "add"
+    },
+    State {
+      name: "addChild"
     }
   ]
 
@@ -106,7 +109,7 @@ Page {
 
 
     title: {
-      if ( root.state === "add" ) return qsTr( "New feature" )
+      if ( root.state === "add" || root.state === "addChild" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
       else if ( root.state === "multiEdit" ) return qsTr( "Edit selected features" )
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
@@ -116,7 +119,7 @@ Page {
 
       anchors.verticalCenter: parent.verticalCenter
 
-      visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
+      visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit" || root.state === "addChild"
 
       iconSource: __style.checkmarkIcon
       iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
@@ -316,7 +319,7 @@ Page {
         property var fieldFeatureLayerPair: root.controller.featureLayerPair
         property string fieldHomePath: root.project ? root.project.homePath : "" // for photo editor
 
-        property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && root.state === "add" && model.EditorWidget !== "Hidden" && Type === MM.FormItem.Field
+        property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && ( root.state === "add" || root.state === "addChild" ) && model.EditorWidget !== "Hidden" && Type === MM.FormItem.Field
         property bool fieldRememberValueState: model.RememberValue ? true : false
 
         active: fieldWidget !== 'Hidden'
@@ -433,6 +436,9 @@ Page {
 
     function onChangesCommited() {
       root.saved()
+      if ( root.state !== "addChild" ) {
+        __activeProject.autosyncController?.syncLayerChange()
+      }
     }
 
     function onCommitFailed() {
@@ -458,10 +464,10 @@ Page {
   }
 
   function rollbackAndClose() {
-    // remove feature if we are in "add" mode and it already has valid ID
+    // remove feature if we are in "add" or "addChild" mode and it already has valid ID
     // it was saved to prefill relation reference field in child layer
     let featureId = root.controller.featureLayerPair.feature.id
-    let shouldRemoveFeature = root.state === "add" && __inputUtils.isFeatureIdValid( featureId )
+    let shouldRemoveFeature = ( root.state === "add" || root.state === "addChild" ) && __inputUtils.isFeatureIdValid( featureId )
 
     if ( shouldRemoveFeature ) {
       root.controller.deleteFeature()
