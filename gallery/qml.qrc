@@ -76,6 +76,7 @@
         <file>../app/qml/components/MMDrawerHeader.qml</file>
         <file>../app/qml/components/MMBusyIndicator.qml</file>
         <file>../app/qml/components/MMSingleClickMouseArea.qml</file>
+        <file>../app/qml/components/MMNotificationBox.qml</file>
         <file>../app/qml/account/components/MMAccountPageItem.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxHorizontal.qml</file>
         <file>../app/qml/account/components/MMIconCheckBoxVertical.qml</file>

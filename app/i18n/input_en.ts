@@ -4,28 +4,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Unable to load source </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -238,67 +238,54 @@ Won&apos;t be added to the project.</source>
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minutes ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n minute(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minute ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hours ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n hour(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hour ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 days ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n day(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 day ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 weeks ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n week(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 week ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 months ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n month(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 month ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 years ago</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 year ago</source>
-        <translation type="unfinished"></translation>
+        <source>%n year(s) ago</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1537"/>
@@ -338,15 +325,21 @@ Won&apos;t be added to the project.</source>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2102"/>
-        <source>You need to add at least %1 point(s) to every part.</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2163"/>
+        <source>You need to add at least %n point(s) to every part.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2106"/>
-        <source>You need to add at least %1 point(s).</source>
-        <translation type="unfinished"></translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2167"/>
+        <source>You need to add at least %n point(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -700,7 +693,7 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="126"/>
         <source>Create workspace</source>
         <translation type="unfinished"></translation>
     </message>
@@ -768,7 +761,7 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
         <source>Add feature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -789,22 +782,22 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormDeleteFeatureDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Delete feature</source>
         <translation type="unfinished">Delete feature</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="24"/>
         <source>Yes, I want to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="25"/>
         <source>No, thanks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1011,6 +1004,7 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1090,7 +1084,12 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="327"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <source>Geoid separation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
         <source>Manage GPS receivers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2160,12 +2159,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
         <source>Select features</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -2173,14 +2172,19 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
         <source>on layer %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="114"/>
         <source>Edit</source>
         <translation type="unfinished">Edit</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="120"/>
+        <source>Delete</source>
+        <translation type="unfinished">Delete</translation>
     </message>
 </context>
 <context>
@@ -2314,7 +2318,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
-        <source>Each time you save changes, the app will sync automatically</source>
+        <source>Your project is synced automatically to keep you up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2429,7 +2433,7 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
-        <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
+        <source>Ensure that your split line intersects the feature properly and that the feature’s geometry is valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2456,7 +2460,12 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished">Done</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="112"/>
+        <source>The split line does not properly cross the feature. Please adjust the line to cross the feature boundary.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSplittingTools.qml" line="120"/>
         <source>You need to add at least 2 points.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2764,115 +2773,115 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="238"/>
+        <location filename="../../core/merginapi.cpp" line="244"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="880"/>
+        <location filename="../../core/merginapi.cpp" line="892"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="888"/>
-        <location filename="../../core/merginapi.cpp" line="948"/>
+        <location filename="../../core/merginapi.cpp" line="900"/>
+        <location filename="../../core/merginapi.cpp" line="960"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="932"/>
-        <location filename="../../core/merginapi.cpp" line="946"/>
+        <location filename="../../core/merginapi.cpp" line="944"/>
+        <location filename="../../core/merginapi.cpp" line="958"/>
         <source>SSO is not supported for the specified domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="961"/>
-        <location filename="../../core/merginapi.cpp" line="1471"/>
+        <location filename="../../core/merginapi.cpp" line="973"/>
+        <location filename="../../core/merginapi.cpp" line="1492"/>
         <source>Please enter a valid email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="968"/>
-        <location filename="../../core/merginapi.cpp" line="1483"/>
+        <location filename="../../core/merginapi.cpp" line="980"/>
+        <location filename="../../core/merginapi.cpp" line="1504"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="982"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1011"/>
+        <location filename="../../core/merginapi.cpp" line="1026"/>
         <source>Marketing source cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1019"/>
+        <location filename="../../core/merginapi.cpp" line="1034"/>
         <source>Industry cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1338"/>
+        <location filename="../../core/merginapi.cpp" line="1359"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1343"/>
+        <location filename="../../core/merginapi.cpp" line="1364"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1451"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
         <source>Registration successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1473"/>
-        <location filename="../../core/merginapi.cpp" line="1479"/>
-        <location filename="../../core/merginapi.cpp" line="1491"/>
+        <location filename="../../core/merginapi.cpp" line="1494"/>
+        <location filename="../../core/merginapi.cpp" line="1500"/>
+        <location filename="../../core/merginapi.cpp" line="1512"/>
         <source>Registration failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1477"/>
+        <location filename="../../core/merginapi.cpp" line="1498"/>
         <source>This email address is already registered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1502"/>
+        <location filename="../../core/merginapi.cpp" line="1523"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1555"/>
         <source>Workspace created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1902"/>
+        <location filename="../../core/merginapi.cpp" line="1923"/>
         <source>Project detached from the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4164"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace name contains invalid characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4298"/>
         <source>Workspace %1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4337"/>
+        <location filename="../../core/merginapi.cpp" line="4404"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4363"/>
-        <location filename="../../core/merginapi.cpp" line="4390"/>
+        <location filename="../../core/merginapi.cpp" line="4430"/>
+        <location filename="../../core/merginapi.cpp" line="4457"/>
         <source>SSO authorization failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2964,7 +2973,7 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="212"/>
+        <location filename="../projectwizard.cpp" line="215"/>
         <source>Project %1 created</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3097,12 +3106,12 @@ only allows up to %1 downloaded projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="578"/>
+        <location filename="../main.cpp" line="588"/>
         <source>Report submitted. Please contact the support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="583"/>
+        <location filename="../main.cpp" line="593"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3188,53 +3197,79 @@ only allows up to %1 downloaded projects.</source>
         <source>not tracking</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="674"/>
+        <source>Delete %n feature(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="675"/>
+        <source>Delete %n selected feature(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../qml/main.qml" line="873"/>
+        <location filename="../qml/main.qml" line="677"/>
+        <source>Yes, I want to delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="678"/>
+        <source>No, thanks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="898"/>
         <source>Select feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="982"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="1014"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1032"/>
+        <location filename="../qml/main.qml" line="1004"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1100"/>
+        <location filename="../qml/main.qml" line="1125"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="801"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="926"/>
+        <location filename="../qml/main.qml" line="951"/>
         <source>Successfully synchronised</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="964"/>
+        <location filename="../qml/main.qml" line="989"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1121"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1154"/>
+        <location filename="../qml/main.qml" line="1179"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>

@@ -227,6 +227,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   if ( mAppSettings.autosyncAllowed() )
   {
     setAutosyncEnabled( true );
+    requestSync( SyncOptions::AutomaticRequest );
   }
 
   // in case tracking is running, we want to show the UI
@@ -329,7 +330,8 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
 
     mAutosyncController = std::make_unique<AutosyncController>( mQgsProject );
 
-    connect( mAutosyncController.get(), &AutosyncController::projectChangeDetected, this, &ActiveProject::requestSync );
+    connect( mAutosyncController.get(), &AutosyncController::projectSyncRequested, this, &ActiveProject::requestSync );
+    connect( this, &ActiveProject::appStateChanged, mAutosyncController.get(), &AutosyncController::checkSyncRequiredAfterAppStateChange );
   }
   else
   {
@@ -341,9 +343,16 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
   }
 }
 
-void ActiveProject::requestSync()
+void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin )
 {
-  emit syncActiveProject( mLocalProject );
+  if ( requestOrigin == SyncOptions::RequestOrigin::ManualRequest )
+  {
+    if ( mAutosyncController )
+    {
+      mAutosyncController->updateLastUpdateTime();
+    }
+  }
+  emit syncActiveProject( mLocalProject, requestOrigin );
 }
 
 void ActiveProject::setMapSettings( InputMapSettings *mapSettings )

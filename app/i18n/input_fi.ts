@@ -2108,7 +2108,7 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/map/MMRecordingTools.qml" line="258"/>
         <location filename="../qml/map/MMRecordingTools.qml" line="288"/>
         <source>Record</source>
-        <translation>Tallenna sijainti</translation>
+        <translation>Tallenna geometria</translation>
     </message>
 </context>
 <context>

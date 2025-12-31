@@ -556,6 +556,16 @@ int main( int argc, char *argv[] )
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
 
+  // the automatic sync request on cold start will fail on MerginApiStatus not being initialized yet, so we call it again
+  // after server ping is done
+  if ( activeProject.autosyncController() )
+  {
+    QObject::connect( ma.get(), &MerginApi::pingMerginFinished, &lambdaContext, [&activeProject]
+    {
+      activeProject.requestSync( SyncOptions::AutomaticRequest );
+    }, Qt::SingleShotConnection );
+  }
+
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &lambdaContext, []( Qt::ApplicationState state )
   {
     QString msg;
@@ -603,9 +613,9 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project )
+  QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
   {
-    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry );
+    syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -649,6 +659,7 @@ int main( int argc, char *argv[] )
   } );
   // Direct connections
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, pk, &PositionKit::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &activeProject, &ActiveProject::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
