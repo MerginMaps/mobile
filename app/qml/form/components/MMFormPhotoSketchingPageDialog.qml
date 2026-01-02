@@ -200,56 +200,16 @@ Dialog {
 
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
-    ScrollView {
+    MMComponents.MMPhotoColorPicker{
+      colors: ["#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93"]
+      showEraseButton: false
+      controller: root.controller
+
       Layout.alignment: Qt.AlignHCenter
-      Layout.preferredHeight: scrollRow.height
-      Layout.preferredWidth: scrollRow.width
       Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
-
-      ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-      Row {
-        id: scrollRow
-        spacing: __style.margin12
-        padding: __style.margin4
-        anchors.centerIn: parent
-
-        Repeater {
-          // we use more vibrant versions of our product colors
-          model: ["#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93"]
-
-          MMComponents.MMRoundButton {
-            id: colorButton
-            required property color modelData
-            anchors.verticalCenter: parent.verticalCenter
-
-            contentItem: Rectangle {
-              color: colorButton.modelData
-              radius: width / 2
-              anchors.fill: parent
-            }
-            background: Rectangle {
-              property bool isActive: colorButton.modelData === root.controller.activeColor
-
-              anchors.centerIn: parent
-              radius: width / 2
-              width: __style.margin48
-              height: __style.margin48
-              color: isActive ? __style.transparentColor : __style.lightGreenColor
-              border.width: 2
-              border.color: isActive ? __style.grassColor : __style.transparentColor
-            }
-
-            onClicked: {
-              root.controller.setActiveColor( modelData )
-            }
-          }
-        }
-      }
     }
   }
 
