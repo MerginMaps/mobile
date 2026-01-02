@@ -54,87 +54,18 @@ MMComponents.MMDrawer {
     onClicked: root.sketchingController.undo()
   }
 
-  drawerContent: Column {
-    id: mainColumn
+  drawerContent: ColumnLayout {
+    anchors {
+        left: parent.left
+        right: parent.right
+    }
 
-    width: parent.width
-    spacing: __style.margin10
+    MMComponents.MMPhotoColorPicker{
+      colors: root.sketchingController?.availableColors() ?? null
+      showEraseButton: true
+      controller: root.sketchingController
 
-    ScrollView {
-      width: parent.width
-      height: scrollRow.height
-
-      ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-      Row {
-        id: scrollRow
-        width: parent.width
-        spacing: __style.margin12
-        leftPadding: __style.margin6
-
-        Repeater {
-          id: colorsView
-
-          model: root.sketchingController?.availableColors() ?? null
-
-          MMComponents.MMRoundButton {
-            anchors.verticalCenter: parent.verticalCenter
-
-            contentItem: Rectangle {
-              color: modelData
-              radius: width / 2
-              anchors.fill: parent
-            }
-
-            background: Rectangle {
-              property bool isActive: modelData.toLowerCase() === root.sketchingController.activeColor.toString().toLowerCase()
-
-              anchors.verticalCenter: parent.verticalCenter
-              anchors.horizontalCenter: parent.horizontalCenter
-              radius: width / 2
-              width: scrollRow.height
-              height: scrollRow.height
-              color: isActive ? __style.transparentColor : __style.lightGreenColor
-              border.width: 2
-              border.color: isActive ? __style.grassColor : __style.transparentColor
-            }
-
-            onClicked: {
-              root.sketchingController.eraserActive = false
-              root.sketchingController.activeColor = modelData
-            }
-
-            Component.onCompleted: {
-              // set the initial color to be the first one in the list
-              if ( index === 0 )
-              {
-                root.sketchingController.activeColor = modelData
-              }
-            }
-          }
-        }
-
-        MMComponents.MMButton {
-          text: qsTr( "Eraser" )
-          iconSourceLeft: __style.editIcon
-
-          type: MMButton.Types.Primary
-          size: MMButton.Sizes.Small
-
-          fontColor: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
-          iconColor: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
-          bgndColor: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          fontColorHover: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          iconColorHover: root.sketchingController?.eraserActive ? __style.grapeColor : __style.negativeColor
-          bgndColorHover: root.sketchingController?.eraserActive ? __style.negativeColor : __style.grapeColor
-
-          onClicked: {
-            root.sketchingController.activeColor = null
-            root.sketchingController.eraserActive = true
-          }
-        }
-      }
+      Layout.fillWidth: true
     }
   }
 }
