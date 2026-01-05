@@ -1,8 +1,8 @@
 diff --git a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm b/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
-index 95d51a86..c3944019 100644
+index 95d51a86..bdb8641b 100644
 --- a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
 +++ b/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
-@@ -47,12 +47,28 @@
+@@ -47,12 +47,36 @@
      NSTimeInterval locationTimeStamp = [newLocation.timestamp timeIntervalSince1970];
      const QDateTime timeStamp = QDateTime::fromMSecsSinceEpoch(qRound64(locationTimeStamp * 1000),
                                                                 QTimeZone::UTC);
@@ -22,14 +22,22 @@ index 95d51a86..c3944019 100644
 -                                             newLocation.altitude),
 +                                             availableAltitude),
                                               timeStamp);
-+    // we abuse the QGeoPositionInfo API here a bit, but we want to inform our app if we are using ellipsoidal or geoid
-+    // elevation and if a transform should be applied
++    // we abuse the QGeoPositionInfo API here a bit, but we want to give our app some more info
++    // VerticalSpeed - true if it's ellipsoidal altitude, false if geoid
++    // MagneticVariation - true if the location is mocked, false if not
 +    if (newLocation.ellipsoidalAltitude) {
 +      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 1);
 +    }
 +    else {
 +      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 0);
 +    }
++    if (newLocation.sourceInformation.isSimulatedBySoftware) {
++      location.setAttribute(QGeoPositionInfo::MagneticVariation, 1);
++    }
++    else {
++      location.setAttribute(QGeoPositionInfo::MagneticVariation, 0);
++    }
++
      if (newLocation.horizontalAccuracy >= 0)
          location.setAttribute(QGeoPositionInfo::HorizontalAccuracy, newLocation.horizontalAccuracy);
      if (newLocation.verticalAccuracy >= 0)

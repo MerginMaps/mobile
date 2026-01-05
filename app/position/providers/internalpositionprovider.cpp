@@ -150,10 +150,21 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
 #ifdef Q_OS_IOS
   // on ios we can get both ellipsoid and geoid altitude, depending on what is available (e.g. with mocked location we might
   // not be able to get the ellipsoid altitude only the geoid) we transform the altitude or not
-  double isTransformRequired = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
+  const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
+  const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
   localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
   QgsPoint geoidPosition;
-  if ( isTransformRequired )
+  if ( !isMockedLocation && isEllipsoidalAltitude )
+  {
+    // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to EPSG:9707 (WGS84 + EGM96)
+    geoidPosition = InputUtils::transformPoint(
+                      PositionKit::positionCrs3DEllipsoidHeight(),
+                      PositionKit::positionCrs3D( true ),
+                      QgsProject::instance()->transformContext(),
+    {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
+    positionOutsideGeoidModelArea );
+  }
+  else if ( isMockedLocation && isEllipsoidalAltitude )
   {
     // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     geoidPosition = InputUtils::transformPoint(
@@ -168,10 +179,10 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
   }
 #else
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to EPSG:9707 (WGS84 + EGM96)
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
-                                   PositionKit::positionCrs3D(),
+                                   PositionKit::positionCrs3D( true ),
                                    QgsProject::instance()->transformContext(),
   {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
   positionOutsideGeoidModelArea );
@@ -192,7 +203,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
 #ifdef Q_OS_IOS
-    if ( isTransformRequired )
+    if ( isEllipsoidalAltitude )
     {
 #endif
       const double ellipsoidAltitude = localPosition.coordinate().altitude();

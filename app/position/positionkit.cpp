@@ -33,20 +33,23 @@ PositionKit::PositionKit( QObject *parent )
 {
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
+QgsCoordinateReferenceSystem PositionKit::positionCrs3D( const bool forceDefault )
 {
-  bool crsExists = false;
-  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
-  if ( crsExists )
+  if ( !forceDefault )
   {
-    const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
-    QString compoundCrsError{};
-    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
-    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+    bool crsExists = false;
+    const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+    if ( crsExists )
     {
-      return compoundCrs;
+      const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+      QString compoundCrsError{};
+      const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
+      if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+      {
+        return compoundCrs;
+      }
+      CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
     }
-    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
   }
 
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );

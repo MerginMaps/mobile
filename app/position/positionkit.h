@@ -128,7 +128,7 @@ class PositionKit : public QObject
      * Coordinate reference system of position (WGS84 + geoid height) - can use custom geoid model
      * \note by default we use egm96_15 model (EPSG:9707)
      */
-    static QgsCoordinateReferenceSystem positionCrs3D();
+    static QgsCoordinateReferenceSystem positionCrs3D( bool forceDefault = false );
     // Returns the model name used for elevation transformations
     Q_INVOKABLE static QString positionCrs3DGeoidModelName();
 
