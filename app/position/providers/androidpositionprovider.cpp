@@ -51,26 +51,48 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
   pos.longitude = longitude;
   pos.utcDateTime = QDateTime::fromMSecsSinceEpoch( timestamp, QTimeZone::UTC );
 
+  // detect if location is mocked (useful to check if 3rd party app is setting it for external GNSS receiver)
+  // we only use this to show users that the mock location is active
+  jboolean isMock = false;
+  if ( QtAndroidPrivate::androidSdkVersion() >= 31 )
+  {
+    isMock = location.callMethod<jboolean>( "isMock" );
+  }
+  else
+  {
+    isMock = location.callMethod<jboolean>( "isFromMockProvider" );
+  }
+  pos.isMock = isMock;
+
   if ( location.callMethod<jboolean>( "hasAltitude" ) )
   {
-    const jdouble ellipsoidHeight = location.callMethod<jdouble>( "getAltitude" );
-    if ( !qFuzzyIsNull( ellipsoidHeight ) )
+    const jdouble altitude = location.callMethod<jdouble>( "getAltitude" );
+    if ( !qFuzzyIsNull( altitude ) )
     {
       bool positionOutsideGeoidModelArea = false;
-      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-      const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                       PositionKit::positionCrs3DEllipsoidHeight(),
-                                       PositionKit::positionCrs3D(),
-                                       QgsProject::instance()->transformContext(),
-      {longitude, latitude, ellipsoidHeight},
-      positionOutsideGeoidModelArea );
-      if ( !positionOutsideGeoidModelArea )
+      if ( !isMock )
       {
-        pos.elevation = geoidPosition.z();
+        // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to EPSG:9707 (WGS84 + EGM96)
+        const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                         PositionKit::positionCrs3DEllipsoidHeight(),
+                                         PositionKit::positionCrs3D( true ),
+                                         QgsProject::instance()->transformContext(),
+        {longitude, latitude, altitude},
+        positionOutsideGeoidModelArea );
+        if ( !positionOutsideGeoidModelArea )
+        {
+          pos.elevation = geoidPosition.z();
 
-        const double geoidSeparation = ellipsoidHeight - geoidPosition.z();
-        pos.elevation_diff = geoidSeparation;
+          const double geoidSeparation = altitude - geoidPosition.z();
+          pos.elevation_diff = geoidSeparation;
+        }
       }
+      else
+      {
+        // if the location is mocked we expect it to be orthometric
+        pos.elevation = altitude;
+      }
+
     }
   }
 
@@ -112,19 +134,6 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 
     // could also use getBearingAccuracyDegrees() since API level 26 (Android 8.0)
   }
-
-  // detect if location is mocked (useful to check if 3rd party app is setting it for external GNSS receiver)
-  // we only use this to show users that the mock location is active
-  jboolean isMock = false;
-  if ( QtAndroidPrivate::androidSdkVersion() >= 31 )
-  {
-    isMock = location.callMethod<jboolean>( "isMock" );
-  }
-  else
-  {
-    isMock = location.callMethod<jboolean>( "isFromMockProvider" );
-  }
-  pos.isMock = isMock;
 
   // could also use getExtras() to get further details from mocked location
   // (the key/value pairs are vendor-specific, and could include things like DOP,
