@@ -213,20 +213,26 @@ void BluetoothPositionProvider::positionUpdateReceived()
     const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
 
-    // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
-    // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
-    const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
-    bool positionOutsideGeoidModelArea = false;
-    const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                     PositionKit::positionCrs3DEllipsoidHeight(),
-                                     PositionKit::positionCrs3D(),
-                                     QgsProject::instance()->transformContext(),
-    {positionData.longitude, positionData.latitude, ellipsoidElevation},
-    positionOutsideGeoidModelArea );
-    if ( !positionOutsideGeoidModelArea )
+    bool valueRead = false;
+    const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+    // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
+    if ( valueRead && !isVerticalCRSPassedThrough )
     {
-      positionData.elevation = geoidPosition.z();
-      positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
+      // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
+      // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
+      const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
+      bool positionOutsideGeoidModelArea = false;
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                       PositionKit::positionCrs3DEllipsoidHeight(),
+                                       PositionKit::positionCrs3D(),
+                                       QgsProject::instance()->transformContext(),
+      {positionData.longitude, positionData.latitude, ellipsoidElevation},
+      positionOutsideGeoidModelArea );
+      if ( !positionOutsideGeoidModelArea )
+      {
+        positionData.elevation = geoidPosition.z();
+        positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
+      }
     }
     emit positionChanged( positionData );
   }
