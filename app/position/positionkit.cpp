@@ -181,7 +181,11 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   {
     if ( InputUtils::isMobilePlatform() )
     {
+#ifdef ANDROID
+      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "android_fused" ) );
+#else
       return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
+#endif
     }
     else // desktop
     {
