@@ -37,6 +37,7 @@ Control {
   signal showChangesRequested()
 
   height: implicitHeight
+  width: ListView.view.width - ListView.view.scrollBarWidth
 
   topPadding: __style.margin20
   rightPadding: __style.margin20

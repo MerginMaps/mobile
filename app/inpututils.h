@@ -222,7 +222,7 @@ class InputUtils: public QObject
 
     /** InputApp platform */
     static QString appPlatform();
-    static bool isMobilePlatform();
+    Q_INVOKABLE static bool isMobilePlatform();
 
     static QString appDataDir();
 
