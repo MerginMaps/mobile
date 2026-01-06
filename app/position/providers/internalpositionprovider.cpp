@@ -148,11 +148,13 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
 
   bool positionOutsideGeoidModelArea = false;
 #ifdef Q_OS_IOS
-  // on ios we can get both ellipsoid and geoid altitude, depending on what is available (e.g. with mocked location we might
-  // not be able to get the ellipsoid altitude only the geoid) we transform the altitude or not
+  // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
+  // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
+  const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
   const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
-  const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
   localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
+  const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
+  mLastPosition.isMock = isMockedLocation;
   QgsPoint geoidPosition;
   if ( !isMockedLocation && isEllipsoidalAltitude )
   {
@@ -164,7 +166,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
     positionOutsideGeoidModelArea );
   }
-  else if ( isMockedLocation && isEllipsoidalAltitude )
+  else if ( isMockedLocation && isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
   {
     // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     geoidPosition = InputUtils::transformPoint(
@@ -203,7 +205,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
 #ifdef Q_OS_IOS
-    if ( isEllipsoidalAltitude )
+    if ( isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
     {
 #endif
       const double ellipsoidAltitude = localPosition.coordinate().altitude();

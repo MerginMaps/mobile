@@ -89,8 +89,29 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
       }
       else
       {
-        // if the location is mocked we expect it to be orthometric
-        pos.elevation = altitude;
+        bool valueRead = false;
+        const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+        if ( valueRead && !isVerticalCRSPassedThrough )
+        {
+          // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified model
+          const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                           PositionKit::positionCrs3DEllipsoidHeight(),
+                                           PositionKit::positionCrs3D(),
+                                           QgsProject::instance()->transformContext(),
+          {longitude, latitude, altitude},
+          positionOutsideGeoidModelArea );
+          if ( !positionOutsideGeoidModelArea )
+          {
+            pos.elevation = geoidPosition.z();
+
+            const double geoidSeparation = altitude - geoidPosition.z();
+            pos.elevation_diff = geoidSeparation;
+          }
+        }
+        else
+        {
+          pos.elevation = altitude;
+        }
       }
 
     }
