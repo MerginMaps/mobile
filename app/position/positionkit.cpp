@@ -55,10 +55,23 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D( const bool forceDefault
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
-QString PositionKit::positionCrs3DGeoidModelName()
+QString PositionKit::positionCrs3DGeoidModelName() const
 {
-  const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
-  return crs.description();
+  if ( !mPosition.isMock )
+  {
+    const QgsCoordinateReferenceSystem crs = positionCrs3D( true ).verticalCrs();
+    return crs.description();
+  }
+
+  bool valueRead = false;
+  const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+  if ( valueRead && !isVerticalCRSPassedThrough )
+  {
+    const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
+    return crs.description();
+  }
+
+  return {};
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs2D()

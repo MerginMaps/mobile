@@ -130,7 +130,7 @@ class PositionKit : public QObject
      */
     static QgsCoordinateReferenceSystem positionCrs3D( bool forceDefault = false );
     // Returns the model name used for elevation transformations
-    Q_INVOKABLE static QString positionCrs3DGeoidModelName();
+    Q_INVOKABLE QString positionCrs3DGeoidModelName() const;
 
     Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
