@@ -180,7 +180,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   {
     geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
   }
-#else
+#elif defined (ANDROID)
   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to EPSG:9707 (WGS84 + EGM96)
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
@@ -188,6 +188,8 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
                                    QgsProject::instance()->transformContext(),
   {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
   positionOutsideGeoidModelArea );
+#else
+  const QgsPoint geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
 #endif
   if ( !positionOutsideGeoidModelArea )
   {
@@ -204,6 +206,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
+    // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
 #ifdef Q_OS_IOS
     if ( isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
     {
