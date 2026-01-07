@@ -2365,7 +2365,7 @@ void TestMerginApi::testAutosync()
   // 2. allow autosync controller
   // 3. load the project
   // 4. make some changes in the project
-  // 5. mock UI form done trigger for autosync
+  // 5. make sure autosync controller triggers that data has changed
   //
 
   QString projectName = QStringLiteral( "testAutosync" );
@@ -2403,7 +2403,6 @@ void TestMerginApi::testAutosync()
   QSignalSpy changesSpy( autosyncController, &AutosyncController::projectSyncRequested );
 
   planes->commitChanges();
-  autosyncController->syncLayerChange();
 
   QVERIFY( changesSpy.count() );
   QVERIFY( syncSpy.count() );
