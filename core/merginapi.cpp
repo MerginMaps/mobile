@@ -1887,6 +1887,28 @@ void MerginApi::pingMergin()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::sslErrors, this, [url]( const QList<QSslError> &errors )
+  {
+    CoreUtils::log( "URL attempting to access:", url.toString() );
+
+    for ( const auto &error : errors )
+    {
+      CoreUtils::log( "Error Description:", error.errorString() );
+
+      // Get the certificate causing the error
+      QSslCertificate cert = error.certificate();
+      if ( !cert.isNull() )
+      {
+        CoreUtils::log( "Subject (Common Name):", cert.subjectInfo( QSslCertificate::CommonName ).join( "," ) );
+        CoreUtils::log( "Issuer (Common Name):", cert.issuerInfo( QSslCertificate::CommonName ).join( "," ) );
+        CoreUtils::log( "Organization:", cert.subjectInfo( QSslCertificate::Organization ).join( "," ) );
+        CoreUtils::log( "Valid From:", cert.effectiveDate().toString() );
+        CoreUtils::log( "Expires On:", cert.expiryDate().toString() );
+        CoreUtils::log( "Fingerprint (SHA256):", cert.digest( QCryptographicHash::Sha256 ).toHex() );
+      }
+    }
+  } );
+
   CoreUtils::log( "ping", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
