@@ -1887,14 +1887,13 @@ void MerginApi::pingMergin()
   request.setUrl( url );
 
   QNetworkReply *reply = mManager->get( request );
+#ifndef QT_NO_SSL
   connect( reply, &QNetworkReply::sslErrors, this, [url]( const QList<QSslError> &errors )
   {
     CoreUtils::log( "URL attempting to access:", url.toString() );
-
     for ( const auto &error : errors )
     {
       CoreUtils::log( "Error Description:", error.errorString() );
-
       // Get the certificate causing the error
       QSslCertificate cert = error.certificate();
       if ( !cert.isNull() )
@@ -1908,7 +1907,7 @@ void MerginApi::pingMergin()
       }
     }
   } );
-
+#endif
   CoreUtils::log( "ping", QStringLiteral( "Requesting: " ) + url.toString() );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::pingMerginReplyFinished );
 }
