@@ -79,6 +79,7 @@ Item {
           StateChangeScript {
             script: {
               featureForm.forceActiveFocus()
+              __activeProject.autosyncController?.setIsSyncPaused(true)
             }
           }
         },

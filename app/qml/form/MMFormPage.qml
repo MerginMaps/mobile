@@ -86,10 +86,6 @@ Page {
     }
   }
 
-  onVisibleChanged: {
-    __activeProject.autosyncController?.setIsSyncPaused(visible)
-  }
-
   property bool layerIsReadOnly: true
   property bool layerIsSpatial: true
 
@@ -457,7 +453,6 @@ Page {
       return
     }
 
-    __activeProject.autosyncController?.setIsSyncPaused(false)
     parent.focus = true
     controller.save()
   }
@@ -476,7 +471,6 @@ Page {
 
     // rollback all changes if the layer is still editable
     root.controller.rollback()
-    __activeProject.autosyncController?.setIsSyncPaused(false)
     root.canceled()
   }
 

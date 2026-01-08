@@ -272,6 +272,12 @@ Item {
     focus: true
 
     anchors.fill: parent
+
+    onDepthChanged: {
+      if (depth === 0) {
+        __activeProject.autosyncController?.setIsSyncPaused(false)
+      }
+    }
   }
 
   Component {
