@@ -31,7 +31,7 @@ Item {
   property var relationToApply
   property var controllerToApply
 
-  property alias formState: featureForm.state // add, addChild, edit, readOnly or multiEdit
+  property alias formState: featureForm.state // add, edit, readOnly or multiEdit
   property alias panelState: statesManager.state
 
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false

@@ -167,7 +167,7 @@ Item {
   function addLinkedFeature( newPair, parentController, relation ) {
     let props = {
       featureLayerPair: newPair,
-      formState: "addChild",
+      formState: "add",
       panelState: "form",
       parentController: parentController,
       linkedRelation: relation

@@ -33,14 +33,27 @@ AutosyncController::AutosyncController(
     return;
   }
 
+  // Register for data change of project's vector layers
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers( true );
+  for ( const QgsMapLayer *layer : layers )
+  {
+    const QgsVectorLayer *vecLayer = qobject_cast<const QgsVectorLayer *>( layer );
+    if ( vecLayer )
+    {
+      if ( !vecLayer->readOnly() )
+      {
+        connect( vecLayer, &QgsVectorLayer::afterCommitChanges, this, &AutosyncController::syncLayerChange );
+      }
+    }
+  }
+
   //every 10 seconds check if last sync was 60 seconds or more ago and sync if it's true
   mTimer = std::make_unique<QTimer>( this );
   connect( mTimer.get(), &QTimer::timeout, this, [&]
   {
     if ( QDateTime::currentDateTime() - mLastUpdateTime >= std::chrono::milliseconds( SYNC_INTERVAL ) )
     {
-      mLastUpdateTime = QDateTime::currentDateTime();
-      emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
+      syncLayerChange();
     }
   } );
   mTimer->start( SYNC_CHECK_TIMEOUT );
@@ -53,8 +66,11 @@ void AutosyncController::updateLastUpdateTime()
 
 void AutosyncController::syncLayerChange()
 {
-  mLastUpdateTime = QDateTime::currentDateTime();
-  emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
+  if ( !mIsSyncPaused )
+  {
+    mLastUpdateTime = QDateTime::currentDateTime();
+    emit projectSyncRequested( SyncOptions::RequestOrigin::AutomaticRequest );
+  }
 }
 
 void AutosyncController::checkSyncRequiredAfterAppStateChange( const Qt::ApplicationState state )

@@ -29,20 +29,26 @@ class AutosyncController : public QObject
     // Set mLastUpdateTime to "now", triggered by manual sync
     void updateLastUpdateTime();
 
-    // This triggers sync after a change has been saved to layer via attributeController
-    Q_INVOKABLE void syncLayerChange();
+    Q_INVOKABLE void setIsSyncPaused( const bool isSyncPaused )
+    {
+      mIsSyncPaused = isSyncPaused;
+    }
+
 
   signals:
     void projectSyncRequested( SyncOptions::RequestOrigin origin );
 
   public slots:
     void checkSyncRequiredAfterAppStateChange( Qt::ApplicationState state );
+    // This triggers sync after a change has been saved to layer
+    void syncLayerChange();
 
   private:
 
     QgsProject *mQgsProject = nullptr; // not owned
     QDateTime mLastUpdateTime;
     std::unique_ptr<QTimer> mTimer = nullptr;
+    bool mIsSyncPaused = false;
 };
 
 #endif // AUTOSYNCCONTROLLER_H
