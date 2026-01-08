@@ -150,6 +150,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
 #ifdef Q_OS_IOS
   // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
   // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
+  bool valueRead = false;
   const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
   const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
   localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
@@ -166,7 +167,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
     positionOutsideGeoidModelArea );
   }
-  else if ( isMockedLocation && isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
+  else if ( isMockedLocation && isEllipsoidalAltitude && valueRead && !isVerticalCRSPassedThrough )
   {
     // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     geoidPosition = InputUtils::transformPoint(
