@@ -2500,9 +2500,9 @@ void TestMerginApi::testCreateWorkspace()
   QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
   // we need to register new user for tests and assign its credentials to env vars
-  QString username = TestUtils::generateUsername();
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
+  QString username = email.left( email.lastIndexOf( '@' ) );
 
   qDebug() << "REGISTERING NEW TEST USER WITH EMAIL:" << email;
 
