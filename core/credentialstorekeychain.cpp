@@ -109,7 +109,7 @@ void CredentialStore::readKeyRecursively( const QString &key )
     if ( mReadJob->error() )
     {
       CoreUtils::log( "Auth", QString( "Keychain read error: %1" ).arg( mReadJob->errorString() ) );
-      emit authDataRead( QString(), QString(), -1, QString(), QDateTime() );
+      emit authDataRead( QString(), QString(), QString(), QDateTime(), -1 );
       return;
     }
 
