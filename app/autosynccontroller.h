@@ -41,7 +41,7 @@ class AutosyncController : public QObject
   public slots:
     void checkSyncRequiredAfterAppStateChange( Qt::ApplicationState state );
     // This triggers sync after a change has been saved to layer
-    void syncLayerChange();
+    Q_INVOKABLE void syncLayerChange();
 
   private:
 

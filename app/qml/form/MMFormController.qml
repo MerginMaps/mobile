@@ -40,6 +40,7 @@ Item {
   property real drawerHeight: drawer.height
 
   signal closed()
+  signal saveRequested()
   signal editGeometry( var pair )
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
@@ -199,7 +200,10 @@ Item {
       layerIsReadOnly: root.layerIsReadOnly
       layerIsSpatial: root.layerIsSpatial
 
-      onSaved: drawer.close()
+      onSaved: {
+        root.saveRequested()
+        drawer.close()
+      }
       onCanceled: drawer.close()
 
       onEditGeometryRequested: function( pair ) {

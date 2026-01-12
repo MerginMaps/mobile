@@ -255,6 +255,8 @@ Item {
   StackView {
     id: formsStack
 
+    property bool saveRequested: false
+
     function popOneOrClose() {
       if ( formsStack.depth > 1 ) {
         formsStack.pop()
@@ -276,6 +278,10 @@ Item {
     onDepthChanged: {
       if (depth === 0) {
         __activeProject.autosyncController?.setIsSyncPaused(false)
+        if (saveRequested) {
+          __activeProject.autosyncController?.syncLayerChange()
+          saveRequested = false
+        }
       }
     }
   }
@@ -292,6 +298,10 @@ Item {
         if ( panelState !== "hidden" ) {
           formsStack.popOneOrClose()
         }
+      }
+
+      onSaveRequested: {
+        formsStack.saveRequested = true
       }
 
       onPreviewPanelChanged: function( panelHeight ) {
