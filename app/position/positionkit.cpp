@@ -156,9 +156,9 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
       return provider;
     }
 #ifdef ANDROID
-    else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
+    if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
     {
-      bool fused = ( id == QStringLiteral( "android_fused" ) );
+      const bool fused = ( id == QStringLiteral( "android_fused" ) );
       if ( fused && !AndroidPositionProvider::isFusedAvailable() )
       {
         // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
