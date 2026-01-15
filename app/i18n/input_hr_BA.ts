@@ -771,7 +771,7 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="24"/>
         <source>Yes, I want to delete</source>
-        <translation>Da, želim odustati</translation>
+        <translation>Da, želim izbrisati</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="25"/>
