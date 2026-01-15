@@ -194,19 +194,33 @@ ApplicationWindow {
       map.highlightPair( pair )
     }
 
-    onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
+    onEditingGeometryStarted: 
+    {
+      // hide the other layers when editing the geometry
+      mapPanelsHideTranslation.y = mapPanelsStackView.height
+      formsStackManager.geometryEditingStarted()
+    }
     onEditingGeometryFinished: function( pair ) {
+      mapPanelsHideTranslation.y = 0
       formsStackManager.geometryEditingFinished( pair )
     }
     onEditingGeometryCanceled: {
+      mapPanelsHideTranslation.y = 0
       formsStackManager.geometryEditingFinished( null, false )
     }
 
-    onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
+    onRecordInLayerFeatureStarted: 
+    {
+      // hide the other layers when editing the geometry
+      mapPanelsHideTranslation.y = mapPanelsStackView.height
+      formsStackManager.geometryEditingStarted()
+    }
     onRecordInLayerFeatureFinished: function( pair ) {
+      mapPanelsHideTranslation.y = 0
       formsStackManager.recordInLayerFinished( pair )
     }
     onRecordInLayerFeatureCanceled: {
+      mapPanelsHideTranslation.y = 0
       formsStackManager.recordInLayerFinished( null, false )
     }
 
@@ -440,6 +454,18 @@ ApplicationWindow {
         from: 0
         duration: 400
         easing.type: Easing.OutCubic
+      }
+    }
+
+    transform: Translate {
+      id: mapPanelsHideTranslation
+      y: 0
+
+      Behavior on y {
+        NumberAnimation { 
+          duration: 500
+          easing.type: Easing.OutCubic
+        }
       }
     }
   }
