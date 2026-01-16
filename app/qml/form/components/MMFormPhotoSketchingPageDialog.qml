@@ -200,16 +200,19 @@ Dialog {
 
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
-    MMComponents.MMPhotoColorPicker{
-      colors: ["#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93"]
+    MMComponents.MMColorPicker{
+      colors: [__style.polarColor, __style.nightColor, __style.oceanBlueColor, __style.meadowGreenColor, __style.informativeYellowColor, __style.fruitOrangeColor, __style.salmonPinkColor]
       showEraseButton: false
-      controller: root.controller
 
       Layout.alignment: Qt.AlignHCenter
       Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
+
+      onActiveColorChanged:{
+        root.controller.activeColor = activeColor
+      }
     }
   }
 
