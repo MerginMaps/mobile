@@ -196,8 +196,11 @@ ApplicationWindow {
 
     onEditingGeometryStarted: 
     {
-      // hide the other layers when editing the geometry
-      mapPanelsHideTranslation.y = mapPanelsStackView.height
+      // if present in the stack, hide the other layers when editing the geometry
+      // use the Translation Animation to hide the stack
+      if(mapPanelsStackView.depth > 0){
+        mapPanelsHideTranslation.y = mapPanelsStackView.height
+      }
       formsStackManager.geometryEditingStarted()
     }
     onEditingGeometryFinished: function( pair ) {
@@ -211,8 +214,11 @@ ApplicationWindow {
 
     onRecordInLayerFeatureStarted: 
     {
-      // hide the other layers when editing the geometry
-      mapPanelsHideTranslation.y = mapPanelsStackView.height
+      // if present in the stack, hide the other layers when editing the geometry
+      // use the Translation Animation to hide the stack
+      if(mapPanelsStackView.depth > 0){
+        mapPanelsHideTranslation.y = mapPanelsStackView.height
+      }
       formsStackManager.geometryEditingStarted()
     }
     onRecordInLayerFeatureFinished: function( pair ) {
