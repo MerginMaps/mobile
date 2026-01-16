@@ -162,9 +162,9 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # FIND PACKAGES
 # ########################################################################################
 
-if(SquishQtBuiltinHook_ROOT)
+if (SquishQtBuiltinHook_ROOT)
   list(APPEND CMAKE_FIND_ROOT_PATH ${SquishQtBuiltinHook_ROOT})
-endif()
+endif ()
 
 find_package(
   Qt6
