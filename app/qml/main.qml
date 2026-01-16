@@ -196,37 +196,29 @@ ApplicationWindow {
 
     onEditingGeometryStarted: 
     {
-      // if present in the stack, hide the other layers when editing the geometry
-      // use the Translation Animation to hide the stack
-      if(mapPanelsStackView.depth > 0){
-        mapPanelsHideTranslation.y = mapPanelsStackView.height
-      }
+      mapPanelsStackView.hideMapStackIfNeeded()
       formsStackManager.geometryEditingStarted()
     }
     onEditingGeometryFinished: function( pair ) {
-      mapPanelsHideTranslation.y = 0
+      mapPanelsStackView.showMapStack()
       formsStackManager.geometryEditingFinished( pair )
     }
     onEditingGeometryCanceled: {
-      mapPanelsHideTranslation.y = 0
+      mapPanelsStackView.showMapStack()
       formsStackManager.geometryEditingFinished( null, false )
     }
 
     onRecordInLayerFeatureStarted: 
     {
-      // if present in the stack, hide the other layers when editing the geometry
-      // use the Translation Animation to hide the stack
-      if(mapPanelsStackView.depth > 0){
-        mapPanelsHideTranslation.y = mapPanelsStackView.height
-      }
+      mapPanelsStackView.hideMapStackIfNeeded()
       formsStackManager.geometryEditingStarted()
     }
     onRecordInLayerFeatureFinished: function( pair ) {
-      mapPanelsHideTranslation.y = 0
+      mapPanelsStackView.showMapStack()
       formsStackManager.recordInLayerFinished( pair )
     }
     onRecordInLayerFeatureCanceled: {
-      mapPanelsHideTranslation.y = 0
+      mapPanelsStackView.showMapStack()
       formsStackManager.recordInLayerFinished( null, false )
     }
 
@@ -473,6 +465,18 @@ ApplicationWindow {
           easing.type: Easing.OutCubic
         }
       }
+    }
+
+    function hideMapStackIfNeeded() {
+      // if present in the stack, hide the other layers when editing the geometry
+      // use the Translation Animation to hide the stack
+      if(mapPanelsStackView.depth > 0){
+        mapPanelsHideTranslation.y = mapPanelsStackView.height  
+      }
+    }
+
+    function showMapStack(){
+       mapPanelsHideTranslation.y = 0  
     }
   }
 
