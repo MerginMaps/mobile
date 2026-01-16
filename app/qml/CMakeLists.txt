@@ -40,7 +40,8 @@ set(MM_QML
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
-    components/MMPhotoColorPicker.qml
+    components/MMColorPicker.qml
+    components/MMColorButton.qml
     components/MMPopup.qml
     components/MMPhoto.qml
     components/MMProgressBar.qml

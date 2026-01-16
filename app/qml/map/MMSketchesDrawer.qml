@@ -54,18 +54,21 @@ MMComponents.MMDrawer {
     onClicked: root.sketchingController.undo()
   }
 
-  drawerContent: ColumnLayout {
+  drawerContent: MMComponents.MMColorPicker{
+    colors: root.sketchingController?.availableColors() ?? null
+    showEraseButton: true
+
     anchors {
-        left: parent.left
-        right: parent.right
+      left: parent.left
+      right: parent.right
     }
 
-    MMComponents.MMPhotoColorPicker{
-      colors: root.sketchingController?.availableColors() ?? null
-      showEraseButton: true
-      controller: root.sketchingController
+    onActiveColorChanged: {
+      root.sketchingController.activeColor = activeColor
+    }
 
-      Layout.fillWidth: true
+    onEraserActiveChanged: {
+      root.sketchingController.eraserActive = eraserActive
     }
   }
 }

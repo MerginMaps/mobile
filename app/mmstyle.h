@@ -82,6 +82,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor negativeUltraLightColor READ negativeUltraLightColor CONSTANT )
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
+    // Colors - color picker default
+    Q_PROPERTY( QColor meadowGreenColor READ meadowGreenColor CONSTANT )
+    Q_PROPERTY( QColor informativeYellowColor READ informativeYellowColor CONSTANT )
+    Q_PROPERTY( QColor fruitOrangeColor READ fruitOrangeColor CONSTANT )
+    Q_PROPERTY( QColor oceanBlueColor READ oceanBlueColor CONSTANT )
+    Q_PROPERTY( QColor salmonPinkColor READ salmonPinkColor CONSTANT )
+
     // Colors - others
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
     Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
@@ -381,6 +388,12 @@ class MMStyle: public QObject
     QColor negativeUltraLightColor() const {return QColor::fromString( "#FEFAF9" );}
     QColor informativeColor() const {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() const {return QColor::fromString( "#BD74FF" );}
+
+    QColor meadowGreenColor() const {return QColor::fromString( "#57B46F" );}
+    QColor informativeYellowColor() const {return QColor::fromString( "#FDCB2A" );}
+    QColor fruitOrangeColor() const {return QColor::fromString( "#FF9C40" );}
+    QColor oceanBlueColor() const {return QColor::fromString( "#5E9EE4" );}
+    QColor salmonPinkColor() const {return QColor::fromString( "#FF8F93" );}
 
     QColor shadowColor() const {return QColor::fromString( "#66777777" );}
 
