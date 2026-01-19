@@ -176,7 +176,7 @@ void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *f
   QgsDataSourceUri dsUri;
   dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
   dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "%1/data/default/{z}/{x}/{y}.pbf" ).arg( TILES_URL ) );
-  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/default.json" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/dev.json" ).arg( TILES_URL ) );
   dsUri.setParam( QStringLiteral( "zmin" ), QStringLiteral( "0" ) );
   dsUri.setParam( QStringLiteral( "zmax" ), QStringLiteral( "14" ) );
   QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles (OSM)" ) );
