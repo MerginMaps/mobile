@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 
 MMRoundButton {
     id: root
@@ -12,14 +11,11 @@ MMRoundButton {
     contentItem: Rectangle {
         color: root.chosenColor
         radius: width / 2
-        anchors.fill: parent
+        anchors.fill: root
     }
 
     background: Rectangle {
-        anchors{
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-        }
+        anchors.centerIn: root
 
         radius: width / 2
         width: __style.margin48

@@ -7,7 +7,7 @@ ScrollView {
     required property list<color> colors
     required property bool showEraseButton
 
-    property color activeColor: "transparent"
+    property color activeColor
     property bool eraserActive: false
 
     height: scrollRow.height
@@ -21,7 +21,7 @@ ScrollView {
         anchors.centerIn: parent
 
         Repeater {
-            model: colors
+            model: root.colors
             MMColorButton{
                 required property color modelData
                 required property int index
@@ -62,7 +62,7 @@ ScrollView {
             bgndColorHover: root.eraserActive ? __style.negativeColor : __style.grapeColor
 
             onClicked: {
-                root.activeColor = "transparent";
+                root.activeColor = null;
                 root.eraserActive = true;
             }
         }

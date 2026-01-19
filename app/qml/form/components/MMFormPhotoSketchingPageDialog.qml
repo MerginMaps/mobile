@@ -201,7 +201,7 @@ Dialog {
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
     MMComponents.MMColorPicker{
-      colors: [__style.polarColor, __style.nightColor, __style.oceanBlueColor, __style.meadowGreenColor, __style.informativeYellowColor, __style.fruitOrangeColor, __style.salmonPinkColor]
+      colors: [__style.photoSketchingWhiteColor, __style.photoSketchingBlackColor, __style.photoSketchingBlueColor, __style.photoSketchingGreenColor, __style.photoSketchingYellowColor, __style.photoSketchingOrangeColor, __style.photoSketchingPinkColor]
       showEraseButton: false
 
       Layout.alignment: Qt.AlignHCenter

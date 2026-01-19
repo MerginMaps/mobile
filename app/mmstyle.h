@@ -83,11 +83,13 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
     // Colors - color picker default
-    Q_PROPERTY( QColor meadowGreenColor READ meadowGreenColor CONSTANT )
-    Q_PROPERTY( QColor informativeYellowColor READ informativeYellowColor CONSTANT )
-    Q_PROPERTY( QColor fruitOrangeColor READ fruitOrangeColor CONSTANT )
-    Q_PROPERTY( QColor oceanBlueColor READ oceanBlueColor CONSTANT )
-    Q_PROPERTY( QColor salmonPinkColor READ salmonPinkColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingBlackColor READ photoSketchingBlackColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingWhiteColor READ photoSketchingWhiteColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingGreenColor READ photoSketchingGreenColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingYellowColor READ photoSketchingYellowColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingOrangeColor READ photoSketchingOrangeColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingBlueColor READ photoSketchingBlueColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingPinkColor READ photoSketchingPinkColor CONSTANT )
 
     // Colors - others
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
@@ -389,11 +391,13 @@ class MMStyle: public QObject
     QColor informativeColor() const {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() const {return QColor::fromString( "#BD74FF" );}
 
-    QColor meadowGreenColor() const {return QColor::fromString( "#57B46F" );}
-    QColor informativeYellowColor() const {return QColor::fromString( "#FDCB2A" );}
-    QColor fruitOrangeColor() const {return QColor::fromString( "#FF9C40" );}
-    QColor oceanBlueColor() const {return QColor::fromString( "#5E9EE4" );}
-    QColor salmonPinkColor() const {return QColor::fromString( "#FF8F93" );}
+    QColor photoSketchingBlackColor() const {return QColor::fromString( "#12181F" );}
+    QColor photoSketchingWhiteColor() const {return QColor::fromString( "#FFFFFF" );}
+    QColor photoSketchingGreenColor() const {return QColor::fromString( "#57B46F" );}
+    QColor photoSketchingYellowColor() const {return QColor::fromString( "#FDCB2A" );}
+    QColor photoSketchingOrangeColor() const {return QColor::fromString( "#FF9C40" );}
+    QColor photoSketchingBlueColor() const {return QColor::fromString( "#5E9EE4" );}
+    QColor photoSketchingPinkColor() const {return QColor::fromString( "#FF8F93" );}
 
     QColor shadowColor() const {return QColor::fromString( "#66777777" );}
 

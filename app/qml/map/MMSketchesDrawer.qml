@@ -51,24 +51,31 @@ MMComponents.MMDrawer {
       verticalCenter: parent.verticalCenter
     }
 
-    onClicked: root.sketchingController.undo()
+    onClicked: root.sketchingController?.undo()
   }
 
-  drawerContent: MMComponents.MMColorPicker{
-    colors: root.sketchingController?.availableColors() ?? null
-    showEraseButton: true
+  drawerContent: 
+    ColumnLayout{
 
-    anchors {
-      left: parent.left
-      right: parent.right
-    }
+      width: parent.width
+      spacing: __style.margin10
+      
+      MMComponents.MMColorPicker{
+        colors: root.sketchingController?.availableColors() ?? __style.photoSketchingWhiteColor
+        showEraseButton: true
 
-    onActiveColorChanged: {
-      root.sketchingController.activeColor = activeColor
-    }
+        Layout.alignment: Qt.AlignHCenter
+        Layout.preferredHeight: scrollRow.height
+        Layout.preferredWidth: scrollRow.width
+        Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins)
 
-    onEraserActiveChanged: {
-      root.sketchingController.eraserActive = eraserActive
+        onActiveColorChanged: {
+          root.sketchingController?.activeColor = activeColor
+        }
+
+        onEraserActiveChanged: {
+          root.sketchingController?.eraserActive = eraserActive
+        }
+      }
     }
-  }
 }
