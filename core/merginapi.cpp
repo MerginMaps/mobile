@@ -113,9 +113,9 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   } );
 
 #ifndef QT_NO_SSL
-  QObject::connect(mManager, &QNetworkAccessManager::sslErrors, this, []( QNetworkReply *reply, const QList<QSslError> &errors )
+  QObject::connect( mManager, &QNetworkAccessManager::sslErrors, this, []( QNetworkReply * reply, const QList<QSslError> &errors )
   {
-    CoreUtils::log( "URL attempting to access:", reply->url().toString());
+    CoreUtils::log( "URL attempting to access:", reply->url().toString() );
     for ( const auto &error : errors )
     {
       CoreUtils::log( "Error Description:", error.errorString() );
