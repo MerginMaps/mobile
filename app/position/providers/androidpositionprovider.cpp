@@ -70,12 +70,17 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     if ( !qFuzzyIsNull( altitude ) )
     {
       bool positionOutsideGeoidModelArea = false;
-      if ( !isMock )
+      bool valueRead = false;
+      const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      // (by default EPSG:9707 (WGS84 + EGM96))
+      // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
+      // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
+      if ( !isMock || ( isMock && valueRead && !isVerticalCRSPassedThrough ) )
       {
-        // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to EPSG:9707 (WGS84 + EGM96)
         const QgsPoint geoidPosition = InputUtils::transformPoint(
                                          PositionKit::positionCrs3DEllipsoidHeight(),
-                                         PositionKit::positionCrs3D( true ),
+                                         PositionKit::positionCrs3D(),
                                          QgsProject::instance()->transformContext(),
         {longitude, latitude, altitude},
         positionOutsideGeoidModelArea );
@@ -89,29 +94,7 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
       }
       else
       {
-        bool valueRead = false;
-        const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
-        if ( valueRead && !isVerticalCRSPassedThrough )
-        {
-          // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified model
-          const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                           PositionKit::positionCrs3DEllipsoidHeight(),
-                                           PositionKit::positionCrs3D(),
-                                           QgsProject::instance()->transformContext(),
-          {longitude, latitude, altitude},
-          positionOutsideGeoidModelArea );
-          if ( !positionOutsideGeoidModelArea )
-          {
-            pos.elevation = geoidPosition.z();
-
-            const double geoidSeparation = altitude - geoidPosition.z();
-            pos.elevation_diff = geoidSeparation;
-          }
-        }
-        else
-        {
-          pos.elevation = altitude;
-        }
+        pos.elevation = altitude;
       }
 
     }

@@ -95,7 +95,7 @@ void SimulatedPositionProvider::generateRadiusPosition()
     bool positionOutsideGeoidModelArea = false;
     const QgsPoint geoidPosition = InputUtils::transformPoint(
                                      PositionKit::positionCrs3DEllipsoidHeight(),
-                                     PositionKit::positionCrs3D( true ),
+                                     PositionKit::positionCrs3D(),
                                      QgsCoordinateTransformContext(),
     {longitude, latitude, ellipsoidAltitude},
     positionOutsideGeoidModelArea );
@@ -145,7 +145,7 @@ void SimulatedPositionProvider::generateConstantPosition()
   bool positionOutsideGeoidModelArea = false;
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    PositionKit::positionCrs3DEllipsoidHeight(),
-                                   PositionKit::positionCrs3D( true ),
+                                   PositionKit::positionCrs3D(),
                                    QgsCoordinateTransformContext(),
   {mLongitude, mLatitude, 100},
   positionOutsideGeoidModelArea );

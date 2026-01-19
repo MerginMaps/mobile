@@ -33,23 +33,20 @@ PositionKit::PositionKit( QObject *parent )
 {
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCrs3D( const bool forceDefault )
+QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
-  if ( !forceDefault )
+  bool crsExists = false;
+  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+  if ( crsExists )
   {
-    bool crsExists = false;
-    const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
-    if ( crsExists )
+    const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+    QString compoundCrsError{};
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
+    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
     {
-      const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
-      QString compoundCrsError{};
-      const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
-      if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
-      {
-        return compoundCrs;
-      }
-      CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
+      return compoundCrs;
     }
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
   }
 
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
@@ -57,12 +54,6 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D( const bool forceDefault
 
 QString PositionKit::positionCrs3DGeoidModelName() const
 {
-  if ( !mPosition.isMock )
-  {
-    const QgsCoordinateReferenceSystem crs = positionCrs3D( true ).verticalCrs();
-    return crs.description();
-  }
-
   bool valueRead = false;
   const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
   if ( valueRead && !isVerticalCRSPassedThrough )
