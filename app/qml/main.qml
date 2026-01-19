@@ -455,28 +455,15 @@ ApplicationWindow {
       }
     }
 
-    transform: Translate {
-      id: mapPanelsHideTranslation
-      y: 0
-
-      Behavior on y {
-        NumberAnimation { 
-          duration: 500
-          easing.type: Easing.OutCubic
-        }
-      }
-    }
-
     function hideMapStackIfNeeded() {
       // if present in the stack, hide the other layers when editing the geometry
-      // use the Translation Animation to hide the stack
       if(mapPanelsStackView.depth > 0){
-        mapPanelsHideTranslation.y = mapPanelsStackView.height  
+        mapPanelsStackView.visible = false
       }
     }
 
     function showMapStack(){
-       mapPanelsHideTranslation.y = 0  
+        mapPanelsStackView.visible = false
     }
   }
 
