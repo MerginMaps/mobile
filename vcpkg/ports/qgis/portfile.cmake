@@ -229,8 +229,8 @@ if (VCPKG_CROSSCOMPILING)
   )
 endif ()
 
-# For desktop builds, build QGIS as RelWithDebInfo for better debugging
-if (TARGET_TRIPLET STREQUAL "arm64-osx" OR TARGET_TRIPLET STREQUAL "x64-linux")
+if (DEFINED ENV{QGIS_DEBUG_BUILD})
+  message(STATUS "Building requested QGIS RelWithDebInfo build")
   list(APPEND QGIS_OPTIONS_RELEASE -DCMAKE_BUILD_TYPE=RelWithDebInfo)
 endif ()
 
