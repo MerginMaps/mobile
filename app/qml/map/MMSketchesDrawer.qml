@@ -70,11 +70,11 @@ MMComponents.MMDrawer {
         Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins)
 
         onActiveColorChanged: {
-          root.sketchingController?.activeColor = activeColor
+          root.sketchingController?.setActiveColor(activeColor)
         }
 
         onEraserActiveChanged: {
-          root.sketchingController?.eraserActive = eraserActive
+          root.sketchingController?.setEraserActive(eraserActive)
         }
       }
     }
