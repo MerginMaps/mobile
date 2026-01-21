@@ -510,7 +510,11 @@ endif ()
 find_library(
   QCA_OSSL_PLUGIN_LIB
   NAMES qca-ossl
-  PATH_SUFFIXES lib/Qca/crypto
+        qca-ossld
+        qca-ossl2
+        qca-ossl-qt5
+  PATH_SUFFIXES lib/Qca/crypto plugins/crypto crypto
+  HINTS ${QT_PLUGIN_PATH} $ENV{OSGEO4W_ROOT}/apps/Qt5/plugins
 )
 
 if (QCA_OSSL_PLUGIN_LIB)

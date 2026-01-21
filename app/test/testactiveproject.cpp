@@ -199,7 +199,7 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
   ActiveProject activeProject( appSettings, activeLayer, mApi->localProjectsManager() );
   QString projectDir = TestUtils::testDataDir() + QStringLiteral( "/project_auth_file/" );
   QString projectName = QStringLiteral( "auth-test.qgz" );
-  QString af = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
+  QString authFile = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
 
   QgsApplication::initQgis();
 
@@ -215,14 +215,15 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
   QCOMPARE( count, 0 );
 
   authManager->removeAllAuthenticationConfigs();
-  QFileInfo cfgFile( af );
-  if ( cfgFile.exists() && cfgFile.isFile() )
+  QFileInfo cfgFileInfo( authFile );
+  if ( cfgFileInfo.exists() && cfgFileInfo.isFile() )
   {
     // we still check that the configuration can be imported
-    bool ok = authManager->importAuthenticationConfigsFromXml( af, AUTH_CONFIG_PASSWORD, true );
+    bool ok = authManager->importAuthenticationConfigsFromXml( authFile, AUTH_CONFIG_PASSWORD, true );
 
-    QVERIFY2( ok, "Importing the authentication database from XML failed" );
+    QCOMPARE( ok, true );
     count = authManager->configIds().count();
     QCOMPARE( count, 1 );
   }
 }
+
