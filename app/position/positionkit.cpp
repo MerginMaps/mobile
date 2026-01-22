@@ -33,9 +33,46 @@ PositionKit::PositionKit( QObject *parent )
 {
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCRS()
+QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
+{
+  bool crsExists = false;
+  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+  if ( crsExists )
+  {
+    const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+    QString compoundCrsError{};
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
+    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+    {
+      return compoundCrs;
+    }
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
+  }
+
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+}
+
+QString PositionKit::positionCrs3DGeoidModelName() const
+{
+  bool valueRead = false;
+  const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+  if ( valueRead && !isVerticalCRSPassedThrough )
+  {
+    const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
+    return crs.description();
+  }
+
+  return {};
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs2D()
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs3DEllipsoidHeight()
+{
+  return QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
 }
 
 void PositionKit::startUpdates()
@@ -110,9 +147,9 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
       return provider;
     }
 #ifdef ANDROID
-    else if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
+    if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
     {
-      bool fused = ( id == QStringLiteral( "android_fused" ) );
+      const bool fused = ( id == QStringLiteral( "android_fused" ) );
       if ( fused && !AndroidPositionProvider::isFusedAvailable() )
       {
         // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
@@ -148,7 +185,11 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   {
     if ( InputUtils::isMobilePlatform() )
     {
+#ifdef ANDROID
+      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "android_fused" ) );
+#else
       return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
+#endif
     }
     else // desktop
     {
@@ -205,9 +246,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation, mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - antennaHeight(), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation;
+    mPosition.elevation = newPosition.elevation - antennaHeight();
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
@@ -320,6 +361,13 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
   {
     mPosition.utcDateTime = newPosition.utcDateTime;
     emit lastReadChanged( mPosition.utcDateTime );
+    hasAnythingChanged = true;
+  }
+
+  if ( newPosition.isMock != mPosition.isMock )
+  {
+    mPosition.isMock = newPosition.isMock;
+    emit isMockPositionChanged( mPosition.isMock );
     hasAnythingChanged = true;
   }
 
@@ -447,6 +495,11 @@ AbstractPositionProvider *PositionKit::positionProvider() const
 const GeoPosition &PositionKit::position() const
 {
   return mPosition;
+}
+
+bool PositionKit::isMockPosition() const
+{
+  return mPosition.isMock;
 }
 
 AppSettings *PositionKit::appSettings() const

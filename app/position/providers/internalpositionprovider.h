@@ -28,11 +28,11 @@ class InternalPositionProvider : public AbstractPositionProvider
 
   public:
     explicit InternalPositionProvider( QObject *parent = nullptr );
-    virtual ~InternalPositionProvider() override;
+    ~InternalPositionProvider() override;
 
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
   public slots:
     void parsePositionUpdate( const QGeoPositionInfo &position );

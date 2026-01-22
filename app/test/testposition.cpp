@@ -396,8 +396,7 @@ void TestPosition::testPositionTracking()
   QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
 
   trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
-
-  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
+  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 133.331" ) ) );
 
   // store the geometry
   QgsVectorLayer *trackingLayer = QgsProject::instance()->mapLayer<QgsVectorLayer *>( "tracking_layer_aad89df7_21db_466e_b5c1_a80160f74c01" );
@@ -411,7 +410,7 @@ void TestPosition::testPositionTracking()
 
   int addedFid = addedSpy.at( 1 ).at( 0 ).toInt();
   QgsFeature f = trackingLayer->getFeature( addedFid );
-  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
+  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 133.331" ) ) );
 
   QString datetimeFormat = QStringLiteral( "dd.MM.yyyy hh:mm:ss" );
   QString dateTrackingStartedFromManager = manager.startTime().toString( datetimeFormat );

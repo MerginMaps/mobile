@@ -8,6 +8,9 @@
  ***************************************************************************/
 
 #include "bluetoothpositionprovider.h"
+
+#include <qgsproject.h>
+
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"
@@ -204,11 +207,33 @@ void BluetoothPositionProvider::positionUpdateReceived()
     // we know the connection is working because we just received data from the device
     setState( tr( "Connected" ), State::Connected );
 
-    QByteArray rawNmea = mSocket->readAll();
-    QString nmea( rawNmea );
+    const QByteArray rawNmea = mSocket->readAll();
+    const QString nmea( rawNmea );
 
-    QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
 
-    emit positionChanged( GeoPosition::fromQgsGpsInformation( data ) );
+    bool valueRead = false;
+    const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+    // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
+    if ( valueRead && !isVerticalCRSPassedThrough )
+    {
+      // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
+      // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
+      const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
+      bool positionOutsideGeoidModelArea = false;
+      const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                       PositionKit::positionCrs3DEllipsoidHeight(),
+                                       PositionKit::positionCrs3D(),
+                                       QgsProject::instance()->transformContext(),
+      {positionData.longitude, positionData.latitude, ellipsoidElevation},
+      positionOutsideGeoidModelArea );
+      if ( !positionOutsideGeoidModelArea )
+      {
+        positionData.elevation = geoidPosition.z();
+        positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
+      }
+    }
+    emit positionChanged( positionData );
   }
 }

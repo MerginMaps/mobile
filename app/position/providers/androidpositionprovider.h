@@ -19,7 +19,7 @@
  * or Fused Location Provider from Google Play Services (when fused=true).
  *
  * Compared to Qt Positioning, it can use Fused Location Provider and it is
- * potentially more flexible becuase we are not going through a generic
+ * potentially more flexible because we are not going through a generic
  * positioning API.
  */
 class AndroidPositionProvider : public AbstractPositionProvider
@@ -28,19 +28,17 @@ class AndroidPositionProvider : public AbstractPositionProvider
 
   public:
     explicit AndroidPositionProvider( bool fused, QObject *parent = nullptr );
-    virtual ~AndroidPositionProvider() override;
+    ~AndroidPositionProvider() override;
 
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
     //! Checks whether the fused location provider can be used (i.e. Google Play services are present)
     static bool isFusedAvailable();
     //! If fused provider is not available, returns error string that could be presented to users.
     //! It is not very human friendly, but at least something (e.g. "SERVICE_DISABLED")
     static QString fusedErrorString();
-
-  public slots:
 
   private:
     bool mFused;

@@ -19,6 +19,8 @@
 
 #include <QTimeZone>
 
+#include "inpututils.h"
+
 
 int AndroidPositionProvider::sLastInstanceId = 0;
 QMap<int, AndroidPositionProvider *> AndroidPositionProvider::sInstances;
@@ -49,17 +51,54 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
   pos.longitude = longitude;
   pos.utcDateTime = QDateTime::fromMSecsSinceEpoch( timestamp, QTimeZone::UTC );
 
+  // detect if location is mocked (useful to check if 3rd party app is setting it for external GNSS receiver)
+  // we only use this to show users that the mock location is active
+  jboolean isMock = false;
+  if ( QtAndroidPrivate::androidSdkVersion() >= 31 )
+  {
+    isMock = location.callMethod<jboolean>( "isMock" );
+  }
+  else
+  {
+    isMock = location.callMethod<jboolean>( "isFromMockProvider" );
+  }
+  pos.isMock = isMock;
+
   if ( location.callMethod<jboolean>( "hasAltitude" ) )
   {
-    const jdouble value = location.callMethod<jdouble>( "getAltitude" );
-    if ( !qFuzzyIsNull( value ) )
-      pos.elevation = value;
-  }
+    const jdouble altitude = location.callMethod<jdouble>( "getAltitude" );
+    if ( !qFuzzyIsNull( altitude ) )
+    {
+      bool positionOutsideGeoidModelArea = false;
+      bool valueRead = false;
+      const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      // (by default EPSG:9707 (WGS84 + EGM96))
+      // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
+      // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
+      if ( !isMock || ( isMock && valueRead && !isVerticalCRSPassedThrough ) )
+      {
+        const QgsPoint geoidPosition = InputUtils::transformPoint(
+                                         PositionKit::positionCrs3DEllipsoidHeight(),
+                                         PositionKit::positionCrs3D(),
+                                         QgsProject::instance()->transformContext(),
+        {longitude, latitude, altitude},
+        positionOutsideGeoidModelArea );
+        if ( !positionOutsideGeoidModelArea )
+        {
+          pos.elevation = geoidPosition.z();
 
-  // TODO: we are getting ellipsoid elevation here. From API level 34 (Android 14),
-  // there is AltitudeConverter() class in Java that can be used to add MSL altitude
-  // to Location object. How to deal with this correctly? (we could also convert
-  // to MSL (orthometric) altitude ourselves if we add geoid model to our APK
+          const double geoidSeparation = altitude - geoidPosition.z();
+          pos.elevation_diff = geoidSeparation;
+        }
+      }
+      else
+      {
+        pos.elevation = altitude;
+      }
+
+    }
+  }
 
   // horizontal accuracy
   if ( location.callMethod<jboolean>( "hasAccuracy" ) )
@@ -99,9 +138,6 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 
     // could also use getBearingAccuracyDegrees() since API level 26 (Android 8.0)
   }
-
-  // could also use isMock() to detect if location is mocked
-  // (may useful to check if 3rd party app is setting it for external GNSS receiver)
 
   // could also use getExtras() to get further details from mocked location
   // (the key/value pairs are vendor-specific, and could include things like DOP,

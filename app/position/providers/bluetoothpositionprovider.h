@@ -52,11 +52,11 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 
   public:
     BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent = nullptr );
-    virtual ~BluetoothPositionProvider() override;
+    ~BluetoothPositionProvider() override;
 
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
     void handleLostConnection();
     void startReconnectionTime();
