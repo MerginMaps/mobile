@@ -255,6 +255,8 @@ Item {
   StackView {
     id: formsStack
 
+    property bool syncWhenFormCloses: false
+
     function popOneOrClose() {
       if ( formsStack.depth > 1 ) {
         formsStack.pop()
@@ -272,6 +274,18 @@ Item {
     focus: true
 
     anchors.fill: parent
+
+    // While the feature forms are open we block autosync triggers, so child features don't get synced before the parent
+    // is saved. After the last (parent) form is closed we enable autosync again and trigger it.
+    onDepthChanged: {
+      if (depth === 0) {
+        __activeProject.autosyncController?.setIsSyncPaused(false)
+        if (syncWhenFormCloses) {
+          __activeProject.autosyncController?.syncLayerChange()
+          syncWhenFormCloses = false
+        }
+      }
+    }
   }
 
   Component {
@@ -286,6 +300,10 @@ Item {
         if ( panelState !== "hidden" ) {
           formsStack.popOneOrClose()
         }
+      }
+
+      onSaveRequested: {
+        formsStack.syncWhenFormCloses = true
       }
 
       onPreviewPanelChanged: function( panelHeight ) {
