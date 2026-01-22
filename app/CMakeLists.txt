@@ -184,6 +184,10 @@ set(MM_HDRS
     mmstyle.h
 )
 
+if (NOT WIN32)
+  set(MM_SRCS ${MM_SRCS} static_plugins.cpp)
+endif ()
+
 if (HAVE_BLUETOOTH)
   set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
@@ -524,20 +528,15 @@ endif ()
 target_link_libraries(
   MerginMaps
   PUBLIC Qt6Keychain::Qt6Keychain
-          qca
-          GDAL::GDAL
-          PostgreSQL::PostgreSQL
-          Spatialite::Spatialite
+         qca
+         GDAL::GDAL
+         PostgreSQL::PostgreSQL
+         Spatialite::Spatialite
 )
 
-if(NOT WIN32)
-target_link_libraries(
-  MerginMaps
-  PUBLIC ${QCA_OSSL_PLUGIN_LIB}
-)
-endif()
-
-
+if (NOT WIN32)
+  target_link_libraries(MerginMaps PUBLIC ${QCA_OSSL_PLUGIN_LIB})
+endif ()
 
 target_link_libraries(
   MerginMaps

@@ -156,9 +156,6 @@
 #include "qgsapplication.h"
 #include "activeproject.h"
 #include "appsettings.h"
-// required for QGIS authentication manager API
-#include <QtPlugin>
-Q_IMPORT_PLUGIN( opensslPlugin )
 
 static QString getDataDir()
 {
@@ -402,6 +399,8 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
+  // for windows qca dll
+  QCoreApplication::addLibraryPath( QCoreApplication::applicationDirPath() );
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
