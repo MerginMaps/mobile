@@ -506,51 +506,38 @@ if (LNX)
   target_link_libraries(MerginMaps PUBLIC QGIS::Core)
 endif ()
 
-if (WIN32)
-  # On Windows, look for the DLL file
-  find_file(
-    QCA_OSSL_PLUGIN_DLL
-    NAMES qca-ossl.dll
-    PATH_SUFFIXES plugins/crypto bin/crypto
-    HINTS ${CMAKE_PREFIX_PATH} $ENV{VCPKG_ROOT}/installed/x64-windows
-  )
-
-  if (QCA_OSSL_PLUGIN_DLL)
-    message(STATUS "Found QCA OSSL Plugin (DLL): ${QCA_OSSL_PLUGIN_DLL}")
-    # Optional: Copy it to your build/bin/plugins/crypto folder automatically
-    file(COPY "${QCA_OSSL_PLUGIN_DLL}" DESTINATION "${CMAKE_BINARY_DIR}/plugins/crypto")
-  else ()
-    message(
-      WARNING "Could not find qca-ossl.dll. Ensure 'vcpkg install qca[ossl]' is run."
-    )
-  endif ()
-
-else ()
+if (NOT WIN32)
   # for macOS and linux
   find_library(
     QCA_OSSL_PLUGIN_LIB
     NAMES qca-ossl libqca-ossl
     PATH_SUFFIXES lib/Qca/crypto
   )
+
+  if (QCA_OSSL_PLUGIN_LIB)
+    message(STATUS "Found QCA OpenSSL Plugin: ${QCA_OSSL_PLUGIN_LIB}")
+  else ()
+    message(WARNING "Could not find 'qca-ossl'. Authentication might fail.")
+  endif ()
 endif ()
 
-if (QCA_OSSL_PLUGIN_LIB)
-  message(STATUS "Found QCA OpenSSL Plugin: ${QCA_OSSL_PLUGIN_LIB}")
-else ()
-  message(WARNING "Could not find 'qca-ossl'. Authentication might fail.")
-endif ()
+target_link_libraries(
+  MerginMaps
+  PUBLIC Qt6Keychain::Qt6Keychain
+          qca
+          GDAL::GDAL
+          PostgreSQL::PostgreSQL
+          Spatialite::Spatialite
+)
 
-if (NOT WIN32)
-  target_link_libraries(
-    MerginMaps
-    PUBLIC Qt6Keychain::Qt6Keychain
-           qca
-           ${QCA_OSSL_PLUGIN_LIB}
-           GDAL::GDAL
-           PostgreSQL::PostgreSQL
-           Spatialite::Spatialite
-  )
-endif ()
+if(NOT WIN32)
+target_link_libraries(
+  MerginMaps
+  PUBLIC ${QCA_OSSL_PLUGIN_LIB}
+)
+endif()
+
+
 
 target_link_libraries(
   MerginMaps

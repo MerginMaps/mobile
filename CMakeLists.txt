@@ -286,6 +286,7 @@ endif ()
 if (WIN)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
   add_compile_definitions(_USE_MATH_DEFINES)
+  add_compile_definitions(NOMINMAX)
 endif ()
 
 if (IOS OR ANDROID)
