@@ -124,6 +124,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
+    Q_PROPERTY( QUrl eraserIcon READ eraserIcon CONSTANT )
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
     Q_PROPERTY( QUrl featuresIcon READ featuresIcon CONSTANT )
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
@@ -169,6 +170,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
     Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
+    Q_PROPERTY( QUrl redoIcon READ redoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl studentIcon READ studentIcon CONSTANT )
@@ -431,6 +433,7 @@ class MMStyle: public QObject
     QUrl downloadIcon() const {return QUrl( "qrc:/Download.svg" );}
     QUrl uploadIcon() const {return QUrl( "qrc:/Upload.svg" );}
     QUrl editIcon() const {return QUrl( "qrc:/Edit.svg" );}
+    QUrl eraserIcon() const {return QUrl( "qrc:/Eraser.svg" );}
     QUrl electricityIcon() const {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() const {return QUrl( "qrc:/Engineering.svg" );}
     QUrl environmentalIcon() const {return QUrl( "qrc:/Environmental.svg" );}
@@ -461,6 +464,7 @@ class MMStyle: public QObject
     QUrl projectsIcon() const {return QUrl( "qrc:/Projects.svg" );}
     QUrl qgisIcon() const {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() const {return QUrl( "qrc:/QRCode.svg" );}
+    QUrl redoIcon() const {return QUrl( "qrc:/Redo.svg" );}
     QUrl redditIcon() const {return QUrl( "qrc:/Reddit.svg" );}
     QUrl satelliteIcon() const {return QUrl( "qrc:/GPSSatellite.svg" );}
     QUrl searchIcon() const {return QUrl( "qrc:/Search.svg" );}
