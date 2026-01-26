@@ -33,6 +33,7 @@ set(MM_SRCS
     ios/iosutils.cpp
     position/providers/abstractpositionprovider.cpp
     position/providers/internalpositionprovider.cpp
+    position/providers/networkpositionprovider.cpp
     position/providers/positionprovidersmodel.cpp
     position/providers/simulatedpositionprovider.cpp
     position/tracking/abstracttrackingbackend.cpp
@@ -123,6 +124,7 @@ set(MM_HDRS
     ios/iosutils.h
     position/providers/abstractpositionprovider.h
     position/providers/internalpositionprovider.h
+    position/providers/networkpositionprovider.h
     position/providers/positionprovidersmodel.h
     position/providers/simulatedpositionprovider.h
     position/tracking/abstracttrackingbackend.h

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQml.Models
 import QtQuick.Controls
 import QtQuick.Dialogs
 
@@ -16,6 +17,7 @@ import MMInput
 
 import "../components" as MMComponents
 import "../dialogs" as MMDialogs
+import "../inputs" as MMInputs
 
 MMComponents.MMPage {
   id: root
@@ -94,7 +96,7 @@ MMComponents.MMPage {
           if ( ListView.section === "internal" ) {
             let ix = providersModel.index( index + 1, 0 )
             let type = providersModel.data( ix, MM.PositionProvidersModel.ProviderType )
-            if ( type === "external" ) return false
+            if ( type.includes("external") ) return false
           }
 
           return true
@@ -135,7 +137,90 @@ MMComponents.MMPage {
 
       text: qsTr( "Connect new receiver" )
 
-      onClicked: bluetoothDiscoveryLoader.active = true
+      onClicked: providerTypeDrawer.open()
+    }
+
+    MMComponents.MMListDrawer {
+      id: providerTypeDrawer
+
+      drawerHeader.title: qsTr("Pick the correct provider type")
+      drawerHeader.titleFont: __style.t2
+
+      list.model: ListModel {
+        ListElement {
+          name: qsTr( "Bluetooth provider" )
+          type: "bluetooth"
+        }
+        ListElement {
+          name: qsTr( "Network provider" )
+          type: "network"
+        }
+      }
+
+      list.delegate: MMComponents.MMListDelegate {
+        required property string name
+        required property string type
+
+        text: name
+        onClicked: {
+          providerTypeDrawer.close()
+          if (type === "bluetooth") {
+            bluetoothDiscoveryLoader.active = true
+          }
+          else if (type === "network"){
+            networkProviderInfoDrawer.open()
+          }
+        }
+      }
+    }
+
+    MMComponents.MMDrawerDialog {
+      id: networkProviderInfoDrawer
+
+      signal confirmButtonClicked(string address, int port)
+
+      title: qsTr("Network provider setup")
+      imageSource: __style.externalGpsGreenImage
+      description: qsTr( "To connect to the external device please specify the IP address and port below." )
+      primaryButton.text: qsTr( "Confirm" )
+      primaryButton.type: MMComponents.MMButton.Primary
+
+      additionalContent: Column {
+        width: parent.width
+        spacing: __style.spacing20
+
+        MMInputs.MMTextInput {
+          id: ipAddressInput
+
+          width: parent.width
+          textFieldBackground.color: __style.lightGreenColor
+
+          title: qsTr("IP address")
+          placeholderText: qsTr("localhost")
+        }
+
+        MMInputs.MMTextInput {
+          id: portInput
+
+          width: parent.width
+          textFieldBackground.color: __style.lightGreenColor
+
+          title: qsTr("Port")
+          placeholderText: qsTr("1234")
+        }
+      }
+
+      onPrimaryButtonClicked: {
+        close()
+        confirmButtonClicked(ipAddressInput.text, portInput.text)
+      }
+
+      onConfirmButtonClicked: function( address, port ) {
+        const deviceAddress = address + ":" + port
+        __positionKit.positionProvider = __positionKit.constructProvider( "external_ip", deviceAddress, "Network provider" )
+
+        providersModel.addProvider( "Network provider", deviceAddress, "external_ip" )
+      }
     }
 
     MMComponents.MMMessage {
@@ -205,9 +290,9 @@ MMComponents.MMPage {
 
     MMAddPositionProviderDrawer {
       onInitiatedConnectionTo: function ( deviceAddress, deviceName ) {
-        __positionKit.positionProvider = __positionKit.constructProvider( "external", deviceAddress, deviceName )
+        __positionKit.positionProvider = __positionKit.constructProvider( "external_bt", deviceAddress, deviceName )
 
-        providersModel.addProvider( deviceName, deviceAddress )
+        providersModel.addProvider( deviceName, deviceAddress, "external_bt" )
         list.model.discovering = false
         close()
 
@@ -239,7 +324,7 @@ MMComponents.MMPage {
   }
 
   function constructProvider( type, id, name ) {
-    if ( type === "external" ) {
+    if ( type === "external_bt" ) {
       // Is bluetooth turned on?
       if ( !__inputUtils.isBluetoothTurnedOn() ) {
         __inputUtils.turnBluetoothOn()
@@ -253,7 +338,7 @@ MMComponents.MMPage {
 
      __positionKit.positionProvider = __positionKit.constructProvider( type, id, name )
 
-    if ( type === "external" ) {
+    if ( type === "external_bt" ) {
       connectingDialogLoader.open()
     }
   }

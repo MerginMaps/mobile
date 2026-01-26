@@ -679,7 +679,7 @@ Item {
           visible: {
             if ( root.mapExtentOffset > 0 && root.state !== "stakeout" ) return false
 
-            if ( __positionKit.positionProvider && __positionKit.positionProvider.type() === "external" ) {
+            if ( __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external") ) {
               // for external receivers we want to show gps panel and accuracy button
               // even when the GPS receiver is not sending position data
               return true
@@ -699,7 +699,7 @@ Item {
             {
               return ""
             }
-            else if ( __positionKit.positionProvider.type() === "external" )
+            else if ( __positionKit.positionProvider.type().includes("external") )
             {
               if ( __positionKit.positionProvider.state === MM.PositionProvider.Connecting )
               {

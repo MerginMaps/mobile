@@ -72,7 +72,7 @@ MMComponents.MMDrawer {
 
             width: parent.width / 2
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             title: qsTr( "Status" )
             value: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
@@ -212,7 +212,7 @@ MMComponents.MMDrawer {
               __positionKit.fix
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -245,7 +245,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( __positionKit.hdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -262,7 +262,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( __positionKit.vdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -279,7 +279,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( __positionKit.pdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -327,7 +327,7 @@ MMComponents.MMDrawer {
               }
               __inputUtils.formatNumber( __positionKit.geoidSeparation, 2 ) + " m"
             }
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type() === "external"
+            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }

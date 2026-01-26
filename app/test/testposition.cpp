@@ -106,8 +106,8 @@ void TestPosition::testBluetoothProviderConnection()
   QCOMPARE( "testBluetoothProvider", pkProvider->name() );
   QCOMPARE( "AA:AA:AA:AA:00:00", btProvider->id() );
   QCOMPARE( "AA:AA:AA:AA:00:00", pkProvider->id() );
-  QCOMPARE( "external", btProvider->type() );
-  QCOMPARE( "external", pkProvider->type() );
+  QCOMPARE( "external_bt", btProvider->type() );
+  QCOMPARE( "external_bt", pkProvider->type() );
 
   //
   // let's continue with BT instance,
@@ -257,11 +257,11 @@ void TestPosition::testPositionProviderKeysInSettings()
   rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
 
 #ifdef HAVE_BLUETOOTH
-  positionKit->setPositionProvider( positionKit->constructProvider( "external", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
+  positionKit->setPositionProvider( positionKit->constructProvider( "external_bt", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
 
   QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
   QCOMPARE( positionKit->positionProvider()->name(), "testProviderA" );
-  QCOMPARE( positionKit->positionProvider()->type(), "external" );
+  QCOMPARE( positionKit->positionProvider()->type(), "external_bt" );
 
   QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
 #endif
@@ -279,7 +279,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   QCOMPARE( providersModel.data( providersModel.index( 1 ), PositionProvidersModel::ProviderId ), "simulated" );
 
   providersModel.setAppSettings( &appSettings );
-  providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44" );
+  providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44", "external_bt" );
 
   // app settings should have one saved provider - testProviderB
   QVariantList providers = appSettings.savedPositionProviders();
