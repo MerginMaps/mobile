@@ -70,6 +70,20 @@ Dialog {
     }
 
     MMComponents.MMRoundButton {
+      iconSource: __style.RedoIcon
+
+      bgndColor: __style.lightGreenColor
+
+
+      enabled: root.controller.canRedo
+
+      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+      Layout.topMargin: __style.pageMargins + __style.safeAreaTop
+
+      onClicked: root.controller.redo()
+    }
+
+    MMComponents.MMRoundButton {
       id: doneButton
 
       Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
@@ -202,13 +216,14 @@ Dialog {
 
     MMComponents.MMColorPicker{
       colors: [__style.photoSketchingWhiteColor, __style.photoSketchingBlackColor, __style.photoSketchingBlueColor, __style.photoSketchingGreenColor, __style.photoSketchingYellowColor, __style.photoSketchingOrangeColor, __style.photoSketchingPinkColor]
-      showEraseButton: false
 
       Layout.alignment: Qt.AlignHCenter
       Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins + __style.safeAreaLeft + __style.safeAreaRight )
       Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
+
+      bgndColor: __style.lightGreenColor
 
       onActiveColorChanged:{
         root.controller.activeColor = activeColor

@@ -39,43 +39,73 @@ MMComponents.MMDrawer {
 
   drawerHeader.title: qsTr( "Sketch" )
 
-  drawerHeader.topLeftItemContent: MMComponents.MMRoundButton {
-    iconSource: __style.undoIcon
-    bgndColor: __style.lightGreenColor
+  drawerHeader.topLeftItemContent: Row{
+      width: parent.width - 2 * __style.pageMargins
+      spacing: __style.margin12
+      anchors{
+        left: parent.left
+        leftMargin: __style.pageMargins + __style.safeAreaLeft
+        verticalCenter:parent.verticalCenter
+        rightMargin: __style.pageMargins + __style.safeAreaRight
+      }
+    
+      MMComponents.MMRoundButton {
+        iconSource: __style.undoIcon
+        bgndColor: __style.lightGreenColor
 
-    enabled: root.sketchingController?.canUndo ?? false
+        enabled: root.sketchingController?.canUndo ?? false
 
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter: parent.verticalCenter
-    }
+        onClicked: root.sketchingController?.undo()
+      }
 
-    onClicked: root.sketchingController?.undo()
+      MMComponents.MMRoundButton {
+        iconSource: __style.redoIcon
+        bgndColor: __style.lightGreenColor
+
+        enabled: root.sketchingController?.canRedo ?? false
+        visible: enabled
+
+        onClicked: root.sketchingController?.redo()
+      }
+
+      MMComponents.MMRoundButton {
+        iconSource: __style.eraserIcon
+        visible: root.showEraseButton
+
+        bgndColor: root.sketchingController.eraserActive ? __style.forestColor : __style.lightGreenColor
+        iconColor: root.sketchingController.eraserActive ? __style.grassColor : __style.forestColor
+
+        onClicked: {
+          if(root.sketchingController)
+          {
+            root.sketchingController.eraserActive = true
+            root.sketchingController.activeColor = null
+          }
+        }
+      }
   }
 
   drawerContent: 
     ColumnLayout{
 
       width: parent.width
-      spacing: __style.margin10
+      spacing: __style.margin2
       
       MMComponents.MMColorPicker{
+        id: colorPicker
         colors: root.sketchingController?.availableColors() ?? __style.photoSketchingWhiteColor
-        showEraseButton: true
 
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredHeight: scrollRow.height
-        Layout.preferredWidth: scrollRow.width
-        Layout.maximumWidth: parent.width - ( 2 * __style.pageMargins)
+        Layout.maximumWidth: parent.width
 
         onActiveColorChanged: {
-          root.sketchingController?.setActiveColor(activeColor)
-        }
-
-        onEraserActiveChanged: {
-          root.sketchingController?.setEraserActive(eraserActive)
+          if(root.sketchingController)
+            root.sketchingController.activeColor = colorPicker.activeColor
+            root.sketchingController.eraserActive = false
         }
       }
     }
+      MMComponents.MMListSpacer{
+        height: 2
+      }
 }
