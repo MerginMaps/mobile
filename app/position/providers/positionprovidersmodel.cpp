@@ -134,16 +134,17 @@ void PositionProvidersModel::removeProvider( const QString &providerId )
   }
 }
 
-void PositionProvidersModel::addProvider( const QString &name, const QString &providerId )
+void PositionProvidersModel::addProvider( const QString &name, const QString &providerId, const QString &providerType )
 {
   if ( providerId.isEmpty() )
     return;
 
   PositionProvider toAdd;
+  const QString deviceDesc = providerType == QStringLiteral( "external_bt" ) ? tr( " Bluetooth device" ) : tr( " Network device" );
   toAdd.name = name;
   toAdd.providerId = providerId;
-  toAdd.description = providerId + " " + tr( " Bluetooth device" );
-  toAdd.providerType = "external";
+  toAdd.description = providerId + " " + deviceDesc;
+  toAdd.providerType = providerType;
 
   if ( mProviders.contains( toAdd ) )
     return;
@@ -218,8 +219,8 @@ QVariantList PositionProvidersModel::toVariantList() const
     if ( mProviders[i].providerType == QStringLiteral( "internal" ) )
       continue;
 
-    QStringList a = { mProviders[i].name, mProviders[i].providerId };
-    out.push_back( a );
+    QStringList provider = { mProviders[i].name, mProviders[i].providerId, mProviders[i].providerType };
+    out.push_back( provider );
   }
 
   return out;

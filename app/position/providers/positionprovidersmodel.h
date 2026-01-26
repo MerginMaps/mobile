@@ -67,7 +67,7 @@ class PositionProvidersModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
     Q_INVOKABLE void removeProvider( const QString &providerId );
-    Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId );
+    Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId, const QString &providerType );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings * );
