@@ -30,8 +30,8 @@ QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeaString )
   return mLastGPSInformation;
 }
 
-BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, positionTransformer, parent )
+BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external_bt" ), name, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
