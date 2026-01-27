@@ -463,7 +463,7 @@ ApplicationWindow {
     }
 
     function showMapStack(){
-        mapPanelsStackView.visible = false
+        mapPanelsStackView.visible = true
     }
   }
 
