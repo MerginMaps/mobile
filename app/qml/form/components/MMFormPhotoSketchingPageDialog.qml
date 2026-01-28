@@ -58,9 +58,6 @@ Dialog {
     MMComponents.MMRoundButton {
       iconSource: __style.undoIcon
 
-      bgndColor: __style.lightGreenColor
-
-
       enabled: root.controller.canUndo
 
       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter

@@ -722,7 +722,7 @@ ApplicationWindow {
   Component {
     id: sketchesPanelComponent
 
-    MMSketchesDrawer {
+    MMMapSketchesDrawer {
       id: sketchesPanel
 
       sketchingController: map.sketchingController

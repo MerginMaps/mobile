@@ -61,17 +61,15 @@ MMComponents.MMDrawer {
       bgndColor: __style.lightGreenColor
 
       enabled: root.sketchingController?.canRedo ?? false
-      visible: enabled
 
       onClicked: root.sketchingController?.redo()
     }
 
     MMComponents.MMRoundButton {
       iconSource: __style.eraserIcon
-      visible: root.showEraseButton
 
-      bgndColor: root.sketchingController.eraserActive ? __style.forestColor : __style.lightGreenColor
-      iconColor: root.sketchingController.eraserActive ? __style.grassColor : __style.forestColor
+      bgndColor: root.sketchingController?.eraserActive ? __style.forestColor : __style.lightGreenColor
+      iconColor: root.sketchingController?.eraserActive ? __style.grassColor : __style.forestColor
 
       onClicked: {
         if(root.sketchingController)
@@ -98,8 +96,10 @@ MMComponents.MMDrawer {
 
         onActiveColorChanged: {
           if(root.sketchingController)
+          {
             root.sketchingController.activeColor = colorPicker.activeColor
             root.sketchingController.eraserActive = false
+          }
         }
       }
     }
