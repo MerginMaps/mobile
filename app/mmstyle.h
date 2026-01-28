@@ -82,6 +82,15 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor negativeUltraLightColor READ negativeUltraLightColor CONSTANT )
     Q_PROPERTY( QColor informativeColor READ informativeColor CONSTANT )
 
+    // Colors - color picker default
+    Q_PROPERTY( QColor photoSketchingBlackColor READ photoSketchingBlackColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingWhiteColor READ photoSketchingWhiteColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingGreenColor READ photoSketchingGreenColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingYellowColor READ photoSketchingYellowColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingOrangeColor READ photoSketchingOrangeColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingBlueColor READ photoSketchingBlueColor CONSTANT )
+    Q_PROPERTY( QColor photoSketchingPinkColor READ photoSketchingPinkColor CONSTANT )
+
     // Colors - others
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
     Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
@@ -115,6 +124,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl electricityIcon READ electricityIcon CONSTANT )
     Q_PROPERTY( QUrl engineeringIcon READ engineeringIcon CONSTANT )
     Q_PROPERTY( QUrl environmentalIcon READ environmentalIcon CONSTANT )
+    Q_PROPERTY( QUrl eraserIcon READ eraserIcon CONSTANT )
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
     Q_PROPERTY( QUrl featuresIcon READ featuresIcon CONSTANT )
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
@@ -160,6 +170,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl tractorIcon READ tractorIcon CONSTANT )
     Q_PROPERTY( QUrl transportationIcon READ transportationIcon CONSTANT )
     Q_PROPERTY( QUrl undoIcon READ undoIcon CONSTANT )
+    Q_PROPERTY( QUrl redoIcon READ redoIcon CONSTANT )
     Q_PROPERTY( QUrl waitingIcon READ waitingIcon CONSTANT )
     Q_PROPERTY( QUrl waterResourcesIcon READ waterResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl studentIcon READ studentIcon CONSTANT )
@@ -382,6 +393,14 @@ class MMStyle: public QObject
     QColor informativeColor() const {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() const {return QColor::fromString( "#BD74FF" );}
 
+    QColor photoSketchingBlackColor() const {return QColor::fromString( "#12181F" );}
+    QColor photoSketchingWhiteColor() const {return QColor::fromString( "#FFFFFF" );}
+    QColor photoSketchingGreenColor() const {return QColor::fromString( "#57B46F" );}
+    QColor photoSketchingYellowColor() const {return QColor::fromString( "#FDCB2A" );}
+    QColor photoSketchingOrangeColor() const {return QColor::fromString( "#FF9C40" );}
+    QColor photoSketchingBlueColor() const {return QColor::fromString( "#5E9EE4" );}
+    QColor photoSketchingPinkColor() const {return QColor::fromString( "#FF8F93" );}
+
     QColor shadowColor() const {return QColor::fromString( "#66777777" );}
 
     QUrl splitGeometryIcon() const {return QUrl( "qrc:/SplitGeometry.svg" );}
@@ -414,6 +433,7 @@ class MMStyle: public QObject
     QUrl downloadIcon() const {return QUrl( "qrc:/Download.svg" );}
     QUrl uploadIcon() const {return QUrl( "qrc:/Upload.svg" );}
     QUrl editIcon() const {return QUrl( "qrc:/Edit.svg" );}
+    QUrl eraserIcon() const {return QUrl( "qrc:/Eraser.svg" );}
     QUrl electricityIcon() const {return QUrl( "qrc:/Electricity.svg" );}
     QUrl engineeringIcon() const {return QUrl( "qrc:/Engineering.svg" );}
     QUrl environmentalIcon() const {return QUrl( "qrc:/Environmental.svg" );}
@@ -444,6 +464,7 @@ class MMStyle: public QObject
     QUrl projectsIcon() const {return QUrl( "qrc:/Projects.svg" );}
     QUrl qgisIcon() const {return QUrl( "qrc:/QGIS.svg" );}
     QUrl qrCodeIcon() const {return QUrl( "qrc:/QRCode.svg" );}
+    QUrl redoIcon() const {return QUrl( "qrc:/Redo.svg" );}
     QUrl redditIcon() const {return QUrl( "qrc:/Reddit.svg" );}
     QUrl satelliteIcon() const {return QUrl( "qrc:/GPSSatellite.svg" );}
     QUrl searchIcon() const {return QUrl( "qrc:/Search.svg" );}
