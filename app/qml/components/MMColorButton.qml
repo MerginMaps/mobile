@@ -42,7 +42,7 @@ RoundButton {
     radius: width / 2
     width: __style.margin48
     height: __style.margin48
-    color: bgndColor
+    color: root.bgndColor
 
     border{
       width: 2
