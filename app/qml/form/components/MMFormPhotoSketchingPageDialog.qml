@@ -70,20 +70,6 @@ Dialog {
     }
 
     MMComponents.MMRoundButton {
-      iconSource: __style.RedoIcon
-
-      bgndColor: __style.lightGreenColor
-
-
-      enabled: root.controller.canRedo
-
-      Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-      Layout.topMargin: __style.pageMargins + __style.safeAreaTop
-
-      onClicked: root.controller.redo()
-    }
-
-    MMComponents.MMRoundButton {
       id: doneButton
 
       Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
