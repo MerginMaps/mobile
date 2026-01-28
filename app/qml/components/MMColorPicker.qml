@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
