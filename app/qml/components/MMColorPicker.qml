@@ -11,43 +11,43 @@ import QtQuick
 import QtQuick.Controls
 
 ScrollView {
-    id: root
+  id: root
 
-    required property list<color> colors
+  required property list<color> colors
 
-    property color activeColor
-    property color bgndColor : __style.polarColor
+  property color activeColor
+  property color bgndColor : __style.polarColor
 
-    height: scrollRow.height
-    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+  height: scrollRow.height
+  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-    Row {
-        id: scrollRow
-        spacing: __style.margin2
-        anchors.centerIn: parent
+  Row {
+    id: scrollRow
+    spacing: __style.margin2
+    anchors.centerIn: parent
 
-        Repeater {
-            model: root.colors
-            MMColorButton{
-                required property color modelData
-                required property int index
+    Repeater {
+      model: root.colors
+      MMColorButton{
+        required property color modelData
+        required property int index
                 
-                buttonColor: modelData
-                bgndColor: root.bgndColor
-                isSelected: root.activeColor === modelData
+        buttonColor: modelData
+        bgndColor: root.bgndColor
+        isSelected: root.activeColor === modelData
                 
-                onClicked: {
-                    root.activeColor = modelData;
-                }
-                Component.onCompleted: {
-                    // set the initial color to be the first one in the list
-                    if ( index === 0 )
-                    {
-                        root.activeColor = modelData
-                    }
-                }  
-            } 
+        onClicked: {
+          root.activeColor = modelData;
         }
+        Component.onCompleted: {
+        // set the initial color to be the first one in the list
+          if ( index === 0 )
+          {
+            root.activeColor = modelData
+          }    
+        }  
+      } 
     }
+  }
 }
