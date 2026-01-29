@@ -17,7 +17,6 @@ ScrollView {
   required property list<color> colors
 
   property color activeColor
-  property color bgndColor : __style.polarColor
 
   height: scrollRow.height
   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
@@ -35,7 +34,6 @@ ScrollView {
         required property int index
                 
         buttonColor: modelData
-        bgndColor: root.bgndColor
         isSelected: root.activeColor === modelData
                 
         onClicked: {

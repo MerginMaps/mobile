@@ -15,7 +15,6 @@ RoundButton {
   id: root
 
   required property color buttonColor
-  required property color bgndColor
   property bool isSelected: false
 
   implicitWidth: __style.margin48
@@ -42,7 +41,7 @@ RoundButton {
     radius: width / 2
     width: __style.margin48
     height: __style.margin48
-    color: root.bgndColor
+    color: __style.transparentColor
 
     border{
       width: 2

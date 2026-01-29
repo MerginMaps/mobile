@@ -206,8 +206,6 @@ Dialog {
       Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
-      bgndColor: __style.lightGreenColor
-
       onActiveColorChanged:{
         root.controller.activeColor = activeColor
       }
