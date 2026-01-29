@@ -13,6 +13,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../inputs"
@@ -87,7 +88,7 @@ Item {
     stackView.focus = true
   }
 
-  StackView {
+  MMStackView {
     id: stackView
 
     initialItem: workspaceProjectsPanelComp
