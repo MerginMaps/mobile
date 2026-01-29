@@ -339,6 +339,19 @@ if (ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle @ONLY
   )
 
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
+    list(APPEND SquishLibs
+            "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
+            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
+    )
+  endif ()
+
   set_target_properties(
     MerginMaps
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
@@ -346,6 +359,7 @@ if (ANDROID)
                QT_ANDROID_MIN_SDK_VERSION ${MM_ANDROID_MIN_SDK_VERSION}
                QT_ANDROID_VERSION_CODE ${MM_VERSION_CODE}
                QT_ANDROID_VERSION_NAME ${MM_VERSION}
+               QT_ANDROID_EXTRA_LIBS "${SquishLibs}"
   )
 endif ()
 
@@ -606,24 +620,3 @@ qt_add_qml_module(
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
 )
-
-# ########################################################################################
-# Other
-# ########################################################################################
-
-if (ANDROID AND SquishQtBuiltinHook_FOUND)
-  squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
-  # copy squish hook libs
-  list(
-    APPEND
-    SquishLibs
-    "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
-    "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
-  )
-  set_target_properties(MerginMaps PROPERTIES QT_ANDROID_EXTRA_LIBS "${SquishLibs}")
-endif ()

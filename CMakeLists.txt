@@ -162,10 +162,6 @@ message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 # FIND PACKAGES
 # ########################################################################################
 
-if (SquishQtBuiltinHook_ROOT)
-  list(APPEND CMAKE_FIND_ROOT_PATH ${SquishQtBuiltinHook_ROOT})
-endif ()
-
 find_package(
   Qt6
   COMPONENTS Quick
@@ -369,6 +365,10 @@ if (ANDROID)
   # Make sure the generator for android_deployment_settings.json can figure out the
   # architecture
   list(APPEND CMAKE_FIND_ROOT_PATH /)
+  # Make sure the generator for android_deployment_settings.json can find Squish libs
+  if (SquishQtBuiltinHook_ROOT)
+    list(APPEND CMAKE_FIND_ROOT_PATH ${SquishQtBuiltinHook_ROOT})
+  endif ()
 endif ()
 
 # ########################################################################################
