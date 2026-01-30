@@ -197,10 +197,12 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
         }
 
         PositionProvider provider;
+        const QString providerType = providerData[2].isNull() ? QStringLiteral( "external_bt" ) : QStringLiteral( "external_ip" );
+        const QString deviceDesc = providerType == QStringLiteral( "external_bt" ) ? tr( " Bluetooth device" ) : tr( " Network device" );
         provider.name = providerData[0].toString();
         provider.providerId = providerData[1].toString();
-        provider.description = provider.providerId + " " + tr( "Bluetooth device" );
-        provider.providerType = "external";
+        provider.description = provider.providerId + deviceDesc;
+        provider.providerType = providerType;
 
         mProviders.append( provider );
       }
