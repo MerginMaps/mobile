@@ -3013,7 +3013,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
-        <translation>Tieto ei saa olla tyhjä</translation>
+        <translation>Kenttä ei saa olla tyhjä</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.h" line="67"/>
