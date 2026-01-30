@@ -22,4 +22,4 @@ assignees: ''
 
 ## ✅ Acceptance Criteria
 * [ ] Matches agreed Figma Design
-* [ ]
+* [ ] 
