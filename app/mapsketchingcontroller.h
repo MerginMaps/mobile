@@ -24,6 +24,7 @@ class MapSketchingController : public QObject
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( QgsGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
     Q_PROPERTY( QColor activeColor READ activeColor WRITE setActiveColor NOTIFY activeColorChanged )
+    Q_PROPERTY( bool canRedo READ canRedo NOTIFY canRedoChanged )
     Q_PROPERTY( bool canUndo READ canUndo NOTIFY canUndoChanged )
     Q_PROPERTY( bool eraserActive READ eraserActive WRITE setEraserActive NOTIFY eraserActiveChanged )
 
@@ -35,6 +36,8 @@ class MapSketchingController : public QObject
 
     Q_INVOKABLE void finishDigitizing();
 
+    Q_INVOKABLE void redo() const;
+
     Q_INVOKABLE void undo() const;
 
     Q_INVOKABLE QStringList availableColors() const;
@@ -43,6 +46,7 @@ class MapSketchingController : public QObject
     void highlightGeometryChanged();
     void activeColorChanged();
     void mapSettingsChanged();
+    void canRedoChanged( bool canRedo );
     void canUndoChanged( bool canUndo );
     void eraserActiveChanged();
 
@@ -51,6 +55,7 @@ class MapSketchingController : public QObject
     void clearHighlight();
     void setMapSettings( InputMapSettings *settings );
     InputMapSettings *mapSettings() const;
+    bool canRedo() const;
     bool canUndo() const;
     bool eraserActive() const;
     void setEraserActive( bool active );
