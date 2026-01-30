@@ -9,12 +9,16 @@
 
 #include "networkpositionprovider.h"
 
+#include <QApplication>
+#include <QNetworkDatagram>
+
 #include "coreutils.h"
 
 static int ONE_SECOND_MS = 1000;
 
 NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external_ip" ), name, parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external_ip" ), name, parent ),
+    mSecondsLeftToReconnect( ReconnectDelay::ShortDelay / ONE_SECOND_MS )
 {
   const QStringList targetAddress = addr.split( ":" );
   mTargetAddress = targetAddress.at( 0 );
@@ -23,36 +27,38 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
   mTcpSocket = std::make_unique<QTcpSocket>();
   mUdpSocket = std::make_unique<QUdpSocket>();
 
-// only one socket will be active depending on, which will find host, the other will be closed
-// connect(mTcpSocket.get(), &QAbstractSocket::hostFound, this, [this]
-// {
-//  CoreUtils::log("NetworkPositionProvider", "TCP socket found host, aborting UDP socket");
-//  mUdpSocket->abort();
-// });
-// connect(mUdpSocket.get(), &QAbstractSocket::hostFound, this, [this]
-// {
-//  CoreUtils::log("NetworkPositionProvider", "UDP socket found host, aborting TCP socket");
-//  mTcpSocket->abort();
-// });
+  connect( mTcpSocket.get(), &QTcpSocket::readyRead, this, &NetworkPositionProvider::positionUpdateReceived );
+  connect( mUdpSocket.get(), &QUdpSocket::readyRead, this, &NetworkPositionProvider::positionUpdateReceived );
 
-  connect( mTcpSocket.get(), &QAbstractSocket::readyRead, this, &NetworkPositionProvider::positionUpdateReceived );
-  connect( mUdpSocket.get(), &QAbstractSocket::readyRead, this, &NetworkPositionProvider::positionUpdateReceived );
-
-  connect( mTcpSocket.get(), &QAbstractSocket::stateChanged, this, &NetworkPositionProvider::socketStateChanged );
-  connect( mUdpSocket.get(), &QAbstractSocket::stateChanged, this, &NetworkPositionProvider::socketStateChanged );
+  connect( mTcpSocket.get(), &QTcpSocket::stateChanged, this, &NetworkPositionProvider::socketStateChanged );
+  connect( mUdpSocket.get(), &QUdpSocket::stateChanged, this, &NetworkPositionProvider::socketStateChanged );
 
   mReconnectTimer.setSingleShot( false );
   mReconnectTimer.setInterval( ONE_SECOND_MS );
   connect( &mReconnectTimer, &QTimer::timeout, this, &NetworkPositionProvider::reconnectTimeout );
+  mUdpReconnectTimer.setSingleShot( true );
+  connect( &mUdpReconnectTimer, &QTimer::timeout, this, [this]
+    {
+      CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "UDP socket no data received in threshold, triggering reconnect..." ) );
+      if ( mTcpSocket->state() != QAbstractSocket::ConnectedState )
+      {
+        setState( tr( "No connection" ), State::NoConnection );
+        startReconnectTimer();
+        // let's also invalidate current position since we no longer have connection
+        emit positionChanged( GeoPosition() );
+      }
+    } );
 
   NetworkPositionProvider::startUpdates();
 }
 
 void NetworkPositionProvider::startUpdates()
 {
+  // TODO: QHostAddress doesn't support hostname lookup (QHostInfo does)
   CoreUtils::log( "NetworkPositionProvider", "Connecting to host..." );
   mTcpSocket->connectToHost( mTargetAddress, mTargetPort );
-  mUdpSocket->connectToHost( mTargetAddress, mTargetPort );
+  mUdpSocket->bind( QHostAddress::LocalHost, mTargetPort );
+  mUdpReconnectTimer.start( ReconnectDelay::ExtraLongDelay );
 }
 
 void NetworkPositionProvider::stopUpdates()
@@ -75,37 +81,92 @@ void NetworkPositionProvider::closeProvider()
 
 void NetworkPositionProvider::positionUpdateReceived()
 {
-  const QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
+  QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
   const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
   CoreUtils::log( "NetworkPositionProvider", QStringLiteral( "%1 socket has received new data!" ).arg( socketTypeToString ) );
-  if ( mTcpSocket->isValid() || mUdpSocket->isValid() )
-  {
-    const QByteArray rawNmeaData = activeSocket()->readAll();
-    const QString nmeaData( rawNmeaData );
-    const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
 
-    emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
+  // if udp is not connected to the host yet, connect
+  // this approach will let us use QIODevice functions for both sockets
+  if ( socket->socketType() == QAbstractSocket::UdpSocket && mUdpSocket->state() != QAbstractSocket::ConnectedState )
+  {
+    mUdpReconnectTimer.stop();
+
+    // if by any chance we showed wrong message in the status like "no connection", fix it here
+    // we know the connection is working because we just received data from the device
+    setState( tr( "Connected" ), State::Connected );
+
+    QHostAddress peerAddress;
+    int peerPort;
+    // process the incoming data as it will break the signal emitting if unprocessed
+    while ( mUdpSocket->hasPendingDatagrams() )
+    {
+      QNetworkDatagram datagram = mUdpSocket->receiveDatagram();
+      peerAddress = datagram.senderAddress();
+      peerPort = datagram.senderPort();
+      const QByteArray rawNmeaData = datagram.data();
+      const QString nmeaData( rawNmeaData );
+      const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
+      emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
+    }
+
+    // "connect" to peer if we are not already connecting
+    if (mUdpSocket->state() != QAbstractSocket::ConnectedState && mUdpSocket->state() != QAbstractSocket::ConnectingState)
+    {
+      mUdpSocket->connectToHost( peerAddress.toString(), peerPort );
+    }
+    return;
   }
+
+  // stop the UDP silence timer, we just received data
+  // kills the timer when the app was minimized, and we were able to reconnect in the meantime
+  if ( socket->socketType() == QAbstractSocket::UdpSocket )
+  {
+    mUdpReconnectTimer.stop();
+  }
+
+  // if by any chance we showed wrong message in the status like "no connection", fix it here
+  // we know the connection is working because we just received data from the device
+  setState( tr( "Connected" ), State::Connected );
+
+  const QByteArray rawNmeaData = socket->readAll();
+  const QString nmeaData( rawNmeaData );
+  const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
+
+  emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
 }
 
 void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketState state )
 {
-  if ( state == QAbstractSocket::SocketState::ConnectingState || state == QAbstractSocket::SocketState::HostLookupState )
+  const QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
+
+  if ( state == QAbstractSocket::ConnectingState || state == QAbstractSocket::HostLookupState )
   {
     setState( tr( "Connecting to %1" ).arg( mProviderName ), State::Connecting );
   }
-  else if ( state == QAbstractSocket::SocketState::ConnectedState )
+  // Only with TCP we can be sure in ConnectedState that we are connected, with UDP we wait until the first datagram arrives
+  else if ( state == QAbstractSocket::ConnectedState  && socket->socketType() == QAbstractSocket::TcpSocket )
   {
     setState( tr( "Connected" ), State::Connected );
   }
-  else if ( state == QAbstractSocket::SocketState::UnconnectedState )
+  else if ( state == QAbstractSocket::UnconnectedState )
   {
-    setState( tr( "No connection" ), State::NoConnection );
-    startReconnectTimer();
-    // let's also invalidate current position since we no longer have connection
-    emit positionChanged( GeoPosition() );
+    const bool isUdpSocketListening = mUdpSocket->state() == QAbstractSocket::ConnectedState || mUdpSocket->state() == QAbstractSocket::BoundState || mUdpReconnectTimer.isActive();
+    if ( socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive)
+    {
+      setState( tr( "No connection" ), State::NoConnection );
+      startReconnectTimer();
+      // let's also invalidate current position since we no longer have connection
+      emit positionChanged( GeoPosition() );
+    }
+    else if (socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive)
+    {
+      setState( tr( "No connection" ), State::NoConnection );
+      startReconnectTimer();
+      // let's also invalidate current position since we no longer have connection
+      emit positionChanged( GeoPosition() );
+    }
   }
-  const QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
+
   const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
   const QString stateToString = QMetaEnum::fromType<QAbstractSocket::SocketState>().valueToKey( state );
   CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "%1 Socket changed state, code: %2" ).arg( socketTypeToString, stateToString ) );
@@ -123,22 +184,6 @@ void NetworkPositionProvider::reconnectTimeout()
     setState( tr( "No connection, reconnecting in (%1)" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
     mReconnectTimer.start();
   }
-}
-
-QAbstractSocket *NetworkPositionProvider::activeSocket() const
-{
-  if ( mTcpSocket->state() >= QAbstractSocket::ConnectingState && mTcpSocket->state() <= QAbstractSocket::BoundState )
-  {
-    return mTcpSocket.get();
-  }
-
-  if ( mUdpSocket->state() >= QAbstractSocket::ConnectingState && mUdpSocket->state() <= QAbstractSocket::BoundState )
-  {
-    return mUdpSocket.get();
-  }
-
-//TODO: wouldn't it be better to guard against nullptr in caller and return nullptr here?
-  return new QAbstractSocket( QAbstractSocket::UnknownSocketType, nullptr );
 }
 
 void NetworkPositionProvider::reconnect()
@@ -160,7 +205,7 @@ void NetworkPositionProvider::startReconnectTimer()
 
   mReconnectTimer.start();
 
-// first time do reconnect in short time, then each other in long time
+  // first time do reconnect in short time, then each other in long time
   if ( mReconnectDelay == NetworkPositionProvider::ShortDelay )
   {
     mReconnectDelay = NetworkPositionProvider::LongDelay;
