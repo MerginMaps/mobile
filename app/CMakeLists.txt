@@ -511,7 +511,7 @@ if (LNX)
 endif ()
 
 if (NOT WIN32)
-  # for macOS and linux
+  # for every other platform except windows
   find_library(
     QCA_OSSL_PLUGIN_LIB
     NAMES qca-ossl libqca-ossl

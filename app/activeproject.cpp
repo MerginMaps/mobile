@@ -171,7 +171,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
       // import the new configuration, if it exists.
       const QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir.path() ) ).projectId;
       const bool ok = authMngr->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
-      CoreUtils::log( "Database authentication: ", QString( "QGIS auth imported: %1" ).arg( ok ? "true" : "false" ) );
+      CoreUtils::log( "Database authentication: ", QStringLiteral( "QGIS auth imported: %1" ).arg( ok ? "true" : "false" ) );
     }
 
     res = mQgsProject->read( filePath );

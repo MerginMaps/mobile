@@ -399,8 +399,6 @@ void addQmlImportPath( QQmlEngine &engine )
 
 int main( int argc, char *argv[] )
 {
-  // for windows qca dll
-  QCoreApplication::addLibraryPath( QCoreApplication::applicationDirPath() );
   QgsApplication app( argc, argv, true );
 
   const QString version = CoreUtils::appVersion();
