@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>General</source>
         <translation>Yleiset</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Kartta ja työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer</source>
         <translation>Taso</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Unable to load source </source>
         <translation>Lähteen avaaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Nauhoitus työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
@@ -237,67 +237,36 @@ Sitä ei lisätä projektiin.</translation>
         <source>just now</source>
         <translation>juuri nyt</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minutes ago</source>
-        <translation>%1 minuuttia sitten</translation>
+        <source>%n minute(s) ago</source>
+        <translation><numerusform>%n minuuttia sitten</numerusform><numerusform>%n minuuttia sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minute ago</source>
-        <translation>%1 minuutti sitten</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hours ago</source>
-        <translation>%1 tuntia sitten</translation>
+        <source>%n hour(s) ago</source>
+        <translation><numerusform>%n tuntia sitten</numerusform><numerusform>%n tuntia sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hour ago</source>
-        <translation>%1 tunti sitten</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 days ago</source>
-        <translation>%1 päivää sitten</translation>
+        <source>%n day(s) ago</source>
+        <translation><numerusform>%n päivää sitten</numerusform><numerusform>%n päivää sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 day ago</source>
-        <translation>%1 päivä sitten</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 weeks ago</source>
-        <translation>%1 viikkoa sitten</translation>
+        <source>%n week(s) ago</source>
+        <translation><numerusform>%n viikkoa sitten</numerusform><numerusform>%n viikkoa sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 week ago</source>
-        <translation>%1 viikko sitten</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 months ago</source>
-        <translation>%1 kuukautta sitten</translation>
+        <source>%n month(s) ago</source>
+        <translation><numerusform>%n kuukautta sitten</numerusform><numerusform>%n kuukautta sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 month ago</source>
-        <translation>%1 kuukausi sitten</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 years ago</source>
-        <translation>%1 vuotta sitten</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 year ago</source>
-        <translation>%1 vuosi sitten</translation>
+        <source>%n year(s) ago</source>
+        <translation><numerusform>%n vuotta sitten</numerusform><numerusform>%n vuotta sitten</numerusform></translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1537"/>
@@ -339,15 +308,15 @@ Sitä ei lisätä projektiin.</translation>
         <source>used dp scale: %1</source>
         <translation>käytetty dp mittakaava: %1</translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2079"/>
-        <source>You need to add at least %1 point(s) to every part.</source>
-        <translation>Sinun tulee lisätä vähintään %1 piste(ttä) jokaiseen osaan.</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2163"/>
+        <source>You need to add at least %n point(s) to every part.</source>
+        <translation><numerusform>Sinun on lisättävä jokaiseen osaan vähintään %n pistettä.</numerusform><numerusform>Sinun on lisättävä jokaiseen osaan vähintään %n pistettä.</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2083"/>
-        <source>You need to add at least %1 point(s).</source>
-        <translation>Sinun tulee lisätä vähintään %1 piste(ttä).</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2167"/>
+        <source>You need to add at least %n point(s).</source>
+        <translation><numerusform>Sinun on lisättävä vähintään %n piste/pistettä.</numerusform><numerusform>Sinun on lisättävä vähintään %n piste/pistettä.</numerusform></translation>
     </message>
 </context>
 <context>
@@ -701,7 +670,7 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Työtilan nimeksi käy esimerkiksi tiimisi tai organisaatiosi nimi.</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="126"/>
         <source>Create workspace</source>
         <translation>Luo työtila</translation>
     </message>
@@ -769,7 +738,7 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
         <source>Add feature</source>
         <translation>Lisää kohde</translation>
     </message>
@@ -790,22 +759,22 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormDeleteFeatureDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Delete feature</source>
         <translation>Poista kohde</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Oletko varma halutessasi poistaa tämän kohteen?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="24"/>
         <source>Yes, I want to delete</source>
         <translation>Kyllä, haluan poistaa</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="25"/>
         <source>No, thanks</source>
         <translation>Ei, kiitos</translation>
     </message>
@@ -1012,6 +981,7 @@ Sitä ei lisätä projektiin.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
@@ -1091,7 +1061,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Ei asetettu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="327"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <source>Geoid separation</source>
+        <translation>Geoidierottelu</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
         <source>Manage GPS receivers</source>
         <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
@@ -1274,12 +1249,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Diagnostiikka loki</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Sending...</source>
         <translation>Lähetetään...</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMLogPage.qml" line="65"/>
+        <location filename="../qml/settings/MMLogPage.qml" line="69"/>
         <source>Send to developers</source>
         <translation>Lähetä kehittäjille</translation>
     </message>
@@ -2162,24 +2137,29 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
         <source>Select features</source>
         <translation>Valitse kohteita</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n kohde(tta) valittu</numerusform><numerusform>%n kohde(tta) valittu</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
         <source>on layer %1</source>
         <translation>Tasolla %1</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="114"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="120"/>
+        <source>Delete</source>
+        <translation>Poista</translation>
     </message>
 </context>
 <context>
@@ -2313,8 +2293,8 @@ Sitä ei lisätä projektiin.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
-        <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Aina kun tallennat muutokset,  ne synkronoituvat automaattisesti</translation>
+        <source>Your project is synced automatically to keep you up to date</source>
+        <translation>Projektisi synkronoidaan automaattisesti, jotta pysyt ajan tasalla</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
@@ -2428,8 +2408,8 @@ Sitä ei lisätä projektiin.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
-        <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Varmista että viiva risteää kohteen kanssa. Kohteella tulee olla hyväksyttävä geometria sen jakamiseksi.</translation>
+        <source>Ensure that your split line intersects the feature properly and that the feature’s geometry is valid.</source>
+        <translation>Varmista, että jakoviiva leikkaa kohteen oikein ja että kohteen geometria on kelvollinen.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
@@ -2455,7 +2435,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Valmis</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="112"/>
+        <source>The split line does not properly cross the feature. Please adjust the line to cross the feature boundary.</source>
+        <translation>Jakoviiva ei ylitä kohdetta oikein. Korjaa viivaa niin, että se ylittää kohteen rajan.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSplittingTools.qml" line="120"/>
         <source>You need to add at least 2 points.</source>
         <translation>Sinun tulee lisätä ainakin 2 pistettä.</translation>
     </message>
@@ -2763,116 +2748,116 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="238"/>
+        <location filename="../../core/merginapi.cpp" line="244"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Poista joitakin projektejä, koska sovellus pystyy
 käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="880"/>
+        <location filename="../../core/merginapi.cpp" line="892"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Palvelimen kertakirjautumisen (SSO) määrityksissä on ongelma. Ota yhteyttä järjestelmänvalvojaan.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="888"/>
-        <location filename="../../core/merginapi.cpp" line="948"/>
+        <location filename="../../core/merginapi.cpp" line="900"/>
+        <location filename="../../core/merginapi.cpp" line="960"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Virhe haettaessa kertakirjautumis (SSO) määrityksiä palvelimelta</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="932"/>
-        <location filename="../../core/merginapi.cpp" line="946"/>
+        <location filename="../../core/merginapi.cpp" line="944"/>
+        <location filename="../../core/merginapi.cpp" line="958"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>Kertakirjautmista (SSO) ei tueta määritetylle verkkotunnukselle.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="961"/>
-        <location filename="../../core/merginapi.cpp" line="1471"/>
+        <location filename="../../core/merginapi.cpp" line="973"/>
+        <location filename="../../core/merginapi.cpp" line="1492"/>
         <source>Please enter a valid email</source>
         <translation>Ole ystävällinen ja anna kelvollinen sähköpostiosoite</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="968"/>
-        <location filename="../../core/merginapi.cpp" line="1483"/>
+        <location filename="../../core/merginapi.cpp" line="980"/>
+        <location filename="../../core/merginapi.cpp" line="1504"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 Salasanan tulee olla vähintää 8 merkin pituinen ja sisältää:1%3 &lt;ul type=&quot;disc&quot;&gt; Pieniä kirjaimia (a-z)%4%3 Isoja kirjaimia (A-Z)%4%3 Vähintään yksi numero (0–9) tai jokin erikoismerkki %4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="982"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Ole hyvä ja hyäksy Terms and Privacy Policy</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1011"/>
+        <location filename="../../core/merginapi.cpp" line="1026"/>
         <source>Marketing source cannot be empty</source>
         <translation>Markkinointilähde ei voi olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1019"/>
+        <location filename="../../core/merginapi.cpp" line="1034"/>
         <source>Industry cannot be empty</source>
         <translation>Toimiala ei voi olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1338"/>
+        <location filename="../../core/merginapi.cpp" line="1359"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Sinulla ei ole oikeutta luoda uusia projekteja tässä työtilassa.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1343"/>
+        <location filename="../../core/merginapi.cpp" line="1364"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Projektia ei voitu luoda. Yritä myöhemmin uudelleen tai ota yhteyttä tukeen, jos ongelma jatkuu.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1451"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
         <source>Registration successful</source>
         <translation>Rekisteröinti onnistui</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1473"/>
-        <location filename="../../core/merginapi.cpp" line="1479"/>
-        <location filename="../../core/merginapi.cpp" line="1491"/>
+        <location filename="../../core/merginapi.cpp" line="1494"/>
+        <location filename="../../core/merginapi.cpp" line="1500"/>
+        <location filename="../../core/merginapi.cpp" line="1512"/>
         <source>Registration failed</source>
         <translation>Rekisteröinti epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1477"/>
+        <location filename="../../core/merginapi.cpp" line="1498"/>
         <source>This email address is already registered</source>
         <translation>Tämä sähköpostiosoite on jo rekisteröity</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1502"/>
+        <location filename="../../core/merginapi.cpp" line="1523"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Uutta rekisteröintiä ei hyväksytä valitulle Mergin palvelimelle. Ole hyvä ja tarkista järjestelmänvalvojasi kanssa.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1555"/>
         <source>Workspace created</source>
         <translation>Työtila luotu</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1902"/>
+        <location filename="../../core/merginapi.cpp" line="1923"/>
         <source>Project detached from the server</source>
         <translation>Projekti irrotettu palvelimelta</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4164"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Työtilan nimi sisältää virheellisiä merkkejä</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4298"/>
         <source>Workspace %1 already exists</source>
         <translation>Työtila %1 on jo olemassa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4337"/>
+        <location filename="../../core/merginapi.cpp" line="4404"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Voit nyt sulkea tämän sivun ja palata Mergin Mapsiin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4363"/>
-        <location filename="../../core/merginapi.cpp" line="4390"/>
+        <location filename="../../core/merginapi.cpp" line="4430"/>
+        <location filename="../../core/merginapi.cpp" line="4457"/>
         <source>SSO authorization failed</source>
         <translation>Kertakirjautmis (SSO) valtuutus epäonnistui</translation>
     </message>
@@ -2964,7 +2949,7 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Projektin nimi sisältää virheellisiä merkkejä</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="212"/>
+        <location filename="../projectwizard.cpp" line="215"/>
         <source>Project %1 created</source>
         <translation>Projekti %1 luotu</translation>
     </message>
@@ -2991,63 +2976,63 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
+        <location filename="../attributes/fieldvalidator.h" line="57"/>
         <source>Value must be a number</source>
         <translation>Arvon tulee olla numero</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
+        <location filename="../attributes/fieldvalidator.h" line="58"/>
         <source>Value must be lower than %1</source>
         <translation>Arvon tulee olla pienempi kuin %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
+        <location filename="../attributes/fieldvalidator.h" line="59"/>
         <source>Value must be higher than %1</source>
         <translation>Arvon tulee olla suurempi kuin %1</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="62"/>
+        <location filename="../attributes/fieldvalidator.h" line="60"/>
         <source>Value is too large</source>
         <translation>Arvo on liian suuri</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
+        <location filename="../attributes/fieldvalidator.h" line="61"/>
         <source>Field can not contain decimal places</source>
         <translation>Tieto ei voi sisältää desimaaleja</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
+        <location filename="../attributes/fieldvalidator.h" line="63"/>
         <source>Can not be longer than %1 characters</source>
         <translation>Ei voi olla pidempi kuin %1 merkkiä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
+        <location filename="../attributes/fieldvalidator.h" line="65"/>
         <source>Field should not be empty</source>
         <translation>Tiedon ei tulisi olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
+        <location filename="../attributes/fieldvalidator.h" line="66"/>
         <source>Field must not be empty</source>
         <translation>Tieto ei saa olla tyhjä</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="67"/>
         <source>Value should be unique</source>
         <translation>Arvon tulee olla yksilöllinen</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
+        <location filename="../attributes/fieldvalidator.h" line="68"/>
         <source>Value must be unique</source>
         <translation>Arvon tulee olla yksilöllinen</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="71"/>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
+        <location filename="../attributes/fieldvalidator.h" line="69"/>
+        <location filename="../attributes/fieldvalidator.h" line="70"/>
         <source>Unmet QGIS expression constraint</source>
         <translation>Ei täytä QGIS lausekkeen rajoitteita</translation>
     </message>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="74"/>
+        <location filename="../attributes/fieldvalidator.h" line="72"/>
         <source>Not a valid value</source>
         <translation>Ei kelvollinen arvo</translation>
     </message>
@@ -3097,12 +3082,12 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Tuntematon sijainti</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="557"/>
+        <location filename="../main.cpp" line="588"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raportti lähetetty. Ota yhteyttä tukeen</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="562"/>
+        <location filename="../main.cpp" line="593"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui. Tarkista internet yhteytesi.</translation>
     </message>
@@ -3188,53 +3173,73 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <source>not tracking</source>
         <translation>Reitin tallennus ei ole päällä</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="674"/>
+        <source>Delete %n feature(s)</source>
+        <translation><numerusform>Poista %n kohde/kohteet</numerusform><numerusform>Poista %n kohde/kohteet</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="675"/>
+        <source>Delete %n selected feature(s)?</source>
+        <translation><numerusform>Poista %n valitut kohteet?</numerusform><numerusform>Poista %n valitut kohteet?</numerusform></translation>
+    </message>
     <message>
-        <location filename="../qml/main.qml" line="873"/>
+        <location filename="../qml/main.qml" line="677"/>
+        <source>Yes, I want to delete</source>
+        <translation>Kyllä, haluan poistaa</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="678"/>
+        <source>No, thanks</source>
+        <translation>Ei, kiitos</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="898"/>
         <source>Select feature</source>
         <translation>Valitse kohde</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="982"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Joku toinen synkronoi parhaillaan, yritämme uudelleen myöhemmin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="1014"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Palvelin yhteys epäonnistui. Yritä parantaa verkkoyhteyttäsi.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1032"/>
+        <location filename="../qml/main.qml" line="1004"/>
         <source>Up to date</source>
         <translation>Ajantasalla</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1100"/>
+        <location filename="../qml/main.qml" line="1125"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Ongelmia ladattaessa projektia. %1Näytä yksityiskohdat%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="801"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Merkintä on poistettu käytöstä, koska sijainti ei ole saatavilla!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="926"/>
+        <location filename="../qml/main.qml" line="951"/>
         <source>Successfully synchronised</source>
         <translation>Synkronoitu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="964"/>
+        <location filename="../qml/main.qml" line="989"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa lukeaksesi lisää.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1121"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Could not read the project file:</source>
         <translation>Ei voitu lukea projektitiedostoa:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1154"/>
+        <location filename="../qml/main.qml" line="1179"/>
         <source>Press back again to quit the app</source>
         <translation>Paina takaisin uudestaan sulkeaksesi sovelluksen.</translation>
     </message>
