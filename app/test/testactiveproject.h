@@ -12,6 +12,11 @@
 
 #include <QObject>
 #include <merginapi.h>
+#include <qgsapplication.h>
+#include <qgsauthmanager.h>
+
+const QString AUTH_CONFIG_FILENAME = QStringLiteral( "qgis_cfg.xml" );
+const QString AUTH_CONFIG_PASSWORD = QStringLiteral( "1234" );
 
 class TestActiveProject : public QObject
 {
@@ -29,6 +34,7 @@ class TestActiveProject : public QObject
     void testPositionTrackingFlag();
     void testRecordingAllowed();
     void testLoadingFlagFileExpiration();
+    void testLoadingAuthFileFromConfiguration();
 
   private:
     MerginApi *mApi;
