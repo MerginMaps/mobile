@@ -188,9 +188,9 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
       if ( providerData[1] == providerId )
       {
         providerName = providerData[0].toString();
-        if ( !providerData.at( 3 ).isNull() )
+        if ( !providerData.at( 2 ).isNull() )
         {
-          providerType = providerData[3].toString();
+          providerType = providerData[2].toString();
         }
       }
     }
