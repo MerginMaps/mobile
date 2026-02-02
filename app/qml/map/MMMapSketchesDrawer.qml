@@ -43,7 +43,7 @@ MMComponents.MMDrawer {
     anchors{
       left: parent.left
       leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter:parent.verticalCenter
+      verticalCenter: parent.verticalCenter
       rightMargin: __style.pageMargins + __style.safeAreaRight
     }
     
@@ -103,7 +103,7 @@ MMComponents.MMDrawer {
         }
       }
     }
-      MMComponents.MMListSpacer{
-        height: 2
-      }
+    MMComponents.MMListSpacer{
+      height: 2
+    }
 }
