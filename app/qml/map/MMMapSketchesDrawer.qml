@@ -21,8 +21,6 @@ import "./components"
 MMComponents.MMDrawer {
   id: root
 
-  readonly property alias panelHeight: root.height
-
   property MM.MapSketchingController sketchingController
 
   Component.onCompleted: root.open()
