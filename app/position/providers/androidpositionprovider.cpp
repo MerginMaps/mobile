@@ -71,12 +71,12 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
     {
       bool positionOutsideGeoidModelArea = false;
       bool valueRead = false;
-      const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+      const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
       // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
       // (by default EPSG:9707 (WGS84 + EGM96))
       // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
       // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
-      if ( !isMock || ( isMock && valueRead && !isVerticalCRSPassedThrough ) )
+      if ( !isMock || ( valueRead && !isVerticalCRSPassedThrough ) )
       {
         const QgsPoint geoidPosition = InputUtils::transformPoint(
                                          PositionKit::positionCrs3DEllipsoidHeight(),

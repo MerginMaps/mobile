@@ -115,6 +115,7 @@ class PositionKit : public QObject
 
     AbstractPositionProvider *positionProvider() const;
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
+    Q_INVOKABLE QString positionProviderName() const;
 
     double hdop() const;
     double vdop() const;

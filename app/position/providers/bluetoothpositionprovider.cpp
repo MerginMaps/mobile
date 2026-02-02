@@ -214,9 +214,10 @@ void BluetoothPositionProvider::positionUpdateReceived()
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
 
     bool valueRead = false;
-    const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+    const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
     // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
-    if ( valueRead && !isVerticalCRSPassedThrough )
+    // also check if we have data for elevation and elevation undulation
+    if ( valueRead && !isVerticalCRSPassedThrough && positionData.elevation && positionData.elevation_diff )
     {
       // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
       // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model

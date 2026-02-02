@@ -876,34 +876,8 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
                                      const QgsCoordinateTransformContext &context,
                                      const QgsPoint &srcPoint )
 {
-  // we do not want to transform empty points,
-  // QGIS would convert them to a valid (0, 0) points
-  if ( srcPoint.isEmpty() )
-  {
-    return {};
-  }
-
-  try
-  {
-    const QgsCoordinateTransform ct( srcCrs, destCrs, context );
-    if ( ct.isValid() )
-    {
-      if ( !ct.isShortCircuited() )
-      {
-        const QgsVector3D transformed = ct.transform( QgsVector3D( srcPoint.x(), srcPoint.y(), srcPoint.z() ) );
-        const QgsPoint pt( transformed.x(), transformed.y(), transformed.z(), srcPoint.m() );
-        return pt;
-      }
-
-      return srcPoint;
-    }
-  }
-  catch ( QgsCsException &cse )
-  {
-    Q_UNUSED( cse )
-  }
-
-  return {};
+  bool dummyFallbackOperationHappened; //ignored
+  return transformPoint( srcCrs, destCrs, context, srcPoint, dummyFallbackOperationHappened );
 }
 
 QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,

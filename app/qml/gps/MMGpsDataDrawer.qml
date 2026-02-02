@@ -64,11 +64,7 @@ MMComponents.MMDrawer {
             title: qsTr( "Source" )
             value: {
               if ( PositionKit.positionProvider ) {
-                if ( PositionKit.isMockPosition ) {
-                  qsTr( "Mocked position provider" )
-                } else {
-                  PositionKit.positionProvider.name()
-                }
+                PositionKit.positionProviderName()
               } else {
                 qsTr( "No receiver" )
               }

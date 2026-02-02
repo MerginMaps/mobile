@@ -55,7 +55,7 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 QString PositionKit::positionCrs3DGeoidModelName() const
 {
   bool valueRead = false;
-  const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
   if ( valueRead && !isVerticalCRSPassedThrough )
   {
     const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
@@ -118,6 +118,15 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 
   // reset last position data
   parsePositionUpdate( GeoPosition() );
+}
+
+QString PositionKit::positionProviderName() const
+{
+  if ( isMockPosition() )
+  {
+    return tr( "Mocked position provider" );
+  }
+  return mPositionProvider->name();
 }
 
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )

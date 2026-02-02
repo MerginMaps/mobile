@@ -151,20 +151,24 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
   // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
   bool valueRead = false;
-  const bool isVerticalCRSPassedThrough = QVariant( QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), QVariant( true ).toString(), &valueRead ) ).toBool();
+  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
   const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
   localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
   const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
   mLastPosition.isMock = isMockedLocation;
   localPosition.removeAttribute( QGeoPositionInfo::MagneticVariation );
+
   QgsPoint geoidPosition;
+
   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
   // (by default EPSG:9707 (WGS84 + EGM96))
   // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
-  // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
-  if ( ( !isMockedLocation && isEllipsoidalAltitude ) || ( isMockedLocation && isEllipsoidalAltitude && valueRead && !isVerticalCRSPassedThrough ) )
+  // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is not enabled
+  const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
+  const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude && valueRead;
+
+  if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !isVerticalCRSPassedThrough ) )
   {
-    // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to
     geoidPosition = InputUtils::transformPoint(
                       PositionKit::positionCrs3DEllipsoidHeight(),
                       PositionKit::positionCrs3D(),
