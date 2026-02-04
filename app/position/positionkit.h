@@ -14,6 +14,7 @@
 
 #include <qgspoint.h>
 #include <qgscoordinatereferencesystem.h>
+#include <qgsproject.h>
 
 #include "positiontransformer.h"
 #include "position/providers/abstractpositionprovider.h"
@@ -183,6 +184,9 @@ class PositionKit : public QObject
 
     // stop updates when application is minimized
     void appStateChanged( Qt::ApplicationState state );
+
+    // gets triggered when active project changes
+    void refreshPositionTransformer( const QgsProject *project );
 
   private:
     GeoPosition mPosition;

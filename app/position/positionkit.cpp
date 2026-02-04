@@ -31,8 +31,7 @@
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
-  const bool isVerticalCRSPassThroughEnabled = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true );
-  mPositionTransformer = new PositionTransformer( positionCrs3DEllipsoidHeight(), positionCrs3D(), isVerticalCRSPassThroughEnabled );
+  refreshPositionTransformer( QgsProject::instance() );
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
@@ -398,6 +397,13 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
   {
     stopUpdates();
   }
+}
+
+void PositionKit::refreshPositionTransformer( const QgsProject *project )
+{
+  free( mPositionTransformer );
+  const bool isVerticalCRSPassThroughEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true );
+  mPositionTransformer = new PositionTransformer( positionCrs3DEllipsoidHeight(), positionCrs3D(), isVerticalCRSPassThroughEnabled );
 }
 
 double PositionKit::latitude() const

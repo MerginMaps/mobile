@@ -20,7 +20,7 @@
 /**
  *  PositionTransformer is a utility class, which should be used with providers to transform received position into set
  *  CRS. Currently only elevation is transformed! The PositionTransformer is project specific as different projects can
- *  have different set-ups. That's why it should be reloaded on project open.
+ *  have different set-ups.
  *
  *  \todo This class could have a nicer API. With just one public method accepting GeoPosition and provider specifier.
  */

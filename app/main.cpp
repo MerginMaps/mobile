@@ -549,6 +549,7 @@ int main( int argc, char *argv[] )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, pk, &PositionKit::refreshPositionTransformer );
   pk->setPositionProvider( pk->constructActiveProvider( as ) );
   pk->setAppSettings( as );
 
