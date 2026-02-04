@@ -27,12 +27,15 @@ class AndroidPositionProvider : public AbstractPositionProvider
     Q_OBJECT
 
   public:
-    explicit AndroidPositionProvider( bool fused, QObject *parent = nullptr );
+    explicit AndroidPositionProvider( bool fused, PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~AndroidPositionProvider() override;
 
     void startUpdates() override;
     void stopUpdates() override;
     void closeProvider() override;
+
+    // Exposes PositionTransformer process function, as we need to access it outside the scope of this class
+    GeoPosition processElevation( const GeoPosition &position );
 
     //! Checks whether the fused location provider can be used (i.e. Google Play services are present)
     static bool isFusedAvailable();

@@ -33,6 +33,7 @@ class SimulatedPositionProvider : public AbstractPositionProvider
      *  Set flightRadius to 0 in order to get constant position (no movement)
      */
     explicit SimulatedPositionProvider(
+      PositionTransformer &positionTransformer,
       double longitude = 17.107137342092614,
       double latitude = 48.10301740375036,
       double flightRadius = 0,

@@ -27,7 +27,7 @@ class InternalPositionProvider : public AbstractPositionProvider
     Q_OBJECT
 
   public:
-    explicit InternalPositionProvider( QObject *parent = nullptr );
+    explicit InternalPositionProvider( PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~InternalPositionProvider() override;
 
     void startUpdates() override;

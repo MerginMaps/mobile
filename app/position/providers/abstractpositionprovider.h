@@ -10,12 +10,10 @@
 #ifndef ABSTRACTPOSITIONPROVIDER_H
 #define ABSTRACTPOSITIONPROVIDER_H
 
-#include "qobject.h"
+#include <qgspoint.h>
 
+#include "positiontransformer.h"
 #include "position/geoposition.h"
-
-#include "qgspoint.h"
-
 
 class AbstractPositionProvider : public QObject
 {
@@ -35,8 +33,8 @@ class AbstractPositionProvider : public QObject
     };
     Q_ENUM( State )
 
-    AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object = nullptr );
-    virtual ~AbstractPositionProvider();
+    AbstractPositionProvider( const QString &id, const QString &type, const QString &name, PositionTransformer &positionTransformer, QObject *object = nullptr );
+    ~AbstractPositionProvider() override = default;
 
     virtual void startUpdates() = 0;
     virtual void stopUpdates() = 0;
@@ -75,9 +73,12 @@ class AbstractPositionProvider : public QObject
     // Internal providers has constant values of "Internal" and "Simulated provider"
     QString mProviderName;
 
-    // State of this provider, see State enum. Message bears human readable explanation of the state
+    // State of this provider, see State enum. Message bears human-readable explanation of the state
     QString mStateMessage;
     State mState = State::NoConnection;
+
+    // Transformer used for vertical CRS transformations before providers emit new position
+    PositionTransformer *mPositionTransformer = nullptr;
 };
 
 Q_DECLARE_METATYPE( AbstractPositionProvider::State );

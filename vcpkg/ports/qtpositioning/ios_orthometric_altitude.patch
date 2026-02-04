@@ -2,7 +2,7 @@ diff --git a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm b/sr
 index 95d51a86..bdb8641b 100644
 --- a/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
 +++ b/src/plugins/position/corelocation/qgeopositioninfosource_cl.mm
-@@ -47,12 +47,36 @@
+@@ -47,12 +47,31 @@
      NSTimeInterval locationTimeStamp = [newLocation.timestamp timeIntervalSince1970];
      const QDateTime timeStamp = QDateTime::fromMSecsSinceEpoch(qRound64(locationTimeStamp * 1000),
                                                                 QTimeZone::UTC);
@@ -28,14 +28,9 @@ index 95d51a86..bdb8641b 100644
 +    if (newLocation.ellipsoidalAltitude) {
 +      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 1);
 +    }
-+    else {
-+      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 0);
-+    }
++
 +    if (newLocation.sourceInformation.isSimulatedBySoftware) {
 +      location.setAttribute(QGeoPositionInfo::MagneticVariation, 1);
-+    }
-+    else {
-+      location.setAttribute(QGeoPositionInfo::MagneticVariation, 0);
 +    }
 +
      if (newLocation.horizontalAccuracy >= 0)

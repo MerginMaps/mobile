@@ -66,38 +66,42 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 
   if ( location.callMethod<jboolean>( "hasAltitude" ) )
   {
-    const jdouble altitude = location.callMethod<jdouble>( "getAltitude" );
-    if ( !qFuzzyIsNull( altitude ) )
-    {
-      bool positionOutsideGeoidModelArea = false;
-      bool valueRead = false;
-      const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
-      // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-      // (by default EPSG:9707 (WGS84 + EGM96))
-      // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
-      // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
-      if ( !isMock || ( valueRead && !isVerticalCRSPassedThrough ) )
-      {
-        const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                         PositionKit::positionCrs3DEllipsoidHeight(),
-                                         PositionKit::positionCrs3D(),
-                                         QgsProject::instance()->transformContext(),
-        {longitude, latitude, altitude},
-        positionOutsideGeoidModelArea );
-        if ( !positionOutsideGeoidModelArea )
-        {
-          pos.elevation = geoidPosition.z();
+    // const jdouble altitude = location.callMethod<jdouble>( "getAltitude" );
+    // if ( !qFuzzyIsNull( altitude ) )
+    // {
+    //   bool positionOutsideGeoidModelArea = false;
+    //   bool valueRead = false;
+    //   const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
+    //   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+    //   // (by default EPSG:9707 (WGS84 + EGM96))
+    //   // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
+    //   // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
+    //   if ( !isMock || ( valueRead && !isVerticalCRSPassedThrough ) )
+    //   {
+    //     const QgsPoint geoidPosition = InputUtils::transformPoint(
+    //                                      PositionKit::positionCrs3DEllipsoidHeight(),
+    //                                      PositionKit::positionCrs3D(),
+    //                                      QgsProject::instance()->transformContext(),
+    //     {longitude, latitude, altitude},
+    //     positionOutsideGeoidModelArea );
+    //     if ( !positionOutsideGeoidModelArea )
+    //     {
+    //       pos.elevation = geoidPosition.z();
+    //
+    //       const double geoidSeparation = altitude - geoidPosition.z();
+    //       pos.elevation_diff = geoidSeparation;
+    //     }
+    //   }
+    //   else
+    //   {
+    //     pos.elevation = altitude;
+    //   }
+    //
+    // }
 
-          const double geoidSeparation = altitude - geoidPosition.z();
-          pos.elevation_diff = geoidSeparation;
-        }
-      }
-      else
-      {
-        pos.elevation = altitude;
-      }
+    pos.elevation = location.callMethod<jdouble>( "getAltitude" );
+    pos = inst->processElevation( pos );
 
-    }
   }
 
   // horizontal accuracy
@@ -169,10 +173,10 @@ void jniOnPositionUpdated( JNIEnv *env, jclass clazz, jint instanceId, jobject l
 }
 
 
-AndroidPositionProvider::AndroidPositionProvider( bool fused, QObject *parent )
+AndroidPositionProvider::AndroidPositionProvider( const bool fused, PositionTransformer &positionTransformer, QObject *parent )
   : AbstractPositionProvider( fused ? QStringLiteral( "android_fused" ) : QStringLiteral( "android_gps" ),
                               QStringLiteral( "internal" ),
-                              fused ? tr( "Internal (fused)" ) : tr( "Internal (gps)" ), parent )
+                              fused ? tr( "Internal (fused)" ) : tr( "Internal (gps)" ), positionTransformer, parent )
   , mFused( fused )
   , mInstanceId( ++sLastInstanceId )
 {
@@ -293,4 +297,9 @@ void AndroidPositionProvider::closeProvider()
   stopUpdates();
 
   mAndroidPos = QJniObject();
+}
+
+GeoPosition AndroidPositionProvider::processElevation( const GeoPosition &position )
+{
+  return mPositionTransformer->processAndroidPosition( position );
 }

@@ -10,12 +10,13 @@
 #ifndef POSITIONKIT_H
 #define POSITIONKIT_H
 
-#include "position/providers/abstractpositionprovider.h"
-
-#include "qgspoint.h"
-#include "qgscoordinatereferencesystem.h"
-#include <QObject>
 #include <QtQml/qqmlregistration.h>
+
+#include <qgspoint.h>
+#include <qgscoordinatereferencesystem.h>
+
+#include "positiontransformer.h"
+#include "position/providers/abstractpositionprovider.h"
 
 class AppSettings;
 
@@ -133,8 +134,8 @@ class PositionKit : public QObject
     // Returns the model name used for elevation transformations
     Q_INVOKABLE QString positionCrs3DGeoidModelName() const;
 
-    Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
-    Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
+    Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
+    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
@@ -188,6 +189,9 @@ class PositionKit : public QObject
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
     AppSettings *mAppSettings = nullptr; // not owned
+    PositionTransformer *mPositionTransformer = nullptr; // owned
+
+    friend class TestPosition;
 };
 
 #endif // POSITIONKIT_H

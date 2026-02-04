@@ -15,8 +15,8 @@
 #include "inpututils.h"
 #include "qgspoint.h"
 
-SimulatedPositionProvider::SimulatedPositionProvider( const double longitude, const double latitude, const double flightRadius, const double updateTimeout, QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), parent )
+SimulatedPositionProvider::SimulatedPositionProvider( PositionTransformer &positionTransformer, const double longitude, const double latitude, const double flightRadius, const double updateTimeout, QObject *parent )
+  : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), positionTransformer, parent )
   , mTimer( new QTimer() )
   , mLongitude( longitude )
   , mLatitude( latitude )
@@ -89,26 +89,13 @@ void SimulatedPositionProvider::generateRadiusPosition()
   position.latitude = latitude;
   position.longitude = longitude;
 
-  double ellipsoidAltitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,115>m and lost (NaN)
+  const double ellipsoidAltitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,115>m and lost (NaN)
   if ( ellipsoidAltitude <= 115 )
   {
-    bool positionOutsideGeoidModelArea = false;
-    const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                     PositionKit::positionCrs3DEllipsoidHeight(),
-                                     PositionKit::positionCrs3D(),
-                                     QgsCoordinateTransformContext(),
-    {longitude, latitude, ellipsoidAltitude},
-    positionOutsideGeoidModelArea );
-    if ( !positionOutsideGeoidModelArea )
-    {
-      position.elevation = geoidPosition.z();
-      position.elevation_diff = ellipsoidAltitude - position.elevation;
-    }
-    else
-    {
-      position.elevation = std::numeric_limits<double>::quiet_NaN();
-      position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
-    }
+    position.elevation = ellipsoidAltitude;
+    GeoPosition transformedPosition = mPositionTransformer->processSimulatedPosition( position );
+    position.elevation = transformedPosition.elevation;
+    position.elevation_diff = transformedPosition.elevation_diff;
   }
   else
   {

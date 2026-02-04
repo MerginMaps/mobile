@@ -31,6 +31,8 @@
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
+  const bool isVerticalCRSPassThroughEnabled = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true );
+  mPositionTransformer = new PositionTransformer( positionCrs3DEllipsoidHeight(), positionCrs3D(), isVerticalCRSPassThroughEnabled );
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
@@ -142,7 +144,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   if ( providerType == QStringLiteral( "external" ) )
   {
 #ifdef HAVE_BLUETOOTH
-    AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name );
+    AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
 #endif
@@ -151,7 +153,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   {
     if ( id == QStringLiteral( "simulated" ) )
     {
-      AbstractPositionProvider *provider = new SimulatedPositionProvider();
+      AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
@@ -164,19 +166,19 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
         // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
 
         // fallback to the default - at this point the Qt Positioning implementation
-        AbstractPositionProvider *provider = new InternalPositionProvider();
+        AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
         QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
         return provider;
       }
       __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
-      AbstractPositionProvider *provider = new AndroidPositionProvider( fused );
+      AbstractPositionProvider *provider = new AndroidPositionProvider( fused, *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
 #endif
     else // id == devicegps
     {
-      AbstractPositionProvider *provider = new InternalPositionProvider();
+      AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }

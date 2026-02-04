@@ -54,7 +54,7 @@ void TestPosition::simulatedPosition()
 {
   QVERIFY( !positionKit->positionProvider() );
 
-  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, -92.36, 38.93, 0 );
 
   positionKit->setPositionProvider( simulatedProvider ); // ownership of provider is passed to positionkit
 
@@ -72,7 +72,7 @@ void TestPosition::simulatedPosition()
   QVERIFY( positionKit->satellitesVisible() >= 0 );
   QVERIFY( positionKit->satellitesUsed() >= 0 );
 
-  SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( 90.36, 33.93, 0 );
+  SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 90.36, 33.93, 0 );
 
   // position kit ignores new provider if it is the same type and id, so delete the previous one first
   positionKit->setPositionProvider( nullptr ); // deletes the first provider
@@ -95,7 +95,7 @@ void TestPosition::simulatedPosition()
 
 void TestPosition::testBluetoothProviderConnection()
 {
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider" );
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider", *positionKit->mPositionTransformer );
 
   positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
@@ -194,7 +194,7 @@ void TestPosition::testBluetoothProviderPosition()
   // NOTE: If you want to read NMEA sentences from file, make sure that files has CRLF line endings!
   //
 
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider", *positionKit->mPositionTransformer );
 
   positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
@@ -322,7 +322,7 @@ void TestPosition::testMapPosition()
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
   // Create position kit provider
-  SimulatedPositionProvider *provider = new SimulatedPositionProvider( 17.1, 48.1, 0 );
+  SimulatedPositionProvider *provider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 17.1, 48.1, 0 );
   positionKit->setPositionProvider( provider );
 
   // Create MapPosition
@@ -351,7 +351,7 @@ void TestPosition::testMapPosition()
 
   // Now let's assign a not stationary provider
   positionKit->setPositionProvider( nullptr );
-  SimulatedPositionProvider *provider2 = new SimulatedPositionProvider( 15.1, 48.1, 1, 500 );
+  SimulatedPositionProvider *provider2 = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 15.1, 48.1, 1, 500 );
   positionKit->setPositionProvider( provider2 );
 
   QSignalSpy positionUpdateSpy2( provider2, &AbstractPositionProvider::positionChanged );
@@ -372,7 +372,7 @@ void TestPosition::testPositionTracking()
 
   QVERIFY( !PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), nullptr ) ); // should return null without pk
 
-  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, -92.36, 38.93, 0 );
   positionKit->setPositionProvider( simulatedProvider ); // ownership of the provider is passed to pk
   simulatedProvider = nullptr;
 

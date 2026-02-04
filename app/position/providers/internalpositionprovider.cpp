@@ -14,8 +14,8 @@
 #include "coreutils.h"
 #include "inpututils.h"
 
-InternalPositionProvider::InternalPositionProvider( QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), tr( "Internal" ), parent )
+InternalPositionProvider::InternalPositionProvider( PositionTransformer &positionTransformer, QObject *parent )
+  : AbstractPositionProvider( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ), tr( "Internal" ), positionTransformer, parent )
 {
   mGpsPositionSource = std::unique_ptr<QGeoPositionInfoSource>( QGeoPositionInfoSource::createDefaultSource( nullptr ) );
 
@@ -146,84 +146,112 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  bool positionOutsideGeoidModelArea = false;
+//   bool positionOutsideGeoidModelArea = false;
+// #ifdef Q_OS_IOS
+//   // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
+//   // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
+//   bool valueRead = false;
+//   const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
+//   const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
+//   localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
+//   const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
+//   mLastPosition.isMock = isMockedLocation;
+//   localPosition.removeAttribute( QGeoPositionInfo::MagneticVariation );
+//
+//   QgsPoint geoidPosition;
+//
+//   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+//   // (by default EPSG:9707 (WGS84 + EGM96))
+//   // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
+//   // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is not enabled
+//   const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
+//   const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude && valueRead;
+//
+//   if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !isVerticalCRSPassedThrough ) )
+//   {
+//     geoidPosition = InputUtils::transformPoint(
+//                       PositionKit::positionCrs3DEllipsoidHeight(),
+//                       PositionKit::positionCrs3D(),
+//                       QgsProject::instance()->transformContext(),
+//     {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
+//     positionOutsideGeoidModelArea );
+//   }
+//   // everything else gets propagated as received
+//   else
+//   {
+//     geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
+//   }
+// #elif defined (ANDROID)
+//   // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+//   // (by default EPSG:9707 (WGS84 + EGM96))
+//   const QgsPoint geoidPosition = InputUtils::transformPoint(
+//                                    PositionKit::positionCrs3DEllipsoidHeight(),
+//                                    PositionKit::positionCrs3D(),
+//                                    QgsProject::instance()->transformContext(),
+//   {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
+//   positionOutsideGeoidModelArea );
+// #else
+//   const QgsPoint geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
+// #endif
+//   if ( !positionOutsideGeoidModelArea )
+//   {
+//     if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
+//     {
+//       mLastPosition.elevation = geoidPosition.z();
+//       positionDataHasChanged = true;
+//     }
+//
+//     // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
+//     // but that's not really true in our case:
+//     // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
+//     //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
+//     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
+//     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
+//     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
+//     // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
+// #ifdef Q_OS_IOS
+//     if ( isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
+//     {
+// #endif
+//       const double ellipsoidAltitude = localPosition.coordinate().altitude();
+//       const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
+//       if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
+//       {
+//         mLastPosition.elevation_diff = geoidSeparation;
+//         positionDataHasChanged = true;
+//       }
+// #ifdef Q_OS_IOS
+//     }
+// #endif
+//   }
+
+  GeoPosition transformedPosition;
 #ifdef Q_OS_IOS
-  // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
-  // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
-  bool valueRead = false;
-  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
-  const bool isEllipsoidalAltitude = localPosition.attribute( QGeoPositionInfo::VerticalSpeed );
-  localPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
-  const bool isMockedLocation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
-  mLastPosition.isMock = isMockedLocation;
-  localPosition.removeAttribute( QGeoPositionInfo::MagneticVariation );
-
-  QgsPoint geoidPosition;
-
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-  // (by default EPSG:9707 (WGS84 + EGM96))
-  // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
-  // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is not enabled
-  const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
-  const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude && valueRead;
-
-  if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !isVerticalCRSPassedThrough ) )
-  {
-    geoidPosition = InputUtils::transformPoint(
-                      PositionKit::positionCrs3DEllipsoidHeight(),
-                      PositionKit::positionCrs3D(),
-                      QgsProject::instance()->transformContext(),
-    {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
-    positionOutsideGeoidModelArea );
-  }
-  // everything else gets propagated as received
-  else
-  {
-    geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
-  }
+  transformedPosition = mPositionTransformer->processInternalIosPosition( localPosition );
 #elif defined (ANDROID)
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-  // (by default EPSG:9707 (WGS84 + EGM96))
-  const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                   PositionKit::positionCrs3DEllipsoidHeight(),
-                                   PositionKit::positionCrs3D(),
-                                   QgsProject::instance()->transformContext(),
-  {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()},
-  positionOutsideGeoidModelArea );
+  transformedPosition = mPositionTransformer->processInternalAndroidPosition( localPosition );
 #else
-  const QgsPoint geoidPosition = {localPosition.coordinate().longitude(), localPosition.coordinate().latitude(), localPosition.coordinate().altitude()};
+  transformedPosition = mPositionTransformer->processInternalDesktopPosition( localPosition );
 #endif
-  if ( !positionOutsideGeoidModelArea )
-  {
-    if ( !qgsDoubleNear( geoidPosition.z(), mLastPosition.elevation ) )
-    {
-      mLastPosition.elevation = geoidPosition.z();
-      positionDataHasChanged = true;
-    }
 
-    // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
-    // but that's not really true in our case:
-    // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
-    //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
-    // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
-    //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
-    //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
-#ifdef Q_OS_IOS
-    if ( isEllipsoidalAltitude && !isVerticalCRSPassedThrough )
-    {
-#endif
-      const double ellipsoidAltitude = localPosition.coordinate().altitude();
-      const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
-      if ( !qgsDoubleNear( geoidSeparation, mLastPosition.elevation_diff ) )
-      {
-        mLastPosition.elevation_diff = geoidSeparation;
-        positionDataHasChanged = true;
-      }
-#ifdef Q_OS_IOS
-    }
-#endif
+  if ( mLastPosition.isMock != transformedPosition.isMock )
+  {
+    mLastPosition.isMock = transformedPosition.isMock;
+    positionDataHasChanged = true;
   }
+
+  if ( !qgsDoubleNear( transformedPosition.elevation, mLastPosition.elevation ) )
+  {
+    mLastPosition.elevation = transformedPosition.elevation;
+    positionDataHasChanged = true;
+  }
+
+  if ( !qgsDoubleNear( transformedPosition.elevation_diff, mLastPosition.elevation_diff ) )
+  {
+    mLastPosition.elevation_diff = transformedPosition.elevation_diff;
+    positionDataHasChanged = true;
+  }
+
 
   const bool hasSpeedInfo = localPosition.hasAttribute( QGeoPositionInfo::GroundSpeed );
   if ( hasSpeedInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )

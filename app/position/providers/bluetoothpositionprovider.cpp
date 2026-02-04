@@ -30,8 +30,8 @@ QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
   return mLastGPSInformation;
 }
 
-BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, parent )
+BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, positionTransformer, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
@@ -213,28 +213,30 @@ void BluetoothPositionProvider::positionUpdateReceived()
     const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
 
-    bool valueRead = false;
-    const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
-    // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
-    // also check if we have data for elevation and elevation undulation
-    if ( valueRead && !isVerticalCRSPassedThrough && positionData.elevation && positionData.elevation_diff )
-    {
-      // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
-      // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
-      const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
-      bool positionOutsideGeoidModelArea = false;
-      const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                       PositionKit::positionCrs3DEllipsoidHeight(),
-                                       PositionKit::positionCrs3D(),
-                                       QgsProject::instance()->transformContext(),
-      {positionData.longitude, positionData.latitude, ellipsoidElevation},
-      positionOutsideGeoidModelArea );
-      if ( !positionOutsideGeoidModelArea )
-      {
-        positionData.elevation = geoidPosition.z();
-        positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
-      }
-    }
+    // bool valueRead = false;
+    // const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
+    // // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
+    // // also check if we have data for elevation and elevation undulation
+    // if ( valueRead && !isVerticalCRSPassedThrough && positionData.elevation && positionData.elevation_diff )
+    // {
+    //   // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
+    //   // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
+    //   const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
+    //   bool positionOutsideGeoidModelArea = false;
+    //   const QgsPoint geoidPosition = InputUtils::transformPoint(
+    //                                    PositionKit::positionCrs3DEllipsoidHeight(),
+    //                                    PositionKit::positionCrs3D(),
+    //                                    QgsProject::instance()->transformContext(),
+    //   {positionData.longitude, positionData.latitude, ellipsoidElevation},
+    //   positionOutsideGeoidModelArea );
+    //   if ( !positionOutsideGeoidModelArea )
+    //   {
+    //     positionData.elevation = geoidPosition.z();
+    //     positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
+    //   }
+    // }
+
+    GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
     emit positionChanged( positionData );
   }
 }
