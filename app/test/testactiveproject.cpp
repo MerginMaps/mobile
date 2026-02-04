@@ -201,8 +201,6 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
   QString projectName = QStringLiteral( "auth-test.qgz" );
   QString authFile = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
 
-  QgsApplication::initQgis();
-
   QgsAuthManager *authManager = QgsApplication::authManager();
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectName );
@@ -210,11 +208,10 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
 
   QSignalSpy spyLoadingStarted( &activeProject, &ActiveProject::loadingStarted );
 
-  // we expect the configuration import to fail as the password for the cfg xml is not the project's id
+  // we expect the configuration import to fail
   int count = authManager->configIds().count();
   QCOMPARE( count, 0 );
 
-  authManager->removeAllAuthenticationConfigs();
   QFileInfo cfgFileInfo( authFile );
   if ( cfgFileInfo.exists() && cfgFileInfo.isFile() )
   {
@@ -226,4 +223,3 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
     QCOMPARE( count, 1 );
   }
 }
-

@@ -544,10 +544,12 @@ int main( int argc, char *argv[] )
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
   LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
-  // setting up the master password for authentication database retrieval
   QgsAuthManager *authManager = QgsApplication::authManager();
+  // remove existing authentication database when opening the app
+  authManager->removeAllAuthenticationConfigs();
+  // set up the master password for authentication database retrieval
   authManager->setPasswordHelperEnabled( false );
-  authManager->setMasterPassword( QStringLiteral( "merginMaps" ) );
+  authManager->setMasterPassword( QStringLiteral( "merginMaps" ), true );
 
 
   // build position kit, save active provider to QSettings and load previously active provider

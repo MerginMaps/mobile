@@ -164,13 +164,10 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     const QFileInfo cfgFile( projectDir.filePath( AUTH_CONFIG_FILENAME ) );
     if ( cfgFile.exists() && cfgFile.isFile() )
     {
-      // clear the authentication database before importing a new one, if it exists
-      QgsAuthManager *authMngr = QgsApplication::authManager();
-      authMngr->removeAllAuthenticationConfigs();
-
       // import the new configuration, if it exists.
+      QgsAuthManager *authManager = QgsApplication::authManager();
       const QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir.path() ) ).projectId;
-      const bool ok = authMngr->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
+      const bool ok = authManager->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
       CoreUtils::log( "Authentication database", QStringLiteral( "QGIS auth imported: %1" ).arg( ok ? "success" : "failure" ) );
     }
 
