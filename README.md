@@ -55,11 +55,11 @@ Please refer to our community contributions guidelines.
 
 Mergin Maps mobile app features touch optimised GUI components based on Qt Quick (based on QGIS core library).
 
-* Mapping components - map canvas, GPS position, scale bar, markers
-* Support for capturing of new geometries
-* Display and editing of feature forms
-* Built-in service for [storing and synchronising data](https://github.com/MerginMaps/server)
-* Translated to several [languages](https://explore.transifex.com/lutra-consulting/mergin-maps-input/)
+- Mapping components - map canvas, GPS position, scale bar, markers
+- Support for capturing of new geometries
+- Display and editing of feature forms
+- Built-in service for [storing and synchronising data](https://github.com/MerginMaps/server)
+- Translated to several [languages](https://explore.transifex.com/lutra-consulting/mergin-maps-mobile/)
 
 ## Documentation
 

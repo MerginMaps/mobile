@@ -112,6 +112,17 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
     }
   } );
 
+#ifndef QT_NO_SSL
+  QObject::connect( mManager, &QNetworkAccessManager::sslErrors, this, []( const QNetworkReply * reply, const QList<QSslError> &errors )
+  {
+    CoreUtils::log( QStringLiteral( "SSL error" ), QStringLiteral( "URL attempting to access: " ) + reply->url().toString() );
+    for ( const auto &error : errors )
+    {
+      CoreUtils::log( QStringLiteral( "SSL error" ), QStringLiteral( "Error Description:" ) + error.errorString() );
+    }
+  } );
+#endif
+
   //
   // check if the cache is up to date:
   //  - server url and type

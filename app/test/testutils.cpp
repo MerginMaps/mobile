@@ -118,19 +118,19 @@ bool TestUtils::needsToAuthorizeAgain( MerginApi *api, const QString &username )
   return false;
 }
 
-
-QString TestUtils::generateUsername()
-{
-  QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "mobile-%1" ).arg( uniqename );
-}
-
 QString TestUtils::generateEmail()
 {
+#if defined(Q_OS_MACOS)
+  QString prefix = QStringLiteral( "mac" );
+#elif defined(Q_OS_LINUX)
+  QString prefix = QStringLiteral( "lin" );
+#else
+  QString prefix = QStringLiteral( "mob" );
+#endif
   QDateTime time = QDateTime::currentDateTime();
-  QString uniqename = time.toString( QStringLiteral( "ddMMyy-hhmmss-z" ) );
-  return QStringLiteral( "mobile-autotest+%1@lutraconsulting.co.uk" ).arg( uniqename );
+  QString uniqeName = time.toString( QStringLiteral( "ddMMyy-hhmmss" ) );
+  // adding the prefix and the uniqueName
+  return QStringLiteral( "%1-%2@lutraconsulting.co.uk" ).arg( prefix, uniqeName );
 }
 
 QString TestUtils::generatePassword()
@@ -139,27 +139,12 @@ QString TestUtils::generatePassword()
   return QStringLiteral( "_Pass12%1" ).arg( pass );
 }
 
-QString TestUtils::generateWorkspaceName( const QString &username )
-{
-  static const QRegularExpression regex( R"(mobile-autotest(\d{6})-(\d{4})\d{2}-\d{3})" );
-  const QRegularExpressionMatch match = regex.match( username );
-
-  if ( match.hasMatch() )
-  {
-    const QString date = match.captured( 1 ); // Day Month Year
-    const QString time = match.captured( 2 ); // Hour Second
-    return QString( "mmat-%1-%2" ).arg( date, time );
-  }
-  return {};
-}
-
 void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &password )
 {
   // generate the test run-specific user details
   QString email = generateEmail();
   password = generatePassword();
-  username = email.split( '@' ).first();
-  username.remove( "+" );
+  username = email.left( email.lastIndexOf( '@' ) );
 
   // create the account for the test run user
   api->clearAuth();
@@ -182,11 +167,10 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   // create workspace
   QSignalSpy wsSpy( api, &MerginApi::workspaceCreated );
   // create the workspace name
-  QString workspace = generateWorkspaceName( username );
-  api->createWorkspace( workspace );
+  api->createWorkspace( username );
   bool workspaceSuccess = wsSpy.wait( TestUtils::LONG_REPLY );
   QVERIFY( workspaceSuccess );
-  qDebug() << "CREATED NEW WORKSPACE:" << workspace;
+  qDebug() << "CREATED NEW WORKSPACE:" << username;
 
   // call userInfo to set active workspace
   QSignalSpy infoSpy( api, &MerginApi::userInfoReplyFinished );
@@ -211,7 +195,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
   bool workspaceStorageModified = wsStorageSpy.wait( TestUtils::LONG_REPLY );
   if ( workspaceStorageModified )
   {
-    qDebug() << "Updated the storage limit" << workspace;
+    qDebug() << "Updated the storage limit" << username;
   }
 
 // this needs to be cleared, as the user will be authorized in the test cases.

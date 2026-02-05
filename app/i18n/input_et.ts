@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>General</source>
         <translation>Üldine</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="271"/>
+        <location filename="../activeproject.cpp" line="272"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Kaart ja tööriistad võivad töötada valesti!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer</source>
         <translation>Kiht</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="283"/>
+        <location filename="../activeproject.cpp" line="284"/>
         <source>Unable to load source </source>
         <translation>Andmeid ei õnnestu laadida</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="293"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Salvestamisel võib tekkida vigu.</translation>
     </message>
@@ -237,67 +237,36 @@ Seda ei lisata projektile.</translation>
         <source>just now</source>
         <translation>äsja</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minutes ago</source>
-        <translation>%1 minutit tagasi</translation>
+        <source>%n minute(s) ago</source>
+        <translation><numerusform>%n minut(i) eest</numerusform><numerusform>%n minut(it) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="241"/>
-        <source>%1 minute ago</source>
-        <translation>%1 minut tagasi</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hours ago</source>
-        <translation>%1 tundi tagasi</translation>
+        <source>%n hour(s) ago</source>
+        <translation><numerusform>%n hour(s) ago</numerusform><numerusform>%n tund(i) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="246"/>
-        <source>%1 hour ago</source>
-        <translation>%1 tund tagasi</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="250"/>
         <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 days ago</source>
-        <translation>%1 päeva tagasi</translation>
+        <source>%n day(s) ago</source>
+        <translation><numerusform>%n päev(a) tagasi</numerusform><numerusform>%n päev(a) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
-        <source>%1 day ago</source>
-        <translation>%1 päev tagasi</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 weeks ago</source>
-        <translation>%1 nädalat tagasi</translation>
+        <source>%n week(s) ago</source>
+        <translation><numerusform>%n nädal(at) tagasi</numerusform><numerusform>%n nädal(at) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="260"/>
-        <source>%1 week ago</source>
-        <translation>%1 nädal tagasi</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 months ago</source>
-        <translation>%1 kuud tagasi</translation>
+        <source>%n month(s) ago</source>
+        <translation><numerusform>%n kuu(d) tagasi</numerusform><numerusform>%n kuu(d) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="265"/>
-        <source>%1 month ago</source>
-        <translation>%1 kuu tagasi</translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 years ago</source>
-        <translation>%1 aastat tagasi</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="270"/>
-        <source>%1 year ago</source>
-        <translation>%1 aasta tagasi</translation>
+        <source>%n year(s) ago</source>
+        <translation><numerusform>%n aasta(t) tagasi</numerusform><numerusform>%n aasta(t) tagasi</numerusform></translation>
     </message>
     <message>
         <location filename="../inpututils.cpp" line="1537"/>
@@ -339,15 +308,15 @@ Seda ei lisata projektile.</translation>
         <source>used dp scale: %1</source>
         <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2102"/>
-        <source>You need to add at least %1 point(s) to every part.</source>
-        <translation>Pead lisama vähemalt %1 punkti iga osa kohta.</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2163"/>
+        <source>You need to add at least %n point(s) to every part.</source>
+        <translation><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="2106"/>
-        <source>You need to add at least %1 point(s).</source>
-        <translation>Pead lisama vähemalt %1 punkti.</translation>
+    <message numerus="yes">
+        <location filename="../inpututils.cpp" line="2167"/>
+        <source>You need to add at least %n point(s).</source>
+        <translation><numerusform>Pead lisama vähemalt %n punkti.</numerusform><numerusform>Pead lisama vähemalt %n punkti.</numerusform></translation>
     </message>
 </context>
 <context>
@@ -701,7 +670,7 @@ Seda ei lisata projektile.</translation>
         <translation>Hea nime variant töölauale on sinu meeskonna või organisatsiooni nimi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="125"/>
+        <location filename="../qml/account/MMCreateWorkspacePage.qml" line="126"/>
         <source>Create workspace</source>
         <translation>Loo töölaud</translation>
     </message>
@@ -770,7 +739,7 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="94"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
     </message>
@@ -791,22 +760,22 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFormDeleteFeatureDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="20"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
         <source>Delete feature</source>
         <translation>Kustuta nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="21"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
         <source>Are you sure you want to delete this feature?</source>
         <translation>Oled kindel et soovid kustutada selle nähtuse?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="22"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="24"/>
         <source>Yes, I want to delete</source>
         <translation>Jah, soovin kustutada</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMFormDeleteFeatureDialog.qml" line="25"/>
         <source>No, thanks</source>
         <translation>Ei, tänan</translation>
     </message>
@@ -1013,6 +982,7 @@ Seda ei lisata projektile.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
         <source>N/A</source>
         <translation>Ei kohaldu</translation>
     </message>
@@ -1092,7 +1062,12 @@ Seda ei lisata projektile.</translation>
         <translation>Määramata</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="327"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <source>Geoid separation</source>
+        <translation> Geoidi kõrguserinevus</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
         <source>Manage GPS receivers</source>
         <translation>Halda GPS vastuvõtjaid</translation>
     </message>
@@ -2163,24 +2138,29 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
         <source>Select features</source>
         <translation>Vali nähtusi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n nähtus(t) valitud</numerusform><numerusform>%n nähtus(t) valitud</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
         <source>on layer %1</source>
         <translation>kihil %1</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="114"/>
         <source>Edit</source>
         <translation>Muuda</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="120"/>
+        <source>Delete</source>
+        <translation>Kustuta</translation>
     </message>
 </context>
 <context>
@@ -2314,8 +2294,8 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
-        <source>Each time you save changes, the app will sync automatically</source>
-        <translation>Iga kord kui salvestad muudatusi sünkroniseerib rakendus need automaatselt</translation>
+        <source>Your project is synced automatically to keep you up to date</source>
+        <translation>Sinu projekti sünkroniseeritakse automaatselt</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
@@ -2429,8 +2409,8 @@ Seda ei lisata projektile.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="19"/>
-        <source>Please make sure that the split line crosses your feature. The feature needs to have a valid geometry in order to split it.</source>
-        <translation>Palun taga et tükeldusjoon läheks üle su nähtuse. Tükeldamiseks peab nähtus peab korras geomeetriaga.</translation>
+        <source>Ensure that your split line intersects the feature properly and that the feature’s geometry is valid.</source>
+        <translation>Kontrolli kas poolitusjoon lõikab nähtust täielikult ja kas nähtuse ruumikuju on vigadeta.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="20"/>
@@ -2456,7 +2436,12 @@ Seda ei lisata projektile.</translation>
         <translation>Tehtud</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMSplittingTools.qml" line="113"/>
+        <location filename="../qml/map/MMSplittingTools.qml" line="112"/>
+        <source>The split line does not properly cross the feature. Please adjust the line to cross the feature boundary.</source>
+        <translation>Poolitusjoon ei lõika nähtust täielikult. Paranda joone asukohta nii et see läheks üle nähtuse välispiiri.</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMSplittingTools.qml" line="120"/>
         <source>You need to add at least 2 points.</source>
         <translation>Pead lisama vähemalt 2 punkti.</translation>
     </message>
@@ -2764,116 +2749,116 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="238"/>
+        <location filename="../../core/merginapi.cpp" line="244"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Palun kustuta mõned projektid kuna rakendus 
 võimaldab ainult kuni %1 allalaetud projekti.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="880"/>
+        <location filename="../../core/merginapi.cpp" line="892"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Serveri SSO seadistusega on midagi valesti. Võta ühendust administraatoriga.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="888"/>
-        <location filename="../../core/merginapi.cpp" line="948"/>
+        <location filename="../../core/merginapi.cpp" line="900"/>
+        <location filename="../../core/merginapi.cpp" line="960"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Serverist SSO seadistuste saamisel tekkis probleem</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="932"/>
-        <location filename="../../core/merginapi.cpp" line="946"/>
+        <location filename="../../core/merginapi.cpp" line="944"/>
+        <location filename="../../core/merginapi.cpp" line="958"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>SSO ei ole määratud domeeni jaoks saadaval</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="961"/>
-        <location filename="../../core/merginapi.cpp" line="1471"/>
+        <location filename="../../core/merginapi.cpp" line="973"/>
+        <location filename="../../core/merginapi.cpp" line="1492"/>
         <source>Please enter a valid email</source>
         <translation>Palun sisesta kehtiv email</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="968"/>
-        <location filename="../../core/merginapi.cpp" line="1483"/>
+        <location filename="../../core/merginapi.cpp" line="980"/>
+        <location filename="../../core/merginapi.cpp" line="1504"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 Salasõna peab olema vähemalt 8 tähemärgi pikkune ja sisaldama:&lt;ul type=&quot;disc&quot;&gt;%3 Väikseid tähti (a-z)%4%3 Suuri tähti (A-Z)%4%3 Vähemalt üks number (0–9) või erisümbol%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="982"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Palun nõustu Tingimuste ja Privaatsuspoliitikaga</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1011"/>
+        <location filename="../../core/merginapi.cpp" line="1026"/>
         <source>Marketing source cannot be empty</source>
         <translation>Info allikas ei saa olla tühi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1019"/>
+        <location filename="../../core/merginapi.cpp" line="1034"/>
         <source>Industry cannot be empty</source>
         <translation>Valdkond ei saa jääda tühjaks</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1338"/>
+        <location filename="../../core/merginapi.cpp" line="1359"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Sul pole õigusi sellel töölaual uute projektide tekitamiseks.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1343"/>
+        <location filename="../../core/merginapi.cpp" line="1364"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Projekti ei õnnestunud tekitada. Proovi hiljem uuesti, kui siis ka ei õnnestu siis võta ühendust kasutajatoega.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1451"/>
+        <location filename="../../core/merginapi.cpp" line="1472"/>
         <source>Registration successful</source>
         <translation>Registreerumine õnnestus</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1473"/>
-        <location filename="../../core/merginapi.cpp" line="1479"/>
-        <location filename="../../core/merginapi.cpp" line="1491"/>
+        <location filename="../../core/merginapi.cpp" line="1494"/>
+        <location filename="../../core/merginapi.cpp" line="1500"/>
+        <location filename="../../core/merginapi.cpp" line="1512"/>
         <source>Registration failed</source>
         <translation>Registreerimine ebaõnnestus</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1477"/>
+        <location filename="../../core/merginapi.cpp" line="1498"/>
         <source>This email address is already registered</source>
         <translation>See emaili aadress on juba registreeritud</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1502"/>
+        <location filename="../../core/merginapi.cpp" line="1523"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Uusi kasutajaid ei lubata valitud serverisse. Palun räägi läbi oma administraatoriga.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1555"/>
         <source>Workspace created</source>
         <translation>Töölaud on loodud</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1902"/>
+        <location filename="../../core/merginapi.cpp" line="1923"/>
         <source>Project detached from the server</source>
         <translation>Projekt on eraldatud serverist</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4164"/>
+        <location filename="../../core/merginapi.cpp" line="4231"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Töölaua nimes on sobimatuid tähemärke</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4298"/>
         <source>Workspace %1 already exists</source>
         <translation>Töölaud %1 on juba olemas</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4337"/>
+        <location filename="../../core/merginapi.cpp" line="4404"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Võid nüüd sulgeda selle lehe ja minna tagasi Mergin Mapsi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4363"/>
-        <location filename="../../core/merginapi.cpp" line="4390"/>
+        <location filename="../../core/merginapi.cpp" line="4430"/>
+        <location filename="../../core/merginapi.cpp" line="4457"/>
         <source>SSO authorization failed</source>
         <translation>SSO autoriseerimine ebaõnnestus</translation>
     </message>
@@ -2965,7 +2950,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Projektinimes on keelatud tähemärke</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="212"/>
+        <location filename="../projectwizard.cpp" line="215"/>
         <source>Project %1 created</source>
         <translation>Projekt %1 loodud</translation>
     </message>
@@ -3098,12 +3083,12 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Teadmata positsioneering</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="578"/>
+        <location filename="../main.cpp" line="588"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Teavitus edastatud. Palun võta ühendust kasutajatoega</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="583"/>
+        <location filename="../main.cpp" line="593"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Teavitust ei õnnestunud saata. Palun kontrolli oma interneti ühendust.</translation>
     </message>
@@ -3189,53 +3174,73 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <source>not tracking</source>
         <translation>ei jälgi</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="674"/>
+        <source>Delete %n feature(s)</source>
+        <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtust</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/main.qml" line="675"/>
+        <source>Delete %n selected feature(s)?</source>
+        <translation><numerusform>Kustutan %n valitud nähtuse?</numerusform><numerusform>Kustutan %n valitud nähtust?</numerusform></translation>
+    </message>
     <message>
-        <location filename="../qml/main.qml" line="873"/>
+        <location filename="../qml/main.qml" line="677"/>
+        <source>Yes, I want to delete</source>
+        <translation>Jah, soovin kustutada</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="678"/>
+        <source>No, thanks</source>
+        <translation>Ei, tänan</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="898"/>
         <source>Select feature</source>
         <translation>Vali nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="957"/>
+        <location filename="../qml/main.qml" line="982"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Keegi teine sünkroniseerib, proovime mõne aja pärast uuesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="981"/>
+        <location filename="../qml/main.qml" line="1014"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Serveriga ei õnnestu ühendust saada. Püüa parandada võrguühendust.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1032"/>
+        <location filename="../qml/main.qml" line="1004"/>
         <source>Up to date</source>
         <translation>Ajakohane</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1100"/>
+        <location filename="../qml/main.qml" line="1125"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Projekti laadimisel tekkis tõrge. %1Vaata täpsemalt%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="776"/>
+        <location filename="../qml/main.qml" line="801"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Markeerimine on välja lülitatud sest asukoht ei ole kättesaadav!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="926"/>
+        <location filename="../qml/main.qml" line="951"/>
         <source>Successfully synchronised</source>
         <translation>Edukalt sünkroniseeritud</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="964"/>
+        <location filename="../qml/main.qml" line="989"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Sünkroniseerimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1121"/>
+        <location filename="../qml/main.qml" line="1146"/>
         <source>Could not read the project file:</source>
         <translation>Ei õnnestunud avada projektifaili:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1154"/>
+        <location filename="../qml/main.qml" line="1179"/>
         <source>Press back again to quit the app</source>
         <translation>Vajuta veelkord tagasi et rakendus kinni panna</translation>
     </message>

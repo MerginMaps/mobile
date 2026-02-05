@@ -28,7 +28,8 @@ void UrlTester::processFinished()
   }
   else
   {
-    qDebug() << "  URL " << mUrl << " ...ERROR";
+    // for CI debugging
+    qDebug() << "  URL " << mUrl << " ...ERROR. " << r->error();
     mResult = 1;
   }
   r->deleteLater();
