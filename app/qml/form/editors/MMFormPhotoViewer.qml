@@ -126,6 +126,7 @@ MMPrivateComponents.MMBaseInput {
         iconColor: __style.forestColor
 
         visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
+
         onClicked: {
           sketchingLoader.active = true
           sketchingLoader.focus = true

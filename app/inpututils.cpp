@@ -1989,10 +1989,12 @@ void InputUtils::sanitizePath( QString &path )
 
   if ( pathStartsWithThreeSlashesFileUrl )
   {
+    // remove file:/// prefix before sanitization
     path.remove( 0, 8 );
   }
   else if ( pathStartsWithTwoSlashesFileURL )
   {
+    // remove file:// prefix before sanitization
     path.remove( 0, 7 );
   }
 
