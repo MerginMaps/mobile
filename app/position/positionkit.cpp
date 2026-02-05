@@ -56,7 +56,7 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 QString PositionKit::positionCrs3DGeoidModelName() const
 {
   bool valueRead = false;
-  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
+  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
   if ( valueRead && !isVerticalCRSPassedThrough )
   {
     const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
@@ -402,7 +402,7 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
 void PositionKit::refreshPositionTransformer( const QgsProject *project )
 {
   free( mPositionTransformer );
-  const bool isVerticalCRSPassThroughEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true );
+  const bool isVerticalCRSPassThroughEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true );
   mPositionTransformer = new PositionTransformer( positionCrs3DEllipsoidHeight(), positionCrs3D(), isVerticalCRSPassThroughEnabled );
 }
 
