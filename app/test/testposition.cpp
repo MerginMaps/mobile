@@ -641,10 +641,10 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoPositionInfo geoPosition;
+  geoPosition.coordinate().setLatitude( 48.10305 );
+  geoPosition.coordinate().setLongitude( 17.1064 );
+  geoPosition.coordinate().setAltitude( 171.3 );
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalAndroidPosition( geoPosition );
@@ -679,10 +679,10 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoPositionInfo geoPosition;
+  geoPosition.coordinate().setLatitude( 48.10305 );
+  geoPosition.coordinate().setLongitude( 17.1064 );
+  geoPosition.coordinate().setAltitude( 171.3 );
 #endif
 
   // ellipsoid elevation
@@ -774,10 +774,10 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoPositionInfo geoPosition;
+  geoPosition.coordinate().setLatitude( 48.10305 );
+  geoPosition.coordinate().setLongitude( 17.1064 );
+  geoPosition.coordinate().setAltitude( 171.3 );
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
