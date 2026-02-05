@@ -499,6 +499,7 @@ void TestPosition::testPositionTransformerAndroidPosition()
   PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
 
+#ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -514,6 +515,12 @@ void TestPosition::testPositionTransformerAndroidPosition()
   QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   // transform with pass through enabled, but position is not mocked
   GeoPosition newPosition = passThroughTransformer.processAndroidPosition( geoPosition );
@@ -551,6 +558,7 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
 
+#ifdef  HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -566,6 +574,12 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   // transform with pass through disabled and missing elevation separation
   GeoPosition newPosition = positionTransformer.processBluetoothPosition( geoPosition );
@@ -610,6 +624,7 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
 
+#ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -625,6 +640,12 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   GeoPosition newPosition = positionTransformer.processInternalAndroidPosition( geoPosition );
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
@@ -641,6 +662,7 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
   PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
 
+#ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -656,6 +678,12 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   // ellipsoid elevation
   geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
@@ -729,6 +757,7 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
 
+#ifdef  HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -744,6 +773,12 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
   QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
@@ -758,6 +793,7 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
 
+#ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -773,6 +809,12 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
 
   GeoPosition newPosition = positionTransformer.processSimulatedPosition( geoPosition );
 
