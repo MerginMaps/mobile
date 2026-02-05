@@ -97,11 +97,6 @@ void SimulatedPositionProvider::generateRadiusPosition()
     position.elevation = transformedPosition.elevation;
     position.elevation_diff = transformedPosition.elevation_diff;
   }
-  else
-  {
-    position.elevation = std::numeric_limits<double>::quiet_NaN();
-    position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
-  }
 
   const QDateTime timestamp = QDateTime::currentDateTime();
   position.utcDateTime = timestamp;
@@ -129,23 +124,11 @@ void SimulatedPositionProvider::generateConstantPosition()
   position.latitude = mLatitude;
   position.longitude = mLongitude;
   // we take 100 as elevation returned by WGS84 ellipsoid and recalculate it to geoid
-  bool positionOutsideGeoidModelArea = false;
-  const QgsPoint geoidPosition = InputUtils::transformPoint(
-                                   PositionKit::positionCrs3DEllipsoidHeight(),
-                                   PositionKit::positionCrs3D(),
-                                   QgsCoordinateTransformContext(),
-  {mLongitude, mLatitude, 100},
-  positionOutsideGeoidModelArea );
-  if ( !positionOutsideGeoidModelArea )
-  {
-    position.elevation = geoidPosition.z();
-    position.elevation_diff = 100 - position.elevation;
-  }
-  else
-  {
-    position.elevation = std::numeric_limits<double>::quiet_NaN();
-    position.elevation_diff = std::numeric_limits<double>::quiet_NaN();
-  }
+  position.elevation = 100;
+  GeoPosition transformedPosition = mPositionTransformer->processSimulatedPosition( position );
+  position.elevation = transformedPosition.elevation;
+  position.elevation_diff = transformedPosition.elevation_diff;
+
   position.utcDateTime = QDateTime::currentDateTime();
   position.direction = 360 - static_cast<int>( mAngle ) % 360;
   position.hacc = ( *mGenerator )() % 20;

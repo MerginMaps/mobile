@@ -23,7 +23,7 @@
  * socket, (b) do not have multiple unique_ptrs holding the same pointer and to avoid some possible crashes.
  *
  * Note: This way of reusing makes the parser highly dependent on QgsNmeaConnection class and any change inside the class
- * can lead to misbehaviors. See implementation of QgsNmeaConnection and QgsGpsConnection for more details.
+ * can lead to misbehavior's. See implementation of QgsNmeaConnection and QgsGpsConnection for more details.
  */
 class NmeaParser : public QgsNmeaConnection
 {
@@ -31,7 +31,7 @@ class NmeaParser : public QgsNmeaConnection
     NmeaParser();
 
     // Takes nmea string and returns gps position
-    QgsGpsInformation parseNmeaString( const QString &nmeastring );
+    QgsGpsInformation parseNmeaString( const QString &nmeaString );
 };
 
 /**

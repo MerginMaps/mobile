@@ -47,7 +47,7 @@ class InternalPositionProvider : public AbstractPositionProvider
     // There are two sources of GPS data, one informs us about position and the other about satellites.
     // Both of them are handled in separate slots and in order to be able to emit merged information
     // as position update, we need to store received data in mLastPosition.
-    // Otherwise this provider would emit incomplete GPS info (position without satellites or vice versa).
+    // Otherwise, this provider would emit incomplete GPS info (position without satellites or vice versa).
     GeoPosition mLastPosition;
 
     std::unique_ptr<QGeoPositionInfoSource> mGpsPositionSource;

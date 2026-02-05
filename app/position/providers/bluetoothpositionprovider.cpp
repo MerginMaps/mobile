@@ -23,9 +23,9 @@ NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
 }
 
-QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
+QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeaString )
 {
-  mStringBuffer = nmeastring;
+  mStringBuffer = nmeaString;
   processStringBuffer();
   return mLastGPSInformation;
 }
@@ -43,7 +43,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
     QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( int( error ) );
     CoreUtils::log(
       QStringLiteral( "BluetoothPositionProvider" ),
-      QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
+      QStringLiteral( "Occurred connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
     );
 
     setState( tr( "No connection" ), State::NoConnection );
@@ -212,31 +212,8 @@ void BluetoothPositionProvider::positionUpdateReceived()
 
     const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
-
-    // bool valueRead = false;
-    // const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "VerticalCRSPassThrough" ), true, &valueRead );
-    // // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
-    // // also check if we have data for elevation and elevation undulation
-    // if ( valueRead && !isVerticalCRSPassedThrough && positionData.elevation && positionData.elevation_diff )
-    // {
-    //   // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
-    //   // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
-    //   const double ellipsoidElevation = positionData.elevation + positionData.elevation_diff;
-    //   bool positionOutsideGeoidModelArea = false;
-    //   const QgsPoint geoidPosition = InputUtils::transformPoint(
-    //                                    PositionKit::positionCrs3DEllipsoidHeight(),
-    //                                    PositionKit::positionCrs3D(),
-    //                                    QgsProject::instance()->transformContext(),
-    //   {positionData.longitude, positionData.latitude, ellipsoidElevation},
-    //   positionOutsideGeoidModelArea );
-    //   if ( !positionOutsideGeoidModelArea )
-    //   {
-    //     positionData.elevation = geoidPosition.z();
-    //     positionData.elevation_diff = ellipsoidElevation - geoidPosition.z();
-    //   }
-    // }
-
     GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
+
     emit positionChanged( positionData );
   }
 }

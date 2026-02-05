@@ -18,7 +18,7 @@
  * AndroidPositionProvider uses Android's LocationManager API (when fused=false)
  * or Fused Location Provider from Google Play Services (when fused=true).
  *
- * Compared to Qt Positioning, it can use Fused Location Provider and it is
+ * Compared to Qt Positioning, it can use Fused Location Provider, and it is
  * potentially more flexible because we are not going through a generic
  * positioning API.
  */

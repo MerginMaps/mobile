@@ -18,7 +18,7 @@
 #include <random>
 
 /**
- * SimulatedPositionProvider is used to generate random position around specified point
+ * SimulatedPositionProvider is used to generate random position around specified point.
  * Point can be specified via constructor arguments
  * Should be used as a position provider in PositionKit
  */
