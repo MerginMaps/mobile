@@ -274,7 +274,7 @@ void TestUtilsFunctions::getRelativePath()
   QString relativePath2 =  mUtils->getRelativePath( path2, prefixPath );
   QCOMPARE( fileName2, relativePath2 );
 
-  QString path3 = QStringLiteral( "file://" ) + path2;
+  QString path3 = QStringLiteral( "file:///" ) + path2;
   QString relativePath3 =  mUtils->getRelativePath( path3, prefixPath );
   QCOMPARE( fileName2, relativePath3 );
 

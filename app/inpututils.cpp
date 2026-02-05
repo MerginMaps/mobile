@@ -91,9 +91,10 @@ bool InputUtils::removeFile( const QString &filePath )
 bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
 {
   QString modSrcPath = srcPath;
-  if ( srcPath.startsWith( "file://" ) )
+  QUrl url( srcPath );
+  if ( url.isValid() && url.isLocalFile() )
   {
-    modSrcPath = modSrcPath.replace( "file://", "" );
+    modSrcPath = url.toLocalFile();
   }
 
   QFileInfo fi( dstPath );
@@ -1044,7 +1045,7 @@ QString InputUtils::resolvePath( const QString &path, const QString &homePath, c
 QString InputUtils::getRelativePath( const QString &path, const QString &prefixPath )
 {
   QString modPath = path;
-  QString filePrefix( "file://" );
+  QString filePrefix( "file:///" );
 
   if ( path.startsWith( filePrefix ) )
   {
@@ -1983,11 +1984,15 @@ void InputUtils::sanitizeFileName( QString &fileName )
 
 void InputUtils::sanitizePath( QString &path )
 {
-  const bool pathStartsWithFileURL = path.startsWith( "file://" );
+  const bool pathStartsWithThreeSlashesFileUrl = path.startsWith( "file:///" );
+  const bool pathStartsWithTwoSlashesFileURL = path.startsWith( "file://" );
 
-  if ( pathStartsWithFileURL )
+  if ( pathStartsWithThreeSlashesFileUrl )
   {
-    // remove file:// prefix before sanitization
+    path.remove( 0, 8 );
+  }
+  else if ( pathStartsWithTwoSlashesFileURL )
+  {
     path.remove( 0, 7 );
   }
 
@@ -1999,7 +2004,15 @@ void InputUtils::sanitizePath( QString &path )
   for ( int i = 0; i < parts.size(); ++i )
   {
     QString part = parts.at( i );
+
+#ifdef Q_OS_WIN
+    if ( !part.endsWith( ':' ) )
+    {
+      sanitizeFileName( part );
+    }
+#else
     sanitizeFileName( part );
+#endif
 
     if ( i > 0 )
     {
@@ -2015,7 +2028,12 @@ void InputUtils::sanitizePath( QString &path )
     sanitizedPath = '/' + sanitizedPath;
   }
 
-  if ( pathStartsWithFileURL )
+  if ( pathStartsWithThreeSlashesFileUrl )
+  {
+    // restore file:/// prefix
+    sanitizedPath = "file:///" + sanitizedPath;
+  }
+  else if ( pathStartsWithTwoSlashesFileURL )
   {
     // restore file:// prefix
     sanitizedPath = "file://" + sanitizedPath;
