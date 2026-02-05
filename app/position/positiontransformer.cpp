@@ -22,9 +22,7 @@ PositionTransformer::PositionTransformer( const QgsCoordinateReferenceSystem &so
 
 GeoPosition PositionTransformer::processBluetoothPosition( GeoPosition geoPosition )
 {
-  // if the user sets custom vertical crs we apply our transformation if not we propagate the value from GNSS device
-  // also check if we have data for elevation and elevation undulation
-  if ( !mVerticalPassThroughEnabled && geoPosition.elevation && geoPosition.elevation_diff )
+  if ( !mVerticalPassThroughEnabled && !std::isnan( geoPosition.elevation ) && !std::isnan( geoPosition.elevation_diff ) )
   {
     // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
     // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
@@ -48,13 +46,9 @@ GeoPosition PositionTransformer::processBluetoothPosition( GeoPosition geoPositi
 
 GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition )
 {
-  if ( !qFuzzyIsNull( geoPosition.elevation ) )
+  if ( geoPosition.elevation != std::numeric_limits<double>::quiet_NaN() )
   {
     bool positionOutsideGeoidModelArea = false;
-    // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-    // (by default EPSG:9707 (WGS84 + EGM96))
-    // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
-    // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is enabled
     if ( !geoPosition.isMock || !mVerticalPassThroughEnabled )
     {
       const QgsPoint geoidPosition = InputUtils::transformPoint(
@@ -80,8 +74,6 @@ GeoPosition PositionTransformer::processInternalAndroidPosition( const QGeoPosit
 {
   GeoPosition newPosition;
   bool positionOutsideGeoidModelArea = false;
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-  // (by default EPSG:9707 (WGS84 + EGM96))
   const QgsPoint geoidPosition = InputUtils::transformPoint(
                                    mSourceCrs,
                                    mDestinationCrs,
@@ -97,10 +89,6 @@ GeoPosition PositionTransformer::processInternalAndroidPosition( const QGeoPosit
     // but that's not really true in our case:
     // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
     //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
-    // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
-    //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
-    //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
     const double ellipsoidAltitude = geoPosition.coordinate().altitude();
     const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
     newPosition.elevation_diff = geoidSeparation;
@@ -122,10 +110,6 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
 
   QgsPoint geoidPosition;
 
-  // transform the altitude from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
-  // (by default EPSG:9707 (WGS84 + EGM96))
-  // we do the transformation only in case the position is not mocked, and it's ellipsoidal altitude
-  // the second variant is when the position is mocked, the altitude is ellipsoidal plus pass through is not enabled
   const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
   const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude;
 
@@ -155,12 +139,9 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
 
     // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
     // but that's not really true in our case:
-    // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
-    //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
     if ( isEllipsoidalAltitude && !mVerticalPassThroughEnabled )
     {
       const double ellipsoidAltitude = geoPosition.coordinate().altitude();
@@ -175,16 +156,11 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
 GeoPosition PositionTransformer::processInternalDesktopPosition( const QGeoPositionInfo &geoPosition )
 {
   GeoPosition newPosition;
-  newPosition.elevation = geoPosition.coordinate().altitude();
 
   // QGeoCoordinate::altitude() docs claim that it is above the sea level (i.e. geoid) altitude,
   // but that's not really true in our case:
-  // - on Android - it is MSL altitude only if "useMslAltitude" parameter is passed to the Android
-  //   Qt positioning plugin, which we don't do - see https://doc.qt.io/qt-6/position-plugin-android.html
-  // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
-  //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
-  //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
   // - on Windows - it returns MSL altitude, which we pass along, but the altitude separation is unknown
+  newPosition.elevation = geoPosition.coordinate().altitude();
 
   return newPosition;
 }
@@ -203,11 +179,6 @@ GeoPosition PositionTransformer::processSimulatedPosition( const GeoPosition &ge
   {
     newPosition.elevation = geoidPosition.z();
     newPosition.elevation_diff = geoPosition.elevation - newPosition.elevation;
-  }
-  else
-  {
-    newPosition.elevation = std::numeric_limits<double>::quiet_NaN();
-    newPosition.elevation_diff = std::numeric_limits<double>::quiet_NaN();
   }
 
   return newPosition;
