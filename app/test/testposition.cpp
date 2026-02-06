@@ -516,10 +516,8 @@ void TestPosition::testPositionTransformerAndroidPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   // transform with pass through enabled, but position is not mocked
@@ -575,10 +573,8 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   // transform with pass through disabled and missing elevation separation
@@ -641,15 +637,11 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  QGeoPositionInfo geoPosition;
-  geoPosition.coordinate().setLatitude( 48.10305 );
-  geoPosition.coordinate().setLongitude( 17.1064 );
-  geoPosition.coordinate().setAltitude( 171.3 );
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalAndroidPosition( geoPosition );
-  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
-  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation separation: %1").arg(newPosition.elevation_diff));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
@@ -681,10 +673,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  QGeoPositionInfo geoPosition;
-  geoPosition.coordinate().setLatitude( 48.10305 );
-  geoPosition.coordinate().setLongitude( 17.1064 );
-  geoPosition.coordinate().setAltitude( 171.3 );
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   // ellipsoid elevation
@@ -692,8 +682,6 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   // position is not mocked and ellipsoid
   GeoPosition newPosition = positionTransformer.processInternalIosPosition( geoPosition );
 
-  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
-  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation separation: %1").arg(newPosition.elevation_diff));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
   QVERIFY( !newPosition.isMock );
@@ -778,14 +766,11 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
   QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
 #else
-  QGeoPositionInfo geoPosition;
-  geoPosition.coordinate().setLatitude( 48.10305 );
-  geoPosition.coordinate().setLongitude( 17.1064 );
-  geoPosition.coordinate().setAltitude( 171.3 );
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
-  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
 }
 
@@ -815,10 +800,8 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  GeoPosition geoPosition;
-  geoPosition.latitude = 48.10305;
-  geoPosition.longitude = 17.1064;
-  geoPosition.elevation = 171.3;
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
 #endif
 
   GeoPosition newPosition = positionTransformer.processSimulatedPosition( geoPosition );
