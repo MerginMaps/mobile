@@ -516,8 +516,10 @@ void TestPosition::testPositionTransformerAndroidPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
-  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
 #endif
 
   // transform with pass through enabled, but position is not mocked
@@ -573,8 +575,10 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
-  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
 #endif
 
   // transform with pass through disabled and missing elevation separation
@@ -800,8 +804,10 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QCOMPARE( geoPosition.elevation, 171.3 );
   QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 #else
-  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
-  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
 #endif
 
   GeoPosition newPosition = positionTransformer.processSimulatedPosition( geoPosition );
