@@ -648,6 +648,8 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalAndroidPosition( geoPosition );
+  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
+  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation separation: %1").arg(newPosition.elevation_diff));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
@@ -690,6 +692,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   // position is not mocked and ellipsoid
   GeoPosition newPosition = positionTransformer.processInternalIosPosition( geoPosition );
 
+  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
+  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation separation: %1").arg(newPosition.elevation_diff));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
   QVERIFY( !newPosition.isMock );
@@ -781,6 +785,7 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
 #endif
 
   GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
+  CoreUtils::log(QStringLiteral("PositionTest"), QString("NewPosition elevation: %1").arg(newPosition.elevation));
   QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
 }
 
