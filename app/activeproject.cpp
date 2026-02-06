@@ -17,7 +17,6 @@
 #include "qgslayertreelayer.h"
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
-#include "qgsauthmanager.h"
 #include "qgsapplication.h"
 
 #include "activeproject.h"
@@ -26,8 +25,6 @@
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
 #endif
-
-const QString AUTH_CONFIG_FILENAME = QStringLiteral( "qgis_cfg.xml" );
 
 const QString ActiveProject::LOADING_FLAG_FILE_PATH = QString( "%1/.input_loading_project" ).arg( QStandardPaths::standardLocations( QStandardPaths::TempLocation ).first() );
 const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
@@ -40,6 +37,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   QObject( parent )
   , mAppSettings( appSettings )
   , mActiveLayer( activeLayer )
+  , mAuthManager( QgsApplication::authManager() )
   , mLocalProjectsManager( localProjectsManager )
   , mProjectLoadingLog( "" )
 {
@@ -114,6 +112,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   AndroidTrackingBroadcast::unregisterBroadcast();
 #endif
 
+  // clear the authentication configurations from other projects before reloading
+  clearAllAuthenticationConfigs();
+
   // Just clear project if empty
   if ( filePath.isEmpty() )
   {
@@ -161,13 +162,12 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
 
     // path to the authentication configuration file
     const QDir projectDir = QFileInfo( filePath ).dir();
-    const QFileInfo cfgFile( projectDir.filePath( AUTH_CONFIG_FILENAME ) );
+    const QFileInfo cfgFile( projectDir.filePath( CoreUtils::AUTH_CONFIG_FILENAME ) );
     if ( cfgFile.exists() && cfgFile.isFile() )
     {
       // import the new configuration, if it exists.
-      QgsAuthManager *authManager = QgsApplication::authManager();
       const QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir.path() ) ).projectId;
-      const bool ok = authManager->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
+      const bool ok = mAuthManager->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
       CoreUtils::log( "Authentication database", QStringLiteral( "QGIS auth imported: %1" ).arg( ok ? "success" : "failure" ) );
     }
 
@@ -509,6 +509,14 @@ void ActiveProject::updateActiveLayer()
     }
 
     setActiveLayer( defaultLayer );
+  }
+}
+
+void ActiveProject::clearAllAuthenticationConfigs()
+{
+  for ( const auto configuration : mAuthManager->configIds() )
+  {
+    mAuthManager->removeAuthenticationConfig( configuration );
   }
 }
 

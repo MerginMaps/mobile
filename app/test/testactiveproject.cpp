@@ -10,6 +10,7 @@
 #include "testactiveproject.h"
 #include "testutils.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "activeproject.h"
 
 #include <QtTest/QtTest>
@@ -199,7 +200,7 @@ void TestActiveProject::testLoadingAuthFileFromConfiguration()
   ActiveProject activeProject( appSettings, activeLayer, mApi->localProjectsManager() );
   QString projectDir = TestUtils::testDataDir() + QStringLiteral( "/project_auth_file/" );
   QString projectName = QStringLiteral( "auth-test.qgz" );
-  QString authFile = QDir( projectDir ).filePath( AUTH_CONFIG_FILENAME );
+  QString authFile = QDir( projectDir ).filePath( CoreUtils::AUTH_CONFIG_FILENAME );
 
   QgsAuthManager *authManager = QgsApplication::authManager();
 

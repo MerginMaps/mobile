@@ -924,6 +924,8 @@ class MerginApi: public QObject
 
     bool projectFileHasBeenUpdated( const ProjectDiff &diff );
 
+    bool authConfigurationHasChanged( const ProjectDiff &diff );
+
     //! Checks if retrieving the project role from the server was successful and
     //! if it differs from the current project role, emits a signal with new project role
     void reloadProjectRoleReplyFinished();
