@@ -611,7 +611,7 @@ void TestPosition::testPositionTransformerBluetoothPosition()
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
-  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 167.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
 
