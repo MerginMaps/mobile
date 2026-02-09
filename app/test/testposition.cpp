@@ -607,7 +607,7 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QCOMPARE( newPosition.elevation_diff, 40 );
 
   // transform with pass through disabled and elevation separation
-  newPosition = positionTransformer.processAndroidPosition( geoPosition );
+  newPosition = positionTransformer.processBluetoothPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
