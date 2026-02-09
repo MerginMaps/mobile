@@ -184,6 +184,10 @@ set(MM_HDRS
     mmstyle.h
 )
 
+if (NOT WIN32)
+  set(MM_SRCS ${MM_SRCS} static_plugins.cpp)
+endif ()
+
 if (HAVE_BLUETOOTH)
   set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
@@ -506,6 +510,21 @@ if (LNX)
   target_link_libraries(MerginMaps PUBLIC QGIS::Core)
 endif ()
 
+if (NOT WIN32)
+  # for every other platform except windows
+  find_library(
+    QCA_OSSL_PLUGIN_LIB
+    NAMES qca-ossl libqca-ossl
+    PATH_SUFFIXES lib/Qca/crypto
+  )
+
+  if (QCA_OSSL_PLUGIN_LIB)
+    message(STATUS "Found QCA OpenSSL Plugin: ${QCA_OSSL_PLUGIN_LIB}")
+  else ()
+    message(WARNING "Could not find 'qca-ossl'. Authentication might fail.")
+  endif ()
+endif ()
+
 target_link_libraries(
   MerginMaps
   PUBLIC Qt6Keychain::Qt6Keychain
@@ -514,6 +533,10 @@ target_link_libraries(
          PostgreSQL::PostgreSQL
          Spatialite::Spatialite
 )
+
+if (NOT WIN32)
+  target_link_libraries(MerginMaps PUBLIC ${QCA_OSSL_PLUGIN_LIB})
+endif ()
 
 target_link_libraries(
   MerginMaps
