@@ -54,7 +54,7 @@ void TestPosition::simulatedPosition()
 {
   QVERIFY( !positionKit->positionProvider() );
 
-  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, -92.36, 38.93, 0 );
 
   positionKit->setPositionProvider( simulatedProvider ); // ownership of provider is passed to positionkit
 
@@ -72,7 +72,7 @@ void TestPosition::simulatedPosition()
   QVERIFY( positionKit->satellitesVisible() >= 0 );
   QVERIFY( positionKit->satellitesUsed() >= 0 );
 
-  SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( 90.36, 33.93, 0 );
+  SimulatedPositionProvider *simulatedProvider2 = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 90.36, 33.93, 0 );
 
   // position kit ignores new provider if it is the same type and id, so delete the previous one first
   positionKit->setPositionProvider( nullptr ); // deletes the first provider
@@ -95,7 +95,7 @@ void TestPosition::simulatedPosition()
 
 void TestPosition::testBluetoothProviderConnection()
 {
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider" );
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:AA:AA:00:00", "testBluetoothProvider", *positionKit->mPositionTransformer );
 
   positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
@@ -194,7 +194,7 @@ void TestPosition::testBluetoothProviderPosition()
   // NOTE: If you want to read NMEA sentences from file, make sure that files has CRLF line endings!
   //
 
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
+  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider", *positionKit->mPositionTransformer );
 
   positionKit->setPositionProvider( btProvider ); // positionKit takes ownership of this provider
 
@@ -214,7 +214,7 @@ void TestPosition::testBluetoothProviderPosition()
   QVERIFY( qgsDoubleNear( positionKit->longitude(), 17.1064 ) );
   QCOMPARE( positionKit->horizontalAccuracy(), -1 );
   QCOMPARE( positionKit->verticalAccuracy(), -1 );
-  QCOMPARE( positionKit->altitude(), 171.3 );
+  QCOMPARE( positionKit->altitude() + positionKit->antennaHeight(), 171.3 );
   QCOMPARE( positionKit->speed(), -1 );
   QCOMPARE( positionKit->hdop(), -1 );
   QCOMPARE( positionKit->fix(), "GPS fix, no correction data" );
@@ -237,7 +237,7 @@ void TestPosition::testBluetoothProviderPosition()
   QVERIFY( qgsDoubleNear( positionKit->longitude(), 17.1059, 0.0001 ) );
   QVERIFY( qgsDoubleNear( positionKit->horizontalAccuracy(), 0.0257, 0.0001 ) );
   QCOMPARE( positionKit->verticalAccuracy(), 0.041 );
-  QCOMPARE( positionKit->altitude(), 153.026 );
+  QCOMPARE( positionKit->altitude() + positionKit->antennaHeight(), 153.026 );
   QCOMPARE( positionKit->speed(), 0.05 );
   QCOMPARE( positionKit->hdop(), 3.2 );
   QVERIFY( positionKit->satellitesUsed() > 3 );
@@ -322,7 +322,7 @@ void TestPosition::testMapPosition()
   ms->setLayers( QList<QgsMapLayer *>() << tempLayer );
 
   // Create position kit provider
-  SimulatedPositionProvider *provider = new SimulatedPositionProvider( 17.1, 48.1, 0 );
+  SimulatedPositionProvider *provider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 17.1, 48.1, 0 );
   positionKit->setPositionProvider( provider );
 
   // Create MapPosition
@@ -351,7 +351,7 @@ void TestPosition::testMapPosition()
 
   // Now let's assign a not stationary provider
   positionKit->setPositionProvider( nullptr );
-  SimulatedPositionProvider *provider2 = new SimulatedPositionProvider( 15.1, 48.1, 1, 500 );
+  SimulatedPositionProvider *provider2 = new SimulatedPositionProvider( *positionKit->mPositionTransformer, 15.1, 48.1, 1, 500 );
   positionKit->setPositionProvider( provider2 );
 
   QSignalSpy positionUpdateSpy2( provider2, &AbstractPositionProvider::positionChanged );
@@ -372,7 +372,7 @@ void TestPosition::testPositionTracking()
 
   QVERIFY( !PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), nullptr ) ); // should return null without pk
 
-  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( -92.36, 38.93, 0 );
+  SimulatedPositionProvider *simulatedProvider = new SimulatedPositionProvider( *positionKit->mPositionTransformer, -92.36, 38.93, 0 );
   positionKit->setPositionProvider( simulatedProvider ); // ownership of the provider is passed to pk
   simulatedProvider = nullptr;
 
@@ -396,8 +396,7 @@ void TestPosition::testPositionTracking()
   QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
 
   trackingSpy.wait( 4000 ); // new position should be emited in 2k ms
-
-  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
+  QVERIFY( manager.trackedGeometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 133.331" ) ) );
 
   // store the geometry
   QgsVectorLayer *trackingLayer = QgsProject::instance()->mapLayer<QgsVectorLayer *>( "tracking_layer_aad89df7_21db_466e_b5c1_a80160f74c01" );
@@ -411,7 +410,7 @@ void TestPosition::testPositionTracking()
 
   int addedFid = addedSpy.at( 1 ).at( 0 ).toInt();
   QgsFeature f = trackingLayer->getFeature( addedFid );
-  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 20" ) ) );
+  QVERIFY( f.geometry().asWkt( 3 ).startsWith( QStringLiteral( "LineString ZM (-92.36 38.93 133.331" ) ) );
 
   QString datetimeFormat = QStringLiteral( "dd.MM.yyyy hh:mm:ss" );
   QString dateTrackingStartedFromManager = manager.startTime().toString( datetimeFormat );
@@ -488,4 +487,331 @@ void TestPosition::testPositionTrackingHighlight()
   trackingHighlight.setMapPosition( p );
 
   QVERIFY( trackingHighlight.highlightGeometry().isEmpty() );
+}
+
+void TestPosition::testPositionTransformerAndroidPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  GeoPosition geoPosition = GeoPosition::fromQgsGpsInformation( position );
+
+  QVERIFY( qgsDoubleNear( geoPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
+  QCOMPARE( geoPosition.elevation, 171.3 );
+  QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
+
+  // transform with pass through enabled, but position is not mocked
+  GeoPosition newPosition = passThroughTransformer.processAndroidPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+
+  // transform with pass through enabled, position is mocked
+  geoPosition.isMock = true;
+  newPosition = passThroughTransformer.processAndroidPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through disabled, position is mocked
+  newPosition = positionTransformer.processAndroidPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+}
+
+void TestPosition::testPositionTransformerBluetoothPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef  HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  GeoPosition geoPosition = GeoPosition::fromQgsGpsInformation( position );
+
+  QVERIFY( qgsDoubleNear( geoPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
+  QCOMPARE( geoPosition.elevation, 171.3 );
+  QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
+
+  // transform with pass through disabled and missing elevation separation
+  GeoPosition newPosition = positionTransformer.processBluetoothPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and missing elevation separation
+  newPosition = passThroughTransformer.processBluetoothPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and elevation separation
+  geoPosition.elevation_diff = 40;
+  newPosition = passThroughTransformer.processBluetoothPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, 40 );
+
+  // transform with pass through disabled and elevation separation
+  newPosition = positionTransformer.processBluetoothPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+}
+
+void TestPosition::testPositionTransformerInternalAndroidPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation qgsPosition = parser.parseNmeaString( miniNmeaFile.readAll() );
+  QGeoCoordinate positionCoordinate( qgsPosition.latitude, qgsPosition.longitude, qgsPosition.elevation );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
+  QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+#endif
+
+  GeoPosition newPosition = positionTransformer.processInternalAndroidPosition( geoPosition );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+}
+
+void TestPosition::testPositionTransformerInternalIosPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+
+#ifdef HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation qgsPosition = parser.parseNmeaString( miniNmeaFile.readAll() );
+  QGeoCoordinate positionCoordinate( qgsPosition.latitude, qgsPosition.longitude, qgsPosition.elevation );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
+  QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+#endif
+
+  // ellipsoid elevation
+  geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
+  // position is not mocked and ellipsoid
+  GeoPosition newPosition = positionTransformer.processInternalIosPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+  QVERIFY( !newPosition.isMock );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
+
+
+  // position is not mocked and not ellipsoid
+  newPosition = positionTransformer.processInternalIosPosition( geoPosition );
+
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+  QVERIFY( !newPosition.isMock );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
+
+
+  // ellipsoid elevation
+  geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
+  // mocked
+  geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
+  // transform with pass through disabled, position is mocked and ellipsoid
+  newPosition = positionTransformer.processInternalIosPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+  QVERIFY( newPosition.isMock );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
+
+
+  // mocked
+  geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
+  // transform with pass through disabled, position is mocked and orthometric
+  newPosition = positionTransformer.processInternalIosPosition( geoPosition );
+
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+  QVERIFY( newPosition.isMock );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
+
+
+  // ellipsoid elevation
+  geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
+  // mocked
+  geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
+  // transform with pass through enabled, position is mocked and ellipsoid
+  newPosition = passThroughTransformer.processInternalIosPosition( geoPosition );
+
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+  QVERIFY( newPosition.isMock );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
+  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
+
+}
+
+void TestPosition::testPositionTransformerInternalDesktopPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef  HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation qgsPosition = parser.parseNmeaString( miniNmeaFile.readAll() );
+  QGeoCoordinate positionCoordinate( qgsPosition.latitude, qgsPosition.longitude, qgsPosition.elevation );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().latitude(), 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.coordinate().longitude(), 17.1064 ) );
+  QCOMPARE( geoPosition.coordinate().altitude(), 171.3 );
+#else
+  QGeoCoordinate positionCoordinate( 48.10305, 17.1064, 171.3 );
+  QGeoPositionInfo geoPosition( positionCoordinate, QDateTime::currentDateTimeUtc() );
+#endif
+
+  GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
+}
+
+void TestPosition::testPositionTransformerSimulatedPosition()
+{
+  // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  GeoPosition geoPosition = GeoPosition::fromQgsGpsInformation( position );
+
+  QVERIFY( qgsDoubleNear( geoPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
+  QCOMPARE( geoPosition.elevation, 171.3 );
+  QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
+
+  GeoPosition newPosition = positionTransformer.processSimulatedPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }

@@ -9,15 +9,14 @@
 
 #include "abstractpositionprovider.h"
 
-AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QString &type, const QString &name, QObject *object )
+AbstractPositionProvider::AbstractPositionProvider( const QString &id, const QString &type, const QString &name, PositionTransformer &positionTransformer, QObject *object )
   : QObject( object )
   , mProviderId( id )
   , mProviderType( type )
   , mProviderName( name )
+  , mPositionTransformer( &positionTransformer )
 {
 }
-
-AbstractPositionProvider::~AbstractPositionProvider() = default;
 
 void AbstractPositionProvider::setPosition( QgsPoint )
 {

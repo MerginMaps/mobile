@@ -8,6 +8,9 @@
  ***************************************************************************/
 
 #include "bluetoothpositionprovider.h"
+
+#include <qgsproject.h>
+
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"
@@ -20,15 +23,15 @@ NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
 {
 }
 
-QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeastring )
+QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeaString )
 {
-  mStringBuffer = nmeastring;
+  mStringBuffer = nmeaString;
   processStringBuffer();
   return mLastGPSInformation;
 }
 
-BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, parent )
+BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, positionTransformer, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
@@ -40,7 +43,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
     QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( int( error ) );
     CoreUtils::log(
       QStringLiteral( "BluetoothPositionProvider" ),
-      QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
+      QStringLiteral( "Occurred connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
     );
 
     setState( tr( "No connection" ), State::NoConnection );
@@ -204,11 +207,13 @@ void BluetoothPositionProvider::positionUpdateReceived()
     // we know the connection is working because we just received data from the device
     setState( tr( "Connected" ), State::Connected );
 
-    QByteArray rawNmea = mSocket->readAll();
-    QString nmea( rawNmea );
+    const QByteArray rawNmea = mSocket->readAll();
+    const QString nmea( rawNmea );
 
-    QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
+    GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
 
-    emit positionChanged( GeoPosition::fromQgsGpsInformation( data ) );
+    emit positionChanged( positionData );
   }
 }

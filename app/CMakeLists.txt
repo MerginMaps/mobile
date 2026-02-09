@@ -21,7 +21,6 @@ set(MM_SRCS
     layer/layertreemodel.cpp
     layer/layertreemodelpixmapprovider.cpp
     layer/layertreesortfiltermodel.cpp
-    map/inputcoordinatetransformer.cpp
     map/inputmapcanvasmap.cpp
     map/inputmapsettings.cpp
     map/inputmaptransform.cpp
@@ -43,6 +42,7 @@ set(MM_SRCS
     position/mapposition.cpp
     position/positiondirection.cpp
     position/positionkit.cpp
+    position/positiontransformer.cpp
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -111,7 +111,6 @@ set(MM_HDRS
     layer/layertreemodel.h
     layer/layertreemodelpixmapprovider.h
     layer/layertreesortfiltermodel.h
-    map/inputcoordinatetransformer.h
     map/inputmapcanvasmap.h
     map/inputmapsettings.h
     map/inputmaptransform.h
@@ -133,6 +132,7 @@ set(MM_HDRS
     position/mapposition.h
     position/positiondirection.h
     position/positionkit.h
+    position/positiontransformer.h
     activelayer.h
     activeproject.h
     androidutils.h

@@ -270,10 +270,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
       __activeProject.mapSettings = map.mapSettings
-      __iosUtils.positionKit = __positionKit
+      __iosUtils.positionKit = PositionKit
       __iosUtils.compass = map.compass
       __variablesManager.compass = map.compass
-      __variablesManager.positionKit = __positionKit
+      __variablesManager.positionKit = PositionKit
     }
   }
 
@@ -819,7 +819,7 @@ ApplicationWindow {
     onStakeoutFeature: function( feature ) {
       if ( !__inputUtils.isPointLayerFeature( feature ) )
         return;
-      if ( !__positionKit.hasPosition )
+      if ( !PositionKit.hasPosition )
       {
         __notificationModel.addWarning( qsTr( "Stake out is disabled because location is unavailable!" ) );
         return;

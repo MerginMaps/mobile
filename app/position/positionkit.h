@@ -10,11 +10,14 @@
 #ifndef POSITIONKIT_H
 #define POSITIONKIT_H
 
-#include "position/providers/abstractpositionprovider.h"
+#include <QtQml/qqmlregistration.h>
 
-#include "qgspoint.h"
-#include "qgscoordinatereferencesystem.h"
-#include <QObject>
+#include <qgspoint.h>
+#include <qgscoordinatereferencesystem.h>
+#include <qgsproject.h>
+
+#include "positiontransformer.h"
+#include "position/providers/abstractpositionprovider.h"
 
 class AppSettings;
 
@@ -27,6 +30,8 @@ class AppSettings;
 class PositionKit : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY( double latitude READ latitude NOTIFY latitudeChanged )
     Q_PROPERTY( double longitude READ longitude NOTIFY longitudeChanged )
@@ -72,6 +77,7 @@ class PositionKit : public QObject
 
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
+    Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
@@ -107,24 +113,40 @@ class PositionKit : public QObject
     QString fix() const;
 
     const GeoPosition &position() const;
+    bool isMockPosition() const;
 
     AbstractPositionProvider *positionProvider() const;
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
+    Q_INVOKABLE QString positionProviderName() const;
 
     double hdop() const;
     double vdop() const;
     double pdop() const;
 
-    // Coordinate reference system of position - WGS84 (constant)
-    Q_INVOKABLE static QgsCoordinateReferenceSystem positionCRS();
+    // Coordinate reference system - WGS84 (EPSG:4326)
+    static QgsCoordinateReferenceSystem positionCrs2D();
+    // Coordinate reference system - WGS84 + ellipsoid height (EPSG:4979)
+    static QgsCoordinateReferenceSystem positionCrs3DEllipsoidHeight();
+    /**
+     * Coordinate reference system of position (WGS84 + geoid height) - can use custom geoid model
+     * \note by default we use egm96_15 model (EPSG:9707)
+     */
+    QgsCoordinateReferenceSystem positionCrs3D();
+    // Returns the model name used for elevation transformations
+    Q_INVOKABLE QString positionCrs3DGeoidModelName();
 
-    Q_INVOKABLE static AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
-    Q_INVOKABLE static AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
+    Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
+    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
 
     double antennaHeight() const;
+
+    void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
+    void setSkipElevationTransformation( bool skipElevationTransformation );
+    // should be executed on active project changed, updates the CRS, elevation transformation and context properties
+    void refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext );
 
   signals:
     void latitudeChanged( double );
@@ -156,6 +178,7 @@ class PositionKit : public QObject
     void positionProviderChanged( AbstractPositionProvider *provider );
 
     void positionChanged( const GeoPosition & );
+    void isMockPositionChanged( bool );
 
     void appSettingsChanged();
 
@@ -172,6 +195,13 @@ class PositionKit : public QObject
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
     AppSettings *mAppSettings = nullptr; // not owned
+    std::unique_ptr<PositionTransformer> mPositionTransformer; // owned
+
+    QgsCoordinateReferenceSystem mPositionCrs3D;
+    QgsCoordinateReferenceSystem mVerticalCrs;
+    bool mSkipElevationTransformation = true;
+
+    friend class TestPosition;
 };
 
 #endif // POSITIONKIT_H

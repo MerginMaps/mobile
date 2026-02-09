@@ -23,7 +23,7 @@
  * socket, (b) do not have multiple unique_ptrs holding the same pointer and to avoid some possible crashes.
  *
  * Note: This way of reusing makes the parser highly dependent on QgsNmeaConnection class and any change inside the class
- * can lead to misbehaviors. See implementation of QgsNmeaConnection and QgsGpsConnection for more details.
+ * can lead to misbehavior's. See implementation of QgsNmeaConnection and QgsGpsConnection for more details.
  */
 class NmeaParser : public QgsNmeaConnection
 {
@@ -31,7 +31,7 @@ class NmeaParser : public QgsNmeaConnection
     NmeaParser();
 
     // Takes nmea string and returns gps position
-    QgsGpsInformation parseNmeaString( const QString &nmeastring );
+    QgsGpsInformation parseNmeaString( const QString &nmeaString );
 };
 
 /**
@@ -51,12 +51,12 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     };
 
   public:
-    BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent = nullptr );
-    virtual ~BluetoothPositionProvider() override;
+    BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
+    ~BluetoothPositionProvider() override;
 
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
     void handleLostConnection();
     void startReconnectionTime();

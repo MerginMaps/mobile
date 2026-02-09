@@ -389,7 +389,7 @@ void TestUtilsFunctions::testStakeoutPathExtent()
   ms.setOutputSize( QSize( 400, 620 ) );
 
   PositionKit positionKit;
-  positionKit.setPositionProvider( PositionKit::constructProvider( "internal", "simulated", "simulated" ) );
+  positionKit.setPositionProvider( positionKit.constructProvider( "internal", "simulated", "simulated" ) );
   AbstractPositionProvider *provider = positionKit.positionProvider();
 
   MapPosition mapPositioner;

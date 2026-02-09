@@ -80,7 +80,6 @@
 #include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
-#include "inputcoordinatetransformer.h"
 #include "identifykit.h"
 #include "featurelayerpair.h"
 
@@ -349,7 +348,6 @@ void initDeclarative()
   qmlRegisterType< InputMapCanvasMap >( "mm", 1, 0, "MapCanvasMap" );
   qmlRegisterType< InputMapSettings >( "mm", 1, 0, "MapSettings" );
   qmlRegisterType< InputMapTransform >( "mm", 1, 0, "MapTransform" );
-  qmlRegisterType< InputCoordinateTransformer >( "mm", 1, 0, "CoordinateTransformer" );
   qmlRegisterUncreatableType< AbstractPositionProvider >( "mm", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
   // map tools
@@ -544,17 +542,33 @@ int main( int argc, char *argv[] )
   LayerDetailLegendImageProvider *layerDetailLegendImageProvider( new LayerDetailLegendImageProvider );
 
   // build position kit, save active provider to QSettings and load previously active provider
-  PositionKit pk;
-  QObject::connect( &pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
+  PositionKit *pk = engine.singletonInstance<PositionKit *>( "MMInput", "PositionKit" );
+  QObject::connect( pk, &PositionKit::positionProviderChanged, as, [as]( AbstractPositionProvider * provider )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk.setPositionProvider( pk.constructActiveProvider( as ) );
-  pk.setAppSettings( as );
+  pk->setPositionProvider( pk->constructActiveProvider( as ) );
+  pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&pk]( QgsProject * project )
+  {
+    // read and set new vertical CRS definition
+    bool crsExists = false;
+    const QString crsWktDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+    const QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+    pk->setVerticalCrs( crs );
+
+    // read and set new elevation transformation behavior
+    bool valueRead = false;
+    const bool skipElevationTransformation = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
+    pk->setSkipElevationTransformation( skipElevationTransformation );
+
+    pk->refreshPositionTransformer( project->transformContext() );
+  } );
 
   // the automatic sync request on cold start will fail on MerginApiStatus not being initialized yet, so we call it again
   // after server ping is done
@@ -658,7 +672,7 @@ int main( int argc, char *argv[] )
     notificationModel.addError( message );
   } );
   // Direct connections
-  QObject::connect( &app, &QGuiApplication::applicationStateChanged, &pk, &PositionKit::appStateChanged );
+  QObject::connect( &app, &QGuiApplication::applicationStateChanged, pk, &PositionKit::appStateChanged );
   QObject::connect( &app, &QGuiApplication::applicationStateChanged, &activeProject, &ActiveProject::appStateChanged );
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
@@ -690,7 +704,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), &pk, as );
+    tests.init( ma.get(), &iu, vm.get(), pk, as );
     return tests.runTest();
   }
 #endif
@@ -733,7 +747,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__projectWizard", &pw );
   engine.rootContext()->setContextProperty( "__localProjectsManager", &localProjectsManager );
   engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
-  engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
   // add image provider to pass QIcons/QImages from C++ to QML
   engine.rootContext()->setContextProperty( "__layerTreeModelPixmapProvider", layerTreeModelPixmapProvider );
