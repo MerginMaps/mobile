@@ -80,7 +80,6 @@
 #include "attributeformproxymodel.h"
 #include "attributetabmodel.h"
 #include "attributetabproxymodel.h"
-#include "inputcoordinatetransformer.h"
 #include "identifykit.h"
 #include "featurelayerpair.h"
 
@@ -349,7 +348,6 @@ void initDeclarative()
   qmlRegisterType< InputMapCanvasMap >( "mm", 1, 0, "MapCanvasMap" );
   qmlRegisterType< InputMapSettings >( "mm", 1, 0, "MapSettings" );
   qmlRegisterType< InputMapTransform >( "mm", 1, 0, "MapTransform" );
-  qmlRegisterType< InputCoordinateTransformer >( "mm", 1, 0, "CoordinateTransformer" );
   qmlRegisterUncreatableType< AbstractPositionProvider >( "mm", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
   // map tools
