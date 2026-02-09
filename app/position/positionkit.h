@@ -131,9 +131,9 @@ class PositionKit : public QObject
      * Coordinate reference system of position (WGS84 + geoid height) - can use custom geoid model
      * \note by default we use egm96_15 model (EPSG:9707)
      */
-    static QgsCoordinateReferenceSystem positionCrs3D();
+    QgsCoordinateReferenceSystem positionCrs3D();
     // Returns the model name used for elevation transformations
-    Q_INVOKABLE QString positionCrs3DGeoidModelName() const;
+    Q_INVOKABLE QString positionCrs3DGeoidModelName();
 
     Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
@@ -142,6 +142,11 @@ class PositionKit : public QObject
     void setAppSettings( AppSettings *appSettings );
 
     double antennaHeight() const;
+
+    void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
+    void setSkipElevationTransformation( bool skipElevationTransformation );
+    // should be executed on active project changed, updates the CRS, elevation transformation and context properties
+    void refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext );
 
   signals:
     void latitudeChanged( double );
@@ -185,15 +190,15 @@ class PositionKit : public QObject
     // stop updates when application is minimized
     void appStateChanged( Qt::ApplicationState state );
 
-    // gets triggered when active project changes
-    void refreshPositionTransformer( const QgsProject *project );
-
   private:
     GeoPosition mPosition;
     bool mHasPosition = false;
     std::unique_ptr<AbstractPositionProvider> mPositionProvider;
     AppSettings *mAppSettings = nullptr; // not owned
-    PositionTransformer *mPositionTransformer = nullptr; // owned
+    std::unique_ptr<PositionTransformer> mPositionTransformer; // owned
+
+    QgsCoordinateReferenceSystem mVerticalCrs;
+    bool mSkipElevationTransformation = true;
 
     friend class TestPosition;
 };

@@ -496,8 +496,8 @@ void TestPosition::testPositionTransformerAndroidPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -555,8 +555,8 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef  HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -622,7 +622,7 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -657,8 +657,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -751,7 +751,7 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef  HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -785,7 +785,7 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date

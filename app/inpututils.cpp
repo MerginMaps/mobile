@@ -1723,7 +1723,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     PositionKit::positionCrs3D(),
+                                     PositionKit::positionCrs3DEllipsoidHeight(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPosition
@@ -1771,7 +1771,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     PositionKit::positionCrs3D(),
+                                     PositionKit::positionCrs3DEllipsoidHeight(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPoint

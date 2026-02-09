@@ -12,17 +12,18 @@
 #include "inpututils.h"
 
 PositionTransformer::PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs,
-    const QgsCoordinateReferenceSystem &destinationCrs, const bool verticalPassThroughEnabled, QObject *parent )
+    const QgsCoordinateReferenceSystem &destinationCrs, const bool skipElevationTransformation, const QgsCoordinateTransformContext &transformContext, QObject *parent )
   : QObject( parent ),
     mSourceCrs( sourceCrs ),
     mDestinationCrs( destinationCrs ),
-    mVerticalPassThroughEnabled( verticalPassThroughEnabled )
+    mTransformContext( transformContext ),
+    mSkipElevationTransformation( skipElevationTransformation )
 {
 }
 
 GeoPosition PositionTransformer::processBluetoothPosition( GeoPosition geoPosition )
 {
-  if ( !mVerticalPassThroughEnabled && !std::isnan( geoPosition.elevation ) && !std::isnan( geoPosition.elevation_diff ) )
+  if ( !mSkipElevationTransformation && !std::isnan( geoPosition.elevation ) && !std::isnan( geoPosition.elevation_diff ) )
   {
     // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
     // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
@@ -49,7 +50,7 @@ GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition
   if ( geoPosition.elevation != std::numeric_limits<double>::quiet_NaN() )
   {
     bool positionOutsideGeoidModelArea = false;
-    if ( !geoPosition.isMock || !mVerticalPassThroughEnabled )
+    if ( !geoPosition.isMock || !mSkipElevationTransformation )
     {
       const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        mSourceCrs,
@@ -113,7 +114,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
   const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
   const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude;
 
-  if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !mVerticalPassThroughEnabled ) )
+  if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !mSkipElevationTransformation ) )
   {
     geoidPosition = InputUtils::transformPoint(
                       mSourceCrs,
@@ -142,7 +143,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    if ( isEllipsoidalAltitude && !mVerticalPassThroughEnabled )
+    if ( isEllipsoidalAltitude && !mSkipElevationTransformation )
     {
       const double ellipsoidAltitude = geoPosition.coordinate().altitude();
       const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
@@ -182,4 +183,24 @@ GeoPosition PositionTransformer::processSimulatedPosition( const GeoPosition &ge
   }
 
   return newPosition;
+}
+
+void PositionTransformer::setSourceCrs( const QgsCoordinateReferenceSystem &sourceCrs )
+{
+  mSourceCrs = sourceCrs;
+}
+
+void PositionTransformer::setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs )
+{
+  mDestinationCrs = destinationCrs;
+}
+
+void PositionTransformer::setTransformContext( const QgsCoordinateTransformContext &transformContext )
+{
+  mTransformContext = transformContext;
+}
+
+void PositionTransformer::setSkipElevationTransformation( const bool skipElevationTransformation )
+{
+  mSkipElevationTransformation = skipElevationTransformation;
 }

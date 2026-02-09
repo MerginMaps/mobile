@@ -31,6 +31,7 @@
  * calculate projected position in desired destination CRS.
  *
  * \note QML Type: CoordinateTransformer
+ * \TODO: dead class, remove?
  */
 class InputCoordinateTransformer : public QObject
 {

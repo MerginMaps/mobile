@@ -31,18 +31,15 @@
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
-  refreshPositionTransformer( QgsProject::instance() );
+  mPositionTransformer = std::make_unique<PositionTransformer>( positionCrs3DEllipsoidHeight(), positionCrs3D(), mSkipElevationTransformation, QgsCoordinateTransformContext() );
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
-  bool crsExists = false;
-  const QString crsWktDef = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
-  if ( crsExists )
+  if ( mVerticalCrs.isValid() )
   {
-    const QgsCoordinateReferenceSystem verticalCrs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
     QString compoundCrsError{};
-    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), verticalCrs, compoundCrsError );
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), mVerticalCrs, compoundCrsError );
     if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
     {
       return compoundCrs;
@@ -53,14 +50,11 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
-QString PositionKit::positionCrs3DGeoidModelName() const
+QString PositionKit::positionCrs3DGeoidModelName()
 {
-  bool valueRead = false;
-  const bool isVerticalCRSPassedThrough = QgsProject::instance()->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
-  if ( valueRead && !isVerticalCRSPassedThrough )
+  if ( !mSkipElevationTransformation )
   {
-    const QgsCoordinateReferenceSystem crs = positionCrs3D().verticalCrs();
-    return crs.description();
+    return mVerticalCrs.description();
   }
 
   return {};
@@ -387,6 +381,16 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
   }
 }
 
+void PositionKit::setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs )
+{
+  mVerticalCrs = verticalCrs;
+}
+
+void PositionKit::setSkipElevationTransformation( const bool skipElevationTransformation )
+{
+  mSkipElevationTransformation = skipElevationTransformation;
+}
+
 void PositionKit::appStateChanged( Qt::ApplicationState state )
 {
   if ( state == Qt::ApplicationActive )
@@ -399,11 +403,11 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
   }
 }
 
-void PositionKit::refreshPositionTransformer( const QgsProject *project )
+void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
-  free( mPositionTransformer );
-  const bool isVerticalCRSPassThroughEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true );
-  mPositionTransformer = new PositionTransformer( positionCrs3DEllipsoidHeight(), positionCrs3D(), isVerticalCRSPassThroughEnabled );
+  mPositionTransformer->setDestinationCrs( positionCrs3D() );
+  mPositionTransformer->setSkipElevationTransformation( mSkipElevationTransformation );
+  mPositionTransformer->setTransformContext( transformContext );
 }
 
 double PositionKit::latitude() const

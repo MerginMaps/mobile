@@ -549,13 +549,31 @@ int main( int argc, char *argv[] )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, pk, &PositionKit::refreshPositionTransformer );
   pk->setPositionProvider( pk->constructActiveProvider( as ) );
   pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&pk]( QgsProject * project )
+  {
+    // read and set new vertical CRS definition
+    bool crsExists = false;
+    const QString crsWktDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
+    const QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
+    if ( crs.isValid() )
+    {
+      pk->setVerticalCrs( crs );
+    }
+
+    // read and set new elevation transformation behavior
+    bool valueRead = false;
+    const bool skipElevationTransformation = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
+    pk->setSkipElevationTransformation( skipElevationTransformation );
+
+    pk->refreshPositionTransformer( project->transformContext() );
+  } );
 
   // the automatic sync request on cold start will fail on MerginApiStatus not being initialized yet, so we call it again
   // after server ping is done

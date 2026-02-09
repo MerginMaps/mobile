@@ -28,7 +28,7 @@ class PositionTransformer : QObject
 {
     Q_OBJECT
   public:
-    PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs, const QgsCoordinateReferenceSystem &destinationCrs, bool verticalPassThroughEnabled, QObject *parent = nullptr );
+    PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs, const QgsCoordinateReferenceSystem &destinationCrs, bool skipElevationTransformation, const QgsCoordinateTransformContext &transformContext, QObject *parent = nullptr );
 
     /**
     * Transform the elevation from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
@@ -75,13 +75,28 @@ class PositionTransformer : QObject
      * \return New GeoPosition with processed elevation and elevation separation if applicable.
      */
     GeoPosition processInternalIosPosition( QGeoPositionInfo &geoPosition );
+
+    /**
+      * Transform the elevation from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
+      * (by default EPSG:9707 (WGS84 + EGM96))
+      * \note This method should be used only with SimulatedPositionProvider on desktop
+      * \return New GeoPosition with processed elevation and elevation separation if applicable.
+      */
     GeoPosition processSimulatedPosition( const GeoPosition &geoPosition );
+
+    void setSourceCrs( const QgsCoordinateReferenceSystem &sourceCrs );
+
+    void setDestinationCrs( const QgsCoordinateReferenceSystem &destinationCrs );
+
+    void setTransformContext( const QgsCoordinateTransformContext &transformContext );
+
+    void setSkipElevationTransformation( bool skipElevationTransformation );
 
   private:
     QgsCoordinateReferenceSystem mSourceCrs;
     QgsCoordinateReferenceSystem mDestinationCrs;
     QgsCoordinateTransformContext mTransformContext;
-    bool mVerticalPassThroughEnabled;
+    bool mSkipElevationTransformation;
 };
 
 

@@ -95,7 +95,7 @@ void PositionTrackingManager::commitTrackedPath()
   }
 
   // convert captured geometry to the destination layer's CRS
-  QgsGeometry geometryInLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, PositionKit::positionCrs3D(), trackingLayer );
+  QgsGeometry geometryInLayerCRS = InputUtils::transformGeometry( mTrackedGeometry, PositionKit::positionCrs3DEllipsoidHeight(), trackingLayer );
 
   // create feature - add tracking variables to scope
   QgsExpressionContextScope *scope = new QgsExpressionContextScope( QStringLiteral( "MM_Tracking" ) );
@@ -332,7 +332,7 @@ void PositionTrackingManager::setVariablesManager( VariablesManager *newVariable
 
 QgsCoordinateReferenceSystem PositionTrackingManager::crs() const
 {
-  return PositionKit::positionCrs3D();
+  return PositionKit::positionCrs3DEllipsoidHeight();
 }
 
 void PositionTrackingManager::tryAgain()
