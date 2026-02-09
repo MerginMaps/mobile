@@ -1002,7 +1002,6 @@ void TestUtilsFunctions::testSanitizeFileName()
   str = QStringLiteral( "/sa ni*tized/.f<i>l?n\"a:m|e .co .ext " );
   InputUtils::sanitizeFileName( str );
   QCOMPARE( str, QStringLiteral( "/sa ni_tized/.f_i_l_n_a_m_e .co.ext" ) );
-  // add some guard and tests for windows
 }
 
 void TestUtilsFunctions::testSanitizePath()
