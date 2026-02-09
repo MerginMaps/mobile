@@ -355,7 +355,9 @@ void TestUtilsFunctions::resolveTargetDir()
   config.insert( QStringLiteral( "PropertyCollection" ), collection );
 
   QString resultDir3 = mUtils->resolveTargetDir( homePath, config, pair, QgsProject::instance() );
-  QCOMPARE( resultDir3, QStringLiteral( "%1/photos" ).arg( projectDir ) );
+  QString expectedDir = QStringLiteral( "%1/photos" ).arg( projectDir );
+  mUtils->sanitizeFileName( expectedDir );
+  QCOMPARE( resultDir3, expectedDir );
 }
 
 void TestUtilsFunctions::testExtractPointFromFeature()
@@ -1000,6 +1002,7 @@ void TestUtilsFunctions::testSanitizeFileName()
   str = QStringLiteral( "/sa ni*tized/.f<i>l?n\"a:m|e .co .ext " );
   InputUtils::sanitizeFileName( str );
   QCOMPARE( str, QStringLiteral( "/sa ni_tized/.f_i_l_n_a_m_e .co.ext" ) );
+  // add some guard and tests for windows
 }
 
 void TestUtilsFunctions::testSanitizePath()
@@ -1029,6 +1032,11 @@ void TestUtilsFunctions::testSanitizePath()
   InputUtils::sanitizePath( str );
   QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" ) );
 
+  // unchanged with partition letter on Windows
+  str = QStringLiteral( "C:/Users/simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "C:/Users/simple/valid/filename.ext" ) );
+
   // sanitized
   str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e.ext " );
   InputUtils::sanitizePath( str );
@@ -1048,4 +1056,9 @@ void TestUtilsFunctions::testSanitizePath()
   str = QStringLiteral( "project name / project .qgz " );
   InputUtils::sanitizePath( str );
   QCOMPARE( str, QStringLiteral( "project name/project.qgz" ) );
+
+  // sanitized with partition letter
+  str = QStringLiteral( "C:/project name / project .qgz " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "C:/project name/project.qgz" ) );
 }
