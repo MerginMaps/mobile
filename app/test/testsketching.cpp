@@ -169,7 +169,11 @@ void TestSketching::testLoadBackupSketch()
   sketchingController.mPhotoSource = path;
   sketchingController.mProjectName = QStringLiteral( "/this/is/long/path/to/image/test_sketching" );
   sketchingController.prepareController();
+  #ifdef Q_OS_WIN32
+  QCOMPARE( sketchingController.mPhotoSource, "file:///" + QDir::tempPath() + QStringLiteral( "/test_sketching" ) + QStringLiteral( "/MM_test_image.jpg" ) );
+#else
   QCOMPARE( sketchingController.mPhotoSource, "file://" + QDir::tempPath() + QStringLiteral( "/test_sketching" ) + QStringLiteral( "/MM_test_image.jpg" ) );
+#endif
   QCOMPARE( sketchingController.mOriginalPhotoSource, QUrl( path ).toLocalFile() );
   QCOMPARE( spy.count(), 1 );
   auto signalArgs = spy.takeLast();
