@@ -197,6 +197,7 @@ class PositionKit : public QObject
     AppSettings *mAppSettings = nullptr; // not owned
     std::unique_ptr<PositionTransformer> mPositionTransformer; // owned
 
+    QgsCoordinateReferenceSystem mPositionCrs3D;
     QgsCoordinateReferenceSystem mVerticalCrs;
     bool mSkipElevationTransformation = true;
 

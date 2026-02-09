@@ -36,17 +36,10 @@ PositionKit::PositionKit( QObject *parent )
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
-  if ( mVerticalCrs.isValid() )
+  if ( !mSkipElevationTransformation && mPositionCrs3D.isValid() )
   {
-    QString compoundCrsError{};
-    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), mVerticalCrs, compoundCrsError );
-    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
-    {
-      return compoundCrs;
-    }
-    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
+    return mPositionCrs3D;
   }
-
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
@@ -384,6 +377,20 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
 void PositionKit::setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs )
 {
   mVerticalCrs = verticalCrs;
+
+  if ( mVerticalCrs.isValid() )
+  {
+    QString compoundCrsError{};
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), mVerticalCrs, compoundCrsError );
+    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+    {
+      mPositionCrs3D =  compoundCrs;
+      return;
+    }
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
+  }
+
+  mPositionCrs3D = QgsCoordinateReferenceSystem();
 }
 
 void PositionKit::setSkipElevationTransformation( const bool skipElevationTransformation )

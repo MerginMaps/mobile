@@ -560,10 +560,7 @@ int main( int argc, char *argv[] )
     bool crsExists = false;
     const QString crsWktDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "TargetVerticalCRS" ), QString(), &crsExists );
     const QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromWkt( crsWktDef );
-    if ( crs.isValid() )
-    {
-      pk->setVerticalCrs( crs );
-    }
+    pk->setVerticalCrs( crs );
 
     // read and set new elevation transformation behavior
     bool valueRead = false;
