@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A térképnek és az eszközöknek meghatározatlan viselkedése lesz!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer</source>
         <translation>Réteg</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="301"/>
         <source>Unable to load source </source>
         <translation>Nem lehet betölteni a forrást </translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>A projekthez érvénytelen vetület lett hozzárendelve. A rögzítés eszközöknek meghatározatlan viselkedése lesz.</translation>
     </message>
@@ -31,28 +31,28 @@
 <context>
     <name>AndroidPositionProvider</name>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (fused)</source>
         <translation>Belső (egyesített)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (gps)</source>
         <translation>Belső (GPS)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="220"/>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="234"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="226"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="240"/>
         <source>No location permissions</source>
         <translation>Nincs engedélyezve a helyzetmeghatározás</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
         <source>Fused location not available</source>
         <translation>Az egyesített helyzetmeghatározás nem érhető el</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="248"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
     </message>
@@ -121,40 +121,40 @@
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="49"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="194"/>
         <source>No connection</source>
         <translation>Nincs kapcsolat</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="90"/>
         <source>Reconnecting</source>
         <translation>Újrakapcsolódás</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="122"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="130"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Nincs kapcsolat, újrakapcsolódás (%1) múlva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
         <source>Bluetooth permission disabled</source>
         <translation>Bluetooth engedélyezés letiltva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
         <source>Could not connect to device, not paired</source>
         <translation>Nem lehet csatlakozni az eszközhöz, nincs párosítva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
         <source>Connecting to %1</source>
         <translation>%1 csatlakoztatása</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="208"/>
         <source>Connected</source>
         <translation>Csatlakoztatva</translation>
     </message>
@@ -233,88 +233,88 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="236"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>just now</source>
         <translation>éppen most</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="241"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n perccel ezelőtt</numerusform><numerusform>%n perccel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="246"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n órával ezelőtt</numerusform><numerusform>%n órával ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
+        <location filename="../inpututils.cpp" line="251"/>
+        <location filename="../inpututils.cpp" line="256"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n nappal ezelőtt</numerusform><numerusform>%n nappal ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="260"/>
+        <location filename="../inpututils.cpp" line="261"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n héttel ezelőtt</numerusform><numerusform>%n héttel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="265"/>
+        <location filename="../inpututils.cpp" line="266"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n hónappal ezelőtt</numerusform><numerusform>%n hónappal ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="270"/>
+        <location filename="../inpututils.cpp" line="271"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n évvel ezelőtt</numerusform><numerusform>%n évvel ezelőtt</numerusform></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1537"/>
+        <location filename="../inpututils.cpp" line="1545"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>képernyő felbontás: %1x%2 pixel
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1538"/>
+        <location filename="../inpututils.cpp" line="1546"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>képernyő DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1539"/>
+        <location filename="../inpututils.cpp" line="1547"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>képernyő méret: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1540"/>
+        <location filename="../inpututils.cpp" line="1548"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>jelentett eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1541"/>
+        <location filename="../inpututils.cpp" line="1549"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>számított eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1542"/>
+        <location filename="../inpututils.cpp" line="1550"/>
         <source>used dp scale: %1</source>
         <translation>használt dp skála: %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2163"/>
+        <location filename="../inpututils.cpp" line="2171"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2167"/>
+        <location filename="../inpututils.cpp" line="2175"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform></translation>
     </message>
@@ -322,13 +322,13 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="16"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="18"/>
         <source>Internal</source>
         <translation>Belső</translation>
     </message>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="41"/>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="120"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="43"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="122"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
     </message>
@@ -510,42 +510,42 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMBluetoothConnectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="28"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
         <source>Connecting to</source>
         <translation>Kapcsolódás ehhez: </translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="30"/>
         <source>Connecting</source>
         <translation>Kapcsolódás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="33"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="34"/>
         <source>Connected</source>
         <translation>Kapcsolódva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="38"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="39"/>
         <source>Failed to connect to</source>
         <translation>Nem sikerült kapcsolódni ehhez: </translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="48"/>
         <source>You might be asked to pair your device during this process.</source>
         <translation>A folyamat során szükség lehet az eszköze párosítására.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="57"/>
         <source>You can close this message, we will try to repeatedly connect to your device.</source>
         <translation>Bezárhatja ezt az üzenetet, megpróbálunk ismételten csatlakozni az eszközéhez.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="62"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>Nem tudtunk csatlakozni a megadott eszközhöz. Ellenőrizze, hogy az eszköz be van-e kapcsolva, illetve csatlakoztatható állapotban van-e.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="117"/>
         <source>Learn more</source>
         <translation>További információ</translation>
     </message>
@@ -939,6 +939,22 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
+    <name>MMFormValueMapEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="94"/>
+        <source>No items</source>
+        <translation>Nincsenek elemek.</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormValueRelationEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="80"/>
+        <source>No items</source>
+        <translation>Nincsenek elemek.</translation>
+    </message>
+</context>
+<context>
     <name>MMGpsDataDrawer</name>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
@@ -951,123 +967,123 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="69"/>
         <source>No receiver</source>
         <translation>Nincs vevő</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="77"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="83"/>
         <source>Status</source>
         <translation>Állapot</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="94"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="100"/>
         <source>Longitude</source>
         <translation>Hosszúság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="97"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="104"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="116"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="123"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="135"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="150"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="165"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="180"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="195"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="209"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="227"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="242"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="259"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="103"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="110"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="122"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="129"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="141"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="156"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="171"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="186"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="201"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="216"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="234"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="249"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="266"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="283"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="300"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="333"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="113"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="119"/>
         <source>Latitude</source>
         <translation>Szélesség</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="132"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="138"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="147"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="153"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="162"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="168"/>
         <source>Horizontal accuracy</source>
         <translation>Vízszintes pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="177"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="183"/>
         <source>Vertical accuracy</source>
         <translation>Függőleges pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="192"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="198"/>
         <source>Altitude</source>
         <translation>Magasság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="213"/>
         <source>Fix quality</source>
         <translation>Minőség javítása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="223"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="230"/>
         <source>Satellites (in use/view)</source>
         <translation>Műholdak (használatban/látókörben)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="239"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="246"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="256"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="263"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="273"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="280"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="290"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="297"/>
         <source>Speed</source>
         <translation>Sebesség</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="312"/>
         <source>Last Fix</source>
         <translation>Utolsó javítás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="321"/>
         <source>GPS antenna height</source>
         <translation>GPS antenna magasság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="315"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="322"/>
         <source>Not set</source>
         <translation>Nincs beállítva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="330"/>
         <source>Geoid separation</source>
         <translation>Geoid elválasztás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="348"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
@@ -1227,12 +1243,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
         <source>Confirm selection</source>
         <translation>Kiválasztás megerősítése</translation>
     </message>
@@ -2388,19 +2404,6 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
-    <name>MMSketchesDrawer</name>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="40"/>
-        <source>Sketch</source>
-        <translation>Vázlat</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="119"/>
-        <source>Eraser</source>
-        <translation>Radír</translation>
-    </message>
-</context>
-<context>
     <name>MMSplittingFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
@@ -2515,22 +2518,22 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMStakeoutDrawer</name>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="91"/>
         <source>Stake out</source>
         <translation>Áthelyezés</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="105"/>
         <source>Feature</source>
         <translation>Elem</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>Distance</source>
         <translation>Távolság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
@@ -2749,116 +2752,116 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="244"/>
+        <location filename="../../core/merginapi.cpp" line="255"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Kérjük, távolítson el néhány projektet, mivel az alkalmazás jelenleg
 legfeljebb %1 letöltött projektet engedélyez.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="892"/>
+        <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="900"/>
-        <location filename="../../core/merginapi.cpp" line="960"/>
+        <location filename="../../core/merginapi.cpp" line="934"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="944"/>
-        <location filename="../../core/merginapi.cpp" line="958"/>
+        <location filename="../../core/merginapi.cpp" line="978"/>
+        <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="973"/>
-        <location filename="../../core/merginapi.cpp" line="1492"/>
+        <location filename="../../core/merginapi.cpp" line="1007"/>
+        <location filename="../../core/merginapi.cpp" line="1526"/>
         <source>Please enter a valid email</source>
         <translation>Kérjük, egy létező e-mail címet adjon meg</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="980"/>
-        <location filename="../../core/merginapi.cpp" line="1504"/>
+        <location filename="../../core/merginapi.cpp" line="1014"/>
+        <location filename="../../core/merginapi.cpp" line="1538"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell a következőket:&lt;ul type=&quot;disc&quot;&gt;%3 kisbetűs karakter (a-z)%4%3 NAGYbetűs karakter (A-Z)%4%3 Legalább egy számjegy (0–9) vagy speciális karakter%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="994"/>
+        <location filename="../../core/merginapi.cpp" line="1028"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Kérjük, fogadja el a Felhasználási Feltételeket és az Adatvédelmi szabályzatot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1026"/>
+        <location filename="../../core/merginapi.cpp" line="1060"/>
         <source>Marketing source cannot be empty</source>
         <translation>A marketingforrás nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1034"/>
+        <location filename="../../core/merginapi.cpp" line="1068"/>
         <source>Industry cannot be empty</source>
         <translation>Az iparág nem lehet üres</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1359"/>
+        <location filename="../../core/merginapi.cpp" line="1393"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Nincs jogosultsága új projekt létrehozására ezen a munkaterületen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1364"/>
+        <location filename="../../core/merginapi.cpp" line="1398"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Nem sikerült létrehozni a projektet. Próbálja újra később, vagy ha a probléma továbbra is fennáll, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1506"/>
         <source>Registration successful</source>
         <translation>Sikeres regisztráció</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1494"/>
-        <location filename="../../core/merginapi.cpp" line="1500"/>
-        <location filename="../../core/merginapi.cpp" line="1512"/>
+        <location filename="../../core/merginapi.cpp" line="1528"/>
+        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1546"/>
         <source>Registration failed</source>
         <translation>A regisztráció nem sikerült</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1498"/>
+        <location filename="../../core/merginapi.cpp" line="1532"/>
         <source>This email address is already registered</source>
         <translation>Ezzel az e-mail címmel már regisztráltak egy fiókot</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1523"/>
+        <location filename="../../core/merginapi.cpp" line="1557"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Az új regisztrációk nem engedélyezettek a kiválasztott szerveren. Kérjük, forduljon az adminisztrátorhoz segítségért.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1555"/>
+        <location filename="../../core/merginapi.cpp" line="1589"/>
         <source>Workspace created</source>
         <translation>Munkaterület létrehozva</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1923"/>
+        <location filename="../../core/merginapi.cpp" line="1957"/>
         <source>Project detached from the server</source>
         <translation>A projekt le van választva a szerverről</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4265"/>
         <source>Workspace name contains invalid characters</source>
         <translation>A munkaterület neve érvénytelen karaktert tartalmaz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4298"/>
+        <location filename="../../core/merginapi.cpp" line="4332"/>
         <source>Workspace %1 already exists</source>
         <translation>%1 munkaterület már létezik</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4404"/>
+        <location filename="../../core/merginapi.cpp" line="4438"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Most már bezárhatja ezt az oldalt, és visszatérhet a Mergin Maps alkalmazáshoz</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4430"/>
-        <location filename="../../core/merginapi.cpp" line="4457"/>
+        <location filename="../../core/merginapi.cpp" line="4464"/>
+        <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
         <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
     </message>
@@ -2874,6 +2877,14 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
         <translation>Nem sikerült meghatározni a változásokat</translation>
+    </message>
+</context>
+<context>
+    <name>PositionKit</name>
+    <message>
+        <location filename="../position/positionkit.cpp" line="115"/>
+        <source>Mocked position provider</source>
+        <translation>Helyimitáló szolgáltató</translation>
     </message>
 </context>
 <context>
@@ -3038,57 +3049,57 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Érvénytelen érték</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="132"/>
+        <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
         <translation>Nincs adat</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="135"/>
+        <location filename="../position/geoposition.cpp" line="140"/>
         <source>No fix</source>
         <translation>Nincs javítás</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="138"/>
+        <location filename="../position/geoposition.cpp" line="143"/>
         <source>GPS fix, no correction data</source>
         <translation>GPS javítás, korrekciós adatok nincsenek</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="148"/>
         <source>DGPS fix</source>
         <translation>DGPS javítás</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="146"/>
+        <location filename="../position/geoposition.cpp" line="151"/>
         <source>PPS fix</source>
         <translation>PPS javítás</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="149"/>
+        <location filename="../position/geoposition.cpp" line="154"/>
         <source>RTK fix</source>
         <translation>RTK javítás</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="152"/>
+        <location filename="../position/geoposition.cpp" line="157"/>
         <source>RTK float</source>
         <translation>RTK lebegőpontos</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="155"/>
+        <location filename="../position/geoposition.cpp" line="160"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Becsült javítás (halott számítás)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="158"/>
+        <location filename="../position/geoposition.cpp" line="163"/>
         <source>Unknown fix</source>
         <translation>Ismeretlen javítás</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="578"/>
+        <location filename="../main.cpp" line="611"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="583"/>
+        <location filename="../main.cpp" line="616"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
@@ -3106,7 +3117,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>SimulatedPositionProvider</name>
     <message>
-        <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
+        <location filename="../position/providers/simulatedpositionprovider.cpp" line="72"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
     </message>
@@ -3114,133 +3125,133 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="284"/>
+        <location filename="../qml/main.qml" line="296"/>
         <source>Sync</source>
         <translation>Szinkronizálás</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="306"/>
         <source>Add</source>
         <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="303"/>
+        <location filename="../qml/main.qml" line="315"/>
         <source>No editable layers found.</source>
         <translation>Nem található szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="321"/>
         <source>Layers</source>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="318"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Projects</source>
         <translation>Projektek</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="326"/>
+        <location filename="../qml/main.qml" line="338"/>
         <source>Zoom to project</source>
         <translation>Nagyítás a projektre</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="335"/>
+        <location filename="../qml/main.qml" line="347"/>
         <source>Map themes</source>
         <translation>Térkép témák</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="346"/>
+        <location filename="../qml/main.qml" line="358"/>
         <source>Position tracking</source>
         <translation>Pozíció követése</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="357"/>
+        <location filename="../qml/main.qml" line="369"/>
         <source>Measure</source>
         <translation>Mérés</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="363"/>
+        <location filename="../qml/main.qml" line="375"/>
         <source>Local changes</source>
         <translation>Helyi változások</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="372"/>
+        <location filename="../qml/main.qml" line="384"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="566"/>
-        <location filename="../qml/main.qml" line="574"/>
+        <location filename="../qml/main.qml" line="589"/>
+        <location filename="../qml/main.qml" line="597"/>
         <source>not tracking</source>
         <translation>nincs követés</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="674"/>
+        <location filename="../qml/main.qml" line="697"/>
         <source>Delete %n feature(s)</source>
         <translation><numerusform>%n elem törlése</numerusform><numerusform>%n elem törlése</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="675"/>
+        <location filename="../qml/main.qml" line="698"/>
         <source>Delete %n selected feature(s)?</source>
         <translation><numerusform>Valóban törölni kíván %n elemet?</numerusform><numerusform>Valóban törölni kíván %n elemet?</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="677"/>
+        <location filename="../qml/main.qml" line="700"/>
         <source>Yes, I want to delete</source>
         <translation>Igen, törlöm</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="678"/>
+        <location filename="../qml/main.qml" line="701"/>
         <source>No, thanks</source>
         <translation>Nem, köszönöm</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="898"/>
+        <location filename="../qml/main.qml" line="921"/>
         <source>Select feature</source>
         <translation>Elem kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="982"/>
+        <location filename="../qml/main.qml" line="1005"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Valaki más is szinkronizál, később újra megpróbáljuk</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1014"/>
+        <location filename="../qml/main.qml" line="1037"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Nem sikerült kommunikálni a szerverrel. Próbálja meg javítani a hálózati kapcsolatot.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1004"/>
+        <location filename="../qml/main.qml" line="1027"/>
         <source>Up to date</source>
         <translation>Naprakész</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1125"/>
+        <location filename="../qml/main.qml" line="1148"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Probléma történt a projekt betöltése során. %1Nézze meg a részleteket%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="801"/>
+        <location filename="../qml/main.qml" line="824"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Az áthelyezés le van tiltva, mert a helymeghatározás nem elérhető!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="951"/>
+        <location filename="../qml/main.qml" line="974"/>
         <source>Successfully synchronised</source>
         <translation>Sikeresen szinkronizálva</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="989"/>
+        <location filename="../qml/main.qml" line="1012"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hiba történt a szinkronizálás során, újra megpróbáljuk. Kattintson a további információért</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1146"/>
+        <location filename="../qml/main.qml" line="1169"/>
         <source>Could not read the project file:</source>
         <translation>Nem sikerült beolvasni a projektfájlt:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1179"/>
+        <location filename="../qml/main.qml" line="1202"/>
         <source>Press back again to quit the app</source>
         <translation>Nyomja meg újra a vissza gombot az alkalmazásból való kilépéshez</translation>
     </message>
