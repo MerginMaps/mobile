@@ -18,7 +18,6 @@
         <file>qml/pages/NotificationPage.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
         <file>qml/pages/PagesPage.qml</file>
-        <file>qml/pages/PhotoCardPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>
         <file>qml/pages/MapPage.qml</file>
         <file>qml/pages/ToolbarPage.qml</file>
