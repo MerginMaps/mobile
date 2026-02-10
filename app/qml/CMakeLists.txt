@@ -44,6 +44,7 @@ set(MM_QML
     components/MMColorButton.qml
     components/MMPopup.qml
     components/MMPhoto.qml
+    components/MMPhotoCard.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml

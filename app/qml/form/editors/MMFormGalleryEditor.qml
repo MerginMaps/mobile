@@ -48,19 +48,22 @@ MMPrivateComponents.MMBaseInput {
       homePath: root._fieldActiveProject.homePath
     }
 
-    delegate: MMComponents.MMPhoto {
+    delegate: MMComponents.MMPhotoCard{
       width: rowView.height
+      height: rowView.height
 
-      fillMode: Image.PreserveAspectCrop
-
-      photoUrl: {
+      imageSource: {
         let absolutePath = model.PhotoPath
 
         if ( absolutePath !== '' && __inputUtils.fileExists( absolutePath ) ) {
-          return "file://" + absolutePath
+          return "file:///" + absolutePath
         }
         return ''
       }
+
+      textVisible: model.FeatureTitle ? true : false
+
+      text: model.FeatureTitle
 
       onClicked: function( path ) {
         root.openLinkedFeature( model.FeaturePair )
