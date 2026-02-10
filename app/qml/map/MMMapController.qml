@@ -596,7 +596,7 @@ Item {
       id: filterIndicatorButton
 
       visible: root.state === "view" && root.filterController && (root.filterController.hasActiveFilters || AppSettings.alwaysShowFilterButton)
-      iconSource: __style.filterIcon
+      iconSource: root.filterController && root.filterController.hasActiveFilters ? __style.filterFilledIcon : __style.filterIcon
       bgndColor: root.filterController && root.filterController.hasActiveFilters ? __style.sandColor : __style.polarColor
 
       anchors {
