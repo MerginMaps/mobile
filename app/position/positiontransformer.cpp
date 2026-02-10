@@ -9,8 +9,9 @@
 
 #include "positiontransformer.h"
 
-#include <coreutils.h>
+#include <QString>
 
+#include "coreutils.h"
 #include "inpututils.h"
 
 PositionTransformer::PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs,
