@@ -29,7 +29,7 @@ index 95d51a86..bdb8641b 100644
 +      location.setAttribute(QGeoPositionInfo::VerticalSpeed, 1);
 +    }
 +
-+    if (newLocation.sourceInformation.isSimulatedBySoftware) {
++    if (newLocation.sourceInformation.isSimulatedBySoftware || newLocation.sourceInformation.isProducedByAccessory) {
 +      location.setAttribute(QGeoPositionInfo::MagneticVariation, 1);
 +    }
 +
