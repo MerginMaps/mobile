@@ -18,6 +18,7 @@ Item {
   height: __style.mapItemHeight
 
   property alias iconSource: icon.source
+  property color bgndColor: __style.polarColor
 
   signal clicked
   signal clickAndHold
@@ -26,7 +27,7 @@ Item {
     width: parent.width
     height: parent.height
     radius: control.height / 2
-    color: __style.polarColor
+    color: control.bgndColor
 
     layer.enabled: true
     layer.effect: MMShadow {}

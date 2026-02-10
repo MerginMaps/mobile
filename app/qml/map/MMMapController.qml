@@ -46,6 +46,9 @@ Item {
 
   property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
+  // Filter controller for managing feature filters
+  property var filterController: null
+
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -79,6 +82,7 @@ Item {
 
   signal openTrackingPanel()
   signal openStreamingPanel()
+  signal openFiltersPanel()
 
   states: [
     State {
@@ -584,6 +588,25 @@ Item {
           mapSettings: mapCanvas.mapSettings
           preferredWidth: 100 * __dp
         }
+      }
+    }
+
+    // Filter indicator button - left side, 20% from top
+    MMMapButton {
+      id: filterIndicatorButton
+
+      visible: root.state === "view" && root.filterController && (root.filterController.hasActiveFilters || AppSettings.alwaysShowFilterButton)
+      iconSource: __style.filterIcon
+      bgndColor: root.filterController && root.filterController.hasActiveFilters ? __style.sandColor : __style.polarColor
+
+      anchors {
+        left: parent.left
+        top: parent.top
+        topMargin: parent.height * 0.2
+      }
+
+      onClicked: {
+        root.openFiltersPanel()
       }
     }
 

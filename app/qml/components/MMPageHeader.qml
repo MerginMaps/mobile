@@ -24,6 +24,7 @@ Rectangle {
   property bool backVisible: true
   property alias backButton: backBtn
 
+  property alias leftItemContent: leftButtonGroup.children
   property alias rightItemContent: rightButtonGroup.children
 
   property real topSpacing: __style.safeAreaTop // offset size from top of the page, normally safeAreaTop, but can be overriden (e.g. login page)
@@ -40,11 +41,11 @@ Rectangle {
     // If there is a right or a left icon, we need to shift the margin
     // of the opposite side to keep the text centred to the center of the screen
     property real leftMarginShift: {
-      return Math.max( internal.backBtnRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+      return Math.max( internal.backBtnRealWidth, internal.leftGroupRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
     }
 
     property real rightMarginShift: {
-      return Math.max( internal.backBtnRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
+      return Math.max( internal.backBtnRealWidth, internal.leftGroupRealWidth, rightButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
     }
 
     anchors {
@@ -76,6 +77,18 @@ Rectangle {
   }
 
   Item {
+    id: leftButtonGroup
+
+    x: __style.pageMargins + __style.safeAreaLeft
+    y: ( root.baseHeaderHeight / 2 - height / 2 ) + root.topSpacing
+
+    width: childrenRect.width
+    height: childrenRect.height
+
+    visible: !root.backVisible // Only show when back button is hidden
+  }
+
+  Item {
     id: rightButtonGroup
 
     x: parent.width - __style.pageMargins - __style.safeAreaRight - width
@@ -90,5 +103,6 @@ Rectangle {
 
     property real headerSpacing: 10 * __dp
     property real backBtnRealWidth: backBtn.visible ? backBtn.width : 0
+    property real leftGroupRealWidth: leftButtonGroup.visible ? leftButtonGroup.width : 0
   }
 }

@@ -37,6 +37,7 @@ set(MM_QML
     components/MMBusyIndicator.qml
     components/MMMessage.qml
     components/MMNotification.qml
+    components/MMNotificationBox.qml
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
@@ -56,6 +57,9 @@ set(MM_QML
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
+    filters/MMFilterChip.qml
+    filters/MMFilterLayerSection.qml
+    filters/MMFiltersPanel.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
