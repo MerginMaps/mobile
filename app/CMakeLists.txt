@@ -453,15 +453,6 @@ if (IOS)
     )
     message(STATUS "Using automatic code sign")
   endif ()
-
-  #squish
-  if (SquishQtBuiltinHook_FOUND)
-    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
-    target_include_directories(
-            MerginMaps
-            PRIVATE "${SquishQtBuiltinHook_ROOT}/include"
-    )
-  endif ()
 endif ()
 
 # ########################################################################################
@@ -578,7 +569,7 @@ if (IOS)
   # TODO is this needed? this change requires cmake 3.28+
   # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
   if (SquishQtBuiltinHook_FOUND)
-    target_link_libraries(MerginMaps PRIVATE SquishQtBuiltinHook)
+    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757 EXTENSIONS QGraphicsView QTabWidget QtQuickTypes QtQuick)
   endif ()
 endif ()
 
