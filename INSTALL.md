@@ -647,9 +647,11 @@ e.g. ` ./MerginMaps --testMerginApi`
 ## Squish tests
 ### Prerequisites
  - Squish for Qt for Android (ARMv8/ARMv7 depending on architecture you build for)
+ - Squish for Qt for iOS
  - Squish for Qt (Windows/Mac/Linux), this should also include the Squish IDE
+
 ### Android
-After you unpack both and install Squish IDE, add another cmake argument `-DSquishQtBuiltinHook_ROOT=/<path>/<to>/<squish-for-android>/<directory>/`.
+After you unpack both (Qt & Qt for Android) and install Squish IDE, add another cmake argument `-DSquishQtBuiltinHook_ROOT=/<path>/<to>/<squish-for-android>/<directory>/`.
 This will build the apk with squish hook inside. You can verify that squish is working by finding these lines in log after startup:
 ```shell
 I/Squish  (26459): Setting SQUISH_PREFIX to '/data/data/uk.co.lutraconsulting'
@@ -658,11 +660,26 @@ I/Squish  (26459): libMerginMaps_arm64-v8a.so[26459]: QObject lifetime tracking 
 I/Squish  (26459): libMerginMaps_arm64-v8a.so[26459]: Listening on port 7757 for incoming connections
 ```
 
-In the squish IDE it's necessary to follow these steps to set it up completely and start testing the application.
+### iOS
+After you unpack both (Qt & Qt for iOS) and install Squish IDE, add these cmake arguments
+```cmake
+-DSquishQtBuiltinHook_ROOT=/<path>/<to>/<squish-for-ios>/<directory>/
+-DCMAKE_FIND_ROOT_PATH=/<path>/<to>/<squish-for-ios>/<directory>/
+-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH
+```
+This will build the app with squish hook inside. You can verify that squish is working by finding these lines in log after startup:
+```shell
+MerginMaps[834]: Loading Qt Wrapper configuration from ":/squish/etc/qtwrapper.ini"
+MerginMaps[834]: QObject lifetime tracking is disabled
+MerginMaps[834]: Listening on port 7757 for incoming connections
+```
+
+### Squish
+In the squish IDE it's necessary to follow these steps to finish setting it up and start testing the application.
 1. In Squish IDE choose File, New Test Suite to create a new Test Suite and follow the wizard. When asked for the GUI Toolkit choose Qt. When asked for the Application Under Test choose \<No Application\>.
 2. [Register attachable AUT](https://doc.qt.io/squish/attaching-to-running-applications.html#register-the-attachable-aut)
-   1. As _Name_ set `MerginMaps`, _Host_ is the IP address of your phone (has to be on the same Wifi) and set _Port_ to `7757`
-   2. You can also use USB cable to connect both devices. However, there is some further setup to do, first you need to forward the device port to your PC with:
+    1. As _Name_ set `MerginMaps`, _Host_ is the IP address of your phone (has to be on the same Wifi) and set _Port_ to `7757`
+    2. You can also use USB cable to connect both devices. However, there is some further setup to do, first you need to forward the device port to your PC with:
    ```shell
     $ adb forward tcp:portnumber tcp:portnumber
    ```
