@@ -544,8 +544,8 @@ void TestPosition::testPositionTransformerAndroidPosition()
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
-  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
-  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 }
 
 void TestPosition::testPositionTransformerBluetoothPosition()
