@@ -60,7 +60,7 @@ GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition
   bool positionOutsideGeoidModelArea = false;
   if ( geoPosition.elevation != std::numeric_limits<double>::quiet_NaN() )
   {
-    if ( !geoPosition.isMock || !mSkipElevationTransformation )
+    if ( !geoPosition.isMock )
     {
       const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        mSourceCrs,
@@ -106,7 +106,7 @@ GeoPosition PositionTransformer::processInternalAndroidPosition( const QGeoPosit
     const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
     newPosition.elevation_diff = geoidSeparation;
   }
-  CoreUtils::log( "Elevation info", QString( "Ellipsoid height: %1, Mocked location: %2, Incoming height: %3, Outgoing height: %4, Separation: %5, Is it transformed: %6, Position outside geoid model: %7" ).arg( QVariant( true ).toString(), QStringLiteral( "¯\_(ツ)_/¯" ), QString::number( geoPosition.coordinate().altitude() ), QString::number( newPosition.elevation ), QString::number( newPosition.elevation_diff ), QVariant( true ).toString(), QVariant( positionOutsideGeoidModelArea ).toString() ) );
+  CoreUtils::log( "Elevation info", QString( "Ellipsoid height: %1, Mocked location: %2, Incoming height: %3, Outgoing height: %4, Separation: %5, Is it transformed: %6, Position outside geoid model: %7" ).arg( QVariant( true ).toString(), QStringLiteral( "¯\\_(ツ)_/¯" ), QString::number( geoPosition.coordinate().altitude() ), QString::number( newPosition.elevation ), QString::number( newPosition.elevation_diff ), QVariant( true ).toString(), QVariant( positionOutsideGeoidModelArea ).toString() ) );
   return newPosition;
 }
 

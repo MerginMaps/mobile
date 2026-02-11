@@ -33,9 +33,7 @@ class PositionTransformer : QObject
     /**
     * Transform the elevation from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     * (by default EPSG:9707 (WGS84 + EGM96))
-    * Transform only if:
-    *  1. the position is not mocked, and it's ellipsoidal elevation
-    *  2. the position is mocked, the elevation is ellipsoidal plus pass through is disabled
+    * Transform only if the position is not mocked, and it's ellipsoidal elevation.
     * \note This method should be used only with AndroidPositionProvider, which guarantees the elevation to be ellipsoid
     * \return Copy of passed geoPosition with processed elevation and elevation separation if applicable.
     */

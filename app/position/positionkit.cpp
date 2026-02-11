@@ -45,7 +45,9 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 
 QString PositionKit::positionCrs3DGeoidModelName()
 {
-  if ( !mSkipElevationTransformation )
+  // we don't transform mocked position on android as we can get both ellipsoid and orthometric elevations
+  const bool isAndroidMockedPosition =  mPositionProvider->id() == QStringLiteral( "android_fused" ) && isMockPosition();
+  if ( !mSkipElevationTransformation && !isAndroidMockedPosition )
   {
     return mVerticalCrs.description();
   }
