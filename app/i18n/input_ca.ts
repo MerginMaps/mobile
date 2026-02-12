@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>El projecte té assignat un CRS no vàlid. El mapa i les eines tenen un comportament indefinit!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer</source>
         <translation>Capa</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="301"/>
         <source>Unable to load source </source>
         <translation>No es pot carregar la font</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>La capa té assignat un CRS no vàlid. Les eines de gravació tenen un comportament indefinit.</translation>
     </message>
@@ -31,28 +31,28 @@
 <context>
     <name>AndroidPositionProvider</name>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (fused)</source>
         <translation>Intern (fusionat)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (gps)</source>
         <translation>Intern (gps)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="220"/>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="234"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="226"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="240"/>
         <source>No location permissions</source>
         <translation>Sense permisos d&apos;ubicació</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
         <source>Fused location not available</source>
         <translation>La ubicació fusionada no està disponible</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="248"/>
         <source>Connected</source>
         <translation>Connectat</translation>
     </message>
@@ -121,40 +121,40 @@
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="49"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="194"/>
         <source>No connection</source>
         <translation>Sense connexió</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="90"/>
         <source>Reconnecting</source>
         <translation>Reconnectant</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="122"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="130"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Sense connexió, reconnectant en (%1)</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
         <source>Bluetooth permission disabled</source>
         <translation>Permís de Bluetooth desactivat</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
         <source>Could not connect to device, not paired</source>
         <translation>No s&apos;ha pogut connectar al dispositiu, no vinculat </translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
         <source>Connecting to %1</source>
         <translation>Connectant a %1</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="208"/>
         <source>Connected</source>
         <translation>Connectat</translation>
     </message>
@@ -233,88 +233,88 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="236"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>just now</source>
         <translation>ara mateix</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="241"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>fa %n minut(s)</numerusform><numerusform>fa %n minut(s)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="246"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>fa %n hora(es)</numerusform><numerusform>fa %n hora(es)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
+        <location filename="../inpututils.cpp" line="251"/>
+        <location filename="../inpututils.cpp" line="256"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>fa %n dia(es)</numerusform><numerusform>fa %n dia(es)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="260"/>
+        <location filename="../inpututils.cpp" line="261"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>fa %n setmana(es)</numerusform><numerusform>fa %n setmana(es)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="265"/>
+        <location filename="../inpututils.cpp" line="266"/>
         <source>%n month(s) ago</source>
         <translation><numerusform> fa %n mes(os)</numerusform><numerusform>fa %n mes(os)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="270"/>
+        <location filename="../inpututils.cpp" line="271"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>fa %n any(s)</numerusform><numerusform>fa %n any(s)</numerusform></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1537"/>
+        <location filename="../inpututils.cpp" line="1545"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>resolució de pantalla: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1538"/>
+        <location filename="../inpututils.cpp" line="1546"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI de pantalla: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1539"/>
+        <location filename="../inpututils.cpp" line="1547"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>mida de pantalla: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1540"/>
+        <location filename="../inpututils.cpp" line="1548"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu informada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1541"/>
+        <location filename="../inpututils.cpp" line="1549"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>relació de píxels del dispositiu calculada: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1542"/>
+        <location filename="../inpututils.cpp" line="1550"/>
         <source>used dp scale: %1</source>
         <translation>escala dp utilitzada: %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2163"/>
+        <location filename="../inpututils.cpp" line="2171"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform> </numerusform><numerusform>Cal que afegiu com a mínim %n punt(s) a cada part.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2167"/>
+        <location filename="../inpututils.cpp" line="2175"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform> 25</numerusform><numerusform>Cal que afegiu com a mínim %n punt(s).</numerusform></translation>
     </message>
@@ -322,13 +322,13 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="16"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="18"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="41"/>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="120"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="43"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="122"/>
         <source>Connected</source>
         <translation>Connectat</translation>
     </message>
@@ -510,42 +510,42 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMBluetoothConnectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="28"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
         <source>Connecting to</source>
         <translation>Connectant amb</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="30"/>
         <source>Connecting</source>
         <translation>Connectant</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="33"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="34"/>
         <source>Connected</source>
         <translation>Connectat</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="38"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="39"/>
         <source>Failed to connect to</source>
         <translation>Ha fallat la connexió amb</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="48"/>
         <source>You might be asked to pair your device during this process.</source>
         <translation>És possible que se us demani que sincronitzeu el vostre dispositiu durant aquest procés.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="57"/>
         <source>You can close this message, we will try to repeatedly connect to your device.</source>
         <translation>Podeu tancar aquest missatge, intentarem connectar-nos repetidament al vostre dispositiu.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="62"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>No ens hem pogut connectar al dispositiu especificat. Assegureu-vos que el vostre dispositiu estigui encès i que es pugui connectar.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="117"/>
         <source>Learn more</source>
         <translation>Més informació</translation>
     </message>
@@ -938,6 +938,22 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
+    <name>MMFormValueMapEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="94"/>
+        <source>No items</source>
+        <translation>Cap element</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormValueRelationEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="80"/>
+        <source>No items</source>
+        <translation>Cap element</translation>
+    </message>
+</context>
+<context>
     <name>MMGpsDataDrawer</name>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
@@ -945,128 +961,128 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Informació GPS</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
         <source>Source</source>
         <translation>Font</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
         <source>No receiver</source>
         <translation>Cap receptor</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="77"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="94"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
         <source>Longitude</source>
         <translation>Longitud</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="97"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="104"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="116"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="123"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="135"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="150"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="165"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="180"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="195"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="209"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="227"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="242"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="259"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="113"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
         <source>Latitude</source>
         <translation>Latitud</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="132"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="147"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="162"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
         <source>Horizontal accuracy</source>
         <translation>Precisió horitzontal</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="177"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
         <source>Vertical accuracy</source>
         <translation>Precisió vertical</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="192"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation>Corregir la qualitat</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="223"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
         <source>Satellites (in use/view)</source>
         <translation>Satèl·lits (en ús/a la vista)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="239"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="256"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="273"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="290"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <source>Speed</source>
         <translation>Velocitat</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
         <translation>Darrera correcció</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
         <source>GPS antenna height</source>
         <translation>Alçada de l&apos;antena GPS</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="315"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
         <source>Not set</source>
         <translation>Sense definir</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
         <source>Geoid separation</source>
         <translation>Separació geoidal</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
         <source>Manage GPS receivers</source>
         <translation>Gestionar receptors GPS</translation>
     </message>
@@ -1226,12 +1242,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
         <source>Confirm selection</source>
         <translation>Confirmar la selecció</translation>
     </message>
@@ -2388,19 +2404,6 @@ No s&apos;afegirà al projecte.</translation>
     </message>
 </context>
 <context>
-    <name>MMSketchesDrawer</name>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="40"/>
-        <source>Sketch</source>
-        <translation>Esbós</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="119"/>
-        <source>Eraser</source>
-        <translation>Goma d&apos;esborrar</translation>
-    </message>
-</context>
-<context>
     <name>MMSplittingFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
@@ -2515,22 +2518,22 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMStakeoutDrawer</name>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="91"/>
         <source>Stake out</source>
         <translation>Replantejar</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="105"/>
         <source>Feature</source>
         <translation>Característica</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>Distance</source>
         <translation>Distància</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
@@ -2749,116 +2752,116 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="244"/>
+        <location filename="../../core/merginapi.cpp" line="255"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Si us plau, elimineu alguns projectes donat que l&apos;aplicació actualment
 només permet fins a %1 projectes baixats.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="892"/>
+        <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Hi ha un problema amb la configuració d&apos;SSO del servidor. Poseu-vos en contacte amb l&apos;administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="900"/>
-        <location filename="../../core/merginapi.cpp" line="960"/>
+        <location filename="../../core/merginapi.cpp" line="934"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Error en obtenir la configuració d&apos;SSO del servidor</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="944"/>
-        <location filename="../../core/merginapi.cpp" line="958"/>
+        <location filename="../../core/merginapi.cpp" line="978"/>
+        <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>L&apos;SSO no és compatible amb el domini especificat.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="973"/>
-        <location filename="../../core/merginapi.cpp" line="1492"/>
+        <location filename="../../core/merginapi.cpp" line="1007"/>
+        <location filename="../../core/merginapi.cpp" line="1526"/>
         <source>Please enter a valid email</source>
         <translation>Si us plau afegiu una adreça de correu vàlida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="980"/>
-        <location filename="../../core/merginapi.cpp" line="1504"/>
+        <location filename="../../core/merginapi.cpp" line="1014"/>
+        <location filename="../../core/merginapi.cpp" line="1538"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 La contrasenya ha de tenir com a mínim 8 caràcters i incloure:&lt;ul type=&quot;disc&quot;&gt;%3 Caràcters minúsculs (a-z)%4%3 Caràcters majúsculs (A-Z)%4%3 Com a mínim un dígit (0–9) o un caràcter especial%4%2%4%2 </translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="994"/>
+        <location filename="../../core/merginapi.cpp" line="1028"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Si us plau accepteu els Termes i la Política de Privadesa</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1026"/>
+        <location filename="../../core/merginapi.cpp" line="1060"/>
         <source>Marketing source cannot be empty</source>
         <translation>La font de màrqueting no pot estar buida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1034"/>
+        <location filename="../../core/merginapi.cpp" line="1068"/>
         <source>Industry cannot be empty</source>
         <translation>La indústria no pot estar buida</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1359"/>
+        <location filename="../../core/merginapi.cpp" line="1393"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>No tens permís per crear projectes nous en aquest espai de treball.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1364"/>
+        <location filename="../../core/merginapi.cpp" line="1398"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>No s&apos;ha pogut crear el projecte. Torna-ho a provar més tard o contacta amb assistència si el problema persisteix.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1506"/>
         <source>Registration successful</source>
         <translation>Registre completat correctament</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1494"/>
-        <location filename="../../core/merginapi.cpp" line="1500"/>
-        <location filename="../../core/merginapi.cpp" line="1512"/>
+        <location filename="../../core/merginapi.cpp" line="1528"/>
+        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1546"/>
         <source>Registration failed</source>
         <translation>El registre ha fallat</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1498"/>
+        <location filename="../../core/merginapi.cpp" line="1532"/>
         <source>This email address is already registered</source>
         <translation>Aquesta adreça de correu electrònic ja està registrada</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1523"/>
+        <location filename="../../core/merginapi.cpp" line="1557"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>No es permeten noves altes al servidor seleccionat. Si us plau, consulteu amb el vostre administrador.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1555"/>
+        <location filename="../../core/merginapi.cpp" line="1589"/>
         <source>Workspace created</source>
         <translation>S&apos;ha creat l&apos;espai de treball</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1923"/>
+        <location filename="../../core/merginapi.cpp" line="1957"/>
         <source>Project detached from the server</source>
         <translation>Projecte desconnectat del servidor</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4265"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nom de l&apos;espai de treball conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4298"/>
+        <location filename="../../core/merginapi.cpp" line="4332"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espai de treball %1 ja existeix</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4404"/>
+        <location filename="../../core/merginapi.cpp" line="4438"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Ara podeu tancar aquesta pàgina i tornar a Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4430"/>
-        <location filename="../../core/merginapi.cpp" line="4457"/>
+        <location filename="../../core/merginapi.cpp" line="4464"/>
+        <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
         <translation>L&apos;autorització SSO ha fallat</translation>
     </message>
@@ -2874,6 +2877,14 @@ només permet fins a %1 projectes baixats.</translation>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
         <translation>No s&apos;ha pogut determinar els canvis</translation>
+    </message>
+</context>
+<context>
+    <name>PositionKit</name>
+    <message>
+        <location filename="../position/positionkit.cpp" line="116"/>
+        <source>External (Mock)</source>
+        <translation>Extern (Simulat)</translation>
     </message>
 </context>
 <context>
@@ -3038,57 +3049,57 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>No és un valor vàlid</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="132"/>
+        <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
         <translation>Sense dades</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="135"/>
+        <location filename="../position/geoposition.cpp" line="140"/>
         <source>No fix</source>
         <translation>Sense correcció</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="138"/>
+        <location filename="../position/geoposition.cpp" line="143"/>
         <source>GPS fix, no correction data</source>
         <translation>Posició GPS, sense dades de correcció</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="148"/>
         <source>DGPS fix</source>
         <translation>Posició DGPS</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="146"/>
+        <location filename="../position/geoposition.cpp" line="151"/>
         <source>PPS fix</source>
         <translation>Posició PPS</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="149"/>
+        <location filename="../position/geoposition.cpp" line="154"/>
         <source>RTK fix</source>
         <translation>Posició RTK</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="152"/>
+        <location filename="../position/geoposition.cpp" line="157"/>
         <source>RTK float</source>
         <translation>RTK flotant</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="155"/>
+        <location filename="../position/geoposition.cpp" line="160"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Posició estimada (dead reckoning)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="158"/>
+        <location filename="../position/geoposition.cpp" line="163"/>
         <source>Unknown fix</source>
         <translation>Posició desconeguda</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="588"/>
+        <location filename="../main.cpp" line="611"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Informe enviat. Poseu-vos en contacte amb el servei d&apos;assistència.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="593"/>
+        <location filename="../main.cpp" line="616"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>No s&apos;ha pogut enviar l&apos;informe. Comproveu la vostra connexió a Internet.</translation>
     </message>
@@ -3106,7 +3117,7 @@ només permet fins a %1 projectes baixats.</translation>
 <context>
     <name>SimulatedPositionProvider</name>
     <message>
-        <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
+        <location filename="../position/providers/simulatedpositionprovider.cpp" line="72"/>
         <source>Connected</source>
         <translation>Connectat</translation>
     </message>
@@ -3114,133 +3125,133 @@ només permet fins a %1 projectes baixats.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="284"/>
+        <location filename="../qml/main.qml" line="296"/>
         <source>Sync</source>
         <translation>Sincronitzar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="306"/>
         <source>Add</source>
         <translation>Afegir</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="303"/>
+        <location filename="../qml/main.qml" line="315"/>
         <source>No editable layers found.</source>
         <translation>No s&apos;ha trobat cap nivell editable.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="321"/>
         <source>Layers</source>
         <translation>Capes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="318"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Projects</source>
         <translation>Projectes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="326"/>
+        <location filename="../qml/main.qml" line="338"/>
         <source>Zoom to project</source>
         <translation>Zoom al projecte</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="335"/>
+        <location filename="../qml/main.qml" line="347"/>
         <source>Map themes</source>
         <translation>Temes de mapes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="346"/>
+        <location filename="../qml/main.qml" line="358"/>
         <source>Position tracking</source>
         <translation>Seguiment de la posició</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="357"/>
+        <location filename="../qml/main.qml" line="369"/>
         <source>Measure</source>
         <translation>Mesurar</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="363"/>
+        <location filename="../qml/main.qml" line="375"/>
         <source>Local changes</source>
         <translation>Canvis locals</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="372"/>
+        <location filename="../qml/main.qml" line="384"/>
         <source>Settings</source>
         <translation>Configuració</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="566"/>
-        <location filename="../qml/main.qml" line="574"/>
+        <location filename="../qml/main.qml" line="589"/>
+        <location filename="../qml/main.qml" line="597"/>
         <source>not tracking</source>
         <translation>sense seguiment</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="674"/>
+        <location filename="../qml/main.qml" line="697"/>
         <source>Delete %n feature(s)</source>
         <translation><numerusform>Esborrar %n geometria(es)</numerusform><numerusform>Esborrar %n geometria(es)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="675"/>
+        <location filename="../qml/main.qml" line="698"/>
         <source>Delete %n selected feature(s)?</source>
         <translation><numerusform>Esborrar %n geometria(es)</numerusform><numerusform>Esborrar %n geometria(es) escollida(es)</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="677"/>
+        <location filename="../qml/main.qml" line="700"/>
         <source>Yes, I want to delete</source>
         <translation>Si, vull esborrar-ho</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="678"/>
+        <location filename="../qml/main.qml" line="701"/>
         <source>No, thanks</source>
         <translation>No, gràcies</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="898"/>
+        <location filename="../qml/main.qml" line="921"/>
         <source>Select feature</source>
         <translation>Seleccioneu la característica</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="982"/>
+        <location filename="../qml/main.qml" line="1005"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Algú més s&apos;està sincronitzant, ho tornarem a provar més tard</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1014"/>
+        <location filename="../qml/main.qml" line="1037"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>No s&apos;ha pogut comunicar amb el servidor. Proveu de millorar la vostra connexió de xarxa.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1004"/>
+        <location filename="../qml/main.qml" line="1027"/>
         <source>Up to date</source>
         <translation>Actualitzat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1125"/>
+        <location filename="../qml/main.qml" line="1148"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Hi ha hagut problemes en carregar el projecte. %1Mostra els detalls%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="801"/>
+        <location filename="../qml/main.qml" line="824"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>El replanteig està desactivat perquè la ubicació no està disponible!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="951"/>
+        <location filename="../qml/main.qml" line="974"/>
         <source>Successfully synchronised</source>
         <translation>S&apos;ha sincronitzat correctament</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="989"/>
+        <location filename="../qml/main.qml" line="1012"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Hi ha hagut un problema durant la sincronització, ho tornarem a provar. Feu clic per obtenir més informació</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1146"/>
+        <location filename="../qml/main.qml" line="1169"/>
         <source>Could not read the project file:</source>
         <translation>No s&apos;ha pogut llegir el fitxer del projecte:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1179"/>
+        <location filename="../qml/main.qml" line="1202"/>
         <source>Press back again to quit the app</source>
         <translation>Premeu enrere de nou per sortir de l&apos;aplicació</translation>
     </message>
