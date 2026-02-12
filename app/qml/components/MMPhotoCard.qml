@@ -17,10 +17,11 @@ Item {
   property string text: ""
   property bool textVisible: true
 
-  signal clicked(var path)
+  signal clicked(string path)
 
-  width: 300
-  height: 300
+  width: 120
+  height: 120
+
   Rectangle {
     id: maskRect
     anchors.fill: parent
@@ -43,6 +44,8 @@ Item {
       smooth: true
     }
 
+    // the footer of the card
+    // contains the text to display over the blurred part of the image
     FastBlur {
       id: footer
       visible: root.textVisible
@@ -52,7 +55,7 @@ Item {
         right: parent.right
         bottom: parent.bottom
       }
-      height: parent.height * 0.33
+      height: parent.height * 0.35
 
       radius: 40
       source: ShaderEffectSource {
@@ -71,16 +74,14 @@ Item {
 
       Text {
         text: root.text
+        width: root.width - 2 * __style.margin12
+        height: 2 * __style.margin14
         anchors.centerIn: parent
-        width: parent.width - __style.margin32
-        height: parent.height - __style.margin10
 
         color: __style.polarColor
-        font {
-          pixelSize: __style.margin10
-          bold: true
-          family: "Inter"
-        }
+        font: __style.p5
+        lineHeightMode: Text.FixedHeight
+        lineHeight: 16
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
