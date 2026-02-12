@@ -32,6 +32,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
     color: root.iconColor
   }
 
+  textField.inputMethodHints: Qt.ImhNoPredictiveText
+
   rightContentVisible: root.showClearIcon && textField.activeFocus && textField.text.length > 0
 
   onRightContentClicked: textField.clear()
