@@ -55,9 +55,9 @@ Item {
         right: parent.right
         bottom: parent.bottom
       }
-      height: parent.height * 0.35
+      height: parent.height * 0.33
 
-      radius: 40
+      radius: 20
       source: ShaderEffectSource {
         sourceItem: bngImage
         sourceRect: Qt.rect(0, bngImage.height - footer.height, bngImage.width,
@@ -74,17 +74,19 @@ Item {
 
       Text {
         text: root.text
-        width: root.width - 2 * __style.margin12
-        height: 2 * __style.margin14
+        width: root.width - 2 * __style.margin16
         anchors.centerIn: parent
 
         color: __style.polarColor
-        font: __style.p5
-        lineHeightMode: Text.FixedHeight
-        lineHeight: 16
+        font: __style.t5
 
-        horizontalAlignment: Text.AlignHCenter
+        lineHeightMode: Text.FixedHeight
+        lineHeight: __style.margin16
+        maximumLineCount: 2
+
+        horizontalAlignment: Text.AlignHCenter | Text.AlignJustify
         verticalAlignment: Text.AlignVCenter
+        
         wrapMode: Text.WordWrap
         elide: Text.ElideRight
       }
