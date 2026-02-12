@@ -103,7 +103,7 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   }
 
   emit positionProviderChanged( provider );
-  emit providerNameChanged();
+  emit positionProviderNameChanged();
 
   // reset last position data
   parsePositionUpdate( GeoPosition() );
@@ -368,7 +368,7 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     emit isMockPositionChanged( mPosition.isMock );
     hasAnythingChanged = true;
     // we also change the name
-    emit providerNameChanged();
+    emit positionProviderNameChanged();
   }
 
   if ( hasAnythingChanged )
