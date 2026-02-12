@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,6 +77,7 @@ class PositionKit : public QObject
 
     // Provider of position data
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
+    Q_PROPERTY( QString positionProviderName READ positionProviderName NOTIFY positionProviderNameChanged )
     Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
@@ -117,7 +118,7 @@ class PositionKit : public QObject
 
     AbstractPositionProvider *positionProvider() const;
     void setPositionProvider( AbstractPositionProvider *newPositionProvider );
-    Q_INVOKABLE QString positionProviderName() const;
+    QString positionProviderName() const;
 
     double hdop() const;
     double vdop() const;
@@ -176,6 +177,7 @@ class PositionKit : public QObject
     void fixChanged( const QString & );
 
     void positionProviderChanged( AbstractPositionProvider *provider );
+    void positionProviderNameChanged();
 
     void positionChanged( const GeoPosition & );
     void isMockPositionChanged( bool );
