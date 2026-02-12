@@ -103,6 +103,7 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   }
 
   emit positionProviderChanged( provider );
+  emit providerNameChanged();
 
   // reset last position data
   parsePositionUpdate( GeoPosition() );
@@ -112,7 +113,7 @@ QString PositionKit::positionProviderName() const
 {
   if ( isMockPosition() )
   {
-    return tr( "Mocked position provider" );
+    return tr( "External (Mock)" );
   }
   return mPositionProvider->name();
 }
@@ -366,6 +367,8 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     mPosition.isMock = newPosition.isMock;
     emit isMockPositionChanged( mPosition.isMock );
     hasAnythingChanged = true;
+    // we also change the name
+    emit providerNameChanged();
   }
 
   if ( hasAnythingChanged )

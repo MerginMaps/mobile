@@ -64,7 +64,7 @@ MMComponents.MMDrawer {
             title: qsTr( "Source" )
             value: {
               if ( PositionKit.positionProvider ) {
-                PositionKit.positionProviderName()
+                PositionKit.providerName
               } else {
                 qsTr( "No receiver" )
               }
