@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>General</source>
         <translation>Üldine</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="272"/>
+        <location filename="../activeproject.cpp" line="289"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Kaart ja tööriistad võivad töötada valesti!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer</source>
         <translation>Kiht</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="284"/>
+        <location filename="../activeproject.cpp" line="301"/>
         <source>Unable to load source </source>
         <translation>Andmeid ei õnnestu laadida</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="293"/>
+        <location filename="../activeproject.cpp" line="310"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Salvestamisel võib tekkida vigu.</translation>
     </message>
@@ -31,28 +31,28 @@
 <context>
     <name>AndroidPositionProvider</name>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (fused)</source>
         <translation>Sisene (ühendatud)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="139"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="145"/>
         <source>Internal (gps)</source>
         <translation>Sisene (gps)</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="220"/>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="234"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="226"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="240"/>
         <source>No location permissions</source>
         <translation>Pole ligipääsu asukohale</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="236"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
         <source>Fused location not available</source>
         <translation>Ühendatud positsioneering pole kättesaadav</translation>
     </message>
     <message>
-        <location filename="../position/providers/androidpositionprovider.cpp" line="242"/>
+        <location filename="../position/providers/androidpositionprovider.cpp" line="248"/>
         <source>Connected</source>
         <translation>Ühendatud</translation>
     </message>
@@ -121,40 +121,40 @@
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="46"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="191"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="49"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="194"/>
         <source>No connection</source>
         <translation>Puudub ühendus</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="87"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="90"/>
         <source>Reconnecting</source>
         <translation>Ühendan uuesti</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="127"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="122"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="130"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Puudub ühendus, ühendan uuesti (%1)</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="156"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
         <source>Bluetooth permission disabled</source>
         <translation>Bluetooth&apos;i õigused on välja lülitatud</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="167"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
         <source>Could not connect to device, not paired</source>
         <translation>Ei suutnud ühendada seadmega, pole seotud</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
         <source>Connecting to %1</source>
         <translation>Ühendan %1</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="187"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="205"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="208"/>
         <source>Connected</source>
         <translation>Ühendatud</translation>
     </message>
@@ -233,88 +233,88 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="236"/>
+        <location filename="../inpututils.cpp" line="237"/>
         <source>just now</source>
         <translation>äsja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="241"/>
+        <location filename="../inpututils.cpp" line="242"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut(i) eest</numerusform><numerusform>%n minut(it) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="246"/>
+        <location filename="../inpututils.cpp" line="247"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n hour(s) ago</numerusform><numerusform>%n tund(i) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="250"/>
-        <location filename="../inpututils.cpp" line="255"/>
+        <location filename="../inpututils.cpp" line="251"/>
+        <location filename="../inpututils.cpp" line="256"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n päev(a) tagasi</numerusform><numerusform>%n päev(a) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="260"/>
+        <location filename="../inpututils.cpp" line="261"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n nädal(at) tagasi</numerusform><numerusform>%n nädal(at) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="265"/>
+        <location filename="../inpututils.cpp" line="266"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n kuu(d) tagasi</numerusform><numerusform>%n kuu(d) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="270"/>
+        <location filename="../inpututils.cpp" line="271"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n aasta(t) tagasi</numerusform><numerusform>%n aasta(t) tagasi</numerusform></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1537"/>
+        <location filename="../inpututils.cpp" line="1545"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>ekraani resolutsioon: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1538"/>
+        <location filename="../inpututils.cpp" line="1546"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>ekraani DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1539"/>
+        <location filename="../inpututils.cpp" line="1547"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>ekraani suurus: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1540"/>
+        <location filename="../inpututils.cpp" line="1548"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>deklareeritud seadme pikslisuhe: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1541"/>
+        <location filename="../inpututils.cpp" line="1549"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>arvutatud seadme pikslisuhe: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1542"/>
+        <location filename="../inpututils.cpp" line="1550"/>
         <source>used dp scale: %1</source>
         <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2163"/>
+        <location filename="../inpututils.cpp" line="2171"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2167"/>
+        <location filename="../inpututils.cpp" line="2175"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti.</numerusform><numerusform>Pead lisama vähemalt %n punkti.</numerusform></translation>
     </message>
@@ -322,13 +322,13 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>InternalPositionProvider</name>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="16"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="18"/>
         <source>Internal</source>
         <translation>Sisene</translation>
     </message>
     <message>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="41"/>
-        <location filename="../position/providers/internalpositionprovider.cpp" line="120"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="43"/>
+        <location filename="../position/providers/internalpositionprovider.cpp" line="122"/>
         <source>Connected</source>
         <translation>Ühendatud</translation>
     </message>
@@ -510,42 +510,42 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMBluetoothConnectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="28"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
         <source>Connecting to</source>
         <translation>Ühendan</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="30"/>
         <source>Connecting</source>
         <translation>Ühendan</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="33"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="34"/>
         <source>Connected</source>
         <translation>Ühendatud</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="38"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="39"/>
         <source>Failed to connect to</source>
         <translation>Ei õnnestunud ühendada</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="47"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="48"/>
         <source>You might be asked to pair your device during this process.</source>
         <translation>Sinult võidakse küsida seadme sidumist selle protsessi käigus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="56"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="57"/>
         <source>You can close this message, we will try to repeatedly connect to your device.</source>
         <translation>Võid selle teate sulgeda, üritame korduvalt ühendada su seadmega.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="61"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="62"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>Me ei suuda siduda kirjeldatud seadmega. Palun kontrolli üle et seade on sisse lülitatud ja lubab ühendumist.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="116"/>
+        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="117"/>
         <source>Learn more</source>
         <translation>Loe lisaks</translation>
     </message>
@@ -939,6 +939,22 @@ Seda ei lisata projektile.</translation>
     </message>
 </context>
 <context>
+    <name>MMFormValueMapEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="94"/>
+        <source>No items</source>
+        <translation>Üksusi pole</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormValueRelationEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="80"/>
+        <source>No items</source>
+        <translation>Üksusi pole</translation>
+    </message>
+</context>
+<context>
     <name>MMGpsDataDrawer</name>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
@@ -946,128 +962,128 @@ Seda ei lisata projektile.</translation>
         <translation>GPS info</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
         <source>Source</source>
         <translation>Allikas</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
         <source>No receiver</source>
         <translation>Vastuvõtja puudub</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="77"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
         <source>Status</source>
         <translation>Olek</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="94"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
         <source>Longitude</source>
         <translation>Pikkus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="97"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="104"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="116"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="123"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="135"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="150"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="165"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="180"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="195"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="209"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="227"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="242"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="259"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="276"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="293"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="306"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="326"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
         <source>N/A</source>
         <translation>Ei kohaldu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="113"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
         <source>Latitude</source>
         <translation>Laius</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="132"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="147"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="162"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
         <source>Horizontal accuracy</source>
         <translation>Horisontaalne täpsus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="177"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
         <source>Vertical accuracy</source>
         <translation>Vertikaalne täpsus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="192"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Kõrgus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation>Positsioneeringu kvaliteet</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="223"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
         <source>Satellites (in use/view)</source>
         <translation>Satelliiti (kasutusel/nähtaval)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="239"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="256"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="273"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="290"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <source>Speed</source>
         <translation>Kiirus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="305"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
         <translation>Viimane positsioneering</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="314"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
         <source>GPS antenna height</source>
         <translation>GPS antenni kõrgus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="315"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
         <source>Not set</source>
         <translation>Määramata</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="323"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
         <source>Geoid separation</source>
         <translation> Geoidi kõrguserinevus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="342"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
         <source>Manage GPS receivers</source>
         <translation>Halda GPS vastuvõtjaid</translation>
     </message>
@@ -1227,12 +1243,12 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="55"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
         <source>Confirm selection</source>
         <translation>Kinnita valik</translation>
     </message>
@@ -2388,19 +2404,6 @@ Seda ei lisata projektile.</translation>
     </message>
 </context>
 <context>
-    <name>MMSketchesDrawer</name>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="40"/>
-        <source>Sketch</source>
-        <translation>Sirgelda</translation>
-    </message>
-    <message>
-        <location filename="../qml/map/MMSketchesDrawer.qml" line="119"/>
-        <source>Eraser</source>
-        <translation>Kustuta</translation>
-    </message>
-</context>
-<context>
     <name>MMSplittingFailedDialog</name>
     <message>
         <location filename="../qml/dialogs/MMSplittingFailedDialog.qml" line="18"/>
@@ -2515,22 +2518,22 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMStakeoutDrawer</name>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="91"/>
         <source>Stake out</source>
         <translation>Markeeri</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="105"/>
         <source>Feature</source>
         <translation>Nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>Distance</source>
         <translation>Vahemaa</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
         <source>N/A</source>
         <translation>Ei kohaldu</translation>
     </message>
@@ -2749,116 +2752,116 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MerginApi</name>
     <message>
-        <location filename="../../core/merginapi.cpp" line="244"/>
+        <location filename="../../core/merginapi.cpp" line="255"/>
         <source>Please remove some projects as the app currently
 only allows up to %1 downloaded projects.</source>
         <translation>Palun kustuta mõned projektid kuna rakendus 
 võimaldab ainult kuni %1 allalaetud projekti.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="892"/>
+        <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
         <translation>Serveri SSO seadistusega on midagi valesti. Võta ühendust administraatoriga.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="900"/>
-        <location filename="../../core/merginapi.cpp" line="960"/>
+        <location filename="../../core/merginapi.cpp" line="934"/>
+        <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
         <translation>Serverist SSO seadistuste saamisel tekkis probleem</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="944"/>
-        <location filename="../../core/merginapi.cpp" line="958"/>
+        <location filename="../../core/merginapi.cpp" line="978"/>
+        <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
         <translation>SSO ei ole määratud domeeni jaoks saadaval</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="973"/>
-        <location filename="../../core/merginapi.cpp" line="1492"/>
+        <location filename="../../core/merginapi.cpp" line="1007"/>
+        <location filename="../../core/merginapi.cpp" line="1526"/>
         <source>Please enter a valid email</source>
         <translation>Palun sisesta kehtiv email</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="980"/>
-        <location filename="../../core/merginapi.cpp" line="1504"/>
+        <location filename="../../core/merginapi.cpp" line="1014"/>
+        <location filename="../../core/merginapi.cpp" line="1538"/>
         <source>%1%3 Password must be at least 8 characters long and include:&lt;ul type=&quot;disc&quot;&gt;%3 Lowercase characters (a-z)%4%3 Uppercase characters (A-Z)%4%3 At least one digit (0–9) or special character%4%2%4%2</source>
         <translation>%1%3 Salasõna peab olema vähemalt 8 tähemärgi pikkune ja sisaldama:&lt;ul type=&quot;disc&quot;&gt;%3 Väikseid tähti (a-z)%4%3 Suuri tähti (A-Z)%4%3 Vähemalt üks number (0–9) või erisümbol%4%2%4%2</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="994"/>
+        <location filename="../../core/merginapi.cpp" line="1028"/>
         <source>Please accept Terms and Privacy Policy</source>
         <translation>Palun nõustu Tingimuste ja Privaatsuspoliitikaga</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1026"/>
+        <location filename="../../core/merginapi.cpp" line="1060"/>
         <source>Marketing source cannot be empty</source>
         <translation>Info allikas ei saa olla tühi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1034"/>
+        <location filename="../../core/merginapi.cpp" line="1068"/>
         <source>Industry cannot be empty</source>
         <translation>Valdkond ei saa jääda tühjaks</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1359"/>
+        <location filename="../../core/merginapi.cpp" line="1393"/>
         <source>You don&apos;t have permission to create new projects in this workspace.</source>
         <translation>Sul pole õigusi sellel töölaual uute projektide tekitamiseks.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1364"/>
+        <location filename="../../core/merginapi.cpp" line="1398"/>
         <source>Couldn&apos;t create the project. Please try again later or contact support if the problem persists.</source>
         <translation>Projekti ei õnnestunud tekitada. Proovi hiljem uuesti, kui siis ka ei õnnestu siis võta ühendust kasutajatoega.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1472"/>
+        <location filename="../../core/merginapi.cpp" line="1506"/>
         <source>Registration successful</source>
         <translation>Registreerumine õnnestus</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1494"/>
-        <location filename="../../core/merginapi.cpp" line="1500"/>
-        <location filename="../../core/merginapi.cpp" line="1512"/>
+        <location filename="../../core/merginapi.cpp" line="1528"/>
+        <location filename="../../core/merginapi.cpp" line="1534"/>
+        <location filename="../../core/merginapi.cpp" line="1546"/>
         <source>Registration failed</source>
         <translation>Registreerimine ebaõnnestus</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1498"/>
+        <location filename="../../core/merginapi.cpp" line="1532"/>
         <source>This email address is already registered</source>
         <translation>See emaili aadress on juba registreeritud</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1523"/>
+        <location filename="../../core/merginapi.cpp" line="1557"/>
         <source>New registrations are not allowed on the selected server. Please check with your administrator.</source>
         <translation>Uusi kasutajaid ei lubata valitud serverisse. Palun räägi läbi oma administraatoriga.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1555"/>
+        <location filename="../../core/merginapi.cpp" line="1589"/>
         <source>Workspace created</source>
         <translation>Töölaud on loodud</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="1923"/>
+        <location filename="../../core/merginapi.cpp" line="1957"/>
         <source>Project detached from the server</source>
         <translation>Projekt on eraldatud serverist</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4231"/>
+        <location filename="../../core/merginapi.cpp" line="4265"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Töölaua nimes on sobimatuid tähemärke</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4298"/>
+        <location filename="../../core/merginapi.cpp" line="4332"/>
         <source>Workspace %1 already exists</source>
         <translation>Töölaud %1 on juba olemas</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4404"/>
+        <location filename="../../core/merginapi.cpp" line="4438"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Võid nüüd sulgeda selle lehe ja minna tagasi Mergin Mapsi</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4430"/>
-        <location filename="../../core/merginapi.cpp" line="4457"/>
+        <location filename="../../core/merginapi.cpp" line="4464"/>
+        <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
         <translation>SSO autoriseerimine ebaõnnestus</translation>
     </message>
@@ -2874,6 +2877,14 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <location filename="../../core/merginprojectstatusmodel.cpp" line="96"/>
         <source>Failed to determine changes</source>
         <translation>Ei õnnestunud leida muutusi</translation>
+    </message>
+</context>
+<context>
+    <name>PositionKit</name>
+    <message>
+        <location filename="../position/positionkit.cpp" line="116"/>
+        <source>External (Mock)</source>
+        <translation>Väline (Simuleeritud)</translation>
     </message>
 </context>
 <context>
@@ -3038,57 +3049,57 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
         <translation>Kehtetu väärtus</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="132"/>
+        <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
         <translation>Pole andmeid</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="135"/>
+        <location filename="../position/geoposition.cpp" line="140"/>
         <source>No fix</source>
         <translation>Pole positsioneeringut</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="138"/>
+        <location filename="../position/geoposition.cpp" line="143"/>
         <source>GPS fix, no correction data</source>
         <translation>GPS positsioneering, ilma paranditeta</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="148"/>
         <source>DGPS fix</source>
         <translation>DGPS positsioneering</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="146"/>
+        <location filename="../position/geoposition.cpp" line="151"/>
         <source>PPS fix</source>
         <translation>PPS positsioneering</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="149"/>
+        <location filename="../position/geoposition.cpp" line="154"/>
         <source>RTK fix</source>
         <translation>RTK positsioneering</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="152"/>
+        <location filename="../position/geoposition.cpp" line="157"/>
         <source>RTK float</source>
         <translation>RTK ligikaudne</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="155"/>
+        <location filename="../position/geoposition.cpp" line="160"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Hinnanguline positsioneering (tuletatud)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="158"/>
+        <location filename="../position/geoposition.cpp" line="163"/>
         <source>Unknown fix</source>
         <translation>Teadmata positsioneering</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="588"/>
+        <location filename="../main.cpp" line="611"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Teavitus edastatud. Palun võta ühendust kasutajatoega</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="593"/>
+        <location filename="../main.cpp" line="616"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Teavitust ei õnnestunud saata. Palun kontrolli oma interneti ühendust.</translation>
     </message>
@@ -3106,7 +3117,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>SimulatedPositionProvider</name>
     <message>
-        <location filename="../position/providers/simulatedpositionprovider.cpp" line="67"/>
+        <location filename="../position/providers/simulatedpositionprovider.cpp" line="72"/>
         <source>Connected</source>
         <translation>Ühendatud</translation>
     </message>
@@ -3114,133 +3125,133 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="284"/>
+        <location filename="../qml/main.qml" line="296"/>
         <source>Sync</source>
         <translation>Sünkroniseeri</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="294"/>
+        <location filename="../qml/main.qml" line="306"/>
         <source>Add</source>
         <translation>Lisa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="303"/>
+        <location filename="../qml/main.qml" line="315"/>
         <source>No editable layers found.</source>
         <translation>Ei leidnud redigeeritavaid kihte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="309"/>
+        <location filename="../qml/main.qml" line="321"/>
         <source>Layers</source>
         <translation>Kihid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="318"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Projects</source>
         <translation>Projektid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="326"/>
+        <location filename="../qml/main.qml" line="338"/>
         <source>Zoom to project</source>
         <translation>Täisvaade</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="335"/>
+        <location filename="../qml/main.qml" line="347"/>
         <source>Map themes</source>
         <translation>Kaardikomplektid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="346"/>
+        <location filename="../qml/main.qml" line="358"/>
         <source>Position tracking</source>
         <translation>Asukoha jälgimine</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="357"/>
+        <location filename="../qml/main.qml" line="369"/>
         <source>Measure</source>
         <translation>Mõõda</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="363"/>
+        <location filename="../qml/main.qml" line="375"/>
         <source>Local changes</source>
         <translation>Kohalikud muudatused</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="372"/>
+        <location filename="../qml/main.qml" line="384"/>
         <source>Settings</source>
         <translation>Seaded</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="566"/>
-        <location filename="../qml/main.qml" line="574"/>
+        <location filename="../qml/main.qml" line="589"/>
+        <location filename="../qml/main.qml" line="597"/>
         <source>not tracking</source>
         <translation>ei jälgi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="674"/>
+        <location filename="../qml/main.qml" line="697"/>
         <source>Delete %n feature(s)</source>
         <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtust</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="675"/>
+        <location filename="../qml/main.qml" line="698"/>
         <source>Delete %n selected feature(s)?</source>
         <translation><numerusform>Kustutan %n valitud nähtuse?</numerusform><numerusform>Kustutan %n valitud nähtust?</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="677"/>
+        <location filename="../qml/main.qml" line="700"/>
         <source>Yes, I want to delete</source>
         <translation>Jah, soovin kustutada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="678"/>
+        <location filename="../qml/main.qml" line="701"/>
         <source>No, thanks</source>
         <translation>Ei, tänan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="898"/>
+        <location filename="../qml/main.qml" line="921"/>
         <source>Select feature</source>
         <translation>Vali nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="982"/>
+        <location filename="../qml/main.qml" line="1005"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Keegi teine sünkroniseerib, proovime mõne aja pärast uuesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1014"/>
+        <location filename="../qml/main.qml" line="1037"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Serveriga ei õnnestu ühendust saada. Püüa parandada võrguühendust.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1004"/>
+        <location filename="../qml/main.qml" line="1027"/>
         <source>Up to date</source>
         <translation>Ajakohane</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1125"/>
+        <location filename="../qml/main.qml" line="1148"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Projekti laadimisel tekkis tõrge. %1Vaata täpsemalt%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="801"/>
+        <location filename="../qml/main.qml" line="824"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Markeerimine on välja lülitatud sest asukoht ei ole kättesaadav!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="951"/>
+        <location filename="../qml/main.qml" line="974"/>
         <source>Successfully synchronised</source>
         <translation>Edukalt sünkroniseeritud</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="989"/>
+        <location filename="../qml/main.qml" line="1012"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Sünkroniseerimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1146"/>
+        <location filename="../qml/main.qml" line="1169"/>
         <source>Could not read the project file:</source>
         <translation>Ei õnnestunud avada projektifaili:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1179"/>
+        <location filename="../qml/main.qml" line="1202"/>
         <source>Press back again to quit the app</source>
         <translation>Vajuta veelkord tagasi et rakendus kinni panna</translation>
     </message>
