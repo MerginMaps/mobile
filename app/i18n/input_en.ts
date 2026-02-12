@@ -984,128 +984,128 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="69"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
         <source>No receiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="83"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
         <source>Longitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="103"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="110"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="122"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="129"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="141"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="156"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="171"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="186"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="201"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="216"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="234"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="249"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="266"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="283"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="300"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="333"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="119"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
         <source>Latitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="138"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="153"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="168"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
         <source>Horizontal accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="183"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
         <source>Vertical accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="198"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="213"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="230"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
         <source>Satellites (in use/view)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="246"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
         <source>HDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="263"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
         <source>VDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="280"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
         <source>PDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="297"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="312"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="321"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
         <source>GPS antenna height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="322"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
         <source>Not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="330"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
         <source>Geoid separation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="348"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
         <source>Manage GPS receivers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2905,8 +2905,8 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="115"/>
-        <source>Mocked position provider</source>
+        <location filename="../position/positionkit.cpp" line="116"/>
+        <source>External (Mock)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
