@@ -162,7 +162,10 @@ jobs:
             mkdir C:\mm-package
             mkdir C:\mm-package\stage
             robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
-            robocopy "${{ env.VCPKG_ROOT }}\installed\${{ env.TRIPLET }}\plugins\crypto" "C:\mm-package\stage\crypto" /E /NFL
+            if exist C:\mm-package\stage\Qca\crypto (
+                move C:\mm-package\stage\Qca\crypto C:\mm-package\stage\crypto
+                rmdir C:\mm-package\stage\Qca /s /q
+            )
             dir C:\mm-package\stage
             dir C:\mm-package\stage\crypto
 
