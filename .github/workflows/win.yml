@@ -162,7 +162,9 @@ jobs:
             mkdir C:\mm-package
             mkdir C:\mm-package\stage
             robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
+            robocopy "${{ env.VCPKG_ROOT }}\installed\${{ env.TRIPLET }}\plugins\crypto" "C:\mm-package\stage\crypto" /E /NFL
             dir C:\mm-package\stage
+            dir C:\mm-package\stage\crypto
 
       - name: Get TimeStamp
         id: time
