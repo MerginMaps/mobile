@@ -91,9 +91,10 @@ bool InputUtils::removeFile( const QString &filePath )
 bool InputUtils::copyFile( const QString &srcPath, const QString &dstPath )
 {
   QString modSrcPath = srcPath;
-  if ( srcPath.startsWith( "file://" ) )
+  QUrl url( srcPath );
+  if ( url.isValid() && url.isLocalFile() )
   {
-    modSrcPath = modSrcPath.replace( "file://", "" );
+    modSrcPath = url.toLocalFile();
   }
 
   QFileInfo fi( dstPath );
@@ -1051,37 +1052,46 @@ QString InputUtils::resolvePath( const QString &path, const QString &homePath, c
 QString InputUtils::getRelativePath( const QString &path, const QString &prefixPath )
 {
   QString modPath = path;
-  QString filePrefix( "file://" );
 
-  if ( path.startsWith( filePrefix ) )
+  // handle file:// and file:/// prefixes
+  if ( modPath.startsWith( QLatin1String( "file:///" ), Qt::CaseInsensitive ) )
   {
-    modPath = modPath.replace( filePrefix, QString() );
+#ifdef Q_OS_WIN
+    // remove the partition letter as well
+    modPath.remove( 0, 8 );
+#else
+    modPath.remove( 0, 7 );
+#endif
+  }
+  else if ( modPath.startsWith( QLatin1String( "file://" ), Qt::CaseInsensitive ) )
+  {
+    modPath.remove( 0, 7 );
   }
 
   if ( prefixPath.isEmpty() ) return modPath;
 
+  // use QDir to calculate the relative path
+  QDir prefixDir( prefixPath );
+  QString relativePath;
+
   // Do not use a canonical path for non-existing path
-  if ( !QFileInfo::exists( path ) )
+  if ( QFileInfo::exists( modPath ) && QFileInfo::exists( prefixPath ) )
   {
-    if ( !prefixPath.isEmpty() && modPath.startsWith( prefixPath ) )
-    {
-      return modPath.replace( prefixPath, QString() );
-    }
+    QDir canonicalPrefix( prefixDir.canonicalPath() );
+    relativePath = canonicalPrefix.relativeFilePath( QFileInfo( modPath ).canonicalFilePath() );
   }
   else
   {
-    QDir absoluteDir( modPath );
-    QDir prefixDir( prefixPath );
-    QString canonicalPath = absoluteDir.canonicalPath();
-    QString prefixCanonicalPath = prefixDir.canonicalPath() + "/";
-
-    if ( prefixCanonicalPath.length() > 1 && canonicalPath.startsWith( prefixCanonicalPath ) )
-    {
-      return canonicalPath.replace( prefixCanonicalPath, QString() );
-    }
+    relativePath = prefixDir.relativeFilePath( modPath );
   }
 
-  return QString();
+  // check that the file is actually a child of the prefix
+  if ( relativePath.startsWith( QLatin1String( ".." ) ) || QFileInfo( relativePath ).isAbsolute() )
+  {
+    return QString();
+  }
+
+  return relativePath;
 }
 
 void InputUtils::logMessage( const QString &message, const QString &tag, Qgis::MessageLevel level )
@@ -1973,62 +1983,107 @@ QUrl InputUtils::iconFromGeometry( const Qgis::GeometryType &geometry )
 
 void InputUtils::sanitizeFileName( QString &fileName )
 {
-  // regex captures ascii codes 0 to 31 and windows path forbidden characters <>:|?*"
-  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x19<>:|?*\"]" ) );
-  fileName.replace( illegalChars, QStringLiteral( "_" ) );
-  fileName = fileName.trimmed();
+  if ( fileName.isEmpty() )
+    return;
 
-  // Trim whitespace immediately before the final extension, e.g. "name  .jpg" -> "name.jpg"
-  const int lastDot = fileName.lastIndexOf( QChar( '.' ) );
-  if ( lastDot > 0 )
+  // unify separators to '/' to handle splitting easily
+  QString unifiedPath = fileName;
+  unifiedPath.replace( QLatin1Char( '\\' ), QLatin1Char( '/' ) );
+
+  // split into segments (folders + filename)
+  QStringList parts = unifiedPath.split( QLatin1Char( '/' ), Qt::KeepEmptyParts );
+
+  // regex captures ascii codes 0 to 31 and windows path forbidden characters <>:|?*"
+  const thread_local QRegularExpression illegalChars( QStringLiteral( "[\x00-\x1f<>:|?*\"\\\\]" ) );
+
+#ifdef Q_OS_WIN
+  const static QRegularExpression reservedNames(
+    QStringLiteral( "^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$" ),
+    QRegularExpression::CaseInsensitiveOption
+  );
+#endif
+
+  // process each segment
+  for ( QString &segment : parts )
   {
-    const QString base = fileName.first( lastDot ).trimmed();
-    const QString ext = fileName.sliced( lastDot );
-    fileName = base + ext;
+    if ( segment.isEmpty() )
+      continue;
+
+    // skip Windows drive letters
+    if ( segment.length() == 2 && segment.at( 1 ) == QLatin1Char( ':' ) && segment.at( 0 ).isLetter() )
+    {
+      continue;
+    }
+
+    // replace illegal characters
+    segment.replace( illegalChars, QStringLiteral( "_" ) );
+
+    // handle whitespace logic
+    QFileInfo info( segment );
+    QString baseName = info.completeBaseName();
+    QString suffix = info.suffix();
+
+    // trim whitespace from the base name
+    baseName = baseName.trimmed();
+
+    // windows reserved names check
+#ifdef Q_OS_WIN
+    if ( reservedNames.match( baseName ).hasMatch() )
+    {
+      baseName.append( QStringLiteral( "_" ) );
+    }
+#endif
+
+    // reassemble segment
+    if ( !suffix.isEmpty() )
+    {
+      segment = baseName + QLatin1Char( '.' ) + suffix;
+    }
+    else
+    {
+      segment = baseName;
+    }
+
+    // final trim of the segment
+    segment = segment.trimmed();
   }
+
+  // rejoin the fileName
+  fileName = parts.join( QLatin1Char( '/' ) );
 }
 
 void InputUtils::sanitizePath( QString &path )
 {
-  const bool pathStartsWithFileURL = path.startsWith( "file://" );
+  if ( path.isEmpty() )
+    return;
 
-  if ( pathStartsWithFileURL )
+  QString prefix;
+  QString cleanPath = path;
+
+  // detect and strip the file prefix
+  if ( path.startsWith( QStringLiteral( "file:///" ), Qt::CaseInsensitive ) )
   {
-    // remove file:// prefix before sanitization
-    path.remove( 0, 7 );
+    prefix = QStringLiteral( "file:///" );
+    cleanPath = path.mid( 8 );
+  }
+  else if ( path.startsWith( QStringLiteral( "file://" ), Qt::CaseInsensitive ) )
+  {
+    prefix = QStringLiteral( "file://" );
+    cleanPath = path.mid( 7 );
   }
 
-  const bool pathStartsWithSlash = path.startsWith( '/' );
+  // sanitize the path content
+  sanitizeFileName( cleanPath );
 
-  const QStringList parts = path.split( '/', Qt::SkipEmptyParts );
-  QString sanitizedPath;
-
-  for ( int i = 0; i < parts.size(); ++i )
+  // reconstruct
+  if ( !prefix.isEmpty() )
   {
-    QString part = parts.at( i );
-    sanitizeFileName( part );
-
-    if ( i > 0 )
-    {
-      sanitizedPath += '/';
-    }
-
-    sanitizedPath += part;
+    path = prefix + cleanPath;
   }
-
-  if ( pathStartsWithSlash )
+  else
   {
-    // restore leading slash
-    sanitizedPath = '/' + sanitizedPath;
+    path = cleanPath;
   }
-
-  if ( pathStartsWithFileURL )
-  {
-    // restore file:// prefix
-    sanitizedPath = "file://" + sanitizedPath;
-  }
-
-  path = sanitizedPath;
 }
 
 QSet<int> InputUtils::referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression )
