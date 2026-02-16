@@ -177,8 +177,6 @@ MMComponents.MMPage {
     MMComponents.MMDrawerDialog {
       id: networkProviderInfoDrawer
 
-      signal confirmButtonClicked(string address, int port)
-
       title: qsTr("Network provider setup")
       imageSource: __style.externalGpsGreenImage
       description: qsTr( "To connect to the external device please specify the IP address and port below." )
@@ -188,6 +186,16 @@ MMComponents.MMPage {
       additionalContent: Column {
         width: parent.width
         spacing: __style.spacing20
+
+        MMInputs.MMTextInput {
+          id: aliasInput
+
+          width: parent.width
+          textFieldBackground.color: __style.lightGreenColor
+
+          title: qsTr("Device alias")
+          placeholderText: qsTr("Green device")
+        }
 
         MMInputs.MMTextInput {
           id: ipAddressInput
@@ -210,16 +218,13 @@ MMComponents.MMPage {
         }
       }
 
-      onPrimaryButtonClicked: {
+      onPrimaryButtonClicked: function() {
         close()
-        confirmButtonClicked(ipAddressInput.text, portInput.text)
-      }
 
-      onConfirmButtonClicked: function( address, port ) {
-        const deviceAddress = address + ":" + port
-        __positionKit.positionProvider = __positionKit.constructProvider( "external_ip", deviceAddress, "Network provider" )
+        const deviceAddress = ipAddressInput.text + ":" + portInput.text
+        __positionKit.positionProvider = __positionKit.constructProvider( "external_ip", deviceAddress, aliasInput.text )
 
-        providersModel.addProvider( "Network provider", deviceAddress, "external_ip" )
+        providersModel.addProvider( aliasInput.text, deviceAddress, "external_ip" )
       }
     }
 
