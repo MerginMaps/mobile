@@ -1080,7 +1080,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
         <source>Geoid separation</source>
-        <translation>Geoid elválasztás</translation>
+        <translation>Geoid–ellipszoid eltérés</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
