@@ -30,7 +30,7 @@ struct FieldFilter
 
   public:
     QString fieldName;
-    QString filterType;  // "text", "number", "date", "bool", "multichoice"
+    QString filterType;  // "text", "number", "date", "bool", "multichoice", "dropdown", "dropdown-multi"
     QVariant value;      // single value or list for multichoice, "from" value for ranges
     QVariant valueTo;    // "to" value for range filters (number, date)
 
@@ -83,6 +83,24 @@ class FilterController : public QObject
     Q_INVOKABLE void setFieldFilter( const QString &layerId, const QString &fieldName,
                                      const QString &filterType, const QVariant &value,
                                      const QVariant &valueTo = QVariant() );
+
+    /**
+     * @brief Sets a dropdown filter from selected key values
+     * @param layerId The layer ID
+     * @param fieldName The field name to filter
+     * @param selectedKeys List of selected key values (stored values, not display texts)
+     */
+    Q_INVOKABLE void setDropdownFilter( const QString &layerId, const QString &fieldName, const QVariant &selectedKeys, bool multiValue = false );
+
+    /**
+     * @brief Gets dropdown options for a ValueMap or ValueRelation field (lazy-loaded)
+     * @param layer The vector layer containing the field
+     * @param fieldName The field name to get options for
+     * @param searchText Filter options by display text (case-insensitive)
+     * @param limit Maximum number of options to return (for ValueRelation)
+     * @return List of maps with "text" (display) and "value" (key) entries
+     */
+    Q_INVOKABLE QVariantList getDropdownOptions( QgsVectorLayer *layer, const QString &fieldName, const QString &searchText = QString(), int limit = 100 );
 
     /**
      * @brief Sets a text filter from raw input string
@@ -198,6 +216,10 @@ class FilterController : public QObject
 
   private:
     QString buildFieldExpression( const FieldFilter &filter ) const;
+    QVariantList extractValueMapOptions( const QVariantMap &config, const QString &searchText ) const;
+    QVariantList extractValueRelationOptions( const QVariantMap &config, const QString &searchText, int limit, const QStringList &alwaysIncludeKeys ) const;
+    QStringList lookupValueMapTexts( const QVariantMap &config, const QStringList &keys ) const;
+    QStringList lookupValueRelationTexts( const QVariantMap &config, const QStringList &keys ) const;
 
     // layerId -> fieldName -> FieldFilter (pending/working state, updated as user types)
     QMap<QString, QMap<QString, FieldFilter>> mFilters;

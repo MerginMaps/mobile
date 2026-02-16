@@ -13,6 +13,9 @@
 #include "qgsproject.h"
 #include "qgsexpression.h"
 #include "qgsfield.h"
+#include "qgseditorwidgetsetup.h"
+#include "qgsvaluerelationfieldformatter.h"
+#include "qgsfeaturerequest.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -322,6 +325,44 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
     return conditions.join( QStringLiteral( " AND " ) );
   }
+  else if ( filter.filterType == QLatin1String( "dropdown" ) )
+  {
+    QStringList values = filter.value.toStringList();
+    if ( values.isEmpty() )
+      return QString();
+
+    if ( values.size() == 1 )
+    {
+      return QStringLiteral( "%1 = %2" ).arg( quotedField, QgsExpression::quotedValue( values.first() ) );
+    }
+
+    QStringList quotedValues;
+    for ( const QString &v : values )
+    {
+      quotedValues << QgsExpression::quotedValue( v );
+    }
+    return QStringLiteral( "%1 IN (%2)" ).arg( quotedField, quotedValues.join( QStringLiteral( ", " ) ) );
+  }
+  else if ( filter.filterType == QLatin1String( "dropdown-multi" ) )
+  {
+    // Multi-value fields store values as {k1,k2,k3}
+    // Use LIKE patterns to match any position within the braced list
+    QStringList values = filter.value.toStringList();
+    if ( values.isEmpty() )
+      return QString();
+
+    QStringList keyConditions;
+    for ( const QString &key : values )
+    {
+      QString escapedKey = key;
+      escapedKey.replace( "'", "''" );
+
+      // Match all positions: only value {k}, first {k,...}, last ...,k}, middle ...,k,...
+      keyConditions << QStringLiteral( "(%1 LIKE '{%2}' OR %1 LIKE '{%2,%%' OR %1 LIKE '%%,%2}' OR %1 LIKE '%%,%2,%%')" )
+                         .arg( quotedField, escapedKey );
+    }
+    return keyConditions.join( QStringLiteral( " OR " ) );
+  }
   else if ( filter.filterType == QLatin1String( "date" ) )
   {
     // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
@@ -438,52 +479,96 @@ QVariantList FilterController::getFilterableFields( QgsVectorLayer *layer ) cons
 
   QString layerId = layer->id();
   const QgsFields fields = layer->fields();
-  for ( const QgsField &field : fields )
+  for ( int i = 0; i < fields.count(); ++i )
   {
+    const QgsField &field = fields.at( i );
     QVariantMap fieldInfo;
     fieldInfo[QStringLiteral( "name" )] = field.name();
     fieldInfo[QStringLiteral( "displayName" )] = field.displayName();
 
-    // Determine filter type based on field type
+    // Check editor widget type first — ValueMap/ValueRelation override the data type
     QString filterType;
-    QMetaType::Type fieldType = static_cast<QMetaType::Type>( field.type() );
+    bool multiSelect = false;
+    QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( i );
+    QString widgetType = widgetSetup.type();
 
-    // Simplified: only number and text filters for prototype
-    switch ( fieldType )
+    if ( widgetType == QLatin1String( "ValueMap" ) )
     {
-      case QMetaType::Int:
-      case QMetaType::UInt:
-      case QMetaType::LongLong:
-      case QMetaType::ULongLong:
-      case QMetaType::Double:
-      case QMetaType::Float:
-        filterType = QStringLiteral( "number" );
-        break;
+      filterType = QStringLiteral( "dropdown" );
+      multiSelect = false;
+    }
+    else if ( widgetType == QLatin1String( "ValueRelation" ) )
+    {
+      filterType = QStringLiteral( "dropdown" );
+      multiSelect = widgetSetup.config().value( QStringLiteral( "AllowMulti" ) ).toBool();
+    }
+    else
+    {
+      // Determine filter type based on field data type
+      QMetaType::Type fieldType = static_cast<QMetaType::Type>( field.type() );
 
-      case QMetaType::QDate:
-        filterType = QStringLiteral( "date" );
-        fieldInfo[QStringLiteral( "hasTime" )] = false;
-        break;
+      switch ( fieldType )
+      {
+        case QMetaType::Int:
+        case QMetaType::UInt:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
+        case QMetaType::Double:
+        case QMetaType::Float:
+          filterType = QStringLiteral( "number" );
+          break;
 
-      case QMetaType::QDateTime:
-        filterType = QStringLiteral( "date" );
-        fieldInfo[QStringLiteral( "hasTime" )] = true;
-        break;
+        case QMetaType::QDate:
+          filterType = QStringLiteral( "date" );
+          fieldInfo[QStringLiteral( "hasTime" )] = false;
+          break;
 
-      default:
-        filterType = QStringLiteral( "text" );
-        break;
+        case QMetaType::QDateTime:
+          filterType = QStringLiteral( "date" );
+          fieldInfo[QStringLiteral( "hasTime" )] = true;
+          break;
+
+        default:
+          filterType = QStringLiteral( "text" );
+          break;
+      }
     }
 
     fieldInfo[QStringLiteral( "filterType" )] = filterType;
 
+    if ( filterType == QLatin1String( "dropdown" ) )
+    {
+      fieldInfo[QStringLiteral( "multiSelect" )] = multiSelect;
+    }
+
     // Get current filter value from pending state (for drawer UI)
     if ( mFilters.contains( layerId ) && mFilters.value( layerId ).contains( field.name() ) )
     {
-      // Use .value() to safely get a copy, not operator[] which returns temporary in const context
       FieldFilter filter = mFilters.value( layerId ).value( field.name() );
       fieldInfo[QStringLiteral( "currentValue" )] = filter.value;
       fieldInfo[QStringLiteral( "currentValueTo" )] = filter.valueTo;
+
+      // For dropdown fields, also look up display texts for currently selected keys
+      if ( filterType == QLatin1String( "dropdown" ) )
+      {
+        QStringList selectedKeys = filter.value.toStringList();
+        if ( !selectedKeys.isEmpty() )
+        {
+          QStringList displayTexts;
+          QVariantMap config = widgetSetup.config();
+
+          if ( widgetType == QLatin1String( "ValueMap" ) )
+          {
+            displayTexts = lookupValueMapTexts( config, selectedKeys );
+          }
+          else if ( widgetType == QLatin1String( "ValueRelation" ) )
+          {
+            displayTexts = lookupValueRelationTexts( config, selectedKeys );
+          }
+
+          fieldInfo[QStringLiteral( "currentValueTexts" )] = displayTexts;
+        }
+      }
     }
 
     result << fieldInfo;
@@ -539,4 +624,247 @@ QVariantList FilterController::getVectorLayers() const
   }
 
   return result;
+}
+
+void FilterController::setDropdownFilter( const QString &layerId, const QString &fieldName, const QVariant &selectedKeys, bool multiValue )
+{
+  QStringList keys = selectedKeys.toStringList();
+
+  if ( keys.isEmpty() )
+  {
+    removeFieldFilter( layerId, fieldName );
+    return;
+  }
+
+  QString filterType = multiValue ? QStringLiteral( "dropdown-multi" ) : QStringLiteral( "dropdown" );
+  setFieldFilter( layerId, fieldName, filterType, QVariant( keys ) );
+}
+
+QVariantList FilterController::getDropdownOptions( QgsVectorLayer *layer, const QString &fieldName, const QString &searchText, int limit )
+{
+  if ( !layer )
+    return QVariantList();
+
+  int fieldIndex = layer->fields().lookupField( fieldName );
+  if ( fieldIndex < 0 )
+    return QVariantList();
+
+  QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
+  QString widgetType = widgetSetup.type();
+  QVariantMap config = widgetSetup.config();
+
+  if ( widgetType == QLatin1String( "ValueMap" ) )
+  {
+    return extractValueMapOptions( config, searchText );
+  }
+  else if ( widgetType == QLatin1String( "ValueRelation" ) )
+  {
+    // Get currently selected keys so they always appear in the list
+    QStringList currentlySelectedKeys;
+    QString layerId = layer->id();
+    if ( mFilters.contains( layerId ) && mFilters.value( layerId ).contains( fieldName ) )
+    {
+      currentlySelectedKeys = mFilters.value( layerId ).value( fieldName ).value.toStringList();
+    }
+
+    return extractValueRelationOptions( config, searchText, limit, currentlySelectedKeys );
+  }
+
+  return QVariantList();
+}
+
+QVariantList FilterController::extractValueMapOptions( const QVariantMap &config, const QString &searchText ) const
+{
+  QVariantList result;
+
+  QVariantList mapList = config.value( QStringLiteral( "map" ) ).toList();
+  for ( const QVariant &entry : mapList )
+  {
+    QVariantMap entryMap = entry.toMap();
+    if ( entryMap.isEmpty() )
+      continue;
+
+    // Each entry is a single-key map: {"Display Text": "stored_value"}
+    QString displayText = entryMap.constBegin().key();
+    QString storedValue = entryMap.constBegin().value().toString();
+
+    // Filter by search text
+    if ( !searchText.isEmpty() && !displayText.contains( searchText, Qt::CaseInsensitive ) )
+      continue;
+
+    QVariantMap option;
+    option[QStringLiteral( "text" )] = displayText;
+    option[QStringLiteral( "value" )] = storedValue;
+    result << option;
+  }
+
+  return result;
+}
+
+QVariantList FilterController::extractValueRelationOptions( const QVariantMap &config, const QString &searchText, int limit, const QStringList &alwaysIncludeKeys ) const
+{
+  QVariantList result;
+
+  QgsVectorLayer *referencedLayer = QgsValueRelationFieldFormatter::resolveLayer( config, QgsProject::instance() );
+  if ( !referencedLayer )
+    return result;
+
+  QString keyFieldName = config.value( QStringLiteral( "Key" ) ).toString();
+  QString valueFieldName = config.value( QStringLiteral( "Value" ) ).toString();
+
+  if ( referencedLayer->fields().indexOf( keyFieldName ) < 0 || referencedLayer->fields().indexOf( valueFieldName ) < 0 )
+    return result;
+
+  // Build feature request
+  QgsFeatureRequest request;
+  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
+  request.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
+
+  // Apply search filter
+  if ( !searchText.isEmpty() )
+  {
+    QString escapedSearch = searchText;
+    escapedSearch.replace( "'", "''" );
+    QString filterExpr = QStringLiteral( "LOWER(%1) LIKE '%%2%'" )
+                           .arg( QgsExpression::quotedColumnRef( valueFieldName ), escapedSearch.toLower() );
+    request.setFilterExpression( filterExpr );
+  }
+
+  // Apply configured filter expression (only if it doesn't require form scope)
+  QString configFilterExpr = config.value( QStringLiteral( "FilterExpression" ) ).toString();
+  if ( !configFilterExpr.isEmpty() && !QgsValueRelationFieldFormatter::expressionRequiresFormScope( configFilterExpr ) )
+  {
+    request.combineFilterExpression( configFilterExpr );
+  }
+
+  // Apply ordering
+  if ( config.value( QStringLiteral( "OrderByValue" ) ).toBool() )
+  {
+    request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( valueFieldName ) } ) );
+  }
+
+  request.setLimit( limit );
+
+  // Fetch features
+  QSet<QString> seenKeys;
+  QgsFeatureIterator it = referencedLayer->getFeatures( request );
+  QgsFeature feature;
+  while ( it.nextFeature( feature ) )
+  {
+    QString key = feature.attribute( keyFieldName ).toString();
+    QString value = feature.attribute( valueFieldName ).toString();
+    seenKeys.insert( key );
+
+    QVariantMap option;
+    option[QStringLiteral( "text" )] = value;
+    option[QStringLiteral( "value" )] = key;
+    result << option;
+  }
+
+  // Ensure currently selected keys are always visible in the list
+  if ( !alwaysIncludeKeys.isEmpty() )
+  {
+    QStringList missingKeys;
+    for ( const QString &key : alwaysIncludeKeys )
+    {
+      if ( !seenKeys.contains( key ) )
+      {
+        missingKeys << key;
+      }
+    }
+
+    if ( !missingKeys.isEmpty() )
+    {
+      QStringList quotedKeys;
+      for ( const QString &k : missingKeys )
+      {
+        quotedKeys << QgsExpression::quotedValue( k );
+      }
+
+      QgsFeatureRequest selectedRequest;
+      selectedRequest.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
+      selectedRequest.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
+      selectedRequest.setFilterExpression(
+        QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
+      );
+
+      QVariantList selectedItems;
+      QgsFeatureIterator selIt = referencedLayer->getFeatures( selectedRequest );
+      QgsFeature selFeature;
+      while ( selIt.nextFeature( selFeature ) )
+      {
+        QVariantMap option;
+        option[QStringLiteral( "text" )] = selFeature.attribute( valueFieldName ).toString();
+        option[QStringLiteral( "value" )] = selFeature.attribute( keyFieldName ).toString();
+        selectedItems << option;
+      }
+
+      // Prepend selected items so they appear first
+      selectedItems.append( result );
+      result = selectedItems;
+    }
+  }
+
+  return result;
+}
+
+QStringList FilterController::lookupValueMapTexts( const QVariantMap &config, const QStringList &keys ) const
+{
+  QStringList texts;
+  QSet<QString> keySet( keys.begin(), keys.end() );
+
+  QVariantList mapList = config.value( QStringLiteral( "map" ) ).toList();
+  for ( const QVariant &entry : mapList )
+  {
+    QVariantMap entryMap = entry.toMap();
+    if ( entryMap.isEmpty() )
+      continue;
+
+    QString displayText = entryMap.constBegin().key();
+    QString storedValue = entryMap.constBegin().value().toString();
+
+    if ( keySet.contains( storedValue ) )
+    {
+      texts << displayText;
+    }
+  }
+
+  return texts;
+}
+
+QStringList FilterController::lookupValueRelationTexts( const QVariantMap &config, const QStringList &keys ) const
+{
+  QStringList texts;
+
+  QgsVectorLayer *referencedLayer = QgsValueRelationFieldFormatter::resolveLayer( config, QgsProject::instance() );
+  if ( !referencedLayer )
+    return texts;
+
+  QString keyFieldName = config.value( QStringLiteral( "Key" ) ).toString();
+  QString valueFieldName = config.value( QStringLiteral( "Value" ) ).toString();
+
+  if ( referencedLayer->fields().indexOf( keyFieldName ) < 0 || referencedLayer->fields().indexOf( valueFieldName ) < 0 )
+    return texts;
+
+  QStringList quotedKeys;
+  for ( const QString &k : keys )
+  {
+    quotedKeys << QgsExpression::quotedValue( k );
+  }
+
+  QgsFeatureRequest request;
+  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
+  request.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
+  request.setFilterExpression(
+    QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
+  );
+
+  QgsFeatureIterator it = referencedLayer->getFeatures( request );
+  QgsFeature feature;
+  while ( it.nextFeature( feature ) )
+  {
+    texts << feature.attribute( valueFieldName ).toString();
+  }
+
+  return texts;
 }

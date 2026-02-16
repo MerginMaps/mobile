@@ -62,6 +62,8 @@ Column {
         property var currentValue: fieldInfo ? fieldInfo.currentValue : null
         property var currentValueTo: fieldInfo ? fieldInfo.currentValueTo : null
         property bool hasTime: fieldInfo ? !!fieldInfo.hasTime : false
+        property bool multiSelect: fieldInfo ? !!fieldInfo.multiSelect : false
+        property var currentValueTexts: fieldInfo ? fieldInfo.currentValueTexts : []
 
         width: root.width
         spacing: __style.margin8
@@ -315,6 +317,130 @@ Column {
             if (!initialized) return
             // Pass raw text to C++ - validation happens there
             root.filterController.setTextFilter(root.layerId, fieldDelegate.fieldName, text)
+          }
+        }
+
+        // Dropdown filter - shown for ValueMap/ValueRelation fields
+        Column {
+          width: parent.width
+          spacing: __style.margin8
+          visible: fieldDelegate.filterType === "dropdown"
+
+          MMText {
+            text: fieldDelegate.fieldDisplayName
+            font: __style.p6
+            color: __style.nightColor
+          }
+
+          Item {
+            width: parent.width
+            height: dropdownInput.height
+
+            MMPrivateComponents.MMBaseSingleLineInput {
+              id: dropdownInput
+              width: parent.width
+              textField.readOnly: true
+
+              placeholderText: qsTr("Select...")
+              text: {
+                let texts = fieldDelegate.currentValueTexts
+                if (!texts || texts.length === 0) return ""
+                if (fieldDelegate.multiSelect && texts.length > 1) {
+                  return qsTr("%1 selected").arg(texts.length)
+                }
+                return texts.join(", ")
+              }
+
+              rightContent: MMIcon {
+                size: __style.icon24
+                source: dropdownInput.text !== "" ? __style.closeIcon : __style.arrowDownIcon
+                color: dropdownInput.iconColor
+              }
+
+              onTextClicked: dropdownDrawerLoader.active = true
+              onRightContentClicked: {
+                if (dropdownInput.text !== "") {
+                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
+                  // Refresh the fields model to clear currentValueTexts
+                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                }
+                else {
+                  dropdownDrawerLoader.active = true
+                }
+              }
+            }
+
+            Loader {
+              id: dropdownDrawerLoader
+              active: false
+              sourceComponent: dropdownDrawerComponent
+            }
+
+            Component {
+              id: dropdownDrawerComponent
+
+              MMListMultiselectDrawer {
+                id: dropdownDrawer
+
+                drawerHeader.title: fieldDelegate.fieldDisplayName
+                multiSelect: fieldDelegate.multiSelect
+                withSearch: true
+                showFullScreen: fieldDelegate.multiSelect
+
+                list.model: ListModel { id: dropdownListModel }
+
+                onSearchTextChanged: function(searchText) {
+                  internal.pendingSearchText = searchText
+                  searchDebounceTimer.restart()
+                }
+
+                onSelectionFinished: function(selectedItems) {
+                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, selectedItems, fieldDelegate.multiSelect)
+                  // Refresh the fields model to update currentValueTexts
+                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                  close()
+                }
+
+                onClosed: dropdownDrawerLoader.active = false
+
+                QtObject {
+                  id: internal
+                  property string pendingSearchText: ""
+                }
+
+                Timer {
+                  id: searchDebounceTimer
+                  interval: 300
+                  repeat: false
+                  onTriggered: {
+                    populateOptions(internal.pendingSearchText)
+                  }
+                }
+
+                function populateOptions(searchText) {
+                  let options = root.filterController.getDropdownOptions(root.vectorLayer, fieldDelegate.fieldName, searchText, 100)
+                  dropdownListModel.clear()
+                  for (let i = 0; i < options.length; i++) {
+                    dropdownListModel.append(options[i])
+                  }
+                }
+
+                Component.onCompleted: {
+                  // Set selected imperatively — QStringList from C++ needs
+                  // conversion to a plain JS array for includes() to work
+                  let val = fieldDelegate.currentValue
+                  if (val && val.length > 0) {
+                    let arr = []
+                    for (let i = 0; i < val.length; i++) {
+                      arr.push(String(val[i]))
+                    }
+                    selected = arr
+                  }
+                  populateOptions("")
+                  open()
+                }
+              }
+            }
           }
         }
       }
