@@ -341,14 +341,16 @@ if (ANDROID)
 
   if (SquishQtBuiltinHook_FOUND)
     squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
-    list(APPEND SquishLibs
-            "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
-            "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
+    list(
+      APPEND
+      SquishLibs
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
     )
   endif ()
 
@@ -569,7 +571,16 @@ if (IOS)
   # TODO is this needed? this change requires cmake 3.28+
   # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
   if (SquishQtBuiltinHook_FOUND)
-    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757 EXTENSIONS QGraphicsView QTabWidget QtQuickTypes QtQuick)
+    squish_qt_add_builtin_hook(
+      MerginMaps
+      ATTACH_PORT
+      7757
+      EXTENSIONS
+      QGraphicsView
+      QTabWidget
+      QtQuickTypes
+      QtQuick
+    )
   endif ()
 endif ()
 
