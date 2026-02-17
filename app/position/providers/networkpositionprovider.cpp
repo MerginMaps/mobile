@@ -12,8 +12,6 @@
 #include <QApplication>
 #include <QNetworkDatagram>
 
-#include "coreutils.h"
-
 static int ONE_SECOND_MS = 1000;
 
 NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
@@ -39,7 +37,6 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
   mUdpReconnectTimer.setSingleShot( true );
   connect( &mUdpReconnectTimer, &QTimer::timeout, this, [this]
   {
-    CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "UDP socket no data received in threshold, triggering reconnect..." ) );
     if ( mTcpSocket->state() != QAbstractSocket::ConnectedState )
     {
       setState( tr( "No connection" ), State::NoConnection );
@@ -55,7 +52,6 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
 void NetworkPositionProvider::startUpdates()
 {
   // TODO: QHostAddress doesn't support hostname lookup (QHostInfo does)
-  CoreUtils::log( "NetworkPositionProvider", "Connecting to host..." );
   mTcpSocket->connectToHost( mTargetAddress, mTargetPort );
   mUdpSocket->bind( QHostAddress::LocalHost, mTargetPort );
   mUdpReconnectTimer.start( ReconnectDelay::ExtraLongDelay );
@@ -83,7 +79,6 @@ void NetworkPositionProvider::positionUpdateReceived()
 {
   QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
   const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
-  CoreUtils::log( "NetworkPositionProvider", QStringLiteral( "%1 socket has received new data!" ).arg( socketTypeToString ) );
 
   // if udp is not connected to the host yet, connect
   // this approach will let us use QIODevice functions for both sockets
@@ -169,7 +164,6 @@ void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketS
 
   const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
   const QString stateToString = QMetaEnum::fromType<QAbstractSocket::SocketState>().valueToKey( state );
-  CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "%1 Socket changed state, code: %2" ).arg( socketTypeToString, stateToString ) );
 }
 
 void NetworkPositionProvider::reconnectTimeout()
@@ -191,8 +185,6 @@ void NetworkPositionProvider::reconnect()
   mReconnectTimer.stop();
 
   setState( tr( "Reconnecting" ), State::Connecting );
-
-  CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "Reconnecting to %1" ).arg( mProviderName ) );
 
   stopUpdates();
   startUpdates();
