@@ -38,16 +38,16 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
   connect( &mReconnectTimer, &QTimer::timeout, this, &NetworkPositionProvider::reconnectTimeout );
   mUdpReconnectTimer.setSingleShot( true );
   connect( &mUdpReconnectTimer, &QTimer::timeout, this, [this]
+  {
+    CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "UDP socket no data received in threshold, triggering reconnect..." ) );
+    if ( mTcpSocket->state() != QAbstractSocket::ConnectedState )
     {
-      CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "UDP socket no data received in threshold, triggering reconnect..." ) );
-      if ( mTcpSocket->state() != QAbstractSocket::ConnectedState )
-      {
-        setState( tr( "No connection" ), State::NoConnection );
-        startReconnectTimer();
-        // let's also invalidate current position since we no longer have connection
-        emit positionChanged( GeoPosition() );
-      }
-    } );
+      setState( tr( "No connection" ), State::NoConnection );
+      startReconnectTimer();
+      // let's also invalidate current position since we no longer have connection
+      emit positionChanged( GeoPosition() );
+    }
+  } );
 
   NetworkPositionProvider::startUpdates();
 }
@@ -110,7 +110,7 @@ void NetworkPositionProvider::positionUpdateReceived()
     }
 
     // "connect" to peer if we are not already connecting
-    if (mUdpSocket->state() != QAbstractSocket::ConnectedState && mUdpSocket->state() != QAbstractSocket::ConnectingState)
+    if ( mUdpSocket->state() != QAbstractSocket::ConnectedState && mUdpSocket->state() != QAbstractSocket::ConnectingState )
     {
       mUdpSocket->connectToHost( peerAddress.toString(), peerPort );
     }
@@ -151,14 +151,14 @@ void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketS
   else if ( state == QAbstractSocket::UnconnectedState )
   {
     const bool isUdpSocketListening = mUdpSocket->state() == QAbstractSocket::ConnectedState || mUdpSocket->state() == QAbstractSocket::BoundState || mUdpReconnectTimer.isActive();
-    if ( socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive)
+    if ( socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive )
     {
       setState( tr( "No connection" ), State::NoConnection );
       startReconnectTimer();
       // let's also invalidate current position since we no longer have connection
       emit positionChanged( GeoPosition() );
     }
-    else if (socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive)
+    else if ( socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive )
     {
       setState( tr( "No connection" ), State::NoConnection );
       startReconnectTimer();
