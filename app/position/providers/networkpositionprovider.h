@@ -13,9 +13,10 @@
 
 #include <QTcpSocket>
 #include <QUdpSocket>
+#include <QTimer>
 
 #include "abstractpositionprovider.h"
-#include "bluetoothpositionprovider.h"
+#include "nmeaparser.h"
 
 
 class NetworkPositionProvider : public AbstractPositionProvider
