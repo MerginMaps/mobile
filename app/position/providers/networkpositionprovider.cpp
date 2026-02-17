@@ -16,8 +16,8 @@
 
 static int ONE_SECOND_MS = 1000;
 
-NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external_ip" ), name, parent ),
+NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external_ip" ), name, positionTransformer, parent ),
     mSecondsLeftToReconnect( ReconnectDelay::ShortDelay / ONE_SECOND_MS )
 {
   const QStringList targetAddress = addr.split( ":" );

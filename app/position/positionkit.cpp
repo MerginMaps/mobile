@@ -145,7 +145,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
 
   if ( providerType == QStringLiteral( "external_ip" ) )
   {
-    AbstractPositionProvider *provider = new NetworkPositionProvider( id, name );
+    AbstractPositionProvider *provider = new NetworkPositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }

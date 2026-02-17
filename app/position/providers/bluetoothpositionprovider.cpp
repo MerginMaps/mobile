@@ -19,8 +19,8 @@
 #include <QPermissions>
 #endif
 
-BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external_bt" ), name, parent )
+BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external_bt" ), name, positionTransformer, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );
