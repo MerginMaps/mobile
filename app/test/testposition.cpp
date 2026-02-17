@@ -257,7 +257,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
 
 #ifdef HAVE_BLUETOOTH
-  positionKit->setPositionProvider( positionKit->constructProvider( "external_bt", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
+  positionKit->setPositionProvider( PositionKit::constructProvider( "external_bt", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
 
   QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
   QCOMPARE( positionKit->positionProvider()->name(), "testProviderA" );
@@ -266,7 +266,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
 #endif
 
-  positionKit->setPositionProvider( positionKit->constructProvider( "internal", "devicegps" ) );
+  positionKit->setPositionProvider( PositionKit::constructProvider( "internal", "devicegps" ) );
 
   QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "devicegps" );
 
@@ -280,19 +280,27 @@ void TestPosition::testPositionProviderKeysInSettings()
 
   providersModel.setAppSettings( &appSettings );
   providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44", "external_bt" );
+  providersModel.addProvider( "testProviderC", "localhost:9000", "external_ip" );
 
-  // app settings should have one saved provider - testProviderB
+  // app settings should have two saved providers - testProviderB & testProviderC
   QVariantList providers = appSettings.savedPositionProviders();
 
-  QCOMPARE( providers.count(), 1 ); // we have one (external) provider
-  QCOMPARE( providers.at( 0 ).toList().count(), 2 ); // the provider has two properties
+  QCOMPARE( providers.count(), 2 ); // we have two (external) providers
+  QCOMPARE( providers.at( 0 ).toList().count(), 3 ); // the provider has two properties
 
   QVariantList providerData = providers.at( 0 ).toList();
   QCOMPARE( providerData.at( 0 ).toString(), "testProviderB" );
   QCOMPARE( providerData.at( 1 ).toString(), "AA:00:11:22:23:44" );
+  QCOMPARE( providerData.at( 2 ).toString(), "external_bt" );
+
+  providerData = providers.at( 1 ).toList();
+  QCOMPARE( providerData.at( 0 ).toString(), "testProviderC" );
+  QCOMPARE( providerData.at( 1 ).toString(), "localhost:9000" );
+  QCOMPARE( providerData.at( 2 ).toString(), "external_ip" );
 
   // remove that provider
   providersModel.removeProvider( "AA:00:11:22:23:44" );
+  providersModel.removeProvider( "localhost:9000" );
 
   providers = appSettings.savedPositionProviders();
 
