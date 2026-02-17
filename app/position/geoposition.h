@@ -29,6 +29,8 @@ class GeoPosition : public QgsGpsInformation
 
     QString fixStatusString;
 
+    bool isMock = false;
+
     // copies all data from QgsGpsInformation other and updates satellitesVisible
     static GeoPosition fromQgsGpsInformation( const QgsGpsInformation &other );
 

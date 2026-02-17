@@ -286,6 +286,9 @@ endif ()
 if (WIN)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
   add_compile_definitions(_USE_MATH_DEFINES)
+  # On windows the compiler instead of using standard min & max functions expands them to
+  # min & max macros in every file that includes windows header file
+  add_compile_definitions(NOMINMAX)
 endif ()
 
 if (IOS OR ANDROID)
@@ -388,6 +391,9 @@ file(
   DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/
   PATTERN "*.cmake" EXCLUDE
   PATTERN "vcpkg*" EXCLUDE
+)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/app/assets/us_nga_egm96_15.tif
+     DESTINATION ${ASSETS_DIR_PATH}/app/android/assets/qgis-data/proj
 )
 
 message(STATUS "QGIS_QUICK_DATA_PATH set to ${QGIS_QUICK_DATA_PATH}")

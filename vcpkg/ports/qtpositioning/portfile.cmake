@@ -4,23 +4,35 @@ include("${SCRIPT_PATH}/qt_install_submodule.cmake")
 set(${PORT}_PATCHES
     devendor-poly2tri.patch
     foregroundservice.patch
-    android15_altitude_fix.patch)
-
-vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-FEATURES
-    "qml"           CMAKE_REQUIRE_FIND_PACKAGE_Qt6Quick
-INVERTED_FEATURES
-    "qml"           CMAKE_DISABLE_FIND_PACKAGE_Qt6Quick
+    ios_orthometric_altitude.patch
+    # TODO: The android patch should be removed after migration to Qt 6.9+ as it is a
+    # backport of their bugfix
+    android15_altitude_fix.patch
 )
 
-list(APPEND FEATURE_OPTIONS "-DCMAKE_DISABLE_FIND_PACKAGE_Gypsy=ON"
-                            "-DCMAKE_DISABLE_FIND_PACKAGE_Gconf=ON"
+vcpkg_check_features(
+  OUT_FEATURE_OPTIONS
+  FEATURE_OPTIONS
+  FEATURES
+  "qml"
+  CMAKE_REQUIRE_FIND_PACKAGE_Qt6Quick
+  INVERTED_FEATURES
+  "qml"
+  CMAKE_DISABLE_FIND_PACKAGE_Qt6Quick
 )
 
+list(
+  APPEND
+  FEATURE_OPTIONS
+  "-DCMAKE_DISABLE_FIND_PACKAGE_Gypsy=ON"
+  "-DCMAKE_DISABLE_FIND_PACKAGE_Gconf=ON"
+)
 
-
-qt_install_submodule(PATCHES    ${${PORT}_PATCHES}
-                     CONFIGURE_OPTIONS ${FEATURE_OPTIONS}
-                     CONFIGURE_OPTIONS_RELEASE
-                     CONFIGURE_OPTIONS_DEBUG
-                    )
+qt_install_submodule(
+  PATCHES
+  ${${PORT}_PATCHES}
+  CONFIGURE_OPTIONS
+  ${FEATURE_OPTIONS}
+  CONFIGURE_OPTIONS_RELEASE
+  CONFIGURE_OPTIONS_DEBUG
+)

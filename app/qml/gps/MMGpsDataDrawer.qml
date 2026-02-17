@@ -27,6 +27,7 @@ MMComponents.MMDrawer {
 
   drawerHeader.title: qsTr( "GPS info" )
 
+
   drawerContent: MMComponents.MMScrollView {
 
     width: parent.width
@@ -62,7 +63,7 @@ MMComponents.MMDrawer {
             width: parent.width / 2
 
             title: qsTr( "Source" )
-            value: __positionKit.positionProvider ? __positionKit.positionProvider.name() : qsTr( "No receiver" )
+            value: PositionKit.positionProvider ? PositionKit.positionProviderName : qsTr( "No receiver" )
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -72,10 +73,10 @@ MMComponents.MMDrawer {
 
             width: parent.width / 2
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             title: qsTr( "Status" )
-            value: __positionKit.positionProvider ? __positionKit.positionProvider.stateMessage : ""
+            value: PositionKit.positionProvider ? PositionKit.positionProvider.stateMessage : ""
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -93,7 +94,7 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Longitude")
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.longitude ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.longitude ) ) {
                 return qsTr( "N/A" )
               }
 
@@ -112,7 +113,7 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Latitude" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.latitude ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.latitude ) ) {
                 return qsTr( "N/A" )
               }
 
@@ -131,7 +132,7 @@ MMComponents.MMDrawer {
 
             title: qsTr( "X" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.x ) ) {
                 return qsTr( "N/A" )
               }
 
@@ -146,7 +147,7 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Y" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( mapPositioning.mapPosition.y ) ) {
                 return qsTr( "N/A" )
               }
 
@@ -161,11 +162,11 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Horizontal accuracy" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.horizontalAccuracy < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.horizontalAccuracy < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.horizontalAccuracy, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.horizontalAccuracy, 2 ) + " m"
             }
 
             alignmentRight: Positioner.index % 2 === 1
@@ -176,11 +177,11 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Vertical accuracy" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.verticalAccuracy < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.verticalAccuracy < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.verticalAccuracy, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.verticalAccuracy, 2 ) + " m"
             }
 
             alignmentRight: Positioner.index % 2 === 1
@@ -191,13 +192,14 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Altitude" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.altitude ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.altitude ) ) {
                 return qsTr( "N/A" )
               }
-              __inputUtils.formatNumber( __positionKit.altitude, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.altitude, 2 ) + " m"
             }
 
             alignmentRight: Positioner.index % 2 === 1
+            desc: PositionKit.positionCrs3DGeoidModelName().length > 0 ? qsTr(("Orthometric height, using %1 geoid").arg(PositionKit.positionCrs3DGeoidModelName())) : ""
           }
 
           MMGpsComponents.MMGpsDataText {
@@ -205,14 +207,14 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Fix quality" )
             value: {
-              if ( !__positionKit.hasPosition ) {
+              if ( !PositionKit.hasPosition ) {
                 return qsTr( "N/A" )
               }
 
-              __positionKit.fix
+              PositionKit.fix
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -222,12 +224,12 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Satellites (in use/view)" )
             value: {
-              if ( __positionKit.satellitesUsed < 0 || __positionKit.satellitesVisible < 0 )
+              if ( PositionKit.satellitesUsed < 0 || PositionKit.satellitesVisible < 0 )
               {
                 return qsTr( "N/A" )
               }
 
-              __positionKit.satellitesUsed + "/" + __positionKit.satellitesVisible
+                PositionKit.satellitesUsed + "/" + PositionKit.satellitesVisible
             }
 
             alignmentRight: Positioner.index % 2 === 1
@@ -238,14 +240,14 @@ MMComponents.MMDrawer {
 
             title: qsTr( "HDOP" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.hdop < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.hdop < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.hdop, 2 )
+              __inputUtils.formatNumber( PositionKit.hdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -255,14 +257,14 @@ MMComponents.MMDrawer {
 
             title: qsTr( "VDOP" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.vdop < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.vdop < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.vdop, 2 )
+              __inputUtils.formatNumber( PositionKit.vdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -272,14 +274,14 @@ MMComponents.MMDrawer {
 
             title: qsTr( "PDOP" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.pdop < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.pdop < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.pdop, 2 )
+              __inputUtils.formatNumber( PositionKit.pdop, 2 )
             }
 
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -289,11 +291,11 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Speed" )
             value: {
-              if ( !__positionKit.hasPosition || __positionKit.speed < 0 ) {
+              if ( !PositionKit.hasPosition || PositionKit.speed < 0 ) {
                 return qsTr( "N/A" )
               }
 
-              __inputUtils.formatNumber( __positionKit.speed, 2 ) + " km/h"
+              __inputUtils.formatNumber( PositionKit.speed, 2 ) + " km/h"
             }
 
             alignmentRight: Positioner.index % 2 === 1
@@ -303,7 +305,7 @@ MMComponents.MMDrawer {
             width: parent.width / 2
 
             title: qsTr( "Last Fix" )
-            value: __positionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
+            value: PositionKit.lastRead.toLocaleTimeString( Qt.locale() ) || qsTr( "N/A" )
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -322,12 +324,11 @@ MMComponents.MMDrawer {
 
             title: qsTr( "Geoid separation" )
             value: {
-              if ( !__positionKit.hasPosition || Number.isNaN( __positionKit.geoidSeparation ) ) {
+              if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.geoidSeparation ) ) {
                 return qsTr( "N/A" )
               }
-              __inputUtils.formatNumber( __positionKit.geoidSeparation, 2 ) + " m"
+              __inputUtils.formatNumber( PositionKit.geoidSeparation, 2 ) + " m"
             }
-            visible: __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -348,13 +349,13 @@ MMComponents.MMDrawer {
   MM.MapPosition {
     id: mapPositioning
 
-    positionKit: __positionKit
+    positionKit: PositionKit
     mapSettings: root.mapSettings
   }
 
   QtObject {
     id: internal
 
-    property string coordinatesInDegrees: __inputUtils.degreesString( __positionKit.positionCoordinate )
+    property string coordinatesInDegrees: __inputUtils.degreesString( PositionKit.positionCoordinate )
   }
 }

@@ -32,11 +32,36 @@
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
+  mPositionTransformer = std::make_unique<PositionTransformer>( positionCrs3DEllipsoidHeight(), positionCrs3D(), mSkipElevationTransformation, QgsCoordinateTransformContext() );
 }
 
-QgsCoordinateReferenceSystem PositionKit::positionCRS()
+QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
+{
+  if ( !mSkipElevationTransformation && mPositionCrs3D.isValid() )
+  {
+    return mPositionCrs3D;
+  }
+  return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+}
+
+QString PositionKit::positionCrs3DGeoidModelName()
+{
+  if ( !mSkipElevationTransformation )
+  {
+    return mVerticalCrs.description();
+  }
+
+  return {};
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs2D()
 {
   return QgsCoordinateReferenceSystem::fromEpsgId( 4326 );
+}
+
+QgsCoordinateReferenceSystem PositionKit::positionCrs3DEllipsoidHeight()
+{
+  return QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
 }
 
 void PositionKit::startUpdates()
@@ -79,9 +104,19 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   }
 
   emit positionProviderChanged( provider );
+  emit positionProviderNameChanged();
 
   // reset last position data
   parsePositionUpdate( GeoPosition() );
+}
+
+QString PositionKit::positionProviderName() const
+{
+  if ( isMockPosition() )
+  {
+    return tr( "External (Mock)" );
+  }
+  return mPositionProvider->name();
 }
 
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
@@ -96,7 +131,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   if ( providerType == QStringLiteral( "external_bt" ) )
   {
 #ifdef HAVE_BLUETOOTH
-    AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name );
+    AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
 #endif
@@ -112,26 +147,25 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   // type == internal
   if ( id == QStringLiteral( "simulated" ) )
   {
-    AbstractPositionProvider *provider = new SimulatedPositionProvider();
+    AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
-
 #ifdef ANDROID
   if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
   {
-    bool fused = ( id == QStringLiteral( "android_fused" ) );
+    constbool fused = ( id == QStringLiteral( "android_fused" ) );
     if ( fused && !AndroidPositionProvider::isFusedAvailable() )
     {
       // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
 
       // fallback to the default - at this point the Qt Positioning implementation
-      AbstractPositionProvider *provider = new InternalPositionProvider();
+      AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
     __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
-    AbstractPositionProvider *provider = new AndroidPositionProvider( fused );
+    AbstractPositionProvider *provider = new AndroidPositionProvider( fused, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -139,7 +173,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
 
   // id == devicegps
   {
-    AbstractPositionProvider *provider = new InternalPositionProvider();
+    AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -156,7 +190,11 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   {
     if ( InputUtils::isMobilePlatform() )
     {
+#ifdef ANDROID
+      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "android_fused" ) );
+#else
       return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
+#endif
     }
     else // desktop
     {
@@ -219,9 +257,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation, mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - antennaHeight(), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation;
+    mPosition.elevation = newPosition.elevation - antennaHeight();
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
@@ -337,10 +375,43 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
+  if ( newPosition.isMock != mPosition.isMock )
+  {
+    mPosition.isMock = newPosition.isMock;
+    emit isMockPositionChanged( mPosition.isMock );
+    hasAnythingChanged = true;
+    // we also change the name
+    emit positionProviderNameChanged();
+  }
+
   if ( hasAnythingChanged )
   {
     emit positionChanged( mPosition );
   }
+}
+
+void PositionKit::setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs )
+{
+  mVerticalCrs = verticalCrs;
+
+  if ( mVerticalCrs.isValid() )
+  {
+    QString compoundCrsError{};
+    const QgsCoordinateReferenceSystem compoundCrs = QgsCoordinateReferenceSystem::createCompoundCrs( positionCrs2D(), mVerticalCrs, compoundCrsError );
+    if ( compoundCrs.isValid() && compoundCrsError.isEmpty() )
+    {
+      mPositionCrs3D =  compoundCrs;
+      return;
+    }
+    CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Failed to create custom compound crs: %1" ).arg( compoundCrsError ) );
+  }
+
+  mPositionCrs3D = QgsCoordinateReferenceSystem();
+}
+
+void PositionKit::setSkipElevationTransformation( const bool skipElevationTransformation )
+{
+  mSkipElevationTransformation = skipElevationTransformation;
 }
 
 void PositionKit::appStateChanged( Qt::ApplicationState state )
@@ -353,6 +424,13 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
   {
     stopUpdates();
   }
+}
+
+void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
+{
+  mPositionTransformer->setDestinationCrs( positionCrs3D() );
+  mPositionTransformer->setSkipElevationTransformation( mSkipElevationTransformation );
+  mPositionTransformer->setTransformContext( transformContext );
 }
 
 double PositionKit::latitude() const
@@ -461,6 +539,11 @@ AbstractPositionProvider *PositionKit::positionProvider() const
 const GeoPosition &PositionKit::position() const
 {
   return mPosition;
+}
+
+bool PositionKit::isMockPosition() const
+{
+  return mPosition.isMock;
 }
 
 AppSettings *PositionKit::appSettings() const

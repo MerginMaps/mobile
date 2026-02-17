@@ -34,7 +34,7 @@ class BluetoothPositionProvider : public AbstractPositionProvider
     };
 
   public:
-    BluetoothPositionProvider( const QString &addr, const QString &name, QObject *parent = nullptr );
+    BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~BluetoothPositionProvider() override;
 
     void startUpdates() override;

@@ -8,6 +8,9 @@
  ***************************************************************************/
 
 #include "bluetoothpositionprovider.h"
+
+#include <qgsproject.h>
+
 #include "coreutils.h"
 #include "androidutils.h"
 #include "inpututils.h"
@@ -29,7 +32,7 @@ BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const
     QString errorToString = QMetaEnum::fromType<QBluetoothSocket::SocketError>().valueToKey( int( error ) );
     CoreUtils::log(
       QStringLiteral( "BluetoothPositionProvider" ),
-      QStringLiteral( "Occured connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
+      QStringLiteral( "Occurred connection error: %1, text: %2" ).arg( errorToString, mSocket->errorString() )
     );
 
     setState( tr( "No connection" ), State::NoConnection );
@@ -193,11 +196,13 @@ void BluetoothPositionProvider::positionUpdateReceived()
     // we know the connection is working because we just received data from the device
     setState( tr( "Connected" ), State::Connected );
 
-    QByteArray rawNmea = mSocket->readAll();
-    QString nmea( rawNmea );
+    const QByteArray rawNmea = mSocket->readAll();
+    const QString nmea( rawNmea );
 
-    QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
+    GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
 
-    emit positionChanged( GeoPosition::fromQgsGpsInformation( data ) );
+    emit positionChanged( positionData );
   }
 }

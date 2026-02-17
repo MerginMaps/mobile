@@ -477,7 +477,7 @@ QString InputUtils::geometryLengthAsString( const QgsGeometry &geometry )
 {
   QgsDistanceArea distanceArea;
   distanceArea.setEllipsoid( QStringLiteral( "WGS84" ) );
-  distanceArea.setSourceCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ), QgsCoordinateTransformContext() );
+  distanceArea.setSourceCrs( PositionKit::positionCrs2D(), QgsProject::instance()->transformContext() );
 
   qreal length = distanceArea.measureLength( geometry );
 
@@ -876,28 +876,36 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
                                      const QgsCoordinateTransformContext &context,
                                      const QgsPoint &srcPoint )
 {
+  bool dummyFallbackOperationHappened; //ignored
+  return transformPoint( srcCrs, destCrs, context, srcPoint, dummyFallbackOperationHappened );
+}
+
+QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                     const QgsCoordinateReferenceSystem &destCrs,
+                                     const QgsCoordinateTransformContext &context,
+                                     const QgsPoint &srcPoint, bool &fallbackOperationOccurred )
+{
   // we do not want to transform empty points,
   // QGIS would convert them to a valid (0, 0) points
   if ( srcPoint.isEmpty() )
   {
-    return QgsPoint();
+    return {};
   }
 
   try
   {
-    QgsCoordinateTransform ct( srcCrs, destCrs, context );
+    const QgsCoordinateTransform ct( srcCrs, destCrs, context );
     if ( ct.isValid() )
     {
       if ( !ct.isShortCircuited() )
       {
-        const QgsPointXY transformed = ct.transform( srcPoint.x(), srcPoint.y() );
-        const QgsPoint pt( transformed.x(), transformed.y(), srcPoint.z(), srcPoint.m() );
+        const QgsVector3D transformed = ct.transform( QgsVector3D( srcPoint.x(), srcPoint.y(), srcPoint.z() ) );
+        fallbackOperationOccurred = ct.fallbackOperationOccurred();
+        const QgsPoint pt( transformed.x(), transformed.y(), transformed.z(), srcPoint.m() );
         return pt;
       }
-      else
-      {
-        return srcPoint;
-      }
+
+      return srcPoint;
     }
   }
   catch ( QgsCsException &cse )
@@ -905,7 +913,7 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
     Q_UNUSED( cse )
   }
 
-  return QgsPoint();
+  return {};
 }
 
 QPointF InputUtils::transformPointToScreenCoordinates( const QgsCoordinateReferenceSystem &srcCrs, InputMapSettings *mapSettings, const QgsPoint &srcPoint )
@@ -954,12 +962,11 @@ QgsPoint InputUtils::mapPointToGps( QPointF mapPosition, InputMapSettings *mapSe
     return QgsPoint();
 
   QgsPoint positionMapCrs = mapSettings->screenToCoordinate( mapPosition );
-  QgsCoordinateReferenceSystem crsGPS = coordinateReferenceSystemFromEpsgId( 4326 );
 
   const QgsPointXY transformedXY = transformPoint(
                                      mapSettings->destinationCrs(),
-                                     crsGPS,
-                                     QgsCoordinateTransformContext(),
+                                     PositionKit::positionCrs2D(),
+                                     mapSettings->transformContext(),
                                      positionMapCrs
                                    );
 
@@ -1716,7 +1723,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     PositionKit::positionCrs3DEllipsoidHeight(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPosition
@@ -1764,7 +1771,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
 
   // Transform gps position to map CRS
   QgsPointXY transformedPosition = transformPoint(
-                                     coordinateReferenceSystemFromEpsgId( 4326 ),
+                                     PositionKit::positionCrs3DEllipsoidHeight(),
                                      mapSettings->destinationCrs(),
                                      mapSettings->transformContext(),
                                      gpsPoint

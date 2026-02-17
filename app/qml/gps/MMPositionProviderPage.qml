@@ -83,7 +83,7 @@ MMComponents.MMPage {
         }
 
         text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
-        secondaryText: listdelegate.isActive ? __positionKit.positionProvider.stateMessage : model.ProviderDescription
+        secondaryText: listdelegate.isActive ? PositionKit.positionProvider.stateMessage : model.ProviderDescription
 
         rightContent: MMComponents.MMRoundButton {
           visible: model.ProviderType !== "internal"
@@ -295,7 +295,7 @@ MMComponents.MMPage {
 
     MMAddPositionProviderDrawer {
       onInitiatedConnectionTo: function ( deviceAddress, deviceName ) {
-        __positionKit.positionProvider = __positionKit.constructProvider( "external_bt", deviceAddress, deviceName )
+        PositionKit.positionProvider = PositionKit.constructProvider( "external_bt", deviceAddress, deviceName )
 
         providersModel.addProvider( deviceName, deviceAddress, "external_bt" )
         list.model.discovering = false
@@ -316,7 +316,7 @@ MMComponents.MMPage {
       onClosed: connectingDialogLoader.active = false
 
       // revert position provider back to internal provider
-      onFailure: __positionKit.positionProvider = __positionKit.constructProvider( "internal", "devicegps", "" )
+      onFailure: PositionKit.positionProvider = PositionKit.constructProvider( "internal", "devicegps", "" )
 
       Component.onCompleted: open()
     }
@@ -341,7 +341,7 @@ MMComponents.MMPage {
       return // do not construct the same provider again
     }
 
-     __positionKit.positionProvider = __positionKit.constructProvider( type, id, name )
+    PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
 
     if ( type === "external_bt" ) {
       connectingDialogLoader.open()

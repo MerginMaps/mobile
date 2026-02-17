@@ -22,7 +22,6 @@
 #include "qrcodedecoder.h"
 #include "inpututils.h"
 #include "scalebarkit.h"
-#include "positionkit.h"
 #include "formfeaturesmodel.h"
 #include "enums.h"
 
@@ -79,9 +78,6 @@ int main( int argc, char *argv[] )
   style->setSafeAreaLeft( 10 );
 
   NotificationModel notificationModel;
-
-  PositionKit pk;
-  engine.rootContext()->setContextProperty( "__positionKit", &pk );
 
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
   // path to local wrapper pages

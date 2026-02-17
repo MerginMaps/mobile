@@ -77,7 +77,7 @@ if (WIN)
   )
   install(
     DIRECTORY "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/Qca/crypto/"
-    DESTINATION .
+    DESTINATION "./Qca/crypto"
     FILES_MATCHING
     PATTERN "*.dll"
   )

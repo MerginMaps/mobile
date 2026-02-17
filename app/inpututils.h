@@ -306,6 +306,14 @@ class InputUtils: public QObject
         const QgsPoint &srcPoint );
 
     /**
+     * Overload of transformPoint function, which also notifies the caller if PROJ fallback operation occurred
+     */
+    static QgsPoint transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
+                                    const QgsCoordinateReferenceSystem &destCrs,
+                                    const QgsCoordinateTransformContext &context,
+                                    const QgsPoint &srcPoint, bool &fallbackOperationOccurred );
+
+    /**
       * Transforms point between CRS and screen pixels
       * Return empty QgsPoint if the transformation could not be applied or srcPoint is empty
       */

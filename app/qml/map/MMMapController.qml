@@ -203,7 +203,7 @@ Item {
     states: [
       State {
         name: "good" // GPS provides position AND horizontal accuracy is below set tolerance (threshold)
-        when: __positionKit.hasPosition && __positionKit.horizontalAccuracy > 0 && __positionKit.horizontalAccuracy <= AppSettings.gpsAccuracyTolerance
+        when: PositionKit.hasPosition && PositionKit.horizontalAccuracy > 0 && PositionKit.horizontalAccuracy <= AppSettings.gpsAccuracyTolerance
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.positiveColor
@@ -211,7 +211,7 @@ Item {
       },
       State {
         name: "low" // below accuracy tolerance OR GPS does not provide horizontal accuracy
-        when: __positionKit.hasPosition &&  (__positionKit.horizontalAccuracy < 0 || __positionKit.horizontalAccuracy > AppSettings.gpsAccuracyTolerance )
+        when: PositionKit.hasPosition &&  (PositionKit.horizontalAccuracy < 0 || PositionKit.horizontalAccuracy > AppSettings.gpsAccuracyTolerance )
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.warningColor
@@ -219,7 +219,7 @@ Item {
       },
       State {
         name: "unavailable" // GPS does not provide position
-        when: !__positionKit.hasPosition
+        when: !PositionKit.hasPosition
         PropertyChanges {
           target: gpsStateGroup
           indicatorColor: __style.negativeColor
@@ -275,9 +275,9 @@ Item {
 
     onLongPressed: function( point ) {
       // Alter position of simulated provider
-      if ( __positionKit.positionProvider && __positionKit.positionProvider.id() === "simulated" )
+      if ( PositionKit.positionProvider && PositionKit.positionProvider.id() === "simulated" )
       {
-        __positionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
+        PositionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
       }
 
       if ( root.state === "view" )
@@ -410,7 +410,7 @@ Item {
         }
 
         Component.onCompleted: {
-          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, __positionKit )
+          trackingManager.trackingBackend = trackingManager.constructTrackingBackend( __activeProject.qgsProject, PositionKit )
         }
 
         Connections {
@@ -433,9 +433,9 @@ Item {
     hasDirection: positionDirectionSource.hasDirection
 
     direction: positionDirectionSource.direction
-    hasPosition: __positionKit.hasPosition
+    hasPosition: PositionKit.hasPosition
 
-    horizontalAccuracy: __positionKit.horizontalAccuracy
+    horizontalAccuracy: PositionKit.horizontalAccuracy
     accuracyRingSize: mapPositionSource.screenAccuracy
 
     trackingMode: root.state !== "inactive" && tracking.active
@@ -679,7 +679,7 @@ Item {
           visible: {
             if ( root.mapExtentOffset > 0 && root.state !== "stakeout" ) return false
 
-            if ( __positionKit.positionProvider && __positionKit.positionProvider.type().includes("external") ) {
+            if ( PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external") ) {
               // for external receivers we want to show gps panel and accuracy button
               // even when the GPS receiver is not sending position data
               return true
@@ -695,36 +695,36 @@ Item {
           }
 
           text: {
-            if ( !__positionKit.positionProvider )
+            if ( !PositionKit.positionProvider )
             {
               return ""
             }
-            else if ( __positionKit.positionProvider.type().includes("external") )
+            else if ( PositionKit.positionProvider.type().includes("external") )
             {
-              if ( __positionKit.positionProvider.state === MM.PositionProvider.Connecting )
+              if ( PositionKit.positionProvider.state === MM.PositionProvider.Connecting )
               {
-                return qsTr( "Connecting to %1" ).arg( __positionKit.positionProvider.name() )
+                return qsTr( "Connecting to %1" ).arg( PositionKit.positionProvider.name() )
               }
-              else if ( __positionKit.positionProvider.state === MM.PositionProvider.WaitingToReconnect )
+              else if ( PositionKit.positionProvider.state === MM.PositionProvider.WaitingToReconnect )
               {
-                return __positionKit.positionProvider.stateMessage
+                return PositionKit.positionProvider.stateMessage
               }
-              else if ( __positionKit.positionProvider.state === MM.PositionProvider.NoConnection )
+              else if ( PositionKit.positionProvider.state === MM.PositionProvider.NoConnection )
               {
-                return __positionKit.positionProvider.stateMessage
+                return PositionKit.positionProvider.stateMessage
               }
             }
 
-            if ( !__positionKit.hasPosition )
+            if ( !PositionKit.hasPosition )
             {
               return qsTr( "Connected, no position" )
             }
-            else if ( Number.isNaN( __positionKit.horizontalAccuracy ) || __positionKit.horizontalAccuracy < 0 )
+            else if ( Number.isNaN( PositionKit.horizontalAccuracy ) || PositionKit.horizontalAccuracy < 0 )
             {
               return qsTr( "Unknown accuracy" )
             }
 
-            let accuracyText = __inputUtils.formatNumber( __positionKit.horizontalAccuracy, __positionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
+            let accuracyText = __inputUtils.formatNumber( PositionKit.horizontalAccuracy, PositionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
             if ( AppSettings.gpsAntennaHeight > 0 )
             {
               let gpsText = Number( AppSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
@@ -1092,14 +1092,14 @@ Item {
     id: mapPositionSource
 
     mapSettings: mapCanvas.mapSettings
-    positionKit: __positionKit
+    positionKit: PositionKit
     onScreenPositionChanged: root.updatePosition()
   }
 
   MM.PositionDirection {
     id: positionDirectionSource
 
-    positionKit: __positionKit
+    positionKit: PositionKit
     compass: deviceCompass
   }
 
@@ -1386,7 +1386,7 @@ Item {
   }
 
   function centerToPosition( animate = false ) {
-    if ( __positionKit.hasPosition ) {
+    if ( PositionKit.hasPosition ) {
       if ( animate )
       {
         let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )

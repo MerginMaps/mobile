@@ -17,6 +17,7 @@
 
 #include "appsettings.h"
 #include "activelayer.h"
+#include "qgsauthmanager.h"
 #include "recordinglayersproxymodel.h"
 #include "localprojectsmanager.h"
 #include "autosynccontroller.h"
@@ -212,11 +213,15 @@ class ActiveProject: public QObject
     //! Reloads layers in 'recording layers model'
     void updateRecordingLayers();
 
+    // Clear all the authentication configurations from the database
+    void clearAllAuthenticationConfigs();
+
     QgsProject *mQgsProject = nullptr;
     LocalProject mLocalProject;
 
     AppSettings &mAppSettings;
     ActiveLayer &mActiveLayer;
+    QgsAuthManager *mAuthManager = nullptr;
     LocalProjectsManager &mLocalProjectsManager;
     InputMapSettings *mMapSettings = nullptr;
     std::unique_ptr<AutosyncController> mAutosyncController;
