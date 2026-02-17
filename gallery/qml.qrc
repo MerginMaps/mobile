@@ -5,6 +5,7 @@
         <file>qml/components/EditorItem.qml</file>
         <file>qml/components/TextItem.qml</file>
         <file>qml/components/ColorBox.qml</file>
+        <file>qml/components/FormPhotoViewer.qml</file>
         <file>qml/pages/ComponentsPage.qml</file>
         <file>qml/pages/SandboxPage.qml</file>
         <file>qml/pages/IconsPage.qml</file>
@@ -18,7 +19,6 @@
         <file>qml/pages/NotificationPage.qml</file>
         <file>qml/pages/DrawerPage.qml</file>
         <file>qml/pages/PagesPage.qml</file>
-        <file>qml/pages/PhotoCardPage.qml</file>
         <file>qml/pages/ChecksPage.qml</file>
         <file>qml/pages/MapPage.qml</file>
         <file>qml/pages/ToolbarPage.qml</file>
@@ -107,6 +107,7 @@
         <file>../app/qml/form/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/form/components/photo/MMPhotoAttachment.qml</file>
         <file>../app/qml/form/components/photo/MMPhotoPreview.qml</file>
+        <file>../app/qml/form/components/MMFormPhotoSketchingPageDialog.qml</file>
         <file>../app/qml/form/editors/MMFormCalendarEditor.qml</file>
         <file>../app/qml/form/editors/MMFormComboboxBaseEditor.qml</file>
         <file>../app/qml/form/editors/MMFormGalleryEditor.qml</file>

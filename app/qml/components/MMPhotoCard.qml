@@ -16,11 +16,12 @@ Item {
   property alias imageSource: bngImage.photoUrl
   property string text: ""
   property bool textVisible: true
+  property int size: 120
 
   signal clicked(string path)
 
-  width: 120
-  height: 120
+  height: size
+  width: size
 
   Rectangle {
     id: maskRect
@@ -74,7 +75,7 @@ Item {
 
       Text {
         text: root.text
-        width: root.width - 2 * __style.margin16
+        width: root.width - 2 * (root.size * 0.15)
         anchors.centerIn: parent
 
         color: __style.polarColor

@@ -49,8 +49,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     delegate: MMComponents.MMPhotoCard{
-      width: rowView.height
-      height: rowView.height
+      size: rowView.height
 
       imageSource: {
         let absolutePath = model.PhotoPath
