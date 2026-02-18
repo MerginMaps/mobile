@@ -274,7 +274,7 @@ void TestUtilsFunctions::getRelativePath()
   QString relativePath2 =  mUtils->getRelativePath( path2, prefixPath );
   QCOMPARE( fileName2, relativePath2 );
 
-  QString path3 = QUrl (path2).toString();
+  QString path3 = QUrl( path2 ).toString();
   QString relativePath3 =  mUtils->getRelativePath( path3, prefixPath );
   QCOMPARE( fileName2, relativePath3 );
 
@@ -1019,9 +1019,9 @@ void TestUtilsFunctions::testSanitizePath()
   InputUtils::sanitizePath( str );
 
 #ifdef Q_OS_WIN
-   QCOMPARE( str, QStringLiteral( "file:///simple/valid/filename.ext" ) );
+  QCOMPARE( str, QStringLiteral( "file:///simple/valid/filename.ext" ) );
 #else
-   QCOMPARE( str, QStringLiteral( "file://simple/valid/filename.ext" ) );
+  QCOMPARE( str, QStringLiteral( "file://simple/valid/filename.ext" ) );
 #endif
 
   // unchanged - url prefix with slash
@@ -1042,7 +1042,7 @@ void TestUtilsFunctions::testSanitizePath()
   // unchanged with partition letter on Windows and file prefix
   str = QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" );
   InputUtils::sanitizePath( str );
-  
+
 #ifdef Q_OS_WIN
   QCOMPARE( str, QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" ) );
 #else

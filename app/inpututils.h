@@ -631,7 +631,7 @@ class InputUtils: public QObject
      * It can be used as standalone for any string to be sanitized
      */
 
-    static QString sanitizeNode(const QString &input);
+    static QString sanitizeNode( const QString &input );
 
     /**
      * Replaces invalid filename characters with underscores (_)
