@@ -101,7 +101,9 @@ void NetworkPositionProvider::positionUpdateReceived()
       const QByteArray rawNmeaData = datagram.data();
       const QString nmeaData( rawNmeaData );
       const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
-      emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
+      GeoPosition transformedPosition = mPositionTransformer->processNetworkPosition( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
+
+      emit positionChanged( transformedPosition );
     }
 
     // "connect" to peer if we are not already connecting
@@ -126,6 +128,7 @@ void NetworkPositionProvider::positionUpdateReceived()
   const QByteArray rawNmeaData = socket->readAll();
   const QString nmeaData( rawNmeaData );
   const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
+  GeoPosition transformedPosition = mPositionTransformer->processNetworkPosition( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
 
   emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
 }

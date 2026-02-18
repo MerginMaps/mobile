@@ -203,6 +203,6 @@ void BluetoothPositionProvider::positionUpdateReceived()
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
     GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
 
-    emit positionChanged( positionData );
+    emit positionChanged( transformedPosition );
   }
 }
