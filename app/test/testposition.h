@@ -44,6 +44,7 @@ class TestPosition: public QObject
     void testPositionTransformerInternalAndroidPosition();
     void testPositionTransformerInternalIosPosition();
     void testPositionTransformerInternalDesktopPosition();
+    void testPositionTransformerNetworkPosition();
     void testPositionTransformerSimulatedPosition();
 
   private:
