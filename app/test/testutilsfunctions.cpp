@@ -1017,12 +1017,7 @@ void TestUtilsFunctions::testSanitizePath()
   // unchanged - url prefix
   str = QStringLiteral( "file://simple/valid/filename.ext" );
   InputUtils::sanitizePath( str );
-
-#ifdef Q_OS_WIN
   QCOMPARE( str, QStringLiteral( "file:///simple/valid/filename.ext" ) );
-#else
-  QCOMPARE( str, QStringLiteral( "file://simple/valid/filename.ext" ) );
-#endif
 
   // unchanged - url prefix with slash
   str = QStringLiteral( "file:///simple/valid/filename.ext" );
@@ -1042,12 +1037,7 @@ void TestUtilsFunctions::testSanitizePath()
   // unchanged with partition letter on Windows and file prefix
   str = QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" );
   InputUtils::sanitizePath( str );
-
-#ifdef Q_OS_WIN
   QCOMPARE( str, QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" ) );
-#else
-  QCOMPARE( str, QStringLiteral( "file://C:/Users/simple/valid/filename.ext" ) );
-#endif
 
   // sanitized
   str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e.ext " );

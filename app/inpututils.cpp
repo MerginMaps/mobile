@@ -1062,6 +1062,12 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   const QDir prefixDir( prefixPath );
   QString relativePath = prefixDir.relativeFilePath( cleanPath );
 
+  // check if the path starts with ".." or is absolute (on Windows/different drives), it's not a "child"
+  if ( relativePath.startsWith( QLatin1String( ".." ) ) || QDir::isAbsolutePath( relativePath ) )
+  {
+    return {};
+  }
+
   if ( relativePath == cleanPath && !cleanPath.isEmpty() )
   {
     return {};
