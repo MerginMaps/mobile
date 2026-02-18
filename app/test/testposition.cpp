@@ -788,7 +788,7 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
 
 void TestPosition::testPositionTransformerNetworkPosition()
 {
- // prepare position transformers
+// prepare position transformers
   // WGS84 + ellipsoid
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
