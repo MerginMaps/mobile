@@ -786,6 +786,73 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
 }
 
+void TestPosition::testPositionTransformerNetworkPosition()
+{
+ // prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef  HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  GeoPosition geoPosition = GeoPosition::fromQgsGpsInformation( position );
+
+  QVERIFY( qgsDoubleNear( geoPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
+  QCOMPARE( geoPosition.elevation, 171.3 );
+  QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
+
+  // transform with pass through disabled and missing elevation separation
+  GeoPosition newPosition = positionTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and missing elevation separation
+  newPosition = passThroughTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and elevation separation
+  geoPosition.elevation_diff = 40;
+  newPosition = passThroughTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, 40 );
+
+  // transform with pass through disabled and elevation separation
+  newPosition = positionTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 167.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
+}
+
 void TestPosition::testPositionTransformerSimulatedPosition()
 {
   // prepare position transformers
