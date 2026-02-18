@@ -627,14 +627,22 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isValidEmail( const QString &email );
 
     /**
+     * Replaces invalid path related characters with underscores '_'
+     * It can be used as standalone for any string to be sanitized
+     */
+
+    static QString sanitizeNode(const QString &input);
+
+    /**
      * Replaces invalid filename characters with underscores (_)
      * Also trims whitespaces at the start and end of \a filename. If \a filename has an extension and
      * last character before the . is a whitespace, it does not get trimmed.
+     * it only sanitizes the file name not the entire path
      */
     static void sanitizeFileName( QString &fileName );
 
     /**
-     * Splits path into components and sanitizes each component using sanitizeFileName().
+     * Splits path into components and sanitizes each component using sanitizeNode().
      */
     static void sanitizePath( QString &path );
 
