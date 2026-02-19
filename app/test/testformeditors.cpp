@@ -97,21 +97,19 @@ void TestFormEditors::testNumericFields()
     FieldValidator::ValidationStatus expectedValidationStatus;
   };
 
-  namespace V = ValidationTexts;
-
   QList<combination> combinations =
   {
     // field "Heading", Int, range <100; 1000>, range editable
     { QVariant( QString() ), headingFieldId, "", FieldValidator::Valid },
-    { "1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
-    { "-1", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
-    { "10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
-    { "-10", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
-    { "-100", headingFieldId, V::numberLowerBoundReached.arg( 100 ), FieldValidator::Error },
+    { "1", headingFieldId, FieldValidator::numberLowerBoundReached().arg( 100 ), FieldValidator::Error },
+    { "-1", headingFieldId, FieldValidator::numberLowerBoundReached().arg( 100 ), FieldValidator::Error },
+    { "10", headingFieldId, FieldValidator::numberLowerBoundReached().arg( 100 ), FieldValidator::Error },
+    { "-10", headingFieldId, FieldValidator::numberLowerBoundReached().arg( 100 ), FieldValidator::Error },
+    { "-100", headingFieldId, FieldValidator::numberLowerBoundReached().arg( 100 ), FieldValidator::Error },
     { "100", headingFieldId, "", FieldValidator::Valid },
-    { "100h", headingFieldId, V::numberInvalid, FieldValidator::Error },
+    { "100h", headingFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
     { "100", headingFieldId, "", FieldValidator::Valid },
-    { "1001", headingFieldId, V::numberUpperBoundReached.arg( 1000 ), FieldValidator::Error },
+    { "1001", headingFieldId, FieldValidator::numberUpperBoundReached().arg( 1000 ), FieldValidator::Error },
     { "1000", headingFieldId, "", FieldValidator::Valid },
 
     // field "Importance", Real, range <-100.00; 100.00>, step:0.01, precision: 2, range editable
@@ -119,22 +117,22 @@ void TestFormEditors::testNumericFields()
     { "0", importanceFieldId, "", FieldValidator::Valid },
     { "-1.00", importanceFieldId, "", FieldValidator::Valid },
     { "100.00", importanceFieldId, "", FieldValidator::Valid },
-    { "100.002", importanceFieldId, V::numberUpperBoundReached.arg( 100.00 ), FieldValidator::Error },
-    { "100.002fdsa", importanceFieldId, V::numberInvalid, FieldValidator::Error },
-    { "100.,.,.,", importanceFieldId, V::numberInvalid, FieldValidator::Error },
-    { "1 000", importanceFieldId, V::numberInvalid, FieldValidator::Error },
+    { "100.002", importanceFieldId, FieldValidator::numberUpperBoundReached().arg( 100.00 ), FieldValidator::Error },
+    { "100.002fdsa", importanceFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
+    { "100.,.,.,", importanceFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
+    { "1 000", importanceFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
     { "10", importanceFieldId, "", FieldValidator::Valid },
 
     // field "Pilots", Int, range <-1000; -100>, range editable
     { QVariant( QString() ), pilotsFieldId, "", FieldValidator::Valid },
     { "-100", pilotsFieldId, "", FieldValidator::Valid },
     { "-1000", pilotsFieldId, "", FieldValidator::Valid },
-    { "0", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error },
-    { "150", pilotsFieldId, V::numberUpperBoundReached.arg( -100 ), FieldValidator::Error },
-    { "-1001", pilotsFieldId, V::numberLowerBoundReached.arg( -1000 ), FieldValidator::Error },
-    { "-51216354321435", pilotsFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
-    { "--100", pilotsFieldId, V::numberInvalid, FieldValidator::Error },
-    { "--100fsda", pilotsFieldId, V::numberInvalid, FieldValidator::Error },
+    { "0", pilotsFieldId, FieldValidator::numberUpperBoundReached().arg( -100 ), FieldValidator::Error },
+    { "150", pilotsFieldId, FieldValidator::numberUpperBoundReached().arg( -100 ), FieldValidator::Error },
+    { "-1001", pilotsFieldId, FieldValidator::numberLowerBoundReached().arg( -1000 ), FieldValidator::Error },
+    { "-51216354321435", pilotsFieldId, FieldValidator::numberExceedingVariableLimits(), FieldValidator::Error },
+    { "--100", pilotsFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
+    { "--100fsda", pilotsFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
     { "-100", pilotsFieldId, "", FieldValidator::Valid },
 
     // field "Cabin Crew", Int, no limit, range editable
@@ -143,9 +141,9 @@ void TestFormEditors::testNumericFields()
     { "-1000", cabinCrewFieldId, "", FieldValidator::Valid },
     { "-2147483647", cabinCrewFieldId, "", FieldValidator::Valid }, // int limit from QGIS
     { "2147483647", cabinCrewFieldId, "", FieldValidator::Valid }, // int limit from QGIS
-    { "214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
-    { "-214748364799", cabinCrewFieldId, V::numberExceedingVariableLimits, FieldValidator::Error },
-    { "-214748-", cabinCrewFieldId, V::numberInvalid, FieldValidator::Error },
+    { "214748364799", cabinCrewFieldId, FieldValidator::numberExceedingVariableLimits(), FieldValidator::Error },
+    { "-214748364799", cabinCrewFieldId, FieldValidator::numberExceedingVariableLimits(), FieldValidator::Error },
+    { "-214748-", cabinCrewFieldId, FieldValidator::numberInvalid(), FieldValidator::Error },
 
     // field "Staff", Int, no limit, range slider
     { QVariant( QString() ), staffFieldId, "", FieldValidator::Valid },

@@ -18,6 +18,20 @@
 #include <QRegularExpression>
 #include <QLocale>
 
+QString FieldValidator::numberInvalid() { return tr( "Value must be a number" ); };
+QString FieldValidator::numberUpperBoundReached() { return tr( "Value must be lower than %1" ); };
+QString FieldValidator::numberLowerBoundReached() { return tr( "Value must be higher than %1" ); };
+QString FieldValidator::numberExceedingVariableLimits() { return tr( "Value is too large" );};
+QString FieldValidator::numberMustBeInt() { return tr( "Field can not contain decimal places" );};
+QString FieldValidator::textTooLong() { return tr( "Can not be longer than %1 characters" );};
+QString FieldValidator::softNotNullFailed() { return tr( "Field should not be empty" );};
+QString FieldValidator::hardNotNullFailed() { return tr( "Field must not be empty" );};
+QString FieldValidator::softUniqueFailed() { return tr( "Value should be unique" );};
+QString FieldValidator::hardUniqueFailed() { return tr( "Value must be unique" );};
+QString FieldValidator::softExpressionFailed() { return tr( "Unmet QGIS expression constraint" );};
+QString FieldValidator::hardExpressionFailed() { return tr( "Unmet QGIS expression constraint" );};
+QString FieldValidator::genericValidationFailed() { return tr( "Not a valid value" );};
+
 FieldValidator::FieldValidator( QObject *parent ) :
   QObject( parent )
 {
@@ -92,14 +106,14 @@ FieldValidator::ValidationStatus FieldValidator::validateTextField( const FormIt
 
     if ( vLength > field.length() )
     {
-      validationMessage = ValidationTexts::textTooLong.arg( field.length() );
+      validationMessage = textTooLong().arg( field.length() );
       return Error;
     }
   }
 
   if ( !field.convertCompatible( value ) )
   {
-    validationMessage = ValidationTexts::genericValidationFailed;
+    validationMessage = genericValidationFailed();
     return Error;
   }
 
@@ -132,11 +146,11 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
   {
     if ( errorMessage.contains( QStringLiteral( "too large" ) ) )
     {
-      validationMessage = ValidationTexts::numberExceedingVariableLimits;
+      validationMessage = numberExceedingVariableLimits();
     }
     else
     {
-      validationMessage = ValidationTexts::numberInvalid;
+      validationMessage = numberInvalid();
     }
 
     return Error;
@@ -147,7 +161,7 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
      * however, the value would not be saved and would get replaced by zero,
      * so we need to handle it here and set invalid state for such input.
      */
-    validationMessage = ValidationTexts::numberMustBeInt;
+    validationMessage = numberMustBeInt();
     return Error;
   }
 
@@ -163,12 +177,12 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
 
     if ( val < min )
     {
-      validationMessage = ValidationTexts::numberLowerBoundReached.arg( min );
+      validationMessage = numberLowerBoundReached().arg( min );
       return Error;
     }
     else if ( val > max )
     {
-      validationMessage = ValidationTexts::numberUpperBoundReached.arg( max );
+      validationMessage = numberUpperBoundReached().arg( max );
       return Error;
     }
   }
@@ -182,7 +196,7 @@ FieldValidator::ValidationStatus FieldValidator::validateGenericField( const For
 
   if ( !field.convertCompatible( value ) )
   {
-    validationMessage = ValidationTexts::genericValidationFailed;
+    validationMessage = genericValidationFailed();
     return Error;
   }
 
@@ -209,11 +223,11 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
 
     if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      validationMessages << ValidationTexts::hardNotNullFailed;
+      validationMessages << hardNotNullFailed();
     }
     else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      validationMessages << ValidationTexts::softNotNullFailed;
+      validationMessages << softNotNullFailed();
     }
   }
 
@@ -226,11 +240,11 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
 
     if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      validationMessages << ValidationTexts::hardUniqueFailed;
+      validationMessages << hardUniqueFailed();
     }
     else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      validationMessages << ValidationTexts::softUniqueFailed;
+      validationMessages << softUniqueFailed();
     }
   }
 
@@ -250,11 +264,11 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
     {
       if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
       {
-        validationMessages << ValidationTexts::hardExpressionFailed;
+        validationMessages << hardExpressionFailed();
       }
       else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
       {
-        validationMessages << ValidationTexts::softExpressionFailed;
+        validationMessages << softExpressionFailed();
       }
     }
   }

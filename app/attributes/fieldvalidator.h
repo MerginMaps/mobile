@@ -49,28 +49,23 @@ class FieldValidator : public QObject
 
   private:
     static QString constructConstraintValidationMessage( const FormItem &item, const QStringList &unmetConstraints );
+
+    static QString numberInvalid();
+    static QString numberUpperBoundReached();
+    static QString numberLowerBoundReached();
+    static QString numberExceedingVariableLimits();
+    static QString numberMustBeInt();
+    static QString textTooLong();
+    static QString softNotNullFailed();
+    static QString hardNotNullFailed();
+    static QString softUniqueFailed();
+    static QString hardUniqueFailed();
+    static QString softExpressionFailed();
+    static QString hardExpressionFailed();
+    static QString genericValidationFailed();
+
+    friend class TestAttributeController;
+    friend class TestFormEditors;
 };
-
-namespace ValidationTexts
-{
-
-  const QString numberInvalid = QObject::tr( "Value must be a number" );
-  const QString numberUpperBoundReached = QObject::tr( "Value must be lower than %1" );
-  const QString numberLowerBoundReached = QObject::tr( "Value must be higher than %1" );
-  const QString numberExceedingVariableLimits = QObject::tr( "Value is too large" );
-  const QString numberMustBeInt = QObject::tr( "Field can not contain decimal places" );
-
-  const QString textTooLong = QObject::tr( "Can not be longer than %1 characters" );
-
-  const QString softNotNullFailed = QObject::tr( "Field should not be empty" );
-  const QString hardNotNullFailed = QObject::tr( "Field must not be empty" );
-  const QString softUniqueFailed = QObject::tr( "Value should be unique" );
-  const QString hardUniqueFailed = QObject::tr( "Value must be unique" );
-  const QString softExpressionFailed = QObject::tr( "Unmet QGIS expression constraint" );
-  const QString hardExpressionFailed = QObject::tr( "Unmet QGIS expression constraint" );
-
-  const QString genericValidationFailed = QObject::tr( "Not a valid value" );
-
-}
 
 #endif // FIELDVALIDATOR_H
