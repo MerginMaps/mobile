@@ -18,6 +18,7 @@
 
 #include "position/providers/internalpositionprovider.h"
 #include "position/providers/simulatedpositionprovider.h"
+#include "providers/networkpositionprovider.h"
 #ifdef ANDROID
 #include "position/providers/androidpositionprovider.h"
 #include <android/log.h>
@@ -122,13 +123,12 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
 {
   QString providerType( type );
 
-  // currently the only external provider is bluetooth, so manually set internal provider for platforms that
-  // do not support reading bluetooth serial
+  // set internal provider for platforms that do not support reading bluetooth serial
 #ifndef HAVE_BLUETOOTH
   providerType = QStringLiteral( "internal" );
 #endif
 
-  if ( providerType == QStringLiteral( "external" ) )
+  if ( providerType == QStringLiteral( "external_bt" ) )
   {
 #ifdef HAVE_BLUETOOTH
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
@@ -136,39 +136,46 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
     return provider;
 #endif
   }
-  else // type == internal
-  {
-    if ( id == QStringLiteral( "simulated" ) )
-    {
-      AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
-      QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
-      return provider;
-    }
-#ifdef ANDROID
-    if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
-    {
-      const bool fused = ( id == QStringLiteral( "android_fused" ) );
-      if ( fused && !AndroidPositionProvider::isFusedAvailable() )
-      {
-        // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
 
-        // fallback to the default - at this point the Qt Positioning implementation
-        AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
-        QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
-        return provider;
-      }
-      __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
-      AbstractPositionProvider *provider = new AndroidPositionProvider( fused, *mPositionTransformer );
-      QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
-      return provider;
-    }
-#endif
-    else // id == devicegps
+  if ( providerType == QStringLiteral( "external_ip" ) )
+  {
+    AbstractPositionProvider *provider = new NetworkPositionProvider( id, name, *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+
+  // type == internal
+  if ( id == QStringLiteral( "simulated" ) )
+  {
+    AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+#ifdef ANDROID
+  if ( id == QStringLiteral( "android_fused" ) || id == QStringLiteral( "android_gps" ) )
+  {
+    const bool fused = ( id == QStringLiteral( "android_fused" ) );
+    if ( fused && !AndroidPositionProvider::isFusedAvailable() )
     {
+      // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
+
+      // fallback to the default - at this point the Qt Positioning implementation
       AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
+    __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
+    AbstractPositionProvider *provider = new AndroidPositionProvider( fused, *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+#endif
+
+  // id == devicegps
+  {
+    AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
   }
 }
 
@@ -201,8 +208,10 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
   }
   else
   {
-    // find name of the active provider
+    // find name & type of the active provider
     QString providerName;
+    // Migration from single external provider to multiple currently, missing type == bluetooth provider
+    QString providerType = QStringLiteral( "external_bt" );
     QVariantList providers = appsettings->savedPositionProviders();
 
     for ( const auto &provider : providers )
@@ -217,10 +226,14 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
       if ( providerData[1] == providerId )
       {
         providerName = providerData[0].toString();
+        if ( !providerData.at( 2 ).isNull() )
+        {
+          providerType = providerData[2].toString();
+        }
       }
     }
 
-    return constructProvider( QStringLiteral( "external" ), providerId, providerName );
+    return constructProvider( providerType, providerId, providerName );
   }
 }
 

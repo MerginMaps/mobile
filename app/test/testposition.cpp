@@ -106,8 +106,8 @@ void TestPosition::testBluetoothProviderConnection()
   QCOMPARE( "testBluetoothProvider", pkProvider->name() );
   QCOMPARE( "AA:AA:AA:AA:00:00", btProvider->id() );
   QCOMPARE( "AA:AA:AA:AA:00:00", pkProvider->id() );
-  QCOMPARE( "external", btProvider->type() );
-  QCOMPARE( "external", pkProvider->type() );
+  QCOMPARE( "external_bt", btProvider->type() );
+  QCOMPARE( "external_bt", pkProvider->type() );
 
   //
   // let's continue with BT instance,
@@ -257,11 +257,11 @@ void TestPosition::testPositionProviderKeysInSettings()
   rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
 
 #ifdef HAVE_BLUETOOTH
-  positionKit->setPositionProvider( positionKit->constructProvider( "external", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
+  positionKit->setPositionProvider( positionKit->constructProvider( "external_bt", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
 
   QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
   QCOMPARE( positionKit->positionProvider()->name(), "testProviderA" );
-  QCOMPARE( positionKit->positionProvider()->type(), "external" );
+  QCOMPARE( positionKit->positionProvider()->type(), "external_bt" );
 
   QCOMPARE( rawSettings.value( CoreUtils::QSETTINGS_APP_GROUP_NAME + "/activePositionProviderId" ).toString(), "AA:BB:CC:DD:EE:FF" );
 #endif
@@ -279,20 +279,28 @@ void TestPosition::testPositionProviderKeysInSettings()
   QCOMPARE( providersModel.data( providersModel.index( 1 ), PositionProvidersModel::ProviderId ), "simulated" );
 
   providersModel.setAppSettings( &appSettings );
-  providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44" );
+  providersModel.addProvider( "testProviderB", "AA:00:11:22:23:44", "external_bt" );
+  providersModel.addProvider( "testProviderC", "localhost:9000", "external_ip" );
 
-  // app settings should have one saved provider - testProviderB
+  // app settings should have two saved providers - testProviderB & testProviderC
   QVariantList providers = appSettings.savedPositionProviders();
 
-  QCOMPARE( providers.count(), 1 ); // we have one (external) provider
-  QCOMPARE( providers.at( 0 ).toList().count(), 2 ); // the provider has two properties
+  QCOMPARE( providers.count(), 2 ); // we have two (external) providers
+  QCOMPARE( providers.at( 0 ).toList().count(), 3 ); // the provider has two properties
 
   QVariantList providerData = providers.at( 0 ).toList();
   QCOMPARE( providerData.at( 0 ).toString(), "testProviderB" );
   QCOMPARE( providerData.at( 1 ).toString(), "AA:00:11:22:23:44" );
+  QCOMPARE( providerData.at( 2 ).toString(), "external_bt" );
+
+  providerData = providers.at( 1 ).toList();
+  QCOMPARE( providerData.at( 0 ).toString(), "testProviderC" );
+  QCOMPARE( providerData.at( 1 ).toString(), "localhost:9000" );
+  QCOMPARE( providerData.at( 2 ).toString(), "external_ip" );
 
   // remove that provider
   providersModel.removeProvider( "AA:00:11:22:23:44" );
+  providersModel.removeProvider( "localhost:9000" );
 
   providers = appSettings.savedPositionProviders();
 
@@ -776,6 +784,73 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
 
   GeoPosition newPosition = positionTransformer.processInternalDesktopPosition( geoPosition );
   QVERIFY( qgsDoubleNear( newPosition.elevation, 171.3 ) );
+}
+
+void TestPosition::testPositionTransformerNetworkPosition()
+{
+// prepare position transformers
+  // WGS84 + ellipsoid
+  QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
+  // WGS84 + EGM96
+  QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
+  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+
+#ifdef  HAVE_BLUETOOTH
+  // mini file contains only minimal info like position and date
+  QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
+  QFile miniNmeaFile( miniNmeaPositionFilePath );
+  miniNmeaFile.open( QFile::ReadOnly );
+
+  QVERIFY( miniNmeaFile.isOpen() );
+
+  NmeaParser parser;
+  QgsGpsInformation position = parser.parseNmeaString( miniNmeaFile.readAll() );
+  GeoPosition geoPosition = GeoPosition::fromQgsGpsInformation( position );
+
+  QVERIFY( qgsDoubleNear( geoPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( geoPosition.longitude, 17.1064 ) );
+  QCOMPARE( geoPosition.elevation, 171.3 );
+  QCOMPARE( geoPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+#else
+  GeoPosition geoPosition;
+  geoPosition.latitude = 48.10305;
+  geoPosition.longitude = 17.1064;
+  geoPosition.elevation = 171.3;
+#endif
+
+  // transform with pass through disabled and missing elevation separation
+  GeoPosition newPosition = positionTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and missing elevation separation
+  newPosition = passThroughTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+
+  // transform with pass through enabled and elevation separation
+  geoPosition.elevation_diff = 40;
+  newPosition = passThroughTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation_diff, 40 );
+
+  // transform with pass through disabled and elevation separation
+  newPosition = positionTransformer.processNetworkPosition( geoPosition );
+
+  QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
+  QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation, 167.53574931171875 ) );
+  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
 
 void TestPosition::testPositionTransformerSimulatedPosition()

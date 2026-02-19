@@ -73,7 +73,7 @@ MMComponents.MMDrawer {
 
             width: parent.width / 2
 
-            visible: PositionKit.positionProvider && PositionKit.positionProvider.type() === "external"
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             title: qsTr( "Status" )
             value: PositionKit.positionProvider ? PositionKit.positionProvider.stateMessage : ""
@@ -214,7 +214,7 @@ MMComponents.MMDrawer {
               PositionKit.fix
             }
 
-            visible: PositionKit.positionProvider && PositionKit.positionProvider.type() === "external"
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -247,7 +247,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( PositionKit.hdop, 2 )
             }
 
-            visible: PositionKit.positionProvider && PositionKit.positionProvider.type() === "external"
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -264,7 +264,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( PositionKit.vdop, 2 )
             }
 
-            visible: PositionKit.positionProvider && PositionKit.positionProvider.type() === "external"
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
@@ -281,7 +281,7 @@ MMComponents.MMDrawer {
               __inputUtils.formatNumber( PositionKit.pdop, 2 )
             }
 
-            visible: PositionKit.positionProvider && PositionKit.positionProvider.type() === "external"
+            visible: PositionKit.positionProvider && PositionKit.positionProvider.type().includes("external")
 
             alignmentRight: Positioner.index % 2 === 1
           }
