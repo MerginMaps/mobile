@@ -10,7 +10,6 @@
 #ifndef FIELDVALIDATOR_H
 #define FIELDVALIDATOR_H
 
-#include <QString>
 #include <QVariant>
 #include <QObject>
 
