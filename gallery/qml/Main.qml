@@ -230,6 +230,10 @@ ApplicationWindow {
           source: "PhotosPage.qml"
         }
         ListElement {
+          title: "Photo cards page"
+          source: "PhotoCardPage.qml"
+        }
+        ListElement {
           title: "Map"
           source: "MapPage.qml"
         }
