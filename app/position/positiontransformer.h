@@ -44,7 +44,7 @@ class PositionTransformer : QObject
     /**
      * Transform the elevation if the user sets custom vertical CRS. The elevation gets recalculated to ellipsoid elevation
      * and then back to orthometric based on specified CRS.
-     * \note This method should be used only with Bluetooth PositionProvider to mitigate unnecessary transformations
+     * \note This method should be used only with BluetoothPositionProvider to mitigate unnecessary transformations
      * \return Copy of passed geoPosition with processed elevation and elevation separation.
      */
     GeoPosition processBluetoothPosition( GeoPosition geoPosition );
