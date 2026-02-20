@@ -63,7 +63,8 @@ class FormItem
       const QgsEditorWidgetSetup &editorWidgetSetup,
       int fieldIndex,
       const QgsExpression &visibilityExpression,
-      const QgsRelation &relation
+      const QgsRelation &relation,
+      const QgsRelation &nmRelation = QgsRelation()
     );
 
     static FormItem *createFieldItem(
@@ -88,7 +89,8 @@ class FormItem
       const QString &name,
       bool showName,
       const QgsExpression &visibilityExpression,
-      const QgsRelation &relation
+      const QgsRelation &relation,
+      const QgsRelation &nmRelation = QgsRelation()
     );
 
     static FormItem *createSpacerItem(
@@ -153,6 +155,7 @@ class FormItem
     void setRawValue( const QVariant &rawValue );
 
     QgsRelation relation() const;
+    QgsRelation nmRelation() const;
     QString fieldError() const;
 
     bool showName() const;
@@ -179,7 +182,8 @@ class FormItem
     QVariant mOriginalValue; // original unmodified value
     QVariant mRawValue;
 
-    const QgsRelation mRelation; // Only used for FormItemType::Relation
+    const QgsRelation mRelation;   // Only used for FormItemType::Relation
+    const QgsRelation mNmRelation; // Second relation for n-m, invalid for 1:n
 };
 
 class  TabItem

@@ -29,7 +29,8 @@ FormItem::FormItem( const QUuid &id,
                     const QgsEditorWidgetSetup &editorWidgetSetup,
                     int fieldIndex,
                     const QgsExpression &visibilityExpression,
-                    const QgsRelation &relation
+                    const QgsRelation &relation,
+                    const QgsRelation &nmRelation
                   )
   : mId( id )
   , mField( field )
@@ -44,7 +45,8 @@ FormItem::FormItem( const QUuid &id,
   , mEditorWidgetSetup( editorWidgetSetup )
   , mFieldIndex( fieldIndex )
   , mVisibilityExpression( visibilityExpression )
-  , mRelation( relation ) // no relation for type field
+  , mRelation( relation )
+  , mNmRelation( nmRelation )
 {
 }
 
@@ -84,7 +86,8 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
                                         const QString &name,
                                         bool showName,
                                         const QgsExpression &visibilityExpression,
-                                        const QgsRelation &relation
+                                        const QgsRelation &relation,
+                                        const QgsRelation &nmRelation
                                       )
 {
   FormItem *item = new FormItem(
@@ -101,7 +104,8 @@ FormItem *FormItem::createRelationItem( const QUuid &id,
     QgsEditorWidgetSetup(),
     -1,
     visibilityExpression,
-    relation
+    relation,
+    nmRelation
   );
   return item;
 }
@@ -303,6 +307,11 @@ void FormItem::setOriginalValue( const QVariant &originalValue )
 QgsRelation FormItem::relation() const
 {
   return mRelation;
+}
+
+QgsRelation FormItem::nmRelation() const
+{
+  return mNmRelation;
 }
 
 bool FormItem::showName() const
