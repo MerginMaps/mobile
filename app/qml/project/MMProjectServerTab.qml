@@ -44,6 +44,7 @@ Item {
     }
 
     delayedSearch: true
+    emitInterval: 400
   }
 
 

@@ -35,6 +35,8 @@ MMComponents.MMPage {
     MMSearchInput {
       id: searchBar
 
+      delayedSearch: true
+
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
       width: parent.width
