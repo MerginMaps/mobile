@@ -61,6 +61,7 @@ class  AttributeFormModel : public QAbstractListModel
       Relation, //!< QgsRelation instance for this item, empty if it is not a relation
       RawValue,
       HasMixedValues, //!< TRUE when editing multiple features that have different value for this attribute
+      NmRelation, //!< Second QgsRelation for n-m items, invalid QgsRelation if not an n-m relation
     };
 
     Q_ENUM( AttributeFormRoles )

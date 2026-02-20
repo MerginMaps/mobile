@@ -85,6 +85,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->validationStatus();
     case Relation:
       return QVariant::fromValue( item->relation() );
+    case NmRelation:
+      return QVariant::fromValue( item->nmRelation() );
     case RawValue:
       return item->rawValue();
     case HasMixedValues:
@@ -137,6 +139,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[Relation] = QByteArray( "Relation" );
   roles[RawValue] = QByteArray( "RawValue" );
   roles[HasMixedValues] = QByteArray( "HasMixedValues" );
+  roles[NmRelation] = QByteArray( "NmRelation" );
 
   return roles;
 }
