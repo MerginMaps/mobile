@@ -64,6 +64,8 @@ Drawer {
         MMInputs.MMSearchInput {
           id: searchBar
 
+          delayedSearch: true
+
           width: parent.width
 
           placeholderText: qsTr("Search for features...")

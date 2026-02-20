@@ -52,6 +52,8 @@ MMDrawer {
       I.MMSearchInput {
         id: searchBar
 
+        delayedSearch: true
+
         width: parent.width
 
         placeholderText: qsTr( "Search" )
