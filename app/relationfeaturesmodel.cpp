@@ -131,8 +131,8 @@ void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
         quotedValues << QgsExpression::quotedValue( v );
 
       const QString filterExpr = QStringLiteral( "%1 IN (%2)" )
-                                   .arg( QgsExpression::quotedColumnRef( childPkField ),
-                                         quotedValues.join( ',' ) );
+                                 .arg( QgsExpression::quotedColumnRef( childPkField ),
+                                       quotedValues.join( ',' ) );
       request.combineFilterExpression( filterExpr );
     }
   }
