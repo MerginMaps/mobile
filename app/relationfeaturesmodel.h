@@ -20,6 +20,10 @@
 /**
  * RelationFeaturesModel class lists features from a specific layer based on provided QgsRelation.
  * It is used as a model in Relation QML editors and offers helpful methods for manipulation with features.
+ *
+ * For regular 1:N relations set \a relation and \a parentFeatureLayerPair.
+ * For N:M relations additionally set \a nmRelation: the model will then perform a two-step lookup
+ * (parent → join table → child) and expose child layer features directly, hiding the join table.
  */
 class RelationFeaturesModel : public LayerFeaturesModel
 {
@@ -32,6 +36,13 @@ class RelationFeaturesModel : public LayerFeaturesModel
 
     //! parent feature layer pair represents a feature from parent relation layer for which we gather related child features
     Q_PROPERTY( FeatureLayerPair parentFeatureLayerPair READ parentFeatureLayerPair WRITE setParentFeatureLayerPair NOTIFY parentFeatureLayerPairChanged )
+
+    //! Second relation for n-m (many-to-many) configurations. When valid, the model shows features from
+    //! the child layer instead of the join table. Leave invalid/unset for regular 1:n behaviour.
+    Q_PROPERTY( QgsRelation nmRelation READ nmRelation WRITE setNmRelation NOTIFY nmRelationChanged )
+
+    //! Returns true when the model is operating in n-m mode (nmRelation is valid)
+    Q_PROPERTY( bool isNmRelation READ isNmRelation NOTIFY nmRelationChanged )
 
   public:
 
@@ -49,12 +60,16 @@ class RelationFeaturesModel : public LayerFeaturesModel
 
     void setup() override;
     void setupFeatureRequest( QgsFeatureRequest &request ) override;
+    void populate() override;
 
     void setParentFeatureLayerPair( FeatureLayerPair pair );
     void setRelation( QgsRelation relation );
+    void setNmRelation( QgsRelation nmRelation );
 
     FeatureLayerPair parentFeatureLayerPair() const;
     QgsRelation relation() const;
+    QgsRelation nmRelation() const;
+    bool isNmRelation() const;
 
     QString homePath() const;
     void setHomePath( const QString &homePath );
@@ -62,6 +77,7 @@ class RelationFeaturesModel : public LayerFeaturesModel
   signals:
     void parentFeatureLayerPairChanged( FeatureLayerPair pair );
     void relationChanged( QgsRelation relation );
+    void nmRelationChanged();
     void homePathChanged();
 
   private:
@@ -74,8 +90,17 @@ class RelationFeaturesModel : public LayerFeaturesModel
      */
     int photoFieldIndex( QgsVectorLayer *layer ) const;
 
-    QgsRelation mRelation; // associated relation
+    /**
+     * For n-m mode: queries the join table and collects the primary key values of the child
+     * features that are related to the current parent feature. Results are stored in mChildPkValues.
+     * This is a synchronous operation and must be called on the main thread before populate().
+     */
+    void fetchChildPkValues();
+
+    QgsRelation mRelation;   // associated (joining) relation
+    QgsRelation mNmRelation; // second relation for n-m; invalid for 1:n
     FeatureLayerPair mParentFeatureLayerPair; // parent feature (with relation widget in form)
+    QList<QVariant> mChildPkValues; // child PK values collected during n-m two-step lookup
     QString mHomePath;
 };
 

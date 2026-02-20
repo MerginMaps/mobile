@@ -11,6 +11,8 @@
 #include "qgsvectorlayer.h"
 #include "inpututils.h"
 
+#include "qgsexpression.h"
+#include "qgsfeatureiterator.h"
 #include "qgsproject.h"
 
 RelationFeaturesModel::RelationFeaturesModel( QObject *parent )
@@ -51,18 +53,94 @@ void RelationFeaturesModel::setup()
   if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
     return;
 
-  QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
+  if ( mNmRelation.isValid() )
+  {
+    // N-M mode: connect both join table and child layer commits, show child layer features
+    QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
+    QObject::connect( mNmRelation.referencedLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
+    LayerFeaturesModel::setLayer( mNmRelation.referencedLayer() );
+  }
+  else
+  {
+    // 1:N mode: connect child layer commits, show referencing layer features
+    QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
+    LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
+  }
 
-  LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
+}
+
+void RelationFeaturesModel::populate()
+{
+  if ( mNmRelation.isValid() )
+    fetchChildPkValues();
+
+  LayerFeaturesModel::populate();
+}
+
+void RelationFeaturesModel::fetchChildPkValues()
+{
+  mChildPkValues.clear();
+
+  if ( !mNmRelation.isValid() || !mParentFeatureLayerPair.isValid() )
+    return;
+
+  QgsVectorLayer *joinLayer = mRelation.referencingLayer();
+  if ( !joinLayer || !joinLayer->isValid() )
+    return;
+
+  const QList<QgsRelation::FieldPair> nmFieldPairs = mNmRelation.fieldPairs();
+  if ( nmFieldPairs.isEmpty() )
+    return;
+
+  // The FK field in the join table that points to the child layer's PK
+  const QString joinFkField = nmFieldPairs.first().referencingField();
+
+  // Query the join table for rows related to the current parent feature
+  const QgsFeatureRequest joinRequest = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
+  QgsFeatureIterator it = joinLayer->getFeatures( joinRequest );
+  QgsFeature joinFeature;
+
+  while ( it.nextFeature( joinFeature ) )
+  {
+    const QVariant fkValue = joinFeature.attribute( joinFkField );
+    if ( fkValue.isValid() && !fkValue.isNull() )
+      mChildPkValues << fkValue;
+  }
 }
 
 void RelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
   LayerFeaturesModel::setupFeatureRequest( request );
 
-  QgsFeatureRequest e = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
-  request.combineFilterExpression( e.filterExpression()->operator QString() );
+  if ( mNmRelation.isValid() )
+  {
+    if ( mChildPkValues.isEmpty() )
+    {
+      // No related child features — return an empty result set
+      request.combineFilterExpression( QStringLiteral( "FALSE" ) );
+    }
+    else
+    {
+      // Build: "child_pk_field" IN (val1, val2, ...)
+      const QString childPkField = mNmRelation.fieldPairs().first().referencedField();
+      QStringList quotedValues;
+      quotedValues.reserve( mChildPkValues.size() );
+
+      for ( const QVariant &v : std::as_const( mChildPkValues ) )
+        quotedValues << QgsExpression::quotedValue( v );
+
+      const QString filterExpr = QStringLiteral( "%1 IN (%2)" )
+                                   .arg( QgsExpression::quotedColumnRef( childPkField ),
+                                         quotedValues.join( ',' ) );
+      request.combineFilterExpression( filterExpr );
+    }
+  }
+  else
+  {
+    const QgsFeatureRequest e = mRelation.getRelatedFeaturesRequest( mParentFeatureLayerPair.feature() );
+    request.combineFilterExpression( e.filterExpression()->operator QString() );
+  }
 }
 
 void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
@@ -100,6 +178,17 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
   }
 }
 
+void RelationFeaturesModel::setNmRelation( QgsRelation nmRelation )
+{
+  if ( mNmRelation.id() != nmRelation.id() )
+  {
+    mNmRelation = nmRelation;
+    emit nmRelationChanged();
+
+    setup();
+  }
+}
+
 FeatureLayerPair RelationFeaturesModel::parentFeatureLayerPair() const
 {
   return mParentFeatureLayerPair;
@@ -108,6 +197,16 @@ FeatureLayerPair RelationFeaturesModel::parentFeatureLayerPair() const
 QgsRelation RelationFeaturesModel::relation() const
 {
   return mRelation;
+}
+
+QgsRelation RelationFeaturesModel::nmRelation() const
+{
+  return mNmRelation;
+}
+
+bool RelationFeaturesModel::isNmRelation() const
+{
+  return mNmRelation.isValid();
 }
 
 QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featurePair ) const
