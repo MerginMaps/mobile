@@ -34,6 +34,7 @@
 #include "qgsvectorlayereditbuffer.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
+#include "qgsrelationmanager.h"
 #include "inpututils.h"
 #include "coreutils.h"
 #include "mixedattributevalue.h"
@@ -303,11 +304,18 @@ void AttributeController::flatten(
           continue;
         }
 
-        bool isNmRelation = layer->editFormConfig().widgetConfig( associatedRelation.id() )[QStringLiteral( "nm-rel" )].toBool();
-        if ( isNmRelation )
+        // Check for n-m relation using the QGIS 3.16+ API
+        QgsRelation nmRelation;
+        QVariant nmRelId = relationField->nmRelationId();
+        if ( !nmRelId.isNull() && !nmRelId.toString().isEmpty() )
         {
-          CoreUtils::log( "Relations", QStringLiteral( "Nm relations are not supported in layer %1" ).arg( layer->name() ) );
-          continue;
+          nmRelation = QgsProject::instance()->relationManager()->relation( nmRelId.toString() );
+          if ( !nmRelation.isValid() )
+          {
+            CoreUtils::log( "Relations", QStringLiteral( "N-M relation '%1' not found or invalid, skipping widget in layer %2" )
+                            .arg( nmRelId.toString(), layer->name() ) );
+            continue;
+          }
         }
 
         const QString groupName = container->isGroupBox() ? container->name() : QString();
@@ -330,7 +338,8 @@ void AttributeController::flatten(
               label,
               relationField->showLabel(),
               parentVisibilityExpressions, // relation field doesn't have visibility expression itself
-              associatedRelation
+              associatedRelation,
+              nmRelation
             )
           );
 
