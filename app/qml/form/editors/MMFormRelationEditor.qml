@@ -28,6 +28,7 @@ MMPrivateComponents.MMBaseInput {
   id: root
 
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
+  property var _fieldNmRelation: parent.fieldNmRelation
   property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
   property var _fieldActiveProject: parent.fieldActiveProject
 
@@ -80,7 +81,7 @@ MMPrivateComponents.MMBaseInput {
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
-        visible: __activeProject.projectRole !== "reader"
+        visible: !rmodel.isNmRelation && __activeProject.projectRole !== "reader"
 
         MMComponents.MMIcon {
           anchors.centerIn: parent
@@ -107,6 +108,7 @@ MMPrivateComponents.MMBaseInput {
           id: rmodel
 
           relation: root._fieldAssociatedRelation
+          nmRelation: root._fieldNmRelation
           parentFeatureLayerPair: root._fieldFeatureLayerPair
           homePath: root._fieldActiveProject.homePath
 
@@ -209,6 +211,7 @@ MMPrivateComponents.MMBaseInput {
 
       list.model: rmodel
       button.text: qsTr( "Add feature" )
+      button.visible: !rmodel.isNmRelation && __activeProject.projectRole !== "reader"
 
       onClosed: listLoader.active = false
       onFeatureClicked: ( featurePair ) => root.openLinkedFeature( featurePair )

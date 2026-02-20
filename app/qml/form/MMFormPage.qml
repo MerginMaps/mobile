@@ -313,6 +313,7 @@ Page {
 
         property var fieldActiveProject: root.project
         property var fieldAssociatedRelation: model.Relation
+        property var fieldNmRelation: model.NmRelation
         property var fieldFeatureLayerPair: root.controller.featureLayerPair
         property string fieldHomePath: root.project ? root.project.homePath : "" // for photo editor
 
