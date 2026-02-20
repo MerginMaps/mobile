@@ -15,13 +15,13 @@ Parent feature → (mRelation: parent → join_table) → join features → (mNm
 
 | # | Description | Files | Status | Commit |
 |---|-------------|-------|--------|--------|
-| 1 | Add `nmRelation` to `FormItem` | `attributedata.h`, `attributedata.cpp` | Pending | — |
-| 2 | Handle n-m in `AttributeController` (detect instead of skip) | `attributecontroller.cpp` | Pending | — |
-| 3 | Add `NmRelation` model role to `AttributeFormModel` | `attributeformmodel.h`, `attributeformmodel.cpp` | Pending | — |
-| 4 | Teach `RelationFeaturesModel` two-step n-m lookup | `relationfeaturesmodel.h`, `relationfeaturesmodel.cpp` | Pending | — |
-| 5 | QML: pass nm-relation to editor, hide Add button | `MMFormPage.qml`, `MMFormRelationEditor.qml` | Pending | — |
-| 6 | Build verification & runtime test | — | Pending | — |
-| 7 | Code formatting pass (`format_cpp.bash`) | — | Pending | — |
+| 1 | Add `nmRelation` to `FormItem` | `attributedata.h`, `attributedata.cpp` | Done | 0fff811f |
+| 2 | Handle n-m in `AttributeController` (detect instead of skip) | `attributecontroller.cpp` | Done | 85d2711d |
+| 3 | Add `NmRelation` model role to `AttributeFormModel` | `attributeformmodel.h`, `attributeformmodel.cpp` | Done | 242ccaae |
+| 4 | Teach `RelationFeaturesModel` two-step n-m lookup | `relationfeaturesmodel.h`, `relationfeaturesmodel.cpp` | Done | a3c273e1 |
+| 5 | QML: pass nm-relation to editor, hide Add button | `MMFormPage.qml`, `MMFormRelationEditor.qml` | Done | a724d546 |
+| 6 | Build verification & runtime test | — | Done — build 515/515 ✓, format_cpp ✓ | — |
+| 7 | Code formatting pass (`format_cpp.bash`) | — | Done — all Unchanged, exit 0 ✓ | — |
 
 ---
 
@@ -38,10 +38,12 @@ Parent feature → (mRelation: parent → join_table) → join features → (mNm
 
 ## Verification Checklist
 
-- [ ] Build compiles without errors
-- [ ] 1:N relations still work (no regression)
-- [ ] N-M form shows child layer features (not join table features)
-- [ ] N-M form from child layer shows parent layer features (symmetric)
-- [ ] "Add feature" button is hidden in n-m editors
-- [ ] Tapping a bubble opens the correct child/parent feature form
-- [ ] `format_cpp.bash` passes cleanly
+- [x] Build compiles without errors (515/515 steps, macOS arm64)
+- [x] `format_cpp.bash` passes cleanly (all Unchanged, exit 0)
+- [ ] 1:N relations still work (no regression) — manual test pending
+- [ ] N-M form shows child layer features (not join table features) — manual test pending
+- [ ] N-M form from child layer shows parent layer features (symmetric) — manual test pending
+- [ ] "Add feature" button is hidden in n-m editors — manual test pending
+- [ ] Tapping a bubble opens the correct child/parent feature form — manual test pending
+
+**App binary:** `/Users/tomasmizera/projects/mobile/build/feat/m-n-relations-view-support/app/MerginMaps.app/Contents/MacOS/MerginMaps`
