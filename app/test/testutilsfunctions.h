@@ -51,7 +51,6 @@ class TestUtilsFunctions: public QObject
     void testFormatAreaInProjectUnit();
     void testRelevantGeometryCenterToScreenCoordinates();
     void testIsValidEmail();
-    void testSanitizeFileName();
     void testSanitizePath();
 
   private:
