@@ -9,7 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 import "../components" as MMComponents
 import "."
@@ -27,19 +27,22 @@ Image {
   asynchronous: true
   autoTransform: true
   layer.enabled: true
-  layer {
-    effect: OpacityMask {
-      maskSource: Item {
-        width: root.width
-        height: root.height
-        Rectangle {
-          anchors.centerIn: parent
-          width: parent.width
-          height: parent.height
-          radius: 20 * __dp
-        }
-      }
+  layer.effect: Component {
+    MultiEffect {
+      maskEnabled: true
+      maskSource: maskRect
+      autoPaddingEnabled: false
     }
+  }
+
+  // The mask shape
+  Rectangle {
+    id: maskRect
+    width: root.width
+    height: root.height
+    radius: 20 * __dp
+    visible: false
+    layer.enabled: true 
   }
 
   Rectangle {

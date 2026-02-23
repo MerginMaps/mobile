@@ -8,7 +8,7 @@
  ***************************************************************************/
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 Item {
   id: root
@@ -23,18 +23,25 @@ Item {
   height: size
   width: size
 
+  // mask for the entire card, containing both image and footer for rounded corners
   Rectangle {
-    id: maskRect
-    anchors.fill: parent
+    id: cardMask
+    width: root.width
+    height: root.height
     radius: __style.margin20
     visible: false
+    layer.enabled: true
   }
 
   Item {
     anchors.fill: parent
     layer.enabled: true
-    layer.effect: OpacityMask {
-      maskSource: maskRect
+    layer.effect: Component {
+      MultiEffect {
+        maskEnabled: true
+        maskSource: cardMask
+        autoPaddingEnabled: false // keeping the geometry locked
+      }
     }
 
     MMPhoto {
@@ -47,7 +54,7 @@ Item {
 
     // the footer of the card
     // contains the text to display over the blurred part of the image
-    FastBlur {
+    Item {
       id: footer
       visible: root.textVisible
 
@@ -58,15 +65,24 @@ Item {
       }
       height: parent.height * 0.33
 
-      radius: 20
-      source: ShaderEffectSource {
-        sourceItem: bngImage
-        sourceRect: Qt.rect(0, bngImage.height - footer.height, bngImage.width,
-                            footer.height)
-        recursive: false
+      clip: true
+
+      // frosted glass effect
+      MultiEffect {
+        source: bngImage
+        width: bngImage.width
+        height: bngImage.height
+        
+        // align the blur at the bottom over the original image
+        y: -footer.y 
+        
+        blurEnabled: true
+        blur: 1.0
+        blurMax: 32
+        autoPaddingEnabled: false
       }
 
-      // Tint Overlay (Child of FastBlur)
+      // tint overlay
       Rectangle {
         anchors.fill: parent
         color: __style.nightColor
