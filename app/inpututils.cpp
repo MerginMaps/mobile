@@ -1063,7 +1063,7 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   QString relativePath = prefixDir.relativeFilePath( cleanPath );
 
   // check if the path starts with ".." or is absolute (on Windows/different drives), it's not a "child"
-  if ( relativePath.startsWith( QLatin1String( ".." ) ) || QDir::isAbsolutePath( relativePath ) )
+  if ( relativePath.startsWith( QLatin1StringView( ".." ) ) || QDir::isAbsolutePath( relativePath ) )
   {
     return {};
   }
@@ -1967,6 +1967,7 @@ QString InputUtils::sanitizeNode( const QString &input )
   cleanOutput = cleanOutput.trimmed();
 
   // remove illegal characters before using QFileInfo
+  // illegal characters: ASCII control letters, "\", "/", "?", "#", "<", ">", ":", "|", " " "
   const static QRegularExpression illegalChars( QStringLiteral( "[\x00-\x1f<>:|?*\"/\\\\]" ) );
   cleanOutput.replace( illegalChars, QStringLiteral( "_" ) );
 
@@ -1985,7 +1986,7 @@ QString InputUtils::sanitizeNode( const QString &input )
     );
     if ( reservedNames.match( base.trimmed() ).hasMatch() )
     {
-      base = base.trimmed() + QLatin1Char( '_' );
+      base = base.trimmed() + QStringLiteral( "_" );
     }
   }
 #endif
@@ -1993,7 +1994,7 @@ QString InputUtils::sanitizeNode( const QString &input )
   // reassemble
   if ( !suffix.isEmpty() )
   {
-    return base + QLatin1Char( '.' ) + suffix;
+    return base + QStringLiteral( "." ) + suffix;
   }
   return base;
 }
@@ -2010,8 +2011,8 @@ void InputUtils::sanitizePath( QString &path )
   cleanPath.replace( QStringLiteral( "#" ), QStringLiteral( "_" ) );
 
   // parse file prefix and path
-  QUrl url = QUrl::fromUserInput( cleanPath );
-  bool isUrl = path.startsWith( QLatin1String( "file:" ), Qt::CaseInsensitive );
+  const QUrl url = QUrl::fromUserInput( cleanPath );
+  const bool isUrl = path.startsWith( QStringLiteral( "file:" ), Qt::CaseInsensitive );
 
   // if it has the file prefix, we will get rid of it
   if ( isUrl )
