@@ -12,11 +12,25 @@
 #include "featurelayerpair.h"
 #include "mixedattributevalue.h"
 
-#include "qgsfield.h"
-#include "qgsvectorlayerutils.h"
+#include <qgsfield.h>
+#include <qgsvectorlayerutils.h>
 
 #include <QRegularExpression>
 #include <QLocale>
+
+QString FieldValidator::numberInvalid() { return tr( "Value must be a number" ); };
+QString FieldValidator::numberUpperBoundReached() { return tr( "Value must be lower than %1" ); };
+QString FieldValidator::numberLowerBoundReached() { return tr( "Value must be higher than %1" ); };
+QString FieldValidator::numberExceedingVariableLimits() { return tr( "Value is too large" );};
+QString FieldValidator::numberMustBeInt() { return tr( "Field can not contain decimal places" );};
+QString FieldValidator::textTooLong() { return tr( "Can not be longer than %1 characters" );};
+QString FieldValidator::softNotNullFailed() { return tr( "Field should not be empty" );};
+QString FieldValidator::hardNotNullFailed() { return tr( "Field must not be empty" );};
+QString FieldValidator::softUniqueFailed() { return tr( "Value should be unique" );};
+QString FieldValidator::hardUniqueFailed() { return tr( "Value must be unique" );};
+QString FieldValidator::softExpressionFailed() { return tr( "Unmet QGIS expression constraint" );};
+QString FieldValidator::hardExpressionFailed() { return tr( "Unmet QGIS expression constraint" );};
+QString FieldValidator::genericValidationFailed() { return tr( "Not a valid value" );};
 
 FieldValidator::FieldValidator( QObject *parent ) :
   QObject( parent )
@@ -42,7 +56,7 @@ FieldValidator::ValidationStatus FieldValidator::validate( const FeatureLayerPai
   if ( value.userType() == qMetaTypeId<MixedAttributeValue>() )
     return Valid;
 
-  bool isNumeric = item.editorWidgetType() == QStringLiteral( "Range" ) || field.isNumeric();
+  const bool isNumeric = item.editorWidgetType() == QStringLiteral( "Range" ) || field.isNumeric();
   if ( isNumeric )
   {
     state = validateNumericField( item, value, validationMessage );
@@ -62,7 +76,7 @@ FieldValidator::ValidationStatus FieldValidator::validate( const FeatureLayerPai
   // Continue to check hard and soft QGIS constraints
   QStringList errors;
 
-  bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
+  const bool hardConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthHard );
   if ( !hardConstraintSatisfied )
   {
     validationMessage = constructConstraintValidationMessage( item, errors );
@@ -71,7 +85,7 @@ FieldValidator::ValidationStatus FieldValidator::validate( const FeatureLayerPai
 
   errors.clear();
 
-  bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
+  const bool softConstraintSatisfied = QgsVectorLayerUtils::validateAttribute( pair.layer(),  pair.feature(), item.fieldIndex(), errors, QgsFieldConstraints::ConstraintStrengthSoft );
   if ( !softConstraintSatisfied )
   {
     validationMessage = constructConstraintValidationMessage( item, errors );
@@ -88,18 +102,18 @@ FieldValidator::ValidationStatus FieldValidator::validateTextField( const FormIt
   // Check if the text is not too long for the field
   if ( field.length() > 0 )
   {
-    const int vLength = value.toString().length();
+    const int vLength = static_cast<int>( value.toString().length() );
 
     if ( vLength > field.length() )
     {
-      validationMessage = ValidationTexts::textTooLong.arg( field.length() );
+      validationMessage = textTooLong().arg( field.length() );
       return Error;
     }
   }
 
   if ( !field.convertCompatible( value ) )
   {
-    validationMessage = ValidationTexts::genericValidationFailed;
+    validationMessage = genericValidationFailed();
     return Error;
   }
 
@@ -117,7 +131,7 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
 
   // in Qt 6 isNull() does not return true for true if the variant contained an object
   // of a builtin type with an isNull() method that returned true for that object.
-  // So isNull() for QVariant( QString() ) will return false and we need to handle this
+  // So isNull() for QVariant( QString() ) will return false, and we need to handle this
   // separately.
   if ( value.userType() == QVariant::String && value.toString().isEmpty() )
   {
@@ -126,17 +140,17 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
 
   QString errorMessage;
 
-  bool containsDecimals = value.toString().contains( QLocale().decimalPoint() ) || value.toString().contains( "." );
+  const bool containsDecimals = value.toString().contains( QLocale().decimalPoint() ) || value.toString().contains( "." );
 
   if ( !field.convertCompatible( value, &errorMessage ) )
   {
     if ( errorMessage.contains( QStringLiteral( "too large" ) ) )
     {
-      validationMessage = ValidationTexts::numberExceedingVariableLimits;
+      validationMessage = numberExceedingVariableLimits();
     }
     else
     {
-      validationMessage = ValidationTexts::numberInvalid;
+      validationMessage = numberInvalid();
     }
 
     return Error;
@@ -147,28 +161,28 @@ FieldValidator::ValidationStatus FieldValidator::validateNumericField( const For
      * however, the value would not be saved and would get replaced by zero,
      * so we need to handle it here and set invalid state for such input.
      */
-    validationMessage = ValidationTexts::numberMustBeInt;
+    validationMessage = numberMustBeInt();
     return Error;
   }
 
-  bool isRangeEditable = item.editorWidgetType() == QStringLiteral( "Range" ) &&
-                         item.editorWidgetConfig().value( QStringLiteral( "Style" ) ) == QStringLiteral( "SpinBox" );
+  const bool isRangeEditable = item.editorWidgetType() == QStringLiteral( "Range" ) &&
+                               item.editorWidgetConfig().value( QStringLiteral( "Style" ) ) == QStringLiteral( "SpinBox" );
 
   // Check min/max range
   if ( isRangeEditable )
   {
-    double min = item.editorWidgetConfig().value( "Min" ).toDouble();
-    double max = item.editorWidgetConfig().value( "Max" ).toDouble();
-    double val = value.toDouble();
+    const double min = item.editorWidgetConfig().value( "Min" ).toDouble();
+    const double max = item.editorWidgetConfig().value( "Max" ).toDouble();
+    const double val = value.toDouble();
 
     if ( val < min )
     {
-      validationMessage = ValidationTexts::numberLowerBoundReached.arg( min );
+      validationMessage = numberLowerBoundReached().arg( min );
       return Error;
     }
     else if ( val > max )
     {
-      validationMessage = ValidationTexts::numberUpperBoundReached.arg( max );
+      validationMessage = numberUpperBoundReached().arg( max );
       return Error;
     }
   }
@@ -182,7 +196,7 @@ FieldValidator::ValidationStatus FieldValidator::validateGenericField( const For
 
   if ( !field.convertCompatible( value ) )
   {
-    validationMessage = ValidationTexts::genericValidationFailed;
+    validationMessage = genericValidationFailed();
     return Error;
   }
 
@@ -197,50 +211,50 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
    */
 
   const QgsField field = item.field();
-  QgsFieldConstraints fldCons = field.constraints();
+  const QgsFieldConstraints &fldCons = field.constraints();
   QStringList validationMessages;
 
-  bool hasNotNullConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintNotNull;
-  bool notNullViolated = unmetConstraints.contains( QStringLiteral( "value is NULL" ) );
+  const bool hasNotNullConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintNotNull;
+  const bool notNullViolated = unmetConstraints.contains( QStringLiteral( "value is NULL" ) );
 
   if ( hasNotNullConstraint && notNullViolated )
   {
-    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintNotNull );
+    const QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintNotNull );
 
     if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      validationMessages << ValidationTexts::hardNotNullFailed;
+      validationMessages << hardNotNullFailed();
     }
     else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      validationMessages << ValidationTexts::softNotNullFailed;
+      validationMessages << softNotNullFailed();
     }
   }
 
-  bool hasUniqueConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintUnique;
-  bool uniqueViolated = unmetConstraints.contains( QStringLiteral( "value is not unique" ) );
+  const bool hasUniqueConstraint = fldCons.constraints() & QgsFieldConstraints::ConstraintUnique;
+  const bool uniqueViolated = unmetConstraints.contains( QStringLiteral( "value is not unique" ) );
 
   if ( hasUniqueConstraint && uniqueViolated )
   {
-    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintUnique );
+    const QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintUnique );
 
     if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
     {
-      validationMessages << ValidationTexts::hardUniqueFailed;
+      validationMessages << hardUniqueFailed();
     }
     else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
     {
-      validationMessages << ValidationTexts::softUniqueFailed;
+      validationMessages << softUniqueFailed();
     }
   }
 
-  bool hasExpressionConstrain = fldCons.constraints() & QgsFieldConstraints::ConstraintExpression;
-  bool expressionViolated = unmetConstraints.filter( QRegularExpression( "(parser error|evaluation error|check failed)" ) ).size() > 0;
+  const bool hasExpressionConstrain = fldCons.constraints() & QgsFieldConstraints::ConstraintExpression;
+  const bool expressionViolated = !unmetConstraints.filter( QRegularExpression( "(parser error|evaluation error|check failed)" ) ).empty();
 
   if ( hasExpressionConstrain && expressionViolated )
   {
-    QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintExpression );
-    bool containsDescription = !fldCons.constraintDescription().isEmpty();
+    const QgsFieldConstraints::ConstraintStrength strength = fldCons.constraintStrength( QgsFieldConstraints::ConstraintExpression );
+    const bool containsDescription = !fldCons.constraintDescription().isEmpty();
 
     if ( containsDescription )
     {
@@ -250,19 +264,19 @@ QString FieldValidator::constructConstraintValidationMessage( const FormItem &it
     {
       if ( strength == QgsFieldConstraints::ConstraintStrengthHard )
       {
-        validationMessages << ValidationTexts::hardExpressionFailed;
+        validationMessages << hardExpressionFailed();
       }
       else if ( strength == QgsFieldConstraints::ConstraintStrengthSoft )
       {
-        validationMessages << ValidationTexts::softExpressionFailed;
+        validationMessages << softExpressionFailed();
       }
     }
   }
 
-  if ( validationMessages.size() )
+  if ( !validationMessages.empty() )
   {
     return validationMessages.join( QStringLiteral( "\n" ) ); // each message on new line
   }
 
-  return QString();
+  return {};
 }
