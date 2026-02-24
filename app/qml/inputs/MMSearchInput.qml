@@ -61,7 +61,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
     else
     {
       // trim the last whitespace from the user's input
-      root.searchText = root.text.replace( /\s+$/, "" )
+      root.searchText = root.text.trim()
     }
   }
 
@@ -74,7 +74,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
     onTriggered: { 
       // when using predictive text suggestions, a whitespace is sometimes added after the word
       // trim the last whitespace from the user's input
-      root.searchText = root.text.replace( /\s+$/, "" )
+      root.searchText = root.text.trim()
     }
   }
 
