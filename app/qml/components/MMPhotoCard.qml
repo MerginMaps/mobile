@@ -7,7 +7,6 @@
  *                                                                         *
  ***************************************************************************/
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Effects
 
 Item {
@@ -18,96 +17,83 @@ Item {
   property bool textVisible: true
   property int size: 120
 
-  signal clicked(string path)
+  signal clicked(url path)
 
   height: size
   width: size
 
-  // mask for the entire card, containing both image and footer for rounded corners
+  layer.enabled: true
+  layer.effect: MultiEffect {
+    maskEnabled: true
+    maskSource: photoMask
+    autoPaddingEnabled: false
+  }
+
   Rectangle {
-    id: cardMask
+    id: photoMask
     width: root.width
     height: root.height
-    radius: __style.margin20
+    radius: 20 * __dp
     visible: false
     layer.enabled: true
   }
 
-  Item {
+  MMPhoto {
+    id: bngImage
     anchors.fill: parent
-    layer.enabled: true
-    layer.effect: Component {
-      MultiEffect {
-        maskEnabled: true
-        maskSource: cardMask
-        autoPaddingEnabled: false // keeping the geometry locked
-      }
+    fillMode: Image.PreserveAspectCrop
+    autoTransform: true
+    smooth: true
+  }
+
+  MultiEffect{
+    id: blurFooter
+    height: parent.height * 0.33
+    visible: root.textVisible
+    anchors {
+      left: parent.left
+      right: parent.right
+      bottom: parent.bottom
     }
 
-    MMPhoto {
-      id: bngImage
-      anchors.fill: parent
-      fillMode: Image.PreserveAspectCrop
-      autoTransform: true
-      smooth: true
+    source: ShaderEffectSource {
+      sourceItem: bngImage
+      sourceRect: Qt.rect(0, bngImage.height - bngImage.height * 0.33, bngImage.width,
+        bngImage.height * 0.33)
+      recursive: false
     }
 
-    // the footer of the card
-    // contains the text to display over the blurred part of the image
-    Item {
-      id: footer
-      visible: root.textVisible
+    autoPaddingEnabled: false
+    blurEnabled: true
+    blur: 0.8
+  }
 
-      anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
-      }
-      height: parent.height * 0.33
+  // tint overlay
+  Rectangle {
+    anchors.fill: blurFooter
+    color: __style.nightColor
+    opacity: 0.35
+    visible: root.textVisible
+  }
 
-      clip: true
+  Text {
+    visible: root.textVisible
+    text: root.text
+    width: root.width - 2 * (root.size * 0.15)
+    anchors.centerIn: blurFooter
 
-      // frosted glass effect
-      MultiEffect {
-        source: bngImage
-        width: bngImage.width
-        height: bngImage.height
-        
-        // align the blur at the bottom over the original image
-        y: -footer.y 
-        
-        blurEnabled: true
-        blur: 1.0
-        blurMax: 32
-        autoPaddingEnabled: false
-      }
+    color: __style.polarColor
+    font: __style.t5
 
-      // tint overlay
-      Rectangle {
-        anchors.fill: parent
-        color: __style.nightColor
-        opacity: 0.35
-      }
+    lineHeightMode: Text.FixedHeight
+    lineHeight: __style.margin16
+    maximumLineCount: 2
 
-      Text {
-        text: root.text
-        width: root.width - 2 * (root.size * 0.15)
-        anchors.centerIn: parent
+    horizontalAlignment: Text.AlignHCenter | Text.AlignJustify
+    verticalAlignment: Text.AlignVCenter
 
-        color: __style.polarColor
-        font: __style.t5
-
-        lineHeightMode: Text.FixedHeight
-        lineHeight: __style.margin16
-        maximumLineCount: 2
-
-        horizontalAlignment: Text.AlignHCenter | Text.AlignJustify
-        verticalAlignment: Text.AlignVCenter
-        
-        wrapMode: Text.WordWrap
-        elide: Text.ElideRight
-      }
-    }
+    wrapMode: Text.WordWrap
+    elide: Text.ElideRight
   }
 
   MMSingleClickMouseArea {
