@@ -170,6 +170,70 @@
     </message>
 </context>
 <context>
+    <name>FieldValidator</name>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="21"/>
+        <source>Value must be a number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="22"/>
+        <source>Value must be lower than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="23"/>
+        <source>Value must be higher than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="24"/>
+        <source>Value is too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="25"/>
+        <source>Field can not contain decimal places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="26"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="27"/>
+        <source>Field should not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="28"/>
+        <source>Field must not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="29"/>
+        <source>Value should be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="30"/>
+        <source>Value must be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="31"/>
+        <location filename="../attributes/fieldvalidator.cpp" line="32"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="33"/>
+        <source>Not a valid value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -3010,67 +3074,6 @@ only allows up to %1 downloaded projects.</source>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
-        <source>Value must be a number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
-        <source>Value must be lower than %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
-        <source>Value must be higher than %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
-        <source>Value is too large</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
-        <source>Field can not contain decimal places</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
-        <source>Can not be longer than %1 characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
-        <source>Field should not be empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
-        <source>Field must not be empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
-        <source>Value should be unique</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
-        <source>Value must be unique</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
-        <source>Unmet QGIS expression constraint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
-        <source>Not a valid value</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
