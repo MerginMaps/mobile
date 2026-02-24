@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Effects
@@ -23,12 +24,10 @@ Image {
   asynchronous: true
   autoTransform: true
   layer.enabled: true
-  layer.effect: Component {
-    MultiEffect {
-      maskEnabled: true
-      maskSource: maskRect
-      autoPaddingEnabled: false
-    }
+  layer.effect: MultiEffect {
+    maskEnabled: true
+    maskSource: maskRect
+    autoPaddingEnabled: false
   }
 
   // The mask shape

@@ -6,6 +6,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Effects
 
@@ -15,7 +17,7 @@ Item {
   property alias imageSource: bngImage.photoUrl
   property string text: ""
   property bool textVisible: true
-  property int size: 120
+  property int size: 120 * __dp
 
   signal clicked(url path)
 
@@ -40,20 +42,18 @@ Item {
 
   MMPhoto {
     id: bngImage
-    anchors.fill: parent
+    anchors.fill: root
     fillMode: Image.PreserveAspectCrop
-    autoTransform: true
-    smooth: true
   }
 
   MultiEffect{
     id: blurFooter
-    height: parent.height * 0.33
+    height: root.height * 0.33
     visible: root.textVisible
     anchors {
-      left: parent.left
-      right: parent.right
-      bottom: parent.bottom
+      left: root.left
+      right: root.right
+      bottom: root.bottom
     }
 
     source: ShaderEffectSource {
@@ -97,7 +97,7 @@ Item {
   }
 
   MMSingleClickMouseArea {
-    anchors.fill: parent
+    anchors.fill: root
     onSingleClicked: root.clicked(root.imageSource)
   }
 }
