@@ -59,7 +59,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   if ( mPositionKit->positionProvider() )
   {
     providerId = mPositionKit->positionProvider()->id();
-    providerName = mPositionKit->positionProvider()->name();
+    providerName = mPositionKit->positionProviderName();
     providerType = mPositionKit->positionProvider()->type();
   }
 
