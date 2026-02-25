@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <QQmlApplicationEngine>
+#include <QTimer>
 
 class QFileSystemWatcher;
 
@@ -34,6 +35,7 @@ class HotReload : public QObject
   private:
     QFileSystemWatcher *_watcher;
     QQmlApplicationEngine &_engine;
+    QTimer* _debounceTimer = nullptr;
 };
 
 #endif // HOTRELOAD_H
