@@ -35,7 +35,7 @@ class HotReload : public QObject
   private:
     QFileSystemWatcher *_watcher;
     QQmlApplicationEngine &_engine;
-    QTimer* _debounceTimer = nullptr;
+    QTimer *_debounceTimer = nullptr;
 };
 
 #endif // HOTRELOAD_H
