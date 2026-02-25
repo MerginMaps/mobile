@@ -17,15 +17,12 @@
 // TODO: not needed to sync dirs every second, just when a file was changed
 QString HotReload::syncScript() const
 {
-  return "#!/bin/sh \n\
-echo running hot reload sync directories ... \n\
-while true; do \n\
-  rsync -ra " GALLERY_SOURCE_DIR "/qml/ HotReload/qml/ \n\
-  rsync -ra " GALLERY_SOURCE_DIR "/../app/qml/ HotReload/app/qml/ \n\
-  sleep 1 \n\
-done";
+    return QString("#!/bin/sh \n"
+                   "echo 'Syncing modified files...' \n"
+                   "rsync -rau \"%1/qml/\" HotReload/qml/ \n"
+                   "rsync -rau \"%1/../app/qml/\" HotReload/app/qml/ \n")
+        .arg(GALLERY_SOURCE_DIR);
 }
-
 HotReload::HotReload( QQmlApplicationEngine &engine, QObject *parent ):
   _engine( engine )
 {
@@ -66,28 +63,52 @@ void HotReload::clearCache()
 
 void HotReload::startHotReload()
 {
-  _watcher = new QFileSystemWatcher( this );
-  _watcher->addPath( "HotReload/qml" );
-  _watcher->addPath( "HotReload/qml/Pages" );
-  _watcher->addPath( "HotReload/app/qml/account" );
-  _watcher->addPath( "HotReload/app/qml/account/components" );
-  _watcher->addPath( "HotReload/app/qml/components" );
-  _watcher->addPath( "HotReload/app/qml/dialogs" );
-  _watcher->addPath( "HotReload/app/qml/form" );
-  _watcher->addPath( "HotReload/app/qml/form/components" );
-  _watcher->addPath( "HotReload/app/qml/form/editors" );
-  _watcher->addPath( "HotReload/app/qml/gps" );
-  _watcher->addPath( "HotReload/app/qml/inputs" );
-  _watcher->addPath( "HotReload/app/qml/layers" );
-  _watcher->addPath( "HotReload/app/qml/map" );
-  _watcher->addPath( "HotReload/app/qml/project" );
-  _watcher->addPath( "HotReload/app/qml/project/components" );
-  _watcher->addPath( "HotReload/app/qml/settings" );
-  _watcher->addPath( "HotReload/app/qml/settings/components" );
+    _debounceTimer = new QTimer(this);
+    _debounceTimer->setSingleShot(true);
+    _debounceTimer->setInterval(300);
 
-  // send signal for hot reloading
-  connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )
-  {
-    emit watchedSourceChanged();
-  } );
+    // When the timer fires, run the sync script ONCE, then reload
+    connect(_debounceTimer, &QTimer::timeout, this, [this]() {
+        // Run the sync synchronously so it finishes before reloading
+        QProcess::execute("./syncGallery.sh");
+        emit watchedSourceChanged();
+    });
+
+    _watcher = new QFileSystemWatcher( this );
+
+    // Set up base paths for your source code
+    QString gallerySrc = QString(GALLERY_SOURCE_DIR) + "/qml";
+    QString appSrc = QString(GALLERY_SOURCE_DIR) + "/../app/qml";
+
+    // Watch the SOURCE directories instead of the destination
+    _watcher->addPath( gallerySrc );
+    _watcher->addPath( gallerySrc + "/Pages" );
+
+    _watcher->addPath( appSrc + "/account" );
+    _watcher->addPath( appSrc + "/account/components" );
+    _watcher->addPath( appSrc + "/components" );
+    _watcher->addPath( appSrc + "/dialogs" );
+    _watcher->addPath( appSrc + "/form" );
+    _watcher->addPath( appSrc + "/form/components" );
+    _watcher->addPath( appSrc + "/form/editors" );
+    _watcher->addPath( appSrc + "/gps" );
+    _watcher->addPath( appSrc + "/inputs" );
+    _watcher->addPath( appSrc + "/layers" );
+    _watcher->addPath( appSrc + "/map" );
+    _watcher->addPath( appSrc + "/project" );
+    _watcher->addPath( appSrc + "/project/components" );
+    _watcher->addPath( appSrc + "/settings" );
+    _watcher->addPath( appSrc + "/settings/components" );
+
+    // When you save a file in your IDE, start the debounce timer
+    connect( _watcher, &QFileSystemWatcher::directoryChanged, this, [this]( const QString & path )
+            {
+                _debounceTimer->start();
+            } );
+
+    // Connect fileChanged as well, just in case macOS watches specific files instead of dirs
+    connect( _watcher, &QFileSystemWatcher::fileChanged, this, [this]( const QString & path )
+            {
+                _debounceTimer->start();
+            } );
 }
