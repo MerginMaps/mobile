@@ -16,7 +16,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property bool delayedSearch: false
-  property int emitInterval: 200
+  property int emitInterval: 250
   property bool showClearIcon: true
   property string searchText: ""
 

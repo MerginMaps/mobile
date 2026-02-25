@@ -39,6 +39,8 @@ MMComponents.MMPage {
       anchors.topMargin: __style.spacing20
       width: parent.width
 
+      delayedSearch: true
+
       placeholderText: qsTr( "Search" ) + "..."
 
       MouseArea {
