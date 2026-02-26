@@ -6,13 +6,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
-
-import "../components" as MMComponents
-import "."
+import QtQuick.Effects
 
 Image {
   id: root
@@ -20,33 +17,34 @@ Image {
   property url photoUrl
   property bool isLocalFile: true
 
-  signal clicked( var path )
+  signal clicked( url path )
 
   height: width
   source: root.photoUrl
   asynchronous: true
   autoTransform: true
   layer.enabled: true
-  layer {
-    effect: OpacityMask {
-      maskSource: Item {
-        width: root.width
-        height: root.height
-        Rectangle {
-          anchors.centerIn: parent
-          width: parent.width
-          height: parent.height
-          radius: 20 * __dp
-        }
-      }
-    }
+  layer.effect: MultiEffect {
+    maskEnabled: true
+    maskSource: maskRect
+    autoPaddingEnabled: false
+  }
+
+  // The mask shape
+  Rectangle {
+    id: maskRect
+    width: root.width
+    height: root.height
+    radius: 20 * __dp
+    visible: false
+    layer.enabled: true 
   }
 
   Rectangle {
-    anchors.fill: parent
+    anchors.fill: root
     color: __style.polarColor
     z: -1
-    visible: root.photoUrl == '' || root.status === Image.Error // if image has transparent background, we would still see it
+    visible: root.photoUrl.toString() === "" || root.status === Image.Error // if image has transparent background, we would still see it
 
     MMIcon {
       anchors.centerIn: parent
@@ -57,13 +55,13 @@ Image {
   }
 
   MMSingleClickMouseArea {
-    anchors.fill: parent
+    anchors.fill: root
     onSingleClicked: root.clicked(root.photoUrl)
   }
 
-  MMComponents.MMBusyIndicator {
+  MMBusyIndicator {
     id: busyIndicator
-    anchors.centerIn: parent
+    anchors.centerIn: root
     visible: root.status === Image.Loading
   }
 
