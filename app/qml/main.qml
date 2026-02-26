@@ -423,7 +423,7 @@ ApplicationWindow {
     onClosed: stateManager.state = "map"
   }
 
-  StackView {
+  MMStackView {
     id: mapPanelsStackView
 
     //

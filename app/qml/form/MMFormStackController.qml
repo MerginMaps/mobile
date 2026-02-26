@@ -10,6 +10,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import MMInput
+
 Item {
   id: root
 
@@ -252,7 +254,7 @@ Item {
     form.controllerToApply = null
   }
 
-  StackView {
+  MMStackView {
     id: formsStack
 
     property bool syncWhenFormCloses: false
