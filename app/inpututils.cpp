@@ -1528,24 +1528,24 @@ QString InputUtils::dumpScreenInfo() const
   const QWindowList windows = QGuiApplication::topLevelWindows();
   if ( !windows.isEmpty() )
   {
-    QScreen *screen = windows.at( 0 )->screen();
-    double dpiX = screen->physicalDotsPerInchX();
-    double dpiY = screen->physicalDotsPerInchY();
-    int height = screen->geometry().height();
-    int width = screen->geometry().width();
-    double sizeX = static_cast<double>( width ) / dpiX * 25.4;
-    double sizeY = static_cast<double>( height ) / dpiY * 25.4;
+    const QScreen *screen = windows.at( 0 )->screen();
+    const double dpiX = screen->physicalDotsPerInchX();
+    const double dpiY = screen->physicalDotsPerInchY();
+    const int height = screen->geometry().height();
+    const int width = screen->geometry().width();
+    const double sizeX = static_cast<double>( width ) / dpiX * 25.4;
+    const double sizeY = static_cast<double>( height ) / dpiY * 25.4;
 
-    msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
-    msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
-    msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-    msg += tr( "reported device pixel ratio: %1\n" ).arg( screen->devicePixelRatio() );
-    msg += tr( "calculated device pixel ratio: %1\n" ).arg( calculateScreenDpr() );
-    msg += tr( "used dp scale: %1" ).arg( calculateDpRatio() );
+    msg += QStringLiteral( "Screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
+    msg += QStringLiteral( "Screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
+    msg += QStringLiteral( "Screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
+    msg += QStringLiteral( "Reported device pixel ratio: %1\n" ).arg( screen->devicePixelRatio() );
+    msg += QStringLiteral( "Calculated device pixel ratio: %1\n" ).arg( calculateScreenDpr() );
+    msg += QStringLiteral( "Used dp scale: %1" ).arg( calculateDpRatio() );
   }
   else
   {
-    msg += QLatin1String( "screen info: application is not initialized!" );
+    msg += QStringLiteral( "Application is not initialized!" );
   }
   return msg;
 }
