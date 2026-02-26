@@ -1063,7 +1063,7 @@ QString InputUtils::getRelativePath( const QString &path, const QString &prefixP
   QString relativePath = prefixDir.relativeFilePath( cleanPath );
 
   // check if the path starts with ".." or is absolute (on Windows/different drives), it's not a "child"
-  if ( relativePath.startsWith( QLatin1StringView( ".." ) ) || QDir::isAbsolutePath( relativePath ) )
+  if ( relativePath.startsWith( QStringLiteral( ".." ) ) || QDir::isAbsolutePath( relativePath ) )
   {
     return {};
   }
@@ -2059,6 +2059,11 @@ void InputUtils::sanitizePath( QString &path )
   {
     path = result;
   }
+}
+
+QString InputUtils::localFileToUrl( const QString &path )
+{
+  return QUrl::fromLocalFile( path ).toString();
 }
 
 QSet<int> InputUtils::referencedAttributeIndexes( QgsVectorLayer *layer, const QString &expression )
