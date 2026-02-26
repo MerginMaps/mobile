@@ -163,7 +163,7 @@ void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *f
   }
 
   QString projectName( projectNameRaw );
-  InputUtils::sanitizeFileName( projectName );
+  projectName = InputUtils::sanitizeNode( projectName );
 
   QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
   QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );

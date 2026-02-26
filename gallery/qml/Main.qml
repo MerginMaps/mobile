@@ -31,7 +31,7 @@ ApplicationWindow {
     function onWatchedSourceChanged() {
       mainLoader.active = false
       _hotReload.clearCache()
-      mainLoader.setSource("file://" + _qmlWrapperPath + currentPageSource)
+      mainLoader.setSource("file:///" + _qmlWrapperPath + currentPageSource)
       mainLoader.active = true
       console.log( new Date().toLocaleTimeString().split(' ')[0] + " ------ App reloaded 🔥 ------ ")
     }
@@ -162,7 +162,7 @@ ApplicationWindow {
           if (__isMobile)
             stackView.push("qrc:/qml/pages/" + model.source)
           else
-            stackView.push("file://" + _qmlWrapperPath + model.source)
+            stackView.push("file:///" + _qmlWrapperPath + model.source)
           stackView.pop()
           drawer.close()
         }
@@ -269,7 +269,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + currentPageSource
+      source: (__isMobile ? "qrc:/qml/pages/" : ("file:///" + _qmlWrapperPath)) + currentPageSource
       scale: 1.0
     }
   }

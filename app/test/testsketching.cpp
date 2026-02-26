@@ -169,7 +169,9 @@ void TestSketching::testLoadBackupSketch()
   sketchingController.mPhotoSource = path;
   sketchingController.mProjectName = QStringLiteral( "/this/is/long/path/to/image/test_sketching" );
   sketchingController.prepareController();
-  QCOMPARE( sketchingController.mPhotoSource, "file://" + QDir::tempPath() + QStringLiteral( "/test_sketching" ) + QStringLiteral( "/MM_test_image.jpg" ) );
+  const QString localPath = QDir::tempPath() + QStringLiteral( "/test_sketching/MM_test_image.jpg" );
+  const QString expectedUrl = QUrl::fromLocalFile( localPath ).toString();
+  QCOMPARE( sketchingController.mPhotoSource, expectedUrl );
   QCOMPARE( sketchingController.mOriginalPhotoSource, QUrl( path ).toLocalFile() );
   QCOMPARE( spy.count(), 1 );
   auto signalArgs = spy.takeLast();
