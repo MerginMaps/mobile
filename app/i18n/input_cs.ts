@@ -168,6 +168,70 @@
     </message>
 </context>
 <context>
+    <name>FieldValidator</name>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="21"/>
+        <source>Value must be a number</source>
+        <translation>Musí být číselná hodnota</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="22"/>
+        <source>Value must be lower than %1</source>
+        <translation>Hodnota musí být menší než %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="23"/>
+        <source>Value must be higher than %1</source>
+        <translation>Hodnota musí být větší než %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="24"/>
+        <source>Value is too large</source>
+        <translation>Hodnota je příliš vysoká</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="25"/>
+        <source>Field can not contain decimal places</source>
+        <translation>Pole musí obsahovat celé číslo</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="26"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation>Nesmí být delší než %1 znaků</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="27"/>
+        <source>Field should not be empty</source>
+        <translation>Pole by nemělo být prázdné</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="28"/>
+        <source>Field must not be empty</source>
+        <translation>Pole nesmí být prázdné</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="29"/>
+        <source>Value should be unique</source>
+        <translation>Hodnota by měla být jedinečná</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="30"/>
+        <source>Value must be unique</source>
+        <translation>Hodnota musí být unikátní</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="31"/>
+        <location filename="../attributes/fieldvalidator.cpp" line="32"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation>Nesplněné omezení výrazu QGIS</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="33"/>
+        <source>Not a valid value</source>
+        <translation>Nevalidní hodnota</translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -233,86 +297,86 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation>právě teď</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>Před %n minutou</numerusform><numerusform>Před %n minutami</numerusform><numerusform>Před %n minutami</numerusform><numerusform>Před %n minutami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>Před %n hodinou</numerusform><numerusform>Před %n hodinami</numerusform><numerusform>Před %n hodinami</numerusform><numerusform>Před %n hodinami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>Před %n dnem</numerusform><numerusform>Před %n dny</numerusform><numerusform>Před %n dny</numerusform><numerusform>Před %n dny</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>Před %n týdnem</numerusform><numerusform>Před %n týdny</numerusform><numerusform>Před %n týdny</numerusform><numerusform>Před %n týdny</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>Před %n měsícem</numerusform><numerusform>Před %n měsíci</numerusform><numerusform>Před %n měsíci</numerusform><numerusform>Před %n měsíci</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>Před %n rokem</numerusform><numerusform>Před %n lety</numerusform><numerusform>Před %n lety</numerusform><numerusform>Před %n lety</numerusform></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1545"/>
+        <location filename="../inpututils.cpp" line="1539"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>rozlišení displeje: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1546"/>
+        <location filename="../inpututils.cpp" line="1540"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>DPI displeje: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1547"/>
+        <location filename="../inpututils.cpp" line="1541"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>velikost displeje: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1548"/>
+        <location filename="../inpututils.cpp" line="1542"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>hlášený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1549"/>
+        <location filename="../inpututils.cpp" line="1543"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>vypočtený poměr pixelů zařízení: %1</translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1550"/>
+        <location filename="../inpututils.cpp" line="1544"/>
         <source>used dp scale: %1</source>
         <translation>použité měřítko dp: %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Ke každé části je třeba přidat alespoň %1 bod.</numerusform><numerusform>Ke každé části je třeba přidat alespoň %1 body.</numerusform><numerusform>Ke každé části je třeba přidat alespoň %1 bodů.</numerusform><numerusform>Ke každé části je třeba přidat alespoň %1 bodů.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Je třeba přidat alespoň %1 bod.</numerusform><numerusform>Je třeba přidat alespoň %1 body.</numerusform><numerusform>Je třeba přidat alespoň %1 bodů.</numerusform><numerusform>Je třeba přidat alespoň %1 bodů.</numerusform></translation>
     </message>
@@ -745,12 +809,12 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
         <source>Search for features...</source>
         <translation>Hledání funkcí...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
         <source>Add feature</source>
         <translation>Přidat prvek</translation>
     </message>
@@ -1225,7 +1289,7 @@ Nemůže být přidáno do projektu.</translation>
         <translation>Vrstvy</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
@@ -1241,12 +1305,12 @@ Nemůže být přidáno do projektu.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
         <source>Confirm selection</source>
         <translation>Potvrdit výběr</translation>
     </message>
@@ -2590,17 +2654,17 @@ Nemůže být přidáno do projektu.</translation>
         <translation>Vyberte pracovní prostor</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation>Čekající pozvánky</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation>Vaše pracovní prostory</translation>
     </message>
@@ -2984,67 +3048,6 @@ only allows up to %1 downloaded projects.</source>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
-        <source>Value must be a number</source>
-        <translation>Musí být číselná hodnota</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
-        <source>Value must be lower than %1</source>
-        <translation>Hodnota musí být menší než %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
-        <source>Value must be higher than %1</source>
-        <translation>Hodnota musí být větší než %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
-        <source>Value is too large</source>
-        <translation>Hodnota je příliš vysoká</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
-        <source>Field can not contain decimal places</source>
-        <translation>Pole musí obsahovat celé číslo</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
-        <source>Can not be longer than %1 characters</source>
-        <translation>Nesmí být delší než %1 znaků</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
-        <source>Field should not be empty</source>
-        <translation>Pole by nemělo být prázdné</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
-        <source>Field must not be empty</source>
-        <translation>Pole nesmí být prázdné</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
-        <source>Value should be unique</source>
-        <translation>Hodnota by měla být jedinečná</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
-        <source>Value must be unique</source>
-        <translation>Hodnota musí být unikátní</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
-        <source>Unmet QGIS expression constraint</source>
-        <translation>Nesplněné omezení výrazu QGIS</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
-        <source>Not a valid value</source>
-        <translation>Nevalidní hodnota</translation>
-    </message>
     <message>
         <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
