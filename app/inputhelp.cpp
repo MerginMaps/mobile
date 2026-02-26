@@ -227,7 +227,7 @@ QVector<QString> InputHelp::logHeader( const bool isHtml ) const
   retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userInfo()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
-    retLines.push_back( QStringLiteral( "Mergin Data: %1/%2 Bytes" )
+    retLines.push_back( QStringLiteral( "Mergin Data: %1/%2" )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ), InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
     retLines.push_back( QStringLiteral( "Workspace Name: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceName() ) );
     retLines.push_back( QStringLiteral( "Workspace ID: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceId() ) );
