@@ -2966,7 +2966,7 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="40"/>
         <source>Internal (fused)</source>
-        <translation>Interný (sloučený)</translation>
+        <translation>Interný (zlúčený)</translation>
     </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="42"/>
