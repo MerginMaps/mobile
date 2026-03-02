@@ -202,7 +202,7 @@
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="27"/>
         <source>Field should not be empty</source>
-        <translation>A mezőnek nem szabad üresnek lennie</translation>
+        <translation>A mező ne maradjon üresen</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="28"/>
