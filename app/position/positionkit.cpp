@@ -53,7 +53,11 @@ QString PositionKit::positionCrs3DGeoidModelName()
   // for internal providers return EGM96 model
   if ( mPositionProvider->type() == QStringLiteral( "internal" ) )
   {
+#ifdef ANDROID
     return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
+#elif Q_OS_IOS
+    return mPosition.isMock ? {} : QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
+#endif
   }
   return {};
 }
