@@ -212,7 +212,7 @@
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="29"/>
         <source>Value should be unique</source>
-        <translation>Az értéknek egyedinek kell lennie</translation>
+        <translation>Az értéknek egyedinek kellene lennie</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="30"/>
