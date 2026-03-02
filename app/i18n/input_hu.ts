@@ -223,7 +223,7 @@
         <location filename="../attributes/fieldvalidator.cpp" line="31"/>
         <location filename="../attributes/fieldvalidator.cpp" line="32"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation>Nem teljesített QGIS kifejezés korlátozás</translation>
+        <translation>Az érték nem felel meg egy beállított feltételnek.</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="33"/>
