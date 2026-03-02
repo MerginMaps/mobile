@@ -55,7 +55,7 @@ MMPrivateComponents.MMBaseInput {
         let absolutePath = model.PhotoPath
 
         if ( absolutePath !== '' && __inputUtils.fileExists( absolutePath ) ) {
-          return "file:///" + absolutePath
+          return __inputUtils.localFileToUrl(absolutePath)
         }
         return ''
       }

@@ -274,7 +274,7 @@ void TestUtilsFunctions::getRelativePath()
   QString relativePath2 =  mUtils->getRelativePath( path2, prefixPath );
   QCOMPARE( fileName2, relativePath2 );
 
-  QString path3 = QStringLiteral( "file://" ) + path2;
+  QString path3 = QUrl( path2 ).toString();
   QString relativePath3 =  mUtils->getRelativePath( path3, prefixPath );
   QCOMPARE( fileName2, relativePath3 );
 
@@ -978,30 +978,6 @@ void TestUtilsFunctions::testIsValidEmail()
   QVERIFY( !InputUtils::isValidEmail( "brokenemail" ) );
   QVERIFY( !InputUtils::isValidEmail( "" ) );
 }
-
-void TestUtilsFunctions::testSanitizeFileName()
-{
-  // unchanged
-  QString str = QStringLiteral( "/simple/valid/filename.ext" );
-  InputUtils::sanitizeFileName( str );
-  QCOMPARE( str, QStringLiteral( "/simple/valid/filename.ext" ) );
-
-  // unchanged
-  str = QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" );
-  InputUtils::sanitizeFileName( str );
-  QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" ) );
-
-  // sanitized
-  str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e .ext " );
-  InputUtils::sanitizeFileName( str );
-  QCOMPARE( str, QStringLiteral( "/sa ni_tized/f_i_l_n_a_m_e.ext" ) );
-
-  // sanitized
-  str = QStringLiteral( "/sa ni*tized/.f<i>l?n\"a:m|e .co .ext " );
-  InputUtils::sanitizeFileName( str );
-  QCOMPARE( str, QStringLiteral( "/sa ni_tized/.f_i_l_n_a_m_e .co.ext" ) );
-}
-
 void TestUtilsFunctions::testSanitizePath()
 {
   // unchanged
@@ -1017,7 +993,7 @@ void TestUtilsFunctions::testSanitizePath()
   // unchanged - url prefix
   str = QStringLiteral( "file://simple/valid/filename.ext" );
   InputUtils::sanitizePath( str );
-  QCOMPARE( str, QStringLiteral( "file://simple/valid/filename.ext" ) );
+  QCOMPARE( str, QStringLiteral( "file:///simple/valid/filename.ext" ) );
 
   // unchanged - url prefix with slash
   str = QStringLiteral( "file:///simple/valid/filename.ext" );
@@ -1027,7 +1003,17 @@ void TestUtilsFunctions::testSanitizePath()
   // unchanged
   str = QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" );
   InputUtils::sanitizePath( str );
-  QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@#äme$%^&()-_=+[]{}`~;',.ext" ) );
+  QCOMPARE( str, QStringLiteral( "/complex/valid/Φ!l@_äme$%^&()-_=+[]{}`~;',.ext" ) );
+
+  // unchanged with partition letter on Windows
+  str = QStringLiteral( "C:/Users/simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "C:/Users/simple/valid/filename.ext" ) );
+
+  // unchanged with partition letter on Windows and file prefix
+  str = QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "file:///C:/Users/simple/valid/filename.ext" ) );
 
   // sanitized
   str = QStringLiteral( "/sa ni*tized/f<i>l?n\"a:m|e.ext " );
@@ -1048,4 +1034,9 @@ void TestUtilsFunctions::testSanitizePath()
   str = QStringLiteral( "project name / project .qgz " );
   InputUtils::sanitizePath( str );
   QCOMPARE( str, QStringLiteral( "project name/project.qgz" ) );
+
+  // sanitized with partition letter
+  str = QStringLiteral( "C:/project name / project .qgz " );
+  InputUtils::sanitizePath( str );
+  QCOMPARE( str, QStringLiteral( "C:/project name/project.qgz" ) );
 }

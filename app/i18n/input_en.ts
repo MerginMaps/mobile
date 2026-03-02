@@ -170,6 +170,70 @@
     </message>
 </context>
 <context>
+    <name>FieldValidator</name>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="21"/>
+        <source>Value must be a number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="22"/>
+        <source>Value must be lower than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="23"/>
+        <source>Value must be higher than %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="24"/>
+        <source>Value is too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="25"/>
+        <source>Field can not contain decimal places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="26"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="27"/>
+        <source>Field should not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="28"/>
+        <source>Field must not be empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="29"/>
+        <source>Value should be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="30"/>
+        <source>Value must be unique</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="31"/>
+        <location filename="../attributes/fieldvalidator.cpp" line="32"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="33"/>
+        <source>Not a valid value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -234,12 +298,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -247,7 +311,7 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -255,8 +319,8 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -264,7 +328,7 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -272,7 +336,7 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -280,7 +344,7 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -288,45 +352,45 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1545"/>
+        <location filename="../inpututils.cpp" line="1539"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation type="unfinished">screen resolution: %1x%2 px
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1546"/>
+        <location filename="../inpututils.cpp" line="1540"/>
         <source>screen DPI: %1x%2
 </source>
         <translation type="unfinished">screen DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1547"/>
+        <location filename="../inpututils.cpp" line="1541"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation type="unfinished">screen size: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1548"/>
+        <location filename="../inpututils.cpp" line="1542"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1549"/>
+        <location filename="../inpututils.cpp" line="1543"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1550"/>
+        <location filename="../inpututils.cpp" line="1544"/>
         <source>used dp scale: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -334,7 +398,7 @@ Won&apos;t be added to the project.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -769,12 +833,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
         <source>Search for features...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
         <source>Add feature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -984,128 +1048,128 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="64"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="69"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
         <source>No receiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="83"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="100"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
         <source>Longitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="103"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="110"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="122"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="129"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="141"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="156"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="171"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="186"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="201"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="216"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="234"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="249"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="266"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="283"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="300"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="313"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="333"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="119"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
         <source>Latitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="138"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="153"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="168"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
         <source>Horizontal accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="183"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
         <source>Vertical accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="198"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="213"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="230"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
         <source>Satellites (in use/view)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="246"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
         <source>HDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="263"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
         <source>VDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="280"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
         <source>PDOP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="297"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
         <source>Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="312"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="321"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
         <source>GPS antenna height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="322"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
         <source>Not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="330"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
         <source>Geoid separation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="348"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
         <source>Manage GPS receivers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1249,7 +1313,7 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1265,12 +1329,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
         <source>Confirm selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2616,17 +2680,17 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2905,8 +2969,8 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="115"/>
-        <source>Mocked position provider</source>
+        <location filename="../position/positionkit.cpp" line="116"/>
+        <source>External (Mock)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3010,67 +3074,6 @@ only allows up to %1 downloaded projects.</source>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
-        <source>Value must be a number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
-        <source>Value must be lower than %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
-        <source>Value must be higher than %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
-        <source>Value is too large</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
-        <source>Field can not contain decimal places</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
-        <source>Can not be longer than %1 characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
-        <source>Field should not be empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
-        <source>Field must not be empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
-        <source>Value should be unique</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
-        <source>Value must be unique</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
-        <source>Unmet QGIS expression constraint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
-        <source>Not a valid value</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>

@@ -75,7 +75,7 @@ MMPrivateComponents.MMBaseInput {
       visible: photoStateGroup.state !== "notSet"
 
       photoUrl: root.photoUrl
-      isLocalFile: root.photoUrl.startsWith( "file://" )
+      isLocalFile: root.photoUrl.startsWith( "file:///")
       cache: false
 
       fillMode: Image.PreserveAspectCrop
@@ -125,7 +125,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file://")
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
 
         onClicked: {
           sketchingLoader.active = true

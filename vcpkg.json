@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2026.1.0",
+    "version": "2026.1.1",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {

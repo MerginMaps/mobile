@@ -27,6 +27,7 @@ MMComponents.MMDrawer {
 
   drawerHeader.title: qsTr( "GPS info" )
 
+
   drawerContent: MMComponents.MMScrollView {
 
     width: parent.width
@@ -62,13 +63,7 @@ MMComponents.MMDrawer {
             width: parent.width / 2
 
             title: qsTr( "Source" )
-            value: {
-              if ( PositionKit.positionProvider ) {
-                PositionKit.positionProviderName()
-              } else {
-                qsTr( "No receiver" )
-              }
-            }
+            value: PositionKit.positionProvider ? PositionKit.positionProviderName : qsTr( "No receiver" )
 
             alignmentRight: Positioner.index % 2 === 1
           }

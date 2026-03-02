@@ -1,0 +1,20 @@
+name: Notify releases repo
+
+on:
+  milestone:
+    types: [created, edited]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch to releases repo
+        env:
+          GH_TOKEN: ${{ secrets.MM_RELEASES_SYNC_TOKEN }}
+        run: |
+          gh api repos/MerginMaps/releases/dispatches \
+            --method POST \
+            -f event_type=milestone-${{ github.event.action }} \
+            -f 'client_payload[repo]=${{ github.repository }}' \
+            -f 'client_payload[milestone_title]=${{ github.event.milestone.title }}' \
+            -f 'client_payload[milestone_url]=${{ github.event.milestone.html_url }}'
