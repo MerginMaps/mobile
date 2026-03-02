@@ -297,88 +297,88 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation>éppen most</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n perccel ezelőtt</numerusform><numerusform>%n perccel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n órával ezelőtt</numerusform><numerusform>%n órával ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n nappal ezelőtt</numerusform><numerusform>%n nappal ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n héttel ezelőtt</numerusform><numerusform>%n héttel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n hónappal ezelőtt</numerusform><numerusform>%n hónappal ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n évvel ezelőtt</numerusform><numerusform>%n évvel ezelőtt</numerusform></translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1545"/>
+        <location filename="../inpututils.cpp" line="1539"/>
         <source>screen resolution: %1x%2 px
 </source>
         <translation>képernyő felbontás: %1x%2 pixel
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1546"/>
+        <location filename="../inpututils.cpp" line="1540"/>
         <source>screen DPI: %1x%2
 </source>
         <translation>képernyő DPI: %1x%2
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1547"/>
+        <location filename="../inpututils.cpp" line="1541"/>
         <source>screen size: %1x%2 mm
 </source>
         <translation>képernyő méret: %1x%2 mm
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1548"/>
+        <location filename="../inpututils.cpp" line="1542"/>
         <source>reported device pixel ratio: %1
 </source>
         <translation>jelentett eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1549"/>
+        <location filename="../inpututils.cpp" line="1543"/>
         <source>calculated device pixel ratio: %1
 </source>
         <translation>számított eszköz pixelarány: %1
 </translation>
     </message>
     <message>
-        <location filename="../inpututils.cpp" line="1550"/>
+        <location filename="../inpututils.cpp" line="1544"/>
         <source>used dp scale: %1</source>
         <translation>használt dp skála: %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform></translation>
     </message>
@@ -811,12 +811,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
         <source>Search for features...</source>
         <translation>Elemek keresése...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
         <source>Add feature</source>
         <translation>Elem hozzáadása</translation>
     </message>
@@ -1104,7 +1104,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
         <source>Satellites (in use/view)</source>
-        <translation>Műholdak (használatban/látókörben)</translation>
+        <translation>Műholdak (használt/látókör)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
@@ -1129,7 +1129,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
-        <translation>Utolsó javítás</translation>
+        <translation>Utolsó GPS helyzetmeghatásozás</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
@@ -1291,7 +1291,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Rétegek</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
@@ -1307,12 +1307,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
         <source>Confirm selection</source>
         <translation>Kiválasztás megerősítése</translation>
     </message>
@@ -2656,17 +2656,17 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Munkaterület kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation>Függőben lévő meghívások</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation>Az Ön munkaterülete</translation>
     </message>
