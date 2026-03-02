@@ -16,7 +16,7 @@ Item {
 
   property alias imageSource: bngImage.photoUrl
   property string text: ""
-  property bool textVisible: true
+  property bool textVisible: false
   property int size: 120 * __dp
 
   signal clicked(url path)

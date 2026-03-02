@@ -60,7 +60,7 @@ MMPrivateComponents.MMBaseInput {
         return ''
       }
 
-      textVisible: true
+      textVisible: false
 
       text: model.FeatureTitle
 
