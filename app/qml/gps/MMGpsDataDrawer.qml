@@ -199,7 +199,7 @@ MMComponents.MMDrawer {
             }
 
             alignmentRight: Positioner.index % 2 === 1
-            desc: PositionKit.positionCrs3DGeoidModelName().length > 0 ? qsTr("Orthometric height, using %1 geoid").arg(PositionKit.positionCrs3DGeoidModelName()) : ""
+            desc: PositionKit.positionCrs3DGeoidModelName().length > 0 ? qsTr("Orthometric height, using %1 geoid").arg(PositionKit.positionCrs3DGeoidModelName()) : qsTr("Elevation using unspecified grid")
           }
 
           MMGpsComponents.MMGpsDataText {
