@@ -1124,6 +1124,11 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation type="unfinished"></translation>
@@ -2974,7 +2979,7 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="121"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation type="unfinished"></translation>
     </message>
