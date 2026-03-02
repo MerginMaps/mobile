@@ -40,6 +40,11 @@ GeoPosition PositionTransformer::processBluetoothPosition( GeoPosition geoPositi
       geoPosition.elevation = geoidPosition.z();
       geoPosition.elevation_diff = ellipsoidElevation - geoidPosition.z();
     }
+    else
+    {
+      geoPosition.elevation = std::numeric_limits<double>::quiet_NaN();
+      geoPosition.elevation_diff = std::numeric_limits<double>::quiet_NaN();
+    }
   }
 
   return geoPosition;
@@ -64,6 +69,11 @@ GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition
 
         geoPosition.elevation = geoidPosition.z();
         geoPosition.elevation_diff = geoidSeparation;
+      }
+      else
+      {
+        geoPosition.elevation = std::numeric_limits<double>::quiet_NaN();
+        geoPosition.elevation_diff = std::numeric_limits<double>::quiet_NaN();
       }
     }
   }

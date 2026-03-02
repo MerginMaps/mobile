@@ -50,6 +50,12 @@ QString PositionKit::positionCrs3DGeoidModelName()
     return mVerticalCrs.description();
   }
 
+  // for internal providers return EGM96 model
+  if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock )
+  {
+    return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
+  }
+
   return {};
 }
 
