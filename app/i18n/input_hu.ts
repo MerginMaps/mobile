@@ -236,7 +236,7 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Kérjük adjon nevet a meglévő mezőnek, mielőtt újat hozna létre.</translation>
+        <translation>Kérjük adjon nevet az előző mezőnek, mielőtt újat hozna létre.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
