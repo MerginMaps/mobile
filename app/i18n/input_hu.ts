@@ -1129,7 +1129,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
         <source>Last Fix</source>
-        <translation>Utolsó GPS helyzetmeghatásozás ideje</translation>
+        <translation>Utolsó GPS helyzetmeghatásozás</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
