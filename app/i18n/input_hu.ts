@@ -202,7 +202,7 @@
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="27"/>
         <source>Field should not be empty</source>
-        <translation>A mezőnek nem szabad üresnek lennie</translation>
+        <translation>A mező ne maradjon üresen</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="28"/>
@@ -223,7 +223,7 @@
         <location filename="../attributes/fieldvalidator.cpp" line="31"/>
         <location filename="../attributes/fieldvalidator.cpp" line="32"/>
         <source>Unmet QGIS expression constraint</source>
-        <translation>Nem teljesített QGIS kifejezés korlátozás</translation>
+        <translation>Az érték nem felel meg egy beállított feltételnek.</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="33"/>
@@ -236,7 +236,7 @@
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
         <source>Please fill a name of previous field before adding a new field.</source>
-        <translation>Kérjük adjon nevet a meglévő mezőnek, mielőtt újat hozna létre.</translation>
+        <translation>Kérjük adjon nevet az előző mezőnek, mielőtt újat hozna létre.</translation>
     </message>
     <message>
         <location filename="../fieldsmodel.cpp" line="23"/>
