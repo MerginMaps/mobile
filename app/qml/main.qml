@@ -1090,6 +1090,13 @@ ApplicationWindow {
     {
       ssoExpiredTokenDialog.open()
     }
+
+    function onProjectSyncRequired( projectFullName)
+    {
+      // modify this
+      __inputUtils.htmlLink(qsTr( "There is a new version of the project availble" ), __style.forestColor),
+      MM.NotificationType.ShowProjectNewVersion
+    }
   }
 
   Connections {
@@ -1111,6 +1118,9 @@ ApplicationWindow {
     }
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
+    }
+    function onShowProjectNewVersionClicked() {
+      __activeProject.requestSync()
     }
   }
 
@@ -1159,6 +1169,7 @@ ApplicationWindow {
 
       AppSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
       AppSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
+      __merginApi.isProjectSyncNeeded(__activeProject.projectFullName(), true)
     }
 
     function onProjectWillBeReloaded() {

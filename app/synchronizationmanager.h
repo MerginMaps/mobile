@@ -92,6 +92,7 @@ class SynchronizationManager : public QObject
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
     void onProjectReloadNeededAfterSync( const QString &projectFullName );
     void onProjectCreated( const QString &projectName, bool result );
+    void onIsProjectSyncNeeded( const QString &projectFullName );
 
   private:
 

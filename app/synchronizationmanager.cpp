@@ -27,6 +27,7 @@ SynchronizationManager::SynchronizationManager(
     connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::projectSyncRequired, this, &SynchronizationManager::onIsProjectSyncNeeded );
     connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&]( const QString & projectFullName )
     {
       const SyncProcess &process = mSyncProcesses[projectFullName];
@@ -326,5 +327,12 @@ void SynchronizationManager::onProjectReloadNeededAfterSync( const QString &proj
   {
     mSyncProcesses[projectFullName].reloadProject = true;
   }
+
+}
+
+void SynchronizationManager::onIsProjectSyncNeeded( const QString &projectFullName )
+{
+  LocalProject project = mMerginApi->getLocalProject( projectFullName );
+  syncProject( project );
 
 }

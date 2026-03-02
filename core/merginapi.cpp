@@ -4597,3 +4597,44 @@ bool MerginApi::serverVersionIsAtLeast( const int requiredMajor, const int requi
   // check patch
   return serverPatch >= requiredPatch;
 }
+
+void MerginApi::isProjectSyncNeededFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QByteArray data = r->readAll();
+    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+
+    LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    if ( projectInfo.isValid() )
+    {
+      // emit a notification
+      if ( projectInfo.localVersion != -1 && projectInfo.localVersion < serverProject.version )
+      {
+        emit projectSyncRequired( projectFullName );
+      }
+
+    }
+  }
+  r->deleteLater();
+}
+
+void MerginApi::isProjectSyncNeeded( const QString &projectFullName, bool withAuth )
+{
+  CoreUtils::log( "DEBUG", "entered the project sync needed method" );
+  QNetworkReply *reply = getProjectInfo( projectFullName );
+
+  if ( !reply )
+    return;
+  if ( reply )
+  {
+    CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Requesting project info for sync: " ) + reply->request().url().toString() );
+    connect( reply, &QNetworkReply::finished, this, &MerginApi::isProjectSyncNeededFinished );
+  }
+}

@@ -645,6 +645,8 @@ class MerginApi: public QObject
      */
     Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
 
+    Q_INVOKABLE void isProjectSyncNeeded( const QString &projectFullName, bool withAuth );
+
     /**
      * Returns the network manager used for Mergin API requests
      */
@@ -689,6 +691,7 @@ class MerginApi: public QObject
 
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
+    void projectSyncRequired( const QString projectFullName );
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
     void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
     void projectReloadNeededAfterSync( const QString &projectFullName );
@@ -777,12 +780,15 @@ class MerginApi: public QObject
 
     void userSelfRegistrationEnabledChanged();
 
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
 
     // Pull slots
     void pullInfoReplyFinished();
+    void isProjectSyncNeededFinished();
+
     void downloadItemReplyFinished( DownloadQueueItem item );
     void cacheServerConfig();
 

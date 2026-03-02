@@ -676,6 +676,11 @@ int main( int argc, char *argv[] )
     notificationModel.addSuccess( message );
   } );
 
+  QObject::connect( ma.get(), &MerginApi::projectSyncRequired, &lambdaContext,  [&notificationModel]( const QString & message )
+  {
+    notificationModel.addInfo( message );
+  } );
+
   QObject::connect( ma.get(), &MerginApi::notifyError, &lambdaContext, [&notificationModel]( const QString & message )
   {
     notificationModel.addError( message );

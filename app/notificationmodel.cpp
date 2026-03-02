@@ -156,6 +156,11 @@ void NotificationModel::onNotificationClicked( uint id )
           emit showSyncFailedDialogClicked();
           break;
         }
+        case NotificationType::ActionType::ShowProjectNewVersionAction:
+        {
+          emit showProjectNewVersionClicked();
+          break;
+        }
         default: break;
       }
     }
