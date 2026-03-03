@@ -152,7 +152,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    if ( isEllipsoidalAltitude && !mSkipElevationTransformation )
+    if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && !mSkipElevationTransformation ) )
     {
       const double ellipsoidAltitude = geoPosition.coordinate().altitude();
       const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();

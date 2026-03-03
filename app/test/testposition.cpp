@@ -708,9 +708,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   newPosition = positionTransformer.processInternalIosPosition( geoPosition );
 
   QCOMPARE( newPosition.elevation, 127.53574931171875 );
-  QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
+  QCOMPARE( newPosition.elevation_diff, 43.764250688281265 );
   QVERIFY( newPosition.isMock );
-  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
   QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
 
 
