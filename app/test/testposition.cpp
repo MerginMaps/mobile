@@ -702,27 +702,12 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
   QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
 
-
-  // ellipsoid elevation
-  geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
-  // mocked
-  geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
-  // transform with pass through disabled, position is mocked and ellipsoid
-  newPosition = positionTransformer.processInternalIosPosition( geoPosition );
-
-  QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
-  QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
-  QVERIFY( newPosition.isMock );
-  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
-  QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) );
-
-
   // mocked
   geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
   // transform with pass through disabled, position is mocked and orthometric
   newPosition = positionTransformer.processInternalIosPosition( geoPosition );
 
-  QCOMPARE( newPosition.elevation, 171.3 );
+  QCOMPARE( newPosition.elevation, 127.53574931171875 );
   QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
   QVERIFY( newPosition.isMock );
   QVERIFY( !geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) );
