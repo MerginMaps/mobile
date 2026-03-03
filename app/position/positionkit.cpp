@@ -51,7 +51,7 @@ QString PositionKit::positionCrs3DGeoidModelName()
   }
 
   // for internal providers return EGM96 model
-  if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock )
+  if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock && !std::isnan( mPosition.elevation_diff ) )
   {
     return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
   }

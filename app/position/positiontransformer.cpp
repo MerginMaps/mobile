@@ -122,9 +122,8 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
   QgsPoint geoidPosition;
 
   const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
-  const bool isMockedProviderEllipsoidAltitude = isMockedLocation && isEllipsoidalAltitude;
-
-  if ( isInternalProviderEllipsoidAltitude || ( isMockedProviderEllipsoidAltitude && !mSkipElevationTransformation ) )
+  // with mocked position we expect ellipsoid elevation
+  if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && !mSkipElevationTransformation ) )
   {
     geoidPosition = InputUtils::transformPoint(
                       mSourceCrs,
