@@ -1097,6 +1097,16 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Výška</translation>
     </message>
     <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Ortometrická výška, podľa %1 geoidu</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Výška podľa neznámeho modelu</translation>
+    </message>
+    <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation>Kvalita fixu</translation>
@@ -2946,7 +2956,7 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Externý (Simulovaný)</translation>
     </message>
