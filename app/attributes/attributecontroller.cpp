@@ -127,32 +127,15 @@ void AttributeController::prefillRelationReferenceField()
   const QList<QgsRelation::FieldPair> fieldPairs = mLinkedRelation.fieldPairs();
   for ( const QgsRelation::FieldPair &fieldPair : fieldPairs )
   {
-    bool fieldFound = false;
     QVariant foreignKey = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
     QString referencingField = fieldPair.referencingField();
-    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-    while ( formItemsIterator != mFormItems.end() )
+    QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
+    if ( childLayer )
     {
-      std::shared_ptr<FormItem> itemData = formItemsIterator.value();
-      if ( itemData->field().name() == referencingField )
+      int fieldIndex = childLayer->fields().lookupField( referencingField );
+      if ( fieldIndex != -1 )
       {
-        setFormValue( itemData->id(), foreignKey );
-        fieldFound = true;
-        break;
-      }
-      ++formItemsIterator;
-    }
-    // if the field is not visible on the child feature's form, look for it in the referincing layer
-    if ( ! fieldFound )
-    {
-      QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
-      if ( childLayer )
-      {
-        int fieldIndex = childLayer->fields().lookupField( referencingField );
-        if ( fieldIndex != -1 )
-        {
-          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
-        }
+        mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
       }
     }
   }
