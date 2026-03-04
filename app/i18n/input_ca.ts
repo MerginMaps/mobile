@@ -1096,6 +1096,16 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Altitud</translation>
     </message>
     <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Alçada ortomètrica, utilitzant el geoide %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Elevació utilitzant una malla no especificada</translation>
+    </message>
+    <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation>Corregir la qualitat</translation>
@@ -2946,7 +2956,7 @@ només permet fins a %1 projectes baixats.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Extern (Simulat)</translation>
     </message>
