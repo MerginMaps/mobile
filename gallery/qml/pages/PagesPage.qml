@@ -11,6 +11,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import MMInput
+
 import "../../app/qml/components"
 import "../../app/qml"
 import "../../app/qml/project"
@@ -21,7 +23,7 @@ import "../../app/qml/account"
 Page {
   id: root
 
-  StackView {
+  MMStackView {
     id: stackview
 
     anchors.fill: parent
