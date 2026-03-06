@@ -61,5 +61,13 @@ void TestImageUtils::testClearOrientationMetadata()
   QVERIFY( !exifData.empty() );
 
   const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
-  QVERIFY( iterator == exifData.end() );
+  QVERIFY( iterator != exifData.end() ); // Ensure the key still exists
+  QCOMPARE( QString::fromStdString( iterator->toString() ), QStringLiteral( "1" ) ); // check that the key is set to 1
+
+  Exiv2::XmpData &xmpData = image->xmpData();
+  const auto xmpIterator = xmpData.findKey( Exiv2::XmpKey( "Xmp.tiff.Orientation" ) );
+  if ( xmpIterator != xmpData.end() ) // Ensure the key still exists
+  {
+    QCOMPARE( QString::fromStdString( xmpIterator->toString() ), QStringLiteral( "1" ) ); // check that the key is set to 1
+  }
 }

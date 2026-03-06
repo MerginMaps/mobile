@@ -145,7 +145,7 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
 
   try
   {
-    const std::unique_ptr<Exiv2::Image> srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
+    const std::unique_ptr srcImage( Exiv2::ImageFactory::open( sourceImage.toStdString() ) );
     if ( !srcImage )
       return false;
 
