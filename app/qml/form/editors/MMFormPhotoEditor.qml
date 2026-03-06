@@ -286,6 +286,7 @@ MMFormPhotoViewer {
      * Called when clicked on the camera icon to capture an image.
      */
     function capturePhoto() {
+      updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
         __inputUtils.log( "Capture photo", "Could not create directory " + targetDir );
@@ -315,6 +316,7 @@ MMFormPhotoViewer {
      * Then "imageSelected" caught the signal, handles changes and sends signal "valueChanged".
      */
     function chooseFromGallery() {
+      updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldIndex )
       }
@@ -350,7 +352,14 @@ MMFormPhotoViewer {
      * Used for Android and desktop builds
      */
     function imageSelected( imgPath ) {
-      let filename = __inputUtils.getFileName( imgPath )
+      updateTargetDir()
+      if ( !targetDir ) {
+        __inputUtils.log( "Select image", "Failed to resolve target dir for new image" )
+        __notificationModel.addError( qsTr( "Failed to process the image, photo directory resolving failed" ) )
+        return
+      }
+
+      const filename = __inputUtils.getFileName( imgPath )
 
       //! final absolute location of an image.
       let absolutePath = __inputUtils.getAbsolutePath( filename, targetDir )
@@ -401,6 +410,14 @@ MMFormPhotoViewer {
           sketchingController.prepareController()
         }
       }
+    }
+
+    /**
+     * Function updates the targetDir property with a new value. Necessary when the photo field uses QGIS expression,
+     * which references another field in the same form, to save photos in certain directory.
+     */
+    function updateTargetDir() {
+      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldFeatureLayerPair, root._fieldActiveProject )
     }
   }
 }
