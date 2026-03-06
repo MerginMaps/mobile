@@ -265,7 +265,7 @@ MMFormPhotoViewer {
         return
       }
 
-      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
+      const absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
@@ -362,11 +362,11 @@ MMFormPhotoViewer {
       const filename = __inputUtils.getFileName( imgPath )
 
       //! final absolute location of an image.
-      let absolutePath = __inputUtils.getAbsolutePath( filename, targetDir )
+      const absolutePath = __inputUtils.getAbsolutePath( filename, targetDir )
 
       if ( !__inputUtils.fileExists( absolutePath ) ) { // we need to copy it!
 
-        let success = __inputUtils.copyFile( imgPath, absolutePath )
+        const success = __inputUtils.copyFile( imgPath, absolutePath )
 
         if ( !success ) {
           __inputUtils.log( "Select image", "Failed to copy image file to " + absolutePath )
@@ -386,7 +386,7 @@ MMFormPhotoViewer {
     function imageCaptured( imgPath ) {
       if ( imgPath ) {
 
-        let prefixPath = prefixToRelativePath.endsWith("/") ? prefixToRelativePath : prefixToRelativePath + "/"
+        const prefixPath = prefixToRelativePath.endsWith("/") ? prefixToRelativePath : prefixToRelativePath + "/"
 
         confirmImage( prefixPath, imgPath )
       }
@@ -403,7 +403,7 @@ MMFormPhotoViewer {
     function confirmImage( prefixToRelativePath, imgPath ) {
       if ( imgPath ) {
         __inputUtils.rescaleImage( imgPath, __activeProject.qgsProject )
-        let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
+        const newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
         if ( photoSketchingLoader.active ) {
