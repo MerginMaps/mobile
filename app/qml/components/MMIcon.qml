@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick.Controls.impl
 
 /**
  Use the size property instead of width and height
@@ -19,27 +19,25 @@ Item {
   required property url source
   property real size: __style.icon24
   property color color: __style.forestColor
+  readonly property bool colorable: source.toString().endsWith("-coloroverlay.svg")
 
   width: size
   height: size
 
-  Image {
-    id: icon
-
+  // IconImage is not part of QML's public API, so this can break on Qt version change.
+  // However, if we don't want to use shaders, this is the most straightforward way.
+  IconImage {
+    visible: !root.source.toString().endsWith("-nocoloroverlay.svg")
     source: root.source
     sourceSize.width: root.width
     sourceSize.height: root.height
+    color: root.color
   }
 
-  // TODO: if all icons are white, we do not need Qt5Compat.GraphicalEffects
-  ColorOverlay {
-    id: overlay
-
-    // Use original colors for some icons, e.g. QGIS layer icons
-    visible: !root.source.toString().endsWith("-nocoloroverlay.svg")
-
-    color: root.color
-    anchors.fill: icon
-    source: icon
+  Image {
+    visible: root.source.toString().endsWith("-nocoloroverlay.svg")
+    source: root.source
+    sourceSize.width: root.width
+    sourceSize.height: root.height
   }
 }
