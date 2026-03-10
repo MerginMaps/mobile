@@ -129,10 +129,10 @@ void AttributeController::prefillRelationReferenceField()
   {
     QVariant foreignKey = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
     QString referencingField = fieldPair.referencingField();
-    QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
+    const QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
     if ( childLayer )
     {
-      int fieldIndex = childLayer->fields().lookupField( referencingField );
+      const int fieldIndex = childLayer->fields().lookupField( referencingField );
       if ( fieldIndex != -1 )
       {
         mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
