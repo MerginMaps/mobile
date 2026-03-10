@@ -22,7 +22,7 @@ Popup {
 
     layer.enabled: true
     layer.effect: MMShadow {
-      radius: __style.radius20
+      blurMax: 64
     }
   }
 }
