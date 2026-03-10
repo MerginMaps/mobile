@@ -155,7 +155,7 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
     Exiv2::ExifData &exifData = srcImage->exifData();
     if ( !exifData.empty() )
     {
-      auto exifIt = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
+      const auto exifIt = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
       if ( exifIt != exifData.end() )
       {
         exifIt->setValue( "1" ); // 1 = no rotation
@@ -166,7 +166,7 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
     Exiv2::XmpData &xmpData = srcImage->xmpData();
     if ( !xmpData.empty() )
     {
-      auto xmpIt = xmpData.findKey( Exiv2::XmpKey( "Xmp.tiff.Orientation" ) );
+      const auto xmpIt = xmpData.findKey( Exiv2::XmpKey( "Xmp.tiff.Orientation" ) );
       if ( xmpIt != xmpData.end() )
       {
         xmpIt->setValue( "1" );
@@ -184,12 +184,7 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
   }
   catch ( const Exiv2::Error &e )
   {
-    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: " ) + QString::fromStdString( e.what() ) );
-    return false;
-  }
-  catch ( ... )
-  {
-    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation EXIF metadata" ) );
+    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: " ).arg( e.what() ) );
     return false;
   }
 }
