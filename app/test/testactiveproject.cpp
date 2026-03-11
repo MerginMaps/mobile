@@ -10,6 +10,7 @@
 #include "testactiveproject.h"
 #include "testutils.h"
 #include "inpututils.h"
+#include "coreutils.h"
 #include "activeproject.h"
 
 #include <QtTest/QtTest>
@@ -36,8 +37,8 @@ void TestActiveProject::testProjectValidations()
   QString projectFilename = "bad_layer.qgz";
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   QSignalSpy spyReportIssues( &activeProject, &ActiveProject::reportIssue );
   QSignalSpy spyErrorsFound( &activeProject, &ActiveProject::loadingErrorFound );
@@ -61,8 +62,8 @@ void TestActiveProject::testProjectLoadFailure()
   InputUtils::cpDir( TestUtils::testDataDir() + "/load_failure", projectdir );
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectdir, projectname );
 
@@ -81,8 +82,8 @@ void TestActiveProject::testPositionTrackingFlag()
   // the position tracking availability is correctly set
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -121,8 +122,8 @@ void TestActiveProject::testRecordingAllowed()
   QString projectFilename = "tracking-project.qgz";
 
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectFilename );
   QVERIFY( activeProject.load( projectDir + "/" + projectFilename ) );
@@ -169,8 +170,8 @@ void TestActiveProject::testRecordingAllowed()
 void TestActiveProject::testLoadingFlagFileExpiration()
 {
   AppSettings as;
-  ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( as, activeLayer, mApi->localProjectsManager() );
 
   // project "planes" - tracking not enabled
   QString projectDir = TestUtils::testDataDir() + "/planes/";
@@ -190,4 +191,36 @@ void TestActiveProject::testLoadingFlagFileExpiration()
   QTest::qWait( ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS + 1000 );
 
   QVERIFY( !flagFile.exists() );
+}
+
+void TestActiveProject::testLoadingAuthFileFromConfiguration()
+{
+  AppSettings appSettings;
+  ActiveLayer activeLayer;
+  ActiveProject activeProject( appSettings, activeLayer, mApi->localProjectsManager() );
+  QString projectDir = TestUtils::testDataDir() + QStringLiteral( "/project_auth_file/" );
+  QString projectName = QStringLiteral( "auth-test.qgz" );
+  QString authFile = QDir( projectDir ).filePath( CoreUtils::AUTH_CONFIG_FILENAME );
+
+  QgsAuthManager *authManager = QgsApplication::authManager();
+
+  mApi->localProjectsManager().addLocalProject( projectDir, projectName );
+  activeProject.load( projectDir + projectName );
+
+  QSignalSpy spyLoadingStarted( &activeProject, &ActiveProject::loadingStarted );
+
+  // we expect the configuration import to fail
+  int count = authManager->configIds().count();
+  QCOMPARE( count, 0 );
+
+  QFileInfo cfgFileInfo( authFile );
+  if ( cfgFileInfo.exists() && cfgFileInfo.isFile() )
+  {
+    // we still check that the configuration can be imported
+    bool ok = authManager->importAuthenticationConfigsFromXml( authFile, AUTH_CONFIG_PASSWORD, true );
+
+    QCOMPARE( ok, true );
+    count = authManager->configIds().count();
+    QCOMPARE( count, 1 );
+  }
 }

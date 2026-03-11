@@ -29,6 +29,7 @@
 const QString CoreUtils::QSETTINGS_APP_GROUP_NAME = QStringLiteral( "inputApp" );
 const QString CoreUtils::LOG_TO_DEVNULL = QStringLiteral();
 const QString CoreUtils::LOG_TO_STDOUT = QStringLiteral( "TO_STDOUT" );
+const QString CoreUtils::AUTH_CONFIG_FILENAME = QStringLiteral( "qgis_cfg.xml" );
 QString CoreUtils::sLogFile = CoreUtils::LOG_TO_DEVNULL;
 int CoreUtils::CHECKSUM_CHUNK_SIZE = 65536;
 
@@ -261,6 +262,11 @@ QString CoreUtils::generateEditConflictFileName( const QString &file, const QStr
 bool CoreUtils::hasProjectFileExtension( const QString filePath )
 {
   return filePath.contains( ".qgs", Qt::CaseInsensitive ) || filePath.contains( ".qgz", Qt::CaseInsensitive );
+}
+
+bool CoreUtils::isAuthConfigFile( const QString filePath )
+{
+  return filePath == AUTH_CONFIG_FILENAME;
 }
 
 bool CoreUtils::isValidName( const QString &name )

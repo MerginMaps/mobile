@@ -358,32 +358,30 @@ void TestAttributeController::testValidationMessages()
     FieldValidator::ValidationStatus expectedValidationStatus;
   };
 
-  namespace V = ValidationTexts;
-
   QList<testunit> testunits
   {
     // Attribute - Name Not NULL - SOFT
-    { items.at( 1 ), QVariant(), V::softNotNullFailed, FieldValidator::Warning  },
+    { items.at( 1 ), QVariant(), FieldValidator::softNotNullFailed(), FieldValidator::Warning  },
     { items.at( 1 ), QStringLiteral( "A" ), "", FieldValidator::Valid },
-    { items.at( 1 ), QVariant( QString() ), V::softNotNullFailed, FieldValidator::Warning },
+    { items.at( 1 ), QVariant( QString() ), FieldValidator::softNotNullFailed(), FieldValidator::Warning },
     { items.at( 1 ), "abcsd fsdkajf nsa ", "", FieldValidator::Valid },
 
     // Attribute - Size Not NULL - HARD <0; 10000>
-    { items.at( 2 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 2 ), QVariant(), FieldValidator::hardNotNullFailed(), FieldValidator::Error },
     { items.at( 2 ), "1", "", FieldValidator::Valid },
-    { items.at( 2 ), "1a", V::numberInvalid, FieldValidator::Error },
-    { items.at( 2 ), "10001", V::numberUpperBoundReached.arg( 10000 ), FieldValidator::Error },
-    { items.at( 2 ), "-1", V::numberLowerBoundReached.arg( 0 ), FieldValidator::Error },
+    { items.at( 2 ), "1a", FieldValidator::numberInvalid(), FieldValidator::Error },
+    { items.at( 2 ), "10001", FieldValidator::numberUpperBoundReached().arg( 10000 ), FieldValidator::Error },
+    { items.at( 2 ), "-1", FieldValidator::numberLowerBoundReached().arg( 0 ), FieldValidator::Error },
     { items.at( 2 ), "150", "", FieldValidator::Valid },
 
     // Attribute - SectorId Unique - SOFT <-100; 1000>
     { items.at( 3 ), "1", "", FieldValidator::Valid },
     { items.at( 3 ), "-100", "", FieldValidator::Valid },
-    { items.at( 3 ), "13", V::softUniqueFailed, FieldValidator::Warning }, // there should already be feature with such value
+    { items.at( 3 ), "13", FieldValidator::softUniqueFailed(), FieldValidator::Warning }, // there should already be feature with such value
     { items.at( 3 ), "14", "", FieldValidator::Valid },
-    { items.at( 3 ), "14sad", V::numberInvalid, FieldValidator::Error },
-    { items.at( 3 ), "-", V::numberInvalid, FieldValidator::Error },
-    { items.at( 3 ), ".", V::numberInvalid, FieldValidator::Error },
+    { items.at( 3 ), "14sad", FieldValidator::numberInvalid(), FieldValidator::Error },
+    { items.at( 3 ), "-", FieldValidator::numberInvalid(), FieldValidator::Error },
+    { items.at( 3 ), ".", FieldValidator::numberInvalid(), FieldValidator::Error },
     { items.at( 3 ), "14", "", FieldValidator::Valid },
 
     // Attribute - Occupied Expression, must be TRUE - HARD, expression descriptionn: 'Must be true'
@@ -391,16 +389,16 @@ void TestAttributeController::testValidationMessages()
     { items.at( 4 ), true, "", FieldValidator::Valid },
 
     // Attribure - DateTime(datetime) Not NULL - HARD, format: yyyy-MM-dd HH:mm:ss (default)
-    { items.at( 5 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 5 ), QVariant(), FieldValidator::hardNotNullFailed(), FieldValidator::Error },
     { items.at( 5 ), QVariant( QDateTime::fromString( "2020-03-10 10:40:30", "yyyy-MM-dd HH:mm:ss" ) ), "", FieldValidator::Valid },
 
     // Attribure - LastEdit(date) Not NULL - HARD, format: dd-MM-yyyy (custom)
-    { items.at( 6 ), QVariant(), V::hardNotNullFailed, FieldValidator::Error },
+    { items.at( 6 ), QVariant(), FieldValidator::hardNotNullFailed(), FieldValidator::Error },
     { items.at( 6 ), QVariant( QDateTime::fromString( "29-10-1998", "dd-MM-yyyy" ) ), "", FieldValidator::Valid },
 
     // Attribute - Hash Unique - HARD
     { items.at( 7 ), QVariant(), "", FieldValidator::Valid },
-    { items.at( 7 ), "1", V::hardUniqueFailed, FieldValidator::Error },
+    { items.at( 7 ), "1", FieldValidator::hardUniqueFailed(), FieldValidator::Error },
     { items.at( 7 ), QVariant(), "", FieldValidator::Valid },
     { items.at( 7 ), "2", "", FieldValidator::Valid },
 
@@ -409,7 +407,7 @@ void TestAttributeController::testValidationMessages()
     { items.at( 8 ), "f", "", FieldValidator::Valid },
     { items.at( 8 ), "fi", "", FieldValidator::Valid },
     { items.at( 8 ), "five ", "", FieldValidator::Valid },
-    { items.at( 8 ), "five chars limit", V::textTooLong.arg( 5 ), FieldValidator::Error },
+    { items.at( 8 ), "five chars limit", FieldValidator::textTooLong().arg( 5 ), FieldValidator::Error },
     { items.at( 8 ), "five ", "", FieldValidator::Valid }
   };
 
@@ -609,13 +607,11 @@ void TestAttributeController::testRawValue()
     FieldValidator::ValidationStatus expectedValidationStatus;
   };
 
-  namespace V = ValidationTexts;
-
   QList<testunit> testunits
   {
     { items.at( 1 ), QVariant( 1 ), QVariant( "1" ), QVariant( "1" ), "", FieldValidator::Valid },
     { items.at( 1 ), QVariant( "1" ), QVariant( "1" ), QVariant( "1" ), "", FieldValidator::Valid },
-    { items.at( 4 ), QVariant( "a" ), QVariant(), QVariant( "a" ), V::numberInvalid, FieldValidator::Error },
+    { items.at( 4 ), QVariant( "a" ), QVariant(), QVariant( "a" ), FieldValidator::numberInvalid(), FieldValidator::Error },
     { items.at( 4 ), QVariant( "1" ), QVariant( 1 ), QVariant( "1" ), "", FieldValidator::Valid },
     { items.at( 4 ), QVariant( 1 ), QVariant( 1 ), QVariant( 1 ), "", FieldValidator::Valid },
   };

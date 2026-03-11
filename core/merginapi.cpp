@@ -373,6 +373,29 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
   return false;
 }
 
+bool MerginApi::authConfigurationHasChanged( const ProjectDiff &diff )
+{
+  for ( QString filePath : diff.remoteAdded )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteUpdated )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteDeleted )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
+      return true;
+  }
+
+  return false;
+}
+
 bool MerginApi::supportsSelectiveSync() const
 {
   return mSupportsSelectiveSync;
@@ -3691,7 +3714,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
 
-  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) )
+  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) || authConfigurationHasChanged( diff ) )
   {
     emit projectReloadNeededAfterSync( projectFullName );
   }

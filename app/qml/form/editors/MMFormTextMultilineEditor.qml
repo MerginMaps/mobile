@@ -128,6 +128,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     onTextChanged: root.editorValueChanged( textArea.text, textArea.text === "" )
+    onPreeditTextChanged: if( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's unconfirmed text
   }
 
   FontMetrics {

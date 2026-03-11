@@ -173,10 +173,10 @@ MMFormPhotoViewer {
     target: root.sketchingController
 
     function onTempPhotoSourceChanged( newPath ){
-      if ( internal.tempSketchedImageSource === "file://" + newPath ) {
+      if ( internal.tempSketchedImageSource === __inputUtils.localFileToUrl( newPath ) ){
         internal.tempSketchedImageSource = ""
       }
-      internal.tempSketchedImageSource = "file://" + newPath
+      internal.tempSketchedImageSource = __inputUtils.localFileToUrl( newPath )
     }
 
     function onSketchesSavingError(){
@@ -269,7 +269,7 @@ MMFormPhotoViewer {
 
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
-        resolvedImageSource = "file://" + absolutePath
+        resolvedImageSource = __inputUtils.localFileToUrl( absolutePath )
         tempSketchedImageSource = ""
       }
       else if ( __inputUtils.isValidUrl( absolutePath ) ) {

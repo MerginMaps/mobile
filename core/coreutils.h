@@ -74,6 +74,7 @@ class CoreUtils
      */
     static const QString LOG_TO_DEVNULL;
     static const QString LOG_TO_STDOUT;
+    static const QString AUTH_CONFIG_FILENAME;
     static void setLogFilename( const QString &value );
 
     static QString logFilename();
@@ -87,6 +88,9 @@ class CoreUtils
 
     //! Checks whether file path has a QGIS project suffix (qgs or qgz)
     static bool hasProjectFileExtension( const QString filePath );
+
+    // Checks whether file is the authentication configuration
+    static bool isAuthConfigFile( const QString filePath );
 
     /**
      * Check whether given project/user name is valid
