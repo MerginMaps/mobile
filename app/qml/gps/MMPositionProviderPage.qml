@@ -222,7 +222,7 @@ MMComponents.MMPage {
         close()
 
         const deviceAddress = ipAddressInput.text + ":" + portInput.text
-        __positionKit.positionProvider = __positionKit.constructProvider( "external_ip", deviceAddress, aliasInput.text )
+        PositionKit.positionProvider = PositionKit.constructProvider( "external_ip", deviceAddress, aliasInput.text )
 
         providersModel.addProvider( aliasInput.text, deviceAddress, "external_ip" )
       }

@@ -73,12 +73,16 @@ void NetworkPositionProvider::closeProvider()
 {
   mTcpSocket->close();
   mUdpSocket->close();
+  if ( mTcpSocket) mTcpSocket->disconnect();
+  if ( mUdpSocket) mUdpSocket->disconnect();
+
+  mUdpReconnectTimer.stop();
+  mReconnectTimer.stop();
 }
 
 void NetworkPositionProvider::positionUpdateReceived()
 {
   QAbstractSocket *socket = dynamic_cast<QAbstractSocket *>( sender() );
-  const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
 
   // if udp is not connected to the host yet, connect
   // this approach will let us use QIODevice functions for both sockets
@@ -164,9 +168,6 @@ void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketS
       emit positionChanged( GeoPosition() );
     }
   }
-
-  const QString socketTypeToString = QMetaEnum::fromType<QAbstractSocket::SocketType>().valueToKey( socket->socketType() );
-  const QString stateToString = QMetaEnum::fromType<QAbstractSocket::SocketState>().valueToKey( state );
 }
 
 void NetworkPositionProvider::reconnectTimeout()
