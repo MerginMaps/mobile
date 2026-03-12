@@ -73,8 +73,8 @@ void NetworkPositionProvider::closeProvider()
 {
   mTcpSocket->close();
   mUdpSocket->close();
-  if ( mTcpSocket) mTcpSocket->disconnect();
-  if ( mUdpSocket) mUdpSocket->disconnect();
+  if ( mTcpSocket ) mTcpSocket->disconnect();
+  if ( mUdpSocket ) mUdpSocket->disconnect();
 
   mUdpReconnectTimer.stop();
   mReconnectTimer.stop();
