@@ -31,7 +31,7 @@ jobs:
       QT_ARCH: "win64_msvc2022_64" # win-only
       
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
           
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
@@ -119,7 +119,7 @@ jobs:
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
           
       - name: Upload APK to Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz
           name: Mergin Maps Gallery ${{ matrix.os }}
