@@ -43,7 +43,8 @@ class NotificationType
       NoAction,
       ShowProjectIssuesAction,
       ShowSwitchWorkspaceAction,
-      ShowSyncFailedDialog
+      ShowSyncFailedDialog,
+      ShowProjectNewVersionAction
     };
     Q_ENUM( ActionType )
 
@@ -111,6 +112,7 @@ class NotificationModel : public QAbstractListModel
     void rowCountChanged();
     void showProjectIssuesActionClicked();
     void showSwitchWorkspaceActionClicked();
+    void showProjectNewVersionClicked();
     void showSyncFailedDialogClicked();
 
   private:
