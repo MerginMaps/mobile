@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Check all builds completed and find artifacts
         id: artifact_finder
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const buildWorkflowNames = ['macOS Build', 'linux Build', 'win64 Build', 'Android Build', 'iOS Build'];
