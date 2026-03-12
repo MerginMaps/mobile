@@ -83,6 +83,8 @@ void HotReload::startHotReload()
   // Watch the SOURCE directories instead of the destination
   _watcher->addPath( gallerySrc );
   _watcher->addPath( gallerySrc + "/Pages" );
+  _watcher->addPath( gallerySrc + "/pages" );
+  _watcher->addPath( gallerySrc + "/components" );
 
   _watcher->addPath( appSrc + "/account" );
   _watcher->addPath( appSrc + "/account/components" );
