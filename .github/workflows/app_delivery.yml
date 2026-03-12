@@ -3,11 +3,12 @@ on:
   workflow_run:
     types:
       - "completed"
-    # Unfortunately we can't specify multiple workflows after which this workflow is triggered. If we specify
-    # multiple workflows the first that finishes triggers this workflow, so we pick the "longest". Linux sometimes takes
-    # longer to build, but we ship Windows, so it has higher priority.
     workflows:
       - "win64 Build"
+      - "macOS Build"
+      - "linux Build"
+      - "Android Build"
+      - "iOS Build"
 
 permissions:
   actions: read
@@ -18,54 +19,64 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - name: Find Artifacts and Format Comment
+      - name: Check all builds completed and find artifacts
         id: artifact_finder
         uses: actions/github-script@v7
         with:
-          # This script finds the artifacts from the required dependency workflows
-          # that ran on the same commit (head_sha) as this PR.
           script: |
             const buildWorkflowNames = ['macOS Build', 'linux Build', 'win64 Build', 'Android Build', 'iOS Build'];
             const headSha = context.payload.workflow_run.head_sha;
-            let commentBody = '## 📦 Build Artifacts Ready\n\n|OS|Status|Build|Info|Workflow run|\n|-----|-----|-----|-----|-----|\n';
-            let artifactsFound = false;
-            
-            // 1. Construct the body of comment with links
-            
+
+            // 1. Fetch all runs for this commit
             const runsResponse = await github.rest.actions.listWorkflowRunsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head_sha: headSha,
-              status: 'success',
               per_page: 50
             });
-            
+
+            const allRuns = runsResponse.data.workflow_runs;
+
+            // 2. Check that every required workflow has a completed run on this commit.
+            //    If any is still in progress (or missing), bail out — another workflow_run
+            //    event will re-trigger this job once that workflow finishes.
+            for (const name of buildWorkflowNames) {
+              const run = allRuns.find(r => r.name === name);
+              if (!run || run.status !== 'completed') {
+                console.log(`Workflow "${name}" is not yet completed. Skipping comment until all builds are done.`);
+                core.setOutput('pr_number', '');
+                return;
+              }
+            }
+
+            console.log('All required workflows are completed. Building comment...');
+
+            // 3. All done — build the comment
+            let commentBody = '## 📦 Build Artifacts Ready\n\n|OS|Status|Build|Info|Workflow run|\n|-----|-----|-----|-----|-----|\n';
+            let artifactsFound = false;
+
             for (const workflowName of buildWorkflowNames) {
-              // Filter to find the run matching the exact workflow name
-              const latestRun = runsResponse.data.workflow_runs.find(run => run.name === workflowName);
-            
-              if (!latestRun) {
-                console.log(`Could not find a successful run for workflow: ${workflowName}`);
-                commentBody += `|**${workflowName}**| 📭 | Build not yet complete or failed.| | |\n`;
+              const latestRun = allRuns.find(run => run.name === workflowName);
+
+              if (!latestRun || latestRun.conclusion !== 'success') {
+                commentBody += `|**${workflowName}**| ❌ | Build failed or not found. | | ${latestRun ? `[#${latestRun.run_number}](${latestRun.html_url})` : ''} |\n`;
                 continue;
               }
-            
-              // for iOS we post only build number as the build is on testflight, for others we link artifacts
+
               if (workflowName !== 'iOS Build') {
-                // List artifacts for that specific run
                 const artifactsResponse = await github.rest.actions.listWorkflowRunArtifacts({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   run_id: latestRun.id,
                 });
-              
+
                 let artifacts = [];
-                if (workflowName === 'Android Build'){
-                  artifacts = artifactsResponse.data.artifacts.filter((artifact) => artifact.name.includes(' APK '));
+                if (workflowName === 'Android Build') {
+                  artifacts = artifactsResponse.data.artifacts.filter(artifact => artifact.name.includes(' APK '));
                 } else {
                   artifacts = artifactsResponse.data.artifacts;
                 }
-              
+
                 if (artifacts.length > 0) {
                   for (const artifact of artifacts) {
                     commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifact.archive_download_url}) | Expires: ${new Date(artifact.expires_at).toLocaleDateString('en-GB')} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
@@ -75,35 +86,30 @@ jobs:
                   commentBody += `|**${workflowName}**| 📭 |  |  | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                 }
               } else {
-                const currentYear = String(new Date().getFullYear()).slice(-2)
-                const currentMonth = (new Date().getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
-                const buildId = `${latestRun.run_number}1${latestRun.run_attempt}`
+                const currentYear = String(new Date().getFullYear()).slice(-2);
+                const currentMonth = (new Date().getMonth() + 1).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+                const buildId = `${latestRun.run_number}1${latestRun.run_attempt}`;
                 commentBody += `|**${workflowName}**| 📬 |  | Build number: ${currentYear}.${currentMonth}.${buildId} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                 artifactsFound = true;
               }
             }
-            
-            if (artifactsFound) {
-                core.setOutput('comment_body', commentBody);
-            } else {
-                core.setOutput('comment_body', 'No artifacts found for this PR commit.');
-            }
-            
-            // 2. Get PR number for posting the comment
+
+            core.setOutput('comment_body', artifactsFound ? commentBody : 'No artifacts found for this PR commit.');
+
+            // 4. Resolve PR number
             const prsResponse = await github.rest.pulls.list({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: 'open',
-                head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`,
-                per_page: 5
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${context.payload.workflow_run.head_branch}`,
+              per_page: 5
             });
-              
+
             const pullRequest = prsResponse.data.find(pr => pr.head.sha === headSha);
-              
+
             if (!pullRequest) {
               console.log(`No open Pull Request found for commit SHA: ${headSha}`);
               core.setOutput('pr_number', '');
-              return;
             } else {
               core.setOutput('pr_number', pullRequest.number);
             }
