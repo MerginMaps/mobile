@@ -780,7 +780,6 @@ class MerginApi: public QObject
 
     void userSelfRegistrationEnabledChanged();
 
-
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -985,7 +984,7 @@ class MerginApi: public QObject
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
-    QSet<QString> mPendingSyncChecks; //!< projects with an in-flight isProjectSyncNeeded request
+    QSet<QString> mPendingSyncChecks; //  not yet updated projects with isProjectSyncNeeded request
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS

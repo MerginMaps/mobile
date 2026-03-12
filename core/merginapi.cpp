@@ -4611,7 +4611,7 @@ void MerginApi::isProjectSyncNeededFinished()
     QByteArray data = r->readAll();
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
 
-    // Skip if a sync is already in progress for this project
+    // skip if a sync is already in progress for this project
     if ( !mTransactionalStatus.contains( projectFullName ) )
     {
       LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
