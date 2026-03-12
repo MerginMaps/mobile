@@ -53,6 +53,16 @@ void TestImageUtils::testClearOrientationMetadata()
   const QString testPhotoName = QStringLiteral( "photo.jpg" );
   QFile::copy( TestUtils::testDataDir() + '/' + testPhotoName, dir.filePath( testPhotoName ) );
 
+  // Set XMP orientation so the XMP code path is checked as well
+  {
+    const std::unique_ptr setupImage( Exiv2::ImageFactory::open( dir.filePath( testPhotoName ).toStdString() ) );
+    setupImage->readMetadata();
+    Exiv2::XmpData &xmpSetup = setupImage->xmpData();
+    xmpSetup["Xmp.tiff.Orientation"] = uint16_t( 6 ); // 6 = 90° CW rotation
+    setupImage->setXmpData( xmpSetup );
+    setupImage->writeMetadata();
+  }
+
   QVERIFY( ImageUtils::clearOrientationMetadata( dir.filePath( testPhotoName ) ) );
 
   const std::unique_ptr image( Exiv2::ImageFactory::open( dir.filePath( testPhotoName ).toStdString() ) );
@@ -60,6 +70,12 @@ void TestImageUtils::testClearOrientationMetadata()
   Exiv2::ExifData &exifData = image->exifData();
   QVERIFY( !exifData.empty() );
 
-  const auto iterator = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
-  QVERIFY( iterator == exifData.end() );
+  const auto exifIterator = exifData.findKey( Exiv2::ExifKey( "Exif.Image.Orientation" ) );
+  QVERIFY( exifIterator != exifData.end() ); // key should be preserved, just reset to 1
+  QCOMPARE( QString::fromStdString( exifIterator->toString() ), QStringLiteral( "1" ) );
+
+  Exiv2::XmpData &xmpData = image->xmpData();
+  const auto xmpIterator = xmpData.findKey( Exiv2::XmpKey( "Xmp.tiff.Orientation" ) );
+  QVERIFY( xmpIterator != xmpData.end() ); // key should be preserved, just reset to 1
+  QCOMPARE( QString::fromStdString( xmpIterator->toString() ), QStringLiteral( "1" ) );
 }
