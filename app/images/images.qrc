@@ -19,8 +19,9 @@
         <file>UploadImage.svg</file>
         <file>WarnLogoImage.svg</file>
         <file>NoMapThemesImage.svg</file>
+        <file>ExternalBluetoothProvider.svg</file>
         <file>ExternalGpsRed.svg</file>
-        <file>ExternalGpsGreen.svg</file>
+        <file>ExternalNetworkProvider.svg</file>
         <file>NegativeMMSymbol.svg</file>
         <file>PositiveMMSymbol.svg</file>
         <file>NeutralMMSymbol.svg</file>

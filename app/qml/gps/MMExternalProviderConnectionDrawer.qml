@@ -19,6 +19,7 @@ import "../components" as MMComponents
 MMComponents.MMDrawer {
   id: root
 
+  property string providerType: ""
   property var positionProvider: PositionKit.positionProvider
   property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
 
@@ -33,10 +34,17 @@ MMComponents.MMDrawer {
     {
       return qsTr( "Connected" )
     }
+    else if ( rootstate.state === "fail")
+    {
+      return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
+    }
     else
     {
-      // either NoConnection or WaitingToReconnect
-      return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
+      if( root.providerType === "bluetooth")
+        return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.")
+      else if (root.providerType === "network")
+        // either NoConnection or WaitingToReconnect
+        return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
     }
   }
 
@@ -45,7 +53,10 @@ MMComponents.MMDrawer {
   property string descriptionText: {
     if ( rootstate.state === "working" )
     {
-      return qsTr( "You might be asked to pair your device during this process." )
+      if( root.providerType === "bluetooth")
+        return qsTr( "You might be asked to pair your device during this process." )
+      else if( root.providerType === "network")
+        return qsTr( "This might take a while..." )
     }
     else if ( rootstate.state === "success" )
     {
@@ -59,7 +70,10 @@ MMComponents.MMDrawer {
 
     else
     {
-      return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+      if( root.providerType === "bluetooth")
+        return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+      else if( root.providerType === "network")
+        return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
     }
   }
 
@@ -69,7 +83,10 @@ MMComponents.MMDrawer {
       return __style.externalGpsRedImage
     }
     else {
-      return __style.externalGpsGreenImage
+      if( root.providerType === "bluetooth" )
+        return __style.externalBluetoothGreenImage
+      else if (root.providerType === "network")
+        return __style.externalNetworkGreenImage
     }
   }
 

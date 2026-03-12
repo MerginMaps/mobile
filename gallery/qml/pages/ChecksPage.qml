@@ -94,9 +94,11 @@ ScrollView {
 
       MMAccountComponents.MMIconCheckBoxHorizontal {
         checked: true
+        width: 300 * __dp
         sourceIcon: __style.redditIcon
         text: "Reddit"
-        small: true
+        description: "This is a small description to check the functionality of this component"
+        small: false
       }
     }
   }

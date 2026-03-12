@@ -103,16 +103,30 @@ MMComponents.MMListDrawer {
     Column {
       width: ListView.view.width
 
-      spacing: 0
+      spacing: __style.spacing16
 
       MMComponents.MMListSpacer { height: __style.margin40 }
+
+      Image {
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        source: __style.mmSymbolImage
+
+        width: 32 * __dp
+        height: 32 * __dp
+
+        fillMode: Image.PreserveAspectFit
+      }
 
       MMComponents.MMText {
         width: parent.width
 
-        text: qsTr( "Looking for devices" ) + "..."
+        text: qsTr( "Looking for more devices" ) + "..."
 
         font: __style.t3
+        color: __style.forestColor
+
+        horizontalAlignment: Text.AlignHCenter
       }
     }
   }
