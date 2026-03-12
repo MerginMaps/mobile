@@ -328,3 +328,4 @@ void SynchronizationManager::onProjectReloadNeededAfterSync( const QString &proj
   }
 
 }
+
