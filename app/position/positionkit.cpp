@@ -153,7 +153,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   // type == internal
   if ( id == QStringLiteral( "simulated" ) )
   {
-    AbstractPositionProvider *provider = new SimulatedPositionProvider();
+    AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -167,12 +167,12 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
       // TODO: inform user + use AndroidPositionProvider::fusedErrorString() output?
 
       // fallback to the default - at this point the Qt Positioning implementation
-      AbstractPositionProvider *provider = new InternalPositionProvider();
+      AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
       QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
       return provider;
     }
     __android_log_print( ANDROID_LOG_INFO, "CPP", "MAKE PROVIDER %d", fused );
-    AbstractPositionProvider *provider = new AndroidPositionProvider( fused );
+    AbstractPositionProvider *provider = new AndroidPositionProvider( fused, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -180,7 +180,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
 
   // id == devicegps
   {
-    AbstractPositionProvider *provider = new InternalPositionProvider();
+    AbstractPositionProvider *provider = new InternalPositionProvider( *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
