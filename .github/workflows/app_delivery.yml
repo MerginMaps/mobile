@@ -65,14 +65,16 @@ jobs:
                 // find the one whose summary contains a URL (written by the deploy step).
                 let linkDict = [];
                 for (const run of checkRuns.data.check_runs) {
-                  const buildType = run.output?.title.split(" ")[1];
-                  const summary = run.output?.summary ?? '';
-                  const match = summary.match(/https:\/\/[^\s)>\]"]+/);
-                  if (match) {
-                    linkDict.push({
-                      type: buildType,
-                      link: summary
-                    });
+                  if (run.name.includes("android") {
+                    const buildType = run.output?.title.split(" ")[1];
+                    const summary = run.output?.summary ?? '';
+                    const match = summary.match(/https:\/\/[^\s)>\]"]+/);
+                    if (match) {
+                      linkDict.push({
+                        type: buildType,
+                        link: summary
+                      });
+                    }
                   }
                 }
                 if (linkDict.length > 0) return linkDict;
