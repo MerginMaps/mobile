@@ -274,6 +274,14 @@ jobs:
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
           echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
+          
+          # Write the Play Store link into this job's check run output
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "https://api.github.com/repos/${{ github.repository }}/check-runs/${{ job.check_run_id }}" \
+            -d "{\"output\":{\"title\":\"Android ${{ matrix.ANDROID_ABI }}\",\"summary\":\"$SHARE_URL\"}}"
 
       - name: Build AAB
         if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
@@ -309,3 +317,11 @@ jobs:
           echo "$FASTLANE_OUTPUT"
           SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
           echo "Google play store AAB link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
+
+          # Write the Play Store link into this job's check run output
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "https://api.github.com/repos/${{ github.repository }}/check-runs/${{ job.check_run_id }}" \
+            -d "{\"output\":{\"title\":\"Android ${{ matrix.ANDROID_ABI }}\",\"summary\":\"$SHARE_URL\"}}"

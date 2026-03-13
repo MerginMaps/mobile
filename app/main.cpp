@@ -6,7 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
+// this comment just triggers build CI's
 #include "mmconfig.h"
 
 #include <QFontDatabase>
