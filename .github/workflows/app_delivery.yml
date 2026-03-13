@@ -59,8 +59,6 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   ref: headSha,
-                  check_name: 'Android Build',
-                  per_page: 10,
                 });
 
                 // There may be multiple check runs with the same name (e.g. matrix builds);
