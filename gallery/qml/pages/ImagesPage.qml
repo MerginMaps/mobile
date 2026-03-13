@@ -38,7 +38,8 @@ ScrollView {
         Column { Image { source: __style.positionTrackingRunningImage } Text { text: "positionTrackingRunningImage" } }
         Column { Image { source: __style.noMapThemesImage } Text { text: "noMapThemesImage" } }
         Column { Image { source: __style.syncImage } Text { text: "syncImage" } }
-        Column { Image { source: __style.externalGpsGreenImage } Text { text: "externalGpsGreenImage" } }
+        Column { Image { source: __style.externalBluetoothGreenImage } Text { text: "externalBluetoothGreenImage" } }
+        Column { Image { source: __style.externalNetworkGreenImage } Text { text: "externalNetworkGreenImage" } }
         Column { Image { source: __style.externalGpsRedImage } Text { text: "externalGpsRedImage" } }
         Column { Image { source: __style.reachedDataLimitImage } Text { text: "reachedDataLimitImage" } }
         Column { Image { source: __style.positiveMMSymbolImage } Text { text: "positiveMMSymbolImage" } }

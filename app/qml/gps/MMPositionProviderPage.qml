@@ -8,8 +8,6 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Dialogs
 
 import mm 1.0 as MM
 import MMInput
@@ -32,8 +30,6 @@ MMComponents.MMPage {
       id: listview
 
       property bool showTopTitle: visibleArea.yPosition * height > ( headerItem.contentHeight / 2 )
-
-      visible: __haveBluetooth
 
       width: parent.width
       height: parent.height
@@ -94,7 +90,7 @@ MMComponents.MMPage {
           if ( ListView.section === "internal" ) {
             let ix = providersModel.index( index + 1, 0 )
             let type = providersModel.data( ix, MM.PositionProvidersModel.ProviderType )
-            if ( type === "external" ) return false
+            if ( type.includes( "external" ) ) return false
           }
 
           return true
@@ -135,10 +131,36 @@ MMComponents.MMPage {
 
       text: qsTr( "Connect new receiver" )
 
-      onClicked: bluetoothDiscoveryLoader.active = true
+      onClicked: {
+        if ( __haveBluetooth ) {
+          providerTypeDrawer.open()
+        }
+        else {
+          networkProviderDrawer.open()
+        }
+      }
+    }
+
+    MMProviderTypeDrawer {
+      id: providerTypeDrawer
+
+      onBluetoothSelected: bluetoothDiscoveryLoader.active = true
+      onNetworkSelected: networkProviderDrawer.open()
+    }
+
+    MMNetworkProviderDrawer {
+      id: networkProviderDrawer
+
+      onConfirmed: function( alias, deviceAddress ) {
+        PositionKit.positionProvider = PositionKit.constructProvider( "external_ip", deviceAddress, alias )
+        providersModel.addProvider( alias, deviceAddress, "external_ip" )
+        connectingDialogLoaderNetwork.open()
+      }
     }
 
     MMComponents.MMMessage {
+      id: infoMessage
+
       visible: !listview.visible
       width: parent.width
       anchors.centerIn: parent
@@ -146,10 +168,10 @@ MMComponents.MMPage {
       image: __style.externalGpsRedImage
       title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
       description: qsTr( "This function is not available on iOS. " +
-                        "Your hardware vendor may provide a custom " +
-                        "app that connects to the receiver and sets position. " +
-                        "The app will still think it is the internal GPS of " +
-                        "your phone/tablet." )
+                          "Your hardware vendor may provide a custom " +
+                          "app that connects to the receiver and sets position. " +
+                          "The app will still think it is the internal GPS of " +
+                          "your phone/tablet." )
       link: __inputHelp.howToConnectGPSLink
     }
 
@@ -162,7 +184,7 @@ MMComponents.MMPage {
       }
 
       onRemoveProvider: {
-        if (removeDialog.providerId === "") {
+        if ( removeDialog.providerId === "" ) {
           close()
           return
         }
@@ -183,7 +205,23 @@ MMComponents.MMPage {
       id: bluetoothDiscoveryLoader
 
       active: false
-      sourceComponent: bluetoothDiscoveryDrawerComponent
+      source: Qt.resolvedUrl( "MMAddPositionProviderDrawer.qml" )
+
+      onLoaded: item.open()
+    }
+
+    Connections {
+      target: bluetoothDiscoveryLoader.item
+
+      function onInitiatedConnectionTo( deviceAddress, deviceName ) {
+        PositionKit.positionProvider = PositionKit.constructProvider( "external_bt", deviceAddress, deviceName )
+        providersModel.addProvider( deviceName, deviceAddress, "external_bt" )
+        bluetoothDiscoveryLoader.item.list.model.discovering = false
+        bluetoothDiscoveryLoader.item.close()
+        connectingDialogLoader.open()
+      }
+
+      function onClosed() { bluetoothDiscoveryLoader.active = false }
     }
 
     Loader {
@@ -191,44 +229,49 @@ MMComponents.MMPage {
 
       active: false
       asynchronous: true
-      sourceComponent: connectionToSavedProviderDialogComponent
+      source: Qt.resolvedUrl( "MMExternalProviderConnectionDrawer.qml" )
+
+      onLoaded: {
+        item.providerType = "bluetooth"
+        item.open()
+      }
 
       function open() {
         active = true
         focus = true
       }
     }
-  }
 
-  Component {
-    id: bluetoothDiscoveryDrawerComponent
+    Connections {
+      target: connectingDialogLoader.item
 
-    MMAddPositionProviderDrawer {
-      onInitiatedConnectionTo: function ( deviceAddress, deviceName ) {
-        PositionKit.positionProvider = PositionKit.constructProvider( "external", deviceAddress, deviceName )
-
-        providersModel.addProvider( deviceName, deviceAddress )
-        list.model.discovering = false
-        close()
-
-        connectingDialogLoader.open()
-      }
-      onClosed: bluetoothDiscoveryLoader.active = false
-
-      Component.onCompleted: open()
+      function onClosed() { connectingDialogLoader.active = false }
+      function onFailure() { PositionKit.positionProvider = PositionKit.constructProvider( "internal", "devicegps", "" ) }
     }
-  }
 
-  Component {
-    id: connectionToSavedProviderDialogComponent
+    Loader {
+      id: connectingDialogLoaderNetwork
 
-    MMBluetoothConnectionDrawer {
-      onClosed: connectingDialogLoader.active = false
+      active: false
+      asynchronous: true
+      source: Qt.resolvedUrl( "MMExternalProviderConnectionDrawer.qml" )
 
-      // revert position provider back to internal provider
-      onFailure: PositionKit.positionProvider = PositionKit.constructProvider( "internal", "devicegps", "" )
+      onLoaded: {
+        item.providerType = "network"
+        item.open()
+      }
 
-      Component.onCompleted: open()
+      function open() {
+        active = true
+        focus = true
+      }
+    }
+
+    Connections {
+      target: connectingDialogLoaderNetwork.item
+
+      function onClosed() { connectingDialogLoaderNetwork.active = false }
+      function onFailure() { PositionKit.positionProvider = PositionKit.constructProvider( "internal", "devicegps", "" ) }
     }
   }
 
@@ -239,7 +282,7 @@ MMComponents.MMPage {
   }
 
   function constructProvider( type, id, name ) {
-    if ( type === "external" ) {
+    if ( type === "external_bt" ) {
       // Is bluetooth turned on?
       if ( !__inputUtils.isBluetoothTurnedOn() ) {
         __inputUtils.turnBluetoothOn()
@@ -253,8 +296,11 @@ MMComponents.MMPage {
 
     PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
 
-    if ( type === "external" ) {
+    if ( type === "external_bt" ) {
       connectingDialogLoader.open()
+    }
+    else if ( type === "external_ip" ) {
+      connectingDialogLoaderNetwork.open()
     }
   }
 }

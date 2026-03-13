@@ -215,6 +215,7 @@ QVariantList AppSettings::savedPositionProviders() const
     QStringList provider;
     provider << settings.value( "providerName" ).toString();
     provider << settings.value( "providerAddress" ).toString();
+    provider << settings.value( "providerType" ).toString();
     providers.push_back( provider );
   }
 
@@ -238,15 +239,16 @@ void AppSettings::savePositionProviders( const QVariantList &providers )
   {
     QVariantList provider = providers[i].toList();
 
-    if ( provider.length() < 2 )
+    if ( provider.length() < 3 )
     {
       CoreUtils::log( QStringLiteral( "AppSettings" ), QStringLiteral( "Tried to save provider without sufficient data" ) );
       continue;
     }
     settings.setArrayIndex( i );
 
-    settings.setValue( "providerName", providers[i].toList()[0] );
-    settings.setValue( "providerAddress", providers[i].toList()[1] );
+    settings.setValue( "providerName", provider[0] );
+    settings.setValue( "providerAddress", provider[1] );
+    settings.setValue( "providerType", provider[2] );
   }
   settings.endArray();
 }
