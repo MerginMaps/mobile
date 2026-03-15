@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 import mm 1.0 as MM

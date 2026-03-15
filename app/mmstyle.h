@@ -401,7 +401,7 @@ class MMStyle: public QObject
     QColor photoSketchingBlueColor() const {return QColor::fromString( "#5E9EE4" );}
     QColor photoSketchingPinkColor() const {return QColor::fromString( "#FF8F93" );}
 
-    QColor shadowColor() const {return QColor::fromString( "#66777777" );}
+    QColor shadowColor() const {return QColor::fromString( "#4D000000" );}
 
     QUrl splitGeometryIcon() const {return QUrl( "qrc:/SplitGeometry.svg" );}
     QUrl streamingIcon() const {return QUrl( "qrc:/Streaming.svg" );}
