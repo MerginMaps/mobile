@@ -128,18 +128,14 @@ QString PositionKit::positionProviderName() const
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
   QString providerType( type );
-
-  // set internal provider for platforms that do not support reading bluetooth serial
-#ifndef HAVE_BLUETOOTH
-  providerType = QStringLiteral( "internal" );
-#endif
-
   if ( providerType == QStringLiteral( "external_bt" ) )
   {
 #ifdef HAVE_BLUETOOTH
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
+#else
+    providerType = QStringLiteral( "internal" );
 #endif
   }
 

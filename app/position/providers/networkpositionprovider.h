@@ -37,6 +37,7 @@ class NetworkPositionProvider : public AbstractPositionProvider
     void startUpdates() override;
     void stopUpdates() override;
     void closeProvider() override;
+    Q_INVOKABLE QString getIpAddress() const; // returns the IP address we try to connect/ are connected to
 
   public slots:
     // processes the received nmea data and emits new position
