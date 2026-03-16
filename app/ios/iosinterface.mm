@@ -28,6 +28,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <Photos/Photos.h>
 
 @implementation IOSInterface
 
@@ -229,13 +230,41 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
       else
       {
         // Gallery handling
-        // Copy an image with metadata from imageURL to targetPath
-        NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
+        // use PHAsset to request the original image data with full EXIF (including GPS).
+        PHAsset *asset = info[UIImagePickerControllerPHAsset];
+        if ( asset )
         {
-          err = QStringLiteral( "Copying image from a gallery failed." );
+          PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+          options.synchronous = YES;
+          options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+          options.version = PHImageRequestOptionsVersionOriginal;
+          options.networkAccessAllowed = YES;
+
+          __block BOOL writeSuccess = NO;
+          [[PHImageManager defaultManager] requestImageDataAndOrientationForAsset:asset
+           options:options
+           resultHandler: ^ ( NSData * imageData, NSString *dataUTI, CGImagePropertyOrientation orientation, NSDictionary * requestInfo )
+          {
+            if ( imageData )
+            {
+              writeSuccess = [imageData writeToFile:imagePath atomically:YES];
+            }
+          }];
+
+          if ( !writeSuccess )
+          {
+            err = QStringLiteral( "Copying image from gallery failed." );
+          }
         }
-        infoImageUrl = nil;
+        else
+        {
+          // fallback: copy file directly, even though GPS metadata might be deleted by iOS
+          NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
+          if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
+          {
+            err = QStringLiteral( "Copying image from a gallery failed." );
+          }
+        }
       }
 
       [picker dismissViewControllerAnimated:YES completion:nil];
