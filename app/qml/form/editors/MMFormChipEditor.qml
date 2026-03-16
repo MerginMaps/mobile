@@ -17,7 +17,7 @@ import "../../components/private" as MMPrivateComponents
  *
  * Displays all options as horizontally-wrapping pill buttons instead of opening
  * a drawer. Intended for fields with a small number of options (≤ 4) where
- * showing all choices inline is more ergonomic than a dropdown.
+ * showing all choices inline is more ergonomic than a drop-down.
  *
  * Requires various global properties set to function, see featureform Loader section.
  * These properties are injected here via 'fieldXYZ' properties and captured with
