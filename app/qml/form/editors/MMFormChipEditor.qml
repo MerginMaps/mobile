@@ -121,24 +121,44 @@ MMPrivateComponents.MMBaseInput {
           Rectangle {
             id: chipBackground
 
-            height: chipLabel.implicitHeight + 2 * __style.margin8
-            width: chipLabel.implicitWidth + 2 * __style.margin16
+            height: chipRow.implicitHeight + 2 * __style.margin8
+            width: chipRow.implicitWidth + 2 * __style.margin16
 
             radius: __style.radius30
 
+            // Selected: solid grassColor fill.
+            // Unselected: white with a muted grey border so selected chip
+            //             stands out clearly even when only 2 options exist.
             color: chipItem.isSelected ? __style.grassColor : __style.polarColor
 
             border.width: __style.width2
-            border.color: chipItem.isSelected ? __style.grassColor : __style.forestColor
+            border.color: chipItem.isSelected ? __style.grassColor : __style.greyColor
 
-            MMComponents.MMText {
-              id: chipLabel
+            Row {
+              id: chipRow
 
               anchors.centerIn: parent
+              spacing: __style.margin4
 
-              text: model.text || ""
-              font: __style.p5
-              color: __style.nightColor
+              // Checkmark shown only on the selected chip for unambiguous feedback.
+              MMComponents.MMIcon {
+                id: chipCheckmark
+
+                visible: chipItem.isSelected
+                source: __style.checkmarkIcon
+                size: __style.icon16
+                color: __style.forestColor
+                anchors.verticalCenter: parent.verticalCenter
+              }
+
+              MMComponents.MMText {
+                id: chipLabel
+
+                text: model.text || ""
+                font: __style.p5
+                color: __style.nightColor
+                anchors.verticalCenter: parent.verticalCenter
+              }
             }
           }
 
