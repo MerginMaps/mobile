@@ -125,11 +125,17 @@ void NetworkPositionProvider::positionUpdateReceived()
     mUdpReconnectTimer.stop();
   }
 
+  const QByteArray rawNmeaData = socket->readAll();
+
+  if ( rawNmeaData.isEmpty() || !rawNmeaData.contains( '$' ) )
+  {
+    return;
+  }
+
   // if by any chance we showed wrong message in the status like "no connection", fix it here
   // we know the connection is working because we just received data from the device
   setState( tr( "Connected" ), State::Connected );
 
-  const QByteArray rawNmeaData = socket->readAll();
   const QString nmeaData( rawNmeaData );
   const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
   GeoPosition transformedPosition = mPositionTransformer->processNetworkPosition( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
@@ -184,6 +190,11 @@ void NetworkPositionProvider::reconnectTimeout()
   }
 }
 
+QString NetworkPositionProvider::getIpAddress() const
+{
+  return mTargetAddress;
+}
+
 void NetworkPositionProvider::reconnect()
 {
   mReconnectTimer.stop();
@@ -191,6 +202,8 @@ void NetworkPositionProvider::reconnect()
   setState( tr( "Reconnecting" ), State::Connecting );
 
   stopUpdates();
+  mReconnectTimer.stop();
+
   startUpdates();
 }
 
