@@ -18,7 +18,6 @@
 #import <ImageIO/ImageIO.h>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
-#include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #include "position/positionkit.h"
 #include "compass.h"
@@ -28,7 +27,6 @@
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import <Photos/Photos.h>
 
 @implementation IOSInterface
 
@@ -178,7 +176,26 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
   UIWindow *rootWindow = app.windows[0];
   UIViewController *rootViewController = rootWindow.rootViewController;
 
-  if ( ![UIImagePickerController isSourceTypeAvailable:( UIImagePickerControllerSourceType ) sourceType] )
+  bool isCamera = ( UIImagePickerControllerSourceType ) sourceType == UIImagePickerControllerSourceTypeCamera;
+
+  if ( !isCamera )
+  {
+    // Gallery: use PHPickerViewController
+    PHPickerConfiguration *config = [[PHPickerConfiguration alloc] init];
+    config.filter = [PHPickerFilter imagesFilter];
+    config.selectionLimit = 1;
+
+    PHPickerViewController *picker = [[PHPickerViewController alloc] initWithConfiguration:config];
+    static IOSGalleryPickerDelegate *galleryDelegate = nullptr;
+    galleryDelegate = [[IOSGalleryPickerDelegate alloc] initWithHandler:handler];
+    picker.delegate = galleryDelegate;
+
+    [rootViewController presentViewController:picker animated:YES completion:nil];
+    return;
+  }
+
+  // Camera: use UIImagePickerController
+  if ( ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] )
   {
     NSString *alertTitle = @"Image picker";
     NSString *alertMessage = @"The functionality is not available";
@@ -189,7 +206,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
                                           preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionOk = [UIAlertAction actionWithTitle:alertOkButtonText
                                style:UIAlertActionStyleDefault
-                               handler:nil]; //You can use a block here to handle a press on this button
+                               handler:nil];
     [alertController addAction:actionOk];
     [rootViewController presentViewController:alertController animated:YES completion:nil];
   }
@@ -197,14 +214,14 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
   {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     imagePickerController = picker;
-    picker.sourceType = ( UIImagePickerControllerSourceType ) sourceType;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
     {
       Q_UNUSED( notification )
-      // Fetch GPS data when an image is captured
+      // Fetch GPS data from positionKit at the moment of capture
       mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
     }];
 
@@ -219,60 +236,13 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
       delegate->processingPicture = YES;
 
       NSString *imagePath = generateImagePath( delegate->handler->targetDir().toNSString() );
-      QString err;
-
-      bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
-      if ( isCameraPhoto )
-      {
-        // Camera handling
-        err = [IOSInterface handleCameraPhoto:info:imagePath];
-      }
-      else
-      {
-        // Gallery handling
-        // use PHAsset to request the original image data with full EXIF (including GPS).
-        PHAsset *asset = info[UIImagePickerControllerPHAsset];
-        if ( asset )
-        {
-          PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-          options.synchronous = YES;
-          options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-          options.version = PHImageRequestOptionsVersionOriginal;
-          options.networkAccessAllowed = YES;
-
-          __block BOOL writeSuccess = NO;
-          [[PHImageManager defaultManager] requestImageDataAndOrientationForAsset:asset
-           options:options
-           resultHandler: ^ ( NSData * imageData, NSString *dataUTI, CGImagePropertyOrientation orientation, NSDictionary * requestInfo )
-          {
-            if ( imageData )
-            {
-              writeSuccess = [imageData writeToFile:imagePath atomically:YES];
-            }
-          }];
-
-          if ( !writeSuccess )
-          {
-            err = QStringLiteral( "Copying image from gallery failed." );
-          }
-        }
-        else
-        {
-          // fallback: copy file directly, even though GPS metadata might be deleted by iOS
-          NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-          if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
-          {
-            err = QStringLiteral( "Copying image from a gallery failed." );
-          }
-        }
-      }
+      QString err = [IOSInterface handleCameraPhoto:info:imagePath];
 
       [picker dismissViewControllerAnimated:YES completion:nil];
       if ( delegate->handler )
       {
         QVariantMap data;
-        QString imagePathData( [imagePath UTF8String] );
-        data["imagePath"] = imagePathData;
+        data["imagePath"] = QString( [imagePath UTF8String] );
         data["error"] = err;
         QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
                                    Q_ARG( bool, err.isEmpty() ),
