@@ -72,6 +72,11 @@
     return; // user cancelled
   }
 
+  if ( !_handler )
+  {
+    return;
+  }
+
   PHPickerResult *result = results.firstObject;
 
   NSDateFormatter *df = [[NSDateFormatter alloc] init];

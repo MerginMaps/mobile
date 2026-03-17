@@ -221,7 +221,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     [[NSNotificationCenter defaultCenter] addObserverForName:@"_UIImagePickerControllerUserDidCaptureItem" object:nil queue:nil usingBlock: ^ ( NSNotification * _Nonnull notification )
     {
       Q_UNUSED( notification )
-      // Fetch GPS data from positionKit at the moment of capture
+      // Fetch GPS data when an image is captured
       mGpsData = getGPSData( delegate->handler->positionKit(), delegate->handler->compass() );
     }];
 
