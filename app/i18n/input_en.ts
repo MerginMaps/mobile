@@ -351,44 +351,6 @@ Won&apos;t be added to the project.</source>
             <numerusform></numerusform>
         </translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1539"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation type="unfinished">screen resolution: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1540"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation type="unfinished">screen DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1541"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation type="unfinished">screen size: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1542"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1543"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1544"/>
-        <source>used dp scale: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
