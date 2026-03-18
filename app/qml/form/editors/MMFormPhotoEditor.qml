@@ -265,7 +265,7 @@ MMFormPhotoViewer {
         return
       }
 
-      let absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
+      const absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
 
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.photoState = "valid"
@@ -286,6 +286,7 @@ MMFormPhotoViewer {
      * Called when clicked on the camera icon to capture an image.
      */
     function capturePhoto() {
+      updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
         __inputUtils.log( "Capture photo", "Could not create directory " + targetDir );
@@ -315,6 +316,7 @@ MMFormPhotoViewer {
      * Then "imageSelected" caught the signal, handles changes and sends signal "valueChanged".
      */
     function chooseFromGallery() {
+      updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldIndex )
       }
@@ -350,14 +352,21 @@ MMFormPhotoViewer {
      * Used for Android and desktop builds
      */
     function imageSelected( imgPath ) {
-      let filename = __inputUtils.getFileName( imgPath )
+      updateTargetDir()
+      if ( !targetDir ) {
+        __inputUtils.log( "Select image", "Failed to resolve target dir for new image" )
+        __notificationModel.addError( qsTr( "Failed to process the image, photo directory resolving failed" ) )
+        return
+      }
+
+      const filename = __inputUtils.getFileName( imgPath )
 
       //! final absolute location of an image.
-      let absolutePath = __inputUtils.getAbsolutePath( filename, targetDir )
+      const absolutePath = __inputUtils.getAbsolutePath( filename, targetDir )
 
       if ( !__inputUtils.fileExists( absolutePath ) ) { // we need to copy it!
 
-        let success = __inputUtils.copyFile( imgPath, absolutePath )
+        const success = __inputUtils.copyFile( imgPath, absolutePath )
 
         if ( !success ) {
           __inputUtils.log( "Select image", "Failed to copy image file to " + absolutePath )
@@ -377,7 +386,7 @@ MMFormPhotoViewer {
     function imageCaptured( imgPath ) {
       if ( imgPath ) {
 
-        let prefixPath = prefixToRelativePath.endsWith("/") ? prefixToRelativePath : prefixToRelativePath + "/"
+        const prefixPath = prefixToRelativePath.endsWith("/") ? prefixToRelativePath : prefixToRelativePath + "/"
 
         confirmImage( prefixPath, imgPath )
       }
@@ -394,13 +403,21 @@ MMFormPhotoViewer {
     function confirmImage( prefixToRelativePath, imgPath ) {
       if ( imgPath ) {
         __inputUtils.rescaleImage( imgPath, __activeProject.qgsProject )
-        let newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
+        const newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
         if ( photoSketchingLoader.active ) {
           sketchingController.prepareController()
         }
       }
+    }
+
+    /**
+     * Function updates the targetDir property with a new value. Necessary when the photo field uses QGIS expression,
+     * which references another field in the same form, to save photos in certain directory.
+     */
+    function updateTargetDir() {
+      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldFeatureLayerPair, root._fieldActiveProject )
     }
   }
 }
