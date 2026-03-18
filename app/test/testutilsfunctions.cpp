@@ -75,13 +75,13 @@ void TestUtilsFunctions::testFormatDuration( const QDateTime &t0, qint64 diffSec
 
 void TestUtilsFunctions::dump_screen_info()
 {
-  if (!QGuiApplication::topLevelWindows().isEmpty())
+  if ( !QGuiApplication::topLevelWindows().isEmpty() )
   {
     QVERIFY( mUtils->dumpScreenInfo().contains( "screen" ) );
   }
   else
   {
-    QCOMPARE(mUtils->dumpScreenInfo(), QStringLiteral( "Application is not initialized!" ));
+    QCOMPARE( mUtils->dumpScreenInfo(), QStringLiteral( "Application is not initialized!" ) );
   }
 }
 
