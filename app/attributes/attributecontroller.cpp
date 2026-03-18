@@ -127,17 +127,16 @@ void AttributeController::prefillRelationReferenceField()
   const QList<QgsRelation::FieldPair> fieldPairs = mLinkedRelation.fieldPairs();
   for ( const QgsRelation::FieldPair &fieldPair : fieldPairs )
   {
-    QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
-    while ( formItemsIterator != mFormItems.end() )
+    QVariant foreignKey = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
+    QString referencingField = fieldPair.referencingField();
+    const QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
+    if ( childLayer )
     {
-      std::shared_ptr<FormItem> itemData = formItemsIterator.value();
-      if ( itemData->field().name() == fieldPair.referencingField() )
+      const int fieldIndex = childLayer->fields().lookupField( referencingField );
+      if ( fieldIndex != -1 )
       {
-        QVariant fk = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
-        setFormValue( itemData->id(), fk );
-        break;
+        mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
       }
-      ++formItemsIterator;
     }
   }
 }
