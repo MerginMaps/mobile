@@ -17,6 +17,7 @@ vcpkg_from_github(
   crssync.patch
   libxml2.patch
   qgis4-project-properties.patch
+  qgis4_url_encoding.patch
 )
 
 file(REMOVE ${SOURCE_PATH}/cmake/FindQtKeychain.cmake)
