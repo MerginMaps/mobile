@@ -332,46 +332,6 @@ Sitä ei lisätä projektiin.</translation>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n vuotta sitten</numerusform><numerusform>%n vuotta sitten</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1539"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>näytön resolutio: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1540"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>näytön DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1541"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>näytön koko: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1542"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>raportoitu laitteen pikselisuhde: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1543"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>raportoitu laitteen pikselisuhde: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1544"/>
-        <source>used dp scale: %1</source>
-        <translation>käytetty dp mittakaava: %1</translation>
-    </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
