@@ -887,12 +887,17 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A fotóvázlatok mentése nem sikerült, kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation>%1 mappát nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation>Nem sikerült feldolgozni a képet, a fotókönyvtár feloldása nem sikerült</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation>Nem sikerült feldolgozni a képet</translation>
     </message>
