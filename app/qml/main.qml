@@ -49,7 +49,7 @@ ApplicationWindow {
     return Qt.Window
   }
 
-  title: "Mergin Maps" // Do not translate
+  title: "MDM Móvil" // Do not translate
 
   readonly property bool isPortraitOrientation: ( Screen.primaryOrientation === Qt.PortraitOrientation
                                                  || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
