@@ -332,46 +332,6 @@ a preto nebude pridaný do projektu.</translation>
         <source>%n year(s) ago</source>
         <translation><numerusform>pred %n rokom</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1539"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>Rozlíšenie obrazovky: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1540"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>DPI obrazovky: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1541"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>Veľkosť obrazovky: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1542"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>reportovaný device pixel ratio: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1543"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>vypočítaný device pixel ratio: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1544"/>
-        <source>used dp scale: %1</source>
-        <translation>použitý dp scale: %1</translation>
-    </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
@@ -1095,6 +1055,16 @@ a preto nebude pridaný do projektu.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Výška</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Ortometrická výška, podľa %1 geoidu</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Výška podľa neznámeho modelu</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
@@ -2946,7 +2916,7 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Externý (Simulovaný)</translation>
     </message>

@@ -332,46 +332,6 @@ No s&apos;afegirà al projecte.</translation>
         <source>%n year(s) ago</source>
         <translation><numerusform>fa %n any(s)</numerusform><numerusform>fa %n any(s)</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1539"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>resolució de pantalla: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1540"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>DPI de pantalla: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1541"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>mida de pantalla: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1542"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>relació de píxels del dispositiu informada: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1543"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>relació de píxels del dispositiu calculada: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1544"/>
-        <source>used dp scale: %1</source>
-        <translation>escala dp utilitzada: %1</translation>
-    </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
@@ -1094,6 +1054,16 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Altitud</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Alçada ortomètrica, utilitzant el geoide %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Elevació utilitzant una malla no especificada</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
@@ -2946,7 +2916,7 @@ només permet fins a %1 projectes baixats.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Extern (Simulat)</translation>
     </message>

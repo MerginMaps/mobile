@@ -50,8 +50,8 @@ QString PositionKit::positionCrs3DGeoidModelName()
     return mVerticalCrs.description();
   }
 
-  // for internal providers return EGM96 model
-  if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock )
+  // for internal providers return EGM96 model if it's not mock, and we haven't got orthometric height
+  if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock && !std::isnan( mPosition.elevation_diff ) )
   {
     return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
   }

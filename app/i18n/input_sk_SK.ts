@@ -297,88 +297,48 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation>práve teraz</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>pred %n minútou </numerusform><numerusform>pred %n minútami</numerusform><numerusform>pred %n minútami</numerusform><numerusform>pred %n minútami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>pred %n hodinou</numerusform><numerusform>pred %n hodinami</numerusform><numerusform>pred %n hodinami</numerusform><numerusform>pred %n hodinami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>pred %n dňom</numerusform><numerusform>pred %n dňami</numerusform><numerusform>pred %n dňami</numerusform><numerusform>pred %n dňami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>pred %n týždňom</numerusform><numerusform>pred %n týždňami</numerusform><numerusform>pred %n týždňami</numerusform><numerusform>pred %n týždňami</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>pred %n mesiacom</numerusform><numerusform>pred %n mesiacmi</numerusform><numerusform>pred %n mesiacmi</numerusform><numerusform>pred %n mesiacmi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>pred %n rokom</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1545"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>Rozlíšenie obrazovky: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1546"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>DPI obrazovky: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1547"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>Veľkosť obrazovky: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1548"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>reportovaný device pixel ratio: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1549"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>vypočítaný device pixel ratio: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1550"/>
-        <source>used dp scale: %1</source>
-        <translation>použitý dp scale: %1</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Musíte pridať aspoň %n bod na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n body na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Musíte pridať aspoň %n bod.</numerusform><numerusform>Musíte pridať aspoň %n body.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform></translation>
     </message>
@@ -811,12 +771,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
         <source>Search for features...</source>
         <translation>Hľadať objekty...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
         <source>Add feature</source>
         <translation>Pridať objekt</translation>
     </message>
@@ -1097,6 +1057,16 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Výška</translation>
     </message>
     <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Ortometrická výška, podľa %1 geoidu</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Výška podľa neznámeho modelu</translation>
+    </message>
+    <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
         <source>Fix quality</source>
         <translation>Kvalita fixu</translation>
@@ -1291,7 +1261,7 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Vrstvy</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation>Hľadať</translation>
     </message>
@@ -1307,12 +1277,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation>Hľadať</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
         <source>Confirm selection</source>
         <translation>Potvrďte výber</translation>
     </message>
@@ -2656,17 +2626,17 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Vyberte pracovný priestor</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation>Hľadať</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation>Čakajúce pozvánky</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation>Tvoje pracovné priestory</translation>
     </message>
@@ -2946,7 +2916,7 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Externý (Simulovaný)</translation>
     </message>
