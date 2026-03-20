@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: mm
 
@@ -191,7 +191,7 @@ jobs:
           tar -c -z -f ${{ github.workspace }}/${MM_TAR} ./
 
       - name: Upload Sdk in Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: ${{ github.workspace }}/${{ env.MM_TAR }}
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} x86_64
