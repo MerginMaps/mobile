@@ -92,6 +92,7 @@
 #include "scalebarkit.h"
 #include "featuresmodel.h"
 #include "staticfeaturesmodel.h"
+#include "filtercontroller.h"
 #include "layerfeaturesmodel.h"
 #include "relationfeaturesmodel.h"
 #include "relationreferencefeaturesmodel.h"
@@ -330,6 +331,7 @@ void initDeclarative()
   qmlRegisterType< MapThemesModel >( "mm", 1, 0, "MapThemesModel" );
   qmlRegisterType< GuidelineController >( "mm", 1, 0, "GuidelineController" );
   qmlRegisterType< FeaturesModel >( "mm", 1, 0, "FeaturesModel" );
+  qmlRegisterType< FilterController >( "mm", 1, 0, "FilterController" );
   qmlRegisterType< StaticFeaturesModel >( "mm", 1, 0, "StaticFeaturesModel" );
   qmlRegisterType< LayerFeaturesModel >( "mm", 1, 0, "LayerFeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "mm", 1, 0, "RelationFeaturesModel" );

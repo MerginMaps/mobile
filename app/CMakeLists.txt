@@ -56,6 +56,7 @@ set(MM_SRCS
     featurelayerpair.cpp
     featuresmodel.cpp
     fieldsmodel.cpp
+    filtercontroller.cpp
     guidelinecontroller.cpp
     hapticsmodel.cpp
     identifykit.cpp
@@ -147,6 +148,7 @@ set(MM_HDRS
     featurelayerpair.h
     featuresmodel.h
     fieldsmodel.h
+    filtercontroller.h
     guidelinecontroller.h
     hapticsmodel.h
     identifykit.h

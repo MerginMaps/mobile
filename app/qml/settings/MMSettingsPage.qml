@@ -207,6 +207,27 @@ MMPage {
       Item { width: 1; height: 1 }
 
       Text {
+        text: qsTr("Map")
+        wrapMode: Text.WordWrap
+        width: parent.width
+        font: __style.h3
+        color: __style.forestColor
+      }
+
+      Item { width: 1; height: 1 }
+
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Always show filter button")
+        description: qsTr("Shows the filter button on the map even when no filters are active")
+        checked: AppSettings.alwaysShowFilterButton
+
+        onClicked: AppSettings.alwaysShowFilterButton = !checked
+      }
+
+      Item { width: 1; height: 1 }
+
+      Text {
         text: qsTr("General")
         wrapMode: Text.WordWrap
         width: parent.width

@@ -38,6 +38,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
+    Q_PROPERTY( bool alwaysShowFilterButton READ alwaysShowFilterButton WRITE setAlwaysShowFilterButton NOTIFY alwaysShowFilterButtonChanged )
 
   public:
     // enum of haptic modes we support
@@ -110,6 +111,9 @@ class AppSettings: public QObject
     HapticsType hapticsType() const;
     void setHapticsType( HapticsType hapticsType );
 
+    bool alwaysShowFilterButton() const;
+    void setAlwaysShowFilterButton( bool alwaysShowFilterButton );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -129,6 +133,7 @@ class AppSettings: public QObject
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
     void hapticsTypeChanged( HapticsType hapticsType );
+    void alwaysShowFilterButtonChanged( bool alwaysShowFilterButton );
 
     void ignoreMigrateVersionChanged();
 
@@ -169,6 +174,7 @@ class AppSettings: public QObject
     QString mIgnoreMigrateVersion;
 
     HapticsType mHapticsType;
+    bool mAlwaysShowFilterButton = false;
 };
 
 #endif // APPSETTINGS_H
