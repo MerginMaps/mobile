@@ -429,6 +429,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Local changes")
         iconSource: __style.localChangesIcon
+        visible: false // <-- para que no sea visible 2026
         onClicked: {
           stateManager.state = "projects"
           projectController.openChangesPanel( __activeProject.projectFullName(), true )
