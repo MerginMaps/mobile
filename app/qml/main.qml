@@ -77,7 +77,7 @@ ApplicationWindow {
         name: "misc" // Settings, GPS panel, ..
       }
     ]
-
+// aquí carga el mapa 2026 < ---
     onStateChanged: {
       if ( stateManager.state === "map" ) {
         map.state = "view"
@@ -112,7 +112,7 @@ ApplicationWindow {
     }
   }
 
-  Component.onCompleted: {
+/*  Component.onCompleted: {
 
     // load default project
     if ( AppSettings.defaultProject ) {
@@ -141,7 +141,52 @@ ApplicationWindow {
     } )
 
     console.log("Application initialized!")
-  }
+  }*/
+
+  /*Component.onCompleted: {
+      // 1. Definir la ruta local a tu proyecto
+      var rutaLocal = "E:/INEGI/Aguascalientes.qgz";
+      console.log("Iniciando app personalizada. Intentando cargar: " + rutaLocal);
+
+      // 2. Usar el objeto C++ interno de MerginMaps para cargar el proyecto
+      if ( __activeProject.load( rutaLocal ) ) {
+        // Si el proyecto carga correctamente:
+        console.log("Proyecto cargado con éxito.");
+        AppSettings.defaultProject = rutaLocal;
+        AppSettings.activeProject = rutaLocal;
+
+        // 3. Forzar a la interfaz a mostrar la pantalla del mapa
+        stateManager.state = "map";
+      } else {
+        // Si la ruta está mal o el archivo no existe, no se quedará en blanco
+        console.log("Error: No se pudo cargar el proyecto en la ruta especificada.");
+        stateManager.state = "projects";
+      }
+
+      // 4. Capturar el botón físico de "Atrás" (Vital para Android)
+      contentItem.Keys.released.connect( function( event ) {
+        if ( event.key === Qt.Key_Back ) {
+          event.accepted = true
+          window.backButtonPressed()
+      }
+    } )
+  }*/
+
+  Component.onCompleted: {
+      // Primero definimos el estado para que la interfaz esté lista
+      stateManager.state = "map"
+
+      // Luego abrimos el selector de archivos
+      projectFileDialog.open()
+
+      // El resto de tu lógica de botones...
+      contentItem.Keys.released.connect( function( event ) {
+        if ( event.key === Qt.Key_Back ) {
+          event.accepted = true
+          window.backButtonPressed()
+        }
+      } )
+    }
 
   MMMapController {
     id: map
@@ -295,10 +340,19 @@ ApplicationWindow {
 
         text: qsTr("Sync")
         iconSource: __style.syncIcon
+        visible: false // <-- para que no sea visible 2026
         onClicked: {
           __activeProject.requestSync()
         }
       }
+
+      MMToolbarButton {
+              text: qsTr("Abrir Archivo") // Cambié el texto
+              iconSource: __style.homeIcon
+              onClicked: {
+                projectFileDialog.open() // Ahora este botón abre el explorador
+              }
+            }
 
       MMToolbarButton {
         id: addButton
@@ -329,6 +383,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Projects")
         iconSource: __style.homeIcon
+        visible: false // <-- para que no sea visible 2026
         onClicked: {
           stateManager.state = "projects"
         }
@@ -1234,4 +1289,71 @@ ApplicationWindow {
       storeWindowPositionTimer.restart()
     }
   }
+
+  /*Component.onCompleted: {
+      // 1. Definir la ruta local a tu proyecto
+      var rutaLocal = "E:/INEGI/Aguascalientes.qgz";
+      console.log("Iniciando app personalizada. Intentando cargar: " + rutaLocal);
+
+      // 2. Usar el objeto C++ interno de MerginMaps para cargar el proyecto
+      if ( __activeProject.load( rutaLocal ) ) {
+        // Si el proyecto carga correctamente:
+        console.log("Proyecto cargado con éxito.");
+        AppSettings.defaultProject = rutaLocal;
+        AppSettings.activeProject = rutaLocal;
+
+        // 3. Forzar a la interfaz a mostrar la pantalla del mapa
+        stateManager.state = "map";
+      } else {
+        // Si la ruta está mal o el archivo no existe, no se quedará en blanco
+        console.log("Error: No se pudo cargar el proyecto en la ruta especificada.");
+        stateManager.state = "projects";
+      }
+
+      // 4. Capturar el botón físico de "Atrás" (Vital para Android)
+      contentItem.Keys.released.connect( function( event ) {
+        if ( event.key === Qt.Key_Back ) {
+          event.accepted = true
+          window.backButtonPressed()
+      }
+    } )
+  }*/
+  FileDialog {
+      id: projectFileDialog
+      title: "Seleccionar Proyecto QGIS"
+      // Usamos el nombre de propiedad correcto según tu versión de Qt
+//      currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+      nameFilters: ["Archivos de proyecto QGIS (*.qgz *.qgs)"]
+      onAccepted: {
+        // 1. Convertimos el objeto URL a texto
+        var rutaSucia = selectedFile.toString();
+
+        // 2. Limpiamos el prefijo 'file:///'
+        // Esto funciona tanto para Windows (E:/...) como para otros sistemas
+        var rutaLimpia = rutaSucia.replace("file:///", "");
+
+        // 3. En Windows, a veces queda una barra inicial extra (/E:/...), la quitamos:
+        if (rutaLimpia.charAt(0) === '/' && rutaLimpia.charAt(2) === ':') {
+            rutaLimpia = rutaLimpia.substring(1);
+        }
+
+        console.log("Ruta procesada para QGIS: " + rutaLimpia);
+
+        // 4. Intentamos cargar
+        if ( __activeProject.load( rutaLimpia ) ) {
+          stateManager.state = "map"
+          AppSettings.activeProject = rutaLimpia
+          AppSettings.defaultProject = rutaLimpia
+        } else {
+          console.log("Error al cargar el proyecto en: " + rutaLimpia)
+          stateManager.state = "projects"
+        }
+      }
+
+      onRejected: {
+        stateManager.state = "map"
+      }
+    }
 }
+
+

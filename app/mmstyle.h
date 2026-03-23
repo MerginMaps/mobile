@@ -361,7 +361,8 @@ class MMStyle: public QObject
     QFont p7() const {return fontFactory( 10, false );}
 
     QColor grassColor() const {return QColor::fromString( "#73D19C" );}
-    QColor forestColor() const {return QColor::fromString( "#004C45" );}
+    //QColor forestColor() const {return QColor::fromString( "#004C45" );}
+    QColor forestColor() const {return QColor::fromString( "#003057" );} // 2026
     QColor nightColor() const {return QColor::fromString( "#12181F" );}
     QColor polarColor() const {return QColor::fromString( "#FFFFFF" );}
     QColor transparentColor() const {return QColor::fromString( "transparent" );}
