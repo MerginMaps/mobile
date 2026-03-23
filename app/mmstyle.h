@@ -94,6 +94,7 @@ class MMStyle: public QObject
     // Colors - others
     Q_PROPERTY( QColor shadowColor READ shadowColor CONSTANT )
     Q_PROPERTY( QColor snappingColor READ snappingColor CONSTANT )
+    Q_PROPERTY( QColor filterGreenColor READ filterGreenColor CONSTANT )
 
     // Icons
     Q_PROPERTY( QUrl linkIcon READ linkIcon CONSTANT )
@@ -394,6 +395,7 @@ class MMStyle: public QObject
     QColor negativeUltraLightColor() const {return QColor::fromString( "#FEFAF9" );}
     QColor informativeColor() const {return QColor::fromString( "#BEDAF0" );}
     QColor snappingColor() const {return QColor::fromString( "#BD74FF" );}
+    QColor filterGreenColor() const {return QColor( 0x9B, 0xD1, 0xA9, 0x42 );}
 
     QColor photoSketchingBlackColor() const {return QColor::fromString( "#12181F" );}
     QColor photoSketchingWhiteColor() const {return QColor::fromString( "#FFFFFF" );}

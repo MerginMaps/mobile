@@ -26,14 +26,14 @@ MMComponents.MMDrawer {
   dropShadow: true
 
   background: Rectangle {
-    color: __style.lightGreenColor
+    color: __style.polarColor
     radius: __style.radius20
 
     layer.enabled: root.dropShadow
     layer.effect: MMComponents.MMShadow {}
 
     Rectangle {
-      color: __style.lightGreenColor
+      color: __style.polarColor
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
@@ -49,7 +49,7 @@ MMComponents.MMDrawer {
 
   onClosed: {
     if ( !filtersApplied ) {
-      // User closed without pressing "Show results" - revert pending changes
+      // discard pending changes when closed without applying
       filterController.discardPendingChanges()
     }
     filtersApplied = false
@@ -61,20 +61,23 @@ MMComponents.MMDrawer {
     property var vectorLayers: []
 
     function refreshLayers() {
-      // Clear first to force UI rebuild
+      // clear first to force a full rebuild
       vectorLayers = []
-      // Use FilterController to get vector layers
       vectorLayers = filterController.getVectorLayers()
     }
   }
 
   drawerHeader.title: qsTr("Filters")
+  drawerHeader.titleFont: __style.t2
 
   drawerHeader.topLeftItemContent: MMComponents.MMButton {
-    type: MMButton.Types.Tertiary
+    type: MMButton.Types.Primary
+    size: MMButton.Sizes.Small
     text: qsTr("Reset")
-    fontColor: __style.grapeColor
-    visible: filterController.hasActiveFilters
+    fontColor: root.filterController.hasActiveFilters ? __style.grapeColor : __style.forestColor
+    fontColorHover: root.filterController.hasActiveFilters ? __style.grapeColor : __style.forestColor
+    bgndColor: root.filterController.hasActiveFilters ? __style.negativeLightColor : __style.transparentColor
+    bgndColorHover: root.filterController.hasActiveFilters ? __style.negativeLightColor : __style.transparentColor
 
     anchors {
       left: parent.left
@@ -86,14 +89,14 @@ MMComponents.MMDrawer {
       filterController.clearAllFilters()
       filterController.applyFiltersToAllLayers()
       root.filtersApplied = true
-      // Refresh the UI to clear input fields
+      // rebuild to reset input fields
       internal.refreshLayers()
     }
   }
 
   drawerContent: Item {
     width: parent.width
-    height: root.maxHeightHit ? root.drawerContentAvailableHeight : (contentColumn.implicitHeight + __style.margin12 + showResultsButton.height)
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentColumn.implicitHeight
 
     MMComponents.MMScrollView {
       id: scrollView
@@ -107,7 +110,7 @@ MMComponents.MMDrawer {
         width: scrollView.availableWidth
         spacing: __style.margin20
 
-        // Show message if no layers
+        // no layers message
         MMComponents.MMText {
           width: parent.width
           visible: internal.vectorLayers.length === 0
@@ -117,7 +120,6 @@ MMComponents.MMDrawer {
           horizontalAlignment: Text.AlignHCenter
         }
 
-        // Repeater for each vector layer
         Repeater {
           id: layerRepeater
 
@@ -141,7 +143,7 @@ MMComponents.MMDrawer {
           }
         }
 
-        // Bottom spacer so content can scroll past the floating button
+        // space for the floating button
         Item {
           width: parent.width
           height: showResultsButton.height + __style.margin12
@@ -161,7 +163,7 @@ MMComponents.MMDrawer {
         right: parent.right
       }
 
-      text: qsTr("Show results")
+      text: qsTr("Apply filters")   
 
       onClicked: {
         filterController.applyFiltersToAllLayers()
