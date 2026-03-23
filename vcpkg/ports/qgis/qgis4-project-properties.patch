@@ -1,19 +1,11 @@
-commit 74549aad26c3358101e88477d9dfa1caae013d72
-Author: Jürgen E. Fischer <jef@norbit.de>
-Date:   Fri Jun 20 15:58:30 2025 +0200
-
-    Reapply "Allow free naming of project properties (#60855)"
-    
-    This reverts commit fb11239112adfc321b3bbacbb20da888a7a37c23.
-
 diff --git a/src/core/project/qgsproject.cpp b/src/core/project/qgsproject.cpp
-index f78f9e53bef..cd6f78edaaf 100644
+index d5cd3e3ebb4..819f8809084 100644
 --- a/src/core/project/qgsproject.cpp
 +++ b/src/core/project/qgsproject.cpp
 @@ -116,21 +116,6 @@ QStringList makeKeyTokens_( const QString &scope, const QString &key )
    // be sure to include the canonical root node
    keyTokens.push_front( QStringLiteral( "properties" ) );
- 
+
 -  //check validy of keys since an invalid xml name will will be dropped upon saving the xml file. If not valid, we print a message to the console.
 -  for ( int i = 0; i < keyTokens.size(); ++i )
 -  {
@@ -31,8 +23,8 @@ index f78f9e53bef..cd6f78edaaf 100644
 -
    return keyTokens;
  }
- 
-@@ -1322,20 +1307,20 @@ void dump_( const QgsProjectPropertyKey &topQgsPropertyKey )
+
+@@ -1311,20 +1296,20 @@ void dump_( const QgsProjectPropertyKey &topQgsPropertyKey )
   * scope.  "layers" is a list containing three string values.
   *
   * \code{.xml}
@@ -64,7 +56,7 @@ index f78f9e53bef..cd6f78edaaf 100644
   * </properties>
   * \endcode
   *
-@@ -3992,10 +3977,25 @@ bool QgsProject::createEmbeddedLayer( const QString &layerId, const QString &pro
+@@ -3967,10 +3952,25 @@ bool QgsProject::createEmbeddedLayer( const QString &layerId, const QString &pro
    const QDomElement propertiesElem = sProjectDocument.documentElement().firstChildElement( QStringLiteral( "properties" ) );
    if ( !propertiesElem.isNull() )
    {
@@ -92,33 +84,13 @@ index f78f9e53bef..cd6f78edaaf 100644
 +      useAbsolutePaths = e.text().compare( QLatin1String( "true" ), Qt::CaseInsensitive ) == 0;
      }
    }
- 
+
 diff --git a/src/core/project/qgsprojectproperty.cpp b/src/core/project/qgsprojectproperty.cpp
-index ff8024a5260..1af598012b4 100644
+index ff8024a5260..7691c1b5d53 100644
 --- a/src/core/project/qgsprojectproperty.cpp
 +++ b/src/core/project/qgsprojectproperty.cpp
-@@ -233,15 +233,15 @@ bool QgsProjectPropertyValue::readXml( const QDomNode &keyNode )
- 
- // keyElement is created by parent QgsProjectPropertyKey
- bool QgsProjectPropertyValue::writeXml( QString const &nodeName,
--                                        QDomElement    &keyElement,
--                                        QDomDocument   &document )
-+                                        QDomElement &keyElement,
-+                                        QDomDocument &document )
- {
--  QDomElement valueElement = document.createElement( nodeName );
-+  QDomElement valueElement = document.createElement( QStringLiteral( "properties" ) );
- 
-   // remember the type so that we can rebuild it when the project is read in
-+  valueElement.setAttribute( QStringLiteral( "name" ), nodeName );
-   valueElement.setAttribute( QStringLiteral( "type" ), mValue.typeName() );
- 
--
-   // we handle string lists differently from other types in that we
-   // create a sequence of repeated elements to cover all the string list
-   // members; each value will be in a <value></value> tag.
 @@ -362,33 +362,41 @@ bool QgsProjectPropertyKey::readXml( const QDomNode &keyNode )
- 
+
    while ( i < subkeys.count() )
    {
 +    const QDomNode subkey = subkeys.item( i );
@@ -148,7 +120,7 @@ index ff8024a5260..1af598012b4 100644
 +      //
 +      delete mProperties.take( name );
 +      mProperties.insert( name, new QgsProjectPropertyValue );
- 
+
 -      QDomNode subkey = subkeys.item( i );
 -
 -      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
@@ -164,7 +136,7 @@ index ff8024a5260..1af598012b4 100644
 -
 -      QDomNode subkey = subkeys.item( i );
 +      addKey( name );
- 
+
 -      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
 +      if ( !mProperties[name]->readXml( subkey ) )
        {
@@ -172,22 +144,12 @@ index ff8024a5260..1af598012b4 100644
 +        QgsDebugError( QStringLiteral( "unable to parse subkey %1" ).arg( name ) );
        }
      }
- 
-@@ -408,7 +416,8 @@ bool QgsProjectPropertyKey::writeXml( QString const &nodeName, QDomElement &elem
-   // If it's an _empty_ node (i.e., one with no properties) we need to emit
-   // an empty place holder; else create new Dom elements as necessary.
- 
--  QDomElement keyElement = document.createElement( nodeName ); // Dom element for this property key
-+  QDomElement keyElement = document.createElement( "properties" ); // Dom element for this property key
-+  keyElement.toElement().setAttribute( QStringLiteral( "name" ), nodeName );
- 
-   if ( ! mProperties.isEmpty() )
-   {
+
 diff --git a/tests/src/python/test_qgsproject.py b/tests/src/python/test_qgsproject.py
-index 237553260f6..d44d4438006 100644
+index 4da8f330941..752110de78a 100644
 --- a/tests/src/python/test_qgsproject.py
 +++ b/tests/src/python/test_qgsproject.py
-@@ -65,84 +65,6 @@ class TestQgsProject(QgisTestCase):
+@@ -63,84 +63,6 @@ class TestQgsProject(QgisTestCase):
          QgisTestCase.__init__(self, methodName)
          self.messageCaught = False
  

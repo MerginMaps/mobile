@@ -1,5 +1,5 @@
 diff --git a/src/core/network/qgshttpheaders.cpp b/src/core/network/qgshttpheaders.cpp
-index 74322dc2fcb..c5cfbbabc66 100644
+index de9caeceeee..890c3100852 100644
 --- a/src/core/network/qgshttpheaders.cpp
 +++ b/src/core/network/qgshttpheaders.cpp
 @@ -73,7 +73,7 @@ bool QgsHttpHeaders::updateUrlQuery( QUrlQuery &uri ) const
@@ -24,47 +24,12 @@ index a86c4d2bc60..f559bb21112 100644
 +    if ( uri.startsWith( storage->type() + ':' ) || uri.startsWith( storage->type() + "%3A" ) )
        return storage;
    }
- 
-diff --git a/src/core/qgsdatasourceuri.cpp b/src/core/qgsdatasourceuri.cpp
-index 6b26e9dd2ee..fe0dd2a12b5 100644
---- a/src/core/qgsdatasourceuri.cpp
-+++ b/src/core/qgsdatasourceuri.cpp
-@@ -701,17 +701,17 @@ QByteArray QgsDataSourceUri::encodedUri() const
-   QUrlQuery url;
-   for ( auto it = mParams.constBegin(); it != mParams.constEnd(); ++it )
-   {
--    url.addQueryItem( it.key(), it.value() );
-+    url.addQueryItem( it.key(), QUrl::toPercentEncoding( it.value() ) );
-   }
- 
-   if ( !mUsername.isEmpty() )
--    url.addQueryItem( QStringLiteral( "username" ), mUsername );
-+    url.addQueryItem( QStringLiteral( "username" ), QUrl::toPercentEncoding( mUsername ) );
- 
-   if ( !mPassword.isEmpty() )
--    url.addQueryItem( QStringLiteral( "password" ), mPassword );
-+    url.addQueryItem( QStringLiteral( "password" ), QUrl::toPercentEncoding( mPassword ) );
- 
-   if ( !mAuthConfigId.isEmpty() )
--    url.addQueryItem( QStringLiteral( "authcfg" ), mAuthConfigId );
-+    url.addQueryItem( QStringLiteral( "authcfg" ), QUrl::toPercentEncoding( mAuthConfigId ) );
- 
-   mHttpHeaders.updateUrlQuery( url );
- 
-@@ -731,7 +731,7 @@ void QgsDataSourceUri::setEncodedUri( const QByteArray &uri )
- 
-   mHttpHeaders.setFromUrlQuery( query );
- 
--  const auto constQueryItems = query.queryItems();
-+  const auto constQueryItems = query.queryItems( QUrl::ComponentFormattingOption::FullyDecoded );
-   for ( const QPair<QString, QString> &item : constQueryItems )
-   {
-     if ( !item.first.startsWith( QgsHttpHeaders::PARAM_PREFIX ) && item.first != QgsHttpHeaders::KEY_REFERER )
+
 diff --git a/src/core/qgsmaplayer.cpp b/src/core/qgsmaplayer.cpp
-index 90b7fba14bb..c2e3cc126bb 100644
+index e1cfb604055..abd3c19a0fc 100644
 --- a/src/core/qgsmaplayer.cpp
 +++ b/src/core/qgsmaplayer.cpp
-@@ -3262,8 +3262,9 @@ QString QgsMapLayer::generalHtmlMetadata() const
+@@ -3277,8 +3277,9 @@ QString QgsMapLayer::generalHtmlMetadata() const
      }
      if ( uriComponents.contains( QStringLiteral( "url" ) ) )
      {
@@ -75,7 +40,7 @@ index 90b7fba14bb..c2e3cc126bb 100644
 +      metadata += QStringLiteral( "<tr><td class=\"highlight\">" ) + tr( "URL" ) + QStringLiteral( "</td><td>%1" ).arg( QStringLiteral( "<a href=\"%1\">%2</a>" ).arg( url, url ) ) + QStringLiteral( "</td></tr>\n" );
      }
    }
- 
+
 diff --git a/src/core/vectortile/qgsvectortileprovidermetadata.cpp b/src/core/vectortile/qgsvectortileprovidermetadata.cpp
 index f7a8b5f1fd9..a6484adde6a 100644
 --- a/src/core/vectortile/qgsvectortileprovidermetadata.cpp
@@ -110,7 +75,7 @@ index be607514666..08c45dbe3c5 100644
 +    dsUri.setParam( QStringLiteral( "url" ), QUrl::fromLocalFile( relSrcUrl ).toString( QUrl::DecodeReserved ) );
      return dsUri.encodedUri();
    }
- 
+
 @@ -335,7 +335,7 @@ QString QgsXyzVectorTileDataProviderMetadata::relativeToAbsoluteUri( const QStri
    {
      const QString absSrcUrl = context.pathResolver().readPath( sourceUrl.toLocalFile() );
@@ -119,12 +84,25 @@ index be607514666..08c45dbe3c5 100644
 +    dsUri.setParam( QStringLiteral( "url" ), QUrl::fromLocalFile( absSrcUrl ).toString( QUrl::DecodeReserved ) );
      return dsUri.encodedUri();
    }
- 
+
+diff --git a/src/providers/wms/qgswmsprovider.cpp b/src/providers/wms/qgswmsprovider.cpp
+index 8c602f74b2e..538087e0163 100644
+--- a/src/providers/wms/qgswmsprovider.cpp
++++ b/src/providers/wms/qgswmsprovider.cpp
+@@ -4957,7 +4957,7 @@ QList<QgsDataItemProvider *> QgsWmsProviderMetadata::dataItemProviders() const
+ QVariantMap QgsWmsProviderMetadata::decodeUri( const QString &uri ) const
+ {
+   const QUrlQuery query { uri };
+-  const QList<QPair<QString, QString>> constItems { query.queryItems() };
++  const QList<QPair<QString, QString>> constItems { query.queryItems( QUrl::ComponentFormattingOption::FullyDecoded ) };
+   QVariantMap decoded;
+   for ( const QPair<QString, QString> &item : constItems )
+   {
 diff --git a/tests/src/app/testqgsidentify.cpp b/tests/src/app/testqgsidentify.cpp
-index 15aaec87c9d..65fe2e81bc0 100644
+index 856d5077c15..401e58747d8 100644
 --- a/tests/src/app/testqgsidentify.cpp
 +++ b/tests/src/app/testqgsidentify.cpp
-@@ -933,7 +933,9 @@ void TestQgsIdentify::identifyVectorTile()
+@@ -932,7 +932,9 @@ void TestQgsIdentify::identifyVectorTile()
    const QString vtPath = QStringLiteral( TEST_DATA_DIR ) + QStringLiteral( "/vector_tile/{z}-{x}-{y}.pbf" );
    QgsDataSourceUri dsUri;
    dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
@@ -134,32 +112,32 @@ index 15aaec87c9d..65fe2e81bc0 100644
 +  dsUri.setParam( QStringLiteral( "url" ), QUrl::fromPercentEncoding( QUrl::fromLocalFile( vtPath ).toString().toUtf8() ) );
    QgsVectorTileLayer *tempLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "testlayer" ) );
    QVERIFY( tempLayer->isValid() );
- 
+
 diff --git a/tests/src/core/testqgsdatasourceuri.cpp b/tests/src/core/testqgsdatasourceuri.cpp
-index f7889423245..4eaac93f4bd 100644
+index 409b059b488..436216ede80 100644
 --- a/tests/src/core/testqgsdatasourceuri.cpp
 +++ b/tests/src/core/testqgsdatasourceuri.cpp
-@@ -38,6 +38,7 @@ class TestQgsDataSourceUri : public QObject
+@@ -37,6 +37,7 @@ class TestQgsDataSourceUri : public QObject
      void checkParameterKeys();
      void checkRemovePassword();
      void checkUnicodeUri();
 +    void checkUriInUri();
  };
- 
+
  void TestQgsDataSourceUri::checkparser_data()
-@@ -775,7 +776,7 @@ void TestQgsDataSourceUri::checkAuthParams()
+@@ -564,7 +565,7 @@ void TestQgsDataSourceUri::checkAuthParams()
    // issue GH #53654
    QgsDataSourceUri uri5;
    uri5.setEncodedUri( QStringLiteral( "zmax=14&zmin=0&styleUrl=http://localhost:8000/&f=application%2Fvnd.geoserver.mbstyle%2Bjson" ) );
 -  QCOMPARE( uri5.param( QStringLiteral( "f" ) ), QStringLiteral( "application%2Fvnd.geoserver.mbstyle%2Bjson" ) );
 +  QCOMPARE( uri5.param( QStringLiteral( "f" ) ), QStringLiteral( "application/vnd.geoserver.mbstyle+json" ) );
- 
+
    uri5.setEncodedUri( QStringLiteral( "zmax=14&zmin=0&styleUrl=http://localhost:8000/&f=application/vnd.geoserver.mbstyle+json" ) );
    QCOMPARE( uri5.param( QStringLiteral( "f" ) ), QStringLiteral( "application/vnd.geoserver.mbstyle+json" ) );
-@@ -822,6 +823,83 @@ void TestQgsDataSourceUri::checkUnicodeUri()
+@@ -611,6 +612,83 @@ void TestQgsDataSourceUri::checkUnicodeUri()
    QCOMPARE( uri.param( QStringLiteral( "url" ) ), QStringLiteral( "file:///directory/テスト.mbtiles" ) );
  }
- 
+
 +void TestQgsDataSourceUri::checkUriInUri()
 +{
 +  QString dataUri = QStringLiteral( "dpiMode=7&url=%1&SERVICE=WMS&REQUEST=GetCapabilities&username=username&password=qgis%C3%A8%C3%A9" );
@@ -237,7 +215,7 @@ index f7889423245..4eaac93f4bd 100644
 +  }
 +}
 +
- 
+
  QGSTEST_MAIN( TestQgsDataSourceUri )
  #include "testqgsdatasourceuri.moc"
 diff --git a/tests/src/core/testqgsgdalcloudconnection.cpp b/tests/src/core/testqgsgdalcloudconnection.cpp
@@ -247,27 +225,27 @@ index e43c4757ee7..0e69eb210ab 100644
 @@ -59,7 +59,7 @@ void TestQgsGdalCloudConnection::encodeDecode()
    data.rootPath = QStringLiteral( "some/path" );
    data.credentialOptions = QVariantMap { { "pw", QStringLiteral( "xxxx" ) }, { "key", QStringLiteral( "yyy" ) } };
- 
+
 -  QCOMPARE( QgsGdalCloudProviderConnection::encodedUri( data ), QStringLiteral( "container=my_container&credentialOptions=key%3Dyyy%7Cpw%3Dxxxx&handler=vsis3&rootPath=some/path" ) );
 +  QCOMPARE( QgsGdalCloudProviderConnection::encodedUri( data ), QStringLiteral( "container=my_container&credentialOptions=key%3Dyyy%7Cpw%3Dxxxx&handler=vsis3&rootPath=some%2Fpath" ) );
- 
+
    const QgsGdalCloudProviderConnection::Data data2 = QgsGdalCloudProviderConnection::decodedUri( QStringLiteral( "container=my_container&credentialOptions=key%3Dyyy%7Cpw%3Dxxxx&handler=vsis3&rootPath=some/path" ) );
    QCOMPARE( data2.vsiHandler, QStringLiteral( "vsis3" ) );
 @@ -94,7 +94,7 @@ void TestQgsGdalCloudConnection::testConnections()
- 
+
    // retrieve stored connection
    conn = QgsGdalCloudProviderConnection( QStringLiteral( "my connection" ) );
 -  QCOMPARE( conn.uri(), QStringLiteral( "container=my_container&credentialOptions=key%3Dyyy%7Cpw%3Dxxxx&handler=vsis3&rootPath=some/path" ) );
 +  QCOMPARE( conn.uri(), QStringLiteral( "container=my_container&credentialOptions=key%3Dyyy%7Cpw%3Dxxxx&handler=vsis3&rootPath=some%2Fpath" ) );
- 
+
    // add a second connection
    QgsGdalCloudProviderConnection::Data data2;
 diff --git a/tests/src/core/testqgshttpheaders.cpp b/tests/src/core/testqgshttpheaders.cpp
-index 867e44de619..623e9532dbb 100644
+index 9c2df3cc20e..78bc5f8be81 100644
 --- a/tests/src/core/testqgshttpheaders.cpp
 +++ b/tests/src/core/testqgshttpheaders.cpp
-@@ -187,11 +187,14 @@ void TestQgsHttpheaders::createQgsOwsConnection()
- 
+@@ -147,11 +147,14 @@ void TestQgsHttpheaders::createQgsOwsConnection()
+
    QgsOwsConnection ows( "service", "name" );
    QCOMPARE( ows.connectionInfo(), ",authcfg=,referer=http://test.com" );
 -  QCOMPARE( ows.uri().encodedUri(), "url&http-header:other_http_header=value&http-header:referer=http://test.com" );
@@ -275,48 +253,48 @@ index 867e44de619..623e9532dbb 100644
 +    QCOMPARE( ows.uri().encodedUri(), "url=&http-header:other_http_header=value&http-header:referer=http%3A%2F%2Ftest.com" );
 +  else
 +    QCOMPARE( ows.uri().encodedUri(), "url&http-header:other_http_header=value&http-header:referer=http%3A%2F%2Ftest.com" );
- 
+
    QgsDataSourceUri uri( QString( "https://www.ogc.org/?p1=v1" ) );
    QgsDataSourceUri uri2 = ows.addWmsWcsConnectionSettings( uri, "service", "name" );
 -  QCOMPARE( uri2.encodedUri(), "https://www.ogc.org/?p1=v1&http-header:other_http_header=value&http-header:referer=http://test.com" );
 +  QCOMPARE( uri2.encodedUri(), "https://www.ogc.org/?p1=v1&http-header:other_http_header=value&http-header:referer=http%3A%2F%2Ftest.com" );
- 
+
    // check space separated string
    QCOMPARE( uri2.uri(), " https://www.ogc.org/?p1='v1' http-header:other_http_header='value' http-header:referer='http://test.com' referer='http://test.com'" );
-@@ -199,7 +202,7 @@ void TestQgsHttpheaders::createQgsOwsConnection()
+@@ -159,7 +162,7 @@ void TestQgsHttpheaders::createQgsOwsConnection()
    QgsDataSourceUri uri3( uri2.uri() );
    QCOMPARE( uri3.httpHeader( QgsHttpHeaders::KEY_REFERER ), "http://test.com" );
    QCOMPARE( uri3.httpHeader( "other_http_header" ), "value" );
 -  QCOMPARE( uri3.encodedUri(), "https://www.ogc.org/?p1=v1&referer=http://test.com&http-header:other_http_header=value&http-header:referer=http://test.com" );
 +  QCOMPARE( uri3.encodedUri(), "https://www.ogc.org/?p1=v1&referer=http%3A%2F%2Ftest.com&http-header:other_http_header=value&http-header:referer=http%3A%2F%2Ftest.com" );
  }
- 
- 
+
+
 diff --git a/tests/src/core/testqgsmaplayer.cpp b/tests/src/core/testqgsmaplayer.cpp
-index b4a99607aa0..90969a5f0a4 100644
+index 47e6f2d5a6e..e9d527b186f 100644
 --- a/tests/src/core/testqgsmaplayer.cpp
 +++ b/tests/src/core/testqgsmaplayer.cpp
-@@ -33,6 +33,7 @@
+@@ -32,6 +32,7 @@
  #include "qgsmaplayerstore.h"
  #include "qgsproject.h"
  #include "qgsxmlutils.h"
 +#include "qgsvectortilelayer.h"
- 
+
  /**
   * \ingroup UnitTests
-@@ -55,6 +56,8 @@ class TestQgsMapLayer : public QObject
+@@ -54,6 +55,8 @@ class TestQgsMapLayer : public QObject
      void testId();
      void formatName();
- 
+
 +    void generalHtmlMetadata();
 +
      void setBlendMode();
- 
+
      void isInScaleRange_data();
-@@ -153,6 +156,33 @@ void TestQgsMapLayer::testId()
+@@ -150,6 +153,33 @@ void TestQgsMapLayer::testId()
    QCOMPARE( spy3.count(), 1 );
  }
- 
+
 +void TestQgsMapLayer::generalHtmlMetadata()
 +{
 +  {
@@ -354,19 +332,19 @@ index b6e68ffce93..ddfef807bc5 100644
 @@ -60,7 +60,7 @@ void TestQgsSensorThingsConnection::encodeDecode()
    data.password = QStringLiteral( "my_pw" );
    data.httpHeaders.insert( QStringLiteral( "my_header" ), QStringLiteral( "value" ) );
- 
+
 -  QCOMPARE( QgsSensorThingsProviderConnection::encodedUri( data ), QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 +  QCOMPARE( QgsSensorThingsProviderConnection::encodedUri( data ), QStringLiteral( "url=http%3A%2F%2Ftesturl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
    QCOMPARE( QgsSensorThingsProviderConnection::encodedLayerUri( data ), QStringLiteral( "user='my_user' password='my_pw' authcfg=my_auth url='http://testurl' http-header:my_header='value'" ) );
- 
+
    const QgsSensorThingsProviderConnection::Data data2 = QgsSensorThingsProviderConnection::decodedUri( QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 @@ -93,7 +93,7 @@ void TestQgsSensorThingsConnection::testConnections()
- 
+
    // retrieve stored connection
    conn = QgsSensorThingsProviderConnection( QStringLiteral( "my connection" ) );
 -  QCOMPARE( conn.uri(), QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 +  QCOMPARE( conn.uri(), QStringLiteral( "url=http%3A%2F%2Ftesturl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
- 
+
    // add a second connection
    QgsSensorThingsProviderConnection::Data data2;
 @@ -104,7 +104,7 @@ void TestQgsSensorThingsConnection::testConnections()
@@ -376,7 +354,7 @@ index b6e68ffce93..ddfef807bc5 100644
 -  QCOMPARE( conn2.uri(), QStringLiteral( "url=http://testurl2&username=my_user2&password=my_pw2&authcfg=my_auth2&http-header:my_header=value2" ) );
 +  QCOMPARE( conn2.uri(), QStringLiteral( "url=http%3A%2F%2Ftesturl2&username=my_user2&password=my_pw2&authcfg=my_auth2&http-header:my_header=value2" ) );
    conn2.store( QStringLiteral( "second connection" ) );
- 
+
    // retrieve stored connections
 diff --git a/tests/src/core/testqgstiledsceneconnection.cpp b/tests/src/core/testqgstiledsceneconnection.cpp
 index 1f5d4263c67..86c9b649cc6 100644
@@ -385,22 +363,22 @@ index 1f5d4263c67..86c9b649cc6 100644
 @@ -61,8 +61,8 @@ void TestQgsTiledSceneConnection::encodeDecode()
    data.password = QStringLiteral( "my_pw" );
    data.httpHeaders.insert( QStringLiteral( "my_header" ), QStringLiteral( "value" ) );
- 
+
 -  QCOMPARE( QgsTiledSceneProviderConnection::encodedUri( data ), QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 -  QCOMPARE( QgsTiledSceneProviderConnection::encodedLayerUri( data ), QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 +  QCOMPARE( QgsTiledSceneProviderConnection::encodedUri( data ), QStringLiteral( "url=http%3A%2F%2Ftesturl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 +  QCOMPARE( QgsTiledSceneProviderConnection::encodedLayerUri( data ), QStringLiteral( "url=http%3A%2F%2Ftesturl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
- 
+
    const QgsTiledSceneProviderConnection::Data data2 = QgsTiledSceneProviderConnection::decodedUri( QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
    QCOMPARE( data2.url, QStringLiteral( "http://testurl" ) );
 @@ -97,7 +97,7 @@ void TestQgsTiledSceneConnection::testConnections()
- 
+
    // retrieve stored connection
    conn = QgsTiledSceneProviderConnection( QStringLiteral( "my connection" ) );
 -  QCOMPARE( conn.uri(), QStringLiteral( "url=http://testurl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
 +  QCOMPARE( conn.uri(), QStringLiteral( "url=http%3A%2F%2Ftesturl&username=my_user&password=my_pw&authcfg=my_auth&http-header:my_header=value" ) );
    QCOMPARE( qgis::down_cast<QgsTiledSceneProviderConnection *>( &conn )->providerKey(), QStringLiteral( "test_provider" ) );
- 
+
    // add a second connection
 @@ -110,7 +110,7 @@ void TestQgsTiledSceneConnection::testConnections()
    data2.httpHeaders.insert( QStringLiteral( "my_header" ), QStringLiteral( "value2" ) );
@@ -410,7 +388,7 @@ index 1f5d4263c67..86c9b649cc6 100644
 +  QCOMPARE( conn2.uri(), QStringLiteral( "url=http%3A%2F%2Ftesturl2&username=my_user2&password=my_pw2&authcfg=my_auth2&http-header:my_header=value2" ) );
    QCOMPARE( qgis::down_cast<QgsTiledSceneProviderConnection *>( &conn2 )->providerKey(), QStringLiteral( "test_provider2" ) );
    conn2.store( QStringLiteral( "second connection" ) );
- 
+
 diff --git a/tests/src/core/testqgsvectortileconnection.cpp b/tests/src/core/testqgsvectortileconnection.cpp
 index e539eb0be69..d73454fa428 100644
 --- a/tests/src/core/testqgsvectortileconnection.cpp
@@ -421,7 +399,7 @@ index e539eb0be69..d73454fa428 100644
    QString uri = QgsVectorTileProviderConnection::encodedUri( conn );
 -  QCOMPARE( uri, QStringLiteral( "type=xyz&url=https://api.maptiler.com/tiles/v3/%7Bz%7D/%7Bx%7D/%7By%7D.pbf?key%3Dabcdef12345&zmax=18&zmin=0" ) );
 +  QCOMPARE( uri, QStringLiteral( "type=xyz&url=https%3A%2F%2Fapi.maptiler.com%2Ftiles%2Fv3%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.pbf%3Fkey%3Dabcdef12345&zmax=18&zmin=0" ) );
- 
+
    conn.url = QStringLiteral( "file:///home/user/tiles.mbtiles" );
    conn.zMin = 0;
    conn.zMax = 18;
@@ -429,15 +407,15 @@ index e539eb0be69..d73454fa428 100644
 -  QCOMPARE( uri, QStringLiteral( "type=mbtiles&url=file:///home/user/tiles.mbtiles&zmax=18&zmin=0" ) );
 +  QCOMPARE( uri, QStringLiteral( "type=mbtiles&url=file%3A%2F%2F%2Fhome%2Fuser%2Ftiles.mbtiles&zmax=18&zmin=0" ) );
  }
- 
- 
+
+
 diff --git a/tests/src/core/testqgsvectortilelayer.cpp b/tests/src/core/testqgsvectortilelayer.cpp
-index 8248b48f4b5..b9b0ec9ef9f 100644
+index 4a5f82f0b0d..99c0b503c30 100644
 --- a/tests/src/core/testqgsvectortilelayer.cpp
 +++ b/tests/src/core/testqgsvectortilelayer.cpp
-@@ -261,11 +261,12 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
+@@ -256,11 +256,12 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
    QCOMPARE( vectorTileMetadata->validLayerTypesForUri( QStringLiteral( "type=mbtiles&url=%1/vector_tile/mbtiles_vt.mbtiles" ).arg( TEST_DATA_DIR ) ), { Qgis::LayerType::VectorTile } );
- 
+
    // query sublayers
 +  QString localMbtilesPath = QStringLiteral( "%1%2" ).arg( QUrl::toPercentEncoding( TEST_DATA_DIR ), QUrl::toPercentEncoding( QStringLiteral( "/vector_tile/mbtiles_vt.mbtiles" ) ) );
    QList<QgsProviderSublayerDetails> sublayers = vectorTileMetadata->querySublayers( QStringLiteral( "%1/vector_tile/mbtiles_vt.mbtiles" ).arg( TEST_DATA_DIR ) );
@@ -449,7 +427,7 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
    QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
    QVERIFY( !QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
-@@ -274,7 +275,7 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
+@@ -269,7 +270,7 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
    QCOMPARE( sublayers.size(), 1 );
    QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "mbtilesvectortiles" ) );
    QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "mbtiles_vt" ) );
@@ -457,8 +435,8 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
 +  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "type=mbtiles&url=%1" ).arg( localMbtilesPath ) );
    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
    QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
- 
-@@ -283,7 +284,7 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
+
+@@ -278,7 +279,7 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
    QCOMPARE( sublayers.size(), 1 );
    QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "mbtilesvectortiles" ) );
    QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "mbtiles_vt" ) );
@@ -467,7 +445,7 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
    QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
    QVERIFY( QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
-@@ -292,17 +293,19 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
+@@ -287,17 +288,19 @@ void TestQgsVectorTileLayer::testMbtilesProviderMetadata()
    QCOMPARE( sublayers.size(), 1 );
    QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "mbtilesvectortiles" ) );
    QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "mbtiles_vt" ) );
@@ -475,7 +453,7 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
 +  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "type=mbtiles&url=%1" ).arg( localMbtilesPath ) );
    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
    QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
- 
+
    // fast scan mode means that any mbtile file will be reported, including those with only raster tiles
    // (we are skipping a potentially expensive db open and format check)
 +  QString localIsleOfManPath = QStringLiteral( "%1%2" ).arg( QUrl::toPercentEncoding( TEST_DATA_DIR ), QUrl::toPercentEncoding( QStringLiteral( "/isle_of_man.mbtiles" ) ) );
@@ -488,48 +466,48 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
 +  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "type=mbtiles&url=%1" ).arg( localIsleOfManPath ) );
    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
    QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
- 
-@@ -333,8 +336,9 @@ void TestQgsVectorTileLayer::test_relativePathsMbTiles()
+
+@@ -328,8 +331,9 @@ void TestQgsVectorTileLayer::test_relativePathsMbTiles()
    QgsReadWriteContext contextRel;
    contextRel.setPathResolver( QgsPathResolver( QStringLiteral( TEST_DATA_DIR ) + QStringLiteral( "/project.qgs" ) ) );
    const QgsReadWriteContext contextAbs;
 +  QString localMbtilesPath = QStringLiteral( "%1%2" ).arg( QUrl::toPercentEncoding( TEST_DATA_DIR ), QUrl::toPercentEncoding( QStringLiteral( "/vector_tile/mbtiles_vt.mbtiles" ) ) );
- 
+
 -  const QString srcMbtiles = QStringLiteral( "type=mbtiles&url=%1/vector_tile/mbtiles_vt.mbtiles" ).arg( TEST_DATA_DIR );
 +  const QString srcMbtiles = QStringLiteral( "type=mbtiles&url=%1" ).arg( localMbtilesPath );
- 
+
    std::unique_ptr<QgsVectorTileLayer> layer = std::make_unique<QgsVectorTileLayer>( srcMbtiles );
    QVERIFY( layer->isValid() );
-@@ -342,7 +346,7 @@ void TestQgsVectorTileLayer::test_relativePathsMbTiles()
- 
+@@ -337,7 +341,7 @@ void TestQgsVectorTileLayer::test_relativePathsMbTiles()
+
    // encode source: converting absolute paths to relative
    const QString srcMbtilesRel = layer->encodedSource( srcMbtiles, contextRel );
 -  QCOMPARE( srcMbtilesRel, QStringLiteral( "type=mbtiles&url=./vector_tile/mbtiles_vt.mbtiles" ) );
 +  QCOMPARE( srcMbtilesRel, QStringLiteral( "type=mbtiles&url=.%2Fvector_tile%2Fmbtiles_vt.mbtiles" ) );
- 
+
    // encode source: keeping absolute paths
    QCOMPARE( layer->encodedSource( srcMbtiles, contextAbs ), srcMbtiles );
-@@ -393,15 +397,15 @@ void TestQgsVectorTileLayer::test_relativePathsXyz()
+@@ -377,15 +381,15 @@ void TestQgsVectorTileLayer::test_relativePathsXyz()
    contextRel.setPathResolver( QgsPathResolver( "/home/qgis/project.qgs" ) );
    const QgsReadWriteContext contextAbs;
- 
+
 -  const QString srcXyzLocal = "type=xyz&url=file:///home/qgis/%7Bz%7D/%7Bx%7D/%7By%7D.pbf";
 -  const QString srcXyzRemote = "type=xyz&url=http://www.example.com/%7Bz%7D/%7Bx%7D/%7By%7D.pbf";
 +  const QString srcXyzLocal = "type=xyz&url=file%3A%2F%2F%2Fhome%2Fqgis%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.pbf";
 +  const QString srcXyzRemote = "type=xyz&url=http%3A%2F%2Fwww.example.com%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.pbf";
- 
+
    std::unique_ptr<QgsVectorTileLayer> layer = std::make_unique<QgsVectorTileLayer>( srcXyzLocal );
    QCOMPARE( layer->providerType(), QStringLiteral( "xyzvectortiles" ) );
- 
+
    // encode source: converting absolute paths to relative
    const QString srcXyzLocalRel = layer->encodedSource( srcXyzLocal, contextRel );
 -  QCOMPARE( srcXyzLocalRel, QStringLiteral( "type=xyz&url=file:./%7Bz%7D/%7Bx%7D/%7By%7D.pbf" ) );
 +  QCOMPARE( srcXyzLocalRel, QStringLiteral( "type=xyz&url=file%3A.%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.pbf" ) );
    QCOMPARE( layer->encodedSource( srcXyzRemote, contextRel ), srcXyzRemote );
- 
+
    // encode source: keeping absolute paths
-@@ -437,7 +441,8 @@ void TestQgsVectorTileLayer::test_absoluteRelativeUriXyz()
- 
+@@ -421,7 +425,8 @@ void TestQgsVectorTileLayer::test_absoluteRelativeUriXyz()
+
    QString absoluteUri = dsAbs.encodedUri();
    QString relativeUri = dsRel.encodedUri();
 -  QCOMPARE( vectorTileMetadata->absoluteToRelativeUri( absoluteUri, context ), relativeUri );
@@ -537,10 +515,10 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
 +  QCOMPARE( absToRelUri, relativeUri );
    QCOMPARE( vectorTileMetadata->relativeToAbsoluteUri( relativeUri, context ), absoluteUri );
  }
- 
-@@ -459,23 +464,23 @@ void TestQgsVectorTileLayer::testVtpkProviderMetadata()
+
+@@ -443,23 +448,23 @@ void TestQgsVectorTileLayer::testVtpkProviderMetadata()
    QVERIFY( vectorTileMetadata->querySublayers( QStringLiteral( "type=vtpk&url=%1/points.shp" ).arg( TEST_DATA_DIR ) ).isEmpty() );
- 
+
    // vtpk uris
 -  QCOMPARE( vectorTileMetadata->priorityForUri( QStringLiteral( TEST_DATA_DIR ) + QStringLiteral( "/testvtpk.vtpk" ) ), 100 );
 -  QCOMPARE( vectorTileMetadata->validLayerTypesForUri( QStringLiteral( TEST_DATA_DIR ) + QStringLiteral( "/testvtpk.vtpk" ) ), { Qgis::LayerType::VectorTile } );
@@ -576,37 +554,111 @@ index 8248b48f4b5..b9b0ec9ef9f 100644
 +    QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "type=vtpk&url=%1" ).arg( localVtpkPath ) );
 +    QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::VectorTile );
 +  }
- 
+
    // test that vtpk provider is the preferred provider for vtpk files
    QList<QgsProviderRegistry::ProviderCandidateDetails> candidates = QgsProviderRegistry::instance()->preferredProvidersForUri( QStringLiteral( "type=vtpk&url=%1/testvtpk.vtpk" ).arg( TEST_DATA_DIR ) );
-@@ -501,7 +506,9 @@ void TestQgsVectorTileLayer::test_relativePathsVtpk()
+@@ -485,7 +490,9 @@ void TestQgsVectorTileLayer::test_relativePathsVtpk()
    contextRel.setPathResolver( QgsPathResolver( QStringLiteral( TEST_DATA_DIR ) + QStringLiteral( "/project.qgs" ) ) );
    const QgsReadWriteContext contextAbs;
- 
+
 -  const QString srcVtpk = QStringLiteral( "type=vtpk&url=%1/testvtpk.vtpk" ).arg( TEST_DATA_DIR );
 +  QString localVtpkPath = QStringLiteral( "%1%2" ).arg( QUrl::toPercentEncoding( TEST_DATA_DIR ), QUrl::toPercentEncoding( QStringLiteral( "/testvtpk.vtpk" ) ) );
 +
 +  const QString srcVtpk = QStringLiteral( "type=vtpk&url=%1" ).arg( localVtpkPath );
- 
+
    std::unique_ptr<QgsVectorTileLayer> layer = std::make_unique<QgsVectorTileLayer>( srcVtpk );
    QVERIFY( layer->isValid() );
-@@ -509,7 +516,7 @@ void TestQgsVectorTileLayer::test_relativePathsVtpk()
- 
+@@ -493,7 +500,7 @@ void TestQgsVectorTileLayer::test_relativePathsVtpk()
+
    // encode source: converting absolute paths to relative
    const QString srcVtpkRel = layer->encodedSource( srcVtpk, contextRel );
 -  QCOMPARE( srcVtpkRel, QStringLiteral( "type=vtpk&url=./testvtpk.vtpk" ) );
 +  QCOMPARE( srcVtpkRel, QStringLiteral( "type=vtpk&url=.%2Ftestvtpk.vtpk" ) );
- 
+
    // encode source: keeping absolute paths
    QCOMPARE( layer->encodedSource( srcVtpk, contextAbs ), srcVtpk );
 diff --git a/tests/src/providers/testqgswmsprovider.cpp b/tests/src/providers/testqgswmsprovider.cpp
-index 8fe106aab19..e86d96fe894 100644
+index d736bfcc38f..3cbaf2578fd 100644
 --- a/tests/src/providers/testqgswmsprovider.cpp
 +++ b/tests/src/providers/testqgswmsprovider.cpp
-@@ -469,10 +469,27 @@ void TestQgsWmsProvider::absoluteRelativeUri()
+@@ -321,7 +321,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
+   QCOMPARE( sublayers.size(), 1 );
+   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
+   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
+-  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
++  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
+   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
+   QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
+   QVERIFY( !QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
+@@ -330,7 +330,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
+   QCOMPARE( sublayers.size(), 1 );
+   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
+   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
+-  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
++  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
+   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
+   QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
+
+@@ -347,16 +347,16 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
+   QCOMPARE( sublayers.size(), 1 );
+   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
+   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
+-  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
++  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
+   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
+   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
+   QVERIFY( QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
+
+-  sublayers = wmsMetadata->querySublayers( QStringLiteral( "type=mbtiles&url=%1/isle_of_man.mbtiles" ).arg( TEST_DATA_DIR ), Qgis::SublayerQueryFlag::FastScan );
++  sublayers = wmsMetadata->querySublayers( u"type=mbtiles&url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles"_s.arg( TEST_DATA_DIR ), Qgis::SublayerQueryFlag::FastScan );
+   QCOMPARE( sublayers.size(), 1 );
+   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
+   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
+-  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
++  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
+   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
+   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
+
+@@ -374,7 +374,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
+   QCOMPARE( sublayers.size(), 1 );
+   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
+   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "mbtiles_vt" ) );
+-  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/vector_tile/mbtiles_vt.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
++  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fvector_tile%2Fmbtiles_vt.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
+   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
+   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
+
+@@ -435,22 +435,21 @@ void TestQgsWmsProvider::providerUriUpdates()
+   QCOMPARE( parts["testParam"], QVariant( "false" ) );
+
+   QString updatedUri = metadata->encodeUri( parts );
+-  QString expectedUri = QStringLiteral( "crs=EPSG:4326&dpiMode=7&"
++  QString expectedUri = QStringLiteral( "crs=EPSG%3A4326&dpiMode=7&"
+                                         "layers=testlayer&styles&"
+                                         "testParam=false&"
+-                                        "url=http://localhost:8380/mapserv" );
++                                        "url=http%3A%2F%2Flocalhost%3A8380%2Fmapserv" );
+   QCOMPARE( updatedUri, expectedUri );
+ }
+
+ void TestQgsWmsProvider::providerUriLocalFile()
+ {
+-  QString uriString = QStringLiteral( "url=file:///my/local/tiles.mbtiles&type=mbtiles" );
+-  QVariantMap parts = QgsProviderRegistry::instance()->decodeUri( QStringLiteral( "wms" ), uriString );
++  QVariantMap parts = QgsProviderRegistry::instance()->decodeUri( u"wms"_s, u"url=file:///my/local/tiles.mbtiles&type=mbtiles"_s );
+   QVariantMap expectedParts { { QString( "type" ), QVariant( "mbtiles" ) }, { QString( "path" ), QVariant( "/my/local/tiles.mbtiles" ) }, { QString( "url" ), QVariant( "file:///my/local/tiles.mbtiles" ) } };
+   QCOMPARE( parts, expectedParts );
+
+   QString encodedUri = QgsProviderRegistry::instance()->encodeUri( QStringLiteral( "wms" ), parts );
+-  QCOMPARE( encodedUri, uriString );
++  QCOMPARE( encodedUri, u"url=file%3A%2F%2F%2Fmy%2Flocal%2Ftiles.mbtiles&type=mbtiles"_s );
+
    QgsProviderMetadata *wmsMetadata = QgsProviderRegistry::instance()->providerMetadata( "wms" );
    QVERIFY( wmsMetadata );
- 
+@@ -475,10 +474,27 @@ void TestQgsWmsProvider::absoluteRelativeUri()
+   QgsProviderMetadata *wmsMetadata = QgsProviderRegistry::instance()->providerMetadata( "wms" );
+   QVERIFY( wmsMetadata );
+
 -  QString absoluteUri = "type=mbtiles&url=file://" + QStringLiteral( TEST_DATA_DIR ) + "/isle_of_man.mbtiles";
 -  QString relativeUri = "type=mbtiles&url=file:./isle_of_man.mbtiles";
 -  QCOMPARE( wmsMetadata->absoluteToRelativeUri( absoluteUri, context ), relativeUri );
@@ -633,19 +685,41 @@ index 8fe106aab19..e86d96fe894 100644
 +    QCOMPARE( wmsMetadata->relativeToAbsoluteUri( relativeUri, context ), absoluteUri );
 +  }
  }
- 
+
  void TestQgsWmsProvider::testXyzIsBasemap()
+diff --git a/tests/src/python/test_qgsmapboxglconverter.py b/tests/src/python/test_qgsmapboxglconverter.py
+index 8f4640eb89c..0031ee3c54d 100644
+--- a/tests/src/python/test_qgsmapboxglconverter.py
++++ b/tests/src/python/test_qgsmapboxglconverter.py
+@@ -2406,7 +2406,7 @@ class TestQgsMapBoxGlStyleConverter(QgisTestCase):
+         self.assertIsInstance(rl, QgsRasterLayer)
+         self.assertEqual(
+             rl.source(),
+-            "tilePixelRation=1&type=xyz&url=https://yyyyyy/v1/tiles/texturereliefshade/EPSG:3857/%7Bz%7D/%7Bx%7D/%7By%7D.webp&zmax=20&zmin=3",
++            "tilePixelRation=1&type=xyz&url=https%3A%2F%2Fyyyyyy%2Fv1%2Ftiles%2Ftexturereliefshade%2FEPSG%3A3857%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.webp&zmax=20&zmin=3",
+         )
+         self.assertEqual(rl.providerType(), "wms")
+
+@@ -2418,7 +2418,7 @@ class TestQgsMapBoxGlStyleConverter(QgisTestCase):
+         self.assertEqual(raster_layer.name(), "Texture-Relief")
+         self.assertEqual(
+             raster_layer.source(),
+-            "tilePixelRation=1&type=xyz&url=https://yyyyyy/v1/tiles/texturereliefshade/EPSG:3857/%7Bz%7D/%7Bx%7D/%7By%7D.webp&zmax=20&zmin=3",
++            "tilePixelRation=1&type=xyz&url=https%3A%2F%2Fyyyyyy%2Fv1%2Ftiles%2Ftexturereliefshade%2FEPSG%3A3857%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.webp&zmax=20&zmin=3",
+         )
+         self.assertEqual(
+             raster_layer.pipe()
 diff --git a/tests/src/python/test_qgsvectortile.py b/tests/src/python/test_qgsvectortile.py
 index a4866d1229b..4c42b630b58 100644
 --- a/tests/src/python/test_qgsvectortile.py
 +++ b/tests/src/python/test_qgsvectortile.py
 @@ -105,7 +105,7 @@ class TestVectorTile(QgisTestCase):
- 
+
          parts["path"] = "/my/new/file.mbtiles"
          uri = md.encodeUri(parts)
 -        self.assertEqual(uri, "type=mbtiles&url=/my/new/file.mbtiles")
 +        self.assertEqual(uri, "type=mbtiles&url=%2Fmy%2Fnew%2Ffile.mbtiles")
- 
+
          uri = (
              "type=xyz&url=https://fake.server/%7Bx%7D/%7By%7D/%7Bz%7D.png&zmin=0&zmax=2"
 @@ -125,7 +125,7 @@ class TestVectorTile(QgisTestCase):
@@ -655,7 +729,7 @@ index a4866d1229b..4c42b630b58 100644
 -            "type=xyz&url=https://fake.new.server/%7Bx%7D/%7By%7D/%7Bz%7D.png&zmax=2&zmin=0",
 +            "type=xyz&url=https%3A%2F%2Ffake.new.server%2F%7Bx%7D%2F%7By%7D%2F%7Bz%7D.png&zmax=2&zmin=0",
          )
- 
+
          uri = "type=xyz&serviceType=arcgis&url=https://fake.server/%7Bx%7D/%7By%7D/%7Bz%7D.png&zmax=2&http-header:referer=https://qgis.org/&styleUrl=https://qgis.org/"
 @@ -147,7 +147,7 @@ class TestVectorTile(QgisTestCase):
          uri = md.encodeUri(parts)
@@ -664,184 +738,35 @@ index a4866d1229b..4c42b630b58 100644
 -            "serviceType=arcgis&styleUrl=https://qgis.org/&type=xyz&url=https://fake.new.server/%7Bx%7D/%7By%7D/%7Bz%7D.png&zmax=2&http-header:referer=https://qgis.org/",
 +            "serviceType=arcgis&styleUrl=https%3A%2F%2Fqgis.org%2F&type=xyz&url=https%3A%2F%2Ffake.new.server%2F%7Bx%7D%2F%7By%7D%2F%7Bz%7D.png&zmax=2&http-header:referer=https%3A%2F%2Fqgis.org%2F",
          )
- 
+
      def testZoomRange(self):
 diff --git a/tests/src/server/wms/test_qgsserver_wms_parameters.cpp b/tests/src/server/wms/test_qgsserver_wms_parameters.cpp
 index 792325c642b..5aa2ab3bd9f 100644
 --- a/tests/src/server/wms/test_qgsserver_wms_parameters.cpp
 +++ b/tests/src/server/wms/test_qgsserver_wms_parameters.cpp
 @@ -64,14 +64,14 @@ void TestQgsServerWmsParameters::external_layers()
- 
+
    QgsWms::QgsWmsParametersLayer layer_params = layers_params[0];
    QCOMPARE( layer_params.mNickname, QString( "external_layer_1" ) );
 -  QCOMPARE( layer_params.mExternalUri, QString( "layers=layer_1_name&url=http://url_1" ) );
 +  QCOMPARE( layer_params.mExternalUri, QString( "layers=layer_1_name&url=http%3A%2F%2Furl_1" ) );
- 
+
    layer_params = layers_params[1];
    QCOMPARE( layer_params.mNickname, QString( "layer" ) );
- 
+
    layer_params = layers_params[2];
    QCOMPARE( layer_params.mNickname, QString( "external_layer_2" ) );
 -  QCOMPARE( layer_params.mExternalUri, QString( "layers=layer_2_name&opacities=100&url=http://url_2" ) );
 +  QCOMPARE( layer_params.mExternalUri, QString( "layers=layer_2_name&opacities=100&url=http%3A%2F%2Furl_2" ) );
- 
+
    //test if opacities are also applied to external layers
    QCOMPARE( layers_params[0].mOpacity, 255 );
 @@ -94,7 +94,7 @@ void TestQgsServerWmsParameters::external_layers()
- 
+
    QgsWms::QgsWmsParametersLayer layer_params2 = layers_params2[0];
    QCOMPARE( layer_params2.mNickname, QString( "external_layer_1" ) );
 -  QCOMPARE( layer_params2.mExternalUri, QString( "layers=layer_1_name&url=http://url_1" ) );
 +  QCOMPARE( layer_params2.mExternalUri, QString( "layers=layer_1_name&url=http%3A%2F%2Furl_1" ) );
  }
- 
+
  void TestQgsServerWmsParameters::percent_encoding()
-diff --git a/src/providers/wms/qgswmsprovider.cpp b/src/providers/wms/qgswmsprovider.cpp
-index f7a17b8c6ba..429dafa69dd 100644
---- a/src/providers/wms/qgswmsprovider.cpp
-+++ b/src/providers/wms/qgswmsprovider.cpp
-@@ -4983,7 +4983,7 @@ QList<QgsDataItemProvider *> QgsWmsProviderMetadata::dataItemProviders() const
- QVariantMap QgsWmsProviderMetadata::decodeUri( const QString &uri ) const
- {
-   const QUrlQuery query { uri };
--  const QList<QPair<QString, QString>> constItems { query.queryItems() };
-+  const QList<QPair<QString, QString>> constItems { query.queryItems( QUrl::ComponentFormattingOption::FullyDecoded ) };
-   QVariantMap decoded;
-   for ( const QPair<QString, QString> &item : constItems )
-   {
-@@ -5035,24 +5035,31 @@ QString QgsWmsProviderMetadata::encodeUri( const QVariantMap &parts ) const
-   {
-     if ( it.key() == QLatin1String( "path" ) )
-     {
--      items.push_back( { QStringLiteral( "url" ), QUrl::fromLocalFile( it.value().toString() ).toString() } );
-+      items.push_back( { QStringLiteral( "url" ), QUrl::toPercentEncoding( QUrl::fromLocalFile( it.value().toString() ).toString() ) } );
-     }
-     else if ( it.key() == QLatin1String( "url" ) )
-     {
-       if ( !parts.contains( QLatin1String( "path" ) ) )
-       {
--        items.push_back( { it.key(), it.value().toString() } );
-+        items.push_back( { it.key(), QUrl::toPercentEncoding( it.value().toString() ) } );
-       }
-     }
-     else
-     {
-       if ( it.value().userType() == QMetaType::Type::QStringList )
-       {
--        listItems.push_back( { it.key(), it.value().toStringList() } );
-+        QStringList encodedList;
-+        const QStringList unencodedList = it.value().toStringList();
-+        encodedList.reserve( unencodedList.size() );
-+        for ( const QString &item : unencodedList )
-+        {
-+          encodedList << QUrl::toPercentEncoding( item );
-+        }
-+        listItems.push_back( { it.key(), encodedList } );
-       }
-       else
-       {
--        items.push_back( { it.key(), it.value().toString() } );
-+        items.push_back( { it.key(), QUrl::toPercentEncoding( it.value().toString() ) } );
-       }
-     }
-   }
-diff --git a/tests/src/providers/testqgswmsprovider.cpp b/tests/src/providers/testqgswmsprovider.cpp
-index 7f07c933b6d..5ac4d3c43c9 100644
---- a/tests/src/providers/testqgswmsprovider.cpp
-+++ b/tests/src/providers/testqgswmsprovider.cpp
-@@ -319,7 +319,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
-   QCOMPARE( sublayers.size(), 1 );
-   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
-   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
--  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
-+  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
-   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
-   QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
-   QVERIFY( !QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
-@@ -328,7 +328,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
-   QCOMPARE( sublayers.size(), 1 );
-   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
-   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
--  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
-+  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
-   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
-   QVERIFY( !sublayers.at( 0 ).skippedContainerScan() );
- 
-@@ -345,16 +345,16 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
-   QCOMPARE( sublayers.size(), 1 );
-   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
-   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
--  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
-+  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
-   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
-   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
-   QVERIFY( QgsProviderUtils::sublayerDetailsAreIncomplete( sublayers ) );
- 
--  sublayers = wmsMetadata->querySublayers( QStringLiteral( "type=mbtiles&url=%1/isle_of_man.mbtiles" ).arg( TEST_DATA_DIR ), Qgis::SublayerQueryFlag::FastScan );
-+  sublayers = wmsMetadata->querySublayers( u"type=mbtiles&url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles"_s.arg( TEST_DATA_DIR ), Qgis::SublayerQueryFlag::FastScan );
-   QCOMPARE( sublayers.size(), 1 );
-   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
-   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "isle_of_man" ) );
--  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/isle_of_man.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
-+  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fisle_of_man.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
-   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
-   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
- 
-@@ -372,7 +372,7 @@ void TestQgsWmsProvider::testMbtilesProviderMetadata()
-   QCOMPARE( sublayers.size(), 1 );
-   QCOMPARE( sublayers.at( 0 ).providerKey(), QStringLiteral( "wms" ) );
-   QCOMPARE( sublayers.at( 0 ).name(), QStringLiteral( "mbtiles_vt" ) );
--  QCOMPARE( sublayers.at( 0 ).uri(), QStringLiteral( "url=file://%1/vector_tile/mbtiles_vt.mbtiles&type=mbtiles" ).arg( TEST_DATA_DIR ) );
-+  QCOMPARE( sublayers.at( 0 ).uri(), u"url=file%3A%2F%2F%1%2Fvector_tile%2Fmbtiles_vt.mbtiles&type=mbtiles"_s.arg( QString( TEST_DATA_DIR ).replace( "/", "%2F" ) ) );
-   QCOMPARE( sublayers.at( 0 ).type(), Qgis::LayerType::Raster );
-   QVERIFY( sublayers.at( 0 ).skippedContainerScan() );
- 
-@@ -433,22 +433,21 @@ void TestQgsWmsProvider::providerUriUpdates()
-   QCOMPARE( parts["testParam"], QVariant( "false" ) );
- 
-   QString updatedUri = metadata->encodeUri( parts );
--  QString expectedUri = QStringLiteral( "crs=EPSG:4326&dpiMode=7&"
-+  QString expectedUri = QStringLiteral( "crs=EPSG%3A4326&dpiMode=7&"
-                                         "layers=testlayer&styles&"
-                                         "testParam=false&"
--                                        "url=http://localhost:8380/mapserv" );
-+                                        "url=http%3A%2F%2Flocalhost%3A8380%2Fmapserv" );
-   QCOMPARE( updatedUri, expectedUri );
- }
- 
- void TestQgsWmsProvider::providerUriLocalFile()
- {
--  QString uriString = QStringLiteral( "url=file:///my/local/tiles.mbtiles&type=mbtiles" );
--  QVariantMap parts = QgsProviderRegistry::instance()->decodeUri( QStringLiteral( "wms" ), uriString );
-+  QVariantMap parts = QgsProviderRegistry::instance()->decodeUri( u"wms"_s, u"url=file:///my/local/tiles.mbtiles&type=mbtiles"_s );
-   QVariantMap expectedParts { { QString( "type" ), QVariant( "mbtiles" ) }, { QString( "path" ), QVariant( "/my/local/tiles.mbtiles" ) }, { QString( "url" ), QVariant( "file:///my/local/tiles.mbtiles" ) } };
-   QCOMPARE( parts, expectedParts );
- 
-   QString encodedUri = QgsProviderRegistry::instance()->encodeUri( QStringLiteral( "wms" ), parts );
--  QCOMPARE( encodedUri, uriString );
-+  QCOMPARE( encodedUri, u"url=file%3A%2F%2F%2Fmy%2Flocal%2Ftiles.mbtiles&type=mbtiles"_s );
- 
-   QgsProviderMetadata *wmsMetadata = QgsProviderRegistry::instance()->providerMetadata( "wms" );
-   QVERIFY( wmsMetadata );
-diff --git a/tests/src/python/test_qgsmapboxglconverter.py b/tests/src/python/test_qgsmapboxglconverter.py
-index 16c0b6652a5..2da4bce4e0c 100644
---- a/tests/src/python/test_qgsmapboxglconverter.py
-+++ b/tests/src/python/test_qgsmapboxglconverter.py
-@@ -2554,7 +2554,7 @@ class TestQgsMapBoxGlStyleConverter(QgisTestCase):
-         self.assertIsInstance(rl, QgsRasterLayer)
-         self.assertEqual(
-             rl.source(),
--            "tilePixelRation=1&type=xyz&url=https://yyyyyy/v1/tiles/texturereliefshade/EPSG:3857/%7Bz%7D/%7Bx%7D/%7By%7D.webp&zmax=20&zmin=3",
-+            "tilePixelRation=1&type=xyz&url=https%3A%2F%2Fyyyyyy%2Fv1%2Ftiles%2Ftexturereliefshade%2FEPSG%3A3857%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.webp&zmax=20&zmin=3",
-         )
-         self.assertEqual(rl.providerType(), "wms")
- 
-@@ -2566,7 +2566,7 @@ class TestQgsMapBoxGlStyleConverter(QgisTestCase):
-         self.assertEqual(raster_layer.name(), "Texture-Relief")
-         self.assertEqual(
-             raster_layer.source(),
--            "tilePixelRation=1&type=xyz&url=https://yyyyyy/v1/tiles/texturereliefshade/EPSG:3857/%7Bz%7D/%7Bx%7D/%7By%7D.webp&zmax=20&zmin=3",
-+            "tilePixelRation=1&type=xyz&url=https%3A%2F%2Fyyyyyy%2Fv1%2Ftiles%2Ftexturereliefshade%2FEPSG%3A3857%2F%7Bz%7D%2F%7Bx%7D%2F%7By%7D.webp&zmax=20&zmin=3",
-         )
-         self.assertEqual(
-             raster_layer.pipe()
