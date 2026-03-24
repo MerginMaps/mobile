@@ -25,6 +25,19 @@ index a86c4d2bc60..f559bb21112 100644
        return storage;
    }
  
+diff --git a/src/core/qgsdatasourceuri.cpp b/src/core/qgsdatasourceuri.cpp
+index 689690e4003..aaef521e652 100644
+--- a/src/core/qgsdatasourceuri.cpp
++++ b/src/core/qgsdatasourceuri.cpp
+@@ -711,7 +711,7 @@ void QgsDataSourceUri::setEncodedUri( const QByteArray &uri )
+ 
+   mHttpHeaders.setFromUrlQuery( query );
+ 
+-  const auto constQueryItems = query.queryItems();
++  const auto constQueryItems = query.queryItems( QUrl::ComponentFormattingOption::FullyDecoded );
+   for ( const QPair<QString, QString> &item : constQueryItems )
+   {
+     if ( !item.first.startsWith( QgsHttpHeaders::PARAM_PREFIX ) && item.first != QgsHttpHeaders::KEY_REFERER )
 diff --git a/src/core/qgsmaplayer.cpp b/src/core/qgsmaplayer.cpp
 index e1cfb604055..abd3c19a0fc 100644
 --- a/src/core/qgsmaplayer.cpp
