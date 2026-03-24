@@ -28,6 +28,13 @@ import "./settings"
 import "./gps"
 import "./form"
 
+/*
+(ApplicationWindow):
+Es el contenedor principal de toda la aplicación.
+Aquí se define el título de la app ("MDM Móvil 2026") y se configuran sus dimensiones, visibilidad y comportamiento
+dependiendo de si el sistema operativo es iOS, Android o Windows
+*/
+
 ApplicationWindow {
   id: window
 
@@ -61,6 +68,15 @@ ApplicationWindow {
   onYChanged: storeWindowPosition()
   onWidthChanged: storeWindowPosition()
   onHeightChanged: storeWindowPosition()
+
+/*
+ Gestor de Estados (stateManager):
+ Es un componente que controla qué pantalla principal está viendo el usuario en un momento dado.
+ Se divide en tres estados:
+ "map" (la vista del mapa y herramientas de edición),
+ "projects" (la lista de proyectos) y
+ "misc" (para configuraciones y el panel del GPS).
+*/
 
   Item {
     id: stateManager
@@ -172,6 +188,15 @@ ApplicationWindow {
     } )
   }*/
 
+/*
+ Inicialización (Component.onCompleted):
+ Es el código que se ejecuta automáticamente cuando la aplicación termina de abrirse.
+ En el bloque actualmente activo, se fuerza a la app a entrar en el estado "map",
+ se abre de inmediato un cuadro de diálogo para seleccionar un archivo (projectFileDialog.open())
+ y se configura el comportamiento del botón físico de "Atrás" en los dispositivos móviles para evitar
+ que la aplicación se cierre por accidente
+*/
+
   Component.onCompleted: {
       // Primero definimos el estado para que la interfaz esté lista
       stateManager.state = "map"
@@ -187,6 +212,16 @@ ApplicationWindow {
         }
       } )
     }
+/*
+ Controlador del Mapa (MMMapController):
+ Es el núcleo de la aplicación donde se visualiza la cartografía.
+ Este componente contiene las instrucciones para reaccionar a las acciones del usuario,
+ tales como:
+ tocar un elemento (onFeatureIdentified),
+ iniciar la captura de geometrías (onEditingGeometryStarted),
+ medir distancias (onMeasureStarted) o
+ encender el rastreo de ubicación (onOpenTrackingPanel).
+*/
 
   MMMapController {
     id: map
@@ -326,6 +361,37 @@ ApplicationWindow {
     id: locationPermission
     accuracy: LocationPermission.Precise
   }
+
+  // prueba 2026
+  /*MMToolbar {
+    id :mapToolBarRight
+    anchors.bottom: parent.right
+    visible: map.state === "view"
+    model: ObjectModel {
+
+      MMToolbarButton {
+        id: syncButton2
+
+        text: qsTr("Sync")
+        iconSource: __style.syncIcon
+        onClicked: {
+          __activeProject.requestSync()
+        }
+      }
+
+
+    }
+  }*/
+
+/*
+ Barra de Herramientas Inferior (MMToolbar):
+ Es la barra de botones que aparece en la parte inferior de la pantalla cuando el usuario está en la vista del mapa.
+ Contiene un botón personalizado llamado "Abrir Archivo" que lanza el explorador de documentos del dispositivo.
+ Incluye otros botones operativos como Agregar información ("Add"),
+ ver las Capas ("Layers"), medir ("Measure") y Configuraciones ("Settings").
+ Se puede observar que algunos botones predeterminados como "Sync" (Sincronizar),
+ "Projects" (Proyectos) y "Local changes" (Cambios locales) fueron ocultados específicamente para esta versión (visible: false)
+*/
 
   MMToolbar {
     id: mapToolbar
@@ -478,6 +544,13 @@ ApplicationWindow {
 
     onClosed: stateManager.state = "map"
   }
+
+/*
+  Gestión de Vistas Dinámicas (StackView y Loader): *
+  Usa un StackView para deslizar paneles sobre el mapa (por ejemplo, el menú de capas) con animaciones fluidas de entrada y salida.
+  Usa elementos Loader para cargar paneles pesados (como la interfaz del GPS, paneles de selección múltiple o dibujo)
+  en la memoria RAM únicamente cuando el usuario solicita abrirlos, lo cual optimiza el rendimiento.
+*/
 
   StackView {
     id: mapPanelsStackView
@@ -818,6 +891,12 @@ ApplicationWindow {
     }
   }
 
+/*
+ Controlador de Formularios (MMFormStackController):
+ Es el encargado de abrir y gestionar las pantallas de formularios donde el usuario puede ver,
+ editar o rellenar la base de datos (atributos) de un punto, línea o polígono del mapa.
+*/
+
   MMFormStackController {
     id: formsStackManager
 
@@ -896,6 +975,16 @@ ApplicationWindow {
     anchors.fill: parent
     visible: false
   }
+
+/*
+  Alertas y Diálogos (Dialogs y FileDialog):
+  Ventanas emergentes que advierten al usuario sobre diferentes situaciones,
+  como límites de almacenamiento (MMStorageLimitDialog),
+  errores al cargar el proyecto (MMProjectLoadErrorDialog) o
+  problemas de permisos de inicio de sesión (MMMissingAuthDialog).
+  En la parte final, se define el projectFileDialog,
+  que es el explorador de archivos configurado específicamente para filtrar y buscar extensiones de QGIS (.qgz, .qgs).
+*/
 
   MMStorageLimitDialog {
     id: storageLimitDialog
@@ -1006,6 +1095,13 @@ ApplicationWindow {
         open()
     }
   }
+/*
+ Conexiones con el Sistema Central (Connections):
+ Son bloques lógicos que "escuchan" en segundo plano lo que sucede en el núcleo de la app (C++) para actualizar la interfaz.
+ Por ejemplo, reciben señales si la sincronización del proyecto falla (onSyncError) ,
+ si se pierde la conexión de red (onNetworkErrorOccurred) o
+ si se conceden/deniegan los permisos de ubicación GPS del celular al momento de abrir el proyecto (onLoadingFinished)
+*/
 
   Connections {
     target: __syncManager
