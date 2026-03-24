@@ -1324,7 +1324,9 @@ ApplicationWindow {
       // Usamos el nombre de propiedad correcto según tu versión de Qt
 //      currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
       nameFilters: ["Archivos de proyecto QGIS (*.qgz *.qgs)"]
-      onAccepted: {
+
+
+      /*onAccepted: {
         // 1. Convertimos el objeto URL a texto
         var rutaSucia = selectedFile.toString();
 
@@ -1348,7 +1350,37 @@ ApplicationWindow {
           console.log("Error al cargar el proyecto en: " + rutaLimpia)
           stateManager.state = "projects"
         }
+      }*/
+
+      onAccepted: {
+          var rutaSucia = selectedFile.toString();
+          var rutaLimpia = "";
+
+          if (Qt.platform.os === "android") {
+              // En Android, el FileDialog suele devolver algo como "content://..." o "file:///storage/..."
+              // Intentamos limpiar el prefijo file://
+              rutaLimpia = rutaSucia.replace("file://", "");
+              // Si el FileDialog de Android te da un "content://",
+              // MerginMaps suele tener una función interna para eso:
+              if (rutaLimpia.startsWith("content://")) {
+                  rutaLimpia = __inputUtils.urlToLocalFile(selectedFile);
+              }
+          } else {
+              // Lógica de Windows que ya tenías
+              rutaLimpia = rutaSucia.replace("file:///", "");
+              if (rutaLimpia.charAt(0) === '/' && rutaLimpia.charAt(2) === ':') {
+                  rutaLimpia = rutaLimpia.substring(1);
+              }
+          }
+
+          console.log("Ruta en " + Qt.platform.os + ": " + rutaLimpia);
+
+          if ( __activeProject.load( rutaLimpia ) ) {
+              stateManager.state = "map"
+          }
       }
+
+
 
       onRejected: {
         stateManager.state = "map"
