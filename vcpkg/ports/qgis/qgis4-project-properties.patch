@@ -5,7 +5,7 @@ index d5cd3e3ebb4..819f8809084 100644
 @@ -116,21 +116,6 @@ QStringList makeKeyTokens_( const QString &scope, const QString &key )
    // be sure to include the canonical root node
    keyTokens.push_front( QStringLiteral( "properties" ) );
-
+ 
 -  //check validy of keys since an invalid xml name will will be dropped upon saving the xml file. If not valid, we print a message to the console.
 -  for ( int i = 0; i < keyTokens.size(); ++i )
 -  {
@@ -23,7 +23,7 @@ index d5cd3e3ebb4..819f8809084 100644
 -
    return keyTokens;
  }
-
+ 
 @@ -1311,20 +1296,20 @@ void dump_( const QgsProjectPropertyKey &topQgsPropertyKey )
   * scope.  "layers" is a list containing three string values.
   *
@@ -84,13 +84,13 @@ index d5cd3e3ebb4..819f8809084 100644
 +      useAbsolutePaths = e.text().compare( QLatin1String( "true" ), Qt::CaseInsensitive ) == 0;
      }
    }
-
+ 
 diff --git a/src/core/project/qgsprojectproperty.cpp b/src/core/project/qgsprojectproperty.cpp
 index ff8024a5260..7691c1b5d53 100644
 --- a/src/core/project/qgsprojectproperty.cpp
 +++ b/src/core/project/qgsprojectproperty.cpp
 @@ -362,33 +362,41 @@ bool QgsProjectPropertyKey::readXml( const QDomNode &keyNode )
-
+ 
    while ( i < subkeys.count() )
    {
 +    const QDomNode subkey = subkeys.item( i );
@@ -120,7 +120,7 @@ index ff8024a5260..7691c1b5d53 100644
 +      //
 +      delete mProperties.take( name );
 +      mProperties.insert( name, new QgsProjectPropertyValue );
-
+ 
 -      QDomNode subkey = subkeys.item( i );
 -
 -      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
@@ -136,7 +136,7 @@ index ff8024a5260..7691c1b5d53 100644
 -
 -      QDomNode subkey = subkeys.item( i );
 +      addKey( name );
-
+ 
 -      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
 +      if ( !mProperties[name]->readXml( subkey ) )
        {
@@ -144,7 +144,7 @@ index ff8024a5260..7691c1b5d53 100644
 +        QgsDebugError( QStringLiteral( "unable to parse subkey %1" ).arg( name ) );
        }
      }
-
+ 
 diff --git a/tests/src/python/test_qgsproject.py b/tests/src/python/test_qgsproject.py
 index 4da8f330941..752110de78a 100644
 --- a/tests/src/python/test_qgsproject.py
