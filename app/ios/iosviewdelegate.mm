@@ -16,6 +16,7 @@
 #include <QtCore>
 #include <QPointer>
 #import "iosviewdelegate.h"
+#import "coreutils.h"
 
 @implementation IOSViewDelegate
 
@@ -90,7 +91,7 @@
     BOOL writeSuccess = data && !error && [data writeToFile:imagePath atomically:YES];
     if ( !writeSuccess )
     {
-      qWarning() << "Gallery Picker: failed to write image data to" << QString::fromNSString( imagePath );
+      CoreUtils::log( "iOS photo picker", QStringLiteral( "Gallery Picker: failed to write image data to %1" ).arg( QString::fromNSString( imagePath ) ) );
     }
 
     dispatch_async( dispatch_get_main_queue(), ^
