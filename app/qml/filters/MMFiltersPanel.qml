@@ -74,10 +74,10 @@ MMComponents.MMDrawer {
     type: MMButton.Types.Primary
     size: MMButton.Sizes.Small
     text: qsTr("Reset")
-    fontColor: root.filterController.hasActiveFilters ? __style.grapeColor : __style.forestColor
-    fontColorHover: root.filterController.hasActiveFilters ? __style.grapeColor : __style.forestColor
-    bgndColor: root.filterController.hasActiveFilters ? __style.negativeLightColor : __style.transparentColor
-    bgndColorHover: root.filterController.hasActiveFilters ? __style.negativeLightColor : __style.transparentColor
+    fontColor: __style.grapeColor
+    fontColorHover: __style.grapeColor
+    bgndColor: __style.negativeLightColor
+    bgndColorHover: __style.negativeLightColor
 
     anchors {
       left: parent.left

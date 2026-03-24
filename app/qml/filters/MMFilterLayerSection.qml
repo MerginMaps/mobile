@@ -24,20 +24,6 @@ Column {
 
   spacing: __style.margin12
 
-  // Layer header
-  MMText {
-    width: root.width
-    text: root.layerName
-    font: __style.t2
-    color: __style.nightColor
-  }
-
-  Rectangle {
-    width: root.width
-    height: 1
-    color: __style.greyColor
-  }
-
   // Filter fields
   Column {
     width: root.width
@@ -457,11 +443,5 @@ Column {
         }
       }
     }
-  }
-
-  // bottom spacer
-  Item {
-    width: root.width
-    height: __style.margin20
   }
 }
