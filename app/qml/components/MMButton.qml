@@ -15,7 +15,7 @@ Button {
   id: root
 
   enum Types { Primary, Secondary, Tertiary }
-  enum Sizes { Small, Regular }
+  enum Sizes { Small, Regular, ExtraSmall }
 
   property int type: MMButton.Types.Primary
   property int size: MMButton.Sizes.Regular
@@ -163,7 +163,10 @@ Button {
   state: "default"
 
   implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
-  implicitWidth: row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+  implicitWidth: {
+    if ( root.size === MMButton.Sizes.ExtraSmall ) return row.paintedChildrenWidth + 2 * __style.margin12
+    return row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+  }
 
   topPadding: {
     if ( root.type === MMButton.Types.Tertiary ) {
@@ -171,6 +174,9 @@ Button {
     }
     else if ( root.size === MMButton.Sizes.Small ) {
       return 7 * __dp;
+    }
+    else if ( root.size === MMButton.Sizes.ExtraSmall ) {
+      return 2 * __dp;
     }
     else {
       return 11 * __dp;
@@ -183,6 +189,9 @@ Button {
     }
     else if ( root.size === MMButton.Sizes.Small ) {
       return 7 * __dp;
+    }
+    else if ( root.size === MMButton.Sizes.ExtraSmall ) {
+      return 2 * __dp;
     }
     else {
       return 11 * __dp;
@@ -200,7 +209,10 @@ Button {
       id: row
 
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
-      property real maxWidth: parent.width - 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+      property real maxWidth: {
+        if ( root.size === MMButton.Sizes.ExtraSmall ) return parent.width - 2 * __style.margin12
+        return parent.width - 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+      }
 
       x: ( parent.width - width ) / 2
 
@@ -232,7 +244,7 @@ Button {
 
         width: parent.width - buttonIconLeft.paintedWidth - buttonIconRight.paintedWidth
 
-        font: __style.t3
+        font: root.size === MMButton.Sizes.ExtraSmall ? __style.t5 : __style.t3
         text: root.text
       }
 
@@ -266,7 +278,7 @@ Button {
   background: Rectangle {
     id: buttonBackground
 
-    radius: __style.radius30
+    radius: root.size === MMButton.Sizes.ExtraSmall ? __style.radius12 : __style.radius30
 
     border.width: 2 * __dp
   }

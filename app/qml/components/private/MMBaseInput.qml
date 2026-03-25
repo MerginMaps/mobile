@@ -32,6 +32,7 @@ Item {
 
   property string errorMsg: ""
   property string warningMsg: ""
+  property string hintMsg: ""
 
   property alias inputContent: contentGroup.children
 
@@ -163,6 +164,38 @@ Item {
 
       width: parent.width
       height: childrenRect.height
+    }
+
+    Item {
+      // hint message
+
+      width: parent.width
+      height: hintMessageGroup.implicitHeight
+
+      visible: root.hintMsg !== ""
+
+      RowLayout {
+        id: hintMessageGroup
+
+        width: parent.width
+
+        MMComponents.MMIcon {
+          source: __style.infoFilledIcon
+          size: __style.icon16
+          color: __style.informativeColor
+        }
+
+        MMComponents.MMText {
+          Layout.fillWidth: true
+
+          text: root.hintMsg
+          color: __style.deepOceanColor
+          font: __style.t4
+
+          wrapMode: Text.Wrap
+          maximumLineCount: 10
+        }
+      }
     }
 
     Item {

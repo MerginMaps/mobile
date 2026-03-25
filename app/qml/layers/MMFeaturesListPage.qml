@@ -15,6 +15,7 @@ import mm 1.0 as MM
 
 import "../inputs"
 import "../components" as MMComponents
+import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -33,57 +34,23 @@ MMComponents.MMPage {
     width: parent.width
     height: parent.height
 
-    Rectangle {
+    MMFilterComponents.MMFilterBanner {
       id: filterNotification
 
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
 
       width: parent.width
-      height: filterRow.implicitHeight + 2 * __style.margin8
-      radius: __style.radius12
 
       visible: root.selectedLayer && globalFilterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
 
-      color: __style.sandColor
-      border.width: 1 * __dp
-      border.color: __style.sunsetColor
+      text: qsTr("Active filters applied")
+      actionText: qsTr("Reset")
 
-      Row {
-        id: filterRow
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: __style.margin12
-        anchors.rightMargin: __style.margin12
-
-        spacing: __style.margin4
-
-        MMComponents.MMText {
-          width: parent.width - resetButton.width - parent.spacing
-          text: qsTr("Some features are hidden by a filter.")
-          font: __style.p6
-          color: __style.nightColor
-          anchors.verticalCenter: parent.verticalCenter
-          wrapMode: Text.Wrap
-        }
-
-        MMComponents.MMButton {
-          id: resetButton
-
-          type: MMButton.Types.Tertiary
-          text: qsTr("Reset")
-          fontColor: __style.earthColor
-          size: MMButton.Sizes.Small
-          anchors.verticalCenter: parent.verticalCenter
-
-          onClicked: {
-            globalFilterController.clearAllFilters()
-            globalFilterController.applyFiltersToAllLayers()
-            featuresModel.reloadFeatures()
-          }
-        }
+      onActionClicked: {
+        globalFilterController.clearAllFilters()
+        globalFilterController.applyFiltersToAllLayers()
+        featuresModel.reloadFeatures()
       }
     }
 

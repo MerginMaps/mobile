@@ -359,7 +359,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
       // Match all positions: only value {k}, first {k,...}, last ...,k}, middle ...,k,...
       keyConditions << QStringLiteral( "(%1 LIKE '{%2}' OR %1 LIKE '{%2,%%' OR %1 LIKE '%%,%2}' OR %1 LIKE '%%,%2,%%')" )
-                         .arg( quotedField, escapedKey );
+                    .arg( quotedField, escapedKey );
     }
     return keyConditions.join( QStringLiteral( " OR " ) );
   }
@@ -726,7 +726,7 @@ QVariantList FilterController::extractValueRelationOptions( const QVariantMap &c
     QString escapedSearch = searchText;
     escapedSearch.replace( "'", "''" );
     QString filterExpr = QStringLiteral( "LOWER(%1) LIKE '%%2%'" )
-                           .arg( QgsExpression::quotedColumnRef( valueFieldName ), escapedSearch.toLower() );
+                         .arg( QgsExpression::quotedColumnRef( valueFieldName ), escapedSearch.toLower() );
     request.setFilterExpression( filterExpr );
   }
 
@@ -785,8 +785,8 @@ QVariantList FilterController::extractValueRelationOptions( const QVariantMap &c
       selectedRequest.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
       selectedRequest.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
       selectedRequest.setFilterExpression(
-        QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
-      );
+                       QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
+                     );
 
       QVariantList selectedItems;
       QgsFeatureIterator selIt = referencedLayer->getFeatures( selectedRequest );
@@ -856,8 +856,8 @@ QStringList FilterController::lookupValueRelationTexts( const QVariantMap &confi
   request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
   request.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
   request.setFilterExpression(
-    QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
-  );
+           QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
+         );
 
   QgsFeatureIterator it = referencedLayer->getFeatures( request );
   QgsFeature feature;
@@ -867,4 +867,12 @@ QStringList FilterController::lookupValueRelationTexts( const QVariantMap &confi
   }
 
   return texts;
+}
+
+bool FilterController::isReferencingLayerFiltered( const QgsRelation &relation ) const
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( relation.referencingLayer() );
+  if ( !layer )
+    return false;
+  return !layer->subsetString().isEmpty();
 }
