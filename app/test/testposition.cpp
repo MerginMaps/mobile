@@ -496,8 +496,8 @@ void TestPosition::testPositionTransformerAndroidPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -522,24 +522,24 @@ void TestPosition::testPositionTransformerAndroidPosition()
   geoPosition.elevation = 171.3;
 #endif
 
-  // transform with pass through enabled, but position is not mocked
-  GeoPosition newPosition = passThroughTransformer.processAndroidPosition( geoPosition );
+  // transform with transformation disabled, but position is not mocked (real positions are always transformed)
+  GeoPosition newPosition = disabledTransformer.processAndroidPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 
-  // transform with pass through enabled, position is mocked
+  // transform with transformation disabled, position is mocked (mocked positions are passed through)
   geoPosition.isMock = true;
-  newPosition = passThroughTransformer.processAndroidPosition( geoPosition );
+  newPosition = disabledTransformer.processAndroidPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
   QCOMPARE( newPosition.elevation, 171.3 );
   QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 
-  // transform with pass through disabled, position is mocked
+  // transform with transformation enabled, position is mocked
   newPosition = positionTransformer.processAndroidPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
@@ -555,8 +555,8 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
 #ifdef  HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -581,7 +581,7 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   geoPosition.elevation = 171.3;
 #endif
 
-  // transform with pass through disabled and missing elevation separation
+  // transform with transformation enabled and missing elevation separation (no-op without elevation_diff)
   GeoPosition newPosition = positionTransformer.processBluetoothPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
@@ -589,24 +589,24 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   QCOMPARE( newPosition.elevation, 171.3 );
   QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 
-  // transform with pass through enabled and missing elevation separation
-  newPosition = passThroughTransformer.processBluetoothPosition( geoPosition );
+  // transform with transformation disabled and missing elevation separation
+  newPosition = disabledTransformer.processBluetoothPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
   QCOMPARE( newPosition.elevation, 171.3 );
   QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );
 
-  // transform with pass through enabled and elevation separation
+  // transform with transformation disabled and elevation separation (passes through as-is)
   geoPosition.elevation_diff = 40;
-  newPosition = passThroughTransformer.processBluetoothPosition( geoPosition );
+  newPosition = disabledTransformer.processBluetoothPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
   QVERIFY( qgsDoubleNear( newPosition.longitude, 17.1064 ) );
   QCOMPARE( newPosition.elevation, 171.3 );
   QCOMPARE( newPosition.elevation_diff, 40 );
 
-  // transform with pass through disabled and elevation separation
+  // transform with transformation enabled and elevation separation
   newPosition = positionTransformer.processBluetoothPosition( geoPosition );
 
   QVERIFY( qgsDoubleNear( newPosition.latitude, 48.10305 ) );
@@ -657,8 +657,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   QgsCoordinateReferenceSystem ellipsoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 4979 );
   // WGS84 + EGM96
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
-  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
-  PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
+  PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
 #ifdef HAVE_BLUETOOTH
   // mini file contains only minimal info like position and date
@@ -704,7 +704,7 @@ void TestPosition::testPositionTransformerInternalIosPosition()
 
   // mocked
   geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
-  // transform with pass through disabled, position is mocked and orthometric
+  // transform with transformation enabled, position is mocked and orthometric
   newPosition = positionTransformer.processInternalIosPosition( geoPosition );
 
   QCOMPARE( newPosition.elevation, 127.53574931171875 );
@@ -717,8 +717,8 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   geoPosition.setAttribute( QGeoPositionInfo::VerticalSpeed, 1 );
   // mocked
   geoPosition.setAttribute( QGeoPositionInfo::MagneticVariation, 1 );
-  // transform with pass through enabled, position is mocked and ellipsoid
-  newPosition = passThroughTransformer.processInternalIosPosition( geoPosition );
+  // transform with transformation disabled, position is mocked and ellipsoid (passed through as-is)
+  newPosition = disabledTransformer.processInternalIosPosition( geoPosition );
 
   QCOMPARE( newPosition.elevation, 171.3 );
   QCOMPARE( newPosition.elevation_diff, std::numeric_limits<double>::quiet_NaN() );

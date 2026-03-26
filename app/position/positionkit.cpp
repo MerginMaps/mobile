@@ -31,12 +31,12 @@
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
 {
-  mPositionTransformer = std::make_unique<PositionTransformer>( positionCrs3DEllipsoidHeight(), positionCrs3D(), mSkipElevationTransformation, QgsCoordinateTransformContext() );
+  mPositionTransformer = std::make_unique<PositionTransformer>( positionCrs3DEllipsoidHeight(), positionCrs3D(), mElevationTransformationEnabled, QgsCoordinateTransformContext() );
 }
 
 QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 {
-  if ( !mSkipElevationTransformation && mPositionCrs3D.isValid() )
+  if ( mElevationTransformationEnabled && mPositionCrs3D.isValid() )
   {
     return mPositionCrs3D;
   }
@@ -45,7 +45,7 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
 
 QString PositionKit::positionCrs3DGeoidModelName()
 {
-  if ( !mSkipElevationTransformation )
+  if ( mElevationTransformationEnabled )
   {
     return mVerticalCrs.description();
   }
@@ -402,9 +402,9 @@ void PositionKit::setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCr
   mPositionCrs3D = QgsCoordinateReferenceSystem();
 }
 
-void PositionKit::setSkipElevationTransformation( const bool skipElevationTransformation )
+void PositionKit::setElevationTransformationEnabled( const bool elevationTransformationEnabled )
 {
-  mSkipElevationTransformation = skipElevationTransformation;
+  mElevationTransformationEnabled = elevationTransformationEnabled;
 }
 
 void PositionKit::appStateChanged( Qt::ApplicationState state )
@@ -422,7 +422,7 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
 void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
   mPositionTransformer->setDestinationCrs( positionCrs3D() );
-  mPositionTransformer->setSkipElevationTransformation( mSkipElevationTransformation );
+  mPositionTransformer->setElevationTransformationEnabled( mElevationTransformationEnabled );
   mPositionTransformer->setTransformContext( transformContext );
 }
 
