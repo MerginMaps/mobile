@@ -21,7 +21,9 @@ MMComponents.MMListDrawer {
   signal initiatedConnectionTo( string deviceAddress, string deviceName )
 
   showFullScreen: true
-  drawerHeader.title: qsTr( "Connect to bluetooth device" )
+  drawerHeader.title: qsTr( "Bluetooth Connection" )
+
+  list.height: root.drawerContentAvailableHeight
 
   list.model: MM.BluetoothDiscoveryModel {
     id: btModel
@@ -97,36 +99,49 @@ MMComponents.MMListDrawer {
     }
   }
 
+  // footer
   Component {
     id: discoveringMessageComponent
 
-    Column {
+    Item {
       width: ListView.view.width
+      height: Math.max( contentColumn.implicitHeight,
+                        ListView.view.height - ( ListView.view.contentHeight - height ) )
 
-      spacing: __style.spacing16
+      Column {
+        id: contentColumn
 
-      MMComponents.MMListSpacer { height: __style.margin40 }
-
-      Image {
+        anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
-        source: __style.mmSymbolImage
-
-        width: 32 * __dp
-        height: 32 * __dp
-
-        fillMode: Image.PreserveAspectFit
-      }
-
-      MMComponents.MMText {
         width: parent.width
+        spacing: __style.spacing16
 
-        text: qsTr( "Looking for more devices" ) + "..."
+        Image {
+          anchors.horizontalCenter: parent.horizontalCenter
 
-        font: __style.t3
-        color: __style.forestColor
+          source: __style.mmSymbolImage
 
-        horizontalAlignment: Text.AlignHCenter
+          width: 32 * __dp
+          height: 32 * __dp
+
+          fillMode: Image.PreserveAspectFit
+        }
+
+        MMComponents.MMListSpacer { height: __style.margin20 }
+
+        MMComponents.MMText {
+          width: parent.width
+
+          text: qsTr( "Scanning for devices" ) + "..."
+
+          font: __style.t3
+          color: __style.forestColor
+
+          horizontalAlignment: Text.AlignHCenter
+        }
+
+        MMComponents.MMListSpacer { height: __style.margin20 }
       }
     }
   }

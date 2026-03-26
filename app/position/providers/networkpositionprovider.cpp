@@ -192,7 +192,7 @@ void NetworkPositionProvider::reconnectTimeout()
 
 QString NetworkPositionProvider::getIpAddress() const
 {
-  return mTargetAddress;
+  return mTargetAddress + ":" + QString::number( mTargetPort );
 }
 
 void NetworkPositionProvider::reconnect()
