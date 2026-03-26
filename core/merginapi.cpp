@@ -4603,18 +4603,17 @@ void MerginApi::isProjectSyncNeededFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
-  mPendingSyncChecks.remove( projectFullName );
+  const QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   if ( r->error() == QNetworkReply::NoError )
   {
-    QByteArray data = r->readAll();
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
+    const QByteArray data = r->readAll();
+    const MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
 
     // skip if a sync is already in progress for this project
     if ( !mTransactionalStatus.contains( projectFullName ) )
     {
-      LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+      const LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
       if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < serverProject.version )
       {
         emit projectSyncRequired( projectFullName );
@@ -4626,13 +4625,9 @@ void MerginApi::isProjectSyncNeededFinished()
 
 void MerginApi::isProjectSyncNeeded( const QString &projectFullName, bool withAuth )
 {
-  if ( mPendingSyncChecks.contains( projectFullName ) )
-    return;
-
-  QNetworkReply *reply = getProjectInfo( projectFullName, withAuth );
+  const QNetworkReply *reply = getProjectInfo( projectFullName, withAuth );
   if ( !reply )
     return;
 
-  mPendingSyncChecks.insert( projectFullName );
   connect( reply, &QNetworkReply::finished, this, &MerginApi::isProjectSyncNeededFinished );
 }

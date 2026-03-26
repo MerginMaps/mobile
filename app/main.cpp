@@ -532,7 +532,7 @@ int main( int argc, char *argv[] )
   NotificationModel notificationModel;
 
   ActiveLayer al;
-  ActiveProject activeProject( *as, al, localProjectsManager );
+  ActiveProject activeProject( *as, al, localProjectsManager, ma.get() );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 

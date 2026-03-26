@@ -984,7 +984,6 @@ class MerginApi: public QObject
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
-    QSet<QString> mPendingSyncChecks; //  not yet updated projects with isProjectSyncNeeded request
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS
