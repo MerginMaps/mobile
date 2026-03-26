@@ -26,14 +26,17 @@ MMComponents.MMDrawer {
 
     MMComponents.MMText {
       width: parent.width
-
-      text: qsTr( "External receivers can be connected via network in iOS devices. Some of the known devices that support network connection (TCP or UDP) are EOS and Emlid." )
-
+       
+      text: qsTr( "Enter the IP address and port for your receiver. You can find these in your manufacturer's app. TCP and UDP connections are supported. Optionally, add a nickname to tell your receivers apart." )
       font: __style.p5
       color: __style.nightColor
 
       wrapMode: Text.Wrap
       horizontalAlignment: Text.AlignJustify
+
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally( link )
+      }
     }
 
     MMInputs.MMTextInput {
@@ -42,7 +45,7 @@ MMComponents.MMDrawer {
       width: parent.width
       textFieldBackground.color: __style.lightGreenColor
 
-      title: qsTr( "IP address" )
+      title: qsTr( "IP Address" )
       placeholderText: qsTr( "localhost" )
 
       onTextEdited: errorMsg = ""

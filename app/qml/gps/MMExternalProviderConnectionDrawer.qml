@@ -29,8 +29,7 @@ MMComponents.MMDrawer {
       if ( rootstate.state === "working" )
       {
         if ( !root.positionProvider ) return ""
-        if ( root.positionProvider.getIpAddress() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + connectingSuffixAnimation
-        return qsTr( "Connecting" ) + connectingSuffixAnimation
+        return qsTr( "Connecting to external receiver" )
       }
       else if ( rootstate.state === "success" )
       {
@@ -47,7 +46,7 @@ MMComponents.MMDrawer {
       if ( rootstate.state === "working" )
       {
         if ( !root.positionProvider ) return ""
-        if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name() + connectingSuffixAnimation
+        if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name()
         return qsTr( "Connecting" ) + connectingSuffixAnimation
       }
       else if ( rootstate.state === "success" )
@@ -73,7 +72,8 @@ MMComponents.MMDrawer {
       if ( root.providerType === "bluetooth" )
         return qsTr( "You might be asked to pair your device during this process." )
       else if ( root.providerType === "network" )
-        return qsTr( "This might take a while..." )
+      if ( root.positionProvider.getIpAddress() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + ". You can close this panel, the app will continue in the background."
+      return qsTr( "Connecting" ) + connectingSuffixAnimation
     }
     else if ( rootstate.state === "success" )
     {
@@ -136,7 +136,7 @@ MMComponents.MMDrawer {
     state: "working"
   }
 
-  drawerBottomMargin: __style.margin20
+  drawerBottomMargin: __style.margin40
   drawerContent: MMComponents.MMScrollView {
 
     width: parent.width

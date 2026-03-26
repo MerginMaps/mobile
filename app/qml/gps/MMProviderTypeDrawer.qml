@@ -30,23 +30,35 @@ MMComponents.MMListDrawer {
 
     Component.onCompleted: {
       providerTypeModel.append( [
-        { name: qsTr( "Bluetooth" ), description: qsTr( "Connect via Bluetooth" ), type: "bluetooth", icon: __style.bluetoothIcon },
-        { name: qsTr( "Network" ), description: qsTr( "Connect via IP address" ), type: "network", icon: __style.networkIcon }
+        { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon },
+        { name: qsTr( "Network" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
       ] )
     }
   }
 
   list.header: MMComponents.MMText {
-    width: ListView.view.width
+      width: ListView.view.width
+       
+      text: __inputUtils.htmlLink(
+                   qsTr( "External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions." ),
+                   __style.nightColor,
+                   __inputHelp.howToConnectGPSLink,
+                   "",
+                   true,
+                   false
+                 )
+      font: __style.p5
+      color: __style.nightColor
+      textFormat: Text.RichText
 
-    text: qsTr( "This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. Mergin Maps will still think it is the internal GPS of your phone/tablet." )
+      wrapMode: Text.Wrap
+      horizontalAlignment: Text.AlignJustify
+      bottomPadding: __style.margin16
 
-    font: __style.p5
-    color: __style.nightColor
-
-    wrapMode: Text.Wrap
-    bottomPadding: __style.margin16
-  }
+      onLinkActivated: function( link ) {
+        Qt.openUrlExternally( link )
+      }
+    }
 
   list.delegate: Item {
     width: ListView.view.width
