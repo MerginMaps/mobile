@@ -128,7 +128,6 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl facebookIcon READ facebookIcon CONSTANT )
     Q_PROPERTY( QUrl featuresIcon READ featuresIcon CONSTANT )
     Q_PROPERTY( QUrl filterIcon READ filterIcon CONSTANT )
-    Q_PROPERTY( QUrl filterFilledIcon READ filterFilledIcon CONSTANT )
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
     Q_PROPERTY( QUrl gpsIcon READ gpsIcon CONSTANT )
@@ -433,7 +432,6 @@ class MMStyle: public QObject
     QUrl deleteIcon() const {return QUrl( "qrc:/Delete.svg" );}
     QUrl featuresIcon() const {return QUrl( "qrc:/Features.svg" );}
     QUrl filterIcon() const {return QUrl( "qrc:/Filter.svg" );}
-    QUrl filterFilledIcon() const {return QUrl( "qrc:/FilterFilled.svg" );}
     QUrl downloadIcon() const {return QUrl( "qrc:/Download.svg" );}
     QUrl uploadIcon() const {return QUrl( "qrc:/Upload.svg" );}
     QUrl editIcon() const {return QUrl( "qrc:/Edit.svg" );}
