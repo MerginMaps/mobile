@@ -26,6 +26,8 @@
 #include "synchronizationoptions.h"
 #include "filter/filtercontroller.h"
 
+class MerginApi;
+
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
  */
@@ -49,6 +51,7 @@ class ActiveProject: public QObject
       AppSettings &appSettings
       , ActiveLayer &activeLayer
       , LocalProjectsManager &localProjectsManager
+      , MerginApi *merginApi
       , QObject *parent = nullptr );
 
     virtual ~ActiveProject();
@@ -201,6 +204,9 @@ class ActiveProject: public QObject
 
     void requestSync( SyncOptions::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
 
+    //! Checks whether the currently loaded project has a newer version available on the server
+    Q_INVOKABLE void checkForProjectUpdate();
+
   private:
 
     /**
@@ -229,6 +235,7 @@ class ActiveProject: public QObject
     LocalProject mLocalProject;
 
     AppSettings &mAppSettings;
+    MerginApi *mMerginApi = nullptr;
     ActiveLayer &mActiveLayer;
     QgsAuthManager *mAuthManager = nullptr;
     LocalProjectsManager &mLocalProjectsManager;

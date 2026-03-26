@@ -109,12 +109,18 @@ Rectangle {
       verticalCenter: parent.verticalCenter
       rightMargin: 20 * __dp
     }
-    iconSource: __style.closeIcon
+    iconSource: model.action === MM.NotificationType.SyncProjectAction ? __style.syncIcon : __style.closeIcon
     iconColor: text.color
     bgndColor: __style.transparentColor
     bgndHoverColor: __style.transparentColor
 
-    onClicked: __notificationModel.remove(model.id)
+    onClicked: {
+      if ( model.action === MM.NotificationType.SyncProjectAction ) {
+        __notificationModel.onNotificationClicked( model.id )
+      } else {
+        __notificationModel.remove( model.id )
+      }
+    }
   }
 
   Behavior on scale { NumberAnimation { easing.type: Easing.OutCubic; from: 0; to: 1.0; duration: 200 } }
