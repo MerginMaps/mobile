@@ -2377,7 +2377,7 @@ void TestMerginApi::testAutosync()
   MapThemesModel mtm;
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  ActiveProject activeProject( as, al, mApi->localProjectsManager(), mApi );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectName );
 

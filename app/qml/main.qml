@@ -89,9 +89,7 @@ ApplicationWindow {
         // Stop/Start sync animation when user goes to map
         syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
 
-        if ( __activeProject.projectFullName() !== "" ) {
-          __merginApi.isProjectSyncNeeded( __activeProject.projectFullName(), true )
-        }
+        __activeProject.checkForProjectUpdate()
       }
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
@@ -1131,8 +1129,8 @@ ApplicationWindow {
       if ( __activeProject.projectFullName() === projectFullName )
       {
         __notificationModel.addInfo(
-          __inputUtils.htmlLink( qsTr( "There is a new version of the project available" ), __style.forestColor ),
-          MM.NotificationType.ShowProjectNewVersionAction
+          qsTr( "There is a new version of the project available" ),
+          MM.NotificationType.SyncProjectAction
         )
       }
     }
@@ -1208,9 +1206,6 @@ ApplicationWindow {
 
       AppSettings.defaultProject = __activeProject.localProject.qgisProjectFilePath ?? ""
       AppSettings.activeProject = __activeProject.localProject.qgisProjectFilePath ?? ""
-      if ( __activeProject.projectFullName() !== "" ) {
-        __merginApi.isProjectSyncNeeded( __activeProject.projectFullName(), true )
-      }
     }
 
     function onProjectWillBeReloaded() {
