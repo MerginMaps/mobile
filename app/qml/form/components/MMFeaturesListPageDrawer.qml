@@ -12,6 +12,7 @@ import QtQuick.Controls
 
 import "../../inputs" as MMInputs
 import "../../components" as MMComponents
+import "../../filters/components" as MMFilters
 
 //
 // Special type of drawer/page -> looks like page, but it is actually Drawer
@@ -75,11 +76,26 @@ Drawer {
 
         MMComponents.MMListSpacer { height: __style.spacing20 }
 
+        MMFilters.MMFilterBanner {
+          id: filterBanner
+
+          visible: globalFilterController.hasActiveFilters
+
+          width: parent.width
+          text: qsTr( "Some features may be hidden by active filters" )
+        }
+
+        MMComponents.MMListSpacer {
+          visible: filterBanner.visible
+          height: __style.spacing10
+        }
+
         MMComponents.MMListView {
           id: listView
 
           width: parent.width
           height: parent.height - 2 * __style.spacing20 - searchBar.height
+                  - ( filterBanner.visible ? filterBanner.height + __style.spacing10 : 0 )
 
           clip: true
 
