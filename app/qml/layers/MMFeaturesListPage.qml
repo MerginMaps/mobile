@@ -43,7 +43,7 @@ MMComponents.MMPage {
       height: filterRow.implicitHeight + 2 * __style.margin8
       radius: __style.radius12
 
-      visible: root.selectedLayer && globalFilterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
+      visible: root.selectedLayer && globalFilterController.filteredLayerIds.indexOf( root.selectedLayer.id ) >= 0
 
       color: __style.sandColor
       border.width: 1 * __dp

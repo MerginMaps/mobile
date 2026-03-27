@@ -865,6 +865,7 @@ Item {
 
           visible: root.state === "view" && root.filterController
           iconSource: __style.filterIcon
+          iconSize: __style.icon24
           bgndColor: root.filterController && root.filterController.hasActiveFilters ? __style.positiveColor : __style.polarColor
 
           onClicked: {
