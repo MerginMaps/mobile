@@ -19,7 +19,7 @@ Item {
 
   property alias iconSource: icon.source
   property color bgndColor: __style.polarColor
-  property real iconSize: __style.icon32
+  property real iconSize: __style.icon24
 
   signal clicked
   signal clickAndHold

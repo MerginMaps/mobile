@@ -89,7 +89,7 @@ MMComponents.MMDrawer {
 
   drawerContent: Item {
     width: parent.width
-    height: root.maxHeightHit ? root.drawerContentAvailableHeight : (contentColumn.implicitHeight + __style.margin12 + showResultsButton.height)
+    height: root.maxHeightHit ? root.drawerContentAvailableHeight : ( contentColumn.implicitHeight + __style.margin12 + showResultsButton.height )
 
     MMComponents.MMScrollView {
       id: scrollView
@@ -169,7 +169,7 @@ MMComponents.MMDrawer {
   Connections {
     target: __activeProject
 
-    function onProjectReloaded(qgsProject) {
+    function onProjectReloaded( qgsProject ) {
       internal.refreshLayers()
     }
   }
