@@ -101,6 +101,7 @@ set(MM_QML
     form/components/photo/MMPhotoPreview.qml
     form/components/MMFormActionBar.qml
     form/editors/MMFormCalendarEditor.qml
+    form/editors/MMFormChipEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
     form/editors/MMFormNotAvailable.qml
