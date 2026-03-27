@@ -162,21 +162,26 @@ Button {
 
   state: "default"
 
-  implicitHeight: root.type === MMButton.Types.Tertiary ? buttonContent.height : buttonContent.height + topPadding + bottomPadding
+  implicitHeight: {
+    if ( root.type === MMButton.Types.Tertiary && root.size !== MMButton.Sizes.ExtraSmall ) 
+      return buttonContent.height 
+    else 
+      return buttonContent.height + topPadding + bottomPadding
+  }
   implicitWidth: {
-    if ( root.size === MMButton.Sizes.ExtraSmall ) return row.paintedChildrenWidth + 2 * __style.margin12
+    if ( root.size === MMButton.Sizes.ExtraSmall ) return row.paintedChildrenWidth + 2 * __style.margin8
     return row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
   }
 
   topPadding: {
-    if ( root.type === MMButton.Types.Tertiary ) {
+    if ( root.size === MMButton.Sizes.ExtraSmall ) {
+      return __style.margin2;
+    }
+    else if ( root.type === MMButton.Types.Tertiary ) {
       return 0;
     }
     else if ( root.size === MMButton.Sizes.Small ) {
       return 7 * __dp;
-    }
-    else if ( root.size === MMButton.Sizes.ExtraSmall ) {
-      return 2 * __dp;
     }
     else {
       return 11 * __dp;
@@ -184,14 +189,14 @@ Button {
   }
 
   bottomPadding: {
-    if ( root.type === MMButton.Types.Tertiary ) {
+    if ( root.size === MMButton.Sizes.ExtraSmall ) {
+      return __style.margin2;
+    }
+    else if ( root.type === MMButton.Types.Tertiary ) {
       return 0;
     }
     else if ( root.size === MMButton.Sizes.Small ) {
       return 7 * __dp;
-    }
-    else if ( root.size === MMButton.Sizes.ExtraSmall ) {
-      return 2 * __dp;
     }
     else {
       return 11 * __dp;
@@ -210,7 +215,7 @@ Button {
 
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
       property real maxWidth: {
-        if ( root.size === MMButton.Sizes.ExtraSmall ) return parent.width - 2 * __style.margin12
+        if ( root.size === MMButton.Sizes.ExtraSmall ) return parent.width - 2 * __style.margin8
         return parent.width - 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
       }
 
@@ -278,7 +283,7 @@ Button {
   background: Rectangle {
     id: buttonBackground
 
-    radius: root.size === MMButton.Sizes.ExtraSmall ? __style.radius12 : __style.radius30
+    radius: root.size === MMButton.Sizes.ExtraSmall ? __style.radius40 : __style.radius30
 
     border.width: 2 * __dp
   }

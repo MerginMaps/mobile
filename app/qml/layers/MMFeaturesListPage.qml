@@ -34,10 +34,22 @@ MMComponents.MMPage {
     width: parent.width
     height: parent.height
 
-    MMFilterComponents.MMFilterBanner {
-      id: filterNotification
+    MMSearchInput {
+      id: searchBar
 
       anchors.top: parent.top
+      anchors.topMargin: __style.spacing20
+
+      width: parent.width
+
+      delayedSearch: true
+      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
+    }
+
+    MMFilterComponents.MMFilterBanner {
+      id: filterBanner
+
+      anchors.top: searchBar.bottom
       anchors.topMargin: __style.spacing20
 
       width: parent.width
@@ -54,27 +66,15 @@ MMComponents.MMPage {
       }
     }
 
-    MMSearchInput {
-      id: searchBar
-
-      anchors.top: filterNotification.visible ? filterNotification.bottom : parent.top
-      anchors.topMargin: __style.spacing20
-
-      width: parent.width
-
-      delayedSearch: true
-      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
-    }
-
     MMComponents.MMListView {
       id: listView
 
       width: parent.width
 
       anchors {
-        top: searchBar.bottom
+        top: filterBanner.visible ? filterBanner.bottom : searchBar.bottom
         bottom: parent.bottom
-        topMargin: __style.spacing20
+        topMargin: filterBanner.visible ? __style.spacing10 : __style.spacing20
       }
 
       model: MM.LayerFeaturesModel {
