@@ -1063,12 +1063,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
         <source>Orthometric height, using %1 geoid</source>
-        <translation> Orthometrische Höhe unter Verwendung des Geoids %1</translation>
+        <translation>Orthometrische Höhe unter Verwendung des Geoids %1</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
         <source>Elevation using unspecified grid</source>
-        <translation> Höhe unter Verwendung eines nicht spezifizierten Grids</translation>
+        <translation>Höhe unter Verwendung eines nicht spezifizierten Grids</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
