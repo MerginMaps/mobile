@@ -50,14 +50,14 @@ Column {
     Repeater {
       id: fieldsRepeater
 
-      model: root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+      model: root.vectorLayer ? root.filterController.getFilterableFields( root.vectorLayer ) : []
 
       delegate: Column {
         id: fieldDelegate
 
         property var fieldInfo: modelData
         property string fieldName: fieldInfo ? fieldInfo.name : ""
-        property string fieldDisplayName: fieldInfo ? (fieldInfo.displayName || fieldInfo.name) : ""
+        property string fieldDisplayName: fieldInfo ? ( fieldInfo.displayName || fieldInfo.name ) : ""
         property string filterType: fieldInfo ? fieldInfo.filterType : "text"
         property var currentValue: fieldInfo ? fieldInfo.currentValue : null
         property var currentValueTo: fieldInfo ? fieldInfo.currentValueTo : null
@@ -85,39 +85,39 @@ Column {
             spacing: __style.margin12
 
             property bool rangeInvalid: {
-              let fromVal = parseFloat(fromNumberInput.text)
-              let toVal = parseFloat(toNumberInput.text)
-              return !isNaN(fromVal) && !isNaN(toVal) && fromVal > toVal
+              let fromVal = parseFloat( fromNumberInput.text )
+              let toVal = parseFloat( toNumberInput.text )
+              return !isNaN( fromVal ) && !isNaN( toVal ) && fromVal > toVal
             }
 
             MMTextInput {
               id: fromNumberInput
-              width: (parent.width - __style.margin12) / 2
-              placeholderText: qsTr("From")
-              text: fieldDelegate.currentValue !== null && fieldDelegate.currentValue !== undefined ? String(fieldDelegate.currentValue) : ""
-              errorMsg: parent.rangeInvalid ? qsTr("\"From\" must be less than \"To\"") : ""
+              width: ( parent.width - __style.margin12 ) / 2
+              placeholderText: qsTr( "From" )
+              text: fieldDelegate.currentValue !== null && fieldDelegate.currentValue !== undefined ? String( fieldDelegate.currentValue ) : ""
+              errorMsg: parent.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
 
               property bool initialized: false
               Component.onCompleted: initialized = true
 
               onTextChanged: {
-                if (!initialized || !toNumberInput.initialized) return
-                root.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, text, toNumberInput.text)
+                if ( !initialized || !toNumberInput.initialized ) return
+                root.filterController.setNumberFilter( root.layerId, fieldDelegate.fieldName, text, toNumberInput.text )
               }
             }
 
             MMTextInput {
               id: toNumberInput
-              width: (parent.width - __style.margin12) / 2
-              placeholderText: qsTr("To")
-              text: fieldDelegate.currentValueTo !== null && fieldDelegate.currentValueTo !== undefined ? String(fieldDelegate.currentValueTo) : ""
+              width: ( parent.width - __style.margin12 ) / 2
+              placeholderText: qsTr( "To" )
+              text: fieldDelegate.currentValueTo !== null && fieldDelegate.currentValueTo !== undefined ? String( fieldDelegate.currentValueTo ) : ""
 
               property bool initialized: false
               Component.onCompleted: initialized = true
 
               onTextChanged: {
-                if (!initialized || !fromNumberInput.initialized) return
-                root.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, fromNumberInput.text, text)
+                if ( !initialized || !fromNumberInput.initialized ) return
+                root.filterController.setNumberFilter( root.layerId, fieldDelegate.fieldName, fromNumberInput.text, text )
               }
             }
           }
@@ -141,12 +141,12 @@ Column {
             spacing: __style.margin12
 
             property bool rangeInvalid: {
-              if (!fromDateInput.selectedDate || !toDateInput.selectedDate) return false
+              if ( !fromDateInput.selectedDate || !toDateInput.selectedDate ) return false
               return fromDateInput.selectedDate > toDateInput.selectedDate
             }
 
             Item {
-              width: (parent.width - __style.margin12) / 2
+              width: ( parent.width - __style.margin12 ) / 2
               height: fromDateInput.height
 
               MMPrivateComponents.MMBaseSingleLineInput {
@@ -157,20 +157,20 @@ Column {
 
                 Component.onCompleted: {
                   let val = fieldDelegate.currentValue
-                  if (val !== null && val !== undefined) {
-                    let d = new Date(val)
-                    if (!isNaN(d.getTime())) selectedDate = d
+                  if ( val !== null && val !== undefined ) {
+                    let d = new Date( val )
+                    if ( !isNaN( d.getTime() ) ) selectedDate = d
                   }
                 }
 
-                placeholderText: qsTr("From")
+                placeholderText: qsTr( "From" )
                 text: {
-                  if (!selectedDate) return ""
-                  if (fieldDelegate.hasTime) return Qt.formatDateTime(selectedDate, Qt.DefaultLocaleShortDate)
-                  return Qt.formatDate(selectedDate, Qt.DefaultLocaleShortDate)
+                  if ( !selectedDate ) return ""
+                  if ( fieldDelegate.hasTime ) return Qt.formatDateTime( selectedDate, Qt.DefaultLocaleShortDate )
+                  return Qt.formatDate( selectedDate, Qt.DefaultLocaleShortDate )
                 }
                 textField.readOnly: true
-                errorMsg: dateRangeRow.rangeInvalid ? qsTr("\"From\" must be less than \"To\"") : ""
+                errorMsg: dateRangeRow.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
 
                 rightContent: MMIcon {
                   size: __style.icon24
@@ -180,10 +180,10 @@ Column {
 
                 onTextClicked: fromCalendarLoader.active = true
                 onRightContentClicked: {
-                  if (fromDateInput.selectedDate) {
+                  if ( fromDateInput.selectedDate ) {
                     fromDateInput.selectedDate = null
                     let toDate = toDateInput.selectedDate ? toDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, null, toDate, fieldDelegate.hasTime)
+                    root.filterController.setDateFilter( root.layerId, fieldDelegate.fieldName, null, toDate, fieldDelegate.hasTime )
                   }
                   else {
                     fromCalendarLoader.active = true
@@ -208,7 +208,7 @@ Column {
                   onPrimaryButtonClicked: {
                     fromDateInput.selectedDate = dateTime
                     let toDate = toDateInput.selectedDate ? toDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, dateTime, toDate, fieldDelegate.hasTime)
+                    root.filterController.setDateFilter( root.layerId, fieldDelegate.fieldName, dateTime, toDate, fieldDelegate.hasTime )
                   }
 
                   onClosed: fromCalendarLoader.active = false
@@ -219,7 +219,7 @@ Column {
             }
 
             Item {
-              width: (parent.width - __style.margin12) / 2
+              width: ( parent.width - __style.margin12 ) / 2
               height: toDateInput.height
 
               MMPrivateComponents.MMBaseSingleLineInput {
@@ -230,17 +230,17 @@ Column {
 
                 Component.onCompleted: {
                   let val = fieldDelegate.currentValueTo
-                  if (val !== null && val !== undefined) {
-                    let d = new Date(val)
-                    if (!isNaN(d.getTime())) selectedDate = d
+                  if ( val !== null && val !== undefined ) {
+                    let d = new Date( val )
+                    if ( !isNaN( d.getTime() ) ) selectedDate = d
                   }
                 }
 
-                placeholderText: qsTr("To")
+                placeholderText: qsTr( "To" )
                 text: {
-                  if (!selectedDate) return ""
-                  if (fieldDelegate.hasTime) return Qt.formatDateTime(selectedDate, Qt.DefaultLocaleShortDate)
-                  return Qt.formatDate(selectedDate, Qt.DefaultLocaleShortDate)
+                  if ( !selectedDate ) return ""
+                  if ( fieldDelegate.hasTime ) return Qt.formatDateTime( selectedDate, Qt.DefaultLocaleShortDate )
+                  return Qt.formatDate( selectedDate, Qt.DefaultLocaleShortDate )
                 }
                 textField.readOnly: true
 
@@ -252,10 +252,10 @@ Column {
 
                 onTextClicked: toCalendarLoader.active = true
                 onRightContentClicked: {
-                  if (toDateInput.selectedDate) {
+                  if ( toDateInput.selectedDate ) {
                     toDateInput.selectedDate = null
                     let fromDate = fromDateInput.selectedDate ? fromDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, null, fieldDelegate.hasTime)
+                    root.filterController.setDateFilter( root.layerId, fieldDelegate.fieldName, fromDate, null, fieldDelegate.hasTime )
                   }
                   else {
                     toCalendarLoader.active = true
@@ -280,7 +280,7 @@ Column {
                   onPrimaryButtonClicked: {
                     toDateInput.selectedDate = dateTime
                     let fromDate = fromDateInput.selectedDate ? fromDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, dateTime, fieldDelegate.hasTime)
+                    root.filterController.setDateFilter( root.layerId, fieldDelegate.fieldName, fromDate, dateTime, fieldDelegate.hasTime )
                   }
 
                   onClosed: toCalendarLoader.active = false
@@ -298,13 +298,13 @@ Column {
           width: parent.width
           visible: fieldDelegate.filterType === "text"
           title: fieldDelegate.fieldDisplayName
-          placeholderText: qsTr("Type to filter...")
+          placeholderText: qsTr( "Type to filter..." )
 
           // Explicitly handle undefined/null values
           text: {
             let val = fieldDelegate.currentValue
-            if (val !== null && val !== undefined && val !== "") {
-              return String(val)
+            if ( val !== null && val !== undefined && val !== "" ) {
+              return String( val )
             }
             return ""
           }
@@ -314,9 +314,9 @@ Column {
           Component.onCompleted: initialized = true
 
           onTextChanged: {
-            if (!initialized) return
+            if ( !initialized ) return
             // Pass raw text to C++ - validation happens there
-            root.filterController.setTextFilter(root.layerId, fieldDelegate.fieldName, text)
+            root.filterController.setTextFilter( root.layerId, fieldDelegate.fieldName, text )
           }
         }
 
@@ -341,14 +341,14 @@ Column {
               width: parent.width
               textField.readOnly: true
 
-              placeholderText: qsTr("Select...")
+              placeholderText: qsTr( "Select..." )
               text: {
                 let texts = fieldDelegate.currentValueTexts
-                if (!texts || texts.length === 0) return ""
-                if (fieldDelegate.multiSelect && texts.length > 1) {
-                  return qsTr("%1 selected").arg(texts.length)
+                if ( !texts || texts.length === 0 ) return ""
+                if ( fieldDelegate.multiSelect && texts.length > 1 ) {
+                  return qsTr( "%1 selected" ).arg( texts.length )
                 }
-                return texts.join(", ")
+                return texts.join( ", " )
               }
 
               rightContent: MMIcon {
@@ -359,10 +359,10 @@ Column {
 
               onTextClicked: dropdownDrawerLoader.active = true
               onRightContentClicked: {
-                if (dropdownInput.text !== "") {
-                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
+                if ( dropdownInput.text !== "" ) {
+                  root.filterController.setDropdownFilter( root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect )
                   // Refresh the fields model to clear currentValueTexts
-                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields( root.vectorLayer ) : []
                 }
                 else {
                   dropdownDrawerLoader.active = true
@@ -389,15 +389,15 @@ Column {
 
                 list.model: ListModel { id: dropdownListModel }
 
-                onSearchTextChanged: function(searchText) {
+                onSearchTextChanged: function( searchText ) {
                   internal.pendingSearchText = searchText
                   searchDebounceTimer.restart()
                 }
 
-                onSelectionFinished: function(selectedItems) {
-                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, selectedItems, fieldDelegate.multiSelect)
+                onSelectionFinished: function( selectedItems ) {
+                  root.filterController.setDropdownFilter( root.layerId, fieldDelegate.fieldName, selectedItems, fieldDelegate.multiSelect )
                   // Refresh the fields model to update currentValueTexts
-                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields( root.vectorLayer ) : []
                   close()
                 }
 
@@ -413,15 +413,15 @@ Column {
                   interval: 300
                   repeat: false
                   onTriggered: {
-                    populateOptions(internal.pendingSearchText)
+                    populateOptions( internal.pendingSearchText )
                   }
                 }
 
-                function populateOptions(searchText) {
-                  let options = root.filterController.getDropdownOptions(root.vectorLayer, fieldDelegate.fieldName, searchText, 100)
+                function populateOptions( searchText ) {
+                  let options = root.filterController.getDropdownOptions( root.vectorLayer, fieldDelegate.fieldName, searchText, 100 )
                   dropdownListModel.clear()
-                  for (let i = 0; i < options.length; i++) {
-                    dropdownListModel.append(options[i])
+                  for ( let i = 0; i < options.length; i++ ) {
+                    dropdownListModel.append( options[i] )
                   }
                 }
 
@@ -429,14 +429,14 @@ Column {
                   // Set selected imperatively — QStringList from C++ needs
                   // conversion to a plain JS array for includes() to work
                   let val = fieldDelegate.currentValue
-                  if (val && val.length > 0) {
+                  if ( val && val.length > 0 ) {
                     let arr = []
-                    for (let i = 0; i < val.length; i++) {
-                      arr.push(String(val[i]))
+                    for ( let i = 0; i < val.length; i++ ) {
+                      arr.push( String( val[i] ) )
                     }
                     selected = arr
                   }
-                  populateOptions("")
+                  populateOptions( "" )
                   open()
                 }
               }
