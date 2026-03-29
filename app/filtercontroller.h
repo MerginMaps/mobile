@@ -10,7 +10,6 @@
 #ifndef FILTERCONTROLLER_H
 #define FILTERCONTROLLER_H
 
-#include <QObject>
 #include <QVariantMap>
 #include <QVariantList>
 
@@ -37,12 +36,11 @@ struct FieldFilter
     bool isValid() const
     {
       // For range filters (number, date), either value or valueTo being valid is enough
-      bool hasValue = value.isValid() && !value.isNull();
-      bool hasValueTo = valueTo.isValid() && !valueTo.isNull();
+      const bool hasValue = value.isValid() && !value.isNull();
+      const bool hasValueTo = valueTo.isValid() && !valueTo.isNull();
       return !fieldName.isEmpty() && ( hasValue || hasValueTo );
     }
 };
-Q_DECLARE_METATYPE( FieldFilter )
 
 
 /**

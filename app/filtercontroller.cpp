@@ -289,7 +289,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
   {
     QStringList values = filter.value.toStringList();
     if ( values.isEmpty() )
-      return QString();
+      return {};
 
     QStringList quotedValues;
     for ( const QString &v : values )
@@ -306,7 +306,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     // Skip invalid range where from > to
     if ( hasFrom && hasTo && filter.value.toDouble() > filter.valueTo.toDouble() )
     {
-      return QString();
+      return {};
     }
 
     QStringList conditions;
@@ -329,7 +329,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
   {
     QStringList values = filter.value.toStringList();
     if ( values.isEmpty() )
-      return QString();
+      return {};
 
     if ( values.size() == 1 )
     {
@@ -349,7 +349,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     // Use LIKE patterns to match any position within the braced list
     QStringList values = filter.value.toStringList();
     if ( values.isEmpty() )
-      return QString();
+      return {};
 
     QStringList keyConditions;
     for ( const QString &key : values )
@@ -392,13 +392,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     return conditions.join( QStringLiteral( " AND " ) );
   }
 
-  return QString();
+  return {};
 }
 
 QString FilterController::generateFilterExpression( const QString &layerId ) const
 {
   if ( !mAppliedFilters.contains( layerId ) )
-    return QString();
+    return {};
 
   // Use .value() to get a copy in const context
   QMap<QString, FieldFilter> layerFilters = mAppliedFilters.value( layerId );
@@ -414,7 +414,7 @@ QString FilterController::generateFilterExpression( const QString &layerId ) con
   }
 
   if ( expressions.isEmpty() )
-    return QString();
+    return {};
 
   return expressions.join( QStringLiteral( " AND " ) );
 }
@@ -643,11 +643,11 @@ void FilterController::setDropdownFilter( const QString &layerId, const QString 
 QVariantList FilterController::getDropdownOptions( QgsVectorLayer *layer, const QString &fieldName, const QString &searchText, int limit )
 {
   if ( !layer )
-    return QVariantList();
+    return {};
 
   int fieldIndex = layer->fields().lookupField( fieldName );
   if ( fieldIndex < 0 )
-    return QVariantList();
+    return {};
 
   QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
   QString widgetType = widgetSetup.type();
@@ -670,7 +670,7 @@ QVariantList FilterController::getDropdownOptions( QgsVectorLayer *layer, const 
     return extractValueRelationOptions( config, searchText, limit, currentlySelectedKeys );
   }
 
-  return QVariantList();
+  return {};
 }
 
 QVariantList FilterController::extractValueMapOptions( const QVariantMap &config, const QString &searchText ) const

@@ -11,8 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import mm 1.0 as MM
-
 import "../components"
 import "../components/private" as MMPrivateComponents
 import "../inputs"
@@ -23,7 +21,6 @@ Column {
 
   required property string layerId
   required property string layerName
-  required property var filterController
   required property var vectorLayer
 
   spacing: __style.margin12
@@ -50,7 +47,7 @@ Column {
     Repeater {
       id: fieldsRepeater
 
-      model: root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+      model: root.vectorLayer ? __activeProject.filterController.getFilterableFields(root.vectorLayer) : []
 
       delegate: Column {
         id: fieldDelegate
@@ -102,7 +99,7 @@ Column {
 
               onTextChanged: {
                 if (!initialized || !toNumberInput.initialized) return
-                root.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, text, toNumberInput.text)
+                __activeProject.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, text, toNumberInput.text)
               }
             }
 
@@ -117,7 +114,7 @@ Column {
 
               onTextChanged: {
                 if (!initialized || !fromNumberInput.initialized) return
-                root.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, fromNumberInput.text, text)
+                __activeProject.filterController.setNumberFilter(root.layerId, fieldDelegate.fieldName, fromNumberInput.text, text)
               }
             }
           }
@@ -183,7 +180,7 @@ Column {
                   if (fromDateInput.selectedDate) {
                     fromDateInput.selectedDate = null
                     let toDate = toDateInput.selectedDate ? toDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, null, toDate, fieldDelegate.hasTime)
+                    __activeProject.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, null, toDate, fieldDelegate.hasTime)
                   }
                   else {
                     fromCalendarLoader.active = true
@@ -208,7 +205,7 @@ Column {
                   onPrimaryButtonClicked: {
                     fromDateInput.selectedDate = dateTime
                     let toDate = toDateInput.selectedDate ? toDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, dateTime, toDate, fieldDelegate.hasTime)
+                    __activeProject.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, dateTime, toDate, fieldDelegate.hasTime)
                   }
 
                   onClosed: fromCalendarLoader.active = false
@@ -255,7 +252,7 @@ Column {
                   if (toDateInput.selectedDate) {
                     toDateInput.selectedDate = null
                     let fromDate = fromDateInput.selectedDate ? fromDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, null, fieldDelegate.hasTime)
+                    __activeProject.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, null, fieldDelegate.hasTime)
                   }
                   else {
                     toCalendarLoader.active = true
@@ -280,7 +277,7 @@ Column {
                   onPrimaryButtonClicked: {
                     toDateInput.selectedDate = dateTime
                     let fromDate = fromDateInput.selectedDate ? fromDateInput.selectedDate : null
-                    root.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, dateTime, fieldDelegate.hasTime)
+                    __activeProject.filterController.setDateFilter(root.layerId, fieldDelegate.fieldName, fromDate, dateTime, fieldDelegate.hasTime)
                   }
 
                   onClosed: toCalendarLoader.active = false
@@ -316,7 +313,7 @@ Column {
           onTextChanged: {
             if (!initialized) return
             // Pass raw text to C++ - validation happens there
-            root.filterController.setTextFilter(root.layerId, fieldDelegate.fieldName, text)
+            __activeProject.filterController.setTextFilter(root.layerId, fieldDelegate.fieldName, text)
           }
         }
 
@@ -360,9 +357,9 @@ Column {
               onTextClicked: dropdownDrawerLoader.active = true
               onRightContentClicked: {
                 if (dropdownInput.text !== "") {
-                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
+                    __activeProject.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
                   // Refresh the fields model to clear currentValueTexts
-                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                  fieldsRepeater.model = root.vectorLayer ? __activeProject.filterController.getFilterableFields(root.vectorLayer) : []
                 }
                 else {
                   dropdownDrawerLoader.active = true
@@ -395,9 +392,9 @@ Column {
                 }
 
                 onSelectionFinished: function(selectedItems) {
-                  root.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, selectedItems, fieldDelegate.multiSelect)
+                  __activeProject.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, selectedItems, fieldDelegate.multiSelect)
                   // Refresh the fields model to update currentValueTexts
-                  fieldsRepeater.model = root.vectorLayer ? root.filterController.getFilterableFields(root.vectorLayer) : []
+                  fieldsRepeater.model = root.vectorLayer ? __activeProject.filterController.getFilterableFields(root.vectorLayer) : []
                   close()
                 }
 
@@ -418,7 +415,7 @@ Column {
                 }
 
                 function populateOptions(searchText) {
-                  let options = root.filterController.getDropdownOptions(root.vectorLayer, fieldDelegate.fieldName, searchText, 100)
+                  let options = __activeProject.filterController.getDropdownOptions(root.vectorLayer, fieldDelegate.fieldName, searchText, 100)
                   dropdownListModel.clear()
                   for (let i = 0; i < options.length; i++) {
                     dropdownListModel.append(options[i])
