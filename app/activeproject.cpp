@@ -671,7 +671,7 @@ bool ActiveProject::photoSketchingEnabled() const
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketching/Enabled" ), false );
 }
 
-FilterController* ActiveProject::filterController() const
+FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
 }
