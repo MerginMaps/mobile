@@ -145,7 +145,7 @@ class PositionKit : public QObject
     double antennaHeight() const;
 
     void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
-    void setSkipElevationTransformation( bool skipElevationTransformation );
+    void setElevationTransformationEnabled( bool elevationTransformationEnabled );
     // should be executed on active project changed, updates the CRS, elevation transformation and context properties
     void refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext );
 
@@ -201,7 +201,7 @@ class PositionKit : public QObject
 
     QgsCoordinateReferenceSystem mPositionCrs3D;
     QgsCoordinateReferenceSystem mVerticalCrs;
-    bool mSkipElevationTransformation = true;
+    bool mElevationTransformationEnabled = false;
 
     friend class TestPosition;
 };
