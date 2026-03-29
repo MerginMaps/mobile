@@ -17,6 +17,7 @@
 #define IOSVIEWDELEGATE_H
 
 #include <UIKit/UIKit.h>
+#import <PhotosUI/PhotosUI.h>
 
 #include "iosimagepicker.h"
 /**
@@ -34,6 +35,13 @@ UINavigationControllerDelegate>
   void ( ^ imagePickerControllerDidCancel )( UIImagePickerController * picker );
 }
 - ( id ) initWithHandler:( IOSImagePicker * )handler;
+@end
+
+/**
+ * we use PHPickerViewController delegate for gallery image selection, which keeps GPS metadata
+ */
+@interface IOSGalleryPickerDelegate : NSObject <PHPickerViewControllerDelegate>
+- ( instancetype ) initWithHandler:( IOSImagePicker * )handler;
 @end
 
 #endif // IOSVIEWDELEGATE_H
