@@ -19,24 +19,48 @@ import "../components" as MMComponents
 MMComponents.MMDrawer {
   id: root
 
+  property string providerType: ""
   property var positionProvider: PositionKit.positionProvider
   property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
 
   property string titleText: {
-    if ( rootstate.state === "working" )
+    if ( root.providerType === "network" )
     {
-      if ( !root.positionProvider ) return ""
-      if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name() + connectingSuffixAnimation
-      return qsTr( "Connecting" ) + connectingSuffixAnimation
+      if ( rootstate.state === "working" )
+      {
+        if ( !root.positionProvider ) return ""
+        return qsTr( "Connecting to external receiver" )
+      }
+      else if ( rootstate.state === "success" )
+      {
+        return qsTr( "Connected" )
+      }
+      else if ( rootstate.state === "fail" )
+      {
+        return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.getIpAddress() : "" )
+      }
+      else return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
     }
-    else if ( rootstate.state === "success" )
+    else if ( root.providerType === "bluetooth" )
     {
-      return qsTr( "Connected" )
-    }
-    else
-    {
-      // either NoConnection or WaitingToReconnect
-      return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
+      if ( rootstate.state === "working" )
+      {
+        if ( !root.positionProvider ) return ""
+        if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name()
+        return qsTr( "Connecting" ) + connectingSuffixAnimation
+      }
+      else if ( rootstate.state === "success" )
+      {
+        return qsTr( "Connected" )
+      }
+      else if ( rootstate.state === "fail" )
+      {
+        return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
+      }
+      else
+      {
+        if ( root.providerType === "bluetooth" ) return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+      }
     }
   }
 
@@ -45,7 +69,11 @@ MMComponents.MMDrawer {
   property string descriptionText: {
     if ( rootstate.state === "working" )
     {
-      return qsTr( "You might be asked to pair your device during this process." )
+      if ( root.providerType === "bluetooth" )
+        return qsTr( "You might be asked to pair your device during this process." )
+      else if ( root.providerType === "network" )
+      if ( root.positionProvider.getIpAddress() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + ". You can close this panel, the app will continue in the background."
+      return qsTr( "Connecting" ) + connectingSuffixAnimation
     }
     else if ( rootstate.state === "success" )
     {
@@ -59,7 +87,10 @@ MMComponents.MMDrawer {
 
     else
     {
-      return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+      if ( root.providerType === "bluetooth" )
+        return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+      else if ( root.providerType === "network" )
+        return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
     }
   }
 
@@ -68,8 +99,12 @@ MMComponents.MMDrawer {
     {
       return __style.externalGpsRedImage
     }
-    else {
-      return __style.externalGpsGreenImage
+    else
+    {
+      if ( root.providerType === "bluetooth" )
+        return __style.externalBluetoothGreenImage
+      else if ( root.providerType === "network" )
+        return __style.externalNetworkGreenImage
     }
   }
 
@@ -101,7 +136,7 @@ MMComponents.MMDrawer {
     state: "working"
   }
 
-  drawerBottomMargin: __style.margin20
+  drawerBottomMargin: __style.margin40
   drawerContent: MMComponents.MMScrollView {
 
     width: parent.width

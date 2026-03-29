@@ -59,7 +59,7 @@ Page {
       }
 
       Button {
-        text: "MMBluetoothConnectionDrawer"
+        text: "MMExternalProviderConnectionDrawer"
         onClicked: {
           bluetoothConnectionDrawer.positionProvider.state = PositionProvider.Connecting
           bluetoothConnectionTimer.start()
@@ -197,8 +197,9 @@ Page {
     }
   }
 
-  MMBluetoothConnectionDrawer {
+  MMExternalProviderConnectionDrawer {
     id: bluetoothConnectionDrawer
+    providerType: "bluetooth"
 
     howToConnectGPSLink: "www.merginmaps.com"
     positionProvider: QtObject {
