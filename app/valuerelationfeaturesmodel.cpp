@@ -155,7 +155,7 @@ QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, Mod
 
   for ( int ix = 0; ix < rowCount(); ++ix )
   {
-    QgsFeature f = data( index( ix, 0 ), Feature ).value<QgsFeature>();
+    QgsFeature f = mFeatures.at( ix ).feature();
 
     if ( keyMap.contains( f.attribute( mKeyField ).toString() ) )
     {

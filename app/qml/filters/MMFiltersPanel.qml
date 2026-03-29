@@ -10,14 +10,10 @@
 import QtQuick
 import QtQuick.Controls
 
-import mm 1.0 as MM
-
 import "../components" as MMComponents
 
 MMComponents.MMDrawer {
   id: root
-
-  required property var filterController
 
   modal: false
   interactive: false
@@ -50,7 +46,7 @@ MMComponents.MMDrawer {
   onClosed: {
     if ( !filtersApplied ) {
       // User closed without pressing "Show results" - revert pending changes
-      filterController.discardPendingChanges()
+        __activeProject.filterController.discardPendingChanges()
     }
     filtersApplied = false
   }
@@ -64,7 +60,7 @@ MMComponents.MMDrawer {
       // Clear first to force UI rebuild
       vectorLayers = []
       // Use FilterController to get vector layers
-      vectorLayers = filterController.getVectorLayers()
+      vectorLayers = __activeProject.filterController.getVectorLayers()
     }
   }
 
@@ -74,7 +70,7 @@ MMComponents.MMDrawer {
     type: MMButton.Types.Tertiary
     text: qsTr("Reset")
     fontColor: __style.grapeColor
-    visible: filterController.hasActiveFilters
+    visible: __activeProject.filterController.hasActiveFilters
 
     anchors {
       left: parent.left
@@ -83,7 +79,7 @@ MMComponents.MMDrawer {
     }
 
     onClicked: {
-      filterController.clearAllFilters()
+        __activeProject.filterController.clearAllFilters()
       filterController.applyFiltersToAllLayers()
       root.filtersApplied = true
       // Refresh the UI to clear input fields
@@ -135,7 +131,7 @@ MMComponents.MMDrawer {
 
               layerId: model.layerId
               layerName: model.layerName
-              filterController: root.filterController
+              filterController: __activeProject.filterController
               vectorLayer: model.layer
             }
           }
@@ -164,7 +160,7 @@ MMComponents.MMDrawer {
       text: qsTr("Show results")
 
       onClicked: {
-        filterController.applyFiltersToAllLayers()
+          __activeProject.filterController.applyFiltersToAllLayers()
         root.filtersApplied = true
         root.close()
       }
