@@ -129,13 +129,31 @@ void AttributeController::prefillRelationReferenceField()
   {
     QVariant foreignKey = mParentController->featureLayerPair().feature().attribute( fieldPair.referencedField() );
     QString referencingField = fieldPair.referencingField();
-    const QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
-    if ( childLayer )
+
+    std::shared_ptr<FormItem> formItem;
+    for ( const auto &item : mFormItems )
     {
-      const int fieldIndex = childLayer->fields().lookupField( referencingField );
-      if ( fieldIndex != -1 )
+      if ( item->field().name() == referencingField )
       {
-        mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
+        formItem = item;
+        break;
+      }
+    }
+
+    if ( formItem )
+    {
+      //if the field is in the form, setFormValue updates both the feature attribute and UI
+      setFormValue( formItem->id(), foreignKey );
+    }
+    else
+    {
+      // if the field is not displayed in the form, then set the attribute directly on the feature
+      const QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
+      if ( childLayer )
+      {
+        const int fieldIndex = childLayer->fields().lookupField( referencingField );
+        if ( fieldIndex != -1 )
+          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
       }
     }
   }
