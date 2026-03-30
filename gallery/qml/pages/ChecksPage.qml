@@ -15,9 +15,13 @@ import "../../app/qml/account/components" as MMAccountComponents
 import "../../app/qml/components" as MMComponents
 import "../../app/qml/inputs"
 
-Column {
-  padding: 20
-  spacing: 20
+ScrollView {
+  anchors.fill: parent
+
+  Column {
+    width: parent.width
+    padding: 20
+    spacing: 20
 
   GroupBox {
     title: "MMComponents.MMCheckBox"
@@ -161,6 +165,39 @@ Column {
   }
 
   GroupBox {
+    title: "MMComponents.MMSegmentControl"
+    background: Rectangle {
+      color: "lightGray"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Column {
+      spacing: 10
+      anchors.fill: parent
+
+      MMComponents.MMSegmentControl {}
+
+      MMComponents.MMSegmentControl {
+        selectedIndex: MMComponents.MMSegmentControl.Options.True
+      }
+
+      MMComponents.MMSegmentControl {
+        selectedIndex: MMComponents.MMSegmentControl.Options.False
+        onSelectionChanged: function( index ) { console.log( "selected:", index ) }
+      }
+
+      MMComponents.MMSegmentControl {
+        enabled: false
+      }
+    }
+  }
+
+  GroupBox {
     title: "MMComponents.MMSwitch"
     background: Rectangle {
       color: "lightGray"
@@ -195,4 +232,5 @@ Column {
       }
     }
   }
+}
 }

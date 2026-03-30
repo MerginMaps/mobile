@@ -6,22 +6,14 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Basic
 
 /**
-  * A three-state segment control for boolean-like selection: All / True / False.
-  *
-  * Signals:
-  *   - selectionChanged( int index ) — emitted when the selected segment changes;
-  *     index maps to MMSegmentControl.Options enum values.
-  *
-  * Usage:
-  *   MMSegmentControl {
-  *     onSelectionChanged: function( index ) { console.log( index ) }
-  *   }
+  * Three-state segment control: All / True / False.
+  * Emits selectionChanged( int index ) on tap; index maps to MMSegmentControl.Options.
   */
 Item {
   id: root
@@ -36,28 +28,30 @@ Item {
 
   signal selectionChanged( int index )
 
-  implicitWidth: row.implicitWidth + 2 * __style.margin8
-  implicitHeight: __style.row45
+  implicitHeight: __style.row50
+  implicitWidth: {
+    let maxW = Math.max( allMeasure.implicitWidth, trueMeasure.implicitWidth, falseMeasure.implicitWidth )
+    return 3 * ( maxW + 2 * __style.margin20 ) + 2 * __style.margin13
+  }
+
+  MMText { id: allMeasure;   text: root.allText;   font: __style.t4; visible: false }
+  MMText { id: trueMeasure;  text: root.trueText;  font: __style.t4; visible: false }
+  MMText { id: falseMeasure; text: root.falseText; font: __style.t4; visible: false }
 
   Rectangle {
-    id: background
-
     anchors.fill: parent
-    radius: __style.radius16
-    color: __style.lightGreenColor
+    radius: __style.radius12
+    color: __style.primaryColor
   }
 
   Row {
-    id: row
-
-    anchors.fill: parent
-    anchors.margins: __style.margin4
+    anchors.centerIn: parent
+    width: parent.width - 2 * __style.margin13
+    height: parent.height - 2 * __style.margin8
 
     spacing: 0
 
     Repeater {
-      id: repeater
-
       model: [
         { text: root.allText,   index: MMSegmentControl.Options.All   },
         { text: root.trueText,  index: MMSegmentControl.Options.True  },
@@ -67,34 +61,37 @@ Item {
       delegate: Item {
         id: segment
 
-        readonly property bool isSelected: root.selectedIndex === modelData.index
+        required property var modelData
 
-        width: ( row.width - row.spacing * ( repeater.count - 1 ) ) / repeater.count
-        height: row.height
+        readonly property bool isSelected: root.enabled && root.selectedIndex === segment.modelData.index
+        readonly property bool isAllOption: segment.modelData.index === MMSegmentControl.Options.All
+
+        width: parent.width / 3
+        height: parent.height
 
         Rectangle {
-          id: segmentBackground
-
           anchors.fill: parent
-          radius: __style.radius12
+          radius: __style.radius8
 
-          color: segment.isSelected ? __style.polarColor : __style.transparentColor
+          visible: segment.isSelected
 
-          border.color: segment.isSelected ? __style.forestColor : __style.transparentColor
-          border.width: segment.isSelected ? 1.5 * __dp : 0
+          color: segment.isAllOption ? __style.mediumGreenColor : __style.positiveColor
+
+          border.color: segment.isAllOption ? __style.transparentColor : __style.forestColor
+          border.width: segment.isAllOption ? 0 : 1.5 * __dp
         }
 
         MMText {
-          id: label
-
           anchors.centerIn: parent
 
-          text: modelData.text
+          text: segment.modelData.text
           font: __style.t4
-          color: segment.isSelected ? __style.forestColor : __style.nightColor
+          color: {
+            if ( !root.enabled ) return __style.darkGreenColor
+            if ( segment.isSelected ) return __style.forestColor
+            return __style.nightColor
+          }
 
-          fontSizeMode: Text.Fit
-          minimumPixelSize: 10 * __dp
           horizontalAlignment: Text.AlignHCenter
 
           leftPadding: __style.margin8
@@ -103,10 +100,11 @@ Item {
 
         MouseArea {
           anchors.fill: parent
+          enabled: root.enabled
           onClicked: {
-            if ( root.selectedIndex !== modelData.index ) {
-              root.selectedIndex = modelData.index
-              root.selectionChanged( modelData.index )
+            if ( root.selectedIndex !== segment.modelData.index ) {
+              root.selectedIndex = segment.modelData.index
+              root.selectionChanged( segment.modelData.index )
             }
           }
         }
