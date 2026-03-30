@@ -147,7 +147,7 @@ void AttributeController::prefillRelationReferenceField()
     }
     else
     {
-      // if thefield is not displayed in the form, then set the attribute directly on the feature
+      // if the field is not displayed in the form, then set the attribute directly on the feature
       const QgsVectorLayer *childLayer = mLinkedRelation.referencingLayer();
       if ( childLayer )
       {
