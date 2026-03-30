@@ -1225,11 +1225,11 @@ void TestAttributeController::testPrefillRelationReferenceField()
   QString projectDir = TestUtils::testDataDir() + "/planes";
   QVERIFY( QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" ) );
 
-  QgsVectorLayer *airportsLayer = static_cast<QgsVectorLayer *>(
+  QgsVectorLayer *airportsLayer = dynamic_cast<QgsVectorLayer *>(
                                     QgsProject::instance()->mapLayersByName( QStringLiteral( "airports" ) ).at( 0 ) );
   QVERIFY( airportsLayer && airportsLayer->isValid() );
 
-  QgsVectorLayer *towersLayer = static_cast<QgsVectorLayer *>(
+  QgsVectorLayer *towersLayer = dynamic_cast<QgsVectorLayer *>(
                                   QgsProject::instance()->mapLayersByName( QStringLiteral( "airport-towers" ) ).at( 0 ) );
   QVERIFY( towersLayer && towersLayer->isValid() );
 
