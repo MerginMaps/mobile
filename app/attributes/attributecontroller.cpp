@@ -154,6 +154,12 @@ void AttributeController::prefillRelationReferenceField()
         const int fieldIndex = childLayer->fields().lookupField( referencingField );
         if ( fieldIndex != -1 )
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, foreignKey );
+        else
+          CoreUtils::log( "Attribute Controller - Relations", QStringLiteral( "Could not find field index for field %1" ).arg( referencingField ) );
+      }
+      else
+      {
+        CoreUtils::log( "Attribute Controller - Relations", QStringLiteral( "Invalid child layer for relation %1" ).arg( mLinkedRelation.name() ) );
       }
     }
   }
