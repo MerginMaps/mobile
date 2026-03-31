@@ -150,8 +150,6 @@ ApplicationWindow {
     height: window.height - mapToolbar.height
     width: window.width
 
-    filterController: __activeProject.filterController
-
     mapExtentOffset: {
       // offset depends on what panels are visible.
       // we need to subtract mapToolbar's height from any visible panel
