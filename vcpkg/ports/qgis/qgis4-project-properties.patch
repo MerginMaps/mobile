@@ -1,0 +1,236 @@
+diff --git a/src/core/project/qgsproject.cpp b/src/core/project/qgsproject.cpp
+index d5cd3e3ebb4..819f8809084 100644
+--- a/src/core/project/qgsproject.cpp
++++ b/src/core/project/qgsproject.cpp
+@@ -116,21 +116,6 @@ QStringList makeKeyTokens_( const QString &scope, const QString &key )
+   // be sure to include the canonical root node
+   keyTokens.push_front( QStringLiteral( "properties" ) );
+ 
+-  //check validy of keys since an invalid xml name will will be dropped upon saving the xml file. If not valid, we print a message to the console.
+-  for ( int i = 0; i < keyTokens.size(); ++i )
+-  {
+-    const QString keyToken = keyTokens.at( i );
+-
+-    //invalid chars in XML are found at http://www.w3.org/TR/REC-xml/#NT-NameChar
+-    //note : it seems \x10000-\xEFFFF is valid, but it when added to the regexp, a lot of unwanted characters remain
+-    const thread_local QRegularExpression sInvalidRegexp = QRegularExpression( QStringLiteral( "([^:A-Z_a-z\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}\\-\\.0-9\\x{B7}\\x{0300}-\\x{036F}\\x{203F}-\\x{2040}]|^[^:A-Z_a-z\\x{C0}-\\x{D6}\\x{D8}-\\x{F6}\\x{F8}-\\x{2FF}\\x{370}-\\x{37D}\\x{37F}-\\x{1FFF}\\x{200C}-\\x{200D}\\x{2070}-\\x{218F}\\x{2C00}-\\x{2FEF}\\x{3001}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFFD}])" ) );
+-    if ( keyToken.contains( sInvalidRegexp ) )
+-    {
+-      const QString errorString = QObject::tr( "Entry token invalid : '%1'. The token will not be saved to file." ).arg( keyToken );
+-      QgsMessageLog::logMessage( errorString, QString(), Qgis::MessageLevel::Critical );
+-    }
+-  }
+-
+   return keyTokens;
+ }
+ 
+@@ -1311,20 +1296,20 @@ void dump_( const QgsProjectPropertyKey &topQgsPropertyKey )
+  * scope.  "layers" is a list containing three string values.
+  *
+  * \code{.xml}
+- * <properties>
+- *   <fsplugin>
+- *     <foo type="int" >42</foo>
+- *     <baz type="int" >1</baz>
+- *     <layers type="QStringList" >
++ * <properties name="properties">
++ *   <properties name="fsplugin">
++ *     <properties name="foo" type="int" >42</properties>
++ *     <properties name="baz" type="int" >1</properties>
++ *     <properties name="layers" type="QStringList">
+  *       <value>railroad</value>
+  *       <value>airport</value>
+- *     </layers>
+- *     <xyqzzy type="int" >1</xyqzzy>
+- *     <bar type="double" >123.456</bar>
+- *     <feature_types type="QStringList" >
++ *     </properties>
++ *     <properties name="xyqzzy" type="int" >1</properties>
++ *     <properties name="bar" type="double" >123.456</properties>
++ *     <properties name="feature_types" type="QStringList">
+  *        <value>type</value>
+- *     </feature_types>
+- *   </fsplugin>
++ *     </properties>
++ *   </properties>
+  * </properties>
+  * \endcode
+  *
+@@ -3967,10 +3952,25 @@ bool QgsProject::createEmbeddedLayer( const QString &layerId, const QString &pro
+   const QDomElement propertiesElem = sProjectDocument.documentElement().firstChildElement( QStringLiteral( "properties" ) );
+   if ( !propertiesElem.isNull() )
+   {
+-    const QDomElement absElem = propertiesElem.firstChildElement( QStringLiteral( "Paths" ) ).firstChildElement( QStringLiteral( "Absolute" ) );
+-    if ( !absElem.isNull() )
++    QDomElement e = propertiesElem.firstChildElement( QStringLiteral( "Paths" ) );
++    if ( e.isNull() )
++    {
++      e = propertiesElem.firstChildElement( QStringLiteral( "properties" ) );
++      while ( !e.isNull() && e.attribute( QStringLiteral( "name" ) ) != QStringLiteral( "Paths" ) )
++        e = e.nextSiblingElement( QStringLiteral( "properties" ) );
++
++      e = e.firstChildElement( QStringLiteral( "properties" ) );
++      while ( !e.isNull() && e.attribute( QStringLiteral( "name" ) ) != QStringLiteral( "Absolute" ) )
++        e = e.nextSiblingElement( QStringLiteral( "properties" ) );
++    }
++    else
++    {
++      e = e.firstChildElement( QStringLiteral( "Absolute" ) );
++    }
++
++    if ( !e.isNull() )
+     {
+-      useAbsolutePaths = absElem.text().compare( QLatin1String( "true" ), Qt::CaseInsensitive ) == 0;
++      useAbsolutePaths = e.text().compare( QLatin1String( "true" ), Qt::CaseInsensitive ) == 0;
+     }
+   }
+ 
+diff --git a/src/core/project/qgsprojectproperty.cpp b/src/core/project/qgsprojectproperty.cpp
+index ff8024a5260..7691c1b5d53 100644
+--- a/src/core/project/qgsprojectproperty.cpp
++++ b/src/core/project/qgsprojectproperty.cpp
+@@ -362,33 +362,41 @@ bool QgsProjectPropertyKey::readXml( const QDomNode &keyNode )
+ 
+   while ( i < subkeys.count() )
+   {
++    const QDomNode subkey = subkeys.item( i );
++    QString name;
++
++    if ( subkey.nodeName() == QStringLiteral( "properties" ) &&
++         subkey.hasAttributes() && // if we have attributes
++         subkey.isElement() && // and we're an element
++         subkey.toElement().hasAttribute( QStringLiteral( "name" ) ) ) // and we have a "name" attribute
++      name = subkey.toElement().attribute( QStringLiteral( "name" ) );
++    else
++      name = subkey.nodeName();
++
+     // if the current node is an element that has a "type" attribute,
+     // then we know it's a leaf node; i.e., a subkey _value_, and not
+     // a subkey
+-    if ( subkeys.item( i ).hasAttributes() && // if we have attributes
+-         subkeys.item( i ).isElement() && // and we're an element
+-         subkeys.item( i ).toElement().hasAttribute( QStringLiteral( "type" ) ) ) // and we have a "type" attribute
++    if ( subkey.hasAttributes() && // if we have attributes
++         subkey.isElement() && // and we're an element
++         subkey.toElement().hasAttribute( QStringLiteral( "type" ) ) ) // and we have a "type" attribute
+     {
+       // then we're a key value
+-      delete mProperties.take( subkeys.item( i ).nodeName() );
+-      mProperties.insert( subkeys.item( i ).nodeName(), new QgsProjectPropertyValue );
++      //
++      delete mProperties.take( name );
++      mProperties.insert( name, new QgsProjectPropertyValue );
+ 
+-      QDomNode subkey = subkeys.item( i );
+-
+-      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
++      if ( !mProperties[name]->readXml( subkey ) )
+       {
+-        QgsDebugError( QStringLiteral( "unable to parse key value %1" ).arg( subkeys.item( i ).nodeName() ) );
++        QgsDebugError( QStringLiteral( "unable to parse key value %1" ).arg( name ) );
+       }
+     }
+     else // otherwise it's a subkey, so just recurse on down the remaining keys
+     {
+-      addKey( subkeys.item( i ).nodeName() );
+-
+-      QDomNode subkey = subkeys.item( i );
++      addKey( name );
+ 
+-      if ( !mProperties[subkeys.item( i ).nodeName()]->readXml( subkey ) )
++      if ( !mProperties[name]->readXml( subkey ) )
+       {
+-        QgsDebugError( QStringLiteral( "unable to parse subkey %1" ).arg( subkeys.item( i ).nodeName() ) );
++        QgsDebugError( QStringLiteral( "unable to parse subkey %1" ).arg( name ) );
+       }
+     }
+ 
+diff --git a/tests/src/python/test_qgsproject.py b/tests/src/python/test_qgsproject.py
+index 4da8f330941..752110de78a 100644
+--- a/tests/src/python/test_qgsproject.py
++++ b/tests/src/python/test_qgsproject.py
+@@ -63,84 +63,6 @@ class TestQgsProject(QgisTestCase):
+         QgisTestCase.__init__(self, methodName)
+         self.messageCaught = False
+ 
+-    def test_makeKeyTokens_(self):
+-        # see http://www.w3.org/TR/REC-xml/#d0e804 for a list of valid characters
+-
+-        invalidTokens = []
+-        validTokens = []
+-
+-        # all test tokens will be generated by prepending or inserting characters to this token
+-        validBase = "valid"
+-
+-        # some invalid characters, not allowed anywhere in a token
+-        # note that '/' must not be added here because it is taken as a separator by makeKeyTokens_()
+-        invalidChars = "+*,;<>|!$%()=?#\x01"
+-
+-        # generate the characters that are allowed at the start of a token (and at every other position)
+-        validStartChars = ":_"
+-        charRanges = [
+-            (ord("a"), ord("z")),
+-            (ord("A"), ord("Z")),
+-            (0x00F8, 0x02FF),
+-            (0x0370, 0x037D),
+-            (0x037F, 0x1FFF),
+-            (0x200C, 0x200D),
+-            (0x2070, 0x218F),
+-            (0x2C00, 0x2FEF),
+-            (0x3001, 0xD7FF),
+-            (0xF900, 0xFDCF),
+-            (0xFDF0, 0xFFFD),
+-            # (0x10000, 0xEFFFF),   while actually valid, these are not yet accepted by makeKeyTokens_()
+-        ]
+-        for r in charRanges:
+-            for c in range(r[0], r[1]):
+-                validStartChars += chr(c)
+-
+-        # generate the characters that are only allowed inside a token, not at the start
+-        validInlineChars = "-.\xB7"
+-        charRanges = [
+-            (ord("0"), ord("9")),
+-            (0x0300, 0x036F),
+-            (0x203F, 0x2040),
+-        ]
+-        for r in charRanges:
+-            for c in range(r[0], r[1]):
+-                validInlineChars += chr(c)
+-
+-        # test forbidden start characters
+-        for c in invalidChars + validInlineChars:
+-            invalidTokens.append(c + validBase)
+-
+-        # test forbidden inline characters
+-        for c in invalidChars:
+-            invalidTokens.append(validBase[:4] + c + validBase[4:])
+-
+-        # test each allowed start character
+-        for c in validStartChars:
+-            validTokens.append(c + validBase)
+-
+-        # test each allowed inline character
+-        for c in validInlineChars:
+-            validTokens.append(validBase[:4] + c + validBase[4:])
+-
+-        logger = QgsApplication.messageLog()
+-        logger.messageReceived.connect(self.catchMessage)
+-        prj = QgsProject.instance()
+-
+-        for token in validTokens:
+-            self.messageCaught = False
+-            prj.readEntry("test", token)
+-            myMessage = f"valid token '{token}' not accepted"
+-            assert not self.messageCaught, myMessage
+-
+-        for token in invalidTokens:
+-            self.messageCaught = False
+-            prj.readEntry("test", token)
+-            myMessage = f"invalid token '{token}' accepted"
+-            assert self.messageCaught, myMessage
+-
+-        logger.messageReceived.disconnect(self.catchMessage)
+-
+     def catchMessage(self):
+         self.messageCaught = True
+ 
