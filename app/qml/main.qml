@@ -84,6 +84,8 @@ ApplicationWindow {
 
         // Stop/Start sync animation when user goes to map
         syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
+
+        __activeProject.checkForProjectUpdate()
       }
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
@@ -1090,6 +1092,17 @@ ApplicationWindow {
     {
       ssoExpiredTokenDialog.open()
     }
+
+    function onProjectSyncRequired( projectFullName )
+    {
+      if ( __activeProject.projectFullName() === projectFullName )
+      {
+        __notificationModel.addInfo(
+          qsTr( "There is a new version of the project available" ),
+          MM.NotificationType.SyncProjectAction
+        )
+      }
+    }
   }
 
   Connections {
@@ -1111,6 +1124,9 @@ ApplicationWindow {
     }
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
+    }
+    function onShowProjectNewVersionClicked() {
+      __activeProject.requestSync()
     }
   }
 

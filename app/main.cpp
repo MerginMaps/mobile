@@ -646,6 +646,8 @@ int main( int argc, char *argv[] )
     merginApi->reloadProjectRole( activeProject.projectFullName() );
   } );
 
+  QObject::connect( &activeProject, &ActiveProject::projectSyncCheckRequested, ma.get(), &MerginApi::isProjectSyncNeeded );
+
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {
     if ( activeProject.isProjectLoaded() )

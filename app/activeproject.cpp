@@ -211,6 +211,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mQgsProject );
     emit positionTrackingSupportedChanged();
     emit mapSketchesEnabledChanged();
+
+    if ( mLocalProject.isValid() )
+    {
+      emit projectSyncCheckRequested( mLocalProject.fullName(), true );
+    }
   }
 
   bool foundErrorsInLoadedProject = validateProject();
@@ -667,4 +672,12 @@ bool ActiveProject::photoSketchingEnabled() const
   }
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketching/Enabled" ), false );
+}
+
+void ActiveProject::checkForProjectUpdate()
+{
+  if ( isProjectLoaded() )
+  {
+    emit projectSyncCheckRequested( projectFullName(), true );
+  }
 }
