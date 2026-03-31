@@ -25,15 +25,29 @@ ApplicationWindow {
 
   property string currentPageSource: "InitialGalleryPage.qml"
 
+  Timer {
+    id: reloadTimer
+    interval: 50
+    onTriggered: {
+      // delete the cache after 50ms
+      _hotReload.clearCache()
+
+      mainLoader.source = Qt.binding(function () {
+        return (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + window.currentPageSource
+      })
+      mainLoader.active = true
+
+      console.log(new Date().toLocaleTimeString().split(' ')[0] + " ------ App reloaded 🔥 ------ ")
+    }
+  }
   Connections {
     target: __isMobile ? null : _hotReload
     enabled: !__isMobile
     function onWatchedSourceChanged() {
       mainLoader.active = false
+      mainLoader.setSource("")
       _hotReload.clearCache()
-      mainLoader.setSource("file://" + _qmlWrapperPath + currentPageSource)
-      mainLoader.active = true
-      console.log( new Date().toLocaleTimeString().split(' ')[0] + " ------ App reloaded 🔥 ------ ")
+      reloadTimer.start()
     }
   }
 
@@ -162,7 +176,7 @@ ApplicationWindow {
           if (__isMobile)
             stackView.push("qrc:/qml/pages/" + model.source)
           else
-            stackView.push("file://" + _qmlWrapperPath + model.source)
+            stackView.push("file:///" + _qmlWrapperPath + model.source)
           stackView.pop()
           drawer.close()
         }
@@ -269,7 +283,7 @@ ApplicationWindow {
 
     initialItem: Loader {
       id: mainLoader
-      source: (__isMobile ? "qrc:/qml/pages/" : ("file://" + _qmlWrapperPath)) + currentPageSource
+      source: (__isMobile ? "qrc:/qml/pages/" : ("file:///" + _qmlWrapperPath)) + currentPageSource
       scale: 1.0
     }
   }

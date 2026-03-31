@@ -59,7 +59,7 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   if ( mPositionKit->positionProvider() )
   {
     providerId = mPositionKit->positionProvider()->id();
-    providerName = mPositionKit->positionProvider()->name();
+    providerName = mPositionKit->positionProviderName();
     providerType = mPositionKit->positionProvider()->type();
   }
 
@@ -72,6 +72,8 @@ QgsExpressionContextScope *VariablesManager::positionScope()
   addPositionVariable( scope, QStringLiteral( "longitude" ), position.longitude );
   addPositionVariable( scope, QStringLiteral( "latitude" ), position.latitude );
   addPositionVariable( scope, QStringLiteral( "altitude" ), position.elevation );
+  addPositionVariable( scope, QStringLiteral( "elevation" ), position.elevation );
+  addPositionVariable( scope, QStringLiteral( "elevation_ellipsoid" ), position.elevation + position.elevation_diff );
   addPositionVariable( scope, QStringLiteral( "geoid_separation" ), position.elevation_diff );
   addPositionVariable( scope, QStringLiteral( "horizontal_accuracy" ), getGeoPositionAttribute( position.hacc ) );
   addPositionVariable( scope, QStringLiteral( "vertical_accuracy" ), getGeoPositionAttribute( position.vacc ) );

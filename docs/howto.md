@@ -57,3 +57,13 @@ NOTE: icon must be without transparency
 - Encrypt mobileprovision file with command ` gpg --symmetric --batch --passphrase="<IOS_GPG_KEY>" --output ./LutraConsultingLtdInputAppStore.mobileprovision.gpg ./LutraConsultingLtdInputAppStore.mobileprovision`
 - Copy both files to `.github/secrets/ios`
 - Update secret (passports) on github
+
+## QGIS debugging
+When you want to debug QGIS code it's necessary to first build the QGIS dependency in `RelWithDebugInfo` mode. This can be achieved by specifying these environment variables:
+
+|         Name          |       Value        |
+|:---------------------:|:------------------:|
+|  `QGIS_DEBUG_BUILD`   |         1          |
+| `VCPKG_KEEP_ENV_VARS` | `QGIS_DEBUG_BUILD` |
+
+Furthermore, to debug android version of Mergin Maps it's highly recommended to use QtCreator, even though it should be possible also without it.

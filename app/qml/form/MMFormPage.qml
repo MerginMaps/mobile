@@ -471,7 +471,6 @@ Page {
 
     // rollback all changes if the layer is still editable
     root.controller.rollback()
-
     root.canceled()
   }
 

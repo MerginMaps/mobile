@@ -194,19 +194,31 @@ ApplicationWindow {
       map.highlightPair( pair )
     }
 
-    onEditingGeometryStarted: formsStackManager.geometryEditingStarted()
+    onEditingGeometryStarted: 
+    {
+      mapPanelsStackView.hideMapStackIfNeeded()
+      formsStackManager.geometryEditingStarted()
+    }
     onEditingGeometryFinished: function( pair ) {
+      mapPanelsStackView.showMapStack()
       formsStackManager.geometryEditingFinished( pair )
     }
     onEditingGeometryCanceled: {
+      mapPanelsStackView.showMapStack()
       formsStackManager.geometryEditingFinished( null, false )
     }
 
-    onRecordInLayerFeatureStarted: formsStackManager.geometryEditingStarted()
+    onRecordInLayerFeatureStarted: 
+    {
+      mapPanelsStackView.hideMapStackIfNeeded()
+      formsStackManager.geometryEditingStarted()
+    }
     onRecordInLayerFeatureFinished: function( pair ) {
+      mapPanelsStackView.showMapStack()
       formsStackManager.recordInLayerFinished( pair )
     }
     onRecordInLayerFeatureCanceled: {
+      mapPanelsStackView.showMapStack()
       formsStackManager.recordInLayerFinished( null, false )
     }
 
@@ -258,10 +270,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
       __activeProject.mapSettings = map.mapSettings
-      __iosUtils.positionKit = __positionKit
+      __iosUtils.positionKit = PositionKit
       __iosUtils.compass = map.compass
       __variablesManager.compass = map.compass
-      __variablesManager.positionKit = __positionKit
+      __variablesManager.positionKit = PositionKit
     }
   }
 
@@ -441,6 +453,17 @@ ApplicationWindow {
         duration: 400
         easing.type: Easing.OutCubic
       }
+    }
+
+    function hideMapStackIfNeeded() {
+      // if present in the stack, hide the other layers when editing the geometry
+      if(mapPanelsStackView.depth > 0){
+        mapPanelsStackView.visible = false
+      }
+    }
+
+    function showMapStack(){
+        mapPanelsStackView.visible = true
     }
   }
 
@@ -699,7 +722,7 @@ ApplicationWindow {
   Component {
     id: sketchesPanelComponent
 
-    MMSketchesDrawer {
+    MMMapSketchesDrawer {
       id: sketchesPanel
 
       sketchingController: map.sketchingController
@@ -796,7 +819,7 @@ ApplicationWindow {
     onStakeoutFeature: function( feature ) {
       if ( !__inputUtils.isPointLayerFeature( feature ) )
         return;
-      if ( !__positionKit.hasPosition )
+      if ( !PositionKit.hasPosition )
       {
         __notificationModel.addWarning( qsTr( "Stake out is disabled because location is unavailable!" ) );
         return;

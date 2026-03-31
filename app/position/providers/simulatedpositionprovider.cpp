@@ -8,25 +8,30 @@
  ***************************************************************************/
 
 #include "simulatedpositionprovider.h"
+
+#include <memory>
+#include <QtNumeric>
+
+#include "inpututils.h"
 #include "qgspoint.h"
 
-SimulatedPositionProvider::SimulatedPositionProvider( double longitude, double latitude, double flightRadius, double timerTimeout, QObject *parent )
-  : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), parent )
+SimulatedPositionProvider::SimulatedPositionProvider( PositionTransformer &positionTransformer, const double longitude, const double latitude, const double flightRadius, const double updateTimeout, QObject *parent )
+  : AbstractPositionProvider( QStringLiteral( "simulated" ), QStringLiteral( "internal" ), QStringLiteral( "Simulated provider" ), positionTransformer, parent )
   , mTimer( new QTimer() )
   , mLongitude( longitude )
   , mLatitude( latitude )
   , mFlightRadius( flightRadius )
-  , mTimerTimeout( timerTimeout )
+  , mTimerTimeout( updateTimeout )
 {
   std::random_device seed;
-  mGenerator = std::unique_ptr<std::mt19937>( new std::mt19937( seed() ) );
+  mGenerator = std::make_unique<std::mt19937>( seed() );
 
   connect( mTimer.get(), &QTimer::timeout, this, &SimulatedPositionProvider::generateNextPosition );
 
   SimulatedPositionProvider::startUpdates();
 }
 
-void SimulatedPositionProvider::setUpdateInterval( double msecs )
+void SimulatedPositionProvider::setUpdateInterval( const double msecs )
 {
   stopUpdates();
   mTimerTimeout = msecs;
@@ -37,7 +42,7 @@ SimulatedPositionProvider::~SimulatedPositionProvider() = default;
 
 void SimulatedPositionProvider::startUpdates()
 {
-  mTimer->start( mTimerTimeout );
+  mTimer->start( static_cast<int>( mTimerTimeout ) );
   generateNextPosition();
 }
 
@@ -51,7 +56,7 @@ void SimulatedPositionProvider::closeProvider()
   mTimer->stop();
 }
 
-void SimulatedPositionProvider::setPosition( QgsPoint position )
+void SimulatedPositionProvider::setPosition( const QgsPoint position )
 {
   if ( position.isEmpty() )
     return;
@@ -84,16 +89,19 @@ void SimulatedPositionProvider::generateRadiusPosition()
   position.latitude = latitude;
   position.longitude = longitude;
 
-  double altitude = ( *mGenerator )() % 40 + 20; // rand altitude <20,55>m and lost (0)
-  if ( altitude <= 55 )
+  const double ellipsoidAltitude = ( *mGenerator )() % 40 + 80; // rand altitude <80,115>m and lost (NaN)
+  if ( ellipsoidAltitude <= 115 )
   {
-    position.elevation = altitude;
+    position.elevation = ellipsoidAltitude;
+    GeoPosition transformedPosition = mPositionTransformer->processSimulatedPosition( position );
+    position.elevation = transformedPosition.elevation;
+    position.elevation_diff = transformedPosition.elevation_diff;
   }
 
-  QDateTime timestamp = QDateTime::currentDateTime();
+  const QDateTime timestamp = QDateTime::currentDateTime();
   position.utcDateTime = timestamp;
 
-  position.direction = 360 - int( mAngle ) % 360;
+  position.direction = 360 - static_cast<int>( mAngle ) % 360;
 
   int accuracy = ( *mGenerator )() % 40; // rand accuracy <0,35>m and lost (-1)
   if ( accuracy > 35 )
@@ -115,9 +123,14 @@ void SimulatedPositionProvider::generateConstantPosition()
   GeoPosition position;
   position.latitude = mLatitude;
   position.longitude = mLongitude;
-  position.elevation = 20;
+  // we take 100 as elevation returned by WGS84 ellipsoid and recalculate it to geoid
+  position.elevation = 100;
+  GeoPosition transformedPosition = mPositionTransformer->processSimulatedPosition( position );
+  position.elevation = transformedPosition.elevation;
+  position.elevation_diff = transformedPosition.elevation_diff;
+
   position.utcDateTime = QDateTime::currentDateTime();
-  position.direction = 360 - int( mAngle ) % 360;
+  position.direction = 360 - static_cast<int>( mAngle ) % 360;
   position.hacc = ( *mGenerator )() % 20;
   position.satellitesUsed = ( *mGenerator )() % 30;
   position.satellitesVisible = ( *mGenerator )() % 30;

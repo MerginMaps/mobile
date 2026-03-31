@@ -169,6 +169,8 @@ MMBaseInput {
 
         onTextEdited: root.textEdited( text )
 
+        onPreeditTextChanged: if( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's unconfirmed text
+
         onReleased: {
           if ( root.editState !== "readOnly" ) {
             root.textClicked()

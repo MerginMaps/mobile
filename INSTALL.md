@@ -1,23 +1,27 @@
-# Table of Contents
+# Table of Contents <a name="table-of-contents"></a>
 <!-- Table of contents generated with https://freelance-tech-writer.github.io/table-of-contents-generator/index.html -->
 
 - [Table of Contents](#table-of-contents)
-- [1. Introduction](#1-introduction)
-- [2. Overview](#2-overview)
-  - [2.1 Secrets](#21-secrets)
-  - [2.2 Code formatting](#22-code-formatting)
-- [3. Building GNU/Linux](#3-building-gnulinux)
-- [4. Building Android (on Linux/macOS/Windows)](#4-building-android-on-linuxmacoswindows)
-  - [4.1. Android on Ubuntu](#41-android-on-ubuntu)
-  - [4.2. Android on macOS](#42-android-on-macos)
-  - [4.3. Android on Windows](#43-android-on-windows)
-- [5. Building iOS](#5-building-ios)
-- [6. Building macOS](#6-building-macos)
-- [7. Building Windows](#7-building-windows)
-- [8. FAQ](#8-faq)
-- [9. Auto Testing](#9-auto-testing)
+- [1. Introduction](#introduction)
+- [2. Overview](#overview)
+  - [2.1 Secrets](#secrets)
+  - [2.2 Code formatting](#code-formatting)
+  - [2.3 Qt packages](#qt-packages)
+  - [2.4 Vcpkg](#vcpkg)
+  - [2.5 ccache](#ccache)
+- [3. Building GNU/Linux](#building-linux)
+  - [3.1 Ubuntu 22.04](#ubuntu)
+- [4. Building Android (on Linux/macOS/Windows)](#building-android)
+  - [4.1. Android on Ubuntu](#android-on-linux)
+  - [4.2. Android on macOS](#android-on-macos)
+  - [4.3. Android on Windows](#android-on-windows)
+- [5. Building iOS](#building-ios)
+- [6. Building macOS](#building-macos)
+- [7. Building Windows](#building-windows)
+- [8. FAQ](#faq)
+- [9. Auto Testing](#auto-testing)
 
-# 1. Introduction
+# 1. Introduction <a name="introduction"></a>
 
 This document is the original installation guide of the described software
 Mergin Maps mobile app. The software and hardware descriptions named in this
@@ -39,7 +43,7 @@ For code architecture of codebase, please see [docs](./docs/README.md).
 **Note to document writers:** Please use this document as the central
 place for describing build procedures. Please do not remove this notice.
 
-# 2. Overview
+# 2. Overview <a name="overview"></a>
 
 Mobile app, like a number of major projects (e.g., KDE),
 uses [CMake](https://www.cmake.org) for building from source.
@@ -53,7 +57,7 @@ Generally, for building setup, we recommend to use the same versions of librarie
 [GitHub Actions](https://github.com/MerginMaps/mobile/tree/master/.github/workflows).
 Open workflow file for your platform/target and see the version of libraries used and replicate it in your setup.
 
-## 2.1 Secrets
+## 2.1 Secrets <a name="secrets"></a>
 
 To communicate with MerginAPI, some endpoints need to attach `api_key`. To not leak API_KEY,
 the source code that returns the API_KEYS is encrypted.
@@ -81,7 +85,7 @@ cd core/
 openssl aes-256-cbc -d -in merginsecrets.cpp.enc -out merginsecrets.cpp -md md5
 ```
 
-## 2.2 Code formatting
+## 2.2 Code formatting <a name="code-formatting"></a>
 
 We use `astyle` to format CPP and Objective-C files. Format is similar to what QGIS has.
 We use `cmake-format` to format CMake files. 
@@ -92,12 +96,12 @@ their usage
 
 For more details about code conventions, please read our [code conventions doc](./docs/code_convention.md).
 
-## 2.3 Qt packages
+## 2.3 Qt packages <a name="qt-packages"></a>
 
 Mergin Maps Mobile app is built with Qt. Qt is build with vcpkg as part of the configure step, but it is recommended
 to install QtCreator and Qt on your host to be able to release translations. 
 
-## 2.4 Vcpkg
+## 2.4 Vcpkg <a name="vcpkg"></a>
 
 Dependencies are build with vcpkg. To fix the version of libraries, you need to download vcpkg and checkout to git commit specified
 in the file `VCPKG_BASELINE` in the repository. 
@@ -115,13 +119,13 @@ in the file `VCPKG_BASELINE` in the repository.
    ./bootstrap-vcpkg.sh
    ```
 
-## 2.4 ccache
+## 2.5 ccache <a name="ccache"></a>
 
 Install and configure ccache for development. It speeds up the development significantly.
  
-# 3. Building GNU/Linux
+# 3. Building GNU/Linux <a name="building-linux"></a>
 
-## 3.1 Ubuntu 22.04
+## 3.1 Ubuntu 22.04 <a name="ubuntu"></a>
 
 Steps to build and run mobile app:
 
@@ -157,7 +161,7 @@ Steps to build and run mobile app:
    Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
    development and debugging)
    
-   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
    
    ```
    mkdir -p build
@@ -172,6 +176,10 @@ Steps to build and run mobile app:
       -GNinja \
       -S ../mobile
    ```
+   
+   Note: `libpq` will fail to build if the `zic` tool is not in the system path. In that case, set the `ZIC` environment variable to the full path leading to
+   the executable, for example: `export ZIC=/usr/sbin/zic`.
+   
 4. Build application 
    
    ```
@@ -184,13 +192,13 @@ Steps to build and run mobile app:
    ./app/Input
    ```
    
-   For testing read [Auto Testing](#AutoTesting) section.
+   For testing read [Auto Testing](#auto-testing) section.
 
-# 4. Building Android (on Linux/macOS/Windows)
+# 4. Building Android (on Linux/macOS/Windows) <a name="building-android"></a>
 
 For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 
-## 4.1. Android on Linux
+## 4.1. Android on Linux <a name="android-on-linux"></a>
 
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
 
@@ -275,7 +283,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
   ```
   
   
-  To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+  To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
 
   4. Build and Run
 
@@ -290,7 +298,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
          MerginMaps
    ```
 
-## 4.2. Android on macOS
+## 4.2. Android on macOS <a name="android-on-macos"></a>
 1. Install Java
 
    - `brew install openjdk@17`, then make this java version default ``export JAVA_HOME=`usr/libexec/java_home -v 17` ``. Check if it's default by executing `java --version`
@@ -391,7 +399,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    ```
    
    
-   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
 
 4. Build and Run
 
@@ -406,12 +414,12 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
          MerginMaps
    ```
 
-## 4.3. Android on Windows
+## 4.3. Android on Windows <a name="android-on-windows"></a>
 
 Even technically it should be possible, we haven't tried this setup yet. If you managed to compile 
 mobile app for Android on Windows, please help us to update this section. 
 
-# 5. Building iOS
+# 5. Building iOS <a name="building-ios"></a>
 
 - you have to run Release or RelWithDebInfo builds. Debug builds will usually crash on some Qt's assert
 - if there is any problem running mobile app from Qt Creator, open cmake-generated project in XCode directly
@@ -441,7 +449,7 @@ mobile app for Android on Windows, please help us to update this section.
    
    Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for development and debugging)
    
-   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
    
    Note: make sure you adjust VCPKG_HOST_TRIPLET and CMAKE_SYSTEM_PROCESSOR if you use x64-osx host machine.
    
@@ -492,7 +500,7 @@ Alternatively, navigate to the build folder and open the Xcode Project:
 Once the project is opened, build it from Xcode.
 
 
-# 6. Building macOS
+# 6. Building macOS <a name="building-macos"></a>
 
 1. Install some dependencies, critically XCode, bison and flex. See "Install Build Dependencies" step in `.github/workflows/macos.yml`
 ```
@@ -521,7 +529,7 @@ Once the project is opened, build it from Xcode.
    
    Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for development and debugging)
    
-   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
     
    Note: for x64-osx (intel laptops) build use VCPKG_TARGET_TRIPLET instead of arm64-osx (Mx laptops)
    
@@ -555,7 +563,7 @@ Once the project is opened, build it from Xcode.
    ./app/MerginMaps.app/Contents/MacOS/MerginMaps
    ```
 
-# 7. Building Windows
+# 7. Building Windows <a name="building-windows"></a>
 
 1. Install some dependencies. See `.github/workflows/win.yml`
   Critically Visual Studio, cmake, bison and flex. Setup build VS environment (adjust to your version)
@@ -583,7 +591,7 @@ Once the project is opened, build it from Xcode.
    Alternatively you can open QtCreator and add cmake defines to the QtCreator Project setup table and configure from QtCreator (recommended for
    development and debugging)
    
-   To use USE_MM_SERVER_API_KEY read [Secrets](#Secrets) section.
+   To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
    
    ```
    mkdir build
@@ -613,7 +621,7 @@ Once the project is opened, build it from Xcode.
    ./app/MerginMaps.exe
    ```
 
-# 8. FAQ
+# 8. FAQ <a name="faq"></a>
 
 - If you have "error: undefined reference to 'stdout'" or so, make sure that in BUILD ENV you have ANDROID_NDK_PLATFORM=android-24 or later!
     ![image](https://user-images.githubusercontent.com/22449698/166630970-a776576f-c505-4265-b4c8-ffbe212c6745.png)
@@ -625,7 +633,7 @@ Once the project is opened, build it from Xcode.
   - Make sure it's targeting **build** directory
 - If using Visual Studio Code to configure and build the project, check the  template in the `docs` folder.
 
-# 9. Auto Testing
+# 9. Auto Testing <a name="auto-testing"></a>
 
 ## Mergin API tests
 You need to add cmake define `-DENABLE_TESTING=TRUE` on your cmake configure line.

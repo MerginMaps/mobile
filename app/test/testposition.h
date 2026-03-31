@@ -39,6 +39,13 @@ class TestPosition: public QObject
     void testPositionTracking();
     void testPositionTrackingHighlight();
 
+    void testPositionTransformerAndroidPosition();
+    void testPositionTransformerBluetoothPosition();
+    void testPositionTransformerInternalAndroidPosition();
+    void testPositionTransformerInternalIosPosition();
+    void testPositionTransformerInternalDesktopPosition();
+    void testPositionTransformerSimulatedPosition();
+
   private:
     PositionKit *positionKit;
 };

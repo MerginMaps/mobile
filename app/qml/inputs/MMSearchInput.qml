@@ -16,7 +16,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   id: root
 
   property bool delayedSearch: false
-  property int emitInterval: 200
+  property int emitInterval: 250
   property bool showClearIcon: true
   property string searchText: ""
 
@@ -60,7 +60,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
     else
     {
-      root.searchText = root.text
+      // trim the last whitespace from the user's input
+      root.searchText = root.text.trim()
     }
   }
 
@@ -70,7 +71,11 @@ MMPrivateComponents.MMBaseSingleLineInput {
     interval: root.emitInterval
     running: false
 
-    onTriggered: root.searchText = root.text
+    onTriggered: { 
+      // when using predictive text suggestions, a whitespace is sometimes added after the word
+      // trim the last whitespace from the user's input
+      root.searchText = root.text.trim()
+    }
   }
 
   /**

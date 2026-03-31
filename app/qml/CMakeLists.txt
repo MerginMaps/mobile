@@ -40,8 +40,11 @@ set(MM_QML
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
+    components/MMColorPicker.qml
+    components/MMColorButton.qml
     components/MMPopup.qml
     components/MMPhoto.qml
+    components/MMPhotoCard.qml
     components/MMProgressBar.qml
     components/MMRadioButton.qml
     components/MMRoundButton.qml
@@ -136,7 +139,7 @@ set(MM_QML
     layers/MMLayersListPage.qml
     layers/MMLayersListSearchPage.qml
     layers/MMLayersController.qml
-    map/MMSketchesDrawer.qml
+    map/MMMapSketchesDrawer.qml
     map/MMHighlight.qml
     map/MMMapCanvas.qml
     map/MMMapThemeDrawer.qml

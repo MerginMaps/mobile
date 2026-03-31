@@ -112,6 +112,17 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
     }
   } );
 
+#ifndef QT_NO_SSL
+  QObject::connect( mManager, &QNetworkAccessManager::sslErrors, this, []( const QNetworkReply * reply, const QList<QSslError> &errors )
+  {
+    CoreUtils::log( QStringLiteral( "SSL error" ), QStringLiteral( "URL attempting to access: " ) + reply->url().toString() );
+    for ( const auto &error : errors )
+    {
+      CoreUtils::log( QStringLiteral( "SSL error" ), QStringLiteral( "Error Description:" ) + error.errorString() );
+    }
+  } );
+#endif
+
   //
   // check if the cache is up to date:
   //  - server url and type
@@ -356,6 +367,29 @@ bool MerginApi::projectFileHasBeenUpdated( const ProjectDiff &diff )
   for ( QString filePath : diff.remoteUpdated )
   {
     if ( CoreUtils::hasProjectFileExtension( filePath ) )
+      return true;
+  }
+
+  return false;
+}
+
+bool MerginApi::authConfigurationHasChanged( const ProjectDiff &diff )
+{
+  for ( QString filePath : diff.remoteAdded )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteUpdated )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
+      return true;
+  }
+
+  for ( QString filePath : diff.remoteDeleted )
+  {
+    if ( CoreUtils::isAuthConfigFile( filePath ) )
       return true;
   }
 
@@ -3680,7 +3714,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
 
-  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) )
+  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) || authConfigurationHasChanged( diff ) )
   {
     emit projectReloadNeededAfterSync( projectFullName );
   }

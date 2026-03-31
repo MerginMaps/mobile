@@ -123,6 +123,14 @@ void MapSketchingController::finishDigitizing()
   }
 }
 
+void MapSketchingController::redo() const
+{
+  if ( !mLayer )
+    return;
+
+  mLayer->undoStack()->redo();
+}
+
 void MapSketchingController::undo() const
 {
   if ( !mLayer )
@@ -174,6 +182,7 @@ void MapSketchingController::setMapSettings( InputMapSettings *settings )
   {
     mLayer->startEditing();
     connect( mLayer->undoStack(), &QUndoStack::canUndoChanged, this, &MapSketchingController::canUndoChanged );
+    connect( mLayer->undoStack(), &QUndoStack::canRedoChanged, this, &MapSketchingController::canRedoChanged );
   }
 
   mMapSettings = settings;
@@ -183,6 +192,14 @@ void MapSketchingController::setMapSettings( InputMapSettings *settings )
 InputMapSettings *MapSketchingController::mapSettings() const
 {
   return mMapSettings;
+}
+
+bool MapSketchingController::canRedo() const
+{
+  if ( !mLayer )
+    return false;
+
+  return mLayer->undoStack()->canRedo();
 }
 
 bool MapSketchingController::canUndo() const

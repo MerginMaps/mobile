@@ -18,7 +18,7 @@
 #include <random>
 
 /**
- * SimulatedPositionProvider is used to generate random position around specified point
+ * SimulatedPositionProvider is used to generate random position around specified point.
  * Point can be specified via constructor arguments
  * Should be used as a position provider in PositionKit
  */
@@ -33,22 +33,23 @@ class SimulatedPositionProvider : public AbstractPositionProvider
      *  Set flightRadius to 0 in order to get constant position (no movement)
      */
     explicit SimulatedPositionProvider(
+      PositionTransformer &positionTransformer,
       double longitude = 17.107137342092614,
       double latitude = 48.10301740375036,
       double flightRadius = 0,
       double updateTimeout = 1000,
       QObject *parent = nullptr
     );
-    virtual ~SimulatedPositionProvider() override;
+    ~SimulatedPositionProvider() override;
 
-    virtual void setUpdateInterval( double msecs ) override;
+    void setUpdateInterval( double msecs ) override;
 
   public slots:
-    virtual void startUpdates() override;
-    virtual void stopUpdates() override;
-    virtual void closeProvider() override;
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
 
-    virtual void setPosition( QgsPoint position ) override;
+    void setPosition( QgsPoint position ) override;
 
     void generateNextPosition();
 
