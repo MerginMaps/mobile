@@ -886,12 +886,17 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Valokuvapiirroksia ei voitu tallentaa, ota yhteyttä tukeen.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation>Hakemistoa %1 ei voitu luoda.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation>Kuvan käsittely epäonnistui: kuvahakemistoa ei löytynyt.</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation>Kuvan prosessointi epäonnistui</translation>
     </message>
