@@ -32,10 +32,7 @@ import "./filters"
 ApplicationWindow {
   id: window
 
-  // Global filter controller for managing map filters
-  MM.FilterController {
-    id: globalFilterController
-  }
+  readonly property var filterController: __activeProject.filterController
 
   visible: true
   x:  __appwindowx
@@ -155,7 +152,7 @@ ApplicationWindow {
     height: window.height - mapToolbar.height
     width: window.width
 
-    filterController: globalFilterController
+    filterController: window.filterController
 
     mapExtentOffset: {
       // offset depends on what panels are visible.
@@ -524,8 +521,6 @@ ApplicationWindow {
 
     active: false
     sourceComponent: MMFiltersPanel {
-      filterController: globalFilterController
-
       onClosed: {
         filtersDrawerLoader.active = false
         stateManager.state = "map"

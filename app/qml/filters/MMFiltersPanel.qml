@@ -131,7 +131,6 @@ MMComponents.MMDrawer {
 
               layerId: model.layerId
               layerName: model.layerName
-              filterController: __activeProject.filterController
               vectorLayer: model.layer
             }
           }
