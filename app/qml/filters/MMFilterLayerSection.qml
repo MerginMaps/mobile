@@ -357,7 +357,7 @@ Column {
               onTextClicked: dropdownDrawerLoader.active = true
               onRightContentClicked: {
                 if (dropdownInput.text !== "") {
-                    __activeProject.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
+                   __activeProject.filterController.setDropdownFilter(root.layerId, fieldDelegate.fieldName, [], fieldDelegate.multiSelect)
                   // Refresh the fields model to clear currentValueTexts
                   fieldsRepeater.model = root.vectorLayer ? __activeProject.filterController.getFilterableFields(root.vectorLayer) : []
                 }
