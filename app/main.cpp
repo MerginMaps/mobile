@@ -532,7 +532,7 @@ int main( int argc, char *argv[] )
   NotificationModel notificationModel;
 
   ActiveLayer al;
-  ActiveProject activeProject( *as, al, localProjectsManager, ma.get() );
+  ActiveProject activeProject( *as, al, localProjectsManager );
   std::unique_ptr<VariablesManager> vm( new VariablesManager( ma.get() ) );
   vm->registerInputExpressionFunctions();
 
@@ -645,6 +645,8 @@ int main( int argc, char *argv[] )
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
   } );
+
+  QObject::connect( &activeProject, &ActiveProject::projectSyncCheckRequested, ma.get(), &MerginApi::isProjectSyncNeeded );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
   {

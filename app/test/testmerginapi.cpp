@@ -2377,7 +2377,8 @@ void TestMerginApi::testAutosync()
   MapThemesModel mtm;
   AppSettings as;
   ActiveLayer al;
-  ActiveProject activeProject( as, al, mApi->localProjectsManager(), mApi );
+  ActiveProject activeProject( as, al, mApi->localProjectsManager() );
+  QObject::connect( &activeProject, &ActiveProject::projectSyncCheckRequested, mApi, &MerginApi::isProjectSyncNeeded );
 
   mApi->localProjectsManager().addLocalProject( projectDir, projectName );
 

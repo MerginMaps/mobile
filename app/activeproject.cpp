@@ -21,7 +21,6 @@
 
 #include "activeproject.h"
 #include "coreutils.h"
-#include "merginapi.h"
 
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
@@ -33,7 +32,6 @@ const int ActiveProject::LOADING_FLAG_FILE_EXPIRATION_MS = 5000;
 ActiveProject::ActiveProject( AppSettings &appSettings
                               , ActiveLayer &activeLayer
                               , LocalProjectsManager &localProjectsManager
-                              , MerginApi *merginApi
                               , QObject *parent ) :
 
   QObject( parent )
@@ -41,7 +39,6 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   , mActiveLayer( activeLayer )
   , mAuthManager( QgsApplication::authManager() )
   , mLocalProjectsManager( localProjectsManager )
-  , mMerginApi( merginApi )
   , mProjectLoadingLog( "" )
 {
   // we used to have our own QgsProject instance, but unfortunately few pieces of qgis_core
@@ -215,9 +212,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit positionTrackingSupportedChanged();
     emit mapSketchesEnabledChanged();
 
-    if ( mLocalProject.isValid() && mMerginApi )
+    if ( mLocalProject.isValid() )
     {
-      mMerginApi->isProjectSyncNeeded( mLocalProject.fullName(), true );
+      emit projectSyncCheckRequested( mLocalProject.fullName(), true );
     }
   }
 
@@ -679,8 +676,8 @@ bool ActiveProject::photoSketchingEnabled() const
 
 void ActiveProject::checkForProjectUpdate()
 {
-  if ( isProjectLoaded() && mMerginApi )
+  if ( isProjectLoaded() )
   {
-    mMerginApi->isProjectSyncNeeded( projectFullName(), true );
+    emit projectSyncCheckRequested( projectFullName(), true );
   }
 }
