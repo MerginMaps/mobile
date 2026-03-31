@@ -79,8 +79,8 @@ MMComponents.MMDrawer {
     }
 
     onClicked: {
-        __activeProject.filterController.clearAllFilters()
-      filterController.applyFiltersToAllLayers()
+      __activeProject.filterController.clearAllFilters()
+      __activeProject.filterController.applyFiltersToAllLayers()
       root.filtersApplied = true
       // Refresh the UI to clear input fields
       internal.refreshLayers()
@@ -131,7 +131,6 @@ MMComponents.MMDrawer {
 
               layerId: model.layerId
               layerName: model.layerName
-              filterController: __activeProject.filterController
               vectorLayer: model.layer
             }
           }
