@@ -572,22 +572,9 @@ int main( int argc, char *argv[] )
     pk->setVerticalCrs( crs );
 
     // read and set new elevation transformation behavior
-    // The project key was previously named "SkipElevationTransformation" (skip=true meant no transformation).
-    // It was replaced by "ElevationTransformationEnabled" with inverted logic (enabled=true means transformation is done).
-    // Both keys are supported for backwards compatibility — "ElevationTransformationEnabled" takes precedence if present.
     bool valueRead = false;
     const bool elevationTransformationEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "ElevationTransformationEnabled" ), false, &valueRead );
-    bool transformationEnabled = false;
-    if ( valueRead )
-    {
-      transformationEnabled = elevationTransformationEnabled;
-    }
-    else
-    {
-      // old key used inverted logic: skip=true meant transformation was disabled
-      transformationEnabled = !project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true );
-    }
-    pk->setElevationTransformationEnabled( transformationEnabled );
+    pk->setElevationTransformationEnabled( elevationTransformationEnabled );
 
     pk->refreshPositionTransformer( project->transformContext() );
   } );
