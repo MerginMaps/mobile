@@ -32,8 +32,6 @@ import "./filters"
 ApplicationWindow {
   id: window
 
-  readonly property var filterController: __activeProject.filterController
-
   visible: true
   x:  __appwindowx
   y:  __appwindowy
@@ -152,7 +150,7 @@ ApplicationWindow {
     height: window.height - mapToolbar.height
     width: window.width
 
-    filterController: window.filterController
+    filterController: __activeProject.filterController
 
     mapExtentOffset: {
       // offset depends on what panels are visible.
