@@ -984,7 +984,6 @@ class MerginApi: public QObject
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
-
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS
     QOAuthUriSchemeReplyHandler *mOauth2ReplyHandler = nullptr; // parented by mOauth2Flow
