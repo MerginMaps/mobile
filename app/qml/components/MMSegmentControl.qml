@@ -9,34 +9,29 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
 
-/**
-  * Three-state segment control: All / True / False.
-  * Emits selectionChanged( int index ) on tap; index maps to MMSegmentControl.Options.
-  */
 Item {
   id: root
 
   enum Options { All, True, False }
 
-  /* optional */ property int selectedIndex: MMSegmentControl.Options.All
+  property int selectedIndex: MMSegmentControl.Options.All
 
-  /* optional */ property string allText: qsTr( "All" )
-  /* optional */ property string trueText: qsTr( "True" )
-  /* optional */ property string falseText: qsTr( "False" )
+  property string allText: qsTr( "All" )
+  property string trueText: qsTr( "True" )
+  property string falseText: qsTr( "False" )
 
   signal selectionChanged( int index )
 
   implicitHeight: __style.row50
   implicitWidth: {
     let maxW = Math.max( allMeasure.implicitWidth, trueMeasure.implicitWidth, falseMeasure.implicitWidth )
-    return 3 * ( maxW + 2 * __style.margin20 ) + 2 * __style.margin13
+    return 3 * ( maxW + 2 * __style.margin20 ) + 2 * __style.margin12
   }
 
-  MMText { id: allMeasure;   text: root.allText;   font: __style.t4; visible: false }
-  MMText { id: trueMeasure;  text: root.trueText;  font: __style.t4; visible: false }
-  MMText { id: falseMeasure; text: root.falseText; font: __style.t4; visible: false }
+  MMText { id: allMeasure;   text: root.allText;   font: __style.t3; visible: false }
+  MMText { id: trueMeasure;  text: root.trueText;  font: __style.t3; visible: false }
+  MMText { id: falseMeasure; text: root.falseText; font: __style.t3; visible: false }
 
   Rectangle {
     anchors.fill: parent
@@ -46,10 +41,8 @@ Item {
 
   Row {
     anchors.centerIn: parent
-    width: parent.width - 2 * __style.margin13
+    width: parent.width - 2 * __style.margin12
     height: parent.height - 2 * __style.margin8
-
-    spacing: 0
 
     Repeater {
       model: [
@@ -78,24 +71,23 @@ Item {
           color: segment.isAllOption ? __style.mediumGreenColor : __style.positiveColor
 
           border.color: segment.isAllOption ? __style.transparentColor : __style.forestColor
-          border.width: segment.isAllOption ? 0 : 1.5 * __dp
+          border.width: segment.isAllOption ? 0 : 1.0 * __dp
         }
 
         MMText {
           anchors.centerIn: parent
 
           text: segment.modelData.text
-          font: __style.t4
+          font: {
+            // bold only if selected
+            if ( segment.isSelected ) return __style.t3
+            return __style.p5
+          }
           color: {
             if ( !root.enabled ) return __style.darkGreenColor
             if ( segment.isSelected ) return __style.forestColor
             return __style.nightColor
           }
-
-          horizontalAlignment: Text.AlignHCenter
-
-          leftPadding: __style.margin8
-          rightPadding: __style.margin8
         }
 
         MouseArea {
