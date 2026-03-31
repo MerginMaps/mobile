@@ -509,6 +509,10 @@ QVariantList FilterController::getFilterableFields( QgsVectorLayer *layer ) cons
 
       switch ( fieldType )
       {
+        case QMetaType::Bool:
+          filterType = QStringLiteral( "bool" );
+          break;
+
         case QMetaType::Int:
         case QMetaType::UInt:
         case QMetaType::LongLong:

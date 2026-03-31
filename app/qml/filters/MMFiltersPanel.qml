@@ -22,14 +22,14 @@ MMComponents.MMDrawer {
   dropShadow: true
 
   background: Rectangle {
-    color: __style.lightGreenColor
+    color: __style.polarColor
     radius: __style.radius20
 
     layer.enabled: root.dropShadow
     layer.effect: MMComponents.MMShadow {}
 
     Rectangle {
-      color: __style.lightGreenColor
+      color: __style.polarColor
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
@@ -65,6 +65,7 @@ MMComponents.MMDrawer {
   }
 
   drawerHeader.title: qsTr("Filters")
+  drawerHeader.titleFont: __style.t2
 
   drawerHeader.topLeftItemContent: MMComponents.MMButton {
     type: MMButton.Types.Tertiary
@@ -156,7 +157,7 @@ MMComponents.MMDrawer {
         right: parent.right
       }
 
-      text: qsTr("Show results")
+      text: qsTr("Apply filters")   
 
       onClicked: {
           __activeProject.filterController.applyFiltersToAllLayers()

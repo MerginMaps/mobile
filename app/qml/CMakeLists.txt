@@ -62,6 +62,7 @@ set(MM_QML
     filters/MMFilterChip.qml
     filters/MMFilterLayerSection.qml
     filters/MMFiltersPanel.qml
+    filters/components/MMFilterTextInput.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
