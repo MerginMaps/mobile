@@ -343,6 +343,20 @@ if (ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle @ONLY
   )
 
+  if (SquishQtBuiltinHook_FOUND)
+    list(
+      APPEND
+      SquishLibs
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
+    )
+  endif ()
+
   set_target_properties(
     MerginMaps
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
@@ -350,6 +364,7 @@ if (ANDROID)
                QT_ANDROID_MIN_SDK_VERSION ${MM_ANDROID_MIN_SDK_VERSION}
                QT_ANDROID_VERSION_CODE ${MM_VERSION_CODE}
                QT_ANDROID_VERSION_NAME ${MM_VERSION}
+               QT_ANDROID_EXTRA_LIBS "${SquishLibs}"
   )
 endif ()
 
@@ -558,8 +573,12 @@ if (IOS OR MACOS)
 endif ()
 
 if (ANDROID)
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
+  endif ()
+
   set_property(
-    TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
+    TARGET MerginMaps APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
                                ${OpenSSL_CRYPTO_LIBRARY}
   )
 endif ()
@@ -577,6 +596,18 @@ if (IOS)
   )
   # TODO is this needed? this change requires cmake 3.28+
   # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(
+      MerginMaps
+      ATTACH_PORT
+      7757
+      EXTENSIONS
+      QGraphicsView
+      QTabWidget
+      QtQuickTypes
+      QtQuick
+    )
+  endif ()
 endif ()
 
 if (WIN)
