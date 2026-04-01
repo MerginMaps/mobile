@@ -46,9 +46,6 @@ Item {
 
   property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
-  // Filter controller for managing feature filters
-  property var filterController: null
-
   signal featureIdentified( var pair )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
@@ -595,9 +592,9 @@ Item {
     MMMapButton {
       id: filterIndicatorButton
 
-      visible: root.state === "view" && root.filterController && (root.filterController.hasActiveFilters || AppSettings.alwaysShowFilterButton)
-      iconSource: root.filterController && root.filterController.hasActiveFilters ? __style.filterFilledIcon : __style.filterIcon
-      bgndColor: root.filterController && root.filterController.hasActiveFilters ? __style.sandColor : __style.polarColor
+      visible: root.state === "view" && __activeProject.filterController && (__activeProject.filterController.hasActiveFilters || AppSettings.alwaysShowFilterButton)
+      iconSource: __activeProject.filterController && __activeProject.filterController.hasActiveFilters ? __style.filterFilledIcon : __style.filterIcon
+      bgndColor: __activeProject.filterController && __activeProject.filterController.hasActiveFilters ? __style.sandColor : __style.polarColor
 
       anchors {
         left: parent.left

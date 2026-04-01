@@ -15,6 +15,7 @@ import mm 1.0 as MM
 
 import "../inputs"
 import "../components" as MMComponents
+import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -33,15 +34,24 @@ MMComponents.MMPage {
     width: parent.width
     height: parent.height
 
-    Rectangle {
-      id: filterNotification
+    MMSearchInput {
+      id: searchBar
 
       anchors.top: parent.top
       anchors.topMargin: __style.spacing20
 
       width: parent.width
-      height: filterRow.implicitHeight + 2 * __style.margin8
-      radius: __style.radius12
+      delayedSearch: true
+      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
+    }
+
+    MMFilterComponents.MMFilterBanner {
+      id: filterBanner
+
+      anchors.top: searchBar.bottom
+      anchors.topMargin: __style.spacing20
+
+      width: parent.width
 
       visible: root.selectedLayer && globalFilterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
 
@@ -79,24 +89,12 @@ MMComponents.MMPage {
           anchors.verticalCenter: parent.verticalCenter
 
           onClicked: {
-            globalFilterController.clearAllFilters()
-            globalFilterController.applyFiltersToAllLayers()
+            __activeProject.filterController.clearAllFilters()
+            __activeProject.filterController.applyFiltersToAllLayers()
             featuresModel.reloadFeatures()
           }
         }
       }
-    }
-
-    MMSearchInput {
-      id: searchBar
-
-      anchors.top: filterNotification.visible ? filterNotification.bottom : parent.top
-      anchors.topMargin: __style.spacing20
-
-      width: parent.width
-
-      delayedSearch: true
-      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
     }
 
     MMComponents.MMListView {
@@ -105,9 +103,9 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: searchBar.bottom
+        top: filterBanner.visible ? filterBanner.bottom : searchBar.bottom
         bottom: parent.bottom
-        topMargin: __style.spacing20
+        topMargin: filterBanner.visible ? __style.spacing10 : __style.spacing20
       }
 
       model: MM.LayerFeaturesModel {
