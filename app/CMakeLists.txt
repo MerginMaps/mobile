@@ -344,7 +344,6 @@ if (ANDROID)
   )
 
   if (SquishQtBuiltinHook_FOUND)
-    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
     list(
       APPEND
       SquishLibs
@@ -574,8 +573,12 @@ if (IOS OR MACOS)
 endif ()
 
 if (ANDROID)
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
+  endif ()
+
   set_property(
-    TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
+    TARGET MerginMaps APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
                                ${OpenSSL_CRYPTO_LIBRARY}
   )
 endif ()
