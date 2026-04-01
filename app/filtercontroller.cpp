@@ -26,6 +26,19 @@ FilterController::FilterController( QObject *parent )
 {
 }
 
+bool FilterController::filtersEnabled() const
+{
+  return mFiltersEnabled;
+}
+
+void FilterController::setFiltersEnabled( bool enabled )
+{
+  if ( mFiltersEnabled == enabled )
+    return;
+  mFiltersEnabled = enabled;
+  emit filtersEnabledChanged();
+}
+
 bool FilterController::hasActiveFilters() const
 {
   for ( auto it = mAppliedFilters.constBegin(); it != mAppliedFilters.constEnd(); ++it )
@@ -462,6 +475,12 @@ void FilterController::applyFiltersToAllLayers()
   if ( hadFilters != hasActiveFilters() )
   {
     emit hasActiveFiltersChanged();
+  }
+
+  if ( !mFiltersEnabled )
+  {
+    mFiltersEnabled = true;
+    emit filtersEnabledChanged();
   }
 }
 
