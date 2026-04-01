@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "../../inputs" as MMInputs
 import "../../components" as MMComponents
@@ -52,7 +53,7 @@ Drawer {
       width: parent.width
       height: parent.height
 
-      Column {
+      ColumnLayout {
         id: contentColumn
 
         width: parent.width
@@ -60,42 +61,41 @@ Drawer {
 
         spacing: 0
 
-        MMComponents.MMListSpacer { height: __style.spacing20 }
+        MMComponents.MMListSpacer { Layout.preferredHeight: __style.spacing20 }
 
         MMInputs.MMSearchInput {
           id: searchBar
 
           delayedSearch: true
 
-          width: parent.width
+          Layout.fillWidth: true
 
           placeholderText: qsTr("Search for features...")
 
           onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
         }
 
-        MMComponents.MMListSpacer { height: __style.spacing20 }
+        MMComponents.MMListSpacer { Layout.preferredHeight: __style.spacing20 }
 
         MMFilters.MMFilterBanner {
           id: filterBanner
 
           visible: __activeProject.filterController.hasActiveFilters
 
-          width: parent.width
+          Layout.fillWidth: true
           text: qsTr( "Some features may be hidden by active filters" )
         }
 
         MMComponents.MMListSpacer {
           visible: filterBanner.visible
-          height: __style.spacing10
+          Layout.preferredHeight: __style.spacing20
         }
 
         MMComponents.MMListView {
           id: listView
 
-          width: parent.width
-          height: parent.height - 2 * __style.spacing20 - searchBar.height
-                  - ( filterBanner.visible ? filterBanner.height + __style.spacing10 : 0 )
+          Layout.fillWidth: true
+          Layout.fillHeight: true
 
           clip: true
 

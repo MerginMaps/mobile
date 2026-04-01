@@ -162,15 +162,13 @@ Button {
 
   state: "default"
 
-  implicitHeight: {
-    if ( root.type === MMButton.Types.Tertiary && root.size !== MMButton.Sizes.ExtraSmall ) 
-      return buttonContent.height 
-    else 
-      return buttonContent.height + topPadding + bottomPadding
-  }
+  implicitHeight: buttonContent.height + topPadding + bottomPadding
+
   implicitWidth: {
-    if ( root.size === MMButton.Sizes.ExtraSmall ) return row.paintedChildrenWidth + 2 * __style.margin8
-    return row.paintedChildrenWidth + 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+    let margin = __style.margin20
+    if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
+    else if ( root.size === MMButton.Sizes.Small ) margin = __style.margin16
+    return row.paintedChildrenWidth + 2 * margin
   }
 
   topPadding: {
@@ -215,8 +213,10 @@ Button {
 
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
       property real maxWidth: {
-        if ( root.size === MMButton.Sizes.ExtraSmall ) return parent.width - 2 * __style.margin8
-        return parent.width - 2 * ( root.size === MMButton.Sizes.Small ? __style.margin16 : __style.margin20 )
+        let margin = __style.margin20 
+        if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
+        else if ( root.size === MMButton.Sizes.Small ) margin = __style.margin16
+        return parent.width - 2 * margin
       }
 
       x: ( parent.width - width ) / 2

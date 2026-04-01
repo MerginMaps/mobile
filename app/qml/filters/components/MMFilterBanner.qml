@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQuick.Layouts
 
 import "../../components" as MMComponents
 
@@ -21,39 +22,45 @@ Rectangle {
 
   color: __style.informativeColor
   radius: __style.radius8
-  implicitHeight: bannerText.implicitHeight + 2 * __style.margin8
+  implicitHeight: row.implicitHeight + 2 * __style.margin8
 
-  MMComponents.MMText {
-    id: bannerText
+  RowLayout {
+    id: row
 
-    anchors.left: parent.left
-    anchors.leftMargin: __style.margin12
-    anchors.right: actionButton.visible ? actionButton.left : parent.right
-    anchors.rightMargin: actionButton.visible ? __style.spacing8 : __style.margin12
-    anchors.verticalCenter: parent.verticalCenter
+    anchors {
+      left: parent.left
+      right: parent.right
+      leftMargin: __style.margin12
+      rightMargin: __style.margin8
+      verticalCenter: parent.verticalCenter
+    }
 
-    text: root.text
-    font: __style.t4
-    color: __style.deepOceanColor
-    wrapMode: Text.Wrap
-    elide: Text.ElideNone
-  }
+    spacing: __style.spacing8
 
-  MMComponents.MMButton {
-    id: actionButton
+    MMComponents.MMText {
+      Layout.fillWidth: true
+      Layout.alignment: Qt.AlignVCenter
 
-    visible: root.actionText !== ""
+      text: root.text
+      font: __style.t4
+      color: __style.deepOceanColor
+      wrapMode: Text.Wrap
+      elide: Text.ElideNone
+    }
 
-    type: MMComponents.MMButton.Types.Tertiary
-    size: MMComponents.MMButton.Sizes.ExtraSmall
-    text: root.actionText
-    fontColor: __style.skyColor
-    bgndColor: __style.deepOceanColor
+    MMComponents.MMButton {
+      id: actionButton
 
-    anchors.right: parent.right
-    anchors.rightMargin: __style.margin8
-    anchors.verticalCenter: parent.verticalCenter
+      visible: root.actionText !== ""
+      Layout.alignment: Qt.AlignVCenter
 
-    onClicked: root.actionClicked()
+      type: MMComponents.MMButton.Types.Tertiary
+      size: MMComponents.MMButton.Sizes.ExtraSmall
+      text: root.actionText
+      fontColor: __style.skyColor
+      bgndColor: __style.deepOceanColor
+
+      onClicked: root.actionClicked()
+    }
   }
 }

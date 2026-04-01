@@ -32,7 +32,7 @@ Item {
 
   property string errorMsg: ""
   property string warningMsg: ""
-  property string hintMsg: ""
+  property string infoMsg: ""
 
   property alias inputContent: contentGroup.children
 
@@ -66,7 +66,7 @@ Item {
     states: [
       State {
         name: "valid"
-        when: !shouldShowValidation || ( !warningMsg && !errorMsg )
+        when: !shouldShowValidation || ( !warningMsg && !errorMsg && !infoMsg )
       },
       State {
         name: "error"
@@ -75,6 +75,10 @@ Item {
       State {
         name: "warning"
         when: warningMsg && !errorMsg
+      },
+      State {
+        name: "information"
+        when: infoMsg
       }
     ]
 
@@ -167,38 +171,6 @@ Item {
     }
 
     Item {
-      // hint message
-
-      width: parent.width
-      height: hintMessageGroup.implicitHeight
-
-      visible: root.hintMsg !== ""
-
-      RowLayout {
-        id: hintMessageGroup
-
-        width: parent.width
-
-        MMComponents.MMIcon {
-          source: __style.infoFilledIcon
-          size: __style.icon16
-          color: __style.informativeColor
-        }
-
-        MMComponents.MMText {
-          Layout.fillWidth: true
-
-          text: root.hintMsg
-          color: __style.deepOceanColor
-          font: __style.t4
-
-          wrapMode: Text.Wrap
-          maximumLineCount: 10
-        }
-      }
-    }
-
-    Item {
       // validation messages
 
       width: parent.width
@@ -212,11 +184,15 @@ Item {
         width: parent.width
 
         MMComponents.MMIcon {
-          source: __style.errorCircleIcon
+          source: {
+            if ( root.validationState === "information" ) return __style.infoFilledIcon
+            return __style.errorCircleIcon
+          }
           size: __style.icon16
           color: {
             if ( root.validationState === "error" ) return __style.negativeColor
             if ( root.validationState === "warning" ) return __style.warningColor
+            if ( root.validationState === "information" ) return __style.informativeColor
             return __style.forestColor
           }
         }
@@ -227,11 +203,13 @@ Item {
           text: {
             if ( root.validationState === "error" ) return root.errorMsg
             if ( root.validationState === "warning" ) return root.warningMsg
+            if ( root.validationState === "information" ) return root.infoMsg
             return ""
           }
           color: {
             if ( root.validationState === "error" ) return __style.grapeColor
             if ( root.validationState === "warning" ) return __style.earthColor
+            if ( root.validationState === "information" ) return __style.deepOceanColor
             return __style.forestColor
           }
 
