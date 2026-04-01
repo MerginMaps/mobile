@@ -188,7 +188,7 @@ ScrollView {
 
       MMComponents.MMSegmentControl {
         selectedIndex: MMComponents.MMSegmentControl.Options.False
-        onSelectionChanged: function( index ) { console.log( "selected:", index ) }
+        onSelectedIndexChanged: { console.log( "selected:", selectedIndex ) }
       }
 
       MMComponents.MMSegmentControl {

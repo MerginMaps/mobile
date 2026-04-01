@@ -17,26 +17,13 @@ Item {
 
   property int selectedIndex: MMSegmentControl.Options.All
 
-  property string allText: qsTr( "All" )
-  property string trueText: qsTr( "True" )
-  property string falseText: qsTr( "False" )
-
-  signal selectionChanged( int index )
-
   implicitHeight: __style.row50
-  implicitWidth: {
-    let maxW = Math.max( allMeasure.implicitWidth, trueMeasure.implicitWidth, falseMeasure.implicitWidth )
-    return 3 * ( maxW + 2 * __style.margin20 ) + 2 * __style.margin12
-  }
-
-  MMText { id: allMeasure;   text: root.allText;   font: __style.t3; visible: false }
-  MMText { id: trueMeasure;  text: root.trueText;  font: __style.t3; visible: false }
-  MMText { id: falseMeasure; text: root.falseText; font: __style.t3; visible: false }
+  implicitWidth: 3 * ( __style.row50 + 2 * __style.margin20 ) + 2 * __style.margin12
 
   Rectangle {
     anchors.fill: parent
     radius: __style.radius12
-    color: __style.primaryColor
+    color: __style.polarColor
   }
 
   Row {
@@ -45,58 +32,62 @@ Item {
     height: parent.height - 2 * __style.margin8
 
     Repeater {
-      model: [
-        { text: root.allText,   index: MMSegmentControl.Options.All   },
-        { text: root.trueText,  index: MMSegmentControl.Options.True  },
-        { text: root.falseText, index: MMSegmentControl.Options.False }
-      ]
+      model: 3
 
       delegate: Item {
         id: segment
 
-        required property var modelData
+        required property int index
 
-        readonly property bool isSelected: root.enabled && root.selectedIndex === segment.modelData.index
-        readonly property bool isAllOption: segment.modelData.index === MMSegmentControl.Options.All
+        readonly property bool isSelected: root.enabled && root.selectedIndex === index
+        readonly property bool isAllOption: index === MMSegmentControl.Options.All
 
         width: parent.width / 3
         height: parent.height
 
+        // button background
         Rectangle {
-          anchors.fill: parent
+          anchors.fill: segment
           radius: __style.radius8
 
-          visible: segment.isSelected
+          color: segment.isSelected ? ( segment.isAllOption ? __style.mediumGreenColor : __style.positiveColor ) : __style.transparentColor
 
-          color: segment.isAllOption ? __style.mediumGreenColor : __style.positiveColor
+          border.color: ( segment.isSelected && !segment.isAllOption ) ? __style.forestColor : __style.transparentColor
+          border.width: ( segment.isSelected && !segment.isAllOption ) ? 1.0 * __dp : 0
 
-          border.color: segment.isAllOption ? __style.transparentColor : __style.forestColor
-          border.width: segment.isAllOption ? 0 : 1.0 * __dp
-        }
+          MMText {
+            anchors.centerIn: parent
 
-        MMText {
-          anchors.centerIn: parent
-
-          text: segment.modelData.text
-          font: {
-            // bold only if selected
-            if ( segment.isSelected ) return __style.t3
-            return __style.p5
-          }
-          color: {
-            if ( !root.enabled ) return __style.darkGreenColor
-            if ( segment.isSelected ) return __style.forestColor
-            return __style.nightColor
+            text: {
+              switch ( segment.index ) {
+                // 0 for All
+                case MMSegmentControl.Options.All: return qsTr( "All" )
+                // 1 for True
+                case MMSegmentControl.Options.True: return qsTr( "True" )
+                // 2 for False
+                case MMSegmentControl.Options.False: return qsTr( "False" )
+              }
+              return ""
+            }
+            font: {
+              // bold only if selected
+              if ( segment.isSelected ) return __style.t3
+              return __style.p5
+            }
+            color: {
+              if ( !root.enabled ) return __style.mediumGreyColor
+              if ( segment.isSelected ) return __style.forestColor
+              return __style.nightColor
+            }
           }
         }
 
         MouseArea {
-          anchors.fill: parent
+          anchors.fill: segment
           enabled: root.enabled
           onClicked: {
-            if ( root.selectedIndex !== segment.modelData.index ) {
-              root.selectedIndex = segment.modelData.index
-              root.selectionChanged( segment.modelData.index )
+            if ( root.selectedIndex !== segment.index ) {
+              root.selectedIndex = segment.index
             }
           }
         }
