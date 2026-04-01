@@ -13,8 +13,6 @@
 #include <QVariantMap>
 #include <QVariantList>
 
-#include "qgsrelation.h"
-
 class QgsVectorLayer;
 class QgsMapLayer;
 
@@ -202,11 +200,6 @@ class FilterController : public QObject
      * @return QVariantList of maps with keys: layerId, layerName, layer (QgsVectorLayer*)
      */
     Q_INVOKABLE QVariantList getVectorLayers() const;
-
-    /**
-     * @brief Returns true if the referencing layer of the given relation has active filters applied
-     */
-    Q_INVOKABLE bool isReferencingLayerFiltered( const QgsRelation &relation ) const;
 
     /**
      * @brief Discards pending filter changes, reverting to the last applied state.

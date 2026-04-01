@@ -868,11 +868,3 @@ QStringList FilterController::lookupValueRelationTexts( const QVariantMap &confi
 
   return texts;
 }
-
-bool FilterController::isReferencingLayerFiltered( const QgsRelation &relation ) const
-{
-  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( relation.referencingLayer() );
-  if ( !layer )
-    return false;
-  return !layer->subsetString().isEmpty();
-}
