@@ -79,7 +79,7 @@ Drawer {
         MMFilters.MMFilterBanner {
           id: filterBanner
 
-          visible: globalFilterController.hasActiveFilters
+          visible: __activeProject.filterController.hasActiveFilters
 
           width: parent.width
           text: qsTr( "Some features may be hidden by active filters" )

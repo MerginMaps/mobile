@@ -30,7 +30,7 @@ MMPrivateComponents.MMBaseInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  hintMsg: root._fieldAssociatedRelation && globalFilterController.hasActiveFilters
+  hintMsg: root._fieldAssociatedRelation && __activeProject.filterController.hasActiveFilters
            ? qsTr( "Some features may be hidden by active filters" )
            : ""
 

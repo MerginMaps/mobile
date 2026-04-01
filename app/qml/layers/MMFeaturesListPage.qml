@@ -53,47 +53,15 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      visible: root.selectedLayer && globalFilterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
+      visible: root.selectedLayer && __activeProject.filterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
 
-      color: __style.sandColor
-      border.width: 1 * __dp
-      border.color: __style.sunsetColor
+      text: qsTr("Active filters applied")
+      actionText: qsTr("Reset")
 
-      Row {
-        id: filterRow
-
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: __style.margin12
-        anchors.rightMargin: __style.margin12
-
-        spacing: __style.margin4
-
-        MMComponents.MMText {
-          width: parent.width - resetButton.width - parent.spacing
-          text: qsTr("Some features are hidden by a filter.")
-          font: __style.p6
-          color: __style.nightColor
-          anchors.verticalCenter: parent.verticalCenter
-          wrapMode: Text.Wrap
-        }
-
-        MMComponents.MMButton {
-          id: resetButton
-
-          type: MMButton.Types.Tertiary
-          text: qsTr("Reset")
-          fontColor: __style.earthColor
-          size: MMButton.Sizes.Small
-          anchors.verticalCenter: parent.verticalCenter
-
-          onClicked: {
-            __activeProject.filterController.clearAllFilters()
-            __activeProject.filterController.applyFiltersToAllLayers()
-            featuresModel.reloadFeatures()
-          }
-        }
+      onActionClicked: {
+        __activeProject.filterController.clearAllFilters()
+        __activeProject.filterController.applyFiltersToAllLayers()
+        featuresModel.reloadFeatures()
       }
     }
 
