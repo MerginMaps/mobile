@@ -30,6 +30,10 @@ MMPrivateComponents.MMBaseInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
+  infoMsg: root._fieldAssociatedRelation && __activeProject.filterController.hasActiveFilters
+           ? qsTr( "Some features may be hidden by active filters" )
+           : ""
+
   inputContent: MMComponents.MMListView {
     id: rowView
 
