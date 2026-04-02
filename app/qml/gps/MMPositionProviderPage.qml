@@ -76,8 +76,19 @@ MMComponents.MMPage {
           }
         }
 
-        text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
-        secondaryText: listdelegate.isActive ? PositionKit.positionProvider.stateMessage : model.ProviderDescription
+        text: {
+          if ( model.ProviderName ) return model.ProviderName
+          if ( model.ProviderType === "external_ip" ) return qsTr( "Network device" )
+          return qsTr( "Unknown device" )
+        }
+        secondaryText: {
+          if ( listdelegate.isActive ) {
+            if ( model.ProviderType === "external_ip" )
+              return PositionKit.positionProvider.stateMessage + " - " + PositionKit.positionProvider.getIpAddress()
+            return PositionKit.positionProvider.stateMessage
+          }
+          return model.ProviderDescription
+        }
 
         rightContent: MMComponents.MMRoundButton {
           visible: model.ProviderType !== "internal"
