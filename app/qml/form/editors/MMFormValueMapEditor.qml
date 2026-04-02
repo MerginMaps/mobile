@@ -12,16 +12,26 @@ import QtQuick
 import "../../components" as MMComponents
 
 /*
- * Dropdown (value map) editor for QGIS Attribute Form
+ * Value-map editor for QGIS Attribute Form.
+ *
+ * When the field has 4 or fewer options the editor renders all options as
+ * inline chip buttons (MMFormChipEditor), so the user can select a value
+ * with a single tap without opening a drawer.
+ *
+ * When there are 5 or more options the original dropdown drawer
+ * (MMFormComboboxBaseEditor + MMListMultiselectDrawer) is used unchanged.
+ *
  * Requires various global properties set to function, see featureform Loader section.
- * These properties are injected here via 'fieldXYZ' properties and captured with underscore `_`.
+ * These properties are injected here via 'fieldXYZ' properties and captured with
+ * underscore `_`.
  *
  * Should be used only within feature form.
- * See MMFormComboboxBaseEditor for more info.
  */
 
-MMFormComboboxBaseEditor {
+Item {
   id: root
+
+  // === Properties injected by MMFormPage ===
 
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
@@ -39,127 +49,205 @@ MMFormComboboxBaseEditor {
   property bool _fieldRememberValueSupported: parent.fieldRememberValueSupported
   property bool _fieldRememberValueState: parent.fieldRememberValueState
 
-  property var preselectedItems: []
+  // === Signals expected by MMFormPage ===
 
   signal editorValueChanged( var newValue, bool isNull )
   signal rememberValueBoxClicked( bool state )
 
-  title: _fieldShouldShowTitle ? _fieldTitle : ""
+  // === Layout ===
 
-  placeholderText: _fieldHasMixedValues ? _fieldValue : ""
+  implicitHeight: editorLoader.item ? editorLoader.item.implicitHeight : 0
 
-  errorMsg: _fieldErrorMessage
-  warningMsg: _fieldWarningMessage
+  // === Internal: shared value-map model ===
 
-  readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
-  shouldShowValidation: !_fieldFormIsReadOnly
+  // Parsed once from _fieldConfig; both chip and dropdown sub-editors read from it.
+  ListModel { id: listModel }
 
-  hasCheckbox: _fieldRememberValueSupported
-  checkboxChecked: _fieldRememberValueState
+  // Tracks whether the model has been populated so we can choose the right sub-editor.
+  property bool _modelReady: false
 
-  onCheckboxCheckedChanged: {
-    root.rememberValueBoxClicked( checkboxChecked )
+  // Initial text displayed in the dropdown (combobox mode only).
+  property string _displayText: ""
+
+  // Initial pre-selected items list passed to the drawer (combobox mode only).
+  property var _preselectedItems: []
+
+  // === Sub-editor loader ===
+
+  Loader {
+    id: editorLoader
+
+    width: parent.width
+
+    // sourceComponent remains null until Component.onCompleted has populated the
+    // model; this prevents the Loader from briefly showing the wrong variant.
+    sourceComponent: root._modelReady
+      ? ( listModel.count <= 4 ? chipEditorComponent : comboboxEditorComponent )
+      : null
   }
 
-  on_FieldValueChanged: {
+  // Forward signals from whichever sub-editor is active.
+  Connections {
+    target: editorLoader.item
+    ignoreUnknownSignals: true
 
-    if ( _fieldValueIsNull || _fieldValue === undefined ) {
-      text = ""
-      preselectedItems = []
+    function onEditorValueChanged( newValue, isNull ) {
+      root.editorValueChanged( newValue, isNull )
     }
 
-    // let's find the new value in the model
-    for ( let i = 0; i < listModel.count; i++ ) {
-      let item_i = listModel.get( i )
-
-      if ( _fieldValue && _fieldValue.toString() === item_i.value.toString() ) {
-        text = item_i.text
-        preselectedItems = [item_i.value]
-      }
+    function onRememberValueBoxClicked( state ) {
+      root.rememberValueBoxClicked( state )
     }
   }
 
-  dropdownLoader.sourceComponent: Component {
+  // === Chip editor (≤ 4 options) ===
 
-    MMComponents.MMListMultiselectDrawer {
+  Component {
+    id: chipEditorComponent
 
-      drawerHeader.title: root._fieldTitle
+    MMFormChipEditor {
 
-      emptyStateDelegate: Item {
-        width: parent.width
-        height: noItemsText.implicitHeight + __style.margin40
-      
-        MMComponents.MMText {
-          id: noItemsText
-          text: qsTr( "No items" )
-          anchors.centerIn: parent
-        }
-      }
+      // Bind all form-field properties from the wrapper.
+      _fieldValue:                  root._fieldValue
+      _fieldConfig:                 root._fieldConfig
+      _fieldValueIsNull:            root._fieldValueIsNull
+      _fieldHasMixedValues:         root._fieldHasMixedValues
+      _fieldShouldShowTitle:        root._fieldShouldShowTitle
+      _fieldFormIsReadOnly:         root._fieldFormIsReadOnly
+      _fieldIsEditable:             root._fieldIsEditable
+      _fieldTitle:                  root._fieldTitle
+      _fieldErrorMessage:           root._fieldErrorMessage
+      _fieldWarningMessage:         root._fieldWarningMessage
+      _fieldRememberValueSupported: root._fieldRememberValueSupported
+      _fieldRememberValueState:     root._fieldRememberValueState
+    }
+  }
 
-      list.model: listModel
+  // === Combobox / dropdown editor (> 4 options) ===
 
-      selected: root.preselectedItems
+  Component {
+    id: comboboxEditorComponent
 
-      showFullScreen: false
-      multiSelect: false
-      withSearch: false
+    MMFormComboboxBaseEditor {
+      id: combobox
 
-      onClosed: dropdownLoader.active = false
+      title:   root._fieldShouldShowTitle ? root._fieldTitle : ""
 
-      onSelectionFinished: function ( selectedItems ) {
-        if ( !selectedItems || ( Array.isArray( selectedItems ) && selectedItems.length !== 1 ) ) {
-          // should not happen...
-          __inputUtils.log( "Value map", root._fieldTitle + " received unexpected values" )
+      placeholderText: root._fieldHasMixedValues ? root._fieldValue : ""
+
+      errorMsg:   root._fieldErrorMessage
+      warningMsg: root._fieldWarningMessage
+
+      readOnly:             root._fieldFormIsReadOnly || !root._fieldIsEditable
+      shouldShowValidation: !root._fieldFormIsReadOnly
+
+      hasCheckbox:    root._fieldRememberValueSupported
+      checkboxChecked: root._fieldRememberValueState
+
+      // Initialise displayed text from the pre-computed value in the wrapper.
+      text: root._displayText
+
+      onCheckboxCheckedChanged: root.rememberValueBoxClicked( checkboxChecked )
+
+      // Watch for field-value changes while the combobox is mounted.
+      property var _watchValue: root._fieldValue
+      on_WatchValueChanged: {
+        if ( root._fieldValueIsNull || root._fieldValue === undefined ) {
+          combobox.text = ""
+          root._preselectedItems = []
           return
         }
-
-        root.editorValueChanged( selectedItems[0], selectedItems[0] === null )
+        for ( let i = 0; i < listModel.count; i++ ) {
+          let item = listModel.get( i )
+          if ( root._fieldValue.toString() === item.value.toString() ) {
+            combobox.text = item.text
+            root._preselectedItems = [ item.value ]
+            break
+          }
+        }
       }
 
-      Component.onCompleted: open()
+      dropdownLoader.sourceComponent: Component {
+
+        MMComponents.MMListMultiselectDrawer {
+
+          drawerHeader.title: root._fieldTitle
+
+          emptyStateDelegate: Item {
+            width: parent.width
+            height: noItemsText.implicitHeight + __style.margin40
+
+            MMComponents.MMText {
+              id: noItemsText
+              text: qsTr( "No items" )
+              anchors.centerIn: parent
+            }
+          }
+
+          list.model: listModel
+
+          selected: root._preselectedItems
+
+          showFullScreen: false
+          multiSelect: false
+          withSearch: false
+
+          onClosed: combobox.dropdownLoader.active = false
+
+          onSelectionFinished: function ( selectedItems ) {
+            if ( !selectedItems || ( Array.isArray( selectedItems ) && selectedItems.length !== 1 ) ) {
+              __inputUtils.log( "Value map", root._fieldTitle + " received unexpected values" )
+              return
+            }
+
+            root.editorValueChanged( selectedItems[0], selectedItems[0] === null )
+          }
+
+          Component.onCompleted: open()
+        }
+      }
     }
   }
 
-  ListModel { id: listModel }
+  // === Initialisation ===
 
   Component.onCompleted: {
 
-    //
-    // Parses value map options from config into ListModel.
-    // This functionality should be moved to cpp model in order to support search.
-    //
-
     if ( !root._fieldConfig['map'] ) {
       __inputUtils.log( "Value map", root._fieldTitle + " config is not configured properly" )
+      root._modelReady = true
+      return
     }
 
     let config = root._fieldConfig['map']
 
-    if ( config.length )
-    {
-      //it's a list (>=QGIS3.0)
-      for ( var i = 0; i < config.length; i++ )
-      {
+    if ( config.length ) {
+      // QGIS ≥ 3.0 list format
+      for ( let i = 0; i < config.length; i++ ) {
         let modelItem = {
-          text: Object.keys( config[i] )[0],
+          text:  Object.keys( config[i] )[0],
           value: Object.values( config[i] )[0]
         }
 
         listModel.append( modelItem )
 
-        // Is this the current item? If so, set the text
-        if ( !root._fieldValueIsNull ) {
+        // Pre-compute display text and pre-selected list for the combobox variant.
+        if ( !root._fieldValueIsNull && root._fieldValue !== undefined ) {
           if ( root._fieldValue.toString() === modelItem.value.toString() ) {
-            root.text = modelItem.text
-            root.preselectedItems = [modelItem.value]
+            root._displayText = modelItem.text
+            root._preselectedItems = [ modelItem.value ]
           }
         }
       }
     }
-    else
-    {
-      //it's a map (<=QGIS2.18) <--- sorry, dropped support for that in 2024.1.0
+    else {
+      // QGIS ≤ 2.18 map format — no longer supported
       __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (map, <=QGIS2.18)" )
     }
+
+    // Setting _modelReady = true triggers the Loader to choose a sub-editor.
+    // This happens synchronously within Component.onCompleted, before the first
+    // frame is painted, so there is no visible flicker between the two variants.
+    root._modelReady = true
   }
 }
