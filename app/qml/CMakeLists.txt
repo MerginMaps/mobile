@@ -120,9 +120,11 @@ set(MM_QML
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
     gps/MMAddPositionProviderDrawer.qml
-    gps/MMBluetoothConnectionDrawer.qml
+    gps/MMExternalProviderConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
+    gps/MMNetworkProviderDrawer.qml
     gps/MMPositionProviderPage.qml
+    gps/MMProviderTypeDrawer.qml
     gps/MMStakeoutDrawer.qml
     gps/MMMeasureDrawer.qml
     gps/MMSelectionDrawer.qml
