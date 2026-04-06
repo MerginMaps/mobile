@@ -1610,21 +1610,21 @@ ApplicationWindow {
   Dialog {
     id: createDatabaseDialog
     title: "Crear nueva base de datos"
-    width: 390
+    width: 300
     height: 220
     modal: true
     footer: DialogButtonBox {
             Button {
                 text: "Aceptar"
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                implicitWidth: 20 // Tamaño fijo
+                implicitWidth: 5 // Tamaño fijo
                 implicitHeight: 20
                 font.pointSize: 8
             }
             Button {
                 text: "Cancelar"
                 DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
-                implicitWidth: 20
+                implicitWidth: 5
                 implicitHeight: 20
                 font.pointSize: 8
             }
@@ -1676,7 +1676,7 @@ ApplicationWindow {
 
              anchors.fill: parent
              width: parent.width * 0.8 // 80% del ancho del padre
-             font.pixelSize: 10
+             font.pixelSize: 8
 
              placeholderText: "Ej: miproyecto"
              Layout.fillWidth: true
@@ -1703,7 +1703,7 @@ ApplicationWindow {
           id: dbPathInput
           anchors.fill: parent
           width: parent.width * 0.8 // 80% del ancho del padre
-          font.pixelSize: 10
+          font.pixelSize: 8
          // font.pointSize: 8
           placeholderText: "Ej: E:/Mis Documentos/"
           Layout.fillWidth: true
