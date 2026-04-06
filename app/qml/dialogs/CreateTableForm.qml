@@ -5,7 +5,7 @@ import QtQuick.Layouts
 Item {
     id: root
     width: 900
-    height: 700
+    height: 220
 
     // =====================================================================
     // PROPIEDADES EXPUESTAS (ALIAS)
@@ -42,6 +42,7 @@ Item {
             title: "Información de Base de Datos"
             Layout.fillWidth: true
             Layout.preferredHeight: 100
+            font.pointSize: 8
 
             ColumnLayout {
                 anchors.fill: parent
@@ -58,6 +59,7 @@ Item {
                         Text {
                             text: "Nombre de BD:"
                             font.bold: true
+                            font.pointSize: 8
                             color: "#333"
                         }
                         TextField {
@@ -65,6 +67,7 @@ Item {
                             placeholderText: "Ej: miproyecto"
                             readOnly: true
                             Layout.fillWidth: true
+                            font.pointSize: 8
                             background: Rectangle {
                                 border.color: "#ddd"
                                 border.width: 1
@@ -80,6 +83,7 @@ Item {
 
                         Text {
                             text: "Ubicación:"
+                            font.pointSize: 8
                             font.bold: true
                             color: "#333"
                         }
@@ -87,6 +91,7 @@ Item {
                             id: dbPathField
                             placeholderText: "Ruta de almacenamiento"
                             readOnly: true
+                            font.pointSize: 8
                             Layout.fillWidth: true
                             background: Rectangle {
                                 border.color: "#ddd"
@@ -114,28 +119,30 @@ Item {
             title: "Nombre de la Tabla"
             Layout.fillWidth: true
             Layout.preferredHeight: 80
+            font.pointSize: 8
 
             RowLayout {
                 anchors.fill: parent
-                anchors.margins: 10
-                spacing: 10
+                anchors.margins: 8
+                spacing: 0
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 5
+                    spacing: 0
 
                     Text {
                         text: "Nombre de la tabla (solo letras, números, guiones bajos):"
-                        font.pointSize: 10
+                        font.pointSize: 8
                         color: "#555"
                     }
                     TextField {
                         id: tableNameField
                         placeholderText: "Ej: usuarios, productos, clientes"
                         Layout.fillWidth: true
+                        font.pointSize: 8
                         background: Rectangle {
                             border.color: tableNameField.activeFocus ? "#4CAF50" : "#ddd"
-                            border.width: 2
+                            border.width: 1
                             radius: 4
                             color: "#fff"
                         }
@@ -152,6 +159,7 @@ Item {
             title: "Definición de Campos"
             Layout.fillWidth: true
             Layout.fillHeight: true
+            font.pointSize: 8
 
             ColumnLayout {
                 anchors.fill: parent
@@ -172,10 +180,10 @@ Item {
                         anchors.margins: 8
                         spacing: 10
 
-                        Text { text: "Nombre del Campo"; font.bold: true; Layout.preferredWidth: 200; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Tipo de Dato"; font.bold: true; Layout.preferredWidth: 120; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Tamaño (solo TEXT)"; font.bold: true; Layout.preferredWidth: 130; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Acciones"; font.bold: true; Layout.fillWidth: true; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
+                        Text { text: "Nombre del Campo"; font.pointSize: 8; font.bold: true; Layout.preferredWidth: 200; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
+                        Text { text: "Tipo de Dato"; font.pointSize: 8; font.bold: true; Layout.preferredWidth: 120; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
+                        Text { text: "Tamaño (solo TEXT)"; font.pointSize: 8; font.bold: true; Layout.preferredWidth: 130; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
+                        Text { text: "Acciones"; font.pointSize: 8; font.bold: true; Layout.fillWidth: true; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
                     }
                 }
 
@@ -287,7 +295,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         font.bold: true
-                        font.pointSize: 11
+                        font.pointSize: 8
                     }
                 }
             }

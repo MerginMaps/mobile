@@ -6,10 +6,27 @@ import QtQuick.Dialogs
 Dialog {
     id: createTableDialog
     title: "Crear Nueva Tabla"
-    width: 900
+    width: 700
     height: 700
     modal: true
-    standardButtons: Dialog.Cancel | Dialog.Ok
+//    standardButtons: Dialog.Cancel | Dialog.Ok
+    footer: DialogButtonBox {
+            Button {
+                text: "Aceptar"
+                DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                implicitWidth: 5 // Tamaño fijo
+                implicitHeight: 20
+                font.pointSize: 8
+            }
+            Button {
+                text: "Cancelar"
+                DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
+                implicitWidth: 5
+                implicitHeight: 20
+                font.pointSize: 8
+            }
+        }
+
 
     // Propiedades expuestas
     property var dbManager: null
