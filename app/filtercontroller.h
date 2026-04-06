@@ -69,6 +69,7 @@ class FilterController : public QObject
 
     bool hasActiveFilters() const;
     QStringList filteredLayerIds() const;
+
     /**
      * @brief Sets a filter for a specific field on a layer
      * @param layerId The layer ID
