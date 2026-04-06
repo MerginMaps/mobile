@@ -230,7 +230,7 @@ ApplicationWindow {
       stateManager.state = "map"
 
       // Luego abrimos el selector de archivos
-      projectFileDialog.open()
+      //projectFileDialog.open()
 
       // El resto de tu lógica de botones...
       contentItem.Keys.released.connect( function( event ) {
@@ -457,6 +457,16 @@ ApplicationWindow {
               createDatabaseDialog.open()
             }
           }
+
+      MMToolbarButton {
+            text: qsTr("Tablas")
+            iconSource: __style.addTableIcon
+            visible: __activeProject.projectRole !== "reader"
+            onClicked: {
+              createTableDialog.open()
+            }
+          }
+
 
       MMToolbarButton {
         id: syncButton
