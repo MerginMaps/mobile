@@ -53,14 +53,14 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      visible: root.selectedLayer && __activeProject.filterController.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
+      visible: root.selectedLayer && __activeProject.filterController?.filteredLayerIds.indexOf(root.selectedLayer.id) >= 0
 
       text: qsTr("Active filters applied")
       actionText: qsTr("Reset")
 
       onActionClicked: {
-        __activeProject.filterController.clearAllFilters()
-        __activeProject.filterController.applyFiltersToAllLayers()
+        __activeProject.filterController?.clearAllFilters()
+        __activeProject.filterController?.applyFiltersToAllLayers()
         featuresModel.reloadFeatures()
       }
     }
