@@ -634,4 +634,5 @@ qt_add_qml_module(
   SOURCES dbmanager.h
   SOURCES dbmanager.cpp
   SOURCES dbmanager.cpp
+  QML_FILES qml/dialogs/CreateTableForm.qml
 )
