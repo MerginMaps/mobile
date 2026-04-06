@@ -163,6 +163,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl stopIcon READ stopIcon CONSTANT )
     Q_PROPERTY( QUrl subscriptionsIcon READ subscriptionsIcon CONSTANT )
     Q_PROPERTY( QUrl syncIcon READ syncIcon CONSTANT )
+    Q_PROPERTY( QUrl addTableIcon READ addTableIcon CONSTANT )
     Q_PROPERTY( QUrl syncGreenIcon READ syncGreenIcon CONSTANT )
     Q_PROPERTY( QUrl teacherIcon READ teacherIcon CONSTANT )
     Q_PROPERTY( QUrl telecommunicationIcon READ telecommunicationIcon CONSTANT )
@@ -479,6 +480,7 @@ class MMStyle: public QObject
     QUrl subscriptionsIcon() const {return QUrl( "qrc:/Subscriptions.svg" );}
     QUrl syncIcon() const {return QUrl( "qrc:/Sync.svg" );}
     QUrl syncGreenIcon() const {return QUrl( "qrc:/SyncGreen.svg" );}
+    QUrl addTableIcon() const {return QUrl( "qrc:/addTable.svg" );}
     QUrl teacherIcon() const {return QUrl( "qrc:/Teacher.svg" );}
     QUrl telecommunicationIcon() const {return QUrl( "qrc:/Telecommunication.svg" );}
     QUrl termsIcon() const {return QUrl( "qrc:/Terms.svg" );}

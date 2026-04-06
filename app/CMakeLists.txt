@@ -90,6 +90,7 @@ set(MM_SRCS
     variablesmanager.cpp
     workspacesmodel.cpp
     workspacesproxymodel.cpp
+    dbmanager.cpp
 )
 
 set(MM_HDRS
@@ -182,6 +183,7 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
+    dbmanager.h
 )
 
 if (NOT WIN32)
@@ -628,4 +630,8 @@ qt_add_qml_module(
   VERSION 1.0
   QML_FILES ${MM_QML_SRCS}
   RESOURCE_PREFIX /com.merginmaps/imports
+  QML_FILES qml/dialogs/CreateTableDialog.qml
+  SOURCES dbmanager.h
+  SOURCES dbmanager.cpp
+  SOURCES dbmanager.cpp
 )

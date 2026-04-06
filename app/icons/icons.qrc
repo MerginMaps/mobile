@@ -103,5 +103,6 @@
         <file>Measure.svg</file>
         <file>CloseShape.svg</file>
         <file>RemoteImageLoadError.svg</file>
+        <file>addTable.svg</file>
     </qresource>
 </RCC>

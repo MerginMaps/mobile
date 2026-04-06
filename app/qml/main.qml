@@ -16,6 +16,8 @@ import QtPositioning // para GPS
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
+import QtQuick.Window
+
 import mm 1.0 as MM
 import MMInput
 
@@ -253,6 +255,15 @@ ApplicationWindow {
  Hereda de un tipo personalizado (MMMapController) que seguramente envuelve la lógica de QGIS y el renderizado del mapa.
 */
 
+  // Diálogo para crear nuevas tablas // 2026
+  CreateTableDialog {
+      id: createTableDialog
+      parent: window
+
+      // Ahora usa el objeto global registrado en QML
+      dbManager: __dbManager
+  }
+
   MMMapController {
     id: map
     // Su altura es window.height - mapToolbar.height, dejando espacio para la barra de herramientas inferior.
@@ -439,6 +450,15 @@ ApplicationWindow {
     model: ObjectModel {
 
       MMToolbarButton {
+            text: qsTr("Base de Datos")
+            iconSource: __style.addTableIcon
+            visible: __activeProject.projectRole !== "reader"
+            onClicked: {
+              createDatabaseDialog.open()
+            }
+          }
+
+      MMToolbarButton {
         id: syncButton
 
         text: qsTr("Sync")
@@ -450,7 +470,8 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
-              text: qsTr("Abrir Archivo") // Cambié el texto
+              id: addTable
+              text: qsTr("Abrir Archivo") // Cambié el texto // traducir
               iconSource: __style.homeIcon
               onClicked: {
                 projectFileDialog.open() // Ahora este botón abre el explorador
@@ -1564,6 +1585,103 @@ ApplicationWindow {
         stateManager.state = "map"
       }
     }
+
+  // =====================================================================
+  // DIÁLOGO: CREAR BD
+  // =====================================================================
+  Dialog {
+    id: createDatabaseDialog
+    title: "Crear nueva base de datos"
+    width: 600
+    height: 300
+    modal: true
+    standardButtons: Dialog.Cancel | Dialog.Ok
+
+    onAccepted: {
+      if (dbNameInput.text.trim() === "") {
+        errorMessage.text = "El nombre no puede estar vacío"
+        return
+      }
+
+      if (__dbManager.initializeDatabase(dbNameInput.text.trim(), dbPathInput.text.trim())) {
+        window.currentDatabaseName = dbNameInput.text.trim()
+          console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
+        window.currentDatabasePath = __dbManager.databasePath
+          console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
+        successMessage.text = "✓ Base de datos creada en:\n" + __dbManager.databasePath
+        dbNameInput.text = ""
+        dbPathInput.text = ""
+        errorMessage.text = ""
+        successTimer.start()
+      } else {
+        errorMessage.text = "Error: " + __dbManager.getLastError()
+        successMessage.text = ""
+      }
+    }
+
+    ColumnLayout {
+      anchors.fill: parent
+      anchors.margins: 15
+      spacing: 12
+
+      ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 5
+
+        Text {
+          text: "Nombre de la Base de Datos:"
+          font.bold: true
+        }
+        TextField {
+          id: dbNameInput
+          placeholderText: "Ej: miproyecto"
+          Layout.fillWidth: true
+        }
+      }
+
+      ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 5
+
+        Text {
+          text: "Ubicación (opcional, Enter para predeterminada):"
+          font.bold: true
+        }
+        TextField {
+          id: dbPathInput
+          placeholderText: "Ej: E:/Mis Documentos/"
+          Layout.fillWidth: true
+        }
+      }
+
+      Text {
+        id: successMessage
+        text: ""
+        color: "#4CAF50"
+        visible: text !== ""
+        wrapMode: Text.Wrap
+      }
+
+      Text {
+        id: errorMessage
+        text: ""
+        color: "#d32f2f"
+        visible: text !== ""
+        wrapMode: Text.Wrap
+      }
+
+      Item { Layout.fillHeight: true }
+    }
+
+    Timer {
+      id: successTimer
+      interval: 2000
+      onTriggered: {
+        createDatabaseDialog.close()
+      }
+    }
+  }
+
 }
 
 
