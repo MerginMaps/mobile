@@ -262,13 +262,22 @@ ApplicationWindow {
 
       // Ahora usa el objeto global registrado en QML
       dbManager: __dbManager
+      currentDatabaseName: __dbManager.databaseName
+      currentDatabasePath: __dbManager.databasePath
 
       onOpened: {
         stateManager.state = "misc"
+        console.log("Se abre ventana de crear tabla");
+      // window.currentDatabaseName = __dbManager.databaseName
+       //   console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
+       // window.currentDatabasePath = __dbManager.databasePath
+       //   console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
+
       }
 
       onClosed: {
         stateManager.state = "map"
+        console.log("Se cierra ventana de crear tabla");
       }
   }
 
