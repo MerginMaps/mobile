@@ -63,22 +63,12 @@ class FilterController : public QObject
      */
     Q_PROPERTY( QStringList filteredLayerIds READ filteredLayerIds NOTIFY filtersChanged )
 
-    /**
-     * Whether filters are currently enabled (applied to the map).
-     * When false, filters are defined but not applied.
-     */
-    Q_PROPERTY( bool filtersEnabled READ filtersEnabled WRITE setFiltersEnabled NOTIFY filtersEnabledChanged )
-
   public:
     explicit FilterController( QObject *parent = nullptr );
     ~FilterController() override = default;
 
     bool hasActiveFilters() const;
     QStringList filteredLayerIds() const;
-
-    bool filtersEnabled() const;
-    void setFiltersEnabled( bool enabled );
-
     /**
      * @brief Sets a filter for a specific field on a layer
      * @param layerId The layer ID
@@ -220,7 +210,6 @@ class FilterController : public QObject
     void filtersChanged();
     void hasActiveFiltersChanged();
     void layerFilterChanged( const QString &layerId );
-    void filtersEnabledChanged();
 
   private:
     QString buildFieldExpression( const FieldFilter &filter ) const;
@@ -234,8 +223,6 @@ class FilterController : public QObject
 
     // Applied state, updated only when the user confirms via "Show results"
     QMap<QString, QMap<QString, FieldFilter>> mAppliedFilters;
-
-    bool mFiltersEnabled = true;
 };
 
 #endif // FILTERCONTROLLER_H
