@@ -190,10 +190,10 @@ ApplicationWindow {
       } )
     }
 
-  // Diálogo para crear nuevas tablas // 2026
+//   Diálogo para crear nuevas tablas // 2026
   CreateTableDialog {
       id: createTableDialog
-      parent: window
+     parent: window
 
       // Ahora usa el objeto global registrado en QML
       dbManager: __dbManager
@@ -354,6 +354,16 @@ ApplicationWindow {
               createDatabaseDialog.open()
             }
           }
+
+      MMToolbarButton {
+            text: qsTr("Agregar tablas")
+            iconSource: __style.addTableIcon
+            visible: __activeProject.projectRole !== "reader"
+            onClicked: {
+              createTableDialog.open()
+            }
+          }
+
 
       MMToolbarButton {
         id: syncButton
