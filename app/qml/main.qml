@@ -230,7 +230,7 @@ ApplicationWindow {
       stateManager.state = "map"
 
       // Luego abrimos el selector de archivos
-      projectFileDialog.open()
+     // projectFileDialog.open()
 
       // El resto de tu lógica de botones...
       contentItem.Keys.released.connect( function( event ) {
