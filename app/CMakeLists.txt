@@ -312,6 +312,9 @@ qt_add_executable(
   ${MM_SRCS}
   ${MM_HDRS}
   main.cpp
+  # Database Manager
+  core/dbmanager.h
+  core/dbmanager.cpp
 )
 
 set_target_properties(MerginMaps PROPERTIES WIN32_EXECUTABLE TRUE)
@@ -635,4 +638,5 @@ qt_add_qml_module(
   SOURCES dbmanager.cpp
   SOURCES dbmanager.cpp
   QML_FILES qml/dialogs/CreateTableForm.qml
+  QML_FILES qml/dialogs/DatabaseManagerWindow.qml
 )
