@@ -39,3 +39,6 @@ CMakeFiles/cmake.check_cache
 qtcsettings.cmake
 vcpkg-dependencies/toolchain.cmake
 CMakeCache.txt
+android/assets
+vcpkg_installed
+

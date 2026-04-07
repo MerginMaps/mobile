@@ -17,9 +17,9 @@
 #include <QNetworkReply>
 #include <QSysInfo>
 
-const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
+const QString helpRoot = QStringLiteral( "https://gaia.inegi.org.mx/mdm6" );
 const QString helpDeskMail = QStringLiteral( "support@merginmaps.com" );
-const QString mmWeb = QStringLiteral( "https://merginmaps.com" );
+const QString mmWeb = QStringLiteral( "https://gaia.inegi.org.mx/mdm6" );
 const QString changelogRss = QStringLiteral( "https://wishlist.merginmaps.com/rss/changelog.xml" );
 
 const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
@@ -216,18 +216,18 @@ QString InputHelp::fullLog( const bool isHtml ) const
 QVector<QString> InputHelp::logHeader( const bool isHtml ) const
 {
   QVector<QString> retLines;
-  retLines.push_back( QStringLiteral( "Mergin Maps App: %1 - %2 (%3)" ).arg( CoreUtils::appVersion(), InputUtils::appPlatform(), CoreUtils::appVersionCode() ) );
+  retLines.push_back( QStringLiteral( "MDM Móvil App: %1 - %2 (%3)" ).arg( CoreUtils::appVersion(), InputUtils::appPlatform(), CoreUtils::appVersionCode() ) );
   retLines.push_back( QStringLiteral( "Device UUID: %1" ).arg( CoreUtils::deviceUuid() ) );
   retLines.push_back( QStringLiteral( "Data Dir: %1" ).arg( InputUtils::appDataDir() ) );
   retLines.push_back( QStringLiteral( "System: %1" ).arg( QSysInfo::prettyProductName() ) );
   retLines.push_back( QStringLiteral( "CPU Architecture: %1" ).arg( QSysInfo::currentCpuArchitecture() ) );
   retLines.push_back( QStringLiteral( "Device Model: %1" ).arg( InputUtils::getDeviceModel() ) );
   retLines.push_back( QStringLiteral( "Device Manufacturer: %1" ).arg( InputUtils::getManufacturer() ) );
-  retLines.push_back( QStringLiteral( "Mergin URL: %1" ).arg( mMerginApi->apiRoot() ) );
-  retLines.push_back( QStringLiteral( "Mergin User: %1" ).arg( mMerginApi->userInfo()->username() ) );
+  retLines.push_back( QStringLiteral( "MDM Móvil URL: %1" ).arg( mMerginApi->apiRoot() ) );
+  retLines.push_back( QStringLiteral( "MDM Móvil User: %1" ).arg( mMerginApi->userInfo()->username() ) );
   if ( !mMerginApi->userInfo()->email().isEmpty() )
   {
-    retLines.push_back( QStringLiteral( "Mergin Data: %1/%2" )
+    retLines.push_back( QStringLiteral( "MDM Móvil Data: %1/%2" )
                         .arg( InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->diskUsage() ), InputUtils::bytesToHumanSize( mMerginApi->workspaceInfo()->storageLimit() ) ) );
     retLines.push_back( QStringLiteral( "Workspace Name: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceName() ) );
     retLines.push_back( QStringLiteral( "Workspace ID: %1" ).arg( mMerginApi->userInfo()->activeWorkspaceId() ) );

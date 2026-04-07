@@ -12,7 +12,7 @@ import QtCore
 import QtQuick.Controls
 import QtMultimedia
 import QtQml.Models
-import QtPositioning
+import QtPositioning // para GPS
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
@@ -21,14 +21,21 @@ import QtQuick.Window
 import mm 1.0 as MM
 import MMInput
 
-import "./map"
-import "./dialogs"
-import "./layers"
-import "./components"
-import "./project"
-import "./settings"
-import "./gps"
-import "./form"
+import "./map" // Componentes relacionados con el mapa (controlador, herramientas).
+import "./dialogs" // Diálogos personalizados (errores, advertencias).
+import "./layers"// Paneles para gestionar las capas del mapa
+import "./components" // Botones, listas, etc., reutilizables.
+import "./project"// Gestión de proyectos (carga, sincronización).
+import "./settings" // Pantalla de configuración.
+import "./gps" // Paneles para datos y seguimiento GPS.
+import "./form" // La lógica para mostrar y editar los formularios de atributos de las entidades.
+
+/*
+(ApplicationWindow):
+Es el contenedor principal de toda la aplicación.
+Aquí se define el título de la app ("MDM Móvil 2026") y se configuran sus dimensiones, visibilidad y comportamiento
+dependiendo de si el sistema operativo es iOS, Android o Windows
+*/
 
 ApplicationWindow {
   id: window
@@ -39,6 +46,12 @@ ApplicationWindow {
   width:  __appwindowwidth
   height: __appwindowheight
   visibility: __appwindowvisibility
+  /*
+    Banderas (flags):
+    Configura el comportamiento de la ventana según el sistema operativo.
+    En iOS, usa una bandera especial para maximizar la pantalla completa.
+    En escritorio (Windows/Linux/macOS), agrega los botones típicos de título, minimizar, maximizar y cerrar.
+  */
   flags: {
     if ( Qt.platform.os === "ios" ) {
       return Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint
@@ -53,16 +66,38 @@ ApplicationWindow {
 
   title: "MDM Móvil 2026" // Do not translate
 
+  /*
+   Orientación (isPortraitOrientation):
+   Detecta si la pantalla está en orientación vertical.
+   Al cambiar, llama a recalculateSafeArea(),
+   que ajusta los márgenes de la interfaz para evitar áreas no seguras (como la "muesca" o "isla dinámica" en móviles).
+  */
+
   readonly property bool isPortraitOrientation: ( Screen.primaryOrientation === Qt.PortraitOrientation
                                                  || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
 
   onIsPortraitOrientationChanged: recalculateSafeArea()
+
+  /*
+   Guardar posición: Los manejadores onXChanged, onYChanged, etc.,
+   disparan un timer (storeWindowPositionTimer) que guarda la geometría de la ventana en las configuraciones de la app
+   después de 1 segundo de inactividad en el redimensionamiento.
+  */
 
   // start window where it was closed last time
   onXChanged: storeWindowPosition()
   onYChanged: storeWindowPosition()
   onWidthChanged: storeWindowPosition()
   onHeightChanged: storeWindowPosition()
+
+/*
+ Gestor de Estados (stateManager):
+ Es un componente que controla qué pantalla principal está viendo el usuario en un momento dado.
+ Se divide en tres estados:
+ "map" (la vista del mapa y herramientas de edición),
+ "projects" (la lista de proyectos) y
+ "misc" (para configuraciones y el panel del GPS).
+*/
 
   Item {
     id: stateManager
@@ -71,26 +106,33 @@ ApplicationWindow {
     states: [
       State {
         name: "map" // Working with map in an opened project - view, record, stakeout, form, ...
+                    // La vista principal donde se ve el mapa y se realizan las operaciones de edición, medición, etc.
       },
       State {
         name: "projects" // Listing projects
+                         // La lista de proyectos, donde el usuario puede abrir, crear o gestionar proyectos.
       },
       State {
         name: "misc" // Settings, GPS panel, ..
+                     // Una categoría "miscelánea" que actualmente se usa para mostrar
+                     // los paneles de configuración (settings) y el panel de capas (layers).
       }
     ]
 // aquí carga el mapa 2026 < ---
     onStateChanged: {
+      // Al entrar en "map", se asegura de que el estado interno del mapa sea "view" y
+      // verifica si debe iniciar la animación de sincronización.
       if ( stateManager.state === "map" ) {
         map.state = "view"
 
         // Stop/Start sync animation when user goes to map
         syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
       }
+      // Al entrar en "projects", llama a projectController.openPanel() para mostrar la lista de proyectos.
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
       }
-
+      // Si se sale de "map", se establece el estado interno del mapa a "inactive", posiblemente para ahorrar recursos.
       if ( stateManager.state !== "map" ) {
         map.state = "inactive";
       }
@@ -174,6 +216,15 @@ ApplicationWindow {
     } )
   }*/
 
+/*
+ Inicialización (Component.onCompleted):
+ Es el código que se ejecuta automáticamente cuando la aplicación termina de abrirse.
+ En el bloque actualmente activo, se fuerza a la app a entrar en el estado "map",
+ se abre de inmediato un cuadro de diálogo para seleccionar un archivo (projectFileDialog.open())
+ y se configura el comportamiento del botón físico de "Atrás" en los dispositivos móviles para evitar
+ que la aplicación se cierre por accidente
+*/
+
   Component.onCompleted: {
       // Primero definimos el estado para que la interfaz esté lista
       stateManager.state = "map"
@@ -189,6 +240,20 @@ ApplicationWindow {
         }
       } )
     }
+/*
+ Controlador del Mapa (MMMapController):
+ Es el núcleo de la aplicación donde se visualiza la cartografía.
+ Este componente contiene las instrucciones para reaccionar a las acciones del usuario,
+ tales como:
+ tocar un elemento (onFeatureIdentified),
+ iniciar la captura de geometrías (onEditingGeometryStarted),
+ medir distancias (onMeasureStarted) o
+ encender el rastreo de ubicación (onOpenTrackingPanel).
+*/
+/*
+ Este es el componente más importante.
+ Hereda de un tipo personalizado (MMMapController) que seguramente envuelve la lógica de QGIS y el renderizado del mapa.
+*/
 
 //   Diálogo para crear nuevas tablas // 2026
   CreateTableDialog {
@@ -201,10 +266,14 @@ ApplicationWindow {
 
   MMMapController {
     id: map
-
+    // Su altura es window.height - mapToolbar.height, dejando espacio para la barra de herramientas inferior.
     height: window.height - mapToolbar.height
     width: window.width
 
+    // Es una propiedad clave para la usabilidad.
+    // Calcula cuánto espacio vertical está ocupando un panel deslizable (como el de "replanteo" o "medición")
+    // que se abre desde la parte inferior.
+    // El mapa usa este valor para centrar correctamente una entidad o ajustar la vista para que no quede oculta detrás del panel
     mapExtentOffset: {
       // offset depends on what panels are visible.
       // we need to subtract mapToolbar's height from any visible panel
@@ -231,7 +300,10 @@ ApplicationWindow {
 
       return 0
     }
-
+    // Manejadores de Señales (onFeatureIdentified, onRecordingFinished, etc.):
+    // Conectan las acciones del usuario en el mapa (tocar una entidad, terminar de dibujar un polígono)
+    // con las acciones correspondientes de la interfaz, como abrir un formulario (formsStackManager.openForm),
+    // iniciar un replanteo, o mostrar un panel de selección múltiple.
     onFeatureIdentified: function( pair ) {
       formsStackManager.openForm( pair, "readOnly", "preview" );
     }
@@ -332,11 +404,42 @@ ApplicationWindow {
       __variablesManager.positionKit = PositionKit
     }
   }
-
+  // Solicita y gestiona los permisos de ubicación precisa del dispositivo.
   LocationPermission {
     id: locationPermission
     accuracy: LocationPermission.Precise
   }
+
+  // prueba 2026
+  /*MMToolbar {
+    id :mapToolBarRight
+    anchors.bottom: parent.right
+    visible: map.state === "view"
+    model: ObjectModel {
+
+      MMToolbarButton {
+        id: syncButton2
+
+        text: qsTr("Sync")
+        iconSource: __style.syncIcon
+        onClicked: {
+          __activeProject.requestSync()
+        }
+      }
+
+
+    }
+  }*/
+
+/*
+ Barra de Herramientas Inferior (MMToolbar):
+ Es la barra de botones que aparece en la parte inferior de la pantalla cuando el usuario está en la vista del mapa.
+ Contiene un botón personalizado llamado "Abrir Archivo" que lanza el explorador de documentos del dispositivo.
+ Incluye otros botones operativos como Agregar información ("Add"),
+ ver las Capas ("Layers"), medir ("Measure") y Configuraciones ("Settings").
+ Se puede observar que algunos botones predeterminados como "Sync" (Sincronizar),
+ "Projects" (Proyectos) y "Local changes" (Cambios locales) fueron ocultados específicamente para esta versión (visible: false)
+*/
 
   MMToolbar {
     id: mapToolbar
@@ -460,6 +563,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Local changes")
         iconSource: __style.localChangesIcon
+        visible: false // <-- para que no sea visible 2026
         onClicked: {
           stateManager.state = "projects"
           projectController.openChangesPanel( __activeProject.projectFullName(), true )
@@ -508,6 +612,13 @@ ApplicationWindow {
 
     onClosed: stateManager.state = "map"
   }
+
+/*
+  Gestión de Vistas Dinámicas (StackView y Loader): *
+  Usa un StackView para deslizar paneles sobre el mapa (por ejemplo, el menú de capas) con animaciones fluidas de entrada y salida.
+  Usa elementos Loader para cargar paneles pesados (como la interfaz del GPS, paneles de selección múltiple o dibujo)
+  en la memoria RAM únicamente cuando el usuario solicita abrirlos, lo cual optimiza el rendimiento.
+*/
 
   StackView {
     id: mapPanelsStackView
@@ -848,6 +959,12 @@ ApplicationWindow {
     }
   }
 
+/*
+ Controlador de Formularios (MMFormStackController):
+ Es el encargado de abrir y gestionar las pantallas de formularios donde el usuario puede ver,
+ editar o rellenar la base de datos (atributos) de un punto, línea o polígono del mapa.
+*/
+
   MMFormStackController {
     id: formsStackManager
 
@@ -855,6 +972,12 @@ ApplicationWindow {
     width: window.width
 
     project: __activeProject.qgsProject
+
+    /*
+      Se llama cuando, desde un formulario, se quiere crear una nueva entidad relacionada.
+      Si la capa destino no tiene geometría, crea la entidad directamente.
+      Si la tiene, cambia el estado a "map" y activa la herramienta de grabación de geometría.
+    */
 
     onCreateLinkedFeatureRequested: function( targetLayer, parentPair )  {
       if ( __inputUtils.isNoGeometryLayer( targetLayer) ) {
@@ -867,10 +990,18 @@ ApplicationWindow {
       }
     }
 
+    // Permite al usuario editar la geometría de una entidad existente.
+    // Cambia el estado a "map" y activa la herramienta de edición.
+
     onEditGeometryRequested: function( pair ) {
       stateManager.state = "map"
       map.edit( pair )
     }
+
+    // onClosed:
+    // Es un manejador crucial que se ejecuta cuando se cierra el último formulario.
+    // Restaura el estado de la aplicación a "map" (o "misc" si el panel de capas estaba abierto),
+    // oculta el resaltado del mapa y limpia cualquier modo de selección múltiple.
 
     onClosed: {
       if ( mapPanelsStackView.depth ) {
@@ -902,6 +1033,8 @@ ApplicationWindow {
       map.startMultiSelect( feature )
     }
 
+    // Si la entidad es un punto y la ubicación GPS está disponible, inicia la herramienta de replanteo.
+
     onStakeoutFeature: function( feature ) {
       if ( !__inputUtils.isPointLayerFeature( feature ) )
         return;
@@ -927,6 +1060,18 @@ ApplicationWindow {
     visible: false
   }
 
+/*
+  Alertas y Diálogos (Dialogs y FileDialog):
+  Ventanas emergentes que advierten al usuario sobre diferentes situaciones,
+  como límites de almacenamiento (MMStorageLimitDialog),
+  errores al cargar el proyecto (MMProjectLoadErrorDialog) o
+  problemas de permisos de inicio de sesión (MMMissingAuthDialog).
+  En la parte final, se define el projectFileDialog,
+  que es el explorador de archivos configurado específicamente para filtrar y buscar extensiones de QGIS (.qgz, .qgs).
+*/
+
+  // MMStorageLimitDialog: Alerta cuando se alcanza el límite de almacenamiento en la nube de Mergin.
+
   MMStorageLimitDialog {
     id: storageLimitDialog
 
@@ -936,6 +1081,8 @@ ApplicationWindow {
 
     onManageAccountClicked: Qt.openUrlExternally(__inputHelp.merginSubscriptionLink)
   }
+
+  //MMProjectLimitDialog: Alerta sobre el límite de número de proyectos.
 
   MMProjectLimitDialog {
     id: projectLimitDialog
@@ -958,6 +1105,8 @@ ApplicationWindow {
     }
   }
 
+  //MMProjectLoadErrorDialog: Muestra errores al cargar un proyecto.
+
   MMProjectLoadErrorDialog {
     id: projectErrorDialog
 
@@ -977,9 +1126,13 @@ ApplicationWindow {
     id: noPermissionsDialog
   }
 
+  //MMSyncFailedDialog: Informa de un fallo en la sincronización.
+
   MMSyncFailedDialog {
     id: syncFailedDialog
   }
+
+  //MMMissingAuthDialog: Pide al usuario que inicie sesión si falta autenticación.
 
   MMMissingAuthDialog {
     id: missingAuthDialog
@@ -998,6 +1151,8 @@ ApplicationWindow {
       projectController.showLogin()
     }
   }
+
+  // MMNotificationView: Un área para mostrar mensajes de notificación no intrusivos (tipo "toast").
 
   MMNotificationView {}
 
@@ -1036,10 +1191,20 @@ ApplicationWindow {
         open()
     }
   }
+/*
+ Conexiones con el Sistema Central (Connections):
+ Son bloques lógicos que "escuchan" en segundo plano lo que sucede en el núcleo de la app (C++) para actualizar la interfaz.
+ Por ejemplo, reciben señales si la sincronización del proyecto falla (onSyncError) ,
+ si se pierde la conexión de red (onNetworkErrorOccurred) o
+ si se conceden/deniegan los permisos de ubicación GPS del celular al momento de abrir el proyecto (onLoadingFinished)
+*/
 
   Connections {
     target: __syncManager
     enabled: stateManager.state === "map"
+
+    // onSyncStarted / onSyncFinished:
+    // Actualizan la animación del ícono de sincronización y muestran mensajes de éxito.
 
     function onSyncStarted( projectFullName )
     {
@@ -1117,6 +1282,9 @@ ApplicationWindow {
 
   Connections {
     target: __merginApi
+
+    // onNetworkErrorOccurred: Muestra un error de red en la pantalla de proyectos.
+
     function onNetworkErrorOccurred( message, topic, httpCode, projectFullName ) {
       if ( stateManager.state === "projects" )
       {
@@ -1124,6 +1292,8 @@ ApplicationWindow {
         __notificationModel.addError( msg )
       }
     }
+
+    // onStorageLimitReached: Abre el diálogo de límite de almacenamiento.
 
     function onStorageLimitReached( uploadSize ) {
       __merginApi.getUserInfo()
@@ -1203,6 +1373,10 @@ ApplicationWindow {
   Connections {
     target: __activeProject
 
+    // onLoadingStarted / onLoadingFinished:
+    // Muestran/ocultan una pantalla de carga al abrir un proyecto.
+    // Al terminar la carga, se solicita el permiso de ubicación si aún no se ha concedido.
+
     function onLoadingStarted() {
       projectLoadingPage.visible = true;
       projectIssuesPage.clear();
@@ -1228,6 +1402,10 @@ ApplicationWindow {
         __inputUtils.log("Permissions", "Location permission is denied")
       }
     }
+
+    // onLoadingErrorFound:
+    // Notifica al usuario que hubo problemas al cargar el proyecto (como capas faltantes) y
+    // le ofrece un enlace para ver los detalles.
 
     function onLoadingErrorFound() {
       __notificationModel.addWarning(

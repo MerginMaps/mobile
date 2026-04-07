@@ -156,7 +156,7 @@ set(MM_VERSION_CODE
 )
 
 mm_detect_version()
-message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
+message(STATUS "MDM Móvil ${version_desc} - ${platform_desc}")
 
 # ########################################################################################
 # FIND PACKAGES
