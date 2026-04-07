@@ -1,504 +1,401 @@
 #include "dbmanager.h"
-
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
+#include <QSqlField>
 #include <QDebug>
-#include <QRegularExpression>
-#include <QStringList>
-#include <QStandardPaths>
-#include <QDir>
-#include <QFileInfo>
-#include <QDateTime>
+#include <QFile>
+#include <QTextStream>
+#include <QVariant>
 
 DBManager::DBManager(QObject *parent)
     : QObject(parent)
-    , m_isConnected(false)
+    , m_lastError("")
+    , m_databasePath("")
 {
+    qDebug() << "DBManager constructor invoked";
 }
 
 DBManager::~DBManager()
 {
     closeDatabase();
+    qDebug() << "DBManager destructor";
 }
 
-bool DBManager::initializeDatabase(const QString &databaseName, const QString &databasePath)
+/**
+ * Inicializa la conexión con la base de datos SQLite
+ */
+bool DBManager::initializeDatabase(const QString &dbPath)
 {
-    // Validar nombre de base de datos
-    if (databaseName.isEmpty())
-    {
-        m_lastError = "El nombre de la base de datos no puede estar vacío";
-        qWarning() << m_lastError;
-        emit errorOccurred(m_lastError);
+    qDebug() << "Initializing database:" << dbPath;
+
+    // Validar que la ruta no esté vacía
+    if (dbPath.isEmpty()) {
+        setError("Ruta de base de datos vacía");
         return false;
     }
 
-    if (!isValidDatabaseName(databaseName))
-    {
-        m_lastError = QString("Nombre de base de datos inválido: '%1'. Solo se permiten letras, números y guiones bajos.").arg(databaseName);
-        qWarning() << m_lastError;
-        emit errorOccurred(m_lastError);
+    // Crear conexión con ID único
+    static int connectionCounter = 0;
+    QString connectionName = QString("DBManager_%1").arg(++connectionCounter);
+
+    m_database = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    m_database.setDatabaseName(dbPath);
+    m_databasePath = dbPath;
+
+    // Intentar abrir la conexión
+    if (!m_database.open()) {
+        setError(QString("No se pudo abrir BD: %1").arg(m_database.lastError().text()));
         return false;
     }
 
-    // Determinar ruta de almacenamiento
-    QString dbDirectory = databasePath;
-    if (dbDirectory.isEmpty() || !QDir(dbDirectory).exists())
-    {
-        dbDirectory = getDefaultDataPath();
-        qInfo() << "Usando ruta de datos predeterminada:" << dbDirectory;
-    }
+    qDebug() << "Database opened successfully at:" << dbPath;
 
-    // Crear directorio si no existe
-    QDir dir(dbDirectory);
-    if (!dir.exists())
-    {
-        if (!dir.mkpath("."))
-        {
-            m_lastError = QString("No se pudo crear el directorio: %1").arg(dbDirectory);
-            qWarning() << m_lastError;
-            emit errorOccurred(m_lastError);
-            return false;
-        }
-        qInfo() << "Directorio creado:" << dbDirectory;
-    }
+    // Cargar lista de tablas
+    loadTableList();
 
-    // Construir ruta completa
-    QString fullPath = dbDirectory;
-    if (!fullPath.endsWith("/") && !fullPath.endsWith("\\"))
-    {
-        fullPath += "/";
-    }
-    fullPath += databaseName + ".db";
-
-    // Normalizar rutas (compatible con Windows y Linux)
-    fullPath = QDir::toNativeSeparators(fullPath);
-
-    // Cerrar conexión anterior si existe
-    if (m_isConnected)
-    {
-        closeDatabase();
-    }
-
-    // Crear conexión a SQLite
-    m_database = QSqlDatabase::addDatabase("QSQLITE", databaseName);
-    m_database.setDatabaseName(fullPath);
-
-    // Intentar conectar
-    if (!m_database.open())
-    {
-        m_lastError = QString("No se pudo conectar a la base de datos: %1").arg(m_database.lastError().text());
-        qWarning() << m_lastError;
-        m_isConnected = false;
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    // Guardar información
-    m_databaseName = databaseName;
-    m_fullDatabasePath = fullPath;
-    m_databaseDirectory = dbDirectory;
-    m_isConnected = true;
-
-    // Obtener información del archivo
-    QFileInfo fileInfo(fullPath);
-    bool isNewDatabase = !fileInfo.exists() || fileInfo.size() == 0;
-
-    if (isNewDatabase)
-    {
-        qInfo() << QString("✓ Nueva base de datos creada: %1").arg(databaseName);
-        qInfo() << QString("  Ubicación: %1").arg(fullPath);
-        qInfo() << QString("  Fecha: %1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    }
-    else
-    {
-        qInfo() << QString("✓ Conectado a base de datos existente: %1").arg(databaseName);
-        qInfo() << QString("  Ubicación: %1").arg(fullPath);
-        qInfo() << QString("  Tamaño: %1 bytes").arg(fileInfo.size());
-    }
-
+    // Emitir señal de conexión exitosa
+    emit databaseCreated(dbPath);
     emit connectionStatusChanged(true);
-    emit databasePathChanged();
-    emit databaseNameChanged();
-    emit databaseCreated(fullPath);
 
     return true;
 }
 
-bool DBManager::createTable(const QString &tableName, const QVariantList &fields)
+/**
+ * Cierra la conexión con la base de datos
+ */
+bool DBManager::closeDatabase()
 {
-    // Validaciones
-    if (tableName.isEmpty())
-    {
-        m_lastError = "El nombre de la tabla no puede estar vacío";
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    if (!isValidTableName(tableName))
-    {
-        m_lastError = QString("Nombre de tabla inválido: '%1'. Solo se permiten letras, números y guiones bajos.")
-                          .arg(tableName);
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    if (fields.isEmpty())
-    {
-        m_lastError = "Debe especificar al menos un campo para la tabla";
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    if (!m_isConnected)
-    {
-        m_lastError = "No hay conexión a la base de datos. Primero ejecute initializeDatabase()";
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    // Verificar si la tabla ya existe
-    if (tableExists(tableName))
-    {
-        m_lastError = QString("La tabla '%1' ya existe en la base de datos '%2'").arg(tableName, m_databaseName);
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    // Construir comando SQL CREATE TABLE
-    QString sqlCommand = QString("CREATE TABLE %1 (").arg(tableName);
-
-    // Procesar cada campo
-    for (int i = 0; i < fields.count(); ++i)
-    {
-        const QVariantMap field = fields[i].toMap();
-
-        // Validar que el campo tiene la estructura esperada
-        if (!field.contains("name") || !field.contains("type"))
-        {
-            m_lastError = QString("Campo %1 incompleto. Debe tener 'name' y 'type'").arg(i + 1);
-            emit errorOccurred(m_lastError);
-            return false;
-        }
-
-        const QString fieldName = field["name"].toString().trimmed();
-        const QString fieldType = field["type"].toString().toUpper().trimmed();
-
-        // Validar nombre del campo
-        if (!isValidFieldName(fieldName))
-        {
-            m_lastError = QString("Nombre de campo inválido: '%1'").arg(fieldName);
-            emit errorOccurred(m_lastError);
-            return false;
-        }
-
-        // Validar tipo de dato
-        if (fieldType.isEmpty())
-        {
-            m_lastError = QString("Campo '%1' sin tipo especificado").arg(fieldName);
-            emit errorOccurred(m_lastError);
-            return false;
-        }
-
-        // Agregar la cláusula del campo
-        sqlCommand += QString("\n  %1 %2").arg(fieldName, convertTypeToSQL(fieldType));
-
-        // Agregar tamaño si es aplicable
-        if (fieldType == "TEXT")
-        {
-            const QString size = field["size"].toString().trimmed();
-            if (!size.isEmpty() && size.toInt() > 0)
-            {
-                sqlCommand += QString("(%1)").arg(size);
-            }
-        }
-
-        // Agregar coma si no es el último campo
-        if (i < fields.count() - 1)
-        {
-            sqlCommand += ",";
-        }
-    }
-
-    sqlCommand += "\n);";
-
-    qDebug() << "SQL Command:" << sqlCommand;
-
-    // Ejecutar comando
-    QSqlQuery query(m_database);
-    if (!query.exec(sqlCommand))
-    {
-        m_lastError = QString("Error al crear tabla '%1': %2")
-        .arg(tableName, query.lastError().text());
-        qWarning() << m_lastError;
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    qInfo() << QString("✓ Tabla '%1' creada exitosamente en la base de datos '%2' con %3 campos")
-                   .arg(tableName, m_databaseName).arg(fields.count());
-
-    emit tableCreated(tableName);
-    emit tablesListChanged();
-
-    return true;
-}
-
-QString DBManager::getLastError() const
-{
-    return m_lastError;
-}
-
-bool DBManager::tableExists(const QString &tableName) const
-{
-    if (!m_isConnected)
-        return false;
-
-    QSqlQuery query(m_database);
-    query.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name=?");
-    query.addBindValue(tableName);
-
-    if (query.exec() && query.next())
-    {
-        return true;
-    }
-    return false;
-}
-
-QVariantList DBManager::getTablesList() const
-{
-    QVariantList tableList;
-
-    if (!m_isConnected)
-        return tableList;
-
-    QSqlQuery query(m_database);
-    query.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-
-    while (query.next())
-    {
-        tableList.append(query.value(0).toString());
-    }
-
-    return tableList;
-}
-
-QStringList DBManager::getTableListAsStringList() const
-{
-    QStringList tableList;
-
-    if (!m_isConnected)
-        return tableList;
-
-    QSqlQuery query(m_database);
-    query.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
-
-    while (query.next())
-    {
-        tableList.append(query.value(0).toString());
-    }
-
-    return tableList;
-}
-
-QVariantList DBManager::getTableStructure(const QString &tableName) const
-{
-    QVariantList structure;
-
-    if (!m_isConnected || !tableExists(tableName))
-        return structure;
-
-    QSqlQuery query(m_database);
-    query.exec(QString("PRAGMA table_info(%1)").arg(tableName));
-
-    while (query.next())
-    {
-        QVariantMap column;
-        column["name"] = query.value(1).toString();
-        column["type"] = query.value(2).toString();
-        column["notnull"] = query.value(3).toBool();
-        column["pk"] = query.value(5).toInt();
-
-        structure.append(column);
-    }
-
-    return structure;
-}
-
-int DBManager::getTableRecordCount(const QString &tableName) const
-{
-    if (!m_isConnected || !tableExists(tableName))
-        return -1;
-
-    QSqlQuery query(m_database);
-    query.exec(QString("SELECT COUNT(*) FROM %1").arg(tableName));
-
-    if (query.next())
-    {
-        return query.value(0).toInt();
-    }
-
-    return -1;
-}
-
-bool DBManager::dropTable(const QString &tableName)
-{
-    if (!m_isConnected)
-    {
-        m_lastError = "No hay conexión a la base de datos";
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    if (!tableExists(tableName))
-    {
-        m_lastError = QString("La tabla '%1' no existe").arg(tableName);
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    QSqlQuery query(m_database);
-    if (!query.exec(QString("DROP TABLE %1").arg(tableName)))
-    {
-        m_lastError = QString("Error al eliminar tabla '%1': %2")
-        .arg(tableName, query.lastError().text());
-        emit errorOccurred(m_lastError);
-        return false;
-    }
-
-    qInfo() << QString("✓ Tabla '%1' eliminada exitosamente de la base de datos '%2'")
-                   .arg(tableName, m_databaseName);
-
-    emit tablesListChanged();
-
-    return true;
-}
-
-void DBManager::closeDatabase()
-{
-    if (m_isConnected && m_database.isOpen())
-    {
+    if (m_database.isOpen()) {
         m_database.close();
-        m_isConnected = false;
-        qInfo() << QString("✓ Base de datos '%1' cerrada correctamente").arg(m_databaseName);
-        emit connectionStatusChanged(false);
+        qDebug() << "Database closed";
     }
+
+    m_tableList.clear();
+    m_currentTable.clear();
+    m_tableModel.reset();
+    m_databasePath.clear();
+
+    emit connectionStatusChanged(false);
+    return true;
 }
 
-QString DBManager::getDatabaseInfo() const
+/**
+ * Carga la lista de todas las tablas de la BD
+ * Ejecuta: SELECT name FROM sqlite_master WHERE type='table' ORDER BY name
+ */
+void DBManager::loadTableList()
 {
-    if (!m_isConnected)
-        return "Sin conexión a base de datos";
+    m_tableList.clear();
 
-    QStringList tables = getTableListAsStringList();
-    QString info;
-    info += QString("╔════════════════════════════════════════════════════╗\n");
-    info += QString("║             INFORMACIÓN DE BASE DE DATOS            ║\n");
-    info += QString("╠════════════════════════════════════════════════════╣\n");
-    info += QString("║ Nombre: %1\n").arg(m_databaseName.leftJustified(42));
-    info += QString("║ Ubicación: %1\n").arg(m_fullDatabasePath.leftJustified(38));
-    info += QString("║ Estado: Conectada ✓\n");
-    info += QString("║ Número de tablas: %1\n").arg(QString::number(tables.count()).leftJustified(32));
+    if (!m_database.isOpen()) {
+        setError("Base de datos no está abierta");
+        return;
+    }
 
-    if (!tables.isEmpty())
-    {
-        info += QString("║\n");
-        info += QString("║ Tablas existentes:\n");
-        for (int i = 0; i < tables.count(); ++i)
-        {
-            int recordCount = getTableRecordCount(tables[i]);
-            info += QString("║   %1. %2 (%3 registros)\n").arg(i + 1).arg(tables[i]).arg(recordCount);
+    QSqlQuery query(m_database);
+
+    // Ejecutar consulta para obtener todas las tablas
+    if (!query.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")) {
+        setError(QString("Error cargando tablas: %1").arg(query.lastError().text()));
+        qDebug() << "SQL Error:" << query.lastError().text();
+        return;
+    }
+
+    int tableCount = 0;
+    while (query.next()) {
+        QString tableName = query.value(0).toString();
+
+        // Filtrar tablas de sistema de SQLite
+        if (!tableName.startsWith("sqlite_")) {
+            m_tableList.append(tableName);
+            tableCount++;
         }
     }
 
-    info += QString("╚════════════════════════════════════════════════════╝\n");
-
-    return info;
+    qDebug() << "Loaded" << tableCount << "tables from database";
+    emit tableListChanged();
 }
 
+/**
+ * Establece la tabla actual y carga sus datos
+ */
+void DBManager::setCurrentTable(const QString &tableName)
+{
+    qDebug() << "Setting current table:" << tableName;
+
+    if (!m_database.isOpen()) {
+        setError("Base de datos no está abierta");
+        return;
+    }
+
+    if (tableName.isEmpty()) {
+        setError("Nombre de tabla vacío");
+        return;
+    }
+
+    if (!isValidTableName(tableName)) {
+        setError(QString("Tabla inválida: %1").arg(tableName));
+        return;
+    }
+
+    if (m_currentTable == tableName) {
+        return; // Ya es la tabla actual
+    }
+
+    m_currentTable = tableName;
+    createTableModel();
+
+    emit currentTableChanged();
+}
+
+/**
+ * Crea un modelo de tabla dinámico para la tabla actual
+ */
+void DBManager::createTableModel()
+{
+    qDebug() << "Creating table model for:" << m_currentTable;
+
+    // Crear nuevo modelo
+    m_tableModel.reset(new QSqlTableModel(this, m_database));
+    m_tableModel->setTable(m_currentTable);
+
+    // Configurar estrategia de edición
+    m_tableModel->setEditStrategy(QSqlTableModel::OnFieldChange);
+
+    // Seleccionar todos los datos
+    if (!m_tableModel->select()) {
+        setError(QString("Error cargando tabla: %1").arg(m_tableModel->lastError().text()));
+        m_tableModel.reset();
+        return;
+    }
+
+    qDebug() << "Table model created with" << m_tableModel->rowCount() << "rows";
+
+    emit tableModelChanged();
+    emit rowCountChanged();
+}
+
+/**
+ * Agrega una nueva fila vacía a la tabla
+ */
+bool DBManager::addRow()
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada");
+        return false;
+    }
+
+    int newRow = m_tableModel->rowCount();
+
+    if (!m_tableModel->insertRow(newRow)) {
+        setError(QString("Error insertando fila: %1").arg(m_tableModel->lastError().text()));
+        return false;
+    }
+
+    qDebug() << "New row added at index:" << newRow;
+
+    emit rowCountChanged();
+    emit dataChanged();
+    return true;
+}
+
+/**
+ * Elimina una fila específica
+ */
+bool DBManager::removeRow(int row)
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada");
+        return false;
+    }
+
+    if (row < 0 || row >= m_tableModel->rowCount()) {
+        setError(QString("Índice de fila inválido: %1").arg(row));
+        return false;
+    }
+
+    if (!m_tableModel->removeRow(row)) {
+        setError(QString("Error eliminando fila: %1").arg(m_tableModel->lastError().text()));
+        return false;
+    }
+
+    qDebug() << "Row removed at index:" << row;
+
+    emit rowCountChanged();
+    emit dataChanged();
+    return true;
+}
+
+/**
+ * Confirma todos los cambios en la base de datos
+ */
+bool DBManager::submitChanges()
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada");
+        return false;
+    }
+
+    if (!m_tableModel->submitAll()) {
+        setError(QString("Error guardando cambios: %1").arg(m_tableModel->lastError().text()));
+        m_tableModel->revertAll();
+        return false;
+    }
+
+    qDebug() << "All changes submitted successfully";
+
+    emit dataChanged();
+    return true;
+}
+
+/**
+ * Revierte todos los cambios pendientes
+ */
+bool DBManager::revertChanges()
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada");
+        return false;
+    }
+
+    m_tableModel->revertAll();
+    qDebug() << "All changes reverted";
+
+    return true;
+}
+
+/**
+ * Obtiene los nombres de columnas de una tabla
+ */
+QStringList DBManager::getColumnNames(const QString &tableName) const
+{
+    QStringList columnNames;
+
+    if (!m_database.isOpen()) {
+        return columnNames;
+    }
+
+    QSqlRecord record = m_database.record(tableName);
+
+    for (int i = 0; i < record.count(); ++i) {
+        columnNames.append(record.fieldName(i));
+    }
+
+    return columnNames;
+}
+
+/**
+ * Obtiene el número total de filas
+ */
+int DBManager::getRowCount() const
+{
+    if (!m_tableModel) {
+        return 0;
+    }
+    return m_tableModel->rowCount();
+}
+
+/**
+ * Obtiene el número total de columnas
+ */
+int DBManager::getColumnCount() const
+{
+    if (!m_tableModel) {
+        return 0;
+    }
+    return m_tableModel->columnCount();
+}
+
+/**
+ * Filtra la tabla con una expresión SQL
+ */
+void DBManager::filterTable(const QString &filterExpression)
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada");
+        return;
+    }
+
+    qDebug() << "Applying filter:" << filterExpression;
+
+    m_tableModel->setFilter(filterExpression);
+    if (!m_tableModel->select()) {
+        setError(QString("Error filtrando tabla: %1").arg(m_tableModel->lastError().text()));
+    }
+}
+
+/**
+ * Limpia todos los filtros
+ */
+void DBManager::clearFilter()
+{
+    if (!m_tableModel) {
+        return;
+    }
+
+    qDebug() << "Clearing filter";
+
+    m_tableModel->setFilter("");
+    m_tableModel->select();
+}
+
+/**
+ * Exporta los datos a CSV
+ */
+bool DBManager::exportToCSV(const QString &filePath)
+{
+    if (!m_tableModel) {
+        setError("No hay tabla cargada para exportar");
+        return false;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        setError(QString("No se pudo crear archivo: %1").arg(filePath));
+        return false;
+    }
+
+    QTextStream out(&file);
+
+    // Escribir encabezados
+    for (int col = 0; col < m_tableModel->columnCount(); ++col) {
+        if (col > 0) out << ",";
+        out << m_tableModel->headerData(col, Qt::Horizontal).toString();
+    }
+    out << "\n";
+
+    // Escribir datos
+    for (int row = 0; row < m_tableModel->rowCount(); ++row) {
+        for (int col = 0; col < m_tableModel->columnCount(); ++col) {
+            if (col > 0) out << ",";
+            QVariant value = m_tableModel->data(m_tableModel->index(row, col));
+            out << value.toString();
+        }
+        out << "\n";
+    }
+
+    file.close();
+    qDebug() << "Data exported to CSV:" << filePath;
+
+    return true;
+}
+
+/**
+ * Valida si el nombre de la tabla existe
+ */
 bool DBManager::isValidTableName(const QString &tableName) const
 {
-    if (tableName.isEmpty())
-        return false;
-
-    QRegularExpression validTableName("^[a-zA-Z_][a-zA-Z0-9_]*$");
-    return validTableName.match(tableName).hasMatch();
+    return m_tableList.contains(tableName);
 }
 
-bool DBManager::isValidFieldName(const QString &fieldName) const
+/**
+ * Establece el último error y emite la señal
+ */
+void DBManager::setError(const QString &errorMessage)
 {
-    return isValidTableName(fieldName);
-}
-
-bool DBManager::isValidDatabaseName(const QString &dbName) const
-{
-    if (dbName.isEmpty())
-        return false;
-
-    QRegularExpression validDbName("^[a-zA-Z0-9_-]+$");
-    return validDbName.match(dbName).hasMatch();
-}
-
-QString DBManager::convertTypeToSQL(const QString &type) const
-{
-    const QString upperType = type.toUpper().trimmed();
-
-    if (upperType == "INT" || upperType == "INTEGER")
-    {
-        return "INTEGER";
-    }
-    else if (upperType == "TEXT")
-    {
-        return "TEXT";
-    }
-    else if (upperType == "REAL" || upperType == "FLOAT" || upperType == "DOUBLE")
-    {
-        return "REAL";
-    }
-    else if (upperType == "DATE")
-    {
-        return "DATE";
-    }
-    else if (upperType == "BOOLEAN" || upperType == "BOOL")
-    {
-        return "INTEGER"; // SQLite usa INTEGER para booleanos (0/1)
-    }
-    else if (upperType == "BLOB")
-    {
-        return "BLOB";
-    }
-    else
-    {
-        qWarning() << QString("Tipo de dato no reconocido '%1'. Se usará TEXT por defecto.").arg(type);
-        return "TEXT";
-    }
-}
-
-QString DBManager::buildFieldClause(const QVariantMap &fieldMap) const
-{
-    const QString fieldName = fieldMap["name"].toString();
-    const QString fieldType = convertTypeToSQL(fieldMap["type"].toString());
-    const QString size = fieldMap["size"].toString();
-
-    QString clause = QString("%1 %2").arg(fieldName, fieldType);
-
-    if (fieldType == "TEXT" && !size.isEmpty())
-    {
-        clause += QString("(%1)").arg(size);
-    }
-
-    return clause;
-}
-
-QString DBManager::getDefaultDataPath() const
-{
-    // Obtener ruta estándar de datos de la aplicación
-    QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-
-    // En Windows: C:/Users/Usuario/AppData/Local/MerginMaps/
-    // En Linux: ~/.local/share/MerginMaps/
-    // En macOS: ~/Library/Application Support/MerginMaps/
-
-    return dataPath;
+    m_lastError = errorMessage;
+    qWarning() << "DBManager Error:" << errorMessage;
+    emit errorOccurred(errorMessage);
 }

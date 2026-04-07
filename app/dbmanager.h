@@ -1,238 +1,181 @@
-#ifndef DBMANAGER_H
-#define DBMANAGER_H
+#pragma once
 
 #include <QObject>
-#include <QString>
-#include <QVariantList>
-#include <QVariantMap>
 #include <QSqlDatabase>
-#include <QSqlError>
+#include <QSqlTableModel>
+#include <QStringList>
 #include <memory>
 
 /**
- * @brief La clase DBManager gestiona operaciones de base de datos para la aplicación Mergin Maps.
- * Proporciona funcionalidad para crear y gestionar múltiples tablas con campos personalizados.
+ * @class DBManager
+ * @brief Gestor de base de datos SQLite para la aplicación Mergin Maps
  *
- * Conecta con QML a través de Q_INVOKABLE para permitir operaciones desde la UI.
+ * Proporciona funcionalidad completa para:
+ * - Inicializar y gestionar conexiones SQLite
+ * - Listar todas las tablas disponibles
+ * - Cargar dinámicamente tablas específicas
+ * - Realizar operaciones CRUD (Create, Read, Update, Delete)
+ * - Manejar errores y notificaciones
+ *
+ * Uso en QML:
+ * @code
+ * __dbManager.initializeDatabase("/path/to/db")
+ * __dbManager.setCurrentTable("tabla_nombre")
+ * __dbManager.addRow()
+ * __dbManager.submitChanges()
+ * @endcode
  */
-class DBManager : public QObject
-{
+class DBManager : public QObject {
     Q_OBJECT
-
-    // Propiedades expuestas a QML
-    Q_PROPERTY(QString databasePath READ getDatabasePath NOTIFY databasePathChanged)
-    Q_PROPERTY(QString databaseName READ getDatabaseName NOTIFY databaseNameChanged)
+    Q_PROPERTY(QStringList tableList READ getTableList NOTIFY tableListChanged)
+    Q_PROPERTY(QString currentTable READ getCurrentTable WRITE setCurrentTable NOTIFY currentTableChanged)
+    Q_PROPERTY(QSqlTableModel* tableModel READ getTableModel NOTIFY tableModelChanged)
+    Q_PROPERTY(QString lastError READ getLastError NOTIFY errorOccurred)
     Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectionStatusChanged)
-    Q_PROPERTY(QStringList tablesList READ getTableListAsStringList NOTIFY tablesListChanged)
 
 public:
-    /**
-     * @brief Constructor de DBManager
-     * @param parent Puntero al objeto padre (para gestión automática de memoria)
-     */
     explicit DBManager(QObject *parent = nullptr);
-
-    /**
-     * @brief Destructor de DBManager
-     */
     ~DBManager();
 
+    // ============== INICIALIZACIÓN ==============
     /**
-     * @brief Inicializa la conexión a la base de datos con un nombre personalizado
-     * @param databaseName Nombre de la base de datos (ej: "merginmaps_data")
-     * @param databasePath Ruta completa donde se almacenará la base de datos
-     *                     Si está vacío, usará la carpeta de datos de la aplicación
-     * @return true si la conexión fue exitosa, false en caso contrario
-     *
-     * Ejemplo desde QML:
-     * @code
-     * dbManager.initializeDatabase("miBaseDatos", "E:/MyData/")
-     * @endcode
+     * Inicializa la conexión con la base de datos SQLite
+     * @param dbPath Ruta completa al archivo de BD
+     * @return true si la inicialización fue exitosa
      */
-    Q_INVOKABLE bool initializeDatabase(const QString &databaseName, const QString &databasePath = "");
-    /**
-     * @brief Crea una nueva tabla en la base de datos con los campos especificados
-     * @param tableName Nombre de la tabla a crear
-     * @param fields Lista de QVariantMap con la estructura de los campos:
-     *        Cada campo debe contener: {"name": "...", "type": "...", "size": "..."}
-     * @return true si la tabla fue creada exitosamente, false en caso contrario
-     *
-     * Ejemplo de uso desde QML:
-     * @code
-     * var fields = [
-     *   { name: "id", type: "INT", size: "" },
-     *   { name: "nombre", type: "TEXT", size: "100" },
-     *   { name: "precio", type: "REAL", size: "" }
-     * ]
-     * dbManager.createTable("productos", fields)
-     * @endcode
-     */
-    Q_INVOKABLE bool createTable(const QString &tableName, const QVariantList &fields);
+    Q_INVOKABLE bool initializeDatabase(const QString &dbPath);
 
     /**
-     * @brief Obtiene el último error de la base de datos
-     * @return Mensaje de error en formato QString
+     * Cierra la conexión actual con la BD
+     * @return true si se cerró correctamente
      */
-    Q_INVOKABLE QString getLastError() const;
+    Q_INVOKABLE bool closeDatabase();
+
+    // ============== GETTERS ==============
+    QStringList getTableList() const { return m_tableList; }
+    QString getCurrentTable() const { return m_currentTable; }
+    QSqlTableModel* getTableModel() const { return m_tableModel.get(); }
+    QString getLastError() const { return m_lastError; }
+    bool isConnected() const { return m_database.isOpen(); }
+
+    // ============== SETTERS ==============
+    /**
+     * Establece la tabla actual y carga sus datos
+     * @param tableName Nombre de la tabla a cargar
+     */
+    Q_INVOKABLE void setCurrentTable(const QString &tableName);
+
+    // ============== OPERACIONES CRUD ==============
+    /**
+     * Agrega una nueva fila vacía a la tabla actual
+     * @return true si se agregó correctamente
+     */
+    Q_INVOKABLE bool addRow();
 
     /**
-     * @brief Verifica si la tabla existe en la base de datos
-     * @param tableName Nombre de la tabla a verificar
-     * @return true si la tabla existe, false en caso contrario
+     * Elimina una fila específica de la tabla actual
+     * @param row Índice de la fila a eliminar
+     * @return true si se eliminó correctamente
      */
-    Q_INVOKABLE bool tableExists(const QString &tableName) const;
+    Q_INVOKABLE bool removeRow(int row);
 
     /**
-     * @brief Obtiene la lista de tablas existentes en la base de datos
-     * @return QVariantList con los nombres de todas las tablas
+     * Confirma todos los cambios pendientes en la BD
+     * @return true si los cambios se guardaron correctamente
      */
-    Q_INVOKABLE QVariantList getTablesList() const;
+    Q_INVOKABLE bool submitChanges();
 
     /**
-     * @brief Obtiene la lista de tablas como QStringList (para QML)
-     * @return QStringList con los nombres de todas las tablas
+     * Revierte todos los cambios pendientes
+     * @return true si se revirtieron correctamente
      */
-    QStringList getTableListAsStringList() const;
+    Q_INVOKABLE bool revertChanges();
 
+    // ============== INFORMACIÓN DE TABLAS ==============
     /**
-     * @brief Obtiene información detallada de una tabla específica
+     * Obtiene los nombres de columnas de una tabla específica
      * @param tableName Nombre de la tabla
-     * @return QVariantList con información de cada columna
+     * @return Lista de nombres de columnas
      */
-    Q_INVOKABLE QVariantList getTableStructure(const QString &tableName) const;
+    Q_INVOKABLE QStringList getColumnNames(const QString &tableName) const;
 
     /**
-     * @brief Obtiene el número de registros en una tabla
-     * @param tableName Nombre de la tabla
-     * @return Número de registros, -1 si hay error
+     * Obtiene el número total de filas en la tabla actual
+     * @return Número de filas
      */
-    Q_INVOKABLE int getTableRecordCount(const QString &tableName) const;
+    Q_INVOKABLE int getRowCount() const;
 
     /**
-     * @brief Elimina una tabla de la base de datos
-     * @param tableName Nombre de la tabla a eliminar
-     * @return true si la tabla fue eliminada, false en caso contrario
+     * Obtiene el número total de columnas en la tabla actual
+     * @return Número de columnas
      */
-    Q_INVOKABLE bool dropTable(const QString &tableName);
+    Q_INVOKABLE int getColumnCount() const;
+
+    // ============== BÚSQUEDA Y FILTRADO ==============
+    /**
+     * Filtra la tabla usando una expresión WHERE SQL
+     * @param filterExpression Expresión de filtro (ej: "edad > 18")
+     */
+    Q_INVOKABLE void filterTable(const QString &filterExpression);
 
     /**
-     * @brief Obtiene la ruta completa donde se almacena la base de datos
-     * @return QString con la ruta completa del archivo .db
+     * Limpia todos los filtros aplicados
      */
-    QString getDatabasePath() const { return m_fullDatabasePath; }
+    Q_INVOKABLE void clearFilter();
 
+    // ============== UTILIDADES ==============
     /**
-     * @brief Obtiene el nombre de la base de datos actual
-     * @return QString con el nombre de la base de datos
+     * Exporta los datos actuales a un archivo CSV
+     * @param filePath Ruta del archivo de destino
+     * @return true si la exportación fue exitosa
      */
-    QString getDatabaseName() const { return m_databaseName; }
-
-    /**
-     * @brief Verifica si hay conexión activa a la base de datos
-     * @return true si está conectada, false en caso contrario
-     */
-    bool isConnected() const { return m_isConnected; }
-
-    /**
-     * @brief Cierra la conexión a la base de datos
-     */
-    Q_INVOKABLE void closeDatabase();
-
-    /**
-     * @brief Obtiene información de la base de datos como QString para mostrar
-     * @return QString con información formateada (nombre, ruta, tablas, etc.)
-     */
-    Q_INVOKABLE QString getDatabaseInfo() const;
+    Q_INVOKABLE bool exportToCSV(const QString &filePath);
 
 signals:
-    /**
-     * @brief Señal emitida cuando se crea una tabla exitosamente
-     * @param tableName Nombre de la tabla creada
-     */
-    void tableCreated(const QString &tableName);
+    // Señales de cambios en tabla
+    void tableListChanged();
+    void currentTableChanged();
+    void tableModelChanged();
+    void rowCountChanged();
 
-    /**
-     * @brief Señal emitida cuando ocurre un error
-     * @param errorMessage Mensaje descriptivo del error
-     */
+    // Señales de notificación
     void errorOccurred(const QString &errorMessage);
-
-    /**
-     * @brief Señal emitida cuando la conexión a la base de datos cambia de estado
-     * @param connected true si está conectada, false si se desconectó
-     */
-    void connectionStatusChanged(bool connected);
-
-    /**
-     * @brief Señal emitida cuando se crea una nueva base de datos
-     * @param databasePath Ruta completa de la base de datos creada
-     */
+    void tableCreated(const QString &tableName);
     void databaseCreated(const QString &databasePath);
-
-    /**
-     * @brief Señal emitida cuando cambia la ruta de la base de datos
-     */
-    void databasePathChanged();
-
-    /**
-     * @brief Señal emitida cuando cambia el nombre de la base de datos
-     */
-    void databaseNameChanged();
-
-    /**
-     * @brief Señal emitida cuando cambia la lista de tablas
-     */
-    void tablesListChanged();
+    void connectionStatusChanged(bool connected);
+    void dataChanged();
 
 private:
+    // ============== MÉTODOS PRIVADOS ==============
     /**
-     * @brief Valida que el nombre de la tabla sea válido (sin caracteres especiales, etc.)
-     * @param tableName Nombre a validar
-     * @return true si es válido, false en caso contrario
+     * Carga la lista de todas las tablas de la BD
+     * Ejecuta: SELECT name FROM sqlite_master WHERE type='table'
+     */
+    void loadTableList();
+
+    /**
+     * Crea un modelo de tabla dinámico para la tabla actual
+     */
+    void createTableModel();
+
+    /**
+     * Valida si el nombre de tabla existe
+     * @param tableName Nombre de la tabla
+     * @return true si la tabla existe
      */
     bool isValidTableName(const QString &tableName) const;
 
     /**
-     * @brief Valida que el nombre de un campo sea válido
-     * @param fieldName Nombre del campo a validar
-     * @return true si es válido, false en caso contrario
+     * Establece el último error y emite la señal
+     * @param errorMessage Mensaje de error
      */
-    bool isValidFieldName(const QString &fieldName) const;
+    void setError(const QString &errorMessage);
 
-    /**
-     * @brief Valida que el nombre de la base de datos sea válido
-     * @param dbName Nombre a validar
-     * @return true si es válido, false en caso contrario
-     */
-    bool isValidDatabaseName(const QString &dbName) const;
-
-    /**
-     * @brief Convierte el tipo de dato especificado en QML a su equivalente SQL
-     * @param type Tipo en formato QML (INT, TEXT, REAL, DATE, BOOLEAN)
-     * @return Tipo SQL correspondiente
-     */
-    QString convertTypeToSQL(const QString &type) const;
-
-    /**
-     * @brief Construye la cláusula SQL para un campo individual
-     * @param fieldMap QVariantMap con la información del campo
-     * @return QString con la cláusula SQL del campo
-     */
-    QString buildFieldClause(const QVariantMap &fieldMap) const;
-
-    /**
-     * @brief Obtiene la ruta estándar de datos de la aplicación
-     * @return QString con la ruta
-     */
-    QString getDefaultDataPath() const;
-
-    // Miembros privados
-    QSqlDatabase m_database;           ///< Conexión a la base de datos
-    QString m_lastError;               ///< Almacena el último error ocurrido
-    QString m_databaseName;            ///< Nombre de la base de datos (sin extensión)
-    QString m_fullDatabasePath;        ///< Ruta completa con nombre (ej: E:/data/mibase.db)
-    QString m_databaseDirectory;       ///< Directorio donde se almacena
-    bool m_isConnected;                ///< Estado de la conexión
+    // ============== MIEMBROS ==============
+    QSqlDatabase m_database;
+    std::unique_ptr<QSqlTableModel> m_tableModel;
+    QStringList m_tableList;
+    QString m_currentTable;
+    QString m_lastError;
+    QString m_databasePath;
 };
-
-#endif // DBMANAGER_H
