@@ -19,17 +19,19 @@ MMComponents.MMDrawer {
   interactive: false
   closePolicy: Popup.CloseOnEscape
 
+  drawerBottomMargin: 0
+
   dropShadow: true
 
   background: Rectangle {
-    color: __style.lightGreenColor
+    color: __style.polarColor
     radius: __style.radius20
 
     layer.enabled: root.dropShadow
     layer.effect: MMComponents.MMShadow {}
 
     Rectangle {
-      color: __style.lightGreenColor
+      color: __style.polarColor
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
@@ -45,32 +47,58 @@ MMComponents.MMDrawer {
 
   onClosed: {
     if ( !filtersApplied ) {
-      // User closed without pressing "Show results" - revert pending changes
-        __activeProject.filterController.discardPendingChanges()
+      __activeProject.filterController.discardPendingChanges()
     }
     filtersApplied = false
   }
 
-  // Cache of vector layers
   QtObject {
     id: internal
     property var vectorLayers: []
+    property var allFields: []
 
     function refreshLayers() {
-      // Clear first to force UI rebuild
-      vectorLayers = []
-      // Use FilterController to get vector layers
       vectorLayers = __activeProject.filterController.getVectorLayers()
+      let fields = []
+      for ( let i = 0; i < vectorLayers.length; i++ ) {
+        let lyr = vectorLayers[i]
+        let lyrFields = __activeProject.filterController.getFilterableFields( lyr.layer )
+        for ( let j = 0; j < lyrFields.length; j++ ) {
+          let f = lyrFields[j]
+          fields.push({
+            layerId: lyr.layerId,
+            vectorLayer: lyr.layer,
+            name: f.name,
+            displayName: f.displayName || f.name,
+            filterType: f.filterType || "text",
+            currentValue: f.currentValue !== undefined ? f.currentValue : null,
+            currentValueTo: f.currentValueTo !== undefined ? f.currentValueTo : null,
+            hasTime: !!f.hasTime,
+            multiSelect: !!f.multiSelect,
+            currentValueTexts: f.currentValueTexts || []
+          })
+        }
+      }
+      // Setting to [] first forces the Repeater to destroy all existing delegates.
+      // Qt.callLater ensures the two assignments are processed in separate event
+      // loop iterations, so the recreation picks up the fresh field values.
+      allFields = []
+      Qt.callLater( function() { allFields = fields } )
     }
   }
 
-  drawerHeader.title: qsTr("Filters")
+  drawerHeader.title: qsTr( "Filters" )
+  drawerHeader.titleFont: __style.t2
 
   drawerHeader.topLeftItemContent: MMComponents.MMButton {
-    type: MMButton.Types.Tertiary
-    text: qsTr("Reset")
+    type: MMButton.Types.Primary
+    size: MMButton.Sizes.Small
+    text: qsTr( "Reset" )
     fontColor: __style.grapeColor
-    visible: __activeProject.filterController.hasActiveFilters
+    bgndColor: __style.negativeLightColor
+    bgndColorHover: __style.negativeLightColor
+    fontColorHover: __style.grapeColor
+    iconColorHover: __style.grapeColor
 
     anchors {
       left: parent.left
@@ -82,14 +110,13 @@ MMComponents.MMDrawer {
       __activeProject.filterController.clearAllFilters()
       __activeProject.filterController.applyFiltersToAllLayers()
       root.filtersApplied = true
-      // Refresh the UI to clear input fields
       internal.refreshLayers()
     }
   }
 
   drawerContent: Item {
     width: parent.width
-    height: root.maxHeightHit ? root.drawerContentAvailableHeight : ( contentColumn.implicitHeight + __style.margin12 + showResultsButton.height )
+    height: root.drawerContentAvailableHeight
 
     MMComponents.MMScrollView {
       id: scrollView
@@ -103,43 +130,71 @@ MMComponents.MMDrawer {
         width: scrollView.availableWidth
         spacing: __style.margin20
 
-        // Show message if no layers
         MMComponents.MMText {
           width: parent.width
-          visible: internal.vectorLayers.length === 0
-          text: qsTr("No layers available for filtering")
+          visible: internal.allFields.length === 0
+          text: qsTr( "No filtering" )
           font: __style.p4
           color: __style.mediumGreyColor
           horizontalAlignment: Text.AlignHCenter
         }
 
-        // Repeater for each vector layer
         Repeater {
-          id: layerRepeater
+          model: internal.allFields
 
-          model: internal.vectorLayers
+          delegate: Loader {
+            id: fieldLoader
 
-          delegate: Item {
-            required property var model
+            required property var modelData
 
             width: contentColumn.width
-            height: layerSection.implicitHeight
 
-            MMFilterLayerSection {
-              id: layerSection
-              width: parent.width
+            Component.onCompleted: {
+              let base = {
+                fieldDisplayName: modelData.displayName,
+                fieldLayerId:     modelData.layerId,
+                fieldName:        modelData.name,
+                currentValue:     modelData.currentValue
+              }
+              switch ( modelData.filterType ) {
+                case "text":
+                  setSource( "components/MMFilterTextEditor.qml", base )
+                  break
+                case "number":
+                  setSource( "components/MMFilterRangeInput.qml", Object.assign( {}, base, {
+                    currentValueTo: modelData.currentValueTo
+                  }))
+                  break
+                case "date":
+                  setSource( "components/MMFilterDateRange.qml", Object.assign( {}, base, {
+                    currentValueTo: modelData.currentValueTo,
+                    hasTime:        modelData.hasTime
+                  }))
+                  break
+                case "bool":
+                  setSource( "components/MMFilterBoolInput.qml", base )
+                  break
+                case "dropdown":
+                  setSource( "components/MMFilterDropdownEditor.qml", Object.assign( {}, base, {
+                    currentValueTexts: modelData.currentValueTexts,
+                    multiSelect:       modelData.multiSelect,
+                    vectorLayer:       modelData.vectorLayer
+                  }))
+                  break
+              }
+            }
 
-              layerId: model.layerId
-              layerName: model.layerName
-              vectorLayer: model.layer
+            Connections {
+              target: fieldLoader.item
+              ignoreUnknownSignals: true
+              function onRefreshRequested() { internal.refreshLayers() }
             }
           }
         }
 
-        // Bottom spacer so content can scroll past the floating button
         Item {
           width: parent.width
-          height: showResultsButton.height + __style.margin12
+          height: showResultsButton.height + __style.margin12 + __style.safeAreaBottom
         }
       }
     }
@@ -152,14 +207,15 @@ MMComponents.MMDrawer {
 
       anchors {
         bottom: parent.bottom
+        bottomMargin: __style.margin8 + __style.safeAreaBottom
         left: parent.left
         right: parent.right
       }
 
-      text: qsTr("Show results")
+      text: qsTr( "Apply filters" )
 
       onClicked: {
-          __activeProject.filterController.applyFiltersToAllLayers()
+        __activeProject.filterController.applyFiltersToAllLayers()
         root.filtersApplied = true
         root.close()
       }

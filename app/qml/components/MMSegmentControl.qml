@@ -16,6 +16,11 @@ Item {
   enum Options { All, True, False }
 
   property int selectedIndex: MMSegmentControl.Options.All
+  property color backgroundColor: __style.polarColor
+
+  property string allText: qsTr( "All" )
+  property string trueText: qsTr( "True" )
+  property string falseText: qsTr( "False" )
 
   implicitHeight: __style.row50
   implicitWidth: 3 * ( __style.row50 + 2 * __style.margin20 ) + 2 * __style.margin12
@@ -23,7 +28,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     radius: __style.radius12
-    color: __style.polarColor
+    color: root.backgroundColor
   }
 
   Row {
@@ -56,15 +61,15 @@ Item {
 
         MMText {
           anchors.centerIn: parent
+          // extra padding
+          width: parent.width - 2 * __style.margin8
+          horizontalAlignment: Text.AlignHCenter
 
           text: {
             switch ( segment.index ) {
-              // 0 for All
-              case MMSegmentControl.Options.All: return qsTr( "All" )
-              // 1 for True
-              case MMSegmentControl.Options.True: return qsTr( "True" )
-              // 2 for False
-              case MMSegmentControl.Options.False: return qsTr( "False" )
+              case MMSegmentControl.Options.All:   return root.allText
+              case MMSegmentControl.Options.True:  return root.trueText
+              case MMSegmentControl.Options.False: return root.falseText
             }
             return ""
           }

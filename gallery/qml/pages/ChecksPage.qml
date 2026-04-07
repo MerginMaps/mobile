@@ -194,6 +194,19 @@ ScrollView {
       MMComponents.MMSegmentControl {
         enabled: false
       }
+
+      MMComponents.MMSegmentControl {
+        allText: qsTr( "No filter" )
+        trueText: qsTr( "Inspected" )
+        falseText: qsTr( "Not inspected" )
+        selectedIndex: MMComponents.MMSegmentControl.Options.False
+      }
+
+      MMComponents.MMSegmentControl {
+        allText: qsTr( "A very long label that should be elided" )
+        trueText: qsTr( "Another extremely long true label" )
+        falseText: qsTr( "A different very long false label" )
+      }
     }
   }
 
