@@ -262,8 +262,11 @@ ApplicationWindow {
 
       // Ahora usa el objeto global registrado en QML
       dbManager: __dbManager
-      currentDatabaseName: __dbManager.databaseName
-      currentDatabasePath: __dbManager.databasePath
+      //currentDatabaseName: __dbManager.databaseName
+      //currentDatabasePath: __dbManager.databasePath
+
+      currentDatabaseName: __dbManager ? __dbManager.databaseName : ""
+      currentDatabasePath: __dbManager ? __dbManager.databasePath : ""
 
       onOpened: {
         stateManager.state = "misc"
