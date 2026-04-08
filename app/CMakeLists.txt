@@ -56,6 +56,7 @@ set(MM_SRCS
     featurelayerpair.cpp
     featuresmodel.cpp
     fieldsmodel.cpp
+    filter/uniquevaluesfiltermodel.cpp
     filtercontroller.cpp
     guidelinecontroller.cpp
     hapticsmodel.cpp
@@ -148,6 +149,7 @@ set(MM_HDRS
     featurelayerpair.h
     featuresmodel.h
     fieldsmodel.h
+    filter/uniquevaluesfiltermodel.h
     filtercontroller.h
     guidelinecontroller.h
     hapticsmodel.h
@@ -320,6 +322,7 @@ target_include_directories(
   MerginMaps
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/
          ${CMAKE_CURRENT_SOURCE_DIR}/attributes
+         ${CMAKE_CURRENT_SOURCE_DIR}/filter
          ${CMAKE_CURRENT_SOURCE_DIR}/map
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
