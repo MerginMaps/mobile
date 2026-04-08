@@ -75,7 +75,11 @@ MMComponents.MMDrawer {
             currentValueTo: f.currentValueTo !== undefined ? f.currentValueTo : null,
             hasTime: !!f.hasTime,
             multiSelect: !!f.multiSelect,
-            currentValueTexts: f.currentValueTexts || []
+            currentValueTexts: f.currentValueTexts || [],
+            boolTrueLabel: f.boolTrueLabel || "",
+            boolFalseLabel: f.boolFalseLabel || "",
+            boolCheckedValue: f.boolCheckedValue !== undefined ? f.boolCheckedValue : null,
+            boolUncheckedValue: f.boolUncheckedValue !== undefined ? f.boolUncheckedValue : null
           })
         }
       }
@@ -172,7 +176,12 @@ MMComponents.MMDrawer {
                   }))
                   break
                 case "bool":
-                  setSource( "components/MMFilterBoolInput.qml", base )
+                  setSource( "components/MMFilterBoolInput.qml", Object.assign( {}, base, {
+                    boolTrueLabel:    modelData.boolTrueLabel,
+                    boolFalseLabel:   modelData.boolFalseLabel,
+                    boolCheckedValue: modelData.boolCheckedValue,
+                    boolUncheckedValue: modelData.boolUncheckedValue
+                  }))
                   break
                 case "dropdown":
                   setSource( "components/MMFilterDropdownEditor.qml", Object.assign( {}, base, {
