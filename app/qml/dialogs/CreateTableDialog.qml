@@ -2,28 +2,46 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import QtQuick.Window
 
 Dialog {
     id: createTableDialog
     title: "Crear Nueva Tabla"
-    width: 700
-    height: 700
+
+    // Responsive dimensions: up to 90% of screen width and 85% of screen height
+    width: Math.min(Screen.width * 0.9, 700)
+    height: Math.min(Screen.height * 0.85, 700)
+
+    // Mobile breakpoint: screens narrower than 480 logical pixels
+    readonly property bool isMobile: width < 480
+
+    // Minimum touch target for mobile buttons (44px) vs compact desktop size
+    readonly property real buttonHeight: isMobile ? 44 : 36
+    readonly property real buttonFontSize: isMobile ? 10 : 8
+
+    // Horizontal padding inside DialogButtonBox (left + right insets)
+    readonly property real dialogButtonBoxHPadding: 32
+
     modal: true
-//    standardButtons: Dialog.Cancel | Dialog.Ok
+
     footer: DialogButtonBox {
             Button {
                 text: "Aceptar"
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                implicitWidth: 5 // Tamaño fijo
-                implicitHeight: 20
-                font.pointSize: 8
+                implicitWidth: createTableDialog.isMobile
+                               ? (createTableDialog.width - createTableDialog.dialogButtonBoxHPadding) / 2
+                               : 120
+                implicitHeight: createTableDialog.buttonHeight
+                font.pointSize: createTableDialog.buttonFontSize
             }
             Button {
                 text: "Cancelar"
                 DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
-                implicitWidth: 5
-                implicitHeight: 20
-                font.pointSize: 8
+                implicitWidth: createTableDialog.isMobile
+                               ? (createTableDialog.width - createTableDialog.dialogButtonBoxHPadding) / 2
+                               : 120
+                implicitHeight: createTableDialog.buttonHeight
+                font.pointSize: createTableDialog.buttonFontSize
             }
         }
 
@@ -194,8 +212,8 @@ Dialog {
     Dialog {
         id: dbInfoDialogPopup
         title: "Información de Base de Datos"
-        width: 700
-        height: 500
+        width: Math.min(Screen.width * 0.9, 700)
+        height: Math.min(Screen.height * 0.75, 500)
         modal: true
         property string infoText: ""
 
@@ -207,7 +225,7 @@ Dialog {
                 wrapMode: Text.Wrap
                 padding: 15
                 font.family: "Courier New"
-                font.pointSize: 9
+                font.pointSize: createTableDialog.isMobile ? 9 : 9
                 color: "#333"
             }
         }
