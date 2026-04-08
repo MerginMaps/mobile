@@ -56,7 +56,7 @@ MMSwitchInput {
   text: _fieldHasMixedValues ? "" : checked ? internal.checkedStateValue : internal.uncheckedStateValue
   placeholderText: _fieldHasMixedValues ? _fieldValue : ""
 
-  checked: _fieldHasMixedValues ? internal.uncheckedStateValue : _fieldValue == internal.checkedStateValue
+  checked: !_fieldHasMixedValues && internal.checkedStateValue !== "" && _fieldValue == internal.checkedStateValue
 
   onToggled: {
     let newVal = checked ? internal.checkedStateValue : internal.uncheckedStateValue
