@@ -161,6 +161,14 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     qWarning( "invalid compass, no GPS Direction" );
   }
 
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+  NSDate *now = [NSDate date];
+  [dateFormatter setDateFormat:@"yyyy:MM:dd"];
+  [gpsDict setValue:[dateFormatter stringFromDate:now] forKey:( NSString * )kCGImagePropertyGPSDateStamp];
+  [dateFormatter setDateFormat:@"HH:mm:ss"];
+  [gpsDict setValue:[dateFormatter stringFromDate:now] forKey:( NSString * )kCGImagePropertyGPSTimeStamp];
+
   return gpsDict;
 }
 
