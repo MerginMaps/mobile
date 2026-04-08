@@ -276,8 +276,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
   if ( filter.filterType == QLatin1String( "bool" ) )
   {
-    bool boolValue = filter.value.toBool();
-    return QStringLiteral( "%1 = %2" ).arg( quotedField, boolValue ? QStringLiteral( "TRUE" ) : QStringLiteral( "FALSE" ) );
+    // for custom checkboxes the values can also be string or integers
+    if ( filter.value.typeId() == QMetaType::Bool )
+    {
+      bool boolValue = filter.value.toBool();
+      return QStringLiteral( "%1 = %2" ).arg( quotedField, boolValue ? QStringLiteral( "TRUE" ) : QStringLiteral( "FALSE" ) );
+    }
+    return QStringLiteral( "%1 = %2" ).arg( quotedField, QgsExpression::quotedValue( filter.value ) );
   }
   else if ( filter.filterType == QLatin1String( "text" ) )
   {
@@ -502,6 +507,36 @@ QVariantList FilterController::getFilterableFields( QgsVectorLayer *layer ) cons
       filterType = QStringLiteral( "dropdown" );
       multiSelect = widgetSetup.config().value( QStringLiteral( "AllowMulti" ) ).toBool();
     }
+    else if ( widgetType == QLatin1String( "CheckBox" ) )
+    {
+      filterType = QStringLiteral( "bool" );
+      QVariantMap config = widgetSetup.config();
+      QString checkedStateStr  = config.value( QStringLiteral( "CheckedState" ) ).toString();
+      QString uncheckedStateStr = config.value( QStringLiteral( "UncheckedState" ) ).toString();
+
+      if ( !checkedStateStr.isEmpty() )
+        fieldInfo[QStringLiteral( "boolTrueLabel" )] = checkedStateStr;
+      if ( !uncheckedStateStr.isEmpty() )
+        fieldInfo[QStringLiteral( "boolFalseLabel" )] = uncheckedStateStr;
+
+      // Emit typed checked/unchecked values matching the field's actual storage type
+      QMetaType::Type fieldType = static_cast<QMetaType::Type>( field.type() );
+      bool isIntField = ( fieldType == QMetaType::Int || fieldType == QMetaType::UInt ||
+                          fieldType == QMetaType::LongLong || fieldType == QMetaType::ULongLong );
+
+      if ( !checkedStateStr.isEmpty() )
+      {
+        bool ok = false;
+        int intVal = checkedStateStr.toInt( &ok );
+        fieldInfo[QStringLiteral( "boolCheckedValue" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( checkedStateStr );
+      }
+      if ( !uncheckedStateStr.isEmpty() )
+      {
+        bool ok = false;
+        int intVal = uncheckedStateStr.toInt( &ok );
+        fieldInfo[QStringLiteral( "boolUncheckedValue" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( uncheckedStateStr );
+      }
+    }
     else
     {
       // Determine filter type based on field data type
@@ -509,6 +544,10 @@ QVariantList FilterController::getFilterableFields( QgsVectorLayer *layer ) cons
 
       switch ( fieldType )
       {
+        case QMetaType::Bool:
+          filterType = QStringLiteral( "bool" );
+          break;
+
         case QMetaType::Int:
         case QMetaType::UInt:
         case QMetaType::LongLong:
