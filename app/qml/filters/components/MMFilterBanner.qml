@@ -35,7 +35,7 @@ Rectangle {
       verticalCenter: parent.verticalCenter
     }
 
-    spacing: __style.spacing8
+    spacing: __style.spacing10
 
     MMComponents.MMText {
       Layout.fillWidth: true
