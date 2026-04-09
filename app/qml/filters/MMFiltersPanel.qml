@@ -142,7 +142,6 @@ MMComponents.MMDrawer {
                 base['isMultiSelect'] = isMulti
 
                 const dropdownConfig = __activeProject.filterController.getDropdownConfiguration( modelData.filterId )
-                console.log( "--> dropdown config:", JSON.stringify( dropdownConfig ) )
 
                 if ( !Object.keys( dropdownConfig ).length )
                 {
@@ -155,6 +154,16 @@ MMComponents.MMDrawer {
                   base["vectorLayerId"] = dropdownConfig["layer_id"]
                   base["fieldName"] = dropdownConfig["field_name"]
                   setSource( "components/MMFilterDropdownUniqueValuesInput.qml", base )
+                }
+                else if ( dropdownConfig["type"] === "value_relation" )
+                {
+                  base["widgetConfig"] = dropdownConfig["config"]
+                  setSource( "components/MMFilterDropdownValueRelationInput.qml", base )
+                }
+                else if ( dropdownConfig["type"] === "value_map" )
+                {
+                  base["widgetConfig"] = dropdownConfig["config"]
+                  setSource( "components/MMFilterDropdownValueMapInput.qml", base )
                 }
               }
             }
