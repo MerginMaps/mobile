@@ -9,6 +9,12 @@ set(MM_VERSION_MAJOR "2026")
 set(MM_VERSION_MINOR "1")
 set(MM_VERSION_PATCH "2")
 
+set(APPLICATION_NAME "MDM móvil")
+set(ORGANIZATION_NAME "INEGI")
+set(ORGANIZATION_DOMAIN "inegi.org.mx")
+
+##project(MerginMaps LANGUAGES CXX C)
+
 if (VCPKG_TARGET_TRIPLET MATCHES ".*ios.*")
   set(IOS TRUE)
 endif ()
@@ -16,15 +22,10 @@ endif ()
 # Note: we cannot set this for non-android build, since CMake will start looking for
 # Qt6AndroidMacros.cmake
 if (ANDROID_ABI)
-  set(ANDROIDAPI "28") # when changed change VCPKG_CMAKE_SYSTEM_VERSION in triplets
-                       # *-android.cmake
+  set(ANDROIDAPI "28") 
 
-  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") # when changed change
-                                                # VCPKG_CMAKE_SYSTEM_VERSION in triplets
-                                                # *-android.cmake
-  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") # when changed change
-                                                    # VCPKG_CMAKE_SYSTEM_VERSION in
-                                                    # triplets *-android.cmake
+  set(ANDROID_PLATFORM "android-${ANDROIDAPI}") 
+  set(ANDROID_NDK_PLATFORM "android-${ANDROIDAPI}") 
   set(ANDROID_STL "c++_shared")
   set(ANDROID_ARM_NEON ON)
 
@@ -46,11 +47,11 @@ if (IOS)
   set(PLATFORM "OS")
   set(ENABLE_ARC FALSE)
   set(ENABLE_BITCODE FALSE)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") # when changed change triplets arm64-ios.cmake
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "16.0") 
 endif ()
 
 if (APPLE AND NOT IOS)
-  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") # when changed change also triplets *-osx.cmake
+  set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0") 
 endif ()
 
 # ########################################################################################
@@ -69,6 +70,32 @@ project(
   HOMEPAGE_URL "https://merginmaps.com"
   LANGUAGES CXX
 )
+
+# --- BLOQUE DE COMPATIBILIDAD PARA LIBKML/GDAL (Android) ---
+include(FindPackageHandleStandardArgs)
+
+# 1. Manejo de MINIZIP
+find_package(unofficial-minizip CONFIG REQUIRED)
+if(TARGET unofficial::minizip::minizip AND NOT TARGET LIBKML::MINIZIP)
+    add_library(LIBKML::MINIZIP INTERFACE IMPORTED)
+    set_target_properties(LIBKML::MINIZIP PROPERTIES
+        INTERFACE_LINK_LIBRARIES "unofficial::minizip::minizip"
+    )
+endif()
+
+# 2. Manejo de URIPARSER
+find_package(uriparser CONFIG REQUIRED)
+if(TARGET uriparser::uriparser AND NOT TARGET LIBKML::URIPARSER)
+    add_library(LIBKML::URIPARSER INTERFACE IMPORTED)
+    set_target_properties(LIBKML::URIPARSER PROPERTIES
+        INTERFACE_LINK_LIBRARIES "uriparser::uriparser"
+    )
+    message(STATUS "### Alias LIBKML::URIPARSER creado exitosamente ###")
+endif()
+# ---------------------------------------------------------
+
+# Forzamos el modo CONFIG para que vcpkg tome el control total
+find_package(GDAL CONFIG REQUIRED)
 
 # ########################################################################################
 # OPTIONS
@@ -99,11 +126,8 @@ else ()
 endif ()
 
 if (IOS)
-  # Important, if QGIS_QUICK_DATA_PATH value is changed, old projects may not be found
-  # after release on iOS devices
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
 elseif (ANDROID)
-  # Android sets this up automatically at runtime
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
 elseif (WIN)
   set(QGIS_QUICK_DATA_PATH_DEFAULT "INPUT")
@@ -182,9 +206,6 @@ find_package(
   REQUIRED
 )
 
-# Qt by default assumes that cmake files live in `lib/cmake`. Point to `share` instead.
-# See
-# https://github.com/qt/qtbase/blob/39290c508e2c7fa816c6f79b3eb284adc0cad3c0/src/corelib/Qt6AndroidMacros.cmake#L1016C16-L1026
 if (ANDROID)
   get_filename_component(
     QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI} "${Qt6_DIR}/.." ABSOLUTE
@@ -196,8 +217,6 @@ if (ANDROID)
 endif ()
 
 if (NOT IOS)
-  # https://doc.qt.io/qt-6/qtprintsupport-index.html Qt Print Support is not available on
-  # iOS
   find_package(
     Qt6
     COMPONENTS PrintSupport
@@ -218,7 +237,17 @@ find_package(Geodiff CONFIG REQUIRED)
 find_package(GEOS CONFIG REQUIRED)
 find_package(PostgreSQL REQUIRED)
 find_package(PROJ CONFIG REQUIRED)
+
+# --- BLOQUE DE PROTOBUF CORREGIDO ---
 find_package(Protobuf REQUIRED)
+if(TARGET protobuf::libprotobuf)
+    set(PROTOBUF_LIBRARIES protobuf::libprotobuf)
+else()
+    set(PROTOBUF_LIBRARIES ${Protobuf_LIBRARIES})
+endif()
+message(STATUS "Librerías de Protobuf detectadas: ${PROTOBUF_LIBRARIES}")
+# ------------------------------------
+
 find_package(QGIS REQUIRED)
 find_package(Qca CONFIG REQUIRED)
 find_package(Qt6Keychain CONFIG REQUIRED)
@@ -278,7 +307,6 @@ endif ()
 # ########################################################################################
 # GLOBAL DEFINES
 # ########################################################################################
-# Exiv still uses std::auto_ptr
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_definitions(_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR)
 endif ()
@@ -286,8 +314,6 @@ endif ()
 if (WIN)
   add_compile_definitions(_HAS_AUTO_PTR_ETC=1)
   add_compile_definitions(_USE_MATH_DEFINES)
-  # On windows the compiler instead of using standard min & max functions expands them to
-  # min & max macros in every file that includes windows header file
   add_compile_definitions(NOMINMAX)
 endif ()
 
@@ -298,7 +324,6 @@ else ()
 endif ()
 
 if (IOS)
-  # Using Security.SecureTransport for SSL
   add_compile_definitions(QT_NO_SSL)
 endif ()
 
@@ -306,11 +331,7 @@ if (IOS)
   add_compile_definitions(QT_NO_PRINTER)
 endif ()
 
-# This is for QGIS defined, do not move to mmconfig.h
 add_compile_definitions(HAVE_WIDGETS)
-
-# QGIS defines
-# add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_PREFIX_PATH=${QGIS_PREFIX_PATH}>")
 add_compile_definitions("$<$<CONFIG:DEBUG>:QGIS_QUICK_EXPAND_TEST_DATA>")
 
 if (ENABLE_TESTS)
@@ -321,7 +342,6 @@ endif ()
 
 set(MM_FORMATS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/docs/supported_formats.txt")
 
-# Generate mmconfig.h
 configure_file(
   ${CMAKE_SOURCE_DIR}/cmake_templates/mmconfig.h.in ${CMAKE_BINARY_DIR}/mmconfig.h
 )
@@ -337,32 +357,24 @@ if (COVERAGE)
 endif ()
 
 if (MACOS)
-  # lot of errors like: This was likely caused by different translation units being
-  # compiled with different visibility settings
   set(CMAKE_CXX_FLAGS
       "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden -fvisibility=hidden"
   )
 endif ()
 
 if (NOT WIN)
-  # Hundreds of warnings from QGIS core warning: 'Type' is deprecated: Use QMetaType::Type
-  # instead
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif ()
 
 if (WIN)
-  # Disable: warning C4003: not enough actual parameters for macro 'QStringLiteral'
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4003")
 endif ()
 
 if (IOS)
-  # Disabling warnings in qgis qgswkbptr.h
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-shorten-64-to-32")
 endif ()
 
 if (ANDROID)
-  # Make sure the generator for android_deployment_settings.json can figure out the
-  # architecture
   list(APPEND CMAKE_FIND_ROOT_PATH /)
 endif ()
 
@@ -371,8 +383,6 @@ endif ()
 # ########################################################################################
 message(STATUS "Copying proj and qgis resources to android/assets/qgis-data")
 
-# On android we need to copy the resources into the source tree and then Qt will copy it
-# to the android build directory with QT_ANDROID_PACKAGE_SOURCE_DIR
 if (ANDROID)
   set(ASSETS_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 else ()
@@ -408,14 +418,14 @@ if (ENABLE_TESTS)
 endif ()
 
 # ########################################################################################
-# INSTALL
+# INSTALL & LINKING
 # ########################################################################################
 
-if (WIN
-    OR LNX
-    OR MACOS
-)
-  # qt_add_executable - on Android automatically creates target for apk/aab - on IOS we
-  # use xcodebuild to build ipa
+if (WIN OR LNX OR MACOS)
   include(InstallStep)
 endif ()
+
+# Forzar vinculación de Protobuf a la librería principal para evitar errores de símbolos
+if(TARGET MerginMaps)
+    target_link_libraries(MerginMaps PUBLIC ${PROTOBUF_LIBRARIES})
+endif()
