@@ -41,7 +41,7 @@ QVariant ValueMapFilterModel::data( const QModelIndex &index, int role ) const
 QHash<int, QByteArray> ValueMapFilterModel::roleNames() const
 {
   QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
-  roles[KeyRole] = QStringLiteral( "key" ).toLatin1();
+  roles[KeyRole] = QStringLiteral( "Key" ).toLatin1();
 
   return roles;
 }

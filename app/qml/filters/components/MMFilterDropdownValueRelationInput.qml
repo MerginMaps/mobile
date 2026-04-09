@@ -84,16 +84,15 @@ Column {
       }
 
       textRole: "FeatureTitle"
-      valueRole: "FeatureId"
+      valueRole: "Key"
 
       onSelectionFinished: function( selectedItems ) {
 
         //
-        // We need to convert from feature IDs to key-column.
         // Large fids could be converted to scientific notation on their way to cpp,
         // so we convert them to string first in JS.
         //
-        selectedItems = selectedItems.map( x => x.toString() ).map( x => vrDropdownModel.convertToKey( x ) )
+        selectedItems = selectedItems.map( x => x.toString() )
 
         root.currentValue = selectedItems
 
@@ -111,9 +110,7 @@ Column {
         if ( root.currentValue )
         {
           // preselect choices if any are set
-
-          // TODO: this is expecting FIDs, but we fill in Key-column values, what to do?
-          // selected = root.currentValue
+          selected = root.currentValue
         }
 
         open()
