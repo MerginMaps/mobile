@@ -57,6 +57,7 @@ set(MM_SRCS
     featuresmodel.cpp
     fieldsmodel.cpp
     filter/uniquevaluesfiltermodel.cpp
+    filter/valuemapfiltermodel.cpp
     filtercontroller.cpp
     guidelinecontroller.cpp
     hapticsmodel.cpp
@@ -150,6 +151,7 @@ set(MM_HDRS
     featuresmodel.h
     fieldsmodel.h
     filter/uniquevaluesfiltermodel.h
+    filter/valuemapfiltermodel.h
     filtercontroller.h
     guidelinecontroller.h
     hapticsmodel.h
