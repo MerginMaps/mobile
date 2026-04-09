@@ -53,7 +53,7 @@ void FilterController::clearAllFilters()
     QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
     if ( vectorLayer )
     {
-      vectorLayer->setSubsetString(QStringLiteral(""));
+      vectorLayer->setSubsetString( QStringLiteral( "" ) );
     }
   }
 }
@@ -208,7 +208,7 @@ QString FilterController::generateFilterExpression( const QString &layerId ) con
 
   for ( const FieldFilter &filter : mFieldFilters )
   {
-    if ( filter.layerId != layerId || !filter.value.isValid()) continue;
+    if ( filter.layerId != layerId || !filter.value.isValid() ) continue;
 
     QString expr = buildFieldExpression( filter );
     if ( !expr.isEmpty() )
@@ -307,7 +307,7 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   // save all newFilter values to mFieldFilters values
   for ( FieldFilter &filter : mFieldFilters )
   {
-    if ( newFilters.contains(filter.filterId) )
+    if ( newFilters.contains( filter.filterId ) )
     {
       //TODO: we need to have both upper and lower bounds for numbers and dates,
       //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
@@ -336,7 +336,7 @@ QVariantMap FilterController::getDropdownConfiguration( const QString &filterId 
   for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
   {
     if ( filterId == filter.filterId )
-    {      
+    {
       fieldFilter = filter;
       break;
     }
@@ -361,17 +361,17 @@ QVariantMap FilterController::getDropdownConfiguration( const QString &filterId 
 
   if ( QString::compare( fieldConfig.type(), QStringLiteral( "ValueMap" ), Qt::CaseInsensitive ) == 0 )
   {
-    map["type"] = QStringLiteral("value_map");
+    map["type"] = QStringLiteral( "value_map" );
     map["config"] = fieldConfig.config();
   }
   else if ( QString::compare( fieldConfig.type(), QStringLiteral( "ValueRelation" ), Qt::CaseInsensitive ) == 0 )
   {
-    map["type"] = QStringLiteral("value_relation");
+    map["type"] = QStringLiteral( "value_relation" );
     map["config"] = fieldConfig.config();
   }
   else
   {
-    map["type"] = QStringLiteral("unique_values");
+    map["type"] = QStringLiteral( "unique_values" );
     map["layer_id"] = fieldFilter.layerId;
     map["field_name"] = fieldFilter.fieldName;
   }

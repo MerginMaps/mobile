@@ -24,7 +24,7 @@ struct FieldFilter
 {
     Q_GADGET
     QML_ELEMENT
-    QML_UNCREATABLE("Full FieldFilter is not exposed to QML, use only the exposed enum.")
+    QML_UNCREATABLE( "Full FieldFilter is not exposed to QML, use only the exposed enum." )
 
   public:
     enum FilterType

@@ -75,7 +75,7 @@ void UniqueValuesFilterModel::populate()
   QgsMapLayer *mapLayer = QgsProject::instance()->mapLayer( mLayerId );
   if ( !mapLayer )
   {
-    CoreUtils::log( QStringLiteral("Filtering"), QStringLiteral("Could not get layer %1").arg(mLayerId));
+    CoreUtils::log( QStringLiteral( "Filtering" ), QStringLiteral( "Could not get layer %1" ).arg( mLayerId ) );
   }
   QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer );
 
