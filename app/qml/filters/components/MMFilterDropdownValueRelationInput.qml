@@ -10,7 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
-import "../../components"
+import "../../components" as MMComponents
 
 Column {
   id: root
@@ -27,7 +27,7 @@ Column {
 
   spacing: __style.margin8
 
-  MMText {
+  MMComponents.MMText {
     width: parent.width
 
     text: root.filterName
@@ -71,10 +71,10 @@ Column {
     // TODO: add indication that model is loading features
     // TODO: add animation when drawer height is changed
 
-    sourceComponent: MMListMultiselectDrawer {
+    sourceComponent: MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root.filterName
 
-      withSearch: true
+      withSearch: vrDropdownModel.count > 5
       multiSelect: root.isMultiSelect
 
       list.model: MM.ValueRelationFeaturesModel {
@@ -88,35 +88,22 @@ Column {
 
       onSelectionFinished: function( selectedItems ) {
 
-        if ( root.isMultiSelect )
-        {
-          let isNull = selectedItems.length === 0
+        //
+        // We need to convert from feature IDs to key-column.
+        // Large fids could be converted to scientific notation on their way to cpp,
+        // so we convert them to string first in JS.
+        //
+        selectedItems = selectedItems.map( x => x.toString() ).map( x => vrDropdownModel.convertToKey( x ) )
 
-          if ( !isNull )
-          {
-            // We need to convert feature id to string prior to sending it to C++ in order to
-            // avoid conversion to scientific notation.
-            selectedItems = selectedItems.map( function(x) { return x.toString() } )
-          }
-
-          root.currentValue = vrDropdownModel.convertToQgisType( selectedItems ).replace( "{","" ).replace( "}","" ).split( ',' ).filter( x => x )
-        }
-        else
-        {
-          // We need to convert feature id to string prior to sending it to C++ in order to
-          // avoid conversion to scientific notation.
-          selectedItems = selectedItems.toString()
-
-          root.currentValue = [vrDropdownModel.convertToKey( selectedItems )]
-        }
-
-        console.log("--> selected items:", selectedItems)
+        root.currentValue = selectedItems
 
         // TODO: this is just a hack, we need to add a dedicated signal instead, Qt does not always get that array length has changed
         root.currentValueChanged()
 
         close()
       }
+
+      onSearchTextChanged: ( searchText ) => vrDropdownModel.searchExpression = searchText
 
       onClosed: dropdownDrawerLoader.active = false
 
