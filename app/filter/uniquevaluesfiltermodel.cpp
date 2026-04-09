@@ -15,23 +15,8 @@
 #include <QtConcurrentRun>
 
 
-UniqueValuesFilterModel::UniqueValuesFilterModel( QObject *parent )
-  : QAbstractListModel( parent )
+UniqueValuesFilterModel::UniqueValuesFilterModel( QObject *parent ) : QAbstractListModel( parent )
 {
-  // <TODO> remove me once this class is used! :)
-  const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
-  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
-  {
-    QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
-    if ( vectorLayer )
-    {
-      setLayer( vectorLayer );
-      setFieldName( "fid" );
-      break;
-    }
-  }
-  // </TODO>
-
   connect( &mResultWatcher, &QFutureWatcher<QVariantList>::finished, this, &UniqueValuesFilterModel::onLoadingFinished );
 }
 
@@ -55,18 +40,18 @@ QVariant UniqueValuesFilterModel::data( const QModelIndex &index, int role ) con
   }
 }
 
-QgsVectorLayer *UniqueValuesFilterModel::layer() const
+QString UniqueValuesFilterModel::layerId() const
 {
-  return mLayer;
+  return mLayerId;
 }
 
-void UniqueValuesFilterModel::setLayer( QgsVectorLayer *layer )
+void UniqueValuesFilterModel::setLayerId( const QString &layerId )
 {
-  if ( mLayer == layer )
+  if ( mLayerId == layerId )
     return;
 
-  mLayer = layer;
-  emit layerChanged();
+  mLayerId = layerId;
+  emit layerIdChanged();
 }
 
 QString UniqueValuesFilterModel::fieldName() const
@@ -85,21 +70,30 @@ void UniqueValuesFilterModel::setFieldName( const QString &fieldName )
 
 void UniqueValuesFilterModel::populate()
 {
-  if ( !mLayer || mFieldName.isEmpty() )
-    return;
+  if ( mLayerId.isEmpty() || mFieldName.isEmpty() ) return;
 
-  int fieldIndex = mLayer->fields().lookupField( mFieldName );
+  QgsMapLayer *mapLayer = QgsProject::instance()->mapLayer( mLayerId );
+  if ( !mapLayer )
+  {
+    CoreUtils::log( QStringLiteral("Filtering"), QStringLiteral("Could not get layer %1").arg(mLayerId));
+  }
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer );
+
+  if ( !layer ) return;
+
+  int fieldIndex = layer->fields().lookupField( mFieldName );
   if ( fieldIndex < 0 )
   {
     CoreUtils::log( QStringLiteral( "Filtering" ), QStringLiteral( "Error, field %1 could not be found, dropdown filter won't work." ).arg( mFieldName ) );
     return;
   }
 
+  // model already populated?
   if ( mItems.size() > 0 ) return;
 
   if ( mResultWatcher.isRunning() ) return;
 
-  QgsVectorLayer *layerClone = mLayer->clone();
+  QgsVectorLayer *layerClone = layer->clone();
 
   mResultWatcher.setFuture( QtConcurrent::run( &UniqueValuesFilterModel::loadUniqueValues, this, layerClone, fieldIndex ) );
 }

@@ -22,7 +22,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY( QgsVectorLayer *layer READ layer WRITE setLayer NOTIFY layerChanged )
+    Q_PROPERTY( QString layerId READ layerId WRITE setLayerId NOTIFY layerIdChanged )
     Q_PROPERTY( QString fieldName READ fieldName WRITE setFieldName NOTIFY fieldNameChanged )
 
   public:
@@ -32,8 +32,8 @@ class UniqueValuesFilterModel : public QAbstractListModel
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
-    QgsVectorLayer *layer() const;
-    void setLayer( QgsVectorLayer *layer );
+    QString layerId() const;
+    void setLayerId( const QString &layerId );
 
     QString fieldName() const;
     void setFieldName( const QString &fieldName );
@@ -41,7 +41,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
     Q_INVOKABLE void populate();
 
   signals:
-    void layerChanged();
+    void layerIdChanged();
     void fieldNameChanged();
 
   public slots:
@@ -50,7 +50,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
   private:
     QVariantList loadUniqueValues( QgsVectorLayer *layer, int fieldIndex );
 
-    QgsVectorLayer *mLayer = nullptr;
+    QString mLayerId;
     QString mFieldName;
 
     QVariantList mItems;
