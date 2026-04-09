@@ -17,17 +17,15 @@ Column {
   width: parent.width
   spacing: __style.margin8
 
-  required property string title
+  required property string filterName
   required property string filterId
-  required property int type            // FieldFilter.FilterType
   required property var currentValue
-
-  property bool _initialized: false
-  Component.onCompleted: _initialized = true
 
   MMText {
     width: parent.width
-    text: root.title
+
+    text: root.filterName
+
     font: __style.p6
     color: __style.nightColor
   }
@@ -38,20 +36,15 @@ Column {
     width: parent.width
     type: MMFilterTextInput.InputType.Text
     placeholderText: qsTr( "Type to filter..." )
-    text: root.currentValue[0] ? root.currentValue[0] : ""
+    text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
 
-    onTextChanged: {
-      if ( !root._initialized ) return
-      debounceTimer.restart()
-    }
+    onTextChanged: debounceTimer.restart()
   }
 
   Timer {
     id: debounceTimer
     interval: 300
     repeat: false
-    onTriggered: {
-      root.currentValue[0] = filterInput.text
-    }
+    onTriggered: root.currentValue = [filterInput.text]
   }
 }
