@@ -60,9 +60,9 @@ Column {
 
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
-      placeholderText: qsTr( "From" )
+      placeholderText: qsTr( "Min" )
       text: root.initialFrom
-      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
+      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
         if ( !root._initialized ) return
@@ -75,9 +75,9 @@ Column {
 
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
-      placeholderText: qsTr( "To" )
+      placeholderText: qsTr( "Max" )
       text: root.initialTo
-      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"To\" must be greater than \"From\"" ) : ""
+      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
         if ( !root._initialized ) return

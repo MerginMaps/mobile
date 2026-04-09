@@ -11,6 +11,7 @@
 #define FILTERCONTROLLER_H
 
 #include <qgsproject.h>
+#include <qqmlintegration.h>
 #include <QVariantList>
 
 class QgsVectorLayer;
@@ -22,10 +23,8 @@ class QgsMapLayer;
 struct FieldFilter
 {
     Q_GADGET
-    Q_PROPERTY( QString filterId MEMBER filterId )
-    Q_PROPERTY( QString filterName MEMBER filterName )
-    Q_PROPERTY( FilterType filterType MEMBER filterType )
-    Q_PROPERTY( QVariant value MEMBER value )
+    QML_ELEMENT
+    QML_UNCREATABLE( "Full FieldFilter is not exposed to QML, use only the exposed enum." )
 
   public:
     enum FilterType
@@ -52,8 +51,12 @@ struct FieldFilter
     {
       const bool hasValue = value.isValid() && !value.isNull();
       const bool isNamed = !filterName.isEmpty();
-      const bool hasFilterInfo = !layerId.isEmpty() && !fieldName.isEmpty() && !sqlExpression.isEmpty();
-      return isNamed && hasValue && hasFilterInfo;
+      return isNamed && hasValue && hasFilterInfo();
+    }
+
+    bool hasFilterInfo() const
+    {
+      return !layerId.isEmpty() && !fieldName.isEmpty() && !sqlExpression.isEmpty();
     }
 };
 
@@ -91,7 +94,7 @@ class FilterController : public QObject
     /**
      * Receives the set values for filtering, saves them and applies them to layers
      */
-    Q_INVOKABLE void processFilters( const QVariantList &newFilters );
+    Q_INVOKABLE void processFilters( const QVariantMap &newFilters );
 
     /**
      * @brief Clears all filters for a specific layer
@@ -103,20 +106,8 @@ class FilterController : public QObject
      */
     Q_INVOKABLE void clearAllFilters();
 
-    /**
-     * @brief Gets dropdown options for a ValueMap or ValueRelation field (lazy-loaded)
-     * @param filterId ID of filter which is querying this info
-     * @param searchText Filter options by display text (case-insensitive)
-     * @param limit Maximum number of options to return (for ValueRelation)
-     * @return List of maps with "text" (display) and "value" (key) entries
-     */
-    Q_INVOKABLE QVariantList getDropdownOptions( const QString &filterId, const QString &searchText = QString(), int limit = 100 );
-
-    /**
-     * @brief Gets unique values for a field (for multichoice filters)
-     * TODO: rework to use filter UUID instead
-     */
-    Q_INVOKABLE QStringList getFieldUniqueValues( QgsVectorLayer *layer, const QString &fieldName ) const;
+    // Indicates if the filter with filterId should use unique values, value relation or value map + returns configs for each
+    Q_INVOKABLE QVariantMap getDropdownConfiguration( const QString &filterId );
 
     /**
      * Queries whether there is any filtering active on the layer specified by ID. Essentially just checks the
@@ -169,12 +160,6 @@ class FilterController : public QObject
      * \return String of usable SQL expression
      */
     QString buildFieldExpression( const FieldFilter &filter ) const;
-    //TODO: needs rework to support newer lookup
-    // utility functions to support value lookup
-    QVariantList extractValueMapOptions( const QVariantMap &config, const QString &searchText ) const;
-    QVariantList extractValueRelationOptions( const QVariantMap &config, const QString &searchText, int limit, const QStringList &alwaysIncludeKeys ) const;
-    QStringList lookupValueMapTexts( const QVariantMap &config, const QStringList &keys ) const;
-    QStringList lookupValueRelationTexts( const QVariantMap &config, const QStringList &keys ) const;
 
     QList<FieldFilter> mFieldFilters;
 

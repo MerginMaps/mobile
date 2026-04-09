@@ -128,7 +128,7 @@ Column {
         type: MMFilterTextInput.InputType.Date
         checked: root.toDate !== null && !root.rangeInvalid
         placeholderText: qsTr( "To" )
-        errorMsg: root.rangeInvalid ? qsTr( "\"To\" must be greater than \"From\"" ) : ""
+        errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
         text: {
           if ( !root.toDate ) return ""
           if ( root.hasTime ) return Qt.formatDateTime( root.toDate, Qt.DefaultLocaleShortDate )

@@ -17,25 +17,17 @@ Column {
   width: parent.width
   spacing: __style.margin8
 
-  required property string fieldDisplayName
-  required property string fieldLayerId
-  required property string fieldName
+  required property string filterName
+  required property string filterId
   required property var currentValue
-
-  property string initialValue: {
-    let v = root.currentValue
-    return ( v !== null && v !== undefined && v !== "" ) ? String( v ) : ""
-  }
-
-  property bool _initialized: false
-  Component.onCompleted: _initialized = true
 
   MMText {
     width: parent.width
-    text: root.fieldDisplayName
+
+    text: root.filterName
+
     font: __style.p6
     color: __style.nightColor
-    visible: root.fieldDisplayName !== ""
   }
 
   MMFilterTextInput {
@@ -44,20 +36,15 @@ Column {
     width: parent.width
     type: MMFilterTextInput.InputType.Text
     placeholderText: qsTr( "Type to filter..." )
-    text: root.initialValue
+    text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
 
-    onTextChanged: {
-      if ( !root._initialized ) return
-      debounceTimer.restart()
-    }
+    onTextChanged: debounceTimer.restart()
   }
 
   Timer {
     id: debounceTimer
     interval: 300
     repeat: false
-    onTriggered: {
-      __activeProject.filterController.setTextFilter( root.fieldLayerId, root.fieldName, filterInput.text )
-    }
+    onTriggered: root.currentValue = [filterInput.text]
   }
 }
