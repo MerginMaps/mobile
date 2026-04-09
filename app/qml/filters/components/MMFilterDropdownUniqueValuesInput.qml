@@ -75,10 +75,14 @@ Column {
     sourceComponent: MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root.filterName
 
-      withSearch: true
+      withSearch: uniqueValuesModel.rowCount() > 5
       multiSelect: root.isMultiSelect
 
-      list.model: uniqueValuesModel
+      list.model: MM.SearchProxyModel {
+        id: searchProxyModel
+
+        sourceModel: uniqueValuesModel
+      }
 
       textRole: "display"
       secondaryTextRole: ""
@@ -93,7 +97,7 @@ Column {
         close()
       }
 
-      onSearchTextChanged: console.log("--> Search me") // TODO: search
+      onSearchTextChanged: ( searchText ) => searchProxyModel.searchString = searchText
 
       onClosed: dropdownDrawerLoader.active = false
 
