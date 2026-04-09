@@ -339,30 +339,6 @@ QStringList FilterController::getFieldUniqueValues( QgsVectorLayer *layer, const
   return result;
 }
 
-QString FilterController::getValueMapWidgetType( QgsVectorLayer *layer, const QString &fieldName ) const
-{
-  if ( !layer )
-    return {};
-
-  const int fieldIndex = layer->fields().lookupField( fieldName );
-  if ( fieldIndex < 0 )
-    return {};
-
-  return layer->editorWidgetSetup( fieldIndex ).type();
-}
-
-QVariantMap FilterController::getValueMapConfig( QgsVectorLayer *layer, const QString &fieldName ) const
-{
-  if ( !layer )
-    return {};
-
-  const int fieldIndex = layer->fields().lookupField( fieldName );
-  if ( fieldIndex < 0 )
-    return {};
-
-  return layer->editorWidgetSetup( fieldIndex ).config();
-}
-
 bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 {
   const QgsProject *project = QgsProject::instance();
