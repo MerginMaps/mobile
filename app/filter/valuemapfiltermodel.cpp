@@ -41,7 +41,8 @@ QVariant ValueMapFilterModel::data( const QModelIndex &index, int role ) const
 
 QHash<int, QByteArray> ValueMapFilterModel::roleNames() const
 {
-  return {
+  return
+  {
     { TextRole, "text" },
     { ValueRole, "value" },
   };
