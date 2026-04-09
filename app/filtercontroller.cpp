@@ -9,16 +9,18 @@
 
 #include "filtercontroller.h"
 
-#include "qgsvectorlayer.h"
-#include "qgsproject.h"
-#include "qgsexpression.h"
-#include "qgsfield.h"
-#include "qgseditorwidgetsetup.h"
-#include "qgsvaluerelationfieldformatter.h"
-#include "qgsfeaturerequest.h"
+#include <qgsvectorlayer.h>
+#include <qgsproject.h>
+#include <qgsexpression.h>
+#include <qgseditorwidgetsetup.h>
+#include <qgsvaluerelationfieldformatter.h>
+#include <qgsfeaturerequest.h>
 
 #include <QDateTime>
 #include <QDebug>
+#include <QJsonArray>
+
+#include "coreutils.h"
 
 
 FilterController::FilterController( QObject *parent )
@@ -26,392 +28,179 @@ FilterController::FilterController( QObject *parent )
 {
 }
 
-bool FilterController::hasActiveFilters() const
-{
-  for ( auto it = mAppliedFilters.constBegin(); it != mAppliedFilters.constEnd(); ++it )
-  {
-    if ( !it.value().isEmpty() )
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-QStringList FilterController::filteredLayerIds() const
-{
-  QStringList ids;
-  for ( auto it = mAppliedFilters.constBegin(); it != mAppliedFilters.constEnd(); ++it )
-  {
-    if ( !it.value().isEmpty() )
-    {
-      ids << it.key();
-    }
-  }
-  return ids;
-}
-
-void FilterController::setFieldFilter( const QString &layerId, const QString &fieldName,
-                                       const QString &filterType, const QVariant &value,
-                                       const QVariant &valueTo )
-{
-  FieldFilter filter;
-  filter.fieldName = fieldName;
-  filter.filterType = filterType;
-  filter.value = value;
-  filter.valueTo = valueTo;
-
-  if ( !filter.isValid() )
-  {
-    removeFieldFilter( layerId, fieldName );
-    return;
-  }
-
-  mFilters[layerId][fieldName] = filter;
-}
-
-void FilterController::removeFieldFilter( const QString &layerId, const QString &fieldName )
-{
-  if ( !mFilters.contains( layerId ) )
-    return;
-
-  mFilters[layerId].remove( fieldName );
-
-  if ( mFilters[layerId].isEmpty() )
-  {
-    mFilters.remove( layerId );
-  }
-}
-
-void FilterController::setTextFilter( const QString &layerId, const QString &fieldName, const QString &text )
-{
-  QString trimmedText = text.trimmed();
-
-  if ( trimmedText.isEmpty() )
-  {
-    removeFieldFilter( layerId, fieldName );
-    return;
-  }
-
-  setFieldFilter( layerId, fieldName, QStringLiteral( "text" ), trimmedText );
-}
-
-void FilterController::setNumberFilter( const QString &layerId, const QString &fieldName,
-                                        const QString &fromText, const QString &toText )
-{
-  QString trimmedFrom = fromText.trimmed();
-  QString trimmedTo = toText.trimmed();
-
-  // If both are empty, remove the filter
-  if ( trimmedFrom.isEmpty() && trimmedTo.isEmpty() )
-  {
-    removeFieldFilter( layerId, fieldName );
-    return;
-  }
-
-  QVariant fromValue;
-  QVariant toValue;
-
-  if ( !trimmedFrom.isEmpty() )
-  {
-    bool ok = false;
-    double val = trimmedFrom.toDouble( &ok );
-    if ( ok )
-    {
-      fromValue = val;
-    }
-  }
-
-  if ( !trimmedTo.isEmpty() )
-  {
-    bool ok = false;
-    double val = trimmedTo.toDouble( &ok );
-    if ( ok )
-    {
-      toValue = val;
-    }
-  }
-
-  // Only set filter if at least one value was successfully parsed
-  if ( fromValue.isValid() || toValue.isValid() )
-  {
-    setFieldFilter( layerId, fieldName, QStringLiteral( "number" ), fromValue, toValue );
-  }
-  else
-  {
-    // Invalid input - remove filter
-    removeFieldFilter( layerId, fieldName );
-  }
-}
-
-void FilterController::setDateFilter( const QString &layerId, const QString &fieldName,
-                                      const QVariant &fromDate, const QVariant &toDate,
-                                      bool hasTime )
-{
-  bool hasFrom = fromDate.isValid() && !fromDate.isNull();
-  bool hasTo = toDate.isValid() && !toDate.isNull();
-
-  // If both are invalid/null, remove the filter
-  if ( !hasFrom && !hasTo )
-  {
-    removeFieldFilter( layerId, fieldName );
-    return;
-  }
-
-  QVariant fromValue;
-  QVariant toValue;
-
-  if ( hasFrom )
-  {
-    QDateTime fromDt = fromDate.toDateTime();
-    if ( fromDt.isValid() )
-    {
-      if ( hasTime )
-      {
-        // Zero out seconds/ms — the time picker doesn't show them,
-        // so "from 15:35" should mean "from 15:35:00.000"
-        QTime t = fromDt.time();
-        fromDt.setTime( QTime( t.hour(), t.minute(), 0, 0 ) );
-      }
-      else
-      {
-        // Date-only field: set to start of day
-        fromDt.setTime( QTime( 0, 0, 0, 0 ) );
-      }
-      fromValue = fromDt;
-    }
-  }
-
-  if ( hasTo )
-  {
-    QDateTime toDt = toDate.toDateTime();
-    if ( toDt.isValid() )
-    {
-      if ( hasTime )
-      {
-        // Max out seconds/ms — "to 15:36" should mean "to 15:36:59.999"
-        QTime t = toDt.time();
-        toDt.setTime( QTime( t.hour(), t.minute(), 59, 999 ) );
-      }
-      else
-      {
-        // Date-only field: set to end of day
-        toDt.setTime( QTime( 23, 59, 59, 999 ) );
-      }
-      toValue = toDt;
-    }
-  }
-
-  // Validate: if from > to, remove the filter (invalid range)
-  if ( fromValue.isValid() && toValue.isValid() )
-  {
-    if ( fromValue.toDateTime() > toValue.toDateTime() )
-    {
-      removeFieldFilter( layerId, fieldName );
-      return;
-    }
-  }
-
-  if ( fromValue.isValid() || toValue.isValid() )
-  {
-    setFieldFilter( layerId, fieldName, QStringLiteral( "date" ), fromValue, toValue );
-  }
-  else
-  {
-    removeFieldFilter( layerId, fieldName );
-  }
-}
-
 void FilterController::clearLayerFilters( const QString &layerId )
 {
-  mFilters.remove( layerId );
+  QgsMapLayer *layer = QgsProject::instance()->mapLayers().value( layerId );
+  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+  vectorLayer->setSubsetString( QStringLiteral( "" ) );
+
+  for ( FieldFilter filter : mFieldFilters )
+  {
+    if ( filter.layerId == layerId )
+    {
+      filter.value.clear();
+    }
+  }
 }
 
 void FilterController::clearAllFilters()
 {
-  mFilters.clear();
+  mFieldFilters.clear();
 }
 
-QVariantList FilterController::getLayerFilters( const QString &layerId ) const
+void FilterController::loadFilterConfig( const QgsProject *project )
 {
-  QVariantList result;
+  mFieldFilters.clear();
 
-  if ( !mAppliedFilters.contains( layerId ) )
-    return result;
+  bool valueRead = false;
+  const bool filteringEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
 
-  // Use .value() to get a copy in const context
-  QMap<QString, FieldFilter> layerFilters = mAppliedFilters.value( layerId );
-  for ( auto it = layerFilters.constBegin(); it != layerFilters.constEnd(); ++it )
+  //return early if filtering is not setup
+  if ( !valueRead )
   {
-    QVariantMap filterMap;
-    filterMap[QStringLiteral( "fieldName" )] = it.value().fieldName;
-    filterMap[QStringLiteral( "filterType" )] = it.value().filterType;
-    filterMap[QStringLiteral( "value" )] = it.value().value;
-    filterMap[QStringLiteral( "valueTo" )] = it.value().valueTo;
-    result << filterMap;
+    return;
+  }
+  mFilteringEnabled = filteringEnabled;
+
+  const QString filtersDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Filters" ) );
+  QJsonParseError jsonError;
+  const QJsonDocument filtersRaw = QJsonDocument::fromJson( filtersDef.toUtf8(), &jsonError );
+  if ( jsonError.error != QJsonParseError::NoError )
+  {
+    CoreUtils::log( QStringLiteral( "Feature Filtering" ), QStringLiteral( "Could not parse filters from json document." ) );
+    return;
   }
 
-  return result;
-}
+  if ( !filtersRaw.isEmpty() && filtersRaw.isArray() )
+  {
+    const QJsonArray filtersArray = filtersRaw.array();
+    for ( auto filter = filtersArray.constBegin(); filter != filtersArray.constEnd(); ++filter )
+    {
+      FieldFilter newFieldFilter;
+      QJsonObject filterObject = filter->toObject();
 
-QVariant FilterController::getFieldFilterValue( const QString &layerId, const QString &fieldName ) const
-{
-  if ( !mFilters.contains( layerId ) || !mFilters.value( layerId ).contains( fieldName ) )
-    return QVariant();
+      newFieldFilter.filterId = QUuid::createUuid().toString( QUuid::WithoutBraces );
 
-  return mFilters.value( layerId ).value( fieldName ).value;
-}
+      newFieldFilter.filterName = filterObject.value( QStringLiteral( "filter_name" ) ).toString();
 
-QVariant FilterController::getFieldFilterValueTo( const QString &layerId, const QString &fieldName ) const
-{
-  if ( !mFilters.contains( layerId ) || !mFilters.value( layerId ).contains( fieldName ) )
-    return QVariant();
+      QString filterTypeRaw = filterObject.value( QStringLiteral( "filter_type" ) ).toString();
+      if ( filterTypeRaw == QStringLiteral( "Text" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::TextFilter;
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Number" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::NumberFilter;
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Date" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::DateFilter;
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Checkbox" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::CheckboxFilter;
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Single select" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::SingleSelectFilter;
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Multi select" ) )
+      {
+        newFieldFilter.filterType = FieldFilter::MultiSelectFilter;
+      }
 
-  return mFilters.value( layerId ).value( fieldName ).valueTo;
+      newFieldFilter.fieldName = filterObject.value( QStringLiteral( "field_name" ) ).toString();
+      newFieldFilter.provider = filterObject.value( QStringLiteral( "provider" ) ).toString();
+      newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
+      newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
+
+      mFieldFilters.append( newFieldFilter );
+    }
+  }
 }
 
 QString FilterController::buildFieldExpression( const FieldFilter &filter ) const
 {
-  const QString quotedField = QgsExpression::quotedColumnRef( filter.fieldName );
-
-  if ( filter.filterType == QLatin1String( "bool" ) )
+  QString expressionCopy = filter.sqlExpression;
+  switch ( filter.filterType )
   {
-    // for custom checkboxes the values can also be string or integers
-    if ( filter.value.typeId() == QMetaType::Bool )
+    case FieldFilter::TextFilter:
     {
-      bool boolValue = filter.value.toBool();
-      return QStringLiteral( "%1 = %2" ).arg( quotedField, boolValue ? QStringLiteral( "TRUE" ) : QStringLiteral( "FALSE" ) );
+      const QString textValue = filter.value.toList().at( 0 ).toString();
+      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedString( textValue ) );
+      break;
     }
-    return QStringLiteral( "%1 = %2" ).arg( quotedField, QgsExpression::quotedValue( filter.value ) );
-  }
-  else if ( filter.filterType == QLatin1String( "text" ) )
-  {
-    QString textValue = filter.value.toString().toLower();
-    // Use LOWER() for case-insensitive search (works with SQLite/GeoPackage)
-    return QStringLiteral( "LOWER(%1) LIKE '%%2%'" ).arg( quotedField, textValue.replace( "'", "''" ) );
-  }
-  else if ( filter.filterType == QLatin1String( "multichoice" ) )
-  {
-    QStringList values = filter.value.toStringList();
-    if ( values.isEmpty() )
-      return {};
-
-    QStringList quotedValues;
-    for ( const QString &v : values )
+    case FieldFilter::CheckboxFilter:
+    case FieldFilter::SingleSelectFilter:
     {
-      quotedValues << QgsExpression::quotedValue( v );
+      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
+      break;
     }
-    return QStringLiteral( "%1 IN (%2)" ).arg( quotedField, quotedValues.join( QStringLiteral( ", " ) ) );
-  }
-  else if ( filter.filterType == QLatin1String( "number" ) )
-  {
-    bool hasFrom = filter.value.isValid() && !filter.value.isNull();
-    bool hasTo = filter.valueTo.isValid() && !filter.valueTo.isNull();
-
-    // Skip invalid range where from > to
-    if ( hasFrom && hasTo && filter.value.toDouble() > filter.valueTo.toDouble() )
+    case FieldFilter::NumberFilter:
     {
-      return {};
-    }
+      const QString valueFrom = filter.value.toList().at( 0 ).toString();
+      const QString valueTo = filter.value.toList().at( 1 ).toString();
 
-    QStringList conditions;
-
-    if ( hasFrom )
-    {
-      double fromValue = filter.value.toDouble();
-      conditions << QStringLiteral( "%1 >= %2" ).arg( quotedField ).arg( fromValue );
-    }
-
-    if ( hasTo )
-    {
-      double toValue = filter.valueTo.toDouble();
-      conditions << QStringLiteral( "%1 <= %2" ).arg( quotedField ).arg( toValue );
-    }
-
-    return conditions.join( QStringLiteral( " AND " ) );
-  }
-  else if ( filter.filterType == QLatin1String( "dropdown" ) )
-  {
-    QStringList values = filter.value.toStringList();
-    if ( values.isEmpty() )
-      return {};
-
-    if ( values.size() == 1 )
-    {
-      return QStringLiteral( "%1 = %2" ).arg( quotedField, QgsExpression::quotedValue( values.first() ) );
-    }
-
-    QStringList quotedValues;
-    for ( const QString &v : values )
-    {
-      quotedValues << QgsExpression::quotedValue( v );
-    }
-    return QStringLiteral( "%1 IN (%2)" ).arg( quotedField, quotedValues.join( QStringLiteral( ", " ) ) );
-  }
-  else if ( filter.filterType == QLatin1String( "dropdown-multi" ) )
-  {
-    // Multi-value fields store values as {k1,k2,k3}
-    // Use LIKE patterns to match any position within the braced list
-    QStringList values = filter.value.toStringList();
-    if ( values.isEmpty() )
-      return {};
-
-    QStringList keyConditions;
-    for ( const QString &key : values )
-    {
-      QString escapedKey = key;
-      escapedKey.replace( "'", "''" );
-
-      // Match all positions: only value {k}, first {k,...}, last ...,k}, middle ...,k,...
-      keyConditions << QStringLiteral( "(%1 LIKE '{%2}' OR %1 LIKE '{%2,%%' OR %1 LIKE '%%,%2}' OR %1 LIKE '%%,%2,%%')" )
-                    .arg( quotedField, escapedKey );
-    }
-    return keyConditions.join( QStringLiteral( " OR " ) );
-  }
-  else if ( filter.filterType == QLatin1String( "date" ) )
-  {
-    // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
-    // so we must convert local datetimes to UTC before comparing.
-    // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
-    const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss" );
-    QStringList conditions;
-
-    if ( filter.value.isValid() && !filter.value.isNull() )
-    {
-      QDateTime fromDate = filter.value.toDateTime();
-      if ( fromDate.isValid() )
+      if ( valueFrom.isEmpty() || valueTo.isEmpty() )
       {
-        conditions << QStringLiteral( "%1 >= '%2'" ).arg( quotedField, fromDate.toUTC().toString( isoFormat ) );
+        expressionCopy = {};
+        break;
       }
-    }
 
-    if ( filter.valueTo.isValid() && !filter.valueTo.isNull() )
+      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), valueFrom );
+      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), valueTo );
+      break;
+    }
+    case FieldFilter::DateFilter:
     {
-      QDateTime toDate = filter.valueTo.toDateTime();
-      if ( toDate.isValid() )
-      {
-        conditions << QStringLiteral( "%1 <= '%2'" ).arg( quotedField, toDate.toUTC().toString( isoFormat ) );
-      }
-    }
+      // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
+      // so we must convert local datetimes to UTC before comparing.
+      // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
+      const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss" );
+      const QString dateFrom = filter.value.toList().at( 0 ).toDateTime().toUTC().toString( isoFormat );
+      const QString dateTo = filter.value.toList().at( 1 ).toDateTime().toUTC().toString( isoFormat );
 
-    return conditions.join( QStringLiteral( " AND " ) );
+      if ( dateFrom.isEmpty() || dateTo.isEmpty() )
+      {
+        expressionCopy = {};
+        break;
+      }
+
+      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), QgsExpression::quotedString( dateFrom ) );
+      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), QgsExpression::quotedString( dateTo ) );
+      break;
+    }
+    case FieldFilter::MultiSelectFilter:
+    {
+      const QVariantList values = filter.value.toList();
+      if ( values.isEmpty() )
+      {
+        expressionCopy = {};
+        break;
+      }
+
+      QStringList quotedValues;
+      for ( const QVariant &v : values )
+      {
+        quotedValues << QgsExpression::quotedValue( v );
+      }
+      expressionCopy.replace( QStringLiteral( "%%values%%" ), quotedValues.join( QStringLiteral( ", " ) ) );
+      break;
+    }
   }
 
-  return {};
+  return expressionCopy;
 }
 
 QString FilterController::generateFilterExpression( const QString &layerId ) const
 {
-  if ( !mAppliedFilters.contains( layerId ) )
-    return {};
-
-  // Use .value() to get a copy in const context
-  QMap<QString, FieldFilter> layerFilters = mAppliedFilters.value( layerId );
   QStringList expressions;
 
-  for ( auto it = layerFilters.constBegin(); it != layerFilters.constEnd(); ++it )
+  for ( const FieldFilter &filter : mFieldFilters )
   {
-    QString expr = buildFieldExpression( it.value() );
+    if ( filter.layerId != layerId ) continue;
+
+    QString expr = buildFieldExpression( filter );
     if ( !expr.isEmpty() )
     {
       expressions << QStringLiteral( "(%1)" ).arg( expr );
@@ -429,8 +218,8 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
   if ( !layer )
     return;
 
-  QString filterExpr = generateFilterExpression( layer->id() );
-  bool success = layer->setSubsetString( filterExpr );
+  const QString filterExpr = generateFilterExpression( layer->id() );
+  const bool success = layer->setSubsetString( filterExpr );
 
   qDebug() << "Applied filter to layer" << layer->name() << ":" << filterExpr << "success:" << success;
 
@@ -443,12 +232,9 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
 
 void FilterController::applyFiltersToAllLayers()
 {
-  bool hadFilters = hasActiveFilters();
+  const bool hadFilters = mFilteringEnabled;
 
-  // Commit pending filters to applied state
-  mAppliedFilters = mFilters;
-
-  QgsProject *project = QgsProject::instance();
+  const QgsProject *project = QgsProject::instance();
   if ( !project )
     return;
 
@@ -462,158 +248,71 @@ void FilterController::applyFiltersToAllLayers()
     }
   }
 
+  //TODO: probably can be removed
   emit filtersChanged();
 
-  if ( hadFilters != hasActiveFilters() )
+  if ( hadFilters != mFilteringEnabled )
   {
-    emit hasActiveFiltersChanged();
+    emit hasFiltersEnabledChanged();
   }
 }
 
-void FilterController::discardPendingChanges()
+bool FilterController::hasFiltersAvailable() const
 {
-  mFilters = mAppliedFilters;
+  return mFilteringAvailable;
 }
 
-QVariantList FilterController::getFilterableFields( QgsVectorLayer *layer ) const
+bool FilterController::hasFiltersEnabled() const
 {
-  QVariantList result;
+  return mFilteringEnabled;
+}
 
-  if ( !layer )
-    return result;
-
-  QString layerId = layer->id();
-  const QgsFields fields = layer->fields();
-  for ( int i = 0; i < fields.count(); ++i )
+void FilterController::setFiltersEnabled( const bool filtersEnabled )
+{
+  if ( mFilteringEnabled != filtersEnabled )
   {
-    const QgsField &field = fields.at( i );
-    QVariantMap fieldInfo;
-    fieldInfo[QStringLiteral( "name" )] = field.name();
-    fieldInfo[QStringLiteral( "displayName" )] = field.displayName();
+    mFilteringEnabled = filtersEnabled;
+    emit hasFiltersEnabledChanged();
+  }
+}
 
-    // Check editor widget type first — ValueMap/ValueRelation override the data type
-    QString filterType;
-    bool multiSelect = false;
-    QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( i );
-    QString widgetType = widgetSetup.type();
+QVariantList FilterController::getFilters() const
+{
+  QVariantList uiFilters;
+  for ( const FieldFilter &filter : mFieldFilters )
+  {
+    QVariantMap filterLite;
+    filterLite.insert( QStringLiteral( "filterName" ), filter.filterName );
+    filterLite.insert( QStringLiteral( "filterType" ), filter.filterType );
+    filterLite.insert( QStringLiteral( "filterId" ), filter.filterId );
+    filterLite.insert( QStringLiteral( "value" ), filter.value );
 
-    if ( widgetType == QLatin1String( "ValueMap" ) )
+    uiFilters.append( filterLite );
+  }
+  return uiFilters;
+}
+
+void FilterController::processFilters( const QVariantList &newFilters )
+{
+  // save all newFilter values to mFieldFilters values
+  for ( const QVariant &newFilter : newFilters )
+  {
+    QVariantMap newFilterMap = newFilter.toMap();
+    if ( newFilterMap[QStringLiteral( "value" )].isValid() )
     {
-      filterType = QStringLiteral( "dropdown" );
-      multiSelect = false;
-    }
-    else if ( widgetType == QLatin1String( "ValueRelation" ) )
-    {
-      filterType = QStringLiteral( "dropdown" );
-      multiSelect = widgetSetup.config().value( QStringLiteral( "AllowMulti" ) ).toBool();
-    }
-    else if ( widgetType == QLatin1String( "CheckBox" ) )
-    {
-      filterType = QStringLiteral( "bool" );
-      QVariantMap config = widgetSetup.config();
-      QString checkedStateStr  = config.value( QStringLiteral( "CheckedState" ) ).toString();
-      QString uncheckedStateStr = config.value( QStringLiteral( "UncheckedState" ) ).toString();
-
-      if ( !checkedStateStr.isEmpty() )
-        fieldInfo[QStringLiteral( "boolTrueLabel" )] = checkedStateStr;
-      if ( !uncheckedStateStr.isEmpty() )
-        fieldInfo[QStringLiteral( "boolFalseLabel" )] = uncheckedStateStr;
-
-      // Emit typed checked/unchecked values matching the field's actual storage type
-      QMetaType::Type fieldType = static_cast<QMetaType::Type>( field.type() );
-      bool isIntField = ( fieldType == QMetaType::Int || fieldType == QMetaType::UInt ||
-                          fieldType == QMetaType::LongLong || fieldType == QMetaType::ULongLong );
-
-      if ( !checkedStateStr.isEmpty() )
+      for ( FieldFilter &filter : mFieldFilters )
       {
-        bool ok = false;
-        int intVal = checkedStateStr.toInt( &ok );
-        fieldInfo[QStringLiteral( "boolCheckedValue" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( checkedStateStr );
-      }
-      if ( !uncheckedStateStr.isEmpty() )
-      {
-        bool ok = false;
-        int intVal = uncheckedStateStr.toInt( &ok );
-        fieldInfo[QStringLiteral( "boolUncheckedValue" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( uncheckedStateStr );
-      }
-    }
-    else
-    {
-      // Determine filter type based on field data type
-      QMetaType::Type fieldType = static_cast<QMetaType::Type>( field.type() );
-
-      switch ( fieldType )
-      {
-        case QMetaType::Bool:
-          filterType = QStringLiteral( "bool" );
-          break;
-
-        case QMetaType::Int:
-        case QMetaType::UInt:
-        case QMetaType::LongLong:
-        case QMetaType::ULongLong:
-        case QMetaType::Double:
-        case QMetaType::Float:
-          filterType = QStringLiteral( "number" );
-          break;
-
-        case QMetaType::QDate:
-          filterType = QStringLiteral( "date" );
-          fieldInfo[QStringLiteral( "hasTime" )] = false;
-          break;
-
-        case QMetaType::QDateTime:
-          filterType = QStringLiteral( "date" );
-          fieldInfo[QStringLiteral( "hasTime" )] = true;
-          break;
-
-        default:
-          filterType = QStringLiteral( "text" );
-          break;
-      }
-    }
-
-    fieldInfo[QStringLiteral( "filterType" )] = filterType;
-
-    if ( filterType == QLatin1String( "dropdown" ) )
-    {
-      fieldInfo[QStringLiteral( "multiSelect" )] = multiSelect;
-    }
-
-    // Get current filter value from pending state (for drawer UI)
-    if ( mFilters.contains( layerId ) && mFilters.value( layerId ).contains( field.name() ) )
-    {
-      FieldFilter filter = mFilters.value( layerId ).value( field.name() );
-      fieldInfo[QStringLiteral( "currentValue" )] = filter.value;
-      fieldInfo[QStringLiteral( "currentValueTo" )] = filter.valueTo;
-
-      // For dropdown fields, also look up display texts for currently selected keys
-      if ( filterType == QLatin1String( "dropdown" ) )
-      {
-        QStringList selectedKeys = filter.value.toStringList();
-        if ( !selectedKeys.isEmpty() )
+        if ( newFilterMap[QStringLiteral( "filterId" )].toString() == filter.filterId )
         {
-          QStringList displayTexts;
-          QVariantMap config = widgetSetup.config();
-
-          if ( widgetType == QLatin1String( "ValueMap" ) )
-          {
-            displayTexts = lookupValueMapTexts( config, selectedKeys );
-          }
-          else if ( widgetType == QLatin1String( "ValueRelation" ) )
-          {
-            displayTexts = lookupValueRelationTexts( config, selectedKeys );
-          }
-
-          fieldInfo[QStringLiteral( "currentValueTexts" )] = displayTexts;
+          //TODO: we need to have both upper and lower bounds for numbers and dates,
+          //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
+          filter.value = newFilterMap[QStringLiteral( "value" )];
         }
       }
     }
-
-    result << fieldInfo;
   }
 
-  return result;
+  applyFiltersToAllLayers();
 }
 
 QStringList FilterController::getFieldUniqueValues( QgsVectorLayer *layer, const QString &fieldName ) const
@@ -640,57 +339,42 @@ QStringList FilterController::getFieldUniqueValues( QgsVectorLayer *layer, const
   return result;
 }
 
-QVariantList FilterController::getVectorLayers() const
+bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 {
-  QVariantList result;
-
-  QgsProject *project = QgsProject::instance();
+  const QgsProject *project = QgsProject::instance();
   if ( !project )
-    return result;
+    return false;
 
-  const QMap<QString, QgsMapLayer *> layers = project->mapLayers();
-  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
+  return !layer->subsetString().isEmpty();
+}
+
+QVariantList FilterController::getDropdownOptions( const QString &filterId, const QString &searchText, const int limit )
+{
+  if ( filterId.isEmpty() )
+    return {};
+
+  FieldFilter fieldFilter;
+  for ( const FieldFilter &filter : mFieldFilters )
   {
-    QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
-    if ( vectorLayer )
+    if ( filterId == filter.filterId )
     {
-      QVariantMap layerInfo;
-      layerInfo[QStringLiteral( "layerId" )] = it.key();
-      layerInfo[QStringLiteral( "layerName" )] = vectorLayer->name();
-      layerInfo[QStringLiteral( "layer" )] = QVariant::fromValue( vectorLayer );
-      result << layerInfo;
+      fieldFilter = filter;
     }
   }
 
-  return result;
-}
-
-void FilterController::setDropdownFilter( const QString &layerId, const QString &fieldName, const QVariant &selectedKeys, bool multiValue )
-{
-  QStringList keys = selectedKeys.toStringList();
-
-  if ( keys.isEmpty() )
-  {
-    removeFieldFilter( layerId, fieldName );
-    return;
-  }
-
-  QString filterType = multiValue ? QStringLiteral( "dropdown-multi" ) : QStringLiteral( "dropdown" );
-  setFieldFilter( layerId, fieldName, filterType, QVariant( keys ) );
-}
-
-QVariantList FilterController::getDropdownOptions( QgsVectorLayer *layer, const QString &fieldName, const QString &searchText, int limit )
-{
-  if ( !layer )
+  const QgsProject *project = QgsProject::instance();
+  if ( !project )
     return {};
 
-  int fieldIndex = layer->fields().lookupField( fieldName );
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( fieldFilter.layerId ) );
+  const int fieldIndex = layer->fields().lookupField( fieldFilter.fieldName );
   if ( fieldIndex < 0 )
     return {};
 
-  QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
-  QString widgetType = widgetSetup.type();
-  QVariantMap config = widgetSetup.config();
+  const QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
+  const QString widgetType = widgetSetup.type();
+  const QVariantMap config = widgetSetup.config();
 
   if ( widgetType == QLatin1String( "ValueMap" ) )
   {
@@ -698,15 +382,7 @@ QVariantList FilterController::getDropdownOptions( QgsVectorLayer *layer, const 
   }
   else if ( widgetType == QLatin1String( "ValueRelation" ) )
   {
-    // Get currently selected keys so they always appear in the list
-    QStringList currentlySelectedKeys;
-    QString layerId = layer->id();
-    if ( mFilters.contains( layerId ) && mFilters.value( layerId ).contains( fieldName ) )
-    {
-      currentlySelectedKeys = mFilters.value( layerId ).value( fieldName ).value.toStringList();
-    }
-
-    return extractValueRelationOptions( config, searchText, limit, currentlySelectedKeys );
+    return extractValueRelationOptions( config, searchText, limit, fieldFilter.value.toStringList() );
   }
 
   return {};
