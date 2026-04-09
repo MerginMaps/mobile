@@ -45,8 +45,8 @@ MMComponents.MMDrawer {
 
   QtObject {
     id: internal
+    
     property var filterValues: ({})
-
   }
 
   drawerHeader.title: qsTr( "Filters" )
@@ -111,36 +111,60 @@ MMComponents.MMDrawer {
 
             Component.onCompleted: {
               let base = {
-                title:              modelData.filterName,
-                type:               modelData.filterType,
+                filterName:         modelData.filterName,
                 filterId:           modelData.filterId,
                 currentValue:       modelData.value
               }
-              switch ( modelData.filterType ) {
-                case FieldFilter.TextFilter:
-                  setSource( "components/MMFilterTextEditor.qml", base )
-                  break
-                case FieldFilter.NumberFilter:
-                  setSource( "components/MMFilterRangeInput.qml", base )
-                  break
-                case FieldFilter.DateFilter:
-                  setSource( "components/MMFilterDateRange.qml", base )
-                  break
-                case FieldFilter.CheckboxFilter:
-                  setSource( "components/MMFilterBoolInput.qml", base )
-                  break
-                case FieldFilter.SingleSelectFilter:
-                case FieldFilter.MultiSelectFilter:
-                  setSource( "components/MMFilterDropdownEditor.qml", base )
-                  break
+
+              const filterType = modelData.filterType
+
+              if ( filterType === FieldFilter.TextFilter )
+              {
+                setSource( "components/MMFilterTextEditor.qml", base )
+              }
+              else if ( filterType === FieldFilter.NumberFilter )
+              {
+                setSource( "components/MMFilterRangeInput.qml", base )
+              }
+              else if ( filterType === FieldFilter.DateFilter )
+              {
+                setSource( "components/MMFilterDateRange.qml", base )
+              }
+              else if ( filterType === FieldFilter.CheckboxFilter )
+              {
+                setSource( "components/MMFilterBoolInput.qml", base )
+              }
+              else if ( filterType === FieldFilter.SingleSelectFilter || filterType === FieldFilter.MultiSelectFilter )
+              {
+                // TODO: might be worth moving this logic to C++
+
+                const isMulti = filterType === FieldFilter.MultiSelectFilter
+                base['isMultiSelect'] = isMulti
+
+                const dropdownConfig = __activeProject.filterController.getDropdownConfiguration( modelData.filterId )
+                console.log( "--> dropdown config:", JSON.stringify( dropdownConfig ) )
+
+                if ( !Object.keys( dropdownConfig ).length )
+                {
+                  __inputUtils.log( "Filters", "Received invalid config for dropdown filter " + modelData.filterName )
+                  return;
+                }
+
+                if ( dropdownConfig["type"] === "unique_values" )
+                {
+                  base["vectorLayerId"] = dropdownConfig["layer_id"]
+                  base["fieldName"] = dropdownConfig["field_name"]
+                  setSource( "components/MMFilterDropdownUniqueValuesInput.qml", base )
+                }
               }
             }
 
             Connections {
               target: fieldLoader.item
               ignoreUnknownSignals: true
-              function onCurrentValueChanged(newValue) {
-                  internal.filterValues[fieldLoader.modelData.filterId] = newValue
+
+              function onCurrentValueChanged() {
+                internal.filterValues[fieldLoader.modelData.filterId] = fieldLoader.item.currentValue
               }
             }
           }

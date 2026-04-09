@@ -318,30 +318,6 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   applyFiltersToAllLayers();
 }
 
-QStringList FilterController::getFieldUniqueValues( QgsVectorLayer *layer, const QString &fieldName ) const
-{
-  QStringList result;
-
-  if ( !layer )
-    return result;
-
-  int fieldIndex = layer->fields().lookupField( fieldName );
-  if ( fieldIndex < 0 )
-    return result;
-
-  QSet<QVariant> uniqueValues = layer->uniqueValues( fieldIndex, 100 );
-  for ( const QVariant &v : uniqueValues )
-  {
-    if ( !v.isNull() && !v.toString().isEmpty() )
-    {
-      result << v.toString();
-    }
-  }
-
-  result.sort();
-  return result;
-}
-
 bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 {
   const QgsProject *project = QgsProject::instance();
@@ -352,237 +328,53 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
   return !layer->subsetString().isEmpty();
 }
 
-QVariantList FilterController::getDropdownOptions( const QString &filterId, const QString &searchText, const int limit )
+QVariantMap FilterController::getDropdownConfiguration( const QString &filterId )
 {
-  if ( filterId.isEmpty() )
-    return {};
+  if ( filterId.isEmpty() ) return {};
 
   FieldFilter fieldFilter;
-  for ( const FieldFilter &filter : mFieldFilters )
+  for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
   {
     if ( filterId == filter.filterId )
-    {
+    {      
       fieldFilter = filter;
+      break;
     }
   }
+
+  if ( !fieldFilter.hasFilterInfo() ) return {};
+
+  if ( fieldFilter.filterType != FieldFilter::SingleSelectFilter && fieldFilter.filterType != FieldFilter::MultiSelectFilter ) return {};
+
+  QVariantMap map;
 
   const QgsProject *project = QgsProject::instance();
-  if ( !project )
-    return {};
+
+  if ( !project ) return {};
 
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( fieldFilter.layerId ) );
+
+  if ( !layer ) return {};
+
   const int fieldIndex = layer->fields().lookupField( fieldFilter.fieldName );
-  if ( fieldIndex < 0 )
-    return {};
+  const QgsEditorWidgetSetup fieldConfig = layer->editorWidgetSetup( fieldIndex );
 
-  const QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
-  const QString widgetType = widgetSetup.type();
-  const QVariantMap config = widgetSetup.config();
-
-  if ( widgetType == QLatin1String( "ValueMap" ) )
+  if ( QString::compare( fieldConfig.type(), QStringLiteral( "ValueMap" ), Qt::CaseInsensitive ) == 0 )
   {
-    return extractValueMapOptions( config, searchText );
+    map["type"] = QStringLiteral("value_map");
+    map["config"] = fieldConfig.config();
   }
-  else if ( widgetType == QLatin1String( "ValueRelation" ) )
+  else if ( QString::compare( fieldConfig.type(), QStringLiteral( "ValueRelation" ), Qt::CaseInsensitive ) == 0 )
   {
-    return extractValueRelationOptions( config, searchText, limit, fieldFilter.value.toStringList() );
+    map["type"] = QStringLiteral("value_relation");
+    map["config"] = fieldConfig.config();
   }
-
-  return {};
-}
-
-QVariantList FilterController::extractValueMapOptions( const QVariantMap &config, const QString &searchText ) const
-{
-  QVariantList result;
-
-  QVariantList mapList = config.value( QStringLiteral( "map" ) ).toList();
-  for ( const QVariant &entry : mapList )
+  else
   {
-    QVariantMap entryMap = entry.toMap();
-    if ( entryMap.isEmpty() )
-      continue;
-
-    // Each entry is a single-key map: {"Display Text": "stored_value"}
-    QString displayText = entryMap.constBegin().key();
-    QString storedValue = entryMap.constBegin().value().toString();
-
-    // Filter by search text
-    if ( !searchText.isEmpty() && !displayText.contains( searchText, Qt::CaseInsensitive ) )
-      continue;
-
-    QVariantMap option;
-    option[QStringLiteral( "text" )] = displayText;
-    option[QStringLiteral( "value" )] = storedValue;
-    result << option;
+    map["type"] = QStringLiteral("unique_values");
+    map["layer_id"] = fieldFilter.layerId;
+    map["field_name"] = fieldFilter.fieldName;
   }
 
-  return result;
-}
-
-QVariantList FilterController::extractValueRelationOptions( const QVariantMap &config, const QString &searchText, int limit, const QStringList &alwaysIncludeKeys ) const
-{
-  QVariantList result;
-
-  QgsVectorLayer *referencedLayer = QgsValueRelationFieldFormatter::resolveLayer( config, QgsProject::instance() );
-  if ( !referencedLayer )
-    return result;
-
-  QString keyFieldName = config.value( QStringLiteral( "Key" ) ).toString();
-  QString valueFieldName = config.value( QStringLiteral( "Value" ) ).toString();
-
-  if ( referencedLayer->fields().indexOf( keyFieldName ) < 0 || referencedLayer->fields().indexOf( valueFieldName ) < 0 )
-    return result;
-
-  // Build feature request
-  QgsFeatureRequest request;
-  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
-  request.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
-
-  // Apply search filter
-  if ( !searchText.isEmpty() )
-  {
-    QString escapedSearch = searchText;
-    escapedSearch.replace( "'", "''" );
-    QString filterExpr = QStringLiteral( "LOWER(%1) LIKE '%%2%'" )
-                         .arg( QgsExpression::quotedColumnRef( valueFieldName ), escapedSearch.toLower() );
-    request.setFilterExpression( filterExpr );
-  }
-
-  // Apply configured filter expression (only if it doesn't require form scope)
-  QString configFilterExpr = config.value( QStringLiteral( "FilterExpression" ) ).toString();
-  if ( !configFilterExpr.isEmpty() && !QgsValueRelationFieldFormatter::expressionRequiresFormScope( configFilterExpr ) )
-  {
-    request.combineFilterExpression( configFilterExpr );
-  }
-
-  // Apply ordering
-  if ( config.value( QStringLiteral( "OrderByValue" ) ).toBool() )
-  {
-    request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( valueFieldName ) } ) );
-  }
-
-  request.setLimit( limit );
-
-  // Fetch features
-  QSet<QString> seenKeys;
-  QgsFeatureIterator it = referencedLayer->getFeatures( request );
-  QgsFeature feature;
-  while ( it.nextFeature( feature ) )
-  {
-    QString key = feature.attribute( keyFieldName ).toString();
-    QString value = feature.attribute( valueFieldName ).toString();
-    seenKeys.insert( key );
-
-    QVariantMap option;
-    option[QStringLiteral( "text" )] = value;
-    option[QStringLiteral( "value" )] = key;
-    result << option;
-  }
-
-  // Ensure currently selected keys are always visible in the list
-  if ( !alwaysIncludeKeys.isEmpty() )
-  {
-    QStringList missingKeys;
-    for ( const QString &key : alwaysIncludeKeys )
-    {
-      if ( !seenKeys.contains( key ) )
-      {
-        missingKeys << key;
-      }
-    }
-
-    if ( !missingKeys.isEmpty() )
-    {
-      QStringList quotedKeys;
-      for ( const QString &k : missingKeys )
-      {
-        quotedKeys << QgsExpression::quotedValue( k );
-      }
-
-      QgsFeatureRequest selectedRequest;
-      selectedRequest.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
-      selectedRequest.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
-      selectedRequest.setFilterExpression(
-                       QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
-                     );
-
-      QVariantList selectedItems;
-      QgsFeatureIterator selIt = referencedLayer->getFeatures( selectedRequest );
-      QgsFeature selFeature;
-      while ( selIt.nextFeature( selFeature ) )
-      {
-        QVariantMap option;
-        option[QStringLiteral( "text" )] = selFeature.attribute( valueFieldName ).toString();
-        option[QStringLiteral( "value" )] = selFeature.attribute( keyFieldName ).toString();
-        selectedItems << option;
-      }
-
-      // Prepend selected items so they appear first
-      selectedItems.append( result );
-      result = selectedItems;
-    }
-  }
-
-  return result;
-}
-
-QStringList FilterController::lookupValueMapTexts( const QVariantMap &config, const QStringList &keys ) const
-{
-  QStringList texts;
-  QSet<QString> keySet( keys.begin(), keys.end() );
-
-  QVariantList mapList = config.value( QStringLiteral( "map" ) ).toList();
-  for ( const QVariant &entry : mapList )
-  {
-    QVariantMap entryMap = entry.toMap();
-    if ( entryMap.isEmpty() )
-      continue;
-
-    QString displayText = entryMap.constBegin().key();
-    QString storedValue = entryMap.constBegin().value().toString();
-
-    if ( keySet.contains( storedValue ) )
-    {
-      texts << displayText;
-    }
-  }
-
-  return texts;
-}
-
-QStringList FilterController::lookupValueRelationTexts( const QVariantMap &config, const QStringList &keys ) const
-{
-  QStringList texts;
-
-  QgsVectorLayer *referencedLayer = QgsValueRelationFieldFormatter::resolveLayer( config, QgsProject::instance() );
-  if ( !referencedLayer )
-    return texts;
-
-  QString keyFieldName = config.value( QStringLiteral( "Key" ) ).toString();
-  QString valueFieldName = config.value( QStringLiteral( "Value" ) ).toString();
-
-  if ( referencedLayer->fields().indexOf( keyFieldName ) < 0 || referencedLayer->fields().indexOf( valueFieldName ) < 0 )
-    return texts;
-
-  QStringList quotedKeys;
-  for ( const QString &k : keys )
-  {
-    quotedKeys << QgsExpression::quotedValue( k );
-  }
-
-  QgsFeatureRequest request;
-  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
-  request.setSubsetOfAttributes( QStringList( { keyFieldName, valueFieldName } ), referencedLayer->fields() );
-  request.setFilterExpression(
-           QStringLiteral( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( keyFieldName ), quotedKeys.join( QStringLiteral( ", " ) ) )
-         );
-
-  QgsFeatureIterator it = referencedLayer->getFeatures( request );
-  QgsFeature feature;
-  while ( it.nextFeature( feature ) )
-  {
-    texts << feature.attribute( valueFieldName ).toString();
-  }
-
-  return texts;
+  return map;
 }
