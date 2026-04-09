@@ -119,6 +119,13 @@ class FilterController : public QObject
     Q_INVOKABLE QStringList getFieldUniqueValues( QgsVectorLayer *layer, const QString &fieldName ) const;
 
     /**
+     * @brief Returns the QGIS editor widget type for a field (e.g. "ValueMap", "ValueRelation")
+     */
+    Q_INVOKABLE QString getValueMapWidgetType( QgsVectorLayer *layer, const QString &fieldName ) const;
+
+    Q_INVOKABLE QVariantMap getValueMapConfig( QgsVectorLayer *layer, const QString &fieldName ) const;
+
+    /**
      * Queries whether there is any filtering active on the layer specified by ID. Essentially just checks the
      * subsetString of layer.
      */
