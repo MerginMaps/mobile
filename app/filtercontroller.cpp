@@ -30,13 +30,13 @@ FilterController::FilterController( QObject *parent )
 
 void FilterController::clearLayerFilters( const QString &layerId )
 {
-  QgsMapLayer *layer = QgsProject::instance()->mapLayers().value(layerId);
+  QgsMapLayer *layer = QgsProject::instance()->mapLayers().value( layerId );
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-  vectorLayer->setSubsetString(QStringLiteral(""));
+  vectorLayer->setSubsetString( QStringLiteral( "" ) );
 
   for ( FieldFilter filter : mFieldFilters )
   {
-    if (filter.layerId == layerId)
+    if ( filter.layerId == layerId )
     {
       filter.value.clear();
     }
@@ -48,7 +48,7 @@ void FilterController::clearAllFilters()
   mFieldFilters.clear();
 }
 
-void FilterController::loadFilterConfig(const QgsProject *project )
+void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
 
@@ -56,7 +56,7 @@ void FilterController::loadFilterConfig(const QgsProject *project )
   const bool filteringEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
 
   //return early if filtering is not setup
-  if (!valueRead)
+  if ( !valueRead )
   {
     return;
   }
@@ -67,19 +67,19 @@ void FilterController::loadFilterConfig(const QgsProject *project )
   const QJsonDocument filtersRaw = QJsonDocument::fromJson( filtersDef.toUtf8(), &jsonError );
   if ( jsonError.error != QJsonParseError::NoError )
   {
-    CoreUtils::log(QStringLiteral("Feature Filtering"), QStringLiteral( "Could not parse filters from json document." ) );
+    CoreUtils::log( QStringLiteral( "Feature Filtering" ), QStringLiteral( "Could not parse filters from json document." ) );
     return;
   }
 
   if ( !filtersRaw.isEmpty() && filtersRaw.isArray() )
   {
     const QJsonArray filtersArray = filtersRaw.array();
-    for (auto filter = filtersArray.constBegin(); filter != filtersArray.constEnd(); ++filter)
+    for ( auto filter = filtersArray.constBegin(); filter != filtersArray.constEnd(); ++filter )
     {
       FieldFilter newFieldFilter;
       QJsonObject filterObject = filter->toObject();
 
-      newFieldFilter.filterId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+      newFieldFilter.filterId = QUuid::createUuid().toString( QUuid::WithoutBraces );
 
       newFieldFilter.filterName = filterObject.value( QStringLiteral( "filter_name" ) ).toString();
 
@@ -87,19 +87,24 @@ void FilterController::loadFilterConfig(const QgsProject *project )
       if ( filterTypeRaw == QStringLiteral( "Text" ) )
       {
         newFieldFilter.filterType = FieldFilter::TextFilter;
-      } else if ( filterTypeRaw == QStringLiteral( "Number" ) )
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Number" ) )
       {
         newFieldFilter.filterType = FieldFilter::NumberFilter;
-      } else if ( filterTypeRaw == QStringLiteral( "Date" ) )
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Date" ) )
       {
         newFieldFilter.filterType = FieldFilter::DateFilter;
-      } else if ( filterTypeRaw == QStringLiteral( "Checkbox" ) )
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Checkbox" ) )
       {
         newFieldFilter.filterType = FieldFilter::CheckboxFilter;
-      } else if ( filterTypeRaw == QStringLiteral( "Single select" ) )
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Single select" ) )
       {
         newFieldFilter.filterType = FieldFilter::SingleSelectFilter;
-      } else if ( filterTypeRaw == QStringLiteral( "Multi select" ) )
+      }
+      else if ( filterTypeRaw == QStringLiteral( "Multi select" ) )
       {
         newFieldFilter.filterType = FieldFilter::MultiSelectFilter;
       }
@@ -109,7 +114,7 @@ void FilterController::loadFilterConfig(const QgsProject *project )
       newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
-      mFieldFilters.append(newFieldFilter);
+      mFieldFilters.append( newFieldFilter );
     }
   }
 }
@@ -117,31 +122,32 @@ void FilterController::loadFilterConfig(const QgsProject *project )
 QString FilterController::buildFieldExpression( const FieldFilter &filter ) const
 {
   QString expressionCopy = filter.sqlExpression;
-  switch (filter.filterType)
+  switch ( filter.filterType )
   {
     case FieldFilter::TextFilter:
     {
-      const QString textValue = filter.value.toList().at(0).toString();
-      expressionCopy.replace(QStringLiteral( "%%value%%" ), QgsExpression::quotedString(textValue) );
+      const QString textValue = filter.value.toList().at( 0 ).toString();
+      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedString( textValue ) );
       break;
     }
     case FieldFilter::CheckboxFilter:
     case FieldFilter::SingleSelectFilter:
     {
-      if (filter.value.toList().at(0).typeId() == QMetaType::QString)
+      if ( filter.value.toList().at( 0 ).typeId() == QMetaType::QString )
       {
-        expressionCopy.replace(QStringLiteral( "%%value%%" ), QgsExpression::quotedString(filter.value.toList().at(0).toString()) );
-      } else
+        expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedString( filter.value.toList().at( 0 ).toString() ) );
+      }
+      else
       {
-        expressionCopy.replace(QStringLiteral( "%%value%%" ), filter.value.toList().at(0).toString() );
+        expressionCopy.replace( QStringLiteral( "%%value%%" ), filter.value.toList().at( 0 ).toString() );
       }
 
       break;
     }
     case FieldFilter::NumberFilter:
     {
-      const QString valueFrom = filter.value.toList().at(0).toString();
-      const QString valueTo = filter.value.toList().at(1).toString();
+      const QString valueFrom = filter.value.toList().at( 0 ).toString();
+      const QString valueTo = filter.value.toList().at( 1 ).toString();
 
       if ( valueFrom.isEmpty() || valueTo.isEmpty() )
       {
@@ -159,8 +165,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       // so we must convert local datetimes to UTC before comparing.
       // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
       const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss" );
-      const QString dateFrom = filter.value.toList().at(0).toDateTime().toUTC().toString( isoFormat );
-      const QString dateTo = filter.value.toList().at(1).toDateTime().toUTC().toString( isoFormat );
+      const QString dateFrom = filter.value.toList().at( 0 ).toDateTime().toUTC().toString( isoFormat );
+      const QString dateTo = filter.value.toList().at( 1 ).toDateTime().toUTC().toString( isoFormat );
 
       if ( dateFrom.isEmpty() || dateTo.isEmpty() )
       {
@@ -168,8 +174,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         break;
       }
 
-      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), QgsExpression::quotedString(dateFrom) );
-      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), QgsExpression::quotedString(dateTo) );
+      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), QgsExpression::quotedString( dateFrom ) );
+      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), QgsExpression::quotedString( dateTo ) );
       break;
     }
     case FieldFilter::MultiSelectFilter:
@@ -186,7 +192,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       {
         quotedValues << QgsExpression::quotedValue( v );
       }
-      expressionCopy.replace(QStringLiteral( "%%values%%" ), quotedValues.join( QStringLiteral( ", " ) ) );
+      expressionCopy.replace( QStringLiteral( "%%values%%" ), quotedValues.join( QStringLiteral( ", " ) ) );
       break;
     }
   }
@@ -198,9 +204,9 @@ QString FilterController::generateFilterExpression( const QString &layerId ) con
 {
   QStringList expressions;
 
-  for ( const FieldFilter& filter : mFieldFilters )
+  for ( const FieldFilter &filter : mFieldFilters )
   {
-    if (filter.layerId != layerId) continue;
+    if ( filter.layerId != layerId ) continue;
 
     QString expr = buildFieldExpression( filter );
     if ( !expr.isEmpty() )
@@ -269,7 +275,7 @@ bool FilterController::hasFiltersEnabled() const
   return mFilteringEnabled;
 }
 
-void FilterController::setFiltersEnabled(const bool filtersEnabled )
+void FilterController::setFiltersEnabled( const bool filtersEnabled )
 {
   if ( mFilteringEnabled != filtersEnabled )
   {
@@ -281,34 +287,34 @@ void FilterController::setFiltersEnabled(const bool filtersEnabled )
 QVariantList FilterController::getFilters() const
 {
   QVariantList uiFilters;
-  for (const FieldFilter &filter : mFieldFilters)
+  for ( const FieldFilter &filter : mFieldFilters )
   {
     QVariantMap filterLite;
-    filterLite.insert(QStringLiteral( "filterName" ), filter.filterName );
-    filterLite.insert(QStringLiteral( "filterType" ), filter.filterType );
-    filterLite.insert(QStringLiteral( "filterId" ), filter.filterId );
-    filterLite.insert(QStringLiteral( "value" ), filter.value );
+    filterLite.insert( QStringLiteral( "filterName" ), filter.filterName );
+    filterLite.insert( QStringLiteral( "filterType" ), filter.filterType );
+    filterLite.insert( QStringLiteral( "filterId" ), filter.filterId );
+    filterLite.insert( QStringLiteral( "value" ), filter.value );
 
     uiFilters.append( filterLite );
   }
   return uiFilters;
 }
 
-void FilterController::processFilters(const QVariantList& newFilters)
+void FilterController::processFilters( const QVariantList &newFilters )
 {
   // save all newFilter values to mFieldFilters values
-  for (const QVariant &newFilter : newFilters )
+  for ( const QVariant &newFilter : newFilters )
   {
     QVariantMap newFilterMap = newFilter.toMap();
-    if (newFilterMap[QStringLiteral("value")].isValid())
+    if ( newFilterMap[QStringLiteral( "value" )].isValid() )
     {
       for ( FieldFilter &filter : mFieldFilters )
       {
-        if ( newFilterMap[QStringLiteral("filterId")].toString() == filter.filterId )
+        if ( newFilterMap[QStringLiteral( "filterId" )].toString() == filter.filterId )
         {
           //TODO: we need to have both upper and lower bounds for numbers and dates,
           //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
-          filter.value = newFilterMap[QStringLiteral("value")];
+          filter.value = newFilterMap[QStringLiteral( "value" )];
         }
       }
     }
@@ -341,17 +347,17 @@ QStringList FilterController::getFieldUniqueValues( QgsVectorLayer *layer, const
   return result;
 }
 
-bool FilterController::hasActiveFilterOnLayer(const QString& layerId)
+bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 {
   const QgsProject *project = QgsProject::instance();
   if ( !project )
     return false;
 
-  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ));
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
   return !layer->subsetString().isEmpty();
 }
 
-QVariantList FilterController::getDropdownOptions( const QString& filterId, const QString &searchText, const int limit )
+QVariantList FilterController::getDropdownOptions( const QString &filterId, const QString &searchText, const int limit )
 {
   if ( filterId.isEmpty() )
     return {};
@@ -359,7 +365,7 @@ QVariantList FilterController::getDropdownOptions( const QString& filterId, cons
   FieldFilter fieldFilter;
   for ( const FieldFilter &filter : mFieldFilters )
   {
-    if (filterId == filter.filterId)
+    if ( filterId == filter.filterId )
     {
       fieldFilter = filter;
     }

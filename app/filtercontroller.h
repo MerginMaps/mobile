@@ -37,7 +37,7 @@ struct FieldFilter
       SingleSelectFilter,
       MultiSelectFilter
     };
-    Q_ENUM(FilterType)
+    Q_ENUM( FilterType )
 
     QString filterId;       // generated ID (not persistent) for faster lookup
     QString filterName;     // name of filter as set by user
@@ -91,7 +91,7 @@ class FilterController : public QObject
     /**
      * Receives the set values for filtering, saves them and applies them to layers
      */
-    Q_INVOKABLE void processFilters( const QVariantList& newFilters );
+    Q_INVOKABLE void processFilters( const QVariantList &newFilters );
 
     /**
      * @brief Clears all filters for a specific layer
@@ -110,7 +110,7 @@ class FilterController : public QObject
      * @param limit Maximum number of options to return (for ValueRelation)
      * @return List of maps with "text" (display) and "value" (key) entries
      */
-    Q_INVOKABLE QVariantList getDropdownOptions( const QString& filterId, const QString &searchText = QString(), int limit = 100 );
+    Q_INVOKABLE QVariantList getDropdownOptions( const QString &filterId, const QString &searchText = QString(), int limit = 100 );
 
     /**
      * @brief Gets unique values for a field (for multichoice filters)
@@ -122,7 +122,7 @@ class FilterController : public QObject
      * Queries whether there is any filtering active on the layer specified by ID. Essentially just checks the
      * subsetString of layer.
      */
-    Q_INVOKABLE bool hasActiveFilterOnLayer(const QString& layerId );
+    Q_INVOKABLE bool hasActiveFilterOnLayer( const QString &layerId );
 
     bool hasFiltersAvailable() const;
 
@@ -143,7 +143,7 @@ class FilterController : public QObject
     /**
      * Gets triggered when active project changes. Loads filtering config from project file and initializes everything.
      */
-    void loadFilterConfig(const QgsProject *project );
+    void loadFilterConfig( const QgsProject *project );
 
   private:
     /**
