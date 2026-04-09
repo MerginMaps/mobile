@@ -208,7 +208,7 @@ QString FilterController::generateFilterExpression( const QString &layerId ) con
 
   for ( const FieldFilter &filter : mFieldFilters )
   {
-    if ( filter.layerId != layerId ) continue;
+    if ( filter.layerId != layerId || !filter.value.isValid()) continue;
 
     QString expr = buildFieldExpression( filter );
     if ( !expr.isEmpty() )
