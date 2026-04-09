@@ -860,9 +860,9 @@ Item {
         MMMapButton {
           id: filterIndicatorButton
 
-          visible: root.state === "view" && __activeProject.filterController?.hasActiveFilters
+          visible: root.state === "view" && __activeProject.filterController?.filteringEnabled
           iconSource: __style.filterIcon
-          bgndColor: __activeProject.filterController?.filtersEnabled ? __style.positiveColor : __style.polarColor
+          bgndColor: __activeProject.filterController?.filteringEnabled ? __style.positiveColor : __style.polarColor
 
           onClicked: {
             root.openFiltersPanel()
@@ -870,8 +870,8 @@ Item {
 
           onClickAndHold: {
             if ( __activeProject.filterController ) {
-              const enabling = !__activeProject.filterController.filtersEnabled
-              __activeProject.filterController.filtersEnabled = enabling
+              const enabling = !__activeProject.filterController.filteringEnabled
+              __activeProject.filterController.filteringEnabled = enabling
               if ( enabling ) {
                 __notificationModel.addSuccess( qsTr( "All filters have been re-enabled" ) )
               } else {
