@@ -46,6 +46,16 @@ void FilterController::clearLayerFilters( const QString &layerId )
 void FilterController::clearAllFilters()
 {
   mFieldFilters.clear();
+
+  const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
+    if ( vectorLayer )
+    {
+      vectorLayer->setSubsetString(QStringLiteral(""));
+    }
+  }
 }
 
 void FilterController::loadFilterConfig( const QgsProject *project )
@@ -292,23 +302,16 @@ QVariantList FilterController::getFilters() const
   return uiFilters;
 }
 
-void FilterController::processFilters( const QVariantList &newFilters )
+void FilterController::processFilters( const QVariantMap &newFilters )
 {
   // save all newFilter values to mFieldFilters values
-  for ( const QVariant &newFilter : newFilters )
+  for ( FieldFilter &filter : mFieldFilters )
   {
-    QVariantMap newFilterMap = newFilter.toMap();
-    if ( newFilterMap[QStringLiteral( "value" )].isValid() )
+    if ( newFilters.contains(filter.filterId) )
     {
-      for ( FieldFilter &filter : mFieldFilters )
-      {
-        if ( newFilterMap[QStringLiteral( "filterId" )].toString() == filter.filterId )
-        {
-          //TODO: we need to have both upper and lower bounds for numbers and dates,
-          //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
-          filter.value = newFilterMap[QStringLiteral( "value" )];
-        }
-      }
+      //TODO: we need to have both upper and lower bounds for numbers and dates,
+      //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
+      filter.value = newFilters.value( filter.filterId );
     }
   }
 

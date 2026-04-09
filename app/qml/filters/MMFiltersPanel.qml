@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
@@ -38,57 +39,14 @@ MMComponents.MMDrawer {
     }
   }
 
-  property bool filtersApplied: false
-
   Component.onCompleted: {
-    internal.refreshLayers()
     root.open()
-  }
-
-  onClosed: {
-    if ( !filtersApplied ) {
-      __activeProject.filterController.discardPendingChanges()
-    }
-    filtersApplied = false
   }
 
   QtObject {
     id: internal
-    property var vectorLayers: []
-    property var allFields: []
+    property var filterValues: ({})
 
-    function refreshLayers() {
-      vectorLayers = __activeProject.filterController.getVectorLayers()
-      let fields = []
-      for ( let i = 0; i < vectorLayers.length; i++ ) {
-        let lyr = vectorLayers[i]
-        let lyrFields = __activeProject.filterController.getFilterableFields( lyr.layer )
-        for ( let j = 0; j < lyrFields.length; j++ ) {
-          let f = lyrFields[j]
-          fields.push({
-            layerId: lyr.layerId,
-            vectorLayer: lyr.layer,
-            name: f.name,
-            displayName: f.displayName || f.name,
-            filterType: f.filterType || "text",
-            currentValue: f.currentValue !== undefined ? f.currentValue : null,
-            currentValueTo: f.currentValueTo !== undefined ? f.currentValueTo : null,
-            hasTime: !!f.hasTime,
-            multiSelect: !!f.multiSelect,
-            currentValueTexts: f.currentValueTexts || [],
-            boolTrueLabel: f.boolTrueLabel || "",
-            boolFalseLabel: f.boolFalseLabel || "",
-            boolCheckedValue: f.boolCheckedValue !== undefined ? f.boolCheckedValue : null,
-            boolUncheckedValue: f.boolUncheckedValue !== undefined ? f.boolUncheckedValue : null
-          })
-        }
-      }
-      // Setting to [] first forces the Repeater to destroy all existing delegates.
-      // Qt.callLater ensures the two assignments are processed in separate event
-      // loop iterations, so the recreation picks up the fresh field values.
-      allFields = []
-      Qt.callLater( function() { allFields = fields } )
-    }
   }
 
   drawerHeader.title: qsTr( "Filters" )
@@ -112,9 +70,6 @@ MMComponents.MMDrawer {
 
     onClicked: {
       __activeProject.filterController.clearAllFilters()
-      __activeProject.filterController.applyFiltersToAllLayers()
-      root.filtersApplied = true
-      internal.refreshLayers()
     }
   }
 
@@ -136,7 +91,7 @@ MMComponents.MMDrawer {
 
         MMComponents.MMText {
           width: parent.width
-          visible: internal.allFields.length === 0
+          visible: inputRepeater.count === 0
           text: qsTr( "No filtering" )
           font: __style.p4
           color: __style.mediumGreyColor
@@ -144,7 +99,8 @@ MMComponents.MMDrawer {
         }
 
         Repeater {
-          model: internal.allFields
+          id: inputRepeater
+          model: __activeProject.filterController.getFilters()
 
           delegate: Loader {
             id: fieldLoader
@@ -155,40 +111,27 @@ MMComponents.MMDrawer {
 
             Component.onCompleted: {
               let base = {
-                fieldDisplayName: modelData.displayName,
-                fieldLayerId:     modelData.layerId,
-                fieldName:        modelData.name,
-                currentValue:     modelData.currentValue
+                title:              modelData.filterName,
+                type:               modelData.filterType,
+                filterId:           modelData.filterId,
+                currentValue:       modelData.value
               }
               switch ( modelData.filterType ) {
-                case "text":
+                case FieldFilter.TextFilter:
                   setSource( "components/MMFilterTextEditor.qml", base )
                   break
-                case "number":
-                  setSource( "components/MMFilterRangeInput.qml", Object.assign( {}, base, {
-                    currentValueTo: modelData.currentValueTo
-                  }))
+                case FieldFilter.NumberFilter:
+                  setSource( "components/MMFilterRangeInput.qml", base )
                   break
-                case "date":
-                  setSource( "components/MMFilterDateRange.qml", Object.assign( {}, base, {
-                    currentValueTo: modelData.currentValueTo,
-                    hasTime:        modelData.hasTime
-                  }))
+                case FieldFilter.DateFilter:
+                  setSource( "components/MMFilterDateRange.qml", base )
                   break
-                case "bool":
-                  setSource( "components/MMFilterBoolInput.qml", Object.assign( {}, base, {
-                    boolTrueLabel:    modelData.boolTrueLabel,
-                    boolFalseLabel:   modelData.boolFalseLabel,
-                    boolCheckedValue: modelData.boolCheckedValue,
-                    boolUncheckedValue: modelData.boolUncheckedValue
-                  }))
+                case FieldFilter.CheckboxFilter:
+                  setSource( "components/MMFilterBoolInput.qml", base )
                   break
-                case "dropdown":
-                  setSource( "components/MMFilterDropdownEditor.qml", Object.assign( {}, base, {
-                    currentValueTexts: modelData.currentValueTexts,
-                    multiSelect:       modelData.multiSelect,
-                    vectorLayer:       modelData.vectorLayer
-                  }))
+                case FieldFilter.SingleSelectFilter:
+                case FieldFilter.MultiSelectFilter:
+                  setSource( "components/MMFilterDropdownEditor.qml", base )
                   break
               }
             }
@@ -196,7 +139,9 @@ MMComponents.MMDrawer {
             Connections {
               target: fieldLoader.item
               ignoreUnknownSignals: true
-              function onRefreshRequested() { internal.refreshLayers() }
+              function onCurrentValueChanged(newValue) {
+                  internal.filterValues[fieldLoader.modelData.filterId] = newValue
+              }
             }
           }
         }
@@ -224,18 +169,9 @@ MMComponents.MMDrawer {
       text: qsTr( "Apply filters" )
 
       onClicked: {
-        __activeProject.filterController.applyFiltersToAllLayers()
-        root.filtersApplied = true
+        __activeProject.filterController.processFilters(internal.filterValues)
         root.close()
       }
-    }
-  }
-
-  Connections {
-    target: __activeProject
-
-    function onProjectReloaded( qgsProject ) {
-      internal.refreshLayers()
     }
   }
 }

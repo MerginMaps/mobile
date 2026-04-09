@@ -11,6 +11,7 @@
 #define FILTERCONTROLLER_H
 
 #include <qgsproject.h>
+#include <qqmlintegration.h>
 #include <QVariantList>
 
 class QgsVectorLayer;
@@ -22,10 +23,8 @@ class QgsMapLayer;
 struct FieldFilter
 {
     Q_GADGET
-    Q_PROPERTY( QString filterId MEMBER filterId )
-    Q_PROPERTY( QString filterName MEMBER filterName )
-    Q_PROPERTY( FilterType filterType MEMBER filterType )
-    Q_PROPERTY( QVariant value MEMBER value )
+    QML_ELEMENT
+    QML_UNCREATABLE("Full FieldFilter is not exposed to QML, use only the exposed enum.")
 
   public:
     enum FilterType
@@ -91,7 +90,7 @@ class FilterController : public QObject
     /**
      * Receives the set values for filtering, saves them and applies them to layers
      */
-    Q_INVOKABLE void processFilters( const QVariantList &newFilters );
+    Q_INVOKABLE void processFilters( const QVariantMap &newFilters );
 
     /**
      * @brief Clears all filters for a specific layer
