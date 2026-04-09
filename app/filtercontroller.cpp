@@ -63,14 +63,15 @@ void FilterController::loadFilterConfig( const QgsProject *project )
   mFieldFilters.clear();
 
   bool valueRead = false;
-  const bool filteringEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
+  const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
 
   //return early if filtering is not setup
   if ( !valueRead )
   {
     return;
   }
-  mFilteringEnabled = filteringEnabled;
+  mFilteringAvailable = filteringAvailable;
+  emit hasFiltersAvailableChanged();
 
   const QString filtersDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Filters" ) );
   QJsonParseError jsonError;
@@ -231,6 +232,12 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
   const QString filterExpr = generateFilterExpression( layer->id() );
   const bool success = layer->setSubsetString( filterExpr );
 
+  if ( !filterExpr.isEmpty() && success && !mFilteringEnabled )
+  {
+    mFilteringEnabled = true;
+    emit hasFiltersEnabledChanged();
+  }
+
   qDebug() << "Applied filter to layer" << layer->name() << ":" << filterExpr << "success:" << success;
 
   // Trigger a layer refresh to ensure the filter takes effect
@@ -242,7 +249,9 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
 
 void FilterController::applyFiltersToAllLayers()
 {
-  const bool hadFilters = mFilteringEnabled;
+  // Change filters enabled to false before enabling filters to find out if any are active
+  mFilteringEnabled = false;
+  emit hasFiltersEnabledChanged();
 
   const QgsProject *project = QgsProject::instance();
   if ( !project )
@@ -256,14 +265,6 @@ void FilterController::applyFiltersToAllLayers()
     {
       applyFiltersToLayer( vectorLayer );
     }
-  }
-
-  //TODO: probably can be removed
-  emit filtersChanged();
-
-  if ( hadFilters != mFilteringEnabled )
-  {
-    emit hasFiltersEnabledChanged();
   }
 }
 
