@@ -258,7 +258,7 @@ ApplicationWindow {
   // Diálogo para crear nuevas tablas // 2026
   CreateTableDialog {
       id: createTableDialog
-      parent: window
+      //parent: window
 
       // Ahora usa el objeto global registrado en QML
       dbManager: __dbManager
@@ -480,7 +480,7 @@ ApplicationWindow {
 
       MMToolbarButton {
             text: qsTr("Tablas")
-            iconSource: __style.addTableIcon
+           iconSource: __style.addTableIcon
             visible: __activeProject.projectRole !== "reader"
             onClicked: {
               createTableDialog.open()
@@ -1627,7 +1627,7 @@ ApplicationWindow {
     modal: true
     footer: DialogButtonBox {
             Button {
-                text: "Aceptar"
+                text: "Crear"
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                 implicitWidth: 5 // Tamaño fijo
                 implicitHeight: 20
@@ -1642,14 +1642,39 @@ ApplicationWindow {
             }
         }
 
+
+    onOpened: {
+        console.log("Abrir ventana de crear DB");
+    }
+
     onAccepted: {
       if (dbNameInput.text.trim() === "") {
         errorMessage.text = "El nombre no puede estar vacío"
         return
       }
 
-      if (__dbManager.initializeDatabase(dbNameInput.text.trim(), dbPathInput.text.trim())) {
-        window.currentDatabaseName = dbNameInput.text.trim()
+      // Construir ruta completa
+        var dbPath = dbPathInput.text.trim()
+        var dbName = dbNameInput.text.trim()
+
+      // Si dbPath está vacío, usar ruta por defecto
+      if (dbPath === "") {
+        // Usar la carpeta de la aplicación (recomendado)
+        dbPath = "./" // Carpeta del ejecutable
+      }
+
+
+      // Asegurar que termina con separador
+      if (!dbPath.endsWith("/") && !dbPath.endsWith("\\")) {
+         dbPath += "/"
+      }
+
+      // Agregar el nombre del archivo
+        var fullPath = dbPath + dbNameInput.text.trim() + ".db"
+
+     // if (__dbManager.initializeDatabase(dbNameInput.text.trim(), dbPathInput.text.trim()))
+      if (__dbManager.initializeDatabase(fullPath)) {
+        window.currentDatabaseName = dbName
           console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
         window.currentDatabasePath = __dbManager.databasePath
           console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
