@@ -93,6 +93,8 @@ Column {
         close()
       }
 
+      onSearchTextChanged: console.log("--> Search me") // TODO: search
+
       onClosed: dropdownDrawerLoader.active = false
 
       Component.onCompleted: {
