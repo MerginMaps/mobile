@@ -22,6 +22,11 @@ Column {
   required property string fieldLayerId
   required property string fieldName
 
+  property string boolTrueLabel: ""
+  property string boolFalseLabel: ""
+  property var boolCheckedValue: null
+  property var boolUncheckedValue: null
+
   property bool _initialized: false
   Component.onCompleted: _initialized = true
 
@@ -39,10 +44,14 @@ Column {
     width: parent.width
     backgroundColor: __style.lightGreenColor
 
+    trueText:  root.boolTrueLabel  !== "" ? root.boolTrueLabel  : qsTr( "True" )
+    falseText: root.boolFalseLabel !== "" ? root.boolFalseLabel : qsTr( "False" )
+
     selectedIndex: {
       let val = root.currentValue
       if ( val === null || val === undefined ) return MMSegmentControl.Options.All
-      return ( val === true || val === 1 ) ? MMSegmentControl.Options.True : MMSegmentControl.Options.False
+      let checkedVal = root.boolCheckedValue !== null ? root.boolCheckedValue : true
+      return ( val == checkedVal ) ? MMSegmentControl.Options.True : MMSegmentControl.Options.False
     }
 
     onSelectedIndexChanged: {
@@ -52,10 +61,12 @@ Column {
           __activeProject.filterController.removeFieldFilter( root.fieldLayerId, root.fieldName )
           break
         case MMSegmentControl.Options.True:
-          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool", true )
+          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool",
+            root.boolCheckedValue !== null ? root.boolCheckedValue : true )
           break
         case MMSegmentControl.Options.False:
-          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool", false )
+          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool",
+            root.boolUncheckedValue !== null ? root.boolUncheckedValue : false )
           break
       }
     }
