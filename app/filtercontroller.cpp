@@ -45,7 +45,12 @@ void FilterController::clearLayerFilters( const QString &layerId )
 
 void FilterController::clearAllFilters()
 {
-  mFieldFilters.clear();
+  for ( FieldFilter &filter : mFieldFilters )
+  {
+    filter.value.clear();
+  }
+  mFilteringEnabled = false;
+  emit hasFiltersEnabledChanged();
 
   const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )

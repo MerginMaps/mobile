@@ -58,9 +58,8 @@ MMComponents.MMDrawer {
     text: qsTr( "Reset" )
     fontColor: __style.grapeColor
     bgndColor: __style.negativeLightColor
-    bgndColorHover: __style.negativeLightColor
-    fontColorHover: __style.grapeColor
-    iconColorHover: __style.grapeColor
+    bgndColorHover: __style.grapeColor
+    fontColorHover: __style.negativeLightColor
 
     anchors {
       left: parent.left
@@ -70,6 +69,7 @@ MMComponents.MMDrawer {
 
     onClicked: {
       __activeProject.filterController.clearAllFilters()
+      inputRepeater.model = __activeProject.filterController.getFilters()
     }
   }
 
