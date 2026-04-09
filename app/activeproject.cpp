@@ -77,6 +77,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
 
   mFilterController = std::make_unique<FilterController>();
+  connect( this, &ActiveProject::projectReloaded, mFilterController.get(), &FilterController::loadFilterConfig);
 }
 
 ActiveProject::~ActiveProject() = default;
