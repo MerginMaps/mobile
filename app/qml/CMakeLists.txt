@@ -55,13 +55,20 @@ set(MM_QML
     components/MMToolbar.qml
     components/MMToolbarButton.qml
     components/MMSingleClickMouseArea.qml
+    components/MMSegmentControl.qml
     components/private/MMBaseInput.qml
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
     filters/MMFilterChip.qml
-    filters/MMFilterLayerSection.qml
     filters/MMFiltersPanel.qml
+    filters/components/MMFilterBanner.qml
+    filters/components/MMFilterBoolInput.qml
+    filters/components/MMFilterDateRange.qml
+    filters/components/MMFilterDropdownEditor.qml
+    filters/components/MMFilterRangeInput.qml
+    filters/components/MMFilterTextEditor.qml
+    filters/components/MMFilterTextInput.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml

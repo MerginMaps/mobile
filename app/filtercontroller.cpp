@@ -133,15 +133,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     case FieldFilter::CheckboxFilter:
     case FieldFilter::SingleSelectFilter:
     {
-      if ( filter.value.toList().at( 0 ).typeId() == QMetaType::QString )
-      {
-        expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedString( filter.value.toList().at( 0 ).toString() ) );
-      }
-      else
-      {
-        expressionCopy.replace( QStringLiteral( "%%value%%" ), filter.value.toList().at( 0 ).toString() );
-      }
-
+      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
       break;
     }
     case FieldFilter::NumberFilter:

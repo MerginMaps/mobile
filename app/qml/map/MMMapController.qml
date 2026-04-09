@@ -588,25 +588,6 @@ Item {
       }
     }
 
-    // Filter indicator button - left side, 20% from top
-    MMMapButton {
-      id: filterIndicatorButton
-
-      visible: root.state === "view" && __activeProject.filterController && (__activeProject.filterController.hasActiveFilters || AppSettings.alwaysShowFilterButton)
-      iconSource: __activeProject.filterController && __activeProject.filterController.hasActiveFilters ? __style.filterFilledIcon : __style.filterIcon
-      bgndColor: __activeProject.filterController && __activeProject.filterController.hasActiveFilters ? __style.sandColor : __style.polarColor
-
-      anchors {
-        left: parent.left
-        top: parent.top
-        topMargin: parent.height * 0.2
-      }
-
-      onClicked: {
-        root.openFiltersPanel()
-      }
-    }
-
     Item {
       // bottom buttons group
       width: parent.width
@@ -873,6 +854,30 @@ Item {
               return root.openStreamingPanel()
 
             moreToolsMenuLoader.item.open()
+          }
+        }
+
+        MMMapButton {
+          id: filterIndicatorButton
+
+          visible: root.state === "view" && __activeProject.filterController?.hasActiveFilters
+          iconSource: __style.filterIcon
+          bgndColor: __activeProject.filterController?.filtersEnabled ? __style.positiveColor : __style.polarColor
+
+          onClicked: {
+            root.openFiltersPanel()
+          }
+
+          onClickAndHold: {
+            if ( __activeProject.filterController ) {
+              const enabling = !__activeProject.filterController.filtersEnabled
+              __activeProject.filterController.filtersEnabled = enabling
+              if ( enabling ) {
+                __notificationModel.addSuccess( qsTr( "All filters have been re-enabled" ) )
+              } else {
+                __notificationModel.addWarning( qsTr( "All filters have been temporarily disabled. Press and hold to re-enable them" ) )
+              }
+            }
           }
         }
 
