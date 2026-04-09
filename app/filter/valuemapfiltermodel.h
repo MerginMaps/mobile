@@ -23,13 +23,11 @@ class ValueMapFilterModel : public QAbstractListModel
     QML_ELEMENT
 
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
-    Q_PROPERTY( QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged )
 
   public:
     enum Roles
     {
-      TextRole = Qt::UserRole + 1,
-      ValueRole
+      KeyRole = Qt::UserRole + 1, // DisplayRole is used for description
     };
     Q_ENUM( Roles )
 
@@ -43,27 +41,21 @@ class ValueMapFilterModel : public QAbstractListModel
     QVariantMap config() const;
     void setConfig( const QVariantMap &config );
 
-    QString searchText() const;
-    void setSearchText( const QString &searchText );
-
   signals:
     void configChanged();
-    void searchTextChanged();
 
   private:
     void populate();
-    void applyFilter();
 
     struct Item
     {
-      QString text;
-      QString value;
+      QString description;
+      QString key;
     };
 
     QVariantMap mConfig;
-    QString mSearchText;
+
     QList<Item> mItems;
-    QList<Item> mFilteredItems;
 };
 
 #endif // VALUEMAPFILTERMODEL_H

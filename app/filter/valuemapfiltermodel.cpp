@@ -17,23 +17,22 @@ ValueMapFilterModel::ValueMapFilterModel( QObject *parent )
 int ValueMapFilterModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
-  return mFilteredItems.size();
+  return mItems.size();
 }
 
 QVariant ValueMapFilterModel::data( const QModelIndex &index, int role ) const
 {
-  if ( !index.isValid() || index.row() >= mFilteredItems.size() )
+  if ( !index.isValid() || index.row() >= mItems.size() )
     return {};
 
-  const Item &item = mFilteredItems.at( index.row() );
+  const Item &item = mItems.at( index.row() );
 
   switch ( role )
   {
     case Qt::DisplayRole:
-    case TextRole:
-      return item.text;
-    case ValueRole:
-      return item.value;
+      return item.description;
+    case KeyRole:
+      return item.key;
     default:
       return {};
   }
@@ -41,11 +40,10 @@ QVariant ValueMapFilterModel::data( const QModelIndex &index, int role ) const
 
 QHash<int, QByteArray> ValueMapFilterModel::roleNames() const
 {
-  return
-  {
-    { TextRole, "text" },
-    { ValueRole, "value" },
-  };
+  QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
+  roles[KeyRole] = QStringLiteral( "key" ).toLatin1();
+
+  return roles;
 }
 
 QVariantMap ValueMapFilterModel::config() const
@@ -64,24 +62,10 @@ void ValueMapFilterModel::setConfig( const QVariantMap &config )
   populate();
 }
 
-QString ValueMapFilterModel::searchText() const
-{
-  return mSearchText;
-}
-
-void ValueMapFilterModel::setSearchText( const QString &searchText )
-{
-  if ( mSearchText == searchText )
-    return;
-
-  mSearchText = searchText;
-  emit searchTextChanged();
-
-  applyFilter();
-}
-
 void ValueMapFilterModel::populate()
 {
+  beginResetModel();
+
   mItems.clear();
 
   const QVariantList mapList = mConfig.value( QStringLiteral( "map" ) ).toList();
@@ -90,30 +74,16 @@ void ValueMapFilterModel::populate()
   for ( const QVariant &entry : mapList )
   {
     const QVariantMap entryMap = entry.toMap();
+
     if ( entryMap.isEmpty() )
       continue;
 
     // Each entry is a single-key map: {"Display Text": "stored_value"}
     Item item;
-    item.text = entryMap.constBegin().key();
-    item.value = entryMap.constBegin().value().toString();
+    item.description = entryMap.constBegin().key();
+    item.key = entryMap.constBegin().value().toString();
+
     mItems.append( item );
-  }
-
-  applyFilter();
-}
-
-void ValueMapFilterModel::applyFilter()
-{
-  beginResetModel();
-  mFilteredItems.clear();
-
-  for ( const Item &item : std::as_const( mItems ) )
-  {
-    if ( mSearchText.isEmpty() || item.text.contains( mSearchText, Qt::CaseInsensitive ) )
-    {
-      mFilteredItems.append( item );
-    }
   }
 
   endResetModel();
