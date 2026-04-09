@@ -313,8 +313,8 @@ qt_add_executable(
   ${MM_HDRS}
   main.cpp
   # Database Manager
-  core/dbmanager.h
-  core/dbmanager.cpp
+  dbmanager.h
+  dbmanager.cpp
 )
 
 set_target_properties(MerginMaps PROPERTIES WIN32_EXECUTABLE TRUE)
