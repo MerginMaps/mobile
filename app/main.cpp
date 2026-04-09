@@ -49,9 +49,9 @@
 #include "merginprojectstatusmodel.h"
 #include "recordinglayersproxymodel.h"
 
-#include "dbmanager.h"  // ← NUEVO: Include para DBManager 2026
-#include <QStandardPaths>  // Si no está ya incluido 2026
-#include <QtSql>  // Para soporte de bases de datos 2026
+#include "dbmanager.h"
+#include <QStandardPaths>
+#include <QtSql>
 
 #include "layersmodel.h"
 #include "activelayer.h"
@@ -78,7 +78,6 @@
 #include "qgsunittypes.h"
 #include "mmstyle.h"
 #include "notificationmodel.h"
-#include "dbmanager.h"  // ← NUEVO: Include para DBManager
 
 #include "rememberattributescontroller.h"
 #include "attributecontroller.h"
@@ -379,117 +378,6 @@ void addQmlImportPath( QQmlEngine &engine )
     // when Input is installed (e.g. Android/Win32)
     engine.addImportPath( QgsApplication::qmlImportPath() );
     qDebug() << "adding QML import Path: " << QgsApplication::qmlImportPath();
-
-    // Register to QQmlEngine 2026
-    engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
-    engine.rootContext()->setContextProperty( "__androidUtils", &androidUtils );
-    engine.rootContext()->setContextProperty( "__iosUtils", &iosUtils );
-
-    // =====================================================================
-    // ✨ INICIALIZAR DBMANAGER PARA MANEJO DE BASES DE DATOS ✨
-    // =====================================================================
-    // Crear instancia de DBManager (gestor de bases de datos)
-    DBManager *dbManager = new DBManager();
-
-    // Determinar ruta de la base de datos según la plataforma
-    QString dbPath = dataDir + "/merginmaps_data.db";
-
-    // Inicializar la conexión a la base de datos
-    if ( !dbManager->initializeDatabase( dbPath ) )
-    {
-        CoreUtils::log( QStringLiteral( "DBManager" ),
-                       QStringLiteral( "Advertencia: No se pudo inicializar BD en %1" ).arg( dbPath ) );
-    }
-
-    // Registrar como objeto global en QML para acceder desde cualquier componente
-    // Esto permite usar: __dbManager.methodName() desde QML
-    engine.rootContext()->setContextProperty( "__dbManager", dbManager );
-
-    // =====================================================================
-    // 🔗 CONECTAR SEÑALES DE DBMANAGER A NOTIFICATIONMODEL
-    // =====================================================================
-    // Esto permite mostrar mensajes al usuario cuando ocurren eventos en la BD
-
-    // Cuando se crea una tabla exitosamente
-    QObject::connect( dbManager, &DBManager::tableCreated, &lambdaContext,
-                     [&notificationModel]( const QString &tableName )
-                     {
-                         notificationModel.addSuccess(
-                             QObject::tr( "✓ Tabla '%1' creada exitosamente" ).arg( tableName )
-                             );
-                         CoreUtils::log( QStringLiteral( "DBManager" ),
-                                        QStringLiteral( "Tabla '%1' creada" ).arg( tableName ) );
-                     } );
-
-    // Cuando ocurre un error en la base de datos
-    QObject::connect( dbManager, &DBManager::errorOccurred, &lambdaContext,
-                     [&notificationModel]( const QString &errorMessage )
-                     {
-                         notificationModel.addError(
-                             QObject::tr( "❌ Error en Base de Datos: %1" ).arg( errorMessage )
-                             );
-                         CoreUtils::log( QStringLiteral( "DBManager" ),
-                                        QStringLiteral( "Error: %1" ).arg( errorMessage ) );
-                     } );
-
-    // Cuando se crea/abre la base de datos
-    QObject::connect( dbManager, &DBManager::databaseCreated, &lambdaContext,
-                     [&notificationModel]( const QString &databasePath )
-                     {
-                         notificationModel.addSuccess(
-                             QObject::tr( "✓ Base de datos: %1" ).arg(
-                                 QFileInfo( databasePath ).fileName() )
-                             );
-                         CoreUtils::log( QStringLiteral( "DBManager" ),
-                                        QStringLiteral( "BD creada en: %1" ).arg( databasePath ) );
-                     } );
-
-    // Cuando cambia el estado de conexión
-    QObject::connect( dbManager, &DBManager::connectionStatusChanged, &lambdaContext,
-                     [&notificationModel]( bool connected )
-                     {
-                         if ( connected )
-                         {
-                             notificationModel.addInfo(
-                                 QObject::tr( "✓ Conectado a base de datos" )
-                                 );
-                         }
-                         else
-                         {
-                             notificationModel.addWarning(
-                                 QObject::tr( "⚠ Desconectado de base de datos" )
-                                 );
-                         }
-                     } );
-
-    // Cuando cambia el modelo de datos (tabla cargada)
-    QObject::connect( dbManager, &DBManager::tableModelChanged, &lambdaContext,
-                     [](){
-                         CoreUtils::log( QStringLiteral( "DBManager" ),
-                                        QStringLiteral( "Modelo de tabla actualizado" ) );
-                     } );
-
-    // =====================================================================
-    // 🛑 LIMPIEZA AL CERRAR LA APLICACIÓN
-    // =====================================================================
-    // Asegurar que DBManager se cierre correctamente cuando la app se cierra
-    QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext,
-                     [dbManager]()
-                     {
-                         if ( dbManager )
-                         {
-                             // Cerrar conexión a BD
-                             dbManager->closeDatabase();
-
-                             // Eliminar de memoria
-                             dbManager->deleteLater();
-
-                             CoreUtils::log( QStringLiteral( "AppState" ),
-                                            QStringLiteral( "DBManager cerrado correctamente" ) );
-                         }
-                     } );
-
-    // Register to QQmlEngine 2026
 
 #ifdef QML_BUILD_IMPORT_DIR
     // Adds a runtime qml directory containing Input plugin
@@ -875,52 +763,103 @@ int main( int argc, char *argv[] )
     engine.rootContext()->setContextProperty( "__variablesManager", vm.get() );
 
     // =====================================================================
-    // INICIALIZAR DBMANAGER PARA MANEJO DE BASES DE DATOS (← NUEVO) 2026
+    // INICIALIZAR DBMANAGER PARA MANEJO DE BASES DE DATOS
     // =====================================================================
     DBManager *dbManager = new DBManager();
+
+    // Determinar ruta de la base de datos según la plataforma
+    QString dbPath = dataDir + "/merginmaps_data.db";
+
+    // Inicializar la conexión a la base de datos
+    if ( !dbManager->initializeDatabase( dbPath ) )
+    {
+        CoreUtils::log( QStringLiteral( "DBManager" ),
+                       QStringLiteral( "Advertencia: No se pudo inicializar BD en %1" ).arg( dbPath ) );
+    }
 
     // Registrar como objeto global en QML para acceder desde cualquier componente
     engine.rootContext()->setContextProperty( "__dbManager", dbManager );
 
-    // Conectar señales de DBManager a NotificationModel para mostrar mensajes al usuario
-    QObject::connect( dbManager, &DBManager::tableCreated, &lambdaContext, [&notificationModel]( const QString &tableName )
+    // =====================================================================
+    // 🔗 CONECTAR SEÑALES DE DBMANAGER A NOTIFICATIONMODEL
+    // =====================================================================
+
+    // Cuando se crea una tabla exitosamente
+    QObject::connect( dbManager, &DBManager::tableCreated, &lambdaContext,
+                     [&notificationModel]( const QString &tableName )
                      {
-                         notificationModel.addSuccess( QObject::tr( "✓ Tabla '%1' creada exitosamente" ).arg( tableName ) );
-                         CoreUtils::log( QStringLiteral( "DBManager" ), QStringLiteral( "Tabla '%1' creada exitosamente" ).arg( tableName ) );
+                         notificationModel.addSuccess(
+                             QObject::tr( "✓ Tabla '%1' creada exitosamente" ).arg( tableName )
+                             );
+                         CoreUtils::log( QStringLiteral( "DBManager" ),
+                                        QStringLiteral( "Tabla '%1' creada" ).arg( tableName ) );
                      } );
 
-    QObject::connect( dbManager, &DBManager::errorOccurred, &lambdaContext, [&notificationModel]( const QString &errorMessage )
+    // Cuando ocurre un error en la base de datos
+    QObject::connect( dbManager, &DBManager::errorOccurred, &lambdaContext,
+                     [&notificationModel]( const QString &errorMessage )
                      {
-                         notificationModel.addError( QObject::tr( "❌ Error en Base de Datos: %1" ).arg( errorMessage ) );
-                         CoreUtils::log( QStringLiteral( "DBManager" ), QStringLiteral( "Error: %1" ).arg( errorMessage ) );
+                         notificationModel.addError(
+                             QObject::tr( "❌ Error en Base de Datos: %1" ).arg( errorMessage )
+                             );
+                         CoreUtils::log( QStringLiteral( "DBManager" ),
+                                        QStringLiteral( "Error: %1" ).arg( errorMessage ) );
                      } );
 
-    QObject::connect( dbManager, &DBManager::databaseCreated, &lambdaContext, [&notificationModel]( const QString &databasePath )
+    // Cuando se crea/abre la base de datos
+    QObject::connect( dbManager, &DBManager::databaseCreated, &lambdaContext,
+                     [&notificationModel]( const QString &databasePath )
                      {
-                         notificationModel.addSuccess( QObject::tr( "✓ Base de datos creada en: %1" ).arg( databasePath ) );
-                         CoreUtils::log( QStringLiteral( "DBManager" ), QStringLiteral( "BD creada en: %1" ).arg( databasePath ) );
+                         notificationModel.addSuccess(
+                             QObject::tr( "✓ Base de datos: %1" ).arg(
+                                 QFileInfo( databasePath ).fileName() )
+                             );
+                         CoreUtils::log( QStringLiteral( "DBManager" ),
+                                        QStringLiteral( "BD creada en: %1" ).arg( databasePath ) );
                      } );
 
-    QObject::connect( dbManager, &DBManager::connectionStatusChanged, &lambdaContext, [&notificationModel]( bool connected )
+    // Cuando cambia el estado de conexión
+    QObject::connect( dbManager, &DBManager::connectionStatusChanged, &lambdaContext,
+                     [&notificationModel]( bool connected )
                      {
                          if ( connected )
                          {
-                             notificationModel.addInfo( QObject::tr( "✓ Conectado a base de datos" ) );
+                             notificationModel.addInfo(
+                                 QObject::tr( "✓ Conectado a base de datos" )
+                                 );
                          }
                          else
                          {
-                             notificationModel.addWarning( QObject::tr( "⚠ Desconectado de base de datos" ) );
+                             notificationModel.addWarning(
+                                 QObject::tr( "⚠ Desconectado de base de datos" )
+                                 );
                          }
                      } );
 
-    // Limpiar DBManager cuando la aplicación se cierre
-    QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext, [dbManager]()
+    // Cuando cambia el modelo de datos (tabla cargada)
+    QObject::connect( dbManager, &DBManager::tableModelChanged, &lambdaContext,
+                     [](){
+                         CoreUtils::log( QStringLiteral( "DBManager" ),
+                                        QStringLiteral( "Modelo de tabla actualizado" ) );
+                     } );
+
+    // =====================================================================
+    // 🛑 LIMPIEZA AL CERRAR LA APLICACIÓN
+    // =====================================================================
+    // Asegurar que DBManager se cierre correctamente cuando la app se cierra
+    QObject::connect( &app, &QCoreApplication::aboutToQuit, &lambdaContext,
+                     [dbManager]()
                      {
                          if ( dbManager )
                          {
+                             // Cerrar conexión a BD
                              dbManager->closeDatabase();
+
+                             // Eliminar de memoria
                              dbManager->deleteLater();
-                             CoreUtils::log( QStringLiteral( "AppState" ), QStringLiteral( "DBManager cerrado correctamente" ) );
+
+                             CoreUtils::log( QStringLiteral( "AppState" ),
+                                            QStringLiteral( "DBManager cerrado correctamente" ) );
                          }
                      } );
 
