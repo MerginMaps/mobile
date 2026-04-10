@@ -154,14 +154,10 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::NumberFilter:
     {
-      const QString valueFrom = filter.value.toList().at( 0 ).toString();
-      const QString valueTo = filter.value.toList().at( 1 ).toString();
-
-      if ( valueFrom.isEmpty() || valueTo.isEmpty() )
-      {
-        expressionCopy = {};
-        break;
-      }
+      const QVariant &variantFrom = filter.value.toList().at( 0 );
+      const QString valueFrom = variantFrom.isValid() ? variantFrom.toString() : QString::number( std::numeric_limits<int>::min() );
+      const QVariant &variantTo = filter.value.toList().at( 1 );
+      const QString valueTo = variantTo.isValid() ? variantTo.toString() : QString::number( std::numeric_limits<int>::max() );
 
       expressionCopy.replace( QStringLiteral( "%%value_from%%" ), valueFrom );
       expressionCopy.replace( QStringLiteral( "%%value_to%%" ), valueTo );
