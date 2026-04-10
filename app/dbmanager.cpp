@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QVariant>
+#include <QFileInfo>      // 2026
 
 DBManager::DBManager(QObject *parent)
     : QObject(parent)
@@ -398,4 +399,142 @@ void DBManager::setError(const QString &errorMessage)
     m_lastError = errorMessage;
     qWarning() << "DBManager Error:" << errorMessage;
     emit errorOccurred(errorMessage);
+}
+
+/**
+* Obtiene información de la base de datos
+*/
+QString DBManager::getDatabaseInfo() const
+{
+    if (!m_database.isOpen()) {
+        return "Base de datos no está abierta";
+    }
+
+    QString info;
+    QTextStream stream(&info);
+
+    // Obtener nombre del archivo
+    QFileInfo fileInfo(m_databasePath);
+    QString dbName = fileInfo.fileName();
+
+    stream << "╔════════════════════════════════════════════════════════════╗\n";
+    stream << "║           INFORMACIÓN DE BASE DE DATOS                     ║\n";
+    stream << "╚════════════════════════════════════════════════════════════╝\n\n";
+
+    stream << "📁 Nombre: " << dbName << "\n";
+    stream << "📍 Ruta: " << m_databasePath << "\n";
+    stream << "💾 Tamaño: " << (QFileInfo(m_databasePath).size() / 1024) << " KB\n";
+    stream << "\n";
+
+    stream << "┌────────────────────────────────────────────────────────────��\n";
+    stream << "│ TABLAS DISPONIBLES (" << m_tableList.count() << "):\n";
+    stream << "└────────────────────────────────────────────────────────────┘\n\n";
+
+    if (m_tableList.isEmpty()) {
+        stream << "  (Sin tablas)\n\n";
+    } else {
+        for (int i = 0; i < m_tableList.count(); ++i) {
+            const QString &tableName = m_tableList.at(i);
+            QStringList columns = getColumnNames(tableName);
+
+            stream << QString("  %1. %2\n").arg(i + 1).arg(tableName);
+            stream << QString("     ├─ Columnas: %1\n").arg(columns.count());
+
+            // Listar columnas
+            for (int j = 0; j < columns.count() && j < 5; ++j) {
+                stream << QString("     │  • %1\n").arg(columns.at(j));
+            }
+
+            if (columns.count() > 5) {
+                stream << QString("     │  • ... y %1 más\n").arg(columns.count() - 5);
+            }
+
+            stream << "\n";
+        }
+    }
+
+    stream << "╔════════════════════════════════════════════════════════════╗\n";
+
+    return info;
+}
+
+/**
+ * Obtiene el nombre de la base de datos
+ */
+QString DBManager::getDatabaseName() const
+{
+    QFileInfo fileInfo(m_databasePath);
+    return fileInfo.fileName();
+}
+
+/**
+ * Verifica si una tabla existe
+ */
+bool DBManager::tableExists(const QString &tableName) const
+{
+    return m_tableList.contains(tableName);
+}
+
+/**
+ * Crea una nueva tabla
+ */
+bool DBManager::createTable(const QString &tableName, const QVariantList &fields)
+{
+    if (!m_database.isOpen()) {
+        setError("Base de datos no está abierta");
+        return false;
+    }
+
+    if (tableName.isEmpty()) {
+        setError("El nombre de la tabla no puede estar vacío");
+        return false;
+    }
+
+    if (m_tableList.contains(tableName)) {
+        setError(QString("La tabla '%1' ya existe").arg(tableName));
+        return false;
+    }
+
+    if (fields.isEmpty()) {
+        setError("Debe agregar al menos un campo");
+        return false;
+    }
+
+    // Construir sentencia CREATE TABLE
+    QString createTableSQL = QString("CREATE TABLE %1 (\n").arg(tableName);
+    createTableSQL += "  id INTEGER PRIMARY KEY AUTOINCREMENT,\n";
+
+    for (int i = 0; i < fields.count(); ++i) {
+        QVariantMap field = fields.at(i).toMap();
+        QString fieldName = field["name"].toString();
+        QString fieldType = field["type"].toString();
+
+        if (fieldName.isEmpty()) continue;
+
+        createTableSQL += QString("  %1 %2").arg(fieldName, fieldType);
+
+        if (i < fields.count() - 1) {
+            createTableSQL += ",\n";
+        } else {
+            createTableSQL += "\n";
+        }
+    }
+
+    createTableSQL += ")";
+
+    qDebug() << "Creating table with SQL:" << createTableSQL;
+
+    QSqlQuery query(m_database);
+    if (!query.exec(createTableSQL)) {
+        setError(QString("Error creando tabla: %1").arg(query.lastError().text()));
+        return false;
+    }
+
+    // Recargar lista de tablas
+    loadTableList();
+
+    qDebug() << "Table created successfully:" << tableName;
+    emit tableCreated(tableName);
+
+    return true;
 }

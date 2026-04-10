@@ -131,6 +131,34 @@ public:
      */
     Q_INVOKABLE bool exportToCSV(const QString &filePath);
 
+    // ============== INFORMACIÓN ==============
+    /*
+    * Obtiene información completa de la base de datos (nombre y tablas)
+    * @return String formateado con la información de la BD
+    */
+    Q_INVOKABLE QString getDatabaseInfo() const;
+
+    /*
+    * Obtiene la propiedad databaseName (nombre del archivo)
+    * @return Nombre del archivo de la base de datos
+    */
+    Q_INVOKABLE QString getDatabaseName() const;
+
+    /*
+    * Verifica si una tabla existe
+    * @param tableName Nombre de la tabla
+    * @return true si existe
+    */
+    Q_INVOKABLE bool tableExists(const QString &tableName) const;
+
+    /*
+    * Crea una nueva tabla con los campos especificados
+    * @param tableName Nombre de la tabla
+    * @param fields Lista de campos {name, type}
+    * @return true si se creó correctamente
+    */
+    Q_INVOKABLE bool createTable(const QString &tableName, const QVariantList &fields);
+
 signals:
     // Señales de cambios en tabla
     void tableListChanged();
