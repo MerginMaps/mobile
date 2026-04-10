@@ -51,6 +51,10 @@ Dialog {
     property string currentDatabaseName: ""
     property string currentDatabasePath: ""
 
+    // ✅ AGREGAR ESTAS PROPIEDADES
+    property string dbNameToShow: ""
+    property string dbPathToShow: ""
+
     // Funciones de callback
     signal tableCreationRequested(string tableName, var fields)
 
@@ -61,15 +65,15 @@ Dialog {
         id: uiForm
         anchors.fill: parent
 
-        // 1. Enviar datos a la vista
-        dbNameFieldText: createTableDialog.currentDatabaseName
-        dbPathFieldText: createTableDialog.currentDatabasePath
+        // ✅ Vincular directamente con las propiedades del diálogo
+        dbNameFieldText: createTableDialog.dbNameToShow
+        dbPathFieldText: createTableDialog.dbPathToShow
         fieldsModel: fieldsListModel
 
         // 2. Recibir señales de la vista
         onShowDbInfoRequested: {
             if (dbManager) {
-               // dbInfoDialogPopup.infoText = dbManager.loadTableList()  //getDatabaseInfo()
+                dbInfoDialogPopup.infoText = dbManager.getDatabaseInfo()
                 dbInfoDialogPopup.open()
             }
         }

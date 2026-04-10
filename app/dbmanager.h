@@ -33,6 +33,10 @@ class DBManager : public QObject {
     Q_PROPERTY(QString lastError READ getLastError NOTIFY errorOccurred)
     Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectionStatusChanged)
 
+    Q_PROPERTY(QString databaseName READ getDatabaseName NOTIFY databaseNameChanged)  // ✅ AGREGAR
+    Q_PROPERTY(QString databasePath READ getDatabasePath NOTIFY databasePathChanged)  // ✅ AGREGAR
+
+
 public:
     explicit DBManager(QObject *parent = nullptr);
     ~DBManager();
@@ -57,6 +61,9 @@ public:
     QSqlTableModel* getTableModel() const { return m_tableModel.get(); }
     QString getLastError() const { return m_lastError; }
     bool isConnected() const { return m_database.isOpen(); }
+
+    //QString getDatabaseName() const;  // ✅ AGREGAR
+    QString getDatabasePath() const;  // ✅ AGREGAR
 
     // ============== SETTERS ==============
     /**
@@ -165,6 +172,10 @@ signals:
     void currentTableChanged();
     void tableModelChanged();
     void rowCountChanged();
+
+    // ✅ AGREGAR ESTAS SEÑALES
+    void databaseNameChanged();
+    void databasePathChanged();
 
     // Señales de notificación
     void errorOccurred(const QString &errorMessage);

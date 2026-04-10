@@ -458,13 +458,25 @@ QString DBManager::getDatabaseInfo() const
     return info;
 }
 
-/**
+/*
  * Obtiene el nombre de la base de datos
  */
 QString DBManager::getDatabaseName() const
 {
+    if (m_databasePath.isEmpty()) {
+        return "";
+    }
+
     QFileInfo fileInfo(m_databasePath);
     return fileInfo.fileName();
+}
+
+/**
+ * Obtiene la ruta de la base de datos
+ */
+QString DBManager::getDatabasePath() const
+{
+    return m_databasePath;
 }
 
 /**

@@ -255,6 +255,7 @@ ApplicationWindow {
  Hereda de un tipo personalizado (MMMapController) que seguramente envuelve la lógica de QGIS y el renderizado del mapa.
 */
 
+/*
   // Diálogo para crear nuevas tablas // 2026
   CreateTableDialog {
       id: createTableDialog
@@ -272,7 +273,7 @@ ApplicationWindow {
         stateManager.state = "misc"
         console.log("Se abre ventana de crear tabla");
       // window.currentDatabaseName = __dbManager.databaseName
-       //   console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
+          console.log("DB en " + Qt.platform.os + ": " + currentDatabaseName);
        // window.currentDatabasePath = __dbManager.databasePath
        //   console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
 
@@ -281,6 +282,34 @@ ApplicationWindow {
       onClosed: {
         stateManager.state = "map"
         console.log("Se cierra ventana de crear tabla");
+      }
+  }
+  */
+  // Diálogo para crear nuevas tablas // 2026
+  CreateTableDialog {
+      id: createTableDialog
+      parent: window
+
+      // Ahora usa el objeto global registrado en QML
+      dbManager: __dbManager
+
+      onOpened: {
+          stateManager.state = "misc"
+          console.log("Se abre ventana de crear tabla")
+
+        // ✅ Actualizar propiedades públicas del diálogo
+        if (__dbManager) {
+            createTableDialog.dbNameToShow = __dbManager.databaseName
+            createTableDialog.dbPathToShow = __dbManager.databasePath
+
+            console.log("DB nombre: " + __dbManager.databaseName)
+            console.log("DB ruta: " + __dbManager.databasePath)
+        }
+      }
+
+      onClosed: {
+          stateManager.state = "map"
+          console.log("Se cierra ventana de crear tabla")
       }
   }
 
@@ -1674,10 +1703,10 @@ ApplicationWindow {
 
      // if (__dbManager.initializeDatabase(dbNameInput.text.trim(), dbPathInput.text.trim()))
       if (__dbManager.initializeDatabase(fullPath)) {
-        window.currentDatabaseName = dbName
-          console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
-        window.currentDatabasePath = __dbManager.databasePath
-          console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
+        //window.currentDatabaseName = dbName
+        //  console.log("DB en " + Qt.platform.os + ": " + window.currentDatabaseName);
+        //window.currentDatabasePath = __dbManager.databasePath
+        //  console.log("DB en " + Qt.platform.os + ": " + window.currentDatabasePath);
         successMessage.text = "✓ Base de datos creada en:\n" + __dbManager.databasePath
         dbNameInput.text = ""
         dbPathInput.text = ""
