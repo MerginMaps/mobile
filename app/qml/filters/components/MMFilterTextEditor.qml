@@ -45,6 +45,12 @@ Column {
     id: debounceTimer
     interval: 300
     repeat: false
-    onTriggered: root.currentValue = [filterInput.text]
+    onTriggered: {
+      if (filterInput.text) {
+        root.currentValue = [filterInput.text]
+      } else {
+        root.currentValue = undefined
+      }
+    }
   }
 }

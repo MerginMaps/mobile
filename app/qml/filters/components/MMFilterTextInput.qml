@@ -73,7 +73,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   // keep checked in sync with whether the field has a value
   onTextChanged: {
     if ( root.type === MMFilterTextInput.InputType.Text || root.type === MMFilterTextInput.InputType.Number ) {
-      root.checked = ( root.text !== "" )
+      root.checked = false
     }
   }
 
@@ -82,6 +82,12 @@ MMPrivateComponents.MMBaseSingleLineInput {
     if ( ( root.type === MMFilterTextInput.InputType.Text || root.type === MMFilterTextInput.InputType.Number ) && root.checked ) {
       textField.clear()
       root.checked = false
+    }
+  }
+
+  Component.onCompleted: {
+    if ( root.text ) {
+      root.checked = true
     }
   }
 }

@@ -123,7 +123,6 @@ class FilterController : public QObject
 
 
   signals:
-    void filtersChanged();
     void hasActiveFiltersChanged();
     void layerFilterChanged( const QString &layerId );
     void hasFiltersAvailableChanged();
