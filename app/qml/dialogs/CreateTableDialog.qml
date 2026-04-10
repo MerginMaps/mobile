@@ -69,7 +69,7 @@ Dialog {
         // 2. Recibir señales de la vista
         onShowDbInfoRequested: {
             if (dbManager) {
-                dbInfoDialogPopup.infoText = dbManager.getDatabaseInfo()
+               // dbInfoDialogPopup.infoText = dbManager.loadTableList()  //getDatabaseInfo()
                 dbInfoDialogPopup.open()
             }
         }
