@@ -9,17 +9,16 @@
 
 import QtQuick
 
-import mm 1.0 as MM
+import MMInput as MM
 import "../../components" as MMComponents
 
 Column {
   id: root
 
   required property string filterName
-  required property string filterId
-  required property var currentValue
-
   required property var widgetConfig
+
+  required property var currentValue
 
   property bool isMultiSelect: false
 
@@ -74,26 +73,24 @@ Column {
     sourceComponent: MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root.filterName
 
-      withSearch: vrDropdownModel.count > 5
+      withSearch: valueMapModel.rowCount() > 5
       multiSelect: root.isMultiSelect
 
-      list.model: MM.ValueRelationFeaturesModel {
-        id: vrDropdownModel
+      list.model: MM.SearchProxyModel {
+        id: searchProxyModel
 
-        config: root.widgetConfig
+        sourceModel: MM.ValueMapFilterModel {
+          id: valueMapModel
+
+          config: root.widgetConfig
+        }
       }
 
-      textRole: "FeatureTitle"
+      textRole: "display"
+      secondaryTextRole: ""
       valueRole: "Key"
 
       onSelectionFinished: function( selectedItems ) {
-
-        //
-        // Large fids could be converted to scientific notation on their way to cpp,
-        // so we convert them to string first in JS.
-        //
-        selectedItems = selectedItems.map( x => x.toString() )
-
         root.currentValue = selectedItems
 
         // TODO: this is just a hack, we need to add a dedicated signal instead, Qt does not always get that array length has changed
@@ -102,7 +99,7 @@ Column {
         close()
       }
 
-      onSearchTextChanged: ( searchText ) => vrDropdownModel.searchExpression = searchText
+      onSearchTextChanged: ( searchText ) => searchProxyModel.searchString = searchText
 
       onClosed: dropdownDrawerLoader.active = false
 
@@ -112,9 +109,7 @@ Column {
           // preselect choices if any are set
           selected = root.currentValue
         }
-
         open()
-        vrDropdownModel.reloadFeatures()
       }
     }
   }
