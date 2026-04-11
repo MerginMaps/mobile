@@ -1674,6 +1674,11 @@ ApplicationWindow {
 
     onOpened: {
         console.log("Abrir ventana de crear DB");
+      stateManager.state = "misc"
+    }
+
+    onClosed: {
+      stateManager.state = "map"
     }
 
     onAccepted: {
