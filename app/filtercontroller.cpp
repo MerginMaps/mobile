@@ -169,14 +169,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       // so we must convert local datetimes to UTC before comparing.
       // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
       const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss" );
-      const QString dateFrom = filter.value.toList().at( 0 ).toDateTime().toUTC().toString( isoFormat );
-      const QString dateTo = filter.value.toList().at( 1 ).toDateTime().toUTC().toString( isoFormat );
+      const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00" );
+      const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59" );
 
-      if ( dateFrom.isEmpty() || dateTo.isEmpty() )
-      {
-        expressionCopy = {};
-        break;
-      }
+      const QVariant &variantFrom = filter.value.toList().at( 0 );
+      const QString dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( isoFormat ) : minimumDateTime;
+      const QVariant &variantTo = filter.value.toList().at( 1 );
+      const QString dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( isoFormat ) : maximumDateTime;
 
       expressionCopy.replace( QStringLiteral( "%%value_from%%" ), QgsExpression::quotedString( dateFrom ) );
       expressionCopy.replace( QStringLiteral( "%%value_to%%" ), QgsExpression::quotedString( dateTo ) );
@@ -311,8 +310,6 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   {
     if ( newFilters.contains( filter.filterId ) )
     {
-      //TODO: we need to have both upper and lower bounds for numbers and dates,
-      //if user didn't supply use numeric_limits for numbers and year 1 to 9999 for dates
       filter.value = newFilters.value( filter.filterId );
     }
   }
@@ -328,6 +325,20 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
   return !layer->subsetString().isEmpty();
+}
+
+bool FilterController::isDateFilterDateTime(const QString& filterId)
+{
+  for ( FieldFilter &filter : mFieldFilters )
+  {
+    if ( filter.filterId == filterId )
+    {
+      const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer(filter.layerId) );
+      const QMetaType::Type fieldType = layer->fields().field(filter.fieldName).type();
+      return fieldType == QMetaType::QDateTime;
+    }
+  }
+  return false;
 }
 
 QVariantMap FilterController::getDropdownConfiguration( const QString &filterId )
