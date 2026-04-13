@@ -9,66 +9,85 @@
 
 import QtQuick
 
-import "../../components"
+import "../../components" as MMComponents
 
 Column {
   id: root
 
+  required property string filterName
+
+  required property var currentValue
+
+  property string customLabelForTrue: ""
+  property string customLabelForFalse: ""
+
+  property var customValueForTrue: null // can be string, number, bool
+  property var customValueForFalse: null // can be string, number, bool
+
   width: parent.width
   spacing: __style.margin8
 
-  required property string fieldDisplayName
-  required property var currentValue
-  required property string fieldLayerId
-  required property string fieldName
-
-  property string boolTrueLabel: ""
-  property string boolFalseLabel: ""
-  property var boolCheckedValue: null
-  property var boolUncheckedValue: null
-
-  property bool _initialized: false
-  Component.onCompleted: _initialized = true
-
-  MMText {
+  MMComponents.MMText {
     width: parent.width
-    text: root.fieldDisplayName
+
+    text: root.filterName
+
     font: __style.p6
     color: __style.nightColor
-    visible: root.fieldDisplayName !== ""
+    visible: text
   }
 
-  MMSegmentControl {
+  MMComponents.MMSegmentControl {
     id: segControl
 
     width: parent.width
     backgroundColor: __style.lightGreenColor
 
-    trueText:  root.boolTrueLabel  !== "" ? root.boolTrueLabel  : qsTr( "True" )
-    falseText: root.boolFalseLabel !== "" ? root.boolFalseLabel : qsTr( "False" )
+    trueText: customLabelForTrue ? customLabelForTrue : qsTr( "True" )
+    falseText: customLabelForFalse ? customLabelForFalse : qsTr( "False" )
 
-    selectedIndex: {
-      let val = root.currentValue
-      if ( val === null || val === undefined ) return MMSegmentControl.Options.All
-      let checkedVal = root.boolCheckedValue !== null ? root.boolCheckedValue : true
-      return ( val == checkedVal ) ? MMSegmentControl.Options.True : MMSegmentControl.Options.False
+    Component.onCompleted: {
+      if ( root.currentValue && root.currentValue.length === 1 )
+      {
+        if ( root.currentValue[0] === internal.representationForTrue )
+        {
+          selectedIndex = MMComponents.MMSegmentControl.Options.True
+        }
+        else if ( root.currentValue[0] === internal.representationForFalse )
+        {
+          selectedIndex = MMComponents.MMSegmentControl.Options.False
+        }
+        else
+        {
+          selectedIndex = MMComponents.MMSegmentControl.Options.All
+        }
+      }
+      else
+      {
+        selectedIndex = MMComponents.MMSegmentControl.Options.All
+      }
     }
 
     onSelectedIndexChanged: {
-      if ( !root._initialized || !root.fieldLayerId || !root.fieldName ) return
-      switch ( segControl.selectedIndex ) {
-        case MMSegmentControl.Options.All:
-          __activeProject.filterController.removeFieldFilter( root.fieldLayerId, root.fieldName )
-          break
-        case MMSegmentControl.Options.True:
-          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool",
-            root.boolCheckedValue !== null ? root.boolCheckedValue : true )
-          break
-        case MMSegmentControl.Options.False:
-          __activeProject.filterController.setFieldFilter( root.fieldLayerId, root.fieldName, "bool",
-            root.boolUncheckedValue !== null ? root.boolUncheckedValue : false )
-          break
+      if ( selectedIndex === MMComponents.MMSegmentControl.Options.All )
+      {
+        root.currentValue = undefined
+      }
+      else if ( selectedIndex === MMComponents.MMSegmentControl.Options.True )
+      {
+        root.currentValue = [internal.representationForTrue]
+      }
+      else if ( selectedIndex === MMComponents.MMSegmentControl.Options.False )
+      {
+        root.currentValue = [internal.representationForFalse]
       }
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property var representationForTrue: root.customValueForTrue ? root.customValueForTrue : true
+    property var representationForFalse: root.customValueForFalse ? root.customValueForFalse : false
   }
 }
