@@ -142,14 +142,16 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
   {
     case FieldFilter::TextFilter:
     {
-      const QString textValue = filter.value.toList().at( 0 ).toString();
-      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedString( textValue ) );
+      QString textValue = QgsExpression::quotedString( filter.value.toList().at( 0 ).toString() );
+      // remove single quotes from the beginning and end of returned string
+      textValue = textValue.slice(1, textValue.size() - 2 );
+      expressionCopy.replace( QStringLiteral( "@@value@@" ), textValue );
       break;
     }
     case FieldFilter::CheckboxFilter:
     case FieldFilter::SingleSelectFilter:
     {
-      expressionCopy.replace( QStringLiteral( "%%value%%" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
+      expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
       break;
     }
     case FieldFilter::NumberFilter:
@@ -159,8 +161,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       const QVariant &variantTo = filter.value.toList().at( 1 );
       const QString valueTo = variantTo.isValid() ? variantTo.toString() : QString::number( std::numeric_limits<int>::max() );
 
-      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), valueFrom );
-      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), valueTo );
+      expressionCopy.replace( QStringLiteral( "@@value_from@@" ), valueFrom );
+      expressionCopy.replace( QStringLiteral( "@@value_to@@" ), valueTo );
       break;
     }
     case FieldFilter::DateFilter:
@@ -177,8 +179,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       const QVariant &variantTo = filter.value.toList().at( 1 );
       const QString dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( isoFormat ) : maximumDateTime;
 
-      expressionCopy.replace( QStringLiteral( "%%value_from%%" ), QgsExpression::quotedString( dateFrom ) );
-      expressionCopy.replace( QStringLiteral( "%%value_to%%" ), QgsExpression::quotedString( dateTo ) );
+      expressionCopy.replace( QStringLiteral( "@@value_from@@" ), QgsExpression::quotedString( dateFrom ) );
+      expressionCopy.replace( QStringLiteral( "@@value_to@@" ), QgsExpression::quotedString( dateTo ) );
       break;
     }
     case FieldFilter::MultiSelectFilter:
@@ -195,7 +197,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       {
         quotedValues << QgsExpression::quotedValue( v );
       }
-      expressionCopy.replace( QStringLiteral( "%%values%%" ), quotedValues.join( QStringLiteral( ", " ) ) );
+      expressionCopy.replace( QStringLiteral( "@@values@@" ), quotedValues.join( QStringLiteral( ", " ) ) );
       break;
     }
   }
