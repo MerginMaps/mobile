@@ -20,9 +20,8 @@ Column {
   spacing: __style.margin8
 
   required property string filterName
-  required property string filterId
   required property var currentValue
-  readonly property bool hasTime: __activeProject.filterController.isDateFilterDateTime(filterId)
+  required property bool hasTime
 
   property bool rangeInvalid: {
     if ( !currentValue || !currentValue[0] || !currentValue[1] ){
