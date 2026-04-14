@@ -18,7 +18,6 @@ Column {
   spacing: __style.margin8
 
   required property string filterName
-  required property string filterId
   required property var currentValue
 
   MMText {

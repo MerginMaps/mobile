@@ -52,7 +52,7 @@ Column {
     onRightContentClicked: {
       if ( root.currentValue && root.currentValue.length )
       {
-        root.currentValue = []
+        root.currentValue = undefined
         root.currentValueChanged()
       }
       else

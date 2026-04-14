@@ -13,6 +13,10 @@ import QtQuick.Controls
 
 import "../components" as MMComponents
 
+//
+// TODO: rename this file to "MMFiltersDrawer"!
+//
+
 MMComponents.MMDrawer {
   id: root
 
@@ -68,7 +72,11 @@ MMComponents.MMDrawer {
     }
 
     onClicked: {
+      internal.filterValues = {}
+
       __activeProject.filterController.clearAllFilters()
+
+      inputRepeater.model = null
       inputRepeater.model = __activeProject.filterController.getFilters()
     }
   }
@@ -100,6 +108,7 @@ MMComponents.MMDrawer {
 
         Repeater {
           id: inputRepeater
+
           model: __activeProject.filterController.getFilters()
 
           delegate: Loader {
@@ -110,36 +119,35 @@ MMComponents.MMDrawer {
             width: contentColumn.width
 
             Component.onCompleted: {
-              let base = {
-                filterName:         modelData.filterName,
-                filterId:           modelData.filterId,
-                currentValue:       modelData.value
-              }
+              let props = { filterName: modelData.filterName }
+
+              const currentValue = modelData.value ? modelData.value : internal.filterValues[modelData.filterId]
+              props['currentValue'] = currentValue
 
               const filterType = modelData.filterType
 
               if ( filterType === FieldFilter.TextFilter )
               {
-                setSource( "components/MMFilterTextEditor.qml", base )
+                setSource( "components/MMFilterTextEditor.qml", props )
               }
               else if ( filterType === FieldFilter.NumberFilter )
               {
-                setSource( "components/MMFilterRangeInput.qml", base )
+                setSource( "components/MMFilterRangeInput.qml", props )
               }
               else if ( filterType === FieldFilter.DateFilter )
               {
-                setSource( "components/MMFilterDateRange.qml", base )
+                setSource( "components/MMFilterDateRange.qml", props )
               }
               else if ( filterType === FieldFilter.CheckboxFilter )
               {
-                setSource( "components/MMFilterBoolInput.qml", base )
+                setSource( "components/MMFilterBoolInput.qml", props )
               }
               else if ( filterType === FieldFilter.SingleSelectFilter || filterType === FieldFilter.MultiSelectFilter )
               {
                 // TODO: might be worth moving this logic to C++
 
                 const isMulti = filterType === FieldFilter.MultiSelectFilter
-                base['isMultiSelect'] = isMulti
+                props['isMultiSelect'] = isMulti
 
                 const dropdownConfig = __activeProject.filterController.getDropdownConfiguration( modelData.filterId )
 
@@ -151,19 +159,19 @@ MMComponents.MMDrawer {
 
                 if ( dropdownConfig["type"] === "unique_values" )
                 {
-                  base["vectorLayerId"] = dropdownConfig["layer_id"]
-                  base["fieldName"] = dropdownConfig["field_name"]
-                  setSource( "components/MMFilterDropdownUniqueValuesInput.qml", base )
+                  props["vectorLayerId"] = dropdownConfig["layer_id"]
+                  props["fieldName"] = dropdownConfig["field_name"]
+                  setSource( "components/MMFilterDropdownUniqueValuesInput.qml", props )
                 }
                 else if ( dropdownConfig["type"] === "value_relation" )
                 {
-                  base["widgetConfig"] = dropdownConfig["config"]
-                  setSource( "components/MMFilterDropdownValueRelationInput.qml", base )
+                  props["widgetConfig"] = dropdownConfig["config"]
+                  setSource( "components/MMFilterDropdownValueRelationInput.qml", props )
                 }
                 else if ( dropdownConfig["type"] === "value_map" )
                 {
-                  base["widgetConfig"] = dropdownConfig["config"]
-                  setSource( "components/MMFilterDropdownValueMapInput.qml", base )
+                  props["widgetConfig"] = dropdownConfig["config"]
+                  setSource( "components/MMFilterDropdownValueMapInput.qml", props )
                 }
               }
             }

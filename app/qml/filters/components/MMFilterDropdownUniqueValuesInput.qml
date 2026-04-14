@@ -16,7 +16,6 @@ Column {
   id: root
 
   required property string filterName
-  required property string filterId
   required property var currentValue
 
   required property string vectorLayerId
@@ -54,7 +53,7 @@ Column {
     onRightContentClicked: {
       if ( root.currentValue && root.currentValue.length )
       {
-        root.currentValue = []
+        root.currentValue = undefined
         root.currentValueChanged()
       }
       else
