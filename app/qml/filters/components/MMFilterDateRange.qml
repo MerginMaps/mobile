@@ -6,6 +6,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
 
@@ -18,48 +19,23 @@ Column {
   width: parent.width
   spacing: __style.margin8
 
-  required property string fieldDisplayName
-  required property bool hasTime
+  required property string filterName
+  required property string filterId
   required property var currentValue
-  required property var currentValueTo
-  required property string fieldLayerId
-  required property string fieldName
+  readonly property bool hasTime: __activeProject.filterController.isDateFilterDateTime(filterId)
 
-  property var initialFromDate: {
-    let v = root.currentValue
-    if ( v === null || v === undefined ) return null
-    let d = new Date( v )
-    return isNaN( d.getTime() ) ? null : d
+  property bool rangeInvalid: {
+    if ( !currentValue || !currentValue[0] || !currentValue[1] ){
+      return false
+    }
+    return currentValue[0] > currentValue[1]
   }
-  property var initialToDate: {
-    let v = root.currentValueTo
-    if ( v === null || v === undefined ) return null
-    let d = new Date( v )
-    return isNaN( d.getTime() ) ? null : d
-  }
-
-  property var fromDate: initialFromDate
-  property var toDate: initialToDate
-
-  property bool rangeInvalid: fromDate !== null && toDate !== null && fromDate.getTime() > toDate.getTime()
-
-  property bool _initialized: false
-  Component.onCompleted: _initialized = true
-
-  function applyDateFilter() {
-    if ( !_initialized || !fieldLayerId || !fieldName ) return
-    __activeProject.filterController.setDateFilter( fieldLayerId, fieldName, fromDate, toDate, hasTime )
-  }
-
-  onFromDateChanged: applyDateFilter()
-  onToDateChanged: applyDateFilter()
 
   MMText {
     width: parent.width
-    text: root.fieldDisplayName
+    text: root.filterName
     font: __style.p6
     color: __style.nightColor
-    visible: root.fieldDisplayName !== ""
   }
 
   Row {
@@ -75,21 +51,43 @@ Column {
 
         width: parent.width
         type: MMFilterTextInput.InputType.Date
-        checked: root.fromDate !== null && !root.rangeInvalid
         placeholderText: qsTr( "From" )
-        errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
+        errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be sooner than \"To\"" ) : ""
         text: {
-          if ( !root.fromDate ) return ""
-          if ( root.hasTime ) return Qt.formatDateTime( root.fromDate, Qt.DefaultLocaleShortDate )
-          return Qt.formatDate( root.fromDate, Qt.DefaultLocaleShortDate )
+          if ( !root.currentValue || !root.currentValue[0] ) return ""
+          if ( root.hasTime ) return Qt.formatDateTime( root.currentValue[0] )
+          return Qt.formatDate( root.currentValue[0] )
         }
 
         onTextClicked: fromCalendarLoader.active = true
         onRightContentClicked: {
-          if ( root.fromDate ) {
-            root.fromDate = null
+          if (checked) {
+            textField.clear()
+            checked = false
+            if ( root.currentValue[1] ){
+              root.currentValue = [undefined, root.currentValue[1]]
+            } else {
+              root.currentValue = undefined
+            }
+            root.currentValueChanged()
           } else {
-            fromCalendarLoader.active = true
+            let currentTimestamp = new Date()
+
+            if (root.hasTime) {
+              text = Qt.formatDateTime(currentTimestamp)
+            } else {
+              text = Qt.formatDate(currentTimestamp)
+            }
+
+            if (!root.hasTime) {
+              currentTimestamp.setHours(0, 0, 0, 0)
+            }
+            if (!root.currentValue) {
+              root.currentValue = [currentTimestamp, undefined]
+            } else {
+              root.currentValue[0] = currentTimestamp
+            }
+            root.currentValueChanged()
           }
         }
       }
@@ -106,10 +104,21 @@ Column {
         MMFormComponents.MMCalendarDrawer {
           hasDatePicker: true
           hasTimePicker: root.hasTime
-          dateTime: root.fromDate ? root.fromDate : new Date()
+          dateTime: root.currentValue && root.currentValue[0] ? root.currentValue[0] : new Date()
 
           onPrimaryButtonClicked: {
-            root.fromDate = dateTime
+            let currentTimestamp = dateTime
+            if (!root.hasTime) {
+              currentTimestamp.setHours(0, 0, 0, 0)
+            }
+            if (!root.currentValue){
+              root.currentValue = [currentTimestamp, undefined]
+            } else {
+              root.currentValue[0] = currentTimestamp
+              root.currentValueChanged()
+            }
+
+            fromDateInput.text = root.hasTime ? Qt.formatDateTime(dateTime) : Qt.formatDate(dateTime)
           }
           onClosed: fromCalendarLoader.active = false
           Component.onCompleted: open()
@@ -126,21 +135,44 @@ Column {
 
         width: parent.width
         type: MMFilterTextInput.InputType.Date
-        checked: root.toDate !== null && !root.rangeInvalid
         placeholderText: qsTr( "To" )
-        errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be less than \"To\"" ) : ""
+        errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be sooner than \"To\"" ) : ""
         text: {
-          if ( !root.toDate ) return ""
-          if ( root.hasTime ) return Qt.formatDateTime( root.toDate, Qt.DefaultLocaleShortDate )
-          return Qt.formatDate( root.toDate, Qt.DefaultLocaleShortDate )
+          if ( !root.currentValue || !root.currentValue[1] ) return ""
+          if ( root.hasTime ) return Qt.formatDateTime( root.currentValue[1] )
+          return Qt.formatDate( root.currentValue[1] )
         }
 
         onTextClicked: toCalendarLoader.active = true
         onRightContentClicked: {
-          if ( root.toDate ) {
-            root.toDate = null
+          if (checked) {
+            textField.clear()
+            checked = false
+            if ( root.currentValue[0] ){
+              root.currentValue = [root.currentValue[0], undefined]
+            } else {
+              root.currentValue = undefined
+            }
+            root.currentValueChanged()
+
           } else {
-            toCalendarLoader.active = true
+            let currentTimestamp = new Date()
+
+            if (root.hasTime) {
+              text = Qt.formatDateTime(currentTimestamp)
+            } else {
+              text = Qt.formatDate(currentTimestamp)
+            }
+
+            if (!root.hasTime) {
+              currentTimestamp.setHours(0, 0, 0, 0)
+            }
+            if (!root.currentValue) {
+              root.currentValue = [undefined, currentTimestamp]
+            } else {
+              root.currentValue[1] = currentTimestamp
+              root.currentValueChanged()
+            }
           }
         }
       }
@@ -157,10 +189,21 @@ Column {
         MMFormComponents.MMCalendarDrawer {
           hasDatePicker: true
           hasTimePicker: root.hasTime
-          dateTime: root.toDate ? root.toDate : new Date()
+          dateTime: root.currentValue && root.currentValue[1] ? root.currentValue[1] : new Date()
 
           onPrimaryButtonClicked: {
-            root.toDate = dateTime
+            let currentTimestamp = dateTime
+            if (!root.hasTime) {
+              currentTimestamp.setHours(0, 0, 0, 0)
+            }
+            if (!root.currentValue){
+              root.currentValue = [undefined, currentTimestamp]
+            } else {
+              root.currentValue[1] = currentTimestamp
+            }
+            root.currentValueChanged()
+
+            toDateInput.text = root.hasTime ? Qt.formatDateTime(dateTime) : Qt.formatDate(dateTime)
           }
           onClosed: toCalendarLoader.active = false
           Component.onCompleted: open()

@@ -115,6 +115,11 @@ class FilterController : public QObject
      */
     Q_INVOKABLE bool hasActiveFilterOnLayer( const QString &layerId );
 
+    /**
+     * Returns whether the date filter is datetime or just date field. Used to show date or date & time UI for users.
+     */
+    Q_INVOKABLE bool isDateFilterDateTime( const QString &filterId );
+
     bool hasFiltersAvailable() const;
 
     bool hasFiltersEnabled() const;

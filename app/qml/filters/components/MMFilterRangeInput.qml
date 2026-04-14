@@ -17,30 +17,15 @@ Column {
   width: parent.width
   spacing: __style.margin8
 
-  required property string fieldDisplayName
+  required property string filterName
+  required property string filterId
   required property var currentValue
-  required property var currentValueTo
-  required property string fieldLayerId
-  required property string fieldName
-
-  property string initialFrom: {
-    let v = root.currentValue
-    return ( v !== null && v !== undefined ) ? String( v ) : ""
-  }
-  property string initialTo: {
-    let v = root.currentValueTo
-    return ( v !== null && v !== undefined ) ? String( v ) : ""
-  }
-
-  property bool _initialized: false
-  Component.onCompleted: _initialized = true
 
   MMText {
     width: parent.width
-    text: root.fieldDisplayName
+    text: root.filterName
     font: __style.p6
     color: __style.nightColor
-    visible: root.fieldDisplayName !== ""
   }
 
   Row {
@@ -61,11 +46,10 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
       placeholderText: qsTr( "Min" )
-      text: root.initialFrom
+      text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
-        if ( !root._initialized ) return
         debounceTimer.restart()
       }
     }
@@ -76,11 +60,10 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
       placeholderText: qsTr( "Max" )
-      text: root.initialTo
+      text: root.currentValue && root.currentValue[1] ? root.currentValue[1] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
-        if ( !root._initialized ) return
         debounceTimer.restart()
       }
     }
@@ -91,8 +74,26 @@ Column {
     interval: 300
     repeat: false
     onTriggered: {
-      if ( root.fieldLayerId && root.fieldName )
-        __activeProject.filterController.setNumberFilter( root.fieldLayerId, root.fieldName, fromInput.text, toInput.text )
+      let newValues = []
+      const valueFrom = parseFloat(fromInput.text)
+      if ( !isNaN(valueFrom) ) {
+        newValues[0] = valueFrom
+      } else {
+        newValues[0] = undefined
+      }
+
+      const valueTo = parseFloat(toInput.text)
+      if ( !isNaN(valueTo) ) {
+        newValues[1] = valueTo
+      } else {
+        newValues[1] = undefined
+      }
+
+      if ( newValues[0] === undefined && newValues[1] === undefined ) {
+        root.currentValue = undefined
+      } else {
+        root.currentValue = newValues
+      }
     }
   }
 }
