@@ -144,7 +144,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     {
       QString textValue = QgsExpression::quotedString( filter.value.toList().at( 0 ).toString() );
       // remove single quotes from the beginning and end of returned string
-      textValue = textValue.slice(1, textValue.size() - 2 );
+      textValue = textValue.slice( 1, textValue.size() - 2 );
       expressionCopy.replace( QStringLiteral( "@@value@@" ), textValue );
       break;
     }
@@ -170,17 +170,49 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
       // so we must convert local datetimes to UTC before comparing.
       // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
-      const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss" );
-      const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00" );
-      const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59" );
+      const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
+      const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
+      const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
 
+      QString dateFrom;
       const QVariant &variantFrom = filter.value.toList().at( 0 );
-      const QString dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( isoFormat ) : minimumDateTime;
-      const QVariant &variantTo = filter.value.toList().at( 1 );
-      const QString dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( isoFormat ) : maximumDateTime;
+      if ( variantFrom.isValid() )
+      {
+        QDateTime dateTimeFrom = variantFrom.toDateTime( );
+        QTime timeFrom = dateTimeFrom.time();
+        timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
+        dateTimeFrom.setTime( timeFrom );
+        dateFrom = dateTimeFrom.toString( isoFormat );
+      }
+      else
+      {
+        dateFrom = minimumDateTime;
+      }
 
-      expressionCopy.replace( QStringLiteral( "@@value_from@@" ), QgsExpression::quotedString( dateFrom ) );
-      expressionCopy.replace( QStringLiteral( "@@value_to@@" ), QgsExpression::quotedString( dateTo ) );
+      const QVariant &variantTo = filter.value.toList().at( 1 );
+      QString dateTo;
+      if ( variantTo.isValid() )
+      {
+        if ( variantTo.toDateTime().time().hour() > 0 || variantTo.toDateTime().time().minute() > 0 )
+        {
+          QDateTime dateTimeTo = variantFrom.toDateTime( );
+          QTime timeFrom = dateTimeTo.time();
+          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 59, 999 );
+          dateTimeTo.setTime( timeFrom );
+          dateTo = dateTimeTo.toString( isoFormat );
+        }
+        else
+        {
+          dateTo = variantFrom.toDateTime().toString( isoFormat );
+        }
+      }
+      else
+      {
+        dateTo = maximumDateTime;
+      }
+
+      expressionCopy.replace( QStringLiteral( "@@value_from@@" ), dateFrom );
+      expressionCopy.replace( QStringLiteral( "@@value_to@@" ), dateTo );
       break;
     }
     case FieldFilter::MultiSelectFilter:
