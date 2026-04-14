@@ -66,6 +66,7 @@ void FilterController::clearAllFilters()
 void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
+  setFiltersEnabled( false );
 
   bool valueRead = false;
   const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
