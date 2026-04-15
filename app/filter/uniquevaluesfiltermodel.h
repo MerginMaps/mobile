@@ -24,6 +24,8 @@ class UniqueValuesFilterModel : public QAbstractListModel
 
     Q_PROPERTY( QString layerId READ layerId WRITE setLayerId NOTIFY layerIdChanged )
     Q_PROPERTY( QString fieldName READ fieldName WRITE setFieldName NOTIFY fieldNameChanged )
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
+    Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
 
   public:
     explicit UniqueValuesFilterModel( QObject *parent = nullptr );
@@ -38,11 +40,15 @@ class UniqueValuesFilterModel : public QAbstractListModel
     QString fieldName() const;
     void setFieldName( const QString &fieldName );
 
+    bool isLoading() const;
+
     Q_INVOKABLE void populate();
 
   signals:
     void layerIdChanged();
     void fieldNameChanged();
+    void isLoadingChanged();
+    void countChanged();
 
   public slots:
     void onLoadingFinished();
@@ -55,6 +61,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
 
     QVariantList mItems;
     QFutureWatcher<QVariantList> mResultWatcher;
+    bool mIsLoading = false;
 };
 
 #endif // UNIQUEVALUESFILTERMODEL_H

@@ -9,9 +9,12 @@
 
 #include "valuemapfiltermodel.h"
 
+#include <QtConcurrentRun>
+
 ValueMapFilterModel::ValueMapFilterModel( QObject *parent )
   : QAbstractListModel( parent )
 {
+  connect( &mResultWatcher, &QFutureWatcher<QList<Item>>::finished, this, &ValueMapFilterModel::onLoadingFinished );
 }
 
 int ValueMapFilterModel::rowCount( const QModelIndex &parent ) const
@@ -51,6 +54,11 @@ QVariantMap ValueMapFilterModel::config() const
   return mConfig;
 }
 
+bool ValueMapFilterModel::isLoading() const
+{
+  return mIsLoading;
+}
+
 void ValueMapFilterModel::setConfig( const QVariantMap &config )
 {
   if ( mConfig == config )
@@ -59,17 +67,29 @@ void ValueMapFilterModel::setConfig( const QVariantMap &config )
   mConfig = config;
   emit configChanged();
 
-  populate();
+  if ( mResultWatcher.isRunning() )
+  {
+    mHasPendingLoad = true;
+    return;
+  }
+
+  startLoad();
 }
 
-void ValueMapFilterModel::populate()
+void ValueMapFilterModel::startLoad()
 {
-  beginResetModel();
+  mIsLoading = true;
+  emit isLoadingChanged();
 
-  mItems.clear();
+  mResultWatcher.setFuture( QtConcurrent::run( &ValueMapFilterModel::loadItems, mConfig ) );
+}
 
-  const QVariantList mapList = mConfig.value( QStringLiteral( "map" ) ).toList();
-  mItems.reserve( mapList.size() );
+QList<ValueMapFilterModel::Item> ValueMapFilterModel::loadItems( const QVariantMap &config )
+{
+  const QVariantList mapList = config.value( QStringLiteral( "map" ) ).toList();
+
+  QList<Item> items;
+  items.reserve( mapList.size() );
 
   for ( const QVariant &entry : mapList )
   {
@@ -83,8 +103,29 @@ void ValueMapFilterModel::populate()
     item.description = entryMap.constBegin().key();
     item.key = entryMap.constBegin().value().toString();
 
-    mItems.append( item );
+    items.append( item );
   }
 
+  return items;
+}
+
+void ValueMapFilterModel::onLoadingFinished()
+{
+  beginResetModel();
+
+  mItems = mResultWatcher.result();
+
   endResetModel();
+  emit countChanged();
+
+  if ( mHasPendingLoad )
+  {
+    mHasPendingLoad = false;
+    startLoad();
+  }
+  else
+  {
+    mIsLoading = false;
+    emit isLoadingChanged();
+  }
 }

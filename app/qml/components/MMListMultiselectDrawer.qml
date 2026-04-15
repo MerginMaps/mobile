@@ -18,6 +18,8 @@ MMDrawer {
   property alias list: listViewComponent
   property alias emptyStateDelegate: emptyStateDelegateLoader.sourceComponent
 
+  property bool isLoading: false
+
   property string textRole: "text"
   property string secondaryTextRole: "secondaryText"
   property string valueRole: "value"
@@ -34,8 +36,8 @@ MMDrawer {
   interactive: !listViewComponent.interactive
 
   drawerBottomMargin: listViewComponent.count === 0
-                      ? (__style.margin20 + __style.safeAreaBottom)
-                      : 0
+    ? ( __style.margin20 + __style.safeAreaBottom )
+    : 0
 
   drawerContent: Item {
     width: parent.width
@@ -52,9 +54,9 @@ MMDrawer {
       I.MMSearchInput {
         id: searchBar
 
-        delayedSearch: true
-
         width: parent.width
+
+        delayedSearch: true
 
         placeholderText: qsTr( "Search" )
 
@@ -63,26 +65,42 @@ MMDrawer {
         visible: root.withSearch
 
         onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
+
+        textField.onPressed: root.showFullScreen = true
       }
 
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
 
       Item {
         width: parent.width
-        height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
+        height: {
+          if ( root.isLoading ) return busyIndicator.height + 2 * __style.margin12
+          if ( listViewComponent.count === 0 ) return emptyStateDelegateLoader.height
+          return listViewComponent.height
+        }
 
-        MMScrollView {
+        Item {
+          id: emptyStateContainer
+
           width: parent.width
-          height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-          enabled: contentHeight > height
+          height: emptyStateDelegateLoader.height
+
+          visible: listViewComponent.count === 0 && !root.isLoading
 
           Loader {
             id: emptyStateDelegateLoader
 
-            visible: listViewComponent.count === 0
-
             width: parent.width
+            sourceComponent: defaultEmptyStateComponent
           }
+        }
+
+        MMBusyIndicator {
+          id: busyIndicator
+
+          anchors.centerIn: parent
+
+          running: root.isLoading
         }
 
         MMListView {
@@ -90,6 +108,7 @@ MMDrawer {
 
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
+
           visible: count > 0
           interactive: contentHeight > height
 
@@ -104,22 +123,20 @@ MMDrawer {
             text: model[root.textRole]
             secondaryText: model[root.secondaryTextRole] ?? ""
 
+            rightContent: MMIcon {
+              source: __style.doneCircleIcon
+              visible: _delegate.checked
+            }
+
             onClicked: {
               if ( root.multiSelect ) {
                 _delegate.checked = !_delegate.checked
-
-                // add or remove the item from the selected features list
                 addOrRemoveSelected( model[root.valueRole] )
               }
               else {
                 root.selectionFinished( [model[root.valueRole]] )
                 root.close()
               }
-            }
-
-            rightContent: MMIcon {
-              source: __style.doneCircleIcon
-              visible: _delegate.checked
             }
           }
 
@@ -141,8 +158,31 @@ MMDrawer {
 
       text: qsTr( "Confirm selection" )
 
-      onClicked: {
-        root.selectionFinished( root.selected )
+      onClicked: root.selectionFinished( root.selected )
+    }
+  }
+
+  QtObject {
+    id: internal
+
+    property real searchBarVerticalSpace: root.withSearch ? searchBar.height + searchBarSpacer.height : 0
+  }
+
+  Component {
+    id: defaultEmptyStateComponent
+
+    Item {
+      width: parent.width
+      height: noItemsText.implicitHeight + 2 * __style.margin20
+
+      MMText {
+        id: noItemsText
+
+        anchors.centerIn: parent
+
+        text: qsTr( "No items" )
+        font: __style.p5
+        color: __style.mediumGreyColor
       }
     }
   }
@@ -154,11 +194,5 @@ MMDrawer {
     else {
       root.selected = root.selected.filter( ( x ) => x !== val )
     }
-  }
-
-  QtObject {
-    id: internal
-
-    property real searchBarVerticalSpace: root.withSearch ? searchBar.height + searchBarSpacer.height : 0
   }
 }

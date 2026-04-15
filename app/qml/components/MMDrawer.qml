@@ -43,10 +43,11 @@ Drawer {
     layer.effect: MMShadow {}
 
     Rectangle {
-      color: __style.polarColor
       width: parent.width
       height: parent.height / 2
       y: parent.height / 2
+
+      color: __style.polarColor
     }
   }
 
@@ -54,8 +55,9 @@ Drawer {
     id: mainColumn
 
     anchors.fill: parent
+
     spacing: 0
-    focus : true
+    focus: true
 
     Keys.onReleased: function( event ) {
       if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
@@ -74,9 +76,7 @@ Drawer {
 
       width: parent.width
 
-      onCloseClicked: {
-        root.close()
-      }
+      onCloseClicked: root.close()
     }
 
     Item {
@@ -98,7 +98,6 @@ Drawer {
           let leftSideOverflow = ( parent.width - minSidesPadding - __style.maxPageWidth ) / 2
           return leftSideOverflow + minLeftPadding
         }
-
         return minLeftPadding
       }
 
@@ -107,7 +106,6 @@ Drawer {
           let rightSideOverflow = ( parent.width - minSidesPadding - __style.maxPageWidth ) / 2
           return rightSideOverflow + minRightPadding
         }
-
         return minRightPadding
       }
 
@@ -123,7 +121,12 @@ Drawer {
       id: bottomSpacer
 
       width: parent.width
-      height: root.drawerBottomMargin > 0 ? __style.safeAreaBottom + root.drawerBottomMargin :0
+      height: root.drawerBottomMargin > 0 ? __style.safeAreaBottom + root.drawerBottomMargin : 0
     }
+  }
+
+  // add behaviour on height
+  Behavior on implicitHeight {
+    PropertyAnimation { duration: 200; easing.type: Easing.InOutQuad }
   }
 }

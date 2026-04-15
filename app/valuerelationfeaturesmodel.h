@@ -26,6 +26,7 @@ class ValueRelationFeaturesModel : public LayerFeaturesModel
 
     Q_PROPERTY( FeatureLayerPair pair READ pair WRITE setPair NOTIFY pairChanged )
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
+    Q_PROPERTY( bool isLoading READ isLoading NOTIFY fetchingResultsChanged )
 
   public:
 
@@ -56,6 +57,8 @@ class ValueRelationFeaturesModel : public LayerFeaturesModel
 
     QVariantMap config() const;
     void setConfig( const QVariantMap &newConfig );
+
+    bool isLoading() const;
 
   signals:
     void pairChanged( const FeatureLayerPair &pair );
