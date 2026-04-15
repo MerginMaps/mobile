@@ -73,7 +73,11 @@ Column {
       withSearch: uniqueValuesModel.count > 5
       multiSelect: root.isMultiSelect
 
-      isLoading: uniqueValuesModel.isLoading
+      emptyStateDelegate: Component {
+        MMComponents.MMListEmptyLoaderDelegate {
+          isLoading: uniqueValuesModel.isLoading
+        }
+      }
 
       list.model: MM.SearchProxyModel {
         id: searchProxyModel

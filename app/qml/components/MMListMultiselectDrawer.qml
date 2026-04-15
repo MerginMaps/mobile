@@ -18,8 +18,6 @@ MMDrawer {
   property alias list: listViewComponent
   property alias emptyStateDelegate: emptyStateDelegateLoader.sourceComponent
 
-  property bool isLoading: false
-
   property string textRole: "text"
   property string secondaryTextRole: "secondaryText"
   property string valueRole: "value"
@@ -73,34 +71,15 @@ MMDrawer {
 
       Item {
         width: parent.width
-        height: {
-          if ( root.isLoading ) return busyIndicator.height + 2 * __style.margin12
-          if ( listViewComponent.count === 0 ) return emptyStateDelegateLoader.height
-          return listViewComponent.height
-        }
+        height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
 
-        Item {
-          id: emptyStateContainer
+        Loader {
+          id: emptyStateDelegateLoader
 
           width: parent.width
-          height: emptyStateDelegateLoader.height
 
-          visible: listViewComponent.count === 0 && !root.isLoading
-
-          Loader {
-            id: emptyStateDelegateLoader
-
-            width: parent.width
-            sourceComponent: defaultEmptyStateComponent
-          }
-        }
-
-        MMBusyIndicator {
-          id: busyIndicator
-
-          anchors.centerIn: parent
-
-          running: root.isLoading
+          visible: listViewComponent.count === 0
+          sourceComponent: defaultEmptyStateComponent
         }
 
         MMListView {

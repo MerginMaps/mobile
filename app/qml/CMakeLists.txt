@@ -31,6 +31,7 @@ set(MM_QML
     components/MMListDelegate.qml
     components/MMListDrawer.qml
     components/MMListFooterSpacer.qml
+    components/MMListEmptyLoaderDelegate.qml
     components/MMListMultiselectDrawer.qml
     components/MMListView.qml
     components/MMListSpacer.qml

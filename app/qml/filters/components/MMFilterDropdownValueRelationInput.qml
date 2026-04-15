@@ -72,7 +72,11 @@ Column {
       withSearch: vrDropdownModel.count > 5
       multiSelect: root.isMultiSelect
 
-      isLoading: vrDropdownModel.isLoading
+      emptyStateDelegate: Component {
+        MMComponents.MMListEmptyLoaderDelegate {
+          isLoading: vrDropdownModel.isLoading
+        }
+      }
 
       list.model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
