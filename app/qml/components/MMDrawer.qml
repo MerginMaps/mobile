@@ -125,7 +125,6 @@ Drawer {
     }
   }
 
-  // add behaviour on height
   Behavior on implicitHeight {
     PropertyAnimation { duration: 200; easing.type: Easing.InOutQuad }
   }

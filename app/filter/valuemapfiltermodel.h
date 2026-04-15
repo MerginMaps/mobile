@@ -16,7 +16,7 @@
 
 /**
  * Populates a list model from a QGIS ValueMap editor widget config.
- * Exposes DisplayRole (display label) and KeyRole (stored key) for each entry.
+ * Exposes TextRole (display label) and ValueRole (stored key) for each entry.
  */
 class ValueMapFilterModel : public QAbstractListModel
 {
