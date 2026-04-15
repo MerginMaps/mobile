@@ -71,6 +71,7 @@ set(MM_QML
     filters/components/MMFilterRangeInput.qml
     filters/components/MMFilterTextEditor.qml
     filters/components/MMFilterTextInput.qml
+    filters/components/private/MMFilterBaseInput.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml
