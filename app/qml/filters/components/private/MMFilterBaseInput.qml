@@ -29,6 +29,11 @@ Row {
   property alias primaryText: primaryInput.text
   property alias secondaryText: secondaryInput.text
 
+  signal primaryTextClicked()
+  signal secondaryTextClicked()
+  signal primaryRightContentClicked( bool isChecked )
+  signal secondaryRightContentClicked( bool isChecked )
+
   spacing: __style.margin12
 
   MMPrivateComponents.MMBaseSingleLineInput {
@@ -87,11 +92,18 @@ Row {
       primaryInput.checked = newText.length
     }
 
+    onTextClicked: {
+      root.primaryTextClicked()
+    }
+
     // clear the field when tapping the close icon
     onRightContentClicked: {
       if ( primaryInput.checked ) {
         textField.clear()
+        root.primaryRightContentClicked( true )
         primaryInput.checked = false
+      } else {
+        root.primaryRightContentClicked( false )
       }
     }
 
@@ -159,11 +171,18 @@ Row {
       secondaryInput.checked = newText.length
     }
 
+    onTextClicked: {
+      root.secondaryTextClicked()
+    }
+
     // clear the field when tapping the close icon
     onRightContentClicked: {
       if ( secondaryInput.checked ) {
         textField.clear()
+        root.secondaryRightContentClicked( true )
         secondaryInput.checked = false
+      } else {
+        root.secondaryRightContentClicked( false )
       }
     }
 

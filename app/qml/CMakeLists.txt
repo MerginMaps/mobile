@@ -64,7 +64,7 @@ set(MM_QML
     filters/MMFiltersPanel.qml
     filters/components/MMFilterBanner.qml
     filters/components/MMFilterBoolInput.qml
-    filters/components/MMFilterDateRange.qml
+    filters/components/MMFilterDateRangeInput.qml
     filters/components/MMFilterDropdownValueMapInput.qml
     filters/components/MMFilterDropdownValueRelationInput.qml
     filters/components/MMFilterDropdownUniqueValuesInput.qml
