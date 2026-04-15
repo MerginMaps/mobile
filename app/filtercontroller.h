@@ -110,6 +110,11 @@ class FilterController : public QObject
     Q_INVOKABLE QVariantMap getDropdownConfiguration( const QString &filterId );
 
     /**
+     *  @brief Returns custom label/value configuration for a CheckboxFilter field.
+     */
+    Q_INVOKABLE QVariantMap getCheckboxConfiguration( const QString &filterId );
+
+    /**
      * Queries whether there is any filtering active on the layer specified by ID. Essentially just checks the
      * subsetString of layer.
      */
