@@ -128,11 +128,11 @@ MMComponents.MMDrawer {
 
               if ( filterType === FieldFilter.TextFilter )
               {
-                setSource( "components/MMFilterTextEditor.qml", props )
+                setSource( "components/MMFilterTextInput.qml", props )
               }
               else if ( filterType === FieldFilter.NumberFilter )
               {
-                setSource( "components/MMFilterRangeInput.qml", props )
+                setSource( "components/MMFilterNumberRangeInput.qml", props )
               }
               else if ( filterType === FieldFilter.DateFilter )
               {

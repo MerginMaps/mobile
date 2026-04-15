@@ -68,8 +68,7 @@ set(MM_QML
     filters/components/MMFilterDropdownValueMapInput.qml
     filters/components/MMFilterDropdownValueRelationInput.qml
     filters/components/MMFilterDropdownUniqueValuesInput.qml
-    filters/components/MMFilterRangeInput.qml
-    filters/components/MMFilterTextEditor.qml
+    filters/components/MMFilterNumberRangeInput.qml
     filters/components/MMFilterTextInput.qml
     filters/components/private/MMFilterBaseInput.qml
     dialogs/MMCloseAccountDialog.qml
