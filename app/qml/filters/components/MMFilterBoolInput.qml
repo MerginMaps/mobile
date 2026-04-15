@@ -43,8 +43,8 @@ Column {
     width: parent.width
     backgroundColor: __style.lightGreenColor
 
-    trueText: customLabelForTrue ? customLabelForTrue : qsTr( "True" )
-    falseText: customLabelForFalse ? customLabelForFalse : qsTr( "False" )
+    trueText: root.customLabelForTrue ? root.customLabelForTrue : qsTr( "True" )
+    falseText: root.customLabelForFalse ? root.customLabelForFalse : qsTr( "False" )
 
     Component.onCompleted: {
       if ( root.currentValue && root.currentValue.length === 1 )
