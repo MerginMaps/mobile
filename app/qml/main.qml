@@ -30,6 +30,8 @@ import "./settings" // Pantalla de configuración.
 import "./gps" // Paneles para datos y seguimiento GPS.
 import "./form" // La lógica para mostrar y editar los formularios de atributos de las entidades.
 
+import "./tables" // Diálogos para la manipulación de tablas
+
 /*
 (ApplicationWindow):
 Es el contenedor principal de toda la aplicación.
