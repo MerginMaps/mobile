@@ -376,6 +376,64 @@ bool FilterController::isDateFilterDateTime( const QString &filterId )
   return false;
 }
 
+QVariantMap FilterController::getCheckboxConfiguration( const QString &filterId )
+{
+  if ( filterId.isEmpty() ) return {};
+
+  FieldFilter fieldFilter;
+  for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
+  {
+    if ( filterId == filter.filterId )
+    {
+      fieldFilter = filter;
+      break;
+    }
+  }
+
+  if ( !fieldFilter.hasFilterInfo() ) return {};
+
+  if ( fieldFilter.filterType != FieldFilter::CheckboxFilter ) return {};
+
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( fieldFilter.layerId ) );
+  if ( !layer ) return {};
+
+  const int fieldIndex = layer->fields().lookupField( fieldFilter.fieldName );
+  if ( fieldIndex < 0 ) return {};
+
+  const QgsEditorWidgetSetup widgetSetup = layer->editorWidgetSetup( fieldIndex );
+  if ( QString::compare( widgetSetup.type(), QStringLiteral( "CheckBox" ), Qt::CaseInsensitive ) != 0 ) return {};
+
+  const QVariantMap config = widgetSetup.config();
+  const QString checkedState = config.value( QStringLiteral( "CheckedState" ) ).toString();
+  const QString uncheckedState = config.value( QStringLiteral( "UncheckedState" ) ).toString();
+
+  if ( checkedState.isEmpty() && uncheckedState.isEmpty() ) return {};
+
+  const QMetaType::Type fieldType = static_cast<QMetaType::Type>( layer->fields().field( fieldIndex ).type() );
+  const bool isIntField = ( fieldType == QMetaType::Int || fieldType == QMetaType::UInt ||
+                            fieldType == QMetaType::LongLong || fieldType == QMetaType::ULongLong );
+
+  QVariantMap result;
+
+  if ( !checkedState.isEmpty() )
+  {
+    result[QStringLiteral( "customLabelForTrue" )] = checkedState;
+    bool ok = false;
+    const int intVal = checkedState.toInt( &ok );
+    result[QStringLiteral( "customValueForTrue" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( checkedState );
+  }
+
+  if ( !uncheckedState.isEmpty() )
+  {
+    result[QStringLiteral( "customLabelForFalse" )] = uncheckedState;
+    bool ok = false;
+    const int intVal = uncheckedState.toInt( &ok );
+    result[QStringLiteral( "customValueForFalse" )] = ( isIntField && ok ) ? QVariant( intVal ) : QVariant( uncheckedState );
+  }
+
+  return result;
+}
+
 QVariantMap FilterController::getDropdownConfiguration( const QString &filterId )
 {
   if ( filterId.isEmpty() ) return {};
