@@ -95,6 +95,9 @@ void UniqueValuesFilterModel::populate()
 
   QgsVectorLayer *layerClone = layer->clone();
 
+  mIsLoading = true;
+  emit isLoadingChanged();
+
   mResultWatcher.setFuture( QtConcurrent::run( &UniqueValuesFilterModel::loadUniqueValues, this, layerClone, fieldIndex ) );
 }
 
@@ -128,8 +131,16 @@ void UniqueValuesFilterModel::onLoadingFinished()
   mItems.clear();
   mItems = mResultWatcher.result();
 
-  // TODO: do we need boolean to indicate if the model is loading?
   // TODO: measure how long it takes to move results from future result to mItems ~ there might be a way to avoid the copy
 
   endResetModel();
+  emit countChanged();
+
+  mIsLoading = false;
+  emit isLoadingChanged();
+}
+
+bool UniqueValuesFilterModel::isLoading() const
+{
+  return mIsLoading;
 }

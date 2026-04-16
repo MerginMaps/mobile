@@ -18,6 +18,11 @@ ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
 {
 }
 
+bool ValueRelationFeaturesModel::isLoading() const
+{
+  return fetchingResults();
+}
+
 ValueRelationFeaturesModel::~ValueRelationFeaturesModel() = default;
 
 void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )

@@ -50,13 +50,11 @@ Column {
 
     onTextClicked: openDrawer()
     onRightContentClicked: {
-      if ( root.currentValue && root.currentValue.length )
-      {
+      if ( root.currentValue && root.currentValue.length ) {
         root.currentValue = undefined
         root.currentValueChanged()
       }
-      else
-      {
+      else {
         openDrawer()
       }
     }
@@ -67,14 +65,18 @@ Column {
 
     active: false
 
-    // TODO: add indication that model is loading features
-    // TODO: add animation when drawer height is changed
 
     sourceComponent: MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root.filterName
 
       withSearch: vrDropdownModel.count > 5
       multiSelect: root.isMultiSelect
+
+      emptyStateDelegate: Component {
+        MMComponents.MMListEmptyLoaderDelegate {
+          isLoading: vrDropdownModel.isLoading
+        }
+      }
 
       list.model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
@@ -106,8 +108,7 @@ Column {
       onClosed: dropdownDrawerLoader.active = false
 
       Component.onCompleted: {
-        if ( root.currentValue )
-        {
+        if ( root.currentValue ) {
           // preselect choices if any are set
           selected = root.currentValue
         }

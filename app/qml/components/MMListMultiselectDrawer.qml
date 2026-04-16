@@ -34,8 +34,8 @@ MMDrawer {
   interactive: !listViewComponent.interactive
 
   drawerBottomMargin: listViewComponent.count === 0
-                      ? (__style.margin20 + __style.safeAreaBottom)
-                      : 0
+    ? ( __style.margin20 + __style.safeAreaBottom )
+    : 0
 
   drawerContent: Item {
     width: parent.width
@@ -52,9 +52,9 @@ MMDrawer {
       I.MMSearchInput {
         id: searchBar
 
-        delayedSearch: true
-
         width: parent.width
+
+        delayedSearch: true
 
         placeholderText: qsTr( "Search" )
 
@@ -63,6 +63,8 @@ MMDrawer {
         visible: root.withSearch
 
         onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
+
+        textField.onPressed: root.showFullScreen = true
       }
 
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
@@ -71,18 +73,13 @@ MMDrawer {
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
 
-        MMScrollView {
+        Loader {
+          id: emptyStateDelegateLoader
+
           width: parent.width
-          height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-          enabled: contentHeight > height
 
-          Loader {
-            id: emptyStateDelegateLoader
-
-            visible: listViewComponent.count === 0
-
-            width: parent.width
-          }
+          visible: listViewComponent.count === 0
+          sourceComponent: defaultEmptyStateComponent
         }
 
         MMListView {
@@ -90,6 +87,7 @@ MMDrawer {
 
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
+
           visible: count > 0
           interactive: contentHeight > height
 
@@ -104,22 +102,20 @@ MMDrawer {
             text: model[root.textRole]
             secondaryText: model[root.secondaryTextRole] ?? ""
 
+            rightContent: MMIcon {
+              source: __style.doneCircleIcon
+              visible: _delegate.checked
+            }
+
             onClicked: {
               if ( root.multiSelect ) {
                 _delegate.checked = !_delegate.checked
-
-                // add or remove the item from the selected features list
                 addOrRemoveSelected( model[root.valueRole] )
               }
               else {
                 root.selectionFinished( [model[root.valueRole]] )
                 root.close()
               }
-            }
-
-            rightContent: MMIcon {
-              source: __style.doneCircleIcon
-              visible: _delegate.checked
             }
           }
 
@@ -141,10 +137,20 @@ MMDrawer {
 
       text: qsTr( "Confirm selection" )
 
-      onClicked: {
-        root.selectionFinished( root.selected )
-      }
+      onClicked: root.selectionFinished( root.selected )
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property real searchBarVerticalSpace: root.withSearch ? searchBar.height + searchBarSpacer.height : 0
+  }
+
+  Component {
+    id: defaultEmptyStateComponent
+
+    MMListEmptyLoaderDelegate {}
   }
 
   function addOrRemoveSelected( val ) {
@@ -154,11 +160,5 @@ MMDrawer {
     else {
       root.selected = root.selected.filter( ( x ) => x !== val )
     }
-  }
-
-  QtObject {
-    id: internal
-
-    property real searchBarVerticalSpace: root.withSearch ? searchBar.height + searchBarSpacer.height : 0
   }
 }
