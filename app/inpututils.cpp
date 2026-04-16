@@ -2456,3 +2456,31 @@ bool InputUtils::isValidEmail( const QString &email )
 {
   return CoreUtils::isValidEmail( email );
 }
+
+QString InputUtils::urlToLocalFile(const QString &url)
+{
+    if (url.isEmpty())
+        return QString();
+
+    // 1. Manejo del protocolo específico de Mergin Maps
+    // El .h define LOCAL_FILE_PREFIX como "project://"
+ //if (url.startsWith(LOCAL_FILE_PREFIX))
+    if (url.startsWith("project://"))
+    {
+        // Retornamos la ruta eliminando el prefijo "project://"
+        // "project://" tiene 10 caracteres
+        return url.mid(10);
+    }
+
+    // 2. Manejo de URLs estándar (ej. file:///storage/emulated/0/...)
+    // QUrl::toLocalFile se encarga de limpiar los prefijos según el OS (Android/Windows)
+    QUrl qurl(url);
+    if (qurl.isLocalFile())
+    {
+        return qurl.toLocalFile();
+    }
+
+    // 3. Fallback: si no es URL, asumimos que ya es una ruta local
+    return url;
+}
+

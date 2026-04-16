@@ -647,9 +647,14 @@ class InputUtils: public QObject
     static void sanitizePath( QString &path );
 
     /**
-     * Returns the URL to a local path
+     * Returns the URL to a local path // alfredo 2026
     */
     Q_INVOKABLE static QString localFileToUrl( const QString &path );
+
+    /**
+     * Returns the local path
+    */
+    Q_INVOKABLE static QString urlToLocalFile( const QString &url );
 
     /**
      * Returns the indexes of fields that are referenced in an expression
