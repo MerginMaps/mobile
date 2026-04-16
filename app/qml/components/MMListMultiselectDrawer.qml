@@ -150,20 +150,7 @@ MMDrawer {
   Component {
     id: defaultEmptyStateComponent
 
-    Item {
-      width: parent.width
-      height: noItemsText.implicitHeight + 2 * __style.margin20
-
-      MMText {
-        id: noItemsText
-
-        anchors.centerIn: parent
-
-        text: qsTr( "No items" )
-        font: __style.p5
-        color: __style.mediumGreyColor
-      }
-    }
+    MMListEmptyLoaderDelegate {}
   }
 
   function addOrRemoveSelected( val ) {
