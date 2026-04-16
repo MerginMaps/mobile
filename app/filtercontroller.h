@@ -76,9 +76,6 @@ class FilterController : public QObject
      */
     Q_PROPERTY( bool filteringAvailable READ hasFiltersAvailable NOTIFY hasFiltersAvailableChanged )
 
-    /**
-     * Whether filtering is currently active (can be temporarily disabled)
-     */
     Q_PROPERTY( bool filteringEnabled READ hasFiltersEnabled WRITE setFiltersEnabled NOTIFY hasFiltersEnabledChanged )
 
   public:

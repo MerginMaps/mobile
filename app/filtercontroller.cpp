@@ -66,7 +66,18 @@ void FilterController::clearAllFilters()
 void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
-  setFiltersEnabled( false );
+
+  if ( mFilteringEnabled )
+  {
+    mFilteringEnabled = false;
+    emit hasFiltersEnabledChanged();
+  }
+
+  if ( mFilteringAvailable )
+  {
+    mFilteringAvailable = false;
+    emit hasFiltersAvailableChanged();
+  }
 
   bool valueRead = false;
   const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
@@ -267,12 +278,6 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
   const QString filterExpr = generateFilterExpression( layer->id() );
   const bool success = layer->setSubsetString( filterExpr );
 
-  if ( !filterExpr.isEmpty() && success && !mFilteringEnabled )
-  {
-    mFilteringEnabled = true;
-    emit hasFiltersEnabledChanged();
-  }
-
   qDebug() << "Applied filter to layer" << layer->name() << ":" << filterExpr << "success:" << success;
 
   // Trigger a layer refresh to ensure the filter takes effect
@@ -284,10 +289,6 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
 
 void FilterController::applyFiltersToAllLayers()
 {
-  // Change filters enabled to false before enabling filters to find out if any are active
-  mFilteringEnabled = false;
-  emit hasFiltersEnabledChanged();
-
   const QgsProject *project = QgsProject::instance();
   if ( !project )
     return;
