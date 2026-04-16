@@ -394,7 +394,7 @@ QVariantMap FilterController::getCheckboxConfiguration( const QString &filterId 
 
   if ( fieldFilter.filterType != FieldFilter::CheckboxFilter ) return {};
 
-  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayers().value( fieldFilter.layerId ) );
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( fieldFilter.layerId ) );
   if ( !layer ) return {};
 
   const int fieldIndex = layer->fields().lookupField( fieldFilter.fieldName );
