@@ -87,7 +87,7 @@ Column {
   QtObject {
     id: internal
 
-    property var representationForTrue: root.customValueForTrue ?? true
-    property var representationForFalse: root.customValueForFalse ?? false
+    property var representationForTrue: root.customValueForTrue != null ? root.customValueForTrue : true
+    property var representationForFalse: root.customValueForFalse != null ? root.customValueForFalse : false
   }
 }
