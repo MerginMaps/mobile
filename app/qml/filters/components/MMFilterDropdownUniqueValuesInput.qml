@@ -87,7 +87,7 @@ Column {
 
       textRole: "display"
       secondaryTextRole: ""
-      valueRole: "display"
+      valueRole: "value"
 
       onSelectionFinished: function( selectedItems ) {
         root.currentValue = selectedItems

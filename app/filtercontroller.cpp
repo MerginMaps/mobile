@@ -455,9 +455,6 @@ QVariantMap FilterController::getDropdownConfiguration( const QString &filterId 
   QVariantMap map;
 
   const QgsProject *project = QgsProject::instance();
-
-  if ( !project ) return {};
-
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( fieldFilter.layerId ) );
 
   if ( !layer ) return {};

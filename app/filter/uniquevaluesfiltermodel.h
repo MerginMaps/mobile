@@ -28,9 +28,16 @@ class UniqueValuesFilterModel : public QAbstractListModel
     Q_PROPERTY( int count READ rowCount NOTIFY countChanged )
 
   public:
+    enum Roles
+    {
+      ValueRole = Qt::UserRole + 1, // DisplayRole is used for description
+    };
+    Q_ENUM( Roles )
+
     explicit UniqueValuesFilterModel( QObject *parent = nullptr );
     ~UniqueValuesFilterModel() override = default;
 
+    QHash<int, QByteArray> roleNames() const override;
     int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 

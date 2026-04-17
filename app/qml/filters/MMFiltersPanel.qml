@@ -152,8 +152,7 @@ MMComponents.MMDrawer {
               {
                 // TODO: might be worth moving this logic to C++
 
-                const isMulti = filterType === FieldFilter.MultiSelectFilter
-                props['isMultiSelect'] = isMulti
+                props['isMultiSelect'] = filterType === FieldFilter.MultiSelectFilter
 
                 const dropdownConfig = __activeProject.filterController.getDropdownConfiguration( modelData.filterId )
 
