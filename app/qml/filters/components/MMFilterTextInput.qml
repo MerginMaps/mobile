@@ -72,8 +72,11 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   // keep checked in sync with whether the field has a value
+  // dropdown type manages checked via the parent's binding
   onTextChanged: {
-    root.checked = root.text.length > 0
+    if ( root.type !== MMFilterTextInput.InputType.Dropdown ) {
+      root.checked = root.text.length > 0
+    }
   }
 
   // clear the field when tapping the close icon
@@ -84,9 +87,4 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
   }
 
-  Component.onCompleted: {
-    if ( root.text ) {
-      root.checked = true
-    }
-  }
 }
