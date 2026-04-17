@@ -225,12 +225,14 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         break;
       }
 
-      QStringList quotedValues;
+      QStringList expressions;
       for ( const QVariant &v : values )
       {
-        quotedValues << QgsExpression::quotedValue( v );
+        QString expressionTemplate = expressionCopy;
+        expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( v ) );
+        expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
       }
-      expressionCopy.replace( QStringLiteral( "@@values@@" ), quotedValues.join( QStringLiteral( ", " ) ) );
+      expressionCopy =  expressions.join( QStringLiteral( " OR " ) );
       break;
     }
   }
