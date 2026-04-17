@@ -514,7 +514,15 @@ ApplicationWindow {
           }
       }
 
-      /*MMToolbarButton {
+      MMToolbarButton {
+        text: qsTr("Layers")
+        iconSource: __style.layersIcon
+        onClicked: {
+          stateManager.state = "misc"
+          let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
+        }
+      }
+            /*MMToolbarButton {
             text: qsTr("Base de Datos")
             iconSource: __style.addTableIcon
             visible: __activeProject.projectRole !== "reader"
@@ -567,15 +575,6 @@ ApplicationWindow {
           else {
             __notificationModel.addInfo( qsTr( "No editable layers found." ) )
           }
-        }
-      }
-
-      MMToolbarButton {
-        text: qsTr("Layers")
-        iconSource: __style.layersIcon
-        onClicked: {
-          stateManager.state = "misc"
-          let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
         }
       }
 
@@ -775,6 +774,9 @@ ApplicationWindow {
               __notificationModel.addSuccess(
                   qsTr("✓ Base de datos '%1' creada exitosamente").arg(dbName)
               )
+            let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+            formsStackManager.openForm( newPair, "add", "form" )
+
           }
       }
   }

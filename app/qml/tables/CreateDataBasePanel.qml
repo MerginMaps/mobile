@@ -3,9 +3,15 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
-Item {
+import mm 1.0 as MM
+
+import "../components"
+import "../inputs"
+
+MMPage {
     id: root
 
+    pageHeader.title: qsTr( "Crear Base de datos" )
     // Propiedades
     property var dbManager: null
     property int panelHeight: 0
@@ -14,8 +20,55 @@ Item {
     signal closed()
     signal databaseCreated(string dbName, string dbPath)
 
-    width: parent?.width ?? 0
-    height: 600  // Altura del panel
+    //width: parent?.width ?? 0
+    //height: 600  // Altura del panel
+
+    function back()
+    {
+      // close the last page; if there is only one, close the controller
+
+      if (pagesStackView.depth > 1) {
+        pagesStackView.pop( null )
+      }
+      else {
+        pagesStackView.clear()
+        root.closed()
+      }
+    }
+
+    StackView {
+      id: pagesStackView
+
+      width: ApplicationWindow.window?.width ?? 0
+      height: ApplicationWindow.window?.height ?? 0
+
+     // anchors.fill: parent
+    }
+    onBackClicked: root.back()
+    //Keys.onReleased: function( event ) {
+    //  if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+    //    event.accepted = true
+
+      //  if ( pagesStackView.depth === 1 ) {
+      //    root.close()
+      //  }
+      //  else {
+      //    pagesStackView.pop( StackView.PopTransition )
+      //  }
+     // }
+   // }
+
+pageContent: ScrollView {
+
+  width: parent.width
+  height: parent.height
+
+  contentWidth: availableWidth // to only scroll vertically
+  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+  Component {
+      id: databaseListPage
 
     ColumnLayout {
         anchors.fill: parent
@@ -23,28 +76,31 @@ Item {
         spacing: 12
 
         // Header con botón de cerrar
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 10
+       // RowLayout {
+       //     Layout.fillWidth: true
+         //   spacing: 10
+//
+//            MMText {
+//                text: "Crear Nueva Base de Datos"
+ //               font.bold: true
+  //              font.pointSize: 12
+ //               Layout.fillWidth: true
+//            }
 
-            Text {
-                text: "Crear Nueva Base de Datos"
-                font.bold: true
-                font.pointSize: 12
-                Layout.fillWidth: true
-            }
-
-            Button {
-                text: "✕"
-                implicitWidth: 40
-                implicitHeight: 40
-                onClicked: root.closed()
-                background: Rectangle {
-                    color: parent.hovered ? "#f44336" : "#e0e0e0"
-                    radius: 4
-                }
-            }
-        }
+           // MMButton {
+           //     width: parent.width
+            //    anchors.bottom: parent.bottom
+             //   anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
+            //    text: "✕"
+  //        //      implicitWidth: 40
+//          //      implicitHeight: 40
+            //    onClicked: root.closed()
+           //     background: Rectangle {
+           //         color: parent.hovered ? "#f44336" : "#e0e0e0"
+           //         radius: 4
+            //    }
+          //  }
+       // }
 
         // Campos de entrada
         ColumnLayout {
@@ -55,7 +111,7 @@ Item {
                 Layout.fillWidth: true
                 spacing: 5
 
-                Text {
+                MMText {
                     text: "Nombre de la Base de Datos:"
                     font.bold: true
                     font.pointSize: 10
@@ -80,7 +136,7 @@ Item {
                 Layout.fillWidth: true
                 spacing: 5
 
-                Text {
+                MMText {
                     text: "Ubicación (opcional, Enter para predeterminada):"
                     font.bold: true
                     font.pointSize: 10
@@ -103,7 +159,7 @@ Item {
         }
 
         // Mensajes
-        Text {
+        MMText {
             id: successMessage
             text: ""
             color: "#4CAF50"
@@ -112,7 +168,7 @@ Item {
             Layout.fillWidth: true
         }
 
-        Text {
+        MMText {
             id: errorMessage
             text: ""
             color: "#d32f2f"
@@ -169,6 +225,7 @@ Item {
             }
         }
     }
+  }
 
     Timer {
         id: successTimer
@@ -216,5 +273,9 @@ Item {
 
     Component.onCompleted: {
         console.log("CreateDatabasePanel cargado")
+        let item = pagesStackView.push( databaseListPage, {}, StackView.Immediate )
+        item.forceActiveFocus()
+
     }
+ }
 }
