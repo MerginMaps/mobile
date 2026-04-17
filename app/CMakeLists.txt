@@ -636,7 +636,8 @@ qt_add_qml_module(
   SOURCES dbmanager.h
   SOURCES dbmanager.cpp
   SOURCES dbmanager.cpp
-  QML_FILES qml/tables/CreateTableForm.qml
-  QML_FILES qml/tables/DatabaseManagerWindow.qml
-  QML_FILES qml/tables/CreateTableDialog.qml
+  #QML_FILES qml/tables/CreateTableForm.qml
+  #QML_FILES qml/tables/DatabaseManagerWindow.qml
+  #QML_FILES qml/tables/CreateTableDialog.qml
+  #QML_FILES qml/tables/CreateDataBasePanel.qml
 )
