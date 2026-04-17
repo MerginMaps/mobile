@@ -32,9 +32,15 @@ void FilterController::clearLayerFilters( const QString &layerId )
 {
   QgsMapLayer *layer = QgsProject::instance()->mapLayers().value( layerId );
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+  if ( !vectorLayer )
+  {
+    CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                    QStringLiteral( "Layer '%1' is not available. Cannot clear its filters." ).arg( layerId ) );
+    return;
+  }
   vectorLayer->setSubsetString( QStringLiteral( "" ) );
 
-  for ( FieldFilter filter : mFieldFilters )
+  for ( FieldFilter &filter : mFieldFilters )
   {
     if ( filter.layerId == layerId )
     {
@@ -131,6 +137,15 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
+      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( newFieldFilter.layerId ) );
+      if ( !filterLayer )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Layer '%1' for filter '%2' is not available in the project. Skipping filter." )
+                        .arg( newFieldFilter.layerId, newFieldFilter.filterName ) );
+        continue;
+      }
+
       mFieldFilters.append( newFieldFilter );
     }
   }
@@ -157,9 +172,12 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::NumberFilter:
     {
-      const QVariant &variantFrom = filter.value.toList().at( 0 );
+      const QVariantList values = filter.value.toList();
+      if ( values.size() < 2 )
+        return {};
+      const QVariant variantFrom = values.at( 0 );
       const QString valueFrom = variantFrom.isValid() ? variantFrom.toString() : QString::number( std::numeric_limits<int>::min() );
-      const QVariant &variantTo = filter.value.toList().at( 1 );
+      const QVariant variantTo = values.at( 1 );
       const QString valueTo = variantTo.isValid() ? variantTo.toString() : QString::number( std::numeric_limits<int>::max() );
 
       expressionCopy.replace( QStringLiteral( "@@value_from@@" ), valueFrom );
@@ -175,8 +193,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
       const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
 
+      const QVariantList values = filter.value.toList();
+      if ( values.size() < 2 )
+        return {};
+      const QVariant variantFrom = values.at( 0 );
+      const QVariant variantTo = values.at( 1 );
+
       QString dateFrom;
-      const QVariant &variantFrom = filter.value.toList().at( 0 );
       if ( variantFrom.isValid() )
       {
         QDateTime dateTimeFrom = variantFrom.toDateTime( );
@@ -190,21 +213,20 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         dateFrom = minimumDateTime;
       }
 
-      const QVariant &variantTo = filter.value.toList().at( 1 );
       QString dateTo;
       if ( variantTo.isValid() )
       {
         if ( variantTo.toDateTime().time().hour() > 0 || variantTo.toDateTime().time().minute() > 0 )
         {
-          QDateTime dateTimeTo = variantFrom.toDateTime( );
-          QTime timeFrom = dateTimeTo.time();
-          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 59, 999 );
-          dateTimeTo.setTime( timeFrom );
+          QDateTime dateTimeTo = variantTo.toDateTime( );
+          QTime timeTo = dateTimeTo.time();
+          timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
+          dateTimeTo.setTime( timeTo );
           dateTo = dateTimeTo.toString( isoFormat );
         }
         else
         {
-          dateTo = variantFrom.toDateTime().toString( isoFormat );
+          dateTo = variantTo.toDateTime().toString( isoFormat );
         }
       }
       else
@@ -359,6 +381,12 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
     return false;
 
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
+  if ( !layer )
+  {
+    CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                    QStringLiteral( "Layer '%1' is not available. Cannot check active filter." ).arg( layerId ) );
+    return false;
+  }
   return !layer->subsetString().isEmpty();
 }
 
@@ -369,6 +397,13 @@ bool FilterController::isDateFilterDateTime( const QString &filterId )
     if ( filter.filterId == filterId )
     {
       const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( filter.layerId ) );
+      if ( !layer )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Layer '%1' for filter '%2' is not available." )
+                        .arg( filter.layerId, filter.filterName ) );
+        return false;
+      }
       const QMetaType::Type fieldType = layer->fields().field( filter.fieldName ).type();
       return fieldType == QMetaType::QDateTime;
     }
