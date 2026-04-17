@@ -49,8 +49,8 @@ void FilterController::clearAllFilters()
   {
     filter.value.clear();
   }
-  mFilteringEnabled = false;
-  emit hasFiltersEnabledChanged();
+  mFilteringActivated = false;
+  emit hasFiltersActivatedChanged();
 
   const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
@@ -67,10 +67,10 @@ void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
 
-  if ( mFilteringEnabled )
+  if ( mFilteringActivated )
   {
-    mFilteringEnabled = false;
-    emit hasFiltersEnabledChanged();
+    mFilteringActivated = false;
+    emit hasFiltersActivatedChanged();
   }
 
   if ( mFilteringAvailable )
@@ -309,17 +309,17 @@ bool FilterController::hasFiltersAvailable() const
   return mFilteringAvailable;
 }
 
-bool FilterController::hasFiltersEnabled() const
+bool FilterController::hasFiltersActivated() const
 {
-  return mFilteringEnabled;
+  return mFilteringActivated;
 }
 
-void FilterController::setFiltersEnabled( const bool filtersEnabled )
+void FilterController::setFiltersActivated( const bool filtersEnabled )
 {
-  if ( mFilteringEnabled != filtersEnabled )
+  if ( mFilteringActivated != filtersEnabled )
   {
-    mFilteringEnabled = filtersEnabled;
-    emit hasFiltersEnabledChanged();
+    mFilteringActivated = filtersEnabled;
+    emit hasFiltersActivatedChanged();
   }
 }
 
@@ -351,6 +351,17 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   }
 
   applyFiltersToAllLayers();
+
+  bool anyActivated = false;
+  for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
+  {
+    if ( filter.value.isValid() && !filter.value.isNull() )
+    {
+      anyActivated = true;
+      break;
+    }
+  }
+  setFiltersActivated( anyActivated );
 }
 
 bool FilterController::hasActiveFilterOnLayer( const QString &layerId )

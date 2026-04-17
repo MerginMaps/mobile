@@ -363,9 +363,6 @@ ApplicationWindow {
         iconSource: __style.filterIcon
         visible: __activeProject.filterController?.filteringAvailable ?? false
         onClicked: {
-          if ( __activeProject.filterController ) {
-            __activeProject.filterController.filteringEnabled = true
-          }
           stateManager.state = "misc"
           filtersDrawerLoader.active = true
         }

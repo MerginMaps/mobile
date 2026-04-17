@@ -860,9 +860,9 @@ Item {
         MMMapButton {
           id: filterIndicatorButton
 
-          visible: root.state === "view" && __activeProject.filterController?.filteringEnabled
+          visible: root.state === "view" && __activeProject.filterController?.filteringActivated
           iconSource: __style.filterIcon
-          bgndColor: __style.polarColor
+          bgndColor: __style.positiveColor
 
           onClicked: {
             root.openFiltersPanel()
