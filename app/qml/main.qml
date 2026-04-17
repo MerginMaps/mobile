@@ -500,14 +500,28 @@ ApplicationWindow {
 
     model: ObjectModel {
 
+      // Elimina el diálogo createDatabaseDialog y reemplázalo con este botón en MMToolbar
+
       MMToolbarButton {
+          text: qsTr("Base de Datos")
+          iconSource: __style.addTableIcon
+          visible: __activeProject.projectRole !== "reader"
+          onClicked: {
+              stateManager.state = "misc"
+              let dbPanel = mapPanelsStackView.push(createDatabasePanelComponent, {
+                  dbManager: __dbManager
+              }, StackView.PushTransition)
+          }
+      }
+
+      /*MMToolbarButton {
             text: qsTr("Base de Datos")
             iconSource: __style.addTableIcon
             visible: __activeProject.projectRole !== "reader"
             onClicked: {
               createDatabaseDialog.open()
             }
-          }
+          }*/
 
       MMToolbarButton {
             text: qsTr("Tablas")
@@ -743,6 +757,26 @@ ApplicationWindow {
         // make sure to change the root state here to "map"
       }
     }
+  }
+
+  Component {
+      id: createDatabasePanelComponent
+
+      CreateDataBasePanel {
+          id: createDataBasePanel
+
+          onClosed: {
+              mapPanelsStackView.pop(StackView.PopTransition)
+              stateManager.state = "map"
+          }
+
+          onDatabaseCreated: function(dbName, dbPath) {
+              console.log("BD creada: " + dbName + " en " + dbPath)
+              __notificationModel.addSuccess(
+                  qsTr("✓ Base de datos '%1' creada exitosamente").arg(dbName)
+              )
+          }
+      }
   }
 
   Component {
@@ -1650,9 +1684,9 @@ ApplicationWindow {
   // =====================================================================
   // DIÁLOGO: CREAR BD
   // =====================================================================
-  Dialog {
+ /* Dialog {
     id: createDatabaseDialog
-    title: "Crear nueva base de datos"
+    title: "Crear nueva base de datos 2026"
     width: 300
     height: 220
     modal: true
@@ -1810,7 +1844,7 @@ ApplicationWindow {
         createDatabaseDialog.close()
       }
     }
-  }
+  }*/
 
 }
 
