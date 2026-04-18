@@ -128,16 +128,16 @@ MMComponents.MMDrawer {
 
               if ( filterType === FieldFilter.TextFilter )
               {
-                setSource( "components/MMFilterTextEditor.qml", props )
+                setSource( "components/MMFilterTextInput.qml", props )
               }
               else if ( filterType === FieldFilter.NumberFilter )
               {
-                setSource( "components/MMFilterRangeInput.qml", props )
+                setSource( "components/MMFilterNumberRangeInput.qml", props )
               }
               else if ( filterType === FieldFilter.DateFilter )
               {
                 props['hasTime'] = __activeProject.filterController.isDateFilterDateTime(modelData.filterId)
-                setSource( "components/MMFilterDateRange.qml", props )
+                setSource( "components/MMFilterDateRangeInput.qml", props )
               }
               else if ( filterType === FieldFilter.CheckboxFilter )
               {

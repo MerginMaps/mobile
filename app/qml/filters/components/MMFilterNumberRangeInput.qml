@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 import QtQuick
+import QtQml
 
 import "../../components"
+import "./private"
 
 Column {
   id: root
@@ -27,44 +29,30 @@ Column {
     color: __style.nightColor
   }
 
-  Row {
-    id: rangeRow
+  MMFilterBaseInput {
+    id: filterInput
 
-    width: parent.width
-    spacing: __style.margin12
+    width: root.width
+
+    doubleInput: true
+    primaryPlaceholderText: qsTr( "Min" )
+    secondaryPlaceholderText: qsTr( "Max" )
+    primaryText: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
+    secondaryText: root.currentValue && root.currentValue[1] ? root.currentValue[1] : ""
+    errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
+
+    onPrimaryTextChanged: {
+      debounceTimer.restart()
+    }
+
+    onSecondaryTextChanged: {
+      debounceTimer.restart()
+    }
 
     property bool rangeInvalid: {
-      let fromVal = parseFloat( fromInput.text )
-      let toVal = parseFloat( toInput.text )
+      let fromVal = parseFloat( filterInput.primaryText )
+      let toVal = parseFloat( filterInput.secondaryText )
       return !isNaN( fromVal ) && !isNaN( toVal ) && fromVal > toVal
-    }
-
-    MMFilterTextInput {
-      id: fromInput
-
-      width: ( parent.width - __style.margin12 ) / 2
-      type: MMFilterTextInput.InputType.Number
-      placeholderText: qsTr( "Min" )
-      text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
-      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
-
-      onTextChanged: {
-        debounceTimer.restart()
-      }
-    }
-
-    MMFilterTextInput {
-      id: toInput
-
-      width: ( parent.width - __style.margin12 ) / 2
-      type: MMFilterTextInput.InputType.Number
-      placeholderText: qsTr( "Max" )
-      text: root.currentValue && root.currentValue[1] ? root.currentValue[1] : ""
-      errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
-
-      onTextChanged: {
-        debounceTimer.restart()
-      }
     }
   }
 
@@ -74,14 +62,14 @@ Column {
     repeat: false
     onTriggered: {
       let newValues = []
-      const valueFrom = parseFloat(fromInput.text)
+      const valueFrom = parseFloat( filterInput.primaryText )
       if ( !isNaN(valueFrom) ) {
         newValues[0] = valueFrom
       } else {
         newValues[0] = undefined
       }
 
-      const valueTo = parseFloat(toInput.text)
+      const valueTo = parseFloat( filterInput.secondaryText )
       if ( !isNaN(valueTo) ) {
         newValues[1] = valueTo
       } else {
