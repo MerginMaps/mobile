@@ -125,6 +125,11 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       {
         newFieldFilter.filterType = FieldFilter::MultiSelectFilter;
       }
+      else
+      {
+        CoreUtils::log( QStringLiteral( "Feature filtering" ), QStringLiteral( "Unknown type of filter specified for filter %1" ).arg( filterObject.value( QStringLiteral( "field_name" ) ).toString() ) );
+        continue;
+      }
 
       newFieldFilter.fieldName = filterObject.value( QStringLiteral( "field_name" ) ).toString();
       newFieldFilter.provider = filterObject.value( QStringLiteral( "provider" ) ).toString();
