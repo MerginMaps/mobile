@@ -30,7 +30,7 @@ FilterController::FilterController( QObject *parent )
 
 void FilterController::clearLayerFilters( const QString &layerId )
 {
-  QgsMapLayer *layer = QgsProject::instance()->mapLayers().value( layerId );
+  QgsMapLayer *layer = QgsProject::instance()->mapLayer( layerId );
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
   vectorLayer->setSubsetString( QStringLiteral( "" ) );
 

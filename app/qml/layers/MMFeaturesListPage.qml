@@ -59,7 +59,7 @@ MMComponents.MMPage {
       actionText: qsTr("Reset")
 
       onActionClicked: {
-        __activeProject.filterController?.clearAllFilters()
+        __activeProject.filterController?.clearLayerFilters( root.selectedLayer.id )
         featuresModel.reloadFeatures()
         visible = false
       }
