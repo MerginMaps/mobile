@@ -67,28 +67,19 @@ void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
 
-  if ( mFilteringActivated )
-  {
-    mFilteringActivated = false;
-    emit hasFiltersActivatedChanged();
-  }
-
-  if ( mFilteringAvailable )
-  {
-    mFilteringAvailable = false;
-    emit hasFiltersAvailableChanged();
-  }
+  setFiltersActivated( false );
 
   bool valueRead = false;
   const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
+
+  mFilteringAvailable = filteringAvailable;
+  emit hasFiltersAvailableChanged();
 
   //return early if filtering is not setup
   if ( !valueRead )
   {
     return;
   }
-  mFilteringAvailable = filteringAvailable;
-  emit hasFiltersAvailableChanged();
 
   const QString filtersDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Filters" ) );
   QJsonParseError jsonError;
@@ -353,9 +344,9 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   applyFiltersToAllLayers();
 
   bool anyActivated = false;
-  for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
+  for ( const QVariant &value : std::as_const( newFilters ) )
   {
-    if ( filter.value.isValid() && !filter.value.isNull() )
+    if ( value.isValid() && !value.isNull() )
     {
       anyActivated = true;
       break;
