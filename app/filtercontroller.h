@@ -171,6 +171,8 @@ class FilterController : public QObject
     QString buildFieldExpression( const FieldFilter &filter ) const;
 
     QList<FieldFilter> mFieldFilters;
+    // Stores any predefined subset strings on layers from QGIS, gets applied with filters from application
+    QMap<QString, QString> mPredefinedSubsetStrings;
 
     bool mFilteringAvailable = false;
     bool mFilteringEnabled = false;
