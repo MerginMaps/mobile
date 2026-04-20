@@ -18,9 +18,9 @@ import "../inputs"
 import "components"
 
 /*
- * MMCreateTableDrawer — bottom-sheet drawer para crear una nueva tabla.
- * Sigue el patrón MMDrawer: solo vista, sin lógica de negocio.
- * Toda la comunicación con el backend se hace mediante señales y propiedades.
+ * MMCreateTableDrawer — bottom-sheet drawer for creating a new table.
+ * Follows the MMDrawer pattern: view only, no business logic.
+ * All communication with the backend is done via signals and properties.
  */
 
 MMDrawer {

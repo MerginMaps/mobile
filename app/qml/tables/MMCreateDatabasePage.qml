@@ -17,9 +17,9 @@ import "../components"
 import "../inputs"
 
 /*
- * MMCreateDatabasePage — página de creación de base de datos SQLite.
- * Sigue el patrón MMPage: solo vista, sin lógica de negocio.
- * Toda la comunicación con el backend se hace mediante señales y propiedades.
+ * MMCreateDatabasePage — SQLite database creation page.
+ * Follows the MMPage pattern: view only, no business logic.
+ * All communication with the backend is done via signals and properties.
  */
 
 MMPage {

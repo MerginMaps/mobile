@@ -15,10 +15,10 @@ import mm 1.0 as MM
 import "../components"
 
 /*
- * MMTablesController — controlador del módulo de tablas.
- * Es el único componente que conoce dbManager.
- * Gestiona la navegación con un StackView interno y conecta señales
- * de las Pages/Drawers con llamadas al backend.
+ * MMTablesController — controller for the tables module.
+ * The only component that knows dbManager.
+ * Manages navigation with an internal StackView and connects signals
+ * from Pages/Drawers to backend calls.
  */
 
 Item {

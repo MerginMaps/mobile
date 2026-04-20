@@ -17,9 +17,9 @@ import "../components"
 import "../inputs"
 
 /*
- * MMDatabaseManagerPage — gestor de tablas de base de datos.
- * Sigue el patrón MMPage: solo vista, sin lógica de negocio.
- * Toda la comunicación con el backend se hace mediante señales y propiedades.
+ * MMDatabaseManagerPage — database table manager.
+ * Follows the MMPage pattern: view only, no business logic.
+ * All communication with the backend is done via signals and properties.
  */
 
 MMPage {

@@ -16,8 +16,8 @@ import mm 1.0 as MM
 import "../../components"
 
 /*
- * MMDatabaseInfoDrawer — drawer de información de base de datos.
- * Extraído de CreateTableDialog.qml para seguir el patrón de componentes reutilizables.
+ * MMDatabaseInfoDrawer — database information drawer.
+ * Extracted from CreateTableDialog.qml to follow the reusable components pattern.
  */
 
 MMDrawer {
