@@ -120,7 +120,7 @@ class FilterController : public QObject
     /**
      * Returns whether the date filter is datetime or just date field. Used to show date or date & time UI for users.
      */
-    Q_INVOKABLE bool isDateFilterDateTime( const QString &filterId );
+    Q_INVOKABLE bool isDateFilterDateTime( const QString &filterId ) const;
 
     bool hasFiltersAvailable() const;
 

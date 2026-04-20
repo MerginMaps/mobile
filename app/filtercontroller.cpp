@@ -259,39 +259,40 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::DateFilter:
     {
-      // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
-      // so we must convert local datetimes to UTC before comparing.
-      // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
-      const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
-      const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
-      const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
-
       const QVariantList values = filter.value.toList();
       if ( values.size() < 2 )
         return {};
-      const QVariant variantFrom = values.at( 0 );
-      const QVariant variantTo = values.at( 1 );
+      const QVariant &variantFrom = values.at( 0 );
+      const QVariant &variantTo = values.at( 1 );
 
       QString dateFrom;
-      if ( variantFrom.isValid() )
-      {
-        QDateTime dateTimeFrom = variantFrom.toDateTime( );
-        QTime timeFrom = dateTimeFrom.time();
-        timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
-        dateTimeFrom.setTime( timeFrom );
-        dateFrom = dateTimeFrom.toString( isoFormat );
-      }
-      else
-      {
-        dateFrom = minimumDateTime;
-      }
-
       QString dateTo;
-      if ( variantTo.isValid() )
+
+      if ( isDateFilterDateTime( filter.filterId ) )
       {
-        if ( variantTo.toDateTime().time().hour() > 0 || variantTo.toDateTime().time().minute() > 0 )
+        // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
+        // so we must convert local datetimes to UTC before comparing.
+        // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
+        const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
+        const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
+        const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
+
+        if ( variantFrom.isValid() )
         {
-          QDateTime dateTimeTo = variantTo.toDateTime( );
+          QDateTime dateTimeFrom = variantFrom.toDateTime().toUTC();
+          QTime timeFrom = dateTimeFrom.time();
+          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
+          dateTimeFrom.setTime( timeFrom );
+          dateFrom = dateTimeFrom.toString( isoFormat );
+        }
+        else
+        {
+          dateFrom = minimumDateTime;
+        }
+
+        if ( variantTo.isValid() )
+        {
+          QDateTime dateTimeTo = variantTo.toDateTime().toUTC();
           QTime timeTo = dateTimeTo.time();
           timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
           dateTimeTo.setTime( timeTo );
@@ -299,12 +300,16 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         }
         else
         {
-          dateTo = variantTo.toDateTime().toString( isoFormat );
+          dateTo = maximumDateTime;
         }
       }
       else
       {
-        dateTo = maximumDateTime;
+        // date-only fields store values as YYYY-MM-DD strings — no time component
+        const QString dateFormat = QStringLiteral( "yyyy-MM-dd" );
+
+        dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( dateFormat ) : QStringLiteral( "0001-01-01" );
+        dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( dateFormat ) : QStringLiteral( "9999-12-31" );
       }
 
       expressionCopy.replace( QStringLiteral( "@@value_from@@" ), dateFrom );
@@ -477,9 +482,9 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
   return !layer->subsetString().isEmpty();
 }
 
-bool FilterController::isDateFilterDateTime( const QString &filterId )
+bool FilterController::isDateFilterDateTime( const QString &filterId ) const
 {
-  for ( FieldFilter &filter : mFieldFilters )
+  for ( const FieldFilter &filter : mFieldFilters )
   {
     if ( filter.filterId == filterId )
     {
