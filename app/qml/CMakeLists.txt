@@ -37,6 +37,7 @@ set(MM_QML
     components/MMBusyIndicator.qml
     components/MMMessage.qml
     components/MMNotification.qml
+    components/MMNotificationBox.qml
     components/MMNotificationView.qml
     components/MMPage.qml
     components/MMPageHeader.qml
