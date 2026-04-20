@@ -45,7 +45,7 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
       placeholderText: qsTr( "Min" )
-      text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
+      text: root.currentValue && root.currentValue[0] !== undefined ? root.currentValue[0] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
@@ -59,7 +59,7 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       type: MMFilterTextInput.InputType.Number
       placeholderText: qsTr( "Max" )
-      text: root.currentValue && root.currentValue[1] ? root.currentValue[1] : ""
+      text: root.currentValue && root.currentValue[1] !== undefined ? root.currentValue[1] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
 
       onTextChanged: {
@@ -73,19 +73,33 @@ Column {
     interval: 300
     repeat: false
     onTriggered: {
-      let newValues = []
-      const valueFrom = parseFloat(fromInput.text)
-      if ( !isNaN(valueFrom) ) {
-        newValues[0] = valueFrom
-      } else {
+      let newValues = [
+        root.currentValue ? root.currentValue[0] : undefined,
+        root.currentValue ? root.currentValue[1] : undefined
+      ]
+
+      const fromText = fromInput.text
+      if ( fromText.length === 0 ) {
         newValues[0] = undefined
+      } else {
+        const valueFrom = parseFloat( fromText )
+        if ( !isNaN( valueFrom ) ) {
+          newValues[0] = valueFrom
+        } else {
+          return  // partial input, such as "-"
+        }
       }
 
-      const valueTo = parseFloat(toInput.text)
-      if ( !isNaN(valueTo) ) {
-        newValues[1] = valueTo
-      } else {
+      const toText = toInput.text
+      if ( toText.length === 0 ) {
         newValues[1] = undefined
+      } else {
+        const valueTo = parseFloat( toText )
+        if ( !isNaN( valueTo ) ) {
+          newValues[1] = valueTo
+        } else {
+          return  // partial input: same reason 
+        }
       }
 
       if ( newValues[0] === undefined && newValues[1] === undefined ) {

@@ -26,6 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   // date and dropdown types open pickers instead of accepting keyboard input
   textField.readOnly: root.type === MMFilterTextInput.InputType.Date || root.type === MMFilterTextInput.InputType.Dropdown
+  textField.inputMethodHints: root.type === MMFilterTextInput.InputType.Number ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
   textField.color: {
     if ( root.editState === "readOnly" ) return __style.nightColor
     if ( root.editState === "enabled" ) return __style.nightColor
@@ -71,9 +72,10 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   // keep checked in sync with whether the field has a value
+  // dropdown type manages checked via the parent's binding
   onTextChanged: {
-    if ( root.type === MMFilterTextInput.InputType.Text || root.type === MMFilterTextInput.InputType.Number ) {
-      root.checked = false
+    if ( root.type !== MMFilterTextInput.InputType.Dropdown ) {
+      root.checked = root.text.length > 0
     }
   }
 
@@ -85,9 +87,4 @@ MMPrivateComponents.MMBaseSingleLineInput {
     }
   }
 
-  Component.onCompleted: {
-    if ( root.text ) {
-      root.checked = true
-    }
-  }
 }

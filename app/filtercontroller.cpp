@@ -44,7 +44,7 @@ void FilterController::clearLayerFilters( const QString &layerId )
     }
   }
 
-  for ( FieldFilter filter : mFieldFilters )
+  for ( FieldFilter &filter : mFieldFilters )
   {
     if ( filter.layerId == layerId )
     {
@@ -153,6 +153,40 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
+      // check for missing filter fields
+      QStringList missingFilterFields;
+      if ( newFieldFilter.layerId.isEmpty() ) missingFilterFields << QStringLiteral( "'layer_id'" );
+      if ( newFieldFilter.fieldName.isEmpty() ) missingFilterFields << QStringLiteral( "'field_name'" );
+      if ( newFieldFilter.sqlExpression.isEmpty() ) missingFilterFields << QStringLiteral( "'sql_expression'" );
+
+      if ( !missingFilterFields.isEmpty() )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Filter '%1' is missing required filter field(s): %2. Skipping." )
+                        .arg( newFieldFilter.filterName, missingFilterFields.join( QStringLiteral( ", " ) ) ) );
+        continue;
+      }
+
+      // check if target layer exists
+      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( project->mapLayer( newFieldFilter.layerId ) );
+      if ( !filterLayer )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Filter '%1' has no layer with ID '%2' found in project. Skipping." )
+                        .arg( newFieldFilter.filterName, newFieldFilter.layerId ) );
+        continue;
+      }
+
+      // check if target field of target layer exists
+      if ( filterLayer->fields().lookupField( newFieldFilter.fieldName ) < 0 )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Filter '%1' has no target field '%2' found on layer '%3' (%4). Skipping." )
+                        .arg( newFieldFilter.filterName, newFieldFilter.fieldName,
+                              filterLayer->name(), newFieldFilter.layerId ) );
+        continue;
+      }
+
       mFieldFilters.append( newFieldFilter );
     }
   }
@@ -209,9 +243,12 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::NumberFilter:
     {
-      const QVariant &variantFrom = filter.value.toList().at( 0 );
+      const QVariantList values = filter.value.toList();
+      if ( values.size() < 2 )
+        return {};
+      const QVariant variantFrom = values.at( 0 );
       const QString valueFrom = variantFrom.isValid() ? variantFrom.toString() : QString::number( std::numeric_limits<int>::min() );
-      const QVariant &variantTo = filter.value.toList().at( 1 );
+      const QVariant variantTo = values.at( 1 );
       const QString valueTo = variantTo.isValid() ? variantTo.toString() : QString::number( std::numeric_limits<int>::max() );
 
       expressionCopy.replace( QStringLiteral( "@@value_from@@" ), valueFrom );
@@ -227,8 +264,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
       const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
 
+      const QVariantList values = filter.value.toList();
+      if ( values.size() < 2 )
+        return {};
+      const QVariant variantFrom = values.at( 0 );
+      const QVariant variantTo = values.at( 1 );
+
       QString dateFrom;
-      const QVariant &variantFrom = filter.value.toList().at( 0 );
       if ( variantFrom.isValid() )
       {
         QDateTime dateTimeFrom = variantFrom.toDateTime( );
@@ -242,21 +284,20 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         dateFrom = minimumDateTime;
       }
 
-      const QVariant &variantTo = filter.value.toList().at( 1 );
       QString dateTo;
       if ( variantTo.isValid() )
       {
         if ( variantTo.toDateTime().time().hour() > 0 || variantTo.toDateTime().time().minute() > 0 )
         {
-          QDateTime dateTimeTo = variantFrom.toDateTime( );
-          QTime timeFrom = dateTimeTo.time();
-          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 59, 999 );
-          dateTimeTo.setTime( timeFrom );
+          QDateTime dateTimeTo = variantTo.toDateTime( );
+          QTime timeTo = dateTimeTo.time();
+          timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
+          dateTimeTo.setTime( timeTo );
           dateTo = dateTimeTo.toString( isoFormat );
         }
         else
         {
-          dateTo = variantFrom.toDateTime().toString( isoFormat );
+          dateTo = variantTo.toDateTime().toString( isoFormat );
         }
       }
       else
