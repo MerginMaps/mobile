@@ -14,12 +14,12 @@ import QtQuick.Layouts
 
 import mm 1.0 as MM
 
-import "../components"
-import "../inputs"
+import "../../components"
+import "../../inputs"
 
 /*
- * CreateTableForm — formulario visual para definir campos de una tabla.
- * Componente de solo presentación; toda la lógica vive en CreateTableDialog.
+ * MMCreateTableForm — formulario visual para definir campos de una tabla.
+ * Componente de solo presentación; toda la lógica vive en MMCreateTableDrawer.
  * Usa el design-system (__style) en lugar de colores y fuentes hardcodeados.
  */
 

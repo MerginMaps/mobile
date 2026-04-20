@@ -17,32 +17,59 @@ import "../components"
 import "../inputs"
 
 /*
- * DatabaseManagerWindow — gestor de tablas de base de datos.
- * Embebido como MMPage dentro del StackView principal de la app.
- * Sustituye el antiguo ApplicationWindow independiente.
+ * MMDatabaseManagerPage — gestor de tablas de base de datos.
+ * Sigue el patrón MMPage: solo vista, sin lógica de negocio.
+ * Toda la comunicación con el backend se hace mediante señales y propiedades.
  */
 
 MMPage {
   id: root
 
-  // ── Estados de vista ──────────────────────────────────────────────────
-  enum ViewState { Idle, Loading, Error, DataLoaded }
-  property int viewState: DatabaseManagerWindow.ViewState.Idle
+  // ── Propiedades de entrada (el Controller las asigna) ─────────────────
+  property var    tableModel:   null
+  property var    tableList:    []
+  property string currentTable: ""
+  property int    rowCount:     0
+  property string errorMessage: ""
 
   property var selectedRowIndex: -1
+
+  // ── Señales de salida (el Controller las escucha) ─────────────────────
+  signal tableSelected(string name)
+  signal addRowRequested()
+  signal removeRowRequested(int rowIndex)
+  signal submitChangesRequested()
+  signal revertChangesRequested()
+  signal filterRequested(string text)
+  signal clearFilterRequested()
+  signal createTableRequested()
+  signal createDatabaseRequested()
+  signal backClicked()
 
   // ── Cabecera ──────────────────────────────────────────────────────────
   pageHeader {
     title: qsTr("Gestor de Base de Datos")
     titleFont: __style.h3
     baseHeaderHeight: __style.row60
+    backVisible: true
   }
+
+  onBackClicked: root.backClicked()
 
   // ── Contenido principal ───────────────────────────────────────────────
   pageContent: ColumnLayout {
     width: parent.width
     height: parent.height
     spacing: __style.spacing12
+
+    // ── Notificación de error ─────────────────────────────────────────
+    MMNotificationBox {
+      Layout.fillWidth: true
+      visible: root.errorMessage !== ""
+      type: MMNotificationBox.Types.Error
+      title: qsTr("Error")
+      description: root.errorMessage
+    }
 
     // ── Barra de selector de tabla + indicador de estado ─────────────
     Rectangle {
@@ -74,7 +101,7 @@ MMPage {
             id: tableComboBox
             anchors.fill: parent
             anchors.margins: 2 * __dp
-            model: dbManager.tableList
+            model: root.tableList
             font: __style.p5
 
             background: Rectangle { color: __style.transparentColor }
@@ -89,7 +116,7 @@ MMPage {
 
             onCurrentTextChanged: {
               if (currentText !== "") {
-                dbManager.setCurrentTable(currentText)
+                root.tableSelected(currentText)
               }
             }
           }
@@ -97,34 +124,19 @@ MMPage {
 
         Item { Layout.fillWidth: true }
 
-        // Indicador de estado
-        Rectangle {
-          Layout.preferredWidth: 160 * __dp
-          Layout.preferredHeight: __style.row40
-          radius: __style.radius12
-          visible: root.viewState !== DatabaseManagerWindow.ViewState.Idle
-          color: {
-            switch (root.viewState) {
-              case DatabaseManagerWindow.ViewState.Error:      return __style.negativeColor
-              case DatabaseManagerWindow.ViewState.Loading:    return __style.warningColor
-              case DatabaseManagerWindow.ViewState.DataLoaded: return __style.grassColor
-              default: return __style.transparentColor
-            }
-          }
+        // Botón crear BD
+        MMButton {
+          text: qsTr("Nueva BD")
+          type: MMButton.Types.Secondary
+          size: MMButton.Sizes.Small
+          onClicked: root.createDatabaseRequested()
+        }
 
-          MMText {
-            anchors.centerIn: parent
-            font: __style.t4
-            color: __style.forestColor
-            text: {
-              switch (root.viewState) {
-                case DatabaseManagerWindow.ViewState.Error:      return qsTr("Error")
-                case DatabaseManagerWindow.ViewState.Loading:    return qsTr("Cargando...")
-                case DatabaseManagerWindow.ViewState.DataLoaded: return qsTr("Datos cargados")
-                default: return ""
-              }
-            }
-          }
+        // Botón crear tabla
+        MMButton {
+          text: qsTr("Nueva Tabla")
+          size: MMButton.Sizes.Small
+          onClicked: root.createTableRequested()
         }
       }
     }
@@ -163,7 +175,7 @@ MMPage {
               spacing: __style.spacing12
 
               MMText {
-                text: dbManager.currentTable || qsTr("Selecciona una tabla")
+                text: root.currentTable || qsTr("Selecciona una tabla")
                 font: __style.t3
                 color: __style.forestColor
               }
@@ -171,7 +183,7 @@ MMPage {
               Item { Layout.fillWidth: true }
 
               MMText {
-                text: qsTr("Registros: ") + dbManager.getRowCount()
+                text: qsTr("Registros: ") + root.rowCount
                 font: __style.p6
                 color: __style.nightColor
               }
@@ -183,14 +195,14 @@ MMPage {
             id: dataTableView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            model: dbManager.tableModel
+            model: root.tableModel
             alternatingRowColors: true
             clip: true
 
             delegate: Rectangle {
               implicitWidth: 120 * __dp
               implicitHeight: __style.row40
-              color: row === selectedRowIndex
+              color: row === root.selectedRowIndex
                      ? __style.grassColor
                      : (index % 2 === 0 ? __style.polarColor : __style.lightGreenColor)
 
@@ -201,16 +213,16 @@ MMPage {
                 anchors.fill: parent
                 anchors.margins: __style.margin4
                 text: display ?? ""
-                color: row === selectedRowIndex ? __style.forestColor : __style.nightColor
+                color: row === root.selectedRowIndex ? __style.forestColor : __style.nightColor
                 font: __style.p5
                 selectByMouse: true
                 readOnly: false
                 verticalAlignment: TextInput.AlignVCenter
 
                 onEditingFinished: {
-                  if (dbManager.tableModel) {
-                    dbManager.tableModel.setData(
-                      dbManager.tableModel.index(row, column),
+                  if (root.tableModel) {
+                    root.tableModel.setData(
+                      root.tableModel.index(row, column),
                       text
                     )
                   }
@@ -219,7 +231,7 @@ MMPage {
                 MouseArea {
                   anchors.fill: parent
                   onPressed: function(mouse) {
-                    selectedRowIndex = row
+                    root.selectedRowIndex = row
                     mouse.accepted = false
                   }
                 }
@@ -243,9 +255,9 @@ MMPage {
               size: MMButton.Sizes.Small
               onClicked: {
                 if (searchField.text) {
-                  dbManager.filterTable(searchField.text)
+                  root.filterRequested(searchField.text)
                 } else {
-                  dbManager.clearFilter()
+                  root.clearFilterRequested()
                 }
               }
             }
@@ -256,7 +268,7 @@ MMPage {
               size: MMButton.Sizes.Small
               onClicked: {
                 searchField.text = ""
-                dbManager.clearFilter()
+                root.clearFilterRequested()
               }
             }
           }
@@ -295,12 +307,7 @@ MMPage {
             Layout.fillWidth: true
             text: qsTr("Agregar")
             iconSourceLeft: __style.addIcon
-            onClicked: {
-              if (!dbManager.addRow()) {
-                errorDrawer.errorMsg = qsTr("No se pudo agregar registro")
-                errorDrawer.open()
-              }
-            }
+            onClicked: root.addRowRequested()
           }
 
           // Eliminar registro
@@ -308,14 +315,10 @@ MMPage {
             Layout.fillWidth: true
             text: qsTr("Eliminar")
             type: MMButton.Types.Secondary
-            enabled: selectedRowIndex >= 0
+            enabled: root.selectedRowIndex >= 0
             onClicked: {
-              if (!dbManager.removeRow(selectedRowIndex)) {
-                errorDrawer.errorMsg = qsTr("No se pudo eliminar registro")
-                errorDrawer.open()
-              } else {
-                selectedRowIndex = -1
-              }
+              root.removeRowRequested(root.selectedRowIndex)
+              root.selectedRowIndex = -1
             }
           }
 
@@ -323,13 +326,7 @@ MMPage {
           MMButton {
             Layout.fillWidth: true
             text: qsTr("Guardar")
-            onClicked: {
-              if (dbManager.submitChanges()) {
-                root.viewState = DatabaseManagerWindow.ViewState.DataLoaded
-              } else {
-                root.viewState = DatabaseManagerWindow.ViewState.Error
-              }
-            }
+            onClicked: root.submitChangesRequested()
           }
 
           // Revertir cambios
@@ -337,7 +334,7 @@ MMPage {
             Layout.fillWidth: true
             text: qsTr("Revertir")
             type: MMButton.Types.Secondary
-            onClicked: dbManager.revertChanges()
+            onClicked: root.revertChangesRequested()
           }
 
           Rectangle {
@@ -373,7 +370,7 @@ MMPage {
               }
 
               MMText {
-                text: qsTr("Tabla:\n") + (dbManager.currentTable || "-")
+                text: qsTr("Tabla:\n") + (root.currentTable || "-")
                 font: __style.p6
                 color: __style.nightColor
                 wrapMode: Text.WordWrap
@@ -381,22 +378,13 @@ MMPage {
               }
 
               MMText {
-                text: qsTr("Registros:\n") + dbManager.getRowCount()
+                text: qsTr("Registros:\n") + root.rowCount
                 font: __style.p6
                 color: __style.nightColor
                 Layout.fillWidth: true
               }
 
               Item { Layout.fillHeight: true }
-
-              // Caja de error inline
-              MMNotificationBox {
-                Layout.fillWidth: true
-                visible: dbManager.lastError !== ""
-                type: MMNotificationBox.Types.Error
-                title: qsTr("Error")
-                description: dbManager.lastError
-              }
             }
           }
         }
@@ -404,53 +392,7 @@ MMPage {
     }
   }
 
-  // ── Drawer de error ───────────────────────────────────────────────────
-  MMDrawer {
-    id: errorDrawer
-
-    property string errorMsg: ""
-
-    drawerHeader.title: qsTr("Error")
-
-    drawerContent: ColumnLayout {
-      width: parent.width
-      spacing: __style.spacing12
-
-      MMText {
-        text: errorDrawer.errorMsg
-        font: __style.p5
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-        Layout.fillWidth: true
-      }
-
-      MMButton {
-        text: qsTr("Aceptar")
-        Layout.fillWidth: true
-        onClicked: errorDrawer.close()
-      }
-    }
-  }
-
-  // ── Conexiones con el backend ──────────────────────────────────────────
-  Connections {
-    target: dbManager
-
-    function onErrorOccurred(errorMessage) {
-      root.viewState = DatabaseManagerWindow.ViewState.Error
-    }
-
-    function onTableModelChanged() {
-      root.viewState = DatabaseManagerWindow.ViewState.DataLoaded
-      selectedRowIndex = -1
-    }
-
-    function onDataChanged() {
-      root.viewState = DatabaseManagerWindow.ViewState.DataLoaded
-    }
-  }
-
   Component.onCompleted: {
-    console.log("DatabaseManagerWindow inicializado")
+    console.log("MMDatabaseManagerPage inicializado")
   }
 }

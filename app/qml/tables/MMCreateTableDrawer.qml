@@ -15,21 +15,24 @@ import mm 1.0 as MM
 
 import "../components"
 import "../inputs"
+import "components"
 
 /*
- * CreateTableDialog — bottom-sheet drawer para crear una nueva tabla.
- * Reemplaza el Qt Dialog por MMDrawer siguiendo el patrón de la app.
+ * MMCreateTableDrawer — bottom-sheet drawer para crear una nueva tabla.
+ * Sigue el patrón MMDrawer: solo vista, sin lógica de negocio.
+ * Toda la comunicación con el backend se hace mediante señales y propiedades.
  */
 
 MMDrawer {
   id: root
 
-  // ── API pública ───────────────────────────────────────────────────────
-  property var dbManager: null
+  // ── Propiedades de entrada ────────────────────────────────────────────
   property string dbNameToShow: ""
   property string dbPathToShow: ""
+  property string errorMessage: ""   // el Controller escribe aquí si falla
 
-  signal tableCreationRequested(string tableName, var fields)
+  // ── Señales de salida ─────────────────────────────────────────────────
+  signal createTableRequested(string tableName, var fields)
 
   // ── Cabecera del drawer ───────────────────────────────────────────────
   drawerHeader.title: qsTr("Crear Nueva Tabla")
@@ -39,8 +42,8 @@ MMDrawer {
     width: parent.width
     spacing: __style.spacing12
 
-    // Formulario visual (CreateTableForm refactorizado)
-    CreateTableForm {
+    // Formulario visual
+    MMCreateTableForm {
       id: uiForm
       Layout.fillWidth: true
 
@@ -49,10 +52,7 @@ MMDrawer {
       fieldsModel: fieldsListModel
 
       onShowDbInfoRequested: {
-        if (root.dbManager) {
-          dbInfoDrawer.infoText = root.dbManager.getDatabaseInfo()
-          dbInfoDrawer.open()
-        }
+        dbInfoDrawer.open()
       }
 
       onAddFieldRequested:        fieldsListModel.addField()
@@ -61,13 +61,15 @@ MMDrawer {
       onRemoveFieldRequested:     function(index) { fieldsListModel.removeField(index) }
     }
 
-    // Caja de mensajes de validación / resultado
-    //MMNotificationBox { // checar
-    //  id: messageBox
-    //  Layout.fillWidth: true
-    //  visible: messageBox.description !== ""
-    //  type: internal.isError ? MMNotificationBox.Types.Error : MMNotificationBox.Types.Warning
-   // }
+    // Notificación de error (visible cuando errorMessage no está vacío)
+    MMNotificationBox {
+      id: errorNotification
+      Layout.fillWidth: true
+      visible: root.errorMessage !== ""
+      type: MMNotificationBox.Types.Error
+      title: qsTr("Error")
+      description: root.errorMessage
+    }
 
     // Botones de acción
     RowLayout {
@@ -79,7 +81,7 @@ MMDrawer {
         Layout.fillWidth: true
         onClicked: {
           if (validateInputs()) {
-            createTableAction()
+            root.createTableRequested(uiForm.tableNameText.trim(), fieldsListModel.getFieldsList())
           }
         }
       }
@@ -110,108 +112,56 @@ MMDrawer {
     }
   }
 
-  // ── Lógica de validación y creación ──────────────────────────────────
-  function showMessage(message, isErr) {
-    messageBox.description = message
-    internal.isError = isErr
+  // ── Drawer de información de BD ────────────────────────────────────────
+  MMDatabaseInfoDrawer {
+    id: dbInfoDrawer
+    infoText: root.dbNameToShow + (root.dbPathToShow ? "\n" + root.dbPathToShow : "")
   }
 
-  function clearMessage() {
-    messageBox.description = ""
-    internal.isError = false
-  }
-
+  // ── Validación de formulario (lógica de UI pura) ──────────────────────
   function validateInputs() {
-    clearMessage()
-
     if (uiForm.tableNameText.trim() === "") {
-      showMessage(qsTr("El nombre de la tabla no puede estar vacío"), true)
+      uiForm.messageTextContent = qsTr("El nombre de la tabla no puede estar vacío")
+      uiForm.messageType = "error"
       return false
     }
 
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(uiForm.tableNameText)) {
-      showMessage(qsTr("El nombre solo puede contener letras, números y guiones bajos"), true)
-      return false
-    }
-
-    if (root.dbManager && root.dbManager.tableExists(uiForm.tableNameText)) {
-      showMessage(qsTr("La tabla '%1' ya existe").arg(uiForm.tableNameText), true)
+      uiForm.messageTextContent = qsTr("El nombre solo puede contener letras, números y guiones bajos")
+      uiForm.messageType = "error"
       return false
     }
 
     if (fieldsListModel.count === 0) {
-      showMessage(qsTr("Debe agregar al menos un campo"), true)
+      uiForm.messageTextContent = qsTr("Debe agregar al menos un campo")
+      uiForm.messageType = "error"
       return false
     }
 
     for (var i = 0; i < fieldsListModel.count; i++) {
       var field = fieldsListModel.get(i)
       if (field.fieldName.trim() === "") {
-        showMessage(qsTr("El campo %1 no tiene nombre").arg(i + 1), true)
+        uiForm.messageTextContent = qsTr("El campo %1 no tiene nombre").arg(i + 1)
+        uiForm.messageType = "error"
         return false
       }
       if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(field.fieldName)) {
-        showMessage(qsTr("El campo '%1' tiene un nombre inválido").arg(field.fieldName), true)
+        uiForm.messageTextContent = qsTr("El campo '%1' tiene un nombre inválido").arg(field.fieldName)
+        uiForm.messageType = "error"
         return false
       }
     }
 
+    uiForm.messageTextContent = ""
+    uiForm.messageType = "info"
     return true
   }
 
-  function createTableAction() {
-    if (!root.dbManager) {
-      showMessage(qsTr("DBManager no está configurado"), true)
-      return
-    }
-
-    var fields = fieldsListModel.getFieldsList()
-    var tableName = uiForm.tableNameText.trim()
-
-    if (root.dbManager.createTable(tableName, fields)) {
-      showMessage(qsTr("Tabla '%1' creada exitosamente").arg(tableName), false)
-      closeTimer.start()
-    } else {
-      showMessage(qsTr("Error: ") + root.dbManager.getLastError(), true)
-    }
-  }
-
-  // ── Timer de cierre automático tras éxito ────────────────────────────
-  Timer {
-    id: closeTimer
-    interval: 2000
-    onTriggered: root.close()
-  }
-
-  // ── Drawer de información de BD ────────────────────────────────────────
-  MMDrawer {
-    id: dbInfoDrawer
-    property string infoText: ""
-
-    drawerHeader.title: qsTr("Información de Base de Datos")
-
-    drawerContent: MMScrollView {
-      width: parent.width
-      height: Math.min(400 * __dp, (ApplicationWindow.window?.height ?? 600) * 0.5)
-
-      MMText {
-        width: parent.width
-        text: dbInfoDrawer.infoText
-        font: __style.p6
-        color: __style.nightColor
-        wrapMode: Text.WordWrap
-      }
-    }
-  }
-
-  // ── Estado interno ────────────────────────────────────────────────────
-  QtObject {
-    id: internal
-    property bool isError: false
-  }
-
   // ── Inicialización ─────────────────────────────────────────────────────
-  onOpened: clearMessage()
+  onOpened: {
+    uiForm.messageTextContent = ""
+    uiForm.messageType = "info"
+  }
 
   Component.onCompleted: fieldsListModel.addField()
 }
