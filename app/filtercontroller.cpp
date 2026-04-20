@@ -131,12 +131,37 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
+      // check for missing filter fields
+      QStringList missingFilterFields;
+      if ( newFieldFilter.layerId.isEmpty() ) missingFilterFields << QStringLiteral( "'layer_id'" );
+      if ( newFieldFilter.fieldName.isEmpty() ) missingFilterFields << QStringLiteral( "'field_name'" );
+      if ( newFieldFilter.sqlExpression.isEmpty() ) missingFilterFields << QStringLiteral( "'sql_expression'" );
+
+      if ( !missingFilterFields.isEmpty() )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Filter '%1' is missing required filter field(s): %2. Skipping." )
+                        .arg( newFieldFilter.filterName, missingFilterFields.join( QStringLiteral( ", " ) ) ) );
+        continue;
+      }
+
+      // check if target layer exists
       const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( project->mapLayer( newFieldFilter.layerId ) );
       if ( !filterLayer )
       {
         CoreUtils::log( QStringLiteral( "Feature Filtering" ),
-                        QStringLiteral( "Filter '%1' is not properly configured in the project. Skipping filter." )
-                        .arg( newFieldFilter.filterName ) );
+                        QStringLiteral( "Filter '%1' has no layer with ID '%2' found in project. Skipping." )
+                        .arg( newFieldFilter.filterName, newFieldFilter.layerId ) );
+        continue;
+      }
+
+      // check if target field of target layer exists
+      if ( filterLayer->fields().lookupField( newFieldFilter.fieldName ) < 0 )
+      {
+        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
+                        QStringLiteral( "Filter '%1' has no target field '%2' found on layer '%3' (%4). Skipping." )
+                        .arg( newFieldFilter.filterName, newFieldFilter.fieldName,
+                              filterLayer->name(), newFieldFilter.layerId ) );
         continue;
       }
 
