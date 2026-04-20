@@ -28,6 +28,20 @@ FilterController::FilterController( QObject *parent )
 {
 }
 
+void FilterController::updateFiltersActivated()
+{
+  bool anyActivated = false;
+  for ( const FieldFilter &filter : std::as_const( mFieldFilters ) )
+  {
+    if ( filter.value.isValid() && !filter.value.isNull() )
+    {
+      anyActivated = true;
+      break;
+    }
+  }
+  setFiltersActivated( anyActivated );
+}
+
 void FilterController::clearLayerFilters( const QString &layerId )
 {
   QgsMapLayer *layer = QgsProject::instance()->mapLayer( layerId );
@@ -51,6 +65,8 @@ void FilterController::clearLayerFilters( const QString &layerId )
       filter.value.clear();
     }
   }
+
+  updateFiltersActivated();
 }
 
 void FilterController::clearAllFilters()
@@ -454,17 +470,7 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   }
 
   applyFiltersToAllLayers();
-
-  bool anyActivated = false;
-  for ( const QVariant &value : std::as_const( newFilters ) )
-  {
-    if ( value.isValid() && !value.isNull() )
-    {
-      anyActivated = true;
-      break;
-    }
-  }
-  setFiltersActivated( anyActivated );
+  updateFiltersActivated();
 }
 
 bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
