@@ -59,8 +59,8 @@ void FilterController::clearAllFilters()
   {
     filter.value.clear();
   }
-  mFilteringEnabled = false;
-  emit hasFiltersEnabledChanged();
+  mFilteringActivated = false;
+  emit hasFiltersActivatedChanged();
 
   const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
@@ -83,18 +83,20 @@ void FilterController::clearAllFilters()
 void FilterController::loadFilterConfig( const QgsProject *project )
 {
   mFieldFilters.clear();
-  setFiltersEnabled( false );
+
+  setFiltersActivated( false );
 
   bool valueRead = false;
   const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
 
+  mFilteringAvailable = filteringAvailable;
+  emit hasFiltersAvailableChanged();
+
   //return early if filtering is not setup
-  if ( !valueRead )
+  if ( !filteringAvailable )
   {
     return;
   }
-  mFilteringAvailable = filteringAvailable;
-  emit hasFiltersAvailableChanged();
 
   const QString filtersDef = project->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Filters" ) );
   QJsonParseError jsonError;
@@ -379,12 +381,6 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
   const QString filterExpr = generateFilterExpression( layer->id() );
   const bool success = layer->setSubsetString( filterExpr );
 
-  if ( !filterExpr.isEmpty() && success && !mFilteringEnabled )
-  {
-    mFilteringEnabled = true;
-    emit hasFiltersEnabledChanged();
-  }
-
   qDebug() << "Applied filter to layer" << layer->name() << ":" << filterExpr << "success:" << success;
 
   // Trigger a layer refresh to ensure the filter takes effect
@@ -396,10 +392,6 @@ void FilterController::applyFiltersToLayer( QgsVectorLayer *layer )
 
 void FilterController::applyFiltersToAllLayers()
 {
-  // Change filters enabled to false before enabling filters to find out if any are active
-  mFilteringEnabled = false;
-  emit hasFiltersEnabledChanged();
-
   const QgsProject *project = QgsProject::instance();
   if ( !project )
     return;
@@ -420,17 +412,17 @@ bool FilterController::hasFiltersAvailable() const
   return mFilteringAvailable;
 }
 
-bool FilterController::hasFiltersEnabled() const
+bool FilterController::hasFiltersActivated() const
 {
-  return mFilteringEnabled;
+  return mFilteringActivated;
 }
 
-void FilterController::setFiltersEnabled( const bool filtersEnabled )
+void FilterController::setFiltersActivated( const bool filtersEnabled )
 {
-  if ( mFilteringEnabled != filtersEnabled )
+  if ( mFilteringActivated != filtersEnabled )
   {
-    mFilteringEnabled = filtersEnabled;
-    emit hasFiltersEnabledChanged();
+    mFilteringActivated = filtersEnabled;
+    emit hasFiltersActivatedChanged();
   }
 }
 
@@ -462,6 +454,17 @@ void FilterController::processFilters( const QVariantMap &newFilters )
   }
 
   applyFiltersToAllLayers();
+
+  bool anyActivated = false;
+  for ( const QVariant &value : std::as_const( newFilters ) )
+  {
+    if ( value.isValid() && !value.isNull() )
+    {
+      anyActivated = true;
+      break;
+    }
+  }
+  setFiltersActivated( anyActivated );
 }
 
 bool FilterController::hasActiveFilterOnLayer( const QString &layerId )

@@ -361,6 +361,7 @@ ApplicationWindow {
       MMToolbarButton {
         text: qsTr("Filters")
         iconSource: __style.filterIcon
+        visible: __activeProject.filterController?.filteringAvailable ?? false
         onClicked: {
           stateManager.state = "misc"
           filtersDrawerLoader.active = true

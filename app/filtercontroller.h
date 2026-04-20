@@ -76,10 +76,7 @@ class FilterController : public QObject
      */
     Q_PROPERTY( bool filteringAvailable READ hasFiltersAvailable NOTIFY hasFiltersAvailableChanged )
 
-    /**
-     * Whether filtering is currently active (can be temporarily disabled)
-     */
-    Q_PROPERTY( bool filteringEnabled READ hasFiltersEnabled WRITE setFiltersEnabled NOTIFY hasFiltersEnabledChanged )
+    Q_PROPERTY( bool filteringActivated READ hasFiltersActivated WRITE setFiltersActivated NOTIFY hasFiltersActivatedChanged )
 
   public:
     explicit FilterController( QObject *parent = nullptr );
@@ -127,16 +124,16 @@ class FilterController : public QObject
 
     bool hasFiltersAvailable() const;
 
-    bool hasFiltersEnabled() const;
+    bool hasFiltersActivated() const;
 
-    void setFiltersEnabled( bool filtersEnabled );
+    void setFiltersActivated( bool filtersEnabled );
 
 
   signals:
     void hasActiveFiltersChanged();
     void layerFilterChanged( const QString &layerId );
     void hasFiltersAvailableChanged();
-    void hasFiltersEnabledChanged();
+    void hasFiltersActivatedChanged();
 
   public slots:
 
@@ -175,7 +172,7 @@ class FilterController : public QObject
     QMap<QString, QString> mPredefinedSubsetStrings;
 
     bool mFilteringAvailable = false;
-    bool mFilteringEnabled = false;
+    bool mFilteringActivated = false;
 };
 
 #endif // FILTERCONTROLLER_H
