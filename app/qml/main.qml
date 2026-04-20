@@ -287,33 +287,7 @@ ApplicationWindow {
       }
   }
   */
-  // Diálogo para crear nuevas tablas // 2026
-  CreateTableDialog {
-      id: createTableDialog
-      parent: window
 
-      // Ahora usa el objeto global registrado en QML
-      dbManager: __dbManager
-
-      onOpened: {
-          stateManager.state = "misc"
-          console.log("Se abre ventana de crear tabla")
-
-        // ✅ Actualizar propiedades públicas del diálogo
-        if (__dbManager) {
-            createTableDialog.dbNameToShow = __dbManager.databaseName
-            createTableDialog.dbPathToShow = __dbManager.databasePath
-
-            console.log("DB nombre: " + __dbManager.databaseName)
-            console.log("DB ruta: " + __dbManager.databasePath)
-        }
-      }
-
-      onClosed: {
-          stateManager.state = "map"
-          console.log("Se cierra ventana de crear tabla")
-      }
-  }
 
   MMMapController {
     id: map
@@ -503,14 +477,12 @@ ApplicationWindow {
       // Elimina el diálogo createDatabaseDialog y reemplázalo con este botón en MMToolbar
 
       MMToolbarButton {
-          text: qsTr("Base de Datos")
+          text: qsTr("Tablas")
           iconSource: __style.addTableIcon
           visible: __activeProject.projectRole !== "reader"
           onClicked: {
               stateManager.state = "misc"
-              let dbPanel = mapPanelsStackView.push(createDatabasePanelComponent, {
-                  dbManager: __dbManager
-              }, StackView.PushTransition)
+              mapPanelsStackView.push(tablesControllerComponent, {}, StackView.PushTransition)
           }
       }
 
@@ -522,23 +494,6 @@ ApplicationWindow {
           let layerspanel = mapPanelsStackView.push( layersPanelComponent, {}, StackView.PushTransition )
         }
       }
-            /*MMToolbarButton {
-            text: qsTr("Base de Datos")
-            iconSource: __style.addTableIcon
-            visible: __activeProject.projectRole !== "reader"
-            onClicked: {
-              createDatabaseDialog.open()
-            }
-          }*/
-
-      MMToolbarButton {
-            text: qsTr("Tablas")
-           iconSource: __style.addTableIcon
-            visible: __activeProject.projectRole !== "reader"
-            onClicked: {
-              createTableDialog.open()
-            }
-          }
 
 
       MMToolbarButton {
@@ -759,24 +714,14 @@ ApplicationWindow {
   }
 
   Component {
-      id: createDatabasePanelComponent
+      id: tablesControllerComponent
 
-      CreateDataBasePanel {
-          id: createDataBasePanel
+      MMTablesController {
+          dbManager: __dbManager
 
           onClosed: {
               mapPanelsStackView.clear(StackView.PopTransition)
               stateManager.state = "map"
-          }
-
-          onDatabaseCreated: function(dbName, dbPath) {
-              console.log("BD creada: " + dbName + " en " + dbPath)
-              __notificationModel.addSuccess(
-                  qsTr("✓ Base de datos '%1' creada exitosamente").arg(dbName)
-              )
-            let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
-            formsStackManager.openForm( newPair, "add", "form" )
-
           }
       }
   }

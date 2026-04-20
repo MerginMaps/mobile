@@ -176,10 +176,12 @@ set(MM_QML
     settings/components/MMSettingsInput.qml
     settings/components/MMSettingsItem.qml
     settings/components/MMSettingsSwitch.qml
-    tables/CreateDataBasePanel.qml
-    tables/CreateTableDialog.qml
-    tables/CreateTableForm.qml
-    tables/DatabaseManagerWindow.qml
+    tables/MMTablesController.qml
+    tables/MMDatabaseManagerPage.qml
+    tables/MMCreateDatabasePage.qml
+    tables/MMCreateTableDrawer.qml
+    tables/components/MMCreateTableForm.qml
+    tables/components/MMDatabaseInfoDrawer.qml
     main.qml
     PARENT_SCOPE
 )
