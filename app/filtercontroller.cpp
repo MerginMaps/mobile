@@ -259,19 +259,16 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::DateFilter:
     {
-      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( filter.layerId ) );
-      const bool isDateTimeField = filterLayer && filterLayer->fields().field( filter.fieldName ).type() == QMetaType::QDateTime;
-
       const QVariantList values = filter.value.toList();
       if ( values.size() < 2 )
         return {};
-      const QVariant variantFrom = values.at( 0 );
-      const QVariant variantTo = values.at( 1 );
+      const QVariant &variantFrom = values.at( 0 );
+      const QVariant &variantTo = values.at( 1 );
 
       QString dateFrom;
       QString dateTo;
 
-      if ( isDateTimeField )
+      if ( isDateFilterDateTime( filter.filterId ) )
       {
         // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
         // so we must convert local datetimes to UTC before comparing.
@@ -297,7 +294,6 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         {
           QDateTime dateTimeTo = variantTo.toDateTime().toUTC();
           QTime timeTo = dateTimeTo.time();
-          // Round to end-of-minute so the "to" bound is inclusive regardless of whether the user picked midnight
           timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
           dateTimeTo.setTime( timeTo );
           dateTo = dateTimeTo.toString( isoFormat );
@@ -486,9 +482,9 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
   return !layer->subsetString().isEmpty();
 }
 
-bool FilterController::isDateFilterDateTime( const QString &filterId )
+bool FilterController::isDateFilterDateTime( const QString &filterId ) const
 {
-  for ( FieldFilter &filter : mFieldFilters )
+  for ( const FieldFilter &filter : mFieldFilters )
   {
     if ( filter.filterId == filterId )
     {
