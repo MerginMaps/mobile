@@ -32,12 +32,6 @@ void FilterController::clearLayerFilters( const QString &layerId )
 {
   QgsMapLayer *layer = QgsProject::instance()->mapLayers().value( layerId );
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-  if ( !vectorLayer )
-  {
-    CoreUtils::log( QStringLiteral( "Feature Filtering" ),
-                    QStringLiteral( "Layer '%1' is not available. Cannot clear its filters." ).arg( layerId ) );
-    return;
-  }
   vectorLayer->setSubsetString( QStringLiteral( "" ) );
 
   for ( FieldFilter &filter : mFieldFilters )
@@ -137,7 +131,7 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       newFieldFilter.sqlExpression = filterObject.value( QStringLiteral( "sql_expression" ) ).toString();
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
-      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( newFieldFilter.layerId ) );
+      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( project->mapLayer( newFieldFilter.layerId ) );
       if ( !filterLayer )
       {
         CoreUtils::log( QStringLiteral( "Feature Filtering" ),
@@ -381,12 +375,6 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
     return false;
 
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
-  if ( !layer )
-  {
-    CoreUtils::log( QStringLiteral( "Feature Filtering" ),
-                    QStringLiteral( "Layer '%1' is not available. Cannot check active filter." ).arg( layerId ) );
-    return false;
-  }
   return !layer->subsetString().isEmpty();
 }
 
@@ -397,13 +385,6 @@ bool FilterController::isDateFilterDateTime( const QString &filterId )
     if ( filter.filterId == filterId )
     {
       const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( filter.layerId ) );
-      if ( !layer )
-      {
-        CoreUtils::log( QStringLiteral( "Feature Filtering" ),
-                        QStringLiteral( "Layer '%1' for filter '%2' is not available." )
-                        .arg( filter.layerId, filter.filterName ) );
-        return false;
-      }
       const QMetaType::Type fieldType = layer->fields().field( filter.fieldName ).type();
       return fieldType == QMetaType::QDateTime;
     }
