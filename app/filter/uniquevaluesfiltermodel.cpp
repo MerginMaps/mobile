@@ -20,6 +20,13 @@ UniqueValuesFilterModel::UniqueValuesFilterModel( QObject *parent ) : QAbstractL
   connect( &mResultWatcher, &QFutureWatcher<QVariantList>::finished, this, &UniqueValuesFilterModel::onLoadingFinished );
 }
 
+QHash<int, QByteArray> UniqueValuesFilterModel::roleNames() const
+{
+  QHash<int, QByteArray> roleMap = QAbstractListModel::roleNames();
+  roleMap.insert( ValueRole, QStringLiteral( "value" ).toLatin1() );
+  return roleMap;
+}
+
 int UniqueValuesFilterModel::rowCount( const QModelIndex &parent ) const
 {
   Q_UNUSED( parent )
@@ -34,6 +41,9 @@ QVariant UniqueValuesFilterModel::data( const QModelIndex &index, int role ) con
   switch ( role )
   {
     case Qt::DisplayRole:
+      // for NULL values, which are gotten as empty strings, we want to return some meaningful text for users
+      return mItems.at( index.row() ).toString().isEmpty() ? QVariant( tr( "No value" ) ) : mItems.at( index.row() );
+    case ValueRole:
       return mItems.at( index.row() );
     default:
       return {};
@@ -105,7 +115,16 @@ QVariantList UniqueValuesFilterModel::loadUniqueValues( QgsVectorLayer *layer, i
 {
   std::unique_ptr<QgsVectorLayer> l( layer );
 
-  const QSet<QVariant> uniqueValues = l->uniqueValues( fieldIndex, 1000000 );
+  QSet<QVariant> uniqueValues = l->uniqueValues( fieldIndex, 1000000 );
+
+  uniqueValues << QVariant( QString() );
+
+  // both empty string and null value show up in the same way, let's remove one to have only one "No value" option in UI
+  const QVariant nullValidQVariant = QVariant( QMetaType( QMetaType::QString ) );
+  if ( uniqueValues.contains( QVariant( "" ) ) && uniqueValues.contains( nullValidQVariant ) )
+  {
+    uniqueValues.remove( QVariant( "" ) );
+  }
 
   QVariantList results;
 

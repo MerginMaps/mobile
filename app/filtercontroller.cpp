@@ -182,9 +182,29 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       break;
     }
     case FieldFilter::CheckboxFilter:
-    case FieldFilter::SingleSelectFilter:
     {
       expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
+      break;
+    }
+    case FieldFilter::SingleSelectFilter:
+    {
+      // check if the value is NULL and if it is search for both NULL and empty string
+      if ( QgsVariantUtils::isNull( filter.value.toList().at( 0 ) ) )
+      {
+        QStringList expressions;
+        QString expressionTemplate( expressionCopy );
+        expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "NULL" ) );
+        expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+        expressionTemplate = QString( expressionCopy );
+        expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "''" ) );
+        expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+
+        expressionCopy =  expressions.join( QStringLiteral( " OR " ) );
+      }
+      else
+      {
+        expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
+      }
       break;
     }
     case FieldFilter::NumberFilter:
@@ -257,12 +277,25 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         break;
       }
 
-      QStringList quotedValues;
+      QStringList expressions;
       for ( const QVariant &v : values )
       {
-        quotedValues << QgsExpression::quotedValue( v );
+        QString expressionTemplate( expressionCopy );
+        if ( QgsVariantUtils::isNull( v ) )
+        {
+          expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "NULL" ) );
+          expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+          expressionTemplate = QString( expressionCopy );
+          expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "''" ) );
+          expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+        }
+        else
+        {
+          expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( v ) );
+          expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+        }
       }
-      expressionCopy.replace( QStringLiteral( "@@values@@" ), quotedValues.join( QStringLiteral( ", " ) ) );
+      expressionCopy =  expressions.join( QStringLiteral( " OR " ) );
       break;
     }
   }
@@ -493,9 +526,6 @@ QVariantMap FilterController::getDropdownConfiguration( const QString &filterId 
   QVariantMap map;
 
   const QgsProject *project = QgsProject::instance();
-
-  if ( !project ) return {};
-
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( fieldFilter.layerId ) );
 
   if ( !layer ) return {};
