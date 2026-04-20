@@ -76,7 +76,7 @@ void FilterController::loadFilterConfig( const QgsProject *project )
   emit hasFiltersAvailableChanged();
 
   //return early if filtering is not setup
-  if ( !valueRead )
+  if ( !filteringAvailable )
   {
     return;
   }
