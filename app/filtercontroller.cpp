@@ -32,7 +32,17 @@ void FilterController::clearLayerFilters( const QString &layerId )
 {
   QgsMapLayer *layer = QgsProject::instance()->mapLayer( layerId );
   QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
-  vectorLayer->setSubsetString( QStringLiteral( "" ) );
+  if ( vectorLayer )
+  {
+    if ( mPredefinedSubsetStrings.contains( vectorLayer->id() ) )
+    {
+      vectorLayer->setSubsetString( mPredefinedSubsetStrings[ vectorLayer->id() ] );
+    }
+    else
+    {
+      vectorLayer->setSubsetString( QStringLiteral( "" ) );
+    }
+  }
 
   for ( FieldFilter filter : mFieldFilters )
   {
@@ -58,7 +68,14 @@ void FilterController::clearAllFilters()
     QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
     if ( vectorLayer )
     {
-      vectorLayer->setSubsetString( QStringLiteral( "" ) );
+      if ( mPredefinedSubsetStrings.contains( vectorLayer->id() ) )
+      {
+        vectorLayer->setSubsetString( mPredefinedSubsetStrings[ vectorLayer->id() ] );
+      }
+      else
+      {
+        vectorLayer->setSubsetString( QStringLiteral( "" ) );
+      }
     }
   }
 }
@@ -137,6 +154,16 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       newFieldFilter.layerId = filterObject.value( QStringLiteral( "layer_id" ) ).toString();
 
       mFieldFilters.append( newFieldFilter );
+    }
+  }
+
+  const QMap<QString, QgsMapLayer *> layers = project->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    const QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
+    if ( vectorLayer  && !vectorLayer->subsetString().isEmpty() )
+    {
+      mPredefinedSubsetStrings.insert( vectorLayer->id(), vectorLayer->subsetString() );
     }
   }
 }
@@ -246,6 +273,12 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 QString FilterController::generateFilterExpression( const QString &layerId ) const
 {
   QStringList expressions;
+
+  // prepend any subset string defined in QGIS
+  if ( mPredefinedSubsetStrings.contains( layerId ) )
+  {
+    expressions << mPredefinedSubsetStrings[ layerId ];
+  }
 
   for ( const FieldFilter &filter : mFieldFilters )
   {
