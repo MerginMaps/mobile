@@ -135,8 +135,8 @@ void FilterController::loadFilterConfig( const QgsProject *project )
       if ( !filterLayer )
       {
         CoreUtils::log( QStringLiteral( "Feature Filtering" ),
-                        QStringLiteral( "Layer '%1' for filter '%2' is not available in the project. Skipping filter." )
-                        .arg( newFieldFilter.layerId, newFieldFilter.filterName ) );
+                        QStringLiteral( "Filter '%1' is not properly configured in the project. Skipping filter." )
+                        .arg( newFieldFilter.filterName ) );
         continue;
       }
 
