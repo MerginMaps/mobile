@@ -143,6 +143,8 @@ class FilterController : public QObject
     void loadFilterConfig( const QgsProject *project );
 
   private:
+    void updateFiltersActivated(); // updates filtersActivated based on current mFieldFilters
+
     /**
      * @brief Applies filters to all vector layers in the current project
      */
