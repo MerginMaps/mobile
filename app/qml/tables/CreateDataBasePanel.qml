@@ -1,281 +1,185 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Window
 
 import mm 1.0 as MM
 
 import "../components"
 import "../inputs"
 
+/*
+ * CreateDataBasePanel — página de creación de base de datos SQLite.
+ * Sigue el patrón MMPage del resto de la app.
+ */
+
 MMPage {
-    id: root
+  id: root
 
-    pageHeader.title: qsTr( "Crear Base de datos" )
-    // Propiedades
-    property var dbManager: null
-    property int panelHeight: 0
+  // ── API pública ───────────────────────────────────────────────────────
+  property var dbManager: null
 
-    // Señales
-    signal closed()
-    signal databaseCreated(string dbName, string dbPath)
+  signal closed()
+  signal databaseCreated(string dbName, string dbPath)
 
-    //width: parent?.width ?? 0
-    //height: 600  // Altura del panel
+  // ── Cabecera ──────────────────────────────────────────────────────────
+  pageHeader {
+    title: qsTr("Crear Base de Datos")
+    titleFont: __style.h3
+    baseHeaderHeight: __style.row80
+  }
 
-    function back()
-    {
-      // close the last page; if there is only one, close the controller
-
-      if (pagesStackView.depth > 1) {
-        pagesStackView.pop( null )
-      }
-      else {
-        pagesStackView.clear()
-        root.closed()
-      }
-    }
-
-    StackView {
-      id: pagesStackView
-
-      width: ApplicationWindow.window?.width ?? 0
-      height: ApplicationWindow.window?.height ?? 0
-
-     // anchors.fill: parent
-    }
-    onBackClicked: root.back()
-    //Keys.onReleased: function( event ) {
-    //  if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-    //    event.accepted = true
-
-      //  if ( pagesStackView.depth === 1 ) {
-      //    root.close()
-      //  }
-      //  else {
-      //    pagesStackView.pop( StackView.PopTransition )
-      //  }
-     // }
-   // }
-
-pageContent: ScrollView {
-
-  width: parent.width
-  height: parent.height
-
-  contentWidth: availableWidth // to only scroll vertically
-  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-
-  Component {
-      id: databaseListPage
-
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: 15
-        spacing: 12
-
-        // Header con botón de cerrar
-       // RowLayout {
-       //     Layout.fillWidth: true
-         //   spacing: 10
-//
-//            MMText {
-//                text: "Crear Nueva Base de Datos"
- //               font.bold: true
-  //              font.pointSize: 12
- //               Layout.fillWidth: true
-//            }
-
-           // MMButton {
-           //     width: parent.width
-            //    anchors.bottom: parent.bottom
-             //   anchors.bottomMargin: root.hasToolbar ? __style.margin20 : ( __style.safeAreaBottom + __style.margin8 )
-            //    text: "✕"
-  //        //      implicitWidth: 40
-//          //      implicitHeight: 40
-            //    onClicked: root.closed()
-           //     background: Rectangle {
-           //         color: parent.hovered ? "#f44336" : "#e0e0e0"
-           //         radius: 4
-            //    }
-          //  }
-       // }
-
-        // Campos de entrada
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: 10
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 5
-
-                MMText {
-                    text: "Nombre de la Base de Datos:"
-                    font.bold: true
-                    font.pointSize: 10
-                }
-                Rectangle {
-                    Layout.fillWidth: true
-                    height: 40
-                    color: "lightgrey"
-                    radius: 4
-
-                    TextField {
-                        id: dbNameInput
-                        anchors.fill: parent
-                        anchors.margins: 5
-                        font.pointSize: 10
-                        placeholderText: "Ej: miproyecto"
-                    }
-                }
-            }
-
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 5
-
-                MMText {
-                    text: "Ubicación (opcional, Enter para predeterminada):"
-                    font.bold: true
-                    font.pointSize: 10
-                }
-                Rectangle {
-                    Layout.fillWidth: true
-                    height: 40
-                    color: "lightgrey"
-                    radius: 4
-
-                    TextField {
-                        id: dbPathInput
-                        anchors.fill: parent
-                        anchors.margins: 5
-                        font.pointSize: 10
-                        placeholderText: "Ej: E:/Mis Documentos/"
-                    }
-                }
-            }
-        }
-
-        // Mensajes
-        MMText {
-            id: successMessage
-            text: ""
-            color: "#4CAF50"
-            visible: text !== ""
-            wrapMode: Text.Wrap
-            Layout.fillWidth: true
-        }
-
-        MMText {
-            id: errorMessage
-            text: ""
-            color: "#d32f2f"
-            visible: text !== ""
-            wrapMode: Text.Wrap
-            Layout.fillWidth: true
-        }
-
-        Item { Layout.fillHeight: true }
-
-        // Botones
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 10
-
-            Button {
-                text: "Crear"
-                Layout.fillWidth: true
-                implicitHeight: 40
-                font.pointSize: 10
-
-                background: Rectangle {
-                    color: parent.hovered ? "#45a049" : "#4CAF50"
-                    radius: 4
-                }
-                contentItem: Text {
-                    text: parent.text
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                onClicked: createDatabase()
-            }
-
-            Button {
-                text: "Cancelar"
-                Layout.fillWidth: true
-                implicitHeight: 40
-                font.pointSize: 10
-
-                background: Rectangle {
-                    color: parent.hovered ? "#757575" : "#bdbdbd"
-                    radius: 4
-                }
-                contentItem: Text {
-                    text: parent.text
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                onClicked: root.closed()
-            }
-        }
+  Keys.onReleased: function( event ) {
+    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
+      event.accepted = true
+      root.closed()
     }
   }
 
-    Timer {
-        id: successTimer
-        interval: 2000
-        onTriggered: root.closed()
+  onBackClicked: function() {
+    console.log("msj: Sale del control de DB")
+    root.closed()
+  }
+
+
+  // ── Contenido principal ───────────────────────────────────────────────
+  pageContent: MMScrollView {
+    width: parent.width
+    height: parent.height
+
+
+
+    ColumnLayout {
+      width: parent.width
+      spacing: __style.spacing20
+
+      // Campo: nombre de la BD
+      MMTextInput {
+        id: dbNameInput
+        Layout.fillWidth: true
+        title: qsTr("Nombre de la Base de Datos")
+        placeholderText: qsTr("Ej: miproyecto")
+      }
+
+      // Campo: ubicación (opcional)
+      MMTextInput {
+        id: dbPathInput
+        Layout.fillWidth: true
+        title: qsTr("Ubicación (dejar vacío para ruta predeterminada)")
+        placeholderText: qsTr("Ej: E:/MisDocumentos/")
+      }
+
+      // Mensaje de éxito
+      Rectangle {
+        id: successBox
+        Layout.fillWidth: true
+        implicitHeight: successText.implicitHeight + __style.margin16 * 2
+        visible: successText.text !== ""
+        color: __style.lightGreenColor
+        radius: __style.radius12
+        border.color: __style.grassColor
+        border.width: __style.width1
+
+        MMText {
+          id: successText
+          anchors { left: parent.left; right: parent.right; top: parent.top; margins: __style.margin16 }
+          text: ""
+          font: __style.p5
+          color: __style.forestColor
+          wrapMode: Text.WordWrap
+        }
+      }
+
+      // Mensaje de error
+      Rectangle {
+        id: errorBox
+        Layout.fillWidth: true
+        implicitHeight: errorText.implicitHeight + __style.margin16 * 2
+        visible: errorText.text !== ""
+        color: __style.negativeLightColor
+        radius: __style.radius12
+        border.color: __style.grapeColor
+        border.width: __style.width1
+
+        MMText {
+          id: errorText
+          anchors { left: parent.left; right: parent.right; top: parent.top; margins: __style.margin16 }
+          text: ""
+          font: __style.p5
+          color: __style.grapeColor
+          wrapMode: Text.WordWrap
+        }
+      }
+
+      Item { implicitHeight: __style.spacing20 }
+
+      // Botones de acción
+      RowLayout {
+        Layout.fillWidth: true
+        spacing: __style.spacing12
+
+        MMButton {
+          text: qsTr("Crear")
+          Layout.fillWidth: true
+          onClicked: createDatabase()
+        }
+
+        MMButton {
+          text: qsTr("Cancelar")
+          type: MMButton.Types.Secondary
+          Layout.fillWidth: true
+          onClicked: root.closed()
+        }
+      }
+    }
+  }
+
+  // ── Timer de cierre automático tras éxito ─────────────────────────────
+  Timer {
+    id: successTimer
+    interval: 2000
+    onTriggered: root.closed()
+  }
+
+  // ── Lógica de creación ─────────────────────────────────────────────────
+  function createDatabase() {
+    if (dbNameInput.text.trim() === "") {
+      errorText.text = qsTr("El nombre no puede estar vacío")
+      successText.text = ""
+      return
     }
 
-    function createDatabase() {
-        if (dbNameInput.text.trim() === "") {
-            errorMessage.text = "El nombre no puede estar vacío"
-            return
-        }
+    var dbPath = dbPathInput.text.trim()
+    var dbName = dbNameInput.text.trim()
 
-        // Construir ruta completa
-        var dbPath = dbPathInput.text.trim()
-        var dbName = dbNameInput.text.trim()
+    if (dbPath === "") dbPath = "./"
+    if (!dbPath.endsWith("/") && !dbPath.endsWith("\\")) dbPath += "/"
 
-        // Si dbPath está vacío, usar ruta por defecto
-        if (dbPath === "") {
-            dbPath = "./"
-        }
+    var fullPath = dbPath + dbName + ".db"
+    console.log("Intentando crear BD en: " + fullPath)
 
-        // Asegurar que termina con separador
-        if (!dbPath.endsWith("/") && !dbPath.endsWith("\\")) {
-            dbPath += "/"
-        }
-
-        // Agregar el nombre del archivo con extensión .db
-        var fullPath = dbPath + dbName + ".db"
-
-        console.log("Intentando crear BD en: " + fullPath)
-
-        if (dbManager && dbManager.initializeDatabase(fullPath)) {
-            successMessage.text = "✓ Base de datos creada en:\n" + dbManager.databasePath
-            errorMessage.text = ""
-            dbNameInput.text = ""
-            dbPathInput.text = ""
-            root.databaseCreated(dbName, dbManager.databasePath)
-            successTimer.start()
-        } else {
-            errorMessage.text = "Error: " + (dbManager ? dbManager.getLastError() : "DBManager no disponible")
-            successMessage.text = ""
-        }
+    if (dbManager && dbManager.initializeDatabase(fullPath)) {
+      successText.text = qsTr("Base de datos creada en:\n") + dbManager.databasePath
+      errorText.text = ""
+      dbNameInput.text = ""
+      dbPathInput.text = ""
+      root.databaseCreated(dbName, dbManager.databasePath)
+      successTimer.start()
+    } else {
+      errorText.text = qsTr("Error: ") + (dbManager ? dbManager.getLastError() : qsTr("DBManager no disponible"))
+      successText.text = ""
     }
+  }
 
-    Component.onCompleted: {
-        console.log("CreateDatabasePanel cargado")
-        let item = pagesStackView.push( databaseListPage, {}, StackView.Immediate )
-        item.forceActiveFocus()
-
-    }
- }
+  Component.onCompleted: {
+    console.log("CreateDatabasePanel cargado")
+  }
 }

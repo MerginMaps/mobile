@@ -1,445 +1,473 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
+import mm 1.0 as MM
+
+import "../components"
+import "../inputs"
+
+/*
+ * CreateTableForm — formulario visual para definir campos de una tabla.
+ * Componente de solo presentación; toda la lógica vive en CreateTableDialog.
+ * Usa el design-system (__style) en lugar de colores y fuentes hardcodeados.
+ */
+
 Item {
-    id: root
+  id: root
 
-    // Remove fixed dimensions — the parent (Dialog) controls sizing
-    // width: 900  (removed)
-    // height: 220 (removed)
+  // ── Alias hacia los campos internos ──────────────────────────────────
+  property alias dbNameFieldText:    dbNameField.text
+  property alias dbPathFieldText:    dbPathField.text
+  property alias tableNameText:      tableNameField.text
+  property alias fieldsModel:        fieldsRepeater.model
+  property alias messageTextContent: messageText.text
+  property string messageType: "info"   // "info" | "error"
 
-    // Mobile breakpoint: forms narrower than 480 logical pixels
-    readonly property bool isMobile: width > 0 && width < 480
+  // ── Señales hacia la lógica ───────────────────────────────────────────
+  signal showDbInfoRequested()
+  signal addFieldRequested()
+  signal moveFieldUpRequested(int index)
+  signal moveFieldDownRequested(int index)
+  signal removeFieldRequested(int index)
 
-    // Adaptive spacing and margins
-    readonly property real layoutMargin: isMobile ? 8 : 15
-    readonly property real layoutSpacing: isMobile ? 8 : 15
-    readonly property real innerMargin: isMobile ? 6 : 10
-    readonly property real innerSpacing: isMobile ? 5 : 8
+  // ── Layout raíz ───────────────────────────────────────────────────────
+  ColumnLayout {
+    anchors.fill: parent
+    spacing: __style.spacing12
 
-    // Adaptive font sizes
-    readonly property real labelFontSize: isMobile ? 9 : 8
-    readonly property real inputFontSize: isMobile ? 10 : 8
-    readonly property real messageFontSize: isMobile ? 10 : 10
+    // ── SECCIÓN 1: Info de la BD ──────────────────────────────────────
+    Rectangle {
+      Layout.fillWidth: true
+      implicitHeight: dbInfoColumn.implicitHeight + __style.margin20 * 2
+      color: __style.lightGreenColor
+      radius: __style.radius12
+      border.color: __style.greyColor
+      border.width: __style.width1
 
-    // Minimum touch target height for mobile (44px), compact on desktop
-    readonly property real inputHeight: isMobile ? 44 : 32
-    readonly property real buttonMinHeight: isMobile ? 44 : 35
+      ColumnLayout {
+        id: dbInfoColumn
+        anchors { top: parent.top; left: parent.left; right: parent.right; margins: __style.margin16 }
+        spacing: __style.spacing12
 
-    // =====================================================================
-    // PROPIEDADES EXPUESTAS (ALIAS)
-    // =====================================================================
-    property alias dbNameFieldText: dbNameField.text
-    property alias dbPathFieldText: dbPathField.text
-    property alias tableNameText: tableNameField.text
-    property alias fieldsModel: fieldsRepeater.model
-
-    // Propiedades para los mensajes
-    property alias messageTextContent: messageText.text
-    property string messageType: "info"
-
-    // =====================================================================
-    // SEÑALES HACIA LA LÓGICA
-    // =====================================================================
-    signal showDbInfoRequested()
-    signal addFieldRequested()
-    signal moveFieldUpRequested(int index)
-    signal moveFieldDownRequested(int index)
-    signal removeFieldRequested(int index)
-
-    ColumnLayout {
-        id: mainLayout
-        anchors.fill: parent
-        anchors.margins: root.layoutMargin
-        spacing: root.layoutSpacing
-
-        // =====================================================================
-        // SECCIÓN 1: INFO DE LA BD
-        // =====================================================================
-        GroupBox {
-            id: dbInfoGroup
-            title: "Información de Base de Datos"
-            Layout.fillWidth: true
-            Layout.preferredHeight: root.isMobile ? 140 : 100
-            font.pointSize: root.labelFontSize
-
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: root.innerMargin
-                spacing: root.innerSpacing
-
-                // On mobile, stack the two fields vertically; on desktop use side by side
-                GridLayout {
-                    Layout.fillWidth: true
-                    columns: root.isMobile ? 1 : 2
-                    rowSpacing: root.innerSpacing
-                    columnSpacing: 15
-
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: root.isMobile ? 3 : 5
-
-                        Text {
-                            text: "Nombre de BD:"
-                            font.bold: true
-                            font.pointSize: root.labelFontSize
-                            color: "#333"
-                        }
-                        TextField {
-                            id: dbNameField
-                            placeholderText: "Ej: miproyecto"
-                            readOnly: true
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: root.inputHeight
-                            font.pointSize: root.inputFontSize
-                            background: Rectangle {
-                                border.color: "#ddd"
-                                border.width: 1
-                                radius: 4
-                                color: "#f5f5f5"
-                            }
-                        }
-                    }
-
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: root.isMobile ? 3 : 5
-
-                        Text {
-                            text: "Ubicación:"
-                            font.pointSize: root.labelFontSize
-                            font.bold: true
-                            color: "#333"
-                        }
-                        TextField {
-                            id: dbPathField
-                            placeholderText: "Ruta de almacenamiento"
-                            readOnly: true
-                            font.pointSize: root.inputFontSize
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: root.inputHeight
-                            background: Rectangle {
-                                border.color: "#ddd"
-                                border.width: 1
-                                radius: 4
-                                color: "#f5f5f5"
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    text: "Ver Información Completa de BD"
-                    Layout.alignment: Qt.AlignRight
-                    implicitHeight: root.buttonMinHeight
-                    onClicked: root.showDbInfoRequested()
-                }
-            }
+        MMText {
+          text: qsTr("Información de Base de Datos")
+          font: __style.t3
+          color: __style.forestColor
         }
 
-        // =====================================================================
-        // SECCIÓN 2: NOMBRE DE TABLA
-        // =====================================================================
-        GroupBox {
-            id: tableNameGroup
-            title: "Nombre de la Tabla"
+        GridLayout {
+          Layout.fillWidth: true
+          columns: width >= 480 * __dp ? 2 : 1
+          rowSpacing: __style.spacing10
+          columnSpacing: __style.spacing12
+
+          // Nombre BD (solo lectura)
+          ColumnLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: root.isMobile ? 100 : 80
-            font.pointSize: root.labelFontSize
+            spacing: __style.spacing5
 
-            RowLayout {
+            MMText { text: qsTr("Nombre de BD:"); font: __style.t4; color: __style.forestColor }
+
+            Rectangle {
+              Layout.fillWidth: true
+              implicitHeight: __style.row50
+              color: __style.polarColor
+              radius: __style.radius12
+              border.color: __style.greyColor
+              border.width: __style.width1
+
+              TextField {
+                id: dbNameField
                 anchors.fill: parent
-                anchors.margins: root.innerMargin
-                spacing: 0
-
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 0
-
-                    Text {
-                        text: "Nombre de la tabla (solo letras, números, guiones bajos):"
-                        font.pointSize: root.labelFontSize
-                        color: "#555"
-                        wrapMode: Text.WordWrap
-                        Layout.fillWidth: true
-                    }
-                    TextField {
-                        id: tableNameField
-                        placeholderText: "Ej: usuarios, productos, clientes"
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: root.inputHeight
-                        font.pointSize: root.inputFontSize
-                        background: Rectangle {
-                            border.color: tableNameField.activeFocus ? "#4CAF50" : "#ddd"
-                            border.width: 1
-                            radius: 4
-                            color: "#fff"
-                        }
-                    }
-                }
+                leftPadding: __style.margin12
+                rightPadding: __style.margin12
+                topPadding: 0
+                bottomPadding: 0
+                readOnly: true
+                color: __style.nightColor
+                font: __style.p5
+                placeholderText: qsTr("Ej: miproyecto")
+                placeholderTextColor: __style.darkGreyColor
+                background: Item {}
+              }
             }
+          }
+
+          // Ubicación BD (solo lectura)
+          ColumnLayout {
+            Layout.fillWidth: true
+            spacing: __style.spacing5
+
+            MMText { text: qsTr("Ubicación:"); font: __style.t4; color: __style.forestColor }
+
+            Rectangle {
+              Layout.fillWidth: true
+              implicitHeight: __style.row50
+              color: __style.polarColor
+              radius: __style.radius12
+              border.color: __style.greyColor
+              border.width: __style.width1
+
+              TextField {
+                id: dbPathField
+                anchors.fill: parent
+                leftPadding: __style.margin12
+                rightPadding: __style.margin12
+                topPadding: 0
+                bottomPadding: 0
+                readOnly: true
+                color: __style.nightColor
+                font: __style.p5
+                placeholderText: qsTr("Ruta de almacenamiento")
+                placeholderTextColor: __style.darkGreyColor
+                background: Item {}
+              }
+            }
+          }
         }
 
-        // =====================================================================
-        // SECCIÓN 3: DEFINICIÓN DE CAMPOS
-        // =====================================================================
-        GroupBox {
-            id: fieldsGroup
-            title: "Definición de Campos"
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            font.pointSize: root.labelFontSize
-
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: root.innerMargin
-                spacing: root.innerSpacing
-
-                // Header row — hidden on mobile to save space (labels appear inline in each row)
-                Rectangle {
-                    id: headerRow
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 40
-                    color: "#f0f0f0"
-                    border.color: "#ddd"
-                    border.width: 1
-                    radius: 4
-                    visible: !root.isMobile
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 8
-                        spacing: 10
-
-                        Text { text: "Nombre del Campo"; font.pointSize: root.labelFontSize; font.bold: true; Layout.fillWidth: true; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Tipo de Dato"; font.pointSize: root.labelFontSize; font.bold: true; Layout.preferredWidth: 110; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Tamaño (solo TEXT)"; font.pointSize: root.labelFontSize; font.bold: true; Layout.preferredWidth: 120; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                        Text { text: "Acciones"; font.pointSize: root.labelFontSize; font.bold: true; Layout.preferredWidth: 120; Layout.fillHeight: true; verticalAlignment: Text.AlignVCenter }
-                    }
-                }
-
-                ScrollView {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    clip: true
-
-                    ColumnLayout {
-                        id: fieldsContainer
-                        // Subtract horizontal margins applied on both sides inside the GroupBox
-                        width: fieldsGroup.width - root.innerMargin * 2
-                        spacing: root.innerSpacing
-
-                        Repeater {
-                            id: fieldsRepeater
-
-                            delegate: Rectangle {
-                                id: fieldRow
-                                Layout.fillWidth: true
-                                // Mobile: two stacked input rows + margins; desktop: single row
-                                Layout.preferredHeight: root.isMobile
-                                    ? (root.inputHeight * 2 + 4 + root.innerMargin * 2)
-                                    : 50
-                                border.color: "#e0e0e0"
-                                border.width: 1
-                                radius: 4
-                                color: index % 2 === 0 ? "#fafafa" : "#fff"
-
-                                // Desktop: single-row layout
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 8
-                                    spacing: 10
-                                    visible: !root.isMobile
-
-                                    TextField {
-                                        id: fieldNameInput
-                                        placeholderText: "Ej: id, nombre, email"
-                                        text: model.fieldName
-                                        Layout.fillWidth: true
-                                        Layout.preferredHeight: root.inputHeight
-                                        font.pointSize: root.inputFontSize
-                                        onTextChanged: model.fieldName = text
-                                        background: Rectangle { border.color: fieldNameInput.activeFocus ? "#4CAF50" : "#ddd"; border.width: 1; radius: 3; color: "#fff" }
-                                    }
-
-                                    ComboBox {
-                                        id: typeCombo
-                                        model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
-                                        currentIndex: find(model.fieldType)
-                                        Layout.preferredWidth: 110
-                                        Layout.preferredHeight: root.inputHeight
-                                        onCurrentTextChanged: model.fieldType = currentText
-                                        background: Rectangle { border.color: "#ddd"; border.width: 1; radius: 3; color: "#fff" }
-                                    }
-
-                                    TextField {
-                                        id: sizeInput
-                                        placeholderText: "Ej: 100, 255"
-                                        text: model.fieldSize
-                                        enabled: typeCombo.currentText === "TEXT"
-                                        Layout.preferredWidth: 120
-                                        Layout.preferredHeight: root.inputHeight
-                                        inputMethodHints: Qt.ImhDigitsOnly
-                                        font.pointSize: root.inputFontSize
-                                        onTextChanged: model.fieldSize = text
-                                        background: Rectangle { border.color: sizeInput.activeFocus ? "#4CAF50" : "#ddd"; border.width: 1; radius: 3; color: enabled ? "#fff" : "#f5f5f5" }
-                                    }
-
-                                    RowLayout {
-                                        spacing: 5
-
-                                        Button {
-                                            text: "⬆"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            enabled: index > 0
-                                            onClicked: root.moveFieldUpRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#4CAF50" : "#e0e0e0"; radius: 3 }
-                                        }
-
-                                        Button {
-                                            text: "⬇"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            enabled: index < fieldsRepeater.count - 1
-                                            onClicked: root.moveFieldDownRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#4CAF50" : "#e0e0e0"; radius: 3 }
-                                        }
-
-                                        Button {
-                                            text: "✕"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            onClicked: root.removeFieldRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#f44336" : "#e0e0e0"; radius: 3 }
-                                        }
-                                    }
-                                }
-
-                                // Mobile: stacked/card layout
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 8
-                                    spacing: 4
-                                    visible: root.isMobile
-
-                                    RowLayout {
-                                        Layout.fillWidth: true
-                                        spacing: 6
-
-                                        TextField {
-                                            id: fieldNameInputMobile
-                                            placeholderText: "Nombre campo"
-                                            text: model.fieldName
-                                            Layout.fillWidth: true
-                                            Layout.preferredHeight: root.inputHeight
-                                            font.pointSize: root.inputFontSize
-                                            onTextChanged: model.fieldName = text
-                                            background: Rectangle { border.color: fieldNameInputMobile.activeFocus ? "#4CAF50" : "#ddd"; border.width: 1; radius: 3; color: "#fff" }
-                                        }
-
-                                        ComboBox {
-                                            id: typeComboMobile
-                                            model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
-                                            currentIndex: find(model.fieldType)
-                                            Layout.preferredWidth: 100
-                                            Layout.preferredHeight: root.inputHeight
-                                            onCurrentTextChanged: model.fieldType = currentText
-                                            background: Rectangle { border.color: "#ddd"; border.width: 1; radius: 3; color: "#fff" }
-                                        }
-                                    }
-
-                                    RowLayout {
-                                        Layout.fillWidth: true
-                                        spacing: 6
-
-                                        TextField {
-                                            id: sizeInputMobile
-                                            placeholderText: "Tamaño (solo TEXT)"
-                                            text: model.fieldSize
-                                            enabled: typeComboMobile.currentText === "TEXT"
-                                            Layout.fillWidth: true
-                                            Layout.preferredHeight: root.inputHeight
-                                            inputMethodHints: Qt.ImhDigitsOnly
-                                            font.pointSize: root.inputFontSize
-                                            onTextChanged: model.fieldSize = text
-                                            background: Rectangle { border.color: sizeInputMobile.activeFocus ? "#4CAF50" : "#ddd"; border.width: 1; radius: 3; color: enabled ? "#fff" : "#f5f5f5" }
-                                        }
-
-                                        Button {
-                                            text: "⬆"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            enabled: index > 0
-                                            onClicked: root.moveFieldUpRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#4CAF50" : "#e0e0e0"; radius: 3 }
-                                        }
-
-                                        Button {
-                                            text: "⬇"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            enabled: index < fieldsRepeater.count - 1
-                                            onClicked: root.moveFieldDownRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#4CAF50" : "#e0e0e0"; radius: 3 }
-                                        }
-
-                                        Button {
-                                            text: "✕"
-                                            implicitWidth: root.buttonMinHeight
-                                            implicitHeight: root.buttonMinHeight
-                                            onClicked: root.removeFieldRequested(index)
-                                            background: Rectangle { color: parent.hovered ? "#f44336" : "#e0e0e0"; radius: 3 }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    id: addFieldButton
-                    text: "+ Agregar Campo"
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: root.buttonMinHeight
-                    onClicked: root.addFieldRequested()
-
-                    background: Rectangle { color: addFieldButton.hovered ? "#45a049" : "#4CAF50"; radius: 4 }
-                    contentItem: Text {
-                        text: addFieldButton.text
-                        color: "white"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        font.bold: true
-                        font.pointSize: root.inputFontSize
-                    }
-                }
-            }
+        MMButton {
+          text: qsTr("Ver Información Completa")
+          type: MMButton.Types.Secondary
+          size: MMButton.Sizes.Small
+          Layout.alignment: Qt.AlignRight
+          onClicked: root.showDbInfoRequested()
         }
-
-        // =====================================================================
-        // SECCIÓN 4: MENSAJES
-        // =====================================================================
-        Rectangle {
-            id: messageBox
-            Layout.fillWidth: true
-            Layout.preferredHeight: root.isMobile ? 70 : 60
-            color: root.messageType === "error" ? "#ffebee" : "#e3f2fd"
-            border.color: root.messageType === "error" ? "#ef9a9a" : "#90caf9"
-            border.width: 1
-            radius: 4
-            visible: messageText.text !== ""
-
-            Text {
-                id: messageText
-                anchors.fill: parent
-                anchors.margins: 10
-                wrapMode: Text.WordWrap
-                color: root.messageType === "error" ? "#d32f2f" : "#1976d2"
-                font.pointSize: root.messageFontSize
-            }
-        }
+      }
     }
+
+    // ── SECCIÓN 2: Nombre de la tabla ─────────────────────────────────
+    Rectangle {
+      Layout.fillWidth: true
+      implicitHeight: tableNameColumn.implicitHeight + __style.margin20 * 2
+      color: __style.lightGreenColor
+      radius: __style.radius12
+      border.color: __style.greyColor
+      border.width: __style.width1
+
+      ColumnLayout {
+        id: tableNameColumn
+        anchors { top: parent.top; left: parent.left; right: parent.right; margins: __style.margin16 }
+        spacing: __style.spacing10
+
+        MMText { text: qsTr("Nombre de la Tabla"); font: __style.t3; color: __style.forestColor }
+
+        MMText {
+          text: qsTr("Solo letras, números y guiones bajos")
+          font: __style.p6
+          color: __style.nightColor
+          Layout.fillWidth: true
+        }
+
+        MMTextInput {
+          id: tableNameField
+          Layout.fillWidth: true
+          placeholderText: qsTr("Ej: usuarios, productos, clientes")
+        }
+      }
+    }
+
+    // ── SECCIÓN 3: Definición de campos ───────────────────────────────
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      color: __style.lightGreenColor
+      radius: __style.radius12
+      border.color: __style.greyColor
+      border.width: __style.width1
+
+      ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: __style.margin16
+        spacing: __style.spacing10
+
+        MMText { text: qsTr("Definición de Campos"); font: __style.t3; color: __style.forestColor }
+
+        // Cabecera de columnas (solo escritorio)
+        Rectangle {
+          Layout.fillWidth: true
+          implicitHeight: __style.row40
+          color: __style.forestColor
+          radius: __style.radius8
+          visible: root.width >= 480 * __dp
+
+          RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: __style.margin12
+            anchors.rightMargin: __style.margin12
+            spacing: __style.spacing10
+
+            MMText { text: qsTr("Nombre del Campo"); font: __style.t4; color: __style.polarColor; Layout.fillWidth: true }
+            MMText { text: qsTr("Tipo");             font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 100 * __dp }
+            MMText { text: qsTr("Tamaño");           font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 90 * __dp }
+            MMText { text: qsTr("Acciones");         font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 100 * __dp }
+          }
+        }
+
+        // Lista de campos con scroll
+        ScrollView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          clip: true
+
+          ColumnLayout {
+            width: root.width - __style.margin16 * 2
+            spacing: __style.spacing5
+
+            Repeater {
+              id: fieldsRepeater
+
+              delegate: Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: root.width < 480 * __dp
+                                ? (__style.row50 * 2 + __style.spacing10 + __style.margin16 * 2)
+                                : __style.row60
+                color: index % 2 === 0 ? __style.polarColor : __style.lightGreenColor
+                radius: __style.radius8
+                border.color: __style.greyColor
+                border.width: __style.width1
+
+                // ── Escritorio: fila única ──────────────────────────
+                RowLayout {
+                  anchors.fill: parent
+                  anchors.margins: __style.margin8
+                  spacing: __style.spacing10
+                  visible: root.width >= 480 * __dp
+
+                  // Nombre
+                  Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: __style.row50
+                    color: __style.polarColor
+                    radius: __style.radius8
+                    border.color: fieldNameInput.activeFocus ? __style.forestColor : __style.greyColor
+                    border.width: fieldNameInput.activeFocus ? __style.width2 : __style.width1
+
+                    TextField {
+                      id: fieldNameInput
+                      anchors.fill: parent
+                      leftPadding: __style.margin12
+                      rightPadding: __style.margin12
+                      topPadding: 0; bottomPadding: 0
+                      text: model.fieldName
+                      color: __style.nightColor
+                      font: __style.p5
+                      placeholderText: qsTr("Ej: nombre")
+                      placeholderTextColor: __style.darkGreyColor
+                      background: Item {}
+                      onTextEdited: model.fieldName = text
+                    }
+                  }
+
+                  // Tipo
+                  Rectangle {
+                    Layout.preferredWidth: 100 * __dp
+                    Layout.preferredHeight: __style.row50
+                    color: __style.polarColor
+                    radius: __style.radius8
+                    border.color: __style.greyColor
+                    border.width: __style.width1
+
+                    ComboBox {
+                      id: typeCombo
+                      anchors.fill: parent
+                      model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
+                      currentIndex: find(model.fieldType)
+                      font: __style.p5
+                      background: Item {}
+                      contentItem: MMText {
+                        text: typeCombo.displayText
+                        font: __style.p5
+                        color: __style.nightColor
+                        leftPadding: __style.margin8
+                        verticalAlignment: Text.AlignVCenter
+                      }
+                      onCurrentTextChanged: model.fieldType = currentText
+                    }
+                  }
+
+                  // Tamaño (solo TEXT)
+                  Rectangle {
+                    Layout.preferredWidth: 90 * __dp
+                    Layout.preferredHeight: __style.row50
+                    color: typeCombo.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
+                    radius: __style.radius8
+                    border.color: sizeInput.activeFocus ? __style.forestColor : __style.greyColor
+                    border.width: sizeInput.activeFocus ? __style.width2 : __style.width1
+
+                    TextField {
+                      id: sizeInput
+                      anchors.fill: parent
+                      leftPadding: __style.margin8
+                      rightPadding: __style.margin8
+                      topPadding: 0; bottomPadding: 0
+                      text: model.fieldSize
+                      enabled: typeCombo.currentText === "TEXT"
+                      color: enabled ? __style.nightColor : __style.darkGreenColor
+                      font: __style.p5
+                      inputMethodHints: Qt.ImhDigitsOnly
+                      placeholderText: qsTr("Ej: 255")
+                      placeholderTextColor: __style.darkGreyColor
+                      background: Item {}
+                      onTextEdited: model.fieldSize = text
+                    }
+                  }
+
+                  // Acciones
+                  RowLayout {
+                    Layout.preferredWidth: 100 * __dp
+                    spacing: __style.spacing5
+
+                    MMRoundButton { iconSource: __style.arrowUpIcon;   enabled: index > 0;                        onClicked: root.moveFieldUpRequested(index) }
+                    MMRoundButton { iconSource: __style.arrowDownIcon; enabled: index < fieldsRepeater.count - 1; onClicked: root.moveFieldDownRequested(index) }
+                    MMRoundButton { iconSource: __style.closeIcon;                                                onClicked: root.removeFieldRequested(index) }
+                  }
+                }
+
+                // ── Móvil: apilado ──────────────────────────────────
+                ColumnLayout {
+                  anchors.fill: parent
+                  anchors.margins: __style.margin8
+                  spacing: __style.spacing5
+                  visible: root.width < 480 * __dp
+
+                  RowLayout {
+                    Layout.fillWidth: true
+                    spacing: __style.spacing10
+
+                    // Nombre (móvil)
+                    Rectangle {
+                      Layout.fillWidth: true
+                      Layout.preferredHeight: __style.row50
+                      color: __style.polarColor
+                      radius: __style.radius8
+                      border.color: fieldNameMobile.activeFocus ? __style.forestColor : __style.greyColor
+                      border.width: fieldNameMobile.activeFocus ? __style.width2 : __style.width1
+
+                      TextField {
+                        id: fieldNameMobile
+                        anchors.fill: parent
+                        leftPadding: __style.margin12
+                        rightPadding: __style.margin12
+                        topPadding: 0; bottomPadding: 0
+                        text: model.fieldName
+                        color: __style.nightColor
+                        font: __style.p5
+                        placeholderText: qsTr("Nombre campo")
+                        placeholderTextColor: __style.darkGreyColor
+                        background: Item {}
+                        onTextEdited: model.fieldName = text
+                      }
+                    }
+
+                    // Tipo (móvil)
+                    Rectangle {
+                      Layout.preferredWidth: 90 * __dp
+                      Layout.preferredHeight: __style.row50
+                      color: __style.polarColor
+                      radius: __style.radius8
+                      border.color: __style.greyColor
+                      border.width: __style.width1
+
+                      ComboBox {
+                        id: typeComboMobile
+                        anchors.fill: parent
+                        model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
+                        currentIndex: find(model.fieldType)
+                        font: __style.p5
+                        background: Item {}
+                        contentItem: MMText {
+                          text: typeComboMobile.displayText
+                          font: __style.p5
+                          color: __style.nightColor
+                          leftPadding: __style.margin8
+                          verticalAlignment: Text.AlignVCenter
+                        }
+                        onCurrentTextChanged: model.fieldType = currentText
+                      }
+                    }
+                  }
+
+                  RowLayout {
+                    Layout.fillWidth: true
+                    spacing: __style.spacing10
+
+                    // Tamaño (móvil)
+                    Rectangle {
+                      Layout.fillWidth: true
+                      Layout.preferredHeight: __style.row50
+                      color: typeComboMobile.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
+                      radius: __style.radius8
+                      border.color: sizeMobile.activeFocus ? __style.forestColor : __style.greyColor
+                      border.width: sizeMobile.activeFocus ? __style.width2 : __style.width1
+
+                      TextField {
+                        id: sizeMobile
+                        anchors.fill: parent
+                        leftPadding: __style.margin8
+                        rightPadding: __style.margin8
+                        topPadding: 0; bottomPadding: 0
+                        text: model.fieldSize
+                        enabled: typeComboMobile.currentText === "TEXT"
+                        color: enabled ? __style.nightColor : __style.darkGreenColor
+                        font: __style.p5
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        placeholderText: qsTr("Tamaño (solo TEXT)")
+                        placeholderTextColor: __style.darkGreyColor
+                        background: Item {}
+                        onTextEdited: model.fieldSize = text
+                      }
+                    }
+
+                    // Acciones (móvil)
+                    MMRoundButton { iconSource: __style.arrowUpIcon;   enabled: index > 0;                        onClicked: root.moveFieldUpRequested(index) }
+                    MMRoundButton { iconSource: __style.arrowDownIcon; enabled: index < fieldsRepeater.count - 1; onClicked: root.moveFieldDownRequested(index) }
+                    MMRoundButton { iconSource: __style.closeIcon;                                                onClicked: root.removeFieldRequested(index) }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Botón agregar campo
+        MMButton {
+          text: qsTr("Agregar Campo")
+          iconSourceLeft: __style.addIcon
+          Layout.fillWidth: true
+          onClicked: root.addFieldRequested()
+        }
+      }
+    }
+
+    // ── SECCIÓN 4: Mensaje de validación / resultado ──────────────────
+    Rectangle {
+      Layout.fillWidth: true
+      implicitHeight: messageText.implicitHeight + __style.margin16 * 2
+      visible: messageText.text !== ""
+      color: root.messageType === "error" ? __style.negativeLightColor : __style.lightGreenColor
+      radius: __style.radius12
+      border.color: root.messageType === "error" ? __style.grapeColor : __style.grassColor
+      border.width: __style.width1
+
+      MMText {
+        id: messageText
+        anchors { left: parent.left; right: parent.right; top: parent.top; margins: __style.margin16 }
+        font: __style.p5
+        color: root.messageType === "error" ? __style.grapeColor : __style.forestColor
+        wrapMode: Text.WordWrap
+      }
+    }
+  }
 }
