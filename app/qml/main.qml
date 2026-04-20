@@ -765,7 +765,7 @@ ApplicationWindow {
           id: createDataBasePanel
 
           onClosed: {
-              mapPanelsStackView.pop(StackView.PopTransition)
+              mapPanelsStackView.clear(StackView.PopTransition)
               stateManager.state = "map"
           }
 
