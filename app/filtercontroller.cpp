@@ -259,12 +259,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
     }
     case FieldFilter::DateFilter:
     {
-      // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
-      // so we must convert local datetimes to UTC before comparing.
-      // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
-      const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
-      const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
-      const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
+      const QgsVectorLayer *filterLayer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( filter.layerId ) );
+      const bool isDateTimeField = filterLayer && filterLayer->fields().field( filter.fieldName ).type() == QMetaType::QDateTime;
 
       const QVariantList values = filter.value.toList();
       if ( values.size() < 2 )
@@ -273,38 +269,51 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       const QVariant variantTo = values.at( 1 );
 
       QString dateFrom;
-      if ( variantFrom.isValid() )
-      {
-        QDateTime dateTimeFrom = variantFrom.toDateTime( );
-        QTime timeFrom = dateTimeFrom.time();
-        timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
-        dateTimeFrom.setTime( timeFrom );
-        dateFrom = dateTimeFrom.toString( isoFormat );
-      }
-      else
-      {
-        dateFrom = minimumDateTime;
-      }
-
       QString dateTo;
-      if ( variantTo.isValid() )
+
+      if ( isDateTimeField )
       {
-        if ( variantTo.toDateTime().time().hour() > 0 || variantTo.toDateTime().time().minute() > 0 )
+        // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
+        // so we must convert local datetimes to UTC before comparing.
+        // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
+        const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
+        const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
+        const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
+
+        if ( variantFrom.isValid() )
         {
-          QDateTime dateTimeTo = variantTo.toDateTime( );
+          QDateTime dateTimeFrom = variantFrom.toDateTime().toUTC();
+          QTime timeFrom = dateTimeFrom.time();
+          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
+          dateTimeFrom.setTime( timeFrom );
+          dateFrom = dateTimeFrom.toString( isoFormat );
+        }
+        else
+        {
+          dateFrom = minimumDateTime;
+        }
+
+        if ( variantTo.isValid() )
+        {
+          QDateTime dateTimeTo = variantTo.toDateTime().toUTC();
           QTime timeTo = dateTimeTo.time();
+          // Round to end-of-minute so the "to" bound is inclusive regardless of whether the user picked midnight
           timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
           dateTimeTo.setTime( timeTo );
           dateTo = dateTimeTo.toString( isoFormat );
         }
         else
         {
-          dateTo = variantTo.toDateTime().toString( isoFormat );
+          dateTo = maximumDateTime;
         }
       }
       else
       {
-        dateTo = maximumDateTime;
+        // date-only fields store values as YYYY-MM-DD strings — no time component
+        const QString dateFormat = QStringLiteral( "yyyy-MM-dd" );
+
+        dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( dateFormat ) : QStringLiteral( "0001-01-01" );
+        dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( dateFormat ) : QStringLiteral( "9999-12-31" );
       }
 
       expressionCopy.replace( QStringLiteral( "@@value_from@@" ), dateFrom );
