@@ -142,8 +142,8 @@ MMComponents.MMDrawer {
               else if ( filterType === FieldFilter.CheckboxFilter )
               {
                 const checkboxConfig = __activeProject.filterController.getCheckboxConfiguration( modelData.filterId )
-                props["customLabelForTrue"] = checkboxConfig["customLabelForTrue"]
-                props["customLabelForFalse"] = checkboxConfig["customLabelForFalse"]
+                props["customLabelForTrue"] = checkboxConfig["customLabelForTrue"] ?? ""
+                props["customLabelForFalse"] = checkboxConfig["customLabelForFalse"] ?? ""
                 props["customValueForTrue"] = checkboxConfig["customValueForTrue"]
                 props["customValueForFalse"] = checkboxConfig["customValueForFalse"]
                 setSource( "components/MMFilterBoolInput.qml", props )
