@@ -487,6 +487,17 @@ ApplicationWindow {
       }
 
       MMToolbarButton {
+          text: qsTr("Nueva BD")
+          iconSource: __style.addIcon
+          visible: __activeProject.projectRole !== "reader"
+          onClicked: {
+              stateManager.state = "misc"
+              mapPanelsStackView.push(createDatabasePageComponent, {}, StackView.PushTransition)
+          }
+      }
+
+
+      MMToolbarButton {
         text: qsTr("Layers")
         iconSource: __style.layersIcon
         onClicked: {
@@ -722,6 +733,31 @@ ApplicationWindow {
           onClosed: {
               mapPanelsStackView.clear(StackView.PopTransition)
               stateManager.state = "map"
+          }
+      }
+  }
+
+  Component {
+      id: createDatabasePageComponent
+
+      MMCreateDatabasePage {
+          onBackClicked: {
+              mapPanelsStackView.clear(StackView.PopTransition)
+              stateManager.state = "map"
+          }
+
+          onCreateDatabaseRequested: function(name, path) {
+              if (name.trim() === "") return
+
+              var dbPath = path.trim()
+              if (dbPath === "") dbPath = "./"
+              if (!dbPath.endsWith("/") && !dbPath.endsWith("\\")) dbPath += "/"
+
+              var fullPath = dbPath + name.trim() + ".db"
+              if (__dbManager && __dbManager.initializeDatabase(fullPath)) {
+                  mapPanelsStackView.clear(StackView.PopTransition)
+                  stateManager.state = "map"
+              }
           }
       }
   }

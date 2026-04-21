@@ -30,7 +30,6 @@ MMPage {
 
   // ── Señales de salida ─────────────────────────────────────────────────
   signal createDatabaseRequested(string name, string path)
-  signal backClicked()
 
   // ── Cabecera ──────────────────────────────────────────────────────────
   pageHeader {
@@ -39,15 +38,6 @@ MMPage {
     baseHeaderHeight: __style.row80
     backVisible: true
   }
-
-  Keys.onReleased: function( event ) {
-    if (event.key === Qt.Key_Back || event.key === Qt.Key_Escape) {
-      event.accepted = true
-      root.backClicked()
-    }
-  }
-
-  onBackClicked: root.backClicked()
 
   // ── Contenido principal ───────────────────────────────────────────────
   pageContent: MMScrollView {

@@ -44,7 +44,6 @@ MMPage {
   signal clearFilterRequested()
   signal createTableRequested()
   signal createDatabaseRequested()
-  signal backClicked()
 
   // ── Cabecera ──────────────────────────────────────────────────────────
   pageHeader {
@@ -53,8 +52,6 @@ MMPage {
     baseHeaderHeight: __style.row60
     backVisible: true
   }
-
-  onBackClicked: root.backClicked()
 
   // ── Contenido principal ───────────────────────────────────────────────
   pageContent: ColumnLayout {
@@ -127,7 +124,7 @@ MMPage {
         // Botón crear BD
         MMButton {
           text: qsTr("Nueva BD")
-          type: MMButton.Types.Secondary
+          //type: MMButton.Types.Secondary
           size: MMButton.Sizes.Small
           onClicked: root.createDatabaseRequested()
         }
@@ -196,7 +193,7 @@ MMPage {
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: root.tableModel
-            alternatingRowColors: true
+            //alternatingRowColors: true
             clip: true
 
             delegate: Rectangle {
