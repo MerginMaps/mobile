@@ -101,6 +101,7 @@ void FilterController::loadFilterConfig( const QgsProject *project )
   mFieldFilters.clear();
 
   setFiltersActivated( false );
+  mPredefinedSubsetStrings.clear();
 
   bool valueRead = false;
   const bool filteringAvailable = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), false, &valueRead );
@@ -213,7 +214,7 @@ void FilterController::loadFilterConfig( const QgsProject *project )
   for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
   {
     const QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( it.value() );
-    if ( vectorLayer  && !vectorLayer->subsetString().isEmpty() )
+    if ( vectorLayer  && !vectorLayer->subsetString().trimmed().isEmpty() )
     {
       mPredefinedSubsetStrings.insert( vectorLayer->id(), vectorLayer->subsetString() );
     }
@@ -481,9 +482,12 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
     return false;
 
   const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( project->mapLayers().value( layerId ) );
+  if ( !layer )
+    return false;
+
   if ( !layer->subsetString().isEmpty() )
   {
-    return QString::compare( layer->subsetString(), mPredefinedSubsetStrings[ layerId ] ) != 0;
+    return QString::compare( layer->subsetString(), mPredefinedSubsetStrings.value( layerId ) ) != 0;
   }
   return false;
 }
