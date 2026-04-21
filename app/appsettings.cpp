@@ -34,7 +34,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   const bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
   int hapticsTypeInt = settings.value( "hapticsType", 0 ).toInt();
   const HapticsType hapticsType = static_cast<HapticsType>( hapticsTypeInt );
-  const bool alwaysShowFilterButton = settings.value( QStringLiteral( "alwaysShowFilterButton" ), false ).toBool();
 
   settings.endGroup();
 
@@ -52,7 +51,6 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
   setHapticsType( hapticsType );
-  setAlwaysShowFilterButton( alwaysShowFilterButton );
 }
 
 QString AppSettings::defaultLayer() const
@@ -373,19 +371,4 @@ void AppSettings::setWindowPosition( const QList<QVariant> &newWindowPosition )
   setValue( QStringLiteral( "windowPosition" ), QVariant::fromValue( newWindowPosition ) );
 
   emit windowPositionChanged();
-}
-
-bool AppSettings::alwaysShowFilterButton() const
-{
-  return mAlwaysShowFilterButton;
-}
-
-void AppSettings::setAlwaysShowFilterButton( bool alwaysShowFilterButton )
-{
-  if ( mAlwaysShowFilterButton == alwaysShowFilterButton )
-    return;
-
-  mAlwaysShowFilterButton = alwaysShowFilterButton;
-  setValue( QStringLiteral( "alwaysShowFilterButton" ), alwaysShowFilterButton );
-  emit alwaysShowFilterButtonChanged( mAlwaysShowFilterButton );
 }
