@@ -80,7 +80,10 @@ Column {
 
             if (!root.hasTime) {
               currentTimestamp.setHours(0, 0, 0, 0)
+            } else {
+              currentTimestamp.setSeconds(0, 0)
             }
+
             if (!root.currentValue) {
               root.currentValue = [currentTimestamp, undefined]
             } else {
@@ -107,9 +110,13 @@ Column {
 
           onPrimaryButtonClicked: {
             let currentTimestamp = dateTime
+
             if (!root.hasTime) {
               currentTimestamp.setHours(0, 0, 0, 0)
+            } else {
+              currentTimestamp.setSeconds(0, 0)
             }
+
             if (!root.currentValue){
               root.currentValue = [currentTimestamp, undefined]
             } else {
@@ -165,7 +172,10 @@ Column {
 
             if (!root.hasTime) {
               currentTimestamp.setHours(0, 0, 0, 0)
+            } else {
+              currentTimestamp.setSeconds(0, 0)
             }
+
             if (!root.currentValue) {
               root.currentValue = [undefined, currentTimestamp]
             } else {
@@ -192,9 +202,13 @@ Column {
 
           onPrimaryButtonClicked: {
             let currentTimestamp = dateTime
+
             if (!root.hasTime) {
               currentTimestamp.setHours(0, 0, 0, 0)
+            } else {
+              currentTimestamp.setSeconds(0, 0)
             }
+
             if (!root.currentValue){
               root.currentValue = [undefined, currentTimestamp]
             } else {

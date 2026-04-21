@@ -295,11 +295,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
         if ( variantFrom.isValid() )
         {
-          QDateTime dateTimeFrom = variantFrom.toDateTime().toUTC();
-          QTime timeFrom = dateTimeFrom.time();
-          timeFrom.setHMS( timeFrom.hour(), timeFrom.minute(), 0 );
-          dateTimeFrom.setTime( timeFrom );
-          dateFrom = dateTimeFrom.toString( isoFormat );
+          dateFrom = variantFrom.toDateTime().toUTC().toString( isoFormat );
         }
         else
         {
