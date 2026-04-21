@@ -108,7 +108,7 @@ Column {
           selected = root.currentValue
         }
 
-        uniqueValuesModel.populate()
+        uniqueValuesModel.populate( __activeProject.filterController )
         open()
       }
     }

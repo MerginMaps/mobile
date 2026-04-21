@@ -128,6 +128,11 @@ class FilterController : public QObject
 
     void setFiltersActivated( bool filtersEnabled );
 
+    /**
+     * For filters using unique values to always show all possible values they need to access unfiltered vector layer.
+     * \note because of mPredefinedSubsetStrings clearing subset string on layer is not enough
+     */
+    QgsVectorLayer *getUnfilteredLayerCopy( const QString &layerId ) const;
 
   signals:
     void hasActiveFiltersChanged();

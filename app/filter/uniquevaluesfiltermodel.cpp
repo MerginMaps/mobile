@@ -78,7 +78,7 @@ void UniqueValuesFilterModel::setFieldName( const QString &fieldName )
   emit fieldNameChanged();
 }
 
-void UniqueValuesFilterModel::populate()
+void UniqueValuesFilterModel::populate( FilterController *controller )
 {
   if ( mLayerId.isEmpty() || mFieldName.isEmpty() ) return;
 
@@ -87,7 +87,7 @@ void UniqueValuesFilterModel::populate()
   {
     CoreUtils::log( QStringLiteral( "Filtering" ), QStringLiteral( "Could not get layer %1" ).arg( mLayerId ) );
   }
-  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer );
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer );
 
   if ( !layer ) return;
 
@@ -99,11 +99,12 @@ void UniqueValuesFilterModel::populate()
   }
 
   // model already populated?
-  if ( mItems.size() > 0 ) return;
+  if ( !mItems.empty() ) return;
 
   if ( mResultWatcher.isRunning() ) return;
 
-  QgsVectorLayer *layerClone = layer->clone();
+  QgsVectorLayer *layerClone = controller->getUnfilteredLayerCopy( mLayerId );
+  if ( !layerClone ) return;
 
   mIsLoading = true;
   emit isLoadingChanged();

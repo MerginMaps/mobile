@@ -444,6 +444,17 @@ void FilterController::setFiltersActivated( const bool filtersEnabled )
   }
 }
 
+QgsVectorLayer *FilterController::getUnfilteredLayerCopy( const QString &layerId ) const
+{
+  const QgsMapLayer *mapLayer = QgsProject::instance()->mapLayer( layerId );
+  if ( !mapLayer ) return nullptr;
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer->clone() );
+  if ( !layer ) return nullptr;
+
+  layer->setSubsetString( mPredefinedSubsetStrings.value( layerId ) );
+  return layer;
+}
+
 QVariantList FilterController::getFilters() const
 {
   QVariantList uiFilters;

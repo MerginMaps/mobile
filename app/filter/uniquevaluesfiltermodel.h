@@ -14,6 +14,8 @@
 #include <QFutureWatcher>
 #include <QtQml/qqmlregistration.h>
 
+#include "filtercontroller.h"
+
 class QgsVectorLayer;
 
 // This model loads unique values from the selected layer+field and exposes them via Qt::DisplayRole
@@ -49,7 +51,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
 
     bool isLoading() const;
 
-    Q_INVOKABLE void populate();
+    Q_INVOKABLE void populate( FilterController *controller );
 
   signals:
     void layerIdChanged();
