@@ -46,7 +46,7 @@ QVariant UniqueValuesFilterModel::data( const QModelIndex &index, int role ) con
       const QVariant &item = mItems.at( index.row() );
 
       // for NULL values, which are gotten as empty strings, we want to return some meaningful text for users
-      if ( item.toString().isEmpty() )
+      if ( item.isNull() )
         return { tr( "No value" ) };
 
       if ( item.typeId() == QMetaType::QDate )
@@ -145,7 +145,16 @@ QVariantList UniqueValuesFilterModel::loadUniqueValues( QgsVectorLayer *layer, i
 
   for ( const QVariant &v : uniqueValues )
   {
-    results.append( v );
+    // Typed null QVariants (e.g. null bool) lose nullness when passed to QML —
+    // Qt's bridge converts them to the type's zero-default (false, 0, etc.).
+    if ( v.isNull() )
+    {
+      results.append( QVariant() );
+    }
+    else
+    {
+      results.append( v );
+    }
   }
 
   std::sort( results.begin(), results.end(), []( const QVariant & a, const QVariant & b )
