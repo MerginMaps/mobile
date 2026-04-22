@@ -20,7 +20,11 @@ import "../../inputs"
 /*
  * MMCreateTableForm — visual form to define table fields.
  * Presentation-only component; all logic lives in MMCreateTableDrawer.
- * Uses the design-system (__style) instead of hard-coded colors and fonts.
+ * Fully responsive: single layout that adapts from narrow phone to wide desktop.
+ *
+ * Breakpoint: compact = width < 400 dp
+ *   compact  → tipo y tamaño en segunda fila; acciones iconos pequeños
+ *   wide     → todo en una sola fila
  */
 
 Item {
@@ -34,6 +38,14 @@ Item {
   property alias messageTextContent: messageText.text
   property string messageType: "info"   // "info" | "error"
 
+  // Breakpoint central — todo el form lo lee desde aquí
+  readonly property bool compact: width < 400 * __dp
+
+  // Anchos de columna responsivos — disponibles para cabecera y filas
+  readonly property real typeColWidth:    Math.max(70 * __dp, root.width * 0.22)
+  readonly property real sizeColWidth:    Math.max(55 * __dp, root.width * 0.17)
+  readonly property real actionsColWidth: 3 * __style.row40 + 2 * __style.spacing5
+
   // ── Señales hacia la lógica ───────────────────────────────────────────
   signal showDbInfoRequested()
   signal addFieldRequested()
@@ -46,10 +58,10 @@ Item {
     anchors.fill: parent
     spacing: __style.spacing12
 
-    // ── SECCIÓN 1: Info de la BD ──────────────────────────────────────
+    // ── SECCIÓN 1: Info de la BD ────────────────────────────────────────
     Rectangle {
       Layout.fillWidth: true
-      implicitHeight: dbInfoColumn.implicitHeight + __style.margin20 * 2
+      implicitHeight: dbInfoColumn.implicitHeight + __style.margin16 * 2
       color: __style.lightGreenColor
       radius: __style.radius12
       border.color: __style.greyColor
@@ -58,81 +70,74 @@ Item {
       ColumnLayout {
         id: dbInfoColumn
         anchors { top: parent.top; left: parent.left; right: parent.right; margins: __style.margin16 }
-        spacing: __style.spacing12
+        spacing: __style.spacing10
 
         MMText {
           text: qsTr("Información de Base de Datos")
           font: __style.t3
           color: __style.forestColor
+          wrapMode: Text.WordWrap
+          Layout.fillWidth: true
         }
 
-        GridLayout {
+        // Nombre BD
+        ColumnLayout {
           Layout.fillWidth: true
-          columns: width >= 480 * __dp ? 2 : 1
-          rowSpacing: __style.spacing10
-          columnSpacing: __style.spacing12
+          spacing: __style.spacing5
 
-          // Nombre BD (solo lectura)
-          ColumnLayout {
+          MMText { text: qsTr("Nombre de BD:"); font: __style.t4; color: __style.forestColor }
+
+          Rectangle {
             Layout.fillWidth: true
-            spacing: __style.spacing5
+            implicitHeight: __style.row50
+            color: __style.polarColor
+            radius: __style.radius12
+            border.color: __style.greyColor
+            border.width: __style.width1
 
-            MMText { text: qsTr("Nombre de BD:"); font: __style.t4; color: __style.forestColor }
-
-            Rectangle {
-              Layout.fillWidth: true
-              implicitHeight: __style.row50
-              color: __style.polarColor
-              radius: __style.radius12
-              border.color: __style.greyColor
-              border.width: __style.width1
-
-              TextField {
-                id: dbNameField
-                anchors.fill: parent
-                leftPadding: __style.margin12
-                rightPadding: __style.margin12
-                topPadding: 0
-                bottomPadding: 0
-                readOnly: true
-                color: __style.nightColor
-                font: __style.p5
-                placeholderText: qsTr("Ej: miproyecto")
-                placeholderTextColor: __style.darkGreyColor
-                background: Item {}
-              }
+            TextField {
+              id: dbNameField
+              anchors.fill: parent
+              leftPadding: __style.margin12
+              rightPadding: __style.margin12
+              topPadding: 0; bottomPadding: 0
+              readOnly: true
+              color: __style.nightColor
+              font: __style.p5
+              placeholderText: qsTr("Ej: miproyecto")
+              placeholderTextColor: __style.darkGreyColor
+              background: Item {}
             }
           }
+        }
 
-          // Ubicación BD (solo lectura)
-          ColumnLayout {
+        // Ubicación BD
+        ColumnLayout {
+          Layout.fillWidth: true
+          spacing: __style.spacing5
+
+          MMText { text: qsTr("Ubicación:"); font: __style.t4; color: __style.forestColor }
+
+          Rectangle {
             Layout.fillWidth: true
-            spacing: __style.spacing5
+            implicitHeight: __style.row50
+            color: __style.polarColor
+            radius: __style.radius12
+            border.color: __style.greyColor
+            border.width: __style.width1
 
-            MMText { text: qsTr("Ubicación:"); font: __style.t4; color: __style.forestColor }
-
-            Rectangle {
-              Layout.fillWidth: true
-              implicitHeight: __style.row50
-              color: __style.polarColor
-              radius: __style.radius12
-              border.color: __style.greyColor
-              border.width: __style.width1
-
-              TextField {
-                id: dbPathField
-                anchors.fill: parent
-                leftPadding: __style.margin12
-                rightPadding: __style.margin12
-                topPadding: 0
-                bottomPadding: 0
-                readOnly: true
-                color: __style.nightColor
-                font: __style.p5
-                placeholderText: qsTr("Ruta de almacenamiento")
-                placeholderTextColor: __style.darkGreyColor
-                background: Item {}
-              }
+            TextField {
+              id: dbPathField
+              anchors.fill: parent
+              leftPadding: __style.margin12
+              rightPadding: __style.margin12
+              topPadding: 0; bottomPadding: 0
+              readOnly: true
+              color: __style.nightColor
+              font: __style.p5
+              placeholderText: qsTr("Ruta de almacenamiento")
+              placeholderTextColor: __style.darkGreyColor
+              background: Item {}
             }
           }
         }
@@ -147,10 +152,10 @@ Item {
       }
     }
 
-    // ── SECCIÓN 2: Nombre de la tabla ─────────────────────────────────
+    // ── SECCIÓN 2: Nombre de la tabla ───────────────────────────────────
     Rectangle {
       Layout.fillWidth: true
-      implicitHeight: tableNameColumn.implicitHeight + __style.margin20 * 2
+      implicitHeight: tableNameColumn.implicitHeight + __style.margin16 * 2
       color: __style.lightGreenColor
       radius: __style.radius12
       border.color: __style.greyColor
@@ -161,12 +166,19 @@ Item {
         anchors { top: parent.top; left: parent.left; right: parent.right; margins: __style.margin16 }
         spacing: __style.spacing10
 
-        MMText { text: qsTr("Nombre de la Tabla"); font: __style.t3; color: __style.forestColor }
+        MMText {
+          text: qsTr("Nombre de la Tabla")
+          font: __style.t3
+          color: __style.forestColor
+          wrapMode: Text.WordWrap
+          Layout.fillWidth: true
+        }
 
         MMText {
           text: qsTr("Solo letras, números y guiones bajos")
           font: __style.p6
           color: __style.nightColor
+          wrapMode: Text.WordWrap
           Layout.fillWidth: true
         }
 
@@ -178,7 +190,7 @@ Item {
       }
     }
 
-    // ── SECCIÓN 3: Definición de campos ───────────────────────────────
+    // ── SECCIÓN 3: Definición de campos ────────────────────────────────
     Rectangle {
       Layout.fillWidth: true
       Layout.fillHeight: true
@@ -189,18 +201,24 @@ Item {
 
       ColumnLayout {
         anchors.fill: parent
-        anchors.margins: __style.margin16
+        anchors.margins: __style.margin12
         spacing: __style.spacing10
 
-        MMText { text: qsTr("Definición de Campos"); font: __style.t3; color: __style.forestColor }
+        MMText {
+          text: qsTr("Definición de Campos")
+          font: __style.t3
+          color: __style.forestColor
+          wrapMode: Text.WordWrap
+          Layout.fillWidth: true
+        }
 
-        // Cabecera de columnas (solo escritorio)
+        // Cabecera de columnas — solo en modo ancho
         Rectangle {
           Layout.fillWidth: true
           implicitHeight: __style.row40
           color: __style.forestColor
           radius: __style.radius8
-          visible: root.width >= 480 * __dp
+          visible: !root.compact
 
           RowLayout {
             anchors.fill: parent
@@ -208,10 +226,10 @@ Item {
             anchors.rightMargin: __style.margin12
             spacing: __style.spacing10
 
-            MMText { text: qsTr("Nombre del Campo"); font: __style.t4; color: __style.polarColor; Layout.fillWidth: true }
-            MMText { text: qsTr("Tipo");             font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 100 * __dp }
-            MMText { text: qsTr("Tamaño");           font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 90 * __dp }
-            MMText { text: qsTr("Acciones");         font: __style.t4; color: __style.polarColor; Layout.preferredWidth: 100 * __dp }
+            MMText { text: qsTr("Nombre");   font: __style.t4; color: __style.polarColor; Layout.fillWidth: true }
+            MMText { text: qsTr("Tipo");     font: __style.t4; color: __style.polarColor; Layout.preferredWidth: typeColWidth }
+            MMText { text: qsTr("Tamaño");   font: __style.t4; color: __style.polarColor; Layout.preferredWidth: sizeColWidth }
+            MMText { text: qsTr("Acciones"); font: __style.t4; color: __style.polarColor; Layout.preferredWidth: actionsColWidth }
           }
         }
 
@@ -220,45 +238,54 @@ Item {
           Layout.fillWidth: true
           Layout.fillHeight: true
           clip: true
+          contentWidth: availableWidth   // evita scroll horizontal
 
           ColumnLayout {
-            width: root.width - __style.margin16 * 2
+            width: parent.width
             spacing: __style.spacing5
 
             Repeater {
               id: fieldsRepeater
 
               delegate: Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: root.width < 480 * __dp
-                                ? (__style.row50 * 2 + __style.spacing10 + __style.margin16 * 2)
-                                : __style.row60
+                // Altura: en compacto apila dos filas
+                readonly property real _rowH: __style.row50
+                readonly property real _gap:  __style.spacing5
+                readonly property real _pad:  __style.margin8
+                implicitWidth:  parent?.width ?? 0
+                implicitHeight: root.compact
+                                ? (_pad * 2 + _rowH * 2 + _gap)
+                                : (_pad * 2 + _rowH)
                 color: index % 2 === 0 ? __style.polarColor : __style.lightGreenColor
                 radius: __style.radius8
                 border.color: __style.greyColor
                 border.width: __style.width1
 
-                // ── Escritorio: fila única ──────────────────────────
+                // Acceso a anchos de columna desde root
+                readonly property real _typeW:    root.typeColWidth
+                readonly property real _sizeW:    root.sizeColWidth
+                readonly property real _actionsW: root.actionsColWidth
+
+                // ── MODO ANCHO: una fila ──────────────────────────────
                 RowLayout {
-                  anchors.fill: parent
-                  anchors.margins: __style.margin8
+                  anchors { left: parent.left; right: parent.right; top: parent.top; margins: parent._pad }
+                  height: parent._rowH
                   spacing: __style.spacing10
-                  visible: root.width >= 480 * __dp
+                  visible: !root.compact
 
                   // Nombre
                   Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: __style.row50
+                    Layout.preferredHeight: parent.height
                     color: __style.polarColor
                     radius: __style.radius8
-                    border.color: fieldNameInput.activeFocus ? __style.forestColor : __style.greyColor
-                    border.width: fieldNameInput.activeFocus ? __style.width2 : __style.width1
+                    border.color: fieldNameWide.activeFocus ? __style.forestColor : __style.greyColor
+                    border.width: fieldNameWide.activeFocus ? __style.width2 : __style.width1
 
                     TextField {
-                      id: fieldNameInput
+                      id: fieldNameWide
                       anchors.fill: parent
-                      leftPadding: __style.margin12
-                      rightPadding: __style.margin12
+                      leftPadding: __style.margin12; rightPadding: __style.margin12
                       topPadding: 0; bottomPadding: 0
                       text: model.fieldName
                       color: __style.nightColor
@@ -272,52 +299,52 @@ Item {
 
                   // Tipo
                   Rectangle {
-                    Layout.preferredWidth: 100 * __dp
-                    Layout.preferredHeight: __style.row50
+                    Layout.preferredWidth: parent.parent._typeW
+                    Layout.preferredHeight: parent.height
                     color: __style.polarColor
                     radius: __style.radius8
                     border.color: __style.greyColor
                     border.width: __style.width1
 
                     ComboBox {
-                      id: typeCombo
+                      id: typeComboWide
                       anchors.fill: parent
                       model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
-                      currentIndex: find(model.fieldType)
+                      currentIndex: find(modelData !== undefined ? modelData : (fieldsRepeater.model.get ? fieldsRepeater.model.get(index).fieldType : "TEXT"))
                       font: __style.p5
                       background: Item {}
                       contentItem: MMText {
-                        text: typeCombo.displayText
+                        text: typeComboWide.displayText
                         font: __style.p5
                         color: __style.nightColor
                         leftPadding: __style.margin8
                         verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
                       }
                       onCurrentTextChanged: model.fieldType = currentText
                     }
                   }
 
-                  // Tamaño (solo TEXT)
+                  // Tamaño
                   Rectangle {
-                    Layout.preferredWidth: 90 * __dp
-                    Layout.preferredHeight: __style.row50
-                    color: typeCombo.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
+                    Layout.preferredWidth: parent.parent._sizeW
+                    Layout.preferredHeight: parent.height
+                    color: typeComboWide.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
                     radius: __style.radius8
-                    border.color: sizeInput.activeFocus ? __style.forestColor : __style.greyColor
-                    border.width: sizeInput.activeFocus ? __style.width2 : __style.width1
+                    border.color: sizeWide.activeFocus ? __style.forestColor : __style.greyColor
+                    border.width: sizeWide.activeFocus ? __style.width2 : __style.width1
 
                     TextField {
-                      id: sizeInput
+                      id: sizeWide
                       anchors.fill: parent
-                      leftPadding: __style.margin8
-                      rightPadding: __style.margin8
+                      leftPadding: __style.margin8; rightPadding: __style.margin8
                       topPadding: 0; bottomPadding: 0
                       text: model.fieldSize
-                      enabled: typeCombo.currentText === "TEXT"
+                      enabled: typeComboWide.currentText === "TEXT"
                       color: enabled ? __style.nightColor : __style.darkGreenColor
                       font: __style.p5
                       inputMethodHints: Qt.ImhDigitsOnly
-                      placeholderText: qsTr("Ej: 255")
+                      placeholderText: qsTr("255")
                       placeholderTextColor: __style.darkGreyColor
                       background: Item {}
                       onTextEdited: model.fieldSize = text
@@ -326,40 +353,37 @@ Item {
 
                   // Acciones
                   RowLayout {
-                    Layout.preferredWidth: 100 * __dp
+                    Layout.preferredWidth: parent.parent._actionsW
                     spacing: __style.spacing5
-
                     MMRoundButton { iconSource: __style.arrowUpIcon;   enabled: index > 0;                        onClicked: root.moveFieldUpRequested(index) }
                     MMRoundButton { iconSource: __style.arrowDownIcon; enabled: index < fieldsRepeater.count - 1; onClicked: root.moveFieldDownRequested(index) }
                     MMRoundButton { iconSource: __style.closeIcon;                                                onClicked: root.removeFieldRequested(index) }
                   }
                 }
 
-                // ── Móvil: apilado ──────────────────────────────────
+                // ── MODO COMPACTO: dos filas ──────────────────────────
                 ColumnLayout {
-                  anchors.fill: parent
-                  anchors.margins: __style.margin8
-                  spacing: __style.spacing5
-                  visible: root.width < 480 * __dp
+                  anchors { left: parent.left; right: parent.right; top: parent.top; margins: parent._pad }
+                  spacing: parent._gap
+                  visible: root.compact
 
+                  // Fila 1: nombre + botón eliminar
                   RowLayout {
                     Layout.fillWidth: true
                     spacing: __style.spacing10
 
-                    // Nombre (móvil)
                     Rectangle {
                       Layout.fillWidth: true
                       Layout.preferredHeight: __style.row50
                       color: __style.polarColor
                       radius: __style.radius8
-                      border.color: fieldNameMobile.activeFocus ? __style.forestColor : __style.greyColor
-                      border.width: fieldNameMobile.activeFocus ? __style.width2 : __style.width1
+                      border.color: fieldNameCompact.activeFocus ? __style.forestColor : __style.greyColor
+                      border.width: fieldNameCompact.activeFocus ? __style.width2 : __style.width1
 
                       TextField {
-                        id: fieldNameMobile
+                        id: fieldNameCompact
                         anchors.fill: parent
-                        leftPadding: __style.margin12
-                        rightPadding: __style.margin12
+                        leftPadding: __style.margin12; rightPadding: __style.margin12
                         topPadding: 0; bottomPadding: 0
                         text: model.fieldName
                         color: __style.nightColor
@@ -371,9 +395,20 @@ Item {
                       }
                     }
 
-                    // Tipo (móvil)
+                    MMRoundButton {
+                      iconSource: __style.closeIcon
+                      onClicked: root.removeFieldRequested(index)
+                    }
+                  }
+
+                  // Fila 2: tipo + tamaño + mover arriba/abajo
+                  RowLayout {
+                    Layout.fillWidth: true
+                    spacing: __style.spacing10
+
+                    // Tipo
                     Rectangle {
-                      Layout.preferredWidth: 90 * __dp
+                      Layout.fillWidth: true
                       Layout.preferredHeight: __style.row50
                       color: __style.polarColor
                       radius: __style.radius8
@@ -381,59 +416,53 @@ Item {
                       border.width: __style.width1
 
                       ComboBox {
-                        id: typeComboMobile
+                        id: typeComboCompact
                         anchors.fill: parent
                         model: ["INT", "TEXT", "REAL", "DATE", "BOOLEAN", "BLOB"]
-                        currentIndex: find(model.fieldType)
+                        currentIndex: find(modelData !== undefined ? modelData : (fieldsRepeater.model.get ? fieldsRepeater.model.get(index).fieldType : "TEXT"))
                         font: __style.p5
                         background: Item {}
                         contentItem: MMText {
-                          text: typeComboMobile.displayText
+                          text: typeComboCompact.displayText
                           font: __style.p5
                           color: __style.nightColor
                           leftPadding: __style.margin8
                           verticalAlignment: Text.AlignVCenter
+                          elide: Text.ElideRight
                         }
                         onCurrentTextChanged: model.fieldType = currentText
                       }
                     }
-                  }
 
-                  RowLayout {
-                    Layout.fillWidth: true
-                    spacing: __style.spacing10
-
-                    // Tamaño (móvil)
+                    // Tamaño
                     Rectangle {
-                      Layout.fillWidth: true
+                      Layout.preferredWidth: Math.max(50 * __dp, root.width * 0.22)
                       Layout.preferredHeight: __style.row50
-                      color: typeComboMobile.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
+                      color: typeComboCompact.currentText === "TEXT" ? __style.polarColor : __style.mediumGreenColor
                       radius: __style.radius8
-                      border.color: sizeMobile.activeFocus ? __style.forestColor : __style.greyColor
-                      border.width: sizeMobile.activeFocus ? __style.width2 : __style.width1
+                      border.color: sizeCompact.activeFocus ? __style.forestColor : __style.greyColor
+                      border.width: sizeCompact.activeFocus ? __style.width2 : __style.width1
 
                       TextField {
-                        id: sizeMobile
+                        id: sizeCompact
                         anchors.fill: parent
-                        leftPadding: __style.margin8
-                        rightPadding: __style.margin8
+                        leftPadding: __style.margin8; rightPadding: __style.margin8
                         topPadding: 0; bottomPadding: 0
                         text: model.fieldSize
-                        enabled: typeComboMobile.currentText === "TEXT"
+                        enabled: typeComboCompact.currentText === "TEXT"
                         color: enabled ? __style.nightColor : __style.darkGreenColor
                         font: __style.p5
                         inputMethodHints: Qt.ImhDigitsOnly
-                        placeholderText: qsTr("Tamaño (solo TEXT)")
+                        placeholderText: qsTr("255")
                         placeholderTextColor: __style.darkGreyColor
                         background: Item {}
                         onTextEdited: model.fieldSize = text
                       }
                     }
 
-                    // Acciones (móvil)
+                    // Mover
                     MMRoundButton { iconSource: __style.arrowUpIcon;   enabled: index > 0;                        onClicked: root.moveFieldUpRequested(index) }
                     MMRoundButton { iconSource: __style.arrowDownIcon; enabled: index < fieldsRepeater.count - 1; onClicked: root.moveFieldDownRequested(index) }
-                    MMRoundButton { iconSource: __style.closeIcon;                                                onClicked: root.removeFieldRequested(index) }
                   }
                 }
               }
@@ -451,7 +480,7 @@ Item {
       }
     }
 
-    // ── SECCIÓN 4: Mensaje de validación / resultado ──────────────────
+    // ── SECCIÓN 4: Mensaje de validación ────────────────────────────────
     Rectangle {
       Layout.fillWidth: true
       implicitHeight: messageText.implicitHeight + __style.margin16 * 2
