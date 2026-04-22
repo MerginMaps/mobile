@@ -18,12 +18,12 @@ import "../inputs"
 import "components"
 
 /*
- * MMCreateTableDrawer — bottom-sheet drawer for creating a new table.
- * Follows the MMDrawer pattern: view only, no business logic.
+ * MMCreateTableDrawer — full-page component for creating a new table.
+ * Migrated from MMDrawer to MMPage to support full-screen layout.
  * All communication with the backend is done via signals and properties.
  */
 
-MMDrawer {
+MMPage {
   id: root
 
   // ── Propiedades de entrada ────────────────────────────────────────────
@@ -33,64 +33,77 @@ MMDrawer {
 
   // ── Señales de salida ─────────────────────────────────────────────────
   signal createTableRequested(string tableName, var fields)
+  signal closed()
 
-  // ── Cabecera del drawer ───────────────────────────────────────────────
-  drawerHeader.title: qsTr("Crear Nueva Tabla")
+  // ── Cabecera ──────────────────────────────────────────────────────────
+  pageHeader {
+    title: qsTr("Crear Nueva Tabla")
+    titleFont: __style.h3
+    baseHeaderHeight: __style.row60
+    backVisible: true
+  }
+
+  onBackClicked: root.closed()
 
   // ── Contenido ──────────────────────────────────────────────────────────
-  drawerContent: ColumnLayout {
+  pageContent: MMScrollView {
     width: parent.width
-    spacing: __style.spacing12
+    height: parent.height
 
-    // Formulario visual
-    MMCreateTableForm {
-      id: uiForm
-      Layout.fillWidth: true
-
-      dbNameFieldText: root.dbNameToShow
-      dbPathFieldText: root.dbPathToShow
-      fieldsModel: fieldsListModel
-
-      onShowDbInfoRequested: {
-        dbInfoDrawer.open()
-      }
-
-      onAddFieldRequested:        fieldsListModel.addField()
-      onMoveFieldUpRequested:     function(index) { fieldsListModel.moveField(index, index - 1) }
-      onMoveFieldDownRequested:   function(index) { fieldsListModel.moveField(index, index + 1) }
-      onRemoveFieldRequested:     function(index) { fieldsListModel.removeField(index) }
-    }
-
-    // Notificación de error (visible cuando errorMessage no está vacío)
-    MMNotificationBox {
-      id: errorNotification
-      Layout.fillWidth: true
-      visible: root.errorMessage !== ""
-      type: MMNotificationBox.Types.Error
-      title: qsTr("Error")
-      description: root.errorMessage
-    }
-
-    // Botones de acción
-    RowLayout {
-      Layout.fillWidth: true
+    ColumnLayout {
+      width: parent.width
       spacing: __style.spacing12
 
-      MMButton {
-        text: qsTr("Aceptar")
+      // Formulario visual
+      MMCreateTableForm {
+        id: uiForm
         Layout.fillWidth: true
-        onClicked: {
-          if (validateInputs()) {
-            root.createTableRequested(uiForm.tableNameText.trim(), fieldsListModel.getFieldsList())
-          }
+
+        dbNameFieldText: root.dbNameToShow
+        dbPathFieldText: root.dbPathToShow
+        fieldsModel: fieldsListModel
+
+        onShowDbInfoRequested: {
+          dbInfoDrawer.open()
         }
+
+        onAddFieldRequested:        fieldsListModel.addField()
+        onMoveFieldUpRequested:     function(index) { fieldsListModel.moveField(index, index - 1) }
+        onMoveFieldDownRequested:   function(index) { fieldsListModel.moveField(index, index + 1) }
+        onRemoveFieldRequested:     function(index) { fieldsListModel.removeField(index) }
       }
 
-      MMButton {
-        text: qsTr("Cancelar")
-        type: MMButton.Types.Secondary
+      // Notificación de error (visible cuando errorMessage no está vacío)
+      MMNotificationBox {
+        id: errorNotification
         Layout.fillWidth: true
-        onClicked: root.close()
+        visible: root.errorMessage !== ""
+        type: MMNotificationBox.Types.Error
+        title: qsTr("Error")
+        description: root.errorMessage
+      }
+
+      // Botones de acción
+      RowLayout {
+        Layout.fillWidth: true
+        spacing: __style.spacing12
+
+        MMButton {
+          text: qsTr("Aceptar")
+          Layout.fillWidth: true
+          onClicked: {
+            if (validateInputs()) {
+              root.createTableRequested(uiForm.tableNameText.trim(), fieldsListModel.getFieldsList())
+            }
+          }
+        }
+
+        MMButton {
+          text: qsTr("Cancelar")
+          type: MMButton.Types.Secondary
+          Layout.fillWidth: true
+          onClicked: root.closed()
+        }
       }
     }
   }
@@ -158,10 +171,9 @@ MMDrawer {
   }
 
   // ── Inicialización ─────────────────────────────────────────────────────
-  onOpened: {
+  Component.onCompleted: {
     uiForm.messageTextContent = ""
     uiForm.messageType = "info"
+    if (fieldsListModel.count === 0) fieldsListModel.addField()
   }
-
-  Component.onCompleted: fieldsListModel.addField()
 }
