@@ -1,0 +1,15 @@
+diff --git a/cmake/QtFrameworkHelpers.cmake b/cmake/QtFrameworkHelpers.cmake
+index b48e39c..c14e220 100644
+--- a/cmake/QtFrameworkHelpers.cmake
++++ b/cmake/QtFrameworkHelpers.cmake
+@@ -54,7 +54,10 @@ function(qt_internal_find_apple_system_framework out_var framework_name)
+     # We might revisit this later.
+     set(cache_var_name "${out_var}Internal")
+
++    set(_qt_save_cmake_find_framework ${CMAKE_FIND_FRAMEWORK})
++    set(CMAKE_FIND_FRAMEWORK FIRST)
+     find_library(${cache_var_name} "${framework_name}")
++    set(CMAKE_FIND_FRAMEWORK ${_qt_save_cmake_find_framework})
+
+     if(${cache_var_name} AND ${cache_var_name} MATCHES ".framework$")
+         set(${out_var} "-framework ${framework_name}" PARENT_SCOPE)

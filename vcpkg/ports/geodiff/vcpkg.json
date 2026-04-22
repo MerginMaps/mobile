@@ -1,6 +1,6 @@
 {
   "name": "geodiff",
-  "version": "2.0.2",
+  "version": "2.2.0",
   "port-version": 2,
   "description": "Library for handling diffs for geospatial data",
   "homepage": "https://github.com/MerginMaps/geodiff",

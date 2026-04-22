@@ -3,10 +3,8 @@ include("${SCRIPT_PATH}/qt_install_submodule.cmake")
 
 set(${PORT}_PATCHES
     static_find_modules.patch
-    fix_avfoundation_target.patch
     remove-static-ssl-stub.patch
-    private_libs.patch
-    ffmpeg-compile-def.patch
+    ffmpeg.patch
 )
 
 vcpkg_check_features(

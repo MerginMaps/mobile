@@ -1,0 +1,12 @@
+diff --git a/src/core/tiledscene/qgsgltfutils.cpp b/src/core/tiledscene/qgsgltfutils.cpp
+index 2e2197a427f..618d89c22ae 100644
+--- a/src/core/tiledscene/qgsgltfutils.cpp
++++ b/src/core/tiledscene/qgsgltfutils.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include <QImage>
+ #include <QMatrix4x4>
++#include <QQuaternion>
+ #include <QRegularExpression>
+ 
+ #define TINYGLTF_IMPLEMENTATION       // should be defined just in one CPP file

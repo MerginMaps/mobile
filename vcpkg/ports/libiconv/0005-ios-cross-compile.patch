@@ -1,0 +1,13 @@
+--- a/configure
++++ b/configure
+@@ -5506,5 +5506,10 @@ ac_clean_files="$ac_clean_files conftest.out"
+ # Check that the compiler produces executables we can run.  If not, either
+ # the compiler is broken, or we cross compile.
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5
+ printf %s "checking whether we are cross compiling... " >&6; }
++# On Apple Silicon, arm64-ios binaries are executable on the host macOS, causing
++# this detection to hang. Force cross_compiling=yes for iOS targets.
++case "$host" in
++  *-*-ios*) cross_compiling=yes ;;
++esac
+ if test "$cross_compiling" != yes; then

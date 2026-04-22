@@ -1,0 +1,13 @@
+diff --git a/src/core/proj/qgscoordinatereferencesystem.h b/src/core/proj/qgscoordinatereferencesystem.h
+index 1234567..abcdefg 100644
+--- a/src/core/proj/qgscoordinatereferencesystem.h
++++ b/src/core/proj/qgscoordinatereferencesystem.h
+@@ -60,7 +60,7 @@
+ // forward declaration for sqlite3
+ typedef struct sqlite3 sqlite3 SIP_SKIP;
+
+-#ifdef DEBUG
++#if defined(DEBUG) || defined(GDAL_DEBUG)
+ typedef struct OGRSpatialReferenceHS *OGRSpatialReferenceH SIP_SKIP;
+ #else
+ typedef void *OGRSpatialReferenceH SIP_SKIP;

@@ -18,6 +18,10 @@ vcpkg_from_github(
   libxml2.patch
   qgis4-project-properties.patch
   qgis4_url_encoding.patch
+  fix-qt-6-10.patch
+  snapping-casting.patch
+  protobuf-qbytearray-ambiguity.patch
+  fix-ogr-typedef.patch
 )
 
 file(REMOVE ${SOURCE_PATH}/cmake/FindQtKeychain.cmake)

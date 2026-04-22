@@ -1,0 +1,15 @@
+diff --git a/src/corelib/thread/qyieldcpu.h b/src/corelib/thread/qyieldcpu.h
+index 6615648..56f3728 100644
+--- a/src/corelib/thread/qyieldcpu.h
++++ b/src/corelib/thread/qyieldcpu.h
+@@ -10,6 +10,10 @@
+ #include <QtCore/qprocessordetection.h>
+ #include <QtCore/qtconfigmacros.h>
+
++#if defined(Q_PROCESSOR_ARM) && defined(Q_CC_GNU) && !defined(Q_CC_MSVC_ONLY)
++#  include <arm_acle.h>
++#endif
++
+ #ifdef Q_CC_MSVC_ONLY
+ // MSVC defines _YIELD_PROCESSOR() in <xatomic.h>, but as that is a private
+ // header, we include the public ones

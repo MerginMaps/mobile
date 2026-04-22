@@ -1,15 +1,16 @@
-diff --color -Naur a/src/3rdparty/clip2tri/CMakeLists.txt b/src/3rdparty/clip2tri/CMakeLists.txt
---- a/src/3rdparty/clip2tri/CMakeLists.txt	2023-05-13 16:59:42.377052155 +0200
-+++ b/src/3rdparty/clip2tri/CMakeLists.txt	2023-05-13 23:05:44.950379088 +0200
+diff --git a/src/3rdparty/clip2tri/CMakeLists.txt b/src/3rdparty/clip2tri/CMakeLists.txt
+index 9b5a56b..343314e 100644
+--- a/src/3rdparty/clip2tri/CMakeLists.txt
++++ b/src/3rdparty/clip2tri/CMakeLists.txt
 @@ -4,6 +4,7 @@
  ## Bundled_Clip2Tri Generic Library:
  #####################################################################
- 
+
 +find_package(poly2tri)
  qt_internal_add_3rdparty_library(Bundled_Clip2Tri
      QMAKE_LIB_NAME _clip2tri
      STATIC
-@@ -13,11 +14,12 @@
+@@ -13,11 +14,12 @@ qt_internal_add_3rdparty_library(Bundled_Clip2Tri
          clip2tri.cpp clip2tri.h
      INCLUDE_DIRECTORIES
          ../clipper
@@ -23,13 +24,14 @@ diff --color -Naur a/src/3rdparty/clip2tri/CMakeLists.txt b/src/3rdparty/clip2tr
 +set_target_properties(poly2tri::poly2tri PROPERTIES INTERFACE_QT_PACKAGE_NAME poly2tri)
  qt_disable_warnings(Bundled_Clip2Tri)
  qt_set_symbol_visibility_hidden(Bundled_Clip2Tri)
- 
-diff --color -Naur a/src/CMakeLists.txt b/src/CMakeLists.txt
---- a/src/CMakeLists.txt	2023-05-13 16:59:42.379052157 +0200
-+++ b/src/CMakeLists.txt	2023-05-13 17:00:19.256085781 +0200
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 980c492..b1c48f2 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
 @@ -2,7 +2,6 @@
  # SPDX-License-Identifier: BSD-3-Clause
- 
+
  # special case begin
 -add_subdirectory(3rdparty/poly2tri)
  add_subdirectory(3rdparty/clipper)
