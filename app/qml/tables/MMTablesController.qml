@@ -62,7 +62,7 @@ Item {
       onRevertChangesRequested: function() { root.dbManager.revertChanges() }
       onFilterRequested:        function(text) { root.dbManager.filterTable(text) }
       onClearFilterRequested:   function() { root.dbManager.clearFilter() }
-      onCreateTableRequested:   function() { stackView.push(createTableDrawerComp, {}, StackView.PushTransition) }
+      onCreateTableRequested:   function() { stackView.push(createTablePageComp, {}, StackView.PushTransition) }
       onCreateDatabaseRequested: function() { stackView.push(createDatabasePageComp, {}, StackView.PushTransition) }
       onBackClicked:            function() { root.closed() }
     }
@@ -96,9 +96,9 @@ Item {
     }
   }
 
-  // ── Drawer: crear tabla ───────────────────────────────────────────────
+  // ── Página: crear tabla ───────────────────────────────────────────────
   Component {
-    id: createTableDrawerComp
+    id: createTablePageComp
 
     MMCreateTableDrawer {
       dbNameToShow: root.dbManager ? root.dbManager.databaseName : ""
@@ -109,7 +109,6 @@ Item {
           errorMessage = qsTr("DBManager no está configurado")
           return
         }
-
         if (root.dbManager.createTable(tableName, fields)) {
           stackView.pop(StackView.PopTransition)
         } else {
