@@ -34,7 +34,7 @@ MMPage {
   // ── Cabecera ──────────────────────────────────────────────────────────
   pageHeader {
     title: qsTr("Crear Base de Datos")
-    titleFont: __style.h3
+    //titleFont: __style.h3
     baseHeaderHeight: __style.row80
     backVisible: true
   }
