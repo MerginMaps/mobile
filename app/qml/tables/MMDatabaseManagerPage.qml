@@ -52,7 +52,7 @@ MMPage {
   // ── Cabecera ──────────────────────────────────────────────────────────
   pageHeader {
     title: qsTr("Gestor de Base de Datos")
-    titleFont: __style.h3
+    //titleFont: __style.h3
     baseHeaderHeight: __style.row60
     backVisible: true
   }
@@ -135,7 +135,10 @@ MMPage {
               text: qsTr("Nueva Tabla")
               size: MMButton.Sizes.Small
               Layout.fillWidth: true
-              onClicked: root.createTableRequested()
+              onClicked: {
+                console.log("msj: Nueva tabla");
+                root.createTableRequested()
+              }
             }
           }
         }
