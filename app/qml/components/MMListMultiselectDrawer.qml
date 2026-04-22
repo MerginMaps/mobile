@@ -97,7 +97,7 @@ MMDrawer {
           delegate: MMListDelegate {
             id: _delegate
 
-            property bool checked: root.selected.includes( model[root.valueRole] )
+            property bool checked: root.selectedContainsValue( model[root.valueRole] )
 
             text: model[root.textRole]
             secondaryText: model[root.secondaryTextRole] ?? ""
@@ -153,12 +153,24 @@ MMDrawer {
     MMListEmptyLoaderDelegate {}
   }
 
-  function addOrRemoveSelected( val ) {
-    if ( root.selected.indexOf( val ) === -1 ) {
-      root.selected.push( val )
+  // QDate/QDateTime values get parsed to JS Date objects in QML, and they do strict comparison by default, which also
+  // checks if the object instance is the same, for us the time value equality is enough
+  function isEqualDate( a, b ) {
+    if ( a instanceof Date && b instanceof Date )
+      return a.getTime() === b.getTime()
+    return a === b
+  }
+
+  function selectedContainsValue( value ) {
+    return root.selected.some( x => isEqualDate( x, value ) )
+  }
+
+  function addOrRemoveSelected( value ) {
+    if ( !selectedContainsValue( value ) ) {
+      root.selected.push( value )
     }
     else {
-      root.selected = root.selected.filter( ( x ) => x !== val )
+      root.selected = root.selected.filter( x => !isEqualDate( x, value )  )
     }
   }
 }
