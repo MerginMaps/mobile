@@ -13,6 +13,7 @@
 #include <qgsproject.h>
 #include <qgsvectorlayer.h>
 #include <QtConcurrentRun>
+#include <QLocale>
 
 
 UniqueValuesFilterModel::UniqueValuesFilterModel( QObject *parent ) : QAbstractListModel( parent )
@@ -41,8 +42,21 @@ QVariant UniqueValuesFilterModel::data( const QModelIndex &index, int role ) con
   switch ( role )
   {
     case Qt::DisplayRole:
+    {
+      const QVariant &item = mItems.at( index.row() );
+
       // for NULL values, which are gotten as empty strings, we want to return some meaningful text for users
-      return mItems.at( index.row() ).toString().isEmpty() ? QVariant( tr( "No value" ) ) : mItems.at( index.row() );
+      if ( item.toString().isEmpty() )
+        return { tr( "No value" ) };
+
+      if ( item.typeId() == QMetaType::QDate )
+        return QLocale().toString( item.toDate(), QLocale::ShortFormat );
+
+      if ( item.typeId() == QMetaType::QDateTime )
+        return QLocale().toString( item.toDateTime().toLocalTime(), QLocale::ShortFormat );
+
+      return item;
+    }
     case ValueRole:
       return mItems.at( index.row() );
     default:

@@ -22,6 +22,8 @@
 
 #include "coreutils.h"
 
+const QString TIMESTAMP_FORMAT = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" );
+const QString DATE_FORMAT = QStringLiteral( "yyyy-MM-dd" );
 
 FilterController::FilterController( QObject *parent )
   : QObject( parent )
@@ -256,7 +258,15 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       }
       else
       {
-        expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( filter.value.toList().at( 0 ) ) );
+        const QVariant &value = filter.value.toList().at( 0 );
+
+        if ( value.typeId() == QMetaType::QDateTime )
+          if ( isDateFilterDateTime( filter.filterId ) )
+            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDateTime().toUTC().toString( TIMESTAMP_FORMAT ) ) );
+          else
+            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
+        else
+          expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( value ) );
       }
       break;
     }
@@ -287,16 +297,12 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
       if ( isDateFilterDateTime( filter.filterId ) )
       {
-        // GeoPackage stores datetimes as timezone-naive strings (effectively UTC),
-        // so we must convert local datetimes to UTC before comparing.
-        // Use a custom format to avoid the 'Z' suffix that Qt::ISODate adds for UTC.
-        const QString isoFormat = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzz" );
-        const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999" );
-        const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000" );
+        const QString maximumDateTime = QStringLiteral( "9999-12-31T23:59:59.999Z" );
+        const QString minimumDateTime = QStringLiteral( "0001-01-01T00:00:00.000Z" );
 
         if ( variantFrom.isValid() )
         {
-          dateFrom = variantFrom.toDateTime().toUTC().toString( isoFormat );
+          dateFrom = variantFrom.toDateTime().toUTC().toString( TIMESTAMP_FORMAT );
         }
         else
         {
@@ -309,7 +315,7 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
           QTime timeTo = dateTimeTo.time();
           timeTo.setHMS( timeTo.hour(), timeTo.minute(), 59, 999 );
           dateTimeTo.setTime( timeTo );
-          dateTo = dateTimeTo.toString( isoFormat );
+          dateTo = dateTimeTo.toString( TIMESTAMP_FORMAT );
         }
         else
         {
@@ -318,11 +324,8 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       }
       else
       {
-        // date-only fields store values as YYYY-MM-DD strings — no time component
-        const QString dateFormat = QStringLiteral( "yyyy-MM-dd" );
-
-        dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( dateFormat ) : QStringLiteral( "0001-01-01" );
-        dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( dateFormat ) : QStringLiteral( "9999-12-31" );
+        dateFrom = variantFrom.isValid() ? variantFrom.toDateTime().toString( DATE_FORMAT ) : QStringLiteral( "0001-01-01" );
+        dateTo = variantTo.isValid() ? variantTo.toDateTime().toString( DATE_FORMAT ) : QStringLiteral( "9999-12-31" );
       }
 
       expressionCopy.replace( QStringLiteral( "@@value_from@@" ), dateFrom );
@@ -339,10 +342,10 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       }
 
       QStringList expressions;
-      for ( const QVariant &v : values )
+      for ( const QVariant &value : values )
       {
         QString expressionTemplate( expressionCopy );
-        if ( QgsVariantUtils::isNull( v ) )
+        if ( QgsVariantUtils::isNull( value ) )
         {
           expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "NULL" ) );
           expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
@@ -352,7 +355,15 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         }
         else
         {
-          expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( v ) );
+          // QML always returns QDateTime so we can't differentiate based on type
+          if ( value.typeId() == QMetaType::QDateTime )
+            if ( isDateFilterDateTime( filter.filterId ) )
+              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDateTime().toUTC().toString( TIMESTAMP_FORMAT ) ) );
+            else
+              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
+          else
+            expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( value ) );
+
           expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
         }
       }
