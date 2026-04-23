@@ -769,7 +769,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="59"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="115"/>
