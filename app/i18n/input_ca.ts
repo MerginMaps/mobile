@@ -886,12 +886,17 @@ No s&apos;afegirà al projecte.</translation>
         <translation>No s&apos;ha pogut desar els esbossos fotogràfics. Poseu-vos en contacte amb l&apos;assistència.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation>No s&apos;ha pogut crear el directori %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation>Error en processar la imatge, ha fallat la resolució del directori de fotos.</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation>No s&apos;ha pogut processar la imatge</translation>
     </message>
