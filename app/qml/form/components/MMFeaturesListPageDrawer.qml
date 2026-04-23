@@ -80,7 +80,7 @@ Drawer {
         MMFilters.MMFilterBanner {
           id: filterBanner
 
-          visible: __activeProject.filterController?.hasActiveFilterOnLayer( listView.model.layer.id )
+          visible: __activeProject.filterController?.hasActiveFilterOnLayer( listView.model?.layer?.id )
 
           Layout.fillWidth: true
           text: qsTr( "Some features may be hidden by active filters" )
