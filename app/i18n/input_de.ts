@@ -898,7 +898,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="52"/>
         <source>Filters</source>
-        <translation>Filters</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="58"/>
