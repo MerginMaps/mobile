@@ -890,7 +890,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterTextInput.qml" line="37"/>
         <source>Type to filter...</source>
-        <translation>Type to filter...</translation>
+        <translation>Zum Filtern tippen...</translation>
     </message>
 </context>
 <context>
