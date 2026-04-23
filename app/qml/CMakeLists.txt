@@ -62,16 +62,16 @@ set(MM_QML
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
-        filters/MMFiltersDrawer.qml
+    filters/MMFiltersDrawer.qml
     filters/components/MMFilterBanner.qml
     filters/components/MMFilterBoolInput.qml
-    filters/components/MMFilterDateRange.qml
+    filters/components/MMFilterDateInput.qml
     filters/components/MMFilterDropdownValueMapInput.qml
     filters/components/MMFilterDropdownValueRelationInput.qml
     filters/components/MMFilterDropdownUniqueValuesInput.qml
     filters/components/MMFilterRangeInput.qml
-    filters/components/MMFilterTextEditor.qml
     filters/components/MMFilterTextInput.qml
+    filters/components/MMFilterBaseInput.qml
     dialogs/MMCloseAccountDialog.qml
     dialogs/MMDownloadProjectDialog.qml
     dialogs/MMMigrateToMerginDialog.qml

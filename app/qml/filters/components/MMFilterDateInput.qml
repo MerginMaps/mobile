@@ -45,11 +45,11 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       height: fromDateInput.height
 
-      MMFilterTextInput {
+      MMFilterBaseInput {
         id: fromDateInput
 
         width: parent.width
-        type: MMFilterTextInput.InputType.Date
+        type: MMFilterBaseInput.InputType.Date
         placeholderText: qsTr( "From" )
         errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be sooner than \"To\"" ) : ""
         text: {
@@ -136,11 +136,11 @@ Column {
       width: ( parent.width - __style.margin12 ) / 2
       height: toDateInput.height
 
-      MMFilterTextInput {
+      MMFilterBaseInput {
         id: toDateInput
 
         width: parent.width
-        type: MMFilterTextInput.InputType.Date
+        type: MMFilterBaseInput.InputType.Date
         placeholderText: qsTr( "To" )
         errorMsg: root.rangeInvalid ? qsTr( "\"From\" must be sooner than \"To\"" ) : ""
         text: {

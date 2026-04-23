@@ -9,82 +9,47 @@
 
 import QtQuick
 
-import "../../components" as MMComponents
-import "../../components/private" as MMPrivateComponents
+import "../../components"
 
-/**
- * Single-line input for the filters panel.
- * See MMBaseSingleLineInput for additional properties.
- */
-MMPrivateComponents.MMBaseSingleLineInput {
+Column {
   id: root
 
-  enum InputType { Text, Number, Date, Dropdown }
+  width: parent.width
+  spacing: __style.margin8
 
-  property bool checked: false
-  property int type: MMFilterTextInput.InputType.Text
+  required property string filterName
+  required property var currentValue
 
-  // date and dropdown types open pickers instead of accepting keyboard input
-  textField.readOnly: root.type === MMFilterTextInput.InputType.Date || root.type === MMFilterTextInput.InputType.Dropdown
-  textField.inputMethodHints: root.type === MMFilterTextInput.InputType.Number ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
-  textField.color: {
-    if ( root.editState === "readOnly" ) return __style.nightColor
-    if ( root.editState === "enabled" ) return __style.nightColor
-    if ( root.editState === "disabled" ) return __style.mediumGreyColor
-    return __style.forestColor
+  MMText {
+    width: parent.width
+
+    text: root.filterName
+
+    font: __style.p6
+    color: __style.nightColor
   }
 
-  // error state takes priority over checked, checked over default
-  textFieldBackground.color: {
-    if ( root.validationState === "error" ) return __style.negativeUltraLightColor
-    if ( root.checked ) return __style.positiveColor
-    return __style.lightGreenColor
+  MMFilterBaseInput {
+    id: filterInput
+
+    width: parent.width
+    type: MMFilterBaseInput.InputType.Text
+    placeholderText: qsTr( "Type to filter..." )
+    text: root.currentValue && root.currentValue[0] ? root.currentValue[0] : ""
+
+    onTextChanged: debounceTimer.restart()
   }
 
-  textFieldBackground.border.color: {
-    if ( root.validationState === "error" ) return __style.negativeColor
-    if ( root.checked ) return __style.darkGreenColor
-    return __style.polarColor
-  }
-
-  textFieldBackground.border.width: {
-    if ( root.validationState === "error" ) return __style.width2
-    if ( root.checked ) return 1 * __dp
-    return 0
-  }
-
-  // close icon when checked, type-specific icon otherwise
-  rightContent: MMComponents.MMIcon {
-    size: __style.icon24
-    source: {
-      if ( root.checked ) return __style.closeIcon
-      if ( root.type === MMFilterTextInput.InputType.Date ) return __style.calendarIcon
-      if ( root.type === MMFilterTextInput.InputType.Dropdown ) return __style.arrowDownIcon
-      return __style.closeIcon
-    }
-    color: __style.forestColor
-  }
-
-  // picker types always show the icon, editable types only when there is a value
-  rightContentVisible: {
-    if ( root.type === MMFilterTextInput.InputType.Text || root.type === MMFilterTextInput.InputType.Number ) return root.checked
-    return true
-  }
-
-  // keep checked in sync with whether the field has a value
-  // dropdown type manages checked via the parent's binding
-  onTextChanged: {
-    if ( root.type !== MMFilterTextInput.InputType.Dropdown ) {
-      root.checked = root.text.length > 0
+  Timer {
+    id: debounceTimer
+    interval: 300
+    repeat: false
+    onTriggered: {
+      if (filterInput.text) {
+        root.currentValue = [filterInput.text]
+      } else {
+        root.currentValue = undefined
+      }
     }
   }
-
-  // clear the field when tapping the close icon
-  onRightContentClicked: {
-    if ( ( root.type === MMFilterTextInput.InputType.Text || root.type === MMFilterTextInput.InputType.Number ) && root.checked ) {
-      textField.clear()
-      root.checked = false
-    }
-  }
-
 }

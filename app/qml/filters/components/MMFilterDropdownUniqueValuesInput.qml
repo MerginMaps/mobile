@@ -37,12 +37,12 @@ Column {
     color: __style.nightColor
   }
 
-  MMFilterTextInput {
+  MMFilterBaseInput {
     id: dropdownInput
 
     width: parent.width
 
-    type: MMFilterTextInput.InputType.Dropdown
+    type: MMFilterBaseInput.InputType.Dropdown
 
     checked: text !== ""
 

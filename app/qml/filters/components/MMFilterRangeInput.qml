@@ -39,11 +39,11 @@ Column {
       return !isNaN( fromVal ) && !isNaN( toVal ) && fromVal > toVal
     }
 
-    MMFilterTextInput {
+    MMFilterBaseInput {
       id: fromInput
 
       width: ( parent.width - __style.margin12 ) / 2
-      type: MMFilterTextInput.InputType.Number
+      type: MMFilterBaseInput.InputType.Number
       placeholderText: qsTr( "Min" )
       text: root.currentValue && root.currentValue[0] !== undefined ? root.currentValue[0] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
@@ -53,11 +53,11 @@ Column {
       }
     }
 
-    MMFilterTextInput {
+    MMFilterBaseInput {
       id: toInput
 
       width: ( parent.width - __style.margin12 ) / 2
-      type: MMFilterTextInput.InputType.Number
+      type: MMFilterBaseInput.InputType.Number
       placeholderText: qsTr( "Max" )
       text: root.currentValue && root.currentValue[1] !== undefined ? root.currentValue[1] : ""
       errorMsg: rangeRow.rangeInvalid ? qsTr( "\"Min\" must be less than \"Max\"" ) : ""
