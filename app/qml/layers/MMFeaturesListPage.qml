@@ -53,7 +53,7 @@ MMComponents.MMPage {
 
       width: parent.width
 
-      visible: root.selectedLayer && __activeProject.filterController?.hasActiveFilterOnLayer(root.selectedLayer.id)
+      visible: root.selectedLayer && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer(root.selectedLayer.id)
 
       text: qsTr("Active filters applied")
       actionText: qsTr("Reset")
