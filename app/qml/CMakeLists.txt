@@ -181,7 +181,6 @@ set(MM_QML
     tables/MMDatabaseManagerPage.qml
     tables/MMCreateDatabasePage.qml
     tables/MMCreateTableDrawer.qml
-    tables/components/MMCreateTableForm.qml
     tables/components/MMDatabaseInfoDrawer.qml
     main.qml
     PARENT_SCOPE

@@ -47,7 +47,7 @@ Item {
       tableModel:   root.dbManager ? root.dbManager.tableModel : null
       tableList:    root.dbManager ? root.dbManager.tableList : []
       currentTable: root.dbManager ? root.dbManager.currentTable : ""
-      rowCount:     root.dbManager ? root.dbManager.getRowCount() : 0
+      rowCount:     root.dbManager ? root.dbManager.rowCount : 0
 
       onTableSelected:          function(name) { root.dbManager.setCurrentTable(name) }
       onAddRowRequested:        function() { root.dbManager.addRow() }
