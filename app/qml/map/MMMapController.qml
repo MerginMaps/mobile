@@ -858,7 +858,7 @@ Item {
         }
 
         MMMapButton {
-          id: filterIndicatorButton
+          id: filterButton
 
           visible: root.state === "view" && __activeProject.filterController?.filteringActivated
           iconSource: __style.filterIcon

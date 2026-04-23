@@ -62,7 +62,6 @@ set(MM_QML
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
-    filters/MMFilterChip.qml
     filters/MMFiltersPanel.qml
     filters/components/MMFilterBanner.qml
     filters/components/MMFilterBoolInput.qml
