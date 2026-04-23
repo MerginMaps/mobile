@@ -3277,7 +3277,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../filter/uniquevaluesfiltermodel.cpp" line="50"/>
         <source>No value</source>
-        <translation>No value</translation>
+        <translation>Kein Wert</translation>
     </message>
 </context>
 <context>
@@ -3320,7 +3320,7 @@ only allows up to %1 downloaded projects.</source>
     <message>
         <location filename="../qml/main.qml" line="362"/>
         <source>Filters</source>
-        <translation>Filters</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="374"/>
