@@ -29,8 +29,18 @@ class ValueRelationFeaturesModel : public LayerFeaturesModel
 
   public:
 
+    enum ValueRelationFeaturesModelRoles
+    {
+      KeyRole = LayerFeaturesModel::LastRole + 1, // the key-column value
+      LastRole = KeyRole
+    };
+    Q_ENUM( ValueRelationFeaturesModelRoles );
+
     explicit ValueRelationFeaturesModel( QObject *parent = nullptr );
     ~ValueRelationFeaturesModel() override;
+
+    QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     void setup() override;
     void reset() override;

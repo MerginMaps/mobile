@@ -15,9 +15,13 @@ import "../../app/qml/account/components" as MMAccountComponents
 import "../../app/qml/components" as MMComponents
 import "../../app/qml/inputs"
 
-Column {
-  padding: 20
-  spacing: 20
+ScrollView {
+  anchors.fill: parent
+
+  Column {
+    width: parent.width
+    padding: 20
+    spacing: 20
 
   GroupBox {
     title: "MMComponents.MMCheckBox"
@@ -161,6 +165,52 @@ Column {
   }
 
   GroupBox {
+    title: "MMComponents.MMSegmentControl"
+    background: Rectangle {
+      color: "lightGray"
+      border.color: "gray"
+    }
+    label: Label {
+      color: "black"
+      text: parent.title
+      padding: 5
+    }
+
+    Column {
+      spacing: 10
+      anchors.fill: parent
+
+      MMComponents.MMSegmentControl {}
+
+      MMComponents.MMSegmentControl {
+        selectedIndex: MMComponents.MMSegmentControl.Options.True
+      }
+
+      MMComponents.MMSegmentControl {
+        selectedIndex: MMComponents.MMSegmentControl.Options.False
+        onSelectedIndexChanged: { console.log( "selected:", selectedIndex ) }
+      }
+
+      MMComponents.MMSegmentControl {
+        enabled: false
+      }
+
+      MMComponents.MMSegmentControl {
+        allText: qsTr( "No filter" )
+        trueText: qsTr( "Inspected" )
+        falseText: qsTr( "Not inspected" )
+        selectedIndex: MMComponents.MMSegmentControl.Options.False
+      }
+
+      MMComponents.MMSegmentControl {
+        allText: qsTr( "A very long label that should be elided" )
+        trueText: qsTr( "Another extremely long true label" )
+        falseText: qsTr( "A different very long false label" )
+      }
+    }
+  }
+
+  GroupBox {
     title: "MMComponents.MMSwitch"
     background: Rectangle {
       color: "lightGray"
@@ -195,4 +245,5 @@ Column {
       }
     }
   }
+}
 }

@@ -15,6 +15,7 @@ import mm 1.0 as MM
 
 import "../inputs"
 import "../components" as MMComponents
+import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -40,9 +41,28 @@ MMComponents.MMPage {
       anchors.topMargin: __style.spacing20
 
       width: parent.width
-
       delayedSearch: true
       onSearchTextChanged: featuresModel.searchExpression = searchBar.text
+    }
+
+    MMFilterComponents.MMFilterBanner {
+      id: filterBanner
+
+      anchors.top: searchBar.bottom
+      anchors.topMargin: __style.spacing20
+
+      width: parent.width
+
+      visible: root.selectedLayer && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer(root.selectedLayer.id)
+
+      text: qsTr("Active filters applied")
+      actionText: qsTr("Reset")
+
+      onActionClicked: {
+        __activeProject.filterController?.clearLayerFilters( root.selectedLayer.id )
+        featuresModel.reloadFeatures()
+        visible = false
+      }
     }
 
     MMComponents.MMListView {
@@ -51,9 +71,9 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: searchBar.bottom
+        top: filterBanner.visible ? filterBanner.bottom : searchBar.bottom
         bottom: parent.bottom
-        topMargin: __style.spacing20
+        topMargin: filterBanner.visible ? __style.spacing10 : __style.spacing20
       }
 
       model: MM.LayerFeaturesModel {
