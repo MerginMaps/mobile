@@ -908,7 +908,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="99"/>
         <source>No filtering</source>
-        <translation>No filtering</translation>
+        <translation>Keine Filter festgelegt</translation>
     </message>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="209"/>
