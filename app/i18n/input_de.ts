@@ -1432,7 +1432,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/components/MMListEmptyLoaderDelegate.qml" line="28"/>
         <source>No items</source>
-        <translation>No items</translation>
+        <translation>Keine Einträge</translation>
     </message>
 </context>
 <context>
