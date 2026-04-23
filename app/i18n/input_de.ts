@@ -832,7 +832,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="49"/>
         <source>Select...</source>
-        <translation>Select...</translation>
+        <translation>Bitte auswählen ...</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="50"/>
@@ -845,7 +845,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="48"/>
         <source>Select...</source>
-        <translation>Select...</translation>
+        <translation>Bitte auswählen ...</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
