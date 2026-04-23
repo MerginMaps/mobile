@@ -850,7 +850,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
         <source>%n selected value(s)</source>
-        <translation><numerusform>%n selected value(s)</numerusform><numerusform>%n selected value(s)</numerusform></translation>
+        <translation><numerusform>%n Wert ausgewählt</numerusform><numerusform>%n Werte ausgewählt</numerusform></translation>
     </message>
 </context>
 <context>
