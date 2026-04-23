@@ -59,7 +59,7 @@ set(MM_SRCS
     filter/uniquevaluesfiltermodel.cpp
     filter/valuemapfiltermodel.cpp
     filter/searchproxymodel.cpp
-    filtercontroller.cpp
+    filter/filtercontroller.cpp
     guidelinecontroller.cpp
     hapticsmodel.cpp
     identifykit.cpp
@@ -154,7 +154,7 @@ set(MM_HDRS
     filter/uniquevaluesfiltermodel.h
     filter/valuemapfiltermodel.h
     filter/searchproxymodel.h
-    filtercontroller.h
+    filter/filtercontroller.h
     guidelinecontroller.h
     hapticsmodel.h
     identifykit.h

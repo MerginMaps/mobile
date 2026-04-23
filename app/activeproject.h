@@ -24,7 +24,7 @@
 #include "inputmapsettings.h"
 #include "merginprojectmetadata.h"
 #include "synchronizationoptions.h"
-#include "filtercontroller.h"
+#include "filter/filtercontroller.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
