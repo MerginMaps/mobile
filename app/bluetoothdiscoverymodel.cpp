@@ -108,7 +108,7 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   if ( discovering )
   {
     mDiscoveryAgent->start();
-    CoreUtils::log( QStringLiteral( "Bluetooth discovery" ), QStringLiteral( "Started discovering devices, method %1" ).arg( mDiscoveryAgent->supportedDiscoveryMethods() ) );
+    CoreUtils::log( QStringLiteral( "Bluetooth discovery" ), QStringLiteral( "Started discovering devices, method %1" ).arg( static_cast<int>( mDiscoveryAgent->supportedDiscoveryMethods() ) ) );
   }
   else
   {
