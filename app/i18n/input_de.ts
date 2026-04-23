@@ -903,7 +903,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="58"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="99"/>
