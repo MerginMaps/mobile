@@ -2355,12 +2355,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/components/MMSegmentControl.qml" line="22"/>
         <source>True</source>
-        <translation>True</translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../qml/components/MMSegmentControl.qml" line="23"/>
         <source>False</source>
-        <translation>False</translation>
+        <translation>Nein</translation>
     </message>
 </context>
 <context>
