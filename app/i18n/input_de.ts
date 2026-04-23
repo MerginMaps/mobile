@@ -962,7 +962,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="34"/>
         <source>Some features may be hidden by active filters</source>
-        <translation>Some features may be hidden by active filters</translation>
+        <translation>Objekte können durch aktive Filter ausgeblendet sein</translation>
     </message>
 </context>
 <context>
@@ -1050,7 +1050,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="46"/>
         <source>Some features may be hidden by active filters</source>
-        <translation>Some features may be hidden by active filters</translation>
+        <translation>Objekte können durch aktive Filter ausgeblendet sein</translation>
     </message>
     <message>
         <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="172"/>
