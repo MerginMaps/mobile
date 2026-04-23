@@ -819,7 +819,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
         <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
-        <translation>&quot;From&quot; must be sooner than &quot;To&quot;</translation>
+        <translation>&quot;Von&quot; muss vor &quot;Bis&quot; liegen</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
