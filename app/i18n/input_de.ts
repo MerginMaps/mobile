@@ -824,7 +824,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
         <source>To</source>
-        <translation>To</translation>
+        <translation>Bis</translation>
     </message>
 </context>
 <context>
