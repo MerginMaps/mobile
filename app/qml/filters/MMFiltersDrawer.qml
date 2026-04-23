@@ -13,10 +13,6 @@ import QtQuick.Controls
 
 import "../components" as MMComponents
 
-//
-// TODO: rename this file to "MMFiltersDrawer"!
-//
-
 MMComponents.MMDrawer {
   id: root
 

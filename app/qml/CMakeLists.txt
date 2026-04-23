@@ -62,7 +62,7 @@ set(MM_QML
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
-    filters/MMFiltersPanel.qml
+        filters/MMFiltersDrawer.qml
     filters/components/MMFilterBanner.qml
     filters/components/MMFilterBoolInput.qml
     filters/components/MMFilterDateRange.qml

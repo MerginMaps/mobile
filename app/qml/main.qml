@@ -517,7 +517,7 @@ ApplicationWindow {
     id: filtersDrawerLoader
 
     active: false
-    sourceComponent: MMFiltersPanel {
+    sourceComponent: MMFiltersDrawer {
       onClosed: {
         filtersDrawerLoader.active = false
         stateManager.state = "map"
