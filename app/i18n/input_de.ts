@@ -764,7 +764,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="58"/>
         <source>Active filters applied</source>
-        <translation>Active filters applied</translation>
+        <translation>Filter angewendet</translation>
     </message>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="59"/>
