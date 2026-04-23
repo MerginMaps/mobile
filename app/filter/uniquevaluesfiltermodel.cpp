@@ -94,7 +94,7 @@ void UniqueValuesFilterModel::setFieldName( const QString &fieldName )
 
 void UniqueValuesFilterModel::populate( FilterController *controller )
 {
-  if ( mLayerId.isEmpty() || mFieldName.isEmpty() ) return;
+  if ( mLayerId.isEmpty() || mFieldName.isEmpty() || !controller ) return;
 
   QgsMapLayer *mapLayer = QgsProject::instance()->mapLayer( mLayerId );
   if ( !mapLayer )
