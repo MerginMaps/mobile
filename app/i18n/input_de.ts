@@ -787,7 +787,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="86"/>
         <source>Some features may be hidden by active filters</source>
-        <translation>Some features may be hidden by active filters</translation>
+        <translation>Objekte können durch aktive Filter ausgeblendet sein</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="123"/>
