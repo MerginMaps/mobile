@@ -74,7 +74,7 @@ Column {
 
       emptyStateDelegate: Component {
         MMComponents.MMListEmptyLoaderDelegate {
-          isLoading: vrDropdownModel.isLoading
+          isLoading: vrDropdownModel.fetchingResults
         }
       }
 

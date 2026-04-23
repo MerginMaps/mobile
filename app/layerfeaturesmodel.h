@@ -73,7 +73,6 @@ class LayerFeaturesModel : public FeaturesModel
     int featuresLimit() const;
     QgsVectorLayer *layer() const;
     QString searchExpression() const;
-    bool fetchingResults() const { return mFetchingResults; }
 
     void setSearchExpression( const QString &searchExpression );
     void setLayer( QgsVectorLayer *newLayer );
