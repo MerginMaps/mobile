@@ -858,7 +858,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="48"/>
         <source>Select...</source>
-        <translation>Select...</translation>
+        <translation>%n selected value(s)</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
