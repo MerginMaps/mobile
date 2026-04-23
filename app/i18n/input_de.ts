@@ -913,7 +913,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/MMFiltersDrawer.qml" line="209"/>
         <source>Apply filters</source>
-        <translation>Apply filters</translation>
+        <translation>Filter anwenden</translation>
     </message>
 </context>
 <context>
