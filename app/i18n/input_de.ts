@@ -2350,7 +2350,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/components/MMSegmentControl.qml" line="21"/>
         <source>All</source>
-        <translation>All</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../qml/components/MMSegmentControl.qml" line="22"/>
