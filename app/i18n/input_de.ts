@@ -877,7 +877,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="49"/>
         <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="63"/>
         <source>&quot;Min&quot; must be less than &quot;Max&quot;</source>
-        <translation>&quot;Min&quot; must be less than &quot;Max&quot;</translation>
+        <translation>&quot;Min&quot; muss kleiner als &quot;Max&quot; sein</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="61"/>
