@@ -805,7 +805,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="47"/>
         <source>False</source>
-        <translation>Falsch</translation>
+        <translation>Nein</translation>
     </message>
 </context>
 <context>
