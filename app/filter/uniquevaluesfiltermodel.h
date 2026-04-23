@@ -63,7 +63,7 @@ class UniqueValuesFilterModel : public QAbstractListModel
     void onLoadingFinished();
 
   private:
-    QVariantList loadUniqueValues( QgsVectorLayer *layer, int fieldIndex );
+    static QVariantList loadUniqueValues( QgsVectorLayer *layer, int fieldIndex );
 
     QString mLayerId;
     QString mFieldName;

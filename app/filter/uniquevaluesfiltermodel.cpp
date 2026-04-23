@@ -123,7 +123,7 @@ void UniqueValuesFilterModel::populate( FilterController *controller )
   mIsLoading = true;
   emit isLoadingChanged();
 
-  mResultWatcher.setFuture( QtConcurrent::run( &UniqueValuesFilterModel::loadUniqueValues, this, layerClone, fieldIndex ) );
+  mResultWatcher.setFuture( QtConcurrent::run( &UniqueValuesFilterModel::loadUniqueValues, layerClone, fieldIndex ) );
 }
 
 QVariantList UniqueValuesFilterModel::loadUniqueValues( QgsVectorLayer *layer, int fieldIndex )
