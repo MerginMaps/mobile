@@ -46,7 +46,7 @@ Column {
     checked: text !== ""
 
     placeholderText: qsTr( "Select..." )
-    text: root.currentValue && root.currentValue.length ? qsTr( "%1 selected" ).arg( root.currentValue.length ) : ""
+    text: root.currentValue && root.currentValue.length ? qsTr( "%n selected value(s)", "", root.currentValue.length ) : ""
 
     onTextClicked: openDrawer()
     onRightContentClicked: {

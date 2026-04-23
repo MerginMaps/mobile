@@ -859,10 +859,13 @@ Won&apos;t be added to the project.</source>
         <source>Select...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="50"/>
-        <source>%1 selected</source>
-        <translation type="unfinished"></translation>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -872,10 +875,13 @@ Won&apos;t be added to the project.</source>
         <source>Select...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
-        <source>%1 selected</source>
-        <translation type="unfinished"></translation>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -885,10 +891,13 @@ Won&apos;t be added to the project.</source>
         <source>Select...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
-        <source>%1 selected</source>
-        <translation type="unfinished"></translation>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
