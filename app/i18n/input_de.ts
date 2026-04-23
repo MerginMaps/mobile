@@ -800,7 +800,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="46"/>
         <source>True</source>
-        <translation>True</translation>
+        <translation>Wahr</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="47"/>
