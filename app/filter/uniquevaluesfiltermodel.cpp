@@ -172,8 +172,6 @@ void UniqueValuesFilterModel::onLoadingFinished()
   mItems.clear();
   mItems = mResultWatcher.result();
 
-  // TODO: measure how long it takes to move results from future result to mItems ~ there might be a way to avoid the copy
-
   endResetModel();
   emit countChanged();
 

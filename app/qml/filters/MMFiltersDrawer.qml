@@ -146,8 +146,6 @@ MMComponents.MMDrawer {
               }
               else if ( filterType === FieldFilter.SingleSelectFilter || filterType === FieldFilter.MultiSelectFilter )
               {
-                // TODO: might be worth moving this logic to C++
-
                 props['isMultiSelect'] = filterType === FieldFilter.MultiSelectFilter
 
                 const dropdownConfig = __activeProject.filterController.getDropdownConfiguration( modelData.filterId )

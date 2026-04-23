@@ -97,7 +97,7 @@ MMDrawer {
           delegate: MMListDelegate {
             id: _delegate
 
-            property bool checked: root.selectedContainsValue( model[root.valueRole] )
+            property bool checked: root.isSelected( model[root.valueRole] )
 
             text: model[root.textRole]
             secondaryText: model[root.secondaryTextRole] ?? ""
@@ -161,12 +161,12 @@ MMDrawer {
     return a === b
   }
 
-  function selectedContainsValue( value ) {
+  function isSelected( value ) {
     return root.selected.some( x => isEqualDate( x, value ) )
   }
 
   function addOrRemoveSelected( value ) {
-    if ( !selectedContainsValue( value ) ) {
+    if ( !isSelected( value ) ) {
       root.selected.push( value )
     }
     else {
