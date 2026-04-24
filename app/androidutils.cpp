@@ -186,40 +186,6 @@ QString AndroidUtils::getDeviceModel()
   return deviceModel;
 }
 
-QVector<int> AndroidUtils::getSafeArea()
-{
-  QVector<int> ret;
-
-#ifdef ANDROID
-  const auto activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
-  const auto safeArrayStringObj = activity.callMethod<jintArray>( "getSafeArea", "()Ljava/lang/String;" );
-
-  if ( safeArrayStringObj.isValid() )
-  {
-    const QString safeArrayString = safeArrayStringObj.toString();
-
-    QStringList stringParts = safeArrayString.split( "," );
-    if ( stringParts.length() != 4 )
-    {
-      CoreUtils::log( "SafeArea", "Android returned malformed string from getSafeArea method" );
-      return ret;
-    }
-
-    const int top = stringParts[0].toInt(); // top inset
-    const int right = stringParts[1].toInt(); // right inset
-    const int bottom = stringParts[2].toInt(); // bottom inset
-    const int left = stringParts[3].toInt(); // left inset
-
-    ret << top << right << bottom << left;
-    return ret;
-  }
-
-  CoreUtils::log( "SafeArea", "Android returned null from getSafeArea method" );
-  return ret;
-#endif
-  return ret;
-}
-
 void AndroidUtils::hideSplashScreen()
 {
 #ifdef ANDROID
