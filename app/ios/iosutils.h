@@ -40,8 +40,6 @@ class IosUtils: public QObject
     IOSImagePicker *imagePicker() const;
     static QString readExif( const QString &filepath, const QString &tag );
 
-    Q_INVOKABLE QVector<int> getSafeArea();
-
     Q_INVOKABLE static bool openFile( const QString &filePath );
 
     static Q_INVOKABLE QString getManufacturer();
@@ -67,8 +65,6 @@ class IosUtils: public QObject
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */
     void setIdleTimerDisabled();
-
-    QVector<int> getSafeAreaImpl();
 
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();

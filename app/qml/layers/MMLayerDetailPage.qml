@@ -20,6 +20,12 @@ import "../inputs"
 Page {
   id: root
 
+  // Qt 6.9+ auto-applies safe area padding; child MMPage instances handle it manually.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
+
   signal close()
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var targetLayer )

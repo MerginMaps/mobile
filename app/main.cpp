@@ -812,46 +812,6 @@ int main( int argc, char *argv[] )
 
   engine.rootContext()->setContextProperty( "__version", version );
 
-  // Set safe areas for mobile devices
-#ifdef ANDROID
-  auto safeAreaInsets = androidUtils.getSafeArea();
-
-  if ( safeAreaInsets.length() == 4 )
-  {
-    // Values from Android API must be scaled with dpr
-    qreal dpr = QGuiApplication::primaryScreen()->devicePixelRatio();
-    style->setSafeAreaTop( safeAreaInsets[0] / dpr );
-    style->setSafeAreaRight( safeAreaInsets[1] / dpr );
-    style->setSafeAreaBottom( safeAreaInsets[2] / dpr );
-    style->setSafeAreaLeft( safeAreaInsets[3] / dpr );
-  }
-#elif defined( Q_OS_IOS )
-
-  //
-  // After migration to Qt 6.8.3, we can no longer reliably read the safe area on app startup (on iOS).
-  // It appears the UIWindow is not fully initialized, returning zero safe area insets.
-  // However, the window is correctly initialized once the event loop begins processing events.
-  // Therefore, we delay the safe area retrieval until after the event loop starts.
-  // This is a temporary workaround and might be replaced in the future by
-  // the more robust approach described in https://www.qt.io/blog/expanded-client-areas-and-safe-areas-in-qt-6.9.
-  //
-
-  const int SAFE_AREA_REFRESH_DELAY_MS = 10;
-
-  QTimer::singleShot( SAFE_AREA_REFRESH_DELAY_MS, &lambdaContext, [&iosUtils, &style]()
-  {
-    auto safeAreaInsets = iosUtils.getSafeArea();
-
-    if ( safeAreaInsets.length() == 4 )
-    {
-      style->setSafeAreaTop( safeAreaInsets[0] );
-      style->setSafeAreaRight( safeAreaInsets[1] );
-      style->setSafeAreaBottom( safeAreaInsets[2] );
-      style->setSafeAreaLeft( safeAreaInsets[3] );
-    }
-  } );
-
-#endif
 
   // Set simulated position for desktop builds
 #ifdef DESKTOP_OS
@@ -914,6 +874,22 @@ int main( int argc, char *argv[] )
   if ( QQuickWindow *quickWindow = qobject_cast<QQuickWindow *>( object ) )
   {
     quickWindow->setIcon( QIcon( logoUrl ) );
+
+#if defined( ANDROID ) || defined( Q_OS_IOS )
+    // Qt 6.9+ provides QWindow::safeAreaMargins() natively for both Android and iOS.
+
+    auto applyMargins = [style, quickWindow]()
+    {
+      const QMargins m = quickWindow->safeAreaMargins();
+      style->setSafeAreaTop( m.top() );
+      style->setSafeAreaRight( m.right() );
+      style->setSafeAreaBottom( m.bottom() );
+      style->setSafeAreaLeft( m.left() );
+    };
+
+    QObject::connect( quickWindow, &QWindow::safeAreaMarginsChanged, &lambdaContext, applyMargins );
+    QTimer::singleShot( 10, &lambdaContext, applyMargins );
+#endif
   }
 
 #ifdef DESKTOP_OS
