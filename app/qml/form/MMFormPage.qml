@@ -24,6 +24,14 @@ import "../dialogs"
 Page {
   id: root
 
+  // Qt 6.9+ Page automatically adds safe area margins as padding.
+  // MMPageHeader and MMToolbar already handle safe areas manually, so
+  // we set them to zero to avoid double-applying the insets.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
+
   /**
    * When feature in the form is saved.
    */
