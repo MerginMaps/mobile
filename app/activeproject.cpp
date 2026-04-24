@@ -75,6 +75,9 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   setAutosyncEnabled( mAppSettings.autosyncAllowed() );
 
   QObject::connect( &mAppSettings, &AppSettings::autosyncAllowedChanged, this, &ActiveProject::setAutosyncEnabled );
+
+  mFilterController = std::make_unique<FilterController>();
+  connect( this, &ActiveProject::projectReloaded, mFilterController.get(), &FilterController::loadFilterConfig );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -667,4 +670,9 @@ bool ActiveProject::photoSketchingEnabled() const
   }
 
   return mQgsProject->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoSketching/Enabled" ), false );
+}
+
+FilterController *ActiveProject::filterController() const
+{
+  return mFilterController.get();
 }

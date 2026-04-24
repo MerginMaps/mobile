@@ -34,8 +34,8 @@ MMDrawer {
   interactive: !listViewComponent.interactive
 
   drawerBottomMargin: listViewComponent.count === 0
-                      ? (__style.margin20 + __style.safeAreaBottom)
-                      : 0
+    ? ( __style.margin20 + __style.safeAreaBottom )
+    : 0
 
   drawerContent: Item {
     width: parent.width
@@ -52,9 +52,9 @@ MMDrawer {
       I.MMSearchInput {
         id: searchBar
 
-        delayedSearch: true
-
         width: parent.width
+
+        delayedSearch: true
 
         placeholderText: qsTr( "Search" )
 
@@ -63,6 +63,8 @@ MMDrawer {
         visible: root.withSearch
 
         onSearchTextChanged: root.searchTextChanged( searchBar.searchText )
+
+        textField.onPressed: root.showFullScreen = true
       }
 
       MMListSpacer { id: searchBarSpacer; height: __style.spacing20; visible: root.withSearch }
@@ -71,18 +73,13 @@ MMDrawer {
         width: parent.width
         height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
 
-        MMScrollView {
+        Loader {
+          id: emptyStateDelegateLoader
+
           width: parent.width
-          height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-          enabled: contentHeight > height
 
-          Loader {
-            id: emptyStateDelegateLoader
-
-            visible: listViewComponent.count === 0
-
-            width: parent.width
-          }
+          visible: listViewComponent.count === 0
+          sourceComponent: defaultEmptyStateComponent
         }
 
         MMListView {
@@ -90,6 +87,7 @@ MMDrawer {
 
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
+
           visible: count > 0
           interactive: contentHeight > height
 
@@ -99,27 +97,25 @@ MMDrawer {
           delegate: MMListDelegate {
             id: _delegate
 
-            property bool checked: root.selected.includes( model[root.valueRole] )
+            property bool checked: root.isSelected( model[root.valueRole] )
 
             text: model[root.textRole]
             secondaryText: model[root.secondaryTextRole] ?? ""
 
+            rightContent: MMIcon {
+              source: __style.doneCircleIcon
+              visible: _delegate.checked
+            }
+
             onClicked: {
               if ( root.multiSelect ) {
                 _delegate.checked = !_delegate.checked
-
-                // add or remove the item from the selected features list
                 addOrRemoveSelected( model[root.valueRole] )
               }
               else {
                 root.selectionFinished( [model[root.valueRole]] )
                 root.close()
               }
-            }
-
-            rightContent: MMIcon {
-              source: __style.doneCircleIcon
-              visible: _delegate.checked
             }
           }
 
@@ -141,18 +137,7 @@ MMDrawer {
 
       text: qsTr( "Confirm selection" )
 
-      onClicked: {
-        root.selectionFinished( root.selected )
-      }
-    }
-  }
-
-  function addOrRemoveSelected( val ) {
-    if ( root.selected.indexOf( val ) === -1 ) {
-      root.selected.push( val )
-    }
-    else {
-      root.selected = root.selected.filter( ( x ) => x !== val )
+      onClicked: root.selectionFinished( root.selected )
     }
   }
 
@@ -160,5 +145,32 @@ MMDrawer {
     id: internal
 
     property real searchBarVerticalSpace: root.withSearch ? searchBar.height + searchBarSpacer.height : 0
+  }
+
+  Component {
+    id: defaultEmptyStateComponent
+
+    MMListEmptyLoaderDelegate {}
+  }
+
+  // QDate/QDateTime values get parsed to JS Date objects in QML, and they do strict comparison by default, which also
+  // checks if the object instance is the same, for us the time value equality is enough
+  function isEqualDate( a, b ) {
+    if ( a instanceof Date && b instanceof Date )
+      return a.getTime() === b.getTime()
+    return a === b
+  }
+
+  function isSelected( value ) {
+    return root.selected.some( x => isEqualDate( x, value ) )
+  }
+
+  function addOrRemoveSelected( value ) {
+    if ( !isSelected( value ) ) {
+      root.selected.push( value )
+    }
+    else {
+      root.selected = root.selected.filter( x => !isEqualDate( x, value )  )
+    }
   }
 }

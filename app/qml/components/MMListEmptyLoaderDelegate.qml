@@ -9,40 +9,32 @@
 
 import QtQuick
 
-import "../../components"
-
 Item {
-  id: control
+  id: root
 
-  width: height
-  height: __style.mapItemHeight
+  property bool isLoading: false
 
-  property alias iconSource: icon.source
-  property color bgndColor: __style.polarColor
+  height: root.isLoading
+    ? busyIndicator.height + 2 * __style.margin12
+    : noItemsText.implicitHeight + 2 * __style.margin20
 
-  signal clicked
-  signal clickAndHold
+  MMText {
+    id: noItemsText
 
-  Rectangle {
-    width: parent.width
-    height: parent.height
-    radius: control.height / 2
-    color: control.bgndColor
+    anchors.centerIn: parent
 
-    layer.enabled: true
-    layer.effect: MMShadow {}
+    visible: !root.isLoading
 
-    MMIcon {
-      id: icon
+    text: qsTr( "No items" )
+    font: __style.p5
+    color: __style.mediumGreyColor
+  }
 
-      anchors.centerIn: parent
-      color: __style.forestColor
-    }
+  MMBusyIndicator {
+    id: busyIndicator
 
-    MouseArea {
-      anchors.fill: parent
-      onClicked: control.clicked()
-      onPressAndHold: control.clickAndHold()
-    }
+    anchors.centerIn: parent
+
+    running: root.isLoading
   }
 }
