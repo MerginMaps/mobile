@@ -788,7 +788,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="86"/>
         <source>Some features may be hidden by active filters</source>
-        <translation>Előfordulhat, hogy egyes elemeket az aktív szűrők elrejtenek.</translation>
+        <translation>Néhány elemet az aktív szűrők elrejthetnek.</translation>
     </message>
     <message>
         <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="123"/>
