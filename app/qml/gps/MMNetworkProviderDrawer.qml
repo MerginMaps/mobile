@@ -72,7 +72,7 @@ MMComponents.MMDrawer {
       textFieldBackground.color: __style.lightGreenColor
 
       title: qsTr( "Receiver nickname (optional)" )
-      placeholderText: qsTr( "Green device" )
+      placeholderText: qsTr( "External receiver" )
     }
 
     MMComponents.MMButton {
@@ -114,9 +114,18 @@ MMComponents.MMDrawer {
 
         const deviceAddress = ip + ":" + port
 
-        root.confirmed( aliasInput.text, deviceAddress )
+        root.confirmed( aliasInput.text.trim(), deviceAddress )
+        ipAddressInput.textField.clear()
+        portInput.textField.clear()
+        aliasInput.textField.clear()
         root.close()
       }
     }
+  }
+
+  onClosed: {
+    ipAddressInput.textField.clear()
+    portInput.textField.clear()
+    aliasInput.textField.clear()
   }
 }
