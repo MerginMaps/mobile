@@ -48,6 +48,33 @@ void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request
   }
 }
 
+QHash<int, QByteArray> ValueRelationFeaturesModel::roleNames() const
+{
+  QHash<int, QByteArray> roles = LayerFeaturesModel::roleNames();
+  roles[KeyRole] = QStringLiteral( "Key" ).toLatin1();
+
+  return roles;
+}
+
+QVariant ValueRelationFeaturesModel::data( const QModelIndex &index, int role ) const
+{
+  int row = index.row();
+  if ( row < 0 || row >= mFeatures.count() )
+    return QVariant();
+
+  if ( !index.isValid() )
+    return QVariant();
+
+  const FeatureLayerPair pair = mFeatures.at( index.row() );
+
+  if ( role == KeyRole )
+  {
+    return pair.feature().attribute( mKeyField );
+  }
+
+  return LayerFeaturesModel::data( index, role );
+}
+
 void ValueRelationFeaturesModel::setup()
 {
   if ( mConfig.isEmpty() )
@@ -155,7 +182,7 @@ QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, Mod
 
   for ( int ix = 0; ix < rowCount(); ++ix )
   {
-    QgsFeature f = data( index( ix, 0 ), Feature ).value<QgsFeature>();
+    QgsFeature f = mFeatures.at( ix ).feature();
 
     if ( keyMap.contains( f.attribute( mKeyField ).toString() ) )
     {

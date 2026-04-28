@@ -79,6 +79,7 @@ Item {
 
   signal openTrackingPanel()
   signal openStreamingPanel()
+  signal openFiltersPanel()
 
   states: [
     State {
@@ -853,6 +854,18 @@ Item {
               return root.openStreamingPanel()
 
             moreToolsMenuLoader.item.open()
+          }
+        }
+
+        MMMapButton {
+          id: filterButton
+
+          visible: root.state === "view" && __activeProject.filterController?.filteringActivated
+          iconSource: __style.filterIcon
+          bgndColor: __style.positiveColor
+
+          onClicked: {
+            root.openFiltersPanel()
           }
         }
 

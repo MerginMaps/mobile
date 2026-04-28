@@ -51,7 +51,43 @@ jobs:
 
             console.log('All required workflows are completed. Building comment...');
 
-            // 3. All done — build the comment
+            // 3. Helper: find the check run created by the Android job for this commit
+            //    and read the Play Store link from its output.summary field.
+            async function fetchPlayStoreLink(headSha) {
+              try {
+                const checkRuns = await github.rest.checks.listForRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: headSha,
+                });
+
+                // There may be multiple check runs with the same name (e.g. matrix builds);
+                // find the one whose summary contains a URL (written by the deploy step).
+                let linkDict = [];
+                for (const run of checkRuns.data.check_runs) {
+                  if (run.name.includes("android")) {
+                    const buildType = run.output?.title.split(" ")[1];
+                    const summary = run.output?.summary ?? '';
+                    const match = summary.match(/https:\/\/[^\s)>\]"]+/);
+                    if (match) {
+                      linkDict.push({
+                        type: buildType,
+                        link: summary
+                      });
+                    }
+                  }
+                }
+                if (linkDict.length > 0) return linkDict;
+
+                console.log('No Play Store link found in Android check run output.');
+                return [];
+              } catch (e) {
+                console.log(`Could not fetch Play Store link from check run: ${e.message}`);
+                return [];
+              }
+            }
+
+            // 4. Build the comment
             let commentBody = '## 📦 Build Artifacts Ready\n\n|OS|Status|Build|Info|Workflow run|\n|-----|-----|-----|-----|-----|\n';
             let artifactsFound = false;
 
@@ -71,8 +107,11 @@ jobs:
                 });
 
                 let artifacts = [];
+                let playStoreLinksDict = [];
                 if (workflowName === 'Android Build') {
                   artifacts = artifactsResponse.data.artifacts.filter(artifact => artifact.name.includes(' APK '));
+                  // also let's fetch links to play store
+                  playStoreLinksDict = await fetchPlayStoreLink(headSha);
                 } else {
                   artifacts = artifactsResponse.data.artifacts;
                 }
@@ -81,6 +120,10 @@ jobs:
                   for (const artifact of artifacts) {
                     commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifact.archive_download_url}) | Expires: ${new Date(artifact.expires_at).toLocaleDateString('en-GB')} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     artifactsFound = true;
+                    if (workflowName === 'Android Build' && playStoreLinksDict.length > 0) {
+                      const playStoreArtifact = playStoreLinksDict.find(playStoreLink => artifact.name.includes(playStoreLink.type));
+                      commentBody += `|| 📬 | [**${artifact.name}**](${playStoreArtifact.link}) | Google Play Store | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
+                    }
                   }
                 } else {
                   commentBody += `|**${workflowName}**| 📭 |  |  | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
@@ -96,7 +139,7 @@ jobs:
 
             core.setOutput('comment_body', artifactsFound ? commentBody : 'No artifacts found for this PR commit.');
 
-            // 4. Resolve PR number
+            // 5. Resolve PR number
             const prsResponse = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,

@@ -4,28 +4,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Unable to load source </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -350,44 +350,6 @@ Won&apos;t be added to the project.</source>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1539"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation type="unfinished">screen resolution: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1540"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation type="unfinished">screen DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1541"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation type="unfinished">screen size: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1542"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1543"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1544"/>
-        <source>used dp scale: %1</source>
-        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../inpututils.cpp" line="2213"/>
@@ -825,7 +787,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="58"/>
+        <source>Active filters applied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="59"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="115"/>
         <source>Add feature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -833,13 +805,148 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="73"/>
         <source>Search for features...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="86"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="123"/>
         <source>Add feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterBoolInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="46"/>
+        <source>True</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="47"/>
+        <source>False</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDateInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="53"/>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
+        <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
+        <source>To</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownUniqueValuesInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="49"/>
+        <source>Select...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="50"/>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueMapInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="48"/>
+        <source>Select...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueRelationInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="48"/>
+        <source>Select...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
+        <source>%n selected value(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterRangeInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="47"/>
+        <source>Min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="49"/>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="63"/>
+        <source>&quot;Min&quot; must be less than &quot;Max&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="61"/>
+        <source>Max</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterTextInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterTextInput.qml" line="37"/>
+        <source>Type to filter...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFiltersDrawer</name>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="52"/>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="58"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="99"/>
+        <source>No filtering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="209"/>
+        <source>Apply filters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -881,6 +988,14 @@ Won&apos;t be added to the project.</source>
     <message>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MMFormGalleryEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="34"/>
+        <source>Some features may be hidden by active filters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -949,12 +1064,17 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -962,12 +1082,17 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="46"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="172"/>
         <source> more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="215"/>
         <source>Add feature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1337,6 +1462,14 @@ Won&apos;t be added to the project.</source>
     </message>
 </context>
 <context>
+    <name>MMListEmptyLoaderDelegate</name>
+    <message>
+        <location filename="../qml/components/MMListEmptyLoaderDelegate.qml" line="28"/>
+        <source>No items</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MMListMultiselectDrawer</name>
     <message>
         <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
@@ -1344,7 +1477,7 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="138"/>
         <source>Confirm selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1433,113 +1566,113 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="125"/>
+        <location filename="../qml/map/MMMapController.qml" line="126"/>
         <source>Mark the geometry on the map and click record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="154"/>
+        <location filename="../qml/map/MMMapController.qml" line="155"/>
         <source>Create line to split the selected feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="171"/>
+        <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="178"/>
+        <location filename="../qml/map/MMMapController.qml" line="179"/>
         <source>Tap on features to add or remove from the selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="184"/>
+        <location filename="../qml/map/MMMapController.qml" line="185"/>
         <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="630"/>
+        <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="706"/>
+        <location filename="../qml/map/MMMapController.qml" line="707"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="720"/>
+        <location filename="../qml/map/MMMapController.qml" line="721"/>
         <source>Connected, no position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="724"/>
+        <location filename="../qml/map/MMMapController.qml" line="725"/>
         <source>Unknown accuracy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="866"/>
+        <location filename="../qml/map/MMMapController.qml" line="879"/>
         <source>GPS currently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="890"/>
+        <location filename="../qml/map/MMMapController.qml" line="903"/>
         <source>Choose Active Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="924"/>
+        <location filename="../qml/map/MMMapController.qml" line="937"/>
         <source>Could not find any editable layers in the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="925"/>
+        <location filename="../qml/map/MMMapController.qml" line="938"/>
         <source>See how to enable digitizing in your project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="951"/>
+        <location filename="../qml/map/MMMapController.qml" line="964"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="956"/>
+        <location filename="../qml/map/MMMapController.qml" line="969"/>
         <source>Split geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="968"/>
+        <location filename="../qml/map/MMMapController.qml" line="981"/>
         <source>Redraw geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="993"/>
         <source>Streaming mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="986"/>
+        <location filename="../qml/map/MMMapController.qml" line="999"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1198"/>
+        <location filename="../qml/map/MMMapController.qml" line="1211"/>
         <source>Splitting done successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1289"/>
+        <location filename="../qml/map/MMMapController.qml" line="1302"/>
         <source>Select some point to start editing the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1302"/>
+        <location filename="../qml/map/MMMapController.qml" line="1315"/>
         <source>Record new geometry for the feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="129"/>
-        <location filename="../qml/map/MMMapController.qml" line="1401"/>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
+        <location filename="../qml/map/MMMapController.qml" line="1414"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2244,6 +2377,24 @@ Won&apos;t be added to the project.</source>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>MMSegmentControl</name>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="21"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="22"/>
+        <source>True</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="23"/>
+        <source>False</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3159,70 +3310,83 @@ only allows up to %1 downloaded projects.</source>
     </message>
 </context>
 <context>
+    <name>UniqueValuesFilterModel</name>
+    <message>
+        <location filename="../filter/uniquevaluesfiltermodel.cpp" line="50"/>
+        <source>No value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Sync</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="306"/>
+        <location filename="../qml/main.qml" line="312"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="321"/>
         <source>No editable layers found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="321"/>
+        <location filename="../qml/main.qml" line="327"/>
         <source>Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="330"/>
+        <location filename="../qml/main.qml" line="336"/>
         <source>Projects</source>
         <translation type="unfinished">Projects</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="338"/>
+        <location filename="../qml/main.qml" line="344"/>
         <source>Zoom to project</source>
         <translation type="unfinished">Zoom to project</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="347"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Map themes</source>
         <translation type="unfinished">Map themes</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="358"/>
+        <location filename="../qml/main.qml" line="362"/>
+        <source>Filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="374"/>
         <source>Position tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="369"/>
+        <location filename="../qml/main.qml" line="385"/>
         <source>Measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="375"/>
+        <location filename="../qml/main.qml" line="391"/>
         <source>Local changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="384"/>
+        <location filename="../qml/main.qml" line="400"/>
         <source>Settings</source>
         <translation type="unfinished">Settings</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="589"/>
-        <location filename="../qml/main.qml" line="597"/>
+        <location filename="../qml/main.qml" line="617"/>
+        <location filename="../qml/main.qml" line="625"/>
         <source>not tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="697"/>
+        <location filename="../qml/main.qml" line="725"/>
         <source>Delete %n feature(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3230,7 +3394,7 @@ only allows up to %1 downloaded projects.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="698"/>
+        <location filename="../qml/main.qml" line="726"/>
         <source>Delete %n selected feature(s)?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -3238,62 +3402,62 @@ only allows up to %1 downloaded projects.</source>
         </translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="700"/>
+        <location filename="../qml/main.qml" line="728"/>
         <source>Yes, I want to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="729"/>
         <source>No, thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="921"/>
+        <location filename="../qml/main.qml" line="949"/>
         <source>Select feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1005"/>
+        <location filename="../qml/main.qml" line="1033"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1037"/>
+        <location filename="../qml/main.qml" line="1065"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1027"/>
+        <location filename="../qml/main.qml" line="1055"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1148"/>
+        <location filename="../qml/main.qml" line="1176"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="852"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="974"/>
+        <location filename="../qml/main.qml" line="1002"/>
         <source>Successfully synchronised</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1012"/>
+        <location filename="../qml/main.qml" line="1040"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1169"/>
+        <location filename="../qml/main.qml" line="1197"/>
         <source>Could not read the project file:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1202"/>
+        <location filename="../qml/main.qml" line="1230"/>
         <source>Press back again to quit the app</source>
         <translation type="unfinished"></translation>
     </message>

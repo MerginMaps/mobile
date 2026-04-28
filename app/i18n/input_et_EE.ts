@@ -168,6 +168,70 @@
     </message>
 </context>
 <context>
+    <name>FieldValidator</name>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="21"/>
+        <source>Value must be a number</source>
+        <translation>Väärtus peab olema täisarv</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="22"/>
+        <source>Value must be lower than %1</source>
+        <translation>Väärtus peab olema väiksem kui %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="23"/>
+        <source>Value must be higher than %1</source>
+        <translation>Väärtus peab olema suurem kui %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="24"/>
+        <source>Value is too large</source>
+        <translation>Väärtus on liiga suur</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="25"/>
+        <source>Field can not contain decimal places</source>
+        <translation>Väljal peab olema täisarv</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="26"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation>Ei saa olla pikem kui %1 tähemärki</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="27"/>
+        <source>Field should not be empty</source>
+        <translation>Väli ei peaks olema tühi</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="28"/>
+        <source>Field must not be empty</source>
+        <translation>Väli ei saa olla tühi</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="29"/>
+        <source>Value should be unique</source>
+        <translation>Väärtus peaks olema unikaalne</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="30"/>
+        <source>Value must be unique</source>
+        <translation>Väärtus peab olema unikaalne</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="31"/>
+        <location filename="../attributes/fieldvalidator.cpp" line="32"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation>Ei vasta QGIS lausendi tingimustele</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="33"/>
+        <source>Not a valid value</source>
+        <translation>Väärtus ei ole kehtiv</translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -233,88 +297,48 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation>äsja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut(i) eest</numerusform><numerusform>%n minuti eest</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n hour(s) ago</numerusform><numerusform>%n tund(i) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n päev(a) tagasi</numerusform><numerusform>%n päev(a) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n nädal(at) tagasi</numerusform><numerusform>%n nädal(at) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n kuu(d) tagasi</numerusform><numerusform>%n kuu(d) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n aasta(t) tagasi</numerusform><numerusform>%n aasta(t) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1545"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>ekraani resolutsioon: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1546"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>ekraani DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1547"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>ekraani suurus: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1548"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>deklareeritud seadme pikslisuhe: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1549"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>arvutatud seadme pikslisuhe: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1550"/>
-        <source>used dp scale: %1</source>
-        <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform><numerusform>Pead lisama vähemalt %n punkti to every part.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti.</numerusform><numerusform>Pead</numerusform></translation>
     </message>
@@ -747,12 +771,12 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
         <source>Search for features...</source>
         <translation>Otsi nähtusi...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
     </message>
@@ -863,12 +887,17 @@ Seda ei lisata projektile.</translation>
         <translation>Pildi sketsi ei õnnestunud salvestada, palun pöördu abi poole.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation>Ei õnnestunud tekitada kausta %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation>Pildi töötlemine ebaõnnestus, piltide kausta ei leitud</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation>Pilti ei õnnestunud töödelda</translation>
     </message>
@@ -1031,6 +1060,16 @@ Seda ei lisata projektile.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Kõrgus</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Ortomeetriline kõrgus, kasutades %1 geoidi</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Kõrgus lähtudes määramata võrgustikust</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
@@ -1227,7 +1266,7 @@ Seda ei lisata projektile.</translation>
         <translation>Kihid</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
@@ -1243,12 +1282,12 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
         <source>Confirm selection</source>
         <translation>Kinnita valik</translation>
     </message>
@@ -2592,17 +2631,17 @@ Seda ei lisata projektile.</translation>
         <translation>Vali töölaud</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation>Ootel kutsed</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation>Sinu töölauad</translation>
     </message>
@@ -2882,7 +2921,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Väline (Simuleeritud)</translation>
     </message>
@@ -2987,67 +3026,6 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 </context>
 <context>
     <name>QObject</name>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
-        <source>Value must be a number</source>
-        <translation>Väärtus peab olema number</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
-        <source>Value must be lower than %1</source>
-        <translation>Väärtus peab olema alla %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
-        <source>Value must be higher than %1</source>
-        <translation>Väärtus peab olema üle %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
-        <source>Value is too large</source>
-        <translation>Väärtus on liiga suur</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
-        <source>Field can not contain decimal places</source>
-        <translation>Väljal ei tohi olla kümnendmurd</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
-        <source>Can not be longer than %1 characters</source>
-        <translation>Ei tohi olla pikem kui %1 tähemärki</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
-        <source>Field should not be empty</source>
-        <translation>Väli ei tohiks olla tühi</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
-        <source>Field must not be empty</source>
-        <translation>Väli ei tohi olla tühi</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
-        <source>Value should be unique</source>
-        <translation>Väärtus peaks olema unikaalne</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
-        <source>Value must be unique</source>
-        <translation>Väärtus peab olema unikaalne</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
-        <source>Unmet QGIS expression constraint</source>
-        <translation>Täitmata QGIS lausendi tingimus</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
-        <source>Not a valid value</source>
-        <translation>Kehtetu väärtus</translation>
-    </message>
     <message>
         <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
