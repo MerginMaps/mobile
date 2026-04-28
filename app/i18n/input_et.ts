@@ -3354,7 +3354,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     <message numerus="yes">
         <location filename="../qml/main.qml" line="725"/>
         <source>Delete %n feature(s)</source>
-        <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtust</numerusform></translation>
+        <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtus(t)</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/main.qml" line="726"/>
