@@ -71,10 +71,16 @@ void NetworkPositionProvider::stopUpdates()
 
 void NetworkPositionProvider::closeProvider()
 {
-  mTcpSocket->close();
-  mUdpSocket->close();
-  if ( mTcpSocket ) mTcpSocket->disconnect();
-  if ( mUdpSocket ) mUdpSocket->disconnect();
+  if ( mTcpSocket )
+  {
+    mTcpSocket->close();
+    mTcpSocket->disconnect();
+  }
+  if ( mUdpSocket )
+  {
+    mUdpSocket->close();
+    mUdpSocket->disconnect();
+  }
 
   mUdpReconnectTimer.stop();
   mReconnectTimer.stop();
