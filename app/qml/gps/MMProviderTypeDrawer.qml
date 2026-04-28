@@ -31,7 +31,7 @@ MMComponents.MMListDrawer {
     Component.onCompleted: {
       providerTypeModel.append( [
         { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon },
-        { name: qsTr( "Network" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
+        { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
       ] )
     }
   }
