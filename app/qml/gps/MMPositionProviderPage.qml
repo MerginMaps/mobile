@@ -78,7 +78,6 @@ MMComponents.MMPage {
 
         text: {
           if ( model.ProviderName ) return model.ProviderName
-          if ( model.ProviderType === "external_ip" ) return qsTr( "Network device" )
           return qsTr( "Unknown device" )
         }
         secondaryText: {
@@ -164,7 +163,7 @@ MMComponents.MMPage {
 
       onConfirmed: function( alias, deviceAddress ) {
         PositionKit.positionProvider = PositionKit.constructProvider( "external_ip", deviceAddress, alias )
-        providersModel.addProvider( alias, deviceAddress, "external_ip" )
+        providersModel.addProvider( PositionKit.positionProvider.name(), deviceAddress, "external_ip" )
         connectingDialogLoaderNetwork.open()
       }
     }

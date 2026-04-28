@@ -1047,3 +1047,32 @@ void TestUtilsFunctions::testSanitizePath()
   InputUtils::sanitizePath( str );
   QCOMPARE( str, QStringLiteral( "C:/project name/project.qgz" ) );
 }
+
+void TestUtilsFunctions::testUniqueString()
+{
+  const QStringList similarStrings( {QStringLiteral( "lutra" ), QStringLiteral( "lutra (1)" ), QStringLiteral( "lutra (256)" ), QStringLiteral( "lutra (257)" )} );
+
+  const QString testString1( QStringLiteral( "lutra" ) );
+  QString result = InputUtils::getUniqueString( testString1, similarStrings );
+  QCOMPARE( result, QStringLiteral( "lutra (2)" ) );
+
+  const QString testString2( QStringLiteral( "lutra            " ) );
+  result = InputUtils::getUniqueString( testString2, similarStrings );
+  QCOMPARE( result, QStringLiteral( "lutra (2)" ) );
+
+  const QString testString3( QStringLiteral( "            lutra" ) );
+  result = InputUtils::getUniqueString( testString3, similarStrings );
+  QCOMPARE( result, QStringLiteral( "lutra (2)" ) );
+
+  const QString testString4( QStringLiteral( "lutra (1)" ) );
+  result = InputUtils::getUniqueString( testString4, similarStrings );
+  QCOMPARE( result, QStringLiteral( "lutra (2)" ) );
+
+  const QString testString5( QStringLiteral( "lutra (256)" ) );
+  result = InputUtils::getUniqueString( testString5, similarStrings );
+  QCOMPARE( result, QStringLiteral( "lutra (258)" ) );
+
+  const QString testString6( QStringLiteral( "mulutram" ) );
+  result = InputUtils::getUniqueString( testString6, similarStrings );
+  QCOMPARE( result, QStringLiteral( "mulutram" ) );
+}

@@ -115,10 +115,10 @@ MMComponents.MMDrawer {
         const deviceAddress = ip + ":" + port
 
         root.confirmed( aliasInput.text.trim(), deviceAddress )
+        root.close()
         ipAddressInput.textField.clear()
         portInput.textField.clear()
         aliasInput.textField.clear()
-        root.close()
       }
     }
   }
