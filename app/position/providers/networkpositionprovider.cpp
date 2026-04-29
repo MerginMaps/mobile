@@ -69,21 +69,26 @@ void NetworkPositionProvider::stopUpdates()
   }
 }
 
+NetworkPositionProvider::~NetworkPositionProvider()
+{
+  NetworkPositionProvider::closeProvider();
+}
+
 void NetworkPositionProvider::closeProvider()
 {
+  mUdpReconnectTimer.stop();
+  mReconnectTimer.stop();
+
   if ( mTcpSocket )
   {
-    mTcpSocket->close();
     mTcpSocket->disconnect();
+    mTcpSocket->abort();
   }
   if ( mUdpSocket )
   {
-    mUdpSocket->close();
     mUdpSocket->disconnect();
+    mUdpSocket->abort();
   }
-
-  mUdpReconnectTimer.stop();
-  mReconnectTimer.stop();
 }
 
 void NetworkPositionProvider::positionUpdateReceived()

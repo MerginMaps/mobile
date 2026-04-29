@@ -33,6 +33,7 @@ class NetworkPositionProvider : public AbstractPositionProvider
 
   public:
     NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
+    ~NetworkPositionProvider() override;
 
     void startUpdates() override;
     void stopUpdates() override;
