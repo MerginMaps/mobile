@@ -197,7 +197,8 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
         }
 
         PositionProvider provider;
-        const QString providerType = providerData[2].isNull() ? QStringLiteral( "external_bt" ) : QStringLiteral( "external_ip" );
+        // when migrating from older version where type wasn't saved we know it's bluetooth device
+        const QString providerType = providerData[2].isNull() ? QStringLiteral( "external_bt" ) : providerData[2].toString();
         const QString deviceDesc = providerType == QStringLiteral( "external_bt" ) ? tr( " Bluetooth device" ) : tr( " Network device" );
         provider.name = providerData[0].toString();
         provider.providerId = providerData[1].toString();
