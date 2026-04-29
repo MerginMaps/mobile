@@ -146,7 +146,7 @@ void NetworkPositionProvider::positionUpdateReceived()
   const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
   GeoPosition transformedPosition = mPositionTransformer->processNetworkPosition( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
 
-  emit positionChanged( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
+  emit positionChanged( transformedPosition );
 }
 
 void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketState state )
