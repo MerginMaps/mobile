@@ -19,7 +19,7 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 {
   if ( !InputUtils::isMobilePlatform() )
   {
-    PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
+    const PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
 
     mProviders.push_front( simulated );
   }
@@ -74,20 +74,20 @@ QHash<int, QByteArray> PositionProvidersModel::roleNames() const
 
 int PositionProvidersModel::rowCount( const QModelIndex & ) const
 {
-  return mProviders.count();
+  return static_cast<int>( mProviders.count() );
 }
 
-QVariant PositionProvidersModel::data( const QModelIndex &index, int role ) const
+QVariant PositionProvidersModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+    return {};
 
-  int row = index.row();
+  const int row = index.row();
 
   PositionProvider provider = mProviders.at( row );
 
   if ( row < 0 || row > mProviders.count() )
-    return QVariant();
+    return {};
 
   switch ( role )
   {
@@ -104,7 +104,7 @@ QVariant PositionProvidersModel::data( const QModelIndex &index, int role ) cons
       return provider.providerType;
 
     default:
-      return QVariant();
+      return {};
   }
 }
 
@@ -119,7 +119,7 @@ void PositionProvidersModel::removeProvider( const QString &providerId )
   if ( !mProviders.contains( toRemove ) )
     return;
 
-  int removeIndex = mProviders.indexOf( toRemove );
+  const int removeIndex = static_cast<int>( mProviders.indexOf( toRemove ) );
 
   beginRemoveRows( QModelIndex(), removeIndex, removeIndex );
 
@@ -149,7 +149,7 @@ void PositionProvidersModel::addProvider( const QString &name, const QString &pr
   if ( mProviders.contains( toAdd ) )
     return;
 
-  int addIndex = mProviders.count();
+  const int addIndex = static_cast<int>( mProviders.count() );
 
   beginInsertRows( QModelIndex(), addIndex, addIndex );
 
@@ -186,7 +186,7 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
 
     for ( int i = 0; i < providers.count(); ++i )
     {
-      if ( providers[i].type() == QVariant::List || providers[i].type() == QVariant::StringList )
+      if ( providers[i].typeId() == QMetaType::QVariantList || providers[i].typeId() == QMetaType::QStringList )
       {
         QVariantList providerData = providers[i].toList();
 

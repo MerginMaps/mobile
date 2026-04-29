@@ -12,13 +12,13 @@
 #include <QApplication>
 #include <QNetworkDatagram>
 
-static int ONE_SECOND_MS = 1000;
+constexpr int ONE_SECOND_MS = 1000;
 
 NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
   : AbstractPositionProvider( addr, QStringLiteral( "external_ip" ), name, positionTransformer, parent ),
     mSecondsLeftToReconnect( ReconnectDelay::ShortDelay / ONE_SECOND_MS )
 {
-  const QStringList targetAddress = addr.split( ":" );
+  const QStringList targetAddress = addr.split( QStringLiteral( ":" ) );
   mTargetAddress = targetAddress.at( 0 );
   mTargetPort = targetAddress.at( 1 ).toInt();
 
@@ -203,7 +203,7 @@ void NetworkPositionProvider::reconnectTimeout()
 
 QString NetworkPositionProvider::getIpAddress() const
 {
-  return mTargetAddress + ":" + QString::number( mTargetPort );
+  return QStringLiteral( "%1:%2" ).arg( mTargetAddress, QString::number( mTargetPort ) );
 }
 
 void NetworkPositionProvider::reconnect()
