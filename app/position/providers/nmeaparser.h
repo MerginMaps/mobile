@@ -13,7 +13,7 @@
 #include <qgsnmeaconnection.h>
 
 /**
- * NmeaParser is a big hack how to reuse QGIS NmeaConnection function in order to (a) keep ownership of bluetooth
+ * NmeaParser is a big hack how to reuse QGIS NmeaConnection function in order to (a) keep ownership of bluetooth / TCP/UDP
  * socket, (b) do not have multiple unique_ptrs holding the same pointer and to avoid some possible crashes.
  *
  * Note: This way of reusing makes the parser highly dependent on QgsNmeaConnection class and any change inside the class

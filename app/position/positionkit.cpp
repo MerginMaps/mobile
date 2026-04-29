@@ -7,27 +7,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "position/positionkit.h"
+#include "positionkit.h"
+
+#include <QQmlEngine>
+
 #include "coreutils.h"
 #include "mmconfig.h"
-#include "qgis.h"
-
-#ifdef HAVE_BLUETOOTH
-#include "position/providers/bluetoothpositionprovider.h"
-#endif
-
-#include "position/providers/internalpositionprovider.h"
-#include "position/providers/simulatedpositionprovider.h"
-#include "providers/networkpositionprovider.h"
-#ifdef ANDROID
-#include "position/providers/androidpositionprovider.h"
-#include <android/log.h>
-#endif
-
 #include "appsettings.h"
 #include "inpututils.h"
 
-#include <QQmlEngine>
+#ifdef HAVE_BLUETOOTH
+#include "providers/bluetoothpositionprovider.h"
+#endif
+#include "providers/internalpositionprovider.h"
+#include "providers/simulatedpositionprovider.h"
+#include "providers/networkpositionprovider.h"
+#ifdef ANDROID
+#include "providers/androidpositionprovider.h"
+#include <android/log.h>
+#endif
 
 PositionKit::PositionKit( QObject *parent )
   : QObject( parent )
@@ -127,19 +125,17 @@ QString PositionKit::positionProviderName() const
 
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
-  QString providerType( type );
-  if ( providerType == QStringLiteral( "external_bt" ) )
-  {
+
 #ifdef HAVE_BLUETOOTH
+  if ( type == QStringLiteral( "external_bt" ) )
+  {
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
-#else
-    providerType = QStringLiteral( "internal" );
-#endif
   }
+#endif
 
-  if ( providerType == QStringLiteral( "external_ip" ) )
+  if ( type == QStringLiteral( "external_ip" ) )
   {
     QString providerName( name );
     if ( providerName.isEmpty() )
@@ -156,7 +152,8 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
     return provider;
   }
 
-  // type == internal
+  // from this point type == internal
+
   if ( id == QStringLiteral( "simulated" ) )
   {
     AbstractPositionProvider *provider = new SimulatedPositionProvider( *mPositionTransformer );
@@ -192,12 +189,12 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   }
 }
 
-AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *appsettings )
+AbstractPositionProvider *PositionKit::constructActiveProvider( const AppSettings *appsettings )
 {
   if ( !appsettings )
     return nullptr;
 
-  QString providerId = appsettings->activePositionProviderId();
+  const QString &providerId = appsettings->activePositionProviderId();
 
   if ( providerId.isEmpty() ) // nothing has been written to qsettings
   {
@@ -209,45 +206,41 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( AppSettings *app
       return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "devicegps" ) );
 #endif
     }
-    else // desktop
-    {
-      return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
-    }
+    // desktop
+    return constructProvider( QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
   }
-  else if ( providerId == QStringLiteral( "devicegps" ) || providerId == QStringLiteral( "simulated" ) ||
-            providerId == QStringLiteral( "android_fused" ) || providerId == QStringLiteral( "android_gps" ) )
+  if ( providerId == QStringLiteral( "devicegps" ) || providerId == QStringLiteral( "simulated" ) ||
+       providerId == QStringLiteral( "android_fused" ) || providerId == QStringLiteral( "android_gps" ) )
   {
     return constructProvider( QStringLiteral( "internal" ), providerId );
   }
-  else
+
+  // find name & type of the active provider
+  QString providerName;
+  // Migration from single external provider to multiple currently, missing type == bluetooth provider
+  QString providerType = QStringLiteral( "external_bt" );
+  QVariantList providers = appsettings->savedPositionProviders();
+
+  for ( const QVariant &provider : providers )
   {
-    // find name & type of the active provider
-    QString providerName;
-    // Migration from single external provider to multiple currently, missing type == bluetooth provider
-    QString providerType = QStringLiteral( "external_bt" );
-    QVariantList providers = appsettings->savedPositionProviders();
-
-    for ( const auto &provider : providers )
+    QVariantList providerData = provider.toList();
+    if ( providerData.length() < 2 )
     {
-      QVariantList providerData = provider.toList();
-      if ( providerData.length() < 2 )
-      {
-        CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Found provider with insufficient data" ) );
-        continue;
-      }
-
-      if ( providerData[1] == providerId )
-      {
-        providerName = providerData[0].toString();
-        if ( !providerData.at( 2 ).isNull() )
-        {
-          providerType = providerData[2].toString();
-        }
-      }
+      CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Found provider with insufficient data" ) );
+      continue;
     }
 
-    return constructProvider( providerType, providerId, providerName );
+    if ( providerData[1] == providerId )
+    {
+      providerName = providerData[0].toString();
+      if ( !providerData.at( 2 ).isNull() )
+      {
+        providerType = providerData[2].toString();
+      }
+    }
   }
+
+  return constructProvider( providerType, providerId, providerName );
 }
 
 void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
@@ -427,7 +420,7 @@ void PositionKit::setSkipElevationTransformation( const bool skipElevationTransf
   mSkipElevationTransformation = skipElevationTransformation;
 }
 
-void PositionKit::appStateChanged( Qt::ApplicationState state )
+void PositionKit::appStateChanged( const Qt::ApplicationState state )
 {
   if ( state == Qt::ApplicationActive )
   {
@@ -469,9 +462,9 @@ double PositionKit::geoidSeparation() const
 QgsPoint PositionKit::positionCoordinate() const
 {
   if ( mPosition.hasValidPosition() )
-    return QgsPoint( mPosition.longitude, mPosition.latitude, mPosition.elevation );
+    return { mPosition.longitude, mPosition.latitude, mPosition.elevation };
 
-  return QgsPoint();
+  return {};
 }
 
 bool PositionKit::hasPosition() const
@@ -576,7 +569,7 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
     mAppSettings = appSettings;
     if ( mAppSettings )
     {
-      QObject::connect( mAppSettings, &AppSettings::gpsAntennaHeightChanged, this, &PositionKit::antennaHeightChanged );
+      connect( mAppSettings, &AppSettings::gpsAntennaHeightChanged, this, &PositionKit::antennaHeightChanged );
     }
     emit appSettingsChanged();
     emit antennaHeightChanged();
@@ -589,8 +582,6 @@ double PositionKit::antennaHeight() const
   {
     return mAppSettings->gpsAntennaHeight();
   }
-  else
-  {
-    return 0;
-  }
+
+  return 0;
 }

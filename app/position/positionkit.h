@@ -137,7 +137,7 @@ class PositionKit : public QObject
     Q_INVOKABLE QString positionCrs3DGeoidModelName();
 
     Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
-    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
+    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( const AppSettings *appsettings );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
