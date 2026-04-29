@@ -47,8 +47,8 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
   // it by dpr.
 
   QScreen *screen = QGuiApplication::screens().at( 0 );
-  qreal pdpi = screen->physicalDotsPerInch() * screen->devicePixelRatio();
-  qreal dpm = pdpi / 25.4;
+  const qreal ldpi = screen->logicalDotsPerInch();
+  const qreal dpmm = ldpi / 25.4;
 
   QSize desiredSize( requestedSize );
   if ( desiredSize.isEmpty() )
@@ -57,14 +57,14 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
     desiredSize = QSize( 60, 60 );
   }
 
-  QImage legend = QImage( desiredSize.width(), minimumSize.height() * dpm, QImage::Format_ARGB32_Premultiplied );
+  QImage legend = QImage( desiredSize.width(), minimumSize.height() * dpmm, QImage::Format_ARGB32_Premultiplied );
 
   QPainter painter( &legend );
   painter.setRenderHint( QPainter::Antialiasing );
 
   QgsRenderContext context = QgsRenderContext::fromQPainter( &painter );
 
-  painter.scale( dpm, dpm );
+  painter.scale( dpmm, dpmm );
 
   legend.fill( Qt::transparent );
 
