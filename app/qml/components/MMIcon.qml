@@ -19,7 +19,6 @@ Item {
   required property url source
   property real size: __style.icon24
   property color color: __style.forestColor
-  readonly property bool colorable: source.toString().endsWith("-coloroverlay.svg")
 
   width: size
   height: size
@@ -27,7 +26,7 @@ Item {
   // IconImage is not part of QML's public API, so this can break on Qt version change.
   // However, if we don't want to use shaders, this is the most straightforward way.
   IconImage {
-    visible: !root.source.toString().endsWith("-nocoloroverlay.svg")
+    visible: internal.iconSupportsRecolor
     source: root.source
     sourceSize.width: root.width
     sourceSize.height: root.height
@@ -35,9 +34,15 @@ Item {
   }
 
   Image {
-    visible: root.source.toString().endsWith("-nocoloroverlay.svg")
+    visible: !internal.iconSupportsRecolor
     source: root.source
     sourceSize.width: root.width
     sourceSize.height: root.height
+  }
+
+  QtObject {
+    id: internal
+
+    readonly property bool iconSupportsRecolor: !root.source.toString().endsWith("-nocoloroverlay.svg")
   }
 }
