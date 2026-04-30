@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick.Controls.impl
 
 import mm 1.0 as MM
 
@@ -72,7 +72,7 @@ Item {
       sourceSize.height: height
     }
 
-    Image {
+    IconImage {
       id: crosshairForeground // green / purple outer circle of the crosshair
 
       x: root.screenPoint.x - width / 2
@@ -100,11 +100,7 @@ Item {
       source: __style.crosshairForegroundImage
       sourceSize.width: width
       sourceSize.height: height
-    }
 
-    ColorOverlay {
-      anchors.fill: crosshairForeground
-      source: crosshairForeground
       color: snapUtils.snapped ? __style.snappingColor : __style.forestColor
     }
 
