@@ -1219,3 +1219,56 @@ void TestAttributeController::testPhotoSketchingSave()
     QCOMPARE( f.attribute( testCaseResult.fieldIdx ), testCaseResult.expectedNewFieldValue );
   }
 }
+
+void TestAttributeController::testPrefillRelationReferenceField()
+{
+  QString projectDir = TestUtils::testDataDir() + "/planes";
+  QVERIFY( QgsProject::instance()->read( projectDir + "/quickapp_project.qgs" ) );
+
+  QgsVectorLayer *airportsLayer = dynamic_cast<QgsVectorLayer *>(
+                                    QgsProject::instance()->mapLayersByName( QStringLiteral( "airports" ) ).at( 0 ) );
+  QVERIFY( airportsLayer && airportsLayer->isValid() );
+
+  QgsVectorLayer *towersLayer = dynamic_cast<QgsVectorLayer *>(
+                                  QgsProject::instance()->mapLayersByName( QStringLiteral( "airport-towers" ) ).at( 0 ) );
+  QVERIFY( towersLayer && towersLayer->isValid() );
+
+  QgsRelation relation = QgsProject::instance()->relationManager()->relation(
+                           QStringLiteral( "airport_to_airport_fk_airports_3_fid" ) );
+  QVERIFY( relation.isValid() );
+
+  // parent controller holds an existing airports feature
+  QgsFeature parentFeature = airportsLayer->getFeature( 1 );
+  QVERIFY( parentFeature.isValid() );
+
+  AttributeController parentController;
+  parentController.setFeatureLayerPair( FeatureLayerPair( parentFeature, airportsLayer ) );
+
+  // child controller holds a new empty airport-towers feature
+  QgsFeature childFeature;
+  childFeature.setValid( true );
+  childFeature.setFields( towersLayer->fields(), true );
+
+  AttributeController childController;
+  childController.setFeatureLayerPair( FeatureLayerPair( childFeature, towersLayer ) );
+  childController.setLinkedRelation( relation );
+  childController.setParentController( &parentController ); // triggers prefillRelationReferenceField
+
+  // find the airport_fk FormItem in the child controller
+  const FormItem *fkItem = nullptr;
+  const TabItem *tab = childController.tabItem( 0 );
+  QVERIFY( tab );
+  for ( const QUuid &id : tab->formItems() )
+  {
+    const FormItem *item = childController.formItem( id );
+    if ( item && item->field().name() == QLatin1String( "airport_fk" ) )
+    {
+      fkItem = item;
+      break;
+    }
+  }
+
+  // compare that the rawValue is updated after setting the linked relation
+  QVERIFY( fkItem );
+  QCOMPARE( fkItem->rawValue(), parentFeature.attribute( QStringLiteral( "fid" ) ) );
+}

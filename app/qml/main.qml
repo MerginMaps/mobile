@@ -27,6 +27,7 @@ import "./project"
 import "./settings"
 import "./gps"
 import "./form"
+import "./filters"
 
 ApplicationWindow {
   id: window
@@ -268,6 +269,11 @@ ApplicationWindow {
       streamingModeDialog.open()
     }
 
+    onOpenFiltersPanel: {
+      stateManager.state = "misc"
+      filtersDrawerLoader.active = true
+    }
+
     Component.onCompleted: {
       __activeProject.mapSettings = map.mapSettings
       __iosUtils.positionKit = PositionKit
@@ -349,6 +355,16 @@ ApplicationWindow {
         onClicked: {
           mapThemesPanel.visible = true
           stateManager.state = "misc"
+        }
+      }
+
+      MMToolbarButton {
+        text: qsTr("Filters")
+        iconSource: __style.filterIcon
+        visible: __activeProject.filterController?.filteringAvailable ?? false
+        onClicked: {
+          stateManager.state = "misc"
+          filtersDrawerLoader.active = true
         }
       }
 
@@ -493,6 +509,18 @@ ApplicationWindow {
 
         // If we start supporting addition of spatial features from the layer's list,
         // make sure to change the root state here to "map"
+      }
+    }
+  }
+
+  Loader {
+    id: filtersDrawerLoader
+
+    active: false
+    sourceComponent: MMFiltersDrawer {
+      onClosed: {
+        filtersDrawerLoader.active = false
+        stateManager.state = "map"
       }
     }
   }

@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>General</source>
         <translation>Üldine</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Kaart ja tööriistad võivad töötada valesti!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer</source>
         <translation>Kiht</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Unable to load source </source>
         <translation>Andmeid ei õnnestu laadida</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektile on määratud vigane koordinaatsüsteem. Salvestamisel võib tekkida vigu.</translation>
     </message>
@@ -168,6 +168,70 @@
     </message>
 </context>
 <context>
+    <name>FieldValidator</name>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="21"/>
+        <source>Value must be a number</source>
+        <translation>Väärtus peab olema täisarv</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="22"/>
+        <source>Value must be lower than %1</source>
+        <translation>Väärtus peab olema väiksem kui %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="23"/>
+        <source>Value must be higher than %1</source>
+        <translation>Väärtus peab olema suurem kui %1</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="24"/>
+        <source>Value is too large</source>
+        <translation>Väärtus on liiga suur</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="25"/>
+        <source>Field can not contain decimal places</source>
+        <translation>Väljal peab olema täisarv</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="26"/>
+        <source>Can not be longer than %1 characters</source>
+        <translation>Ei saa olla pikem kui %1 tähemärki</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="27"/>
+        <source>Field should not be empty</source>
+        <translation>Väli ei peaks olema tühi</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="28"/>
+        <source>Field must not be empty</source>
+        <translation>Väli ei saa olla tühi</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="29"/>
+        <source>Value should be unique</source>
+        <translation>Väärtus peaks olema unikaalne</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="30"/>
+        <source>Value must be unique</source>
+        <translation>Väärtus peab olema unikaalne</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="31"/>
+        <location filename="../attributes/fieldvalidator.cpp" line="32"/>
+        <source>Unmet QGIS expression constraint</source>
+        <translation>Ei vasta QGIS lausendi tingimustele</translation>
+    </message>
+    <message>
+        <location filename="../attributes/fieldvalidator.cpp" line="33"/>
+        <source>Not a valid value</source>
+        <translation>Väärtus ei ole kehtiv</translation>
+    </message>
+</context>
+<context>
     <name>FieldsModel</name>
     <message>
         <location filename="../fieldsmodel.cpp" line="19"/>
@@ -233,88 +297,48 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>InputUtils</name>
     <message>
-        <location filename="../inpututils.cpp" line="237"/>
+        <location filename="../inpututils.cpp" line="238"/>
         <source>just now</source>
         <translation>äsja</translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="242"/>
+        <location filename="../inpututils.cpp" line="243"/>
         <source>%n minute(s) ago</source>
         <translation><numerusform>%n minut(i) eest</numerusform><numerusform>%n minut(it) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="247"/>
+        <location filename="../inpututils.cpp" line="248"/>
         <source>%n hour(s) ago</source>
         <translation><numerusform>%n hour(s) ago</numerusform><numerusform>%n tund(i) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="251"/>
-        <location filename="../inpututils.cpp" line="256"/>
+        <location filename="../inpututils.cpp" line="252"/>
+        <location filename="../inpututils.cpp" line="257"/>
         <source>%n day(s) ago</source>
         <translation><numerusform>%n päev(a) tagasi</numerusform><numerusform>%n päev(a) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="261"/>
+        <location filename="../inpututils.cpp" line="262"/>
         <source>%n week(s) ago</source>
         <translation><numerusform>%n nädal(at) tagasi</numerusform><numerusform>%n nädal(at) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="266"/>
+        <location filename="../inpututils.cpp" line="267"/>
         <source>%n month(s) ago</source>
         <translation><numerusform>%n kuu(d) tagasi</numerusform><numerusform>%n kuu(d) tagasi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="271"/>
+        <location filename="../inpututils.cpp" line="272"/>
         <source>%n year(s) ago</source>
         <translation><numerusform>%n aasta(t) tagasi</numerusform><numerusform>%n aasta(t) tagasi</numerusform></translation>
     </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1545"/>
-        <source>screen resolution: %1x%2 px
-</source>
-        <translation>ekraani resolutsioon: %1x%2 px
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1546"/>
-        <source>screen DPI: %1x%2
-</source>
-        <translation>ekraani DPI: %1x%2
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1547"/>
-        <source>screen size: %1x%2 mm
-</source>
-        <translation>ekraani suurus: %1x%2 mm
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1548"/>
-        <source>reported device pixel ratio: %1
-</source>
-        <translation>deklareeritud seadme pikslisuhe: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1549"/>
-        <source>calculated device pixel ratio: %1
-</source>
-        <translation>arvutatud seadme pikslisuhe: %1
-</translation>
-    </message>
-    <message>
-        <location filename="../inpututils.cpp" line="1550"/>
-        <source>used dp scale: %1</source>
-        <translation>kasutatud seadme pikslite mõõtkava: %1</translation>
-    </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2171"/>
+        <location filename="../inpututils.cpp" line="2213"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform><numerusform>Pead lisama vähemalt %n punkti iga osa kohta.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2175"/>
+        <location filename="../inpututils.cpp" line="2217"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Pead lisama vähemalt %n punkti.</numerusform><numerusform>Pead lisama vähemalt %n punkti.</numerusform></translation>
     </message>
@@ -739,7 +763,17 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="58"/>
+        <source>Active filters applied</source>
+        <translation>Filtrid sisse lülitatud</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="59"/>
+        <source>Reset</source>
+        <translation>Tühista</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="115"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
     </message>
@@ -747,14 +781,140 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="69"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="73"/>
         <source>Search for features...</source>
         <translation>Otsi nähtusi...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="105"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="86"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Mõned nähtused võivad olla aktiivsete filtrite tõttu peidus</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="123"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterBoolInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="46"/>
+        <source>True</source>
+        <translation>Jah</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="47"/>
+        <source>False</source>
+        <translation>Ei</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDateInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="53"/>
+        <source>From</source>
+        <translation>Alates</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
+        <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
+        <translation>&quot;Alates&quot; peab olema varasem kui &quot;Kuni&quot;</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
+        <source>To</source>
+        <translation>Kuni</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownUniqueValuesInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="49"/>
+        <source>Select...</source>
+        <translation>Vali...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="50"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valitud väärtus(t)</numerusform><numerusform>%n valitud väärtus(t)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueMapInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="48"/>
+        <source>Select...</source>
+        <translation>Vali...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valitud väärtus(t)</numerusform><numerusform>%n valitud väärtus(t)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueRelationInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="48"/>
+        <source>Select...</source>
+        <translation>Vali...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valitud väärtus(t)</numerusform><numerusform>%n valitud väärtus(t)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterRangeInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="47"/>
+        <source>Min</source>
+        <translation>Miinimum</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="49"/>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="63"/>
+        <source>&quot;Min&quot; must be less than &quot;Max&quot;</source>
+        <translation>&quot;Miinimum&quot; peab olema väiksem kui &quot;Maksimum&quot;</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="61"/>
+        <source>Max</source>
+        <translation>Maksimum</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterTextInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterTextInput.qml" line="37"/>
+        <source>Type to filter...</source>
+        <translation>Filtreeritavad tüübid...</translation>
+    </message>
+</context>
+<context>
+    <name>MMFiltersDrawer</name>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="52"/>
+        <source>Filters</source>
+        <translation>Filtrid</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="58"/>
+        <source>Reset</source>
+        <translation>Tühista</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="99"/>
+        <source>No filtering</source>
+        <translation>Filtrid puuduvad</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="209"/>
+        <source>Apply filters</source>
+        <translation>Rakenda filtrid</translation>
     </message>
 </context>
 <context>
@@ -796,6 +956,14 @@ Seda ei lisata projektile.</translation>
         <location filename="../qml/dialogs/MMFormEditFailedDialog.qml" line="20"/>
         <source>Ok, I understand</source>
         <translation>Olgu, mõistan</translation>
+    </message>
+</context>
+<context>
+    <name>MMFormGalleryEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="34"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Mõned nähtused võivad olla aktiivsete filtrite tõttu peidus</translation>
     </message>
 </context>
 <context>
@@ -863,12 +1031,17 @@ Seda ei lisata projektile.</translation>
         <translation>Pildi sketsi ei õnnestunud salvestada, palun pöördu kasutajatoe poole.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="292"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
         <source>Could not create directory %1.</source>
         <translation>Ei õnnestunud tekitada kausta %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="364"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <source>Failed to process the image, photo directory resolving failed</source>
+        <translation>Pildi töötlemine ebaõnnestus, piltide kausta ei leitud</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
         <source>Failed to process the image</source>
         <translation>Pilti ei õnnestunud töödelda</translation>
     </message>
@@ -876,12 +1049,17 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="46"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Mõned nähtused võivad olla aktiivsete filtrite tõttu peidus</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="172"/>
         <source> more</source>
         <translation>veel</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="215"/>
         <source>Add feature</source>
         <translation>Lisa nähtus</translation>
     </message>
@@ -1031,6 +1209,16 @@ Seda ei lisata projektile.</translation>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
         <source>Altitude</source>
         <translation>Kõrgus</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Orthometric height, using %1 geoid</source>
+        <translation>Ortomeetriline kõrgus, kasutades %1 geoidi</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <source>Elevation using unspecified grid</source>
+        <translation>Kõrgus lähtudes määramata võrgustikust</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
@@ -1227,7 +1415,7 @@ Seda ei lisata projektile.</translation>
         <translation>Kihid</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayersListPage.qml" line="42"/>
+        <location filename="../qml/layers/MMLayersListPage.qml" line="44"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
@@ -1241,14 +1429,22 @@ Seda ei lisata projektile.</translation>
     </message>
 </context>
 <context>
+    <name>MMListEmptyLoaderDelegate</name>
+    <message>
+        <location filename="../qml/components/MMListEmptyLoaderDelegate.qml" line="28"/>
+        <source>No items</source>
+        <translation>Nähtusi pole</translation>
+    </message>
+</context>
+<context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="57"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="140"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="138"/>
         <source>Confirm selection</source>
         <translation>Kinnita valik</translation>
     </message>
@@ -1337,113 +1533,113 @@ Seda ei lisata projektile.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="125"/>
+        <location filename="../qml/map/MMMapController.qml" line="126"/>
         <source>Mark the geometry on the map and click record</source>
         <translation>Märgi geomeetria kaardil ja vajuta salvesta</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="154"/>
+        <location filename="../qml/map/MMMapController.qml" line="155"/>
         <source>Create line to split the selected feature</source>
         <translation>Tekita joon et tükeldada valitud nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="171"/>
+        <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation>Lisa punkte et mõõta vahemaad, sulge ringpiir et mõõta pindala</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="178"/>
+        <location filename="../qml/map/MMMapController.qml" line="179"/>
         <source>Tap on features to add or remove from the selection</source>
         <translation>Toksa nähtusel et lisada või eemaldada valikust</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="184"/>
+        <location filename="../qml/map/MMMapController.qml" line="185"/>
         <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
         <translation>Vali värv ja alusta kaardil sirgeldamist. Kaardi liigutamiseks või mõõtkava muutmiseks kasuta kahte sõrme.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="630"/>
+        <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
         <translation>raja salvestamine</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="706"/>
+        <location filename="../qml/map/MMMapController.qml" line="707"/>
         <source>Connecting to %1</source>
         <translation>Ühendan %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="720"/>
+        <location filename="../qml/map/MMMapController.qml" line="721"/>
         <source>Connected, no position</source>
         <translation>Ühendatud, puudub asukoht</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="724"/>
+        <location filename="../qml/map/MMMapController.qml" line="725"/>
         <source>Unknown accuracy</source>
         <translation>Teadmata täpsus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="866"/>
+        <location filename="../qml/map/MMMapController.qml" line="879"/>
         <source>GPS currently unavailable</source>
         <translation>GPS ei ole hetkel kättesaadav</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="890"/>
+        <location filename="../qml/map/MMMapController.qml" line="903"/>
         <source>Choose Active Layer</source>
         <translation>Vali aktiivne kiht</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="924"/>
+        <location filename="../qml/map/MMMapController.qml" line="937"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Ei leidnud projektist muudetavaid kihte.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="925"/>
+        <location filename="../qml/map/MMMapController.qml" line="938"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Vaata kuidas lubada oma projektis digimine.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="951"/>
+        <location filename="../qml/map/MMMapController.qml" line="964"/>
         <source>More options</source>
         <translation>Veel valikuid</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="956"/>
+        <location filename="../qml/map/MMMapController.qml" line="969"/>
         <source>Split geometry</source>
         <translation>Tükelda geomeetria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="968"/>
+        <location filename="../qml/map/MMMapController.qml" line="981"/>
         <source>Redraw geometry</source>
         <translation>Muuda geomeetriat</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="993"/>
         <source>Streaming mode</source>
         <translation>Striimimismeetod</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="986"/>
+        <location filename="../qml/map/MMMapController.qml" line="999"/>
         <source>Active</source>
         <translation>Aktiivne</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1198"/>
+        <location filename="../qml/map/MMMapController.qml" line="1211"/>
         <source>Splitting done successfully</source>
         <translation>Tükeldamine õnnestus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1289"/>
+        <location filename="../qml/map/MMMapController.qml" line="1302"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vali mõni punkt et alustada geomeetria muutmist</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1302"/>
+        <location filename="../qml/map/MMMapController.qml" line="1315"/>
         <source>Record new geometry for the feature</source>
         <translation>Salvesta nähtuse uus geomeetria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="129"/>
-        <location filename="../qml/map/MMMapController.qml" line="1401"/>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
+        <location filename="../qml/map/MMMapController.qml" line="1414"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei ole hetkel kättesaadav.</translation>
     </message>
@@ -2152,6 +2348,24 @@ Seda ei lisata projektile.</translation>
     </message>
 </context>
 <context>
+    <name>MMSegmentControl</name>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="21"/>
+        <source>All</source>
+        <translation>Kõik</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="22"/>
+        <source>True</source>
+        <translation>Jah</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="23"/>
+        <source>False</source>
+        <translation>Ei</translation>
+    </message>
+</context>
+<context>
     <name>MMSelectionDrawer</name>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
@@ -2592,17 +2806,17 @@ Seda ei lisata projektile.</translation>
         <translation>Vali töölaud</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="61"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="64"/>
         <source>Search</source>
         <translation>Otsi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="93"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="96"/>
         <source>Pending invitations</source>
         <translation>Ootel kutsed</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="141"/>
+        <location filename="../qml/account/MMSwitchWorkspacePage.qml" line="144"/>
         <source>Your workspaces</source>
         <translation>Sinu töölauad</translation>
     </message>
@@ -2882,7 +3096,7 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="116"/>
+        <location filename="../position/positionkit.cpp" line="122"/>
         <source>External (Mock)</source>
         <translation>Väline (Simuleeritud)</translation>
     </message>
@@ -2988,67 +3202,6 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../attributes/fieldvalidator.h" line="57"/>
-        <source>Value must be a number</source>
-        <translation>Väärtus peab olema number</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="58"/>
-        <source>Value must be lower than %1</source>
-        <translation>Väärtus peab olema alla %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="59"/>
-        <source>Value must be higher than %1</source>
-        <translation>Väärtus peab olema üle %1</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="60"/>
-        <source>Value is too large</source>
-        <translation>Väärtus on liiga suur</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="61"/>
-        <source>Field can not contain decimal places</source>
-        <translation>Väljal ei tohi olla kümnendmurd</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="63"/>
-        <source>Can not be longer than %1 characters</source>
-        <translation>Ei tohi olla pikem kui %1 tähemärki</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="65"/>
-        <source>Field should not be empty</source>
-        <translation>Väli ei tohiks olla tühi</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="66"/>
-        <source>Field must not be empty</source>
-        <translation>Väli ei tohi olla tühi</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="67"/>
-        <source>Value should be unique</source>
-        <translation>Väärtus peaks olema unikaalne</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="68"/>
-        <source>Value must be unique</source>
-        <translation>Väärtus peab olema unikaalne</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="69"/>
-        <location filename="../attributes/fieldvalidator.h" line="70"/>
-        <source>Unmet QGIS expression constraint</source>
-        <translation>Täitmata QGIS lausendi tingimus</translation>
-    </message>
-    <message>
-        <location filename="../attributes/fieldvalidator.h" line="72"/>
-        <source>Not a valid value</source>
-        <translation>Kehtetu väärtus</translation>
-    </message>
-    <message>
         <location filename="../position/geoposition.cpp" line="137"/>
         <source>No data</source>
         <translation>Pole andmeid</translation>
@@ -3123,135 +3276,148 @@ võimaldab ainult kuni %1 allalaetud projekti.</translation>
     </message>
 </context>
 <context>
+    <name>UniqueValuesFilterModel</name>
+    <message>
+        <location filename="../filter/uniquevaluesfiltermodel.cpp" line="50"/>
+        <source>No value</source>
+        <translation>Väärtus puudub</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="302"/>
         <source>Sync</source>
         <translation>Sünkroniseeri</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="306"/>
+        <location filename="../qml/main.qml" line="312"/>
         <source>Add</source>
         <translation>Lisa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="321"/>
         <source>No editable layers found.</source>
         <translation>Ei leidnud redigeeritavaid kihte.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="321"/>
+        <location filename="../qml/main.qml" line="327"/>
         <source>Layers</source>
         <translation>Kihid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="330"/>
+        <location filename="../qml/main.qml" line="336"/>
         <source>Projects</source>
         <translation>Projektid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="338"/>
+        <location filename="../qml/main.qml" line="344"/>
         <source>Zoom to project</source>
         <translation>Täisvaade</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="347"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Map themes</source>
         <translation>Kaardikomplektid</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="358"/>
+        <location filename="../qml/main.qml" line="362"/>
+        <source>Filters</source>
+        <translation>Filtrid</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="374"/>
         <source>Position tracking</source>
         <translation>Asukoha jälgimine</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="369"/>
+        <location filename="../qml/main.qml" line="385"/>
         <source>Measure</source>
         <translation>Mõõda</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="375"/>
+        <location filename="../qml/main.qml" line="391"/>
         <source>Local changes</source>
         <translation>Kohalikud muudatused</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="384"/>
+        <location filename="../qml/main.qml" line="400"/>
         <source>Settings</source>
         <translation>Seaded</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="589"/>
-        <location filename="../qml/main.qml" line="597"/>
+        <location filename="../qml/main.qml" line="617"/>
+        <location filename="../qml/main.qml" line="625"/>
         <source>not tracking</source>
         <translation>ei jälgi</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="697"/>
+        <location filename="../qml/main.qml" line="725"/>
         <source>Delete %n feature(s)</source>
-        <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtust</numerusform></translation>
+        <translation><numerusform>Kustuta %n nähtus</numerusform><numerusform>Kustuta %n nähtus(t)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="698"/>
+        <location filename="../qml/main.qml" line="726"/>
         <source>Delete %n selected feature(s)?</source>
         <translation><numerusform>Kustutan %n valitud nähtuse?</numerusform><numerusform>Kustutan %n valitud nähtust?</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="700"/>
+        <location filename="../qml/main.qml" line="728"/>
         <source>Yes, I want to delete</source>
         <translation>Jah, soovin kustutada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="729"/>
         <source>No, thanks</source>
         <translation>Ei, tänan</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="921"/>
+        <location filename="../qml/main.qml" line="949"/>
         <source>Select feature</source>
         <translation>Vali nähtus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1005"/>
+        <location filename="../qml/main.qml" line="1033"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Keegi teine sünkroniseerib, proovime mõne aja pärast uuesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1037"/>
+        <location filename="../qml/main.qml" line="1065"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Serveriga ei õnnestu ühendust saada. Püüa parandada võrguühendust.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1027"/>
+        <location filename="../qml/main.qml" line="1055"/>
         <source>Up to date</source>
         <translation>Ajakohane</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1148"/>
+        <location filename="../qml/main.qml" line="1176"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Projekti laadimisel tekkis tõrge. %1Vaata täpsemalt%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="852"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Markeerimine on välja lülitatud sest asukoht ei ole kättesaadav!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="974"/>
+        <location filename="../qml/main.qml" line="1002"/>
         <source>Successfully synchronised</source>
         <translation>Edukalt sünkroniseeritud</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1012"/>
+        <location filename="../qml/main.qml" line="1040"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Sünkroniseerimise käigus tekkis probleem, proovime hiljem uuesti. Kliki siia et täpsemalt teada saada</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1169"/>
+        <location filename="../qml/main.qml" line="1197"/>
         <source>Could not read the project file:</source>
         <translation>Ei õnnestunud avada projektifaili:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1202"/>
+        <location filename="../qml/main.qml" line="1230"/>
         <source>Press back again to quit the app</source>
         <translation>Vajuta veelkord tagasi et rakendus kinni panna</translation>
     </message>

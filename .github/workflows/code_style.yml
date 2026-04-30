@@ -29,7 +29,7 @@ jobs:
     steps:
 
       - name: Checkout input
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: input
 
@@ -51,7 +51,7 @@ jobs:
           sudo pip3 install cmakelang
 
       - name: Checkout input
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: input
 
@@ -65,12 +65,15 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Requirements
+        #workaround for the current false positive bug in cppcheck 2.20 (latest version)
         run: |
-          brew update
-          brew install cppcheck
+          curl -L https://github.com/danmar/cppcheck/archive/refs/tags/2.19.1.tar.gz | tar xz
+          cmake -S cppcheck-2.19.1 -B cppcheck-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build cppcheck-build -j$(sysctl -n hw.logicalcpu)
+          cmake --install cppcheck-build
 
       - name: Run cppcheck test
         run: ./scripts/cppcheck.bash

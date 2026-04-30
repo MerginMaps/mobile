@@ -30,6 +30,10 @@ MMPrivateComponents.MMBaseInput {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
+  infoMsg: root._fieldAssociatedRelation && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer( rmodel?.layer?.id )
+           ? qsTr( "Some features may be hidden by active filters" )
+           : ""
+
   inputContent: MMComponents.MMListView {
     id: rowView
 
@@ -48,12 +52,10 @@ MMPrivateComponents.MMBaseInput {
       homePath: root._fieldActiveProject.homePath
     }
 
-    delegate: MMComponents.MMPhoto {
-      width: rowView.height
+    delegate: MMComponents.MMPhotoCard{
+      size: rowView.height
 
-      fillMode: Image.PreserveAspectCrop
-
-      photoUrl: {
+      imageSource: {
         let absolutePath = model.PhotoPath
 
         if ( absolutePath !== '' && __inputUtils.fileExists( absolutePath ) ) {
@@ -61,6 +63,10 @@ MMPrivateComponents.MMBaseInput {
         }
         return ''
       }
+
+      textVisible: false
+
+      text: model.FeatureTitle
 
       onClicked: function( path ) {
         root.openLinkedFeature( model.FeaturePair )

@@ -36,6 +36,12 @@ class TestAttributeController: public QObject
      * the sketches play nicely with renaming expressions and metadata gets copied too.
      */
     void testPhotoSketchingSave();
+
+    /**
+     * Test that prefillRelationReferenceField sets the rawValue of the FK field in the child controller
+     * to the parent feature's referenced field value (FID).
+     */
+    void testPrefillRelationReferenceField();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H
