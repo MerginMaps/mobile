@@ -96,7 +96,6 @@ endif ()
 # ########################################################################################
 set(qml_dirs
     Qt
-    Qt5Compat
     QtMultimedia
     QtQml
     QtQuick
