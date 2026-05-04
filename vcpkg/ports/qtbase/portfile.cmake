@@ -24,6 +24,8 @@ set(${PORT}_PATCHES
     fix_deploy_windows.patch
     fix-link-lib-discovery.patch
     macdeployqt-symlinks.patch
+    fix_find_framework.patch
+    fix_yield_arm_acle.patch
 )
 
 if (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW)
@@ -449,6 +451,7 @@ qt_install_submodule(
   -DINPUT_bundled_xcb_xinput:STRING=no
   -DFEATURE_force_debug_info:BOOL=ON
   -DFEATURE_relocatable:BOOL=ON
+  -DQT_AVOID_CMAKE_ARCHIVING_API=ON
   CONFIGURE_OPTIONS_RELEASE
   CONFIGURE_OPTIONS_DEBUG
   -DFEATURE_debug:BOOL=ON
