@@ -11,6 +11,7 @@
 #define FIELDSMODEL_H
 
 #include <QAbstractListModel>
+#include <QtQml/qqmlregistration.h>
 
 #include <qgsfield.h>
 
