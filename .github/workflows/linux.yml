@@ -20,7 +20,7 @@ on:
       - published
 
 env:
-  CMAKE_VERSION: '3.31.6'
+  CMAKE_VERSION: '3.31.11'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
   TRIPLET: x64-linux
@@ -95,7 +95,7 @@ jobs:
       - name: Setup NuGet Credentials
         shell: bash
         run: |
-          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | head -n 1` \
             sources add \
             -source "https://nuget.pkg.github.com/merginmaps/index.json" \
             -storepasswordincleartext \
@@ -103,7 +103,7 @@ jobs:
             -username "mergin-maps-bot" \
             -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
 
-          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | head -n 1` \
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
 
