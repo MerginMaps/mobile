@@ -5,9 +5,9 @@ FieldsModel::FieldsModel( QObject *parent )
   : QAbstractListModel( parent )
 {
   // fill the model with initial data
-  addField( "Date", "DateTime" );
-  addField( "Notes", "TextEdit" );
-  addField( "Photo", "ExternalResource" );
+  addField( tr( "Date" ), "DateTime" );
+  addField( tr( "Notes" ), "TextEdit" );
+  addField( tr( "Photo" ), "ExternalResource" );
 }
 
 bool FieldsModel::addField( const QString &name, const QString &widgetType )

@@ -145,10 +145,10 @@ MMComponents.MMPage {
   ListModel {
     id: typesmodel
 
-    ListElement { text: "Text"; type: "TextEdit" }
-    ListElement { text: "Date&time"; type: "DateTime" }
-    ListElement { text: "Number"; type: "Range" }
-    ListElement { text: "Checkbox"; type: "CheckBox" }
-    ListElement { text: "Photo"; type: "ExternalResource" }
+    ListElement { text: qsTr( "Text" ); type: "TextEdit" }
+    ListElement { text: qsTr( "Date & Time" ); type: "DateTime" }
+    ListElement { text: qsTr( "Number" ); type: "Range" }
+    ListElement { text: qsTr( "Checkbox" ); type: "CheckBox" }
+    ListElement { text: qsTr( "Photo" ); type: "ExternalResource" }
   }
 }
