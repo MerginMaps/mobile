@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
 import mm 1.0 as MM
 import MMInput
 
@@ -21,92 +20,8 @@ MMComponents.MMDrawer {
 
   property string providerType: ""
   property var positionProvider: PositionKit.positionProvider
-  property string howToConnectGPSLink: __inputHelp.howToConnectGPSLink
-
-  property string titleText: {
-    if ( root.providerType === "network" )
-    {
-      if ( rootstate.state === "working" )
-      {
-        if ( !root.positionProvider ) return ""
-        return qsTr( "Connecting to external receiver" )
-      }
-      else if ( rootstate.state === "success" )
-      {
-        return qsTr( "Connected" )
-      }
-      else if ( rootstate.state === "fail" )
-      {
-        return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.getIpAddress() : "" )
-      }
-      else return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
-    }
-    else if ( root.providerType === "bluetooth" )
-    {
-      if ( rootstate.state === "working" )
-      {
-        if ( !root.positionProvider ) return ""
-        if ( root.positionProvider.name() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.name()
-        return qsTr( "Connecting" ) + connectingSuffixAnimation
-      }
-      else if ( rootstate.state === "success" )
-      {
-        return qsTr( "Connected" )
-      }
-      else if ( rootstate.state === "fail" )
-      {
-        return qsTr( "Failed to connect to" ) + " " + ( root.positionProvider ? root.positionProvider.name() : "" )
-      }
-      else
-      {
-        if ( root.providerType === "bluetooth" ) return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
-      }
-    }
-  }
 
   property string connectingSuffixAnimation: ""
-
-  property string descriptionText: {
-    if ( rootstate.state === "working" )
-    {
-      if ( root.providerType === "bluetooth" )
-        return qsTr( "You might be asked to pair your device during this process." )
-      else if ( root.providerType === "network" )
-      if ( root.positionProvider.getIpAddress() ) return qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + ". You can close this panel, the app will continue in the background."
-      return qsTr( "Connecting" ) + connectingSuffixAnimation
-    }
-    else if ( rootstate.state === "success" )
-    {
-      return ""
-    }
-    else if ( rootstate.state === "waitingToReconnect" )
-    {
-      return PositionKit.positionProvider.stateMessage + "<br><br>" +
-          qsTr( "You can close this message, we will try to repeatedly connect to your device." )
-    }
-
-    else
-    {
-      if ( root.providerType === "bluetooth" )
-        return qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
-      else if ( root.providerType === "network" )
-        return qsTr( "We were not able to connect to the specified IP address. Please try again later." )
-    }
-  }
-
-  property var imageSource: {
-    if ( rootstate.state === "fail" )
-    {
-      return __style.externalGpsRedImage
-    }
-    else
-    {
-      if ( root.providerType === "bluetooth" )
-        return __style.externalBluetoothGreenImage
-      else if ( root.providerType === "network" )
-        return __style.externalNetworkGreenImage
-    }
-  }
 
   signal success()
   signal failure()
@@ -118,18 +33,60 @@ MMComponents.MMDrawer {
       State {
         name: "working"
         when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connecting
+        PropertyChanges {
+          target: message
+          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          title: root.providerType === "network"
+            ? qsTr( "Connecting to external receiver" )
+            : ( root.positionProvider.name()
+                ? qsTr( "Connecting to" ) + " " + root.positionProvider.name()
+                : qsTr( "Connecting" ) + root.connectingSuffixAnimation )
+          description: root.providerType === "bluetooth"
+            ? qsTr( "You might be asked to pair your device during this process." )
+            : ( root.positionProvider.getIpAddress()
+                ? qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + qsTr( ". You can close this panel, the app will continue in the background." )
+                : qsTr( "Connecting" ) + root.connectingSuffixAnimation )
+          linkText: ""
+        }
       },
       State {
         name: "success"
         when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connected
+        PropertyChanges {
+          target: message
+          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          title: qsTr( "Connected" )
+          description: ""
+          linkText: ""
+        }
       },
       State {
         name: "fail"
         when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.NoConnection
+        PropertyChanges {
+          target: message
+          image: __style.externalGpsRedImage
+          title: qsTr( "Failed to connect to" ) + " " + ( root.positionProvider
+            ? ( root.providerType === "network" ? root.positionProvider.getIpAddress() : root.positionProvider.name() )
+            : "" )
+          description: root.providerType === "bluetooth"
+            ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+            : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
+          linkText: qsTr( "Learn more" )
+        }
       },
       State {
         name: "waitingToReconnect"
-        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
+        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
+        PropertyChanges {
+          target: message
+          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          title: root.providerType === "bluetooth"
+            ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
+            : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
+          description: root.positionProvider.stateMessage + "<br><br>" + qsTr( "You can close this message, we will try to repeatedly connect to your device." )
+          linkText: qsTr( "Learn more" )
+        }
       }
     ]
 
@@ -143,13 +100,10 @@ MMComponents.MMDrawer {
     height: root.maxHeightHit ? root.drawerContentAvailableHeight : contentHeight
 
     MMComponents.MMMessage {
-      width: parent.width
+      id: message
 
-      image: root.imageSource
-      title: root.titleText
-      description: root.descriptionText
-      link: root.howToConnectGPSLink
-      linkText: ( rootstate.state === "working" || rootstate.state === "success" ) ? "" : qsTr( "Learn more" )
+      width: parent.width
+      link: __inputHelp.howToConnectGPSLink
     }
   }
 
@@ -159,9 +113,7 @@ MMComponents.MMDrawer {
     interval: 1500
     repeat: false
     running: rootstate.state === "success"
-    onTriggered: {
-      root.close()
-    }
+    onTriggered: root.close()
   }
 
   Timer {

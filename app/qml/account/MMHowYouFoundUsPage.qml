@@ -112,7 +112,7 @@ MMPage {
                NumberAnimation { properties: "x,y"; duration: 100 }
            }
 
-      delegate: MMAccountComponents.MMIconCheckBoxHorizontal {
+      delegate: MMIconCheckBoxHorizontal{
         x: model.submenu ? __style.margin20 : 0
         width: model.submenu ? ListView.view.width - __style.margin20 : ListView.view.width
 

@@ -11,81 +11,69 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 
-import "../../components"
-
 CheckBox {
   id: control
 
-  property string sourceIcon: ""
-  property string description: ""
+  property alias sourceIcon: icon.source
+  property alias description: descriptionText.text
   property bool showBorder: false
   property bool small: false
 
-  height: (description !== "" ? 96 : (control.small ? 50 : 80)) * __dp
+  readonly property int baseHeight: small ? 50 : 80
 
-  leftPadding: (description !== "" ? iconBgRectangle.x : 0) + iconBgRectangle.width + 30 * __dp
+  height: control.baseHeight * __dp
+  implicitWidth: leftPadding + titleText.implicitWidth + rightPadding
+
+  topPadding: Math.max(0, (height - contentColumn.implicitHeight) / 2)
+  bottomPadding: topPadding
+  leftPadding: iconBgRectangle.x + iconBgRectangle.width + 20 * __dp
   rightPadding: 20 * __dp
 
   indicator: Rectangle {
     id: iconBgRectangle
-    width: (control.small ? 24 : (control.description !== "" ? 50 : 40)) * __dp
-    height: (control.small ? 24 : (control.description !== "" ? 50 : 40)) * __dp
+    implicitWidth: (small ? 24 : 40) * __dp
+    implicitHeight: (small ? 24 : 40) * __dp
     x: 20 * __dp
     y: control.height / 2 - height / 2
     radius: width / 2
     color: control.checked ? __style.polarColor : __style.lightGreenColor
 
     MMIcon {
-      size: control.small ? __style.icon16 : __style.icon24
+      id: icon
+      size: small ? __style.icon16 : __style.icon24
       anchors.centerIn: parent
       source: control.sourceIcon
       color: __style.forestColor
     }
   }
 
-  contentItem: Item {
-    implicitWidth: titleText.implicitWidth
+  contentItem: Column {
+    id: contentColumn
+    spacing: 4 * __dp
 
     Text {
       id: titleText
-      visible: control.description === ""
       width: parent.width
-      height: parent.height
       text: control.text
       font: __style.t3
       color: control.checked ? __style.polarColor : __style.nightColor
       elide: Text.ElideRight
-      verticalAlignment: Text.AlignVCenter
     }
 
-    Column {
-      id: textColumn
-      visible: control.description !== ""
-      anchors.verticalCenter: parent.verticalCenter
+    Text {
+      id: descriptionText
+      visible: text !== ""
       width: parent.width
-      spacing: 10 * __dp
-
-      Text {
-        width: parent.width
-        text: control.text
-        font: __style.t3
-        color: control.checked ? __style.polarColor : __style.nightColor
-        elide: Text.ElideRight
-      }
-
-      Text {
-        width: parent.width
-        text: control.description
-        font: __style.p6
-        color: control.checked ? __style.polarColor : __style.nightColor
-        elide: Text.ElideRight
-      }
+      font: __style.p6
+      color: control.checked ? __style.polarColor : __style.nightColor
+      wrapMode: Text.Wrap
+      maximumLineCount: 2
     }
   }
 
   background: Rectangle {
     radius: __style.radius12
     color: control.checked ? __style.forestColor : __style.polarColor
-    border.color: showBorder ? ( control.checked ? __style.transparentColor : __style.mediumGreenColor ) : __style.transparentColor
+    border.color: showBorder && !control.checked ? __style.mediumGreenColor : __style.transparentColor
   }
 }
