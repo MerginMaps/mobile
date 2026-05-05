@@ -19,7 +19,7 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 {
   if ( !InputUtils::isMobilePlatform() )
   {
-    PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
+    const PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
 
     mProviders.push_front( simulated );
   }
@@ -74,20 +74,20 @@ QHash<int, QByteArray> PositionProvidersModel::roleNames() const
 
 int PositionProvidersModel::rowCount( const QModelIndex & ) const
 {
-  return mProviders.count();
+  return static_cast<int>( mProviders.count() );
 }
 
-QVariant PositionProvidersModel::data( const QModelIndex &index, int role ) const
+QVariant PositionProvidersModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+    return {};
 
-  int row = index.row();
+  const int row = index.row();
 
   PositionProvider provider = mProviders.at( row );
 
   if ( row < 0 || row > mProviders.count() )
-    return QVariant();
+    return {};
 
   switch ( role )
   {
@@ -104,7 +104,7 @@ QVariant PositionProvidersModel::data( const QModelIndex &index, int role ) cons
       return provider.providerType;
 
     default:
-      return QVariant();
+      return {};
   }
 }
 
@@ -119,7 +119,7 @@ void PositionProvidersModel::removeProvider( const QString &providerId )
   if ( !mProviders.contains( toRemove ) )
     return;
 
-  int removeIndex = mProviders.indexOf( toRemove );
+  const int removeIndex = static_cast<int>( mProviders.indexOf( toRemove ) );
 
   beginRemoveRows( QModelIndex(), removeIndex, removeIndex );
 
@@ -134,21 +134,22 @@ void PositionProvidersModel::removeProvider( const QString &providerId )
   }
 }
 
-void PositionProvidersModel::addProvider( const QString &name, const QString &providerId )
+void PositionProvidersModel::addProvider( const QString &name, const QString &providerId, const QString &providerType )
 {
   if ( providerId.isEmpty() )
     return;
 
   PositionProvider toAdd;
+  const QString deviceDesc = providerType == QStringLiteral( "external_bt" ) ? tr( " Bluetooth device" ) : tr( " Network device" );
   toAdd.name = name;
   toAdd.providerId = providerId;
-  toAdd.description = providerId + " " + tr( " Bluetooth device" );
-  toAdd.providerType = "external";
+  toAdd.description = providerId + " " + deviceDesc;
+  toAdd.providerType = providerType;
 
   if ( mProviders.contains( toAdd ) )
     return;
 
-  int addIndex = mProviders.count();
+  const int addIndex = static_cast<int>( mProviders.count() );
 
   beginInsertRows( QModelIndex(), addIndex, addIndex );
 
@@ -185,7 +186,7 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
 
     for ( int i = 0; i < providers.count(); ++i )
     {
-      if ( providers[i].type() == QVariant::List || providers[i].type() == QVariant::StringList )
+      if ( providers[i].typeId() == QMetaType::QVariantList || providers[i].typeId() == QMetaType::QStringList )
       {
         QVariantList providerData = providers[i].toList();
 
@@ -196,10 +197,13 @@ void PositionProvidersModel::setAppSettings( AppSettings *as )
         }
 
         PositionProvider provider;
+        // when migrating from older version where type wasn't saved we know it's bluetooth device
+        const QString providerType = providerData[2].isNull() ? QStringLiteral( "external_bt" ) : providerData[2].toString();
+        const QString deviceDesc = providerType == QStringLiteral( "external_bt" ) ? tr( " Bluetooth device" ) : tr( " Network device" );
         provider.name = providerData[0].toString();
         provider.providerId = providerData[1].toString();
-        provider.description = provider.providerId + " " + tr( "Bluetooth device" );
-        provider.providerType = "external";
+        provider.description = provider.providerId + deviceDesc;
+        provider.providerType = providerType;
 
         mProviders.append( provider );
       }
@@ -218,8 +222,8 @@ QVariantList PositionProvidersModel::toVariantList() const
     if ( mProviders[i].providerType == QStringLiteral( "internal" ) )
       continue;
 
-    QStringList a = { mProviders[i].name, mProviders[i].providerId };
-    out.push_back( a );
+    QStringList provider = { mProviders[i].name, mProviders[i].providerId, mProviders[i].providerType };
+    out.push_back( provider );
   }
 
   return out;

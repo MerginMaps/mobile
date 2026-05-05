@@ -2105,6 +2105,29 @@ void InputUtils::updateQgisFormats( const QByteArray &output )
 #endif
 }
 
+QString InputUtils::getUniqueString( const QString &newString, const QStringList &existingStrings )
+{
+  const QRegularExpression regex( QStringLiteral( R"(^(.*)\((\d+)\)$)" ) );
+  QString uniqueString( newString.trimmed() );
+  int i = 1;
+  while ( existingStrings.contains( uniqueString ) )
+  {
+    // if the string ends with "(x)" where x is integer number replace it in place
+    auto regexMatch = regex.match( uniqueString );
+    if ( regexMatch.hasMatch() )
+    {
+      i = regexMatch.captured( 2 ).toInt() + 1;
+      uniqueString = QStringLiteral( "%1 (%2)" ).arg( regexMatch.captured( 1 ).trimmed(), QString::number( i ) );
+    }
+    else
+    {
+      uniqueString = QStringLiteral( "%1 (%2)" ).arg( newString.trimmed(), QString::number( i ) );
+    }
+    i++;
+  }
+  return uniqueString;
+}
+
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );

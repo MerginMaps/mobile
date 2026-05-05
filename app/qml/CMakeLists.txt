@@ -1,5 +1,4 @@
 set(MM_QML
-    account/components/MMIconCheckBoxHorizontal.qml
     account/components/MMIconCheckBoxVertical.qml
     account/components/MMAccountPageItem.qml
     account/components/MMWorkspaceDelegate.qml
@@ -26,6 +25,7 @@ set(MM_QML
     components/MMDrawerHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
+    components/MMIconCheckBoxHorizontal.qml
     components/MMInfoBox.qml
     components/MMLine.qml
     components/MMListDelegate.qml
@@ -132,10 +132,12 @@ set(MM_QML
     form/editors/MMFormTextMultilineEditor.qml
     form/editors/MMFormValueMapEditor.qml
     form/editors/MMFormValueRelationEditor.qml
-    gps/MMAddPositionProviderDrawer.qml
-    gps/MMBluetoothConnectionDrawer.qml
+    gps/MMBluetoothProviderDrawer.qml
+    gps/MMExternalProviderConnectionDrawer.qml
     gps/MMGpsDataDrawer.qml
+    gps/MMNetworkProviderDrawer.qml
     gps/MMPositionProviderPage.qml
+    gps/MMProviderTypeDrawer.qml
     gps/MMStakeoutDrawer.qml
     gps/MMMeasureDrawer.qml
     gps/MMSelectionDrawer.qml

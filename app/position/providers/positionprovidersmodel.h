@@ -10,7 +10,6 @@
 #ifndef POSITIONPROVIDERSMODEL_H
 #define POSITIONPROVIDERSMODEL_H
 
-#include <QObject>
 #include <qglobal.h>
 #include <QAbstractListModel>
 
@@ -21,8 +20,8 @@ struct PositionProvider
 {
   QString name;
   QString description;
-  QString providerType; // either internal or external
-  QString providerId; // holds BT address for external provider and simulated/internal for internal provider
+  QString providerType; // can be internal, external_bt, external_ip
+  QString providerId; // holds BT address or IP address for external providers and simulated/internal for internal providers
 
   bool operator==( const PositionProvider &other ) const
   {
@@ -38,7 +37,7 @@ struct PositionProvider
     : name( name ), description( desc ), providerType( type ), providerId( id )
   {}
 
-  PositionProvider() {}
+  PositionProvider() = default;
 };
 
 class PositionProvidersModel : public QAbstractListModel
@@ -50,14 +49,14 @@ class PositionProvidersModel : public QAbstractListModel
   public:
 
     explicit PositionProvidersModel( QObject *parent = nullptr );
-    virtual ~PositionProvidersModel();
+    ~PositionProvidersModel() override;
 
     enum DataRoles
     {
-      ProviderName = Qt::UserRole + 1, //! physical address of BT device
-      ProviderDescription,
-      ProviderId,
-      ProviderType // external (connected) / internal (device)
+      ProviderName = Qt::UserRole + 1, // name of bluetooth device or custom name for network device
+      ProviderDescription, // device address (IP/BT) + device type
+      ProviderId, // device address (IP/BT)
+      ProviderType // external_ip (connected) / external_bt (connected) / internal (device) / simulated (device)
     };
     Q_ENUM( DataRoles )
 
@@ -67,7 +66,7 @@ class PositionProvidersModel : public QAbstractListModel
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const override;
 
     Q_INVOKABLE void removeProvider( const QString &providerId );
-    Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId );
+    Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId, const QString &providerType );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings * );
