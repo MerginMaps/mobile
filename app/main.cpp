@@ -573,8 +573,8 @@ int main( int argc, char *argv[] )
 
     // read and set new elevation transformation behavior
     bool valueRead = false;
-    const bool skipElevationTransformation = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
-    pk->setSkipElevationTransformation( skipElevationTransformation );
+    const bool elevationTransformationEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "ElevationTransformationEnabled" ), false, &valueRead );
+    pk->setElevationTransformationEnabled( elevationTransformationEnabled );
 
     pk->refreshPositionTransformer( project->transformContext() );
   } );

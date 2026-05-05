@@ -12,18 +12,18 @@
 #include "inpututils.h"
 
 PositionTransformer::PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs,
-    const QgsCoordinateReferenceSystem &destinationCrs, const bool skipElevationTransformation, const QgsCoordinateTransformContext &transformContext, QObject *parent )
+    const QgsCoordinateReferenceSystem &destinationCrs, const bool elevationTransformationEnabled, const QgsCoordinateTransformContext &transformContext, QObject *parent )
   : QObject( parent ),
     mSourceCrs( sourceCrs ),
     mDestinationCrs( destinationCrs ),
     mTransformContext( transformContext ),
-    mSkipElevationTransformation( skipElevationTransformation )
+    mElevationTransformationEnabled( elevationTransformationEnabled )
 {
 }
 
 GeoPosition PositionTransformer::processBluetoothPosition( GeoPosition geoPosition )
 {
-  if ( !mSkipElevationTransformation && !std::isnan( geoPosition.elevation ) && !std::isnan( geoPosition.elevation_diff ) )
+  if ( mElevationTransformationEnabled && !std::isnan( geoPosition.elevation ) && !std::isnan( geoPosition.elevation_diff ) )
   {
     // The geoid models used in GNSS devices can be often times unreliable, thus we apply the transformations ourselves
     // GNSS supplied orthometric elevation -> ellipsoid elevation -> orthometric elevation based on our model
@@ -55,7 +55,7 @@ GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition
   if ( geoPosition.elevation != std::numeric_limits<double>::quiet_NaN() )
   {
     bool positionOutsideGeoidModelArea = false;
-    if ( !geoPosition.isMock || !mSkipElevationTransformation )
+    if ( !geoPosition.isMock || mElevationTransformationEnabled )
     {
       const QgsPoint geoidPosition = InputUtils::transformPoint(
                                        mSourceCrs,
@@ -112,7 +112,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
   GeoPosition newPosition;
   bool positionOutsideGeoidModelArea = false;
   // on ios we can get both ellipsoid and geoid altitude, depending on what is available we transform the altitude or not
-  // we also check if the user set vertical CRS pass through in plugin, which prohibits any transformation
+  // we also check if the user has elevation transformation enabled in the project settings
   const bool isEllipsoidalAltitude = geoPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed );
   geoPosition.removeAttribute( QGeoPositionInfo::VerticalSpeed );
   const bool isMockedLocation = geoPosition.hasAttribute( QGeoPositionInfo::MagneticVariation );
@@ -123,7 +123,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
 
   const bool isInternalProviderEllipsoidAltitude = !isMockedLocation && isEllipsoidalAltitude;
   // with mocked position we expect ellipsoid elevation
-  if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && !mSkipElevationTransformation ) )
+  if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && mElevationTransformationEnabled ) )
   {
     geoidPosition = InputUtils::transformPoint(
                       mSourceCrs,
@@ -152,7 +152,7 @@ GeoPosition PositionTransformer::processInternalIosPosition( QGeoPositionInfo &g
     // - on iOS - it would return MSL altitude, but we have a custom patch in vcpkg to return
     //   ellipsoid altitude, if it's available (so we do not rely on geoid model of unknown quality/resolution),
     //   or we get orthometric altitude from mocked location, but the altitude separation is unknown
-    if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && !mSkipElevationTransformation ) )
+    if ( isInternalProviderEllipsoidAltitude || ( isMockedLocation && mElevationTransformationEnabled ) )
     {
       const double ellipsoidAltitude = geoPosition.coordinate().altitude();
       const double geoidSeparation = ellipsoidAltitude - geoidPosition.z();
@@ -209,7 +209,7 @@ void PositionTransformer::setTransformContext( const QgsCoordinateTransformConte
   mTransformContext = transformContext;
 }
 
-void PositionTransformer::setSkipElevationTransformation( const bool skipElevationTransformation )
+void PositionTransformer::setElevationTransformationEnabled( const bool elevationTransformationEnabled )
 {
-  mSkipElevationTransformation = skipElevationTransformation;
+  mElevationTransformationEnabled = elevationTransformationEnabled;
 }
