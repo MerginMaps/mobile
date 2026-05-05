@@ -169,8 +169,6 @@ MMComponents.MMPage {
     }
 
     MMComponents.MMMessage {
-      id: infoMessage
-
       visible: !listview.visible
       width: parent.width
       anchors.centerIn: parent
@@ -194,7 +192,7 @@ MMComponents.MMPage {
       }
 
       onRemoveProvider: {
-        if ( removeDialog.providerId === "" ) {
+        if ( !removeDialog.providerId ) {
           close()
           return
         }
@@ -215,7 +213,7 @@ MMComponents.MMPage {
       id: bluetoothDiscoveryLoader
 
       active: false
-      source: Qt.resolvedUrl( "MMAddPositionProviderDrawer.qml" )
+      source: Qt.resolvedUrl( "MMBluetoothProviderDrawer.qml" )
 
       onLoaded: item.open()
     }

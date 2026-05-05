@@ -73,26 +73,26 @@ ScrollView {
       spacing: 10
       anchors.fill: parent
 
-      MMAccountComponents.MMIconCheckBoxHorizontal {
+      MMComponents.MMIconCheckBoxHorizontal{
         checked: false
         sourceIcon: __style.qgisIcon
         text: "QGIS website"
       }
 
-      MMAccountComponents.MMIconCheckBoxHorizontal {
+      MMComponents.MMIconCheckBoxHorizontal{
         checked: true
         sourceIcon: __style.qgisIcon
         text: "QGIS website"
       }
 
-      MMAccountComponents.MMIconCheckBoxHorizontal {
+      MMComponents.MMIconCheckBoxHorizontal{
         checked: false
         sourceIcon: __style.redditIcon
         text: "Reddit"
         small: true
       }
 
-      MMAccountComponents.MMIconCheckBoxHorizontal {
+      MMComponents.MMIconCheckBoxHorizontal{
         checked: true
         width: 300 * __dp
         sourceIcon: __style.redditIcon

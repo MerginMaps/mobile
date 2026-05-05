@@ -10,7 +10,6 @@
 import QtCore
 import QtQuick
 import QtQuick.Controls
-
 import mm 1.0 as MM
 
 import "../components" as MMComponents
@@ -115,20 +114,19 @@ MMComponents.MMListDrawer {
         anchors.horizontalCenter: parent.horizontalCenter
 
         width: parent.width
-        spacing: __style.spacing16
 
         Image {
           anchors.horizontalCenter: parent.horizontalCenter
 
           source: __style.mmSymbolImage
 
-          width: 32 * __dp
-          height: 32 * __dp
+          width: __style.icon32 * __dp
+          height: __style.icon32 * __dp
 
           fillMode: Image.PreserveAspectFit
         }
 
-        MMComponents.MMListSpacer { height: __style.margin20 }
+        MMComponents.MMListSpacer { height: __style.margin16 }
 
         MMComponents.MMText {
           width: parent.width
@@ -140,8 +138,7 @@ MMComponents.MMListDrawer {
 
           horizontalAlignment: Text.AlignHCenter
         }
-
-        MMComponents.MMListSpacer { height: __style.margin20 }
+        MMComponents.MMListSpacer { height: __style.margin16 }
       }
     }
   }

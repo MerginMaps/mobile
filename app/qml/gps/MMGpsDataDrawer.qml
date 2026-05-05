@@ -9,7 +9,6 @@
 
 import QtQuick
 import QtQuick.Layouts
-
 import mm 1.0 as MM
 import MMInput
 
@@ -34,13 +33,13 @@ MMComponents.MMDrawer {
 
     width: parent.width
     height: root.maxHeightHit ? root.drawerContentAvailableHeight
-                              : ( scrollView.contentHeight + reservedButtonSpace )
+                              : ( scrollView.contentHeight + root.reservedButtonSpace )
 
     MMComponents.MMScrollView {
       id: scrollView
 
       width: parent.width
-      height: root.maxHeightHit ? ( parent.height - reservedButtonSpace)
+      height: root.maxHeightHit ? ( parent.height - root.reservedButtonSpace)
                                  : contentHeight
 
       Column {

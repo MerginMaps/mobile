@@ -57,8 +57,8 @@ MMComponents.MMDrawer {
       width: parent.width
       textFieldBackground.color: __style.lightGreenColor
 
-      title: qsTr( "Port" )
-      placeholderText: qsTr( "1234" )
+      title: "Port"
+      placeholderText: "1234"
 
       textField.inputMethodHints: Qt.ImhDigitsOnly
 
@@ -98,7 +98,7 @@ MMComponents.MMDrawer {
         }
 
         const portNum = parseInt( port )
-        if ( port === "" ) {
+        if ( !port ) {
           portInput.errorMsg = qsTr( "Port is required" )
         }
         else if ( !/^\d+$/.test( port ) || portNum < 1 || portNum > 65535 ) {
@@ -108,7 +108,7 @@ MMComponents.MMDrawer {
           portInput.errorMsg = ""
         }
 
-        if ( ipAddressInput.errorMsg !== "" || portInput.errorMsg !== "" ) {
+        if ( ipAddressInput.errorMsg || portInput.errorMsg ) {
           return
         }
 

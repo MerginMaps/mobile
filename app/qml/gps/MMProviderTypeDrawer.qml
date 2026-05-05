@@ -8,9 +8,8 @@
  ***************************************************************************/
 
 import QtQuick
-
+import QtQml.Models
 import "../components" as MMComponents
-import "../account/components" as MMAccountComponents
 
 MMComponents.MMListDrawer {
   id: root
@@ -64,7 +63,7 @@ MMComponents.MMListDrawer {
     width: ListView.view.width
     height: checkbox.height + __style.margin12
 
-    MMAccountComponents.MMIconCheckBoxHorizontal {
+    MMComponents.MMIconCheckBoxHorizontal{
       id: checkbox
 
       width: parent.width
