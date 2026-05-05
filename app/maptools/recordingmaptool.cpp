@@ -137,12 +137,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     if ( mActiveRing == 0 )
     {
-      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
+      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing()->clone() );
     }
     else
     {
       // interior rings starts indexing from 0
-      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 ) );
+      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 )->clone() );
     }
 
     if ( !r )
