@@ -18,7 +18,6 @@
 #import <ImageIO/ImageIO.h>
 #import "ios/iosinterface.h"
 #include "iosviewdelegate.h"
-#include "inpututils.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #include "position/positionkit.h"
 #include "compass.h"
@@ -130,11 +129,11 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
       @try
       {
         const QgsPoint position = positionKit->positionCoordinate();
-        [gpsDict setValue:[NSNumber numberWithFloat:position.x()] forKey:( NSString * )kCGImagePropertyGPSLongitude];
-        [gpsDict setValue:[NSNumber numberWithFloat:position.y()] forKey:( NSString * )kCGImagePropertyGPSLatitude];
+        [gpsDict setValue:[NSNumber numberWithDouble:fabs( position.x() )] forKey:( NSString * )kCGImagePropertyGPSLongitude];
+        [gpsDict setValue:[NSNumber numberWithDouble:fabs( position.y() )] forKey:( NSString * )kCGImagePropertyGPSLatitude];
         [gpsDict setValue:position.x() < 0.0 ? @"W" : @"E" forKey : ( NSString * )kCGImagePropertyGPSLongitudeRef];
         [gpsDict setValue:position.y() < 0.0 ? @"S" : @"N" forKey : ( NSString * )kCGImagePropertyGPSLatitudeRef];
-        [gpsDict setValue:[NSNumber numberWithFloat:position.z()] forKey:( NSString * )kCGImagePropertyGPSAltitude];
+        [gpsDict setValue:[NSNumber numberWithDouble:fabs( position.z() )] forKey:( NSString * )kCGImagePropertyGPSAltitude];
         [gpsDict setValue:[NSNumber numberWithShort:position.z() < 0.0 ? 1 : 0] forKey:( NSString * )kCGImagePropertyGPSAltitudeRef];
       }
       @catch ( NSException *exception )
@@ -162,6 +161,14 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
     qWarning( "invalid compass, no GPS Direction" );
   }
 
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+  NSDate *now = [NSDate date];
+  [dateFormatter setDateFormat:@"yyyy:MM:dd"];
+  [gpsDict setValue:[dateFormatter stringFromDate:now] forKey:( NSString * )kCGImagePropertyGPSDateStamp];
+  [dateFormatter setDateFormat:@"HH:mm:ss"];
+  [gpsDict setValue:[dateFormatter stringFromDate:now] forKey:( NSString * )kCGImagePropertyGPSTimeStamp];
+
   return gpsDict;
 }
 
@@ -177,7 +184,26 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
   UIWindow *rootWindow = app.windows[0];
   UIViewController *rootViewController = rootWindow.rootViewController;
 
-  if ( ![UIImagePickerController isSourceTypeAvailable:( UIImagePickerControllerSourceType ) sourceType] )
+  bool isCamera = ( UIImagePickerControllerSourceType ) sourceType == UIImagePickerControllerSourceTypeCamera;
+
+  if ( !isCamera )
+  {
+    // Gallery: use PHPickerViewController
+    PHPickerConfiguration *config = [[PHPickerConfiguration alloc] init];
+    config.filter = [PHPickerFilter imagesFilter];
+    config.selectionLimit = 1;
+
+    PHPickerViewController *picker = [[PHPickerViewController alloc] initWithConfiguration:config];
+    static IOSGalleryPickerDelegate *galleryDelegate = nullptr;
+    galleryDelegate = [[IOSGalleryPickerDelegate alloc] initWithHandler:handler];
+    picker.delegate = galleryDelegate;
+
+    [rootViewController presentViewController:picker animated:YES completion:nil];
+    return;
+  }
+
+  // Camera: use UIImagePickerController
+  if ( ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] )
   {
     NSString *alertTitle = @"Image picker";
     NSString *alertMessage = @"The functionality is not available";
@@ -188,7 +214,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
                                           preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *actionOk = [UIAlertAction actionWithTitle:alertOkButtonText
                                style:UIAlertActionStyleDefault
-                               handler:nil]; //You can use a block here to handle a press on this button
+                               handler:nil];
     [alertController addAction:actionOk];
     [rootViewController presentViewController:alertController animated:YES completion:nil];
   }
@@ -196,7 +222,7 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
   {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     imagePickerController = picker;
-    picker.sourceType = ( UIImagePickerControllerSourceType ) sourceType;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
     static IOSViewDelegate *delegate = nullptr;
     delegate = [[IOSViewDelegate alloc] initWithHandler:handler];
 
@@ -218,32 +244,13 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
       delegate->processingPicture = YES;
 
       NSString *imagePath = generateImagePath( delegate->handler->targetDir().toNSString() );
-      QString err;
-
-      bool isCameraPhoto = picker.sourceType == UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera;
-      if ( isCameraPhoto )
-      {
-        // Camera handling
-        err = [IOSInterface handleCameraPhoto:info:imagePath];
-      }
-      else
-      {
-        // Gallery handling
-        // Copy an image with metadata from imageURL to targetPath
-        NSURL *infoImageUrl = info[UIImagePickerControllerImageURL];
-        if ( !InputUtils::copyFile( QString::fromNSString( infoImageUrl.absoluteString ), QString::fromNSString( imagePath ) ) )
-        {
-          err = QStringLiteral( "Copying image from a gallery failed." );
-        }
-        infoImageUrl = nil;
-      }
+      QString err = [IOSInterface handleCameraPhoto:info:imagePath];
 
       [picker dismissViewControllerAnimated:YES completion:nil];
       if ( delegate->handler )
       {
         QVariantMap data;
-        QString imagePathData( [imagePath UTF8String] );
-        data["imagePath"] = imagePathData;
+        data["imagePath"] = QString( [imagePath UTF8String] );
         data["error"] = err;
         QMetaObject::invokeMethod( delegate->handler, "onImagePickerFinished", Qt::DirectConnection,
                                    Q_ARG( bool, err.isEmpty() ),
