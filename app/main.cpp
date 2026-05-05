@@ -55,7 +55,6 @@
 #include "variablesmanager.h"
 #include "inputhelp.h"
 #include "inputprojutils.h"
-#include "fieldsmodel.h"
 #include "projectwizard.h"
 #include "qrcodedecoder.h"
 #include "inputexpressionfunctions.h"
@@ -270,7 +269,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<PositionDirection>( "mm", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "mm", 1, 0, "Compass" );
-  qmlRegisterType<FieldsModel>( "mm", 1, 0, "FieldsModel" );
   qmlRegisterType<QrCodeDecoder>( "mm", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ProjectsModel>( "mm", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "mm", 1, 0, "ProjectsProxyModel" );
