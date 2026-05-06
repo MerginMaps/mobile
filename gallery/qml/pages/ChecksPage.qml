@@ -100,6 +100,17 @@ ScrollView {
         description: "This is a small description to check the functionality of this component"
         small: false
       }
+
+
+      MMComponents.MMIconCheckBoxHorizontal{
+        checked: false
+        width: 300 * __dp
+        sourceIcon: __style.redditIcon
+        text: "Internet provider mock"
+        description: "This is a small description to check the functionality of this component"
+        small: false
+        showBorder: true
+      }
     }
   }
 

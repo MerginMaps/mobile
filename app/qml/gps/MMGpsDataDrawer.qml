@@ -21,25 +21,22 @@ MMComponents.MMDrawer {
   property var mapSettings
 
   property bool showReceiversButton: true
-  readonly property real reservedButtonSpace: __style.spacing20 + manageButton.implicitHeight + __style.safeAreaBottom + __style.margin8
 
   signal manageReceiversClicked()
 
   drawerHeader.title: qsTr( "GPS info" )
 
-  drawerBottomMargin: 0
-
   drawerContent: Item {
 
     width: parent.width
     height: root.maxHeightHit ? root.drawerContentAvailableHeight
-                              : ( scrollView.contentHeight + root.reservedButtonSpace )
+                              : ( scrollView.contentHeight + internal.reservedButtonSpace )
 
     MMComponents.MMScrollView {
       id: scrollView
 
       width: parent.width
-      height: root.maxHeightHit ? ( parent.height - root.reservedButtonSpace)
+      height: root.maxHeightHit ? ( parent.height - internal.reservedButtonSpace)
                                  : contentHeight
 
       Column {
@@ -373,5 +370,6 @@ MMComponents.MMDrawer {
     id: internal
 
     property string coordinatesInDegrees: __inputUtils.degreesString( PositionKit.positionCoordinate )
+    readonly property real reservedButtonSpace: __style.spacing20 + manageButton.implicitHeight + __style.safeAreaBottom + __style.margin8
   }
 }

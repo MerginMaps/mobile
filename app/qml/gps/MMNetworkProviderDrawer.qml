@@ -26,17 +26,12 @@ MMComponents.MMDrawer {
 
     MMComponents.MMText {
       width: parent.width
-       
       text: qsTr( "Enter the IP address and port for your receiver. You can find these in your manufacturer's app. TCP and UDP connections are supported. Optionally, add a nickname to tell your receivers apart." )
       font: __style.p5
       color: __style.nightColor
 
       wrapMode: Text.Wrap
       horizontalAlignment: Text.AlignJustify
-
-      onLinkActivated: function( link ) {
-        Qt.openUrlExternally( link )
-      }
     }
 
     MMInputs.MMTextInput {
@@ -87,7 +82,7 @@ MMComponents.MMDrawer {
         const ipv4Regex = /^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/
         const hostnameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9\-\.]*[a-zA-Z0-9])?$/
 
-        if ( ip === "" ) {
+        if ( !ip ) {
           ipAddressInput.errorMsg = qsTr( "IP address is required" )
         }
         else if ( !ipv4Regex.test( ip ) && !hostnameRegex.test( ip ) ) {
