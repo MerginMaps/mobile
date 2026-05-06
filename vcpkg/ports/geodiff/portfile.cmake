@@ -1,7 +1,7 @@
 # Be sure to update both of these versions together.
-set(GEODIFF_VERSION 2.0.2)
+set(GEODIFF_VERSION 2.2.0)
 set(GEODIFF_HASH
-    290f10ec1a0d419d13996e915d02b7d226f23359c2745a72a1a286d439bed3afdf536d5bb8771c3d4fb3df2d56ac5c0d4c7f178ee31493f4bf02d597c8b9a878
+    b6ddd579dc446e6c22b520f4f94c49dbef42bba9deca55848acbd2b4993ae1236304cd1f07f4f7de91267901495bfb60d76668e8152625125778697cb57faabf
 )
 
 vcpkg_from_github(
@@ -32,7 +32,6 @@ vcpkg_configure_cmake(
   -DENABLE_TESTS=OFF
   -DBUILD_TOOLS=OFF
   -DWITH_POSTGRESQL=OFF
-  -DCMAKE_CXX_FLAGS=-Wno-error=deprecated-literal-operator
   ${GEODIFF_LINK_OPTIONS}
 )
 
