@@ -23,7 +23,7 @@ jobs:
           os: [ubuntu-latest, macos-26, windows-latest]
     runs-on: ${{ matrix.os }}
     env:
-      QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
+      QT_VERSION: '6.10.3'
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 1
       XC_VERSION: ${{ '26.4.1' }} # macos-only
