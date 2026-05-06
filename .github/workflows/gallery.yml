@@ -28,7 +28,6 @@ jobs:
       CACHE_VERSION: 1
       XC_VERSION: ${{ '26.4.1' }} # macos-only
       VS_VERSION: "2022" # win-only
-      QT_ARCH: "win64_msvc2022_64" # win-only
       
     steps:
       - uses: actions/checkout@v6
