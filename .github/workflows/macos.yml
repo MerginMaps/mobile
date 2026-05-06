@@ -22,7 +22,7 @@ env:
   CMAKE_VERSION: '3.31.11'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
-  XC_VERSION: ${{ '16.4' }}
+  XC_VERSION: ${{ '26.4.1' }}
   DEPLOYMENT_TARGET: '11.0'
   TRIPLET: arm64-osx
 
@@ -54,7 +54,7 @@ jobs:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
 
       - name: Setup XCode
-        uses: maxim-lobanov/setup-xcode@v1.6.0
+        uses: maxim-lobanov/setup-xcode@v1.7.0
         with:
           xcode-version: ${{ env.XC_VERSION }}
 
