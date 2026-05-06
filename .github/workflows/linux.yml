@@ -94,10 +94,6 @@ jobs:
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
 
-      - name: Print vcpkg fetch nuget output
-        shell: bash
-        run: ${{ env.VCPKG_ROOT }}/vcpkg fetch nuget
-
       - name: Setup NuGet Credentials
         shell: bash
         run: |
