@@ -24,7 +24,6 @@ env:
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
   XC_VERSION: ${{ '26.4.1' }}
-  DEPLOYMENT_TARGET: '14.0'
   TRIPLET: arm64-ios
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
   KEYCHAIN: ${{ 'inputapp.keychain' }}
@@ -163,7 +162,6 @@ jobs:
             -D CMAKE_CXX_VISIBILITY_PRESET=hidden \
             -D CMAKE_SYSTEM_NAME=iOS \
             -D CMAKE_SYSTEM_PROCESSOR=aarch64 \
-            -D CMAKE_OSX_DEPLOYMENT_TARGET=${{ env.DEPLOYMENT_TARGET }} \
             -DIOS=TRUE \
             -DUSE_MM_SERVER_API_KEY=TRUE \
             -DUSE_KEYCHAIN=No \
