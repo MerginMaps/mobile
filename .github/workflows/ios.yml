@@ -26,7 +26,7 @@ env:
   XC_VERSION: ${{ '26.4.1' }}
   TRIPLET: arm64-ios
   IOS_PROVISIONING_PROFILE_UUID: 59aaa8d7-516a-4592-8c58-d7d1c1f81610
-  KEYCHAIN: ${{ 'inputapp.keychain' }}
+  KEYCHAIN: ${{ 'mmapp.keychain' }}
 
 concurrency:
   group: ci-${{github.ref}}-ios
