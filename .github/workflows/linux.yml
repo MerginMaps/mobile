@@ -97,6 +97,8 @@ jobs:
       - name: Setup NuGet Credentials
         shell: bash
         run: |
+          ${{ env.VCPKG_ROOT }}/vcpkg fetch nuget
+          
           mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | head -n 1` \
             sources add \
             -source "https://nuget.pkg.github.com/merginmaps/index.json" \
