@@ -35,7 +35,7 @@ jobs:
             ANDROID_ABI: 'arm64-v8a'
             BUILD_OFFSET: 50
 
-    runs-on: macos-15
+    runs-on: macos-26
     env:
       NDK_VERSION: 'r27' # '27.2.12479018'
       NDK_VERSION_FULL: r27c
@@ -44,7 +44,7 @@ jobs:
       ANDROIDAPI: 24
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       SDK_BUILD_TOOLS: 34.0.0
-      CMAKE_VERSION: '3.31.6'
+      CMAKE_VERSION: '3.31.11'
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}

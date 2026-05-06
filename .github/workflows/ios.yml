@@ -20,7 +20,7 @@ on:
       - published
 
 env:
-  CMAKE_VERSION: '3.31.6'
+  CMAKE_VERSION: '3.31.11'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
   XC_VERSION: ${{ '16.4' }}
@@ -36,7 +36,7 @@ concurrency:
 jobs:
   ios_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v6
