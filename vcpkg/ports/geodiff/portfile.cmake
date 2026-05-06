@@ -32,6 +32,7 @@ vcpkg_configure_cmake(
   -DENABLE_TESTS=OFF
   -DBUILD_TOOLS=OFF
   -DWITH_POSTGRESQL=OFF
+  -DCMAKE_CXX_FLAGS=-Wno-error=deprecated-literal-operator
   ${GEODIFF_LINK_OPTIONS}
 )
 
