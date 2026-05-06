@@ -25,15 +25,20 @@ else ()
   list(APPEND GEODIFF_LINK_OPTIONS -DBUILD_SHARED=ON)
 endif ()
 
-vcpkg_configure_cmake(
-  SOURCE_PATH
-  ${SOURCE_PATH}/geodiff
-  OPTIONS
+set(GEODIFF_OPTIONS
   -DENABLE_TESTS=OFF
   -DBUILD_TOOLS=OFF
   -DWITH_POSTGRESQL=OFF
-  -DCMAKE_CXX_FLAGS=-Wno-error=deprecated-literal-operator
   ${GEODIFF_LINK_OPTIONS}
+)
+
+if(VCPKG_TARGET_IS_OSX OR VCPKG_TARGET_IS_IOS)
+  list(APPEND GEODIFF_OPTIONS "-DCMAKE_CXX_FLAGS=-Wno-error=deprecated-literal-operator")
+endif()
+
+vcpkg_configure_cmake(
+  SOURCE_PATH ${SOURCE_PATH}/geodiff
+  OPTIONS ${GEODIFF_OPTIONS}
 )
 
 vcpkg_install_cmake()
