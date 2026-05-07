@@ -2,6 +2,5 @@
 - libiconv - ios fix for Qt 6.10.3 (best to retest every update if it's necessary)
 - qca - we needed 2.3.10, there is 2.3.7 in main repo
 - qgis - no official port in vcpkg
-- qtbase - https://github.com/microsoft/vcpkg/issues/39832#issuecomment-2221449238
 - qtdeclarative - optimization to decrease package size
 - qtpositioning - Android service fix & iOS orthometric position hack 
