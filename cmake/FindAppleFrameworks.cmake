@@ -19,6 +19,7 @@ set(APPLE_FRAMEWORKS
     SystemConfiguration
     CoreLocation
     CoreHaptics
+    PhotosUI
 )
 
 foreach (framework ${APPLE_FRAMEWORKS})

@@ -402,7 +402,7 @@ class MMStyle: public QObject
     static QColor photoSketchingBlueColor() {return QColor::fromString( "#5E9EE4" );}
     static QColor photoSketchingPinkColor() {return QColor::fromString( "#FF8F93" );}
 
-    static QColor shadowColor() {return QColor::fromString( "#66777777" );}
+    static QColor shadowColor() {return QColor::fromString( "#4D000000" );}
 
     static QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
     static QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}

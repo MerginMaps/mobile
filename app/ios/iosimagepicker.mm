@@ -16,7 +16,6 @@
 #include <QCoreApplication>
 #include <UIKit/UIKit.h>
 #include <QPointer>
-#include <QtCore>
 #include <QImage>
 
 #include "iosinterface.h"

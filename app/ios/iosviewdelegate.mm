@@ -14,11 +14,9 @@
  ***************************************************************************/
 
 #include <QtCore>
+#include <QPointer>
 #import "iosviewdelegate.h"
-
-@interface IOSViewDelegate()
-
-@end
+#import "coreutils.h"
 
 @implementation IOSViewDelegate
 
@@ -47,6 +45,71 @@
   {
     imagePickerControllerDidCancel( picker );
   }
+}
+
+@end
+
+@implementation IOSGalleryPickerDelegate
+{
+  QPointer<IOSImagePicker> _handler;
+}
+
+- ( instancetype ) initWithHandler:( IOSImagePicker * )handler
+{
+  self = [super init];
+  if ( self )
+  {
+    _handler = handler;
+  }
+  return self;
+}
+
+- ( void )picker:( PHPickerViewController * )picker didFinishPicking:( NSArray<PHPickerResult *> * )results
+{
+  [picker dismissViewControllerAnimated:YES completion:nil];
+
+  if ( results.count == 0 )
+  {
+    return; // user cancelled
+  }
+
+  if ( !_handler )
+  {
+    return;
+  }
+
+  PHPickerResult *result = results.firstObject;
+
+  NSDateFormatter *df = [[NSDateFormatter alloc] init];
+  [df setDateFormat:@"yyyyMMdd_HHmmss"];
+  NSString *fileName = [[df stringFromDate:[NSDate date]] stringByAppendingString:@".jpg"];
+  NSString *imagePath = [_handler->targetDir().toNSString() stringByAppendingPathComponent:fileName];
+
+  [result.itemProvider loadDataRepresentationForTypeIdentifier:@"public.jpeg"
+   completionHandler: ^ ( NSData * data, NSError * error )
+  {
+    BOOL writeSuccess = data && !error && [data writeToFile:imagePath atomically:YES];
+    if ( !writeSuccess )
+    {
+      CoreUtils::log( "iOS photo picker", QStringLiteral( "Gallery Picker: failed to write image data to %1" ).arg( QString::fromNSString( imagePath ) ) );
+    }
+
+    dispatch_async( dispatch_get_main_queue(), ^
+    {
+      if ( _handler )
+      {
+        QVariantMap resultData;
+        resultData["imagePath"] = QString::fromNSString( imagePath );
+        if ( !writeSuccess )
+        {
+          resultData["error"] = QStringLiteral( "Copying image from gallery failed." );
+        }
+        QMetaObject::invokeMethod( _handler, "onImagePickerFinished", Qt::DirectConnection,
+                                   Q_ARG( bool, writeSuccess ),
+                                   Q_ARG( const QVariantMap, resultData ) );
+      }
+    } );
+  }];
 }
 
 @end
