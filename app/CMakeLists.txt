@@ -439,7 +439,7 @@ if (IOS)
       PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
                  "LutraConsultingLtd.Input.AppStore"
                  XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
-                 "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
+                 "Apple Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
                  XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
     )
     message(STATUS "Using manual code sign with production certificate")
