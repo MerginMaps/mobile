@@ -108,7 +108,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   textFormat.setColor( MMStyle::nightColor() );
   legendSettings.rstyle( QgsLegendStyle::Style::SymbolLabel ).setTextFormat( textFormat );
   legendSettings.rstyle( QgsLegendStyle::Style::SymbolLabel ).setMargin( 4 ); // match the top and left total margin of the legend
-  legendSettings.rstyle( QgsLegendStyle::Style::Title ).setMargin( 0 );
+  legendSettings.rstyle( QgsLegendStyle::Style::Title ).setMargin( 0 ); // Our empty Title still adds some margins, so we set those to zero
 
   mLayerTreeNode->setCustomProperty( QStringLiteral( "legend/title-style" ), QStringLiteral( "hidden" ) );
 
