@@ -1,4 +1,5 @@
 - Geodiff - no official port in vcpkg
+- libiconv - ios fix for Qt 6.10.3 (best to retest every update if it's necessary)
 - qca - we needed 2.3.9, there is 2.3.7 in main repo
 - qgis - no official port in vcpkg
 - qtbase - https://github.com/microsoft/vcpkg/issues/39832#issuecomment-2221449238
