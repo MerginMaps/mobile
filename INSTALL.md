@@ -139,7 +139,7 @@ Steps to build and run mobile app:
       bison flex lcov nasm libxrandr-dev xvfb
    ```
    
-   Also install CMake 3.x, Ninja and ccache
+   Also install CMake, Ninja and ccache
 
 2. Install vcpkg and checkout to correct version from file `VCPKG_BASELINE`
    Read [vcpkg](#vcpkg) section.
@@ -426,7 +426,7 @@ mobile app for Android on Windows, please help us to update this section.
   
 1. Setup development environment
    - XCode
-   - install deps, see requirements in `.github/workflows/ios.yml`. Most specifically cmake 3.x, ninja, bison and flex (on PATH)
+   - install deps, see requirements in `.github/workflows/ios.yml`. Most specifically cmake, ninja, bison and flex (on PATH)
    - if you want to build for production, you need development certificates. These are not needed for local development, signing is handled automatically (see IOS_USE_PRODUCTION_SIGNING cmake variable for more info). You can get the certificates by following:
        - Get device UDID: either iTunes or about this mac->system report->USB->find iPAD (Serial Number)
        - Create dev iOS certificate for development
@@ -506,12 +506,7 @@ Once the project is opened, build it from Xcode.
 ```
    brew install cmake automake bison flex gnu-sed autoconf-archive libtool ninja pkg-config
 ```
-   install cmake 3.x
    
-   Note: 
-   - cmake 4.0.1 is broken (empty -isysroot)
-   - TODO test with cmake 4.0.3 which is today's 
-
 2. Install vcpkg and checkout to correct version from file `VCPKG_BASELINE`
    Read [vcpkg](#vcpkg) section.
  
