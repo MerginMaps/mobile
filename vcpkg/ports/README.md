@@ -3,7 +3,7 @@
 - qca - we needed 2.3.9, there is 2.3.7 in main repo
 - qgis - no official port in vcpkg
 - qtbase - https://github.com/microsoft/vcpkg/issues/39832#issuecomment-2221449238
-- qtdeclarative - unknown
+- qtdeclarative - optimization to decrease package size
 - qtkeychain-qt6 - official port uses qt5
 - qtmultimedia - unknown
 - qtpositioning - unknown

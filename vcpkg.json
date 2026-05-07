@@ -114,7 +114,7 @@
           "default-features": false
         }
     ],
-    "builtin-baseline": "13bf92b7216b42ffc7d8cf55b6181e486039accd",
+    "builtin-baseline": "a78b96b07eb590c59bde5db0f4b260bda45ba92d",
     "overrides": [
         {
             "name": "openssl",
