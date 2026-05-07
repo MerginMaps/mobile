@@ -48,7 +48,7 @@ jobs:
       QT_ANDROID_KEYSTORE_ALIAS: input
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.INPUTKEYSTORE_STOREPASS }}
-      XC_VERSION: ${{ '16.2' }}
+      XC_VERSION: ${{ '26.4.1' }}
       VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
       LC_ALL: 'en_US.UTF-8' #fastlane
       LANG: 'en_US.UTF-8' #fastlane
@@ -97,7 +97,7 @@ jobs:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
 
       - name: Setup XCode
-        uses: maxim-lobanov/setup-xcode@v1.6.0
+        uses: maxim-lobanov/setup-xcode@v1.7.0
         with:
           xcode-version: ${{ env.XC_VERSION }}
 
