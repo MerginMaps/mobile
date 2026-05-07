@@ -4,6 +4,5 @@
 - qgis - no official port in vcpkg
 - qtbase - https://github.com/microsoft/vcpkg/issues/39832#issuecomment-2221449238
 - qtdeclarative - optimization to decrease package size
-- qtmultimedia - unknown
 - qtpositioning - unknown
 - gstreamer - unknown (linux build ffmpeg?)
