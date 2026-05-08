@@ -351,7 +351,7 @@ MMComponents.MMDrawer {
 
       anchors {
         bottom: parent.bottom
-        bottomMargin: __style.safeAreaBottom + __style.margin8
+        bottomMargin: 0
       }
 
       text: qsTr( "Manage GPS receivers" )
@@ -370,6 +370,6 @@ MMComponents.MMDrawer {
     id: internal
 
     property string coordinatesInDegrees: __inputUtils.degreesString( PositionKit.positionCoordinate )
-    readonly property real reservedButtonSpace: __style.spacing20 + manageButton.implicitHeight + __style.safeAreaBottom + __style.margin8
+    readonly property real reservedButtonSpace: __style.spacing20 + manageButton.implicitHeight + __style.margin8
   }
 }

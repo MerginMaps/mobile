@@ -96,7 +96,7 @@ MMComponents.MMDrawer {
         if ( !port ) {
           portInput.errorMsg = qsTr( "Port is required" )
         }
-        else if ( !/^\d+$/.test( port ) || portNum < 1 || portNum > 65535 ) {
+        else if ( portNum < 1 || portNum > 65535 ) {
           portInput.errorMsg = qsTr( "Enter a valid port (1–65535)" )
         }
         else {

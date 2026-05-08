@@ -86,30 +86,21 @@ MMComponents.MMListDrawer {
     }
   }
 
-  list.footer: Item {
-    width: ListView.view.width
-    height: continueButton.height + __style.margin20
+  list.footer: MMComponents.MMButton {
+    width: parent.width
 
-    MMComponents.MMButton {
-      id: continueButton
+    text: qsTr( "Continue" )
+    enabled: root.list.currentIndex !== -1
 
-      width: parent.width
-      anchors.top: parent.top
-      anchors.topMargin: __style.margin8
+    onClicked: {
+      const providerType = providerTypeModel.get( root.list.currentIndex ).type
+      root.close()
 
-      text: qsTr( "Continue" )
-      enabled: root.list.currentIndex !== -1
-
-      onClicked: {
-        const providerType = providerTypeModel.get( root.list.currentIndex ).type
-        root.close()
-
-        if ( providerType === "bluetooth" ) {
-          root.providerSelected("bluetooth")
-        }
-        else if ( providerType === "network" ) {
-          root.providerSelected("network")
-        }
+      if ( providerType === "bluetooth" ) {
+        root.providerSelected("bluetooth")
+      }
+      else if ( providerType === "network" ) {
+        root.providerSelected("network")
       }
     }
   }
