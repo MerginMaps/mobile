@@ -29,7 +29,7 @@ if (ANDROID_ABI)
   set(ANDROID_ARM_NEON ON)
 
   # Target/Minimum API levels for Android, used as MerginMaps target properties
-  set(MM_ANDROID_TARGET_SDK_VERSION "35")
+  set(MM_ANDROID_TARGET_SDK_VERSION "36")
   set(MM_ANDROID_MIN_SDK_VERSION "${ANDROIDAPI}")
   set(MM_ANDROID_NDK_PATH "$ENV{ANDROID_NDK_HOME}")
   if (NOT MM_ANDROID_NDK_PATH)

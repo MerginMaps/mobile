@@ -7,7 +7,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.0'
+        //noinspection AndroidGradlePluginVersion
+        classpath 'com.android.tools.build:gradle:8.10.1'
     }
 }
 
@@ -18,13 +19,12 @@ repositories {
 
 apply plugin: qtGradlePluginType
 
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "androidx.appcompat:appcompat:1.7.1"
-    implementation "androidx.core:core:1.13.1"
-    implementation "androidx.core:core-splashscreen:1.0.1"
-    implementation "androidx.exifinterface:exifinterface:1.4.1"
+    implementation "androidx.core:core:1.16.0"
+    implementation "androidx.core:core-splashscreen:1.2.0"
+    implementation "androidx.exifinterface:exifinterface:1.4.2"
     implementation "com.google.android.gms:play-services-location:21.3.0"
 }
 
@@ -36,6 +36,7 @@ android {
      * - qtAndroidDir - holds the path to qt android files
      *                   needed to build any Qt application
      *                   on Android.
+     * - qtGradlePluginType - whether to build an app or a library
      *
      * are defined in gradle.properties file. This file is
      * updated by QtCreator and androiddeployqt tools.
@@ -45,12 +46,10 @@ android {
     namespace 'uk.co.lutraconsulting'
     compileSdkVersion androidCompileSdkVersion
     buildToolsVersion androidBuildToolsVersion
-    ndkVersion androidNdkVersion
+    ndkVersion = androidNdkVersion
     // don't get rid of this line as it inflates the final bundle size 5x
     ndkPath '@MM_ANDROID_NDK_PATH@'
 
-    packagingOptions.jniLibs.useLegacyPackaging true
-    
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -66,27 +65,27 @@ android {
 
     tasks.withType(JavaCompile) {
         options.incremental = true
+        options.compilerArgs += ['-Xlint:all']
     }
 
     compileOptions {
-    	sourceCompatibility JavaVersion.VERSION_1_8
-	    targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
 
-    // Do not compress Qt binary resources file
     aaptOptions {
+        // Do not compress Qt binary resources file
         noCompress 'rcc'
     }
 
     defaultConfig {
-        resConfigs "en"
+        resConfig "en"
         minSdkVersion qtMinSdkVersion
         targetSdkVersion qtTargetSdkVersion
         ndk.abiFilters = qtTargetAbiList.split(",")
-        ndk.debugSymbolLevel "SYMBOL_TABLE"
     }
 }
