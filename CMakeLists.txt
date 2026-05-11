@@ -185,10 +185,9 @@ find_package(
 if (ANDROID)
   # Android requires access to private headers for AndroidUtils
   find_package(
-          Qt6
-          COMPONENTS
-          CorePrivate
-          REQUIRED
+    Qt6
+    COMPONENTS CorePrivate
+    REQUIRED
   )
 
   # Qt by default assumes that cmake files live in `lib/cmake`. Point to `share` instead.
