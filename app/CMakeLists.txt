@@ -484,6 +484,10 @@ target_link_libraries(
          Qt6::Widgets
 )
 
+if (ANDROID)
+  target_link_libraries(MerginMaps PRIVATE Qt6::CorePrivate)
+endif ()
+
 if (HAVE_BLUETOOTH)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
 endif ()

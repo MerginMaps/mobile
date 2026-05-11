@@ -182,13 +182,20 @@ find_package(
   REQUIRED
 )
 
-# Qt by default assumes that cmake files live in `lib/cmake`. Point to `share` instead.
-# See
-# https://github.com/qt/qtbase/blob/39290c508e2c7fa816c6f79b3eb284adc0cad3c0/src/corelib/Qt6AndroidMacros.cmake#L1016C16-L1026
 if (ANDROID)
-  get_filename_component(
-    QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI} "${Qt6_DIR}/.." ABSOLUTE
+  # Android requires access to private headers for AndroidUtils
+  find_package(
+          Qt6
+          COMPONENTS
+          CorePrivate
+          REQUIRED
   )
+
+  # Qt by default assumes that cmake files live in `lib/cmake`. Point to `share` instead.
+  # See
+  # https://github.com/qt/qtbase/blob/7ddbc87d8e14ce51d2957ea72d0a6077593d5ff4/src/corelib/Qt6AndroidMacros.cmake#L1281-L1296
+  cmake_path(SET QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI} "${Qt6_DIR}/..")
+  cmake_path(ABSOLUTE_PATH QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI} NORMALIZE)
   message(
     STATUS
       "QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI}: ${QT_ANDROID_PATH_CMAKE_DIR_${ANDROID_ABI}}"
