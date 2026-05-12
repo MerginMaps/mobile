@@ -421,9 +421,35 @@ void PositionKit::appStateChanged( Qt::ApplicationState state )
 
 void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
-  mPositionTransformer->setDestinationCrs( positionCrs3D() );
+  const QgsCoordinateReferenceSystem srcCrs = positionCrs3DEllipsoidHeight();
+  const QgsCoordinateReferenceSystem destCrs = positionCrs3D();
+
+  QgsCoordinateTransformContext context = transformContext;
+
+  // Find the project-configured PROJ op for this vertical CRS
+  QString projString;
+  if ( mVerticalCrs.isValid() )
+  {
+    const auto projectOps = context.coordinateOperations();
+    for ( auto it = projectOps.constBegin(); it != projectOps.constEnd(); ++it )
+    {
+      const QgsCoordinateReferenceSystem opDestCrs( it.key().second );
+      if ( opDestCrs.isValid() && opDestCrs.verticalCrs() == mVerticalCrs )
+      {
+        projString = it.value();
+        break;
+      }
+    }
+  }
+
+  if ( !projString.isEmpty() )
+  {
+    context.addCoordinateOperation( srcCrs, destCrs, projString, true );
+  }
+
+  mPositionTransformer->setDestinationCrs( destCrs );
   mPositionTransformer->setElevationTransformationEnabled( mElevationTransformationEnabled );
-  mPositionTransformer->setTransformContext( transformContext );
+  mPositionTransformer->setTransformContext( context );
 }
 
 double PositionKit::latitude() const
