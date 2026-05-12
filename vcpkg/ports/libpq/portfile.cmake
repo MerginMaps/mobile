@@ -17,6 +17,7 @@ vcpkg_extract_source_archive(
         windows/spin_delay.patch
         windows/getopt.patch
         ios-detection.patch
+        ios-system-unavailable.patch
 )
 
 file(GLOB _py3_include_path "${CURRENT_HOST_INSTALLED_DIR}/include/python3*")

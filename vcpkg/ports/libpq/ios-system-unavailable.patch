@@ -1,0 +1,17 @@
+diff --git a/src/fe_utils/archive.c b/src/fe_utils/archive.c
+index 5de3617cb29..5be21760ef2 100644
+--- a/src/fe_utils/archive.c
++++ b/src/fe_utils/archive.c
+@@ -54,7 +54,12 @@ RestoreArchivedFile(const char *path, const char *xlogfname,
+ 	 * archival storage.
+ 	 */
+ 	fflush(NULL);
++#if defined(__APPLE__) && defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__)
++	/* system() is not available on iOS */
++	rc = -1;
++#else
+ 	rc = system(xlogRestoreCmd);
++#endif
+ 	pfree(xlogRestoreCmd);
+ 
+ 	if (rc == 0)
