@@ -262,7 +262,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
 
         if ( value.typeId() == QMetaType::QDateTime )
           if ( isDateFilterDateTime( filter.filterId ) )
-            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDateTime().toUTC().toString( TIMESTAMP_FORMAT ) ) );
+          {
+            const QDateTime utcDt = value.toDateTime().toUTC();
+            const QString dtFormat = utcDt.time().msec() != 0
+                                     ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
+                                     : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
+            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDt.toString( dtFormat ) ) );
+          }
           else
             expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
         else
@@ -358,7 +364,13 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
           // QML always returns QDateTime so we can't differentiate based on type
           if ( value.typeId() == QMetaType::QDateTime )
             if ( isDateFilterDateTime( filter.filterId ) )
-              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDateTime().toUTC().toString( TIMESTAMP_FORMAT ) ) );
+            {
+              const QDateTime utcDt = value.toDateTime().toUTC();
+              const QString dtFormat = utcDt.time().msec() != 0
+                                       ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
+                                       : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
+              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDt.toString( dtFormat ) ) );
+            }
             else
               expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
           else
