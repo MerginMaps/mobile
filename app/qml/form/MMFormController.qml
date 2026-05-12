@@ -59,6 +59,13 @@ Item {
   Drawer {
     id: drawer
 
+    // Qt 6.9+ Popup/Drawer automatically applies safe area margins as padding.
+    // MMFormPage and MMPreviewDrawer already handle safe areas manually.
+    topPadding: 0
+    bottomPadding: 0
+    leftPadding: 0
+    rightPadding: 0
+
     StateGroup {
       id: statesManager
 
