@@ -1,8 +1,7 @@
 - Geodiff - no official port in vcpkg
 - pcre2 - patch missing `_init`/`_fini` symbols causing lld linker errors on Android
-- libiconv - ios fix for Qt 6.10.3 (best to retest every update if it's necessary)
 - libpq - ios fix for OS detection, we change the detected OS to darwin
 - qca - we needed 2.3.10, there is 2.3.7 in main repo
 - qgis - no official port in vcpkg
 - qtdeclarative - optimization to decrease package size
-- qtpositioning - Android service fix & iOS orthometric position hack 
+- qtpositioning - Android service fix & iOS orthometric position hack
