@@ -5,7 +5,7 @@ index 95d51a8..656a5d2 100644
 @@ -48,11 +48,31 @@
      const QDateTime timeStamp = QDateTime::fromMSecsSinceEpoch(qRound64(locationTimeStamp * 1000),
                                                                 QTimeZone::UTC);
-
+ 
 +    // The ellipsoidalAltitude property can be populated depending on the manufacturer, we either use this and apply
 +    // transformation with our geoid model or just propagate the geoid elevation from the mocked location
 +    double availableAltitude;
@@ -35,3 +35,4 @@ index 95d51a8..656a5d2 100644
      if (newLocation.horizontalAccuracy >= 0)
          location.setAttribute(QGeoPositionInfo::HorizontalAccuracy, newLocation.horizontalAccuracy);
      if (newLocation.verticalAccuracy >= 0)
+ 

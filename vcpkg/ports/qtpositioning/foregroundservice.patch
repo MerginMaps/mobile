@@ -5,7 +5,7 @@ index 0abc2ca..9d160a9 100644
 @@ -592,10 +592,6 @@ namespace AndroidPositioning {
      {
          QLocationPermission permission;
-
+ 
 -        // The needed permission depends on whether we run as a service or as an activity
 -        if (!QNativeInterface::QAndroidApplication::isActivityContext())
 -            permission.setAvailability(QLocationPermission::Always); // background location
@@ -13,3 +13,4 @@ index 0abc2ca..9d160a9 100644
          bool permitted = false;
          if (accuracy & AccuracyType::Precise) {
              permission.setAccuracy(QLocationPermission::Precise);
+ 
