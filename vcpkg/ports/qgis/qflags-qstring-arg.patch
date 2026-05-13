@@ -5,10 +5,10 @@ index 9078011d516..fb5f4bdd5ff 100644
 @@ -3166,7 +3166,7 @@ QgsRasterBandStats QgsGdalProvider::bandStatistics( int bandNo, Qgis::RasterBand
        | Qgis::RasterBandStatistic::Range | Qgis::RasterBandStatistic::Mean
        | Qgis::RasterBandStatistic::StdDev;
-
+ 
 -  QgsDebugMsgLevel( QStringLiteral( "theStats = %1 supportedStats = %2" ).arg( stats, 0, 2 ).arg( supportedStats, 0, 2 ), 2 );
 +  QgsDebugMsgLevel( QStringLiteral( "theStats = %1 supportedStats = %2" ).arg( static_cast<int>( stats ), 0, 2 ).arg( static_cast<int>( supportedStats ), 0, 2 ), 2 );
-
+ 
    if ( myRasterBandStats.extent != extent() ||
         ( stats & ( ~supportedStats ) ) )
 diff --git a/src/core/raster/qgsrasterinterface.cpp b/src/core/raster/qgsrasterinterface.cpp
@@ -22,7 +22,7 @@ index bbd88574da0..942ea6c444e 100644
 -  QgsDebugMsgLevel( QStringLiteral( "theBandNo = %1 stats = %2 sampleSize = %3" ).arg( bandNo ).arg( stats ).arg( sampleSize ), 4 );
 +  QgsDebugMsgLevel( QStringLiteral( "theBandNo = %1 stats = %2 sampleSize = %3" ).arg( bandNo ).arg( static_cast<int>( stats ) ).arg( sampleSize ), 4 );
    if ( mStatistics.isEmpty() ) return false;
-
+ 
    QgsRasterBandStats myRasterBandStats;
 @@ -124,7 +124,7 @@ QgsRasterBandStats QgsRasterInterface::bandStatistics( int bandNo,
      const QgsRectangle &extent,
@@ -30,9 +30,9 @@ index bbd88574da0..942ea6c444e 100644
  {
 -  QgsDebugMsgLevel( QStringLiteral( "theBandNo = %1 stats = %2 sampleSize = %3" ).arg( bandNo ).arg( stats ).arg( sampleSize ), 4 );
 +  QgsDebugMsgLevel( QStringLiteral( "theBandNo = %1 stats = %2 sampleSize = %3" ).arg( bandNo ).arg( static_cast<int>( stats ) ).arg( sampleSize ), 4 );
-
+ 
    // TODO: null values set on raster layer!!!
-
+ 
 diff --git a/src/providers/wms/qgswmsprovider.cpp b/src/providers/wms/qgswmsprovider.cpp
 index 4e7ba49ba19..7b5d7b1f327 100644
 --- a/src/providers/wms/qgswmsprovider.cpp
@@ -40,12 +40,12 @@ index 4e7ba49ba19..7b5d7b1f327 100644
 @@ -2351,7 +2351,7 @@ Qgis::RasterInterfaceCapabilities QgsWmsProvider::capabilities() const
      capability |= Qgis::RasterInterfaceCapability::Prefetch;
    }
-
+ 
 -  QgsDebugMsgLevel( QStringLiteral( "capability = %1" ).arg( capability ), 2 );
 +  QgsDebugMsgLevel( QStringLiteral( "capability = %1" ).arg( static_cast<int>( capability ) ), 2 );
    return capability;
  }
-
+ 
 diff --git a/tests/bench/main.cpp b/tests/bench/main.cpp
 index 3c085cbefd6..2f329d60984 100644
 --- a/tests/bench/main.cpp
@@ -58,4 +58,5 @@ index 3c085cbefd6..2f329d60984 100644
 +    QgsDebugMsgLevel( QStringLiteral( "hints: %1" ).arg( static_cast<int>( hints ) ), 1 );
      qbench->setRenderHints( hints );
    }
-
+ 
+ 
