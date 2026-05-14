@@ -1,3 +1,23 @@
+diff --git a/src/core/pointcloud/qgslazinfo.h b/src/core/pointcloud/qgslazinfo.h
+index 2e55117f300..f6ae367d19a 100644
+--- a/src/core/pointcloud/qgslazinfo.h
++++ b/src/core/pointcloud/qgslazinfo.h
+@@ -23,6 +23,8 @@
+ #include "qgspointcloudattribute.h"
+ #include "qgscoordinatereferencesystem.h"
+ 
++#if WITH_COPC || WITH_EPT
++
+ #include "lazperf/header.hpp"
+ 
+ #define SIP_NO_FILE
+@@ -166,4 +168,6 @@ class CORE_EXPORT QgsLazInfo
+     QVector<ExtraBytesAttributeDetails> mExtrabyteAttributes;
+ };
+ 
++#endif // WITH_COPC || WITH_EPT
++
+ #endif // QGSLAZINFO_H
 diff --git a/src/core/pointcloud/qgspointcloudeditingindex.cpp b/src/core/pointcloud/qgspointcloudeditingindex.cpp
 index 40aecdc9a1f..76280678ba0 100644
 --- a/src/core/pointcloud/qgspointcloudeditingindex.cpp
