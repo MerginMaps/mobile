@@ -99,10 +99,19 @@
         "qtlocation",
         {
           "name": "qtmultimedia",
+          "default-features": false,
           "features": [
             {
               "name": "ffmpeg",
               "platform": "linux | android | windows"
+            },
+            {
+              "name": "pipewire",
+              "platform": "linux"
+            },
+            {
+              "name": "pulseaudio",
+              "platform": "linux"
             },
             "qml"
           ]
