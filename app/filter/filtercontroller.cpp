@@ -263,11 +263,11 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         if ( value.typeId() == QMetaType::QDateTime )
           if ( isDateFilterDateTime( filter.filterId ) )
           {
-            const QDateTime utcDt = value.toDateTime().toUTC();
-            const QString dtFormat = utcDt.time().msec() != 0
-                                     ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
-                                     : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
-            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDt.toString( dtFormat ) ) );
+            const QDateTime utcDateTime = value.toDateTime().toUTC();
+            const QString dateTimeFormat = utcDateTime.time().msec() != 0
+                                           ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
+                                           : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
+            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( dateTimeFormat ) ) );
           }
           else
             expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
