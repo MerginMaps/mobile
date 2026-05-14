@@ -1,23 +1,17 @@
-diff --git a/src/core/pointcloud/qgslazinfo.h b/src/core/pointcloud/qgslazinfo.h
-index 2e55117f300..f6ae367d19a 100644
---- a/src/core/pointcloud/qgslazinfo.h
-+++ b/src/core/pointcloud/qgslazinfo.h
-@@ -23,6 +23,8 @@
- #include "qgspointcloudattribute.h"
- #include "qgscoordinatereferencesystem.h"
+diff --git a/external/lazperf/lazperf_base.hpp b/external/lazperf/lazperf_base.hpp
+index 864ca2c2f7d..f31ade579cd 100644
+--- a/external/lazperf/lazperf_base.hpp
++++ b/external/lazperf/lazperf_base.hpp
+@@ -7,7 +7,9 @@
+ #define LAZPERF_VERSION 3.0.0
  
-+#if WITH_COPC || WITH_EPT
-+
- #include "lazperf/header.hpp"
- 
- #define SIP_NO_FILE
-@@ -166,4 +168,6 @@ class CORE_EXPORT QgsLazInfo
-     QVector<ExtraBytesAttributeDetails> mExtrabyteAttributes;
- };
- 
-+#endif // WITH_COPC || WITH_EPT
-+
- #endif // QGSLAZINFO_H
+ #ifdef _WIN32
++#if WITH_EPT || WITH_COPC
+ #define LAZPERF_EXPORT __declspec(dllexport)
++#endif
+ #else
+ // This may not be necessary. The GCC doc says it take __declspec((dllexport))
+ #define LAZPERF_EXPORT __attribute__((visibility ("default")))
 diff --git a/src/core/pointcloud/qgspointcloudeditingindex.cpp b/src/core/pointcloud/qgspointcloudeditingindex.cpp
 index 40aecdc9a1f..76280678ba0 100644
 --- a/src/core/pointcloud/qgspointcloudeditingindex.cpp
