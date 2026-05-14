@@ -263,9 +263,10 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         if ( value.typeId() == QMetaType::QDateTime )
           if ( isDateFilterDateTime( filter.filterId ) )
           {
+            // check if the DateTime contains milliseconds
             const QDateTime utcDateTime = value.toDateTime().toUTC();
             const QString dateTimeFormat = utcDateTime.time().msec() != 0
-                                           ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
+                                           ? TIMESTAMP_FORMAT
                                            : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
             expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( dateTimeFormat ) ) );
           }
@@ -365,11 +366,12 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
           if ( value.typeId() == QMetaType::QDateTime )
             if ( isDateFilterDateTime( filter.filterId ) )
             {
-              const QDateTime utcDt = value.toDateTime().toUTC();
-              const QString dtFormat = utcDt.time().msec() != 0
-                                       ? QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" )
-                                       : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
-              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDt.toString( dtFormat ) ) );
+              // check if the DateTime contains milliseconds
+              const QDateTime utcDateTime = value.toDateTime().toUTC();
+              const QString dateTimeFormat = utcDateTime.time().msec() != 0
+                                             ? TIMESTAMP_FORMAT
+                                             : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
+              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( dateTimeFormat ) ) );
             }
             else
               expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
