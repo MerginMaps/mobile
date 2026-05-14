@@ -109,8 +109,12 @@ Column {
 
       Component.onCompleted: {
         if ( root.currentValue ) {
-          // preselect choices if any are set
-          selected = root.currentValue
+          // preselect choices if any are set; coerce numeric strings to numbers
+          // so they match the model's numeric keys (fixes AllowMulti filter returning 0 results)
+          selected = root.currentValue.map( v => {
+            const n = Number( v )
+            return isFinite( n ) && String( n ) === v ? n : v
+          } )
         }
 
         open()
