@@ -56,8 +56,8 @@ jobs:
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
-                    
-      - name: Install ccache
+
+      - name: Install NSIS
         shell: cmd
         run: |
             choco install nsis
@@ -141,40 +141,40 @@ jobs:
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
              -S ${{ steps.vars.outputs.WORKSPACE_DIR }}/mm ^
              -B .
-              
+
       - name: Build app
         shell: cmd
         run: |
           cd build-mm
-          
+
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
-          
+
           cmake --build ${{ github.workspace }}\build-mm --config Release --verbose
 
           IF NOT EXIST Release\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
-                                          
+
       - name: Install app
         shell: cmd
         run: |
-            cd build-mm
-            cmake --install ${{ github.workspace }}\build-mm --config Release --verbose 
-            
-            mkdir C:\mm-package
-            mkdir C:\mm-package\stage
-            robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
-            dir C:\mm-package\stage
+          cd build-mm
+          cmake --install ${{ github.workspace }}\build-mm --config Release --verbose 
+
+          mkdir C:\mm-package
+          mkdir C:\mm-package\stage
+          robocopy ${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm C:\mm-package\stage /E /NFL
+          dir C:\mm-package\stage
 
       - name: Get TimeStamp
         id: time
         uses: josStorer/get-current-time@v2.0.2
         with:
           format: 'YYYYMMDD'
-          
+
       - name: Create package
         shell: cmd
         run: |
-            makensis.exe mm\scripts\MM_win.nsi
-            xcopy C:\mm-package\merginmaps-app-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
+          "C:\Program Files (x86)\NSIS\makensis.exe" mm\scripts\MM_win.nsi
+          xcopy C:\mm-package\merginmaps-app-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
 
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v6
@@ -182,4 +182,3 @@ jobs:
           path: mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64
           if-no-files-found: error
-
