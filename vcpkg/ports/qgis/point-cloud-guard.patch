@@ -1,17 +1,44 @@
 diff --git a/external/lazperf/lazperf_base.hpp b/external/lazperf/lazperf_base.hpp
-index 864ca2c2f7d..f31ade579cd 100644
+index 864ca2c2f7d..234af5a50ec 100644
 --- a/external/lazperf/lazperf_base.hpp
 +++ b/external/lazperf/lazperf_base.hpp
-@@ -7,7 +7,9 @@
+@@ -7,8 +7,12 @@
  #define LAZPERF_VERSION 3.0.0
  
  #ifdef _WIN32
 +#if WITH_EPT || WITH_COPC
  #define LAZPERF_EXPORT __declspec(dllexport)
-+#endif
  #else
++#define LAZPERF_EXPORT 
++#endif
++#else
  // This may not be necessary. The GCC doc says it take __declspec((dllexport))
  #define LAZPERF_EXPORT __attribute__((visibility ("default")))
+ #endif
+diff --git a/src/core/pointcloud/qgscopcpointcloudindex.h b/src/core/pointcloud/qgscopcpointcloudindex.h
+index 2b18d53ce89..f68682d8c39 100644
+--- a/src/core/pointcloud/qgscopcpointcloudindex.h
++++ b/src/core/pointcloud/qgscopcpointcloudindex.h
+@@ -32,7 +32,9 @@
+ #include "qgspointcloudstatistics.h"
+ 
+ #include "qgslazinfo.h"
++#if WITH_EPT || WITH_COPC
+ #include "lazperf/vlr.hpp"
++#endif
+ 
+ ///@cond PRIVATE
+ #define SIP_NO_FILE
+@@ -109,7 +111,9 @@ class CORE_EXPORT QgsCopcPointCloudIndex: public QgsAbstractPointCloudIndex
+     bool mIsValid = false;
+     Qgis::PointCloudAccessType mAccessType = Qgis::PointCloudAccessType::Local;
+     mutable std::ifstream mCopcFile;
++#if WITH_EPT || WITH_COPC
+     mutable lazperf::copc_info_vlr mCopcInfoVlr;
++#endif
+     mutable QHash<QgsPointCloudNodeId, QPair<uint64_t, int32_t>> mHierarchyNodePos; //!< Additional data hierarchy for COPC
+ 
+     mutable QMutex mFileMutex;
 diff --git a/src/core/pointcloud/qgspointcloudeditingindex.cpp b/src/core/pointcloud/qgspointcloudeditingindex.cpp
 index 40aecdc9a1f..76280678ba0 100644
 --- a/src/core/pointcloud/qgspointcloudeditingindex.cpp
