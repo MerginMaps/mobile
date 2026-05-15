@@ -44,6 +44,12 @@ class TestMapTools : public QObject
     void testAddVertexMultiLineLayer();
     void testAddVertexPolygonLayer();
     void testAddVertexMultiPolygonLayer();
+    void testAddPartPointLayer();
+    void testAddPartLineLayer();
+    void testAddPartPolygonLayer();
+    void testAddPartMultiPointLayer();
+    void testAddPartMultiLineLayer();
+    void testAddPartMultiPolygonLayer();
     void testUpdateVertex();
     void testRemoveVertex();
     void testVerticesStructure();
