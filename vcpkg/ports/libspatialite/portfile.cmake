@@ -150,11 +150,20 @@ else()
         set(TARGET_ALIAS "--target=android")
     elseif(VCPKG_TARGET_IS_MINGW)
         set(TARGET_ALIAS "--target=mingw32")
-    elseif(VCPKG_TARGET_IS_OSX)
+    elseif(VCPKG_TARGET_IS_OSX OR VCPKG_TARGET_IS_IOS)
         set(TARGET_ALIAS "--target=macosx")
     else()
         set(TARGET_ALIAS "")
     endif()
+
+    # On iOS, spatialite sub-libraries are compiled without SQLITE_CORE, causing every object to reference sqlite3_api
+    # as an undefined external. Compile with SQLITE_CORE so the code uses direct SQLite function calls instead
+    # of the pointer table.
+    if(VCPKG_TARGET_IS_IOS)
+        string(APPEND VCPKG_C_FLAGS " -DSQLITE_CORE")
+        string(APPEND VCPKG_CXX_FLAGS " -DSQLITE_CORE")
+    endif()
+
     vcpkg_make_configure(
         SOURCE_PATH "${SOURCE_PATH}"
         AUTORECONF
@@ -182,17 +191,25 @@ else()
         vcpkg_replace_string("${makefile}" " -I$(top_builddir)/./src/headers/spatialite" " -I$(top_builddir)/./src/headers" IGNORE_UNCHANGED)
     endforeach()
 
-    # On iOS libtool has no shared library support and falls back to static archives
-    # for both lib<name>.la and <name>.la in every src/ subdirectory, naming both
-    # .libs/lib<name>.a and causing a parallel build race. Serialize all of them.
+    # On iOS libtool has no shared library support. When both lib<name>.la and <name>.la exist in noinst_LTLIBRARIES,
+    # both write to the same .libs/lib<name>.a. The -module target runs second and overwrites the archive with empty
+    # objects. Fixed by:
+    # 1. Adding .NOTPARALLEL: so build is sequential
+    # 2. Reversing the order so lib<name>.la is built last
     if(VCPKG_TARGET_IS_IOS)
         file(GLOB ios_makefiles
+            "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/src/Makefile"
             "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/src/*/Makefile"
+            "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/src/Makefile"
             "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-dbg/src/*/Makefile"
         )
         foreach(makefile IN LISTS ios_makefiles)
             file(READ "${makefile}" _contents)
-            string(REPLACE "\nnoinst_LTLIBRARIES = " "\n.NOTPARALLEL:\nnoinst_LTLIBRARIES = " _contents "${_contents}")
+            string(PREPEND _contents ".NOTPARALLEL:\n")
+            string(REGEX REPLACE
+                "noinst_LTLIBRARIES = (lib[^ \t\n]+\\.la) ([^ \t\n]+\\.la)"
+                "noinst_LTLIBRARIES = \\2 \\1"
+                _contents "${_contents}")
             file(WRITE "${makefile}" "${_contents}")
         endforeach()
     endif()
