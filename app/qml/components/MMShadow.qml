@@ -8,13 +8,11 @@
  ***************************************************************************/
 
 import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
-DropShadow {
-  id: shadow
-  horizontalOffset: 2 * __dp
-  verticalOffset: 3 * __dp
-  radius: 7 * __dp
-  color: __style.shadowColor
-  transparentBorder: true
+MultiEffect {
+  shadowEnabled: true
+  shadowHorizontalOffset: 2 * __dp
+  shadowVerticalOffset: 3 * __dp
+  shadowColor: __style.shadowColor
 }

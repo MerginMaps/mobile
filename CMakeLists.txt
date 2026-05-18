@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.22)
 
 # Note: To update version use script/update_all_versions.bash
 set(MM_VERSION_MAJOR "2026")
-set(MM_VERSION_MINOR "2")
+set(MM_VERSION_MINOR "3")
 set(MM_VERSION_PATCH "0")
 
 if (VCPKG_TARGET_TRIPLET MATCHES ".*ios.*")
