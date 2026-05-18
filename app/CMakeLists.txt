@@ -570,6 +570,21 @@ if (IOS OR MACOS)
   target_link_libraries(MerginMaps PUBLIC Tasn1::Tasn1)
 endif ()
 
+if (IOS)
+  # GDAL's gets compiled with the iOS SDK's iconv.h, so it references _iconv/_iconv_open/_iconv_close.
+  # Vcpkg's Iconv::Iconv resolves to libiconv.a which only exports _libiconv* (GNU names).
+  # Link the system libiconv.tbd explicitly so the linker can find the BSD-named symbols.
+  execute_process(
+    COMMAND xcrun --sdk iphoneos --show-sdk-path
+    OUTPUT_VARIABLE MM_IOS_SDK_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+  )
+  if (MM_IOS_SDK_PATH AND EXISTS "${MM_IOS_SDK_PATH}/usr/lib/libiconv.tbd")
+    target_link_libraries(MerginMaps PRIVATE "${MM_IOS_SDK_PATH}/usr/lib/libiconv.tbd")
+  endif ()
+endif ()
+
 if (ANDROID)
   set_property(
     TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
