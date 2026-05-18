@@ -266,26 +266,24 @@ jobs:
           path: ${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} APK [${{ matrix.ANDROID_ABI }}]
 
-      - name: Deploy App to Google play - Internal app sharing
-        if: ${{ !(github.ref_name == 'master' || github.ref_type == 'tag') }}
-        run: |
-          cd ${{ github.workspace }}/mm/fastlane
-          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing apk_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk)
-
-          echo "$FASTLANE_OUTPUT"
-          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
-          echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
-          
-          # Write the Play Store link into this job's check run output
-          curl -s -X PATCH \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2026-03-10" \
-            "https://api.github.com/repos/${{ github.repository }}/check-runs/${{ job.check_run_id }}" \
-            -d "{\"output\":{\"title\":\"Android ${{ matrix.ANDROID_ABI }}\",\"summary\":\"$SHARE_URL\"}}"
+#      - name: Deploy App to Google play - Internal app sharing
+#        run: |
+#          cd ${{ github.workspace }}/mm/fastlane
+#          FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing apk_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.apk)
+#
+#          echo "$FASTLANE_OUTPUT"
+#          SHARE_URL=$(echo "$FASTLANE_OUTPUT" | awk '/APP_SHARE_URL:/ {print $NF}')
+#          echo "Google play store APK link: $SHARE_URL" >> $GITHUB_STEP_SUMMARY
+#
+#          # Write the Play Store link into this job's check run output
+#          curl -s -X PATCH \
+#            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+#            -H "Accept: application/vnd.github+json" \
+#            -H "X-GitHub-Api-Version: 2026-03-10" \
+#            "https://api.github.com/repos/${{ github.repository }}/check-runs/${{ job.check_run_id }}" \
+#            -d "{\"output\":{\"title\":\"Android ${{ matrix.ANDROID_ABI }}\",\"summary\":\"$SHARE_URL\"}}"
 
       - name: Build AAB
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
         run: |
@@ -296,7 +294,6 @@ jobs:
           find . | grep .aab
 
       - name: Rename AAB artefacts
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         run: |
           mv \
             ${{ github.workspace }}/build-mm/app/android-build/build/outputs/bundle/release/android-build-release.aab \
@@ -310,7 +307,6 @@ jobs:
           name: Mergin Maps ${{ env.MM_VERSION_CODE }} AAB [${{ matrix.ANDROID_ABI }}]
 
       - name: Deploy App to Google play - Internal app sharing
-        if: ${{ github.ref_name == 'master' || github.ref_type == 'tag' }}
         run: |
           cd ${{ github.workspace }}/mm/fastlane
           FASTLANE_OUTPUT=$(bundle exec fastlane deploy_app_sharing aab_path:${{ github.workspace }}/merginmaps-${{ env.MM_VERSION_CODE }}-${{ matrix.ANDROID_ABI }}.aab)
