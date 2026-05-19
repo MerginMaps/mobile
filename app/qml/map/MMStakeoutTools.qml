@@ -42,6 +42,7 @@ Item {
   Component.onCompleted: updateStakeout()
 
   function updateStakeout() {
-    highlight.geometry = __inputUtils.stakeoutGeometry( mapPositioning.mapPosition, target, map.mapSettings )
-  }
+    highlight.geometryData = __inputUtils.extractGeometryCoordinates( 
+        __inputUtils.stakeoutGeometry( mapPositioning.mapPosition, target, map.mapSettings ) 
+    ) }
 }

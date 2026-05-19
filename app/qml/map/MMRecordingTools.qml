@@ -106,8 +106,10 @@ Item {
     mapSettings: root.map.mapSettings
     insertPolicy: mapTool.insertPolicy
     crosshairPosition: crosshair.screenPoint
-    realGeometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-
+    realGeometry: { 
+      let trigger = mapTool.recordedGeometryData; // Forces binding evaluation
+      return __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings ) 
+    }
     activeVertex: mapTool.activeVertex
     activePart: mapTool.activePart
     activeRing: mapTool.activeRing
@@ -122,8 +124,12 @@ Item {
     visible: !__inputUtils.isPointLayer(__activeLayer.vectorLayer)
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
-
+    geometryData: { 
+      let trigger = mapTool.recordedGeometryData;  // Forces binding evaluation
+      return __inputUtils.extractGeometryToQml( 
+        __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings ) 
+      );
+    }
     lineBorderWidth: 0
   }
 
@@ -180,8 +186,12 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings )
-
+    geometryData: { 
+      let trigger = mapTool.existingVerticesData; // Forces binding evaluation
+      return __inputUtils.extractGeometryCoordinates( 
+        __inputUtils.transformGeometryToMapWithLayer( mapTool.existingVertices, __activeLayer.vectorLayer, root.map.mapSettings ) 
+      );
+    }
     markerType: MMHighlight.MarkerTypes.Circle
     markerSize: MMHighlight.MarkerSizes.Bigger
   }
@@ -328,7 +338,12 @@ Item {
       width: root.map.width
 
       mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings )
+      geometryData: { 
+        let trigger = mapTool.handlesData; // Forces binding evaluation
+        return __inputUtils.extractGeometryCoordinates( 
+          __inputUtils.transformGeometryToMapWithLayer( mapTool.handles, __activeLayer.vectorLayer, root.map.mapSettings ) 
+        );
+      }
       lineStrokeStyle: ShapePath.DashLine
       lineWidth: MMHighlight.LineWidths.Narrow
     }
@@ -347,8 +362,11 @@ Item {
       lineStrokeStyle: ShapePath.DashLine
 
       mapSettings: root.map.mapSettings
-      geometry: guidelineController.guidelineGeometry
-    }
+      geometryData: { 
+        let trigger = guidelineController.crosshairPosition; // Forces binding evaluation
+        return __inputUtils.extractGeometryCoordinates( guidelineController.guidelineGeometry );
+      }
+     }
   }
 
   Component {
@@ -361,8 +379,12 @@ Item {
       width: root.map.width
 
       mapSettings: root.map.mapSettings
-      geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings )
-
+      geometryData: { 
+        let trigger = mapTool.midPointsData; // Forces binding evaluation
+        return __inputUtils.extractGeometryCoordinates( 
+          __inputUtils.transformGeometryToMapWithLayer( mapTool.midPoints, __activeLayer.vectorLayer, root.map.mapSettings ) 
+        );
+      }
       markerType: MMHighlight.MarkerTypes.Circle
       markerBorderColor: __style.grapeColor
     }

@@ -229,7 +229,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    binary vcpkg cache.
 
    ```
-     export ANDROID_NDK_HOME=/home/<user>/android/ndk/<current_version>
+     export ANDROID_NDK_ROOT=/home/<user>/android/ndk/<current_version>
      export ANDROID_SDK_ROOT=/home/<user>/android
      export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
      export QT_ANDROID_KEYSTORE_KEY_PASS=<password>

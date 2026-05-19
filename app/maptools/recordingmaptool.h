@@ -93,8 +93,15 @@ class RecordingMapTool : public AbstractMapTool
     Q_PROPERTY( QgsGeometry midPoints READ midPoints WRITE setMidPoints NOTIFY midPointsChanged )
     Q_PROPERTY( QgsGeometry handles READ handles WRITE setHandles NOTIFY handlesChanged )
 
+
+    Q_PROPERTY( QVariantList recordedGeometryData READ recordedGeometryData NOTIFY recordedGeometryChanged )
+    Q_PROPERTY( QVariantList existingVerticesData READ existingVerticesData NOTIFY existingVerticesChanged )
+    Q_PROPERTY( QVariantList midPointsData READ midPointsData NOTIFY midPointsChanged )
+    Q_PROPERTY( QVariantList handlesData READ handlesData NOTIFY handlesChanged )
+
     Q_PROPERTY( Vertex activeVertex READ activeVertex WRITE setActiveVertex NOTIFY activeVertexChanged )
     Q_PROPERTY( QgsGeometry activeVertexGeometry READ activeVertexGeometry WRITE setActiveVertexGeometry NOTIFY activeVertexGeometryChanged )
+    Q_PROPERTY( QVariantList activeVertexGeometryData READ activeVertexGeometryData NOTIFY activeVertexGeometryChanged )
     Q_PROPERTY( InsertPolicy insertPolicy READ insertPolicy WRITE setInsertPolicy NOTIFY insertPolicyChanged )
 
     Q_PROPERTY( MapToolState state READ state WRITE setState NOTIFY stateChanged )
@@ -202,6 +209,13 @@ class RecordingMapTool : public AbstractMapTool
 
     QgsVectorLayer *activeLayer() const;
     void setActiveLayer( QgsVectorLayer *newActiveLayer );
+
+    QVariantList recordedGeometryData() const;
+    QVariantList existingVerticesData() const;
+    QVariantList midPointsData() const;
+    QVariantList handlesData() const;
+
+    QVariantList activeVertexGeometryData() const;
 
     const QgsGeometry &recordedGeometry() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );

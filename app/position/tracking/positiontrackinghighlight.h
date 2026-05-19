@@ -14,6 +14,7 @@
 #include <qglobal.h>
 
 #include "qgsgeometry.h"
+#include "inpututils.h"
 
 class PositionTrackingHighlight : public QObject
 {
@@ -23,6 +24,8 @@ class PositionTrackingHighlight : public QObject
 
     // Geometry in
     Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry WRITE setTrackedGeometry NOTIFY trackedGeometryChanged )
+
+    Q_PROPERTY( QVariantList highlightGeometryData READ highlightGeometryData NOTIFY highlightGeometryChanged )
 
     // Geometry out
     Q_PROPERTY( QgsGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
@@ -34,6 +37,8 @@ class PositionTrackingHighlight : public QObject
     void setTrackedGeometry( const QgsGeometry &newTrackedGeometry );
 
     QgsGeometry highlightGeometry() const;
+
+    QVariantList highlightGeometryData() const;
 
     QgsPoint mapPosition() const;
     void setMapPosition( QgsPoint newMapPosition );

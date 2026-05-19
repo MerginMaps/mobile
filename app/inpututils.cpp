@@ -466,6 +466,22 @@ QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geomet
   return transformGeometry( geometry, sourceCRS, targetSettings->destinationCrs(), targetSettings->transformContext() );
 }
 
+QVariantList InputUtils::extractGeometryToQml( const QgsGeometry &geometry )
+{
+  QVector<double> coords = extractGeometryCoordinates( geometry );
+  QVariantList variantList;
+
+  // Reserve space to avoid reallocation overhead during the loop
+  variantList.reserve( coords.size() );
+
+  for ( double val : coords )
+  {
+    variantList.append( val );
+  }
+
+  return variantList;
+}
+
 QgsGeometry InputUtils::extractGeometry( const FeatureLayerPair &pair )
 {
   if ( !pair.isValid() )

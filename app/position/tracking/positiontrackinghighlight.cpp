@@ -60,6 +60,11 @@ QgsGeometry PositionTrackingHighlight::highlightGeometry() const
   return mHighlightGeometry;
 }
 
+QVariantList PositionTrackingHighlight::highlightGeometryData() const
+{
+  return InputUtils::extractGeometryToQml( mHighlightGeometry );
+}
+
 void PositionTrackingHighlight::setHighlightGeometry( const QgsGeometry &newHighlightGeometry )
 {
   if ( mHighlightGeometry.equals( newHighlightGeometry ) )

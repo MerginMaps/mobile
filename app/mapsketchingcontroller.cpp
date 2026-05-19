@@ -139,9 +139,9 @@ void MapSketchingController::undo() const
   mLayer->undoStack()->undo();
 }
 
-QgsGeometry MapSketchingController::highlightGeometry() const
+QVariantList MapSketchingController::highlightGeometry() const
 {
-  return mHighlight;
+  return InputUtils::extractGeometryToQml( mHighlight );
 }
 
 QStringList MapSketchingController::availableColors() const

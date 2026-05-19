@@ -111,6 +111,11 @@ const QgsGeometry &SplittingMapTool::recordedGeometry() const
   return mRecordedGeometry;
 }
 
+QVariantList SplittingMapTool::recordedGeometryData() const
+{
+  return InputUtils::extractGeometryToQml( mRecordedGeometry );
+}
+
 void SplittingMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )
 {
   if ( mRecordedGeometry.equals( newRecordedGeometry ) )

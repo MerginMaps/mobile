@@ -107,7 +107,7 @@ Button {
 
     State {
       name: "hovered"
-      when: root.hovered && root.enabled
+      when: (root.hovered || root.down) && root.enabled
 
       PropertyChanges {
         target: buttonContent

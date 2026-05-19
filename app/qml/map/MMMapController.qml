@@ -40,6 +40,8 @@ Item {
     measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
   }
 
+  property var highlightedGeomRef: null
+
   property MM.PositionTrackingManager trackingManager: tracking.item?.manager ?? null
 
   property MM.MultiEditManager multiEditManager:  multiEditLoader.item?.manager ?? null
@@ -407,7 +409,7 @@ Item {
           lineWidth: MMHighlight.LineWidths.Narrow
 
           mapSettings: mapCanvas.mapSettings
-          geometry: trackingHighlight.highlightGeometry
+          geometryData: trackingHighlight.highlightGeometryData
         }
 
         Component.onCompleted: {
@@ -1043,7 +1045,7 @@ Item {
 
         markerType: MMHighlight.MarkerTypes.Circle
         mapSettings: mapCanvas.mapSettings
-        geometry: multiEditManager.geometry
+        geometryData: __inputUtils.extractGeometryToQml( multiEditManager.geometry )
       }
     }
   }
@@ -1080,7 +1082,7 @@ Item {
         lineWidth: sketchingController.eraserActive ? MMHighlight.LineWidths.Narrow : MMHighlight.LineWidths.Normal
 
         mapSettings: mapCanvas.mapSettings
-        geometry: sketchingController.highlightGeometry
+        geometryData: sketchingController.highlightGeometry
       }
     }
   }
@@ -1380,21 +1382,24 @@ Item {
   }
 
   function jumpToHighlighted( mapOffset ) {
-    if ( identifyHighlight.geometry === null )
+    if ( !highlightedGeomRef )
       return
-    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
-
+    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( highlightedGeomRef.geom, mapCanvas.mapSettings )
     screenPt.y += mapOffset / 2
     mapCanvas.jumpTo( screenPt )
   }
 
   function highlightPair( pair ) {
     let geometry = __inputUtils.extractGeometry( pair )
-    identifyHighlight.geometry = __inputUtils.transformGeometryToMapWithLayer( geometry, pair.layer, mapCanvas.mapSettings )
+    let mapGeom = __inputUtils.transformGeometryToMapWithLayer( geometry, pair.layer, mapCanvas.mapSettings )
+    
+    identifyHighlight.geometryData = __inputUtils.extractGeometryToQml( mapGeom )
+    highlightedGeomRef = { geom: mapGeom }
   }
 
   function hideHighlight() {
-    identifyHighlight.geometry = null
+    identifyHighlight.geometryData = []
+    highlightedGeomRef = null
     updatePosition()
   }
 
@@ -1441,7 +1446,7 @@ Item {
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position
-        if ( identifyHighlight.geometry !== null )
+        if ( highlightedGeomRef )
         {
           break
         }
@@ -1476,7 +1481,8 @@ Item {
     // clear all previous references to old project (if we don't clear references to the previous project,
     // highlights may end up with dangling pointers to map layers and cause crashes)
 
-    identifyHighlight.geometry = null
+    identifyHighlight.geometryData = []
+    highlightedGeomRef = null
   }
 
   function setTracking( shouldTrack ) {

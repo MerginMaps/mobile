@@ -114,38 +114,34 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
-    // if it is a polygon and ring is not correctly defined yet (e.g. only
-    // contains 1 point or not closed) we add point directly to the ring
-    // and close it
-
-    QgsLineString *r;
-    const QgsPolygon *poly;
-
+    // 1. Get a mutable pointer to the polygon directly from the geometry
+    QgsPolygon *mutablePoly = nullptr;
     if ( mRecordedGeometry.isMultipart() )
     {
-      poly = qgsgeometry_cast<const QgsMultiPolygon *>( mRecordedGeometry.constGet() )->polygonN( mActivePart );
+      mutablePoly = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() )->polygonN( mActivePart );
     }
     else
     {
-      poly = qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() );
+      mutablePoly = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
     }
 
-    if ( !poly )
+    if ( !mutablePoly )
     {
       return;
     }
 
+    // 2. Get a mutable pointer to the specific ring
+    QgsLineString *mutableRing = nullptr;
     if ( mActiveRing == 0 )
     {
-      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing()->clone() );
+      mutableRing = qgsgeometry_cast<QgsLineString *>( mutablePoly->exteriorRing() );
     }
     else
     {
-      // interior rings starts indexing from 0
-      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 )->clone() );
+      mutableRing = qgsgeometry_cast<QgsLineString *>( mutablePoly->interiorRing( mActiveRing - 1 ) );
     }
 
-    if ( !r )
+    if ( !mutableRing )
     {
       return;
     }
@@ -170,10 +166,11 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       mRecordedGeometry.addPart( poly.clone(), Qgis::GeometryType::Polygon );
     }
 
-    if ( r->nCoordinates() < 2 )
+    // 3. Check the actual ring and add the vertex directly in place!
+    if ( mutableRing->nCoordinates() < 2 )
     {
-      r->addVertex( pointToAdd );
-      r->close();
+      mutableRing->addVertex( pointToAdd );
+      mutableRing->close();
 
       mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
@@ -1692,6 +1689,32 @@ void RecordingMapTool::setActiveFeature( const QgsFeature &newActiveFeature )
 
   mActiveFeature = newActiveFeature;
   emit activeFeatureChanged( mActiveFeature );
+}
+
+
+QVariantList RecordingMapTool::recordedGeometryData() const
+{
+  return InputUtils::extractGeometryToQml( mRecordedGeometry );
+}
+
+QVariantList RecordingMapTool::existingVerticesData() const
+{
+  return InputUtils::extractGeometryToQml( mExistingVertices );
+}
+
+QVariantList RecordingMapTool::midPointsData() const
+{
+  return InputUtils::extractGeometryToQml( mMidPoints );
+}
+
+QVariantList RecordingMapTool::handlesData() const
+{
+  return InputUtils::extractGeometryToQml( mHandles );
+}
+
+QVariantList RecordingMapTool::activeVertexGeometryData() const
+{
+  return InputUtils::extractGeometryToQml( mActiveVertexGeometry );
 }
 
 void RecordingMapTool::avoidIntersections()

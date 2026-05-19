@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Shapes
 
@@ -17,9 +19,9 @@ import ".."
 Item {
   id: highlight
 
-  // geometry to highlight
+  // geometry data array extracted from C++
   // geometry must be in map canvas CRS!
-  property var geometry
+  property var geometryData
 
   // for transformation of the highlight to the correct location on the map
   property MM.MapSettings mapSettings
@@ -37,6 +39,7 @@ Item {
   property real markerWidth: 40 * __dp // based on marker image size
   property real markerHeight: 53 * __dp // based on marker image size
   property real markerBorderWidth: 2 * __dp
+  readonly property url markerImageSource: __style.mapPinImage
 
   // line properties
   enum LineWidths { Normal, Narrow }
@@ -90,7 +93,7 @@ Item {
       }
   }
 
-  onGeometryChanged: constructHighlights()
+  onGeometryDataChanged: constructHighlights()
 
   // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
   function transformX( xcoord )
@@ -108,22 +111,22 @@ Item {
   {
     if ( !mapSettings ) return
 
-    if ( !geometry )
+    if ( !geometryData || geometryData.length === 0 )
     {
       // trigger repaint for empty geometries
       markerItems = markerItems.map( function (marker) { return marker.destroy() } )
-
-      let newLineElements = [];
-      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
-
-      let newPolygonElements = [];
-      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+      lineShapeItems = lineShapeItems.map( function (el) { return el.destroy() } )
+      lineBorderShapeItems = lineBorderShapeItems.map( function (el) { return el.destroy() } )
+      polygonShapeItems = polygonShapeItems.map( function (el) { return el.destroy() } )
+      polygonRingBorderShapeItems = polygonRingBorderShapeItems.map( function (el) { return el.destroy() } )
 
       markerItems = [];
-      lineShapePath.pathElements = newLineElements
-      polygonShapePath.pathElements = newPolygonElements
-      lineBorderShapePath.pathElements = newLineElements
-      polygonRingBorderPath.pathElements = newPolygonElements
+      lineShapeItems = []; lineBorderShapeItems = []; polygonShapeItems = []; polygonRingBorderShapeItems = [];
+      
+      lineShapePath.pathElements = [ componentMoveTo.createObject( lineShapePath ) ]
+      lineBorderShapePath.pathElements = [ componentMoveTo.createObject( lineBorderShapePath ) ]
+      polygonShapePath.pathElements = [ componentMoveTo.createObject( polygonShapePath ) ]
+      polygonRingBorderPath.pathElements = [ componentMoveTo.createObject( polygonRingBorderPath ) ]
 
       return;
     }
@@ -132,35 +135,39 @@ Item {
     refTransformOffsetY = mapTransformOffsetY
     refTransformScale = mapTransformScale
 
-    let data = __inputUtils.extractGeometryCoordinates( highlight.geometry )
+    let data = geometryData 
 
     let newMarkerItems = []
     let newLineElements = []
+    let newLineBorderElements = []
     let newPolygonElements = []
+    let newPolygonRingBorderElements = []
 
-    let geometryType = data[0] // type of geometry - 0: point, 1: linestring, 2: polygon
-    let dataStartIndex = ( geometryType === 0 ? 1 : 2 ) // point data starts from index 1, others from index 2
+    let geometryType = data[0]
+    let dataStartIndex = ( geometryType === 0 ? 1 : 2 )
 
     if ( data.length > dataStartIndex )
     {
       if ( geometryType === 0 ) // point
       {
+        let coords = []
         if ( data.length === 3 )
-        {
-          newMarkerItems.push( componentMarker.createObject( highlight, { "posX": data[dataStartIndex], "posY": data[dataStartIndex + 1] } ) )
-        }
+          coords.push( { x: data[dataStartIndex], y: data[dataStartIndex + 1] } )
         else
+          for ( let it = dataStartIndex; it < data.length; it += 3 )
+            coords.push( { x: data[it], y: data[it + 1] } )
+
+        for ( let c = 0; c < coords.length; c++ )
         {
-          let it = 0;
-          // this is multipoint [0, x1, y1, 0, x2, y2, 0, x3, y3, 0,..]
-          for ( it = dataStartIndex; it < data.length; it += 3 )
-          {
-            newMarkerItems.push( componentMarker.createObject( highlight, {
-                                                                "posX": data[it],
-                                                                "posY": data[it + 1]
-                                                              } ) )
+          if ( c < markerItems.length ) {
+            markerItems[c].posX = coords[c].x
+            markerItems[c].posY = coords[c].y
+            newMarkerItems.push( markerItems[c] )
+          } else {
+            newMarkerItems.push( componentMarker.createObject( highlight, { "posX": coords[c].x, "posY": coords[c].y } ) )
           }
         }
+        for ( let j = coords.length; j < markerItems.length; j++ ) markerItems[j].destroy()
       }
       else // line or polygon
       {
@@ -174,10 +181,8 @@ Item {
                                                             } ) )
         }
 
-        let objOwner = ( geometryType === 1 ? lineShapePath : polygonShapePath )
-        let elements = ( geometryType === 1 ? newLineElements : newPolygonElements )
-
-        // Create (multi) geometry for the highlight
+        let linePartIdx = 0
+        let polygonPartIdx = 0
         let i = 0
         let k = 0
         while ( i < data.length )
@@ -202,54 +207,88 @@ Item {
           }
           i = k
 
-          elements.push( componentPathPolyline.createObject( objOwner, { path: newPath } ) )
+          if ( geometryType === 1 )
+          {
+            let lineEl = linePartIdx < lineShapeItems.length ? lineShapeItems[ linePartIdx ] : componentPathPolyline.createObject( lineShapePath, { path: [] } )
+            let borderEl = linePartIdx < lineBorderShapeItems.length ? lineBorderShapeItems[ linePartIdx ] : componentPathPolyline.createObject( lineBorderShapePath, { path: [] } )
+            lineEl.path = newPath    
+            borderEl.path = newPath
+            newLineElements.push( lineEl )
+            newLineBorderElements.push( borderEl )
+            linePartIdx++
+          }
+          else
+          {
+            let polyEl = polygonPartIdx < polygonShapeItems.length ? polygonShapeItems[ polygonPartIdx ] : componentPathPolyline.createObject( polygonShapePath, { path: [] } )
+            let ringEl = polygonPartIdx < polygonRingBorderShapeItems.length ? polygonRingBorderShapeItems[ polygonPartIdx ] : componentPathPolyline.createObject( polygonRingBorderPath, { path: [] } )
+            polyEl.path = newPath
+            ringEl.path = newPath
+            newPolygonElements.push( polyEl )
+            newPolygonRingBorderElements.push( ringEl )
+            polygonPartIdx++
+          }
         }
+
+        for ( let j = newLineElements.length; j < lineShapeItems.length; j++ ) lineShapeItems[ j ].destroy()
+        for ( let j = newLineBorderElements.length; j < lineBorderShapeItems.length; j++ ) lineBorderShapeItems[ j ].destroy()
+        for ( let j = newPolygonElements.length; j < polygonShapeItems.length; j++ ) polygonShapeItems[ j ].destroy()
+        for ( let j = newPolygonRingBorderElements.length; j < polygonRingBorderShapeItems.length; j++ ) polygonRingBorderShapeItems[ j ].destroy()
       }
     }
 
-    // trigger repaint for empty geometries
-    markerItems = markerItems.map( function (marker) { return marker.destroy() } )
-    if ( newLineElements.length === 0 )
-      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
-    if ( newPolygonElements.length === 0 )
-      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+    if ( geometryType !== 0 ) markerItems.forEach( function (m) { if (m) m.destroy() } )
+    if ( geometryType !== 1 ) { lineShapeItems.forEach( function (el) { if (el) el.destroy() } ); lineBorderShapeItems.forEach( function (el) { if (el) el.destroy() } ) }
+    if ( geometryType !== 2 ) { polygonShapeItems.forEach( function (el) { if (el) el.destroy() } ); polygonRingBorderShapeItems.forEach( function (el) { if (el) el.destroy() } ) }
 
     markerItems = newMarkerItems
-    polygonShapePath.pathElements = newPolygonElements
-    polygonRingBorderPath.pathElements = newPolygonElements
+    
+    lineShapeItems = newLineElements.slice()
+    lineBorderShapeItems = newLineBorderElements.slice()
+    polygonShapeItems = newPolygonElements.slice()
+    polygonRingBorderShapeItems = newPolygonRingBorderElements.slice()
+
+    if ( newLineElements.length === 0 ) {
+      newLineElements.push( componentMoveTo.createObject( lineShapePath ) )
+      newLineBorderElements.push( componentMoveTo.createObject( lineBorderShapePath ) )
+    }
+    if ( newPolygonElements.length === 0 ) {
+      newPolygonElements.push( componentMoveTo.createObject( polygonShapePath ) )
+      newPolygonRingBorderElements.push( componentMoveTo.createObject( polygonRingBorderPath ) )
+    }
+
     lineShapePath.pathElements = newLineElements
-    lineBorderShapePath.pathElements = newLineElements
+    lineBorderShapePath.pathElements = newLineBorderElements
+    polygonShapePath.pathElements = newPolygonElements
+    polygonRingBorderPath.pathElements = newPolygonRingBorderElements
+
+    shape.update()
   }
 
-  // keeps list of currently displayed marker items (an internal property)
   property var markerItems: []
-
-  // enable anti-aliasing to make the higlight look nicer
-  // https://stackoverflow.com/questions/48895449/how-do-i-enable-antialiasing-on-qml-shapes
-  layer.enabled: true
-  layer.samples: 4
+  property var lineShapeItems: []
+  property var lineBorderShapeItems: []
+  property var polygonShapeItems: []
+  property var polygonRingBorderShapeItems: []
 
   Component {
     id: componentMarker
 
     Item {
+      id: markerItem
       property real posX: 0
       property real posY: 0
-
       property int markerType: highlight.markerType
 
-      x: ( posX *  highlight.mapTransformScale + highlight.mapTransformOffsetX *  highlight.mapTransformScale ) / displayDevicePixelRatio - ( highlight.markerWidth / 2 )
-      y: ( posY * -highlight.mapTransformScale + highlight.mapTransformOffsetY * -highlight.mapTransformScale ) / displayDevicePixelRatio - highlight.markerHeight
+      x: ( posX * highlight.mapTransformScale + highlight.mapTransformOffsetX * highlight.mapTransformScale ) / highlight.displayDevicePixelRatio - ( highlight.markerWidth / 2 )
+      y: ( posY * -highlight.mapTransformScale + highlight.mapTransformOffsetY * -highlight.mapTransformScale ) / highlight.displayDevicePixelRatio - highlight.markerHeight
 
       width: highlight.markerWidth
       height: highlight.markerHeight
 
       Rectangle {
-
         width: internal.markerSize
         height: width
-
-        visible: markerType === MMHighlight.MarkerTypes.Circle
+        visible: markerItem.markerType === 0 
 
         anchors {
           bottom: parent.bottom
@@ -264,9 +303,8 @@ Item {
       }
 
       Image {
-        visible: markerType === MMHighlight.MarkerTypes.Image
-
-        source: __style.mapPinImage
+        visible: markerItem.markerType !== 0 
+        source: highlight.markerImageSource
         sourceSize.width: parent.width
         sourceSize.height: parent.height
       }

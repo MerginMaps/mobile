@@ -56,7 +56,10 @@ Item {
     lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
+    geometryData: {
+      let trigger = guidelineController.crosshairPosition; // Forces binding evaluation
+      return __inputUtils.extractGeometryCoordinates( guidelineController.guidelineGeometry );
+    }
   }
 
   MMHighlight {
@@ -70,7 +73,12 @@ Item {
     lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
-    geometry: __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings )
+    geometryData: {
+      let trigger = mapTool.recordedGeometryData;
+      return __inputUtils.extractGeometryCoordinates( 
+        __inputUtils.transformGeometryToMapWithLayer( mapTool.recordedGeometry, __activeLayer.vectorLayer, root.map.mapSettings ) 
+      );
+    }
   }
 
   MMCrosshair {

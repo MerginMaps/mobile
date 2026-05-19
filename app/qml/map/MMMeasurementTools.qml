@@ -55,7 +55,10 @@ Item {
     lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
-    geometry: guidelineController.guidelineGeometry
+    geometryData: {
+      let trigger = guidelineController.crosshairPosition; // Forces binding evaluation
+      return __inputUtils.extractGeometryCoordinates( guidelineController.guidelineGeometry );
+    }
   }
 
   MMHighlight {
@@ -69,7 +72,7 @@ Item {
     lineWidth: MMHighlight.LineWidths.Narrow
 
     mapSettings: root.map.mapSettings
-    geometry: mapTool.recordedGeometry
+    geometryData: __inputUtils.extractGeometryCoordinates( mapTool.recordedGeometry )
   }
 
   MMHighlight {
@@ -79,7 +82,7 @@ Item {
     width: root.map.width
 
     mapSettings: root.map.mapSettings
-    geometry: mapTool.existingVertices
+    geometryData: __inputUtils.extractGeometryCoordinates( mapTool.existingVertices )
 
     markerType: MMHighlight.MarkerTypes.Circle
     markerSize: MMHighlight.MarkerSizes.Bigger

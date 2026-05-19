@@ -16,12 +16,15 @@
 #include "qgsgeometry.h"
 
 #include "featurelayerpair.h"
+#include "inpututils.h"
 
 class SplittingMapTool : public AbstractMapTool
 {
     Q_OBJECT
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+
+    Q_PROPERTY( QVariantList recordedGeometryData READ recordedGeometryData NOTIFY recordedGeometryChanged )
     Q_PROPERTY( FeatureLayerPair featureToSplit READ featureToSplit WRITE setFeatureToSplit NOTIFY featureToSplitChanged )
 
   public:
@@ -57,6 +60,7 @@ class SplittingMapTool : public AbstractMapTool
 
     // Getters/setters
     const QgsGeometry &recordedGeometry() const;
+    QVariantList recordedGeometryData() const;
     void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
 
     const FeatureLayerPair &featureToSplit() const;

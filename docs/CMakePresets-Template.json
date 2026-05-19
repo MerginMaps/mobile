@@ -1,8 +1,8 @@
 {
-  "version": 3,
+  "version": 4,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 21,
+    "minor": 23,
     "patch": 0
   },
   "configurePresets": [
@@ -52,7 +52,7 @@
         "QT_ANDROID_SIGN_APK": "Yes"
       },
       "environment": {
-        "ANDROID_NDK_HOME": "<add_the_path_to_NDK_home>",
+        "ANDROID_NDK_ROOT": "<add_the_path_to_NDK_home>",
         "ANDROID_SDK_ROOT": "<add_the_path_to_SDK_root>",
         "QT_ANDROID_KEYSTORE_PATH": "<add_the_path_to_the_ketstore",
         "QT_ANDROID_KEYSTORE_ALIAS": "<add_the_keystore_alias>",
@@ -78,7 +78,7 @@
         "VCPKG_HOST_TRIPLET": "arm64-osx"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -90,7 +90,7 @@
         "VCPKG_HOST_TRIPLET": "x64-osx"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -111,7 +111,7 @@
         "IOS": "TRUE"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -126,7 +126,7 @@
         "ENABLE_TESTS": "TRUE"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -140,7 +140,7 @@
         "VCPKG_TARGET_TRIPLET": "arm64-osx"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -155,7 +155,7 @@
         "ENABLE_TESTS": "TRUE"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
@@ -169,7 +169,7 @@
         "VCPKG_TARGET_TRIPLET": "x64-osx"
       },
       "environment": {
-        "PATH": "$penv{PATH}:$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:/Applications/CMake.app/Contents/bin"
+        "PATH": "$env{HOMEBREW_PREFIX}/opt/flex/bin:$env{HOMEBREW_PREFIX}/opt/bison/bin:$env{HOMEBREW_PREFIX}/opt/gettext/bin:$env{HOMEBREW_PREFIX}/bin:$penv{PATH}"
       }
     },
     {
