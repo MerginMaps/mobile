@@ -119,15 +119,15 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
     // and close it
 
     QgsLineString *r;
-    const QgsPolygon *poly;
+    QgsPolygon *poly;
 
     if ( mRecordedGeometry.isMultipart() )
     {
-      poly = qgsgeometry_cast<const QgsMultiPolygon *>( mRecordedGeometry.constGet() )->polygonN( mActivePart );
+      poly = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() )->polygonN( mActivePart );
     }
     else
     {
-      poly = qgsgeometry_cast<const QgsPolygon *>( mRecordedGeometry.constGet() );
+      poly = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
     }
 
     if ( !poly )
@@ -137,12 +137,12 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
     if ( mActiveRing == 0 )
     {
-      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing()->clone() );
+      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
     }
     else
     {
       // interior rings starts indexing from 0
-      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 )->clone() );
+      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 ) );
     }
 
     if ( !r )
