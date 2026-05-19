@@ -23,6 +23,7 @@
 #include "coreutils.h"
 
 const QString TIMESTAMP_FORMAT = QStringLiteral( "yyyy-MM-ddTHH:mm:ss.zzzZ" );
+const QString TIMESTAMP_FORMAT_NO_MS = QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
 const QString DATE_FORMAT = QStringLiteral( "yyyy-MM-dd" );
 
 FilterController::FilterController( QObject *parent )
@@ -263,17 +264,38 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         if ( value.typeId() == QMetaType::QDateTime )
           if ( isDateFilterDateTime( filter.filterId ) )
           {
-            // check if the DateTime contains milliseconds
             const QDateTime utcDateTime = value.toDateTime().toUTC();
-            const QString dateTimeFormat = utcDateTime.time().msec() != 0
-                                           ? TIMESTAMP_FORMAT
-                                           : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
-            expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( dateTimeFormat ) ) );
+            if ( utcDateTime.time().msec() != 0 )
+            {
+              expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT ) ) );
+            }
+            else
+            {
+              // if the msec() is 0, it could mean that either there are 0 milliseconds or none at all
+              // in this case add both filter queries and use 'OR' between them
+              QStringList dateTimeExpressions;
+
+              // filter expression with milliseconds
+              QString exprWithMs( expressionCopy );
+              exprWithMs.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT ) ) );
+              dateTimeExpressions << QStringLiteral( "(%1)" ).arg( exprWithMs );
+
+              // filter expression without milliseconds
+              QString exprNoMs( expressionCopy );
+              exprNoMs.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT_NO_MS ) ) );
+              dateTimeExpressions << QStringLiteral( "(%1)" ).arg( exprNoMs );
+
+              expressionCopy = dateTimeExpressions.join( QStringLiteral( " OR " ) );
+            }
           }
           else
+          {
             expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
+          }
         else
+        {
           expressionCopy.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( value ) );
+        }
       }
       break;
     }
@@ -364,21 +386,39 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         {
           // QML always returns QDateTime so we can't differentiate based on type
           if ( value.typeId() == QMetaType::QDateTime )
+          {
             if ( isDateFilterDateTime( filter.filterId ) )
             {
-              // check if the DateTime contains milliseconds
               const QDateTime utcDateTime = value.toDateTime().toUTC();
-              const QString dateTimeFormat = utcDateTime.time().msec() != 0
-                                             ? TIMESTAMP_FORMAT
-                                             : QStringLiteral( "yyyy-MM-ddTHH:mm:ssZ" );
-              expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( dateTimeFormat ) ) );
+              if ( utcDateTime.time().msec() != 0 )
+              {
+                expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT ) ) );
+                expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+              }
+              else
+              {
+                // if the msec() is 0, it could mean that either there are 0 milliseconds or none at all
+                // in this case, we create two filter expressions which are already joined by OR for multi-select
+                QString exprWithMs( expressionTemplate );
+                exprWithMs.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT ) ) );
+                expressions << QStringLiteral( "(%1)" ).arg( exprWithMs );
+
+                QString exprNoMs( expressionTemplate );
+                exprNoMs.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( utcDateTime.toString( TIMESTAMP_FORMAT_NO_MS ) ) );
+                expressions << QStringLiteral( "(%1)" ).arg( exprNoMs );
+              }
             }
             else
+            {
               expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedString( value.toDate().toString( DATE_FORMAT ) ) );
+              expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+            }
+          }
           else
+          {
             expressionTemplate.replace( QStringLiteral( "@@value@@" ), QgsExpression::quotedValue( value ) );
-
-          expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+            expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
+          }
         }
       }
       expressionCopy =  expressions.join( QStringLiteral( " OR " ) );
