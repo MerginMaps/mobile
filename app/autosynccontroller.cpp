@@ -13,8 +13,8 @@
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
 
-// 1 minute
-constexpr int SYNC_INTERVAL = 60000;
+// 1 hour
+constexpr int SYNC_INTERVAL = 3600000;
 // 10 seconds
 constexpr int SYNC_CHECK_TIMEOUT = 10000;
 
