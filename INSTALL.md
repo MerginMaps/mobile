@@ -229,6 +229,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    binary vcpkg cache.
 
    ```
+     export ANDROID_NDK_HOME=/home/<user>/android/ndk/<current_version>
      export ANDROID_NDK_ROOT=/home/<user>/android/ndk/<current_version>
      export ANDROID_SDK_ROOT=/home/<user>/android
      export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
@@ -262,6 +263,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
   ```
        PATH=+/Users/<user>/Projects/quick/build/vcpkg
        ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+       ANDROID_NDK_ROOT=/Users/<user>/android/ndk/<current_version>
        ANDROID_SDK_ROOT=/Users/<user>/android
        QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
        QT_ANDROID_KEYSTORE_KEY_PASS=<password>
@@ -345,6 +347,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    
    ```
      export ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+     export ANDROID_NDK_ROOT=/Users/<user>/android/ndk/<current_version>
      export ANDROID_SDK_ROOT=/Users/<user>/android
      export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
      export QT_ANDROID_KEYSTORE_KEY_PASS=<password>
@@ -379,6 +382,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
      PATH=+/opt/homebrew/Cellar/bison/3.8.2/bin
      PATH=+/Users/<user>/Projects/quick/build/vcpkg
      ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
+     ANDROID_NDK_ROOT=/Users/<user>/android/ndk/<current_version>
      ANDROID_SDK_ROOT=/Users/<user>/android
      QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
      QT_ANDROID_KEYSTORE_KEY_PASS=<password>
