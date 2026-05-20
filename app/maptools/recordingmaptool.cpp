@@ -114,34 +114,38 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   if ( mRecordedGeometry.type() == Qgis::GeometryType::Polygon )
   {
-    // 1. Get a mutable pointer to the polygon directly from the geometry
-    QgsPolygon *mutablePoly = nullptr;
+    // if it is a polygon and ring is not correctly defined yet (e.g. only
+    // contains 1 point or not closed) we add point directly to the ring
+    // and close it
+
+    QgsLineString *r;
+    QgsPolygon *poly;
+
     if ( mRecordedGeometry.isMultipart() )
     {
-      mutablePoly = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() )->polygonN( mActivePart );
+      poly = qgsgeometry_cast<QgsMultiPolygon *>( mRecordedGeometry.get() )->polygonN( mActivePart );
     }
     else
     {
-      mutablePoly = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
+      poly = qgsgeometry_cast<QgsPolygon *>( mRecordedGeometry.get() );
     }
 
-    if ( !mutablePoly )
+    if ( !poly )
     {
       return;
     }
 
-    // 2. Get a mutable pointer to the specific ring
-    QgsLineString *mutableRing = nullptr;
     if ( mActiveRing == 0 )
     {
-      mutableRing = qgsgeometry_cast<QgsLineString *>( mutablePoly->exteriorRing() );
+      r = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
     }
     else
     {
-      mutableRing = qgsgeometry_cast<QgsLineString *>( mutablePoly->interiorRing( mActiveRing - 1 ) );
+      // interior rings starts indexing from 0
+      r = qgsgeometry_cast<QgsLineString *>( poly->interiorRing( mActiveRing - 1 ) );
     }
 
-    if ( !mutableRing )
+    if ( !r )
     {
       return;
     }
@@ -166,11 +170,10 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
       mRecordedGeometry.addPart( poly.clone(), Qgis::GeometryType::Polygon );
     }
 
-    // 3. Check the actual ring and add the vertex directly in place!
-    if ( mutableRing->nCoordinates() < 2 )
+    if ( r->nCoordinates() < 2 )
     {
-      mutableRing->addVertex( pointToAdd );
-      mutableRing->close();
+      r->addVertex( pointToAdd );
+      r->close();
 
       mActiveLayer->beginEditCommand( QStringLiteral( "Add point" ) );
       emit recordedGeometryChanged( mRecordedGeometry );
