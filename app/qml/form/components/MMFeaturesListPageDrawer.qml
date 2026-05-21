@@ -37,7 +37,12 @@ Drawer {
   height: ApplicationWindow.window.height
 
   edge: Qt.BottomEdge
-  padding: 0
+
+  // Qt 6.9+ Popup/Drawer automatically applies safe area margins as padding.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
 
   contentItem: MMComponents.MMPage {
     id: page
@@ -123,7 +128,10 @@ Drawer {
         text: qsTr( "Add feature" )
         visible: __activeProject.projectRole !== "reader"
 
-        onClicked: root.buttonClicked()
+        onClicked: {
+          root.close()
+          root.buttonClicked()
+        }
       }
     }
   }
