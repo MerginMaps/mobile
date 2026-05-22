@@ -13,6 +13,7 @@
 #include <QColor>
 
 #include "qgsgeometry.h"
+#include "externalTypes/mmgeometry.h"
 
 class QgsVectorLayer;
 class InputMapSettings;
@@ -22,7 +23,7 @@ class MapSketchingController : public QObject
     Q_OBJECT
 
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
-    Q_PROPERTY( QgsGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
+    Q_PROPERTY( MMGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
     Q_PROPERTY( QColor activeColor READ activeColor WRITE setActiveColor NOTIFY activeColorChanged )
     Q_PROPERTY( bool canRedo READ canRedo NOTIFY canRedoChanged )
     Q_PROPERTY( bool canUndo READ canUndo NOTIFY canUndoChanged )
@@ -51,7 +52,7 @@ class MapSketchingController : public QObject
     void eraserActiveChanged();
 
   private:
-    QgsGeometry highlightGeometry() const;
+    MMGeometry highlightGeometry() const;
     void clearHighlight();
     void setMapSettings( InputMapSettings *settings );
     InputMapSettings *mapSettings() const;
@@ -65,7 +66,7 @@ class MapSketchingController : public QObject
     InputMapSettings *mMapSettings = nullptr;
     QgsVectorLayer *mLayer = nullptr;
 
-    QgsGeometry mHighlight;
+    MMGeometry mHighlight;
 
     QgsGeometry mScreenPoints;
     QColor mColor;
