@@ -9,6 +9,8 @@
 
 #include "positiontrackinghighlight.h"
 
+#include "inpututils.h"
+
 PositionTrackingHighlight::PositionTrackingHighlight( QObject *parent )
   : QObject( parent )
 {
@@ -20,20 +22,20 @@ void PositionTrackingHighlight::recalculate()
 {
   if ( mMapPosition.isEmpty() )
   {
-    setHighlightGeometry( QgsGeometry() );
+    setHighlightGeometry( InputUtils::emptyGeometry() );
     return;
   }
 
   if ( mTrackedGeometry.isEmpty() )
   {
-    setHighlightGeometry( QgsGeometry() );
+    setHighlightGeometry( InputUtils::emptyGeometry() );
     return;
   }
 
   // add map position to the end of the tracked geometry
   // note - map position must be in the same CRS as the tracked geometry
 
-  QgsGeometry highlightGeometry( mTrackedGeometry );
+  MMGeometry highlightGeometry( mTrackedGeometry );
 
   QgsVertexId lastVertex( 0, 0, highlightGeometry.constGet()->vertexCount() );
   highlightGeometry.get()->insertVertex( lastVertex, mMapPosition );
@@ -55,12 +57,12 @@ void PositionTrackingHighlight::setTrackedGeometry( const QgsGeometry &newTracke
   emit trackedGeometryChanged( mTrackedGeometry );
 }
 
-QgsGeometry PositionTrackingHighlight::highlightGeometry() const
+MMGeometry PositionTrackingHighlight::highlightGeometry() const
 {
   return mHighlightGeometry;
 }
 
-void PositionTrackingHighlight::setHighlightGeometry( const QgsGeometry &newHighlightGeometry )
+void PositionTrackingHighlight::setHighlightGeometry( const MMGeometry &newHighlightGeometry )
 {
   if ( mHighlightGeometry.equals( newHighlightGeometry ) )
     return;

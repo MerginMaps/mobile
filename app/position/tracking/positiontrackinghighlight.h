@@ -14,6 +14,7 @@
 #include <qglobal.h>
 
 #include "qgsgeometry.h"
+#include "externalTypes/mmgeometry.h"
 
 class PositionTrackingHighlight : public QObject
 {
@@ -25,7 +26,7 @@ class PositionTrackingHighlight : public QObject
     Q_PROPERTY( QgsGeometry trackedGeometry READ trackedGeometry WRITE setTrackedGeometry NOTIFY trackedGeometryChanged )
 
     // Geometry out
-    Q_PROPERTY( QgsGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
+    Q_PROPERTY( MMGeometry highlightGeometry READ highlightGeometry NOTIFY highlightGeometryChanged )
 
   public:
     explicit PositionTrackingHighlight( QObject *parent = nullptr );
@@ -33,7 +34,7 @@ class PositionTrackingHighlight : public QObject
     QgsGeometry trackedGeometry() const;
     void setTrackedGeometry( const QgsGeometry &newTrackedGeometry );
 
-    QgsGeometry highlightGeometry() const;
+    MMGeometry highlightGeometry() const;
 
     QgsPoint mapPosition() const;
     void setMapPosition( QgsPoint newMapPosition );
@@ -43,15 +44,15 @@ class PositionTrackingHighlight : public QObject
 
   signals:
     void trackedGeometryChanged( QgsGeometry trackedGeometry );
-    void highlightGeometryChanged( QgsGeometry highlightGeometry );
+    void highlightGeometryChanged( MMGeometry highlightGeometry );
 
     void mapPositionChanged( QgsPoint mapPosition );
 
   private:
-    void setHighlightGeometry( const QgsGeometry &newHighlightGeometry );
+    void setHighlightGeometry( const MMGeometry &newHighlightGeometry );
 
     QgsGeometry mTrackedGeometry;
-    QgsGeometry mHighlightGeometry;
+    MMGeometry mHighlightGeometry;
     QgsPoint mMapPosition;
 };
 
