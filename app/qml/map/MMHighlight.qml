@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import ".."
 
@@ -19,7 +20,7 @@ Item {
 
   // geometry to highlight
   // geometry must be in map canvas CRS!
-  property var geometry
+  property mmGeometry geometry
 
   // for transformation of the highlight to the correct location on the map
   property MM.MapSettings mapSettings
@@ -108,7 +109,7 @@ Item {
   {
     if ( !mapSettings ) return
 
-    if ( !geometry )
+    if ( __inputUtils.isEmptyGeometry( geometry ) )
     {
       // trigger repaint for empty geometries
       markerItems = markerItems.map( function (marker) { return marker.destroy() } )

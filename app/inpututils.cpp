@@ -446,14 +446,14 @@ QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const Qg
   return transformGeometry( geometry, sourceCRS, targetLayer->crs(), targetLayer->transformContext() );
 }
 
-QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
+MMGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
 {
   if ( !sourceLayer || !sourceLayer->isValid() || !targetSettings )
   {
-    return QgsGeometry();
+    return {};
   }
 
-  return transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
+  return MMGeometry( transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() ) );
 }
 
 QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings )
@@ -816,9 +816,9 @@ QgsPoint InputUtils::point( double x, double y, double z, double m )
   return QgsPoint( x, y, z, m );
 }
 
-QgsGeometry InputUtils::emptyGeometry()
+MMGeometry InputUtils::emptyGeometry()
 {
-  return QgsGeometry();
+  return {};
 }
 
 QgsFeature InputUtils::emptyFeature()

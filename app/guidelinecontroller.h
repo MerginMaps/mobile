@@ -37,13 +37,13 @@ class GuidelineController : public QObject
     Q_PROPERTY( bool allowed READ allowed WRITE setAllowed NOTIFY allowedChanged )
 
     // output properties (real geometry + crosshair position ) in map CRS
-    Q_PROPERTY( QgsGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )
+    Q_PROPERTY( MMGeometry guidelineGeometry READ guidelineGeometry WRITE setGuidelineGeometry NOTIFY guidelineGeometryChanged )
 
   public:
     explicit GuidelineController( QObject *parent = nullptr );
 
-    const QgsGeometry &guidelineGeometry() const;
-    void setGuidelineGeometry( const QgsGeometry &newGuidelineGeometry );
+    const MMGeometry &guidelineGeometry() const;
+    void setGuidelineGeometry( const MMGeometry &newGuidelineGeometry );
 
     QPointF crosshairPosition() const;
     void setCrosshairPosition( QPointF newCrosshairPosition );
@@ -93,7 +93,7 @@ class GuidelineController : public QObject
 
   private:
 
-    QgsGeometry mGuidelineGeometry;
+    MMGeometry mGuidelineGeometry;
     QPointF mCrosshairPosition;
     QgsGeometry mRealGeometry;
     InputMapSettings *mMapSettings = nullptr; // not owned

@@ -190,6 +190,7 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
+    externalTypes/mmgeometry.h
 )
 
 if (NOT WIN32)
@@ -331,6 +332,7 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
          ${CMAKE_CURRENT_SOURCE_DIR}/position
+         ${CMAKE_CURRENT_SOURCE_DIR}/externalTypes
 )
 
 qt_policy(SET QTP0002 NEW)

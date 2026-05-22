@@ -187,12 +187,12 @@ void GuidelineController::buildGuideline()
   }
 }
 
-const QgsGeometry &GuidelineController::guidelineGeometry() const
+const MMGeometry &GuidelineController::guidelineGeometry() const
 {
   return mGuidelineGeometry;
 }
 
-void GuidelineController::setGuidelineGeometry( const QgsGeometry &newGuidelineGeometry )
+void GuidelineController::setGuidelineGeometry( const MMGeometry &newGuidelineGeometry )
 {
   if ( mGuidelineGeometry.equals( newGuidelineGeometry ) )
     return;
