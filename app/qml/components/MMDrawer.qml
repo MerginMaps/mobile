@@ -34,6 +34,12 @@ Drawer {
   edge: Qt.BottomEdge
   dragMargin: 0
 
+  // Qt 6.9+ Popup/Drawer automatically applies safe area margins as padding.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
+
   // rounded background
   background: Rectangle {
     color: __style.polarColor
