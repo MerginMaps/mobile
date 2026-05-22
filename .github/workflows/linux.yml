@@ -40,7 +40,7 @@ jobs:
           path: mm
 
       - name: Free disk space
-        uses: jlumbroso/free-disk-space@main
+        uses: insightsengineering/disk-space-reclaimer@v1
 
       - name: Install build dependencies
         run: |
