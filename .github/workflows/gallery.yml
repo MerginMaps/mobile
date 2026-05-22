@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-          os: [ubuntu-latest, macos-26, windows-latest]
+          os: [ubuntu-latest, macos-26, windows-2025]
     runs-on: ${{ matrix.os }}
     env:
       QT_VERSION: '6.10.3'
@@ -46,10 +46,10 @@ jobs:
         run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
 
       - uses: seanmiddleditch/gha-setup-ninja@master
-        if: matrix.os != 'windows-2022'
+        if: matrix.os != 'windows-2025'
 
       - name: Configure and Build Gallery App (macos & ubuntu)
-        if: matrix.os != 'windows-2022'
+        if: matrix.os != 'windows-2025'
         run: |
             mkdir -p ${{ github.workspace }}/install-gallery
             mkdir -p ${{ github.workspace }}/build-gallery
@@ -69,7 +69,7 @@ jobs:
             ls -la ${{ github.workspace }}/install-gallery
 
       - name: Prepare vars (windows)
-        if: matrix.os == 'windows-2022'
+        if: matrix.os == 'windows-2025'
         id: vars
         shell: bash
         run: |
@@ -78,13 +78,13 @@ jobs:
           echo "WORKSPACE_DIR: $WORKSPACE_DIR"
 
       - name: Developer Command Prompt for Microsoft Visual C++ (windows)
-        if: matrix.os == 'windows-2022'
+        if: matrix.os == 'windows-2025'
         uses: ilammy/msvc-dev-cmd@v1
         with:
           vsversion: ${{ env.VS_VERSION }}
 
       - name: Configure and Build Gallery App (windows)
-        if: matrix.os == 'windows-2022'
+        if: matrix.os == 'windows-2025'
         shell: cmd
         run: |
           mkdir install-gallery -ea 0
@@ -103,14 +103,14 @@ jobs:
           nmake install
 
       - name: Prepare artefacts (macos & ubuntu)
-        if: matrix.os != 'windows-2022'
+        if: matrix.os != 'windows-2025'
         run: |
           cd ${{ github.workspace }}/install-gallery
           ls -la .
           tar -czf ${{ github.workspace }}/merginmaps-gallery-${{ matrix.os }}.tar.gz .
 
       - name: Prepare artefacts (windows)
-        if: matrix.os == 'windows-2022'
+        if: matrix.os == 'windows-2025'
         shell: cmd
         run: |
           cd install-gallery
