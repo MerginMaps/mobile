@@ -19,6 +19,7 @@
 #include "qgsgeometry.h"
 #include "qgsvectorlayer.h"
 #include "qgsmultipoint.h"
+#include  "externalTypes/mmgeometry.h"
 
 const double CLOSE_THRESHOLD = 10.0; // in pixels
 
@@ -26,8 +27,8 @@ class MeasurementMapTool : public AbstractMapTool
 {
     Q_OBJECT
 
-    Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
-    Q_PROPERTY( QgsGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
+    Q_PROPERTY( MMGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
+    Q_PROPERTY( MMGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
     Q_PROPERTY( QPointF crosshairPoint READ crosshairPoint WRITE setCrosshairPoint NOTIFY crosshairPointChanged )
 
     Q_PROPERTY( double lengthWithGuideline READ lengthWithGuideline WRITE setLengthWithGuideline NOTIFY lengthWithGuidelineChanged )
@@ -93,11 +94,11 @@ class MeasurementMapTool : public AbstractMapTool
     bool measurementFinalized() const;
     void setMeasurementFinalized( bool newMeasurementFinalized );
 
-    const QgsGeometry &recordedGeometry() const;
-    void setRecordedGeometry( const QgsGeometry &newRecordedGeometry );
+    const MMGeometry &recordedGeometry() const;
+    void setRecordedGeometry( const MMGeometry &newRecordedGeometry );
 
-    QgsGeometry existingVertices() const;
-    void setExistingVertices( const QgsGeometry &vertices );
+    MMGeometry existingVertices() const;
+    void setExistingVertices( const MMGeometry &vertices );
 
     void resetMapSettings();
     void updateMapSettings( InputMapSettings *newMapSettings );
@@ -109,8 +110,8 @@ class MeasurementMapTool : public AbstractMapTool
     void canUndoChanged( bool canUndo );
     void canCloseShapeChanged( bool canUndo );
     void measurementFinalizedChanged( bool measurementFinalized );
-    void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
-    void existingVerticesChanged( const QgsGeometry &vertices );
+    void recordedGeometryChanged( const MMGeometry &recordedGeometry );
+    void existingVerticesChanged( const MMGeometry &vertices );
     void crosshairPointChanged( const QPointF &crosshairPoint );
     void isValidGeometryChanged( bool canFinalize );
 
@@ -123,8 +124,8 @@ class MeasurementMapTool : public AbstractMapTool
 
   private:
     QVector<QgsPoint> mPoints;
-    QgsGeometry mRecordedGeometry;
-    QgsGeometry mExistingVertices;
+    MMGeometry mRecordedGeometry;
+    MMGeometry mExistingVertices;
     QgsDistanceArea mDistanceArea;
     QPointF mCrosshairPoint;
     double mLengthWithGuideline = 0;
