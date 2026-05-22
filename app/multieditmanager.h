@@ -14,6 +14,7 @@
 
 #include "featurelayerpair.h"
 #include "staticfeaturesmodel.h"
+#include "externalTypes/mmgeometry.h"
 
 class QgsVectorLayer;
 
@@ -30,7 +31,7 @@ class MultiEditManager : public QObject
 
     Q_PROPERTY( QgsVectorLayer *layer MEMBER mLayer NOTIFY layerChanged )
     Q_PROPERTY( StaticFeaturesModel *model READ model CONSTANT )
-    Q_PROPERTY( QgsGeometry geometry READ collectGeometry NOTIFY geometryChanged )
+    Q_PROPERTY( MMGeometry geometry READ collectGeometry NOTIFY geometryChanged )
     Q_PROPERTY( InputMapSettings *mapSettings MEMBER mMapSettings )
 
   public:
@@ -49,7 +50,7 @@ class MultiEditManager : public QObject
     Q_INVOKABLE void deleteSelectedFeatures();
 
     //! Returns multipart geometry of all geometries in the model, in map crs
-    QgsGeometry collectGeometry() const { return mModel->collectGeometries( mMapSettings ); }
+    MMGeometry collectGeometry() const { return mModel->collectGeometries( mMapSettings ); }
 
     StaticFeaturesModel *model() const { return mModel.get(); }
 
