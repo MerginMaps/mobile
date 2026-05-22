@@ -523,7 +523,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings, double mapExtentOffset );
 
     //! Returns geometry created out of the two points and converts it to map canvas screen pixels.
-    Q_INVOKABLE static QgsGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings );
+    Q_INVOKABLE static MMGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings );
 
     // Translates distance to target point into scale factor that should be used for map canvas during stakeout
     qreal distanceToScale( qreal distance );

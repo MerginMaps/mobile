@@ -1667,15 +1667,15 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   return extent;
 }
 
-QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
+MMGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !target.isValid() )
-    return QgsGeometry();
+    return {};
 
-  QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
-  QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+  const QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
+  const QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
 
-  QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
+  const QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
 
   return QgsGeometry::fromPolyline( points );
 }
