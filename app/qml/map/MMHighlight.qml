@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Shapes
+import QtQml
 
 import mm 1.0 as MM
 import MMInput
