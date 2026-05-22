@@ -71,7 +71,7 @@ class GuidelineController : public QObject
 
   signals:
 
-    void guidelineGeometryChanged( const QgsGeometry &guidelineGeometry );
+    void guidelineGeometryChanged( const MMGeometry &guidelineGeometry );
     void crosshairPositionChanged( QPointF crosshairPosition );
 
     void realGeometryChanged( const QgsGeometry &realGeometry );
