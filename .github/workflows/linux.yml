@@ -44,6 +44,8 @@ jobs:
 
       - name: Install build dependencies
         run: |
+            # remove enzu mirror, which was breaking the CI build
+            sudo sed -i '/mirror.enzu.com/d' /etc/apt/apt-mirrors.txt 2>/dev/null || true
             sudo apt-get update -y
 
             sudo apt-get install -y \
