@@ -49,10 +49,7 @@ jobs:
       - name: Install build dependencies
         run: |
             # remove enzu mirror, which was breaking the CI build
-            echo "----apt-mirrors.txt-----"
-            cat /etc/apt/apt-mirrors.txt
-            echo "----sources.list-----"
-            cat /etc/apt/sources.list
+            rm /etc/apt/sources.list
             sudo apt-get update -y
 
             sudo apt-get install -y \
