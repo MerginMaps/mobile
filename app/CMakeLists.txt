@@ -190,6 +190,7 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
+    mmtypeutils.h
 )
 
 if (NOT WIN32)

@@ -10,6 +10,7 @@
 #ifndef MULTIEDITMANAGER_H
 #define MULTIEDITMANAGER_H
 
+#include <qgsgeometry.h>
 #include <QObject>
 
 #include "featurelayerpair.h"
