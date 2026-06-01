@@ -38,7 +38,6 @@
 #include "inputmapsettings.h"
 #include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
-#include "externalTypes/mmgeometry.h"
 #include "position/mapposition.h"
 
 class QgsFeature;
@@ -115,7 +114,7 @@ class InputUtils: public QObject
     static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context );
 
     //! Helper methods to use for transforming geometry from QML as overriding does not work properly there
-    Q_INVOKABLE static MMGeometry transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
+    Q_INVOKABLE static QgsGeometry transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings );
     Q_INVOKABLE static QgsGeometry transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings );
 
     /**
@@ -271,7 +270,7 @@ class InputUtils: public QObject
     /**
      * Creates empty geometry
      */
-    Q_INVOKABLE static MMGeometry emptyGeometry();
+    Q_INVOKABLE static QgsGeometry emptyGeometry();
 
     /**
      * Creates empty feature
@@ -523,7 +522,7 @@ class InputUtils: public QObject
     Q_INVOKABLE QgsRectangle stakeoutPathExtent( MapPosition *mapPosition, const FeatureLayerPair &targetFeature, InputMapSettings *mapSettings, double mapExtentOffset );
 
     //! Returns geometry created out of the two points and converts it to map canvas screen pixels.
-    Q_INVOKABLE static MMGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings );
+    Q_INVOKABLE static QgsGeometry stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings );
 
     // Translates distance to target point into scale factor that should be used for map canvas during stakeout
     qreal distanceToScale( qreal distance );

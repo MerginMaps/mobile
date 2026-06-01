@@ -446,14 +446,14 @@ QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const Qg
   return transformGeometry( geometry, sourceCRS, targetLayer->crs(), targetLayer->transformContext() );
 }
 
-MMGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
+QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geometry, QgsVectorLayer *sourceLayer, InputMapSettings *targetSettings )
 {
   if ( !sourceLayer || !sourceLayer->isValid() || !targetSettings )
   {
     return {};
   }
 
-  return MMGeometry( transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() ) );
+  return QgsGeometry( transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() ) );
 }
 
 QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings )
@@ -816,7 +816,7 @@ QgsPoint InputUtils::point( double x, double y, double z, double m )
   return QgsPoint( x, y, z, m );
 }
 
-MMGeometry InputUtils::emptyGeometry()
+QgsGeometry InputUtils::emptyGeometry()
 {
   return {};
 }
@@ -1667,7 +1667,7 @@ QgsRectangle InputUtils::stakeoutPathExtent(
   return extent;
 }
 
-MMGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
+QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !target.isValid() )
     return {};

@@ -44,7 +44,7 @@ void MapSketchingController::updateHighlight( const QPointF &oldPoint, const QPo
     ls->addZValue();
     ls->addMValue();
     QgsMultiLineString *mls = new QgsMultiLineString( QList<QgsLineString *>() << ls );
-    mHighlight = MMGeometry( mls );
+    mHighlight = QgsGeometry( mls );
 
     mScreenPoints = QgsGeometry( new QgsLineString( { QgsPointXY( oldPoint.x(), oldPoint.y() ) } ) );
   }
@@ -139,7 +139,7 @@ void MapSketchingController::undo() const
   mLayer->undoStack()->undo();
 }
 
-MMGeometry MapSketchingController::highlightGeometry() const
+QgsGeometry MapSketchingController::highlightGeometry() const
 {
   return mHighlight;
 }
@@ -152,7 +152,7 @@ QStringList MapSketchingController::availableColors() const
 
 void MapSketchingController::clearHighlight()
 {
-  mHighlight = MMGeometry( new QgsMultiLineString() );
+  mHighlight = QgsGeometry( new QgsMultiLineString() );
   emit highlightGeometryChanged();
 }
 

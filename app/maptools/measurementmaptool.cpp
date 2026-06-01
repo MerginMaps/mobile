@@ -178,17 +178,17 @@ void MeasurementMapTool::updateMapSettings( InputMapSettings *newMapSettings )
   }
 }
 
-const MMGeometry &MeasurementMapTool::recordedGeometry() const
+const QgsGeometry &MeasurementMapTool::recordedGeometry() const
 {
   return mRecordedGeometry;
 }
 
-MMGeometry MeasurementMapTool::existingVertices() const
+QgsGeometry MeasurementMapTool::existingVertices() const
 {
   return mExistingVertices;
 }
 
-void MeasurementMapTool::setExistingVertices( const MMGeometry &vertices )
+void MeasurementMapTool::setExistingVertices( const QgsGeometry &vertices )
 {
   if ( mExistingVertices.equals( vertices ) )
     return;
@@ -273,7 +273,7 @@ void MeasurementMapTool::setMeasurementFinalized( bool newMeasurementFinalized )
   emit measurementFinalizedChanged( mMeasurementFinalized );
 }
 
-void MeasurementMapTool::setRecordedGeometry( const MMGeometry &newRecordedGeometry )
+void MeasurementMapTool::setRecordedGeometry( const QgsGeometry &newRecordedGeometry )
 {
   if ( mRecordedGeometry.equals( newRecordedGeometry ) )
     return;

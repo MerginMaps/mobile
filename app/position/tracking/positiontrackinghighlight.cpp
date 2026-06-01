@@ -35,7 +35,7 @@ void PositionTrackingHighlight::recalculate()
   // add map position to the end of the tracked geometry
   // note - map position must be in the same CRS as the tracked geometry
 
-  MMGeometry highlightGeometry( mTrackedGeometry );
+  QgsGeometry highlightGeometry( mTrackedGeometry );
 
   QgsVertexId lastVertex( 0, 0, highlightGeometry.constGet()->vertexCount() );
   highlightGeometry.get()->insertVertex( lastVertex, mMapPosition );
@@ -57,12 +57,12 @@ void PositionTrackingHighlight::setTrackedGeometry( const QgsGeometry &newTracke
   emit trackedGeometryChanged( mTrackedGeometry );
 }
 
-MMGeometry PositionTrackingHighlight::highlightGeometry() const
+QgsGeometry PositionTrackingHighlight::highlightGeometry() const
 {
   return mHighlightGeometry;
 }
 
-void PositionTrackingHighlight::setHighlightGeometry( const MMGeometry &newHighlightGeometry )
+void PositionTrackingHighlight::setHighlightGeometry( const QgsGeometry &newHighlightGeometry )
 {
   if ( mHighlightGeometry.equals( newHighlightGeometry ) )
     return;

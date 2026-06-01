@@ -21,7 +21,7 @@ Item {
 
   // geometry to highlight
   // geometry must be in map canvas CRS!
-  property mmGeometry geometry
+  property qgsGeometry geometry
 
   // for transformation of the highlight to the correct location on the map
   property MM.MapSettings mapSettings
