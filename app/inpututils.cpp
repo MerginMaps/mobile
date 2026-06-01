@@ -453,7 +453,7 @@ QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geom
     return {};
   }
 
-  return QgsGeometry( transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() ) );
+  return transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
 }
 
 QgsGeometry InputUtils::transformGeometryToMapWithCRS( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, InputMapSettings *targetSettings )
