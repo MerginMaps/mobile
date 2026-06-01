@@ -39,13 +39,20 @@ jobs:
         with:
           path: mm
 
+      - name: Update package repositories
+        run: |
+            sudo apt-get update -y
+
       - name: Free disk space
         uses: insightsengineering/disk-space-reclaimer@v1
 
       - name: Install build dependencies
         run: |
             # remove enzu mirror, which was breaking the CI build
+            echo "----apt-mirrors.txt-----"
             cat /etc/apt/apt-mirrors.txt
+            echo "----sources.list-----"
+            cat /etc/apt/sources.list
             sudo apt-get update -y
 
             sudo apt-get install -y \
