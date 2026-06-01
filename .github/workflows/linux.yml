@@ -39,10 +39,6 @@ jobs:
         with:
           path: mm
 
-      - name: Update package repositories
-        run: |
-            sudo apt-get update -y
-
       - name: Free disk space
         uses: insightsengineering/disk-space-reclaimer@v1
 
