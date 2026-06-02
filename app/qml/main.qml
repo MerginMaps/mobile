@@ -52,10 +52,13 @@ ApplicationWindow {
 
   title: "Mergin Maps" // Do not translate
 
-  readonly property bool isPortraitOrientation: ( Screen.primaryOrientation === Qt.PortraitOrientation
-                                                 || Screen.primaryOrientation === Qt.InvertedPortraitOrientation )
-
-  onIsPortraitOrientationChanged: recalculateSafeArea()
+  // Qt 6.9+ ApplicationWindow automatically adds safe area margins as padding to its
+  // contentItem. Since this app manages safe areas manually via __style,
+  // we override the automatic padding to avoid double-applying the insets.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
 
   // start window where it was closed last time
   onXChanged: storeWindowPosition()
@@ -1228,31 +1231,6 @@ ApplicationWindow {
     else {
       closeAppTimer.start()
       __notificationModel.addInfo( qsTr( "Press back again to quit the app" ) )
-    }
-  }
-
-  function recalculateSafeArea() {
-    let safeArea = []
-
-    // Should be merged in future with the same code in main.cpp
-    if ( Qt.platform.os === "ios" ) {
-      safeArea = Array.from( __iosUtils.getSafeArea() )
-    }
-    else if ( Qt.platform.os === "android" ) {
-      safeArea = Array.from( __androidUtils.getSafeArea() )
-
-      // Values from Android API must be divided by dpr
-      safeArea[0] = safeArea[0] / Screen.devicePixelRatio
-      safeArea[1] = safeArea[1] / Screen.devicePixelRatio
-      safeArea[2] = safeArea[2] / Screen.devicePixelRatio
-      safeArea[3] = safeArea[3] / Screen.devicePixelRatio
-    }
-
-    if ( safeArea.length === 4 ) {
-      __style.safeAreaTop = safeArea[0]
-      __style.safeAreaRight = safeArea[1]
-      __style.safeAreaBottom = safeArea[2]
-      __style.safeAreaLeft = safeArea[3]
     }
   }
 

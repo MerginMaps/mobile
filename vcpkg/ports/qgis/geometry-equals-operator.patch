@@ -1,0 +1,21 @@
+diff --git a/src/core/geometry/qgsgeometry.h b/src/core/geometry/qgsgeometry.h
+index 98e40e74e14..06fa2a78ddd 100644
+--- a/src/core/geometry/qgsgeometry.h
++++ b/src/core/geometry/qgsgeometry.h
+@@ -177,6 +177,16 @@ class CORE_EXPORT QgsGeometry
+      */
+     QgsGeometry &operator=( QgsGeometry const &rhs ) SIP_SKIP;
+ 
++    /**
++     * Upstream QgsGeometry is missing equals operator overload and uses equals() to correctly check for equality.
++     * However QML in Qt 6.9+ also checks equality, before firing onChanged signal. The incorrect equality evaluation
++     * is breaking property bindings.
++     */
++    bool operator==( const QgsGeometry &rhs ) const
++    {
++      return equals( rhs );
++    }
++
+     /**
+      * Creates a geometry from an abstract geometry object. Ownership of
+      * geom is transferred.

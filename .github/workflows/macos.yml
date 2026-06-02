@@ -19,11 +19,10 @@ on:
       - published
 
 env:
-  CMAKE_VERSION: '3.31.6'
+  CMAKE_VERSION: '4.3.2'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: '${{ github.workspace }}/vcpkg'
-  XC_VERSION: ${{ '16.4' }}
-  DEPLOYMENT_TARGET: '11.0'
+  XC_VERSION: ${{ '26.4.1' }}
   TRIPLET: arm64-osx
 
 concurrency:
@@ -33,7 +32,7 @@ concurrency:
 jobs:
   macos_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -54,7 +53,7 @@ jobs:
           cmakeVersion: ${{ env.CMAKE_VERSION }}
 
       - name: Setup XCode
-        uses: maxim-lobanov/setup-xcode@v1.6.0
+        uses: maxim-lobanov/setup-xcode@v1.7.0
         with:
           xcode-version: ${{ env.XC_VERSION }}
 

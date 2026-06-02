@@ -35,3 +35,4 @@ diff --color -Naur a/src/CMakeLists.txt b/src/CMakeLists.txt
  add_subdirectory(3rdparty/clipper)
  add_subdirectory(3rdparty/clip2tri)
  add_subdirectory(positioning)
+ 

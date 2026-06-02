@@ -17,10 +17,6 @@ on:
     types:
       - published
 
-env:
-  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  CACHE_VERSION: 0
-  
 jobs:
   code_style_cpp:
     name: C++ code convention check

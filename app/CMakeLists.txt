@@ -190,6 +190,7 @@ set(MM_HDRS
     workspacesmodel.h
     workspacesproxymodel.h
     mmstyle.h
+    mmtypeutils.h
 )
 
 if (NOT WIN32)
@@ -439,7 +440,7 @@ if (IOS)
       PROPERTIES XCODE_ATTRIBUTE_PROVISIONING_PROFILE_SPECIFIER
                  "LutraConsultingLtd.Input.AppStore"
                  XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY
-                 "iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
+                 "Apple Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)"
                  XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Manual"
     )
     message(STATUS "Using manual code sign with production certificate")
@@ -483,6 +484,10 @@ target_link_libraries(
          Qt6::Multimedia
          Qt6::Widgets
 )
+
+if (ANDROID)
+  target_link_libraries(MerginMaps PRIVATE Qt6::CorePrivate)
+endif ()
 
 if (HAVE_BLUETOOTH)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
@@ -564,6 +569,21 @@ endif ()
 
 if (IOS OR MACOS)
   target_link_libraries(MerginMaps PUBLIC Tasn1::Tasn1)
+endif ()
+
+if (IOS)
+  # GDAL's gets compiled with the iOS SDK's iconv.h, so it references
+  # _iconv/_iconv_open/_iconv_close. Vcpkg's Iconv::Iconv resolves to libiconv.a which
+  # only exports _libiconv* (GNU names). Link the system libiconv.tbd explicitly so the
+  # linker can find the BSD-named symbols.
+  execute_process(
+    COMMAND xcrun --sdk iphoneos --show-sdk-path
+    OUTPUT_VARIABLE MM_IOS_SDK_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET
+  )
+  if (MM_IOS_SDK_PATH AND EXISTS "${MM_IOS_SDK_PATH}/usr/lib/libiconv.tbd")
+    target_link_libraries(MerginMaps PRIVATE "${MM_IOS_SDK_PATH}/usr/lib/libiconv.tbd")
+  endif ()
 endif ()
 
 if (ANDROID)

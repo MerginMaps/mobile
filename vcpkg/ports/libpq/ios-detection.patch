@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index 34456b36bbf..ed64e289512 100644
+--- a/meson.build
++++ b/meson.build
+@@ -189,6 +189,9 @@ elif host_system == 'android'
+   # while android isn't quite a normal linux, it seems close enough
+   # for our purposes so far
+   host_system = 'linux'
++elif host_system == 'ios'
++  # map iOS as darwin
++  host_system = 'darwin'
+ endif
+ 
+ # meson's system names don't quite map to our "traditional" names. In some

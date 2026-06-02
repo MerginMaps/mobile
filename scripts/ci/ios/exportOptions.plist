@@ -14,7 +14,7 @@
 		<string>LutraConsultingLtd.Input.AppStore</string>
 	</dict>
 	<key>signingCertificate</key>
-    <string>iPhone Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)</string>
+    <string>Apple Distribution: LUTRA CONSULTING LIMITED (79QMH2QRAH)</string>
     <key>signingStyle</key>
     <string>manual</string>
     <key>teamID</key>

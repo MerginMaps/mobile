@@ -1,10 +1,8 @@
 - Geodiff - no official port in vcpkg
-- libb2 - bug, see: https://github.com/microsoft/vcpkg/issues/43326#issuecomment-2827154631
-- qca - we needed 2.3.9, there is 2.3.7 in main repo
+- pcre2 - patch missing `_init`/`_fini` symbols causing lld linker errors on Android
+- libpq - ios fix for OS detection, we change the detected OS to darwin
+- libspatialite - fix build failing on racing condition for ios builds, force sequential build for some directories
+- qca - we needed 2.3.10, there is 2.3.7 in main repo
 - qgis - no official port in vcpkg
-- qtbase - https://github.com/microsoft/vcpkg/issues/39832#issuecomment-2221449238
-- qtdeclarative - unknown
-- qtkeychain-qt6 - official port uses qt5
-- qtmultimedia - unknown
-- qtpositioning - unknown
-- gstreamer - unknown (linux build ffmpeg?)
+- qtdeclarative - optimization to decrease package size
+- qtpositioning - Android service fix & iOS orthometric position hack

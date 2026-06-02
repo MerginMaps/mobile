@@ -1,6 +1,6 @@
 {
     "name": "qgis",
-    "version": "3.40.4",
+    "version": "3.44.10",
     "port-version": 0,
     "homepage": "https://qgis.org",
     "description": "QGIS is a free, open source, cross platform (lin/win/mac) geographical information system (GIS)",

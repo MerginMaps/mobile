@@ -146,7 +146,7 @@ QgsVectorLayer *ProjectWizard::createTrackingLayer( const QString &trackingGpkgP
   symbolProps["line_width_unit"] = "MM";
   symbolProps["line_color"] = QgsSymbolLayerUtils::encodeColor( QColor( "#FFA500" ) );
 
-  layer->setRenderer( new QgsSingleSymbolRenderer( QgsLineSymbol::createSimple( symbolProps ) ) );
+  layer->setRenderer( new QgsSingleSymbolRenderer( QgsLineSymbol::createSimple( symbolProps ).release() ) );
 
   layer->setReadOnly( false );
   layer->setFlags( QgsMapLayer::Identifiable | QgsMapLayer::Searchable | QgsMapLayer::Removable );

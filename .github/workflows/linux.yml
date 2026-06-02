@@ -20,7 +20,7 @@ on:
       - published
 
 env:
-  CMAKE_VERSION: '3.31.6'
+  CMAKE_VERSION: '4.3.2'
   VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
   VCPKG_ROOT: "${{ github.workspace }}/vcpkg"
   TRIPLET: x64-linux
@@ -32,25 +32,28 @@ concurrency:
 jobs:
   linux_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           path: mm
 
-      - name: Free Disk Space
-        uses: jlumbroso/free-disk-space@main
+      - name: Free disk space
+        uses: insightsengineering/disk-space-reclaimer@v1
 
-      - name: Install Build Dependencies
+      - name: Install build dependencies
         run: |
+            # remove enzu mirror, which was breaking the CI build
+            sudo rm /etc/apt/sources.list
             sudo apt-get update -y
 
             sudo apt-get install -y \
-            gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa libegl1-mesa-dev \
+            gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa-dev \
             libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
-            autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2 \
-            bison flex lcov nasm libxrandr-dev xvfb
+            autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2t64 \
+            lcov nasm libxrandr-dev mono-complete xvfb libltdl-dev libwayland-dev libwayland-egl-backend-dev \
+            wayland-protocols
             
             # Required to run unit tests on linux
             echo "QT_QPA_PLATFORM=offscreen" >> $GITHUB_ENV
@@ -72,13 +75,13 @@ jobs:
             -k "$MERGINSECRETS_DECRYPT_KEY" \
             -md md5
 
-      - name: ccache
+      - name: Ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
 
-      - name: Install vcpkg
+      - name: Install VCPKG
         shell: bash
         run: |
           mkdir -p "${{ env.VCPKG_ROOT }}"
@@ -92,10 +95,12 @@ jobs:
           chmod +x ./bootstrap-vcpkg.sh
           ./bootstrap-vcpkg.sh
 
-      - name: Setup NuGet Credentials
+      - name: Setup NuGet credentials
         shell: bash
         run: |
-          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+          ${{ env.VCPKG_ROOT }}/vcpkg fetch nuget
+          
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | head -n 1` \
             sources add \
             -source "https://nuget.pkg.github.com/merginmaps/index.json" \
             -storepasswordincleartext \
@@ -103,7 +108,7 @@ jobs:
             -username "mergin-maps-bot" \
             -password "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}"
 
-          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1` \
+          mono `${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | head -n 1` \
             setapikey "${{ secrets.MERGIN_MAPS_BOT_GITHUB_TOKEN }}" \
             -source "https://nuget.pkg.github.com/merginmaps/index.json"
 
@@ -114,7 +119,7 @@ jobs:
 
             echo "Version code: ${BUILD_NUM}"
 
-      - name: build app (debug)
+      - name: Build app (debug)
         run: |
           mkdir -p build-mm-db
           cd build-mm-db
@@ -133,20 +138,20 @@ jobs:
 
           ninja
 
-      - name: run tests
+      - name: Run tests
         env: 
           QT_QPA_PLATFORM: "offscreen"  
         run: |
           cd build-mm-db/
           xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure
 
-      - name: build lcov summary
+      - name: Build lcov summary
         run: |
           cd build-mm-db
 
           lcov --directory . --capture --output-file coverage.info
 
-          lcov --remove coverage.info '*/vcpkg_installed/*' '*Qt/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '/Applications/*' '/opt/*' '*build-mm-db/*' --output-file coverage.info
+          lcov --remove coverage.info '*/vcpkg_installed/*' '*/merginsecrets.cpp' '*/test/*' '/usr/*' '*build-mm-db/*' --output-file coverage.info
           lcov --list coverage.info
 
       - name: Coveralls
@@ -154,8 +159,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: build-mm-db/coverage.info
+          fail-on-error: false
 
-      - name: build app
+      - name: Build app (release)
         run: |
           mkdir -p install-mm
           mkdir -p build-mm
@@ -175,13 +181,13 @@ jobs:
           ninja
           ninja install
 
-      - name: Get TimeStamp
+      - name: Get timestamp
         id: time
         uses: josStorer/get-current-time@v2.0.2
         with:
           format: 'YYYYMMDD'
 
-      - name: package app
+      - name: Package app
         run: |
           MM_TAR=input-${{ env.MM_VERSION_CODE }}-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.tar.gz
           echo "MM_TAR=${MM_TAR}" >> $GITHUB_ENV
@@ -190,7 +196,7 @@ jobs:
           find .
           tar -c -z -f ${{ github.workspace }}/${MM_TAR} ./
 
-      - name: Upload Sdk in Artifacts
+      - name: Upload app to artifacts
         uses: actions/upload-artifact@v6
         with:
           path: ${{ github.workspace }}/${{ env.MM_TAR }}
