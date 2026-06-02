@@ -607,8 +607,9 @@ if (ANDROID)
   endif ()
 
   set_property(
-    TARGET MerginMaps APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
-                               ${OpenSSL_CRYPTO_LIBRARY}
+    TARGET MerginMaps
+    APPEND
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY} ${OpenSSL_CRYPTO_LIBRARY}
   )
 endif ()
 
