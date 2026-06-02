@@ -653,9 +653,16 @@ e.g. ` ./MerginMaps --testMerginApi`
  - Squish for Qt for iOS
  - Squish for Qt (Windows/Mac/Linux), this should also include the Squish IDE
 
-### Android
-After you unpack both (Qt & Qt for Android) and install Squish IDE, add another cmake argument `-DSquishQtBuiltinHook_ROOT=/<path>/<to>/<squish-for-android>/<directory>/`.
-This will build the apk with squish hook inside. You can verify that squish is working by finding these lines in log after startup:
+### Android & iOS
+After you unpack both (Qt & Qt for Android / iOS) and install Squish IDE, add these cmake arguments
+```cmake
+-DSQUISH_PATH=/<path>/<to>/<squish-for-android-or-ios>/<directory>/
+-DCMAKE_FIND_ROOT_PATH=/<path>/<to>/<squish-for-android-or-ios>/<directory>/
+-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH
+```
+This will build the app with squish hook inside. You can verify that squish is working by finding these lines in log after startup:
+
+##### Android log
 ```shell
 I/Squish  (26459): Setting SQUISH_PREFIX to '/data/data/uk.co.lutraconsulting'
 I/Squish  (26459): libMerginMaps_arm64-v8a.so[26459]: Loading Qt Wrapper configuration from ":/squish/etc/qtwrapper.ini"
@@ -663,14 +670,7 @@ I/Squish  (26459): libMerginMaps_arm64-v8a.so[26459]: QObject lifetime tracking 
 I/Squish  (26459): libMerginMaps_arm64-v8a.so[26459]: Listening on port 7757 for incoming connections
 ```
 
-### iOS
-After you unpack both (Qt & Qt for iOS) and install Squish IDE, add these cmake arguments
-```cmake
--DSquishQtBuiltinHook_ROOT=/<path>/<to>/<squish-for-ios>/<directory>/
--DCMAKE_FIND_ROOT_PATH=/<path>/<to>/<squish-for-ios>/<directory>/
--DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH
-```
-This will build the app with squish hook inside. You can verify that squish is working by finding these lines in log after startup:
+##### iOS log
 ```shell
 MerginMaps[834]: Loading Qt Wrapper configuration from ":/squish/etc/qtwrapper.ini"
 MerginMaps[834]: QObject lifetime tracking is disabled
