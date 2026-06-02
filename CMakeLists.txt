@@ -158,7 +158,8 @@ set(MM_VERSION_CODE
 if (DEFINED SQUISH_PATH)
   set(SquishQtBuiltinHook_ROOT
       ${SQUISH_PATH}
-      CACHE PATH "Path to directory with Squish hook and libraries")
+      CACHE PATH "Path to directory with Squish hook and libraries"
+  )
 endif ()
 
 mm_detect_version()
