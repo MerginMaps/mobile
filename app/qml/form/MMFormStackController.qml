@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import MMInput
+import "../components"
 
 Item {
   id: root

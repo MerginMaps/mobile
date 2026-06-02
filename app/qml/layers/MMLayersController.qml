@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
-import MMInput
 
 import "../components"
 import "../inputs"

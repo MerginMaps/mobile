@@ -15,13 +15,5 @@ import QtQuick.Controls
 StackView {
   id: root
 
-  onEmptyChanged: function() {
-    visible = !empty
-  }
-
-  Component.onCompleted: {
-    if (empty) {
-      visible = false
-    }
-  }
+  visible: !empty
 }
