@@ -12,7 +12,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 
 CheckBox {
-  id: control
+  id: root
 
   property alias sourceIcon: icon.source
   property alias description: descriptionText.text
@@ -21,28 +21,28 @@ CheckBox {
 
   readonly property int baseHeight: small ? 50 : 80
 
-  height: control.baseHeight * __dp
+  height: baseHeight * __dp
   implicitWidth: leftPadding + titleText.implicitWidth + rightPadding
 
-  topPadding: Math.max(0, (height - contentColumn.implicitHeight) / 2)
+  topPadding: Math.max( 0, ( height - contentColumn.implicitHeight ) / 2 )
   bottomPadding: topPadding
   leftPadding: iconBgRectangle.x + iconBgRectangle.width + 20 * __dp
   rightPadding: 20 * __dp
 
   indicator: Rectangle {
     id: iconBgRectangle
-    implicitWidth: (small ? 24 : 40) * __dp
-    implicitHeight: (small ? 24 : 40) * __dp
+    implicitWidth: ( root.small ? 24 : 40 ) * __dp
+    implicitHeight: ( root.small ? 24 : 40 ) * __dp
     x: 20 * __dp
-    y: control.height / 2 - height / 2
+    y: root.height / 2 - height / 2
     radius: width / 2
-    color: control.checked ? __style.polarColor : __style.lightGreenColor
+    color: root.checked ? __style.polarColor : __style.lightGreenColor
 
     MMIcon {
       id: icon
-      size: small ? __style.icon16 : __style.icon24
+      size: root.small ? __style.icon16 : __style.icon24
       anchors.centerIn: parent
-      source: control.sourceIcon
+      source: root.sourceIcon
       color: __style.forestColor
     }
   }
@@ -54,18 +54,18 @@ CheckBox {
     Text {
       id: titleText
       width: parent.width
-      text: control.text
+      text: root.text
       font: __style.t3
-      color: control.checked ? __style.polarColor : __style.nightColor
+      color: root.checked ? __style.polarColor : __style.nightColor
       elide: Text.ElideRight
     }
 
     Text {
       id: descriptionText
-      visible: text !== ""
+      visible: text
       width: parent.width
       font: __style.p6
-      color: control.checked ? __style.polarColor : __style.nightColor
+      color: root.checked ? __style.polarColor : __style.nightColor
       wrapMode: Text.Wrap
       maximumLineCount: 2
     }
@@ -73,7 +73,7 @@ CheckBox {
 
   background: Rectangle {
     radius: __style.radius12
-    color: control.checked ? __style.forestColor : __style.polarColor
-    border.color: showBorder && !control.checked ? __style.mediumGreenColor : __style.transparentColor
+    color: root.checked ? __style.forestColor : __style.polarColor
+    border.color: root.showBorder && !root.checked ? __style.mediumGreenColor : __style.transparentColor
   }
 }
