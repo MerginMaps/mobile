@@ -136,7 +136,7 @@ Steps to build and run mobile app:
          libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
          autoconf-archive libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libfuse2t64 \
          lcov nasm libxrandr-dev mono-complete xvfb libltdl-dev libwayland-dev libwayland-egl-backend-dev \
-         wayland-protocols
+         wayland-protocols bison flex
    ```
 
    Also install CMake, Ninja and ccache
