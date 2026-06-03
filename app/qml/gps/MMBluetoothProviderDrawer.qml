@@ -6,10 +6,12 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtCore
 import QtQuick
-import QtQuick.Controls
+import QtQml
+
 import mm 1.0 as MM
 
 import "../components" as MMComponents
@@ -56,17 +58,21 @@ MMComponents.MMListDrawer {
   }
 
   list.delegate: MMComponents.MMListDelegate {
-    text: model.DeviceName ? model.DeviceName : qsTr("Unknown device")
-    secondaryText: model.DeviceAddress
+    id: deviceDelegate
+    required property string deviceName
+    required property string deviceAddress
+
+    text: deviceName ? deviceName : qsTr("Unknown device")
+    secondaryText: deviceAddress
 
     rightContent: MMComponents.MMRoundButton {
       bgndColor: __style.lightGreenColor
       iconSource: __style.plusIcon
 
-      onClicked: root.initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
+      onClicked: root.initiatedConnectionTo( deviceDelegate.deviceAddress, deviceDelegate.deviceName )
     }
 
-    onClicked: root.initiatedConnectionTo( model.DeviceAddress, model.DeviceName )
+    onClicked: root.initiatedConnectionTo( deviceAddress, deviceName )
   }
 
   list.footer: btModel.discovering ? discoveringMessageComponent : null
