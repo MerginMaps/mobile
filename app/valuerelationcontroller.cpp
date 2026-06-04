@@ -41,7 +41,7 @@ QStringList ValueRelationController::qgisFormatToArray( const QVariant &qgsValue
 {
   if ( !mIsInitialized )
   {
-    CoreUtils::log(  "Value Relation", "Attempted to convert QGIS format to array, but the class is not initialized!" );
+    CoreUtils::log( u"Value Relation"_s, u"Attempted to convert QGIS format to array, but the class is not initialized!"_s );
     return {};
   }
 
@@ -65,7 +65,7 @@ QString ValueRelationController::arrayToQgisFormat( const QStringList &keys ) co
 {
   if ( !mIsInitialized )
   {
-    CoreUtils::log(  "Value Relation", "Attempted to convert array to QGIS format, but the class is not initialized!" );
+    CoreUtils::log( u"Value Relation"_s, u"Attempted to convert array to QGIS format, but the class is not initialized!"_s );
     return {};
   }
 
@@ -79,7 +79,7 @@ QString ValueRelationController::arrayToQgisFormat( const QStringList &keys ) co
   }
   else
   {
-    return keys.at(0);
+    return keys.at( 0 );
   }
 }
 
@@ -102,7 +102,7 @@ void ValueRelationController::lookupDisplayTextAsync( const QString &currentValu
 {
   if ( !mIsInitialized || !mTargetLayer )
   {
-    CoreUtils::log(  "Value Relation", "Called lookupDisplayTextAsync, but the class is not initialized or layer is invalid!" );
+    CoreUtils::log( u"Value Relation"_s, u"Called lookupDisplayTextAsync, but the class is not initialized or layer is invalid!"_s );
     return;
   }
 
@@ -334,12 +334,12 @@ bool ValueRelationController::isMultiSelection() const
   return mIsMultiSelection;
 }
 
-const QString& ValueRelationController::displayText() const
+const QString &ValueRelationController::displayText() const
 {
   return mDisplayText;
 }
 
-void ValueRelationController::setDisplayText( const QString& newText )
+void ValueRelationController::setDisplayText( const QString &newText )
 {
   if ( mDisplayText != newText )
   {

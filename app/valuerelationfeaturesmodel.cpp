@@ -120,7 +120,7 @@ void ValueRelationFeaturesModel::setup()
 
   if ( vLayer->fields().indexOf( keyFieldName ) < 0 || vLayer->fields().indexOf( valueFieldName ) < 0 )
   {
-    CoreUtils::log( u"ValueRelationFeaturesModel"_s ,u"Missing referenced fields for value relations."_s );
+    CoreUtils::log( u"ValueRelationFeaturesModel"_s, u"Missing referenced fields for value relations."_s );
     return;
   }
 

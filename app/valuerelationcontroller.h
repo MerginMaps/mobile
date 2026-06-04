@@ -34,9 +34,10 @@ class ValueRelationController : public QObject
 
   public:
 
-    enum LookupReason {
-        ValueChanged = 0,
-        HotReload
+    enum LookupReason
+    {
+      ValueChanged = 0,
+      HotReload
     };
     Q_ENUM( LookupReason );
 
@@ -79,7 +80,7 @@ class ValueRelationController : public QObject
     void setIsEditable( bool newIsEditable );
 
     bool isMultiSelection() const;
-    const QString& displayText() const;
+    const QString &displayText() const;
 
   signals:
     void invalidateSelection(); // the value should reset as it is longer available (due to drill-down forms)
