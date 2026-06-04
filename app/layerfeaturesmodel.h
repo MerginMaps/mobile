@@ -127,7 +127,7 @@ class LayerFeaturesModel : public FeaturesModel
     QgsVectorLayer *mLayer = nullptr;
 
     QAtomicInt mNextSearchId = 0;
-    QHash<int, QgsFeedback*> mFeedbacks; //!< feedback objects parented to this
+    QHash<int, QgsFeedback *> mFeedbacks; //!< feedback objects parented to this
     QHash<int, QFutureWatcher<SearchResultData>*> mSearchResultWatchers; //!< future watcher objects parented to this
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
