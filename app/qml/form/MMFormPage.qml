@@ -321,7 +321,7 @@ Page {
 
         property var fieldActiveProject: root.project
         property var fieldAssociatedRelation: model.Relation
-        property var fieldFeatureLayerPair: root.controller.featureLayerPair
+        property MM.AttributeController fieldController: root.controller
         property string fieldHomePath: root.project ? root.project.homePath : "" // for photo editor
 
         property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && root.state === "add" && model.EditorWidget !== "Hidden" && Type === MM.FormItem.Field
@@ -372,19 +372,11 @@ Page {
       Connections {
         target: root.controller
 
-        // Important for relation form editors // <--- TODO: remove me if all works, unused
-        function onFeatureLayerPairChanged() {
-          if ( formEditorsLoader.item && formEditorsLoader.item.featureLayerPairChanged )
-          {
-            formEditorsLoader.item.featureLayerPairChanged()
-          }
-        }
-
         // Important for value relation form editors
         function onFormRecalculated() {
-          if ( formEditorsLoader.item && formEditorsLoader.item.reload )
+          if ( formEditorsLoader.item && formEditorsLoader.item.hotReload )
           {
-            formEditorsLoader.item.reload()
+            formEditorsLoader.item.hotReload()
           }
         }
       }
