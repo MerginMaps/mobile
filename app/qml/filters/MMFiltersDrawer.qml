@@ -61,12 +61,6 @@ MMComponents.MMDrawer {
     bgndColorHover: __style.grapeColor
     fontColorHover: __style.negativeLightColor
 
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter: parent.verticalCenter
-    }
-
     onClicked: {
       internal.filterValues = {}
 

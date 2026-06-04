@@ -34,15 +34,9 @@ MMComponents.MMDrawer {
     PropertyAnimation { properties: "implicitHeight"; easing.type: Easing.InOutQuad }
   }
 
-  drawerHeader.topLeftItemContent: Row{
+  drawerHeader.topLeftItemContent: Row {
     width: parent.width - 2 * __style.pageMargins
     spacing: __style.margin12
-    anchors{
-      left: parent.left
-      leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter: parent.verticalCenter
-      rightMargin: __style.pageMargins + __style.safeAreaRight
-    }
     
     MMComponents.MMRoundButton {
       iconSource: __style.undoIcon
@@ -69,7 +63,7 @@ MMComponents.MMDrawer {
       iconColor: root.sketchingController?.eraserActive ? __style.grassColor : __style.forestColor
 
       onClicked: {
-        if(root.sketchingController)
+        if ( root.sketchingController )
         {
           root.sketchingController.eraserActive = true
           root.sketchingController.activeColor = null
@@ -78,13 +72,12 @@ MMComponents.MMDrawer {
     }
   }
 
-  drawerContent: 
-    ColumnLayout{
+  drawerContent: ColumnLayout {
 
       width: parent.width
       spacing: __style.margin2
       
-      MMComponents.MMColorPicker{
+      MMComponents.MMColorPicker {
         id: colorPicker
         colors: root.sketchingController?.availableColors() ?? __style.photoSketchingWhiteColor
 
@@ -92,7 +85,7 @@ MMComponents.MMDrawer {
         Layout.maximumWidth: parent.width
 
         onActiveColorChanged: {
-          if(root.sketchingController)
+          if ( root.sketchingController )
           {
             root.sketchingController.activeColor = colorPicker.activeColor
             root.sketchingController.eraserActive = false
@@ -100,7 +93,8 @@ MMComponents.MMDrawer {
         }
       }
     }
-    MMComponents.MMListSpacer{
+
+    MMComponents.MMListSpacer {
       height: 2
     }
 }
