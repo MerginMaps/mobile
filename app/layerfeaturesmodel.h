@@ -12,6 +12,7 @@
 
 #include <QFutureWatcher>
 #include <QAtomicInt>
+#include <QHash>
 
 #include "qgsvectorlayer.h"
 #include "featurelayerpair.h"
@@ -88,7 +89,7 @@ class LayerFeaturesModel : public FeaturesModel
     void layerFeaturesCountChanged( int layerFeaturesCount );
 
     //! \a isFetching is TRUE when still fetching results, FALSE when done fetching
-    bool fetchingResultsChanged( bool isFetching );
+    void fetchingResultsChanged( bool isFetching );
 
   protected:
 
@@ -104,13 +105,21 @@ class LayerFeaturesModel : public FeaturesModel
     void onFutureFinished();
 
   private:
+    struct SearchResultData
+    {
+      int searchId;
+      QgsFeatureList features;
+    };
+
     QString buildSearchExpression();
 
     //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
-    QgsFeatureList fetchFeatures( QgsVectorLayerFeatureSource *layer, QgsFeatureRequest req, int searchId );
+    static SearchResultData fetchFeatures( QgsVectorLayerFeatureSource *layer, const QgsFeatureRequest &req, int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
+
+    void cancelPendingRequests();
 
     const int FEATURES_LIMIT = 10000; //!< Number of maximum features loaded from layer
 
@@ -118,11 +127,10 @@ class LayerFeaturesModel : public FeaturesModel
     QgsVectorLayer *mLayer = nullptr;
 
     QAtomicInt mNextSearchId = 0;
-    QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
+    QHash<int, QgsFeedback*> mFeedbacks; //!< feedback objects parented to this
+    QHash<int, QFutureWatcher<SearchResultData>*> mSearchResultWatchers; //!< future watcher objects parented to this
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
-
-    std::unique_ptr<QgsFeedback> mFeedback;
 
     friend class TestModels;
 };

@@ -23,14 +23,15 @@ LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   : FeaturesModel( parent ),
     mLayer( nullptr )
 {
-  mFeedback = std::make_unique<QgsFeedback>();
-  connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &LayerFeaturesModel::onFutureFinished );
 }
 
 LayerFeaturesModel::~LayerFeaturesModel()
 {
   // cancel any long running request
-  mFeedback->cancel();
+  cancelPendingRequests();
+
+  for ( auto w : std::as_const( mSearchResultWatchers ) )
+    w->waitForFinished();
 }
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
@@ -73,6 +74,8 @@ void LayerFeaturesModel::populate()
 {
   if ( mLayer )
   {
+    cancelPendingRequests();
+
     mFetchingResults = true;
     emit fetchingResultsChanged( mFetchingResults );
     beginResetModel();
@@ -82,26 +85,31 @@ void LayerFeaturesModel::populate()
     QgsFeatureRequest req;
     setupFeatureRequest( req );
 
-    req.setFeedback( mFeedback.get() );
+    const int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
+    QgsFeedback *feedback = new QgsFeedback( this );
+    mFeedbacks[ searchId ] = feedback;
+    req.setFeedback( feedback );
 
-    int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
+    QFutureWatcher<SearchResultData> *watcher = new QFutureWatcher<SearchResultData>( this );
+    mSearchResultWatchers[ searchId ] = watcher;
+    connect( watcher, &QFutureWatcher<SearchResultData>::finished, this, &LayerFeaturesModel::onFutureFinished );
+
     QgsVectorLayerFeatureSource *source = new QgsVectorLayerFeatureSource( mLayer );
-    mSearchResultWatcher.setFuture( QtConcurrent::run( &LayerFeaturesModel::fetchFeatures, this, source, req, searchId ) );
+    watcher->setFuture( QtConcurrent::run( &LayerFeaturesModel::fetchFeatures, source, req, searchId ) );
   }
 }
 
-QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, QgsFeatureRequest req, int searchId )
+LayerFeaturesModel::SearchResultData LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, const QgsFeatureRequest &req, int searchId )
 {
   std::unique_ptr<QgsVectorLayerFeatureSource> fs( source );
   QgsFeatureList fl;
 
   // a search might have been queued if no threads were available in the pool, so we also
   // check if canceled before we start as the first iteration can potentially be slow
-  bool canceled = searchId + 1 != mNextSearchId.loadAcquire();
-  if ( canceled )
+  if ( req.feedback()->isCanceled() )
   {
-    qDebug() << QString( "Search (%1) was cancelled before it started!" ).arg( searchId );
-    return fl;
+    qDebug() << QStringLiteral( "Search (%1) was cancelled before it started!" ).arg( searchId );
+    return { searchId, fl };
   }
 
   QElapsedTimer t;
@@ -111,12 +119,6 @@ QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *s
 
   while ( it.nextFeature( f ) )
   {
-    if ( searchId + 1 != mNextSearchId.loadAcquire() )
-    {
-      canceled = true;
-      break;
-    }
-
     if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
     {
       continue; // ignore uncommited features
@@ -125,27 +127,44 @@ QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *s
     fl.append( f );
   }
 
-  canceled = canceled || ( req.feedback() && req.feedback()->isCanceled() );
+  const bool canceled = req.feedback()->isCanceled();
 
-  qDebug() << QString( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? "was canceled" : "completed" ).arg( t.elapsed() ).arg( fl.count() );
-  return fl;
+  qDebug() << QStringLiteral( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? QStringLiteral( "was canceled" ) : QStringLiteral( "completed" ) ).arg( t.elapsed() ).arg( fl.count() );
+  return { searchId, fl };
 }
 
 void LayerFeaturesModel::onFutureFinished()
 {
-  QFutureWatcher<QgsFeatureList> *watcher = static_cast< QFutureWatcher<QgsFeatureList> *>( sender() );
-  const QgsFeatureList features = watcher->future().result();
-  beginResetModel();
-  mFeatures.clear();
-  for ( const auto &f : features )
+  QFutureWatcher<SearchResultData> *watcher = static_cast< QFutureWatcher<SearchResultData> *>( sender() );
+  const SearchResultData data = watcher->future().result();
+
+  mSearchResultWatchers.remove( data.searchId );
+  watcher->deleteLater();
+
+  QgsFeedback *feedback = mFeedbacks.take( data.searchId );
+  feedback->deleteLater();
+
+  // We ignore the results of cancelled requests
+  if ( !feedback->isCanceled() )
   {
-    mFeatures << FeatureLayerPair( f, mLayer );
+    const QgsFeatureList features = data.features;
+    beginResetModel();
+    mFeatures.clear();
+    for ( const auto &f : features )
+    {
+      mFeatures.emplaceBack( f, mLayer );
+    }
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
+    emit countChanged( rowCount() );
+    endResetModel();
   }
-  emit layerFeaturesCountChanged( layerFeaturesCount() );
-  emit countChanged( rowCount() );
-  endResetModel();
-  mFetchingResults = false;
-  emit fetchingResultsChanged( mFetchingResults );
+
+  // Only fire signal if that was the latest request
+  if ( data.searchId + 1 == mNextSearchId.loadAcquire() )
+  {
+    mFetchingResults = false;
+    emit fetchingResultsChanged( mFetchingResults );
+  }
 }
 
 QString LayerFeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
@@ -177,6 +196,12 @@ QString LayerFeaturesModel::searchResultPair( const FeatureLayerPair &pair ) con
   }
 
   return foundPairs.join( ", " );
+}
+
+void LayerFeaturesModel::cancelPendingRequests()
+{
+  for ( auto fb : std::as_const( mFeedbacks ) )
+    fb->cancel();
 }
 
 QString LayerFeaturesModel::buildSearchExpression()
@@ -256,6 +281,7 @@ int LayerFeaturesModel::layerFeaturesCount() const
 
 void LayerFeaturesModel::reset()
 {
+  cancelPendingRequests();
   mFeatures.clear();
   mLayer = nullptr;
   mSearchExpression.clear();
@@ -285,6 +311,8 @@ void LayerFeaturesModel::setLayer( QgsVectorLayer *newLayer )
 {
   if ( mLayer != newLayer )
   {
+    cancelPendingRequests();
+
     if ( mLayer )
     {
       disconnect( mLayer );
