@@ -349,7 +349,6 @@ void initDeclarative()
   qmlRegisterType< InputMapCanvasMap >( "mm", 1, 0, "MapCanvasMap" );
   qmlRegisterType< InputMapSettings >( "mm", 1, 0, "MapSettings" );
   qmlRegisterType< InputMapTransform >( "mm", 1, 0, "MapTransform" );
-  qmlRegisterUncreatableType< AbstractPositionProvider >( "mm", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
   // map tools
   qmlRegisterUncreatableType< AbstractMapTool >( "mm", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );

@@ -201,11 +201,6 @@ void NetworkPositionProvider::reconnectTimeout()
   }
 }
 
-QString NetworkPositionProvider::getIpAddress() const
-{
-  return QStringLiteral( "%1:%2" ).arg( mTargetAddress, QString::number( mTargetPort ) );
-}
-
 void NetworkPositionProvider::reconnect()
 {
   mReconnectTimer.stop();

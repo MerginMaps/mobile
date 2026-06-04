@@ -8,9 +8,8 @@
  ***************************************************************************/
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import mm 1.0 as MM
+import QtQml
+
 import MMInput
 
 import "../components" as MMComponents
@@ -19,7 +18,7 @@ MMComponents.MMDrawer {
   id: root
 
   property string providerType: ""
-  property var positionProvider: PositionKit.positionProvider
+  property PositionProvider positionProvider: PositionKit.positionProvider
 
   property string connectingSuffixAnimation: ""
 
@@ -32,60 +31,56 @@ MMComponents.MMDrawer {
     states: [
       State {
         name: "working"
-        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connecting
+        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connecting
         PropertyChanges {
-          target: message
-          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
-          title: root.providerType === "network"
+          message.image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          message.title: root.providerType === "network"
             ? qsTr( "Connecting to external receiver" )
             : ( root.positionProvider.name()
                 ? qsTr( "Connecting to" ) + " " + root.positionProvider.name()
                 : qsTr( "Connecting" ) + root.connectingSuffixAnimation )
-          description: root.providerType === "bluetooth"
+          message.description: root.providerType === "bluetooth"
             ? qsTr( "You might be asked to pair your device during this process." )
-            : ( root.positionProvider.getIpAddress()
-                ? qsTr( "Connecting to" ) + " " + root.positionProvider.getIpAddress() + qsTr( ". You can close this panel, the app will continue in the background." )
+            : ( root.positionProvider.id()
+                ? qsTr( "Connecting to" ) + " " + root.positionProvider.id() + qsTr( ". You can close this panel, the app will continue in the background." )
                 : qsTr( "Connecting" ) + root.connectingSuffixAnimation )
-          linkText: ""
+          message.linkText: ""
         }
       },
       State {
         name: "success"
-        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.Connected
+        when: root.positionProvider && root.positionProvider.state === PositionProvider.Connected
         PropertyChanges {
-          target: message
-          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
-          title: qsTr( "Connected" )
-          description: ""
-          linkText: ""
+          message.image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          message.title: qsTr( "Connected" )
+          message.description: ""
+          message.linkText: ""
         }
       },
       State {
         name: "fail"
-        when: !root.positionProvider || root.positionProvider.state === MM.PositionProvider.NoConnection
+        when: !root.positionProvider || root.positionProvider.state === PositionProvider.NoConnection
         PropertyChanges {
-          target: message
-          image: __style.externalGpsRedImage
-          title: qsTr( "Failed to connect to" ) + " " + ( root.positionProvider
-            ? ( root.providerType === "network" ? root.positionProvider.getIpAddress() : root.positionProvider.name() )
+          message.image: __style.externalGpsRedImage
+          message.title: qsTr( "Failed to connect to" ) + " " + ( root.positionProvider
+            ? ( root.providerType === "network" ? root.positionProvider.id() : root.positionProvider.name() )
             : "" )
-          description: root.providerType === "bluetooth"
+          message.description: root.providerType === "bluetooth"
             ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
             : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
-          linkText: qsTr( "Learn more" )
+          message.linkText: qsTr( "Learn more" )
         }
       },
       State {
         name: "waitingToReconnect"
-        when: root.positionProvider && root.positionProvider.state === MM.PositionProvider.WaitingToReconnect
+        when: root.positionProvider && root.positionProvider.state === PositionProvider.WaitingToReconnect
         PropertyChanges {
-          target: message
-          image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
-          title: root.providerType === "bluetooth"
+          message.image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          message.title: root.providerType === "bluetooth"
             ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
             : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
-          description: root.positionProvider.stateMessage + "<br><br>" + qsTr( "You can close this message, we will try to repeatedly connect to your device." )
-          linkText: qsTr( "Learn more" )
+          message.description: root.positionProvider.stateMessage + "<br><br>" + qsTr( "You can close this message, we will try to repeatedly connect to your device." )
+          message.linkText: qsTr( "Learn more" )
         }
       }
     ]

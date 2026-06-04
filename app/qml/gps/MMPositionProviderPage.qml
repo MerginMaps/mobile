@@ -67,8 +67,8 @@ MMComponents.MMPage {
         }
         secondaryText: {
           if ( listdelegate.isActive ) {
-            if ( listdelegate.model.ProviderType === "external_ip" && typeof PositionKit.positionProvider.getIpAddress === "function" )
-              return PositionKit.positionProvider.stateMessage + " - " + PositionKit.positionProvider.getIpAddress()
+            if ( listdelegate.model.ProviderType === "external_ip" )
+              return PositionKit.positionProvider.stateMessage + " - " + PositionKit.positionProvider.id()
             return PositionKit.positionProvider.stateMessage
           }
           return listdelegate.model.ProviderDescription

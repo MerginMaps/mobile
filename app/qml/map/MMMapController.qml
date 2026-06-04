@@ -702,15 +702,15 @@ Item {
             }
             else if ( PositionKit.positionProvider.type().includes("external") )
             {
-              if ( PositionKit.positionProvider.state === MM.PositionProvider.Connecting )
+              if ( PositionKit.positionProvider.state === PositionProvider.Connecting )
               {
                 return qsTr( "Connecting to %1" ).arg( PositionKit.positionProvider.name() )
               }
-              else if ( PositionKit.positionProvider.state === MM.PositionProvider.WaitingToReconnect )
+              else if ( PositionKit.positionProvider.state === PositionProvider.WaitingToReconnect )
               {
                 return PositionKit.positionProvider.stateMessage
               }
-              else if ( PositionKit.positionProvider.state === MM.PositionProvider.NoConnection )
+              else if ( PositionKit.positionProvider.state === PositionProvider.NoConnection )
               {
                 return PositionKit.positionProvider.stateMessage
               }
