@@ -65,10 +65,10 @@ PositionProvidersModel::~PositionProvidersModel() = default;
 QHash<int, QByteArray> PositionProvidersModel::roleNames() const
 {
   QHash<int, QByteArray> roles;
-  roles.insert( DataRoles::ProviderName, QByteArray( "ProviderName" ) );
-  roles.insert( DataRoles::ProviderDescription, QByteArray( "ProviderDescription" ) );
-  roles.insert( DataRoles::ProviderType, QByteArray( "ProviderType" ) );
-  roles.insert( DataRoles::ProviderId, QByteArray( "ProviderId" ) );
+  roles.insert( DataRoles::ProviderName, QByteArray( "providerName" ) );
+  roles.insert( DataRoles::ProviderDescription, QByteArray( "providerDescription" ) );
+  roles.insert( DataRoles::ProviderType, QByteArray( "providerType" ) );
+  roles.insert( DataRoles::ProviderId, QByteArray( "providerId" ) );
   return roles;
 }
 

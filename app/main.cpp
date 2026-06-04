@@ -336,7 +336,6 @@ void initDeclarative()
   qmlRegisterType< ValueRelationFeaturesModel >( "mm", 1, 0, "ValueRelationFeaturesModel" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "mm", 1, 0, "BluetoothDiscoveryModel" );
-  qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );

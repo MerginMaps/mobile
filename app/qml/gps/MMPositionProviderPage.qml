@@ -6,10 +6,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQml
 
-import mm 1.0 as MM
 import MMInput
 
 import "../components" as MMComponents
@@ -34,7 +35,7 @@ MMComponents.MMPage {
 
       clip: true
 
-      model: MM.PositionProvidersModel {
+      model: PositionProvidersModel {
         id: providersModel
 
         appSettings: AppSettings
@@ -43,10 +44,13 @@ MMComponents.MMPage {
       delegate: MMComponents.MMListDelegate {
         id: listdelegate
 
-        required property var model
+        required property string providerName
+        required property string providerDescription
+        required property string providerType
+        required property string providerId
         required property int index
 
-        property bool isActive: AppSettings.activePositionProviderId === listdelegate.model.ProviderId
+        property bool isActive: AppSettings.activePositionProviderId === providerId
 
         leftContent: MMComponents.MMRadioButton {
           checked: listdelegate.isActive
@@ -56,47 +60,48 @@ MMComponents.MMPage {
             anchors.fill: parent
             onClicked: function( mouse ) {
               mouse.accepted = true
-              root.activateProvider( listdelegate.model.ProviderType, listdelegate.model.ProviderId, listdelegate.model.ProviderName )
+              root.activateProvider( listdelegate.providerType, listdelegate.providerId, listdelegate.providerName )
             }
           }
         }
 
         text: {
-          if ( listdelegate.model.ProviderName ) return listdelegate.model.ProviderName
+          if ( listdelegate.providerName ) return listdelegate.providerName
           return qsTr( "Unknown device" )
         }
         secondaryText: {
           if ( listdelegate.isActive ) {
-            if ( listdelegate.model.ProviderType === "external_ip" )
+            if ( listdelegate.providerType === "external_ip" )
               return PositionKit.positionProvider.stateMessage + " - " + PositionKit.positionProvider.id()
             return PositionKit.positionProvider.stateMessage
           }
-          return listdelegate.model.ProviderDescription
+          return listdelegate.providerDescription
         }
 
         rightContent: MMComponents.MMRoundButton {
-          visible: listdelegate.model.ProviderType !== "internal"
+          visible: listdelegate.providerType !== "internal"
           iconSource: __style.deleteIcon
-          onClicked: removeDialog.openDialog( listdelegate.model.ProviderId )
+          onClicked: removeDialog.openDialog( listdelegate.providerId )
         }
 
         hasLine: {
           if ( listdelegate.index === ListView.view.count - 1 ) return false
           if ( ListView.section === "internal" ) {
             let ix = providersModel.index( listdelegate.index + 1, 0 )
-            let type = providersModel.data( ix, MM.PositionProvidersModel.ProviderType )
+            let type = providersModel.data( ix, PositionProvidersModel.ProviderType )
             if ( type.includes( "external" ) ) return false
           }
 
           return true
         }
 
-        onClicked: root.activateProvider( listdelegate.model.ProviderType, listdelegate.model.ProviderId, listdelegate.model.ProviderName )
+        onClicked: root.activateProvider( listdelegate.providerType, listdelegate.providerId, listdelegate.providerName )
       }
 
       section {
-        property: "ProviderType"
+        property: "providerType"
         delegate: MMComponents.MMText {
+          required property string section
           width: ListView.view.width
 
           text: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )

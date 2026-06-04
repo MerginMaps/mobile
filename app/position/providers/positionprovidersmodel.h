@@ -12,6 +12,7 @@
 
 #include <qglobal.h>
 #include <QAbstractListModel>
+#include <qqmlintegration.h>
 
 #include "appsettings.h"
 
@@ -43,6 +44,7 @@ struct PositionProvider
 class PositionProvidersModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
 

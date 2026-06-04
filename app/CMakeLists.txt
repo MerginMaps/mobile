@@ -336,6 +336,7 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
          ${CMAKE_CURRENT_SOURCE_DIR}/position
+         ${CMAKE_CURRENT_SOURCE_DIR}/position/providers
 )
 
 qt_policy(SET QTP0002 NEW)
