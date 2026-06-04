@@ -94,6 +94,8 @@ class LayerFeaturesModel : public FeaturesModel
 
     virtual void setupFeatureRequest( QgsFeatureRequest &request );
 
+    virtual QString buildSearchExpression();
+
     virtual void populate();
     void reset() override;
 
@@ -104,7 +106,6 @@ class LayerFeaturesModel : public FeaturesModel
     void onFutureFinished();
 
   private:
-    QString buildSearchExpression();
 
     //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
     QgsFeatureList fetchFeatures( QgsVectorLayerFeatureSource *layer, QgsFeatureRequest req, int searchId );

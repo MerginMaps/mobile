@@ -97,6 +97,7 @@
 #include "relationreferencefeaturesmodel.h"
 #include "fieldvalidator.h"
 #include "valuerelationfeaturesmodel.h"
+#include "valuerelationcontroller.h"
 #include "snaputils.h"
 #include "guidelinecontroller.h"
 #include "multieditmanager.h"
@@ -334,6 +335,7 @@ void initDeclarative()
   qmlRegisterType< LayerFeaturesModel >( "mm", 1, 0, "LayerFeaturesModel" );
   qmlRegisterType< RelationFeaturesModel >( "mm", 1, 0, "RelationFeaturesModel" );
   qmlRegisterType< ValueRelationFeaturesModel >( "mm", 1, 0, "ValueRelationFeaturesModel" );
+  qmlRegisterType< ValueRelationController >( "mm", 1, 0, "ValueRelationController" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "mm", 1, 0, "BluetoothDiscoveryModel" );
   qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
