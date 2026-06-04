@@ -7,8 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQml.Models
+
 import "../components" as MMComponents
 
 MMComponents.MMListDrawer {

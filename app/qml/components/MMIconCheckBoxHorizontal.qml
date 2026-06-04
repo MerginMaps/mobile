@@ -19,12 +19,10 @@ CheckBox {
   property bool showBorder: false
   property bool small: false
 
-  readonly property int baseHeight: small ? 50 : 80
-
-  height: baseHeight * __dp
+  implicitHeight: small ? 50 * __dp : 80 * __dp
   implicitWidth: leftPadding + titleText.implicitWidth + rightPadding
 
-  topPadding: Math.max( 0, ( height - contentColumn.implicitHeight ) / 2 )
+  topPadding: Math.max( 0, ( implicitHeight - contentColumn.implicitHeight ) / 2 )
   bottomPadding: topPadding
   leftPadding: iconBgRectangle.x + iconBgRectangle.width + 20 * __dp
   rightPadding: 20 * __dp
