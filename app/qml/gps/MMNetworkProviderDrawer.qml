@@ -41,7 +41,7 @@ MMComponents.MMDrawer {
       textFieldBackground.color: __style.lightGreenColor
 
       title: qsTr( "IP Address" )
-      placeholderText: qsTr( "localhost" )
+      placeholderText: "192.168.1.1"
 
       onTextEdited: errorMsg = ""
     }
@@ -52,8 +52,8 @@ MMComponents.MMDrawer {
       width: parent.width
       textFieldBackground.color: __style.lightGreenColor
 
-      title: "Port"
-      placeholderText: "1234"
+      title: qsTr( "Port" )
+      placeholderText: "80"
 
       textField.inputMethodHints: Qt.ImhDigitsOnly
 
