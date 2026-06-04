@@ -19,8 +19,8 @@
 class AbstractPositionProvider : public QObject
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(PositionProvider)
-    QML_UNCREATABLE("PositionProvider is abstract base class, which is exposed just as a value type")
+    QML_NAMED_ELEMENT( PositionProvider )
+    QML_UNCREATABLE( "PositionProvider is abstract base class, which is exposed just as a value type" )
 
     Q_PROPERTY( QString stateMessage READ stateMessage NOTIFY stateMessageChanged )
     Q_PROPERTY( State state READ state NOTIFY stateChanged )
