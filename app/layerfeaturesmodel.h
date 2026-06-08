@@ -14,12 +14,12 @@
 #include <QAtomicInt>
 #include <QHash>
 
-#include "qgsvectorlayer.h"
-#include "featurelayerpair.h"
 #include "featuresmodel.h"
 
 
-class QgsVectorLayerFeatureSource;
+class QgsVectorLayer;
+
+class FeatureLayerPair;
 
 
 /**
@@ -113,8 +113,8 @@ class LayerFeaturesModel : public FeaturesModel
 
     QString buildSearchExpression();
 
-    //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
-    static SearchResultData fetchFeatures( QgsVectorLayerFeatureSource *layer, const QgsFeatureRequest &req, int searchId );
+    //! Performs getFeatures on a feature source. Takes ownership of \a source.
+    static SearchResultData fetchFeatures( QgsAbstractFeatureSource *source, const QgsFeatureRequest &req, int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
@@ -127,8 +127,7 @@ class LayerFeaturesModel : public FeaturesModel
     QgsVectorLayer *mLayer = nullptr;
 
     QAtomicInt mNextSearchId = 0;
-    QHash<int, QgsFeedback *> mFeedbacks; //!< feedback objects parented to this
-    QHash<int, QFutureWatcher<SearchResultData>*> mSearchResultWatchers; //!< future watcher objects parented to this
+    QHash<int, QPair<QgsFeedback *, QFutureWatcher<SearchResultData> *>> mResultWatchers; //!< owns feedback and future watches objects
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
 
