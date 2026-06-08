@@ -9,8 +9,9 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml.Models
 
-import mm 1.0 as MM
+import MMInput
 
 import "./components" as MMProjectComponents
 import "../components" as MMComponents
@@ -68,7 +69,8 @@ MMComponents.MMPage {
         spacing: __style.margin20
 
         delegate: MMProjectComponents.MMProjectWizardDelegate {
-          id: fieldDelegate
+          required property string widgetType
+          required property string attributeName
 
           width: ListView.view.width
 
@@ -77,16 +79,16 @@ MMComponents.MMPage {
           comboboxField.valueRole: "type"
 
           comboboxField.onCurrentIndexChanged: {
-            WidgetType = typesmodel.get(comboboxField.currentIndex)?.type ?? ""
+            widgetType = typesmodel.get( comboboxField.currentIndex )?.type ?? ""
           }
 
-          onAttrNameChanged: ( attrname ) => AttributeName = attrname
+          onAttrNameChanged: ( attrName ) => attributeName = attrName
           onRemoveClicked: () => fieldsModel.removeField( index )
 
           Component.onCompleted: {
             // assign initial values without binding
-            attrname = AttributeName
-            comboboxField.currentIndex = comboboxField.indexFromValue( WidgetType )
+            attrname = attributeName
+            comboboxField.currentIndex = comboboxField.indexFromValue( widgetType )
           }
         }
 
@@ -127,14 +129,14 @@ MMComponents.MMPage {
           if (!projectNameField.text) {
             __notificationModel.addWarning( qsTr("Empty project name") )
           } else {
-            __projectWizard.createProject(projectNameField.text, fieldsModel )
+            __projectWizard.createProject( projectNameField.text, fieldsModel )
           }
         }
       }
     }
   }
 
-  MM.FieldsModel {
+  FieldsModel {
     id: fieldsModel
 
     onNotifyError: function( message ) {
@@ -145,10 +147,10 @@ MMComponents.MMPage {
   ListModel {
     id: typesmodel
 
-    ListElement { text: "Text"; type: "TextEdit" }
-    ListElement { text: "Date&time"; type: "DateTime" }
-    ListElement { text: "Number"; type: "Range" }
-    ListElement { text: "Checkbox"; type: "CheckBox" }
-    ListElement { text: "Photo"; type: "ExternalResource" }
+    ListElement { text: qsTr( "Text" ); type: "TextEdit" }
+    ListElement { text: qsTr( "Date & Time" ); type: "DateTime" }
+    ListElement { text: qsTr( "Number" ); type: "Range" }
+    ListElement { text: qsTr( "Checkbox" ); type: "CheckBox" }
+    ListElement { text: qsTr( "Photo" ); type: "ExternalResource" }
   }
 }
