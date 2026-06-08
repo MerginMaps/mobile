@@ -155,6 +155,13 @@ set(MM_VERSION_CODE
     CACHE STRING "Build version (for stores)"
 )
 
+if (DEFINED SQUISH_PATH)
+  set(SquishQtBuiltinHook_ROOT
+      ${SQUISH_PATH}
+      CACHE PATH "Path to directory with Squish hook and libraries"
+  )
+endif ()
+
 mm_detect_version()
 message(STATUS "Mergin Maps Mobile ${version_desc} - ${platform_desc}")
 
@@ -266,6 +273,10 @@ if (ENABLE_TESTS)
   )
 endif ()
 
+if (SquishQtBuiltinHook_ROOT)
+  find_package(SquishQtBuiltinHook)
+endif ()
+
 # ########################################################################################
 # GLOBAL SETUP
 # ########################################################################################
@@ -370,6 +381,10 @@ if (ANDROID)
   # Make sure the generator for android_deployment_settings.json can figure out the
   # architecture
   list(APPEND CMAKE_FIND_ROOT_PATH /)
+  # Make sure the generator for android_deployment_settings.json can find Squish libs
+  if (SquishQtBuiltinHook_ROOT)
+    list(APPEND CMAKE_FIND_ROOT_PATH ${SquishQtBuiltinHook_ROOT})
+  endif ()
 endif ()
 
 # ########################################################################################
