@@ -32,8 +32,10 @@ set(MM_SRCS
     ios/iosutils.cpp
     position/providers/abstractpositionprovider.cpp
     position/providers/internalpositionprovider.cpp
+    position/providers/networkpositionprovider.cpp
     position/providers/positionprovidersmodel.cpp
     position/providers/simulatedpositionprovider.cpp
+    position/providers/nmeaparser.cpp
     position/tracking/abstracttrackingbackend.cpp
     position/tracking/internaltrackingbackend.cpp
     position/tracking/positiontrackinghighlight.cpp
@@ -127,8 +129,10 @@ set(MM_HDRS
     ios/iosutils.h
     position/providers/abstractpositionprovider.h
     position/providers/internalpositionprovider.h
+    position/providers/networkpositionprovider.h
     position/providers/positionprovidersmodel.h
     position/providers/simulatedpositionprovider.h
+    position/providers/nmeaparser.h
     position/tracking/abstracttrackingbackend.h
     position/tracking/internaltrackingbackend.h
     position/tracking/positiontrackinghighlight.h
@@ -334,6 +338,7 @@ target_include_directories(
          ${CMAKE_CURRENT_SOURCE_DIR}/layer
          ${CMAKE_CURRENT_SOURCE_DIR}/maptools
          ${CMAKE_CURRENT_SOURCE_DIR}/position
+         ${CMAKE_CURRENT_SOURCE_DIR}/position/providers
 )
 
 qt_policy(SET QTP0002 NEW)
@@ -355,6 +360,20 @@ if (ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/android/build.gradle @ONLY
   )
 
+  if (SquishQtBuiltinHook_FOUND)
+    list(
+      APPEND
+      SquishLibs
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishhook.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtquickcommon.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/libsquishqtwrapper.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqgraphicsview.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtabwidget.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquick.so"
+      "${SquishQtBuiltinHook_ROOT}/lib/extensions/qt/libsquishqtquicktypes.so"
+    )
+  endif ()
+
   set_target_properties(
     MerginMaps
     PROPERTIES QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
@@ -362,6 +381,7 @@ if (ANDROID)
                QT_ANDROID_MIN_SDK_VERSION ${MM_ANDROID_MIN_SDK_VERSION}
                QT_ANDROID_VERSION_CODE ${MM_VERSION_CODE}
                QT_ANDROID_VERSION_NAME ${MM_VERSION}
+               QT_ANDROID_EXTRA_LIBS "${SquishLibs}"
   )
 endif ()
 
@@ -589,9 +609,14 @@ if (IOS)
 endif ()
 
 if (ANDROID)
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(MerginMaps ATTACH_PORT 7757)
+  endif ()
+
   set_property(
-    TARGET MerginMaps PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY}
-                               ${OpenSSL_CRYPTO_LIBRARY}
+    TARGET MerginMaps
+    APPEND
+    PROPERTY QT_ANDROID_EXTRA_LIBS ${OpenSSL_SSL_LIBRARY} ${OpenSSL_CRYPTO_LIBRARY}
   )
 endif ()
 
@@ -609,6 +634,18 @@ if (IOS)
   )
   # TODO is this needed? this change requires cmake 3.28+
   # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
+  if (SquishQtBuiltinHook_FOUND)
+    squish_qt_add_builtin_hook(
+      MerginMaps
+      ATTACH_PORT
+      7757
+      EXTENSIONS
+      QGraphicsView
+      QTabWidget
+      QtQuickTypes
+      QtQuick
+    )
+  endif ()
 endif ()
 
 if (WIN)

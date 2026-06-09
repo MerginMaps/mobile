@@ -55,7 +55,6 @@
 #include "variablesmanager.h"
 #include "inputhelp.h"
 #include "inputprojutils.h"
-#include "fieldsmodel.h"
 #include "projectwizard.h"
 #include "qrcodedecoder.h"
 #include "inputexpressionfunctions.h"
@@ -271,7 +270,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<RegistrationError>( "mm", 1, 0, "RegistrationError", "RegistrationError Enum" );
   qmlRegisterType<PositionDirection>( "mm", 1, 0, "PositionDirection" );
   qmlRegisterType<Compass>( "mm", 1, 0, "Compass" );
-  qmlRegisterType<FieldsModel>( "mm", 1, 0, "FieldsModel" );
   qmlRegisterType<QrCodeDecoder>( "mm", 1, 0, "QrCodeDecoder" );
   qmlRegisterType<ProjectsModel>( "mm", 1, 0, "ProjectsModel" );
   qmlRegisterType<ProjectsProxyModel>( "mm", 1, 0, "ProjectsProxyModel" );
@@ -338,7 +336,6 @@ void initDeclarative()
   qmlRegisterType< ValueRelationController >( "mm", 1, 0, "ValueRelationController" );
   qmlRegisterType< RelationReferenceFeaturesModel >( "mm", 1, 0, "RelationReferenceFeaturesModel" );
   qmlRegisterType< BluetoothDiscoveryModel >( "mm", 1, 0, "BluetoothDiscoveryModel" );
-  qmlRegisterType< PositionProvidersModel >( "mm", 1, 0, "PositionProvidersModel" );
   qmlRegisterType< PositionTrackingManager >( "mm", 1, 0, "PositionTrackingManager" );
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
@@ -351,7 +348,6 @@ void initDeclarative()
   qmlRegisterType< InputMapCanvasMap >( "mm", 1, 0, "MapCanvasMap" );
   qmlRegisterType< InputMapSettings >( "mm", 1, 0, "MapSettings" );
   qmlRegisterType< InputMapTransform >( "mm", 1, 0, "MapTransform" );
-  qmlRegisterUncreatableType< AbstractPositionProvider >( "mm", 1, 0, "PositionProvider", "Must be instantiated via its construct method" );
 
   // map tools
   qmlRegisterUncreatableType< AbstractMapTool >( "mm", 1, 0, "AbstractMapTool", "Instantiate one of child map tools instead" );
@@ -575,8 +571,8 @@ int main( int argc, char *argv[] )
 
     // read and set new elevation transformation behavior
     bool valueRead = false;
-    const bool skipElevationTransformation = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SkipElevationTransformation" ), true, &valueRead );
-    pk->setSkipElevationTransformation( skipElevationTransformation );
+    const bool elevationTransformationEnabled = project->readBoolEntry( QStringLiteral( "Mergin" ), QStringLiteral( "ElevationTransformationEnabled" ), false, &valueRead );
+    pk->setElevationTransformationEnabled( elevationTransformationEnabled );
 
     pk->refreshPositionTransformer( project->transformContext() );
   } );

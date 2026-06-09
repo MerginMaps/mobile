@@ -6,12 +6,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Dialogs
+import QtQml
 
-import mm 1.0 as MM
 import MMInput
 
 import "../components" as MMComponents
@@ -20,7 +19,7 @@ import "../dialogs" as MMDialogs
 MMComponents.MMPage {
   id: root
 
-  pageHeader.title: listview.showTopTitle ? internal.pageTitle : ""
+  pageHeader.title: internal.pageTitle
 
   pageBottomMarginPolicy: MMComponents.MMPage.PaintBehindSystemBar
 
@@ -31,41 +30,27 @@ MMComponents.MMPage {
     MMComponents.MMListView {
       id: listview
 
-      property bool showTopTitle: visibleArea.yPosition * height > ( headerItem.contentHeight / 2 )
-
-      visible: __haveBluetooth
-
       width: parent.width
       height: parent.height
 
       clip: true
 
-      model: MM.PositionProvidersModel {
+      model: PositionProvidersModel {
         id: providersModel
 
         appSettings: AppSettings
       }
 
-      header: MMComponents.MMText {
-        id: headerText
-
-        width: ListView.view.width
-
-        text: internal.pageTitle
-
-        font: __style.h3
-        color: __style.forestColor
-
-        wrapMode: Text.Wrap
-        maximumLineCount: 2
-
-        bottomPadding: __style.margin40
-      }
-
       delegate: MMComponents.MMListDelegate {
         id: listdelegate
 
-        property bool isActive: AppSettings.activePositionProviderId === model.ProviderId
+        required property string providerName
+        required property string providerDescription
+        required property string providerType
+        required property string providerId
+        required property int index
+
+        property bool isActive: AppSettings.activePositionProviderId === providerId
 
         leftContent: MMComponents.MMRadioButton {
           checked: listdelegate.isActive
@@ -75,37 +60,48 @@ MMComponents.MMPage {
             anchors.fill: parent
             onClicked: function( mouse ) {
               mouse.accepted = true
-              root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+              root.activateProvider( listdelegate.providerType, listdelegate.providerId, listdelegate.providerName )
             }
           }
         }
 
-        text: model.ProviderName ? model.ProviderName : qsTr( "Unknown device" )
-        secondaryText: listdelegate.isActive ? PositionKit.positionProvider.stateMessage : model.ProviderDescription
+        text: {
+          if ( listdelegate.providerName ) return listdelegate.providerName
+          return qsTr( "Unknown device" )
+        }
+        secondaryText: {
+          if ( listdelegate.isActive ) {
+            if ( listdelegate.providerType === "external_ip" )
+              return PositionKit.positionProvider.stateMessage + " - " + PositionKit.positionProvider.id()
+            return PositionKit.positionProvider.stateMessage
+          }
+          return listdelegate.providerDescription
+        }
 
         rightContent: MMComponents.MMRoundButton {
-          visible: model.ProviderType !== "internal"
+          visible: listdelegate.providerType !== "internal"
           iconSource: __style.deleteIcon
-          onClicked: removeDialog.openDialog( model.ProviderId )
+          onClicked: removeDialog.openDialog( listdelegate.providerId )
         }
 
         hasLine: {
-          if ( index === ListView.view.count - 1 ) return false
+          if ( listdelegate.index === ListView.view.count - 1 ) return false
           if ( ListView.section === "internal" ) {
-            let ix = providersModel.index( index + 1, 0 )
-            let type = providersModel.data( ix, MM.PositionProvidersModel.ProviderType )
-            if ( type === "external" ) return false
+            let ix = providersModel.index( listdelegate.index + 1, 0 )
+            let type = providersModel.data( ix, PositionProvidersModel.ProviderType )
+            if ( type.includes( "external" ) ) return false
           }
 
           return true
         }
 
-        onClicked: root.constructProvider( model.ProviderType, model.ProviderId, model.ProviderName )
+        onClicked: root.activateProvider( listdelegate.providerType, listdelegate.providerId, listdelegate.providerName )
       }
 
       section {
-        property: "ProviderType"
+        property: "providerType"
         delegate: MMComponents.MMText {
+          required property string section
           width: ListView.view.width
 
           text: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
@@ -135,7 +131,31 @@ MMComponents.MMPage {
 
       text: qsTr( "Connect new receiver" )
 
-      onClicked: bluetoothDiscoveryLoader.active = true
+      onClicked: {
+        if ( __haveBluetooth ) {
+          providerTypeDrawer.open()
+        }
+        else {
+          networkProviderDrawer.open()
+        }
+      }
+    }
+
+    MMProviderTypeDrawer {
+      id: providerTypeDrawer
+
+      onProviderSelected: function( providerType ) {
+        if ( providerType === "bluetooth" ) bluetoothDiscoveryLoader.active = true
+        else if ( providerType === "network" ) networkProviderDrawer.open()
+      }
+    }
+
+    MMNetworkProviderDrawer {
+      id: networkProviderDrawer
+
+      onConfirmed: function( alias, deviceAddress ) {
+        root.activateProvider( "external_ip", deviceAddress, alias )
+      }
     }
 
     MMComponents.MMMessage {
@@ -146,10 +166,10 @@ MMComponents.MMPage {
       image: __style.externalGpsRedImage
       title: qsTr( "Connecting to external receivers via bluetooth is not supported" )
       description: qsTr( "This function is not available on iOS. " +
-                        "Your hardware vendor may provide a custom " +
-                        "app that connects to the receiver and sets position. " +
-                        "The app will still think it is the internal GPS of " +
-                        "your phone/tablet." )
+                          "Your hardware vendor may provide a custom " +
+                          "app that connects to the receiver and sets position. " +
+                          "The app will still think it is the internal GPS of " +
+                          "your phone/tablet." )
       link: __inputHelp.howToConnectGPSLink
     }
 
@@ -162,7 +182,7 @@ MMComponents.MMPage {
       }
 
       onRemoveProvider: {
-        if (removeDialog.providerId === "") {
+        if ( !removeDialog.providerId ) {
           close()
           return
         }
@@ -170,7 +190,7 @@ MMComponents.MMPage {
         if ( AppSettings.activePositionProviderId === removeDialog.providerId )
         {
           // we are removing an active provider, replace it with internal provider
-          root.constructProvider( "internal", "devicegps", qsTr( "Internal" ) )
+          root.activateProvider( "internal", "devicegps", qsTr( "Internal" ) )
         }
 
         providersModel.removeProvider( removeDialog.providerId )
@@ -183,52 +203,49 @@ MMComponents.MMPage {
       id: bluetoothDiscoveryLoader
 
       active: false
-      sourceComponent: bluetoothDiscoveryDrawerComponent
+      sourceComponent: Component { MMBluetoothProviderDrawer {} }
+
+      onLoaded: item.open()
+    }
+
+    Connections {
+      target: bluetoothDiscoveryLoader.item
+
+      function onInitiatedConnectionTo( deviceAddress, deviceName ) {
+        bluetoothDiscoveryLoader.item.list.model.discovering = false
+        bluetoothDiscoveryLoader.item.close()
+        root.activateProvider( "external_bt", deviceAddress, deviceName )
+      }
+
+      function onClosed() { bluetoothDiscoveryLoader.active = false }
     }
 
     Loader {
       id: connectingDialogLoader
 
+      property string providerType: ""
+
       active: false
       asynchronous: true
-      sourceComponent: connectionToSavedProviderDialogComponent
+      sourceComponent: Component { MMExternalProviderConnectionDrawer{} }
 
-      function open() {
+      onLoaded: {
+        item.providerType = connectingDialogLoader.providerType
+        item.open()
+      }
+
+      function open( type ) {
+        providerType = type
         active = true
         focus = true
       }
     }
-  }
 
-  Component {
-    id: bluetoothDiscoveryDrawerComponent
+    Connections {
+      target: connectingDialogLoader.item
 
-    MMAddPositionProviderDrawer {
-      onInitiatedConnectionTo: function ( deviceAddress, deviceName ) {
-        PositionKit.positionProvider = PositionKit.constructProvider( "external", deviceAddress, deviceName )
-
-        providersModel.addProvider( deviceName, deviceAddress )
-        list.model.discovering = false
-        close()
-
-        connectingDialogLoader.open()
-      }
-      onClosed: bluetoothDiscoveryLoader.active = false
-
-      Component.onCompleted: open()
-    }
-  }
-
-  Component {
-    id: connectionToSavedProviderDialogComponent
-
-    MMBluetoothConnectionDrawer {
-      onClosed: connectingDialogLoader.active = false
-
-      // revert position provider back to internal provider
-      onFailure: PositionKit.positionProvider = PositionKit.constructProvider( "internal", "devicegps", "" )
-
-      Component.onCompleted: open()
+      function onClosed() { connectingDialogLoader.active = false }
+      function onFailure() { root.activateProvider( "internal", "devicegps", "" ) }
     }
   }
 
@@ -238,8 +255,8 @@ MMComponents.MMPage {
     property string pageTitle: qsTr( "Manage GPS receivers" )
   }
 
-  function constructProvider( type, id, name ) {
-    if ( type === "external" ) {
+  function activateProvider( type, id, name ) {
+    if ( type === "external_bt" ) {
       // Is bluetooth turned on?
       if ( !__inputUtils.isBluetoothTurnedOn() ) {
         __inputUtils.turnBluetoothOn()
@@ -251,10 +268,14 @@ MMComponents.MMPage {
       return // do not construct the same provider again
     }
 
+    providersModel.addProvider( name, id, type )
     PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
 
-    if ( type === "external" ) {
-      connectingDialogLoader.open()
+    if ( type === "external_bt" ) {
+      connectingDialogLoader.open( "bluetooth" )
+    }
+    else if ( type === "external_ip" ) {
+      connectingDialogLoader.open( "network" )
     }
   }
 }
