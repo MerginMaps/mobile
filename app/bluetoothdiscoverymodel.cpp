@@ -40,9 +40,9 @@ QHash<int, QByteArray> BluetoothDiscoveryModel::roleNames() const
   QHash<int, QByteArray> roles;
 
 #ifdef HAVE_BLUETOOTH
-  roles.insert( DataRoles::DeviceAddress, "DeviceAddress" );
-  roles.insert( DataRoles::DeviceName, "DeviceName" );
-  roles.insert( DataRoles::SignalStrength, "SignalStrength" );
+  roles.insert( DataRoles::DeviceAddress, "deviceAddress" );
+  roles.insert( DataRoles::DeviceName, "deviceName" );
+  roles.insert( DataRoles::SignalStrength, "signalStrength" );
 #endif
 
   return roles;

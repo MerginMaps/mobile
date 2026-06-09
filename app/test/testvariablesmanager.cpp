@@ -84,7 +84,7 @@ void TestVariablesManager::testPositionVariables()
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "0.000" ), &context );
   evaluateExpression( QStringLiteral( "@position_provider_address" ), QStringLiteral( "AA:AA:FF:AA:00:10" ), &context );
   evaluateExpression( QStringLiteral( "@position_provider_name" ), QStringLiteral( "testBluetoothProvider" ), &context );
-  evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "external" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "external_bt" ), &context );
 
   mAppSettings->setGpsAntennaHeight( 1.6784 );
   pos.verticalSpeed = 1.345;
