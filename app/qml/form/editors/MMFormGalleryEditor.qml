@@ -48,7 +48,7 @@ MMPrivateComponents.MMBaseInput {
       id: rmodel
 
       relation: root._fieldAssociatedRelation
-      parentFeatureLayerPair: root._fieldController.featureLayerPair()
+      parentFeatureLayerPair: root._fieldController.featureLayerPair
       homePath: root._fieldActiveProject.homePath
     }
 
@@ -97,7 +97,7 @@ MMPrivateComponents.MMBaseInput {
 
         MMComponents.MMSingleClickMouseArea {
           anchors.fill: parent
-          onSingleClicked: root.createLinkedFeature( root._fieldController.featureLayerPair(), root._fieldAssociatedRelation )
+          onSingleClicked: root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
         }
       }
 

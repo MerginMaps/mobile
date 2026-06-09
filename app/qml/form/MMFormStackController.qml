@@ -142,7 +142,7 @@ Item {
     // https://github.com/MerginMaps/mobile/issues/2879
     for ( let i = 0; i < formsStack.depth; i++ ) {
       let form = formsStack.get( i )
-      form.featureLayerPair = __inputUtils.createFeatureLayerPair()
+      form.featureLayerPair = __inputUtils.createFeatureLayerPair
       form.relationToApply = null
       form.controllerToApply = null
       form.project = null
