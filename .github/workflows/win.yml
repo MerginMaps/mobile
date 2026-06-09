@@ -28,9 +28,8 @@ jobs:
     runs-on: windows-2025
 
     env:
-      VS_VERSION: "2022"
-      # we can't reference other variables within, so make sure the year in path is same as VS_VERSION
-      VCINSTALLDIR: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/"
+      # Visual Studio Enterprise 2026 - 18.6.11819.183
+      VS_INSTALL_DIR: "C:\Program Files\Microsoft Visual Studio\18\Enterprise"
       CMAKE_VERSION: '4.3.2'
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       TRIPLET: x64-windows
@@ -117,7 +116,7 @@ jobs:
       - name: Setup compiler
         shell: cmd
         run: |
-            CALL "C:\Program Files\Microsoft Visual Studio\${{ env.VS_VERSION }}\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
+            CALL "${{ env.VS_INSTALL_DIR }}\Common7\Tools\VsDevCmd.bat" -arch=${{ env.CMAKE_ARCH }}
 
       - name: Configure app
         shell: cmd
