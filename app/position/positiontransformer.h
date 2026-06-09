@@ -28,14 +28,14 @@ class PositionTransformer : QObject
 {
     Q_OBJECT
   public:
-    PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs, const QgsCoordinateReferenceSystem &destinationCrs, bool skipElevationTransformation, const QgsCoordinateTransformContext &transformContext, QObject *parent = nullptr );
+    PositionTransformer( const QgsCoordinateReferenceSystem &sourceCrs, const QgsCoordinateReferenceSystem &destinationCrs, bool elevationTransformationEnabled, const QgsCoordinateTransformContext &transformContext, QObject *parent = nullptr );
 
     /**
     * Transform the elevation from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     * (by default EPSG:9707 (WGS84 + EGM96))
     * Transform only if:
     *  1. the position is not mocked, and it's ellipsoidal elevation
-    *  2. the position is mocked, the elevation is ellipsoidal plus pass through is disabled
+    *  2. the position is mocked, the elevation is ellipsoidal and elevation transformation is enabled
     * \note This method should be used only with AndroidPositionProvider, which guarantees the elevation to be ellipsoid
     * \return Copy of passed geoPosition with processed elevation and elevation separation if applicable.
     */
@@ -69,7 +69,7 @@ class PositionTransformer : QObject
       * (by default EPSG:9707 (WGS84 + EGM96))
       * Transform only if:
       *  1. the position is not mocked, and it's ellipsoidal elevation
-      *  2. the position is mocked, the elevation is ellipsoidal plus pass through is disabled
+      *  2. the position is mocked, the elevation is ellipsoidal and elevation transformation is enabled
       *  \note The function gets passed reference to geoPosition, because we use some QGeoPositionInfo attributes
       *       to find out if the position is mocked and if the elevation is ellipsoid or orthometric.
      * \return New GeoPosition with processed elevation and elevation separation if applicable.
@@ -90,13 +90,13 @@ class PositionTransformer : QObject
 
     void setTransformContext( const QgsCoordinateTransformContext &transformContext );
 
-    void setSkipElevationTransformation( bool skipElevationTransformation );
+    void setElevationTransformationEnabled( bool elevationTransformationEnabled );
 
   private:
     QgsCoordinateReferenceSystem mSourceCrs;
     QgsCoordinateReferenceSystem mDestinationCrs;
     QgsCoordinateTransformContext mTransformContext;
-    bool mSkipElevationTransformation;
+    bool mElevationTransformationEnabled;
 };
 
 
