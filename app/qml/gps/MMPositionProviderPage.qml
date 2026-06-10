@@ -69,6 +69,7 @@ MMComponents.MMPage {
           if ( listdelegate.providerName ) return listdelegate.providerName
           return qsTr( "Unknown device" )
         }
+
         secondaryText: {
           if ( listdelegate.isActive ) {
             if ( listdelegate.providerType === "external_ip" )
@@ -273,8 +274,8 @@ MMComponents.MMPage {
       return // do not construct the same provider again
     }
 
-    providersModel.addProvider( name, id, type )
     PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
+    providersModel.addProvider( PositionKit.positionProvider.name(), id, type )
 
     if ( type === "external_bt" ) {
       connectingDialogLoader.open( "bluetooth" )
