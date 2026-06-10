@@ -14,11 +14,11 @@
 #include "qgsfeaturerequest.h"
 #include "qgsfeedback.h"
 #include "qgsproject.h"
-#include "qgsvectordataprovider.h"
 #include "qgsvectorlayer.h"
+#include "qgsvectorlayerfeatureiterator.h"
 
 #include <QLocale>
-#include <QTimer>
+#include <QElapsedTimer>
 #include <QtConcurrentRun>
 
 
@@ -113,8 +113,7 @@ void LayerFeaturesModel::populate()
 
     qDebug() << QStringLiteral( "Search (%1) starting on layer %2" ).arg( searchId ).arg( mLayer->id() );
 
-    // We use the data provider source here, so we can have potential sorting on the provider side, while also skipping any uncommitted features
-    watcher->setFuture( QtConcurrent::run( LayerFeaturesModel::fetchFeatures, mLayer->dataProvider()->featureSource(), req, searchId ) );
+    watcher->setFuture( QtConcurrent::run( LayerFeaturesModel::fetchFeatures, new QgsVectorLayerFeatureSource( mLayer ), req, searchId ) );
   }
 }
 
@@ -134,6 +133,11 @@ LayerFeaturesModel::SearchResultData LayerFeaturesModel::fetchFeatures( QgsAbstr
 
   while ( it.nextFeature( f ) )
   {
+    if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
+    {
+      continue; // ignore uncommited features
+    }
+
     fl.append( f );
   }
 
