@@ -84,13 +84,7 @@
         },
         {
           "name": "qtbase",
-          "default-features": false,
-          "features": [
-            {
-              "name": "wayland",
-              "platform": "linux"
-            }
-          ]
+          "default-features": false
         },
         "qtconnectivity",
         "qtdeclarative",
