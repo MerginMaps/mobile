@@ -455,12 +455,12 @@ void TestFormEditors::testValueRelationConversions()
    * and multi values.
    *
    * AllowMulti=false:
-   *   QGIS value → keys:  "1"       → ["1"]
-   *   keys → QGIS value:  ["42"]    → "42"
+   *   QGIS value -> keys:  "1"       -> ["1"]
+   *   keys -> QGIS value:  ["42"]    -> "42"
    *
    * AllowMulti=true:
-   *   QGIS value → keys:  "{1,3,4}" → ["1","3","4"]
-   *   keys → QGIS value:  ["1","3","4"] → "{1,3,4}";  ["1"] → "{1}"
+   *   QGIS value -> keys:  "{1,3,4}" -> ["1","3","4"]
+   *   keys -> QGIS value:  ["1","3","4"] -> "{1,3,4}";  ["1"] -> "{1}"
    */
   QgsProject::instance()->removeAllMapLayers();
 
@@ -532,16 +532,16 @@ void TestFormEditors::testValueRelationControllerLookup()
   /* Tests async display-text lookup for ValueRelationController:
    *
    * baseConfig controller (no FilterExpression):
-   * 1. Missing key → presentRawValue fires; invalidateSelection does NOT fire; displayText=""
-   * 2. lookupDisplayTextOnHotreload without FilterExpression → returns early, no signals
-   * 3. Basic lookup: lookupDisplayTextOnValueChanged("1") → "Cat1-A"
+   * 1. Missing key -> presentRawValue fires; invalidateSelection does NOT fire; displayText=""
+   * 2. lookupDisplayTextOnHotreload without FilterExpression -> returns early, no signals
+   * 3. Basic lookup: lookupDisplayTextOnValueChanged("1") -> "Cat1-A"
    *
    * filterConfig controller (FilterExpression set):
-   * 4. lookupDisplayTextOnHotreload, key valid in context → displayText updated ("Cat1-A")
-   * 5. lookupDisplayTextOnHotreload, key no longer in context → invalidateSelection fires
+   * 4. lookupDisplayTextOnHotreload, key valid in context -> displayText updated ("Cat1-A")
+   * 5. lookupDisplayTextOnHotreload, key no longer in context -> invalidateSelection fires
    *
    * Cases 1-2 run before case 3 so that mDisplayText is "" when case 1 checks
-   * displaySpy.isEmpty() — the setDisplayText guard skips emission for equal values.
+   * displaySpy.isEmpty() -> the setDisplayText guard skips emission for equal values.
    *
    * Lookup layer:
    *   key=1  label="Cat1-A"  category=1
@@ -550,7 +550,7 @@ void TestFormEditors::testValueRelationControllerLookup()
    *   key=4  label="Cat2-B"  category=2
    *
    * Filter expression:  "category" = current_value('cat')
-   * Form feature cat=1 → keys 1,2 reachable; cat=2 → keys 3,4 reachable.
+   * Form feature cat=1 -> keys 1,2 reachable; cat=2 -> keys 3,4 reachable.
    */
   QgsProject::instance()->removeAllMapLayers();
 
