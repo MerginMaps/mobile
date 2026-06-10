@@ -190,6 +190,7 @@ void TestModels::testValueRelationOrdering()
    *   2. OrderByKey  desc -> 4(Beta),  3(Gamma), 2(Delta), 1(Alpha)
    *   3. OrderByValue asc -> 1(Alpha), 4(Beta),  2(Delta), 3(Gamma)
    *   4. OrderByField "label" asc -> same as 3, but different code path
+   *   5. OrderByField desc -> 3(Gamma), 2(Delta), 4(Beta), 1(Alpha)
    */
   QgsProject::instance()->removeAllMapLayers();
 
@@ -206,6 +207,8 @@ void TestModels::testValueRelationOrdering()
   };
 
   ValueRelationFeaturesModel model;
+  model.setConfig( baseConfig );
+  QCOMPARE( model.rowCount(), 0 ); // setConfig should not populate the model
   QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
   auto keyAt = [&]( int row )
@@ -269,6 +272,15 @@ void TestModels::testValueRelationOrdering()
   QCOMPARE( valAt( 2 ), QStringLiteral( "Delta" ) );
   QCOMPARE( valAt( 3 ), QStringLiteral( "Gamma" ) );
 
+  // 5. OrderByField descending
+  config[ QStringLiteral( "OrderByDescending" ) ] = true;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( valAt( 0 ), QStringLiteral( "Gamma" ) );
+  QCOMPARE( valAt( 1 ), QStringLiteral( "Delta" ) );
+  QCOMPARE( valAt( 2 ), QStringLiteral( "Beta" ) );
+  QCOMPARE( valAt( 3 ), QStringLiteral( "Alpha" ) );
+
   QgsProject::instance()->removeAllMapLayers();
 }
 
@@ -305,7 +317,7 @@ void TestModels::testValueRelationSearch()
     features << f;
   }
   layer->dataProvider()->addFeatures( features );
-  QCOMPARE( static_cast<int>( layer->featureCount() ), 3 );
+  QCOMPARE( layer->featureCount(), ( long long ) 3 );
   QgsProject::instance()->addMapLayer( layer );
 
   const QVariantMap config =
@@ -317,14 +329,14 @@ void TestModels::testValueRelationSearch()
   };
 
   ValueRelationFeaturesModel model;
-  model.setConfig( config );
-
   QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
   auto waitForReload = [&]()
   {
     while ( spy.count() < 2 )
       QVERIFY( spy.wait( 5000 ) );
   };
+
+  model.setConfig( config );
 
   // Initial load: all 3 features
   model.reloadFeatures();
@@ -376,14 +388,14 @@ void TestModels::testValueRelationHotreload()
   };
 
   ValueRelationFeaturesModel model;
-  model.setConfig( config );
-
   QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
   auto waitForReload = [&]()
   {
     while ( spy.count() < 2 )
       QVERIFY( spy.wait( 5000 ) );
   };
+
+  model.setConfig( config );
 
   // Initial load: 3 features
   model.reloadFeatures();
