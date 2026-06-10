@@ -110,12 +110,13 @@ MMComponents.MMDrawer {
         const deviceAddress = ip + ":" + port
 
         root.confirmed( aliasInput.text.trim(), deviceAddress )
-        root.close()
-        ipAddressInput.textField.clear()
-        portInput.textField.clear()
-        aliasInput.textField.clear()
       }
     }
+  }
+
+  function showDuplicateProviderError() {
+    ipAddressInput.errorMsg = qsTr( "Network position provider with this IP address & port already exists" )
+    portInput.errorMsg = qsTr( "Network position provider with this IP address & port already exists" )
   }
 
   onClosed: {

@@ -69,6 +69,7 @@ class PositionProvidersModel : public QAbstractListModel
 
     Q_INVOKABLE void removeProvider( const QString &providerId );
     Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId, const QString &providerType );
+    Q_INVOKABLE bool providerExists( const QString &providerId );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings * );

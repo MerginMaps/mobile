@@ -154,7 +154,12 @@ MMComponents.MMPage {
       id: networkProviderDrawer
 
       onConfirmed: function( alias, deviceAddress ) {
-        root.activateProvider( "external_ip", deviceAddress, alias )
+        if ( providersModel.providerExists( deviceAddress ) ) {
+          showDuplicateProviderError()
+        } else {
+          close()
+          root.activateProvider( "external_ip", deviceAddress, alias )
+        }
       }
     }
 

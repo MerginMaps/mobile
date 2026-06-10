@@ -164,6 +164,14 @@ void PositionProvidersModel::addProvider( const QString &name, const QString &pr
   }
 }
 
+bool PositionProvidersModel::providerExists( const QString &providerId )
+{
+  return std::any_of( mProviders.begin(), mProviders.end(), [providerId]( const PositionProvider & provider )
+  {
+    return provider.providerId == providerId;
+  } );
+}
+
 AppSettings *PositionProvidersModel::appSettings() const
 {
   return mAppSettings;
