@@ -449,151 +449,204 @@ void TestFormEditors::testRelationsWidgetPresence()
   QVERIFY( relationReferencesCount == 1 );
 }
 
-void TestFormEditors::testValueRelationsEditor() {}
-// {
-//   /* Test project: project_value_relations
-//    * It has value relations sets up followingly:
-//    *
-//    *  - Main Layer has VR to:
-//    *    - sub layer
-//    *    - subsub layer ( with filter expression that subsub is categorized based on sub )
-//    *    - another layer ( key is not fid, but textual )
-//    */
+void TestFormEditors::testValueRelationConversions()
+{
+  /* Tests qgisFormatToArray() and arrayToQgisFormat() for null, single,
+   * and multi values.
+   *
+   * AllowMulti=false:
+   *   QGIS value → keys:  "1"       → ["1"]
+   *   keys → QGIS value:  ["42"]    → "42"
+   *
+   * AllowMulti=true:
+   *   QGIS value → keys:  "{1,3,4}" → ["1","3","4"]
+   *   keys → QGIS value:  ["1","3","4"] → "{1,3,4}";  ["1"] → "{1}"
+   */
+  QgsProject::instance()->removeAllMapLayers();
 
-//   QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
-//   QString projectName = "proj.qgz";
+  QgsVectorLayer *layer = TestUtils::createVRLookupLayer( 5 );
+  QVERIFY( layer && layer->isValid() );
+  QgsProject::instance()->addMapLayer( layer );
 
-//   QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+  // Single value test
+  ValueRelationController controller;
+  controller.setConfig(
+  {
+    { QStringLiteral( "Layer" ),      layer->id() },
+    { QStringLiteral( "Key" ),        QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ),      QStringLiteral( "label" ) },
+    { QStringLiteral( "AllowMulti" ), false }
+  } );
 
-//   QgsMapLayer *mainL = QgsProject::instance()->mapLayersByName( QStringLiteral( "main" ) ).at( 0 );
-//   QgsVectorLayer *mainLayer = static_cast<QgsVectorLayer *>( mainL );
+  // null/empty : empty list
+  QCOMPARE( controller.qgisFormatToArray( QVariant() ),             QStringList() );
+  QCOMPARE( controller.qgisFormatToArray( QStringLiteral( "" ) ),   QStringList() );
 
-//   QVERIFY( mainLayer && mainLayer->isValid() );
+  // single value "1" : ["1"]
+  QCOMPARE( controller.qgisFormatToArray( QStringLiteral( "1" ) ),
+            QStringList( { QStringLiteral( "1" ) } ) );
 
-//   QgsMapLayer *subL = QgsProject::instance()->mapLayersByName( QStringLiteral( "sub" ) ).at( 0 );
-//   QgsVectorLayer *subLayer = static_cast<QgsVectorLayer *>( subL );
+  // empty keys : ""
+  QCOMPARE( controller.arrayToQgisFormat( {} ), QString() );
 
-//   QVERIFY( subLayer && subLayer->isValid() );
+  // single key : plain value
+  QCOMPARE( controller.arrayToQgisFormat( { QStringLiteral( "42" ) } ),
+            QStringLiteral( "42" ) );
 
-//   QgsMapLayer *subsubL = QgsProject::instance()->mapLayersByName( QStringLiteral( "subsub" ) ).at( 0 );
-//   QgsVectorLayer *subsubLayer = static_cast<QgsVectorLayer *>( subsubL );
+  // Multi value test
+  controller.setConfig(
+  {
+    { QStringLiteral( "Layer" ),      layer->id() },
+    { QStringLiteral( "Key" ),        QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ),      QStringLiteral( "label" ) },
+    { QStringLiteral( "AllowMulti" ), true }
+  } );
 
-//   QVERIFY( subsubLayer && subsubLayer->isValid() );
+  // null : empty list
+  QCOMPARE( controller.qgisFormatToArray( QVariant() ), QStringList() );
 
-//   QgsMapLayer *anotherL = QgsProject::instance()->mapLayersByName( QStringLiteral( "another" ) ).at( 0 );
-//   QgsVectorLayer *anotherLayer = static_cast<QgsVectorLayer *>( anotherL );
+  // "{1,3,4}" : ["1","3","4"]
+  QCOMPARE( controller.qgisFormatToArray( QStringLiteral( "{1,3,4}" ) ),
+            QStringList( { QStringLiteral( "1" ), QStringLiteral( "3" ), QStringLiteral( "4" ) } ) );
 
-//   QVERIFY( anotherLayer && anotherLayer->isValid() );
+  // "{1}" : ["1"]
+  QCOMPARE( controller.qgisFormatToArray( QStringLiteral( "{1}" ) ),
+            QStringList( { QStringLiteral( "1" ) } ) );
 
-//   // test ValueRelationsFeaturesModel (drawer model) and ValueRelationController
+  // empty keys : ""
+  QCOMPARE( controller.arrayToQgisFormat( {} ), QString() );
 
-//   QgsFeature f = mainLayer->getFeature( 1 );
-//   FeatureLayerPair pair( f, mainLayer );
+  // ["1","3","4"] : "{1,3,4}"
+  QCOMPARE( controller.arrayToQgisFormat( { QStringLiteral( "1" ), QStringLiteral( "3" ), QStringLiteral( "4" ) } ),
+            QStringLiteral( "{1,3,4}" ) );
 
-//   AttributeController controller;
-//   controller.setFeatureLayerPair( pair );
+  // ["1"] : "{1}"
+  QCOMPARE( controller.arrayToQgisFormat( { QStringLiteral( "1" ) } ),
+            QStringLiteral( "{1}" ) );
 
-//   const TabItem *tab = controller.tabItem( 0 );
-//   QVector<QUuid> items = tab->formItems();
+  QgsProject::instance()->removeAllMapLayers();
+}
 
-//   QVERIFY( items.length() == 5 );
+void TestFormEditors::testValueRelationControllerLookup()
+{
+  /* Tests async display-text lookup for ValueRelationController:
+   *
+   * baseConfig controller (no FilterExpression):
+   * 1. Missing key → presentRawValue fires; invalidateSelection does NOT fire; displayText=""
+   * 2. lookupDisplayTextOnHotreload without FilterExpression → returns early, no signals
+   * 3. Basic lookup: lookupDisplayTextOnValueChanged("1") → "Cat1-A"
+   *
+   * filterConfig controller (FilterExpression set):
+   * 4. lookupDisplayTextOnHotreload, key valid in context → displayText updated ("Cat1-A")
+   * 5. lookupDisplayTextOnHotreload, key no longer in context → invalidateSelection fires
+   *
+   * Cases 1-2 run before case 3 so that mDisplayText is "" when case 1 checks
+   * displaySpy.isEmpty() — the setDisplayText guard skips emission for equal values.
+   *
+   * Lookup layer:
+   *   key=1  label="Cat1-A"  category=1
+   *   key=2  label="Cat1-B"  category=1
+   *   key=3  label="Cat2-A"  category=2
+   *   key=4  label="Cat2-B"  category=2
+   *
+   * Filter expression:  "category" = current_value('cat')
+   * Form feature cat=1 → keys 1,2 reachable; cat=2 → keys 3,4 reachable.
+   */
+  QgsProject::instance()->removeAllMapLayers();
 
-//   // order: 0 - fid, 1 - Name, 2 - subfk, 3 - anotherfk, 4 - subsubfk
+  // create the lookup layer
+  QgsVectorLayer *lookupLayer = new QgsVectorLayer(
+    QStringLiteral( "None?field=key:integer&field=label:string&field=category:integer" ),
+    QStringLiteral( "vr_lookup" ),
+    QStringLiteral( "memory" )
+  );
+  QVERIFY( lookupLayer && lookupLayer->isValid() );
 
-//   // ------- FIELD SubFK: drawer model loads all sub-layer features on demand
+  const QStringList labels = { QStringLiteral( "Cat1-A" ), QStringLiteral( "Cat1-B" ),
+                               QStringLiteral( "Cat2-A" ), QStringLiteral( "Cat2-B" )
+                             };
+  QgsFeatureList features;
+  for ( int i = 0; i < 4; ++i )
+  {
+    QgsFeature feature( lookupLayer->fields() );
+    feature.setAttribute( QStringLiteral( "key" ),      i + 1 );
+    feature.setAttribute( QStringLiteral( "label" ),    labels.at( i ) );
+    feature.setAttribute( QStringLiteral( "category" ), i < 2 ? 1 : 2 );
+    features << feature;
+  }
+  lookupLayer->dataProvider()->addFeatures( features );
+  QgsProject::instance()->addMapLayer( lookupLayer );
 
-//   const FormItem *subFkItem = controller.formItem( items.at( 2 ) );
+  // create the form layer, that provides fields for building form-scope features
+  QgsVectorLayer *formLayer = new QgsVectorLayer(
+    QStringLiteral( "None?field=cat:integer" ),
+    QStringLiteral( "vr_form" ),
+    QStringLiteral( "memory" )
+  );
+  QVERIFY( formLayer && formLayer->isValid() );
+  QgsProject::instance()->addMapLayer( formLayer );
 
-//   ValueRelationFeaturesModel subVRModel;
-//   QSignalSpy subSpy( &subVRModel, &LayerFeaturesModel::fetchingResultsChanged );
+  const QVariantMap baseConfig =
+  {
+    { QStringLiteral( "Layer" ),      lookupLayer->id() },
+    { QStringLiteral( "Key" ),        QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ),      QStringLiteral( "label" ) },
+    { QStringLiteral( "AllowMulti" ), false }
+  };
 
-//   subVRModel.setConfig( subFkItem->editorWidgetConfig() );
+  QVariantMap filterConfig = baseConfig;
+  filterConfig[ QStringLiteral( "FilterExpression" ) ] =
+    QStringLiteral( "\"category\" = current_value('cat')" );
 
-//   // No features before explicit load (lazy loading)
-//   QCOMPARE( subVRModel.rowCount(), 0 );
+  ValueRelationController baseController;
+  baseController.setConfig( baseConfig );
 
-//   subVRModel.reloadFeatures();
-//   subSpy.wait();
-//   QCOMPARE( subVRModel.rowCount(), subLayer->dataProvider()->featureCount() );
-//   QCOMPARE( subVRModel.layer()->id(), subLayer->id() );
+  QSignalSpy rawSpy( &baseController, &ValueRelationController::presentRawValue );
+  QSignalSpy invalidateSpy( &baseController, &ValueRelationController::invalidateSelection );
+  QSignalSpy displaySpy( &baseController, &ValueRelationController::displayTextChanged );
 
-//   // KeyColumn and ValueColumn roles are present
-//   QVERIFY( subVRModel.data( subVRModel.index( 0, 0 ), ValueRelationFeaturesModel::KeyColumn ).isValid() );
-//   QVERIFY( subVRModel.data( subVRModel.index( 0, 0 ), ValueRelationFeaturesModel::ValueColumn ).isValid() );
+  // 1. Missing key, no filter -> presentRawValue; NOT invalidateSelection
+  baseController.lookupDisplayTextOnValueChanged( QStringLiteral( "99999" ) );
+  QVERIFY( rawSpy.wait( 5000 ) );
+  QVERIFY( displaySpy.isEmpty() );  // mDisplayText was already ""; setDisplayText skips emission
+  QVERIFY( invalidateSpy.isEmpty() );
+  QCOMPARE( baseController.displayText(), QString() );
 
-//   // ------- FIELD SubSubFK: form-scoped FilterExpression + drill-down
+  // 2. Hotreload without FilterExpression -> early return, no signals
+  rawSpy.clear();
+  displaySpy.clear();
+  baseController.lookupDisplayTextOnHotreload( QStringLiteral( "1" ), QgsFeature() );
+  QVERIFY( displaySpy.isEmpty() );
 
-//   const FormItem *subsubFkItem = controller.formItem( items.at( 4 ) );
+  // 3. Basic lookup: key "1" -> "Cat1-A"
+  displaySpy.clear();
+  baseController.lookupDisplayTextOnValueChanged( QStringLiteral( "1" ) );
+  QVERIFY( displaySpy.wait( 5000 ) );
+  QCOMPARE( baseController.displayText(), QStringLiteral( "Cat1-A" ) );
 
-//   ValueRelationFeaturesModel subsubVRModel;
-//   QSignalSpy subsubSpy( &subsubVRModel, &LayerFeaturesModel::fetchingResultsChanged );
-//   subsubVRModel.setConfig( subsubFkItem->editorWidgetConfig() );
-//   subsubVRModel.setPair( pair ); // form scope resolves current_value() in the filter
-//   subsubVRModel.reloadFeatures();
+  ValueRelationController filterController;
+  filterController.setConfig( filterConfig );
 
-//   subsubSpy.wait();
-//   QCOMPARE( subsubVRModel.layer()->id(), subsubLayer->id() );
+  QSignalSpy filterDisplaySpy( &filterController, &ValueRelationController::displayTextChanged );
+  QSignalSpy filterInvalidateSpy( &filterController, &ValueRelationController::invalidateSelection );
 
-//   // With the pair set the form-scoped filter must restrict the result set
-//   QCOMPARE( subsubVRModel.rowCount(), 2 );
+  // 4. Hotreload with filter, key valid in context -> displayText updated
+  // Form context: cat=1 -> key 1 ("Cat1-A") is reachable (category=1)
+  QgsFeature formFeature( formLayer->fields() );
+  formFeature.setAttribute( QStringLiteral( "cat" ), 1 );
+  formFeature.setValid( true );
+  filterController.lookupDisplayTextOnHotreload( QStringLiteral( "1" ), formFeature );
+  QVERIFY( filterDisplaySpy.wait( 5000 ) );
+  QCOMPARE( filterController.displayText(), QStringLiteral( "Cat1-A" ) );
 
-//   // Filter expression is present and valid in the request
-//   QgsFeatureRequest request;
-//   subsubVRModel.setupFeatureRequest( request );
-//   QVERIFY( !request.filterExpression()->operator QString().isEmpty() );
-//   QVERIFY( request.filterExpression()->isValid() );
+  // 5. Hotreload with filter, key not in context -> invalidateSelection
+  // Form context: cat=2 -> key 1 ("Cat1-A") is NOT reachable (category=1 ≠ 2)
+  filterDisplaySpy.clear();
+  QgsFeature formFeature2( formLayer->fields() );
+  formFeature2.setAttribute( QStringLiteral( "cat" ), 2 );
+  formFeature2.setValid( true );
+  filterController.lookupDisplayTextOnHotreload( QStringLiteral( "1" ), formFeature2 );
+  QVERIFY( filterInvalidateSpy.wait( 5000 ) );
 
-//   // Search combined with the filter expression
-//   subsubVRModel.setSearchExpression( QStringLiteral( "2" ) );
-//   subsubSpy.wait();
-//   QCOMPARE( subsubVRModel.rowCount(), 1 );
-
-//   // featureTitle returns the value column
-//   {
-//     QModelIndex idx = subsubVRModel.index( 0, 0 );
-//     FeatureLayerPair tempPair = subsubVRModel.data( idx, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
-//     QCOMPARE( subsubVRModel.featureTitle( tempPair ), QStringLiteral( "A2" ) );
-//   }
-
-//   // ------- FIELD AnotherFK: helper-based conversions and invalidation
-
-//   const FormItem *anotherFkItem = controller.formItem( items.at( 3 ) );
-
-//   ValueRelationFeaturesModel anotherVRModel;
-//   QSignalSpy anotherSpy( &anotherVRModel, &LayerFeaturesModel::fetchingResultsChanged );
-//   anotherVRModel.setConfig( anotherFkItem->editorWidgetConfig() );
-//   anotherVRModel.reloadFeatures();
-//   anotherSpy.wait();
-//   QCOMPARE( anotherVRModel.rowCount(), anotherLayer->dataProvider()->featureCount() );
-//   QCOMPARE( anotherVRModel.layer()->id(), anotherLayer->id() );
-
-//   // ValueRelationController handles conversions (static) and lookups (instance).
-//   // The "another" layer uses text keys; we look up a single known key "B".
-//   ValueRelationController anotherHelper;
-//   anotherHelper.setConfig( anotherFkItem->editorWidgetConfig() );
-
-//   // Single key lookup: pick the first key from the already-loaded model so the
-//   // test is not sensitive to the exact fixture values.
-//   QVERIFY( anotherVRModel.rowCount() > 0 );
-//   const QVariant firstKey = anotherVRModel.data( anotherVRModel.index( 0, 0 ), ValueRelationFeaturesModel::KeyColumn );
-//   QVERIFY( firstKey.isValid() );
-
-//   QSignalSpy lookupSpy( &anotherHelper, &ValueRelationController::displayValuesReady );
-//   anotherHelper.lookupDisplayValues( firstKey );
-//   QVERIFY( lookupSpy.wait() );
-//   QCOMPARE( lookupSpy.last().at( 0 ).toList().size(), 1 );
-
-//   // Static: round-trip QGIS format (type-independent, no layer access)
-//   QCOMPARE( anotherHelper.convertToQgisFormat( { QStringLiteral( "B" ), QStringLiteral( "C" ) } ),
-//             QStringLiteral( "{B,C}" ) );
-//   QCOMPARE( anotherHelper.convertFromQgisFormat( QStringLiteral( "{B,C}" ), true ),
-//             QStringList( { QStringLiteral( "B" ), QStringLiteral( "C" ) } ) );
-
-//   // Invalidation: helper with no FilterExpression must NOT emit invalidate
-//   // (the "another" layer config has no filter expression)
-//   QSignalSpy helperInvalidateSpy( &anotherHelper, &ValueRelationController::invalidate );
-//   QSignalSpy helperResultSpy( &anotherHelper, &ValueRelationController::displayValuesReady );
-//   anotherHelper.lookupDisplayValues( QStringLiteral( "NONEXISTENT_KEY" ) );
-//   QVERIFY( helperResultSpy.wait() );
-//   QVERIFY( helperInvalidateSpy.isEmpty() );
-// }
+  QgsProject::instance()->removeAllMapLayers();
+}

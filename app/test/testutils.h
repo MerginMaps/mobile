@@ -50,6 +50,19 @@ namespace TestUtils
   QgsProject *loadPlanesTestProject();
 
   /**
+   * Creates an in-memory no-geometry lookup layer with \a count features.
+   * Fields: key (integer), label (string).
+   */
+  QgsVectorLayer *createVRLookupLayer( int count );
+
+  /**
+   * Creates an in-memory no-geometry lookup layer for ordering tests.
+   * Features are inserted in an order that is neither key-sorted nor label-sorted:
+   *   key=3 label="Gamma", key=1 label="Alpha", key=4 label="Beta", key=2 label="Delta"
+   */
+  QgsVectorLayer *createVROrderingLayer();
+
+  /**
    * Generates files and folders in rootPath based on json structure.
    * \param structure is a json instance, each object is considered as folder. Each folder can have a key named "files"
    * which is an array of files to be created.

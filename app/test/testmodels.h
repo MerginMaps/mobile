@@ -23,9 +23,9 @@ class TestModels : public QObject
     void testStaticFeaturesModel();
     void testLayerFeaturesModel();
     void testLayerFeaturesModelSorted();
-    void testValueRelationFeaturesModel();
-    void testValueRelationController();
-    void testValueRelationControllerInvalidation();
+    void testValueRelationOrdering();
+    void testValueRelationSearch();
+    void testValueRelationHotreload();
     void testProjectsModel();
     void testProjectsProxyModel();
 
