@@ -101,9 +101,6 @@ class LayerFeaturesModel : public FeaturesModel
     //! These are the attributes that will be fetched from the data source when populating the model
     QgsAttributeList mAttributeList;
 
-  private slots:
-    void onFutureFinished();
-
   private:
     struct SearchResultData
     {
@@ -116,6 +113,9 @@ class LayerFeaturesModel : public FeaturesModel
     //! Performs getFeatures on a feature source. Takes ownership of \a source.
     static SearchResultData fetchFeatures( QgsAbstractFeatureSource *source, const QgsFeatureRequest &req, int searchId );
 
+    //! Should be called when a search is done/canceled. Cleans up mResultWatchers entry and populates the model if not canceled.
+    void handleFinishedSearch( int searchId );
+
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
 
@@ -127,7 +127,7 @@ class LayerFeaturesModel : public FeaturesModel
     QgsVectorLayer *mLayer = nullptr;
 
     QAtomicInt mNextSearchId = 0;
-    QHash<int, QPair<QgsFeedback *, QFutureWatcher<SearchResultData> *>> mResultWatchers; //!< owns feedback and future watches objects
+    QHash<int, QPair<QgsFeedback *, QFutureWatcher<SearchResultData> * >> mResultWatchers; //!< owns feedback and future watches objects
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
 

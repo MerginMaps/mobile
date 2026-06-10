@@ -11,9 +11,9 @@
 
 #include "featurelayerpair.h"
 
+#include "qgsattributetableconfig.h"
 #include "qgsfeaturerequest.h"
 #include "qgsfeedback.h"
-#include "qgsproject.h"
 #include "qgsvectorlayer.h"
 #include "qgsvectorlayerfeatureiterator.h"
 
@@ -109,7 +109,7 @@ void LayerFeaturesModel::populate()
     QFutureWatcher<SearchResultData> *watcher = new QFutureWatcher<SearchResultData>();
 
     mResultWatchers[ searchId ] = qMakePair( feedback, watcher );
-    connect( watcher, &QFutureWatcher<SearchResultData>::finished, this, &LayerFeaturesModel::onFutureFinished );
+    connect( watcher, &QFutureWatcher<SearchResultData>::finished, this, [this, searchId] { this->handleFinishedSearch( searchId ); } );
 
     qDebug() << QStringLiteral( "Search (%1) starting on layer %2" ).arg( searchId ).arg( mLayer->id() );
 
@@ -148,18 +148,24 @@ LayerFeaturesModel::SearchResultData LayerFeaturesModel::fetchFeatures( QgsAbstr
   return { searchId, fl };
 }
 
-void LayerFeaturesModel::onFutureFinished()
+void LayerFeaturesModel::handleFinishedSearch( int searchId )
 {
-  QFutureWatcher<SearchResultData> *watcher = static_cast< QFutureWatcher<SearchResultData> *>( sender() );
+  if ( !mResultWatchers.contains( searchId ) )
+  {
+    // should not happen, this method is called only once for existing searchIds only
+    Q_ASSERT( false );
+    return;
+  }
+
+  auto [feedback, watcher] = mResultWatchers.take( searchId );
   const SearchResultData data = watcher->future().result();
 
-  auto [f, w] = mResultWatchers.take( data.searchId );
-  w->deleteLater();
-  f->deleteLater();
-  qDebug() << QStringLiteral( "Search (%1) cleaned up" ).arg( data.searchId );
+  watcher->deleteLater();
+  feedback->deleteLater();
+  qDebug() << QStringLiteral( "Search (%1) cleaned up" ).arg( searchId );
 
   // We ignore the results of cancelled requests
-  if ( !f->isCanceled() )
+  if ( !feedback->isCanceled() )
   {
     const QgsFeatureList features = data.features;
     beginResetModel();
