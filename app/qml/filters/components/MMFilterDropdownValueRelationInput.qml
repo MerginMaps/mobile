@@ -109,8 +109,8 @@ Column {
 
       Component.onCompleted: {
         if ( root.currentValue ) {
-          // preselect choices if any are set
-          selected = root.currentValue
+
+          selected = root.currentValue.map( v => isFinite( v ) ? Number( v ) : v )
         }
 
         open()
