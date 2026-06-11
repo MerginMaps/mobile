@@ -33,7 +33,8 @@ qt_install_submodule(
   TOOL_NAMES
   ${TOOL_NAMES}
   CONFIGURE_OPTIONS
-  -DFEATURE_quickcontrols2_fusion:BOOL=ON
+  # space and load time optimization, we don't compile styles that are not used
+  -DFEATURE_quickcontrols2_fusion:BOOL=OFF
   -DFEATURE_quickcontrols2_material:BOOL=ON
   -DFEATURE_quickcontrols2_imagine:BOOL=OFF
   -DFEATURE_quickcontrols2_universal:BOOL=OFF

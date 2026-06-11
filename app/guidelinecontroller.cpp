@@ -128,16 +128,16 @@ void GuidelineController::buildGuideline()
     {
       // we are adding new point to the end/beginning
       QgsGeometry guideline;
-      QgsLineString *line;
+      const QgsLineString *line;
 
       if ( mRealGeometry.isMultipart() )
       {
-        QgsMultiLineString *multiLine = qgsgeometry_cast<QgsMultiLineString *>( mRealGeometry.constGet() );
+        const QgsMultiLineString *multiLine = qgsgeometry_cast<const QgsMultiLineString *>( mRealGeometry.constGet() );
         line = multiLine->lineStringN( mActivePart );
       }
       else
       {
-        line = qgsgeometry_cast<QgsLineString *>( mRealGeometry.constGet() );
+        line = qgsgeometry_cast<const QgsLineString *>( mRealGeometry.constGet() );
       }
 
       if ( !line )

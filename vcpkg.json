@@ -84,7 +84,13 @@
         },
         {
           "name": "qtbase",
-          "default-features": false
+          "default-features": false,
+          "features": [
+            {
+              "name": "wayland",
+              "platform": "linux"
+            }
+          ]
         },
         "qtconnectivity",
         "qtdeclarative",
@@ -93,10 +99,19 @@
         "qtlocation",
         {
           "name": "qtmultimedia",
+          "default-features": false,
           "features": [
             {
               "name": "ffmpeg",
               "platform": "linux | android | windows"
+            },
+            {
+              "name": "pipewire",
+              "platform": "linux"
+            },
+            {
+              "name": "pulseaudio",
+              "platform": "linux"
             },
             "qml"
           ]
@@ -114,11 +129,17 @@
           "default-features": false
         }
     ],
-    "builtin-baseline": "d6995a0cf3cafda5e9e52749fad075dd62bfd90c",
+    "builtin-baseline": "a78b96b07eb590c59bde5db0f4b260bda45ba92d",
     "overrides": [
         {
-            "name": "openssl",
-            "version": "3.3.2"
+          "$comment": "Required for QCA to work properly",
+          "name": "openssl",
+          "version": "3.3.2"
+        },
+        {
+          "$comment": "Issue in newer version https://github.com/qgis/QGIS/pull/63196",
+          "name": "libspatialindex",
+          "version": "2.0.0"
         }
     ]
 }

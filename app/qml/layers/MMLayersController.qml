@@ -41,7 +41,7 @@ Item {
     }
   }
 
-  StackView {
+  MMStackView {
     id: pagesStackView
 
     anchors.fill: parent

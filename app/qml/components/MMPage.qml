@@ -27,6 +27,13 @@ Page {
 
   enum BottomMarginPolicy { UseMargin, PaintBehindSystemBar }
 
+  // Qt 6.9+ Page automatically adds safe area margins as padding.
+  // MMPageHeader and page content already handle safe areas manually.
+  topPadding: 0
+  bottomPadding: 0
+  leftPadding: 0
+  rightPadding: 0
+
   implicitHeight: ApplicationWindow.window?.height ?? 0
   implicitWidth: ApplicationWindow.window?.width ?? 0
 

@@ -17,10 +17,6 @@ on:
     types:
       - published
 
-env:
-  QT_VERSION: '6.8.3' # use scripts/update_qt_version.bash to change
-  CACHE_VERSION: 0
-  
 jobs:
   code_style_cpp:
     name: C++ code convention check
@@ -68,12 +64,40 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install Requirements
-        #workaround for the current false positive bug in cppcheck 2.20 (latest version)
+        # workaround for the current false positive bug in cppcheck 2.21 (latest version)
         run: |
-          curl -L https://github.com/danmar/cppcheck/archive/refs/tags/2.19.1.tar.gz | tar xz
+          curl -L -o cppcheck.tar.gz https://github.com/danmar/cppcheck/archive/refs/tags/2.19.1.tar.gz
+          tar xz -f cppcheck.tar.gz
           cmake -S cppcheck-2.19.1 -B cppcheck-build -DCMAKE_BUILD_TYPE=Release
           cmake --build cppcheck-build -j$(sysctl -n hw.logicalcpu)
           cmake --install cppcheck-build
 
       - name: Run cppcheck test
         run: ./scripts/cppcheck.bash
+
+  no_stackview:
+    name: No direct StackView usage in QML
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check for direct StackView instantiation in QML files
+        run: |
+          # MMStackView.qml is the approved wrapper — exclude it from the search.
+          # Any other QML file with a bare "StackView" is using the raw Qt component
+          # instead of the wrapper, which breaks Squish test support.
+          matches=$(grep -rn --include="*.qml" \
+            --exclude="MMStackView.qml" \
+            '\<StackView[[:space:]]*{' \
+            app/qml/ || true)
+
+          if [ -n "$matches" ]; then
+            echo "ERROR: Direct StackView usage found. Use MMStackView instead:"
+            echo ""
+            echo "$matches"
+            exit 1
+          fi
+
+          echo "OK: No direct StackView usage found."

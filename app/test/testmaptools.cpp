@@ -2715,7 +2715,7 @@ void TestMapTools::testVerticesStructure()
   // We want to test case when last part is a line, not polygon.
   // As QGIS automatically close unclosed rings we need to alter geometry
   // manually and remove one point from the exterior ring of the part 3.
-  QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygonringsdataGEO.constGet() );
+  QgsMultiPolygon *multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygonringsdataGEO.get() );
   QgsPolygon *poly = multiPolygon->polygonN( 2 );
   QgsLineString *ring = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
   QgsPointSequence points;
@@ -2857,7 +2857,7 @@ void TestMapTools::testVerticesStructure()
   QgsGeometry multipolygoninvaliddataGEO = QgsGeometry::fromMultiPolygonXY( multipolygoninvaliddata );
   // We want to test case when 2nd part is a line, not polygon.
   // As QGIS automatically close unclosed rings we need to alter geometry
-  multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygoninvaliddataGEO.constGet() );
+  multiPolygon = qgsgeometry_cast<QgsMultiPolygon *>( multipolygoninvaliddataGEO.get() );
   poly = multiPolygon->polygonN( 1 );
   ring = qgsgeometry_cast<QgsLineString *>( poly->exteriorRing() );
   ring->points( points );

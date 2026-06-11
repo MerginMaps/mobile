@@ -1422,7 +1422,7 @@ Item {
   }
 
   function jumpToHighlighted( mapOffset ) {
-    if ( identifyHighlight.geometry === null )
+    if ( identifyHighlight.geometry.isNull )
       return
     let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
 
@@ -1436,7 +1436,7 @@ Item {
   }
 
   function hideHighlight() {
-    identifyHighlight.geometry = null
+    identifyHighlight.geometry = __inputUtils.emptyGeometry()
     updatePosition()
   }
 
@@ -1483,7 +1483,7 @@ Item {
       case "view": {
         // While a feature is highlighted we want to keep it visible in the map extent
         // so in that case we skip centering to position
-        if ( identifyHighlight.geometry !== null )
+        if ( !__inputUtils.isEmptyGeometry( identifyHighlight.geometry ) )
         {
           break
         }
@@ -1518,7 +1518,7 @@ Item {
     // clear all previous references to old project (if we don't clear references to the previous project,
     // highlights may end up with dangling pointers to map layers and cause crashes)
 
-    identifyHighlight.geometry = null
+    identifyHighlight.geometry = __inputUtils.emptyGeometry()
   }
 
   function setTracking( shouldTrack ) {

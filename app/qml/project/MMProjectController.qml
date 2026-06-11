@@ -87,7 +87,7 @@ Item {
     stackView.focus = true
   }
 
-  StackView {
+  MMStackView {
     id: stackView
 
     initialItem: workspaceProjectsPanelComp

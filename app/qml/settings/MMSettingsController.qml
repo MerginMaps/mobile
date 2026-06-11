@@ -56,7 +56,7 @@ Item {
   }
 
 
-  StackView {
+  MMStackView {
     id: stackview
 
     width: ApplicationWindow.window?.width ?? 0

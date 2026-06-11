@@ -58,6 +58,7 @@ set(MM_QML
     components/MMToolbarButton.qml
     components/MMSingleClickMouseArea.qml
     components/MMSegmentControl.qml
+    components/MMStackView.qml
     components/private/MMBaseInput.qml
     components/private/MMBaseSingleLineInput.qml
     components/private/MMToolbarLongButton.qml

@@ -1,0 +1,239 @@
+diff --git a/external/lazperf/lazperf_base.hpp b/external/lazperf/lazperf_base.hpp
+index 864ca2c2f7d..234af5a50ec 100644
+--- a/external/lazperf/lazperf_base.hpp
++++ b/external/lazperf/lazperf_base.hpp
+@@ -7,8 +7,12 @@
+ #define LAZPERF_VERSION 3.0.0
+ 
+ #ifdef _WIN32
++#if WITH_EPT || WITH_COPC
+ #define LAZPERF_EXPORT __declspec(dllexport)
+ #else
++#define LAZPERF_EXPORT 
++#endif
++#else
+ // This may not be necessary. The GCC doc says it take __declspec((dllexport))
+ #define LAZPERF_EXPORT __attribute__((visibility ("default")))
+ #endif
+diff --git a/src/core/pointcloud/qgscopcpointcloudindex.h b/src/core/pointcloud/qgscopcpointcloudindex.h
+index 2b18d53ce89..f68682d8c39 100644
+--- a/src/core/pointcloud/qgscopcpointcloudindex.h
++++ b/src/core/pointcloud/qgscopcpointcloudindex.h
+@@ -32,7 +32,9 @@
+ #include "qgspointcloudstatistics.h"
+ 
+ #include "qgslazinfo.h"
++#if WITH_EPT || WITH_COPC
+ #include "lazperf/vlr.hpp"
++#endif
+ 
+ ///@cond PRIVATE
+ #define SIP_NO_FILE
+@@ -109,7 +111,9 @@ class CORE_EXPORT QgsCopcPointCloudIndex: public QgsAbstractPointCloudIndex
+     bool mIsValid = false;
+     Qgis::PointCloudAccessType mAccessType = Qgis::PointCloudAccessType::Local;
+     mutable std::ifstream mCopcFile;
++#if WITH_EPT || WITH_COPC
+     mutable lazperf::copc_info_vlr mCopcInfoVlr;
++#endif
+     mutable QHash<QgsPointCloudNodeId, QPair<uint64_t, int32_t>> mHierarchyNodePos; //!< Additional data hierarchy for COPC
+ 
+     mutable QMutex mFileMutex;
+diff --git a/src/core/pointcloud/qgspointcloudeditingindex.cpp b/src/core/pointcloud/qgspointcloudeditingindex.cpp
+index 40aecdc9a1f..76280678ba0 100644
+--- a/src/core/pointcloud/qgspointcloudeditingindex.cpp
++++ b/src/core/pointcloud/qgspointcloudeditingindex.cpp
+@@ -118,8 +118,11 @@ std::unique_ptr< QgsPointCloudBlock > QgsPointCloudEditingIndex::nodeData( const
+     QgsCopcPointCloudIndex *copcIndex = static_cast<QgsCopcPointCloudIndex *>( mIndex.get() );
+ 
+     int pointCount = copcIndex->mHierarchy.value( n );
+-
++#if WITH_EPT || WITH_COPC
+     return QgsLazDecoder::decompressCopc( rawBlockData, *copcIndex->mLazInfo.get(), pointCount, requestAttributes, filterExpression, filterRect );
++#else
++    return {};
++#endif
+   }
+   else
+   {
+@@ -172,6 +175,7 @@ bool QgsPointCloudEditingIndex::commitChanges( QString *errorMessage )
+   QFileInfo fileInfo( mUri );
+   const QString outputFilename = fileInfo.dir().filePath( fileInfo.baseName() + QStringLiteral( "-update.copc.laz" ) );
+ 
++#if WITH_EPT || WITH_COPC
+   if ( !QgsCopcUpdate::writeUpdatedFile( mUri, outputFilename, updatedChunks, errorMessage ) )
+   {
+     return false;
+@@ -180,6 +184,7 @@ bool QgsPointCloudEditingIndex::commitChanges( QString *errorMessage )
+   // reset the underlying index - we will reload it at the end
+   QgsCopcPointCloudIndex *copcIndex = static_cast<QgsCopcPointCloudIndex *>( mIndex.get() );
+   copcIndex->reset();
++#endif
+ 
+   const QString originalFilename = fileInfo.dir().filePath( fileInfo.baseName() + QStringLiteral( "-original.copc.laz" ) );
+   if ( !QFile::rename( mUri, originalFilename ) )
+@@ -209,8 +214,10 @@ bool QgsPointCloudEditingIndex::commitChanges( QString *errorMessage )
+ 
+   mEditedNodeData.clear();
+ 
++#if WITH_EPT || WITH_COPC
+   // now let's reload
+   copcIndex->load( mUri );
++#endif
+ 
+   return true;
+ }
+diff --git a/src/core/pointcloud/qgspointcloudlayer.cpp b/src/core/pointcloud/qgspointcloudlayer.cpp
+index d7147110757..9c58ccf9f20 100644
+--- a/src/core/pointcloud/qgspointcloudlayer.cpp
++++ b/src/core/pointcloud/qgspointcloudlayer.cpp
+@@ -45,7 +45,9 @@
+ #include "qgsthreadingutils.h"
+ #include "qgspointcloudlayerprofilegenerator.h"
+ #include "qgspointcloudlayerundocommand.h"
++#if WITH_EPT || WITH_COPC
+ #include "qgsvirtualpointcloudprovider.h"
++#endif
+ 
+ 
+ #include <QUrl>
+@@ -960,6 +962,7 @@ void QgsPointCloudLayer::loadIndexesForRenderContext( QgsRenderContext &renderer
+     }
+ 
+     const QVector<QgsPointCloudSubIndex> subIndex = mDataProvider->subIndexes();
++#if WITH_EPT || WITH_COPC
+     if ( const QgsVirtualPointCloudProvider *vpcProvider = dynamic_cast<QgsVirtualPointCloudProvider *>( mDataProvider.get() ) )
+     {
+       for ( int i = 0; i < subIndex.size(); ++i )
+@@ -976,6 +979,7 @@ void QgsPointCloudLayer::loadIndexesForRenderContext( QgsRenderContext &renderer
+         }
+       }
+     }
++#endif
+   }
+ }
+ 
+diff --git a/src/core/pointcloud/qgspointcloudlayereditutils.cpp b/src/core/pointcloud/qgspointcloudlayereditutils.cpp
+index 94704bb5351..f29b9dedace 100644
+--- a/src/core/pointcloud/qgspointcloudlayereditutils.cpp
++++ b/src/core/pointcloud/qgspointcloudlayereditutils.cpp
+@@ -19,9 +19,10 @@
+ #include "qgscopcpointcloudindex.h"
+ #include <QMutex>
+ 
++#if WITH_EPT || WITH_COPC
+ #include <lazperf/readers.hpp>
+ #include <lazperf/writers.hpp>
+-
++#endif
+ 
+ static void updatePoint( char *pointBuffer, int pointFormat, const QString &attributeName, double newValue )
+ {
+@@ -141,6 +142,7 @@ QByteArray QgsPointCloudLayerEditUtils::updateChunkValues( QgsCopcPointCloudInde
+     pointCount = copcIndex->mHierarchy[n];
+   }
+ 
++#if WITH_EPT || WITH_COPC
+   lazperf::header14 header = copcIndex->mLazInfo->header();
+ 
+   lazperf::reader::chunk_decompressor decompressor( header.pointFormat(), header.ebCount(), chunkData.constData() );
+@@ -169,6 +171,9 @@ QByteArray QgsPointCloudLayerEditUtils::updateChunkValues( QgsCopcPointCloudInde
+ 
+   std::vector<unsigned char> data = compressor.done();
+   return QByteArray( ( const char * ) data.data(), ( int ) data.size() ); // QByteArray makes a deep copy
++#else
++  return {};
++#endif
+ }
+ 
+ bool QgsPointCloudLayerEditUtils::isAttributeValueValid( const QgsPointCloudAttribute &attribute, double value )
+diff --git a/src/core/pointcloud/qgspointcloudlayerelevationproperties.cpp b/src/core/pointcloud/qgspointcloudlayerelevationproperties.cpp
+index de43f05bebd..64580b10524 100644
+--- a/src/core/pointcloud/qgspointcloudlayerelevationproperties.cpp
++++ b/src/core/pointcloud/qgspointcloudlayerelevationproperties.cpp
+@@ -21,7 +21,9 @@
+ #include "qgsapplication.h"
+ #include "qgscolorschemeregistry.h"
+ #include "qgscolorutils.h"
++#if WITH_EPT || WITH_COPC
+ #include "qgsvirtualpointcloudprovider.h"
++#endif
+ 
+ QgsPointCloudLayerElevationProperties::QgsPointCloudLayerElevationProperties( QObject *parent )
+   : QgsMapLayerElevationProperties( parent )
+@@ -138,6 +140,7 @@ QgsDoubleRange QgsPointCloudLayerElevationProperties::calculateZRange( QgsMapLay
+         zMax = stats.maximum( QStringLiteral( "Z" ) );
+       }
+       // try to fetch the elevation properties from virtual point cloud metadata
++#if WITH_EPT || WITH_COPC
+       else if ( QgsVirtualPointCloudProvider *virtualProvider = dynamic_cast< QgsVirtualPointCloudProvider * >( pcLayer->dataProvider() ) )
+       {
+         for ( QgsPointCloudSubIndex subIndex : virtualProvider->subIndexes() )
+@@ -148,6 +151,7 @@ QgsDoubleRange QgsPointCloudLayerElevationProperties::calculateZRange( QgsMapLay
+           zMax = std::isnan( zMax ) ? newRange.upper() : std::max( zMax, newRange.upper() );
+         }
+       }
++#endif
+ 
+       if ( !std::isnan( zMin ) && !std::isnan( zMax ) )
+       {
+diff --git a/src/core/pointcloud/qgspointcloudlayerrenderer.cpp b/src/core/pointcloud/qgspointcloudlayerrenderer.cpp
+index ac38367f6de..f0426ce9bc8 100644
+--- a/src/core/pointcloud/qgspointcloudlayerrenderer.cpp
++++ b/src/core/pointcloud/qgspointcloudlayerrenderer.cpp
+@@ -36,7 +36,9 @@
+ #include "qgspointcloudrequest.h"
+ #include "qgsrendercontext.h"
+ #include "qgsruntimeprofiler.h"
++#if WITH_EPT || WITH_COPC
+ #include "qgsvirtualpointcloudprovider.h"
++#endif
+ 
+ #include <delaunator.hpp>
+ 
+@@ -77,6 +79,7 @@ QgsPointCloudLayerRenderer::QgsPointCloudLayerRenderer( QgsPointCloudLayer *laye
+     mZScale = elevationProps->zScale();
+   }
+ 
++  #if WITH_EPT || WITH_COPC
+   if ( const QgsVirtualPointCloudProvider *vpcProvider = dynamic_cast<QgsVirtualPointCloudProvider *>( layer->dataProvider() ) )
+   {
+     mIsVpc = true;
+@@ -84,6 +87,7 @@ QgsPointCloudLayerRenderer::QgsPointCloudLayerRenderer( QgsPointCloudLayer *laye
+     mAverageSubIndexHeight = vpcProvider->averageSubIndexHeight();
+     mOverviewIndex = vpcProvider->overview();
+   }
++  #endif
+ 
+   mCloudExtent = layer->dataProvider()->polygonBounds();
+ 
+diff --git a/src/core/pointcloud/qgspointcloudlayerundocommand.cpp b/src/core/pointcloud/qgspointcloudlayerundocommand.cpp
+index 816ebb4564b..b5652c751ea 100644
+--- a/src/core/pointcloud/qgspointcloudlayerundocommand.cpp
++++ b/src/core/pointcloud/qgspointcloudlayerundocommand.cpp
+@@ -100,6 +100,7 @@ void QgsPointCloudLayerUndoCommandChangeAttribute::redo()
+ 
+ void QgsPointCloudLayerUndoCommandChangeAttribute::undoRedoPrivate( bool isUndo )
+ {
++#if WITH_EPT || WITH_COPC
+   QgsEventTracing::ScopedEvent _trace( QStringLiteral( "PointCloud" ), QStringLiteral( "QgsPointCloudLayerUndoCommand::undoRedoPrivate" ) );
+   QgsPointCloudEditingIndex *editIndex = dynamic_cast<QgsPointCloudEditingIndex *>( mLayer->index().get() );
+   QgsCopcPointCloudIndex *copcIndex = dynamic_cast<QgsCopcPointCloudIndex *>( editIndex->backingIndex().get() );
+@@ -141,4 +142,5 @@ void QgsPointCloudLayerUndoCommandChangeAttribute::undoRedoPrivate( bool isUndo
+   {
+     emit mLayer->chunkAttributeValuesChanged( it.key() );
+   }
++#endif
+ }
+diff --git a/src/core/pointcloud/qgspointcloudrenderer.cpp b/src/core/pointcloud/qgspointcloudrenderer.cpp
+index c27e90b0a77..0db83906c63 100644
+--- a/src/core/pointcloud/qgspointcloudrenderer.cpp
++++ b/src/core/pointcloud/qgspointcloudrenderer.cpp
+@@ -25,7 +25,6 @@
+ #include "qgslogger.h"
+ #include "qgscircle.h"
+ #include "qgsunittypes.h"
+-#include "qgsvirtualpointcloudprovider.h"
+ 
+ #include <QThread>
+ #include <QPointer>
