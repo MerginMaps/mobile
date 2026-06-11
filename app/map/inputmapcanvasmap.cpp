@@ -269,6 +269,9 @@ void InputMapCanvasMap::onScreenChanged( QScreen *screen )
       mMapSettings->setDevicePixelRatio( screen->devicePixelRatio() );
     }
     mMapSettings->setOutputDpi( screen->physicalDotsPerInch() );
+    // Re-apply logical size so setOutputSize re-scales it with the new DPR
+    mMapSettings->setOutputSize( boundingRect().size().toSize() );
+    refresh();
   }
 }
 

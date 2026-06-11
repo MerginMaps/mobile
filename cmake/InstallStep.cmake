@@ -158,7 +158,6 @@ set(qt_libs
     LabsWavefrontMesh
     Multimedia
     MultimediaQuick
-    MultimediaWidgets
     Network
     Nfc
     OpenGL

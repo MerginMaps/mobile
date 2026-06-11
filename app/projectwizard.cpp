@@ -15,17 +15,13 @@
 #include "qgsvectortilelayer.h"
 #include "qgsvectorlayer.h"
 #include "qgsvectorfilewriter.h"
-#include "qgsdatetimefieldformatter.h"
 #include "qgsmarkersymbollayer.h"
-#include "qgis.h"
 #include "qgslinesymbol.h"
 #include "qgssymbollayer.h"
 #include "qgssymbollayerutils.h"
 #include "qgssymbol.h"
 #include "qgsmarkersymbol.h"
 #include "qgssinglesymbolrenderer.h"
-#include "inpututils.h"
-#include "coreutils.h"
 
 const QString TILES_URL = QStringLiteral( "https://tiles.merginmaps.com" );
 
@@ -39,17 +35,17 @@ ProjectWizard::ProjectWizard( const QString &dataDir, QObject *parent )
 
 QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig )
 {
-  QString gpkgName( QStringLiteral( "data" ) );
-  QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
-  QString layerName( QStringLiteral( "Survey" ) );
-  QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
+  const QString gpkgName( QStringLiteral( "data" ) );
+  const QString projectGpkgPath( QString( "%1/%2.%3" ).arg( projectDir ).arg( gpkgName ).arg( "gpkg" ) );
+  const QString layerName( QStringLiteral( "Survey" ) );
+  const QgsCoordinateReferenceSystem layerCrs( LAYER_CRS_ID );
   QgsFields predefinedFields = createFields( fieldsConfig );
 
   // Write layer as gpkg
   QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=%1" ).arg( LAYER_CRS_ID ), layerName, "memory" );
   layer->startEditing();
   layer->setCrs( layerCrs );
-  for ( QgsField f : predefinedFields )
+  for ( const QgsField &f : predefinedFields )
   {
     layer->addAttribute( f );
   }
@@ -103,19 +99,19 @@ QgsVectorLayer *ProjectWizard::createTrackingLayer( const QString &trackingGpkgP
   options.driverName = "GPKG";
   options.layerName = "tracking_layer";
 
-  QgsVectorFileWriter *writer = QgsVectorFileWriter::create(
-                                  trackingGpkgPath,
-                                  fields,
-                                  Qgis::WkbType::LineStringZM,
-                                  QgsCoordinateReferenceSystem( "EPSG:4326" ),
-                                  mSettings->transformContext(),
-                                  options );
+  const QgsVectorFileWriter *writer = QgsVectorFileWriter::create(
+                                        trackingGpkgPath,
+                                        fields,
+                                        Qgis::WkbType::LineStringZM,
+                                        QgsCoordinateReferenceSystem( "EPSG:4326" ),
+                                        mSettings->transformContext(),
+                                        options );
   delete writer;
 
   QgsVectorLayer *layer = new QgsVectorLayer( trackingGpkgPath, "tracking_layer", "ogr" );
 
   int idx = layer->fields().indexFromName( "fid" );
-  QgsEditorWidgetSetup cfg( "Hidden", QVariantMap() );
+  const QgsEditorWidgetSetup cfg( "Hidden", QVariantMap() );
   layer->setEditorWidgetSetup( idx, cfg );
 
   idx = layer->fields().indexFromName( "tracking_start_time" );
@@ -146,7 +142,7 @@ QgsVectorLayer *ProjectWizard::createTrackingLayer( const QString &trackingGpkgP
   symbolProps["line_width_unit"] = "MM";
   symbolProps["line_color"] = QgsSymbolLayerUtils::encodeColor( QColor( "#FFA500" ) );
 
-  layer->setRenderer( new QgsSingleSymbolRenderer( QgsLineSymbol::createSimple( symbolProps ) ) );
+  layer->setRenderer( new QgsSingleSymbolRenderer( QgsLineSymbol::createSimple( symbolProps ).release() ) );
 
   layer->setReadOnly( false );
   layer->setFlags( QgsMapLayer::Identifiable | QgsMapLayer::Searchable | QgsMapLayer::Removable );
@@ -154,7 +150,7 @@ QgsVectorLayer *ProjectWizard::createTrackingLayer( const QString &trackingGpkgP
   return layer;
 }
 
-void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *fieldsModel )
+void ProjectWizard::createProject( QString const &projectNameRaw, const FieldsModel *fieldsModel )
 {
   if ( !CoreUtils::isValidName( projectNameRaw ) )
   {
@@ -165,10 +161,10 @@ void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *f
   QString projectName( projectNameRaw );
   projectName = InputUtils::sanitizeNode( projectName );
 
-  QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
-  QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
-  QString projectGpkgPath( QString( "%1/data.gpkg" ).arg( projectDir ) );
-  QString trackingGpkgPath( QString( "%1/tracking_layer.gpkg" ).arg( projectDir ) );
+  const QString projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
+  const QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
+  const QString projectGpkgPath( QString( "%1/data.gpkg" ).arg( projectDir ) );
+  const QString trackingGpkgPath( QString( "%1/tracking_layer.gpkg" ).arg( projectDir ) );
 
   QgsProject project;
 
@@ -197,7 +193,7 @@ void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *f
   project.addMapLayers( layers );
 
   // Configurate mapSettings
-  QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
+  const QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
   mSettings->setExtent( bgLayer->extent() );
   mSettings->setEllipsoid( "WGS84" );
   mSettings->setDestinationCrs( projectCrs );
@@ -218,7 +214,7 @@ void ProjectWizard::createProject( QString const &projectNameRaw, FieldsModel *f
 
 void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
 {
-  QDomNodeList nl = doc.elementsByTagName( QStringLiteral( "qgis" ) );
+  const QDomNodeList nl = doc.elementsByTagName( QStringLiteral( "qgis" ) );
   if ( !nl.count() )
   {
     QgsDebugError( QStringLiteral( "Unable to find qgis element in project file" ) );
@@ -232,14 +228,14 @@ void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )
   mSettings->writeXml( mapcanvasNode, doc );
 }
 
-QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> fieldsConfig ) const
+QgsFields ProjectWizard::createFields( const QList<FieldConfiguration> &fieldsConfig ) const
 {
 
   QgsFields fields;
   for ( const FieldConfiguration &fc : fieldsConfig )
   {
     QString type = widgetToType( fc.widgetType );
-    QVariant::Type qtype = parseType( type );
+    const QMetaType::Type qtype = parseType( type );
     QgsField field( fc.attributeName, qtype, type );
     fields.append( field );
   }
@@ -257,45 +253,53 @@ QgsSingleSymbolRenderer *ProjectWizard::surveyLayerRenderer()
   return new QgsSingleSymbolRenderer( symbol );
 }
 
-QVariant::Type ProjectWizard::parseType( const QString &type ) const
+QMetaType::Type ProjectWizard::parseType( const QString &type ) const
 {
   if ( type == QLatin1String( "text" ) )
-    return QVariant::String;
-  else if ( type == QLatin1String( "integer" ) )
-    return QVariant::Int;
-  else if ( type == QLatin1String( "integer64" ) )
-    return QVariant::Int;
-  else if ( type == QLatin1String( "real" ) )
-    return QVariant::Double;
-  else if ( type == QLatin1String( "date" ) )
-    return QVariant::Date;
-  else if ( type == QLatin1String( "datetime" ) )
-    return QVariant::DateTime;
-  else if ( type == QLatin1String( "bool" ) )
-    return QVariant::Bool;
-  else if ( type == QLatin1String( "binary" ) )
-    return QVariant::ByteArray;
+    return QMetaType::QString;
 
-  return QVariant::Invalid;
+  if ( type == QLatin1String( "integer" ) || type == QLatin1String( "integer64" ) )
+    return QMetaType::Int;
+
+  if ( type == QLatin1String( "real" ) )
+    return QMetaType::Double;
+
+  if ( type == QLatin1String( "date" ) )
+    return QMetaType::QDate;
+
+  if ( type == QLatin1String( "datetime" ) )
+    return QMetaType::QDateTime;
+
+  if ( type == QLatin1String( "bool" ) )
+    return QMetaType::Bool;
+
+  if ( type == QLatin1String( "binary" ) )
+    return QMetaType::QByteArray;
+
+  return QMetaType::UnknownType;
 }
 
 QString ProjectWizard::widgetToType( const QString &widgetType ) const
 {
   if ( widgetType == QStringLiteral( "TextEdit" ) )
     return QStringLiteral( "text" );
-  else if ( widgetType == QStringLiteral( "Range" ) )
+
+  if ( widgetType == QStringLiteral( "Range" ) )
     return QStringLiteral( "integer" );
-  else if ( widgetType == QStringLiteral( "DateTime" ) )
+
+  if ( widgetType == QStringLiteral( "DateTime" ) )
     return QStringLiteral( "datetime" );
-  else if ( widgetType == QStringLiteral( "CheckBox" ) )
+
+  if ( widgetType == QStringLiteral( "CheckBox" ) )
     return QStringLiteral( "bool" );
-  else if ( widgetType == QStringLiteral( "ExternalResource" ) )
+
+  if ( widgetType == QStringLiteral( "ExternalResource" ) )
     return QStringLiteral( "text" );
 
   return QStringLiteral( "text" );
 }
 
-QString ProjectWizard::findWidgetTypeByFieldName( const QString name, const QList<FieldConfiguration> fieldsConfig ) const
+QString ProjectWizard::findWidgetTypeByFieldName( const QString &name, const QList<FieldConfiguration> &fieldsConfig ) const
 {
 
   for ( int i = 0; i < fieldsConfig.count(); ++i )

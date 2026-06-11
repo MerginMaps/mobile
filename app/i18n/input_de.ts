@@ -2373,7 +2373,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message numerus="yes">
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
         <source>%n Feature(s) selected</source>
-        <translation><numerusform>%n Objekt ausgewählt</numerusform><numerusform>%n Objekte ausgewählt</numerusform></translation>
+        <translation><numerusform>%n Objekt ausgewählt</numerusform><numerusform>%n Objekt(e) ausgewählt</numerusform></translation>
     </message>
     <message>
         <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>

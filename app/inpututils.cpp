@@ -450,7 +450,7 @@ QgsGeometry InputUtils::transformGeometryToMapWithLayer( const QgsGeometry &geom
 {
   if ( !sourceLayer || !sourceLayer->isValid() || !targetSettings )
   {
-    return QgsGeometry();
+    return {};
   }
 
   return transformGeometry( geometry, sourceLayer->crs(), targetSettings->destinationCrs(), targetSettings->transformContext() );
@@ -818,7 +818,7 @@ QgsPoint InputUtils::point( double x, double y, double z, double m )
 
 QgsGeometry InputUtils::emptyGeometry()
 {
-  return QgsGeometry();
+  return {};
 }
 
 QgsFeature InputUtils::emptyFeature()
@@ -1670,12 +1670,12 @@ QgsRectangle InputUtils::stakeoutPathExtent(
 QgsGeometry InputUtils::stakeoutGeometry( const QgsPoint &mapPosition, const FeatureLayerPair &target, InputMapSettings *mapSettings )
 {
   if ( !mapSettings || !target.isValid() )
-    return QgsGeometry();
+    return {};
 
-  QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
-  QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
+  const QgsPointXY targetInLayerCoordinates = target.feature().geometry().asPoint();
+  const QgsPointXY t = transformPointXY( target.layer()->crs(), mapSettings->destinationCrs(), mapSettings->transformContext(), targetInLayerCoordinates );
 
-  QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
+  const QVector<QgsPoint> points { mapPosition, QgsPoint( t ) };
 
   return QgsGeometry::fromPolyline( points );
 }

@@ -9,6 +9,8 @@
 
 #include "positiontrackinghighlight.h"
 
+#include "inpututils.h"
+
 PositionTrackingHighlight::PositionTrackingHighlight( QObject *parent )
   : QObject( parent )
 {
@@ -20,13 +22,13 @@ void PositionTrackingHighlight::recalculate()
 {
   if ( mMapPosition.isEmpty() )
   {
-    setHighlightGeometry( QgsGeometry() );
+    setHighlightGeometry( InputUtils::emptyGeometry() );
     return;
   }
 
   if ( mTrackedGeometry.isEmpty() )
   {
-    setHighlightGeometry( QgsGeometry() );
+    setHighlightGeometry( InputUtils::emptyGeometry() );
     return;
   }
 

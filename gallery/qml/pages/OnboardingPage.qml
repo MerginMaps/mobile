@@ -17,7 +17,7 @@ import "../../app/qml/account"
 Page {
   id: root
 
-  StackView {
+  MMStackView {
     id: stackview
 
     anchors.fill: parent
