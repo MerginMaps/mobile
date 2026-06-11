@@ -28,8 +28,8 @@ MMPrivateComponents.MMBaseInput {
   id: root
 
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
-  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
   property var _fieldActiveProject: parent.fieldActiveProject
+  property MM.AttributeController _fieldController: parent.fieldController
 
   property string _fieldTitle: parent.fieldTitle
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -97,7 +97,7 @@ MMPrivateComponents.MMBaseInput {
           anchors.fill: parent
           onSingleClicked: {
             root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
-            root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+            root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
           }
         }
       }
@@ -111,7 +111,7 @@ MMPrivateComponents.MMBaseInput {
           id: rmodel
 
           relation: root._fieldAssociatedRelation
-          parentFeatureLayerPair: root._fieldFeatureLayerPair
+          parentFeatureLayerPair: root._fieldController.featureLayerPair
           homePath: root._fieldActiveProject.homePath
 
           onModelReset: {
@@ -217,7 +217,7 @@ MMPrivateComponents.MMBaseInput {
       onClosed: listLoader.active = false
       onFeatureClicked: ( featurePair ) => root.openLinkedFeature( featurePair )
       onSearchTextChanged: ( searchText ) => rmodel.searchExpression = searchText
-      onButtonClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+      onButtonClicked: root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
 
       Component.onCompleted: open()
     }

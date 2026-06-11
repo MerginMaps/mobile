@@ -12,6 +12,10 @@
 
 #include "qgsvaluerelationfieldformatter.h"
 #include "qgsexpressioncontextutils.h"
+#include "qgsvectorlayer.h"
+
+using namespace Qt::Literals;
+
 
 ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
   : LayerFeaturesModel( parent )
@@ -20,209 +24,159 @@ ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
 
 ValueRelationFeaturesModel::~ValueRelationFeaturesModel() = default;
 
-void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
+QVariant ValueRelationFeaturesModel::data( const QModelIndex &index, int role ) const
 {
-  LayerFeaturesModel::setupFeatureRequest( request );
+  if ( !index.isValid() )
+    return QVariant();
 
-  if ( !mFilterExpression.isEmpty() )
-  {
-    request.combineFilterExpression( mFilterExpression );
+  const int row = index.row();
+  if ( row < 0 || row >= mFeatures.count() )
+    return QVariant();
 
-    // create context for filter expression
-    if ( QgsValueRelationFieldFormatter::expressionIsUsable( mFilterExpression, mPair.feature() ) )
-    {
-      QgsExpression exp( mFilterExpression );
-      QgsExpressionContext filterContext = QgsExpressionContext( QgsExpressionContextUtils::globalProjectLayerScopes( LayerFeaturesModel::layer() ) );
+  if ( role == KeyColumn )
+    return mFeatures.at( row ).feature().attribute( mKeyFieldIndex ).toString();
 
-      if ( mPair.feature().isValid() && QgsValueRelationFieldFormatter::expressionRequiresFormScope( mFilterExpression ) )
-        filterContext.appendScope( QgsExpressionContextUtils::formScope( mPair.feature() ) );
+  if ( role == ValueColumn )
+    return mFeatures.at( row ).feature().attribute( mValueFieldIndex ).toString();
 
-      request.setExpressionContext( filterContext );
-    }
-  }
-
-  if ( mConfig.value( QStringLiteral( "OrderByValue" ) ).toBool() )
-  {
-    // replace any existing order by clause with our value field
-    request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( mTitleField ) } ) );
-  }
+  return LayerFeaturesModel::data( index, role );
 }
 
 QHash<int, QByteArray> ValueRelationFeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roles = LayerFeaturesModel::roleNames();
-  roles[KeyRole] = QStringLiteral( "Key" ).toLatin1();
-
+  roles[KeyColumn]   = QByteArrayLiteral( "KeyColumn" );
+  roles[ValueColumn] = QByteArrayLiteral( "ValueColumn" );
   return roles;
 }
 
-QVariant ValueRelationFeaturesModel::data( const QModelIndex &index, int role ) const
+void ValueRelationFeaturesModel::setupFeatureRequest( QgsFeatureRequest &request )
 {
-  int row = index.row();
-  if ( row < 0 || row >= mFeatures.count() )
-    return QVariant();
+  LayerFeaturesModel::setupFeatureRequest( request );
 
-  if ( !index.isValid() )
-    return QVariant();
+  // minimal subset of attributes
 
-  const FeatureLayerPair pair = mFeatures.at( index.row() );
+  request.setSubsetOfAttributes( QgsAttributeList() << mKeyFieldIndex << mValueFieldIndex );
+  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
 
-  if ( role == KeyRole )
+  // filter expression
+
+  if ( !mFilterExpression.isEmpty() && mPair.isValid() )
   {
-    return pair.feature().attribute( mKeyField );
+    request.combineFilterExpression( mFilterExpression );
+
+    if ( QgsValueRelationFieldFormatter::expressionIsUsable( mFilterExpression, mPair.feature() ) )
+    {
+      QgsExpressionContext ctx( QgsExpressionContextUtils::globalProjectLayerScopes( layer() ) );
+
+      if ( mPair.feature().isValid() && QgsValueRelationFieldFormatter::expressionRequiresFormScope( mFilterExpression ) )
+      {
+        ctx.appendScope( QgsExpressionContextUtils::formScope( mPair.feature() ) );
+      }
+
+      request.setExpressionContext( ctx );
+    }
   }
 
-  return LayerFeaturesModel::data( index, role );
+  // order
+
+  request.setOrderBy( QgsFeatureRequest::OrderBy( { QgsFeatureRequest::OrderByClause( mOrderByField, mOrderByAsc, false ) } ) );
+
+  // limit
+
+  request.setLimit( VR_FEATURES_LIMIT );
+}
+
+QString ValueRelationFeaturesModel::buildSearchExpression()
+{
+  // Let's search only in the value column, this is a minimal approach compared to the base class implementation
+  const QString searchExpr = searchExpression().trimmed();
+
+  if ( searchExpr.isEmpty() )
+  {
+    return {};
+  }
+
+  return u"(%1 ILIKE '%%2%')"_s.arg( QgsExpression::quotedColumnRef( mValueField ), searchExpr );
 }
 
 void ValueRelationFeaturesModel::setup()
 {
+  mIsInitialized = false;
+
   if ( mConfig.isEmpty() )
     return;
 
-  QgsVectorLayer *layer = QgsValueRelationFieldFormatter::resolveLayer( mConfig, QgsProject::instance() );
+  QgsVectorLayer *vLayer = QgsValueRelationFieldFormatter::resolveLayer( mConfig, QgsProject::instance() );
 
-  if ( layer && layer->fields().size() != 0 )
+  if ( !vLayer || !vLayer->isValid() || vLayer->fields().isEmpty() )
   {
-    QgsFields fields = layer->fields();
+    CoreUtils::log( u"Value Relation"_s, u"Missing or invalid referenced layer"_s );
+    return;
+  }
 
-    QString keyFieldName = mConfig.value( QStringLiteral( "Key" ) ).toString();
-    QString valueFieldName = mConfig.value( QStringLiteral( "Value" ) ).toString();
+  const QString keyFieldName = mConfig.value( u"Key"_s ).toString();
+  const QString valueFieldName = mConfig.value( u"Value"_s ).toString();
 
-    if ( fields.indexOf( keyFieldName ) >= 0 && fields.indexOf( valueFieldName ) >= 0 )
+  if ( vLayer->fields().indexOf( keyFieldName ) < 0 || vLayer->fields().indexOf( valueFieldName ) < 0 )
+  {
+    CoreUtils::log( u"ValueRelationFeaturesModel"_s, u"Missing referenced fields for value relations."_s );
+    return;
+  }
+
+  mKeyField = keyFieldName;
+  mValueField = valueFieldName;
+  mKeyFieldIndex = vLayer->fields().indexOf( keyFieldName );
+  mValueFieldIndex = vLayer->fields().indexOf( valueFieldName );
+
+  mFilterExpression = mConfig.value( u"FilterExpression"_s ).toString();
+
+  // setLayer() internally resets mAttributeList to all fields, so we must
+  // override it afterwards with only the two columns we actually need.
+  LayerFeaturesModel::setLayer( vLayer );
+
+  mAttributeList = { mKeyFieldIndex, mValueFieldIndex };
+
+  mOrderByAsc = !mConfig.value( u"OrderByDescending"_s ).toBool();
+
+  if ( mConfig.value( u"OrderByKey"_s ).toBool() )
+  {
+    mOrderByField = mKeyField;
+  }
+  else if ( mConfig.value( u"OrderByField"_s ).toBool() )
+  {
+    QString fieldToOrderBy = mConfig.value( u"OrderByFieldName"_s ).toString();
+    if ( fieldToOrderBy.isEmpty() )
     {
-      mKeyField = keyFieldName;
-      mTitleField = valueFieldName;
-
-      mFilterExpression = mConfig.value( QStringLiteral( "FilterExpression" ) ).toString();
-      LayerFeaturesModel::setLayer( layer );
-
-      mAllowMulti = mConfig.value( QStringLiteral( "AllowMulti" ) ).toBool();
-      mIsInitialized = true;
+      CoreUtils::log( u"Value Relation"_s, u"Requested to order results by field, but the field name is empty"_s );
     }
-    else
-      CoreUtils::log( QStringLiteral( "ValueRelations" ), QStringLiteral( "Missing referenced fields for value relations." ) );
+
+    mOrderByField = fieldToOrderBy;
   }
   else
-    CoreUtils::log( QStringLiteral( "ValueRelations" ), QStringLiteral( "Missing referenced layer for value relations." ) );
+  {
+    // let's use "OrderByValue" by default
+    mOrderByField = mValueField;
+  }
+
+  mIsInitialized = true;
+
+  // Note: populate() is intentionally NOT called here.
+  // The QML drawer calls it explicitly in Component.onCompleted so that features
+  // are only fetched when the user actually opens the drawer.
 }
 
 void ValueRelationFeaturesModel::reset()
 {
   mKeyField.clear();
-  mTitleField.clear();
-  mPair = FeatureLayerPair();
+  mValueField.clear();
+  mKeyFieldIndex   = -1;
+  mValueFieldIndex = -1;
+  mFilterExpression.clear();
   mConfig = QVariantMap();
+  mPair = FeatureLayerPair();
   mIsInitialized = false;
   LayerFeaturesModel::reset();
-}
-
-QVariant ValueRelationFeaturesModel::featureTitle( const FeatureLayerPair &pair ) const
-{
-  if ( !mTitleField.isEmpty() )
-  {
-    return pair.feature().attribute( mTitleField );
-  }
-
-  return LayerFeaturesModel::featureTitle( pair );
-}
-
-QVariant ValueRelationFeaturesModel::convertToKey( const QVariant &id )
-{
-  QgsFeature f = convertRoleValue( FeaturesModel::FeatureId, id, Feature ).value<QgsFeature>();
-  return f.attribute( mKeyField );
-}
-
-QVariant ValueRelationFeaturesModel::convertToQgisType( const QVariantList &featureIds )
-{
-  if ( !mIsInitialized )
-  {
-    return QVariant();
-  }
-
-  QVariant qgsFormat;
-
-  QStringList keys;
-  for ( const QVariant &id : featureIds )
-  {
-    keys << convertToKey( id ).toString();
-  }
-
-  qgsFormat = QStringLiteral( "{%1}" ).arg( keys.join( ',' ) );
-
-  return qgsFormat;
-}
-
-QVariant ValueRelationFeaturesModel::convertFromQgisType( QVariant qgsValue, ModelRoles toRole )
-{
-  if ( !mIsInitialized )
-  {
-    return QVariant();
-  }
-
-  QStringList keyList;
-
-  if ( mAllowMulti )
-  {
-    keyList = QgsValueRelationFieldFormatter::valueToStringList( qgsValue );
-  }
-  else
-  {
-    keyList << qgsValue.toString();
-  }
-
-  QList<QVariant> roleList;
-
-  // optimize it a little bit
-  QMap<QVariant, QVariant> keyMap;
-  for ( const QString &key : keyList )
-  {
-    keyMap.insert( key, QLatin1String() );
-  }
-
-  for ( int ix = 0; ix < rowCount(); ++ix )
-  {
-    QgsFeature f = mFeatures.at( ix ).feature();
-
-    if ( keyMap.contains( f.attribute( mKeyField ).toString() ) )
-    {
-      if ( toRole == FeatureId )
-        roleList.append( f.id() );
-      else
-      {
-        QVariant attr = convertRoleValue( FeatureId, f.id(), toRole );
-        if ( !attr.isNull() )
-          roleList.append( attr );
-      }
-    }
-  }
-
-  if ( roleList.isEmpty() && !qgsValue.isNull() )
-  {
-    // could not convert qgs value
-    emit invalidate();
-  }
-
-  return roleList;
-}
-
-FeatureLayerPair ValueRelationFeaturesModel::pair() const
-{
-  return mPair;
-}
-
-void ValueRelationFeaturesModel::setPair( const FeatureLayerPair &newPair )
-{
-  if ( mPair == newPair )
-    return;
-
-  mPair = newPair;
-  emit pairChanged( mPair );
-
-  if ( mIsInitialized )
-  {
-    populate();
-  }
 }
 
 QVariantMap ValueRelationFeaturesModel::config() const
@@ -239,4 +193,20 @@ void ValueRelationFeaturesModel::setConfig( const QVariantMap &newConfig )
   emit configChanged( mConfig );
 
   setup();
+}
+
+FeatureLayerPair ValueRelationFeaturesModel::pair() const
+{
+  return mPair;
+}
+
+void ValueRelationFeaturesModel::setPair( const FeatureLayerPair &newPair )
+{
+  if ( mPair == newPair )
+    return;
+
+  mPair = newPair;
+  emit pairChanged( mPair );
+  // No automatic repopulation — the pair is set once at drawer-open time.
+  // reloadFeatures() is called separately by Component.onCompleted.
 }

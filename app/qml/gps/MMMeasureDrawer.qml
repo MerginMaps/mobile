@@ -59,12 +59,6 @@ MMComponents.MMDrawer {
 
     enabled: measurementFinalized || canUndo
 
-    anchors {
-      left: parent.left
-      leftMargin: __style.pageMargins + __style.safeAreaLeft
-      verticalCenter: parent.verticalCenter
-    }
-
     onClicked: measurementFinalized ? root.mapTool.resetMeasurement() : root.mapTool.removePoint()
   }
 
