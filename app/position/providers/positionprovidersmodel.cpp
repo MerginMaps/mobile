@@ -19,7 +19,7 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
 {
   if ( !InputUtils::isMobilePlatform() )
   {
-    const PositionProvider simulated( "Simulated provider", "Simulated position around point", "internal", "simulated" );
+    const PositionProvider simulated( tr( "Simulated provider" ), tr( "Simulated position around point" ), QStringLiteral( "internal" ), QStringLiteral( "simulated" ) );
 
     mProviders.push_front( simulated );
   }
@@ -30,8 +30,8 @@ PositionProvidersModel::PositionProvidersModel( QObject *parent ) : QAbstractLis
   PositionProvider internal;
   internal.name = tr( "Internal" );
   internal.description = tr( "GPS receiver of this device" );
-  internal.providerType = "internal";
-  internal.providerId = "devicegps";
+  internal.providerType = QStringLiteral( "internal" );
+  internal.providerId = QStringLiteral( "devicegps" );
 
   mProviders.push_front( internal );
 
@@ -68,6 +68,7 @@ QHash<int, QByteArray> PositionProvidersModel::roleNames() const
   roles.insert( DataRoles::ProviderName, QByteArray( "providerName" ) );
   roles.insert( DataRoles::ProviderDescription, QByteArray( "providerDescription" ) );
   roles.insert( DataRoles::ProviderType, QByteArray( "providerType" ) );
+  roles.insert( DataRoles::ProviderGroup, QByteArray( "providerGroup" ) );
   roles.insert( DataRoles::ProviderId, QByteArray( "providerId" ) );
   return roles;
 }
@@ -102,6 +103,15 @@ QVariant PositionProvidersModel::data( const QModelIndex &index, const int role 
 
     case DataRoles::ProviderType:
       return provider.providerType;
+
+    case DataRoles::ProviderGroup:
+    {
+      if ( provider.providerType == QStringLiteral( "internal" ) )
+      {
+        return QStringLiteral( "internal" );
+      }
+      return QStringLiteral( "external" );
+    }
 
     default:
       return {};

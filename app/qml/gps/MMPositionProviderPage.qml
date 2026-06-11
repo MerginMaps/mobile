@@ -100,12 +100,12 @@ MMComponents.MMPage {
       }
 
       section {
-        property: "providerType"
+        property: "providerGroup"
         delegate: MMComponents.MMText {
           required property string section
           width: ListView.view.width
 
-          text: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
+          text: qsTr( "%1 receivers" ).arg( section === "internal" ? qsTr( "Internal" ) : qsTr( "External" ) )
 
           font: __style.p6
           color: __style.nightColor

@@ -58,7 +58,8 @@ class PositionProvidersModel : public QAbstractListModel
       ProviderName = Qt::UserRole + 1, // name of bluetooth device or custom name for network device
       ProviderDescription, // device address (IP/BT) + device type
       ProviderId, // device address (IP/BT)
-      ProviderType // external_ip (connected) / external_bt (connected) / internal (device) / simulated (device)
+      ProviderType, // external_ip (connected) / external_bt (connected) / internal (device) / simulated (device)
+      ProviderGroup // internal / external
     };
     Q_ENUM( DataRoles )
 
