@@ -51,7 +51,7 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
 
 void NetworkPositionProvider::startUpdates()
 {
-  // TODO: QHostAddress doesn't support hostname lookup (QHostInfo does)
+  // NOTE: QHostAddress doesn't support hostname lookup (QHostInfo does)
   mTcpSocket->connectToHost( mTargetAddress, mTargetPort );
   mUdpSocket->bind( QHostAddress::LocalHost, mTargetPort );
   mUdpReconnectTimer.start( ReconnectDelay::ExtraLongDelay );
@@ -126,14 +126,16 @@ void NetworkPositionProvider::positionUpdateReceived()
     {
       mUdpSocket->connectToHost( peerAddress.toString(), peerPort );
     }
+
+    // restart UDP silence timer
+    mUdpReconnectTimer.start();
     return;
   }
 
-  // stop the UDP silence timer, we just received data
-  // kills the timer when the app was minimized, and we were able to reconnect in the meantime
+  // restart the UDP silence timer, we just received data
   if ( socket->socketType() == QAbstractSocket::UdpSocket )
   {
-    mUdpReconnectTimer.stop();
+    mUdpReconnectTimer.start();
   }
 
   const QByteArray rawNmeaData = socket->readAll();
@@ -170,14 +172,9 @@ void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketS
   else if ( state == QAbstractSocket::UnconnectedState )
   {
     const bool isUdpSocketListening = mUdpSocket->state() == QAbstractSocket::ConnectedState || mUdpSocket->state() == QAbstractSocket::BoundState || mUdpReconnectTimer.isActive();
-    if ( socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive )
-    {
-      setState( tr( "No connection" ), State::NoConnection );
-      startReconnectTimer();
-      // let's also invalidate current position since we no longer have connection
-      emit positionChanged( GeoPosition() );
-    }
-    else if ( socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive )
+    const bool isTcpSocketAndUdpNotListening = socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive;
+    const bool isUdpSocket = socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive;
+    if ( isTcpSocketAndUdpNotListening || isUdpSocket )
     {
       setState( tr( "No connection" ), State::NoConnection );
       startReconnectTimer();

@@ -67,7 +67,7 @@ MMComponents.MMDrawer {
             : "" )
           message.description: root.providerType === "bluetooth"
             ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
-            : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
+            : qsTr( "We were not able to connect to the specified IP address." )
           message.linkText: qsTr( "Learn more" )
         }
       },
@@ -75,10 +75,10 @@ MMComponents.MMDrawer {
         name: "waitingToReconnect"
         when: root.positionProvider && root.positionProvider.state === PositionProvider.WaitingToReconnect
         PropertyChanges {
-          message.image: root.providerType === "bluetooth" ? __style.externalBluetoothGreenImage : __style.externalNetworkGreenImage
+          message.image: __style.externalGpsRedImage
           message.title: root.providerType === "bluetooth"
             ? qsTr( "We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to." )
-            : qsTr( "We were not able to connect to the specified IP address. Please try again later." )
+            : qsTr( "We were not able to connect to the specified IP address." )
           message.description: root.positionProvider.stateMessage + "<br><br>" + qsTr( "You can close this message, we will try to repeatedly connect to your device." )
           message.linkText: qsTr( "Learn more" )
         }
