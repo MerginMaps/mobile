@@ -126,14 +126,16 @@ void NetworkPositionProvider::positionUpdateReceived()
     {
       mUdpSocket->connectToHost( peerAddress.toString(), peerPort );
     }
+
+    // restart UDP silence timer
+    mUdpReconnectTimer.start();
     return;
   }
 
-  // stop the UDP silence timer, we just received data
-  // kills the timer when the app was minimized, and we were able to reconnect in the meantime
+  // restart the UDP silence timer, we just received data
   if ( socket->socketType() == QAbstractSocket::UdpSocket )
   {
-    mUdpReconnectTimer.stop();
+    mUdpReconnectTimer.start();
   }
 
   const QByteArray rawNmeaData = socket->readAll();
