@@ -39,13 +39,13 @@ MMDrawer {
 
   drawerContent: Item {
     width: parent.width
-    height: showFullScreen ? root.drawerContentAvailableHeight : contentLayout.height
+    height: showFullScreen && listViewComponent.count > 0 ? root.drawerContentAvailableHeight : contentLayout.height
 
     Column {
       id: contentLayout
 
       width: parent.width
-      height: showFullScreen ? parent.height : implicitHeight
+      height: showFullScreen && listViewComponent.count > 0 ? parent.height : implicitHeight
 
       spacing: 0
 
