@@ -1150,6 +1150,36 @@ void RecordingMapTool::cancelGrab()
   setActiveVertex( Vertex() );
 }
 
+void RecordingMapTool::startDigitizingNewPart()
+{
+  // if maptool is in GRAB and VIEW state, no part should be added
+  if ( mState == RecordingMapTool::View || mState == RecordingMapTool::Grab )
+  {
+    return;
+  }
+
+  QgsAbstractGeometry *geom = mRecordedGeometry.get();
+  if ( QgsGeometryCollection *collection = qgsgeometry_cast<QgsGeometryCollection *>( geom ) )
+  {
+    switch ( mRecordedGeometry.type() )
+    {
+      case Qgis::GeometryType::Line:
+        collection->addGeometry( new QgsLineString() );
+        setActivePartAndRing( collection->partCount() - 1, 0 );
+        break;
+      case Qgis::GeometryType::Polygon:
+        collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString*>() ) );
+        setActivePartAndRing( collection->partCount() - 1, 0 );
+        break;
+      case Qgis::GeometryType::Point:
+      // MultiPoints do not need an empty placeholder part, new point part is directly appended when digitizing
+      case Qgis::GeometryType::Unknown:
+      case Qgis::GeometryType::Null:
+        break;
+    }
+  }
+}
+
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
 {
   QgsRenderContext context = QgsRenderContext::fromMapSettings( mapSettings()->mapSettings() );
