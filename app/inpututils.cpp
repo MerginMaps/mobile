@@ -900,14 +900,25 @@ QgsPoint InputUtils::transformPoint( const QgsCoordinateReferenceSystem &srcCrs,
     {
       if ( !ct.isShortCircuited() )
       {
-        const QgsVector3D transformed = ct.transform( QgsVector3D( srcPoint.x(), srcPoint.y(), srcPoint.z() ) );
-        fallbackOperationOccurred = ct.fallbackOperationOccurred();
-        const QgsPoint pt( transformed.x(), transformed.y(), transformed.z(), srcPoint.m() );
-        return pt;
+        // check if the CRS have vertical axis
+        if ( srcCrs.hasVerticalAxis() && destCrs.hasVerticalAxis() )
+        {
+          const QgsVector3D transformed = ct.transform( QgsVector3D( srcPoint.x(), srcPoint.y(), srcPoint.z() ) );
+          fallbackOperationOccurred = ct.fallbackOperationOccurred();
+          const QgsPoint pt( transformed.x(), transformed.y(), transformed.z(), srcPoint.m() );
+          return pt;
+        }
+        else
+        {
+          const QgsPointXY transformedXY = ct.transform( QgsPointXY( srcPoint.x(), srcPoint.y() ) );
+          fallbackOperationOccurred = ct.fallbackOperationOccurred();
+          const QgsPoint pt( transformedXY.x(), transformedXY.y(), srcPoint.z(), srcPoint.m() );
+          return pt;
+        }
       }
-
-      return srcPoint;
     }
+
+    return srcPoint;
   }
   catch ( QgsCsException &cse )
   {
