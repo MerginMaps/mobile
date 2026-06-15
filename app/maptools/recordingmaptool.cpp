@@ -926,10 +926,23 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
   }
 
-  // Update the previously grabbed point's position
-  if ( mState == MapToolState::Grab )
+  switch ( mState )
   {
-    updateVertex( mActiveVertex, mRecordPoint );
+    case MapToolState::Grab:
+      // Update the previously grabbed point's position
+      updateVertex( mActiveVertex, mRecordPoint );
+      break;
+    case MapToolState::Record:
+      // If we were adding a line or poly part but did not add any points yet,
+      // we need to drop the added empty part
+      if ( InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+      {
+        mRecordedGeometry.deletePart( mActivePart );
+        emit recordedGeometryChanged( mRecordedGeometry );
+      }
+      break;
+    case MapToolState::View:
+      break;
   }
 
   if ( idx >= 0 )
