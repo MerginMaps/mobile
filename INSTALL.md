@@ -11,7 +11,7 @@
   - [2.4 Vcpkg](#vcpkg)
   - [2.5 ccache](#ccache)
 - [3. Building GNU/Linux](#building-linux)
-  - [3.1 Ubuntu 22.04](#ubuntu)
+  - [3.1 Ubuntu 24.04](#ubuntu)
 - [4. Building Android (on Linux/macOS/Windows)](#building-android)
   - [4.1. Android on Ubuntu](#android-on-linux)
   - [4.2. Android on macOS](#android-on-macos)
@@ -201,13 +201,13 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
 ## 4.1. Android on Linux <a name="android-on-linux"></a>
 
 1. Install some dependencies, see requirements in `.github/workflows/android.yml`
-   - Java 17 (on Ubuntu 22.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
+   - Java 17 (on Ubuntu 24.04 do `sudo apt install openjdk-17-jdk` and make sure it is the default by checking `java --version`)
    - android SDK + build tools to `~/android`, android NDK to `~/android/ndk/<ver>`:
      - Get [Android command line tools](https://developer.android.com/studio/index.html#command-line-tools-only) and extract to `~/android/cmdline-tools`
      - See current versions of build tools (`SDK_BUILD_TOOLS`), ndk (`NDK_VERSION`) and platform (`SDK_PLATFORM`) in `.github/workflows/android.yml`
      - `./cmdline-tools/bin/sdkmanager --sdk_root=./ "build-tools;<current_version>" "ndk;<current_version>" "platforms;<current_version>" platform-tools tools`
    - flex and bison
-   - - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line with this command: `keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000`
+   - set up your own developer keystore. Creating the key(store) can be done either with Android studio or on command line with this command: `keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000`
        (customise the validity argument if needed).
 
 2. Build mobile app (update CMake command with the correct Qt and Android NDK versions)
