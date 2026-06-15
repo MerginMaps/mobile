@@ -1353,7 +1353,6 @@ Item {
 
   function addPart( featurepair) {
     __activeProject.setActiveLayer( featurepair.layer )
-    root.centerToPair( featurepair )
     root.showInfoTextMessage( qsTr( "Add new part to the geometry" ) )
 
     internal.featurePairToEdit = featurepair
