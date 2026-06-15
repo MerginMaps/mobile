@@ -14,8 +14,10 @@
 #include <qtestcase.h>
 
 #include "qgsproject.h"
+#include "filtercontroller.h"
 
 class MerginApi;
+class QgsVectorLayer;
 
 namespace TestUtils
 {
@@ -78,6 +80,22 @@ namespace TestUtils
   void testIsValidUrl();
 
   bool testExifPositionMetadataExists( const QString &imageSource );
+
+  //! Creates an in-memory layer with a single field of the given type and registers it in QgsProject::instance()
+  //! fieldType is the QGIS memory-provider type string: "datetime", "date", "string", "integer", "double", "bool", etc.
+  QgsVectorLayer *createFilterTestLayer( const QString &fieldName,
+                                         const QString &fieldType,
+                                         const QString &layerName = QStringLiteral( "FilterTestLayer" ) );
+
+  //! Appends a single feature to layer via the data provider; value is stored in the named field. Returns false if addFeatures() fails.
+  bool addFeatureToLayer( QgsVectorLayer *layer, const QString &fieldName, const QVariant &value );
+
+  //! Writes a single-filter config into the project and loads it; returns the assigned filterId
+  QString setupControllerWithFilter( FilterController *controller,
+                                     FieldFilter::FilterType filterType,
+                                     const QString &layerId,
+                                     const QString &fieldName,
+                                     const QString &sqlExpression );
 }
 
 #define COMPARENEAR(actual, expected, epsilon) \

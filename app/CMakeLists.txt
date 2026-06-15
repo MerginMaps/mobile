@@ -234,6 +234,7 @@ if (ENABLE_TESTS)
       test/testactiveproject.cpp
       test/testprojectchecksumcache.cpp
       test/testmultieditmanager.cpp
+      test/testfiltercontroller.cpp
   )
 
   set(MM_HDRS
@@ -260,6 +261,7 @@ if (ENABLE_TESTS)
       test/testactiveproject.h
       test/testprojectchecksumcache.h
       test/testmultieditmanager.h
+      test/testfiltercontroller.h
   )
 
   if (NOT USE_MM_SERVER_API_KEY)

@@ -8,8 +8,9 @@
  ***************************************************************************/
 
 #include "QtDebug"
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSignalSpy>
 #include <exiv2/exiv2.hpp>
 
@@ -433,6 +434,70 @@ QgsVectorLayer *TestUtils::createVROrderingLayer()
   }
   layer->dataProvider()->addFeatures( features );
   return layer;
+}
+
+QgsVectorLayer *TestUtils::createFilterTestLayer( const QString &fieldName, const QString &fieldType, const QString &layerName )
+{
+  const QString layerUri = QStringLiteral( "None?field=%1:%2" ).arg( fieldName, fieldType );
+
+  auto *layer = new QgsVectorLayer( layerUri, layerName, QStringLiteral( "memory" ) );
+  if ( !layer->isValid() )
+  {
+    delete layer;
+    return nullptr;
+  }
+
+  QgsProject::instance()->addMapLayer( layer );
+  return layer;
+}
+
+bool TestUtils::addFeatureToLayer( QgsVectorLayer *layer, const QString &fieldName, const QVariant &value )
+{
+  QgsFeature f( layer->fields() );
+  f.setAttribute( fieldName, value );
+  return layer->dataProvider()->addFeatures( QgsFeatureList() << f );
+}
+
+QString TestUtils::setupControllerWithFilter( FilterController *controller,
+    FieldFilter::FilterType filterType,
+    const QString &layerId,
+    const QString &fieldName,
+    const QString &sqlExpression )
+{
+  QString filterTypeStr;
+  switch ( filterType )
+  {
+    case FieldFilter::TextFilter:         filterTypeStr = QStringLiteral( "Text" ); break;
+    case FieldFilter::NumberFilter:       filterTypeStr = QStringLiteral( "Number" ); break;
+    case FieldFilter::DateFilter:         filterTypeStr = QStringLiteral( "Date" ); break;
+    case FieldFilter::CheckboxFilter:     filterTypeStr = QStringLiteral( "Checkbox" ); break;
+    case FieldFilter::SingleSelectFilter: filterTypeStr = QStringLiteral( "Single select" ); break;
+    case FieldFilter::MultiSelectFilter:  filterTypeStr = QStringLiteral( "Multi select" ); break;
+  }
+
+  QJsonObject filterObj;
+  filterObj[QStringLiteral( "filter_name" )]    = QStringLiteral( "Test Filter" );
+  filterObj[QStringLiteral( "filter_type" )]    = filterTypeStr;
+  filterObj[QStringLiteral( "field_name" )]     = fieldName;
+  filterObj[QStringLiteral( "sql_expression" )] = sqlExpression;
+  filterObj[QStringLiteral( "layer_id" )]       = layerId;
+  filterObj[QStringLiteral( "provider" )]       = QStringLiteral( "memory" );
+
+  QJsonArray filtersArray;
+  filtersArray.append( filterObj );
+
+  const QString filtersJson = QString::fromUtf8(
+                                QJsonDocument( filtersArray ).toJson( QJsonDocument::Compact ) );
+
+  QgsProject::instance()->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Enabled" ), true );
+  QgsProject::instance()->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "Filtering/Filters" ), filtersJson );
+
+  controller->loadFilterConfig( QgsProject::instance() );
+
+  const QVariantList filters = controller->getFilters();
+  if ( filters.isEmpty() )
+    return {};
+  return filters.first().toMap().value( QStringLiteral( "filterId" ) ).toString();
 }
 
 bool TestUtils::testExifPositionMetadataExists( const QString &imageSource )
