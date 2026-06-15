@@ -30,6 +30,8 @@ jobs:
     env:
       # Visual Studio Enterprise 2026 - 18.6.11819.183
       VS_INSTALL_DIR: "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise"
+      # This is required by windeployqt script - do not remove it breaks packaging the executable
+      VCINSTALLDIR: "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\"
       CMAKE_VERSION: '4.3.2'
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       TRIPLET: x64-windows
