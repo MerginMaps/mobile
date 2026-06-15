@@ -1186,7 +1186,7 @@ void RecordingMapTool::startDigitizingNewPart()
       case Qgis::GeometryType::Polygon:
         if ( !InputUtils::isLastPartEmpty( mRecordedGeometry ) )
         {
-          collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString*>() ) );
+          collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString *>() ) );
           emit recordedGeometryChanged( mRecordedGeometry );
         }
         setActivePartAndRing( collection->partCount() - 1, 0 );
