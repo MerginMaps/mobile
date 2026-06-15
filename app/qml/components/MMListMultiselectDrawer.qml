@@ -34,7 +34,7 @@ MMDrawer {
 
   interactive: !listViewComponent.interactive
 
-  drawerBottomMargin: listViewComponent.count === 0
+  drawerBottomMargin: listViewComponent.count === 0 && !listViewComponent.headerItem
     ? ( __style.margin20 + __style.safeAreaBottom )
     : 0
 
@@ -72,12 +72,17 @@ MMDrawer {
 
       Item {
         width: parent.width
-        height: listViewComponent.count === 0 ? emptyStateDelegateLoader.height : listViewComponent.height
+        height: {
+          if ( listViewComponent.count > 0 ) return listViewComponent.height
+          if ( listViewComponent.headerItem ) return listViewComponent.height + emptyStateDelegateLoader.height
+          return emptyStateDelegateLoader.height
+        }
 
         Loader {
           id: emptyStateDelegateLoader
 
           width: parent.width
+          y: listViewComponent.headerItem && listViewComponent.count === 0 ? listViewComponent.height : 0
 
           visible: listViewComponent.count === 0
           sourceComponent: defaultEmptyStateComponent
@@ -89,7 +94,7 @@ MMDrawer {
           width: parent.width
           height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
 
-          visible: count > 0
+          visible: count > 0 || headerItem !== null
           interactive: contentHeight > height
 
           clip: true
@@ -134,7 +139,7 @@ MMDrawer {
         bottomMargin: __style.margin8 + __style.safeAreaBottom
       }
 
-      visible: root.multiSelect && listViewComponent.count > 0
+      visible: root.multiSelect && ( listViewComponent.count > 0 || listViewComponent.headerItem !== null )
 
       text: qsTr( "Confirm selection" )
 

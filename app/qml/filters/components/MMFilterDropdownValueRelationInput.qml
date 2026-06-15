@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import mm 1.0 as MM
@@ -75,6 +77,18 @@ Column {
 
       isLoading: vrDropdownModel.fetchingResults
 
+      list.header: MMFilterNoValueDelegate {
+        width: listDrawer.list.width
+        currentValue: root.currentValue
+        isMultiSelect: root.isMultiSelect
+
+        onAddOrRemoveRequested: listDrawer.addOrRemoveSelected( null )
+        onSelectionRequested: {
+          listDrawer.selectionFinished( [null] )
+          listDrawer.close()
+        }
+      }
+
       list.model: MM.ValueRelationFeaturesModel {
         id: vrDropdownModel
 
@@ -109,8 +123,9 @@ Column {
         //
         // Large fids could be converted to scientific notation on their way to cpp,
         // so we convert them to string first in JS.
+        // Null values (representing "No value") are preserved as-is.
         //
-        selectedItems = selectedItems.map( x => x.toString() )
+        selectedItems = selectedItems.map( x => x !== null && x !== undefined ? x.toString() : null )
 
         root.currentValue = selectedItems
 
