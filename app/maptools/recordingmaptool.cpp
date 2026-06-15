@@ -1163,11 +1163,19 @@ void RecordingMapTool::startDigitizingNewPart()
     switch ( mRecordedGeometry.type() )
     {
       case Qgis::GeometryType::Line:
-        collection->addGeometry( new QgsLineString() );
+        if ( !InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+        {
+          collection->addGeometry( new QgsLineString() );
+          emit recordedGeometryChanged( mRecordedGeometry );
+        }
         setActivePartAndRing( collection->partCount() - 1, 0 );
         break;
       case Qgis::GeometryType::Polygon:
-        collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString*>() ) );
+        if ( !InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+        {
+          collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString*>() ) );
+          emit recordedGeometryChanged( mRecordedGeometry );
+        }
         setActivePartAndRing( collection->partCount() - 1, 0 );
         break;
       case Qgis::GeometryType::Point:
