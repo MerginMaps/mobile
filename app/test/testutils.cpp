@@ -21,6 +21,7 @@
 
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
+#include "qgsfeature.h"
 #include "qgslayertree.h"
 #include "qgslayertreelayer.h"
 
@@ -377,6 +378,61 @@ void TestUtils::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "://example.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
+}
+
+QgsVectorLayer *TestUtils::createVRLookupLayer( int count )
+{
+  auto *layer = new QgsVectorLayer(
+    QStringLiteral( "None?field=key:integer&field=label:string" ),
+    QStringLiteral( "vr_lookup" ),
+    QStringLiteral( "memory" )
+  );
+  if ( !layer || !layer->isValid() )
+    return nullptr;
+
+  QgsFeatureList features;
+  features.reserve( count );
+  for ( int i = 1; i <= count; ++i )
+  {
+    QgsFeature f( layer->fields() );
+    f.setAttribute( QStringLiteral( "key" ),   i );
+    f.setAttribute( QStringLiteral( "label" ), QStringLiteral( "Label %1" ).arg( i ) );
+    features << f;
+  }
+  layer->dataProvider()->addFeatures( features );
+  return layer;
+}
+
+QgsVectorLayer *TestUtils::createVROrderingLayer()
+{
+  auto *layer = new QgsVectorLayer(
+    QStringLiteral( "None?field=key:integer&field=label:string" ),
+    QStringLiteral( "vr_ordering" ),
+    QStringLiteral( "memory" )
+  );
+  if ( !layer || !layer->isValid() )
+    return nullptr;
+
+  struct Row { int key; QString label; };
+  const QList<Row> rows =
+  {
+    {3, QStringLiteral( "Gamma" )},
+    {1, QStringLiteral( "Alpha" )},
+    {4, QStringLiteral( "Beta" )},
+    {2, QStringLiteral( "Delta" )}
+  };
+
+  QgsFeatureList features;
+  features.reserve( rows.size() );
+  for ( const auto &row : rows )
+  {
+    QgsFeature f( layer->fields() );
+    f.setAttribute( QStringLiteral( "key" ),   row.key );
+    f.setAttribute( QStringLiteral( "label" ), row.label );
+    features << f;
+  }
+  layer->dataProvider()->addFeatures( features );
+  return layer;
 }
 
 bool TestUtils::testExifPositionMetadataExists( const QString &imageSource )
