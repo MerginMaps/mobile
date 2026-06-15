@@ -1360,7 +1360,6 @@ Item {
 
     // You should be already in state == "edit"
     if ( recordingToolsLoader.active ) {
-      recordingToolsLoader.item.recordingMapTool.state = MM.RecordingMapTool.Record
       recordingToolsLoader.item.recordingMapTool.startDigitizingNewPart()
     }
   }

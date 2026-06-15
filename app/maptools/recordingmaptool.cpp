@@ -1152,11 +1152,10 @@ void RecordingMapTool::cancelGrab()
 
 void RecordingMapTool::startDigitizingNewPart()
 {
-  // if maptool is in GRAB and VIEW state, no part should be added
-  if ( mState == RecordingMapTool::View || mState == RecordingMapTool::Grab )
-  {
-    return;
-  }
+  // cancel grab and switch to record
+  // we'll add a new empty part at the end (unless there's one already) and set it active
+  setActiveVertex( Vertex() );
+  setState( RecordingMapTool::MapToolState::Record );
 
   QgsAbstractGeometry *geom = mRecordedGeometry.get();
   if ( QgsGeometryCollection *collection = qgsgeometry_cast<QgsGeometryCollection *>( geom ) )

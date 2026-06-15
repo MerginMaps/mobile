@@ -1488,10 +1488,10 @@ void TestMapTools::testAddPartPointLayer()
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
-  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   // startDigitizingNewPart should not affect singlepart layers
   mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
 
@@ -1545,6 +1545,7 @@ void TestMapTools::testAddPartMultiPointLayer()
 
   // startDigitizingNewPart on MultiPoint does not add an empty placeholder part
   mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
   QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 2 );
@@ -1619,12 +1620,12 @@ void TestMapTools::testAddPartLineLayer()
   QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
 
   QVERIFY( !mapTool.activeVertex().isValid() );
-  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::LineString );
 
   // startDigitizingNewPart should not affect singlepart layers
   mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
   QCOMPARE( mapTool.activePart(), 0 );
@@ -1682,6 +1683,7 @@ void TestMapTools::testAddPartMultiLineLayer()
 
   // start digitizing a new part
   mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
 
   QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
   QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 3 );
@@ -1709,21 +1711,6 @@ void TestMapTools::testAddPartMultiLineLayer()
   QCOMPARE( mls->lineStringN( 0 )->pointN( 2 ), pointsToAdd[2] );
   QCOMPARE( mls->lineStringN( 1 )->pointN( 0 ), pointsToAdd[3] );
   QCOMPARE( mls->lineStringN( 1 )->pointN( 1 ), pointsToAdd[4] );
-
-  // nothing should be added in VIEW (neither in GRAB) state
-  mapTool.setState( RecordingMapTool::View );
-
-  mapTool.startDigitizingNewPart();
-
-  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
-  QCOMPARE( mapTool.activePart(), 1 );
-
-  mapTool.setState( RecordingMapTool::Grab );
-
-  mapTool.startDigitizingNewPart();
-
-  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
-  QCOMPARE( mapTool.activePart(), 1 );
 
   delete project;
   delete multiLineLayer;
@@ -1873,21 +1860,6 @@ void TestMapTools::testAddPartMultiPolygonLayer()
   QCOMPARE( ring1->pointN( 0 ), pointsToAdd[3] );
   QCOMPARE( ring1->pointN( 1 ), pointsToAdd[4] );
   QCOMPARE( ring1->pointN( 2 ), pointsToAdd[5] );
-
-  // nothing should be added in VIEW (neither in GRAB) state
-  mapTool.setState( RecordingMapTool::View );
-
-  mapTool.startDigitizingNewPart();
-
-  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
-  QCOMPARE( mapTool.activePart(), 1 );
-
-  mapTool.setState( RecordingMapTool::Grab );
-
-  mapTool.startDigitizingNewPart();
-
-  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
-  QCOMPARE( mapTool.activePart(), 1 );
 
   delete project;
   delete multiPolygonLayer;
