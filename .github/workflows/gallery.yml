@@ -27,8 +27,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.INPUTAPP_BOT_GITHUB_TOKEN }}
       CACHE_VERSION: 1
       XC_VERSION: ${{ '26.4.1' }} # macos-only
-      VS_VERSION: "2022" # win-only
-      
+
     steps:
       - uses: actions/checkout@v6
           
@@ -80,8 +79,6 @@ jobs:
       - name: Developer Command Prompt for Microsoft Visual C++ (windows)
         if: matrix.os == 'windows-2025'
         uses: ilammy/msvc-dev-cmd@v1
-        with:
-          vsversion: ${{ env.VS_VERSION }}
 
       - name: Configure and Build Gallery App (windows)
         if: matrix.os == 'windows-2025'

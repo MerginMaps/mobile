@@ -59,11 +59,10 @@ NOTE: icon must be without transparency
 - Update secret (passports) on github
 
 ## QGIS debugging
-When you want to debug QGIS code it's necessary to first build the QGIS dependency in `RelWithDebugInfo` mode. This can be achieved by specifying these environment variables:
 
-|         Name          |       Value        |
-|:---------------------:|:------------------:|
-|  `QGIS_DEBUG_BUILD`   |         1          |
-| `VCPKG_KEEP_ENV_VARS` | `QGIS_DEBUG_BUILD` |
+When you want to debug QGIS code it's necessary to first build the QGIS dependency in `Debug` or `RelWithDebugInfo` mode.
+The build type of the QGIS dependency can be selected by setting the `QGIS_BUILD_TYPE` environment variable before calling `cmake`.
+Valid values are `Debug` and `RelWithDebugInfo`, any other value or an unset variable will result in having QGIS built in `Release`, which is the default.
+Once the QGIS dependency is built in all modes, switching between them should be fast as the vcpkg cache is used and no rebuild is required.
 
 Furthermore, to debug android version of Mergin Maps it's highly recommended to use QtCreator, even though it should be possible also without it.

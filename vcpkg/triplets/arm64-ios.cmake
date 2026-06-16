@@ -10,3 +10,5 @@ set(VCPKG_MAKE_BUILD_TRIPLET "--host=aarch64-apple-ios${VCPKG_OSX_DEPLOYMENT_TAR
 set(VCPKG_BUILD_TYPE release)
 set(VCPKG_CXX_FLAGS "-fvisibility=hidden")
 set(VCPKG_C_FLAGS "-fvisibility=hidden")
+
+include("${CMAKE_CURRENT_LIST_DIR}/qgis-build-type.cmake")
