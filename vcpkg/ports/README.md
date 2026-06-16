@@ -6,3 +6,4 @@
 - qgis - no official port in vcpkg
 - qtdeclarative - optimization to decrease package size
 - qtpositioning - Android service fix & iOS orthometric position hack
+- libsecret - Build with -Dbash_completion=disabled to avoid PermissionError: [Errno 13] Permission denied: '/usr/share/bash-completion/completions/secret-tool'

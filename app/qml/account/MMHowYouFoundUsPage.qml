@@ -13,7 +13,6 @@ import QtQuick.Controls
 
 import mm 1.0 as MM
 
-import "./components" as MMAccountComponents
 import "../components"
 import "../inputs"
 
@@ -112,7 +111,7 @@ MMPage {
                NumberAnimation { properties: "x,y"; duration: 100 }
            }
 
-      delegate: MMAccountComponents.MMIconCheckBoxHorizontal {
+      delegate: MMIconCheckBoxHorizontal {
         x: model.submenu ? __style.margin20 : 0
         width: model.submenu ? ListView.view.width - __style.margin20 : ListView.view.width
 

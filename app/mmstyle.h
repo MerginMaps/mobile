@@ -112,6 +112,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
     Q_PROPERTY( QUrl arrowUpIcon READ arrowUpIcon CONSTANT )
+    Q_PROPERTY( QUrl bluetoothIcon READ bluetoothIcon CONSTANT )
     Q_PROPERTY( QUrl backIcon READ backIcon CONSTANT )
     Q_PROPERTY( QUrl briefcaseIcon READ briefcaseIcon CONSTANT )
     Q_PROPERTY( QUrl calendarIcon READ calendarIcon CONSTANT )
@@ -145,6 +146,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mouthIcon READ mouthIcon CONSTANT )
     Q_PROPERTY( QUrl naturalResourcesIcon READ naturalResourcesIcon CONSTANT )
     Q_PROPERTY( QUrl nextIcon READ nextIcon CONSTANT )
+    Q_PROPERTY( QUrl networkIcon READ networkIcon CONSTANT )
     Q_PROPERTY( QUrl otherIcon READ otherIcon CONSTANT )
     Q_PROPERTY( QUrl othersIcon READ othersIcon CONSTANT )
     Q_PROPERTY( QUrl plusIcon READ plusIcon CONSTANT )
@@ -228,8 +230,9 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
-    Q_PROPERTY( QUrl externalGpsGreenImage READ externalGpsGreenImage CONSTANT )
     Q_PROPERTY( QUrl externalGpsRedImage READ externalGpsRedImage CONSTANT )
+    Q_PROPERTY( QUrl externalBluetoothGreenImage READ externalBluetoothGreenImage CONSTANT )
+    Q_PROPERTY( QUrl externalNetworkGreenImage READ externalNetworkGreenImage CONSTANT )
     Q_PROPERTY( QUrl negativeMMSymbolImage READ negativeMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl positiveMMSymbolImage READ positiveMMSymbolImage CONSTANT )
     Q_PROPERTY( QUrl neutralMMSymbolImage READ neutralMMSymbolImage CONSTANT )
@@ -404,95 +407,97 @@ class MMStyle: public QObject
 
     static QColor shadowColor() {return QColor::fromString( "#4D000000" );}
 
-    static QUrl splitGeometryIcon() {return QUrl( "qrc:/SplitGeometry.svg" );}
-    static QUrl streamingIcon() {return QUrl( "qrc:/Streaming.svg" );}
-    static QUrl redrawGeometryIcon() {return QUrl( "qrc:/RedrawGeometry.svg" );}
-    static QUrl cloudIcon() {return QUrl( "qrc:/Cloud.svg" );}
-    static QUrl linkIcon() {return QUrl( "qrc:/Link.svg" );}
-    static QUrl closeAccountIcon() {return QUrl( "qrc:/CloseAccount.svg" );}
-    static QUrl signOutIcon() {return QUrl( "qrc:/SignOut.svg" );}
-    static QUrl workspacesIcon() {return QUrl( "qrc:/Workspaces.svg" );}
-    static QUrl addIcon() {return QUrl( "qrc:/Add.svg" );}
-    static QUrl layersIcon() {return QUrl( "qrc:/Layers.svg" );}
-    static QUrl localChangesIcon() {return QUrl( "qrc:/LocalChanges.svg" );}
-    static QUrl mapThemesIcon() {return QUrl( "qrc:/MapThemes.svg" );}
-    static QUrl positionTrackingIcon() {return QUrl( "qrc:/PositionTracking.svg" );}
-    static QUrl settingsIcon() {return QUrl( "qrc:/Settings.svg" );}
-    static QUrl zoomToProjectIcon() {return QUrl( "qrc:/ZoomToProject.svg" );}
-    static QUrl addImageIcon() {return QUrl( "qrc:/AddImage.svg" );}
-    static QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
-    static QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
-    static QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}
-    static QUrl arrowUpIcon() {return QUrl( "qrc:/ArrowUp.svg" );}
-    static QUrl backIcon() {return QUrl( "qrc:/Back.svg" );}
-    static QUrl briefcaseIcon() {return QUrl( "qrc:/Briefcase.svg" );}
-    static QUrl calendarIcon() {return QUrl( "qrc:/Calendar.svg" );}
-    static QUrl checkmarkIcon() {return QUrl( "qrc:/Checkmark.svg" );}
-    static QUrl closeIcon() {return QUrl( "qrc:/Close.svg" );}
-    static QUrl deleteIcon() {return QUrl( "qrc:/Delete.svg" );}
-    static QUrl featuresIcon() {return QUrl( "qrc:/Features.svg" );}
-    static QUrl filterIcon() {return QUrl( "qrc:/Filter.svg" );}
-    static QUrl downloadIcon() {return QUrl( "qrc:/Download.svg" );}
-    static QUrl uploadIcon() {return QUrl( "qrc:/Upload.svg" );}
-    static QUrl editIcon() {return QUrl( "qrc:/Edit.svg" );}
-    static QUrl eraserIcon() {return QUrl( "qrc:/Eraser.svg" );}
-    static QUrl electricityIcon() {return QUrl( "qrc:/Electricity.svg" );}
-    static QUrl engineeringIcon() {return QUrl( "qrc:/Engineering.svg" );}
-    static QUrl environmentalIcon() {return QUrl( "qrc:/Environmental.svg" );}
-    static QUrl facebookIcon() {return QUrl( "qrc:/Facebook.svg" );}
-    static QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
-    static QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
-    static QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
-    static QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
-    static QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
-    static QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
-    static QUrl infoIcon() {return QUrl( "qrc:/Info.svg" );}
-    static QUrl linkedinIcon() {return QUrl( "qrc:/Linkedin.svg" );}
-    static QUrl mastodonIcon() {return QUrl( "qrc:/Mastodon.svg" );}
-    static QUrl minusIcon() {return QUrl( "qrc:/Minus.svg" );}
-    static QUrl moreIcon() {return QUrl( "qrc:/More.svg" );}
-    static QUrl moreVerticalIcon() {return QUrl( "qrc:/MoreVertical.svg" );}
-    static QUrl morePhotosIcon() {return QUrl( "qrc:/MorePhotos.svg" );}
-    static QUrl remoteImageLoadErrorIcon() {return QUrl( "qrc:/RemoteImageLoadError.svg" );}
-    static QUrl mouthIcon() {return QUrl( "qrc:/Mouth.svg" );}
-    static QUrl measurementToolIcon() {return QUrl( "qrc:/Measure.svg" );}
-    static QUrl closeShapeIcon() {return QUrl( "qrc:/CloseShape.svg" );}
-    static QUrl naturalResourcesIcon() {return QUrl( "qrc:/NaturalResources.svg" );}
-    static QUrl nextIcon() {return QUrl( "qrc:/Next.svg" );}
-    static QUrl otherIcon() {return QUrl( "qrc:/Other.svg" );}
-    static QUrl othersIcon() {return QUrl( "qrc:/Others.svg" );}
-    static QUrl plusIcon() {return QUrl( "qrc:/Plus.svg" );}
-    static QUrl personalIcon() {return QUrl( "qrc:/Personal.svg" );}
-    static QUrl projectsIcon() {return QUrl( "qrc:/Projects.svg" );}
-    static QUrl qgisIcon() {return QUrl( "qrc:/QGIS.svg" );}
-    static QUrl qrCodeIcon() {return QUrl( "qrc:/QRCode.svg" );}
-    static QUrl redoIcon() {return QUrl( "qrc:/Redo.svg" );}
-    static QUrl redditIcon() {return QUrl( "qrc:/Reddit.svg" );}
-    static QUrl satelliteIcon() {return QUrl( "qrc:/GPSSatellite.svg" );}
-    static QUrl searchIcon() {return QUrl( "qrc:/Search.svg" );}
-    static QUrl showIcon() {return QUrl( "qrc:/Show.svg" );}
-    static QUrl smallCheckmarkIcon() {return QUrl( "qrc:/SmallCheckmark.svg" );}
-    static QUrl smallEditIcon() {return QUrl( "qrc:/SmallEdit.svg" );}
-    static QUrl socialMediaIcon() {return QUrl( "qrc:/SocialMedia.svg" );}
-    static QUrl stakeOutIcon() {return QUrl( "qrc:/StakeOut.svg" );}
-    static QUrl stateAndLocalIcon() {return QUrl( "qrc:/StateAndLocal.svg" );}
-    static QUrl stopIcon() {return QUrl( "qrc:/Stop.svg" );}
-    static QUrl subscriptionsIcon() {return QUrl( "qrc:/Subscriptions.svg" );}
-    static QUrl syncIcon() {return QUrl( "qrc:/Sync.svg" );}
-    static QUrl syncGreenIcon() {return QUrl( "qrc:/SyncGreen.svg" );}
-    static QUrl teacherIcon() {return QUrl( "qrc:/Teacher.svg" );}
-    static QUrl telecommunicationIcon() {return QUrl( "qrc:/Telecommunication.svg" );}
-    static QUrl termsIcon() {return QUrl( "qrc:/Terms.svg" );}
-    static QUrl tractorIcon() {return QUrl( "qrc:/Tractor.svg" );}
-    static QUrl transportationIcon() {return QUrl( "qrc:/Transportation.svg" );}
-    static QUrl undoIcon() {return QUrl( "qrc:/Undo.svg" );}
-    static QUrl waitingIcon() {return QUrl( "qrc:/Waiting.svg" );}
-    static QUrl waterResourcesIcon() {return QUrl( "qrc:/WaterResources.svg" );}
-    static QUrl studentIcon() {return QUrl( "qrc:/Student.svg" );}
-    static QUrl xTwitterIcon() {return QUrl( "qrc:/XTwitter.svg" );}
-    static QUrl youtubeIcon() {return QUrl( "qrc:/Youtube.svg" );}
-    static QUrl formIcon() {return QUrl( "qrc:/Terms.svg" );}
-    static QUrl drawIcon() {return QUrl( "qrc:/Draw.svg" );}
+    static QUrl splitGeometryIcon() const {return QUrl( "qrc:/SplitGeometry.svg" );}
+    static QUrl streamingIcon() const {return QUrl( "qrc:/Streaming.svg" );}
+    static QUrl redrawGeometryIcon() const {return QUrl( "qrc:/RedrawGeometry.svg" );}
+    static QUrl cloudIcon() const {return QUrl( "qrc:/Cloud.svg" );}
+    static QUrl linkIcon() const {return QUrl( "qrc:/Link.svg" );}
+    static QUrl closeAccountIcon() const {return QUrl( "qrc:/CloseAccount.svg" );}
+    static QUrl signOutIcon() const {return QUrl( "qrc:/SignOut.svg" );}
+    static QUrl workspacesIcon() const {return QUrl( "qrc:/Workspaces.svg" );}
+    static QUrl addIcon() const {return QUrl( "qrc:/Add.svg" );}
+    static QUrl layersIcon() const {return QUrl( "qrc:/Layers.svg" );}
+    static QUrl localChangesIcon() const {return QUrl( "qrc:/LocalChanges.svg" );}
+    static QUrl mapThemesIcon() const {return QUrl( "qrc:/MapThemes.svg" );}
+    static QUrl positionTrackingIcon() const {return QUrl( "qrc:/PositionTracking.svg" );}
+    static QUrl settingsIcon() const {return QUrl( "qrc:/Settings.svg" );}
+    static QUrl zoomToProjectIcon() const {return QUrl( "qrc:/ZoomToProject.svg" );}
+    static QUrl addImageIcon() const {return QUrl( "qrc:/AddImage.svg" );}
+    static QUrl archaeologyIcon() const {return QUrl( "qrc:/Archaeology.svg" );}
+    static QUrl arrowDownIcon() const {return QUrl( "qrc:/ArrowDown.svg" );}
+    static QUrl arrowLinkRightIcon() const {return QUrl( "qrc:/ArrowLinkRight.svg" );}
+    static QUrl arrowUpIcon() const {return QUrl( "qrc:/ArrowUp.svg" );}
+    static QUrl backIcon() const {return QUrl( "qrc:/Back.svg" );}
+    static QUrl bluetoothIcon() const {return QUrl( "qrc:/Bluetooth.svg" );}
+    static QUrl briefcaseIcon() const {return QUrl( "qrc:/Briefcase.svg" );}
+    static QUrl calendarIcon() const {return QUrl( "qrc:/Calendar.svg" );}
+    static QUrl checkmarkIcon() const {return QUrl( "qrc:/Checkmark.svg" );}
+    static QUrl closeIcon() const {return QUrl( "qrc:/Close.svg" );}
+    static QUrl deleteIcon() const {return QUrl( "qrc:/Delete.svg" );}
+    static QUrl featuresIcon() const {return QUrl( "qrc:/Features.svg" );}
+    static QUrl filterIcon() const {return QUrl( "qrc:/Filter.svg" );}
+    static QUrl downloadIcon() const {return QUrl( "qrc:/Download.svg" );}
+    static QUrl uploadIcon() const {return QUrl( "qrc:/Upload.svg" );}
+    static QUrl editIcon() const {return QUrl( "qrc:/Edit.svg" );}
+    static QUrl eraserIcon() const {return QUrl( "qrc:/Eraser.svg" );}
+    static QUrl electricityIcon() const {return QUrl( "qrc:/Electricity.svg" );}
+    static QUrl engineeringIcon() const {return QUrl( "qrc:/Engineering.svg" );}
+    static QUrl environmentalIcon() const {return QUrl( "qrc:/Environmental.svg" );}
+    static QUrl facebookIcon() const {return QUrl( "qrc:/Facebook.svg" );}
+    static QUrl globeIcon() const {return QUrl( "qrc:/Globe.svg" );}
+    static QUrl globalIcon() const {return QUrl( "qrc:/Global.svg" );}
+    static QUrl gpsIcon() const {return QUrl( "qrc:/GPSIcon.svg" );}
+    static QUrl gpsAntennaHeightIcon() const {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
+    static QUrl hideIcon() const {return QUrl( "qrc:/Hide.svg" );}
+    static QUrl homeIcon() const {return QUrl( "qrc:/Home.svg" );}
+    static QUrl infoIcon() const {return QUrl( "qrc:/Info.svg" );}
+    static QUrl linkedinIcon() const {return QUrl( "qrc:/Linkedin.svg" );}
+    static QUrl mastodonIcon() const {return QUrl( "qrc:/Mastodon.svg" );}
+    static QUrl minusIcon() const {return QUrl( "qrc:/Minus.svg" );}
+    static QUrl moreIcon() const {return QUrl( "qrc:/More.svg" );}
+    static QUrl moreVerticalIcon() const {return QUrl( "qrc:/MoreVertical.svg" );}
+    static QUrl morePhotosIcon() const {return QUrl( "qrc:/MorePhotos.svg" );}
+    static QUrl remoteImageLoadErrorIcon() const {return QUrl( "qrc:/RemoteImageLoadError.svg" );}
+    static QUrl mouthIcon() const {return QUrl( "qrc:/Mouth.svg" );}
+    static QUrl measurementToolIcon() const {return QUrl( "qrc:/Measure.svg" );}
+    static QUrl networkIcon() const {return QUrl( "qrc:/Network.svg" );}
+    static QUrl closeShapeIcon() const {return QUrl( "qrc:/CloseShape.svg" );}
+    static QUrl naturalResourcesIcon() const {return QUrl( "qrc:/NaturalResources.svg" );}
+    static QUrl nextIcon() const {return QUrl( "qrc:/Next.svg" );}
+    static QUrl otherIcon() const {return QUrl( "qrc:/Other.svg" );}
+    static QUrl othersIcon() const {return QUrl( "qrc:/Others.svg" );}
+    static QUrl plusIcon() const {return QUrl( "qrc:/Plus.svg" );}
+    static QUrl personalIcon() const {return QUrl( "qrc:/Personal.svg" );}
+    static QUrl projectsIcon() const {return QUrl( "qrc:/Projects.svg" );}
+    static QUrl qgisIcon() const {return QUrl( "qrc:/QGIS.svg" );}
+    static QUrl qrCodeIcon() const {return QUrl( "qrc:/QRCode.svg" );}
+    static QUrl redoIcon() const {return QUrl( "qrc:/Redo.svg" );}
+    static QUrl redditIcon() const {return QUrl( "qrc:/Reddit.svg" );}
+    static QUrl satelliteIcon() const {return QUrl( "qrc:/GPSSatellite.svg" );}
+    static QUrl searchIcon() const {return QUrl( "qrc:/Search.svg" );}
+    static QUrl showIcon() const {return QUrl( "qrc:/Show.svg" );}
+    static QUrl smallCheckmarkIcon() const {return QUrl( "qrc:/SmallCheckmark.svg" );}
+    static QUrl smallEditIcon() const {return QUrl( "qrc:/SmallEdit.svg" );}
+    static QUrl socialMediaIcon() const {return QUrl( "qrc:/SocialMedia.svg" );}
+    static QUrl stakeOutIcon() const {return QUrl( "qrc:/StakeOut.svg" );}
+    static QUrl stateAndLocalIcon() const {return QUrl( "qrc:/StateAndLocal.svg" );}
+    static QUrl stopIcon() const {return QUrl( "qrc:/Stop.svg" );}
+    static QUrl subscriptionsIcon() const {return QUrl( "qrc:/Subscriptions.svg" );}
+    static QUrl syncIcon() const {return QUrl( "qrc:/Sync.svg" );}
+    static QUrl syncGreenIcon() const {return QUrl( "qrc:/SyncGreen.svg" );}
+    static QUrl teacherIcon() const {return QUrl( "qrc:/Teacher.svg" );}
+    static QUrl telecommunicationIcon() const {return QUrl( "qrc:/Telecommunication.svg" );}
+    static QUrl termsIcon() const {return QUrl( "qrc:/Terms.svg" );}
+    static QUrl tractorIcon() const {return QUrl( "qrc:/Tractor.svg" );}
+    static QUrl transportationIcon() const {return QUrl( "qrc:/Transportation.svg" );}
+    static QUrl undoIcon() const {return QUrl( "qrc:/Undo.svg" );}
+    static QUrl waitingIcon() const {return QUrl( "qrc:/Waiting.svg" );}
+    static QUrl waterResourcesIcon() const {return QUrl( "qrc:/WaterResources.svg" );}
+    static QUrl studentIcon() const {return QUrl( "qrc:/Student.svg" );}
+    static QUrl xTwitterIcon() const {return QUrl( "qrc:/XTwitter.svg" );}
+    static QUrl youtubeIcon() const {return QUrl( "qrc:/Youtube.svg" );}
+    static QUrl formIcon() const {return QUrl( "qrc:/Terms.svg" );}
+    static QUrl drawIcon() const {return QUrl( "qrc:/Draw.svg" );}
 
     static QUrl projectsFilledIcon() {return QUrl( "qrc:/ProjectsFilled.svg" );}
     static QUrl globalFilledIcon() {return QUrl( "qrc:/GlobalFilled.svg" );}
@@ -513,43 +518,44 @@ class MMStyle: public QObject
     static QUrl tableLayerNoColorOverlayIcon() {return QUrl( "qrc:/mIconTableLayer-nocoloroverlay.svg" );}
     static QUrl followGPSNoColorOverlayIcon() {return QUrl( "qrc:/FollowGPS-nocoloroverlay.svg" );}
 
-    static QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
-    static QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
-    static QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.svg" );}
-    static QUrl trackingDirectionImage() {return QUrl( "qrc:/images/TrackingDirection.svg" );}
-    static QUrl directionImage() {return QUrl( "qrc:/images/Direction.svg" );}
-    static QUrl mmSymbolImage() {return QUrl( "qrc:/images/MMSymbol.svg" );}
-    static QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/images/AcceptInvitationLogoImage.svg" ); }
-    static QUrl acceptInvitationImage() {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
-    static QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
-    static QUrl noMapThemesImage() {return QUrl( "qrc:/images/NoMapThemesImage.svg" );}
-    static QUrl syncFailedImage() {return QUrl( "qrc:/images/SyncFailed.svg" );}
-    static QUrl noPermissionsImage() {return QUrl( "qrc:/images/NoPermissions.svg" );}
-    static QUrl signInImage() {return QUrl( "qrc:/images/SignIn.svg" );}
-    static QUrl reachedDataLimitImage() {return QUrl( "qrc:/images/ReachedDataLimit.svg" );}
-    static QUrl warnLogoImage() {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
-    static QUrl mapPinImage() {return QUrl( "qrc:/images/MapPin.svg" );}
-    static QUrl positionTrackingRunningImage() {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
-    static QUrl positionTrackingStartImage() {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
-    static QUrl syncImage() {return QUrl( "qrc:/images/SyncImage.svg" );}
-    static QUrl externalGpsGreenImage() {return QUrl( "qrc:/images/ExternalGpsGreen.svg" );}
-    static QUrl externalGpsRedImage() {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
-    static QUrl negativeMMSymbolImage() {return QUrl( "qrc:/images/NegativeMMSymbol.svg" );}
-    static QUrl positiveMMSymbolImage() {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
-    static QUrl neutralMMSymbolImage() {return QUrl( "qrc:/images/NeutralMMSymbol.svg" );}
-    static QUrl closeAccountImage() {return QUrl( "qrc:/images/CloseAccount.svg" );}
-    static QUrl attentionImage() {return QUrl( "qrc:/images/Attention.svg" );}
-    static QUrl blueInfoImage() {return QUrl( "qrc:/images/BlueInfo.svg" );}
-    static QUrl bubbleImage() {return QUrl( "qrc:/images/Bubble.svg" );}
-    static QUrl streamingBootsImage() {return QUrl( "qrc:/images/StreamingBoots.svg" );}
-    static QUrl streamingBootsOrangeImage() {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}
-    static QUrl noWifiImage() {return QUrl( "qrc:/images/NoWifi.svg" );}
-    static QUrl crosshairBackgroundImage() {return QUrl( "qrc:/images/CrosshairBackground.svg" );}
-    static QUrl crosshairCenterImage() {return QUrl( "qrc:/images/CrosshairCenter.svg" );}
-    static QUrl crosshairCircleImage() {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
-    static QUrl crosshairForegroundImage() {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
-    static QUrl crosshairPlusImage() {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
-    static QUrl noWorkspaceImage() {return QUrl( "qrc:/images/NoWorkspace.svg" );}
+    static QUrl loadingIndicatorImage() const {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
+    static QUrl mmLogoImage() const {return QUrl( "qrc:/images/MMLogo.svg" );}
+    static QUrl lutraLogoImage() const {return QUrl( "qrc:/images/LutraLogo.svg" );}
+    static QUrl trackingDirectionImage() const {return QUrl( "qrc:/images/TrackingDirection.svg" );}
+    static QUrl directionImage() const {return QUrl( "qrc:/images/Direction.svg" );}
+    static QUrl mmSymbolImage() const {return QUrl( "qrc:/images/MMSymbol.svg" );}
+    static QUrl acceptInvitationLogoImage() const {return QUrl( "qrc:/images/AcceptInvitationLogoImage.svg" ); }
+    static QUrl acceptInvitationImage() const {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
+    static QUrl uploadImage() const {return QUrl( "qrc:/images/UploadImage.svg" );}
+    static QUrl noMapThemesImage() const {return QUrl( "qrc:/images/NoMapThemesImage.svg" );}
+    static QUrl syncFailedImage() const {return QUrl( "qrc:/images/SyncFailed.svg" );}
+    static QUrl noPermissionsImage() const {return QUrl( "qrc:/images/NoPermissions.svg" );}
+    static QUrl signInImage() const {return QUrl( "qrc:/images/SignIn.svg" );}
+    static QUrl reachedDataLimitImage() const {return QUrl( "qrc:/images/ReachedDataLimit.svg" );}
+    static QUrl warnLogoImage() const {return QUrl( "qrc:/images/WarnLogoImage.svg" );}
+    static QUrl mapPinImage() const {return QUrl( "qrc:/images/MapPin.svg" );}
+    static QUrl positionTrackingRunningImage() const {return QUrl( "qrc:/images/PositionTrackingRunning.svg" );}
+    static QUrl positionTrackingStartImage() const {return QUrl( "qrc:/images/PositionTrackingStart.svg" );}
+    static QUrl syncImage() const {return QUrl( "qrc:/images/SyncImage.svg" );}
+    static QUrl externalGpsRedImage() const {return QUrl( "qrc:/images/ExternalGpsRed.svg" );}
+    static QUrl externalBluetoothGreenImage() const {return QUrl( "qrc:/images/ExternalBluetoothProvider.svg" );}
+    static QUrl externalNetworkGreenImage() const {return QUrl( "qrc:/images/ExternalNetworkProvider.svg" );}
+    static QUrl negativeMMSymbolImage() const {return QUrl( "qrc:/images/NegativeMMSymbol.svg" );}
+    static QUrl positiveMMSymbolImage() const {return QUrl( "qrc:/images/PositiveMMSymbol.svg" );}
+    static QUrl neutralMMSymbolImage() const {return QUrl( "qrc:/images/NeutralMMSymbol.svg" );}
+    static QUrl closeAccountImage() const {return QUrl( "qrc:/images/CloseAccount.svg" );}
+    static QUrl attentionImage() const {return QUrl( "qrc:/images/Attention.svg" );}
+    static QUrl blueInfoImage() const {return QUrl( "qrc:/images/BlueInfo.svg" );}
+    static QUrl bubbleImage() const {return QUrl( "qrc:/images/Bubble.svg" );}
+    static QUrl streamingBootsImage() const {return QUrl( "qrc:/images/StreamingBoots.svg" );}
+    static QUrl streamingBootsOrangeImage() const {return QUrl( "qrc:/images/StreamingBootsOrange.svg" );}
+    static QUrl noWifiImage() const {return QUrl( "qrc:/images/NoWifi.svg" );}
+    static QUrl crosshairBackgroundImage() const {return QUrl( "qrc:/images/CrosshairBackground.svg" );}
+    static QUrl crosshairCenterImage() const {return QUrl( "qrc:/images/CrosshairCenter.svg" );}
+    static QUrl crosshairCircleImage() const {return QUrl( "qrc:/images/CrosshairCircle.svg" );}
+    static QUrl crosshairForegroundImage() const {return QUrl( "qrc:/images/CrosshairForeground.svg" );}
+    static QUrl crosshairPlusImage() const {return QUrl( "qrc:/images/CrosshairPlus.svg" );}
+    static QUrl noWorkspaceImage() const {return QUrl( "qrc:/images/NoWorkspace.svg" );}
 
     static QUrl hapticSound() {return QUrl( "qrc:/sounds/haptic_sound.wav" );}
 

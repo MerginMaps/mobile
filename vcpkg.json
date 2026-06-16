@@ -84,13 +84,7 @@
         },
         {
           "name": "qtbase",
-          "default-features": false,
-          "features": [
-            {
-              "name": "wayland",
-              "platform": "linux"
-            }
-          ]
+          "default-features": false
         },
         "qtconnectivity",
         "qtdeclarative",
@@ -129,7 +123,7 @@
           "default-features": false
         }
     ],
-    "builtin-baseline": "a78b96b07eb590c59bde5db0f4b260bda45ba92d",
+    "builtin-baseline": "b4097dd14b05a86289e1eaa20387e09d16c7bb36",
     "overrides": [
         {
           "$comment": "Required for QCA to work properly",

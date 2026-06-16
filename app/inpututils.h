@@ -662,6 +662,19 @@ class InputUtils: public QObject
      */
     static void updateQgisFormats( const QByteArray &output );
 
+    /**
+     * From received string checks occurrences in existingStrings and returns first next unique option. Appends " (i)"
+     * behind received string or replaces it if it exists, where i is the smallest possible number starting from 1 if
+     * appending and next smallest if replacing.
+     *  "lutra"         -> "lutra (1)"
+     *  "lutra (256)"   -> "lutra (257)"
+     *  "    lutra    " -> "lutra (1)"
+     * \param newString  wanted string
+     * \param existingStrings QStringList of possible similar values
+     * \return unique variant of wanted string
+     */
+    static QString getUniqueString( const QString &newString, const QStringList &existingStrings );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 
