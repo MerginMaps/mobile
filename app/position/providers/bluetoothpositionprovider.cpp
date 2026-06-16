@@ -19,19 +19,8 @@
 #include <QPermissions>
 #endif
 
-NmeaParser::NmeaParser() : QgsNmeaConnection( new QBluetoothSocket() )
-{
-}
-
-QgsGpsInformation NmeaParser::parseNmeaString( const QString &nmeaString )
-{
-  mStringBuffer = nmeaString;
-  processStringBuffer();
-  return mLastGPSInformation;
-}
-
 BluetoothPositionProvider::BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
-  : AbstractPositionProvider( addr, QStringLiteral( "external" ), name, positionTransformer, parent )
+  : AbstractPositionProvider( addr, QStringLiteral( "external_bt" ), name, positionTransformer, parent )
   , mTargetAddress( addr )
 {
   mSocket = std::unique_ptr<QBluetoothSocket>( new QBluetoothSocket( QBluetoothServiceInfo::RfcommProtocol ) );

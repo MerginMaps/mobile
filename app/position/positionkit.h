@@ -137,7 +137,7 @@ class PositionKit : public QObject
     Q_INVOKABLE QString positionCrs3DGeoidModelName();
 
     Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
-    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( AppSettings *appsettings );
+    Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( const AppSettings *appsettings );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
@@ -145,7 +145,7 @@ class PositionKit : public QObject
     double antennaHeight() const;
 
     void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
-    void setSkipElevationTransformation( bool skipElevationTransformation );
+    void setElevationTransformationEnabled( bool elevationTransformationEnabled );
     // should be executed on active project changed, updates the CRS, elevation transformation and context properties
     void refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext );
 
@@ -201,7 +201,7 @@ class PositionKit : public QObject
 
     QgsCoordinateReferenceSystem mPositionCrs3D;
     QgsCoordinateReferenceSystem mVerticalCrs;
-    bool mSkipElevationTransformation = true;
+    bool mElevationTransformationEnabled = false;
 
     friend class TestPosition;
 };

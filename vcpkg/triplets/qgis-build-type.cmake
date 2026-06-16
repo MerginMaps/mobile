@@ -1,0 +1,3 @@
+if (PORT STREQUAL "qgis" AND "$ENV{QGIS_BUILD_TYPE}" MATCHES "^(Debug|RelWithDebInfo)$")
+  list(APPEND VCPKG_ENV_PASSTHROUGH QGIS_BUILD_TYPE)
+endif ()
