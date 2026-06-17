@@ -84,7 +84,7 @@ MMFormComboboxBaseEditor {
 
       multiSelect: internal.allowMultivalue
       withSearch: vrModel.count > 5
-      showFullScreen: multiSelect || withSearch
+      showFullScreen: withSearch
 
       valueRole: "FeatureId"
       textRole: "FeatureTitle"
