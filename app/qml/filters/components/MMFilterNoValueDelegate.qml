@@ -24,17 +24,13 @@ MMComponents.MMListDelegate {
   signal addOrRemoveRequested()
   signal selectionRequested()
 
-  property bool checked: false
+  property bool checked: root.currentValue ? root.currentValue.some( v => v === null ) : false
 
   text: qsTr( "No value" )
 
   rightContent: MMComponents.MMIcon {
     source: __style.doneCircleIcon
     visible: root.checked
-  }
-
-  Component.onCompleted: {
-    checked = root.currentValue ? root.currentValue.some( v => v === null ) : false
   }
 
   onClicked: {
