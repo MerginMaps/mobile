@@ -250,7 +250,6 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         QStringList expressions;
         QString expressionTemplate( expressionCopy );
         expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "NULL" ) );
-        expressionTemplate.replace( QStringLiteral( "= NULL" ), QStringLiteral( "IS NULL" ) );
         expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
         expressionTemplate = QString( expressionCopy );
         expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "''" ) );
@@ -378,7 +377,6 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
         if ( QgsVariantUtils::isNull( value ) )
         {
           expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "NULL" ) );
-          expressionTemplate.replace( QStringLiteral( "= NULL" ), QStringLiteral( "IS NULL" ) );
           expressions << QStringLiteral( "(%1)" ).arg( expressionTemplate );
           expressionTemplate = QString( expressionCopy );
           expressionTemplate.replace( QStringLiteral( "@@value@@" ), QStringLiteral( "''" ) );

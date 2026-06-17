@@ -24,27 +24,27 @@ class TestFilterController : public QObject
     void cleanup(); // called after each test function
 
     // Date range
-    void testDateRange_dateTime();
-    void testDateRange_date();
-    void testDateRange_dateTime_null();              // invalid bounds fall back to min/max sentinels
-    void testDateRange_date_null();                  // invalid bounds fall back to min/max sentinels
-    void testDateRange_dateTime_featureAtLowerBound(); // >= is inclusive: feature exactly at from-bound is counted
-    void testDateRange_dateTime_midnightLowerBound();  // from=midnight; midnight feature is at the inclusive lower bound
-    void testDateRange_dateTime_zeroMsInsideRange();   // 0 ms feature inside range: range uses >= / <=, no double-expr needed
+    void testDateRangeDateTime();
+    void testDateRangeDate();
+    void testDateRangeDateTimeNull();              // invalid bounds fall back to min/max sentinels
+    void testDateRangeDateNull();                  // invalid bounds fall back to min/max sentinels
+    void testDateRangeDateTimeFeatureAtLowerBound(); // >= is inclusive: feature exactly at from-bound is counted
+    void testDateRangeDateTimeMidnightLowerBound();  // from=midnight; midnight feature is at the inclusive lower bound
+    void testDateRangeDateTimeZeroMsInsideRange();   // 0 ms feature inside range: range uses >= / <=, no double-expr needed
 
     // Single select
-    void testSingleSelect_dateTime_nonZeroMs();
-    void testSingleSelect_dateTime_zeroMs(); // edge case: 0 ms
-    void testSingleSelect_dateTime_null();   // null -> NULL OR ''
-    void testSingleSelect_date();
+    void testSingleSelectDateTimeNonZeroMs();
+    void testSingleSelectDateTimeZeroMs(); // edge case: 0 ms
+    void testSingleSelectDateTimeNull();   // null -> NULL OR ''
+    void testSingleSelectDate();
 
     // Multi select
-    void testMultiSelect_dateTime_nonZeroMs();
-    void testMultiSelect_dateTime_zeroMs();  // edge case: 0 ms
-    void testMultiSelect_dateTime_mixed();   // mix of 0 ms and non-zero ms values
-    void testMultiSelect_dateTime_null();    // null -> NULL OR ''
-    void testMultiSelect_dateTime_empty();   // empty list -> no subset string
-    void testMultiSelect_date();
+    void testMultiSelectDateTimeNonZeroMs();
+    void testMultiSelectDateTimeZeroMs();  // edge case: 0 ms
+    void testMultiSelectDateTimeMixed();   // mix of 0 ms and non-zero ms values
+    void testMultiSelectDateTimeNull();    // null -> NULL OR ''
+    void testMultiSelectDateTimeEmpty();   // empty list -> no subset string
+    void testMultiSelectDate();
 
   private:
     std::unique_ptr<FilterController> mController;

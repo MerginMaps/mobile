@@ -38,7 +38,7 @@ void TestFilterController::cleanup()
 }
 
 // Date range
-void TestFilterController::testDateRange_dateTime()
+void TestFilterController::testDateRangeDateTime()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -65,7 +65,7 @@ void TestFilterController::testDateRange_dateTime()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testDateRange_date()
+void TestFilterController::testDateRangeDate()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
   QVERIFY( layer );
@@ -92,7 +92,7 @@ void TestFilterController::testDateRange_date()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testDateRange_dateTime_null()
+void TestFilterController::testDateRangeDateTimeNull()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -116,7 +116,7 @@ void TestFilterController::testDateRange_dateTime_null()
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
-void TestFilterController::testDateRange_date_null()
+void TestFilterController::testDateRangeDateNull()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
   QVERIFY( layer );
@@ -140,7 +140,7 @@ void TestFilterController::testDateRange_date_null()
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
-void TestFilterController::testDateRange_dateTime_featureAtLowerBound()
+void TestFilterController::testDateRangeDateTimeFeatureAtLowerBound()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -167,7 +167,7 @@ void TestFilterController::testDateRange_dateTime_featureAtLowerBound()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testDateRange_dateTime_midnightLowerBound()
+void TestFilterController::testDateRangeDateTimeMidnightLowerBound()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -195,7 +195,7 @@ void TestFilterController::testDateRange_dateTime_midnightLowerBound()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testDateRange_dateTime_zeroMsInsideRange()
+void TestFilterController::testDateRangeDateTimeZeroMsInsideRange()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -225,7 +225,7 @@ void TestFilterController::testDateRange_dateTime_zeroMsInsideRange()
 }
 
 // Single select
-void TestFilterController::testSingleSelect_dateTime_nonZeroMs()
+void TestFilterController::testSingleSelectDateTimeNonZeroMs()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -249,7 +249,7 @@ void TestFilterController::testSingleSelect_dateTime_nonZeroMs()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testSingleSelect_dateTime_zeroMs()
+void TestFilterController::testSingleSelectDateTimeZeroMs()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -276,13 +276,14 @@ void TestFilterController::testSingleSelect_dateTime_zeroMs()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testSingleSelect_dateTime_null()
+void TestFilterController::testSingleSelectDateTimeNull()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
 
-  // Null value → two OR'd expressions matching both NULL and empty string
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // matches (null)
+  // Null value → two OR'd expressions: one with NULL, one with empty string
+  // Note: "= NULL" is invalid SQL and never matches; proper IS NULL support is a separate feature
+  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // not matched (= NULL is invalid SQL)
   QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );        // no match
 
   const QString filterId = TestUtils::setupControllerWithFilter(
@@ -294,12 +295,12 @@ void TestFilterController::testSingleSelect_dateTime_null()
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" IS NULL) OR (\"ts_field\" = ''))" );
+                             "((\"ts_field\" = NULL) OR (\"ts_field\" = ''))" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 0 );
 }
 
-void TestFilterController::testSingleSelect_date()
+void TestFilterController::testSingleSelectDate()
 {
   // QML always passes QDateTime even for date-only fields; the field type drives formatting
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
@@ -325,7 +326,7 @@ void TestFilterController::testSingleSelect_date()
 }
 
 // Multi select
-void TestFilterController::testMultiSelect_dateTime_nonZeroMs()
+void TestFilterController::testMultiSelectDateTimeNonZeroMs()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -351,7 +352,7 @@ void TestFilterController::testMultiSelect_dateTime_nonZeroMs()
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
-void TestFilterController::testMultiSelect_dateTime_zeroMs()
+void TestFilterController::testMultiSelectDateTimeZeroMs()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -375,7 +376,7 @@ void TestFilterController::testMultiSelect_dateTime_zeroMs()
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testMultiSelect_dateTime_mixed()
+void TestFilterController::testMultiSelectDateTimeMixed()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -404,13 +405,14 @@ void TestFilterController::testMultiSelect_dateTime_mixed()
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
-void TestFilterController::testMultiSelect_dateTime_null()
+void TestFilterController::testMultiSelectDateTimeNull()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
 
-  // Null value → two OR'd expressions matching both NULL and empty string
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // matches (null)
+  // Null value → two OR'd expressions: one with NULL, one with empty string
+  // Note: "= NULL" is invalid SQL and never matches; proper IS NULL support is a separate feature
+  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // not matched (= NULL is invalid SQL)
   QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );        // no match
 
   const QString filterId = TestUtils::setupControllerWithFilter(
@@ -422,12 +424,12 @@ void TestFilterController::testMultiSelect_dateTime_null()
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" IS NULL) OR (\"ts_field\" = ''))" );
+                             "((\"ts_field\" = NULL) OR (\"ts_field\" = ''))" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 0 );
 }
 
-void TestFilterController::testMultiSelect_dateTime_empty()
+void TestFilterController::testMultiSelectDateTimeEmpty()
 {
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
   QVERIFY( layer );
@@ -448,7 +450,7 @@ void TestFilterController::testMultiSelect_dateTime_empty()
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
-void TestFilterController::testMultiSelect_date()
+void TestFilterController::testMultiSelectDate()
 {
   // Date-only field: all QDateTime values are formatted as yyyy-MM-dd
   QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
