@@ -568,6 +568,7 @@ target_link_libraries(
          GDAL::GDAL
          PostgreSQL::PostgreSQL
          Spatialite::Spatialite
+         unofficial::sqlite3::sqlite3
 )
 
 if (NOT WIN32)

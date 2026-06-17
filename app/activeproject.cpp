@@ -11,6 +11,8 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include <sqlite3.h>
+
 #include "qgsvectorlayer.h"
 #include "qgslayertree.h"
 #include "qgslayertreemodel.h"
@@ -372,6 +374,11 @@ void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin 
       mAutosyncController->updateLastUpdateTime();
     }
   }
+
+  // Flush WAL back into the main .gpkg files before sync so that
+  // Mergin uploads self-contained databases without -wal/-shm sidecar files.
+  checkpointGeoPackages();
+
   emit syncActiveProject( mLocalProject, requestOrigin );
 }
 
@@ -675,4 +682,50 @@ bool ActiveProject::photoSketchingEnabled() const
 FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
+}
+
+void ActiveProject::checkpointGeoPackages()
+{
+  if ( !mQgsProject )
+    return;
+
+  QSet<QString> gpkgPaths;
+
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+  for ( QgsMapLayer *layer : layers )
+  {
+    if ( !layer || !layer->isValid() )
+      continue;
+
+    // OGR source format: /path/to/file.gpkg|layername=tablename
+    QString filePath = layer->source().split( '|' ).first();
+    if ( filePath.endsWith( QStringLiteral( ".gpkg" ), Qt::CaseInsensitive ) )
+    {
+      gpkgPaths.insert( filePath );
+    }
+  }
+
+  for ( const QString &path : gpkgPaths )
+  {
+    sqlite3 *db = nullptr;
+    int rc = sqlite3_open_v2( path.toUtf8().constData(), &db, SQLITE_OPEN_READWRITE, nullptr );
+    if ( rc != SQLITE_OK )
+    {
+      CoreUtils::log( QStringLiteral( "WAL Checkpoint" ), QStringLiteral( "Failed to open %1: %2" ).arg( path, QString::fromUtf8( sqlite3_errmsg( db ) ) ) );
+      sqlite3_close( db );
+      continue;
+    }
+
+    rc = sqlite3_exec( db, "PRAGMA wal_checkpoint(TRUNCATE);", nullptr, nullptr, nullptr );
+    if ( rc != SQLITE_OK )
+    {
+      CoreUtils::log( QStringLiteral( "WAL Checkpoint" ), QStringLiteral( "Checkpoint failed on %1: %2" ).arg( path, QString::fromUtf8( sqlite3_errmsg( db ) ) ) );
+    }
+    else
+    {
+      CoreUtils::log( QStringLiteral( "WAL Checkpoint" ), QStringLiteral( "Checkpointed %1" ).arg( path ) );
+    }
+
+    sqlite3_close( db );
+  }
 }

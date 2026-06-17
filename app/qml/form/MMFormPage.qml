@@ -358,7 +358,14 @@ Page {
             root.createLinkedFeature( root.controller, relation )
           }
           else {
-            // parent feature does not have a valid ID yet, we need to save it and acquire ID
+            // parent feature does not have a valid ID yet, we need to save it and acquire ID.
+            // Check constraints first — acquireId() commits unconditionally, so we must block
+            // here the same way save() does.
+            if ( root.controller.hasValidationErrors )
+            {
+              __notificationModel.addError( qsTr( 'Feature could not be saved, please check all required fields' ) )
+              return
+            }
             root.controller.acquireId()
             root.createLinkedFeature( root.controller, relation )
           }

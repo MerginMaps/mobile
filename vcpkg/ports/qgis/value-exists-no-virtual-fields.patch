@@ -1,0 +1,13 @@
+diff --git a/src/core/vector/qgsvectorlayerutils.cpp b/src/core/vector/qgsvectorlayerutils.cpp
+index 1234567890..abcdef1234 100644
+--- a/src/core/vector/qgsvectorlayerutils.cpp
++++ b/src/core/vector/qgsvectorlayerutils.cpp
+@@ -191,7 +191,7 @@ bool QgsVectorLayerUtils::valueExists( const QgsVectorLayer *layer, int fieldInd
+   // build up an optimised feature request
+   QgsFeatureRequest request;
+   request.setNoAttributes();
+-  request.setFlags( Qgis::FeatureRequestFlag::NoGeometry );
++  request.setFlags( request.flags() | Qgis::FeatureRequestFlag::NoGeometry );
+
+   // at most we need to check ignoreIds.size() + 1 - the feature not in ignoreIds is the one we're interested in
+   int limit = ignoreIds.size() + 1;

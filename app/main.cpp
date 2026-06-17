@@ -734,9 +734,11 @@ int main( int argc, char *argv[] )
 
   initDeclarative();
   // QGIS environment variables to set
-  // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
-  // and properly close connection after writting changes to gpkg.
-  qputenv( "OGR_SQLITE_JOURNAL", "DELETE" );
+  // OGR_SQLITE_JOURNAL is set to WAL to allow concurrent readers and writers on GeoPackage files.
+  // This prevents "database is locked" errors when background threads (e.g. RelationFeaturesModel,
+  // ValueRelationController) hold read connections while the main thread commits changes.
+  // WAL creates -wal and -shm sidecar files; these are checkpointed before sync.
+  qputenv( "OGR_SQLITE_JOURNAL", "WAL" );
 
 
   // Register to QQmlEngine

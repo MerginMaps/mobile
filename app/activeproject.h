@@ -246,6 +246,14 @@ class ActiveProject: public QObject
     * otherwise used only for loading a new projects (evoked by a user).
     */
     bool forceLoad( const QString &filePath, bool force );
+
+    /**
+     * Runs PRAGMA wal_checkpoint(TRUNCATE) on all GeoPackage files in the project.
+     * This flushes the WAL back into the main database so that sync uploads a
+     * self-contained .gpkg without depending on -wal/-shm sidecar files.
+     */
+    void checkpointGeoPackages();
+
     QString mMapTheme;
 };
 

@@ -24,6 +24,7 @@ vcpkg_from_github(
   # TODO: when updating to QGIS 4, this has to be reworked to support new QgsGeometry
   # comparison in QGIS 4
   geometry-equals-operator.patch
+  value-exists-no-virtual-fields.patch
 )
 
 file(REMOVE ${SOURCE_PATH}/cmake/FindQtKeychain.cmake)
