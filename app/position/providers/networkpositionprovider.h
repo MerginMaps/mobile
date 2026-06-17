@@ -59,7 +59,7 @@ class NetworkPositionProvider : public AbstractPositionProvider
     int mReconnectDelay = ReconnectDelay::ShortDelay; // in how many [ms] we will try to reconnect again
     int mSecondsLeftToReconnect; // how many seconds are left to reconnect. Reconnects if less than or equal to one
     QTimer mReconnectTimer; // timer that times out each second and lowers the mSecondsLeftToReconnect by one
-    QTimer mUdpReconnectTimer; // timer that times out after ExtraLongDelay and triggers reconnect
+    QTimer mHeartBeatTimer; // timer that times out after ExtraLongDelay and triggers reconnect
 
     QString mTargetAddress; // IP address or hostname of the receiver
     int mTargetPort; // active port of the receiver

@@ -34,16 +34,13 @@ NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QSt
   mReconnectTimer.setSingleShot( false );
   mReconnectTimer.setInterval( ONE_SECOND_MS );
   connect( &mReconnectTimer, &QTimer::timeout, this, &NetworkPositionProvider::reconnectTimeout );
-  mUdpReconnectTimer.setSingleShot( true );
-  connect( &mUdpReconnectTimer, &QTimer::timeout, this, [this]
+  mHeartBeatTimer.setSingleShot( true );
+  connect( &mHeartBeatTimer, &QTimer::timeout, this, [this]
   {
-    if ( mTcpSocket->state() != QAbstractSocket::ConnectedState )
-    {
-      setState( tr( "No connection" ), State::NoConnection );
-      startReconnectTimer();
-      // let's also invalidate current position since we no longer have connection
-      emit positionChanged( GeoPosition() );
-    }
+    setState( tr( "No connection" ), State::NoConnection );
+    startReconnectTimer();
+    // let's also invalidate current position since we no longer have connection
+    emit positionChanged( GeoPosition() );
   } );
 
   NetworkPositionProvider::startUpdates();
@@ -54,7 +51,7 @@ void NetworkPositionProvider::startUpdates()
   // NOTE: QHostAddress doesn't support hostname lookup (QHostInfo does)
   mTcpSocket->connectToHost( mTargetAddress, mTargetPort );
   mUdpSocket->bind( QHostAddress::LocalHost, mTargetPort );
-  mUdpReconnectTimer.start( ReconnectDelay::ExtraLongDelay );
+  mHeartBeatTimer.start( ReconnectDelay::ExtraLongDelay );
 }
 
 void NetworkPositionProvider::stopUpdates()
@@ -76,7 +73,7 @@ NetworkPositionProvider::~NetworkPositionProvider()
 
 void NetworkPositionProvider::closeProvider()
 {
-  mUdpReconnectTimer.stop();
+  mHeartBeatTimer.stop();
   mReconnectTimer.stop();
 
   if ( mTcpSocket )
@@ -99,7 +96,7 @@ void NetworkPositionProvider::positionUpdateReceived()
   // this approach will let us use QIODevice functions for both sockets
   if ( socket->socketType() == QAbstractSocket::UdpSocket && mUdpSocket->state() != QAbstractSocket::ConnectedState )
   {
-    mUdpReconnectTimer.stop();
+    mHeartBeatTimer.stop();
 
     // if by any chance we showed wrong message in the status like "no connection", fix it here
     // we know the connection is working because we just received data from the device
@@ -127,16 +124,13 @@ void NetworkPositionProvider::positionUpdateReceived()
       mUdpSocket->connectToHost( peerAddress.toString(), peerPort );
     }
 
-    // restart UDP silence timer
-    mUdpReconnectTimer.start();
+    // restart silence timer
+    mHeartBeatTimer.start();
     return;
   }
 
-  // restart the UDP silence timer, we just received data
-  if ( socket->socketType() == QAbstractSocket::UdpSocket )
-  {
-    mUdpReconnectTimer.start();
-  }
+  // restart the silence timer, we just received data
+  mHeartBeatTimer.start();
 
   const QByteArray rawNmeaData = socket->readAll();
 
@@ -171,7 +165,7 @@ void NetworkPositionProvider::socketStateChanged( const QAbstractSocket::SocketS
   }
   else if ( state == QAbstractSocket::UnconnectedState )
   {
-    const bool isUdpSocketListening = mUdpSocket->state() == QAbstractSocket::ConnectedState || mUdpSocket->state() == QAbstractSocket::BoundState || mUdpReconnectTimer.isActive();
+    const bool isUdpSocketListening = mUdpSocket->state() == QAbstractSocket::ConnectedState || mUdpSocket->state() == QAbstractSocket::BoundState || mHeartBeatTimer.isActive();
     const bool isTcpSocketAndUdpNotListening = socket->socketType() == QAbstractSocket::TcpSocket && !isUdpSocketListening && QApplication::applicationState() == Qt::ApplicationActive;
     const bool isUdpSocket = socket->socketType() == QAbstractSocket::UdpSocket && QApplication::applicationState() == Qt::ApplicationActive;
     if ( isTcpSocketAndUdpNotListening || isUdpSocket )
