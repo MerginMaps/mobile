@@ -13,5 +13,7 @@
   
 #cmakedefine HAVE_BLUETOOTH
 
+#cmakedefine POSTHOG_API_KEY "@POSTHOG_API_KEY@"
+
 #endif
 

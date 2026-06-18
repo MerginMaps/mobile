@@ -11,6 +11,7 @@
 
 #include <QFontDatabase>
 #include <QGuiApplication>
+#include <QSet>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QtDebug>
@@ -35,6 +36,7 @@
 #include "qgsnetworkaccessmanager.h"
 #include "geodiffutils.h"
 #include "merginerrortypes.h"
+#include "analytics/analyticscontroller.h"
 #include "androidutils.h"
 #include "ios/iosutils.h"
 #include "inpututils.h"
@@ -533,6 +535,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  AnalyticsController analytics;
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -635,6 +638,42 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::syncActiveProject, &syncManager, [&syncManager]( const LocalProject & project, const SyncOptions::RequestOrigin requestOrigin )
   {
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
+  } );
+
+  // Analytics: project lifecycle
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&analytics]( QgsProject * project )
+  {
+    const auto layers = project->mapLayers();
+    QSet<QString> uniqueGeometryTypes;
+    for ( const QgsMapLayer *layer : layers )
+    {
+      const QgsVectorLayer *vl = qobject_cast<const QgsVectorLayer *>( layer );
+      if ( vl )
+        uniqueGeometryTypes << QgsWkbTypes::geometryDisplayString( vl->geometryType() );
+    }
+    analytics.capture( QStringLiteral( "project_opened" ), {
+      { QStringLiteral( "layer_count" ), layers.count() },
+      { QStringLiteral( "geometry_types" ), QStringList( uniqueGeometryTypes.begin(), uniqueGeometryTypes.end() ).join( ',' ) }
+    } );
+  } );
+
+  // Analytics: sync lifecycle
+  QObject::connect( &syncManager, &SynchronizationManager::syncStarted, &lambdaContext, [&analytics]( const QString & )
+  {
+    analytics.capture( QStringLiteral( "sync_started" ) );
+  } );
+
+  QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &lambdaContext, [&analytics]( const QString &, bool success, int, bool )
+  {
+    analytics.capture( QStringLiteral( "sync_finished" ), { { QStringLiteral( "success" ), success } } );
+  } );
+
+  QObject::connect( &syncManager, &SynchronizationManager::syncError, &lambdaContext, [&analytics]( const QString &, int errorType, bool willRetry, const QString & )
+  {
+    analytics.capture( QStringLiteral( "sync_error" ), {
+      { QStringLiteral( "error_type" ), errorType },
+      { QStringLiteral( "will_retry" ), willRetry }
+    } );
   } );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -746,6 +785,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
+  engine.rootContext()->setContextProperty( "__analytics", &analytics );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
   engine.rootContext()->setContextProperty( "__activeLayer", &al );
@@ -833,6 +873,8 @@ int main( int argc, char *argv[] )
 
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
+
+  analytics.capture( QStringLiteral( "app_opened" ) );
 
   if ( !component.errors().isEmpty() )
   {

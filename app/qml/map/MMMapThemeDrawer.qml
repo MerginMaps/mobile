@@ -44,6 +44,7 @@ MMListDrawer {
     }
 
     onClicked: {
+      __analytics.capture( "map_theme_applied" )
       __activeProject.mapTheme = model.display
       root.close()
     }

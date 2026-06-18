@@ -142,6 +142,10 @@ set(HAVE_BLUETOOTH
     ${HAVE_BLUETOOTH_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
 )
+set(POSTHOG_API_KEY
+    ""
+    CACHE STRING "PostHog project API key for anonymous usage analytics"
+)
 
 set(USE_KEYCHAIN
     FALSE

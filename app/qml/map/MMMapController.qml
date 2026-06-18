@@ -135,17 +135,20 @@ Item {
           }
         }
 
+        __analytics.capture( "recording_started" )
         root.recordingStarted()
         break
       }
 
       case "recordInLayer": {
+        __analytics.capture( "recording_started", { "mode": "in_layer" } )
         root.recordInLayerFeatureStarted()
         root.hideHighlight()
         break
       }
 
       case "edit": {
+        __analytics.capture( "map_tool_activated", { "tool": "edit_geometry" } )
         root.editingGeometryStarted()
         root.hideHighlight()
         break
@@ -153,6 +156,7 @@ Item {
 
       case "split": {
         root.showInfoTextMessage( qsTr( "Create line to split the selected feature" ) )
+        __analytics.capture( "map_tool_activated", { "tool": "split" } )
         root.splittingStarted()
         break
       }
@@ -163,6 +167,7 @@ Item {
       }
 
       case "stakeout": {
+        __analytics.capture( "map_tool_activated", { "tool": "stakeout" } )
         root.hideHighlight()
         root.stakeoutStarted( internal.stakeoutTarget )
         break
@@ -171,17 +176,20 @@ Item {
       case "measure": {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
+        __analytics.capture( "map_tool_activated", { "tool": "measure" } )
         root.measureStarted()
         break
       }
 
       case "multiSelect": {
+        __analytics.capture( "map_tool_activated", { "tool": "multiselect" } )
         root.showInfoTextMessage( qsTr( "Tap on features to add or remove from the selection" ) )
         root.multiSelectStarted()
         break
       }
 
       case "sketch": {
+        __analytics.capture( "sketching_started" )
         root.showInfoTextMessage( qsTr( "Select a colour and start sketching on the map. Use two fingers to move or zoom the map." ) )
         root.drawStarted()
         break
@@ -261,6 +269,7 @@ Item {
         }
         else if ( pair.valid )  // root.state === "view"
         {
+          __analytics.capture( "feature_identified" )
           root.highlightPair( pair )
           root.featureIdentified( pair )
         }
@@ -1481,6 +1490,7 @@ Item {
 
   function setTracking( shouldTrack ) {
     if ( shouldTrack ) {
+      __analytics.capture( "tracking_started" )
       if ( root.trackingManager ) {
         root.trackingManager.tryAgain()
       }
@@ -1489,6 +1499,8 @@ Item {
       }
     }
     else {
+      if ( root.isTrackingPosition )
+        __analytics.capture( "tracking_stopped" )
       trackingManager?.commitTrackedPath()
       tracking.active = false
     }

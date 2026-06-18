@@ -101,8 +101,14 @@ MMFormPhotoViewer {
   }
   on_FieldValueIsNullChanged: internal.setImageSource()
 
-  onCapturePhotoClicked: internal.capturePhoto()
-  onChooseFromGalleryClicked: internal.chooseFromGallery()
+  onCapturePhotoClicked: {
+    __analytics.capture( "photo_added", { "source": "camera" } )
+    internal.capturePhoto()
+  }
+  onChooseFromGalleryClicked: {
+    __analytics.capture( "photo_added", { "source": "gallery" } )
+    internal.chooseFromGallery()
+  }
   onTrashClicked: internal.removeImage( __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath ) )
 
   onCheckboxCheckedChanged: {

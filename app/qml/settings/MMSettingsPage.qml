@@ -266,6 +266,17 @@ MMPage {
 
       MMLine {}
 
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Send anonymous usage data")
+        description: qsTr("Helps us understand which features are used so we can improve the app. No personal data is collected.")
+        checked: __analytics.enabled
+
+        onClicked: __analytics.enabled = !checked
+      }
+
+      MMLine {}
+
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Diagnostic log")

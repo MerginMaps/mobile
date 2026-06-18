@@ -45,6 +45,7 @@ set(MM_SRCS
     position/positiondirection.cpp
     position/positionkit.cpp
     position/positiontransformer.cpp
+    analytics/analyticscontroller.cpp
     activelayer.cpp
     activeproject.cpp
     androidutils.cpp
@@ -99,6 +100,7 @@ set(MM_SRCS
 )
 
 set(MM_HDRS
+    analytics/analyticscontroller.h
     attributes/attributecontroller.h
     attributes/attributedata.h
     attributes/attributeformmodel.h

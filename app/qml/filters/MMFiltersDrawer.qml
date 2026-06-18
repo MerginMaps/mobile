@@ -68,6 +68,7 @@ MMComponents.MMDrawer {
     }
 
     onClicked: {
+      __analytics.capture( "filters_reset" )
       internal.filterValues = {}
 
       __activeProject.filterController.clearAllFilters()
@@ -209,6 +210,7 @@ MMComponents.MMDrawer {
       text: qsTr( "Apply filters" )
 
       onClicked: {
+        __analytics.capture( "filters_applied", { "filter_count": Object.keys( internal.filterValues ).length } )
         __activeProject.filterController.processFilters(internal.filterValues)
         root.close()
       }

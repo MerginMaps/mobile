@@ -57,6 +57,8 @@ Item {
   signal previewPanelChanged( var panelHeight )
 
   function openForm( pair, formState, panelState ) {
+    __analytics.capture( "form_opened", { "form_state": formState } )
+
     if ( formsStack.depth === 0 )
     {
       let props = {
@@ -305,6 +307,7 @@ Item {
       }
 
       onSaveRequested: {
+        __analytics.capture( "form_saved" )
         formsStack.syncWhenFormCloses = true
       }
 

@@ -292,6 +292,8 @@ Item {
         return
       }
 
+      __analytics.capture( "project_removed_local" )
+
       if ( root.activeProjectId === relatedProjectId )
         root.activeProjectDeleted()
 
@@ -310,6 +312,7 @@ Item {
     id: downloadProjectDialog
 
     onDownloadClicked: {
+      __analytics.capture( "project_downloaded" )
       controllerModel.syncProject( relatedProjectId )
       downloadProjectDialog.relatedProjectId = ""
     }

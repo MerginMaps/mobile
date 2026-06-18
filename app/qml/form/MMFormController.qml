@@ -168,11 +168,18 @@ Item {
         root.stakeoutFeature( feature )
       }
 
-      onContentClicked: root.panelState = "form"
+      onContentClicked: {
+        __analytics.capture( "preview_expanded_to_form", { "via": "tap" } )
+        root.panelState = "form"
+      }
 
-      onOpenFormClicked: root.panelState = "form"
+      onOpenFormClicked: {
+        __analytics.capture( "preview_expanded_to_form", { "via": "open_form_button" } )
+        root.panelState = "form"
+      }
 
       onEditClicked: {
+        __analytics.capture( "preview_expanded_to_form", { "via": "edit_button" } )
         root.panelState = "form"
         featureForm.state = "edit"
       }

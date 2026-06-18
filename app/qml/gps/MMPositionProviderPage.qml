@@ -268,6 +268,7 @@ MMComponents.MMPage {
       return // do not construct the same provider again
     }
 
+    __analytics.capture( "gps_provider_changed", { "provider_type": type } )
     providersModel.addProvider( name, id, type )
     PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
 
