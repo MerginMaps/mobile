@@ -110,8 +110,6 @@ class LayerFeaturesModel : public FeaturesModel
       QgsFeatureList features;
     };
 
-    QString buildSearchExpression();
-
     //! Performs getFeatures on a feature source. Takes ownership of \a source.
     static SearchResultData fetchFeatures( QgsAbstractFeatureSource *source, const QgsFeatureRequest &req, int searchId );
 
