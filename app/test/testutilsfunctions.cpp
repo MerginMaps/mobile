@@ -341,12 +341,12 @@ void TestUtilsFunctions::resolveTargetDir()
   FeatureLayerPair pair; // Can be dummy pair
 
   // case 1: empty config, no expression
-  QString resultDir = mUtils->resolveTargetDir( homePath, config, pair, activeProject );
+  QString resultDir = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
   QCOMPARE( resultDir, homePath );
 
   // case 2: defined default root config, no expression
   config.insert( QStringLiteral( "DefaultRoot" ), DEFAULT_ROOT );
-  QString resultDir2 = mUtils->resolveTargetDir( homePath, config, pair, activeProject );
+  QString resultDir2 = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
   QCOMPARE( resultDir2, DEFAULT_ROOT );
   config.clear();
 
@@ -361,7 +361,7 @@ void TestUtilsFunctions::resolveTargetDir()
   collection.insert( QStringLiteral( "properties" ), props );
   config.insert( QStringLiteral( "PropertyCollection" ), collection );
 
-  QString resultDir3 = mUtils->resolveTargetDir( homePath, config, pair, QgsProject::instance() );
+  QString resultDir3 = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), QgsProject::instance() );
   QCOMPARE( resultDir3, QStringLiteral( "%1/photos" ).arg( projectDir ) );
 }
 

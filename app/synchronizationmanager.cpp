@@ -12,6 +12,8 @@
 #include "coreutils.h"
 #include "synchronizationmanager.h"
 
+using namespace Qt::Literals;
+
 SynchronizationManager::SynchronizationManager(
   MerginApi *merginApi,
   QObject *parent
