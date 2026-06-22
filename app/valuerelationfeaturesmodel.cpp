@@ -14,9 +14,6 @@
 #include "qgsexpressioncontextutils.h"
 #include "qgsvectorlayer.h"
 
-using namespace Qt::Literals;
-
-
 ValueRelationFeaturesModel::ValueRelationFeaturesModel( QObject *parent )
   : LayerFeaturesModel( parent )
 {
@@ -97,7 +94,7 @@ QString ValueRelationFeaturesModel::buildSearchExpression()
     return {};
   }
 
-  return u"(%1 ILIKE '%%2%')"_s.arg( QgsExpression::quotedColumnRef( mValueField ), searchExpr );
+  return QString( "(%1 ILIKE '%%2%')" ).arg( QgsExpression::quotedColumnRef( mValueField ), searchExpr );
 }
 
 void ValueRelationFeaturesModel::setup()
@@ -111,16 +108,16 @@ void ValueRelationFeaturesModel::setup()
 
   if ( !vLayer || !vLayer->isValid() || vLayer->fields().isEmpty() )
   {
-    CoreUtils::log( u"Value Relation"_s, u"Missing or invalid referenced layer"_s );
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Missing or invalid referenced layer" ) );
     return;
   }
 
-  const QString keyFieldName = mConfig.value( u"Key"_s ).toString();
-  const QString valueFieldName = mConfig.value( u"Value"_s ).toString();
+  const QString keyFieldName = mConfig.value( QStringLiteral( "Key" ) ).toString();
+  const QString valueFieldName = mConfig.value( QStringLiteral( "Value" ) ).toString();
 
   if ( vLayer->fields().indexOf( keyFieldName ) < 0 || vLayer->fields().indexOf( valueFieldName ) < 0 )
   {
-    CoreUtils::log( u"ValueRelationFeaturesModel"_s, u"Missing referenced fields for value relations."_s );
+    CoreUtils::log( QStringLiteral( "ValueRelationFeaturesModel" ), QStringLiteral( "Missing referenced fields for value relations." ) );
     return;
   }
 
@@ -129,7 +126,7 @@ void ValueRelationFeaturesModel::setup()
   mKeyFieldIndex = vLayer->fields().indexOf( keyFieldName );
   mValueFieldIndex = vLayer->fields().indexOf( valueFieldName );
 
-  mFilterExpression = mConfig.value( u"FilterExpression"_s ).toString();
+  mFilterExpression = mConfig.value( QStringLiteral( "FilterExpression" ) ).toString();
 
   // setLayer() internally resets mAttributeList to all fields, so we must
   // override it afterwards with only the two columns we actually need.
@@ -137,18 +134,18 @@ void ValueRelationFeaturesModel::setup()
 
   mAttributeList = { mKeyFieldIndex, mValueFieldIndex };
 
-  mOrderByAsc = !mConfig.value( u"OrderByDescending"_s ).toBool();
+  mOrderByAsc = !mConfig.value( QStringLiteral( "OrderByDescending" ) ).toBool();
 
-  if ( mConfig.value( u"OrderByKey"_s ).toBool() )
+  if ( mConfig.value( QStringLiteral( "OrderByKey" ) ).toBool() )
   {
     mOrderByField = mKeyField;
   }
-  else if ( mConfig.value( u"OrderByField"_s ).toBool() )
+  else if ( mConfig.value( QStringLiteral( "OrderByField" ) ).toBool() )
   {
-    QString fieldToOrderBy = mConfig.value( u"OrderByFieldName"_s ).toString();
+    QString fieldToOrderBy = mConfig.value( QStringLiteral( "OrderByFieldName" ) ).toString();
     if ( fieldToOrderBy.isEmpty() )
     {
-      CoreUtils::log( u"Value Relation"_s, u"Requested to order results by field, but the field name is empty"_s );
+      CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Requested to order results by field, but the field name is empty" ) );
     }
 
     mOrderByField = fieldToOrderBy;

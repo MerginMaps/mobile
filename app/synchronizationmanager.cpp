@@ -12,8 +12,6 @@
 #include "coreutils.h"
 #include "synchronizationmanager.h"
 
-using namespace Qt::Literals;
-
 SynchronizationManager::SynchronizationManager(
   MerginApi *merginApi,
   QObject *parent
@@ -52,7 +50,7 @@ void SynchronizationManager::syncProject( const Project &project, SyncOptions::A
     return;
   }
 
-  CoreUtils::log( u"Sync Manager"_s, u"Requested download of project %2"_s.arg( project.mergin.projectName ) );
+  CoreUtils::log( QStringLiteral( "Sync Manager" ), QStringLiteral( "Requested download of project %2" ).arg( project.mergin.projectName ) );
 
   // project is not local yet -> we download it for the first time
   bool syncHasStarted = mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, auth == SyncOptions::Authorized );
@@ -76,7 +74,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
     return;
   }
 
-  CoreUtils::log( u"Sync Manager"_s, u"Requested %1 sync of project %2"_s.arg( requestOrigin == SyncOptions::ManualRequest ? "manual" : "automatic" ).arg( project.projectName ) );
+  CoreUtils::log( QStringLiteral( "Sync Manager" ), QStringLiteral( "Requested %1 sync of project %2" ).arg( requestOrigin == SyncOptions::ManualRequest ? "manual" : "automatic" ).arg( project.projectName ) );
 
   if ( !project.hasMerginMetadata() )
   {
