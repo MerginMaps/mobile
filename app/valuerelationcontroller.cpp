@@ -133,17 +133,8 @@ void ValueRelationController::lookupDisplayTextAsync( const QString &currentValu
   quotedKeys.reserve( keys.size() );
   for ( const QString &k : keys )
   {
-    QVariant typedKey( k );
-    if ( keyFieldDef.isNumeric() )
-    {
-      bool ok = false;
-      const qlonglong numVal = k.toLongLong( &ok );
-      if ( ok )
-      {
-        typedKey = QVariant( numVal );
-      }
-    }
-    quotedKeys << QgsExpression::quotedValue( typedKey );
+    const QMetaType::Type keyType = keyFieldDef.isNumeric() ? QMetaType::Int : QMetaType::QString;
+    quotedKeys << QgsExpression::quotedValue( k, keyType );
   }
 
   const QString keyExpr = QString( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( mTargetLayerKeyField ), quotedKeys.join( ',' ) );
