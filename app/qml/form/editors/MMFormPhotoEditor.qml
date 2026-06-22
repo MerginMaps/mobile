@@ -63,7 +63,7 @@ MMFormPhotoViewer {
 
   property string _fieldHomePath: parent.fieldHomePath
   property var _fieldActiveProject: parent.fieldActiveProject
-  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
+  property MM.AttributeController _fieldController: parent.fieldController
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -237,7 +237,7 @@ MMFormPhotoViewer {
     property string targetDir: __inputUtils.resolveTargetDir(
                                  root._fieldHomePath,
                                  root._fieldConfig,
-                                 root._fieldFeatureLayerPair,
+                                 root._fieldController.featureLayerPair,
                                  root._fieldActiveProject
                                  )
 
@@ -417,7 +417,7 @@ MMFormPhotoViewer {
      * which references another field in the same form, to save photos in certain directory.
      */
     function updateTargetDir() {
-      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldFeatureLayerPair, root._fieldActiveProject )
+      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldController.featureLayerPair, root._fieldActiveProject )
     }
   }
 }

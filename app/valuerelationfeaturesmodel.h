@@ -14,27 +14,46 @@
 #include "featurelayerpair.h"
 
 #include <QObject>
-
+#include <qqmlintegration.h>
+#include <QVariantMap>
 
 /**
- * ValueRelationFeaturesModel class lists features from a specific layer regarding to a filterExpression of value relations.
- * It is used as a model in ValueRelations QML editors.
+ * ValueRelationFeaturesModel backs the selection drawer in the value-relation
+ * drawers.
+ *
+ * Features are never loaded automatically, caller must call reloadFeatures()
+ * explicitly.
+ *
+ * The inherited searchExpression property triggers an async re-query with
+ * the user's search text combined with any FilterExpression (if a valid feature
+ * is provided).
+ *
+ * Model is reduced to load only KeyColumn and ValueColumn attributes.
+ * It searches only within ValueColumn attribute.
  */
 class ValueRelationFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
+    QML_ELEMENT
 
-    Q_PROPERTY( FeatureLayerPair pair READ pair WRITE setPair NOTIFY pairChanged )
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
+
+    /**
+     * Used solely during setupFeatureRequest() to build a form-scope expression
+     * context so that form-scoped filter expressions (e.g. current_value())
+     * resolve correctly for drill-down / cascading value relations.
+     */
+    Q_PROPERTY( FeatureLayerPair pair READ pair WRITE setPair NOTIFY pairChanged )
 
   public:
 
-    enum ValueRelationFeaturesModelRoles
+    enum ValueRelationRoles
     {
-      KeyRole = LayerFeaturesModel::LastRole + 1, // the key-column value
-      LastRole = KeyRole
+      KeyColumn   = LayerFeaturesModel::LayerModelRoles::LastRole + 1,
+      ValueColumn = KeyColumn + 1,
+      LastRole    = ValueColumn
     };
-    Q_ENUM( ValueRelationFeaturesModelRoles );
+    Q_ENUM( ValueRelationRoles );
 
     explicit ValueRelationFeaturesModel( QObject *parent = nullptr );
     ~ValueRelationFeaturesModel() override;
@@ -45,35 +64,33 @@ class ValueRelationFeaturesModel : public LayerFeaturesModel
     void setup() override;
     void reset() override;
     void setupFeatureRequest( QgsFeatureRequest &request ) override;
-    QVariant featureTitle( const FeatureLayerPair &pair ) const override;
-
-    Q_INVOKABLE QVariant convertToKey( const QVariant &id );
-    Q_INVOKABLE QVariant convertToQgisType( const QVariantList &featureIds ); // feature id -> key
-    Q_INVOKABLE QVariant convertFromQgisType( QVariant qgsValue, FeaturesModel::ModelRoles ); // key -> other role (feature id/title)
-
-    FeatureLayerPair pair() const;
-    void setPair( const FeatureLayerPair &newPair );
+    QString buildSearchExpression() override;
 
     QVariantMap config() const;
     void setConfig( const QVariantMap &newConfig );
 
+    FeatureLayerPair pair() const;
+    void setPair( const FeatureLayerPair &newPair );
+
   signals:
-    void pairChanged( const FeatureLayerPair &pair );
     void configChanged( const QVariantMap &config );
-    void invalidate(); // invalidate signal is emitted when value to convert is not present in model
+    void pairChanged( const FeatureLayerPair &pair );
 
   private:
-    QMap<QVariant, QVariant> mCache;
+
+    static constexpr int VR_FEATURES_LIMIT = 1000;
 
     QVariantMap mConfig;
-    FeatureLayerPair mPair; // feature layer pair that has opened the form
-
-    bool mAllowMulti = false;
+    FeatureLayerPair mPair;
     QString mKeyField;
-    QString mTitleField;
+    QString mValueField;
+    int mKeyFieldIndex = -1;
+    int mValueFieldIndex = -1;
     QString mFilterExpression;
+    bool mIsInitialized = false;
 
-    bool mIsInitialized = false; // model successfully read config and is ready to use
+    QString mOrderByField;
+    bool mOrderByAsc = false;
 };
 
 #endif // VALUERELATIONFEATURESMODEL_H
