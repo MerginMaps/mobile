@@ -136,20 +136,20 @@ MMFormComboboxBaseEditor {
       __inputUtils.log( "Value map", root._fieldTitle + " config is not configured properly" )
     }
 
-    let config = root._fieldConfig['map']
+    const config = root._fieldConfig['map']
 
     if ( config.length )
     {
       //it's a list (>=QGIS3.0)
-      for ( var i = 0; i < config.length; i++ )
+      for ( let i = 0; i < config.length; i++ )
       {
-        let modelItem = {
+        const modelItem = {
           text: Object.keys( config[i] )[0],
           value: Object.values( config[i] )[0]
         }
 
         // filter out nulls
-        if ( modelItem.text !== "<NULL>" )
+        if ( modelItem.value !== internal.qgisFakeNull )
         {
           listModel.append( modelItem )
         }
@@ -168,5 +168,13 @@ MMFormComboboxBaseEditor {
       //it's a map (<=QGIS2.18) <--- sorry, dropped support for that in 2024.1.0
       __inputUtils.log( "Value map", root._fieldTitle + " is using unsupported format (map, <=QGIS2.18)" )
     }
+  }
+
+  QtObject {
+    id: internal
+
+    // QGIS value maps can have "NULL" values, QGIS always uses this string for the value
+    // see QgsValueMapFieldFormatter::NULL_VALUE
+    property string qgisFakeNull: "{2839923C-8B7D-419E-B84B-CA2FE9B80EC7}"
   }
 }
