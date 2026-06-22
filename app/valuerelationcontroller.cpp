@@ -18,8 +18,6 @@
 
 #include <QtConcurrentRun>
 
-using namespace Qt::Literals;
-
 ValueRelationController::ValueRelationController( QObject *parent )
   : QObject( parent )
 {
@@ -41,12 +39,12 @@ QStringList ValueRelationController::qgisFormatToArray( const QVariant &qgsValue
 {
   if ( !mIsInitialized )
   {
-    CoreUtils::log( u"Value Relation"_s, u"Attempted to convert QGIS format to array, but the class is not initialized!"_s );
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert QGIS format to array, but the class is not initialized!" ) );
     return {};
   }
 
   if ( qgsValue.isNull() || qgsValue.toString().isEmpty() )
-    return QStringList();
+    return {};
 
   if ( mIsMultiSelection )
   {
@@ -58,14 +56,14 @@ QStringList ValueRelationController::qgisFormatToArray( const QVariant &qgsValue
     }
   }
 
-  return QStringList() << qgsValue.toString();
+  return { qgsValue.toString() };
 }
 
 QString ValueRelationController::arrayToQgisFormat( const QStringList &keys ) const
 {
   if ( !mIsInitialized )
   {
-    CoreUtils::log( u"Value Relation"_s, u"Attempted to convert array to QGIS format, but the class is not initialized!"_s );
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert array to QGIS format, but the class is not initialized!" ) );
     return {};
   }
 
@@ -102,7 +100,7 @@ void ValueRelationController::lookupDisplayTextAsync( const QString &currentValu
 {
   if ( !mIsInitialized || !mTargetLayer )
   {
-    CoreUtils::log( u"Value Relation"_s, u"Called lookupDisplayTextAsync, but the class is not initialized or layer is invalid!"_s );
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Called lookupDisplayTextAsync, but the class is not initialized or layer is invalid!" ) );
     return;
   }
 
@@ -135,17 +133,8 @@ void ValueRelationController::lookupDisplayTextAsync( const QString &currentValu
   quotedKeys.reserve( keys.size() );
   for ( const QString &k : keys )
   {
-    QVariant typedKey( k );
-    if ( keyFieldDef.isNumeric() )
-    {
-      bool ok = false;
-      const qlonglong numVal = k.toLongLong( &ok );
-      if ( ok )
-      {
-        typedKey = QVariant( numVal );
-      }
-    }
-    quotedKeys << QgsExpression::quotedValue( typedKey );
+    const QMetaType::Type keyType = keyFieldDef.isNumeric() ? QMetaType::Int : QMetaType::QString;
+    quotedKeys << QgsExpression::quotedValue( k, keyType );
   }
 
   const QString keyExpr = QString( "%1 IN (%2)" ).arg( QgsExpression::quotedColumnRef( mTargetLayerKeyField ), quotedKeys.join( ',' ) );
@@ -221,7 +210,7 @@ void ValueRelationController::onLookupFinished()
 
   if ( !displayValues.isEmpty() )
   {
-    setDisplayText( displayValues.join( u", "_s ) );
+    setDisplayText( displayValues.join( QStringLiteral( ", " ) ) );
     return;
   }
 
@@ -271,16 +260,16 @@ void ValueRelationController::setup()
   QgsVectorLayer *layer = QgsValueRelationFieldFormatter::resolveLayer( mConfig, QgsProject::instance() );
   if ( !layer || !layer->isValid() || layer->fields().isEmpty() )
   {
-    CoreUtils::log( u"ValueRelationController"_s, u"Missing or invalid referenced layer."_s );
+    CoreUtils::log( QStringLiteral( "ValueRelationController" ), QStringLiteral( "Missing or invalid referenced layer." ) );
     return;
   }
 
-  const QString keyFieldName = mConfig.value( u"Key"_s ).toString();
-  const QString valueFieldName = mConfig.value( u"Value"_s ).toString();
+  const QString keyFieldName = mConfig.value( QStringLiteral( "Key" ) ).toString();
+  const QString valueFieldName = mConfig.value( QStringLiteral( "Value" ) ).toString();
 
   if ( layer->fields().indexOf( keyFieldName ) < 0 || layer->fields().indexOf( valueFieldName ) < 0 )
   {
-    CoreUtils::log( u"ValueRelationController"_s, u"Missing referenced fields for value relations."_s );
+    CoreUtils::log( QStringLiteral( "ValueRelationController" ), QStringLiteral( "Missing referenced fields for value relations." ) );
     return;
   }
 
@@ -289,9 +278,9 @@ void ValueRelationController::setup()
   mTargetLayerKeyFieldIndex = layer->fields().indexOf( keyFieldName );
   mTargetLayerValueFieldIndex = layer->fields().indexOf( valueFieldName );
 
-  mFilterExpression = mConfig.value( u"FilterExpression"_s ).toString();
+  mFilterExpression = mConfig.value( QStringLiteral( "FilterExpression" ) ).toString();
 
-  mIsMultiSelection = mConfig.value( u"AllowMulti"_s ).toBool();
+  mIsMultiSelection = mConfig.value( QStringLiteral( "AllowMulti" ) ).toBool();
 
   mIsInitialized = true;
 

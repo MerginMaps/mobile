@@ -12,13 +12,14 @@
 
 #include <QFutureWatcher>
 #include <QAtomicInt>
+#include <QHash>
 
-#include "qgsvectorlayer.h"
-#include "featurelayerpair.h"
 #include "featuresmodel.h"
 
 
-class QgsVectorLayerFeatureSource;
+class QgsVectorLayer;
+
+class FeatureLayerPair;
 
 
 /**
@@ -88,7 +89,7 @@ class LayerFeaturesModel : public FeaturesModel
     void layerFeaturesCountChanged( int layerFeaturesCount );
 
     //! \a isFetching is TRUE when still fetching results, FALSE when done fetching
-    bool fetchingResultsChanged( bool isFetching );
+    void fetchingResultsChanged( bool isFetching );
 
   protected:
 
@@ -102,16 +103,25 @@ class LayerFeaturesModel : public FeaturesModel
     //! These are the attributes that will be fetched from the data source when populating the model
     QgsAttributeList mAttributeList;
 
-  private slots:
-    void onFutureFinished();
-
   private:
+    struct SearchResultData
+    {
+      int searchId;
+      QgsFeatureList features;
+    };
 
-    //! Performs getFeatures on layer. Takes ownership of \a layer and tries to move it to current thread.
-    QgsFeatureList fetchFeatures( QgsVectorLayerFeatureSource *layer, QgsFeatureRequest req, int searchId );
+    QString buildSearchExpression();
+
+    //! Performs getFeatures on a feature source. Takes ownership of \a source.
+    static SearchResultData fetchFeatures( QgsAbstractFeatureSource *source, const QgsFeatureRequest &req, int searchId );
+
+    //! Should be called when a search is done/canceled. Cleans up mResultWatchers entry and populates the model if not canceled.
+    void handleFinishedSearch( int searchId );
 
     //! Returns found attribute and its value from search expression for feature
     QString searchResultPair( const FeatureLayerPair &feat ) const;
+
+    void cancelPendingRequests();
 
     const int FEATURES_LIMIT = 10000; //!< Number of maximum features loaded from layer
 
@@ -119,11 +129,9 @@ class LayerFeaturesModel : public FeaturesModel
     QgsVectorLayer *mLayer = nullptr;
 
     QAtomicInt mNextSearchId = 0;
-    QFutureWatcher<QgsFeatureList> mSearchResultWatcher;
+    QHash<int, QPair<QgsFeedback *, QFutureWatcher<SearchResultData> * >> mResultWatchers; //!< owns feedback and future watches objects
     bool mFetchingResults = false;
     bool mUseAttributeTableSortOrder = false;
-
-    std::unique_ptr<QgsFeedback> mFeedback;
 
     friend class TestModels;
 };

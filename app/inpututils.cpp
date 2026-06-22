@@ -831,6 +831,22 @@ bool InputUtils::isEmptyGeometry( const QgsGeometry &geometry )
   return geometry.isEmpty();
 }
 
+bool InputUtils::isLastPartEmpty( const QgsGeometry &geometry )
+{
+  if ( geometry.isEmpty() )
+    return true;
+
+  const QgsAbstractGeometry *geom = geometry.constGet();
+  if ( const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom ) )
+  {
+    const int parts = collection->partCount();
+    const QgsAbstractGeometry *lastPart = collection->geometryN( parts - 1 );
+    return lastPart->isEmpty();
+  }
+
+  return false;
+}
+
 QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );

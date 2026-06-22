@@ -215,7 +215,7 @@ Item {
         enabled: {
            if ( mapTool.recordingType !== MM.RecordingMapTool.Manual ) return false;
            if ( mapTool.state === MM.RecordingMapTool.View ) return false;
-           if ( __inputUtils.isEmptyGeometry( mapTool.recordedGeometry ) ) return false;
+           if ( __inputUtils.isLastPartEmpty( mapTool.recordedGeometry ) ) return false;
 
            return true;
          }

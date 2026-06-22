@@ -14,6 +14,7 @@
 #include "featurelayerpair.h"
 
 #include <QObject>
+#include <qqmlintegration.h>
 #include <QVariantMap>
 
 /**
@@ -33,6 +34,7 @@
 class ValueRelationFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
 

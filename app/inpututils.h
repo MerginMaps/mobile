@@ -283,6 +283,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isEmptyGeometry( const QgsGeometry &geometry );
 
     /**
+     * Returns true when the last part of the geometry is empty, also implicitly for null or empty geometry
+     */
+    Q_INVOKABLE static bool isLastPartEmpty( const QgsGeometry &geometry );
+
+    /**
       * Converts QGeoCoordinate to QgsPoint
       */
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );

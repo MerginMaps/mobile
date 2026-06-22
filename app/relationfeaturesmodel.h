@@ -16,6 +16,7 @@
 #include "qgsrelation.h"
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 /**
  * RelationFeaturesModel class lists features from a specific layer based on provided QgsRelation.
@@ -24,6 +25,7 @@
 class RelationFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY( QgsRelation relation READ relation WRITE setRelation NOTIFY relationChanged )
 

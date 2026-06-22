@@ -9,7 +9,8 @@
 
 import QtQuick
 
-import mm 1.0 as MM
+import MMInput
+
 import "../../components" as MMComponents
 
 Column {
@@ -75,7 +76,7 @@ Column {
 
       isLoading: vrDropdownModel.fetchingResults
 
-      list.model: MM.ValueRelationFeaturesModel {
+      list.model: ValueRelationFeaturesModel {
         id: vrDropdownModel
 
         config: root.widgetConfig
