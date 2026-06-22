@@ -24,6 +24,7 @@ MMDrawer {
 
   property bool withSearch: true
   property bool multiSelect: false
+  property bool isLoading: false
   property var selected: [] // in/out property, contains a list of (pre-)selected item values
 
   property bool showFullScreen: false
@@ -150,7 +151,9 @@ MMDrawer {
   Component {
     id: defaultEmptyStateComponent
 
-    MMListEmptyLoaderDelegate {}
+    MMListEmptyLoaderDelegate {
+      isLoading: root.isLoading
+    }
   }
 
   // QDate/QDateTime values get parsed to JS Date objects in QML, and they do strict comparison by default, which also
@@ -172,5 +175,10 @@ MMDrawer {
     else {
       root.selected = root.selected.filter( x => !isEqualDate( x, value )  )
     }
+  }
+
+  function focusSearchBar() {
+    root.showFullScreen = true
+    searchBar.textField.forceActiveFocus()
   }
 }

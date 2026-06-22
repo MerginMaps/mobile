@@ -166,7 +166,8 @@ Button {
 
   implicitWidth: {
     let margin = __style.margin20
-    if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
+    if ( root.type === MMButton.Types.Tertiary ) margin = 0
+    else if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
     else if ( root.size === MMButton.Sizes.Small ) margin = __style.margin16
     return row.paintedChildrenWidth + 2 * margin
   }
@@ -214,7 +215,8 @@ Button {
       property real paintedChildrenWidth: buttonIconLeft.paintedWidth + buttonContent.implicitWidth + buttonIconRight.paintedWidth + spacing
       property real maxWidth: {
         let margin = __style.margin20 
-        if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
+        if ( root.type === MMButton.Types.Tertiary ) margin = 0
+        else if ( root.size === MMButton.Sizes.ExtraSmall ) margin = __style.margin8
         else if ( root.size === MMButton.Sizes.Small ) margin = __style.margin16
         return parent.width - 2 * margin
       }

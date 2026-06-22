@@ -95,6 +95,8 @@ class LayerFeaturesModel : public FeaturesModel
 
     virtual void setupFeatureRequest( QgsFeatureRequest &request );
 
+    virtual QString buildSearchExpression();
+
     virtual void populate();
     void reset() override;
 

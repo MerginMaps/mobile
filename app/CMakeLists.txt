@@ -92,6 +92,7 @@ set(MM_SRCS
     streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
+    valuerelationcontroller.cpp
     valuerelationfeaturesmodel.cpp
     variablesmanager.cpp
     workspacesmodel.cpp
@@ -189,6 +190,7 @@ set(MM_HDRS
     synchronizationerror.h
     synchronizationmanager.h
     synchronizationoptions.h
+    valuerelationcontroller.h
     valuerelationfeaturesmodel.h
     variablesmanager.h
     workspacesmodel.h

@@ -229,7 +229,10 @@ if (DEFINED ENV{QGIS_BUILD_TYPE})
     message(STATUS "Building requested QGIS ${QGIS_BUILD_TYPE} build")
     list(APPEND QGIS_OPTIONS_RELEASE -DCMAKE_BUILD_TYPE=${QGIS_BUILD_TYPE})
   else ()
-    message(WARNING "QGIS_BUILD_TYPE value '${QGIS_BUILD_TYPE}' is not valid, ignoring. Valid values are Debug or RelWithDebInfo.")
+    message(
+      WARNING
+        "QGIS_BUILD_TYPE value '${QGIS_BUILD_TYPE}' is not valid, ignoring. Valid values are Debug or RelWithDebInfo."
+    )
   endif ()
 else ()
   message(STATUS "Building requested QGIS Release build")

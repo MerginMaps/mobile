@@ -70,14 +70,10 @@ Column {
     sourceComponent: MMComponents.MMListMultiselectDrawer {
       drawerHeader.title: root.filterName
 
-      withSearch: uniqueValuesModel.count > 5
+      withSearch: uniqueValuesModel.count > 8
       multiSelect: root.isMultiSelect
 
-      emptyStateDelegate: Component {
-        MMComponents.MMListEmptyLoaderDelegate {
-          isLoading: uniqueValuesModel.isLoading
-        }
-      }
+      isLoading: uniqueValuesModel.isLoading
 
       list.model: MM.SearchProxyModel {
         id: searchProxyModel

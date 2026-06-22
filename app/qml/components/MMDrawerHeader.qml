@@ -13,7 +13,7 @@ import QtQuick.Layouts
 
 import "."
 
-//! Best to use MMDrawerHeader as the header component for the MMPage object
+//! Best to use MMDrawerHeader as the header component for the MMDrawer object
 
 Rectangle {
   id: root
@@ -25,6 +25,8 @@ Rectangle {
 
   property alias closeButton: closeBtn
   property alias topLeftItemContent: topLeftButtonGroup.children
+  property alias topLeftItem: topLeftButtonGroup
+  property alias titleComponent: headerTitleText
 
   color: __style.transparentColor
 
@@ -36,11 +38,16 @@ Rectangle {
   Item {
     id: topLeftButtonGroup
 
+    x: __style.pageMargins + __style.safeAreaLeft
+    y: root.height / 2 - height / 2
+
     width: childrenRect.width
-    height: parent.height
+    height: childrenRect.height
   }
 
   Text {
+    id: headerTitleText
+
     property real leftMarginShift: {
       return Math.max( internal.closeBtnRealWidth, topLeftButtonGroup.width ) + internal.headerSpacing + __style.pageMargins
     }

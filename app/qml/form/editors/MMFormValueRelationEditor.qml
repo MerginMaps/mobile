@@ -10,6 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 
@@ -29,7 +30,7 @@ MMFormComboboxBaseEditor {
   property var _fieldConfig: parent.fieldConfig
   property bool _fieldValueIsNull: parent.fieldValueIsNull
   property bool _fieldHasMixedValues: parent.fieldHasMixedValues
-  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
+  property MM.AttributeController _fieldController: parent.fieldController
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -58,42 +59,76 @@ MMFormComboboxBaseEditor {
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  on_FieldValueChanged: {
-    vrModel.pair = root._fieldFeatureLayerPair
-  }
+  on_FieldValueChanged: lookupDisplayText()
+  on_FieldHasMixedValuesChanged: lookupDisplayText()
 
-  onCheckboxCheckedChanged: {
-    root.rememberValueBoxClicked( checkboxChecked )
-  }
+  onCheckboxCheckedChanged: root.rememberValueBoxClicked( checkboxChecked )
 
   dropdownLoader.sourceComponent: Component {
 
     MMComponents.MMListMultiselectDrawer {
-      drawerHeader.title: root._fieldTitle
+      id: listDrawer
 
-      emptyStateDelegate: Item {
-        width: parent.width
-        height: noItemsText.implicitHeight + __style.margin40
-      
-        MMComponents.MMText {
-          id: noItemsText
-          text: qsTr( "No items" )
-          anchors.centerIn: parent
+      drawerHeader.title: root._fieldTitle
+      drawerHeader.titleFont: __style.t2
+
+      drawerHeader.topLeftItem.visible: !root._fieldValueIsNull
+      drawerHeader.topLeftItemContent: MMComponents.MMButton {
+        text: qsTr( "Clear" )
+
+        type: MMButton.Types.Tertiary
+
+        fontColor: __style.darkGreyColor
+        fontColorHover: __style.nightColor
+
+        onClicked: {
+          root.editorValueChanged( "", true )
+          close()
         }
       }
 
-      multiSelect: internal.allowMultivalue
-      withSearch: vrModel.count > 5
-      showFullScreen: multiSelect || withSearch
+      withSearch: false
+      multiSelect: _controller.isMultiSelection
 
-      valueRole: "FeatureId"
-      textRole: "FeatureTitle"
+      valueRole: "KeyColumn"
+      textRole: "ValueColumn"
 
-      list.model: MM.ValueRelationFeaturesModel {
+      isLoading: vrDropdownModel.fetchingResults
+
+      list.model: ValueRelationFeaturesModel {
         id: vrDropdownModel
 
+        property bool firstFetchFinished: false
+
         config: root._fieldConfig
-        pair: root._fieldFeatureLayerPair
+        pair: root._fieldController.featureLayerPair
+
+        // We show search for lists with more then 8 features.
+        // We need to intentionally break the binding here because "count" changes
+        // when users search for something and that would hide the search bar
+        onFetchingResultsChanged: {
+          if ( !fetchingResults && !firstFetchFinished )
+          {
+            if ( count > 8 )
+            {
+              listDrawer.withSearch = true
+
+              // Additionally, focus the searchbar immediately in case "UseCompleter" is enabled
+              if ( internal.useCompleter )
+              {
+                listDrawer.focusSearchBar()
+              }
+            }
+            else
+            {
+              listDrawer.withSearch = false
+            }
+
+            firstFetchFinished = true
+          }
+        }
+
+        Component.onCompleted: reloadFeatures()
       }
 
       onSearchTextChanged: ( searchText ) => vrDropdownModel.searchExpression = searchText
@@ -101,90 +136,54 @@ MMFormComboboxBaseEditor {
       onClosed: dropdownLoader.active = false
 
       onSelectionFinished: function ( selectedItems ) {
+        const keys = _controller.arrayToQgisFormat( selectedItems )
+        const isNull = selectedItems.length === 0
 
-        if ( internal.allowMultivalue )
-        {
-          let isNull = selectedItems.length === 0
-
-          if ( !isNull )
-          {
-            // We need to convert feature id to string prior to sending it to C++ in order to
-            // avoid conversion to scientific notation.
-            selectedItems = selectedItems.map( function(x) { return x.toString() } )
-          }
-          root.editorValueChanged( vrModel.convertToQgisType( selectedItems ), isNull )
-        }
-        else
-        {
-          // We need to convert feature id to string prior to sending it to C++ in order to
-          // avoid conversion to scientific notation.
-          selectedItems = selectedItems.toString()
-
-          root.editorValueChanged( vrModel.convertToKey( selectedItems ), false )
-        }
-
+        root.editorValueChanged( keys, isNull )
         close()
       }
 
       Component.onCompleted: {
-        // We want to set the initial value of 'selected' property but not bind it so we avoid a binding loop
-        if ( internal.allowMultivalue ) {
-          selected = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureId )
-        }
-        else {
-          selected = [root._fieldValue]
-        }
+        // Pre-select the currently stored keys so the drawer opens with the
+        // right items highlighted.
+        selected = _controller.qgisFormatToArray( root._fieldValue )
+
         open()
       }
     }
   }
 
-  MM.ValueRelationFeaturesModel {
-    id: vrModel
+  ValueRelationController {
+    id: _controller
 
     config: root._fieldConfig
-    pair: root._fieldFeatureLayerPair
 
-    onInvalidate: {
-      if ( root._fieldHasMixedValues )
-      {
-        return // ignore invalidate signal if value is MixedAttributeValue
-      }
-      if ( root._fieldValueIsNull )
-      {
-        return // ignore invalidate signal if value is already NULL
-      }
-      if ( root._fieldIsReadOnly )
-      {
-        return // ignore invalidate signal if form is not in edit mode
-      }
-      root.editorValueChanged( "", true )
-    }
+    isEditable: !root._fieldFormIsReadOnly && root._fieldIsEditable
 
-    onFetchingResultsChanged: function ( isFetching ) {
-      if ( !isFetching )
-      {
-        setText()
-      }
-    }
-  }
-
-  function reload()
-  {
-    if ( !root.isReadOnly )
-    {
-      vrModel.pair = root._fieldFeatureLayerPair
-    }
-  }
-
-  function setText()
-  {
-    root.text = vrModel.convertFromQgisType( root._fieldValue, MM.FeaturesModel.FeatureTitle ).join( ', ' )
+    onDisplayTextChanged: root.text = _controller.displayText
+    onInvalidateSelection: root.editorValueChanged( "", true )
+    onPresentRawValue: root.text = root._fieldValue
   }
 
   QtObject {
     id: internal
 
-    property bool allowMultivalue: root._fieldConfig["AllowMulti"]
+    property bool useCompleter: root?._fieldConfig?.["UseCompleter"] ?? false
+  }
+
+  function hotReload()
+  {
+    if ( !root._fieldHasMixedValues )
+    {
+      _controller.lookupDisplayTextOnHotreload( root._fieldValue, root._fieldController.featureLayerPair.feature )
+    }
+  }
+
+  function lookupDisplayText()
+  {
+    if ( !root._fieldHasMixedValues )
+    {
+      _controller.lookupDisplayTextOnValueChanged( root._fieldValue )
+    }
   }
 }
