@@ -184,6 +184,13 @@ class RecordingMapTool : public AbstractMapTool
 
     Q_INVOKABLE void cancelGrab();
 
+    /**
+     * When this is called on a multipart geometry, a new empty part will be added to the geometry and
+     * activePart will be set to that new last part.
+     * For MultiPoints and singlepart geometries no new empty part will be added.
+     */
+    Q_INVOKABLE void startDigitizingNewPart();
+
     // Getters / setters
     bool centeredToGPS() const;
     void setCenteredToGPS( bool newCenteredToGPS );
