@@ -70,6 +70,7 @@ set(MM_QML
     filters/components/MMFilterDropdownValueMapInput.qml
     filters/components/MMFilterDropdownValueRelationInput.qml
     filters/components/MMFilterDropdownUniqueValuesInput.qml
+    filters/components/MMFilterNoValueDelegate.qml
     filters/components/MMFilterRangeInput.qml
     filters/components/MMFilterTextInput.qml
     filters/components/MMFilterBaseInput.qml

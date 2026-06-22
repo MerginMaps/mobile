@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 import mm 1.0 as MM
@@ -65,16 +67,25 @@ Column {
 
     active: false
 
-
     sourceComponent: MMComponents.MMListMultiselectDrawer {
+      id: listDrawer
+
       drawerHeader.title: root.filterName
 
-      withSearch: vrDropdownModel.count > 5
+      withSearch: vrDropdownModel.count > 8
       multiSelect: root.isMultiSelect
 
-      emptyStateDelegate: Component {
-        MMComponents.MMListEmptyLoaderDelegate {
-          isLoading: vrDropdownModel.fetchingResults
+      isLoading: vrDropdownModel.fetchingResults
+
+      list.header: MMFilterNoValueDelegate {
+        width: listDrawer.list.width
+        currentValue: root.currentValue
+        isMultiSelect: root.isMultiSelect
+
+        onAddOrRemoveRequested: listDrawer.addOrRemoveSelected( null )
+        onSelectionRequested: {
+          listDrawer.selectionFinished( [null] )
+          listDrawer.close()
         }
       }
 
@@ -82,18 +93,39 @@ Column {
         id: vrDropdownModel
 
         config: root.widgetConfig
+
+        property bool firstFetchFinished: false
+
+        // We show search for lists with more then 8 features.
+        // We need to intentionally break the binding here because "count" changes
+        // when users search for something and that would hide the search bar
+        onFetchingResultsChanged: {
+          if ( !fetchingResults && !firstFetchFinished )
+          {
+            if ( count > 8 )
+            {
+              listDrawer.withSearch = true
+            }
+            else
+            {
+              listDrawer.withSearch = false
+            }
+
+            firstFetchFinished = true
+          }
+        }
       }
 
-      textRole: "FeatureTitle"
-      valueRole: "Key"
+      textRole: "ValueColumn"
+      valueRole: "KeyColumn"
 
       onSelectionFinished: function( selectedItems ) {
-
         //
         // Large fids could be converted to scientific notation on their way to cpp,
         // so we convert them to string first in JS.
+        // Null values (representing "No value") are preserved as-is.
         //
-        selectedItems = selectedItems.map( x => x.toString() )
+        selectedItems = selectedItems.map( x => x !== null && x !== undefined ? x.toString() : null )
 
         root.currentValue = selectedItems
 

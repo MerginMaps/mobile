@@ -62,7 +62,6 @@ MMFormComboboxBaseEditor {
   }
 
   on_FieldValueChanged: {
-
     if ( _fieldValueIsNull || _fieldValue === undefined ) {
       text = ""
       preselectedItems = []
@@ -82,17 +81,21 @@ MMFormComboboxBaseEditor {
   dropdownLoader.sourceComponent: Component {
 
     MMComponents.MMListMultiselectDrawer {
-
       drawerHeader.title: root._fieldTitle
+      drawerHeader.titleFont: __style.t2
 
-      emptyStateDelegate: Item {
-        width: parent.width
-        height: noItemsText.implicitHeight + __style.margin40
-      
-        MMComponents.MMText {
-          id: noItemsText
-          text: qsTr( "No items" )
-          anchors.centerIn: parent
+      drawerHeader.topLeftItem.visible: !root._fieldValueIsNull
+      drawerHeader.topLeftItemContent: MMComponents.MMButton {
+        text: qsTr( "Clear" )
+
+        type: MMButton.Types.Tertiary
+
+        fontColor: __style.darkGreyColor
+        fontColorHover: __style.nightColor
+
+        onClicked: {
+          root.editorValueChanged( "", true )
+          close()
         }
       }
 
@@ -145,7 +148,11 @@ MMFormComboboxBaseEditor {
           value: Object.values( config[i] )[0]
         }
 
-        listModel.append( modelItem )
+        // filter out nulls
+        if ( modelItem.text !== "<NULL>" )
+        {
+          listModel.append( modelItem )
+        }
 
         // Is this the current item? If so, set the text
         if ( !root._fieldValueIsNull ) {
