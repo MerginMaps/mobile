@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -44,7 +45,7 @@ MMPrivateComponents.MMBaseInput {
     spacing: __style.spacing12
     orientation: ListView.Horizontal
 
-    model: MM.RelationFeaturesModel {
+    model: RelationFeaturesModel {
       id: rmodel
 
       relation: root._fieldAssociatedRelation

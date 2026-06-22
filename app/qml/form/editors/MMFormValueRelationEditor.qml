@@ -10,6 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 
@@ -94,7 +95,7 @@ MMFormComboboxBaseEditor {
 
       isLoading: vrDropdownModel.fetchingResults
 
-      list.model: MM.ValueRelationFeaturesModel {
+      list.model: ValueRelationFeaturesModel {
         id: vrDropdownModel
 
         property bool firstFetchFinished: false
@@ -152,7 +153,7 @@ MMFormComboboxBaseEditor {
     }
   }
 
-  MM.ValueRelationController {
+  ValueRelationController {
     id: _controller
 
     config: root._fieldConfig

@@ -15,6 +15,7 @@
 #include <QAtomicInt>
 #include <QFutureWatcher>
 #include <QObject>
+#include <qqmlintegration.h>
 #include <QVariantMap>
 
 class QgsVectorLayerFeatureSource;
@@ -23,6 +24,7 @@ class QgsFeature;
 class ValueRelationController : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     // in
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )
