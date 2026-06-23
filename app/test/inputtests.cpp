@@ -30,6 +30,7 @@
 #include "testactiveproject.h"
 #include "testprojectchecksumcache.h"
 #include "testmultieditmanager.h"
+#include "testfiltercontroller.h"
 
 InputTests::InputTests() = default;
 
@@ -204,6 +205,11 @@ int InputTests::runTest() const
   {
     TestMultiEditManager multiEditManagerTest;
     nFailed = QTest::qExec( &multiEditManagerTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testFilterController" )
+  {
+    TestFilterController filterControllerTest;
+    nFailed = QTest::qExec( &filterControllerTest, mTestArgs );
   }
   else
   {
