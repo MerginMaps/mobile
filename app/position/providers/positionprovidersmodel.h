@@ -58,7 +58,8 @@ class PositionProvidersModel : public QAbstractListModel
       ProviderName = Qt::UserRole + 1, // name of bluetooth device or custom name for network device
       ProviderDescription, // device address (IP/BT) + device type
       ProviderId, // device address (IP/BT)
-      ProviderType // external_ip (connected) / external_bt (connected) / internal (device) / simulated (device)
+      ProviderType, // external_ip (connected) / external_bt (connected) / internal (device) / simulated (device)
+      ProviderGroup // internal / external
     };
     Q_ENUM( DataRoles )
 
@@ -69,6 +70,7 @@ class PositionProvidersModel : public QAbstractListModel
 
     Q_INVOKABLE void removeProvider( const QString &providerId );
     Q_INVOKABLE void addProvider( const QString &providerName, const QString &providerId, const QString &providerType );
+    Q_INVOKABLE bool providerExists( const QString &providerId );
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings * );
