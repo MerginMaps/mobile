@@ -481,7 +481,8 @@ QString TestUtils::setupControllerWithFilter( FilterController *controller,
   filterObj[QStringLiteral( "field_name" )]     = fieldName;
   filterObj[QStringLiteral( "sql_expression" )] = sqlExpression;
   filterObj[QStringLiteral( "layer_id" )]       = layerId;
-  filterObj[QStringLiteral( "provider" )]       = QStringLiteral( "memory" );
+  const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( layerId ) );
+  filterObj[QStringLiteral( "provider" )]       = layer ? layer->providerType() : QStringLiteral( "memory" );
 
   QJsonArray filtersArray;
   filtersArray.append( filterObj );

@@ -17,18 +17,42 @@
 #include <qgsproject.h>
 #include <qgsvectorlayer.h>
 
-// Field name and SQL templates reused across all tests
-static const QString FIELD_NAME = QStringLiteral( "ts_field" );
+void TestFilterController::initTestCase()
+{
+  const QString projectPath = TestUtils::testDataDir() + "/filtering/test_feature_filtering.qgz";
+  QVERIFY2( QgsProject::instance()->read( projectPath ),
+            qPrintable( QStringLiteral( "Failed to load filtering test project: %1" ).arg( projectPath ) ) );
 
-// Template for single/multi select: @@value@@ is replaced by a quoted value
-static const QString SELECT_SQL = QStringLiteral( "\"ts_field\" = @@value@@" );
+  // Save original subset strings so we can restore them between tests
+  const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    QgsVectorLayer *vl = qobject_cast<QgsVectorLayer *>( it.value() );
+    if ( vl && !vl->subsetString().isEmpty() )
+      mOriginalSubsets.insert( vl->id(), vl->subsetString() );
+  }
+}
 
-// Template for date range: @@value_from@@ and @@value_to@@ are replaced by quoted date strings
-static const QString RANGE_SQL = QStringLiteral( "\"ts_field\" >= '@@value_from@@' AND \"ts_field\" <= '@@value_to@@'" );
+void TestFilterController::cleanupTestCase()
+{
+  QgsProject::instance()->clear();
+}
 
 void TestFilterController::init()
 {
-  QgsProject::instance()->clear();
+  // Restore original subset strings -- clears filter-applied subsets, preserves predefined ones
+  const QMap<QString, QgsMapLayer *> layers = QgsProject::instance()->mapLayers();
+  for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it )
+  {
+    QgsVectorLayer *vl = qobject_cast<QgsVectorLayer *>( it.value() );
+    if ( vl )
+    {
+      if ( mOriginalSubsets.contains( vl->id() ) )
+        vl->setSubsetString( mOriginalSubsets[vl->id()] );
+      else
+        vl->setSubsetString( QString() );
+    }
+  }
   mController = std::make_unique<FilterController>();
 }
 
@@ -40,439 +64,547 @@ void TestFilterController::cleanup()
 // Date range
 void TestFilterController::testDateRangeDateTime()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 14 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );   // before range
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 12, 0, 0 ), Qt::UTC ) ) );  // inside range
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 17 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );   // after range
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" >= '@@value_from@@' AND \"date-time\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime from = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 0, 0, 0 ), Qt::UTC );
-  const QDateTime to   = QDateTime( QDate( 2024, 3, 16 ), QTime( 18, 30, 0, 0 ), Qt::UTC );
+  // April 2026
+  const QDateTime from = QDateTime( QDate( 2026, 4, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC );
+  const QDateTime to   = QDateTime( QDate( 2026, 4, 30 ), QTime( 23, 59, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ from, to };
   mController->processFilters( filterValues );
 
-  // 'to' seconds are capped to 59 and ms to 999, hour and minute are preserved
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '2024-03-15T10:00:00.000Z' AND \"ts_field\" <= '2024-03-16T18:30:59.999Z')" );
+                             "(\"date-time\" >= '2026-04-01T00:00:00.000Z' AND \"date-time\" <= '2026-04-30T23:59:59.999Z')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 5 );
 }
 
 void TestFilterController::testDateRangeDate()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2023, 12, 31 ) ) );  // before range
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 15 ) ) );   // inside range
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2025, 1, 1 ) ) );    // after range
-
+  const QString fieldName = QStringLiteral( "date" );
+  const QString sql = QStringLiteral( "\"date\" >= '@@value_from@@' AND \"date\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime from = QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC );
-  const QDateTime to   = QDateTime( QDate( 2024, 12, 31 ), QTime( 0, 0, 0 ), Qt::UTC );
+  // May 15–21, 2026
+  const QDateTime from = QDateTime( QDate( 2026, 5, 15 ), QTime( 0, 0, 0 ), Qt::UTC );
+  const QDateTime to   = QDateTime( QDate( 2026, 5, 21 ), QTime( 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ from, to };
   mController->processFilters( filterValues );
 
-  // Date-only fields produce yyyy-MM-dd format
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '2024-01-01' AND \"ts_field\" <= '2024-12-31')" );
+                             "(\"date\" >= '2026-05-15' AND \"date\" <= '2026-05-21')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 9 );
 }
 
 void TestFilterController::testDateRangeDateTimeNull()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Sentinel range covers everything, so both features must appear after filtering
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2000, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 6, 15 ), QTime( 12, 0, 0 ), Qt::UTC ) ) );
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" >= '@@value_from@@' AND \"date-time\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  // Both bounds invalid — should fall back to the sentinel strings
+  // Both bounds invalid — should fall back to sentinel strings, all features visible
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ QVariant(), QVariant() };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '0001-01-01T00:00:00.000Z' AND \"ts_field\" <= '9999-12-31T23:59:59.999Z')" );
+                             "(\"date-time\" >= '0001-01-01T00:00:00.000Z' AND \"date-time\" <= '9999-12-31T23:59:59.999Z')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 2 );
+  QCOMPARE( layer->featureCount(), ( long long ) 43 );
 }
 
 void TestFilterController::testDateRangeDateNull()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Sentinel range covers everything, so both features must appear after filtering
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2000, 1, 1 ) ) );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 15 ) ) );
-
+  const QString fieldName = QStringLiteral( "date" );
+  const QString sql = QStringLiteral( "\"date\" >= '@@value_from@@' AND \"date\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  // Both bounds invalid — should fall back to the sentinel strings
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ QVariant(), QVariant() };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '0001-01-01' AND \"ts_field\" <= '9999-12-31')" );
+                             "(\"date\" >= '0001-01-01' AND \"date\" <= '9999-12-31')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 2 );
+  QCOMPARE( layer->featureCount(), ( long long ) 43 );
 }
 
-void TestFilterController::testDateRangeDateTimeFeatureAtLowerBound()
+void TestFilterController::testDateRangeDateTimeLowerBoundInclusive()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Feature exactly at the lower bound — >= is inclusive, so it must be counted.
-  // Feature just before the bound must be excluded.
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 0, 0, 0 ), Qt::UTC ) ) );   // at lower bound
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 9, 59, 59, 999 ), Qt::UTC ) ) ); // just before
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" >= '@@value_from@@' AND \"date-time\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime from = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 0, 0, 0 ), Qt::UTC );
-  const QDateTime to   = QDateTime( QDate( 2024, 3, 15 ), QTime( 18, 0, 0, 0 ), Qt::UTC );
+  // from exactly at fid 66's timestamp -- >= is inclusive, so fid 66 must be counted
+  const QDateTime from = QDateTime( QDate( 2026, 4, 17 ), QTime( 15, 20, 39, 268 ), Qt::UTC );
+  const QDateTime to   = QDateTime( QDate( 2026, 4, 17 ), QTime( 15, 22, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ from, to };
   mController->processFilters( filterValues );
 
+  // to is capped to 15:22:59.999; range covers fids 66, 52, 193
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '2024-03-15T10:00:00.000Z' AND \"ts_field\" <= '2024-03-15T18:00:59.999Z')" );
+                             "(\"date-time\" >= '2026-04-17T15:20:39.268Z' AND \"date-time\" <= '2026-04-17T15:22:59.999Z')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 3 );
 }
 
 void TestFilterController::testDateRangeDateTimeMidnightLowerBound()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // When the user picks a date without a time the picker passes midnight (00:00:00.000).
-  // A feature stored at midnight on that date must be included — it is at the
-  // start of the day, not before it.
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );    // at midnight lower bound
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 14 ), QTime( 23, 59, 59, 999 ), Qt::UTC ) ) ); // previous day, excluded
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" >= '@@value_from@@' AND \"date-time\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime from = QDateTime( QDate( 2024, 3, 15 ), QTime( 0, 0, 0, 0 ), Qt::UTC );
-  const QDateTime to   = QDateTime( QDate( 2024, 3, 15 ), QTime( 23, 0, 0, 0 ), Qt::UTC );
+  // When the user picks a date without a time the picker passes midnight (00:00:00.000).
+  // QTime(0,0,0,0) is valid — it must be treated as "start of day", not "no time".
+  const QDateTime from = QDateTime( QDate( 2026, 4, 17 ), QTime( 0, 0, 0, 0 ), Qt::UTC );
+  const QDateTime to   = QDateTime( QDate( 2026, 4, 17 ), QTime( 16, 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ from, to };
   mController->processFilters( filterValues );
 
+  // Covers fids 66 (15:20:39.268), 52 (15:21:06.780), 193 (15:22:01.883)
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '2024-03-15T00:00:00.000Z' AND \"ts_field\" <= '2024-03-15T23:00:59.999Z')" );
+                             "(\"date-time\" >= '2026-04-17T00:00:00.000Z' AND \"date-time\" <= '2026-04-17T16:00:59.999Z')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 3 );
 }
 
 void TestFilterController::testDateRangeDateTimeZeroMsInsideRange()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // A feature with ms=0 is ambiguous for single/multi select (requires double OR'd expression),
-  // but range filters use >= / <=. QGIS does datetime-aware comparison, so the feature is
-  // counted regardless of whether it was stored as '.000Z' or without the ms suffix.
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 12, 0, 0, 0 ), Qt::UTC ) ) );  // inside range, 0 ms
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 9, 0, 0, 0 ), Qt::UTC ) ) );   // before range, excluded
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" >= '@@value_from@@' AND \"date-time\" <= '@@value_to@@'" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::DateFilter, layer->id(), FIELD_NAME, RANGE_SQL );
+                             mController.get(), FieldFilter::DateFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime from = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 0, 0, 0 ), Qt::UTC );
-  const QDateTime to   = QDateTime( QDate( 2024, 3, 15 ), QTime( 18, 0, 0, 0 ), Qt::UTC );
+  // fid 219 stored as '2026-05-18T22:00:00Z' (0 ms). Range uses >= / <=, so QGIS
+  // datetime comparison matches it without the double-expression trick.
+  const QDateTime from = QDateTime( QDate( 2026, 5, 18 ), QTime( 21, 0, 0, 0 ), Qt::UTC );
+  const QDateTime to   = QDateTime( QDate( 2026, 5, 18 ), QTime( 23, 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ from, to };
   mController->processFilters( filterValues );
 
-  // Single expression — no double-expr trick needed for range filters
+  // Covers fids 212 (21:38:57.818) and 219 (22:00:00Z)
   const QString expected = QStringLiteral(
-                             "(\"ts_field\" >= '2024-03-15T10:00:00.000Z' AND \"ts_field\" <= '2024-03-15T18:00:59.999Z')" );
+                             "(\"date-time\" >= '2026-05-18T21:00:00.000Z' AND \"date-time\" <= '2026-05-18T23:00:59.999Z')" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
 // Single select
-void TestFilterController::testSingleSelectDateTimeNonZeroMs()
+void TestFilterController::testSingleSelectText()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 30, 45, 123 ), Qt::UTC ) ) );  // matches
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );        // no match
-
+  const QString fieldName = QStringLiteral( "type" );
+  const QString sql = QStringLiteral( "\"type\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime dt = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 30, 45, 123 ), Qt::UTC );
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ QStringLiteral( "Pub" ) };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral( "(\"type\" = 'Pub')" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 11 );
+}
+
+void TestFilterController::testSingleSelectDateTimeNonZeroMs()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  // fid 18: 2026-05-27T12:27:37.674Z — non-zero ms --> single expression
+  const QDateTime dt = QDateTime( QDate( 2026, 5, 27 ), QTime( 12, 27, 37, 674 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt };
   mController->processFilters( filterValues );
 
-  // Non-zero ms → single expression with full timestamp format
-  const QString expected = QStringLiteral( "(\"ts_field\" = '2024-03-15T10:30:45.123Z')" );
+  const QString expected = QStringLiteral( "(\"date-time\" = '2026-05-27T12:27:37.674Z')" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
 void TestFilterController::testSingleSelectDateTimeZeroMs()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Exactly 0 ms: ambiguous between "stored as .000Z" and "stored without ms" in the data.
-  // The filter must match both representations.
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 30, 45, 0 ), Qt::UTC ) ) );  // matches (0ms)
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );      // no match
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime dt = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 30, 45, 0 ), Qt::UTC );
+  // fid 219: stored as '2026-05-18T22:00:00Z' (no ms suffix in GeoPackage)
+  // 0 ms --> two OR'd expressions to cover both storage formats
+  const QDateTime dt = QDateTime( QDate( 2026, 5, 18 ), QTime( 22, 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt };
   mController->processFilters( filterValues );
 
-  // Zero ms → two OR'd expressions: one with .000Z and one without ms suffix
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = '2024-03-15T10:30:45.000Z') OR (\"ts_field\" = '2024-03-15T10:30:45Z'))" );
+                             "((\"date-time\" = '2026-05-18T22:00:00.000Z') OR (\"date-time\" = '2026-05-18T22:00:00Z'))" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
-void TestFilterController::testSingleSelectDateTimeNull()
+void TestFilterController::testSingleSelectDate()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Null value → two OR'd expressions: one with NULL, one with empty string
-  // Note: "= NULL" is invalid SQL and never matches; proper IS NULL support is a separate feature
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // not matched (= NULL is invalid SQL)
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );        // no match
-
+  const QString fieldName = QStringLiteral( "date" );
+  const QString sql = QStringLiteral( "\"date\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
+  // QML always passes QDateTime even for date-only fields; the field type drives formatting
+  const QDateTime dt = QDateTime( QDate( 2026, 4, 17 ), QTime( 0, 0, 0 ), Qt::UTC );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ dt };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral( "(\"date\" = '2026-04-17')" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 3 );
+}
+
+void TestFilterController::testSingleSelectNull()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "type" );
+  const QString sql = QStringLiteral( "\"type\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  // Null -- "= NULL" is invalid SQL (matches nothing); "= ''" matches empty strings.
+  // TODO: update expected expression and count if null handling switches to IS NULL.
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ QVariant() };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = NULL) OR (\"ts_field\" = ''))" );
+                             "((\"type\" = NULL) OR (\"type\" = ''))" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 0 );
 }
 
-void TestFilterController::testSingleSelectDate()
+// Multi select
+void TestFilterController::testMultiSelectText()
 {
-  // QML always passes QDateTime even for date-only fields; the field type drives formatting
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 10 ) ) );   // matches
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 11 ) ) );   // no match
-
+  const QString fieldName = QStringLiteral( "type" );
+  const QString sql = QStringLiteral( "\"type\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
-
-  const QDateTime dt = QDateTime( QDate( 2024, 6, 10 ), QTime( 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
-  filterValues[filterId] = QVariantList{ dt };
+  filterValues[filterId] = QVariantList{ QStringLiteral( "Pub" ), QStringLiteral( "Shop" ) };
   mController->processFilters( filterValues );
 
-  // Date field → yyyy-MM-dd format only
-  const QString expected = QStringLiteral( "(\"ts_field\" = '2024-06-10')" );
+  const QString expected = QStringLiteral(
+                             "((\"type\" = 'Pub') OR (\"type\" = 'Shop'))" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 1 );
+  QCOMPARE( layer->featureCount(), ( long long ) 19 );
 }
 
-// Multi select
 void TestFilterController::testMultiSelectDateTimeNonZeroMs()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  const QDateTime dt1 = QDateTime( QDate( 2024, 3, 15 ), QTime( 10, 30, 45, 100 ), Qt::UTC );
-  const QDateTime dt2 = QDateTime( QDate( 2024, 3, 16 ), QTime( 11, 0, 0, 500 ), Qt::UTC );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, dt1 ) );                                                                  // matches dt1
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, dt2 ) );                                                                  // matches dt2
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );     // no match
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
+
+  // Both values have non-zero ms --> one expression per value, joined by OR
+  const QDateTime dt1 = QDateTime( QDate( 2026, 5, 27 ), QTime( 12, 27, 37, 674 ), Qt::UTC );  // fid 18
+  const QDateTime dt2 = QDateTime( QDate( 2026, 4, 17 ), QTime( 15, 21, 6, 780 ), Qt::UTC );   // fid 52
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt1, dt2 };
   mController->processFilters( filterValues );
 
-  // Both values have non-zero ms → one expression per value, joined by OR
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = '2024-03-15T10:30:45.100Z') OR (\"ts_field\" = '2024-03-16T11:00:00.500Z'))" );
+                             "((\"date-time\" = '2026-05-27T12:27:37.674Z') OR (\"date-time\" = '2026-04-17T15:21:06.780Z'))" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
 void TestFilterController::testMultiSelectDateTimeZeroMs()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // Single value with 0 ms → produces two OR'd expressions for ambiguity coverage
-  const QDateTime dt = QDateTime( QDate( 2024, 5, 1 ), QTime( 8, 0, 0, 0 ), Qt::UTC );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, dt ) );                                                                   // matches (0ms)
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );     // no match
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
+
+  // Single value with 0 ms --> produces two OR'd expressions for ambiguity coverage
+  const QDateTime dt = QDateTime( QDate( 2026, 5, 18 ), QTime( 22, 0, 0, 0 ), Qt::UTC );  // fid 219
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = '2024-05-01T08:00:00.000Z') OR (\"ts_field\" = '2024-05-01T08:00:00Z'))" );
+                             "((\"date-time\" = '2026-05-18T22:00:00.000Z') OR (\"date-time\" = '2026-05-18T22:00:00Z'))" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 1 );
 }
 
 void TestFilterController::testMultiSelectDateTimeMixed()
 {
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  // First value has non-zero ms → one expression.
-  // Second value has 0 ms → expands to two expressions (with and without ms).
-  const QDateTime dt1 = QDateTime( QDate( 2024, 1, 10 ), QTime( 9, 15, 30, 250 ), Qt::UTC );
-  const QDateTime dt2 = QDateTime( QDate( 2024, 2, 20 ), QTime( 14, 0, 0, 0 ), Qt::UTC );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, dt1 ) );                                                                  // matches dt1
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, dt2 ) );                                                                  // matches dt2 (0ms)
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 6, 1 ), QTime( 0, 0, 0, 0 ), Qt::UTC ) ) );     // no match
-
+  const QString fieldName = QStringLiteral( "date-time" );
+  const QString sql = QStringLiteral( "\"date-time\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
+
+  // First value has non-zero ms (fid 18: 674ms) --> one expression.
+  // Second value has 0 ms (fid 219: stored without ms) --> expands to two expressions.
+  const QDateTime dt1 = QDateTime( QDate( 2026, 5, 27 ), QTime( 12, 27, 37, 674 ), Qt::UTC );
+  const QDateTime dt2 = QDateTime( QDate( 2026, 5, 18 ), QTime( 22, 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt1, dt2 };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = '2024-01-10T09:15:30.250Z')"
-                             " OR (\"ts_field\" = '2024-02-20T14:00:00.000Z')"
-                             " OR (\"ts_field\" = '2024-02-20T14:00:00Z'))" );
+                             "((\"date-time\" = '2026-05-27T12:27:37.674Z')"
+                             " OR (\"date-time\" = '2026-05-18T22:00:00.000Z')"
+                             " OR (\"date-time\" = '2026-05-18T22:00:00Z'))" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 2 );
-}
-
-void TestFilterController::testMultiSelectDateTimeNull()
-{
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
-  QVERIFY( layer );
-
-  // Null value → two OR'd expressions: one with NULL, one with empty string
-  // Note: "= NULL" is invalid SQL and never matches; proper IS NULL support is a separate feature
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QVariant() ) );                                                          // not matched (= NULL is invalid SQL)
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );        // no match
-
-  const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
-  QVERIFY( !filterId.isEmpty() );
-
-  QVariantMap filterValues;
-  filterValues[filterId] = QVariantList{ QVariant() };
-  mController->processFilters( filterValues );
-
-  const QString expected = QStringLiteral(
-                             "((\"ts_field\" = NULL) OR (\"ts_field\" = ''))" );
-  QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 0 );
-}
-
-void TestFilterController::testMultiSelectDateTimeEmpty()
-{
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "datetime" ) );
-  QVERIFY( layer );
-
-  // Empty values list → short-circuits to empty expression → no subset string applied → all features visible
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 1, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDateTime( QDate( 2024, 6, 1 ), QTime( 0, 0, 0 ), Qt::UTC ) ) );
-
-  const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
-  QVERIFY( !filterId.isEmpty() );
-
-  QVariantMap filterValues;
-  filterValues[filterId] = QVariantList{};
-  mController->processFilters( filterValues );
-
-  QVERIFY( layer->subsetString().isEmpty() );
   QCOMPARE( layer->featureCount(), ( long long ) 2 );
 }
 
 void TestFilterController::testMultiSelectDate()
 {
-  // Date-only field: all QDateTime values are formatted as yyyy-MM-dd
-  QgsVectorLayer *layer = TestUtils::createFilterTestLayer( FIELD_NAME, QStringLiteral( "date" ) );
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
   QVERIFY( layer );
 
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 1 ) ) );   // matches dt1
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 6, 15 ) ) );  // matches dt2
-  QVERIFY( TestUtils::addFeatureToLayer( layer, FIELD_NAME, QDate( 2024, 7, 1 ) ) );   // no match
-
+  const QString fieldName = QStringLiteral( "date" );
+  const QString sql = QStringLiteral( "\"date\" = @@value@@" );
   const QString filterId = TestUtils::setupControllerWithFilter(
-                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), FIELD_NAME, SELECT_SQL );
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
   QVERIFY( !filterId.isEmpty() );
 
-  const QDateTime dt1 = QDateTime( QDate( 2024, 6, 1 ), QTime( 0, 0, 0 ), Qt::UTC );
-  const QDateTime dt2 = QDateTime( QDate( 2024, 6, 15 ), QTime( 0, 0, 0 ), Qt::UTC );
+  const QDateTime dt1 = QDateTime( QDate( 2026, 4, 17 ), QTime( 0, 0, 0 ), Qt::UTC );
+  const QDateTime dt2 = QDateTime( QDate( 2026, 5, 18 ), QTime( 0, 0, 0 ), Qt::UTC );
 
   QVariantMap filterValues;
   filterValues[filterId] = QVariantList{ dt1, dt2 };
   mController->processFilters( filterValues );
 
   const QString expected = QStringLiteral(
-                             "((\"ts_field\" = '2024-06-01') OR (\"ts_field\" = '2024-06-15'))" );
+                             "((\"date\" = '2026-04-17') OR (\"date\" = '2026-05-18'))" );
   QCOMPARE( layer->subsetString(), expected );
-  QCOMPARE( layer->featureCount(), ( long long ) 2 );
+  QCOMPARE( layer->featureCount(), ( long long ) 5 );
+}
+
+void TestFilterController::testMultiSelectNull()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "type" );
+  const QString sql = QStringLiteral( "\"type\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  // Null -- "= NULL" is invalid SQL (matches nothing); "= ''" matches empty strings.
+  // TODO: update expected expression and count if null handling switches to IS NULL.
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ QVariant() };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral(
+                             "((\"type\" = NULL) OR (\"type\" = ''))" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 0 );
+}
+
+void TestFilterController::testMultiSelectEmpty()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "POI" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "type" );
+  const QString sql = QStringLiteral( "\"type\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::MultiSelectFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  // Empty list --> no subset string --> all features visible
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{};
+  mController->processFilters( filterValues );
+
+  QVERIFY( layer->subsetString().isEmpty() );
+  QCOMPARE( layer->featureCount(), ( long long ) 43 );
+}
+
+// Number range
+void TestFilterController::testNumberRange()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "roads" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "Lenthg" );
+  const QString sql = QStringLiteral( "\"Lenthg\" >= @@value_from@@ AND \"Lenthg\" <= @@value_to@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::NumberFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ 1000, 3000 };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral(
+                             "(\"Lenthg\" >= 1000 AND \"Lenthg\" <= 3000)" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 6 );
+}
+
+// Text filter
+void TestFilterController::testTextFilter()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "roads" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "Condition" );
+  const QString sql = QStringLiteral( "\"Condition\" LIKE '%@@value@@%'" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::TextFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ QStringLiteral( "great" ) };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral( "(\"Condition\" LIKE '%great%')" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 14 );
+}
+
+// Checkbox filter
+void TestFilterController::testCheckboxFilter()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "roads" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  const QString fieldName = QStringLiteral( "Paved?" );
+  const QString sql = QStringLiteral( "\"Paved?\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::CheckboxFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ 1 };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral( "(\"Paved?\" = 1)" );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), ( long long ) 19 );
+}
+
+// Predefined subset string
+void TestFilterController::testPredefinedSubsetString()
+{
+  QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayersByName( QStringLiteral( "addresses" ) ).at( 0 ) );
+  QVERIFY( layer );
+
+  // The addresses layer has a predefined subset: "PSC" IN (90201, 84101, 84102)
+  QVERIFY( !layer->subsetString().isEmpty() );
+
+  const QString fieldName = QStringLiteral( "OBEC" );
+  const QString sql = QStringLiteral( "\"OBEC\" = @@value@@" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::SingleSelectFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ QStringLiteral( "Pezinok" ) };
+  mController->processFilters( filterValues );
+
+  // The predefined subset and the new filter should be AND'd together.
+  // Normalize whitespace so the test survives project re-saves in QGIS.
+  const QString actual = layer->subsetString().simplified();
+  QVERIFY2( actual.startsWith( QStringLiteral( "\"PSC\" IN (90201, 84101, 84102)" ) ),
+            qPrintable( QStringLiteral( "Predefined subset missing or changed: %1" ).arg( actual ) ) );
+  QVERIFY2( actual.endsWith( QStringLiteral( "AND (\"OBEC\" = 'Pezinok')" ) ),
+            qPrintable( QStringLiteral( "Filter expression not appended: %1" ).arg( actual ) ) );
+  QCOMPARE( layer->featureCount(), ( long long ) 39 );
 }

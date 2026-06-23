@@ -11,6 +11,7 @@
 #define TESTFILTERCONTROLLER_H
 
 #include <QObject>
+#include <QMap>
 #include <memory>
 
 #include "filtercontroller.h"
@@ -20,34 +21,51 @@ class TestFilterController : public QObject
     Q_OBJECT
 
   private slots:
-    void init();    // called before each test function
-    void cleanup(); // called after each test function
+    void initTestCase();    // load project once
+    void cleanupTestCase(); // clear project
+    void init();            // reset filters before each test
+    void cleanup();         // reset controller after each test
 
     // Date range
     void testDateRangeDateTime();
     void testDateRangeDate();
-    void testDateRangeDateTimeNull();              // invalid bounds fall back to min/max sentinels
-    void testDateRangeDateNull();                  // invalid bounds fall back to min/max sentinels
-    void testDateRangeDateTimeFeatureAtLowerBound(); // >= is inclusive: feature exactly at from-bound is counted
-    void testDateRangeDateTimeMidnightLowerBound();  // from=midnight; midnight feature is at the inclusive lower bound
-    void testDateRangeDateTimeZeroMsInsideRange();   // 0 ms feature inside range: range uses >= / <=, no double-expr needed
+    void testDateRangeDateTimeNull();
+    void testDateRangeDateNull();
+    void testDateRangeDateTimeLowerBoundInclusive();
+    void testDateRangeDateTimeMidnightLowerBound();
+    void testDateRangeDateTimeZeroMsInsideRange();
 
     // Single select
+    void testSingleSelectText();
     void testSingleSelectDateTimeNonZeroMs();
-    void testSingleSelectDateTimeZeroMs(); // edge case: 0 ms
-    void testSingleSelectDateTimeNull();   // null -> NULL OR ''
+    void testSingleSelectDateTimeZeroMs();
     void testSingleSelectDate();
+    void testSingleSelectNull();
 
     // Multi select
+    void testMultiSelectText();
     void testMultiSelectDateTimeNonZeroMs();
-    void testMultiSelectDateTimeZeroMs();  // edge case: 0 ms
-    void testMultiSelectDateTimeMixed();   // mix of 0 ms and non-zero ms values
-    void testMultiSelectDateTimeNull();    // null -> NULL OR ''
-    void testMultiSelectDateTimeEmpty();   // empty list -> no subset string
+    void testMultiSelectDateTimeZeroMs();
+    void testMultiSelectDateTimeMixed();
     void testMultiSelectDate();
+    void testMultiSelectNull();
+    void testMultiSelectEmpty();
+
+    // Number range
+    void testNumberRange();
+
+    // Text filter
+    void testTextFilter();
+
+    // Checkbox filter
+    void testCheckboxFilter();
+
+    // Predefined subset string preserved with filters
+    void testPredefinedSubsetString();
 
   private:
     std::unique_ptr<FilterController> mController;
+    QMap<QString, QString> mOriginalSubsets; // layer ID -> original subset string
 };
 
 #endif // TESTFILTERCONTROLLER_H
