@@ -47,31 +47,36 @@ QImage LayerDetailLegendImageProvider::requestImage( const QString &, QSize *siz
   // it by dpr.
 
   QScreen *screen = QGuiApplication::screens().at( 0 );
-  qreal pdpi = screen->physicalDotsPerInch() * screen->devicePixelRatio();
-  qreal dpm = pdpi / 25.4;
+  const qreal ldpi = screen->logicalDotsPerInch();
+  const qreal dpr = screen->devicePixelRatio();
 
-  QSize desiredSize( requestedSize );
-  if ( desiredSize.isEmpty() )
+  const qreal dpmm = ldpi * dpr / 25.4;
+
+  // 60 is fallback size, not sure how it came to be
+  const int width = requestedSize.isEmpty() ? static_cast<int>( 60 * dpr ) : static_cast<int>( requestedSize.width() * dpr );
+  const int height = static_cast<int>( minimumSize.height() * dpmm );
+
+  QImage legend = QImage( width, height, QImage::Format_ARGB32_Premultiplied );
+
   {
-    // fallback size
-    desiredSize = QSize( 60, 60 );
+    QPainter painter( &legend );
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    QgsRenderContext context = QgsRenderContext::fromQPainter( &painter );
+
+    painter.scale( dpmm, dpmm );
+
+    legend.fill( Qt::transparent );
+
+    renderer->drawLegend( context );
   }
 
-  QImage legend = QImage( desiredSize.width(), minimumSize.height() * dpm, QImage::Format_ARGB32_Premultiplied );
+  // Tag with DPR only after painting so QPainter does not auto-scale the
+  // coordinate system by dpr (which would otherwise double-apply the factor).
+  legend.setDevicePixelRatio( dpr );
 
-  QPainter painter( &legend );
-  painter.setRenderHint( QPainter::Antialiasing );
-
-  QgsRenderContext context = QgsRenderContext::fromQPainter( &painter );
-
-  painter.scale( dpm, dpm );
-
-  legend.fill( Qt::transparent );
-
-  renderer->drawLegend( context );
-
-  size->setHeight( desiredSize.height() );
-  size->setWidth( desiredSize.width() );
+  size->setWidth( static_cast<int>( width / dpr ) );
+  size->setHeight( static_cast<int>( height / dpr ) );
 
   return legend;
 }
