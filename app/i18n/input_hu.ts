@@ -1857,7 +1857,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="97"/>
         <source>Port is required</source>
-        <translation>Port szám megadása kötelező</translation>
+        <translation>Port szám szükséges</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="100"/>
