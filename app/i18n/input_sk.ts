@@ -1868,7 +1868,7 @@ a preto nebude pridaný do projektu.</translation>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="118"/>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="119"/>
         <source>Network position provider with this IP address &amp; port already exists</source>
-        <translation>Internetový prijímač s touto IP adresou a portom už existuje</translation>
+        <translation>Sieťový prijímač s touto IP adresou a portom už existuje</translation>
     </message>
 </context>
 <context>
