@@ -121,40 +121,40 @@
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="49"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="194"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="38"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
         <source>No connection</source>
         <translation>Nincs kapcsolat</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="90"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="79"/>
         <source>Reconnecting</source>
         <translation>Újrakapcsolódás</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="122"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="130"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="111"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Nincs kapcsolat, újrakapcsolódás (%1) múlva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="148"/>
         <source>Bluetooth permission disabled</source>
         <translation>Bluetooth engedélyezés letiltva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
         <source>Could not connect to device, not paired</source>
         <translation>Nem lehet csatlakozni az eszközhöz, nincs párosítva</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="175"/>
         <source>Connecting to %1</source>
         <translation>%1 csatlakoztatása</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="208"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="179"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="197"/>
         <source>Connected</source>
         <translation>Csatlakoztatva</translation>
     </message>
@@ -348,12 +348,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation><numerusform>%n évvel ezelőtt</numerusform><numerusform>%n évvel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2213"/>
+        <location filename="../inpututils.cpp" line="2254"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2217"/>
+        <location filename="../inpututils.cpp" line="2258"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform></translation>
     </message>
@@ -506,34 +506,6 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
-    <name>MMAddPositionProviderDrawer</name>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="24"/>
-        <source>Connect to bluetooth device</source>
-        <translation>Csatlakozás bluetooth eszközhöz</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="48"/>
-        <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
-        <translation>Bluetooth engedély szükséges, hogy külső vevőkhöz tudjon csatlakozni. Kérjük, engedélyezze ezt a rendszer beállításokban</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
-        <source>Unknown device</source>
-        <translation>Ismeretlen eszköz</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
-        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Új GPS vevő csatlakoztatásához be kell kapcsolnia a Bluetooth-t</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
-        <source>Looking for devices</source>
-        <translation>Eszközök keresése</translation>
-    </message>
-</context>
-<context>
     <name>MMAmPmSwitch</name>
     <message>
         <location filename="../qml/form/components/calendar/MMAmPmSwitch.qml" line="41"/>
@@ -547,46 +519,31 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
-    <name>MMBluetoothConnectionDrawer</name>
+    <name>MMBluetoothProviderDrawer</name>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
-        <source>Connecting to</source>
-        <translation>Kapcsolódás ehhez: </translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="25"/>
+        <source>Bluetooth Connection</source>
+        <translation>Bluetooth kapcsolat</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="30"/>
-        <source>Connecting</source>
-        <translation>Kapcsolódás</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="51"/>
+        <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
+        <translation>Bluetooth engedély szükséges, hogy külső vevőkhöz tudjon csatlakozni. Kérjük, engedélyezze ezt a rendszer beállításokban</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="34"/>
-        <source>Connected</source>
-        <translation>Kapcsolódva</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="65"/>
+        <source>Unknown device</source>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="39"/>
-        <source>Failed to connect to</source>
-        <translation>Nem sikerült kapcsolódni ehhez: </translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="101"/>
+        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
+        <translation>Új GPS vevő csatlakoztatásához be kell kapcsolnia a Bluetooth-t</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="48"/>
-        <source>You might be asked to pair your device during this process.</source>
-        <translation>A folyamat során szükség lehet az eszköze párosítására.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="57"/>
-        <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation>Bezárhatja ezt az üzenetet, megpróbálunk ismételten csatlakozni az eszközéhez.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="62"/>
-        <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
-        <translation>Nem tudtunk csatlakozni a megadott eszközhöz. Ellenőrizze, hogy az eszköz be van-e kapcsolva, illetve csatlakoztatható állapotban van-e.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="117"/>
-        <source>Learn more</source>
-        <translation>További információ</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="140"/>
+        <source>Scanning for devices</source>
+        <translation>Eszközök keresése</translation>
     </message>
 </context>
 <context>
@@ -776,6 +733,69 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
+    <name>MMExternalProviderConnectionDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="38"/>
+        <source>Connecting to external receiver</source>
+        <translation>Csatlakozás külső vevőhöz</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="40"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
+        <source>Connecting to</source>
+        <translation>Kapcsolódás ehhez: </translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="41"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="46"/>
+        <source>Connecting</source>
+        <translation>Kapcsolódás</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="43"/>
+        <source>You might be asked to pair your device during this process.</source>
+        <translation>A folyamat során szükség lehet az eszköze párosítására.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
+        <source>. You can close this panel, the app will continue in the background.</source>
+        <translation>. Bezárhatja ezt a panelt, az alkalmazás a háttérben folytatja működését.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="55"/>
+        <source>Connected</source>
+        <translation>Csatlakozva</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="65"/>
+        <source>Failed to connect to</source>
+        <translation>Nem sikerült kapcsolódni ehhez: </translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="80"/>
+        <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
+        <translation>Nem sikerült csatlakozni a megadott eszközhöz. Ellenőrizze, hogy az eszköz be van-e kapcsolva, illetve csatlakoztatható állapotban van-e.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="70"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="81"/>
+        <source>We were not able to connect to the specified IP address.</source>
+        <translation>Nem sikerült csatlakozni a megadott IP-címhez.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="71"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="83"/>
+        <source>Learn more</source>
+        <translation>További információ</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="82"/>
+        <source>You can close this message, we will try to repeatedly connect to your device.</source>
+        <translation>Bezárhatja ezt az üzenetet, megpróbálunk ismételten csatlakozni az eszközéhez.</translation>
+    </message>
+</context>
+<context>
     <name>MMFeaturesListPage</name>
     <message>
         <location filename="../qml/layers/MMFeaturesListPage.qml" line="58"/>
@@ -872,12 +892,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFilterDropdownValueRelationInput</name>
     <message>
-        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="48"/>
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
         <source>Select...</source>
         <translation>Kiválasztás...</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="50"/>
         <source>%n selected value(s)</source>
         <translation><numerusform>%n érték kiválasztva</numerusform><numerusform>%n érték kiválasztva</numerusform></translation>
     </message>
@@ -922,12 +942,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Visszaállítás</translation>
     </message>
     <message>
-        <location filename="../qml/filters/MMFiltersDrawer.qml" line="99"/>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="93"/>
         <source>No filtering</source>
         <translation>Nincs szűrés</translation>
     </message>
     <message>
-        <location filename="../qml/filters/MMFiltersDrawer.qml" line="209"/>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="203"/>
         <source>Apply filters</source>
         <translation>Szűrők alkalmazása</translation>
     </message>
@@ -976,7 +996,7 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormGalleryEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="34"/>
+        <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="35"/>
         <source>Some features may be hidden by active filters</source>
         <translation>Néhány elemet az aktív szűrők elrejthetnek.</translation>
     </message>
@@ -1018,7 +1038,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Geometria szerkesztése</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="458"/>
+        <location filename="../qml/form/MMFormPage.qml" line="450"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Nem sikerült elmenteni az elemet, ellenőrizze a kitöltendő mezőket</translation>
     </message>
@@ -1046,17 +1066,17 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A fotóvázlatok mentése nem sikerült, kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="294"/>
         <source>Could not create directory %1.</source>
         <translation>%1 mappát nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="359"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Nem sikerült feldolgozni a képet, a fotókönyvtár feloldása nem sikerült</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="374"/>
         <source>Failed to process the image</source>
         <translation>Nem sikerült feldolgozni a képet</translation>
     </message>
@@ -1064,17 +1084,17 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="46"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="47"/>
         <source>Some features may be hidden by active filters</source>
         <translation>Néhány elemet az aktív szűrők elrejthetnek.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="172"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="173"/>
         <source> more</source>
         <translation> több</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="215"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="216"/>
         <source>Add feature</source>
         <translation>Elem hozzáadása</translation>
     </message>
@@ -1082,12 +1102,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
         <source>Change link</source>
         <translation>Összekapcsolás módosítása</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="105"/>
         <source>Unlink feature</source>
         <translation>Elem szétkapcsolása</translation>
     </message>
@@ -1134,159 +1154,159 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="94"/>
-        <source>No items</source>
-        <translation>Nincsenek elemek.</translation>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <source>Clear</source>
+        <translation>Törlés</translation>
     </message>
 </context>
 <context>
     <name>MMFormValueRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="80"/>
-        <source>No items</source>
-        <translation>Nincsenek elemek.</translation>
+        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="77"/>
+        <source>Clear</source>
+        <translation>Törlés</translation>
     </message>
 </context>
 <context>
     <name>MMGpsDataDrawer</name>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
         <source>GPS info</source>
         <translation>GPS információ</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="69"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="70"/>
         <source>No receiver</source>
         <translation>Nincs vevő</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="82"/>
         <source>Status</source>
         <translation>Állapot</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="99"/>
         <source>Longitude</source>
         <translation>Hosszúság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="102"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="109"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="121"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="128"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="140"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="155"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="170"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="185"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="200"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="215"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="233"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="248"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="265"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="282"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="299"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="312"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="332"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="118"/>
         <source>Latitude</source>
         <translation>Szélesség</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="137"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="152"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="167"/>
         <source>Horizontal accuracy</source>
         <translation>Vízszintes pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="182"/>
         <source>Vertical accuracy</source>
         <translation>Függőleges pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="197"/>
         <source>Altitude</source>
         <translation>Magasság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
         <source>Orthometric height, using %1 geoid</source>
         <translation>Ortometrikus magasság, %1 használva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
         <source>Elevation using unspecified grid</source>
         <translation>Magasság, meghatározatlan rács használatával</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="212"/>
         <source>Fix quality</source>
         <translation>Minőség javítása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
         <source>Satellites (in use/view)</source>
         <translation>Műholdak (használt/látókör)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="245"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="262"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="279"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="296"/>
         <source>Speed</source>
         <translation>Sebesség</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="311"/>
         <source>Last Fix</source>
         <translation>Utolsó GPS helyzetmeghatározás</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="320"/>
         <source>GPS antenna height</source>
         <translation>GPS antenna magasság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="321"/>
         <source>Not set</source>
         <translation>Nincs beállítva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="329"/>
         <source>Geoid separation</source>
         <translation>Geoid–ellipszoid eltérés</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="357"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
@@ -1294,97 +1314,97 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMHowYouFoundUsPage</name>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="31"/>
         <source>Search engine (Google, ...)</source>
         <translation>Keresőmotor (Google, ...)</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
         <source>Blog</source>
         <translation>Blog</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
         <source>Mouth</source>
         <translation>Beszélgetés útján</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
         <source>QGIS website</source>
         <translation>QGIS weboldal</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>Application store</source>
         <translation>Alkalmazás áruház</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Teacher</source>
         <translation>Tanár</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
         <source>Conference</source>
         <translation>Konferencia</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="39"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
         <source>Social media</source>
         <translation>Közösségi média</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="42"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="41"/>
         <source>Other</source>
         <translation>Egyéb</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="130"/>
         <source>YouTube</source>
         <translation>YouTube</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
         <source>Twitter</source>
         <translation>Twitter</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
         <source>Facebook</source>
         <translation>Facebook</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="134"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
         <source>LinkedIn</source>
         <translation>LinkedIn</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="135"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="134"/>
         <source>Mastodon</source>
         <translation>Mastodon</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="136"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="135"/>
         <source>Reddit</source>
         <translation>Reddit</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="173"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="172"/>
         <source>Continue</source>
         <translation>Tovább</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="205"/>
         <source>Where did you hear about us?</source>
         <translation>Honnan hallott rólunk?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
         <source>Please specify the source</source>
         <translation>Kérjük adja meg ezt a forrást</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="221"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
@@ -1454,12 +1474,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="60"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="138"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
         <translation>Kiválasztás megerősítése</translation>
     </message>
@@ -1593,68 +1613,78 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Ismeretlen pontosság</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="879"/>
+        <location filename="../qml/map/MMMapController.qml" line="890"/>
         <source>GPS currently unavailable</source>
         <translation>A GPS jelenleg nem elérhető</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="903"/>
+        <location filename="../qml/map/MMMapController.qml" line="914"/>
         <source>Choose Active Layer</source>
         <translation>Aktív réteg kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="937"/>
+        <location filename="../qml/map/MMMapController.qml" line="948"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>A projektben nem található semmilyen szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="938"/>
+        <location filename="../qml/map/MMMapController.qml" line="949"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Nézze meg, hogy lehet engedélyezni a digitalizálást a projektjében.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="964"/>
+        <location filename="../qml/map/MMMapController.qml" line="975"/>
         <source>More options</source>
         <translation>Több lehetőség</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="969"/>
+        <location filename="../qml/map/MMMapController.qml" line="980"/>
         <source>Split geometry</source>
         <translation>Geometria felosztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="981"/>
+        <location filename="../qml/map/MMMapController.qml" line="992"/>
+        <source>Add part</source>
+        <translation>Rész hozzáadása</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="1004"/>
         <source>Redraw geometry</source>
         <translation>Geometria újrarajzolása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="993"/>
+        <location filename="../qml/map/MMMapController.qml" line="1016"/>
         <source>Streaming mode</source>
         <translation>Streaming mód</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="999"/>
+        <location filename="../qml/map/MMMapController.qml" line="1022"/>
         <source>Active</source>
         <translation>Aktív</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1211"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>Splitting done successfully</source>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1302"/>
+        <location filename="../qml/map/MMMapController.qml" line="1326"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1315"/>
+        <location filename="../qml/map/MMMapController.qml" line="1339"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
+        <location filename="../qml/map/MMMapController.qml" line="1356"/>
+        <source>Add new part to the geometry</source>
+        <translation>Új rész hozzáadása a geometriához</translation>
+    </message>
+    <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1414"/>
+        <location filename="../qml/map/MMMapController.qml" line="1454"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -1693,32 +1723,32 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Mérés</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="83"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="77"/>
         <source>Perimeter</source>
         <translation>Kerület</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="83"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="77"/>
         <source>Length</source>
         <translation>Hosszúság</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="90"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Area</source>
         <translation>Terület</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="103"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="97"/>
         <source>Close shape</source>
         <translation>Alakzat zárása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="103"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="97"/>
         <source>Add point</source>
         <translation>Pont hozzáadása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="110"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Done</source>
         <translation>Kész</translation>
     </message>
@@ -1778,6 +1808,70 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
 </context>
 <context>
+    <name>MMNetworkProviderDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="20"/>
+        <source>Network connection</source>
+        <translation>Hálózati kapcsolat</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="29"/>
+        <source>Enter the IP address and port for your receiver. You can find these in your manufacturer&apos;s app. TCP and UDP connections are supported. Optionally, add a nickname to tell your receivers apart.</source>
+        <translation>Adja meg a vevőegység IP-címét és portszámát. Ezeket a gyártó alkalmazásában találja meg. A TCP és UDP kapcsolatok támogatottak. Opcionálisan megadhat egy becenevet a vevőegységek megkülönböztetéséhez.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="43"/>
+        <source>IP Address</source>
+        <translation>IP cím</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="55"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="69"/>
+        <source>Receiver nickname (optional)</source>
+        <translation>Vevőegység beceneve (nem kötelező)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="70"/>
+        <source>External receiver</source>
+        <translation>Külső vevő</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="76"/>
+        <source>Confirm</source>
+        <translation>Megerősítés</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="86"/>
+        <source>IP address is required</source>
+        <translation>IP cím megadása kötelező</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="89"/>
+        <source>Enter a valid IP address or hostname</source>
+        <translation>Adjon meg egy érvényes IP-címet vagy hostnevet/gépnevet</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="97"/>
+        <source>Port is required</source>
+        <translation>Port szám megadása kötelező</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="100"/>
+        <source>Enter a valid port (1–65535)</source>
+        <translation>Adjon meg egy érvényes port számot (1–65535)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="118"/>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="119"/>
+        <source>Network position provider with this IP address &amp; port already exists</source>
+        <translation>Ezzel az IP-címmel és portszámmal már létezik hálózati helymeghatározó</translation>
+    </message>
+</context>
+<context>
     <name>MMNoPermissionsDialog</name>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="18"/>
@@ -1834,42 +1928,43 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMPositionProviderPage</name>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="83"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="70"/>
         <source>Unknown device</source>
         <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
-        <source>Internal receivers</source>
-        <translation>Belső vevők</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
-        <source>External receivers</source>
-        <translation>Külső vevők</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="136"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="133"/>
         <source>Connect new receiver</source>
         <translation>Új vevő csatlakoztatása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation>A külső vevőkhöz való csatlakozás Bluetooth kapcsolattal nincs támogatva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="148"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="174"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>iOS rendszer esetén ez a funkció nem érhető el. A hardverszállító biztosíthat egy egyéni alkalmazást, ami csatlakozik a vevőhöz, és beállítja a pozíciót. Az alkalmazás továbbra is úgy fogja észlelni, mintha ez a telefon/táblagép belső GPS-e lenne.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="199"/>
         <source>Internal</source>
         <translation>Belső</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="238"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <source>%1 receivers</source>
+        <translation>%1 vevő</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <source>External</source>
+        <translation>Külső</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="261"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
@@ -2298,6 +2393,44 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/dialogs/MMProviderRemoveReceiverDialog.qml" line="25"/>
         <source>No, thanks</source>
         <translation>Nem, köszönöm</translation>
+    </message>
+</context>
+<context>
+    <name>MMProviderTypeDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="21"/>
+        <source>Connect new receiver</source>
+        <translation>Új vevő csatlakoztatása</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <source>Bad Elf, Emlid, Juniper, marXact and more</source>
+        <translation>Bad Elf, Emlid, Juniper, marXact stb.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <source>Network (TCP, UDP)</source>
+        <translation>Hálózat (TCP, UDP)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <source>Emlid RS, EOS and more</source>
+        <translation>Emlid RS, EOS stb.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
+        <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
+        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 fa támogatott eszközökért és a beállítási útmutatóért.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="94"/>
+        <source>Continue</source>
+        <translation>Tovább</translation>
     </message>
 </context>
 <context>
@@ -3134,15 +3267,62 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     </message>
 </context>
 <context>
+    <name>NetworkPositionProvider</name>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="40"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="173"/>
+        <source>No connection</source>
+        <translation>Nincs kapcsolat</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="103"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="144"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="164"/>
+        <source>Connected</source>
+        <translation>Csatlakozva</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="159"/>
+        <source>Connecting to %1</source>
+        <translation>Csatlakozás: %1</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="210"/>
+        <source>No connection, reconnecting in (%1)</source>
+        <translation>Nincs kapcsolat, újrakapcsolódás (%1) múlva</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="199"/>
+        <source>Reconnecting</source>
+        <translation>Újrakapcsolódás</translation>
+    </message>
+</context>
+<context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="122"/>
+        <location filename="../position/positionkit.cpp" line="121"/>
         <source>External (Mock)</source>
         <translation>Külső (Színlelt)</translation>
+    </message>
+    <message>
+        <location filename="../position/positionkit.cpp" line="148"/>
+        <source>Network device</source>
+        <translation>Hálózati eszköz</translation>
     </message>
 </context>
 <context>
     <name>PositionProvidersModel</name>
+    <message>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="22"/>
+        <source>Simulated provider</source>
+        <translation>Szimulált szolgáltató</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="22"/>
+        <source>Simulated position around point</source>
+        <translation>Szimulált pozíció egy pont körül</translation>
+    </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
@@ -3179,14 +3359,16 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Csak a GPS használata</translation>
     </message>
     <message>
-        <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="153"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="220"/>
         <source> Bluetooth device</source>
         <translation> Bluetooth eszköz</translation>
     </message>
     <message>
-        <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
-        <source>Bluetooth device</source>
-        <translation>Bluetooth eszköz</translation>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="153"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="220"/>
+        <source> Network device</source>
+        <translation>Hálózati eszköz</translation>
     </message>
 </context>
 <context>
@@ -3287,12 +3469,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Ismeretlen javítás</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="609"/>
+        <location filename="../main.cpp" line="605"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="614"/>
+        <location filename="../main.cpp" line="610"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
