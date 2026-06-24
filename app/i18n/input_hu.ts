@@ -1847,7 +1847,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="86"/>
         <source>IP address is required</source>
-        <translation>IP cím megadása kötelező</translation>
+        <translation>IP cím szükséges</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="89"/>
