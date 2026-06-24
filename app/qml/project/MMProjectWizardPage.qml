@@ -71,6 +71,7 @@ MMComponents.MMPage {
         delegate: MMProjectComponents.MMProjectWizardDelegate {
           required property string widgetType
           required property string attributeName
+          required property int index
 
           width: ListView.view.width
 
