@@ -1152,6 +1152,7 @@ Item {
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       onCanceled: {
+        internal.featurePairToEdit = null
         root.hideInfoTextMessage()
 
         if ( root.state === "record" )
@@ -1171,6 +1172,7 @@ Item {
       }
 
       onDone: function( featureLayerPair ) {
+        internal.featurePairToEdit = null
         root.hideInfoTextMessage()
 
         if ( root.state === "record" )
@@ -1226,6 +1228,7 @@ Item {
       featureToSplit: internal.featurePairToEdit
 
       onDone: function (success) {
+        internal.featurePairToEdit = null
         // close all feature forms, show banner if it went fine or not
         root.hideInfoTextMessage()
 
@@ -1245,6 +1248,7 @@ Item {
       }
 
       onCanceled: {
+        internal.featurePairToEdit = null
         // go back to feature form
         root.hideInfoTextMessage()
 
@@ -1311,7 +1315,6 @@ Item {
   }
 
   function record() {
-    internal.featurePairToEdit = null
     state = "record"
   }
 
