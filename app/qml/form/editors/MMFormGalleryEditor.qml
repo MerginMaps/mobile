@@ -70,6 +70,7 @@ MMPrivateComponents.MMBaseInput {
       text: model.FeatureTitle
 
       onClicked: function( path ) {
+        root.forceActiveFocus()
         root.openLinkedFeature( model.FeaturePair )
       }
     }
@@ -98,7 +99,10 @@ MMPrivateComponents.MMBaseInput {
 
         MMComponents.MMSingleClickMouseArea {
           anchors.fill: parent
-          onSingleClicked: root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
+          onSingleClicked: {
+            root.forceActiveFocus()
+            root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
+          }
         }
       }
 
