@@ -105,7 +105,7 @@ void MapPosition::recalculateMapPosition()
     {
       QgsPointXY srcPoint = QgsPointXY( geoposition.x(), geoposition.y() );
       QgsPointXY mapPositionXY = InputUtils::transformPointXY(
-                                   mPositionKit->positionCrs3D(),
+                                   mPositionKit->positionCrs2D(),
                                    mMapSettings->destinationCrs(),
                                    mMapSettings->transformContext(),
                                    srcPoint
