@@ -57,6 +57,7 @@ MMPrivateComponents.MMBaseInput {
     MouseArea {
       anchors.fill: parent
       onClicked: function( mouse ) {
+        root.forceActiveFocus()
         mouse.accepted = true
         listLoader.active = true
         listLoader.focus = true
@@ -146,7 +147,10 @@ MMPrivateComponents.MMBaseInput {
 
           MMComponents.MMSingleClickMouseArea {
             anchors.fill: parent
-            onSingleClicked: root.openLinkedFeature( model.FeaturePair )
+            onSingleClicked: {
+              root.forceActiveFocus()
+              root.openLinkedFeature( model.FeaturePair )
+            }
           }
 
           onVisibleChanged: root.recalculateVisibleItems()

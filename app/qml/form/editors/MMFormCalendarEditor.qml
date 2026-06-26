@@ -112,6 +112,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   function openCalendar() {
+    forceActiveFocus()
+
     if (root._fieldValueIsNull || _fieldHasMixedValues) {
       root.openPicker( new Date() )
     }
