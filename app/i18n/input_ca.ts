@@ -736,7 +736,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="38"/>
         <source>Connecting to external receiver</source>
-        <translation>connectant amb un receptor extern</translation>
+        <translation>Connectant amb un receptor extern</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="40"/>
