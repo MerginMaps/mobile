@@ -2420,7 +2420,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
         <source>Emlid RS, EOS and more</source>
-        <translation>Emlid RS, EOS i més</translation>
+        <translation>Emlid RS, EOS i altres</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
