@@ -1644,7 +1644,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="992"/>
         <source>Add part</source>
-        <translation>Afegeix una part</translation>
+        <translation>Afegeix un tros</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1004"/>
