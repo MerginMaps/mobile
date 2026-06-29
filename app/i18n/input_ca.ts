@@ -2410,7 +2410,7 @@ No s&apos;afegirà al projecte.</translation>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
         <source>Bad Elf, Emlid, Juniper, marXact and more</source>
-        <translation>Bad Elf, Emlid, Juniper, marXact i més</translation>
+        <translation>Bad Elf, Emlid, Juniper, marXact i altres</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
