@@ -22,6 +22,9 @@
 #include "providers/internalpositionprovider.h"
 #include "providers/simulatedpositionprovider.h"
 #include "providers/networkpositionprovider.h"
+#ifdef WITH_TRIMBLE_PROVIDERS
+#include "providers/trimblepositionprovider.h"
+#endif
 #ifdef ANDROID
 #include "providers/androidpositionprovider.h"
 #include <android/log.h>
@@ -38,6 +41,10 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
   if ( mElevationTransformationEnabled && mPositionCrs3D.isValid() )
   {
     return mPositionCrs3D;
+  }
+  if ( mProviderCrs.isValid() )
+  {
+    return mProviderCrs;
   }
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
@@ -96,9 +103,21 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 
   mPositionProvider.reset( provider );
 
+  mProviderCrs = QgsCoordinateReferenceSystem(); // reset to WGS84 default
+
   if ( mPositionProvider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
+    connect( mPositionProvider.get(), &AbstractPositionProvider::sourceCrsChanged, this, [this]( const QgsCoordinateReferenceSystem & crs )
+    {
+      mProviderCrs = crs.isValid() ? crs : QgsCoordinateReferenceSystem();
+      refreshPositionTransformer( QgsCoordinateTransformContext() );
+    } );
+
+    // Pick up provider CRS if it's already known (e.g. re-activation)
+    const QgsCoordinateReferenceSystem initial = mPositionProvider->sourceCrs();
+    if ( initial.isValid() )
+      mProviderCrs = initial;
 
     CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->id() ) );
   }
@@ -117,8 +136,8 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 QString PositionKit::positionProviderName() const
 {
   if ( isMockPosition() )
-  {
-    return tr( "External (Mock)" );
+{
+  return tr( "External (Mock)" );
   }
   return mPositionProvider->name();
 }
@@ -130,6 +149,15 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   if ( type == QStringLiteral( "external_bt" ) )
   {
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+#endif
+
+#ifdef WITH_TRIMBLE_PROVIDERS
+  if ( type == QStringLiteral( "external_trimble" ) )
+  {
+    AbstractPositionProvider *provider = new TrimblePositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -263,9 +291,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation - antennaHeight(), mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - ( newPosition.antennaHeightApplied ? 0 : antennaHeight() ), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation - antennaHeight();
+    mPosition.elevation = newPosition.elevation - ( newPosition.antennaHeightApplied ? 0 : antennaHeight() );
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
@@ -390,6 +418,16 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     emit positionProviderNameChanged();
   }
 
+  const bool antennaDataChanged = !qgsDoubleNear( newPosition.antennaHeight, mPosition.antennaHeight )
+                                  || newPosition.antennaHeightApplied != mPosition.antennaHeightApplied;
+  if ( antennaDataChanged )
+  {
+    mPosition.antennaHeight = newPosition.antennaHeight;
+    mPosition.antennaHeightApplied = newPosition.antennaHeightApplied;
+    emit antennaHeightChanged();
+    hasAnythingChanged = true;
+  }
+
   if ( hasAnythingChanged )
   {
     emit positionChanged( mPosition );
@@ -434,7 +472,7 @@ void PositionKit::appStateChanged( const Qt::ApplicationState state )
 
 void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
-  const QgsCoordinateReferenceSystem srcCrs = positionCrs3DEllipsoidHeight();
+  const QgsCoordinateReferenceSystem srcCrs = mProviderCrs.isValid() ? mProviderCrs : positionCrs3DEllipsoidHeight();
   const QgsCoordinateReferenceSystem destCrs = positionCrs3D();
 
   QgsCoordinateTransformContext context = transformContext;
@@ -488,7 +526,7 @@ double PositionKit::geoidSeparation() const
 QgsPoint PositionKit::positionCoordinate() const
 {
   if ( mPosition.hasValidPosition() )
-    return { mPosition.longitude, mPosition.latitude, mPosition.elevation };
+  return { mPosition.longitude, mPosition.latitude, mPosition.elevation };
 
   return {};
 }
@@ -604,10 +642,29 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
 
 double PositionKit::antennaHeight() const
 {
+  // Display value: provider-streamed height takes precedence; never overwrites AppSettings.
+  if ( mPosition.antennaHeight >= 0 )
+    return mPosition.antennaHeight;
+
   if ( mAppSettings )
-  {
     return mAppSettings->gpsAntennaHeight();
-  }
 
   return 0;
+}
+
+double PositionKit::antennaHeightToApply() const
+{
+  // If the provider already subtracted antenna height, the app must apply zero.
+  if ( mPosition.antennaHeightApplied )
+  return 0;
+
+  if ( mAppSettings )
+    return mAppSettings->gpsAntennaHeight();
+
+    return 0;
+  }
+
+bool PositionKit::antennaHeightApplied() const
+{
+  return mPosition.antennaHeightApplied;
 }
