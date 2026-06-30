@@ -16,6 +16,8 @@ import "../components" as MMComponents
 MMComponents.MMListDrawer {
   id: root
 
+  property bool withTrimbleProviders: __withTrimbleProviders
+
   signal providerSelected( string providerType )
 
   drawerHeader.title: qsTr( "Connect new receiver" )
@@ -32,7 +34,7 @@ MMComponents.MMListDrawer {
         { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
       ] )
 
-      if ( __withTrimbleProviders ) {
+      if ( root.withTrimbleProviders ) {
         providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble", icon: __style.gpsIcon } )
       }
     }
