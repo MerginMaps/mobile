@@ -10,6 +10,7 @@
 #ifndef ABSTRACTPOSITIONPROVIDER_H
 #define ABSTRACTPOSITIONPROVIDER_H
 
+#include <qgscoordinatereferencesystem.h>
 #include <qgspoint.h>
 #include <qqmlintegration.h>
 
@@ -53,11 +54,18 @@ class AbstractPositionProvider : public QObject
     Q_INVOKABLE QString name() const;
     Q_INVOKABLE QString type() const;
 
+    // The geodetic CRS the provider's coordinates are in.
+    // Default: invalid (means WGS84). Override in providers that report their datum.
+    virtual QgsCoordinateReferenceSystem sourceCrs() const;
+
   signals:
     void positionChanged( const GeoPosition &position );
 
     void stateMessageChanged( const QString &message );
     void stateChanged( AbstractPositionProvider::State state );
+
+    // Emitted when the provider's reported source CRS changes.
+    void sourceCrsChanged( const QgsCoordinateReferenceSystem &crs );
 
   protected:
     void setState( const QString &message ); // keeps state enum the same and only changes the message
