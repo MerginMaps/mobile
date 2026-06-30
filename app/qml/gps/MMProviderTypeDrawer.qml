@@ -31,6 +31,10 @@ MMComponents.MMListDrawer {
         { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon },
         { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
       ] )
+
+      if ( __withTrimbleProviders ) {
+        providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble", icon: __style.gpsIcon } )
+      }
     }
   }
 
@@ -103,6 +107,9 @@ MMComponents.MMListDrawer {
       }
       else if ( providerType === "network" ) {
         root.providerSelected("network")
+      }
+      else if ( providerType === "trimble" ) {
+        root.providerSelected("trimble")
       }
     }
   }

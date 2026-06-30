@@ -85,16 +85,56 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingsInput {
+      Loader {
         width: parent.width
-        title: qsTr("GPS antenna height")
-        description: qsTr("Includes pole height and GPS receiver’s antenna height")
-        valueDescription: qsTr("GPS antenna height, in meters")
-        value: AppSettings.gpsAntennaHeight
-        suffix: " m"
+        sourceComponent: PositionKit.antennaHeightApplied ? trimbleAntennaHeightComponent : editableAntennaHeightComponent
+      }
 
-        onValueWasChanged: function( newValue ) {
-          AppSettings.gpsAntennaHeight = newValue
+      Component {
+        id: editableAntennaHeightComponent
+
+        MMSettingsComponents.MMSettingsInput {
+          width: parent ? parent.width : 0
+          title: qsTr("GPS antenna height")
+          description: qsTr("Includes pole height and GPS receiver’s antenna height")
+          valueDescription: qsTr("GPS antenna height, in meters")
+          value: AppSettings.gpsAntennaHeight
+          suffix: " m"
+
+          onValueWasChanged: function( newValue ) {
+            AppSettings.gpsAntennaHeight = newValue
+          }
+        }
+      }
+
+      Component {
+        id: trimbleAntennaHeightComponent
+
+        Column {
+          width: parent ? parent.width : 0
+          spacing: __style.spacing4
+
+          MMSettingsComponents.MMSettingsItem {
+            width: parent.width
+            title: qsTr("GPS antenna height")
+            value: PositionKit.antennaHeight.toFixed( 3 ) + " m"
+          }
+
+          MMComponents.MMText {
+            width: parent.width
+            text: qsTr("Antenna height is managed by Trimble Mobile Manager")
+            color: __style.greyColor
+            font: __style.t4
+          }
+
+          MMComponents.MMButton {
+            text: qsTr("Open in Trimble Mobile Manager")
+            small: true
+            onClicked: {
+              if ( PositionKit.positionProvider )
+                PositionKit.positionProvider.openAntennaHeightPage()
+            }
+          }
         }
       }
 

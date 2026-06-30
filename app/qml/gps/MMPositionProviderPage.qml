@@ -148,6 +148,11 @@ MMComponents.MMPage {
       onProviderSelected: function( providerType ) {
         if ( providerType === "bluetooth" ) bluetoothDiscoveryLoader.active = true
         else if ( providerType === "network" ) networkProviderDrawer.open()
+        else if ( providerType === "trimble" ) {
+          root.activateProvider( "external_trimble", "trimble_tmm", qsTr( "Trimble Mobile Manager" ) )
+          connectingDialogLoader.providerType = "trimble"
+          connectingDialogLoader.active = true
+        }
       }
     }
 
