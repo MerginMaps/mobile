@@ -31,6 +31,13 @@ class GeoPosition : public QgsGpsInformation
 
     bool isMock = false;
 
+    // Set by providers that already account for antenna height (e.g. Trimble via TMM).
+    // antennaHeight >= 0 means the provider reported it; -1 = not provided.
+    // antennaHeightApplied = true means the provider already reduced to the ground point
+    // and the app must NOT subtract it again.
+    double antennaHeight = -1;
+    bool antennaHeightApplied = false;
+
     // copies all data from QgsGpsInformation other and updates satellitesVisible
     static GeoPosition fromQgsGpsInformation( const QgsGpsInformation &other );
 

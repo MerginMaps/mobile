@@ -132,9 +132,9 @@ QString GeoPosition::parseFixStatus() const
   //
 
   switch ( quality )
-  {
-    case -1:
-      return QObject::tr( "No data" );
+{
+  case -1:
+    return QObject::tr( "No data" );
 
     case 0:
       return QObject::tr( "No fix" );
