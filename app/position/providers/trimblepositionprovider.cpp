@@ -181,6 +181,19 @@ TrimblePositionProvider::~TrimblePositionProvider()
 
 void TrimblePositionProvider::startUpdates()
 {
+  if ( mRegistrationInProgress )
+  {
+    qDebug() << "TrimblePositionProvider: startUpdates called while registration already in progress, ignoring";
+    return;
+  }
+  if ( mCachedPort > 0 )
+  {
+    qDebug() << "TrimblePositionProvider: startUpdates - reconnecting with cached port" << mCachedPort;
+    connectWebSocket( mCachedPort );
+    return;
+  }
+  mRegistrationInProgress = true;
+  qDebug() << "TrimblePositionProvider: startUpdates - requesting registration";
   setState( tr( "Connecting to Trimble Mobile Manager" ), State::Connecting );
   mRegistration->requestRegistration( __getTrimbleAppId() );
 }
@@ -215,12 +228,16 @@ QgsCoordinateReferenceSystem TrimblePositionProvider::sourceCrs() const
 
 void TrimblePositionProvider::onRegistered( int port )
 {
+  qDebug() << "TrimblePositionProvider: registration succeeded, port:" << port;
+  mRegistrationInProgress = false;
   mCachedPort = port;
   connectWebSocket( port );
 }
 
 void TrimblePositionProvider::onRegistrationFailed( const QString &reason )
 {
+  qDebug() << "TrimblePositionProvider: registration failed:" << reason;
+  mRegistrationInProgress = false;
   setState( reason, State::NoConnection );
   emit positionChanged( GeoPosition() );
 }

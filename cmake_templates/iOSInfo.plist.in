@@ -37,6 +37,16 @@
 			</array>
 		</dict>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tmmregister</string>
+		<string>trimblelink</string>
+		<string>trimbleMobileManager</string>
+		<string>com.trimble.mobilemanager</string>
+		<string>trimble-mobile-manager</string>
+		<string>trimble</string>
+		<string>TrimbleMobileManager</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Program requires access to camera to take pictures for features on map</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

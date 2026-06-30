@@ -64,6 +64,7 @@ class TrimblePositionProvider : public AbstractPositionProvider
     int mCachedPort = 0;
     int mReconnectDelay = ReconnectDelay::ShortDelay;
     int mSecondsLeftToReconnect = 0;
+    bool mRegistrationInProgress = false;
 
     QgsCoordinateReferenceSystem mSourceCrs;
 };

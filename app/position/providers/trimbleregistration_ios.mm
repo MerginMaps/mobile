@@ -14,8 +14,10 @@
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPointer>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QDebug>
 
 #import <UIKit/UIKit.h>
 
@@ -39,33 +41,64 @@ void TrimbleRegistration::requestRegistration( const QString &appId )
 
   const QByteArray jsonBytes = QJsonDocument( payload ).toJson( QJsonDocument::Compact );
   const QString base64 = QString::fromLatin1( jsonBytes.toBase64() );
-  const QUrl tmmUrl( QStringLiteral( "%1://?%2" ).arg( QLatin1String( TMM_REGISTER_SCHEME ), base64 ) );
 
-  if ( !QDesktopServices::openUrl( tmmUrl ) )
+  // Build the raw URL string and open via UIKit directly.
+  // QDesktopServices::openUrl() routes through QUrl which percent-encodes or rejects
+  // the base64 payload ('+', '/', '=' are special in URLs), breaking the scheme.
+  const QString rawUrlString = QStringLiteral( "%1://?%2" )
+                               .arg( QLatin1String( TMM_REGISTER_SCHEME ), base64 );
+  NSString *nsUrlString = rawUrlString.toNSString();
+  NSURL *nsUrl = [NSURL URLWithString:nsUrlString];
+
+  qDebug() << "TrimbleRegistration: opening URL:" << rawUrlString;
+  qDebug() << "TrimbleRegistration: NSURL valid:" << ( nsUrl != nil );
+
+  if ( !nsUrl )
   {
     emit failed( tr( "Could not open Trimble Mobile Manager. Is it installed?" ) );
+    return;
   }
+
+  QPointer<TrimbleRegistration> self( this );
+  [[UIApplication sharedApplication] openURL:nsUrl options:@{} completionHandler:^( BOOL success )
+  {
+    qDebug() << "TrimbleRegistration: openURL completionHandler success:" << success;
+    if ( !success && self )
+    {
+      emit self->failed( tr( "Could not open Trimble Mobile Manager. Is it installed?" ) );
+    }
+  }];
 }
 
 Q_INVOKABLE void TrimbleRegistration::handleCallback( const QUrl &url )
 {
+  qDebug() << "TrimbleRegistration: handleCallback called with URL:" << url.toString();
+
   if ( url.scheme() != QLatin1String( TMM_CALLBACK_SCHEME ) )
+  {
+    qDebug() << "TrimbleRegistration: unexpected scheme, ignoring:" << url.scheme();
     return;
+  }
 
   const QString fragment = url.fragment();
   const QString query = url.query();
   const QString base64 = fragment.isEmpty() ? query : fragment;
+  qDebug() << "TrimbleRegistration: raw callback payload:" << base64;
 
   const QByteArray jsonBytes = QByteArray::fromBase64( base64.toLatin1() );
   const QJsonDocument doc = QJsonDocument::fromJson( jsonBytes );
   if ( doc.isNull() || !doc.isObject() )
   {
+    qDebug() << "TrimbleRegistration: failed to parse callback JSON:" << jsonBytes;
     emit failed( tr( "Invalid response from Trimble Mobile Manager" ) );
     return;
   }
 
   const QJsonObject obj = doc.object();
   const QString result = obj.value( QStringLiteral( "registrationResult" ) ).toString();
+  const QJsonValue dbgPort = obj.value( QStringLiteral( "locationV2Port" ) );
+  qDebug() << "TrimbleRegistration: registrationResult:" << result
+           << "locationV2Port:" << ( dbgPort.isString() ? dbgPort.toString() : QString::number( dbgPort.toInt( 0 ) ) );
 
   if ( result != QLatin1String( "OK" ) )
   {
@@ -73,7 +106,9 @@ Q_INVOKABLE void TrimbleRegistration::handleCallback( const QUrl &url )
     return;
   }
 
-  const int port = obj.value( QStringLiteral( "locationV2Port" ) ).toInt( 0 );
+  // TMM returns port values as JSON strings, not numbers — use toString().toInt()
+  const QJsonValue portVal = obj.value( QStringLiteral( "locationV2Port" ) );
+  const int port = portVal.isString() ? portVal.toString().toInt() : portVal.toInt( 0 );
   if ( port <= 0 )
   {
     emit failed( tr( "Trimble Mobile Manager returned invalid port" ) );

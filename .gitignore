@@ -24,3 +24,4 @@ CMakeLists.txt.user
 google_play_key.json
 fastlane/report.xml
 CMakeUserPresets.json
+CLAUDE.md
