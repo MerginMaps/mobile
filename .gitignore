@@ -5,6 +5,7 @@
 *build*/
 app/config.pri
 core/merginsecrets.cpp
+app/position/providers/trimblesecrets.cpp
 *.idea
 *.vscode
 *.cache
