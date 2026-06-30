@@ -22,6 +22,7 @@ MMComponents.MMDrawer {
   property alias hasDatePicker: dateTimePicker.hasDatePicker
   property alias hasTimePicker: dateTimePicker.hasTimePicker
   property bool showSeconds: false
+  property bool fieldValueIsNull: true
 
   signal primaryButtonClicked
   signal clearButtonClicked
@@ -30,24 +31,19 @@ MMComponents.MMDrawer {
 
   drawerHeader.title: root.title
 
-  drawerHeader.topLeftItemContent: [
+  drawerHeader.topLeftItem.visible: !root.fieldValueIsNull
+  drawerHeader.topLeftItemContent:
     MMComponents.MMButton {
       text: qsTr("Clear")
-      type: MMComponents.MMButton.Types.Tertiary
-      size: MMComponents.MMButton.Sizes.Small
-
-      anchors {
-        left: parent.left
-        leftMargin: __style.pageMargins + __style.safeAreaLeft
-        verticalCenter: parent.verticalCenter
-      }
+      type: MMButton.Types.Tertiary
+      fontColor: __style.darkGreyColor
+      fontColorHover: __style.nightColor
 
       onClicked: {
         root.clearButtonClicked()
         root.close()
       }
     }
-  ]
 
   drawerContent: Item {
       width: parent.width
