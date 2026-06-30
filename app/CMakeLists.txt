@@ -209,6 +209,30 @@ if (HAVE_BLUETOOTH)
   set(MM_HDRS ${MM_HDRS} position/providers/bluetoothpositionprovider.h)
 endif ()
 
+if (WITH_TRIMBLE_PROVIDERS)
+  if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/position/providers/trimblesecrets.cpp)
+    message(
+      FATAL_ERROR
+        "app/position/providers/trimblesecrets.cpp doesn't exist. Decrypt trimblesecrets.cpp.enc or set WITH_TRIMBLE_PROVIDERS=FALSE"
+    )
+  endif ()
+
+  set(MM_SRCS
+      ${MM_SRCS}
+      position/providers/trimblepositionprovider.cpp
+  )
+  set(MM_HDRS
+      ${MM_HDRS}
+      position/providers/trimbleregistration.h
+      position/providers/trimblepositionprovider.h
+  )
+  if (ANDROID)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistration_android.cpp)
+  elseif (IOS)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistration_ios.mm)
+  endif ()
+endif ()
+
 if (ENABLE_TESTS)
   set(MM_SRCS
       ${MM_SRCS}
@@ -515,6 +539,11 @@ endif ()
 
 if (HAVE_BLUETOOTH)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
+endif ()
+
+if (WITH_TRIMBLE_PROVIDERS)
+  target_compile_definitions(MerginMaps PRIVATE WITH_TRIMBLE_PROVIDERS)
+  target_link_libraries(MerginMaps PUBLIC Qt6::WebSockets)
 endif ()
 
 if (NOT IOS)

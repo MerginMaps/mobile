@@ -143,6 +143,11 @@ set(HAVE_BLUETOOTH
     CACHE BOOL "Building with bluetooth position provider"
 )
 
+set(WITH_TRIMBLE_PROVIDERS
+    FALSE
+    CACHE BOOL "Building with Trimble GNSS position provider via Trimble Mobile Manager (mobile only)"
+)
+
 set(USE_KEYCHAIN
     FALSE
     CACHE
@@ -261,6 +266,17 @@ if (HAVE_BLUETOOTH)
   find_package(
     Qt6
     COMPONENTS Bluetooth
+    REQUIRED
+  )
+endif ()
+
+if (WITH_TRIMBLE_PROVIDERS)
+  if (NOT ANDROID AND NOT IOS)
+    message(FATAL_ERROR "WITH_TRIMBLE_PROVIDERS is only supported on Android and iOS. Set WITH_TRIMBLE_PROVIDERS=FALSE for desktop builds.")
+  endif ()
+  find_package(
+    Qt6
+    COMPONENTS WebSockets
     REQUIRED
   )
 endif ()
