@@ -107,6 +107,18 @@ jobs:
               -k "$MERGINSECRETS_DECRYPT_KEY" \
               -md md5
 
+      - name: Extract Trimble App ID
+        env:
+          TRIMBLE_SECRETS_DECRYPT_KEY: ${{ secrets.TRIMBLE_SECRETS_DECRYPT_KEY }}
+        run: |
+          cd mm/app/position/providers/
+          $HOMEBREW_PREFIX/bin/openssl \
+              aes-256-cbc -d \
+              -in trimblesecrets.cpp.enc \
+              -out trimblesecrets.cpp \
+              -k "$TRIMBLE_SECRETS_DECRYPT_KEY" \
+              -md md5
+
       - name: Configure Keychain
         run: |
           security create-keychain -p "" "$KEYCHAIN"
@@ -164,6 +176,7 @@ jobs:
             -D CMAKE_SYSTEM_PROCESSOR=aarch64 \
             -DIOS=TRUE \
             -DUSE_MM_SERVER_API_KEY=TRUE \
+            -DWITH_TRIMBLE_PROVIDERS=TRUE \
             -DUSE_KEYCHAIN=No \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
             -G "Xcode" \

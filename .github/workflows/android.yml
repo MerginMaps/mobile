@@ -112,6 +112,18 @@ jobs:
               -k "$MERGINSECRETS_DECRYPT_KEY" \
               -md md5
 
+      - name: Extract Trimble App ID
+        env:
+          TRIMBLE_SECRETS_DECRYPT_KEY: ${{ secrets.TRIMBLE_SECRETS_DECRYPT_KEY }}
+        run: |
+          cd mm/app/position/providers/
+          $HOMEBREW_PREFIX/bin/openssl \
+              aes-256-cbc -d \
+              -in trimblesecrets.cpp.enc \
+              -out trimblesecrets.cpp \
+              -k "$TRIMBLE_SECRETS_DECRYPT_KEY" \
+              -md md5
+
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
@@ -237,6 +249,7 @@ jobs:
             -DQT_ANDROID_SIGN_APK=Yes \
             -DQT_ANDROID_SIGN_AAB=Yes \
             -DUSE_MM_SERVER_API_KEY=Yes \
+            -DWITH_TRIMBLE_PROVIDERS=TRUE \
             -DUSE_KEYCHAIN=No \
             -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" \
             -GNinja \
