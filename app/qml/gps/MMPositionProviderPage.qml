@@ -133,7 +133,7 @@ MMComponents.MMPage {
       text: qsTr( "Connect new receiver" )
 
       onClicked: {
-        if ( __haveBluetooth ) {
+        if ( __haveBluetooth || __withTrimbleProviders ) {
           providerTypeDrawer.open()
         }
         else {
