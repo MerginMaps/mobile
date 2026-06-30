@@ -1,0 +1,99 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+        "USE_MM_SERVER_API_KEY": "FALSE",
+        "ENABLE_TESTS": "FALSE"
+      }
+    },
+    {
+      "name": "macos-base",
+      "displayName": "macOS arm64 Debug",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/macos",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-osx",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "ENABLE_TESTS": "TRUE"
+      }
+    },
+    {
+      "name": "ios-base",
+      "displayName": "iOS arm64 RelWithDebInfo",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Xcode",
+      "binaryDir": "${sourceDir}/build/ios",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "arm64-osx",
+        "VCPKG_TARGET_TRIPLET": "arm64-ios",
+        "CMAKE_SYSTEM_NAME": "iOS",
+        "CMAKE_SYSTEM_PROCESSOR": "aarch64",
+        "IOS": "TRUE",
+        "ENABLE_BITCODE": "OFF",
+        "ENABLE_ARC": "ON",
+        "CMAKE_CXX_VISIBILITY_PRESET": "hidden",
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "14.0"
+      }
+    },
+    {
+      "name": "android-arm64-base",
+      "displayName": "Android arm64-v8a Release",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/android-arm64",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "arm64-osx",
+        "VCPKG_TARGET_TRIPLET": "arm64-android",
+        "VCPKG_INSTALL_OPTIONS": "--allow-unsupported",
+        "CMAKE_BUILD_TYPE": "Release",
+        "ANDROID_ABI": "arm64-v8a",
+        "QT_ANDROID_ABIS": "arm64-v8a",
+        "USE_KEYCHAIN": "FALSE",
+        "ANDROID_SDK_ROOT": "$env{ANDROID_SDK_ROOT}",
+        "WITH_TRIMBLE_PROVIDERS": "TRUE"
+      }
+    },
+    {
+      "name": "android-arm-base",
+      "displayName": "Android armeabi-v7a Release",
+      "hidden": true,
+      "inherits": "base",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/android-arm",
+      "cacheVariables": {
+        "VCPKG_HOST_TRIPLET": "arm64-osx",
+        "VCPKG_TARGET_TRIPLET": "arm-android",
+        "VCPKG_INSTALL_OPTIONS": "--allow-unsupported",
+        "CMAKE_BUILD_TYPE": "Release",
+        "ANDROID_ABI": "armeabi-v7a",
+        "QT_ANDROID_ABIS": "armeabi-v7a",
+        "USE_KEYCHAIN": "FALSE",
+        "ANDROID_SDK_ROOT": "$env{ANDROID_SDK_ROOT}"
+      }
+    },
+    {
+      "name": "android-arm64-signed-base",
+      "displayName": "Android arm64-v8a Release (signed)",
+      "hidden": true,
+      "inherits": "android-arm64-base",
+      "cacheVariables": {
+        "QT_ANDROID_SIGN_APK": "YES",
+        "QT_ANDROID_SIGN_AAB": "YES"
+      }
+    }
+  ],
+  "buildPresets": []
+}

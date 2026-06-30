@@ -123,16 +123,16 @@ GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
   switch ( diffStatus )
   {
     case 4:
-      pos.qualityIndicator = QgsGpsInformation::QualityIndicator::RTK;
+      pos.qualityIndicator = Qgis::GpsQualityIndicator::RTK;
       break;
     case 5:
-      pos.qualityIndicator = QgsGpsInformation::QualityIndicator::FloatRTK;
+      pos.qualityIndicator = Qgis::GpsQualityIndicator::FloatRTK;
       break;
     case 2:
-      pos.qualityIndicator = QgsGpsInformation::QualityIndicator::Differential;
+      pos.qualityIndicator = Qgis::GpsQualityIndicator::DGPS;
       break;
     default:
-      pos.qualityIndicator = QgsGpsInformation::QualityIndicator::GPS;
+      pos.qualityIndicator = Qgis::GpsQualityIndicator::GPS;
       break;
   }
 

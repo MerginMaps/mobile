@@ -27,6 +27,8 @@ TrimbleRegistration::TrimbleRegistration( QObject *parent )
 {
 }
 
+TrimbleRegistration::~TrimbleRegistration() = default;
+
 void TrimbleRegistration::requestRegistration( const QString &appId )
 {
   QDesktopServices::setUrlHandler( QString::fromLatin1( TMM_CALLBACK_SCHEME ), this, "handleCallback" );
