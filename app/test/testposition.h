@@ -47,6 +47,12 @@ class TestPosition: public QObject
     void testPositionTransformerNetworkPosition();
     void testPositionTransformerSimulatedPosition();
 
+#ifdef WITH_TRIMBLE_PROVIDERS
+    void testTrimbleMessageParser();
+    void testTrimbleFrameResolver();
+    void testTrimbleAntennaHeight();
+#endif
+
   private:
     PositionKit *positionKit;
 };
