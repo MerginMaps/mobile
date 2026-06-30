@@ -66,18 +66,18 @@ bool RememberAttributesController::shouldRememberValue( const QgsVectorLayer *la
 {
   // global switch off of the functionality
   if ( !mRememberValuesAllowed )
-  return false;
+    return false;
 
   if ( !layer || !sRememberedValues.contains( keyForLayer( layer ) ) )
     return false;
 
-    const RememberedValues from = sRememberedValues[keyForLayer( layer )];
-    if ( fieldIndex < 0 || fieldIndex >= from.attributeFilter.size() )
-      // serious screw-up, mismatch between layer and stored layer?
-      return false;
+  const RememberedValues from = sRememberedValues[keyForLayer( layer )];
+  if ( fieldIndex < 0 || fieldIndex >= from.attributeFilter.size() )
+    // serious screw-up, mismatch between layer and stored layer?
+    return false;
 
-      return from.attributeFilter.at( fieldIndex );
-    }
+  return from.attributeFilter.at( fieldIndex );
+}
 
 bool RememberAttributesController::setShouldRememberValue( const QgsVectorLayer *layer, int fieldIndex, bool shouldRemember )
 {
@@ -113,25 +113,25 @@ bool RememberAttributesController::rememberedValue(
 {
   // global switch off of the functionality
   if ( !mRememberValuesAllowed )
-  return false;
+    return false;
 
   if ( !layer || !sRememberedValues.contains( keyForLayer( layer ) ) )
     return false;
 
-    const RememberedValues from = sRememberedValues[keyForLayer( layer )];
-    if ( !from.feature.isValid() )
-      return false;
+  const RememberedValues from = sRememberedValues[keyForLayer( layer )];
+  if ( !from.feature.isValid() )
+    return false;
 
-      QgsAttributes fromAttributes = from.feature.attributes();
-      if ( fieldIndex < 0 || fieldIndex >= fromAttributes.length() )
-        // serious screw-up, mismatch between layer and stored layer?
-        return false;
+  QgsAttributes fromAttributes = from.feature.attributes();
+  if ( fieldIndex < 0 || fieldIndex >= fromAttributes.length() )
+    // serious screw-up, mismatch between layer and stored layer?
+    return false;
 
-        if ( !from.attributeFilter.at( fieldIndex ) )
-          // user do not want to remember this value
-          return false;
+  if ( !from.attributeFilter.at( fieldIndex ) )
+    // user do not want to remember this value
+    return false;
 
-          // got it
-          value = fromAttributes.at( fieldIndex );
-          return true;
-        }
+  // got it
+  value = fromAttributes.at( fieldIndex );
+  return true;
+}

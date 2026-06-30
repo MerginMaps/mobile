@@ -24,20 +24,20 @@ ValueRelationFeaturesModel::~ValueRelationFeaturesModel() = default;
 QVariant ValueRelationFeaturesModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() )
-  return QVariant();
+    return QVariant();
 
   const int row = index.row();
   if ( row < 0 || row >= mFeatures.count() )
     return QVariant();
 
-    if ( role == KeyColumn )
-      return mFeatures.at( row ).feature().attribute( mKeyFieldIndex ).toString();
+  if ( role == KeyColumn )
+    return mFeatures.at( row ).feature().attribute( mKeyFieldIndex ).toString();
 
-      if ( role == ValueColumn )
-        return mFeatures.at( row ).feature().attribute( mValueFieldIndex ).toString();
+  if ( role == ValueColumn )
+    return mFeatures.at( row ).feature().attribute( mValueFieldIndex ).toString();
 
-        return LayerFeaturesModel::data( index, role );
-      }
+  return LayerFeaturesModel::data( index, role );
+}
 
 QHash<int, QByteArray> ValueRelationFeaturesModel::roleNames() const
 {

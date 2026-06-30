@@ -57,7 +57,7 @@ int FeaturesModel::rowCount( const QModelIndex &parent ) const
   // For list models only the root node (an invalid parent) should return the list's size. For all
   // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
   if ( parent.isValid() )
-  return 0;
+    return 0;
 
   return mFeatures.count();
 }
@@ -65,8 +65,8 @@ int FeaturesModel::rowCount( const QModelIndex &parent ) const
 QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) const
 {
   if ( !featurePair.layer() || !featurePair.layer()->isValid() )
-{
-  CoreUtils::log( QStringLiteral( "Features Model" ), QStringLiteral( "Received invalid feature layer pair!" ) );
+  {
+    CoreUtils::log( QStringLiteral( "Features Model" ), QStringLiteral( "Received invalid feature layer pair!" ) );
     return tr( "Unknown title" );
   }
 
@@ -78,7 +78,7 @@ QVariant FeaturesModel::featureTitle( const FeatureLayerPair &featurePair ) cons
   title = expr.evaluate( &context ).toString();
 
   if ( title.isEmpty() )
-  return featurePair.feature().id();
+    return featurePair.feature().id();
 
   return title;
 }

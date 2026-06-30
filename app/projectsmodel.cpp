@@ -61,83 +61,83 @@ void ProjectsModel::initializeProjectsModel()
 QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() )
-  return QVariant();
+    return QVariant();
 
   if ( index.row() < 0 || index.row() >= mProjects.size() )
     return QVariant();
 
-    const Project project = mProjects.at( index.row() );
+  const Project project = mProjects.at( index.row() );
 
-    switch ( role )
+  switch ( role )
+  {
+    case ProjectName: return QVariant( project.projectName() );
+    case ProjectNamespace: return QVariant( project.projectNamespace() );
+    case ProjectFullName: return QVariant( project.fullName() );
+    case ProjectId: return QVariant( project.id() );
+    case ProjectIsLocal: return QVariant( project.isLocal() );
+    case ProjectIsMergin: return QVariant( project.isMergin() );
+    case ProjectStatus: return QVariant( project.isMergin() ? project.mergin.status : ProjectStatus::NoVersion );
+    case ProjectFilePath: return QVariant( project.isLocal() ? project.local.qgisProjectFilePath : QString() );
+    case ProjectDirectory: return QVariant( project.isLocal() ? project.local.projectDir : QString() );
+    case ProjectIsValid:
     {
-      case ProjectName: return QVariant( project.projectName() );
-        case ProjectNamespace: return QVariant( project.projectNamespace() );
-        case ProjectFullName: return QVariant( project.fullName() );
-        case ProjectId: return QVariant( project.id() );
-        case ProjectIsLocal: return QVariant( project.isLocal() );
-        case ProjectIsMergin: return QVariant( project.isMergin() );
-        case ProjectStatus: return QVariant( project.isMergin() ? project.mergin.status : ProjectStatus::NoVersion );
-        case ProjectFilePath: return QVariant( project.isLocal() ? project.local.qgisProjectFilePath : QString() );
-        case ProjectDirectory: return QVariant( project.isLocal() ? project.local.projectDir : QString() );
-        case ProjectIsValid:
+      if ( !project.isLocal() )
+        return true; // Mergin projects are by default valid, remote error only affects syncing, not opening of a project
+      return project.local.projectError.isEmpty();
+    }
+    case ProjectDescription:
+    {
+      if ( project.isLocal() )
+      {
+        if ( !project.local.projectError.isEmpty() )
         {
-          if ( !project.isLocal() )
-            return true; // Mergin projects are by default valid, remote error only affects syncing, not opening of a project
-          return project.local.projectError.isEmpty();
+          return QVariant( project.local.projectError );
         }
-        case ProjectDescription:
+        else
         {
-          if ( project.isLocal() )
+          ProjectStatus::Status status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+
+          if ( status == ProjectStatus::NeedsSync )
           {
-            if ( !project.local.projectError.isEmpty() )
-            {
-              return QVariant( project.local.projectError );
-            }
-            else
-            {
-              ProjectStatus::Status status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
-
-              if ( status == ProjectStatus::NeedsSync )
-              {
-                return QVariant( tr( "Pending changes to synchronise" ) );
-              }
-
-              if ( status == ProjectStatus::NoVersion )
-              {
-                return QVariant( tr( "Local project, not uploaded" ) );
-              }
-            }
-
-            QFileInfo fi( project.local.projectDir );
-
-            // Up to date
-            // lastModified of projectDir is not reliable - gpkg file may have modified header after opening it. See more #1320
-            return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( fi.lastModified().toUTC() ) ) );
-          }
-          else if ( project.isMergin() )
-          {
-            return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( project.mergin.serverUpdated.toUTC() ) ) );
+            return QVariant( tr( "Pending changes to synchronise" ) );
           }
 
-          // This should not happen
-          CoreUtils::log( "Project error", "Found project that is not downloaded nor remote" );
-          return QVariant();
+          if ( status == ProjectStatus::NoVersion )
+          {
+            return QVariant( tr( "Local project, not uploaded" ) );
+          }
         }
-        case ProjectIsActiveProject:
-        {
-          return QVariant( project.id() == mActiveProjectId );
-        }
-        default:
-        {
-          if ( !project.isMergin() ) return QVariant();
 
-          // Roles only for projects that has mergin part
-          if ( role == ProjectSyncPending ) return QVariant( mSyncManager->hasPendingSync( project.fullName() ) );
-          else if ( role == ProjectSyncProgress ) return QVariant( mSyncManager->syncProgress( project.fullName() ) );
-          else if ( role == ProjectRemoteError ) return QVariant( project.mergin.remoteError );
-          return QVariant();
-        }
+        QFileInfo fi( project.local.projectDir );
+
+        // Up to date
+        // lastModified of projectDir is not reliable - gpkg file may have modified header after opening it. See more #1320
+        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( fi.lastModified().toUTC() ) ) );
       }
+      else if ( project.isMergin() )
+      {
+        return QVariant( tr( "Updated %1" ).arg( InputUtils::formatDateTimeDiff( project.mergin.serverUpdated.toUTC() ) ) );
+      }
+
+      // This should not happen
+      CoreUtils::log( "Project error", "Found project that is not downloaded nor remote" );
+      return QVariant();
+    }
+    case ProjectIsActiveProject:
+    {
+      return QVariant( project.id() == mActiveProjectId );
+    }
+    default:
+    {
+      if ( !project.isMergin() ) return QVariant();
+
+      // Roles only for projects that has mergin part
+      if ( role == ProjectSyncPending ) return QVariant( mSyncManager->hasPendingSync( project.fullName() ) );
+      else if ( role == ProjectSyncProgress ) return QVariant( mSyncManager->syncProgress( project.fullName() ) );
+      else if ( role == ProjectRemoteError ) return QVariant( project.mergin.remoteError );
+      return QVariant();
+    }
+  }
 }
 
 QModelIndex ProjectsModel::index( int row, int col, const QModelIndex &parent ) const
@@ -607,9 +607,9 @@ void ProjectsModel::setModelType( ProjectsModel::ProjectModelTypes modelType )
 QString ProjectsModel::modelTypeToFlag() const
 {
   switch ( mModelType )
-{
-  case WorkspaceProjectsModel:
-    return QStringLiteral( "workspace" );
+  {
+    case WorkspaceProjectsModel:
+      return QStringLiteral( "workspace" );
     case PublicProjectsModel:
       return QStringLiteral( "public" );
     default:
@@ -664,9 +664,9 @@ int ProjectsModel::projectIndexFromId( const QString &projectId ) const
 
 Project ProjectsModel::projectFromId( const QString &projectId ) const
 {
-for ( const Project &project : mProjects )
-{
-  if ( project.id() == projectId )
+  for ( const Project &project : mProjects )
+  {
+    if ( project.id() == projectId )
     {
       return project;
     }

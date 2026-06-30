@@ -40,59 +40,59 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
 {
   Q_ASSERT( mController );
   if ( !index.isValid() )
-  return QVariant();
+    return QVariant();
 
   const int row = index.row();
   if ( !rowIsValid( row ) )
     return QVariant();
 
-    const QUuid uuid = mData[row];
-    const FormItem *item = mController->formItem( uuid );
-    if ( !item )
+  const QUuid uuid = mData[row];
+  const FormItem *item = mController->formItem( uuid );
+  if ( !item )
+    return QVariant();
+
+  switch ( role )
+  {
+    case Name:
+      return item->name();
+    case ShowName:
+      return item->showName();
+    case Type:
+      return item->type();
+    case AttributeValue:
+      return mController->formValue( item->fieldIndex() );
+    case RawValueIsNull:
+      return item->rawValue().isNull();
+    case AttributeEditable:
+      return item->isEditable();
+    case AttributeFormModel::EditorWidget:
+      return item->editorWidgetType();
+    case AttributeFormModel::EditorWidgetConfig:
+      return item->editorWidgetConfig();
+    case AttributeFormModel::RememberValue:
+      return mController->formShouldRememberValue( item->fieldIndex() );
+    case AttributeFormModel::Field:
+      return item->field();
+    case FieldIndex:
+      return item->fieldIndex();
+    case AttributeFormModel::Group:
+      return item->groupName();
+    case Visible:
+      return item->isVisible();
+    case ValidationMessage:
+      return item->validationMessage();
+    case ValidationStatus:
+      return item->validationStatus();
+    case Relation:
+      return QVariant::fromValue( item->relation() );
+    case RawValue:
+      return item->rawValue();
+    case HasMixedValues:
+      return item->rawValue().userType() == qMetaTypeId< MixedAttributeValue >();
+
+    default:
       return QVariant();
-
-      switch ( role )
-      {
-        case Name:
-          return item->name();
-          case ShowName:
-            return item->showName();
-          case Type:
-            return item->type();
-          case AttributeValue:
-            return mController->formValue( item->fieldIndex() );
-          case RawValueIsNull:
-            return item->rawValue().isNull();
-          case AttributeEditable:
-            return item->isEditable();
-          case AttributeFormModel::EditorWidget:
-            return item->editorWidgetType();
-          case AttributeFormModel::EditorWidgetConfig:
-            return item->editorWidgetConfig();
-          case AttributeFormModel::RememberValue:
-            return mController->formShouldRememberValue( item->fieldIndex() );
-          case AttributeFormModel::Field:
-            return item->field();
-          case FieldIndex:
-            return item->fieldIndex();
-          case AttributeFormModel::Group:
-            return item->groupName();
-          case Visible:
-            return item->isVisible();
-          case ValidationMessage:
-            return item->validationMessage();
-          case ValidationStatus:
-            return item->validationStatus();
-          case Relation:
-            return QVariant::fromValue( item->relation() );
-          case RawValue:
-            return item->rawValue();
-          case HasMixedValues:
-            return item->rawValue().userType() == qMetaTypeId< MixedAttributeValue >();
-
-          default:
-            return QVariant();
-        }
+  }
 }
 
 void AttributeFormModel::onFormDataChanged( const QUuid id, const QVector<int> roles )

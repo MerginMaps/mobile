@@ -354,7 +354,7 @@ QDateTime PositionTrackingManager::startTime() const
 QString PositionTrackingManager::elapsedTimeText() const
 {
   if ( !mIsTrackingPosition )
-  return QString();
+    return QString();
 
   qint64 totalSecs = mTrackingStartTime.secsTo( QDateTime::currentDateTime() );
   int hours = totalSecs / 3600;

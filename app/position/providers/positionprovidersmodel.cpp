@@ -81,7 +81,7 @@ int PositionProvidersModel::rowCount( const QModelIndex & ) const
 QVariant PositionProvidersModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-  return {};
+    return {};
 
   const int row = index.row();
 
@@ -90,32 +90,32 @@ QVariant PositionProvidersModel::data( const QModelIndex &index, const int role 
   if ( row < 0 || row > mProviders.count() )
     return {};
 
-    switch ( role )
+  switch ( role )
+  {
+    case DataRoles::ProviderName:
+      return provider.name;
+
+    case DataRoles::ProviderDescription:
+      return provider.description;
+
+    case DataRoles::ProviderId:
+      return provider.providerId;
+
+    case DataRoles::ProviderType:
+      return provider.providerType;
+
+    case DataRoles::ProviderGroup:
     {
-      case DataRoles::ProviderName:
-        return provider.name;
-
-      case DataRoles::ProviderDescription:
-        return provider.description;
-
-      case DataRoles::ProviderId:
-        return provider.providerId;
-
-      case DataRoles::ProviderType:
-        return provider.providerType;
-
-      case DataRoles::ProviderGroup:
+      if ( provider.providerType == QStringLiteral( "internal" ) )
       {
-        if ( provider.providerType == QStringLiteral( "internal" ) )
-          {
-            return QStringLiteral( "internal" );
-          }
-          return QStringLiteral( "external" );
-        }
-
-        default:
-          return {};
+        return QStringLiteral( "internal" );
       }
+      return QStringLiteral( "external" );
+    }
+
+    default:
+      return {};
+  }
 }
 
 void PositionProvidersModel::removeProvider( const QString &providerId )

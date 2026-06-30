@@ -4408,17 +4408,17 @@ void MerginApi::reloadProjectRoleReplyFinished()
 QString MerginApi::getCachedProjectRole( const QString &projectFullName ) const
 {
   if ( projectFullName.isEmpty() )
-  return QString();
+    return QString();
 
   QString projectDir = mLocalProjects.projectFromMerginName( projectFullName ).projectDir;
 
   if ( projectDir.isEmpty() )
     return QString();
 
-    MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
+  MerginProjectMetadata cachedProjectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
 
-    return cachedProjectMetadata.role;
-  }
+  return cachedProjectMetadata.role;
+}
 
 void MerginApi::startSsoFlow( const QString &clientId )
 {

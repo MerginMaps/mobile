@@ -442,8 +442,8 @@ void RecordingMapTool::removePoint()
 bool RecordingMapTool::hasValidGeometry() const
 {
   if ( mActiveLayer )
-{
-  if ( mRecordedGeometry.isEmpty() )
+  {
+    if ( mRecordedGeometry.isEmpty() )
     {
       return false;
     }
@@ -512,32 +512,32 @@ bool RecordingMapTool::hasValidGeometry() const
 void RecordingMapTool::fixZM( QgsPoint &point ) const
 {
   if ( !mActiveLayer )
-  return;
+    return;
 
   bool layerIs3D = QgsWkbTypes::hasZ( mActiveLayer->wkbType() );
-    bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
+  bool pointIs3D = QgsWkbTypes::hasZ( point.wkbType() );
 
-    bool layerIsM = QgsWkbTypes::hasM( mActiveLayer->wkbType() );
-    bool pointIsM = QgsWkbTypes::hasM( point.wkbType() );
+  bool layerIsM = QgsWkbTypes::hasM( mActiveLayer->wkbType() );
+  bool pointIsM = QgsWkbTypes::hasM( point.wkbType() );
 
-    if ( layerIs3D )
+  if ( layerIs3D )
   {
     if ( !pointIs3D )
-      {
-        point.addZValue();
-      }
-    }
-    else /* !layerIs3D */
     {
-      if ( pointIs3D )
-      {
-        point.dropZValue();
-      }
+      point.addZValue();
     }
+  }
+  else /* !layerIs3D */
+  {
+    if ( pointIs3D )
+    {
+      point.dropZValue();
+    }
+  }
 
   if ( layerIsM )
-{
-  if ( !pointIsM )
+  {
+    if ( !pointIsM )
     {
       point.addMValue();
     }
@@ -1143,8 +1143,8 @@ void RecordingMapTool::updateVertex( const Vertex &vertex, const QgsPoint &point
 QgsPoint RecordingMapTool::vertexMapCoors( const Vertex &vertex ) const
 {
   if ( vertex.isValid() && mActiveLayer && mapSettings() )
-{
-  return InputUtils::transformPoint( mActiveLayer->crs(), mapSettings()->destinationCrs(), mActiveLayer->transformContext(), vertex.coordinates() );
+  {
+    return InputUtils::transformPoint( mActiveLayer->crs(), mapSettings()->destinationCrs(), mActiveLayer->transformContext(), vertex.coordinates() );
   }
 
   return QgsPoint();
@@ -1378,11 +1378,11 @@ QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
 bool RecordingMapTool::hasChanges() const
 {
   if ( !mActiveLayer )
-{
-  return false;
-}
+  {
+    return false;
+  }
 
-if ( mActiveLayer->isEditable() && mActiveLayer->undoStack() )
+  if ( mActiveLayer->isEditable() && mActiveLayer->undoStack() )
   {
     return mActiveLayer->undoStack()->index() > mMinUndoStackIndex;
   }

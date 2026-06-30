@@ -17,10 +17,10 @@
 QString HotReload::syncScript() const
 {
   return QString( "#!/bin/sh \n"
-         "echo 'Syncing modified files...' \n"
-         "rsync -rau \"%1/qml/\" HotReload/qml/ \n"
-         "rsync -rau \"%1/../app/qml/\" HotReload/app/qml/ \n" )
-  .arg( GALLERY_SOURCE_DIR );
+                  "echo 'Syncing modified files...' \n"
+                  "rsync -rau \"%1/qml/\" HotReload/qml/ \n"
+                  "rsync -rau \"%1/../app/qml/\" HotReload/app/qml/ \n" )
+         .arg( GALLERY_SOURCE_DIR );
 }
 HotReload::HotReload( QQmlApplicationEngine &engine, QObject *parent ):
   _engine( engine )

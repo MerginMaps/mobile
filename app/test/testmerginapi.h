@@ -75,8 +75,8 @@ class MockNetworkManager : public QNetworkAccessManager
     QNetworkReply *createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData = nullptr ) override
     {
       if ( mShouldFail )
-    {
-      auto *reply = new MockReply( request, op, this, mErrorCode );
+      {
+        auto *reply = new MockReply( request, op, this, mErrorCode );
         return reply;
       }
       return QNetworkAccessManager::createRequest( op, request, outgoingData );

@@ -102,8 +102,8 @@ void AppSettings::setActiveProject( const QString &value )
 QString AppSettings::defaultProjectName() const
 {
   if ( !mDefaultProject.isEmpty() )
-{
-  const QFileInfo info( mDefaultProject );
+  {
+    const QFileInfo info( mDefaultProject );
     return info.baseName();
   }
   return { "" };

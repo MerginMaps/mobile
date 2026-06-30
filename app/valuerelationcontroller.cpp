@@ -38,23 +38,23 @@ ValueRelationController::~ValueRelationController()
 QStringList ValueRelationController::qgisFormatToArray( const QVariant &qgsValue ) const
 {
   if ( !mIsInitialized )
-{
-  CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert QGIS format to array, but the class is not initialized!" ) );
+  {
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert QGIS format to array, but the class is not initialized!" ) );
     return {};
   }
 
   if ( qgsValue.isNull() || qgsValue.toString().isEmpty() )
     return {};
 
-    if ( mIsMultiSelection )
+  if ( mIsMultiSelection )
   {
     const QString str = qgsValue.toString().trimmed();
 
-      if ( str.startsWith( '{' ) || str.startsWith( '[' ) )
-      {
-        return QgsValueRelationFieldFormatter::valueToStringList( qgsValue );
-      }
+    if ( str.startsWith( '{' ) || str.startsWith( '[' ) )
+    {
+      return QgsValueRelationFieldFormatter::valueToStringList( qgsValue );
     }
+  }
 
   return { qgsValue.toString() };
 }
@@ -62,8 +62,8 @@ QStringList ValueRelationController::qgisFormatToArray( const QVariant &qgsValue
 QString ValueRelationController::arrayToQgisFormat( const QStringList &keys ) const
 {
   if ( !mIsInitialized )
-{
-  CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert array to QGIS format, but the class is not initialized!" ) );
+  {
+    CoreUtils::log( QStringLiteral( "Value Relation" ), QStringLiteral( "Attempted to convert array to QGIS format, but the class is not initialized!" ) );
     return {};
   }
 
@@ -71,14 +71,14 @@ QString ValueRelationController::arrayToQgisFormat( const QStringList &keys ) co
   if ( keys.isEmpty() )
     return {};
 
-    if ( mIsMultiSelection )
+  if ( mIsMultiSelection )
   {
     return QString( "{%1}" ).arg( keys.join( ',' ) );
-    }
-    else
-    {
-      return keys.at( 0 );
-    }
+  }
+  else
+  {
+    return keys.at( 0 );
+  }
 }
 
 void ValueRelationController::lookupDisplayTextOnValueChanged( const QString &currentValue )

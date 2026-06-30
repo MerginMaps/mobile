@@ -562,16 +562,16 @@ class MMStyle: public QObject
     double toolbarHeight() const
     {
       if ( mSafeAreaBottom > 2 )
-    {
-      return 54 * mDp;
+      {
+        return 54 * mDp;
+      }
+      else
+      {
+        return 58 * mDp;
+      }
     }
-    else
-    {
-      return 58 * mDp;
-    }
-  }
 
-  double safeAreaTop() const { return mSafeAreaTop; };
+    double safeAreaTop() const { return mSafeAreaTop; };
     double safeAreaRight() const { return mSafeAreaRight; };
     double safeAreaBottom() const { return mSafeAreaBottom; };
     double safeAreaLeft() const { return mSafeAreaLeft; };

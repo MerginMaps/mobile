@@ -127,12 +127,12 @@ QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featu
 int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const
 {
   if ( !layer )
-{
-  return -1;
-}
+  {
+    return -1;
+  }
 
-QgsFields fields = layer->fields();
-for ( int i = 0; i < fields.size(); i++ )
+  QgsFields fields = layer->fields();
+  for ( int i = 0; i < fields.size(); i++ )
   {
     // Lets try by widget type
     QgsEditorWidgetSetup setup = layer->editorWidgetSetup( i );

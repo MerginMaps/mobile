@@ -54,9 +54,9 @@ void LocalProjectsManager::reloadDataDir()
 
 LocalProject LocalProjectsManager::projectFromDirectory( const QString &projectDir ) const
 {
-for ( const LocalProject &info : mProjects )
-{
-  if ( info.projectDir == projectDir )
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.projectDir == projectDir )
       return info;
   }
   return LocalProject();
@@ -64,9 +64,9 @@ for ( const LocalProject &info : mProjects )
 
 LocalProject LocalProjectsManager::projectFromProjectFilePath( const QString &projectFilePath ) const
 {
-for ( const LocalProject &info : mProjects )
-{
-  if ( info.qgisProjectFilePath == projectFilePath )
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.qgisProjectFilePath == projectFilePath )
       return info;
   }
   return LocalProject();
@@ -74,9 +74,9 @@ for ( const LocalProject &info : mProjects )
 
 LocalProject LocalProjectsManager::projectFromProjectId( const QString &projectId ) const
 {
-for ( const LocalProject &info : mProjects )
-{
-  if ( info.id() == projectId )
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.id() == projectId )
       return info;
   }
   return LocalProject();
@@ -84,9 +84,9 @@ for ( const LocalProject &info : mProjects )
 
 LocalProject LocalProjectsManager::projectFromMerginName( const QString &projectFullName ) const
 {
-for ( const LocalProject &info : mProjects )
-{
-  if ( info.id() == projectFullName )
+  for ( const LocalProject &info : mProjects )
+  {
+    if ( info.id() == projectFullName )
       return info;
   }
   return LocalProject();

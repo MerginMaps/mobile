@@ -23,18 +23,18 @@
 - ( void )dealloc
 {
   if ( mManager )
-{
-  [mManager stopUpdatingLocation];
+  {
+    [mManager stopUpdatingLocation];
     [mManager release];
     mManager = nil;
   }
 
   if ( mObserver )
-{
-  mObserver = nil;
-}
+  {
+    mObserver = nil;
+  }
 
-[super dealloc];
+  [super dealloc];
 }
 
 -( NSString * ) setup:( double )distanceFilter

@@ -143,24 +143,24 @@ struct Project
   {
     if ( isMergin() ) return mergin.projectName;
     else if ( isLocal() ) return local.projectName;
-      return QString();
-    }
+    return QString();
+  }
 
-QString projectNamespace() const
+  QString projectNamespace() const
   {
     if ( isMergin() ) return mergin.projectNamespace;
     else if ( isLocal() ) return local.projectNamespace;
-      return QString();
-    }
+    return QString();
+  }
 
-QString id() const
+  QString id() const
   {
     if ( isMergin() ) return mergin.id();
     else if ( isLocal() ) return local.id();
-      return QString();
-    }
+    return QString();
+  }
 
-QString fullName() const
+  QString fullName() const
   {
     return id();
   }

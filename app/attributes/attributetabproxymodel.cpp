@@ -27,7 +27,7 @@ AttributeTabProxyModel::~AttributeTabProxyModel() = default;
 bool AttributeTabProxyModel::AttributeTabProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
 {
   if ( !sourceModel() )
-  return false;
+    return false;
   QModelIndex sourceIndex = sourceModel()->index( sourceRow, 0, sourceParent );
   return sourceModel()->data( sourceIndex, AttributeTabModel::AttributeTabRoles::Visible ).toBool();
 }
@@ -35,7 +35,7 @@ bool AttributeTabProxyModel::AttributeTabProxyModel::filterAcceptsRow( int sourc
 AttributeFormProxyModel *AttributeTabProxyModel::attributeFormProxyModel( int sourceRow ) const
 {
   if ( !sourceModel() )
-  return nullptr;
+    return nullptr;
 
   return qobject_cast<AttributeTabModel *>( sourceModel() )->attributeFormProxyModel( sourceRow );
 }

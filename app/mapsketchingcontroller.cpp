@@ -126,7 +126,7 @@ void MapSketchingController::finishDigitizing()
 void MapSketchingController::redo() const
 {
   if ( !mLayer )
-  return;
+    return;
 
   mLayer->undoStack()->redo();
 }
@@ -134,7 +134,7 @@ void MapSketchingController::redo() const
 void MapSketchingController::undo() const
 {
   if ( !mLayer )
-  return;
+    return;
 
   mLayer->undoStack()->undo();
 }
@@ -197,7 +197,7 @@ InputMapSettings *MapSketchingController::mapSettings() const
 bool MapSketchingController::canRedo() const
 {
   if ( !mLayer )
-  return false;
+    return false;
 
   return mLayer->undoStack()->canRedo();
 }
@@ -205,7 +205,7 @@ bool MapSketchingController::canRedo() const
 bool MapSketchingController::canUndo() const
 {
   if ( !mLayer )
-  return false;
+    return false;
 
   return mLayer->undoStack()->canUndo();
 }

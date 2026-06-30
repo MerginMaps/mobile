@@ -136,8 +136,8 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 QString PositionKit::positionProviderName() const
 {
   if ( isMockPosition() )
-{
-  return tr( "External (Mock)" );
+  {
+    return tr( "External (Mock)" );
   }
   return mPositionProvider->name();
 }
@@ -526,7 +526,7 @@ double PositionKit::geoidSeparation() const
 QgsPoint PositionKit::positionCoordinate() const
 {
   if ( mPosition.hasValidPosition() )
-  return { mPosition.longitude, mPosition.latitude, mPosition.elevation };
+    return { mPosition.longitude, mPosition.latitude, mPosition.elevation };
 
   return {};
 }
@@ -656,13 +656,13 @@ double PositionKit::antennaHeightToApply() const
 {
   // If the provider already subtracted antenna height, the app must apply zero.
   if ( mPosition.antennaHeightApplied )
-  return 0;
+    return 0;
 
   if ( mAppSettings )
     return mAppSettings->gpsAntennaHeight();
 
-    return 0;
-  }
+  return 0;
+}
 
 bool PositionKit::antennaHeightApplied() const
 {

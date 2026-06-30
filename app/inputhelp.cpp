@@ -92,8 +92,8 @@ QString InputHelp::merginDashboardLink() const
 QString InputHelp::merginSubscriptionLink() const
 {
   if ( mMerginApi && mMerginApi->apiSupportsSubscriptions() )
-{
-  return merginLinkHelper( "subscription", utmTagSubscription );
+  {
+    return merginLinkHelper( "subscription", utmTagSubscription );
   }
   return merginDashboardLink();
 }

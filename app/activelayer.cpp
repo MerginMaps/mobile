@@ -23,7 +23,7 @@ QgsMapLayer *ActiveLayer::layer() const
 QgsVectorLayer *ActiveLayer::vectorLayer() const
 {
   if ( mLayer )
-  return qobject_cast<QgsVectorLayer *>( mLayer );
+    return qobject_cast<QgsVectorLayer *>( mLayer );
 
   return nullptr;
 }
@@ -31,7 +31,7 @@ QgsVectorLayer *ActiveLayer::vectorLayer() const
 QString ActiveLayer::layerId() const
 {
   if ( mLayer )
-  return mLayer->id();
+    return mLayer->id();
 
   return QString();
 }
@@ -39,7 +39,7 @@ QString ActiveLayer::layerId() const
 QString ActiveLayer::layerName() const
 {
   if ( mLayer )
-  return mLayer->name();
+    return mLayer->name();
 
   return QString();
 }

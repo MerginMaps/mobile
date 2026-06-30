@@ -74,9 +74,9 @@ FeatureLayerPairs StaticFeaturesModel::features() const
 
 bool StaticFeaturesModel::contains( const FeatureLayerPair &pair ) const
 {
-for ( const FeatureLayerPair &feat : std::as_const( mFeatures ) )
-{
-  if ( feat == pair )
+  for ( const FeatureLayerPair &feat : std::as_const( mFeatures ) )
+  {
+    if ( feat == pair )
       return true;
   }
   return false;

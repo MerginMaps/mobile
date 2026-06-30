@@ -53,16 +53,16 @@ int NotificationModel::rowCount( const QModelIndex &parent ) const
 QVariant NotificationModel::data( const QModelIndex &index, int role ) const
 {
   if ( !hasIndex( index.row(), index.column(), index.parent() ) )
-  return {};
+    return {};
 
   Notification notification = mNotifications.at( index.row() );
   if ( role == IdRole ) return notification.id();
-    if ( role == MessageRole ) return notification.message();
-      if ( role == TypeRole ) return notification.type();
-        if ( role == IconRole ) return notification.icon();
+  if ( role == MessageRole ) return notification.message();
+  if ( role == TypeRole ) return notification.type();
+  if ( role == IconRole ) return notification.icon();
 
-          return {};
-        }
+  return {};
+}
 
 // remove item by message
 void NotificationModel::remove( uint id )

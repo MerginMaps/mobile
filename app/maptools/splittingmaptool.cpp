@@ -45,52 +45,52 @@ bool SplittingMapTool::hasValidGeometry() const
 bool SplittingMapTool::isValidSplit() const
 {
   if ( !mFeatureToSplit.isValid() || !hasValidGeometry() )
-  return false;
+    return false;
 
   const QgsGeometry featureGeom = mFeatureToSplit.feature().geometry();
   if ( featureGeom.isNull() || featureGeom.isEmpty() )
     return false;
 
-    // split line must intersect the feature's geometry
-    if ( !mRecordedGeometry.intersects( featureGeom ) )
-      return false;
+  // split line must intersect the feature's geometry
+  if ( !mRecordedGeometry.intersects( featureGeom ) )
+    return false;
 
-      QgsPointXY firstPoint( mPoints.first() );
-      QgsPointXY lastPoint( mPoints.last() );
+  QgsPointXY firstPoint( mPoints.first() );
+  QgsPointXY lastPoint( mPoints.last() );
 
-      // start and end points of the line must be outside the feature, ensuring line properly crosses the feature
-      if ( featureGeom.contains( &firstPoint ) || featureGeom.contains( &lastPoint ) )
-        return false;
+  // start and end points of the line must be outside the feature, ensuring line properly crosses the feature
+  if ( featureGeom.contains( &firstPoint ) || featureGeom.contains( &lastPoint ) )
+    return false;
 
-        return true;
-      }
+  return true;
+}
 
 SplittingMapTool::SplitResult SplittingMapTool::commitSplit() const
 {
   if ( !mFeatureToSplit.isValid() )
-  return Failed;
+    return Failed;
 
   if ( !hasValidGeometry() )
     return Failed;
 
-    if ( !isValidSplit() )
-      return InvalidSplit;
+  if ( !isValidSplit() )
+    return InvalidSplit;
 
-      // only the specified featureToSplit shall be split, so we select
-      // it here in order to avoid other features being split
-      mFeatureToSplit.layer()->select( mFeatureToSplit.feature().id() );
-      mFeatureToSplit.layer()->startEditing();
+  // only the specified featureToSplit shall be split, so we select
+  // it here in order to avoid other features being split
+  mFeatureToSplit.layer()->select( mFeatureToSplit.feature().id() );
+  mFeatureToSplit.layer()->startEditing();
 
-      Qgis::GeometryOperationResult result = mFeatureToSplit.layer()->splitFeatures( mPoints );
+  Qgis::GeometryOperationResult result = mFeatureToSplit.layer()->splitFeatures( mPoints );
 
-      mFeatureToSplit.layer()->commitChanges();
-      mFeatureToSplit.layer()->deselect( mFeatureToSplit.feature().id() );
+  mFeatureToSplit.layer()->commitChanges();
+  mFeatureToSplit.layer()->deselect( mFeatureToSplit.feature().id() );
 
-      if ( result == Qgis::GeometryOperationResult::Success )
-      {
-        return Success;
-      }
-return Failed;
+  if ( result == Qgis::GeometryOperationResult::Success )
+  {
+    return Success;
+  }
+  return Failed;
 }
 
 void SplittingMapTool::rebuildGeometry()
