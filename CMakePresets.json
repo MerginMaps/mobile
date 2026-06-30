@@ -44,7 +44,8 @@
         "ENABLE_BITCODE": "OFF",
         "ENABLE_ARC": "ON",
         "CMAKE_CXX_VISIBILITY_PRESET": "hidden",
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "14.0"
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "14.0",
+        "WITH_TRIMBLE_PROVIDERS": "TRUE"
       }
     },
     {
