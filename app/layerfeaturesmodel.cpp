@@ -190,30 +190,30 @@ void LayerFeaturesModel::handleFinishedSearch( int searchId )
 QString LayerFeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
 {
   if ( mSearchExpression.isEmpty() )
-    return QString();
+  return QString();
 
   QgsFields fields = pair.feature().fields();
   const QStringList words = mSearchExpression.split( ' ', Qt::SkipEmptyParts );
   QStringList foundPairs;
 
-  for ( const QString &word : words )
+for ( const QString &word : words )
   {
     for ( const QgsField &field : fields )
-    {
-      if ( field.configurationFlags().testFlag( Qgis::FieldConfigurationFlag::NotSearchable ) )
-        continue;
-
-      QString attrValue = pair.feature().attribute( field.name() ).toString();
-
-      if ( attrValue.toLower().indexOf( word.toLower() ) != -1 )
       {
-        foundPairs << field.name() + ": " + attrValue;
+        if ( field.configurationFlags().testFlag( Qgis::FieldConfigurationFlag::NotSearchable ) )
+          continue;
 
-        // remove found field from list of fields to not select it more than once
-        fields.remove( fields.lookupField( field.name() ) );
+        QString attrValue = pair.feature().attribute( field.name() ).toString();
+
+        if ( attrValue.toLower().indexOf( word.toLower() ) != -1 )
+        {
+          foundPairs << field.name() + ": " + attrValue;
+
+          // remove found field from list of fields to not select it more than once
+          fields.remove( fields.lookupField( field.name() ) );
+        }
       }
     }
-  }
 
   return foundPairs.join( ", " );
 }
@@ -294,8 +294,8 @@ void LayerFeaturesModel::reloadFeatures()
 int LayerFeaturesModel::layerFeaturesCount() const
 {
   if ( mLayer && mLayer->isValid() )
-  {
-    return mLayer->dataProvider()->featureCount();
+{
+  return mLayer->dataProvider()->featureCount();
   }
 
   return 0;

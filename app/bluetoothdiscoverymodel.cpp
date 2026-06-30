@@ -61,34 +61,34 @@ QVariant BluetoothDiscoveryModel::data( const QModelIndex &index, int role ) con
 {
 #ifdef HAVE_BLUETOOTH
   if ( !index.isValid() )
-    return QVariant();
+  return QVariant();
 
   int deviceIndex = index.row();
 
   if ( deviceIndex < 0 || deviceIndex >= mFoundDevices.count() )
     return QVariant();
 
-  QBluetoothDeviceInfo device = mFoundDevices[deviceIndex];
+    QBluetoothDeviceInfo device = mFoundDevices[deviceIndex];
 
-  switch ( role )
-  {
-    case DataRoles::DeviceAddress:
+    switch ( role )
     {
-      return device.address().toString();
-    }
+      case DataRoles::DeviceAddress:
+      {
+        return device.address().toString();
+        }
 
-    case DataRoles::DeviceName:
-    {
-      return device.name();
-    }
+        case DataRoles::DeviceName:
+        {
+          return device.name();
+        }
 
-    case DataRoles::SignalStrength:
-    {
-      return device.rssi();
-    }
+        case DataRoles::SignalStrength:
+        {
+          return device.rssi();
+        }
 
-    default: return QVariant();
-  }
+        default: return QVariant();
+      }
 #else
   return QVariant();
 #endif

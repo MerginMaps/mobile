@@ -20,42 +20,42 @@ LayersModel::LayersModel()
 QVariant LayersModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() )
-    return QVariant();
+  return QVariant();
 
   if ( role < LayerNameRole ) // if requested role from parent
     return QgsMapLayerModel::data( index, role );
 
-  QgsMapLayer *layer = layerFromIndex( index );
-  if ( !layer || !layer->isValid() ) return QVariant();
+    QgsMapLayer *layer = layerFromIndex( index );
+    if ( !layer || !layer->isValid() ) return QVariant();
 
-  QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
+      QgsVectorLayer *vectorLayer = qobject_cast<QgsVectorLayer *>( layer );
 
-  switch ( role )
-  {
-    case LayerNameRole: return layer->name();
-    case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
-    case HasGeometryRole: return vectorLayer ? vectorLayer->wkbType() != Qgis::WkbType::NoGeometry && vectorLayer->wkbType() != Qgis::WkbType::Unknown : QVariant();
-    case IconSourceRole:
-    {
-      if ( vectorLayer )
+      switch ( role )
       {
-        Qgis::GeometryType type = vectorLayer->geometryType();
-        switch ( type )
-        {
-          case Qgis::GeometryType::Point: return MMStyle::pointLayerNoColorOverlayIcon();
-          case Qgis::GeometryType::Line: return MMStyle::lineLayerNoColorOverlayIcon();
-          case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
+        case LayerNameRole: return layer->name();
+          case VectorLayerRole: return vectorLayer ? QVariant::fromValue<QgsVectorLayer *>( vectorLayer ) : QVariant();
+          case HasGeometryRole: return vectorLayer ? vectorLayer->wkbType() != Qgis::WkbType::NoGeometry && vectorLayer->wkbType() != Qgis::WkbType::Unknown : QVariant();
+          case IconSourceRole:
+          {
+            if ( vectorLayer )
+            {
+              Qgis::GeometryType type = vectorLayer->geometryType();
+              switch ( type )
+              {
+                case Qgis::GeometryType::Point: return MMStyle::pointLayerNoColorOverlayIcon();
+                case Qgis::GeometryType::Line: return MMStyle::lineLayerNoColorOverlayIcon();
+                case Qgis::GeometryType::Polygon: return MMStyle::polygonLayerNoColorOverlayIcon();
 
-          case Qgis::GeometryType::Unknown: // fall through
-          case Qgis::GeometryType::Null: return MMStyle::tableLayerNoColorOverlayIcon();
+                case Qgis::GeometryType::Unknown: // fall through
+                case Qgis::GeometryType::Null: return MMStyle::tableLayerNoColorOverlayIcon();
+              }
+              return QVariant();
+            }
+            else return MMStyle::rasterLayerNoColorOverlayIcon();
+          }
+          case LayerIdRole: return layer->id();
+          case LayerVisible: return ( mProject && InputUtils::isLayerVisible( layer, mProject ) );
         }
-        return QVariant();
-      }
-      else return MMStyle::rasterLayerNoColorOverlayIcon();
-    }
-    case LayerIdRole: return layer->id();
-    case LayerVisible: return ( mProject && InputUtils::isLayerVisible( layer, mProject ) );
-  }
   return QVariant();
 }
 

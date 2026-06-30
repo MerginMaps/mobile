@@ -19,8 +19,8 @@ LayerTreeSortFilterModel::LayerTreeSortFilterModel( QObject *parent )
 bool LayerTreeSortFilterModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
 {
   if ( mLayerTreeModel )
-  {
-    QModelIndex modelIndex = mLayerTreeModel->index( source_row, 0, source_parent );
+{
+  QModelIndex modelIndex = mLayerTreeModel->index( source_row, 0, source_parent );
 
     QgsLayerTreeNode *node = mLayerTreeModel->index2node( modelIndex );
 
@@ -78,8 +78,8 @@ LayerTreeSortFilterModel::~LayerTreeSortFilterModel() = default;
 QModelIndex LayerTreeSortFilterModel::node2index( QgsLayerTreeNode *node ) const
 {
   if ( !node )
-  {
-    return QModelIndex();
+{
+  return QModelIndex();
   }
 
   QModelIndex srcIndex = mLayerTreeModel->node2index( node );

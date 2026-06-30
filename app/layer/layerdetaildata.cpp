@@ -135,18 +135,18 @@ const QString &LayerDetailData::layerId() const
 QgsVectorLayer *LayerDetailData::vectorLayer() const
 {
   if ( !mLayerTreeNode )
-  {
-    return nullptr;
-  }
+{
+  return nullptr;
+}
 
-  QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
-  if ( !nodeLayer )
-  {
-    return nullptr;
-  }
+QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
+if ( !nodeLayer )
+{
+  return nullptr;
+}
 
-  QgsMapLayer *mapLayer = nodeLayer->layer();
-  if ( !mapLayer || mapLayer->type() != Qgis::LayerType::Vector )
+QgsMapLayer *mapLayer = nodeLayer->layer();
+if ( !mapLayer || mapLayer->type() != Qgis::LayerType::Vector )
   {
     return nullptr;
   }
@@ -157,23 +157,23 @@ QgsVectorLayer *LayerDetailData::vectorLayer() const
 QgsMapLayer *LayerDetailData::mapLayer() const
 {
   if ( !mLayerTreeNode )
-  {
-    return nullptr;
-  }
+{
+  return nullptr;
+}
 
-  QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
-  if ( !nodeLayer )
-  {
-    return nullptr;
-  }
+QgsLayerTreeLayer *nodeLayer = QgsLayerTree::toLayer( mLayerTreeNode );
+if ( !nodeLayer )
+{
+  return nullptr;
+}
 
-  QgsMapLayer *mapLayer = nodeLayer->layer();
-  if ( !mapLayer )
-  {
-    return nullptr;
-  }
+QgsMapLayer *mapLayer = nodeLayer->layer();
+if ( !mapLayer )
+{
+  return nullptr;
+}
 
-  return mapLayer;
+return mapLayer;
 }
 
 bool LayerDetailData::isVisible() const

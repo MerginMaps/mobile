@@ -50,21 +50,21 @@ int AttributePreviewModel::rowCount( const QModelIndex &parent ) const
 QVariant AttributePreviewModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
-    return {};
+  return {};
 
   const int row = index.row();
   if ( row < 0 || row >= mItems.size() )
     return {};
 
-  switch ( role )
-  {
-    case AttributePreviewModel::Name:
-      return mItems.at( row ).first;
-    case AttributePreviewModel::Value:
-      return mItems.at( row ).second;
-    default:
-      return {};
-  }
+    switch ( role )
+    {
+      case AttributePreviewModel::Name:
+        return mItems.at( row ).first;
+        case AttributePreviewModel::Value:
+          return mItems.at( row ).second;
+        default:
+          return {};
+      }
 }
 
 QVector<QPair<QString, QString>> AttributePreviewController::mapTipFields( )

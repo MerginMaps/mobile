@@ -1161,8 +1161,8 @@ int AttributeController::tabCount() const
 AttributeFormProxyModel *AttributeController::attributeFormProxyModelForTab( int tabRow ) const
 {
   if ( isValidTabId( tabRow ) )
-  {
-    return mAttributeFormProxyModelForTabItem[tabRow];
+{
+  return mAttributeFormProxyModelForTabItem[tabRow];
   }
   else
   {
@@ -1444,18 +1444,18 @@ bool AttributeController::isValidTabId( int id ) const
 const FormItem *AttributeController::formItem( const QUuid &id ) const
 {
   if ( isValidFormId( id ) )
-    return mFormItems[id].get();
+  return mFormItems[id].get();
   else
     return nullptr;
-}
+  }
 
 const TabItem *AttributeController::tabItem( int tabRow ) const
 {
   if ( isValidTabId( tabRow ) )
-    return mTabItems[tabRow].get();
+  return mTabItems[tabRow].get();
   else
     return nullptr;
-}
+  }
 
 bool AttributeController::setFormShouldRememberValue( const QUuid &id, bool shouldRememberValue )
 {

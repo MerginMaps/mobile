@@ -20,13 +20,13 @@ LayerTreeFlatModel::LayerTreeFlatModel( QObject *parent )
 QVariant LayerTreeFlatModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() || index.row() < 0 )
-  {
-    return QVariant();
+{
+  return QVariant();
   }
 
   if ( role == NodeIsVisible )
-  {
-    QgsLayerTreeNode *node = data( index, Node ).value<QgsLayerTreeNode *>();
+{
+  QgsLayerTreeNode *node = data( index, Node ).value<QgsLayerTreeNode *>();
 
     if ( node && mLayerTreeModel )
     {

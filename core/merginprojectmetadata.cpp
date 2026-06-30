@@ -136,9 +136,9 @@ MerginProjectMetadata MerginProjectMetadata::fromCachedJson( const QString &meta
 
 MerginFile MerginProjectMetadata::fileInfo( const QString &filePath ) const
 {
-  for ( const MerginFile &merginFile : files )
-  {
-    if ( merginFile.path == filePath )
+for ( const MerginFile &merginFile : files )
+{
+  if ( merginFile.path == filePath )
       return merginFile;
   }
   qDebug() << "requested fileInfo() for non-existant file! " << filePath;

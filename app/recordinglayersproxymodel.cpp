@@ -22,22 +22,22 @@ RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
 bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
 {
   if ( !QgsMapLayerProxyModel::filterAcceptsRow( source_row, source_parent ) )
-    return false;
+  return false;
 
   if ( !mModel )
     return false;
 
-  // get layer from row and parent index
-  QModelIndex index = mModel->index( source_row, 0, source_parent );
-  QgsMapLayer *layer = mModel->layerFromIndex( index );
+    // get layer from row and parent index
+    QModelIndex index = mModel->index( source_row, 0, source_parent );
+    QgsMapLayer *layer = mModel->layerFromIndex( index );
 
-  return mModel->data( index, LayersModel::LayerVisible ).toBool();
-}
+    return mModel->data( index, LayersModel::LayerVisible ).toBool();
+  }
 
 QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
 {
   if ( !mModel )
-    return QList<QgsMapLayer *>();
+  return QList<QgsMapLayer *>();
 
   return mModel->layers();
 }

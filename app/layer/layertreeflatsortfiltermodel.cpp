@@ -23,8 +23,8 @@ LayerTreeFlatSortFilterModel::~LayerTreeFlatSortFilterModel() = default;
 bool LayerTreeFlatSortFilterModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const
 {
   if ( mLayerTreeFlatModel )
-  {
-    QModelIndex modelIndex = mLayerTreeFlatModel->index( source_row, 0, source_parent );
+{
+  QModelIndex modelIndex = mLayerTreeFlatModel->index( source_row, 0, source_parent );
 
     QStandardItem *item = mLayerTreeFlatModel->itemFromIndex( modelIndex );
     if ( item )

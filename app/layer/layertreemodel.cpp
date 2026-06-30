@@ -48,19 +48,19 @@ void LayerTreeModel::reset()
 QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
 {
   if ( !index.isValid() || index.column() > 1 )
-  {
-    return QVariant();
+{
+  return QVariant();
   }
 
   QgsLayerTreeNode *node = index2node( index );
 
   if ( role == Node )
-  {
-    return QVariant::fromValue( node );
+{
+  return QVariant::fromValue( node );
   }
   else if ( role == NodeType )
-  {
-    if ( node )
+{
+  if ( node )
     {
       if ( QgsLayerTree::isGroup( node ) )
       {
@@ -73,11 +73,11 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
     }
   }
   else if ( role == NodePath )
-  {
-    // return parent groups to this layer in format "groupA/group B/"
-    QString path;
+{
+  // return parent groups to this layer in format "groupA/group B/"
+  QString path;
 
-    QModelIndex parentIndex = parent( index );
+  QModelIndex parentIndex = parent( index );
 
     while ( parentIndex.isValid() )
     {
@@ -88,12 +88,12 @@ QVariant LayerTreeModel::data( const QModelIndex &index, int role ) const
     return path;
   }
   else if ( role == NodeIsVisible )
-  {
-    return visible( node );
+{
+  return visible( node );
   }
   else if ( role == SerializedNode )
-  {
-    return serializeNode( node );
+{
+  return serializeNode( node );
   }
 
   return QgsLayerTreeModel::data( index, role );
@@ -127,8 +127,8 @@ void LayerTreeModel::setQgsProject( QgsProject *newQgsProject )
 QString LayerTreeModel::serializeNode( QgsLayerTreeNode *node ) const
 {
   if ( !node )
-  {
-    return QString();
+{
+  return QString();
   }
 
   QModelIndex index = node2index( node );
@@ -202,8 +202,8 @@ QgsLayerTreeNode *LayerTreeModel::deserializeNode( const QString &nodeId ) const
 QString LayerTreeModel::visible( QgsLayerTreeNode *node ) const
 {
   if ( !node )
-  {
-    return QString();
+{
+  return QString();
   }
 
   if ( QgsLayerTree::isLayer( node ) )

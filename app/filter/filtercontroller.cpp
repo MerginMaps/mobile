@@ -570,9 +570,9 @@ bool FilterController::hasActiveFilterOnLayer( const QString &layerId )
 
 bool FilterController::isDateFilterDateTime( const QString &filterId ) const
 {
-  for ( const FieldFilter &filter : mFieldFilters )
-  {
-    if ( filter.filterId == filterId )
+for ( const FieldFilter &filter : mFieldFilters )
+{
+  if ( filter.filterId == filterId )
     {
       const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( filter.layerId ) );
       const QMetaType::Type fieldType = layer->fields().field( filter.fieldName ).type();

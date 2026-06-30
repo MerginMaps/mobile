@@ -116,16 +116,16 @@ int ChangelogModel::rowCount( const QModelIndex &parent ) const
 QVariant ChangelogModel::data( const QModelIndex &index, int role ) const
 {
   if ( !hasIndex( index.row(), index.column(), index.parent() ) )
-    return {};
+  return {};
 
   Changelog log = mLogs.at( index.row() );
   if ( role == TitleRole ) return log.title;
-  if ( role == DescriptionRole ) return log.descriptionWithoutImages();
-  if ( role == LinkRole ) return log.link;
-  if ( role == DateRole ) return log.date;
+    if ( role == DescriptionRole ) return log.descriptionWithoutImages();
+      if ( role == LinkRole ) return log.link;
+        if ( role == DateRole ) return log.date;
 
-  return {};
-}
+          return {};
+        }
 
 bool ChangelogModel::isLoading() const
 {

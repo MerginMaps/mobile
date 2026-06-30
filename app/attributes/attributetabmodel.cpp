@@ -48,24 +48,24 @@ QVariant AttributeTabModel::data( const QModelIndex &index, int role ) const
 {
   Q_ASSERT( mController );
   if ( !index.isValid() )
-    return QVariant();
+  return QVariant();
 
   const int row = index.row();
   const TabItem *item = mController->tabItem( row );
   if ( !item )
     return QVariant();
 
-  switch ( role )
-  {
-    case AttributeTabModel::Name:
-      return item->name();
-    case AttributeTabModel::Visible:
-      return item->isVisible();
-    case AttributeTabModel::TabIndex:
-      return item->tabIndex();
-    default:
-      return QVariant();
-  }
+    switch ( role )
+    {
+      case AttributeTabModel::Name:
+        return item->name();
+        case AttributeTabModel::Visible:
+          return item->isVisible();
+        case AttributeTabModel::TabIndex:
+          return item->tabIndex();
+        default:
+          return QVariant();
+      }
 }
 
 AttributeFormProxyModel *AttributeTabModel::attributeFormProxyModel( int row ) const
