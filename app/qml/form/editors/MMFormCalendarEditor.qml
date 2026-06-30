@@ -105,6 +105,10 @@ MMPrivateComponents.MMBaseSingleLineInput {
         root.newDateSelected( dateTime )
       }
 
+      onClearButtonClicked: {
+        root.editorValueChanged( root._fieldValue, true )
+      }
+
       onClosed: dateTimeDrawerLoader.active = false
 
       Component.onCompleted: open()

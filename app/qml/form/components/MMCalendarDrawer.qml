@@ -24,10 +24,30 @@ MMComponents.MMDrawer {
   property bool showSeconds: false
 
   signal primaryButtonClicked
+  signal clearButtonClicked
 
   dim: true
 
   drawerHeader.title: root.title
+
+  drawerHeader.topLeftItemContent: [
+    MMComponents.MMButton {
+      text: qsTr("Clear")
+      type: MMComponents.MMButton.Types.Tertiary
+      size: MMComponents.MMButton.Sizes.Small
+
+      anchors {
+        left: parent.left
+        leftMargin: __style.pageMargins + __style.safeAreaLeft
+        verticalCenter: parent.verticalCenter
+      }
+
+      onClicked: {
+        root.clearButtonClicked()
+        root.close()
+      }
+    }
+  ]
 
   drawerContent: Item {
       width: parent.width
