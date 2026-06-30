@@ -765,6 +765,12 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__haveBluetooth", false );
 #endif
 
+#ifdef WITH_TRIMBLE_PROVIDERS
+  engine.rootContext()->setContextProperty( "__withTrimbleProviders", true );
+#else
+  engine.rootContext()->setContextProperty( "__withTrimbleProviders", false );
+#endif
+
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.
