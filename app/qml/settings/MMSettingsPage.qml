@@ -120,16 +120,16 @@ MMPage {
             value: PositionKit.antennaHeight.toFixed( 3 ) + " m"
           }
 
-          MMComponents.MMText {
+          MMText {
             width: parent.width
             text: qsTr("Antenna height is managed by Trimble Mobile Manager")
             color: __style.greyColor
             font: __style.t4
           }
 
-          MMComponents.MMButton {
+          MMButton {
             text: qsTr("Open in Trimble Mobile Manager")
-            small: true
+            size: MMButton.Sizes.Small
             onClicked: {
               if ( PositionKit.positionProvider )
                 PositionKit.positionProvider.openAntennaHeightPage()
