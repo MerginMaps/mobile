@@ -26,6 +26,17 @@
 	<false/>
 	<key>MinimumOSVersion</key>
 	<string>${IPHONEOS_DEPLOYMENT_TARGET}</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.lutraconsulting.merginmaps.trimble</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>merginmaps-tmm</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Program requires access to camera to take pictures for features on map</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
