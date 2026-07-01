@@ -96,13 +96,18 @@ MMPrivateComponents.MMBaseSingleLineInput {
       id: dateTimeDrawer
 
       title: root._fieldTitle
-      dateTime: root._fieldValueIsNull || root._fieldHasMixedValues ? new Date() : dateTransformer.toJsDate( root._fieldValue )
+      dateTime: root.hasValidFieldValue() ? new Date() : dateTransformer.toJsDate( root._fieldValue )
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
+      fieldValueIsNull: root._fieldValueIsNull
 
       onPrimaryButtonClicked: {
         root.newDateSelected( dateTime )
+      }
+
+      onClearButtonClicked: {
+        root.editorValueChanged( root._fieldValue, true )
       }
 
       onClosed: dateTimeDrawerLoader.active = false
@@ -120,6 +125,13 @@ MMPrivateComponents.MMBaseSingleLineInput {
     else {
       root.openPicker( dateTransformer.toJsDate(root._fieldValue) )
     }
+  }
+
+  function hasValidFieldValue() {
+    return root._fieldValueIsNull
+        || root._fieldHasMixedValues
+        || root._fieldValue === undefined
+        || root._fieldValue === null
   }
 
   QtObject {
