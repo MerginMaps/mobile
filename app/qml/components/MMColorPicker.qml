@@ -18,6 +18,8 @@ ScrollView {
 
   property color activeColor
 
+  signal activeColorChangeRequested( color newColor )
+
   height: scrollRow.height
   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
@@ -29,6 +31,7 @@ ScrollView {
 
     Repeater {
       model: root.colors
+
       MMColorButton{
         required property color modelData
         required property int index
@@ -36,16 +39,7 @@ ScrollView {
         buttonColor: modelData
         isSelected: root.activeColor === modelData
                 
-        onClicked: {
-          root.activeColor = modelData;
-        }
-        Component.onCompleted: {
-        // set the initial color to be the first one in the list
-          if ( index === 0 )
-          {
-            root.activeColor = modelData
-          }    
-        }  
+        onClicked: root.activeColorChangeRequested( modelData )
       } 
     }
   }

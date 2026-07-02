@@ -147,7 +147,13 @@ QgsGeometry MapSketchingController::highlightGeometry() const
 QStringList MapSketchingController::availableColors() const
 {
   const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
-  return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
+
+if ( mMapSettings && mMapSettings->project() )
+    {
+        return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
+    }
+
+    return defaultColors;
 }
 
 void MapSketchingController::clearHighlight()
@@ -187,6 +193,8 @@ void MapSketchingController::setMapSettings( InputMapSettings *settings )
 
   mMapSettings = settings;
   emit mapSettingsChanged();
+
+  setActiveColor( availableColors().first() );
 }
 
 InputMapSettings *MapSketchingController::mapSettings() const
