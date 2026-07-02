@@ -148,12 +148,12 @@ QStringList MapSketchingController::availableColors() const
 {
   const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
 
-if ( mMapSettings && mMapSettings->project() )
-    {
-        return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
-    }
+  if ( mMapSettings && mMapSettings->project() )
+  {
+    return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
+  }
 
-    return defaultColors;
+  return defaultColors;
 }
 
 void MapSketchingController::clearHighlight()
