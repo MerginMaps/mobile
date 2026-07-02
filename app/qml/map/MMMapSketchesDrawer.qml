@@ -80,8 +80,8 @@ MMComponents.MMDrawer {
       MMComponents.MMColorPicker {
         id: colorPicker
 
-        colors: root.sketchingController?.availableColors() ?? null
-        activeColor: root.sketchingController?.activeColor ?? null
+        colors: root.sketchingController?.availableColors()
+        activeColor: root.sketchingController?.activeColor
 
         Layout.alignment: Qt.AlignHCenter
         Layout.maximumWidth: parent.width
