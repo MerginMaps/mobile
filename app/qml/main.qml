@@ -104,8 +104,8 @@ ApplicationWindow {
     projDialog.open()
   }
 
-  function identifyFeature( pair ) {
-    let hasNullGeometry = pair.feature.geometry.isNull
+  function identifyFeature( pair, point = Qt.point(NaN, NaN) ) {
+    map.identifyLocation = point
 
     if ( hasNullGeometry ) {
       formsStackManager.openForm( pair, "readOnly", "form" )
@@ -180,8 +180,8 @@ ApplicationWindow {
       return 0
     }
 
-    onFeatureIdentified: function( pair ) {
-      formsStackManager.openForm( pair, "readOnly", "preview" );
+    onFeatureIdentified: function( pair, point ) {
+      window.identifyFeature( pair, point )
     }
 
     onFeaturesIdentified: function( pairs ) {
@@ -190,6 +190,7 @@ ApplicationWindow {
     }
 
     onNothingIdentified: {
+      map.hideHighlight()
       formsStackManager.closeDrawer()
     }
 
@@ -957,10 +958,8 @@ ApplicationWindow {
       secondaryText: model.LayerName
       leftContent: MMIcon { source: model.LayerIcon }
       onClicked: {
-        let pair = model.FeaturePair
         featurePairSelection.close()
-        map.highlightPair( pair )
-        formsStackManager.openForm( pair, "readOnly", "preview" );
+        window.identifyFeature( model.FeaturePair );
       }
     }
 

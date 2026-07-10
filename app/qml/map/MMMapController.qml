@@ -46,7 +46,10 @@ Item {
 
   property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
-  signal featureIdentified( var pair )
+  // Holds the map coordinates of the point the user identified. NaN if identify was triggered from list of features
+  property point identifyLocation: Qt.point(NaN, NaN)
+
+  signal featureIdentified( var pair, var point )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
 
@@ -261,12 +264,11 @@ Item {
         }
         else if ( pair.valid )  // root.state === "view"
         {
-          root.highlightPair( pair )
-          root.featureIdentified( pair )
+          let mapPoint = mapCanvas.mapSettings.screenToCoordinate( screenPoint )
+          root.featureIdentified( pair, mapPoint )
         }
         else
         {
-          root.hideHighlight()
           root.nothingIdentified()
         }
       }
@@ -1419,7 +1421,7 @@ Item {
     __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings )
   }
 
-  function jumpToHighlighted( mapOffset ) {
+  function jumpToHighlighted() {
     if ( identifyHighlight.geometry.isNull )
       return
     let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
