@@ -503,6 +503,42 @@ void TestUtilsFunctions::testWhereToPanWhenIdentifying()
   }
 }
 
+void TestUtilsFunctions::testDrawerCompensatedExtent()
+{
+  // bottomOffset is in logical pixels, so the result must not depend on the device pixel ratio
+  const QVector<qreal> dprs = { 1.0, 2.0 };
+  for ( const qreal dpr : dprs )
+  {
+    InputMapSettings ms;
+    ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+    ms.setDevicePixelRatio( dpr );
+    ms.setOutputSize( QSize( 400, 620 ) );
+    ms.setExtent( QgsRectangle( 0, 0, 40, 62 ) ); // 0.1 map units per logical pixel
+
+    const double bottomOffset = 200; // drawer covers screen y in [420, 620]
+
+    // point geometry -> scale is kept, center shifts down by bottomOffset / 2
+    // in screen space so the point is centered in the unobstructed part
+    const QgsGeometry point = QgsGeometry::fromPointXY( QgsPointXY( 20, 10 ) );
+    QgsRectangle extent = mUtils->drawerCompensatedExtent( point, &ms, bottomOffset );
+    COMPARENEAR( extent.width(), 40.0, 1e-4 );
+    COMPARENEAR( extent.height(), 62.0, 1e-4 );
+    COMPARENEAR( extent.center().x(), 20.0, 1e-4 );
+    COMPARENEAR( extent.center().y(), 0.0, 1e-4 );
+
+    // non-empty bounding box -> zoom so the padded bbox fits the part of the
+    // canvas not covered by the drawer, centered in it
+    const QgsGeometry line = QgsGeometry::fromPolylineXY( { QgsPointXY( 10, 10 ), QgsPointXY( 30, 20 ) } );
+    extent = mUtils->drawerCompensatedExtent( line, &ms, bottomOffset );
+
+    // padded bbox is 23.6 x 11.8 -> 0.059 map units per logical pixel to fit 400 x 420
+    COMPARENEAR( extent.width(), 400 * 0.059, 1e-4 );
+    COMPARENEAR( extent.height(), 620 * 0.059, 1e-4 );
+    COMPARENEAR( extent.center().x(), 20.0, 1e-4 );
+    COMPARENEAR( extent.center().y(), 15.0 - bottomOffset / 2.0 * 0.059, 1e-4 );
+  }
+}
+
 void TestUtilsFunctions::testDistanceBetweenGpsAndFeature()
 {
   QgsCoordinateReferenceSystem crs = QgsCoordinateReferenceSystem::fromEpsgId( 4326 );

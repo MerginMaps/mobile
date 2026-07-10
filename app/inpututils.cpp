@@ -364,6 +364,41 @@ QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, InputMap
   return screenPoint;
 }
 
+QgsRectangle InputUtils::drawerCompensatedExtent( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset )
+{
+  const QgsRectangle bbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+
+  // canvas size in logical pixels; the bottom bottomOffset of the canvas is covered by another
+  // component (e.g. preview drawer), so we center the geometry in the remaining visible part
+  const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
+  const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
+  const double visibleHeight = std::max( canvasHeight - bottomOffset, 1.0 );
+
+  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  {
+    const QgsPointXY center( bbox.center().x(), bbox.center().y() - bottomOffset / 2.0 * mapSettings->mapUnitsPerPoint() );
+    const QgsVector offset = currentExtent.center() - center;
+    currentExtent -= offset;
+  }
+  else
+  {
+    QgsRectangle paddedBbox = bbox;
+
+    // Add a offset to encompass handles etc..
+    // This number is based on what feel confortable for the user
+    constexpr double SCALE_FACTOR = 1.18;
+    paddedBbox.scale( SCALE_FACTOR );
+
+    const double mapUnitsPerPoint = std::max( paddedBbox.width() / canvasWidth, paddedBbox.height() / visibleHeight );
+    const double cx = bbox.center().x();
+    const double cy = bbox.center().y() - bottomOffset / 2.0 * mapUnitsPerPoint;
+    currentExtent = QgsRectangle( cx - canvasWidth * mapUnitsPerPoint / 2, cy - canvasHeight * mapUnitsPerPoint / 2,
+                                  cx + canvasWidth * mapUnitsPerPoint / 2, cy + canvasHeight * mapUnitsPerPoint / 2 );
+  }
+  return currentExtent;
+}
+
 double InputUtils::convertCoordinateString( const QString &rationalValue )
 {
   QStringList values = rationalValue.split( "," );
@@ -2159,6 +2194,11 @@ QString InputUtils::getUniqueString( const QString &newString, const QStringList
     i++;
   }
   return uniqueString;
+}
+
+QgsRectangle InputUtils::extentFromMinMax( double xMin, double yMin, double xMax, double yMax )
+{
+  return QgsRectangle( xMin, yMin, xMax, yMax );
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )

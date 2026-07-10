@@ -104,6 +104,17 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation );
 
+    /**
+     * Returns the extent that the map needs to zoom to so that the \a geom fits (with a safe buffer) the visible part
+     * of the map canvas when the canvas lower part is covered by a drawer of \a bottomOffset pixels high.
+     *
+     * \param geom The geometry identified
+     * \param mapSettings Current map settings
+     * \param bottomOffset Pixel size (height) of drawer that may be covering the map canvas, eg preview panel
+     *
+     * Nota Bene: Assume geometry and map canvas CRS are the same
+     */
+    Q_INVOKABLE static QgsRectangle drawerCompensatedExtent( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset );
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform
@@ -685,6 +696,9 @@ class InputUtils: public QObject
      * \return unique variant of wanted string
      */
     static QString getUniqueString( const QString &newString, const QStringList &existingStrings );
+
+    //! Trivial constructor for QgsRectangle since the actual constructor is not invokable
+    Q_INVOKABLE static QgsRectangle extentFromMinMax( double xMin, double yMin, double xMax, double yMax );
 
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );

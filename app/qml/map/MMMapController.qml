@@ -1434,6 +1434,12 @@ Item {
 
       mapCanvas.jumpTo( screenPt )
     }
+    else
+    {
+      // when identifying by picking from feature list, we zoom to the geometry
+      let extent = __inputUtils.drawerCompensatedExtent( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset )
+      mapCanvas.jumpToExtent( extent )
+    }
   }
 
   function highlightPair( pair ) {

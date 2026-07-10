@@ -38,6 +38,7 @@ class TestUtilsFunctions: public QObject
     void testExtractPointFromFeature();
     void testStakeoutPathExtent();
     void testWhereToPanWhenIdentifying();
+    void testDrawerCompensatedExtent();
     void testDistanceBetweenGpsAndFeature();
     void testAngleBetweenGpsAndFeature();
     void testIsPointLayerFeature();
