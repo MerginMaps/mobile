@@ -130,7 +130,7 @@ jobs:
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
 
           cmake ^
-             -DCMAKE_BUILD_TYPE=Release ^
+             -DCMAKE_BUILD_TYPE=Debug ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" ^
              -G "${{ env.CMAKE_GENERATOR }}" ^
@@ -150,15 +150,15 @@ jobs:
 
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
 
-          cmake --build ${{ github.workspace }}\build-mm --config Release --verbose
+          cmake --build ${{ github.workspace }}\build-mm --config Debug --verbose
 
-          IF NOT EXIST Release\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
+          IF NOT EXIST Debug\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
 
       - name: Install app
         shell: cmd
         run: |
           cd build-mm
-          cmake --install ${{ github.workspace }}\build-mm --config Release --verbose 
+          cmake --install ${{ github.workspace }}\build-mm --config Debug --verbose
 
           mkdir C:\mm-package
           mkdir C:\mm-package\stage
@@ -171,15 +171,9 @@ jobs:
         with:
           format: 'YYYYMMDD'
 
-      - name: Create package
-        shell: cmd
-        run: |
-          "C:\Program Files (x86)\NSIS\makensis.exe" mm\scripts\MM_win.nsi
-          xcopy C:\mm-package\merginmaps-app-win-x86_64.exe mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe* /Y
-
       - name: Upload Sdk in Artifacts
         uses: actions/upload-artifact@v6
         with:
-          path: mergin-maps-mobile-win64-${{ steps.time.outputs.formattedTime }}-${{ github.run_number }}.exe
-          name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64
+          path: C:\mm-package\stage
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64 Debug
           if-no-files-found: error
