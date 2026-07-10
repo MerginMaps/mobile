@@ -92,13 +92,18 @@ class InputUtils: public QObject
     Q_INVOKABLE void setExtentToGeom( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
     /**
-     * Returns the center point of the \a geom currently displayed on screen
+     * Returns the screen point where the map should jump to when identifying features.
+     * If the map should not pan, a QPointF with NaNs is returned.
      *
-     * Fall back to \see setExtentToGeom in case we don't find any geometry relevant
+     * \param geom The geometry identified
+     * \param mapSettings Current map settings
+     * \param bottomOffset Pixel size (height) of drawer that may be covering the map canvas, eg preview panel
+     * \param identifyLocation The map coords of the location the user clicked for identification
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
-    Q_INVOKABLE QPointF relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
+    Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation );
+
 
     // utility functions to extract information from map settings
     // (in theory this data should be directly available from .MapTransform

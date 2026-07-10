@@ -321,31 +321,46 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation )
 {
+  QgsRectangle effectiveExtent( mapSettings->visibleExtent() );
+
+  // canvas size in logical pixels; bottomOffset is in logical pixels too and
+  // screenToCoordinate() expects logical pixel coordinates
+  const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
+  const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
+  const QPointF bottomPoint( canvasWidth / 2.0, canvasHeight - bottomOffset );
+
+  const QgsPoint bottomPointMap = mapSettings->screenToCoordinate( bottomPoint );
+
+  effectiveExtent.setYMinimum( bottomPointMap.y() );
+
+  // Now we calculate a safeEffectiveExtent, slightly smaller, so that we don't allow geometries too close to the screen borders
+  constexpr double EXTENT_BUFFER_SCALE = 0.82;
+  const QgsRectangle safeEffectiveExtent( effectiveExtent.scaled( EXTENT_BUFFER_SCALE ) );
+
   QPointF screenPoint;
   QgsPoint target;
-  if ( !mapSettings || geom.isNull() || !geom.constGet() )
-    return screenPoint;
-
-  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
-
-  // Cut the geometry to current extent
-  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
-
-  if ( !intersectedGeom.isEmpty() )
+  if ( safeEffectiveExtent.contains( geom.boundingBox() ) )
   {
-    target = QgsPoint( intersectedGeom.boundingBox().center() );
+    // If the whole geometry is visible, don't move map
+    return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
+  }
+  else if ( effectiveExtent.width() >= geom.boundingBox().width() &&
+            effectiveExtent.height() >= geom.boundingBox().height() )
+  {
+    // if the whole geometry would fit without changing scale, center it
+    target = QgsPoint( geom.boundingBox().center() );
   }
   else
   {
-    // The geometry is outside the current viewed extent
-    setExtentToGeom( geom, mapSettings );
-    target = QgsPoint( geom.boundingBox().center() );
+    // the geometry is big, let's pan to the point the user clicked on the map
+    target = QgsPoint( identifyLocation );
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
+  screenPoint.ry() += bottomOffset / 2;
+
   return screenPoint;
 }
 

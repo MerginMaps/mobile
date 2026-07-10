@@ -1424,10 +1424,16 @@ Item {
   function jumpToHighlighted() {
     if ( identifyHighlight.geometry.isNull )
       return
-    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
 
-    screenPt.y += mapOffset / 2
-    mapCanvas.jumpTo( screenPt )
+    if ( !isNaN( root.identifyLocation.x ) && !isNaN( root.identifyLocation.y ) )
+    {
+      // when identifying with a point on the map, we preserve scale and may only pan
+      let screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, root.identifyLocation )
+      if ( isNaN( screenPt.x ) || isNaN( screenPt.y ) )
+        return
+
+      mapCanvas.jumpTo( screenPt )
+    }
   }
 
   function highlightPair( pair ) {
