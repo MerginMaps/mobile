@@ -107,12 +107,13 @@ ApplicationWindow {
   function identifyFeature( pair, point = Qt.point(NaN, NaN) ) {
     map.identifyLocation = point
 
-    if ( hasNullGeometry ) {
+    let skipPreview = __inputUtils.isEmptyGeometry( pair.feature.geometry )
+    if ( skipPreview ) {
       formsStackManager.openForm( pair, "readOnly", "form" )
     }
     else if ( pair.valid ) {
       map.highlightPair( pair )
-      formsStackManager.openForm( pair, "readOnly", "preview")
+      formsStackManager.openForm( pair, "readOnly", "preview" )
     }
   }
 

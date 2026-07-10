@@ -1422,7 +1422,7 @@ Item {
   }
 
   function jumpToHighlighted() {
-    if ( identifyHighlight.geometry.isNull )
+    if ( __inputUtils.isEmptyGeometry( identifyHighlight.geometry ) )
       return
 
     if ( !isNaN( root.identifyLocation.x ) && !isNaN( root.identifyLocation.y ) )
