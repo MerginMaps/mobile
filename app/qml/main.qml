@@ -860,8 +860,8 @@ ApplicationWindow {
       closeDrawer()
     }
 
-    onPreviewPanelChanged: function( panelHeight ) {
-      map.jumpToHighlighted( panelHeight - mapToolbar.height )
+    onPreviewPanelChanged: {
+      map.jumpToHighlighted()
     }
   }
 
