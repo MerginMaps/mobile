@@ -130,7 +130,7 @@ jobs:
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
 
           cmake ^
-             -DCMAKE_BUILD_TYPE=Debug ^
+             -DCMAKE_BUILD_TYPE=RelWithDebInfo ^
              -DCMAKE_INSTALL_PREFIX:PATH=${{ steps.vars.outputs.WORKSPACE_DIR }}/install-mm ^
              -DCMAKE_TOOLCHAIN_FILE:PATH="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" ^
              -G "${{ env.CMAKE_GENERATOR }}" ^
@@ -150,15 +150,15 @@ jobs:
 
           set PATH=${{ env.VCPKG_ROOT }};%PATH%
 
-          cmake --build ${{ github.workspace }}\build-mm --config Debug --verbose
+          cmake --build ${{ github.workspace }}\build-mm --config RelWithDebInfo --verbose
 
-          IF NOT EXIST Debug\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
+          IF NOT EXIST RelWithDebInfo\MerginMaps.exe (echo err_MERGINMAPS_BUILD & exit /b 1)
 
       - name: Install app
         shell: cmd
         run: |
           cd build-mm
-          cmake --install ${{ github.workspace }}\build-mm --config Debug --verbose
+          cmake --install ${{ github.workspace }}\build-mm --config RelWithDebInfo --verbose
 
           mkdir C:\mm-package
           mkdir C:\mm-package\stage
@@ -175,5 +175,5 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           path: C:\mm-package\stage
-          name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64 Debug
+          name: Mergin Maps ${{ env.MM_VERSION_CODE }} win64 RelWithDebInfo
           if-no-files-found: error
