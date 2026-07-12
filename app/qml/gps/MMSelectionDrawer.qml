@@ -76,7 +76,6 @@ MMComponents.MMDrawer {
           color: __style.nightColor
 
           elide: Text.ElideRight
-          wrapMode: Text.NoWrap
         }
 
         MMComponents.MMText {
@@ -86,7 +85,6 @@ MMComponents.MMDrawer {
           color: __style.nightColor
 
           elide: Text.ElideRight
-          wrapMode: Text.NoWrap
         }
       }
     }
