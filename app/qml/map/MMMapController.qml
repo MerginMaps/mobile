@@ -46,7 +46,10 @@ Item {
 
   property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
-  signal featureIdentified( var pair )
+  // Holds the map coordinates of the point the user identified. NaN if identify was triggered from list of features
+  property point identifyLocation: Qt.point(NaN, NaN)
+
+  signal featureIdentified( var pair, var point )
   signal featuresIdentified( var pairs )
   signal nothingIdentified()
 
@@ -261,12 +264,11 @@ Item {
         }
         else if ( pair.valid )  // root.state === "view"
         {
-          root.highlightPair( pair )
-          root.featureIdentified( pair )
+          let mapPoint = mapCanvas.mapSettings.screenToCoordinate( screenPoint )
+          root.featureIdentified( pair, mapPoint )
         }
         else
         {
-          root.hideHighlight()
           root.nothingIdentified()
         }
       }
@@ -1426,13 +1428,25 @@ Item {
     __inputUtils.setExtentToFeature( pair, mapCanvas.mapSettings )
   }
 
-  function jumpToHighlighted( mapOffset ) {
-    if ( identifyHighlight.geometry.isNull )
+  function jumpToHighlighted() {
+    if ( __inputUtils.isEmptyGeometry( identifyHighlight.geometry ) )
       return
-    let screenPt = __inputUtils.relevantGeometryCenterToScreenCoordinates( identifyHighlight.geometry, mapCanvas.mapSettings )
 
-    screenPt.y += mapOffset / 2
-    mapCanvas.jumpTo( screenPt )
+    if ( !isNaN( root.identifyLocation.x ) && !isNaN( root.identifyLocation.y ) )
+    {
+      // when identifying with a point on the map, we preserve scale and may only pan
+      let screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, root.identifyLocation )
+      if ( isNaN( screenPt.x ) || isNaN( screenPt.y ) )
+        return
+
+      mapCanvas.jumpTo( screenPt )
+    }
+    else
+    {
+      // when identifying by picking from feature list, we zoom to the geometry
+      let extent = __inputUtils.drawerCompensatedExtent( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset )
+      mapCanvas.jumpToExtent( extent )
+    }
   }
 
   function highlightPair( pair ) {

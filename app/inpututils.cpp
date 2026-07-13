@@ -321,32 +321,82 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings )
+QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation )
 {
+  QgsRectangle effectiveExtent( mapSettings->visibleExtent() );
+
+  // canvas size in logical pixels; bottomOffset is in logical pixels too and
+  // screenToCoordinate() expects logical pixel coordinates
+  const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
+  const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
+  const QPointF bottomPoint( canvasWidth / 2.0, canvasHeight - bottomOffset );
+
+  const QgsPoint bottomPointMap = mapSettings->screenToCoordinate( bottomPoint );
+
+  effectiveExtent.setYMinimum( bottomPointMap.y() );
+
+  // Now we calculate a safeEffectiveExtent, slightly smaller, so that we don't allow geometries too close to the screen borders
+  constexpr double EXTENT_BUFFER_SCALE = 0.82;
+  const QgsRectangle safeEffectiveExtent( effectiveExtent.scaled( EXTENT_BUFFER_SCALE ) );
+
   QPointF screenPoint;
   QgsPoint target;
-  if ( !mapSettings || geom.isNull() || !geom.constGet() )
-    return screenPoint;
-
-  const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
-
-  // Cut the geometry to current extent
-  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
-
-  if ( !intersectedGeom.isEmpty() )
+  if ( safeEffectiveExtent.contains( geom.boundingBox() ) )
   {
-    target = QgsPoint( intersectedGeom.boundingBox().center() );
+    // If the whole geometry is visible, don't move map
+    return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
+  }
+  else if ( effectiveExtent.width() >= geom.boundingBox().width() &&
+            effectiveExtent.height() >= geom.boundingBox().height() )
+  {
+    // if the whole geometry would fit without changing scale, center it
+    target = QgsPoint( geom.boundingBox().center() );
   }
   else
   {
-    // The geometry is outside the current viewed extent
-    setExtentToGeom( geom, mapSettings );
-    target = QgsPoint( geom.boundingBox().center() );
+    // the geometry is big, let's pan to the point the user clicked on the map
+    target = QgsPoint( identifyLocation );
   }
 
   screenPoint = mapSettings->coordinateToScreen( target );
+  screenPoint.ry() += bottomOffset / 2;
+
   return screenPoint;
+}
+
+QgsRectangle InputUtils::drawerCompensatedExtent( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset )
+{
+  const QgsRectangle bbox = geom.boundingBox();
+  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+
+  // canvas size in logical pixels; the bottom bottomOffset of the canvas is covered by another
+  // component (e.g. preview drawer), so we center the geometry in the remaining visible part
+  const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
+  const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
+  const double visibleHeight = std::max( canvasHeight - bottomOffset, 1.0 );
+
+  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  {
+    const QgsPointXY center( bbox.center().x(), bbox.center().y() - bottomOffset / 2.0 * mapSettings->mapUnitsPerPoint() );
+    const QgsVector offset = currentExtent.center() - center;
+    currentExtent -= offset;
+  }
+  else
+  {
+    QgsRectangle paddedBbox = bbox;
+
+    // Add a offset to encompass handles etc..
+    // This number is based on what feel confortable for the user
+    constexpr double SCALE_FACTOR = 1.18;
+    paddedBbox.scale( SCALE_FACTOR );
+
+    const double mapUnitsPerPoint = std::max( paddedBbox.width() / canvasWidth, paddedBbox.height() / visibleHeight );
+    const double cx = bbox.center().x();
+    const double cy = bbox.center().y() - bottomOffset / 2.0 * mapUnitsPerPoint;
+    currentExtent = QgsRectangle( cx - canvasWidth * mapUnitsPerPoint / 2, cy - canvasHeight * mapUnitsPerPoint / 2,
+                                  cx + canvasWidth * mapUnitsPerPoint / 2, cy + canvasHeight * mapUnitsPerPoint / 2 );
+  }
+  return currentExtent;
 }
 
 double InputUtils::convertCoordinateString( const QString &rationalValue )
@@ -2144,6 +2194,11 @@ QString InputUtils::getUniqueString( const QString &newString, const QStringList
     i++;
   }
   return uniqueString;
+}
+
+QgsRectangle InputUtils::extentFromMinMax( double xMin, double yMin, double xMax, double yMax )
+{
+  return QgsRectangle( xMin, yMin, xMax, yMax );
 }
 
 bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )

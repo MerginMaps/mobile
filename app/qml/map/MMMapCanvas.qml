@@ -66,6 +66,29 @@ Item {
     rendererPrivate.unfreeze('jumpTo')
   }
 
+  function jumpToExtent( newExtent )
+  {
+    rendererPrivate.freeze('jumpTo')
+
+    let oldExtent = mapRenderer.mapSettings.visibleExtent
+
+    // Disable animation until initial position is set
+    jumpExtentAnimator.enabled = false
+    jumpExtentAnimator.startMinX = oldExtent.xMinimum
+    jumpExtentAnimator.startMinY = oldExtent.yMinimum
+    jumpExtentAnimator.startMaxX = oldExtent.xMaximum
+    jumpExtentAnimator.startMaxY = oldExtent.yMaximum
+    jumpExtentAnimator.endMinX = newExtent.xMinimum
+    jumpExtentAnimator.endMinY = newExtent.yMinimum
+    jumpExtentAnimator.endMaxX = newExtent.xMaximum
+    jumpExtentAnimator.endMaxY = newExtent.yMaximum
+
+    jumpExtentAnimator.percentage = 0
+    jumpExtentAnimator.enabled = true
+    jumpExtentAnimator.percentage = 100
+    rendererPrivate.unfreeze('jumpTo')
+  }
+
   function zoom( center, scale )
   {
     mapRenderer.zoom( center, scale )
@@ -101,6 +124,39 @@ Item {
         let tmpX = startX - percentage * 0.01 * distance * Math.sin( azimuth )
         let tmpY = startY - percentage * 0.01 * distance * Math.cos( azimuth )
         mapRenderer.mapSettings.center = mapRenderer.mapSettings.toQgsPoint( Qt.point( tmpX, tmpY ) )
+      }
+    }
+  }
+
+  Item {
+    id: jumpExtentAnimator
+
+    property double startMinX
+    property double startMinY
+    property double startMaxX
+    property double startMaxY
+    property double endMinX
+    property double endMinY
+    property double endMaxX
+    property double endMaxY
+    property double percentage: 0
+
+    Behavior on percentage {
+      NumberAnimation {
+        easing.type: Easing.OutQuart
+        duration: 500
+      }
+      enabled: jumpExtentAnimator.enabled
+    }
+
+    onPercentageChanged: {
+      if ( enabled ) {
+        let tmpMinX = startMinX - percentage * 0.01 * ( startMinX - endMinX )
+        let tmpMinY = startMinY - percentage * 0.01 * ( startMinY - endMinY )
+        let tmpMaxX = startMaxX - percentage * 0.01 * ( startMaxX - endMaxX )
+        let tmpMaxY = startMaxY - percentage * 0.01 * ( startMaxY - endMaxY )
+
+        mapRenderer.mapSettings.extent = __inputUtils.extentFromMinMax( tmpMinX, tmpMinY, tmpMaxX, tmpMaxY )
       }
     }
   }

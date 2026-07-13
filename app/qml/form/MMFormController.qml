@@ -37,7 +37,7 @@ Item {
   property bool layerIsReadOnly: featureLayerPair?.layer?.readOnly ?? false
   property bool layerIsSpatial: featureLayerPair ? __inputUtils.isSpatialLayer( featureLayerPair.layer ) : false
 
-  property real drawerHeight: drawer.height
+  property real previewPanelHeight: previewPanel.implicitHeight
 
   signal closed()
   signal saveRequested()
@@ -46,7 +46,7 @@ Item {
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
-  signal previewPanelChanged( var panelHeight )
+  signal previewPanelChanged()
 
   function openDrawer() {
     root.panelState = "form"
@@ -142,11 +142,6 @@ Item {
     edge: Qt.BottomEdge
     closePolicy: Popup.CloseOnEscape // prevents the drawer closing while moving canvas
 
-    onOpened: {
-      if ( panelState === "preview" )
-        previewPanelChanged( previewPanel.implicitHeight )
-    }
-
     onClosed: {
       if ( statesManager.state !== "hidden" )
         statesManager.state = "closed"
@@ -179,8 +174,9 @@ Item {
 
       onCloseClicked: drawer.close()
 
-      onImplicitHeightChanged: {
-        previewPanelChanged( previewPanel.implicitHeight )
+      onDoneLoading: {
+        if ( root.panelState === "preview" )
+          previewPanelChanged()
       }
     }
 
@@ -242,10 +238,5 @@ Item {
         }
       }
     }
-  }
-
-  onFeatureLayerPairChanged: {
-    if ( panelState === "preview" )
-      previewPanelChanged( previewPanel.implicitHeight )
   }
 }
