@@ -25,17 +25,17 @@ concurrency:
 jobs:
   win64_build:
     if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
-    runs-on: windows-2025
+    runs-on: windows-2022
 
     env:
-      # Visual Studio Enterprise 2026 - 18.6.11819.183
-      VS_INSTALL_DIR: "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise"
+      # Visual Studio Enterprise 2022
+      VS_INSTALL_DIR: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise"
       # This is required by windeployqt script - do not remove it breaks packaging the executable
-      VCINSTALLDIR: "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\VC\\"
+      VCINSTALLDIR: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\"
       CMAKE_VERSION: '4.3.2'
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
       TRIPLET: x64-windows
-      CMAKE_GENERATOR: "Visual Studio 18 2026" # see https://github.com/actions/runner-images/blob/main/images/windows/Windows2025-VS2026-Readme.md
+      CMAKE_GENERATOR: "Visual Studio 17 2022" # see https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
       CMAKE_ARCH: "x64"
       VCPKG_ROOT: "C:/vcpkg-root" # Looks like there is more space on C: than on D: drive (~14GB)
 
