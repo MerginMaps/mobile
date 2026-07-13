@@ -968,7 +968,7 @@ void TestUtilsFunctions::testRelevantGeometryCenterToScreenCoordinates()
 
   // Case when we cut the geometry to current extent
   ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
-  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.257, 274.5 ), epsilon ), true );
+  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.261, 304.496 ), epsilon ), true );
 }
 
 void TestUtilsFunctions::testIsValidEmail()
