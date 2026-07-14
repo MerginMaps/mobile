@@ -32,14 +32,14 @@ bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIn
   QgsMapLayer *layer = mModel->layerFromIndex( index );
 
   if ( layer )
-    {
-      bool isPrivate = layer->flags() & QgsMapLayer::LayerFlag::Private;
+  {
+    bool isPrivate = layer->flags() & QgsMapLayer::LayerFlag::Private;
 
-      if ( isPrivate )
-      {
-        return false;
-      }
+    if ( isPrivate )
+    {
+      return false;
     }
+  }
 
   return mModel->data( index, LayersModel::LayerVisible ).toBool();
 }
