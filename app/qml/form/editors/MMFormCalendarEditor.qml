@@ -100,14 +100,14 @@ MMPrivateComponents.MMBaseSingleLineInput {
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
-      fieldValueIsNull: root._fieldValueIsNull
+      showClearButton: root._fieldValueIsNull
 
       onPrimaryButtonClicked: {
         root.newDateSelected( dateTime )
       }
 
       onClearButtonClicked: {
-        root.editorValueChanged( root._fieldValue, true )
+        root.editorValueChanged( undefined, true )
       }
 
       onClosed: dateTimeDrawerLoader.active = false
@@ -130,8 +130,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   function hasValidFieldValue() {
     return root._fieldValueIsNull
         || root._fieldHasMixedValues
-        || root._fieldValue === undefined
-        || root._fieldValue === null
+        || (root._fieldValue ?? null) === null
   }
 
   QtObject {
