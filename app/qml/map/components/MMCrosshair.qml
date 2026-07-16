@@ -15,13 +15,13 @@ import MMInput
 Item {
     id: root
 
-    /*required*/ property var qgsProject
-    /*required*/ property var mapSettings
+    required property var qgsProject
+    required property var mapSettings
     property bool shouldUseSnapping: false
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property var recordPoint : snapUtils.recordPoint
+    property qgsPoint recordPoint : snapUtils.recordPoint
     property point screenPoint : snapUtils.snapped ? snapUtils.snapPoint : root.center
 
     property real outerSize: 60 * __dp

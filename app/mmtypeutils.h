@@ -24,4 +24,11 @@ struct ForeignGeometry
   QML_VALUE_TYPE( qgsGeometry );
 };
 
+struct ForeignPoint
+{
+  Q_GADGET
+  QML_FOREIGN( QgsPoint )
+  QML_VALUE_TYPE( qgsPoint );
+};
+
 #endif //MMTYPEUTILS_H
