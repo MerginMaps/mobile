@@ -21,8 +21,8 @@ Item {
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property var recordPoint
-    property point screenPoint
+    property var recordPoint : snapUtils.recordPoint
+    property point screenPoint : snapUtils.snapped ? snapUtils.snapPoint : root.center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
@@ -38,14 +38,6 @@ Item {
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
       destinationLayer: __activeLayer.vectorLayer
-
-      // We are using assignment instead of property binding here on purpose. Qt 6.10+ doesn't trigger property binding
-      // if tha value hasn't changed. However, if snapping is enabled recordPoint might be the same, but the screenPoint
-      // will be different, thus we need to trigger the recalculation.
-      onRecordPointChanged: {
-        root.recordPoint = snapUtils.recordPoint
-        root.screenPoint = snapUtils.snapped && __activeLayer.vectorLayer ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, root.mapSettings, snapUtils.recordPoint) : root.center
-      }
     }
 
     Image {

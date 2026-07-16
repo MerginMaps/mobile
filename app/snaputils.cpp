@@ -128,6 +128,7 @@ void SnapUtils::getsnap()
     }
 
     setRecordPoint( layerPoint );
+    setSnapPoint( InputUtils::transformPointToScreenCoordinates( mDestinationLayer->crs(), mMapSettings, layerPoint ) );
 
     if ( snap.hasVertex() )
     {
@@ -184,6 +185,17 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
   emit centerPositionChanged( mCenterPosition );
 
   initializeRecordPosition();
+}
+
+QPointF SnapUtils::snapPoint() const
+{
+  return mSnapPoint;
+}
+
+void SnapUtils::setSnapPoint( QPointF newSnapPoint )
+{
+  mSnapPoint = newSnapPoint;
+  emit snapPointChanged( mSnapPoint );
 }
 
 QgsPoint SnapUtils::recordPoint() const

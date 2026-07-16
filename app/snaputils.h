@@ -32,7 +32,10 @@ class SnapUtils : public QObject
     Q_PROPERTY( QgsVectorLayer *destinationLayer READ destinationLayer WRITE setDestinationLayer NOTIFY destinationLayerChanged )
 
     Q_PROPERTY( bool snapped READ snapped WRITE setSnapped NOTIFY snappedChanged )
+    // point in map CRS which will be recorded
     Q_PROPERTY( QgsPoint recordPoint READ recordPoint WRITE setRecordPoint NOTIFY recordPointChanged )
+    // point in screen CRS where the crosshair should point if snapping is enabled
+    Q_PROPERTY( QPointF snapPoint READ snapPoint WRITE setSnapPoint NOTIFY snapPointChanged )
 
   public:
     SnapUtils( QObject *parent = nullptr );
@@ -57,6 +60,9 @@ class SnapUtils : public QObject
 
     QPointF centerPosition() const;
     void setCenterPosition( QPointF newCenterPosition );
+
+    QPointF snapPoint() const;
+    void setSnapPoint( QPointF newSnapPoint );
 
     QgsPoint recordPoint() const;
     void setRecordPoint( QgsPoint newRecordPoint );
@@ -84,6 +90,8 @@ class SnapUtils : public QObject
 
     void centerPositionChanged( QPointF centerPosition );
 
+    void snapPointChanged( QPointF snapPoint );
+
     void recordPointChanged( QgsPoint recordPoint );
 
     void useSnappingChanged( bool useSnapping );
@@ -105,6 +113,7 @@ class SnapUtils : public QObject
     QgsVectorLayer *mDestinationLayer = nullptr; // not owned
 
     QPointF mCenterPosition = QPointF( -1, -1 );
+    QPointF mSnapPoint = QPointF( -1, -1 );
     QgsPoint mRecordPoint = QgsPoint( -1, -1 );
 
     bool mSnapped = false;
