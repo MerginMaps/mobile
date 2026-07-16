@@ -10,7 +10,7 @@
 import QtQuick
 import QtQuick.Controls.impl
 
-import mm 1.0 as MM
+import MMInput
 
 Item {
     id: root
@@ -30,7 +30,7 @@ Item {
     property alias crosshairForeground: crosshairForeground
     property alias snapUtils: snapUtils
 
-    MM.SnapUtils {
+    SnapUtils {
       id: snapUtils
 
       centerPosition: root.center
@@ -164,7 +164,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
+      opacity: snapUtils.snapped && ( snapUtils.snapType === SnapUtils.Vertex || snapUtils.snapType === SnapUtils.Other ) ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {
@@ -174,7 +174,7 @@ Item {
         }
       }
 
-      rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
+      rotation: snapUtils.snapType === SnapUtils.Other ? 0 : 45
 
       Behavior on rotation {
         PropertyAnimation {
@@ -215,7 +215,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
+      opacity: snapUtils.snapped && snapUtils.snapType === SnapUtils.Segment ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {

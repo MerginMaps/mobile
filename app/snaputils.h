@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <qglobal.h>
+#include <qqmlintegration.h>
 
 #include "qgspoint.h"
 #include "qgsproject.h"
@@ -23,6 +24,7 @@
 class SnapUtils : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
