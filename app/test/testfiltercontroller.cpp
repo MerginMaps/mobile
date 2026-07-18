@@ -13,6 +13,8 @@
 
 #include <QtTest/QtTest>
 #include <QDateTime>
+#include <QFile>
+#include <QTemporaryDir>
 
 #include <qgsproject.h>
 #include <qgsvectorlayer.h>
@@ -554,9 +556,71 @@ void TestFilterController::testTextFilter()
   filterValues[filterId] = QVariantList{ QStringLiteral( "great" ) };
   mController->processFilters( filterValues );
 
-  const QString expected = QStringLiteral( "(\"Condition\" LIKE '%great%')" );
+  const QString expected = QStringLiteral( "(\"Condition\" LIKE '%great%' ESCAPE '!')" );
   QCOMPARE( layer->subsetString(), expected );
   QCOMPARE( layer->featureCount(), ( long long ) 14 );
+}
+
+void TestFilterController::testTextFilterWildcards_data()
+{
+  QTest::addColumn<QString>( "searchValue" );
+  QTest::addColumn<QString>( "expectedPattern" );
+  QTest::addColumn<qlonglong>( "expectedCount" );
+
+  QTest::newRow( "percent" ) << QStringLiteral( "%" ) << QStringLiteral( "%!%%" ) << 2LL;
+  QTest::newRow( "underscore" ) << QStringLiteral( "_" ) << QStringLiteral( "%!_%" ) << 2LL;
+  QTest::newRow( "escape-character" ) << QStringLiteral( "!" ) << QStringLiteral( "%!!%" ) << 1LL;
+  QTest::newRow( "combined-wildcards" ) << QStringLiteral( "%_" ) << QStringLiteral( "%!%!_%" ) << 1LL;
+}
+
+void TestFilterController::testTextFilterWildcards()
+{
+  QFETCH( QString, searchValue );
+  QFETCH( QString, expectedPattern );
+  QFETCH( qlonglong, expectedCount );
+
+  QTemporaryDir tempDir;
+  QVERIFY( tempDir.isValid() );
+  const QString layerPath = tempDir.filePath( QStringLiteral( "roads.gpkg" ) );
+  QVERIFY( QFile::copy( TestUtils::testDataDir() + QStringLiteral( "/filtering/roads.gpkg" ), layerPath ) );
+
+  const QString fieldName = QStringLiteral( "Condition" );
+  QgsVectorLayer *layer = new QgsVectorLayer(
+    layerPath + QStringLiteral( "|layername=roads" ),
+    QStringLiteral( "text-filter-wildcards" ),
+    QStringLiteral( "ogr" )
+  );
+  QVERIFY( layer );
+  QVERIFY( layer->isValid() );
+  QgsProject::instance()->addMapLayer( layer );
+
+  const QStringList values =
+  {
+    QStringLiteral( "plain" ),
+    QStringLiteral( "percent%only" ),
+    QStringLiteral( "under_score" ),
+    QStringLiteral( "bang!mark" ),
+    QStringLiteral( "both%_chars" )
+  };
+  for ( const QString &value : values )
+  {
+    QVERIFY( TestUtils::addFeatureToLayer( layer, fieldName, value ) );
+  }
+
+  const QString sql = QStringLiteral( "\"Condition\" LIKE '%@@value@@%'" );
+  const QString filterId = TestUtils::setupControllerWithFilter(
+                             mController.get(), FieldFilter::TextFilter, layer->id(), fieldName, sql );
+  QVERIFY( !filterId.isEmpty() );
+
+  QVariantMap filterValues;
+  filterValues[filterId] = QVariantList{ searchValue };
+  mController->processFilters( filterValues );
+
+  const QString expected = QStringLiteral( "(\"Condition\" LIKE '%1' ESCAPE '!')" ).arg( expectedPattern );
+  QCOMPARE( layer->subsetString(), expected );
+  QCOMPARE( layer->featureCount(), expectedCount );
+
+  QgsProject::instance()->removeMapLayer( layer );
 }
 
 // Checkbox filter

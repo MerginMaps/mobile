@@ -56,6 +56,8 @@ class TestFilterController : public QObject
 
     // Text filter
     void testTextFilter();
+    void testTextFilterWildcards_data();
+    void testTextFilterWildcards();
 
     // Checkbox filter
     void testCheckboxFilter();
