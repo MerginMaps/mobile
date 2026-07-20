@@ -54,6 +54,11 @@ Page {
     anchors.fill: parent
 
     interactive: layerDetailData.isVectorLayer
+
+    // Keep the bottom toolbar's highlighted button in sync with the visible
+    // page when the user changes page by swiping (onClicked handlers below
+    // already take care of the case when a toolbar button is tapped).
+    onCurrentIndexChanged: selectableToolbar.index = content.currentIndex
   }
 
   Component {
