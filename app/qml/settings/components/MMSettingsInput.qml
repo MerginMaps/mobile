@@ -56,7 +56,7 @@ MMSettingsItem {
             textFieldBackground.color: __style.lightGreenColor
 
             text: root.value
-            textField.inputMethodHints: Qt.ImhNoAutoUppercase
+            textField.inputMethodHints: Qt.ImhFormattedNumbersOnly
           }
 
           MMComponents.MMListSpacer { height: __style.spacing40 }

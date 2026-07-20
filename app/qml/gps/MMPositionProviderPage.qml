@@ -69,6 +69,7 @@ MMComponents.MMPage {
           if ( listdelegate.providerName ) return listdelegate.providerName
           return qsTr( "Unknown device" )
         }
+
         secondaryText: {
           if ( listdelegate.isActive ) {
             if ( listdelegate.providerType === "external_ip" )
@@ -99,12 +100,12 @@ MMComponents.MMPage {
       }
 
       section {
-        property: "providerType"
+        property: "providerGroup"
         delegate: MMComponents.MMText {
           required property string section
           width: ListView.view.width
 
-          text: section === "internal" ? qsTr( "Internal receivers" ) : qsTr( "External receivers" )
+          text: qsTr( "%1 receivers" ).arg( section === "internal" ? qsTr( "Internal" ) : qsTr( "External" ) )
 
           font: __style.p6
           color: __style.nightColor
@@ -154,7 +155,12 @@ MMComponents.MMPage {
       id: networkProviderDrawer
 
       onConfirmed: function( alias, deviceAddress ) {
-        root.activateProvider( "external_ip", deviceAddress, alias )
+        if ( providersModel.providerExists( deviceAddress ) ) {
+          showDuplicateProviderError()
+        } else {
+          close()
+          root.activateProvider( "external_ip", deviceAddress, alias )
+        }
       }
     }
 
@@ -268,8 +274,8 @@ MMComponents.MMPage {
       return // do not construct the same provider again
     }
 
-    providersModel.addProvider( name, id, type )
     PositionKit.positionProvider = PositionKit.constructProvider( type, id, name )
+    providersModel.addProvider( PositionKit.positionProvider.name(), id, type )
 
     if ( type === "external_bt" ) {
       connectingDialogLoader.open( "bluetooth" )

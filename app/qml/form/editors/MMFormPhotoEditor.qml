@@ -63,7 +63,7 @@ MMFormPhotoViewer {
 
   property string _fieldHomePath: parent.fieldHomePath
   property var _fieldActiveProject: parent.fieldActiveProject
-  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
+  property MM.AttributeController _fieldController: parent.fieldController
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -237,7 +237,8 @@ MMFormPhotoViewer {
     property string targetDir: __inputUtils.resolveTargetDir(
                                  root._fieldHomePath,
                                  root._fieldConfig,
-                                 root._fieldFeatureLayerPair,
+                                 root._fieldController.featureLayerPair,
+                                 root._fieldController.parentController?.featureLayerPair ?? __inputUtils.createFeatureLayerPair(),
                                  root._fieldActiveProject
                                  )
 
@@ -286,6 +287,7 @@ MMFormPhotoViewer {
      * Called when clicked on the camera icon to capture an image.
      */
     function capturePhoto() {
+      forceActiveFocus()
       updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
@@ -316,6 +318,7 @@ MMFormPhotoViewer {
      * Then "imageSelected" caught the signal, handles changes and sends signal "valueChanged".
      */
     function chooseFromGallery() {
+      forceActiveFocus()
       updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldIndex )
@@ -335,6 +338,7 @@ MMFormPhotoViewer {
      * \param imagePath Absolute path to an image.
      */
     function removeImage( path ) {
+      forceActiveFocus()
       if ( __inputUtils.fileExists( path ) ) {
         imageDeleteDialog.imagePath = path
         imageDeleteDialog.open()
@@ -417,7 +421,7 @@ MMFormPhotoViewer {
      * which references another field in the same form, to save photos in certain directory.
      */
     function updateTargetDir() {
-      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldFeatureLayerPair, root._fieldActiveProject )
+      targetDir = __inputUtils.resolveTargetDir( root._fieldHomePath, root._fieldConfig, root._fieldController.featureLayerPair, root._fieldController.parentController?.featureLayerPair ?? __inputUtils.createFeatureLayerPair(), root._fieldActiveProject )
     }
   }
 }

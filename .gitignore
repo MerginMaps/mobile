@@ -22,3 +22,4 @@ CMakeLists.txt.user
 .github/secrets/ios/LutraConsulting*.mobileprovision
 google_play_key.json
 fastlane/report.xml
+CMakeUserPresets.json

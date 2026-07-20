@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -18,8 +19,8 @@ import "../../components/private" as MMPrivateComponents
 MMPrivateComponents.MMBaseInput {
   id: root
 
+  property MM.AttributeController _fieldController: parent.fieldController
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
-  property var _fieldFeatureLayerPair: parent.fieldFeatureLayerPair
   property var _fieldActiveProject: parent.fieldActiveProject
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -44,11 +45,11 @@ MMPrivateComponents.MMBaseInput {
     spacing: __style.spacing12
     orientation: ListView.Horizontal
 
-    model: MM.RelationFeaturesModel {
+    model: RelationFeaturesModel {
       id: rmodel
 
       relation: root._fieldAssociatedRelation
-      parentFeatureLayerPair: root._fieldFeatureLayerPair
+      parentFeatureLayerPair: root._fieldController.featureLayerPair
       homePath: root._fieldActiveProject.homePath
     }
 
@@ -69,6 +70,7 @@ MMPrivateComponents.MMBaseInput {
       text: model.FeatureTitle
 
       onClicked: function( path ) {
+        root.forceActiveFocus()
         root.openLinkedFeature( model.FeaturePair )
       }
     }
@@ -97,7 +99,10 @@ MMPrivateComponents.MMBaseInput {
 
         MMComponents.MMSingleClickMouseArea {
           anchors.fill: parent
-          onSingleClicked: root.createLinkedFeature( root._fieldFeatureLayerPair, root._fieldAssociatedRelation )
+          onSingleClicked: {
+            root.forceActiveFocus()
+            root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
+          }
         }
       }
 

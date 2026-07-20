@@ -318,7 +318,7 @@ void AppSettings::setHapticsType( const HapticsType hapticsType )
 
 double AppSettings::gpsAntennaHeight() const
 {
-  return mGpsAntennaHeight;
+  return std::round( mGpsAntennaHeight / 0.001 ) * 0.001;
 }
 
 void AppSettings::setGpsAntennaHeight( const double gpsAntennaHeight )

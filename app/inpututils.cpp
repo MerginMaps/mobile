@@ -330,13 +330,12 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
 
   const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
-  // Cut the geometry to current extent
-  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+  // Cut the geometry extent to current extent
+  const QgsRectangle intersectedExtent = currentExtent.intersect( geom.boundingBox() );
 
-  if ( !intersectedGeom.isEmpty() )
+  if ( !intersectedExtent.isEmpty() )
   {
-    target = QgsPoint( intersectedGeom.boundingBox().center() );
+    target = QgsPoint( intersectedExtent.center() );
   }
   else
   {
@@ -831,6 +830,22 @@ bool InputUtils::isEmptyGeometry( const QgsGeometry &geometry )
   return geometry.isEmpty();
 }
 
+bool InputUtils::isLastPartEmpty( const QgsGeometry &geometry )
+{
+  if ( geometry.isEmpty() )
+    return true;
+
+  const QgsAbstractGeometry *geom = geometry.constGet();
+  if ( const QgsGeometryCollection *collection = qgsgeometry_cast<const QgsGeometryCollection *>( geom ) )
+  {
+    const int parts = collection->partCount();
+    const QgsAbstractGeometry *lastPart = collection->geometryN( parts - 1 );
+    return lastPart->isEmpty();
+  }
+
+  return false;
+}
+
 QgsPoint InputUtils::coordinateToPoint( const QGeoCoordinate &coor )
 {
   return QgsPoint( coor.longitude(), coor.latitude(), coor.altitude() );
@@ -987,7 +1002,7 @@ bool InputUtils::fileExists( const QString &path )
   return ( check_file.exists() && check_file.isFile() );
 }
 
-QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject )
+QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, const FeatureLayerPair &parentPair, QgsProject *activeProject )
 {
   QString expression;
   QMap<QString, QVariant> collection = config.value( QStringLiteral( "PropertyCollection" ) ).toMap();
@@ -1001,7 +1016,7 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
 
   if ( !expression.isEmpty() )
   {
-    QString result = evaluateExpression( pair, activeProject, expression );
+    QString result = evaluateExpression( pair, parentPair, activeProject, expression );
     sanitizePath( result );
     return result;
   }
@@ -1043,7 +1058,7 @@ QString InputUtils::getAbsolutePath( const QString &path, const QString &prefixP
 QString InputUtils::resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject )
 {
   int relativeStorageMode = config.value( QStringLiteral( "RelativeStorage" ) ).toInt();
-  QString targetDir = resolveTargetDir( homePath, config, pair, activeProject );
+  QString targetDir = resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
   QString prefixToRelativePath = resolvePrefixForRelativePath( relativeStorageMode, homePath, targetDir );
 
   return getAbsolutePath( path, prefixToRelativePath );
@@ -1550,12 +1565,14 @@ QString InputUtils::dumpScreenInfo() const
   return msg;
 }
 
-QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression )
+QString InputUtils::evaluateExpression( const FeatureLayerPair &pair, const FeatureLayerPair &parentPair, QgsProject *activeProject, const QString &expression )
 {
   QList<QgsExpressionContextScope *> scopes;
   scopes << QgsExpressionContextUtils::globalScope();
   scopes << QgsExpressionContextUtils::projectScope( activeProject );
   scopes << QgsExpressionContextUtils::layerScope( pair.layer() );
+  scopes << QgsExpressionContextUtils::parentFormScope( parentPair.feature() );
+  scopes << QgsExpressionContextUtils::formScope( pair.feature() );
 
   QgsExpressionContext context( scopes );
   context.setFeature( pair.feature() );

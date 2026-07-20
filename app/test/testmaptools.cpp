@@ -17,6 +17,7 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsmultipolygon.h"
+#include "qgsmultilinestring.h"
 #include "qgslinestring.h"
 #include "qgsgeometry.h"
 
@@ -1443,6 +1444,425 @@ void TestMapTools::testAddVertexMultiPolygonLayer()
 
   delete project;
   delete polygonLayer;
+}
+
+void TestMapTools::testAddPartPointLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  // Create memory layer to work with
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( "Point?crs=epsg:4326", "pointlayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+
+  mapTool.setActiveLayer( pointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -97.129, 22.602 },
+    { -104.923, 24.840 }
+  };
+
+  //
+  // Point layer should only add point when geometry is empty
+  //
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+
+  // startDigitizingNewPart should not affect singlepart layers
+  mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
+
+  // geometry did not change
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+
+  QCOMPARE( mapTool.activePart(), 0 );
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::Point );
+
+  delete project;
+  delete pointLayer;
+}
+
+void TestMapTools::testAddPartMultiPointLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QgsVectorLayer *multiPointLayer = new QgsVectorLayer( "MultiPoint?crs=epsg:4326", "mpointlayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setActiveLayer( multiPointLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -97.129, 22.602 },
+    { -104.923, 24.840 },
+    { -108.0, 26.0 },
+  };
+
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 2 );
+
+  // startDigitizingNewPart on MultiPoint does not add an empty placeholder part
+  mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 2 );
+  QCOMPARE( mapTool.activePart(), 0 );
+
+  // adding another point still appends a new part
+  mapTool.addPoint( pointsToAdd[2] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 3 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 3 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
+  QCOMPARE( mapTool.activePart(), 0 );
+
+  delete project;
+  delete multiPointLayer;
+}
+
+void TestMapTools::testAddPartLineLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  // Create memory layer to work with
+  QgsVectorLayer *lineLayer = new QgsVectorLayer( "LineString?crs=epsg:4326", "linelayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+
+  mapTool.setActiveLayer( lineLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  //
+  // ----------- Linestring layer ----------
+  //
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -97.129, 22.602 }, // added to end
+    { -104.923, 24.840 }, // added to end
+    { -108, 26 }, // added to end
+    { -110, 28 }, // added to end
+    { -110, 28 }, // Same as previous point should not be recorded
+    { -95, 20 }, // added to start
+    { -109, 27 }, // added to middle
+  };
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( !mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 2 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::LineString );
+
+  // startDigitizingNewPart should not affect singlepart layers
+  mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
+  QCOMPARE( mapTool.activePart(), 0 );
+
+  mapTool.addPoint( pointsToAdd[2] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  delete project;
+  delete lineLayer;
+}
+
+void TestMapTools::testAddPartMultiLineLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QgsVectorLayer *multiLineLayer = new QgsVectorLayer( "MultiLineString?crs=epsg:4326", "mlinelayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setActiveLayer( multiLineLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -97.129, 22.602 },
+    { -104.923, 24.840 },
+    { -108.0, 26.0 },
+    { -80.0, 30.0 },
+    { -85.0, 35.0 },
+  };
+
+  // build first line part
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[1] );
+  mapTool.addPoint( pointsToAdd[2] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 3 );
+  QCOMPARE( mapTool.activePart(), 0 );
+
+  // start digitizing a new part
+  mapTool.startDigitizingNewPart();
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 3 );
+  QCOMPARE( mapTool.activePart(), 1 );
+
+  // new points are added to the new part
+  mapTool.addPoint( pointsToAdd[3] );
+
+  // second part has only 1 vertex so the overall geometry is not yet valid
+  QVERIFY( !mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 4 );
+
+  mapTool.addPoint( pointsToAdd[4] );
+
+  // second part now has 2 vertices — both parts are valid
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 5 );
+
+  const QgsMultiLineString *mls = qgsgeometry_cast<const QgsMultiLineString *>( mapTool.recordedGeometry().constGet() );
+  QVERIFY( mls );
+  QCOMPARE( mls->lineStringN( 0 )->numPoints(), 3 );
+  QCOMPARE( mls->lineStringN( 1 )->numPoints(), 2 );
+  QCOMPARE( mls->lineStringN( 0 )->pointN( 0 ), pointsToAdd[0] );
+  QCOMPARE( mls->lineStringN( 0 )->pointN( 2 ), pointsToAdd[2] );
+  QCOMPARE( mls->lineStringN( 1 )->pointN( 0 ), pointsToAdd[3] );
+  QCOMPARE( mls->lineStringN( 1 )->pointN( 1 ), pointsToAdd[4] );
+
+  delete project;
+  delete multiLineLayer;
+}
+
+void TestMapTools::testAddPartPolygonLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QCOMPARE( mapTool.recordingType(), RecordingMapTool::Manual );
+
+  // Create memory layer to work with
+  QgsVectorLayer *polygonLayer = new QgsVectorLayer( "Polygon?crs=epsg:4326", "polygonlayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setActiveLayer( polygonLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  //
+  // ----------- Polygon layer ----------
+  //
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -95.5, 22.0 },
+    { -97.5, 22.0 },
+    { -97.5, 26.0 },
+    { -95.5, 26.0 },
+    { -96.5, 22.0 }, // add between first two
+    { -97.5, 24.0 }, // add between second & third
+    { -95.5, 24.0 }, // add between third & last
+  };
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[0] );
+
+  QVERIFY( !mapTool.hasValidGeometry() );
+
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 1 );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->nCoordinates(), 1 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 0 ), pointsToAdd[0] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  mapTool.addPoint( pointsToAdd[1] );
+
+  QVERIFY( !mapTool.hasValidGeometry() );
+  // ring will be closed, hance 3 points
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 3 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 1 ), pointsToAdd[1] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  QVERIFY( mapTool.recordedGeometry().wkbType() == Qgis::WkbType::Polygon );
+
+  mapTool.addPoint( pointsToAdd[2] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QVERIFY( mapTool.recordedGeometry().constGet()->nCoordinates() == 4 );
+  QCOMPARE( mapTool.recordedGeometry().vertexAt( 2 ), pointsToAdd[2] );
+
+  QVERIFY( !mapTool.activeVertex().isValid() );
+  QVERIFY( mapTool.state() == RecordingMapTool::Record );
+
+  // startDigitizingNewPart should not affect singlepart layers
+  mapTool.startDigitizingNewPart();
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
+  QCOMPARE( mapTool.activePart(), 0 );
+
+  delete project;
+  delete polygonLayer;
+}
+
+void TestMapTools::testAddPartMultiPolygonLayer()
+{
+  RecordingMapTool mapTool;
+
+  QgsProject *project = TestUtils::loadPlanesTestProject();
+  QVERIFY( project && !project->homePath().isEmpty() );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  setupMapSettings( ms, project, QgsRectangle( -107.54331499504026226, 21.62302175066136556, -72.73224633912816728, 51.49933451998575151 ), QSize( 600, 1096 ) );
+
+  mapTool.setMapSettings( ms );
+
+  QgsVectorLayer *multiPolygonLayer = new QgsVectorLayer( "MultiPolygon?crs=epsg:4326", "mpolylayer", "memory" );
+
+  mapTool.setState( RecordingMapTool::Record );
+  mapTool.setActiveLayer( multiPolygonLayer );
+  mapTool.setActiveFeature( QgsFeature() );
+
+  QVector<QgsPoint> pointsToAdd =
+  {
+    { -95.5, 22.0 },
+    { -97.5, 22.0 },
+    { -97.5, 26.0 },
+    { -80.0, 30.0 },
+    { -82.0, 30.0 },
+    { -82.0, 34.0 },
+  };
+
+  // build first polygon part (3 unique vertices make a valid polygon)
+  mapTool.addPoint( pointsToAdd[0] );
+  mapTool.addPoint( pointsToAdd[1] );
+  mapTool.addPoint( pointsToAdd[2] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 1 );
+  QCOMPARE( mapTool.activePart(), 0 );
+  QCOMPARE( mapTool.recordedGeometry().wkbType(), Qgis::WkbType::MultiPolygon );
+
+  // start digitizing a new part
+  mapTool.startDigitizingNewPart();
+
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+  QCOMPARE( mapTool.activePart(), 1 );
+
+  // new points are added to the new polygon part
+  mapTool.addPoint( pointsToAdd[3] );
+  mapTool.addPoint( pointsToAdd[4] );
+  mapTool.addPoint( pointsToAdd[5] );
+
+  QVERIFY( mapTool.hasValidGeometry() );
+  QCOMPARE( mapTool.recordedGeometry().constGet()->partCount(), 2 );
+
+  const QgsMultiPolygon *mp = qgsgeometry_cast<const QgsMultiPolygon *>( mapTool.recordedGeometry().constGet() );
+  QVERIFY( mp );
+  // each polygon exterior ring has 4 vertices (3 unique + closing vertex)
+  QCOMPARE( mp->polygonN( 0 )->exteriorRing()->numPoints(), 4 );
+  QCOMPARE( mp->polygonN( 1 )->exteriorRing()->numPoints(), 4 );
+  const QgsLineString *ring1 = qgsgeometry_cast<const QgsLineString *>( mp->polygonN( 1 )->exteriorRing() );
+  QVERIFY( ring1 );
+  QCOMPARE( ring1->pointN( 0 ), pointsToAdd[3] );
+  QCOMPARE( ring1->pointN( 1 ), pointsToAdd[4] );
+  QCOMPARE( ring1->pointN( 2 ), pointsToAdd[5] );
+
+  delete project;
+  delete multiPolygonLayer;
 }
 
 void TestMapTools::testUpdateVertex()

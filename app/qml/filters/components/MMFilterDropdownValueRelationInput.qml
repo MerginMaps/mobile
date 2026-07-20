@@ -9,7 +9,8 @@
 
 import QtQuick
 
-import mm 1.0 as MM
+import MMInput
+
 import "../../components" as MMComponents
 
 Column {
@@ -65,30 +66,47 @@ Column {
 
     active: false
 
-
     sourceComponent: MMComponents.MMListMultiselectDrawer {
+      id: listDrawer
+
       drawerHeader.title: root.filterName
 
-      withSearch: vrDropdownModel.count > 5
+      withSearch: vrDropdownModel.count > 8
       multiSelect: root.isMultiSelect
 
-      emptyStateDelegate: Component {
-        MMComponents.MMListEmptyLoaderDelegate {
-          isLoading: vrDropdownModel.fetchingResults
-        }
-      }
+      isLoading: vrDropdownModel.fetchingResults
 
-      list.model: MM.ValueRelationFeaturesModel {
+      list.model: ValueRelationFeaturesModel {
         id: vrDropdownModel
 
         config: root.widgetConfig
+
+        property bool firstFetchFinished: false
+
+        // We show search for lists with more then 8 features.
+        // We need to intentionally break the binding here because "count" changes
+        // when users search for something and that would hide the search bar
+        onFetchingResultsChanged: {
+          if ( !fetchingResults && !firstFetchFinished )
+          {
+            if ( count > 8 )
+            {
+              listDrawer.withSearch = true
+            }
+            else
+            {
+              listDrawer.withSearch = false
+            }
+
+            firstFetchFinished = true
+          }
+        }
       }
 
-      textRole: "FeatureTitle"
-      valueRole: "Key"
+      textRole: "ValueColumn"
+      valueRole: "KeyColumn"
 
       onSelectionFinished: function( selectedItems ) {
-
         //
         // Large fids could be converted to scientific notation on their way to cpp,
         // so we convert them to string first in JS.
@@ -120,6 +138,7 @@ Column {
   }
 
   function openDrawer() {
+    forceActiveFocus()
     dropdownDrawerLoader.active = true
     dropdownDrawerLoader.focus = true
   }

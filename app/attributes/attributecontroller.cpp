@@ -883,6 +883,10 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   // Create context
   QgsFields fields = mFeatureLayerPair.feature().fields();
   QgsExpressionContext expressionContext = layer->createExpressionContext();
+  if ( mParentController )
+  {
+    expressionContext << QgsExpressionContextUtils::parentFormScope( mParentController->featureLayerPair().feature() );
+  }
   expressionContext << QgsExpressionContextUtils::formScope( mFeatureLayerPair.feature() );
   if ( mVariablesManager )
     expressionContext << mVariablesManager->positionScope();
@@ -900,7 +904,7 @@ void AttributeController::recalculateDerivedItems( bool isFormValueChange, bool 
   // Evaluate HTML and Text element expressions
   recalculateRichTextWidgets( changedFormItems, expressionContext );
 
-  // Evaluate tab items visiblity
+  // Evaluate tab items visibility
   {
     QVector<std::shared_ptr<TabItem>>::iterator tabItemsIterator = mTabItems.begin();
     while ( tabItemsIterator != mTabItems.end() )
@@ -1632,7 +1636,8 @@ void AttributeController::renamePhotos()
           continue;
         }
 
-        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
+        const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
+        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
         const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
         QString newName = val.toString();
@@ -1675,7 +1680,8 @@ void AttributeController::saveSketches()
       if ( item->rawValue().isValid() )
       {
         const QVariantMap config = item->editorWidgetConfig();
-        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, QgsProject::instance() );
+        const FeatureLayerPair &parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
+        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
         const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
 
