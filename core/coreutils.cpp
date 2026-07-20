@@ -269,15 +269,36 @@ bool CoreUtils::isAuthConfigFile( const QString filePath )
   return filePath == AUTH_CONFIG_FILENAME;
 }
 
+static bool hasValidFirstCharacter( const QString &name )
+{
+  static QRegularExpression re( R"(^[\s^\.].*$)", QRegularExpression::CaseInsensitiveOption );
+  return !re.match( name ).hasMatch();
+}
+
+static bool isInvalidFilename( const QString &name )
+{
+  if ( name.length() > 255 )
+    return true;
+
+  static QRegularExpression re( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
+  return re.match( name ).hasMatch();
+}
+
+static bool isReservedWord( const QString &name )
+{
+  static QRegularExpression re( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  return re.match( name ).hasMatch();
+}
+
+static bool hasValidCharacters( const QString &name )
+{
+  static QRegularExpression re( R"(^[\w\s\-\.]+$)" );
+  return re.match( name ).hasMatch();
+}
+
 bool CoreUtils::isValidName( const QString &name )
 {
-  static QRegularExpression reForbiddenmNames( R"(^[\s^\.].*$|^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d|^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
-  static QRegularExpression reValidCharacters( R"(^[\w\s\-\.]+$)" );
-
-  QRegularExpressionMatch matchForbiddenNames = reForbiddenmNames.match( name );
-  QRegularExpressionMatch matchValidCharacters = reValidCharacters.match( name );
-
-  return !matchForbiddenNames.hasMatch() && matchValidCharacters.hasMatch();
+  return hasValidFirstCharacter( name ) && !isInvalidFilename( name ) && !isReservedWord( name ) && hasValidCharacters( name );
 }
 
 QString CoreUtils::nameAbbr( const QString &name, const QString &email )
