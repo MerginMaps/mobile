@@ -220,7 +220,7 @@ void SnapUtils::setSnapped( bool newSnapped )
     return;
 
   if ( !newSnapped ) resetSnapPoint();
-  
+
   mSnapped = newSnapped;
   emit snappedChanged( mSnapped );
 }
