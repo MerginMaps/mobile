@@ -37,6 +37,9 @@ class LayerTreeSortFilterModel : public QSortFilterProxyModel
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
 
+    // Returns the layer sorting method configured for the given project (defaults to Alphabetical)
+    static SortMethodEnum sortMethod( QgsProject *project );
+
     LayerTreeModel *layerTreeModel() const;
     void setLayerTreeModel( LayerTreeModel *newLayerTreeModel );
 
