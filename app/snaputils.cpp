@@ -218,6 +218,9 @@ void SnapUtils::setSnapped( bool newSnapped )
 {
   if ( mSnapped == newSnapped )
     return;
+
+  if ( !newSnapped ) resetSnapPoint();
+  
   mSnapped = newSnapped;
   emit snappedChanged( mSnapped );
 }
@@ -309,6 +312,11 @@ void SnapUtils::initializeRecordPosition()
                            recordpoint );
 
   setRecordPoint( centerPoint );
+}
+
+void SnapUtils::resetSnapPoint()
+{
+  mSnapPoint = QPointF( -1, -1 );
 }
 
 QgsVectorLayer *SnapUtils::destinationLayer() const

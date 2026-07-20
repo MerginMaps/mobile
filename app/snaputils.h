@@ -108,6 +108,8 @@ class SnapUtils : public QObject
     void setupSnapping();
     void initializeRecordPosition();
 
+    void resetSnapPoint();
+
     QgsSnappingUtils mSnappingUtils;
 
     QgsProject *mQgsProject = nullptr; // not owned
