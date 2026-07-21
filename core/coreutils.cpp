@@ -269,36 +269,29 @@ bool CoreUtils::isAuthConfigFile( const QString filePath )
   return filePath == AUTH_CONFIG_FILENAME;
 }
 
-static bool hasValidFirstCharacter( const QString &name )
-{
-  static QRegularExpression re( R"(^[\s^\.].*$)", QRegularExpression::CaseInsensitiveOption );
-  return !re.match( name ).hasMatch();
-}
-
-static bool isInvalidFilename( const QString &name )
-{
-  if ( name.length() > 255 )
-    return true;
-
-  static QRegularExpression re( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
-  return re.match( name ).hasMatch();
-}
-
-static bool isReservedWord( const QString &name )
-{
-  static QRegularExpression re( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
-  return re.match( name ).hasMatch();
-}
-
-static bool hasValidCharacters( const QString &name )
-{
-  static QRegularExpression re( R"(^[\w\s\-\.]+$)" );
-  return re.match( name ).hasMatch();
-}
-
 bool CoreUtils::isValidName( const QString &name )
 {
-  return hasValidFirstCharacter( name ) && !isInvalidFilename( name ) && !isReservedWord( name ) && hasValidCharacters( name );
+  if ( name.length() > 255 )
+    return false;
+
+  // name must not start with whitespace, '^' or '.'
+  static QRegularExpression invalidFirstCharacterRe( R"(^[\s^\.].*$)", QRegularExpression::CaseInsensitiveOption );
+  if ( invalidFirstCharacterRe.match( name ).hasMatch() )
+    return false;
+
+  // name must not be a reserved Windows device filename (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
+  static QRegularExpression invalidFilenameRe( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
+  if ( invalidFilenameRe.match( name ).hasMatch() )
+    return false;
+
+  // name must not be a word reserved by Mergin Maps / Lutra Consulting
+  static QRegularExpression reservedWordRe( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  if ( reservedWordRe.match( name ).hasMatch() )
+    return false;
+
+  // name must contain only word characters, whitespace, '-' or '.'
+  static QRegularExpression validCharactersRe( R"(^[\w\s\-\.]+$)" );
+  return validCharactersRe.match( name ).hasMatch();
 }
 
 QString CoreUtils::nameAbbr( const QString &name, const QString &email )
