@@ -24,7 +24,8 @@ class TestFormEditors : public QObject
     void testRelationsEditor();
     void testRelationsReferenceEditor();
     void testRelationsWidgetPresence();
-    void testValueRelationsEditor();
+    void testValueRelationConversions();
+    void testValueRelationControllerLookup();
 };
 
 #endif // TESTFORMEDITORS_H

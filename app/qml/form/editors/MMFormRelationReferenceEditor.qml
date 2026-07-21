@@ -10,6 +10,7 @@
 import QtQuick
 
 import mm 1.0 as MM
+import MMInput
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
@@ -72,11 +73,12 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   onRightContentClicked: {
+    forceActiveFocus()
     listLoader.active = true
     listLoader.focus = true
   }
 
-  MM.RelationReferenceFeaturesModel {
+  RelationReferenceFeaturesModel {
     id: rModel
 
     config: root._fieldConfig

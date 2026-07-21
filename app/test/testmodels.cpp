@@ -13,6 +13,7 @@
 #include "staticfeaturesmodel.h"
 #include "inputmapsettings.h"
 #include "valuerelationfeaturesmodel.h"
+#include "valuerelationcontroller.h"
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
 
@@ -178,125 +179,259 @@ void TestModels::testLayerFeaturesModelSorted()
   QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
 }
 
-void TestModels::testValueRelationFeaturesModel()
+void TestModels::testValueRelationOrdering()
 {
-  QString projectDir = TestUtils::testDataDir() + "/project_value_relations";
-  QString projectName = "proj.qgz";
+  /* Tests the four ordering permutations against a layer whose insertion order
+   * is neither key-sorted nor label-sorted:
+   *
+   *   key->label:  1->Alpha  2->Delta  3->Gamma  4->Beta
+   *
+   *   1. OrderByKey  asc  -> 1(Alpha), 2(Delta), 3(Gamma), 4(Beta)
+   *   2. OrderByKey  desc -> 4(Beta),  3(Gamma), 2(Delta), 1(Alpha)
+   *   3. OrderByValue asc -> 1(Alpha), 4(Beta),  2(Delta), 3(Gamma)
+   *   4. OrderByField "label" asc -> same as 3, but different code path
+   *   5. OrderByField desc -> 3(Gamma), 2(Delta), 4(Beta), 1(Alpha)
+   */
+  QgsProject::instance()->removeAllMapLayers();
 
-  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+  QgsVectorLayer *layer = TestUtils::createVROrderingLayer();
+  QVERIFY( layer && layer->isValid() );
+  QCOMPARE( static_cast<int>( layer->featureCount() ), 4 );
+  QgsProject::instance()->addMapLayer( layer );
 
-  QgsMapLayer *mainL = QgsProject::instance()->mapLayersByName( QStringLiteral( "main" ) ).at( 0 );
-  QgsVectorLayer *mainLayer = static_cast<QgsVectorLayer *>( mainL );
-
-  QVERIFY( mainLayer && mainLayer->isValid() );
-
-  QgsMapLayer *subsubL = QgsProject::instance()->mapLayersByName( QStringLiteral( "subsub" ) ).at( 0 );
-  QgsVectorLayer *subsubLayer = static_cast<QgsVectorLayer *>( subsubL );
-
-  QVERIFY( subsubLayer && subsubLayer->isValid() );
-
-  QgsFeature f = mainLayer->getFeature( 1 );
-  FeatureLayerPair pair( f, mainLayer );
+  const QVariantMap baseConfig =
+  {
+    { QStringLiteral( "Layer" ), layer->id() },
+    { QStringLiteral( "Key" ),   QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ), QStringLiteral( "label" ) }
+  };
 
   ValueRelationFeaturesModel model;
-
+  model.setConfig( baseConfig );
+  QCOMPARE( model.rowCount(), 0 ); // setConfig should not populate the model
   QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
 
-  // setup value relation, initially unsorted
-  QVariantMap config =
+  auto keyAt = [&]( int row )
   {
-    { QStringLiteral( "Layer" ), QStringLiteral( "subsub_df9d0ba0_2ec8_4a2c_9f96_84576e37c126" ) },
-    { QStringLiteral( "Key" ), QStringLiteral( "fid" ) },
-    { QStringLiteral( "Value" ), QStringLiteral( "Name" ) },
+    return model.data( model.index( row, 0 ), ValueRelationFeaturesModel::KeyColumn ).toString();
   };
+  auto valAt = [&]( int row )
+  {
+    return model.data( model.index( row, 0 ), ValueRelationFeaturesModel::ValueColumn ).toString();
+  };
+
+  auto reload = [&]( const QVariantMap & config )
+  {
+    spy.clear();
+    model.setConfig( config );
+    model.reloadFeatures();
+    while ( spy.count() < 2 )
+      QVERIFY( spy.wait( 5000 ) );
+  };
+
+  // 1. OrderByKey ascending
+  QVariantMap config = baseConfig;
+  config[ QStringLiteral( "OrderByKey" ) ]        = true;
+  config[ QStringLiteral( "OrderByDescending" ) ] = false;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( keyAt( 0 ), QStringLiteral( "1" ) );
+  QCOMPARE( keyAt( 1 ), QStringLiteral( "2" ) );
+  QCOMPARE( keyAt( 2 ), QStringLiteral( "3" ) );
+  QCOMPARE( keyAt( 3 ), QStringLiteral( "4" ) );
+
+  // 2. OrderByKey descending
+  config[ QStringLiteral( "OrderByDescending" ) ] = true;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( keyAt( 0 ), QStringLiteral( "4" ) );
+  QCOMPARE( keyAt( 1 ), QStringLiteral( "3" ) );
+  QCOMPARE( keyAt( 2 ), QStringLiteral( "2" ) );
+  QCOMPARE( keyAt( 3 ), QStringLiteral( "1" ) );
+
+  // 3. OrderByValue ascending
+  config = baseConfig;
+  config[ QStringLiteral( "OrderByValue" ) ]      = true;
+  config[ QStringLiteral( "OrderByDescending" ) ] = false;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( valAt( 0 ), QStringLiteral( "Alpha" ) );
+  QCOMPARE( valAt( 1 ), QStringLiteral( "Beta" ) );
+  QCOMPARE( valAt( 2 ), QStringLiteral( "Delta" ) );
+  QCOMPARE( valAt( 3 ), QStringLiteral( "Gamma" ) );
+
+  // 4. OrderByField with an explicit field name — same result as 3, different code path
+  config = baseConfig;
+  config[ QStringLiteral( "OrderByField" ) ]      = true;
+  config[ QStringLiteral( "OrderByFieldName" ) ]  = QStringLiteral( "label" );
+  config[ QStringLiteral( "OrderByDescending" ) ] = false;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( valAt( 0 ), QStringLiteral( "Alpha" ) );
+  QCOMPARE( valAt( 1 ), QStringLiteral( "Beta" ) );
+  QCOMPARE( valAt( 2 ), QStringLiteral( "Delta" ) );
+  QCOMPARE( valAt( 3 ), QStringLiteral( "Gamma" ) );
+
+  // 5. OrderByField descending
+  config[ QStringLiteral( "OrderByDescending" ) ] = true;
+  reload( config );
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( valAt( 0 ), QStringLiteral( "Gamma" ) );
+  QCOMPARE( valAt( 1 ), QStringLiteral( "Delta" ) );
+  QCOMPARE( valAt( 2 ), QStringLiteral( "Beta" ) );
+  QCOMPARE( valAt( 3 ), QStringLiteral( "Alpha" ) );
+
+  QgsProject::instance()->removeAllMapLayers();
+}
+
+void TestModels::testValueRelationSearch()
+{
+  /* Tests that search applies only to the value (label) column, not the key.
+   *
+   * Layer:
+   *   key=1    label="Alpha"  — key contains "1", label does not
+   *   key=2    label="Val1"   — label contains "1", key does not
+   *   key=100  label="Gamma"  — key contains "1", label does not
+   *
+   * Search "1" must return only "Val1" — proving that key=1 and key=100 are
+   * ignored because buildSearchExpression() filters on the value field only.
+   */
+  QgsProject::instance()->removeAllMapLayers();
+
+  auto *layer = new QgsVectorLayer(
+    QStringLiteral( "None?field=key:integer&field=label:string" ),
+    QStringLiteral( "vr_search" ),
+    QStringLiteral( "memory" )
+  );
+  QVERIFY( layer && layer->isValid() );
+
+  struct Row { int key; QString label; };
+  const QList<Row> rows = { {1, QStringLiteral( "Alpha" )}, {2, QStringLiteral( "Val1" )}, {100, QStringLiteral( "Gamma" )} };
+
+  QgsFeatureList features;
+  for ( const auto &row : rows )
+  {
+    QgsFeature f( layer->fields() );
+    f.setAttribute( QStringLiteral( "key" ),   row.key );
+    f.setAttribute( QStringLiteral( "label" ), row.label );
+    features << f;
+  }
+  layer->dataProvider()->addFeatures( features );
+  QCOMPARE( layer->featureCount(), ( long long ) 3 );
+  QgsProject::instance()->addMapLayer( layer );
+
+  const QVariantMap config =
+  {
+    { QStringLiteral( "Layer" ),        layer->id() },
+    { QStringLiteral( "Key" ),          QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ),        QStringLiteral( "label" ) },
+    { QStringLiteral( "OrderByValue" ), true }
+  };
+
+  ValueRelationFeaturesModel model;
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
+  auto waitForReload = [&]()
+  {
+    while ( spy.count() < 2 )
+      QVERIFY( spy.wait( 5000 ) );
+  };
+
   model.setConfig( config );
-  model.setPair( pair );
 
-  spy.wait();
+  // Initial load: all 3 features
+  model.reloadFeatures();
+  waitForReload();
+  QCOMPARE( model.rowCount(), 3 );
 
-  QCOMPARE( model.rowCount(), 9 );
-  QCOMPARE( model.layer()->id(), subsubLayer->id() );
+  // Search "1": only "Val1" matches (value column); key=1 and key=100 are ignored
+  spy.clear();
+  model.setSearchExpression( QStringLiteral( "1" ) );
+  waitForReload();
+  QCOMPARE( model.rowCount(), 1 );
+  QCOMPARE( model.data( model.index( 0, 0 ), ValueRelationFeaturesModel::ValueColumn ).toString(),
+            QStringLiteral( "Val1" ) );
 
-  QCOMPARE( model.rowCount(), 9 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureId ), 1 );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureId ), 2 );
-  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureId ), 3 );
-  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureId ), 4 );
-  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureId ), 5 );
-  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureId ), 6 );
-  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureId ), 7 );
-  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureId ), 8 );
-  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
-
-  // enable order by value for the value relation
-  model.reset();
-  config[ QStringLiteral( "OrderByValue" ) ] = true;
-  model.setConfig( config );
-  model.setPair( pair );
-
-  spy.wait();
-
-  QCOMPARE( model.rowCount(), 9 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
-  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B1" ) );
-  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "B2" ) );
-  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C1" ) );
-  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "C2" ) );
-  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
-  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
-  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "VERYBIG" ) );
-
-  // add a search expression to model
-  model.setSearchExpression( QStringLiteral( "D" ) );
-
-  spy.wait();
-  QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D1" ) );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "D2" ) );
-
-  // add a filter expression to the model
-  config[ QStringLiteral( "FilterExpression" ) ] = "subFk = 1";
-  model.setConfig( config );
+  // Clear search: all 3 features again
+  spy.clear();
   model.setSearchExpression( QString() );
+  waitForReload();
+  QCOMPARE( model.rowCount(), 3 );
 
-  spy.wait();
+  // Search with no match
+  spy.clear();
+  model.setSearchExpression( QStringLiteral( "xyz" ) );
+  waitForReload();
+  QCOMPARE( model.rowCount(), 0 );
 
-  QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
+  QgsProject::instance()->removeAllMapLayers();
+}
 
-  // remove sorting
-  model.reset();
-  config.remove( QStringLiteral( "OrderByValue" ) );
+void TestModels::testValueRelationHotreload()
+{
+  /* Tests that calling reloadFeatures() after modifying the underlying layer
+   * triggers hot reload -> reloading after the drawer is already open
+   * Also tests auto-reload: LayerFeaturesModel connects featureAdded to populate(),
+   * so adding a feature during an editing session triggers an async reload.
+   */
+  QgsProject::instance()->removeAllMapLayers();
+
+  QgsVectorLayer *layer = TestUtils::createVRLookupLayer( 3 );
+  QVERIFY( layer && layer->isValid() );
+  QgsProject::instance()->addMapLayer( layer );
+
+  const QVariantMap config =
+  {
+    { QStringLiteral( "Layer" ),      layer->id() },
+    { QStringLiteral( "Key" ),        QStringLiteral( "key" ) },
+    { QStringLiteral( "Value" ),      QStringLiteral( "label" ) },
+    { QStringLiteral( "OrderByKey" ), true }
+  };
+
+  ValueRelationFeaturesModel model;
+  QSignalSpy spy( &model, &LayerFeaturesModel::fetchingResultsChanged );
+  auto waitForReload = [&]()
+  {
+    while ( spy.count() < 2 )
+      QVERIFY( spy.wait( 5000 ) );
+  };
+
   model.setConfig( config );
-  model.setPair( pair );
 
-  spy.wait();
+  // Initial load: 3 features
+  model.reloadFeatures();
+  waitForReload();
+  QCOMPARE( model.rowCount(), 3 );
 
-  QCOMPARE( model.rowCount(), 2 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A2" ) );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureTitle ), QLatin1String( "A1" ) );
+  // Add a feature directly to the provider
+  QgsFeature newFeature( layer->fields() );
+  newFeature.setAttribute( QStringLiteral( "key" ),   4 );
+  newFeature.setAttribute( QStringLiteral( "label" ), QStringLiteral( "Label 4" ) );
+  QVERIFY( layer->dataProvider()->addFeatures( QgsFeatureList() << newFeature ) );
 
-  // remove filters
-  model.reset();
-  config.remove( QStringLiteral( "FilterExpression" ) );
-  model.setConfig( config );
-  model.setPair( pair );
+  // Manual hot reload: reloadFeatures() must pick up the added feature
+  spy.clear();
+  model.reloadFeatures();
+  waitForReload();
+  QCOMPARE( model.rowCount(), 4 );
+  QCOMPARE( model.data( model.index( 3, 0 ), ValueRelationFeaturesModel::KeyColumn ).toString(),
+            QStringLiteral( "4" ) );
 
-  spy.wait();
+  // Auto-reload via featureAdded signal:
+  // startEditing + addFeature fires featureAdded, which LayerFeaturesModel connects to populate().
+  // addFeature and commitChanges can each trigger a populate cycle (2 emissions each);
+  // wait until fetching has stopped (last emission is false) to avoid reading rowCount mid-flight.
+  spy.clear();
+  layer->startEditing();
+  QgsFeature editFeature( layer->fields() );
+  editFeature.setAttribute( QStringLiteral( "key" ),   5 );
+  editFeature.setAttribute( QStringLiteral( "label" ), QStringLiteral( "Label 5" ) );
+  QVERIFY( layer->addFeature( editFeature ) );
+  QVERIFY( layer->commitChanges() );
+  while ( spy.isEmpty() || spy.last().at( 0 ).toBool() )
+    QVERIFY( spy.wait( 5000 ) );
+  QCOMPARE( model.rowCount(), 5 );
 
-  QCOMPARE( model.rowCount(), 9 );
-  QCOMPARE( model.data( model.index( 0, 0 ), FeaturesModel::ModelRoles::FeatureId ), 1 );
-  QCOMPARE( model.data( model.index( 1, 0 ), FeaturesModel::ModelRoles::FeatureId ), 2 );
-  QCOMPARE( model.data( model.index( 2, 0 ), FeaturesModel::ModelRoles::FeatureId ), 3 );
-  QCOMPARE( model.data( model.index( 3, 0 ), FeaturesModel::ModelRoles::FeatureId ), 4 );
-  QCOMPARE( model.data( model.index( 4, 0 ), FeaturesModel::ModelRoles::FeatureId ), 5 );
-  QCOMPARE( model.data( model.index( 5, 0 ), FeaturesModel::ModelRoles::FeatureId ), 6 );
-  QCOMPARE( model.data( model.index( 6, 0 ), FeaturesModel::ModelRoles::FeatureId ), 7 );
-  QCOMPARE( model.data( model.index( 7, 0 ), FeaturesModel::ModelRoles::FeatureId ), 8 );
-  QCOMPARE( model.data( model.index( 8, 0 ), FeaturesModel::ModelRoles::FeatureId ), 100000000 );
+  QgsProject::instance()->removeAllMapLayers();
 }
 
 void TestModels::testProjectsModel()

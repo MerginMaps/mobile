@@ -92,6 +92,7 @@ set(MM_SRCS
     streamingintervaltype.cpp
     synchronizationerror.cpp
     synchronizationmanager.cpp
+    valuerelationcontroller.cpp
     valuerelationfeaturesmodel.cpp
     variablesmanager.cpp
     workspacesmodel.cpp
@@ -189,6 +190,7 @@ set(MM_HDRS
     synchronizationerror.h
     synchronizationmanager.h
     synchronizationoptions.h
+    valuerelationcontroller.h
     valuerelationfeaturesmodel.h
     variablesmanager.h
     workspacesmodel.h
@@ -232,6 +234,7 @@ if (ENABLE_TESTS)
       test/testactiveproject.cpp
       test/testprojectchecksumcache.cpp
       test/testmultieditmanager.cpp
+      test/testfiltercontroller.cpp
   )
 
   set(MM_HDRS
@@ -258,6 +261,7 @@ if (ENABLE_TESTS)
       test/testactiveproject.h
       test/testprojectchecksumcache.h
       test/testmultieditmanager.h
+      test/testfiltercontroller.h
   )
 
   if (NOT USE_MM_SERVER_API_KEY)

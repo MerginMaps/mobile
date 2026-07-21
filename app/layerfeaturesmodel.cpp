@@ -9,13 +9,16 @@
 
 #include "layerfeaturesmodel.h"
 
-#include "inpututils.h"
-#include "qgsproject.h"
-#include "qgsvectorlayerfeatureiterator.h"
+#include "featurelayerpair.h"
+
+#include "qgsattributetableconfig.h"
+#include "qgsfeaturerequest.h"
 #include "qgsfeedback.h"
+#include "qgsvectorlayer.h"
+#include "qgsvectorlayerfeatureiterator.h"
 
 #include <QLocale>
-#include <QTimer>
+#include <QElapsedTimer>
 #include <QtConcurrentRun>
 
 
@@ -23,14 +26,29 @@ LayerFeaturesModel::LayerFeaturesModel( QObject *parent )
   : FeaturesModel( parent ),
     mLayer( nullptr )
 {
-  mFeedback = std::make_unique<QgsFeedback>();
-  connect( &mSearchResultWatcher, &QFutureWatcher<QgsFeatureList>::finished, this, &LayerFeaturesModel::onFutureFinished );
 }
 
 LayerFeaturesModel::~LayerFeaturesModel()
 {
-  // cancel any long running request
-  mFeedback->cancel();
+  for ( auto [id, feedbackWatcherPair] : mResultWatchers.asKeyValueRange() )
+  {
+    const int i = id;
+    QgsFeedback *feedback = feedbackWatcherPair.first;
+    QFutureWatcher<SearchResultData> *watcher = feedbackWatcherPair.second;
+
+    // watcher should not call ofFutureFinished after this is deleted
+    watcher->disconnect( this );
+    feedback->cancel();
+
+    // Self-cleanup: delete both once the background task finishes
+    connect( watcher, &QFutureWatcher<SearchResultData>::finished, watcher, [watcher, feedback, i]()
+    {
+      watcher->deleteLater();
+      feedback->deleteLater();
+      qDebug() << QStringLiteral( "Search (%1) cleaned up in the destructor" ).arg( i );
+    } );
+  }
+  mResultWatchers.clear();
 }
 
 QVariant LayerFeaturesModel::data( const QModelIndex &index, int role ) const
@@ -71,7 +89,9 @@ QHash<int, QByteArray> LayerFeaturesModel::roleNames() const
 
 void LayerFeaturesModel::populate()
 {
-  if ( mLayer )
+  cancelPendingRequests();
+
+  if ( mLayer && mLayer->dataProvider() )
   {
     mFetchingResults = true;
     emit fetchingResultsChanged( mFetchingResults );
@@ -82,41 +102,37 @@ void LayerFeaturesModel::populate()
     QgsFeatureRequest req;
     setupFeatureRequest( req );
 
-    req.setFeedback( mFeedback.get() );
+    const int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
+    QgsFeedback *feedback = new QgsFeedback();
+    req.setFeedback( feedback );
 
-    int searchId = mNextSearchId.fetchAndAddOrdered( 1 );
-    QgsVectorLayerFeatureSource *source = new QgsVectorLayerFeatureSource( mLayer );
-    mSearchResultWatcher.setFuture( QtConcurrent::run( &LayerFeaturesModel::fetchFeatures, this, source, req, searchId ) );
+    QFutureWatcher<SearchResultData> *watcher = new QFutureWatcher<SearchResultData>();
+
+    mResultWatchers[ searchId ] = qMakePair( feedback, watcher );
+    connect( watcher, &QFutureWatcher<SearchResultData>::finished, this, [this, searchId] { this->handleFinishedSearch( searchId ); } );
+
+    qDebug() << QStringLiteral( "Search (%1) starting on layer %2" ).arg( searchId ).arg( mLayer->id() );
+
+    watcher->setFuture( QtConcurrent::run( LayerFeaturesModel::fetchFeatures, new QgsVectorLayerFeatureSource( mLayer ), req, searchId ) );
   }
 }
 
-QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *source, QgsFeatureRequest req, int searchId )
+LayerFeaturesModel::SearchResultData LayerFeaturesModel::fetchFeatures( QgsAbstractFeatureSource *source, const QgsFeatureRequest &req, int searchId )
 {
-  std::unique_ptr<QgsVectorLayerFeatureSource> fs( source );
-  QgsFeatureList fl;
-
-  // a search might have been queued if no threads were available in the pool, so we also
-  // check if canceled before we start as the first iteration can potentially be slow
-  bool canceled = searchId + 1 != mNextSearchId.loadAcquire();
-  if ( canceled )
-  {
-    qDebug() << QString( "Search (%1) was cancelled before it started!" ).arg( searchId );
-    return fl;
-  }
-
+#ifdef QT_DEBUG
   QElapsedTimer t;
   t.start();
-  QgsFeatureIterator it = fs->getFeatures( req );
+#endif
+
+  std::unique_ptr<QgsAbstractFeatureSource> ownedSource( source );
+  QgsFeatureList fl;
+
+  QgsFeatureIterator it = ownedSource->getFeatures( req );
+  it.setInterruptionChecker( req.feedback() );
   QgsFeature f;
 
   while ( it.nextFeature( f ) )
   {
-    if ( searchId + 1 != mNextSearchId.loadAcquire() )
-    {
-      canceled = true;
-      break;
-    }
-
     if ( FID_IS_NEW( f.id() ) || FID_IS_NULL( f.id() ) )
     {
       continue; // ignore uncommited features
@@ -125,27 +141,50 @@ QgsFeatureList LayerFeaturesModel::fetchFeatures( QgsVectorLayerFeatureSource *s
     fl.append( f );
   }
 
-  canceled = canceled || ( req.feedback() && req.feedback()->isCanceled() );
-
-  qDebug() << QString( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? "was canceled" : "completed" ).arg( t.elapsed() ).arg( fl.count() );
-  return fl;
+#ifdef QT_DEBUG
+  const bool canceled = req.feedback()->isCanceled();
+  qDebug() << QStringLiteral( "Search (%1) %2 after %3ms, results: %4" ).arg( searchId ).arg( canceled ? QStringLiteral( "was canceled" ) : QStringLiteral( "completed" ) ).arg( t.elapsed() ).arg( fl.count() );
+#endif
+  return { searchId, fl };
 }
 
-void LayerFeaturesModel::onFutureFinished()
+void LayerFeaturesModel::handleFinishedSearch( int searchId )
 {
-  QFutureWatcher<QgsFeatureList> *watcher = static_cast< QFutureWatcher<QgsFeatureList> *>( sender() );
-  const QgsFeatureList features = watcher->future().result();
-  beginResetModel();
-  mFeatures.clear();
-  for ( const auto &f : features )
+  if ( !mResultWatchers.contains( searchId ) )
   {
-    mFeatures << FeatureLayerPair( f, mLayer );
+    // should not happen, this method is called only once for existing searchIds only
+    Q_ASSERT( false );
+    return;
   }
-  emit layerFeaturesCountChanged( layerFeaturesCount() );
-  emit countChanged( rowCount() );
-  endResetModel();
-  mFetchingResults = false;
-  emit fetchingResultsChanged( mFetchingResults );
+
+  auto [feedback, watcher] = mResultWatchers.take( searchId );
+  const SearchResultData data = watcher->future().result();
+
+  watcher->deleteLater();
+  feedback->deleteLater();
+  qDebug() << QStringLiteral( "Search (%1) cleaned up" ).arg( searchId );
+
+  // We ignore the results of cancelled requests
+  if ( !feedback->isCanceled() )
+  {
+    const QgsFeatureList features = data.features;
+    beginResetModel();
+    mFeatures.clear();
+    for ( const QgsFeature &feat : features )
+    {
+      mFeatures.emplaceBack( feat, mLayer );
+    }
+    emit layerFeaturesCountChanged( layerFeaturesCount() );
+    emit countChanged( rowCount() );
+    endResetModel();
+  }
+
+  // Only fire signal if that was the latest request
+  if ( data.searchId + 1 == mNextSearchId.loadAcquire() )
+  {
+    mFetchingResults = false;
+    emit fetchingResultsChanged( mFetchingResults );
+  }
 }
 
 QString LayerFeaturesModel::searchResultPair( const FeatureLayerPair &pair ) const
@@ -177,6 +216,14 @@ QString LayerFeaturesModel::searchResultPair( const FeatureLayerPair &pair ) con
   }
 
   return foundPairs.join( ", " );
+}
+
+void LayerFeaturesModel::cancelPendingRequests()
+{
+  for ( auto [id, feedbackWatcherPair] : mResultWatchers.asKeyValueRange() )
+  {
+    feedbackWatcherPair.first->cancel();
+  }
 }
 
 QString LayerFeaturesModel::buildSearchExpression()
@@ -256,6 +303,7 @@ int LayerFeaturesModel::layerFeaturesCount() const
 
 void LayerFeaturesModel::reset()
 {
+  cancelPendingRequests();
   mFeatures.clear();
   mLayer = nullptr;
   mSearchExpression.clear();
@@ -285,6 +333,8 @@ void LayerFeaturesModel::setLayer( QgsVectorLayer *newLayer )
 {
   if ( mLayer != newLayer )
   {
+    cancelPendingRequests();
+
     if ( mLayer )
     {
       disconnect( mLayer );

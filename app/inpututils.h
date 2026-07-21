@@ -283,6 +283,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isEmptyGeometry( const QgsGeometry &geometry );
 
     /**
+     * Returns true when the last part of the geometry is empty, also implicitly for null or empty geometry
+     */
+    Q_INVOKABLE static bool isLastPartEmpty( const QgsGeometry &geometry );
+
+    /**
       * Converts QGeoCoordinate to QgsPoint
       */
     Q_INVOKABLE static QgsPoint coordinateToPoint( const QGeoCoordinate &coor );
@@ -344,7 +349,7 @@ class InputUtils: public QObject
      * @param activeProject QgsProject - needed for expression evaluation
      * @return Path to the image
      */
-    Q_INVOKABLE static QString resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+    static QString resolvePath( const QString &path, const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
 
     /**
      * This evaluates the "default path" with the following order:
@@ -352,7 +357,7 @@ class InputUtils: public QObject
      * 2. use default path value if not empty,
      * 3. use project home folder
      */
-    Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, QgsProject *activeProject );
+    Q_INVOKABLE static QString resolveTargetDir( const QString &homePath, const QVariantMap &config, const FeatureLayerPair &pair, const FeatureLayerPair &parentPair, QgsProject *activeProject );
 
     /**
      * Function used for resolving path of an image for a field with ExternalResource widget type.
@@ -472,12 +477,13 @@ class InputUtils: public QObject
 
     /**
      * Evaluates expression.
-     * \param pair Used to define a context scope.
-     * \param activeProject Used to define a context scope.
-     * \param expression
+     * \param pair Used to define layer & form context scope.
+     * \param parentPair Used to define parent form context scope.
+     * \param activeProject Used to define project context scope.
+     * \param expression Expression to evaluate
      * \return Evaluated expression
      */
-    Q_INVOKABLE static QString evaluateExpression( const FeatureLayerPair &pair, QgsProject *activeProject, const QString &expression );
+    static QString evaluateExpression( const FeatureLayerPair &pair, const FeatureLayerPair &parentPair, QgsProject *activeProject, const QString &expression );
 
     /**
     * Returns the QVariant typeName of a \a field.

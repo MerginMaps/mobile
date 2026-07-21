@@ -814,17 +814,22 @@ Item {
               return "invisible"
 
             if (internal.splitGeometryButtonVisible) {
-              if (!internal.redrawGeometryButtonVisible && !internal.streamingModeButtonVisible)
+              if (!internal.redrawGeometryButtonVisible && !internal.streamingModeButtonVisible && !internal.addPartButtonVisible)
                 return "split"
             }
 
+            if (internal.addPartButtonVisible) {
+              if (!internal.splitGeometryButtonVisible && !internal.streamingModeButtonVisible && !internal.redrawGeometryButtonVisible)
+                return "addPart"
+            }
+
             if (internal.redrawGeometryButtonVisible) {
-              if (!internal.splitGeometryButtonVisible && !internal.streamingModeButtonVisible)
+              if (!internal.splitGeometryButtonVisible && !internal.streamingModeButtonVisible && !internal.addPartButtonVisible)
                 return "redraw"
             }
 
             if (internal.streamingModeButtonVisible) {
-              if (!internal.redrawGeometryButtonVisible && !internal.splitGeometryButtonVisible)
+              if (!internal.redrawGeometryButtonVisible && !internal.splitGeometryButtonVisible && !internal.addPartButtonVisible)
                 return "stream"
             }
             return "menu"
@@ -833,6 +838,9 @@ Item {
           iconSource: {
             if (actionState === "split")
               return __style.splitGeometryIcon
+
+            if (actionState === "addPart")
+              return __style.plusIcon
 
             if (actionState === "redraw")
               return __style.redrawGeometryIcon
@@ -846,6 +854,9 @@ Item {
           onClicked: {
             if (actionState === "split")
               return root.toggleSplitting()
+
+            if (actionState === "addPart")
+              return root.toggleAddPart()
 
             if (actionState === "redraw")
               return root.toggleRedraw()
@@ -973,6 +984,18 @@ Item {
 
           onClicked: {
             root.toggleSplitting()
+            moreToolsMenu.close()
+          }
+        }
+
+        MMListDelegate {
+          text: qsTr( "Add part" )
+          leftContent: MMIcon { source: __style.plusIcon }
+
+          visible: internal.addPartButtonVisible
+
+          onClicked: {
+            root.toggleAddPart()
             moreToolsMenu.close()
           }
         }
@@ -1129,6 +1152,7 @@ Item {
       activeFeature: root.state === "edit" ? internal.featurePairToEdit.feature : __inputUtils.emptyFeature()
 
       onCanceled: {
+        internal.featurePairToEdit = null
         root.hideInfoTextMessage()
 
         if ( root.state === "record" )
@@ -1148,6 +1172,7 @@ Item {
       }
 
       onDone: function( featureLayerPair ) {
+        internal.featurePairToEdit = null
         root.hideInfoTextMessage()
 
         if ( root.state === "record" )
@@ -1203,6 +1228,7 @@ Item {
       featureToSplit: internal.featurePairToEdit
 
       onDone: function (success) {
+        internal.featurePairToEdit = null
         // close all feature forms, show banner if it went fine or not
         root.hideInfoTextMessage()
 
@@ -1222,6 +1248,7 @@ Item {
       }
 
       onCanceled: {
+        internal.featurePairToEdit = null
         // go back to feature form
         root.hideInfoTextMessage()
 
@@ -1272,6 +1299,7 @@ Item {
 
     // visibility of buttons in "more" menu
     property bool splitGeometryButtonVisible: !internal.isPointLayer && !root.isStreaming && root.state === "edit"
+    property bool addPartButtonVisible: internal.isMultiPartLayer && !root.isStreaming && isInRecordState
     property bool redrawGeometryButtonVisible: root.state === "edit"
     property bool streamingModeButtonVisible: !internal.isPointLayer || internal.isMultiPartLayer
 
@@ -1330,6 +1358,25 @@ Item {
     // You should be already in state == "edit"
     if ( recordingToolsLoader.active ) {
       recordingToolsLoader.item.recordingMapTool.state = MM.RecordingMapTool.Record
+    }
+  }
+
+  function toggleAddPart() {
+    addPart( internal.featurePairToEdit )
+  }
+
+  function addPart( featurepair) {
+    if ( featurepair )
+    {
+      __activeProject.setActiveLayer( featurepair.layer )
+      internal.featurePairToEdit = featurepair
+    }
+    root.showInfoTextMessage( qsTr( "Add new part to the geometry" ) )
+
+
+    // You should be already in state == "edit"
+    if ( recordingToolsLoader.active ) {
+      recordingToolsLoader.item.recordingMapTool.startDigitizingNewPart()
     }
   }
 

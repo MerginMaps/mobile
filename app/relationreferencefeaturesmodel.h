@@ -11,6 +11,7 @@
 #define RELATIONREFERENCEFEATURESMODEL_H
 
 #include <QObject>
+#include <qqmlintegration.h>
 
 #include "qgsproject.h"
 #include "layerfeaturesmodel.h"
@@ -23,6 +24,7 @@
 class RelationReferenceFeaturesModel : public LayerFeaturesModel
 {
     Q_OBJECT
+    QML_ELEMENT
 
     //! widget's config
     Q_PROPERTY( QVariantMap config READ config WRITE setConfig NOTIFY configChanged )

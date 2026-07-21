@@ -926,10 +926,23 @@ void RecordingMapTool::lookForVertex( const QPointF &clickedPoint, double search
     }
   }
 
-  // Update the previously grabbed point's position
-  if ( mState == MapToolState::Grab )
+  switch ( mState )
   {
-    updateVertex( mActiveVertex, mRecordPoint );
+    case MapToolState::Grab:
+      // Update the previously grabbed point's position
+      updateVertex( mActiveVertex, mRecordPoint );
+      break;
+    case MapToolState::Record:
+      // If we were adding a line or poly part but did not add any points yet,
+      // we need to drop the added empty part
+      if ( InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+      {
+        mRecordedGeometry.deletePart( mActivePart );
+        emit recordedGeometryChanged( mRecordedGeometry );
+      }
+      break;
+    case MapToolState::View:
+      break;
   }
 
   if ( idx >= 0 )
@@ -1148,6 +1161,43 @@ void RecordingMapTool::cancelGrab()
   setState( MapToolState::View );
   setActivePartAndRing( 0, 0 );
   setActiveVertex( Vertex() );
+}
+
+void RecordingMapTool::startDigitizingNewPart()
+{
+  // cancel grab and switch to record
+  // we'll add a new empty part at the end (unless there's one already) and set it active
+  setActiveVertex( Vertex() );
+  setState( RecordingMapTool::MapToolState::Record );
+
+  QgsAbstractGeometry *geom = mRecordedGeometry.get();
+  if ( QgsGeometryCollection *collection = qgsgeometry_cast<QgsGeometryCollection *>( geom ) )
+  {
+    switch ( mRecordedGeometry.type() )
+    {
+      case Qgis::GeometryType::Line:
+        if ( !InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+        {
+          collection->addGeometry( new QgsLineString() );
+          emit recordedGeometryChanged( mRecordedGeometry );
+        }
+        setActivePartAndRing( collection->partCount() - 1, 0 );
+        break;
+      case Qgis::GeometryType::Polygon:
+        if ( !InputUtils::isLastPartEmpty( mRecordedGeometry ) )
+        {
+          collection->addGeometry( new QgsPolygon( new QgsLineString(), QList<QgsLineString *>() ) );
+          emit recordedGeometryChanged( mRecordedGeometry );
+        }
+        setActivePartAndRing( collection->partCount() - 1, 0 );
+        break;
+      case Qgis::GeometryType::Point:
+      // MultiPoints do not need an empty placeholder part, new point part is directly appended when digitizing
+      case Qgis::GeometryType::Unknown:
+      case Qgis::GeometryType::Null:
+        break;
+    }
+  }
 }
 
 double RecordingMapTool::pixelsToMapUnits( double numPixels )
