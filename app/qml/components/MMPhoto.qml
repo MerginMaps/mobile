@@ -37,7 +37,26 @@ Image {
     height: root.height
     radius: 20 * __dp
     visible: false
-    layer.enabled: true 
+    layer.enabled: true
+  }
+
+  // On Android, backgrounding/resuming the app (e.g. while picking a photo) can tear down and
+  // recreate the EGL surface. If this item's layer renders while that surface is still settling,
+  // the resulting texture can be corrupted (seen as a blank/white photo on some Android 9 devices),
+  // and nothing else triggers a re-render afterwards. Force the layer to regenerate once the app
+  // is confirmed active again.
+  Connections {
+    target: Qt.application
+    function onStateChanged() {
+      if ( Qt.application.state === Qt.ApplicationActive ) {
+        root.layer.enabled = false
+        maskRect.layer.enabled = false
+        Qt.callLater( function() {
+          root.layer.enabled = true
+          maskRect.layer.enabled = true
+        } )
+      }
+    }
   }
 
   Rectangle {
