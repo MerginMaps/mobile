@@ -608,14 +608,11 @@ bool ActiveProject::recordingAllowed( QgsMapLayer *layer ) const
   if ( layer->readOnly() )
     return false;
 
-  if ( layer )
-  {
-    bool isPrivate = layer->flags() & QgsMapLayer::LayerFlag::Private;
+  bool isPrivate = layer->flags().testFlag( QgsMapLayer::LayerFlag::Private );
 
-    if ( isPrivate )
-    {
-      return false;
-    }
+  if ( isPrivate )
+  {
+    return false;
   }
 
   return QgsMapLayerProxyModel::layerMatchesFilters( layer, Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer ) && layer->id() != positionTrackingLayerId() && layer->id() != mapSketchesLayerId();
