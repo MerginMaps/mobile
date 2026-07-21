@@ -290,7 +290,7 @@ bool CoreUtils::isValidName( const QString &name )
     return false;
 
   // name must contain only word characters, whitespace, '-' or '.'
-  static QRegularExpression validCharactersRe( R"(^[\w\s\-\.]+$)" );
+  static QRegularExpression validCharactersRe( R"(^[\w\s\-\.]+$)", QRegularExpression::UseUnicodePropertiesOption );
   return validCharactersRe.match( name ).hasMatch();
 }
 
