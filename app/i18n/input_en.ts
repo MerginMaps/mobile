@@ -178,12 +178,12 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
+        <source>Value must be less than or equal to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
+        <source>Value must be greater than or equal to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

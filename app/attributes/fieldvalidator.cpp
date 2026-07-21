@@ -19,8 +19,8 @@
 #include <QLocale>
 
 QString FieldValidator::numberInvalid() { return tr( "Value must be a number" ); };
-QString FieldValidator::numberUpperBoundReached() { return tr( "Value must be lower than %1" ); };
-QString FieldValidator::numberLowerBoundReached() { return tr( "Value must be higher than %1" ); };
+QString FieldValidator::numberUpperBoundReached() { return tr( "Value must be less than or equal to %1" ); };
+QString FieldValidator::numberLowerBoundReached() { return tr( "Value must be greater than or equal to %1" ); };
 QString FieldValidator::numberExceedingVariableLimits() { return tr( "Value is too large" );};
 QString FieldValidator::numberMustBeInt() { return tr( "Field can not contain decimal places" );};
 QString FieldValidator::textTooLong() { return tr( "Can not be longer than %1 characters" );};
