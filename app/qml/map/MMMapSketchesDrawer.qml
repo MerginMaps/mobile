@@ -79,15 +79,17 @@ MMComponents.MMDrawer {
       
       MMComponents.MMColorPicker {
         id: colorPicker
-        colors: root.sketchingController?.availableColors() ?? __style.photoSketchingWhiteColor
+
+        colors: root.sketchingController?.availableColors()
+        activeColor: root.sketchingController?.activeColor
 
         Layout.alignment: Qt.AlignHCenter
         Layout.maximumWidth: parent.width
 
-        onActiveColorChanged: {
+        onActiveColorChangeRequested: {
           if ( root.sketchingController )
           {
-            root.sketchingController.activeColor = colorPicker.activeColor
+            root.sketchingController.activeColor = newColor
             root.sketchingController.eraserActive = false
           }
         }

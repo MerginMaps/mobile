@@ -330,13 +330,12 @@ QPointF InputUtils::relevantGeometryCenterToScreenCoordinates( const QgsGeometry
 
   const QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
-  // Cut the geometry to current extent
-  const QgsGeometry currentExtentAsGeom = QgsGeometry::fromRect( currentExtent );
-  const QgsGeometry intersectedGeom = geom.intersection( currentExtentAsGeom );
+  // Cut the geometry extent to current extent
+  const QgsRectangle intersectedExtent = currentExtent.intersect( geom.boundingBox() );
 
-  if ( !intersectedGeom.isEmpty() )
+  if ( !intersectedExtent.isEmpty() )
   {
-    target = QgsPoint( intersectedGeom.boundingBox().center() );
+    target = QgsPoint( intersectedExtent.center() );
   }
   else
   {
