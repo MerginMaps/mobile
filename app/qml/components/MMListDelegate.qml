@@ -87,6 +87,10 @@ Item {
           textFormat: Text.PlainText
 
           color: __style.nightColor
+
+          elide: Text.ElideRight
+          wrapMode: Text.Wrap
+          maximumLineCount: 3
         }
 
         MMText {
@@ -98,6 +102,10 @@ Item {
           text: root.secondaryText
 
           color: __style.nightColor
+
+          elide: Text.ElideRight
+          wrapMode: Text.Wrap
+          maximumLineCount: 3
         }
       }
 
