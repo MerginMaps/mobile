@@ -100,7 +100,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
-      showClearButton: root._fieldValueIsNull
+      showClearButton: !root._fieldValueIsNull
 
       onPrimaryButtonClicked: {
         root.newDateSelected( dateTime )

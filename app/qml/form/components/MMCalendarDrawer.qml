@@ -22,7 +22,7 @@ MMComponents.MMDrawer {
   property alias hasDatePicker: dateTimePicker.hasDatePicker
   property alias hasTimePicker: dateTimePicker.hasTimePicker
   property bool showSeconds: false
-  property bool showClearButton: true
+  property bool showClearButton: false
 
   signal primaryButtonClicked
   signal clearButtonClicked
@@ -30,7 +30,7 @@ MMComponents.MMDrawer {
   dim: true
 
   drawerHeader.title: root.title
-  drawerHeader.topLeftItem.visible: !root.showClearButton
+  drawerHeader.topLeftItem.visible: root.showClearButton
   drawerHeader.topLeftItemContent:
     MMComponents.MMButton {
       text: qsTr("Clear")
