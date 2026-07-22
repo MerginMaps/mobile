@@ -59,12 +59,14 @@ MMComponents.MMPage {
         verticalAlignment: Text.AlignVCenter
       }
 
+      MMComponents.MMScrollView {
+        width: parent.width
+        height: parent.height - __style.margin20 - projectNameField.height - __style.margin20 - attributesLabel.height
+
       MMComponents.MMListView {
         id: fieldList
 
         model: fieldsModel
-        width: parent.width
-        height: parent.height - __style.margin20 - projectNameField.height - __style.margin20 - attributesLabel.height
         clip: true
         spacing: __style.margin20
 
@@ -114,6 +116,7 @@ MMComponents.MMPage {
             }
           }
         }
+      }
       }
     }
   }

@@ -27,11 +27,12 @@ MMComponents.MMPage {
     width: parent.width
     height: parent.height
 
-    MMComponents.MMListView {
-      id: listview
-
+    MMComponents.MMScrollView {
       width: parent.width
       height: parent.height
+
+    MMComponents.MMListView {
+      id: listview
 
       clip: true
 
@@ -117,6 +118,7 @@ MMComponents.MMPage {
       footer: MMComponents.MMListSpacer {
         height: __style.safeAreaBottom + __style.margin8 + connectNewReceiverButton.height
       }
+    }
     }
 
     MMComponents.MMButton {

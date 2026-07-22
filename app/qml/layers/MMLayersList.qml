@@ -15,7 +15,7 @@ import QtQuick.Layouts
 import "../components" as MMComponents
 import "../inputs"
 
-MMComponents.MMListView {
+MMComponents.MMScrollView {
   id: root
 
   property var basemodel: null
@@ -27,43 +27,49 @@ MMComponents.MMListView {
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
 
-  model: DelegateModel {
-    id: delegatemodel
+  property alias footer: listView.footer
 
-    model: root.basemodel
+  MMComponents.MMListView {
+    id: listView
 
-    delegate: MMComponents.MMListDelegate {
+    model: DelegateModel {
+      id: delegatemodel
 
-      property bool secondaryTextVisible: root.showNodePath && model.nodePath
+      model: root.basemodel
 
-      text: model.display
-      secondaryText: secondaryTextVisible ? model.nodePath: ""
+      delegate: MMComponents.MMListDelegate {
 
-      leftContent: Image {
-        width: __style.icon24
-        height: width
-        sourceSize: Qt.size( width, height)
-        cache: false // important! Otherwise pixmap providers would not be called for the same id again
+        property bool secondaryTextVisible: root.showNodePath && model.nodePath
 
-        source: root.imageProviderPath + model.serializedNode
-      }
+        text: model.display
+        secondaryText: secondaryTextVisible ? model.nodePath: ""
 
-      rightContent: MMComponents.MMSwitch {
-        visible: model.nodeIsVisible !== ""
-        checked: model.nodeIsVisible === "yes"
-        onReleased: {
-          root.nodeVisibilityClicked( model.node )
+        leftContent: Image {
+          width: __style.icon24
+          height: width
+          sourceSize: Qt.size( width, height)
+          cache: false // important! Otherwise pixmap providers would not be called for the same id again
+
+          source: root.imageProviderPath + model.serializedNode
         }
+
+        rightContent: MMComponents.MMSwitch {
+          visible: model.nodeIsVisible !== ""
+          checked: model.nodeIsVisible === "yes"
+          onReleased: {
+            root.nodeVisibilityClicked( model.node )
+          }
+        }
+
+        onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
       }
-
-      onClicked: root.nodeClicked( model.node, model.nodeType, model.display )
     }
-  }
 
-  Component.onCompleted: {
-    if ( root.parentNodeIndex )
-    {
-      delegatemodel.rootIndex = root.parentNodeIndex
+    Component.onCompleted: {
+      if ( root.parentNodeIndex )
+      {
+        delegatemodel.rootIndex = root.parentNodeIndex
+      }
     }
   }
 }
