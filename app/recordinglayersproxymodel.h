@@ -30,6 +30,7 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
     Q_INVOKABLE explicit RecordingLayersProxyModel( QObject *parent = nullptr );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
+    bool lessThan( const QModelIndex &left, const QModelIndex &right ) const override;
 
     /**
      * @brief layers method return layers from source model filtered with filter function
