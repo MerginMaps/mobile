@@ -305,6 +305,8 @@ Item {
       }
 
       onSaveRequested: {
+        if ( AppSettings.reuseLastEnteredValues )
+          AppSettings.trackUsageFeature( "reuse_last_value" )
         formsStack.syncWhenFormCloses = true
       }
 

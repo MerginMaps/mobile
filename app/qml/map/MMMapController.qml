@@ -174,6 +174,7 @@ Item {
       case "measure": {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
+        AppSettings.trackUsageFeature( "map_measuring" )
         root.measureStarted()
         break
       }
@@ -185,6 +186,7 @@ Item {
       }
 
       case "sketch": {
+        AppSettings.trackUsageFeature( "map_sketching" )
         root.showInfoTextMessage( qsTr( "Select a colour and start sketching on the map. Use two fingers to move or zoom the map." ) )
         root.drawStarted()
         break
