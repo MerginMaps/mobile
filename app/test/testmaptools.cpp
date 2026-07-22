@@ -571,10 +571,10 @@ void TestMapTools::testMidSegmentVertices()
   vertices = mapTool.midPoints();
   QCOMPARE( vertices.wkbType(), Qgis::WkbType::MultiPoint );
   QCOMPARE( vertices.constGet()->partCount(), 4 );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -0.87614105022163979 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 0, 0, 0 ) ), QgsPoint( 0, -2.45319494062059196 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 1, 0, 0 ) ), QgsPoint( 0, 0.5 ) );
   QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 2, 0, 0 ) ), QgsPoint( 0.5, 1 ) );
-  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 1.87040839992228825, 1 ) );
+  QCOMPARE( vertices.constGet()->vertexAt( QgsVertexId( 3, 0, 0 ) ), QgsPoint( 3.43714351978240718, 1 ) );
 
   // multipoint
   QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "MultiPoint?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
@@ -632,14 +632,14 @@ void TestMapTools::testHandles()
   // an existing vertex (start/end of the line)
   QVector<QString> expected =
   {
-    QStringLiteral( "LineString (0 -0.87614105022164, 0 0)" ),
-    QStringLiteral( "LineString (1 1, 1.87040839992229 1)" ),
+    QStringLiteral( "LineString (0 -2.45319494062059, 0 0)" ),
+    QStringLiteral( "LineString (1 1, 3.43714351978241 1)" ),
   };
 
   const QVector<QgsGeometry> parts = handles.asGeometryCollection();
   for ( int i = 0; i < parts.count(); i++ )
   {
-    QVERIFY( parts.at( i ).asWkt( 14 ) == expected.at( i ) );
+    QCOMPARE( parts.at( i ).asWkt( 14 ), expected.at( i ) );
   }
 
   delete lineLayer;
@@ -678,7 +678,7 @@ void TestMapTools::testLookForVertex()
   QCOMPARE( mapTool.state(), RecordingMapTool::MapToolState::View );
 
   // Start handle point. Active vertex is invalid, state changes to Record
-  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -0.83 ) );
+  QPointF screenPoint = ms->coordinateToScreen( QgsPoint( -0.05, -2.45 ) );
   mapTool.lookForVertex( screenPoint );
   QVERIFY( !mapTool.activeVertex().isValid() );
   QCOMPARE( mapTool.state(), RecordingMapTool::MapToolState::Record );
@@ -1038,7 +1038,7 @@ void TestMapTools::testAddVertexLineLayer()
 
   mapTool.addPoint( pointsToAdd[1] );
 
-  QCOMPARE( mapTool.handles().vertexAt( 0 ).asWkt( 14 ), "Point (-96.22182942132511 22.34151145046518)" );
+  QCOMPARE( mapTool.handles().vertexAt( 0 ).asWkt( 14 ), "Point (-94.5889223797103 21.87263206130249)" );
   QCOMPARE( mapTool.handles().vertexAt( 1 ), pointsToAdd[0] );
 
   delete project;
