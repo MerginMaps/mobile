@@ -18,6 +18,10 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString & absoluteImagePath )
   {
     emit imageSelected( absoluteImagePath, mLastCode );
+    if ( mLastSourceWasCamera )
+      emit photoCaptured();
+    else
+      emit photoFromGallery();
   } );
   QObject::connect( mImagePicker, &IOSImagePicker::notifyError, this, &IosUtils::notifyError );
 }
@@ -34,12 +38,14 @@ bool IosUtils::isIos() const
 void IosUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
   mLastCode = code;
+  mLastSourceWasCamera = false;
   mImagePicker->showImagePicker( targetPath );
 }
 
 void IosUtils::callCamera( const QString &targetPath, const QString &code )
 {
   mLastCode = code;
+  mLastSourceWasCamera = true;
   mImagePicker->callCamera( targetPath, mPositionKit, mCompass );
 }
 
