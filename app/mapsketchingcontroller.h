@@ -43,6 +43,7 @@ class MapSketchingController : public QObject
     Q_INVOKABLE QStringList availableColors() const;
 
   signals:
+    void sketched();
     void highlightGeometryChanged();
     void activeColorChanged();
     void mapSettingsChanged();

@@ -10,7 +10,9 @@
 #include "mmconfig.h"
 
 #include <QDateTime>
+#include <QElapsedTimer>
 #include <QFontDatabase>
+#include <QSettings>
 #include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -109,6 +111,8 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "filter/filtercontroller.h"
+#include "autosynccontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -767,9 +771,176 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  // ── Usage reporting: accumulate dynamic data via signal connections ──
+  // Helper lambdas for writing to QSettings usage_report/data/* namespace.
+  // All connections guard on usageReportEnabled before writing.
+  auto trackFeature = [as]( const QString & key )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, true );
+  };
+
+  auto incrementCounter = [as]( const QString & key, int amount = 1 )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings s;
+    const QString fullKey = QStringLiteral( "usage_report/data/" ) + key;
+    s.setValue( fullKey, s.value( fullKey, 0 ).toInt() + amount );
+  };
+
+  auto setUsageData = [as]( const QString & key, const QVariant & value )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, value );
+  };
+
+  // Filtering
+  QObject::connect( &activeProject, &ActiveProject::filterControllerChanged, &lambdaContext, [trackFeature]( FilterController * fc )
+  {
+    if ( !fc ) return;
+    QObject::connect( fc, &FilterController::hasFiltersActivatedChanged, fc, [trackFeature]()
+    {
+      trackFeature( QStringLiteral( "filtering" ) );
+    } );
+  } );
+
+  // Auto-sync
+  QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [trackFeature]( AutosyncController * ac )
+  {
+    if ( !ac ) return;
+    QObject::connect( ac, &AutosyncController::projectSyncRequested, ac, [trackFeature]( SyncOptions::RequestOrigin origin )
+    {
+      if ( origin == SyncOptions::AutomaticRequest )
+        trackFeature( QStringLiteral( "autosync" ) );
+    } );
+  } );
+
+  // Created project
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [trackFeature]( const QString &, const QString & )
+  {
+    trackFeature( QStringLiteral( "created_project" ) );
+  } );
+
+  // Photo captured vs attached
+  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+
+  // Workspace switches
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "workspace_switches" ) );
+  } );
+
+  // External GPS provider
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [trackFeature, setUsageData]( AbstractPositionProvider * provider )
+  {
+    if ( !provider ) return;
+    if ( provider->type() == QLatin1String( "internal" ) ) return;
+
+    trackFeature( QStringLiteral( "external_gps" ) );
+
+    const QString id = provider->id();
+    QString connectionType;
+    if ( id == QLatin1String( "simulated" ) )
+      connectionType = QStringLiteral( "mock" );
+    else if ( id.contains( QLatin1Char( ':' ) ) )
+      connectionType = QStringLiteral( "bluetooth" );
+    else
+      connectionType = QStringLiteral( "network" );
+
+    setUsageData( QStringLiteral( "external_connection_type" ), connectionType );
+    setUsageData( QStringLiteral( "external_name" ), provider->name() );
+  } );
+
+  // Highest project role
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [setUsageData, &activeProject]()
+  {
+    const QString role = activeProject.projectRole();
+    auto roleRank = []( const QString & r ) -> int
+    {
+      if ( r == QLatin1String( "owner" ) ) return 5;
+      if ( r == QLatin1String( "admin" ) ) return 4;
+      if ( r == QLatin1String( "writer" ) ) return 3;
+      if ( r == QLatin1String( "reader" ) ) return 2;
+      if ( r == QLatin1String( "guest" ) ) return 1;
+      return 0;
+    };
+
+    QSettings s;
+    const QString current = s.value( QStringLiteral( "usage_report/data/highest_role" ) ).toString();
+    if ( roleRank( role ) > roleRank( current ) )
+      setUsageData( QStringLiteral( "highest_role" ), role );
+  } );
+
+  // Project load time
+  auto projectLoadTimer = std::make_shared<QElapsedTimer>();
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [projectLoadTimer]()
+  {
+    projectLoadTimer->start();
+  } );
+
+  // Map sketching (via MapSketchingController — QML_ELEMENT, connect per instance)
+  // Connected alongside projectReloaded below since sketching controller is project-scoped.
+
+  // Connectivity ping: HEAD request every 5 minutes
+  QTimer *pingTimer = new QTimer( &lambdaContext );
+  QObject::connect( pingTimer, &QTimer::timeout, &lambdaContext, [&usageReportNam, merginApi = ma.get(), as, incrementCounter]()
+  {
+    if ( !as->usageReportEnabled() || merginApi->apiRoot().isEmpty() ) return;
+
+    QUrl url( merginApi->apiRoot() );
+    QNetworkRequest request( url );
+    request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+    QNetworkReply *reply = usageReportNam.head( request );
+    QObject::connect( reply, &QNetworkReply::finished, reply, [reply, incrementCounter]()
+    {
+      if ( reply->error() == QNetworkReply::NoError )
+        incrementCounter( QStringLiteral( "ping_success_count" ) );
+      else
+        incrementCounter( QStringLiteral( "ping_fail_count" ) );
+      reply->deleteLater();
+    } );
+  } );
+  pingTimer->start( 5 * 60 * 1000 ); // 5 minutes
+
+  // Stop ping and clear data on opt-out
+  QObject::connect( as, &AppSettings::usageReportEnabledChanged, &lambdaContext, [pingTimer]( bool enabled )
+  {
+    if ( !enabled )
+      pingTimer->stop();
+    else
+      pingTimer->start( 5 * 60 * 1000 );
+  } );
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, incrementCounter, projectLoadTimer]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
+
+    // Record project load time
+    if ( projectLoadTimer->isValid() )
+    {
+      const qint64 elapsed = projectLoadTimer->elapsed();
+      QSettings s;
+      const QString prefix = QStringLiteral( "usage_report/data/" );
+      s.setValue( prefix + QStringLiteral( "total_load_time_ms" ), s.value( prefix + QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong() + elapsed );
+      s.setValue( prefix + QStringLiteral( "load_count" ), s.value( prefix + QStringLiteral( "load_count" ), 0 ).toInt() + 1 );
+      projectLoadTimer->invalidate();
+    }
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()

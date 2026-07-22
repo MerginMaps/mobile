@@ -386,6 +386,7 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
                            QJniObject::fromString( mTargetPath ).object<jstring>() )
                            .toString();
     emit imageSelected( newUri, mLastCode );
+    emit photoFromGallery();
   }
   else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
   {
@@ -394,6 +395,7 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
     const QString absolutePath = absolutePathJNI.toString();
 
     emit imageSelected( absolutePath, mLastCode );
+    emit photoCaptured();
   }
   else
   {
