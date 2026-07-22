@@ -176,13 +176,13 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
-        <translation>El valor ha de ser inferior a %1</translation>
+        <source>Value must be less than or equal to %1</source>
+        <translation>El valor ha de ser menor o igual a %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
-        <translation>El valor ha de ser superior a %1</translation>
+        <source>Value must be greater than or equal to %1</source>
+        <translation>El valor ha de ser superior o igual a %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="24"/>
@@ -348,12 +348,12 @@ No s&apos;afegirà al projecte.</translation>
         <translation><numerusform>fa %n any(s)</numerusform><numerusform>fa %n any(s)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2254"/>
+        <location filename="../inpututils.cpp" line="2253"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform> </numerusform><numerusform>Cal que afegiu com a mínim %n punt(s) a cada part.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2258"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform> 25</numerusform><numerusform>Cal que afegiu com a mínim %n punt(s).</numerusform></translation>
     </message>
@@ -852,12 +852,12 @@ No s&apos;afegirà al projecte.</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="149"/>
         <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
         <translation>&quot;Des de&quot; ha de ser anterior a &quot;A&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="148"/>
         <source>To</source>
         <translation>A</translation>
     </message>
@@ -1065,17 +1065,17 @@ No s&apos;afegirà al projecte.</translation>
         <translation>No s&apos;ha pogut desar els esbossos fotogràfics. Poseu-vos en contacte amb l&apos;assistència.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="294"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
         <source>Could not create directory %1.</source>
         <translation>No s&apos;ha pogut crear el directori %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="359"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Error en processar la imatge, ha fallat la resolució del directori de fotos.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="374"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
         <source>Failed to process the image</source>
         <translation>No s&apos;ha pogut processar la imatge</translation>
     </message>
@@ -1088,12 +1088,12 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Algunes funcions poden estar ocultes pels filtres actius</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="173"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="177"/>
         <source> more</source>
         <translation>més</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="216"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="220"/>
         <source>Add feature</source>
         <translation>Afegir característica</translation>
     </message>
@@ -1101,12 +1101,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="103"/>
         <source>Change link</source>
         <translation>Canviar l&apos;enllaç</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="106"/>
         <source>Unlink feature</source>
         <translation>Desenllaçar caracterítstica</translation>
     </message>
@@ -1662,28 +1662,28 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Activa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1234"/>
+        <location filename="../qml/map/MMMapController.qml" line="1237"/>
         <source>Splitting done successfully</source>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1326"/>
+        <location filename="../qml/map/MMMapController.qml" line="1330"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1339"/>
+        <location filename="../qml/map/MMMapController.qml" line="1343"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1356"/>
+        <location filename="../qml/map/MMMapController.qml" line="1364"/>
         <source>Add new part to the geometry</source>
         <translation>Afegeix un nou tros a la geometria</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1454"/>
+        <location filename="../qml/map/MMMapController.qml" line="1461"/>
         <source>GPS currently unavailable.</source>
         <translation>El GPS no està disponible ara mateix.</translation>
     </message>
@@ -2332,42 +2332,42 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Camps</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="101"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="102"/>
         <source>Add field</source>
         <translation>Afegir camp</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="126"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="130"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="131"/>
         <source>Empty project name</source>
         <translation>Nom de projecte buit</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="150"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
         <source>Date &amp; Time</source>
         <translation>Dia i hora</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
         <source>Number</source>
         <translation>Número</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
         <source>Checkbox</source>
         <translation>Casella de selecció</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="155"/>
         <source>Photo</source>
         <translation>Foto</translation>
     </message>
