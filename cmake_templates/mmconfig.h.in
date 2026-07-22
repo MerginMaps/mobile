@@ -13,5 +13,7 @@
   
 #cmakedefine HAVE_BLUETOOTH
 
+#cmakedefine USAGE_REPORT_KEY "@USAGE_REPORT_KEY@"
+
 #endif
 
