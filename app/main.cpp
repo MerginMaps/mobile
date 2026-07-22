@@ -9,8 +9,14 @@
 
 #include "mmconfig.h"
 
+#include <QDateTime>
 #include <QFontDatabase>
 #include <QGuiApplication>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QtDebug>
@@ -389,6 +395,131 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 }
 
+#ifndef USAGE_REPORT_KEY
+#define USAGE_REPORT_KEY ""
+#endif
+
+static const QString USAGE_REPORT_API_KEY = QStringLiteral( USAGE_REPORT_KEY );
+static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
+
+/**
+ * Attempt to send a weekly usage snapshot if one is due.
+ * Collects static device/app data, merges accumulated dynamic data from
+ * QSettings, and sends a single HTTP POST. On success, dynamic data is
+ * reset and last_reported_at is updated. On failure, silently ignored.
+ */
+static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
+                                    LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
+{
+  if ( !as->usageReportEnabled() || USAGE_REPORT_API_KEY.isEmpty() )
+    return;
+
+  QSettings settings;
+  const QDateTime lastReported = settings.value( QStringLiteral( "usage_report/last_reported_at" ) ).toDateTime();
+  const QDateTime now = QDateTime::currentDateTimeUtc();
+
+  if ( lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
+    return;
+
+  // Ensure device UUID exists
+  QString deviceUuid = settings.value( QStringLiteral( "usage_report/device_uuid" ) ).toString();
+  if ( deviceUuid.isEmpty() )
+  {
+    deviceUuid = CoreUtils::deviceUuid();
+    settings.setValue( QStringLiteral( "usage_report/device_uuid" ), deviceUuid );
+  }
+
+  // Collect static data
+  QVariantMap properties;
+  properties.insert( QStringLiteral( "app_language" ), QLocale().name() );
+  properties.insert( QStringLiteral( "system_language" ), QLocale::system().name() );
+  properties.insert( QStringLiteral( "device_manufacturer" ), InputUtils::getManufacturer() );
+  properties.insert( QStringLiteral( "device_model" ), InputUtils::getDeviceModel() );
+  properties.insert( QStringLiteral( "app_version" ), CoreUtils::appVersion() );
+  properties.insert( QStringLiteral( "platform" ), InputUtils::appPlatform() );
+  properties.insert( QStringLiteral( "os_version" ), QSysInfo::productVersion() );
+  properties.insert( QStringLiteral( "project_count" ), localProjectsManager.projects().count() );
+  properties.insert( QStringLiteral( "autosync_enabled" ), as->autosyncAllowed() );
+
+  // External provider count
+  int externalProviderCount = 0;
+  const QVariantList providers = as->savedPositionProviders();
+  for ( const QVariant &v : providers )
+  {
+    const QStringList p = v.toStringList();
+    if ( p.size() >= 3 && p[2] != QLatin1String( "internal" ) && p[2] != QLatin1String( "simulated" ) )
+      externalProviderCount++;
+  }
+  properties.insert( QStringLiteral( "num_external_providers" ), externalProviderCount );
+
+  // Server info
+  const auto serverType = static_cast<MerginServerType::ServerType>( merginApi->serverType() );
+  QString serverTypeStr;
+  switch ( serverType )
+  {
+    case MerginServerType::SAAS: serverTypeStr = QStringLiteral( "saas" ); break;
+    case MerginServerType::EE:   serverTypeStr = QStringLiteral( "ee" );   break;
+    case MerginServerType::CE:   serverTypeStr = QStringLiteral( "ce" );   break;
+    default:                     serverTypeStr = QStringLiteral( "old" );  break;
+  }
+  properties.insert( QStringLiteral( "server_type" ), serverTypeStr );
+  properties.insert( QStringLiteral( "server_version" ), merginApi->apiVersion() );
+  if ( merginApi->subscriptionInfo() )
+    properties.insert( QStringLiteral( "plan_name" ), merginApi->subscriptionInfo()->planAlias() );
+
+  // Merge accumulated dynamic data
+  settings.beginGroup( QStringLiteral( "usage_report/data" ) );
+  const QStringList keys = settings.childKeys();
+  for ( const QString &key : keys )
+    properties.insert( key, settings.value( key ) );
+  settings.endGroup();
+
+  // Compute average project load time from running totals
+  const qint64 totalMs = properties.value( QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong();
+  const int loadCount = properties.value( QStringLiteral( "load_count" ), 0 ).toInt();
+  if ( loadCount > 0 )
+    properties.insert( QStringLiteral( "avg_project_load_time_ms" ), totalMs / loadCount );
+  properties.remove( QStringLiteral( "total_load_time_ms" ) );
+  properties.remove( QStringLiteral( "load_count" ) );
+
+  // Suppress IP collection
+  properties.insert( QStringLiteral( "$ip" ), QString() );
+
+  // Last reported at
+  properties.insert( QStringLiteral( "last_reported_at" ), lastReported.isValid() ? lastReported.toString( Qt::ISODate ) : QString() );
+
+  const QJsonObject body
+  {
+    { QStringLiteral( "api_key" ), USAGE_REPORT_API_KEY },
+    { QStringLiteral( "event" ), QStringLiteral( "usage_snapshot" ) },
+    { QStringLiteral( "distinct_id" ), deviceUuid },
+    { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
+    { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
+  };
+
+  QUrl url( QStringLiteral( "https://eu.i.posthog.com/capture/" ) );
+  QNetworkRequest request( url );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+  QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
+  QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
+  {
+    if ( reply->error() == QNetworkReply::NoError )
+    {
+      QSettings s;
+      // Reset dynamic data
+      s.beginGroup( QStringLiteral( "usage_report/data" ) );
+      s.remove( QString() );
+      s.endGroup();
+      // Update last reported
+      s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
+    }
+    // On network error: silently ignore — data preserved for next attempt
+    reply->deleteLater();
+  } );
+}
+
 int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
@@ -531,6 +662,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  QNetworkAccessManager usageReportNam;
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -831,6 +963,9 @@ int main( int argc, char *argv[] )
 
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
+
+  // Usage reporting: attempt weekly snapshot
+  trySubmitUsageSnapshot( &usageReportNam, as, localProjectsManager, ma.get() );
 
   if ( !component.errors().isEmpty() )
   {
