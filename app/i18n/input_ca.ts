@@ -182,7 +182,7 @@
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
         <source>Value must be greater than or equal to %1</source>
-        <translation>El valor ha de ser superior o igual a %1</translation>
+        <translation>El valor ha de ser més gran o igual que %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="24"/>
