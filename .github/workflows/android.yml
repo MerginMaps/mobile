@@ -37,8 +37,8 @@ jobs:
 
     runs-on: macos-26
     env:
-      NDK_VERSION: 'r27' # '27.2.12479018'
-      NDK_VERSION_FULL: r27c
+      NDK_VERSION: 'r28' # '28.2.13676358'
+      NDK_VERSION_FULL: r28c
       JDK_VERSION: 17
       SDK_PLATFORM: android-36
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
