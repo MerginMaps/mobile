@@ -114,6 +114,9 @@ class AppSettings: public QObject
     bool usageReportEnabled() const;
     void setUsageReportEnabled( bool enabled );
 
+    Q_INVOKABLE void trackUsageFeature( const QString &key );
+    Q_INVOKABLE void incrementUsageCounter( const QString &key );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
