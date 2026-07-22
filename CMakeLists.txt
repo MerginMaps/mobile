@@ -150,6 +150,11 @@ set(WITH_TRIMBLE_PROVIDERS
       "Building with Trimble GNSS position provider via Trimble Mobile Manager (mobile only)"
 )
 
+set(USAGE_REPORT_KEY
+    ""
+    CACHE STRING "API key for anonymous usage reporting"
+)
+
 set(USE_KEYCHAIN
     FALSE
     CACHE
