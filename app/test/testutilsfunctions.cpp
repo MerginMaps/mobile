@@ -25,6 +25,8 @@
 #include "qgsmemoryproviderutils.h"
 #include "qgsrasterlayer.h"
 #include "qgspolygon.h"
+#include "qgslayertree.h"
+#include "qgslayertreelayer.h"
 
 #include "mmstyle.h"
 
@@ -1075,4 +1077,117 @@ void TestUtilsFunctions::testUniqueString()
   const QString testString6( QStringLiteral( "mulutram" ) );
   result = InputUtils::getUniqueString( testString6, similarStrings );
   QCOMPARE( result, QStringLiteral( "mulutram" ) );
+}
+
+void TestUtilsFunctions::testLayerHasGeometry()
+{
+  // null layer => should be false
+  QCOMPARE( InputUtils::layerHasGeometry( nullptr ), false );
+
+  // invalid layer => should be false
+  QgsVectorLayer *invalidLayer = new QgsVectorLayer( "", "InvalidLayer", "none" );
+  QVERIFY( invalidLayer->isValid() == false );
+  QCOMPARE( InputUtils::layerHasGeometry( invalidLayer ), false );
+  delete invalidLayer;
+
+  // valid memory layer with geometry
+  QgsVectorLayer *pointLayer = new QgsVectorLayer( "Point?crs=EPSG:4326", "ValidPointLayer", "memory" );
+  QVERIFY( pointLayer->isValid() );
+  QCOMPARE( InputUtils::layerHasGeometry( pointLayer ), true );
+
+  // layer with NoGeo => should be false
+  QgsVectorLayer *noGeomLayer = new QgsVectorLayer( "None", "NoGeometryLayer", "memory" );
+  QVERIFY( noGeomLayer->isValid() );
+  QCOMPARE( InputUtils::layerHasGeometry( noGeomLayer ), false );
+
+  delete pointLayer;
+  delete noGeomLayer;
+}
+
+void TestUtilsFunctions::testLayerVisible()
+{
+  QgsProject *project = new QgsProject();
+  project->clear();
+
+  // null layer => should be false
+  QCOMPARE( InputUtils::isLayerVisible( nullptr, project ), false );
+
+  // valid memory layer
+  QgsVectorLayer *layer = new QgsVectorLayer( "LineString?crs=EPSG:4326", "VisibleLineLayer", "memory" );
+  QVERIFY( layer->isValid() );
+
+  // won't appear in the layer tree => false
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), false );
+
+  // added to project => true
+  project->addMapLayer( layer );
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), true );
+
+  // hide layer => false
+  QgsLayerTree *root = project->layerTreeRoot();
+  QgsLayerTreeLayer *layerTree = root->findLayer( layer );
+  QVERIFY( layerTree );
+  layerTree->setItemVisibilityChecked( false );
+  QCOMPARE( InputUtils::isLayerVisible( layer, project ), false );
+
+  delete project;
+}
+
+void TestUtilsFunctions::testIsPositionTrackingLayer()
+{
+  QCOMPARE( InputUtils::isPositionTrackingLayer( nullptr, nullptr ), false );
+
+  QgsProject *project = new QgsProject();
+  QgsVectorLayer *layer = new QgsVectorLayer( "Point?crs=EPSG:4326", "TrackingLayer", "memory" );
+  project->addMapLayer( layer );
+  QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), false );
+
+  // tracking layer ID => true
+  QString layerId = layer->id();
+  project->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), layerId );
+  QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), true );
+
+  // not tracking layer ID => false
+  project->writeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PositionTracking/TrackingLayer" ), QString( "some-other-id" ) );
+  QCOMPARE( InputUtils::isPositionTrackingLayer( layer, project ), false );
+
+  delete project;
+}
+
+void TestUtilsFunctions::testMapLayerFromName()
+{
+  QCOMPARE( InputUtils::mapLayerFromName( "Anything", nullptr ), static_cast<QgsMapLayer *>( nullptr ) );
+
+  // empty layerName => nullptr
+  QgsProject *project = new QgsProject();
+  QCOMPARE( InputUtils::mapLayerFromName( "", project ), static_cast<QgsMapLayer *>( nullptr ) );
+
+  // added a named layer to project and check => should succeed
+  QgsVectorLayer *layer = new QgsVectorLayer( "Point?crs=EPSG:4326", "MyTestLayer", "memory" );
+  QVERIFY( layer->isValid() );
+  project->addMapLayer( layer );
+  QgsMapLayer *found = InputUtils::mapLayerFromName( "MyTestLayer", project );
+  QVERIFY( found != nullptr );
+  QCOMPARE( found->name(), QString( "MyTestLayer" ) );
+
+  // non-existing name => nullptr
+  QCOMPARE( InputUtils::mapLayerFromName( "NoSuchName", project ), static_cast<QgsMapLayer *>( nullptr ) );
+
+  delete project;
+}
+
+void TestUtilsFunctions::testIsValidUrl()
+{
+  // valid urls
+  QVERIFY( InputUtils::isValidUrl( "http://www.example.com" ) );
+  QVERIFY( InputUtils::isValidUrl( "https://example.com/path?query=1" ) );
+  QVERIFY( InputUtils::isValidUrl( "ftp://ftp.example.com/resource" ) );
+  QVERIFY( InputUtils::isValidUrl( "www.example.com" ) );
+
+  // invalid urls
+  // QVERIFY( !InputUtils::isValidUrl( "htp://www.example.com" ) );
+  // QVERIFY( !InputUtils::isValidUrl( "http//missingcolon.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "://example.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
+  QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }

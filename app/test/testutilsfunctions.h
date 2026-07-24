@@ -53,6 +53,11 @@ class TestUtilsFunctions: public QObject
     void testIsValidEmail();
     void testSanitizePath();
     void testUniqueString();
+    void testLayerHasGeometry();
+    void testLayerVisible();
+    void testIsPositionTrackingLayer();
+    void testMapLayerFromName();
+    void testIsValidUrl();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
