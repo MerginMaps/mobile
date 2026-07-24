@@ -229,10 +229,8 @@ static void init_qgis( const QString &pkgPath )
 #ifdef MOBILE_OS
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
-  QgsApplication::setPkgDataPath( pkgPath );
-#else
-  Q_UNUSED( pkgPath )
 #endif
+  QgsApplication::setPkgDataPath( pkgPath );
 
   QgsApplication::initQgis();
 
