@@ -234,7 +234,11 @@ QString FilterController::buildFieldExpression( const FieldFilter &filter ) cons
       QString textValue = QgsExpression::quotedString( filter.value.toList().at( 0 ).toString() );
       // remove single quotes from the beginning and end of returned string
       textValue = textValue.slice( 1, textValue.size() - 2 );
+      textValue.replace( QStringLiteral( "!" ), QStringLiteral( "!!" ) );
+      textValue.replace( QStringLiteral( "%" ), QStringLiteral( "!%" ) );
+      textValue.replace( QStringLiteral( "_" ), QStringLiteral( "!_" ) );
       expressionCopy.replace( QStringLiteral( "@@value@@" ), textValue );
+      expressionCopy.append( QStringLiteral( " ESCAPE '!'" ) );
       break;
     }
     case FieldFilter::CheckboxFilter:
