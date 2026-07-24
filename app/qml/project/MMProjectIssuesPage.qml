@@ -30,10 +30,11 @@ MMComponents.MMPage {
   onBackClicked: root.visible = false
   pageHeader.title: qsTr("Project issues")
 
-  pageContent: MMComponents.MMListView {
-    id: mainList
-
+  pageContent: MMComponents.MMScrollView {
     anchors.fill: parent
+
+  MMComponents.MMListView {
+    id: mainList
 
     model: root.projectIssuesModel
     spacing: __style.margin12
@@ -92,5 +93,6 @@ MMComponents.MMPage {
         font: __style.p5
       }
     }
+  }
   }
 }

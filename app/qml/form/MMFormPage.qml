@@ -175,13 +175,14 @@ Page {
 
           property int tabIndex: model.TabIndex // from the repeater
 
-          MMComponents.MMListView {
-
+          MMComponents.MMScrollView {
             anchors {
               fill: parent
               leftMargin: __style.pageMargins
               rightMargin: __style.pageMargins
             }
+
+          MMComponents.MMListView {
 
             model: swipeViewRepeater.model.attributeFormProxyModel( pageDelegate.tabIndex )
 
@@ -205,6 +206,7 @@ Page {
               opacity: 1 // invisible
               height: 20 * __dp
             }
+          }
           }
         }
       }
