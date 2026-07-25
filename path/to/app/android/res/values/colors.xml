@@ -1,0 +1,6 @@
+# Define the rose and pressed rose colors
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rose">#FFC5C5</color>
+    <color name="rose_pressed">#FFA07A</color>
+</resources>
