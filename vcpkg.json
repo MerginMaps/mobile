@@ -111,6 +111,7 @@
           ]
         },
         "qtremoteobjects",
+        "qtwebsockets",
         {
           "name": "qtsensors",
           "features": [

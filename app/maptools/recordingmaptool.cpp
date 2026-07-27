@@ -79,10 +79,10 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZM( pointToAdd );
 
-  // apply gps antenna height
-  if ( QgsWkbTypes::hasZ( pointToAdd.wkbType() ) && mPositionKit && mPositionKit->antennaHeight() > 0 )
+  // apply gps antenna height (zero when provider already reduced to ground point, e.g. Trimble via TMM)
+  if ( QgsWkbTypes::hasZ( pointToAdd.wkbType() ) && mPositionKit && mPositionKit->antennaHeightToApply() > 0 )
   {
-    pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
+    pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeightToApply() );
   }
 
   QgsVertexId id( mActivePart, mActiveRing, 0 );

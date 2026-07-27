@@ -874,3 +874,99 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QVERIFY( qgsDoubleNear( newPosition.elevation, 127.53574931171875 ) );
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
+
+#ifdef WITH_TRIMBLE_PROVIDERS
+#include "position/providers/trimblepositionprovider.h"
+#include "appsettings.h"
+
+void TestPosition::testTrimbleMessageParser()
+{
+  // Full LocationV2DataMessage sample
+  const QString json = QStringLiteral(
+                         R"({
+      "latitude": 48.123456,
+      "longitude": 17.654321,
+      "altitude": 150.5,
+      "hdop": 0.8,
+      "satellites": 12,
+      "totalSatInUse": 10,
+      "diffStatus": 4,
+      "antennaHeight": 1.234,
+      "targetReferenceFrameName": "ITRF2014",
+      "targetReferenceFrameEpoch": 2010.0
+    })" );
+
+  GeoPosition pos = TrimblePositionProvider::parseLocationMessage( json );
+
+  QVERIFY( qgsDoubleNear( pos.latitude, 48.123456 ) );
+  QVERIFY( qgsDoubleNear( pos.longitude, 17.654321 ) );
+  QVERIFY( qgsDoubleNear( pos.elevation, 150.5 ) );
+  QVERIFY( qgsDoubleNear( pos.hdop, 0.8 ) );
+  QCOMPARE( pos.satellitesVisible, 12 );
+  QCOMPARE( pos.satellitesUsed, 10 );
+  QCOMPARE( pos.qualityIndicator, QgsGpsInformation::QualityIndicator::RTK );
+  QVERIFY( qgsDoubleNear( pos.antennaHeight, 1.234 ) );
+  QVERIFY( pos.antennaHeightApplied );
+
+  // Null / missing fields should not crash
+  const QString emptyJson = QStringLiteral( "{}" );
+  GeoPosition emptyPos = TrimblePositionProvider::parseLocationMessage( emptyJson );
+  QVERIFY( !emptyPos.hasValidPosition() );
+
+  // Malformed JSON
+  const QString badJson = QStringLiteral( "not json at all" );
+  GeoPosition badPos = TrimblePositionProvider::parseLocationMessage( badJson );
+  QVERIFY( !badPos.hasValidPosition() );
+}
+
+void TestPosition::testTrimbleFrameResolver()
+{
+  // Known frames should resolve to valid CRS
+  QgsCoordinateReferenceSystem wgs84 = TrimblePositionProvider::resolveFrame( QStringLiteral( "WGS84" ), 0 );
+  QVERIFY( wgs84.isValid() );
+  QCOMPARE( wgs84.authid(), QStringLiteral( "EPSG:4979" ) );
+
+  QgsCoordinateReferenceSystem itrf2014 = TrimblePositionProvider::resolveFrame( QStringLiteral( "ITRF2014" ), 2010.0 );
+  QVERIFY( itrf2014.isValid() );
+  QCOMPARE( itrf2014.authid(), QStringLiteral( "EPSG:7912" ) );
+  QVERIFY( qgsDoubleNear( itrf2014.coordinateEpoch(), 2010.0 ) );
+
+  QgsCoordinateReferenceSystem etrs89 = TrimblePositionProvider::resolveFrame( QStringLiteral( "ETRS89" ), 0 );
+  QVERIFY( etrs89.isValid() );
+  QCOMPARE( etrs89.authid(), QStringLiteral( "EPSG:4936" ) );
+
+  // Unknown frame → WGS84 fallback
+  QgsCoordinateReferenceSystem unknown = TrimblePositionProvider::resolveFrame( QStringLiteral( "SomeUnknownDatum2099" ), 0 );
+  QVERIFY( unknown.isValid() );
+  QCOMPARE( unknown.authid(), QStringLiteral( "EPSG:4979" ) );
+
+  // Empty frame → WGS84 default
+  QgsCoordinateReferenceSystem empty = TrimblePositionProvider::resolveFrame( QString(), 0 );
+  QVERIFY( empty.isValid() );
+  QCOMPARE( empty.authid(), QStringLiteral( "EPSG:4979" ) );
+}
+
+void TestPosition::testTrimbleAntennaHeight()
+{
+  // Provider-supplied antenna height: display from GeoPosition, apply 0
+  GeoPosition trimblePos;
+  trimblePos.antennaHeight = 1.5;
+  trimblePos.antennaHeightApplied = true;
+
+  positionKit->parsePositionUpdate( trimblePos );
+  QVERIFY( qgsDoubleNear( positionKit->antennaHeight(), 1.5 ) );
+  QVERIFY( qgsDoubleNear( positionKit->antennaHeightToApply(), 0.0 ) );
+  QVERIFY( positionKit->antennaHeightApplied() );
+
+  // Normal provider (no antennaHeight from stream): display from AppSettings, apply AppSettings value
+  GeoPosition normalPos;
+  normalPos.antennaHeight = -1; // not provided
+  normalPos.antennaHeightApplied = false;
+
+  const double savedHeight = positionKit->appSettings() ? positionKit->appSettings()->gpsAntennaHeight() : 0.0;
+  positionKit->parsePositionUpdate( normalPos );
+  QVERIFY( qgsDoubleNear( positionKit->antennaHeight(), savedHeight ) );
+  QVERIFY( qgsDoubleNear( positionKit->antennaHeightToApply(), savedHeight ) );
+  QVERIFY( !positionKit->antennaHeightApplied() );
+}
+#endif // WITH_TRIMBLE_PROVIDERS
