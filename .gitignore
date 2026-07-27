@@ -1,27 +1,30 @@
+# broad file type filters
 *.autosave
 *.orig
 *.DS_Store
 *.user
-*build*/
-app/config.pri
-core/merginsecrets.cpp
-app/position/providers/trimblesecrets.cpp
 *.idea
 *.vscode
 *.cache
-test/temp_projects/
-test/temp_extra_projects/
+*.gpkg-wal
+*.gpkg-shm
+# secrets
+core/merginsecrets.cpp
+app/position/providers/trimblesecrets.cpp
+.github/secrets/ios/LutraConsulting*.mobileprovision
+Input_keystore.keystore
+google_play_key.json
+# generated files
+app/config.pri
+*build*/
 input.pro.user*
 app/android/assets
 app/android/AndroidManifest.xml
 app/android/build.gradle
 app/android/.gradle
-*.gpkg-wal
-*.gpkg-shm
-Input_keystore.keystore
-CMakeLists.txt.user
-.github/secrets/ios/LutraConsulting*.mobileprovision
-google_play_key.json
+test/temp_projects/
+test/temp_extra_projects/
 fastlane/report.xml
+CMakeLists.txt.user
 CMakeUserPresets.json
 CLAUDE.md
