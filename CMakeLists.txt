@@ -278,12 +278,13 @@ if (WITH_TRIMBLE_PROVIDERS)
       FATAL_ERROR
         "WITH_TRIMBLE_PROVIDERS is only supported on Android and iOS. Set WITH_TRIMBLE_PROVIDERS=FALSE for desktop builds."
     )
+  else ()
+    find_package(
+      Qt6
+      COMPONENTS WebSockets
+      REQUIRED
+    )
   endif ()
-  find_package(
-    Qt6
-    COMPONENTS WebSockets
-    REQUIRED
-  )
 endif ()
 
 if (ENABLE_TESTS)

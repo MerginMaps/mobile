@@ -16,15 +16,15 @@
 #include <memory>
 
 #ifdef ANDROID
-class TmmResultReceiver; // defined in trimbleregistration_android.cpp
+class TmmResultReceiver; // defined in trimbleregistrationandroid.cpp
 #endif
 
 /**
  * Platform-agnostic async contract for registering with Trimble Mobile Manager.
  *
  * Call requestRegistration() once; listen for registered() or failed().
- * Concrete implementations are in trimbleregistration_android.cpp (Android)
- * and trimbleregistration_ios.mm (iOS).
+ * Concrete implementations are in trimbleregistrationandroid.cpp (Android)
+ * and trimbleregistrationios.mm (iOS).
  */
 class TrimbleRegistration : public QObject
 {

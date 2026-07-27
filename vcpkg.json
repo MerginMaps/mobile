@@ -111,7 +111,10 @@
           ]
         },
         "qtremoteobjects",
-        "qtwebsockets",
+        {
+          "name": "qtwebsockets",
+          "platform": "android | ios"
+        },
         {
           "name": "qtsensors",
           "features": [

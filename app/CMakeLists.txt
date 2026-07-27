@@ -217,14 +217,15 @@ if (WITH_TRIMBLE_PROVIDERS)
     )
   endif ()
 
-  set(MM_SRCS ${MM_SRCS} position/providers/trimblepositionprovider.cpp)
   set(MM_HDRS ${MM_HDRS} position/providers/trimbleregistration.h
               position/providers/trimblepositionprovider.h
   )
+  set(MM_SRCS ${MM_SRCS} position/providers/trimblepositionprovider.cpp)
+
   if (ANDROID)
-    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistration_android.cpp)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistrationandroid.cpp)
   elseif (IOS)
-    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistration_ios.mm)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistrationios.mm)
   endif ()
 endif ()
 

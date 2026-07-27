@@ -60,7 +60,7 @@ void TrimbleRegistration::requestRegistration( const QString &appId )
   }
 
   QPointer<TrimbleRegistration> self( this );
-  [[UIApplication sharedApplication] openURL:nsUrl options:@{} completionHandler:^( BOOL success )
+  [[UIApplication sharedApplication] openURL:nsUrl options:@ {} completionHandler: ^ ( BOOL success )
   {
     qDebug() << "TrimbleRegistration: openURL completionHandler success:" << success;
     if ( !success && self )
