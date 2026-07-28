@@ -2846,7 +2846,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
         <source>SSO login has expired</source>
-        <translation>Az egyszeri bejelentkezése lejárt</translation>
+        <translation>Az egyszeri (SSO) bejelentkezése lejárt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
