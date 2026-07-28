@@ -2430,7 +2430,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
         <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
-        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 támogatott eszközökért és a beállítási útmutatóért.</translation>
+        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 a támogatott eszközökért és a beállítási útmutatóért.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="94"/>
