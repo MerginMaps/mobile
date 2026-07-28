@@ -3153,13 +3153,13 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
-        <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
+        <translation>Probléma van a szerver egyszeri (SSO) bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="934"/>
         <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
-        <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
+        <translation>Hiba történt az egyszeri (SSO) bejelentkezési konfiguráció lekérésekor a szerverről</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="978"/>
