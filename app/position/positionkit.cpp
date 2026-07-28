@@ -16,13 +16,13 @@
 #include "appsettings.h"
 #include "inpututils.h"
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 #include "providers/bluetoothpositionprovider.h"
 #endif
 #include "providers/internalpositionprovider.h"
 #include "providers/simulatedpositionprovider.h"
 #include "providers/networkpositionprovider.h"
-#ifdef WITH_TRIMBLE_PROVIDERS
+#if WITH_TRIMBLE_PROVIDERS
 #include "providers/trimblepositionprovider.h"
 #endif
 #ifdef ANDROID
@@ -145,7 +145,7 @@ QString PositionKit::positionProviderName() const
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   if ( type == QStringLiteral( "external_bt" ) )
   {
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
@@ -154,7 +154,7 @@ AbstractPositionProvider *PositionKit::constructProvider( const QString &type, c
   }
 #endif
 
-#ifdef WITH_TRIMBLE_PROVIDERS
+#if WITH_TRIMBLE_PROVIDERS
   if ( type == QStringLiteral( "external_trimble" ) )
   {
     AbstractPositionProvider *provider = new TrimblePositionProvider( id, name, *mPositionTransformer );
@@ -273,7 +273,7 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( const AppSetting
 
 bool PositionKit::hasTrimbleSupport()
 {
-#ifdef WITH_TRIMBLE_PROVIDERS
+#if WITH_TRIMBLE_PROVIDERS
   return true;
 #else
   return false;
@@ -282,7 +282,7 @@ bool PositionKit::hasTrimbleSupport()
 
 bool PositionKit::hasBluetoothSupport()
 {
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   return true;
 #else
   return false;

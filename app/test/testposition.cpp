@@ -19,7 +19,7 @@
 #include "position/positionkit.h"
 #include "position/providers/simulatedpositionprovider.h"
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
 #endif
 
@@ -91,7 +91,7 @@ void TestPosition::simulatedPosition()
   QVERIFY( !positionKit->positionProvider() );
 }
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 
 void TestPosition::testBluetoothProviderConnection()
 {
@@ -256,7 +256,7 @@ void TestPosition::testPositionProviderKeysInSettings()
   QSettings rawSettings;
   rawSettings.remove( AppSettings::POSITION_PROVIDERS_GROUP ); // make sure nothing is there from previous tests
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   positionKit->setPositionProvider( positionKit->constructProvider( "external_bt", "AA:BB:CC:DD:EE:FF", "testProviderA" ) );
 
   QCOMPARE( positionKit->positionProvider()->id(), "AA:BB:CC:DD:EE:FF" );
@@ -507,7 +507,7 @@ void TestPosition::testPositionTransformerAndroidPosition()
   PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -566,7 +566,7 @@ void TestPosition::testPositionTransformerBluetoothPosition()
   PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
-#ifdef  WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -632,7 +632,7 @@ void TestPosition::testPositionTransformerInternalAndroidPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -668,7 +668,7 @@ void TestPosition::testPositionTransformerInternalIosPosition()
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
   PositionTransformer disabledTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -745,7 +745,7 @@ void TestPosition::testPositionTransformerInternalDesktopPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
-#ifdef  WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -780,7 +780,7 @@ void TestPosition::testPositionTransformerNetworkPosition()
   PositionTransformer passThroughTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, true, QgsCoordinateTransformContext() );
 
-#ifdef  WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -846,7 +846,7 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QgsCoordinateReferenceSystem geoidHeightCrs = QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
   PositionTransformer positionTransformer( ellipsoidHeightCrs, geoidHeightCrs, false, QgsCoordinateTransformContext() );
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   // mini file contains only minimal info like position and date
   QString miniNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_mini.txt";
   QFile miniNmeaFile( miniNmeaPositionFilePath );
@@ -875,7 +875,7 @@ void TestPosition::testPositionTransformerSimulatedPosition()
   QVERIFY( qgsDoubleNear( newPosition.elevation_diff, 43.764250688281265 ) );
 }
 
-#ifdef WITH_TRIMBLE_PROVIDERS
+#if WITH_TRIMBLE_PROVIDERS
 #include "position/providers/trimblepositionprovider.h"
 #include "appsettings.h"
 

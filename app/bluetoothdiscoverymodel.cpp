@@ -10,14 +10,14 @@
 #include "bluetoothdiscoverymodel.h"
 #include "coreutils.h"
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 #include <QBluetoothUuid>
 #endif
 
 
 BluetoothDiscoveryModel::BluetoothDiscoveryModel( QObject *parent ) : QAbstractListModel( parent )
 {
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   mDiscoveryAgent = std::unique_ptr<QBluetoothDeviceDiscoveryAgent>( new QBluetoothDeviceDiscoveryAgent() );
 
   connect( mDiscoveryAgent.get(), &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &BluetoothDiscoveryModel::deviceDiscovered );
@@ -39,7 +39,7 @@ QHash<int, QByteArray> BluetoothDiscoveryModel::roleNames() const
 {
   QHash<int, QByteArray> roles;
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   roles.insert( DataRoles::DeviceAddress, "deviceAddress" );
   roles.insert( DataRoles::DeviceName, "deviceName" );
   roles.insert( DataRoles::SignalStrength, "signalStrength" );
@@ -50,7 +50,7 @@ QHash<int, QByteArray> BluetoothDiscoveryModel::roleNames() const
 
 int BluetoothDiscoveryModel::rowCount( const QModelIndex & ) const
 {
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   return mFoundDevices.count();
 #else
   return 0;
@@ -59,7 +59,7 @@ int BluetoothDiscoveryModel::rowCount( const QModelIndex & ) const
 
 QVariant BluetoothDiscoveryModel::data( const QModelIndex &index, int role ) const
 {
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   if ( !index.isValid() )
     return QVariant();
 
@@ -104,7 +104,7 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   if ( mDiscovering == discovering )
     return;
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   if ( discovering )
   {
     mDiscoveryAgent->start();
@@ -120,7 +120,7 @@ void BluetoothDiscoveryModel::setDiscovering( bool discovering )
   emit discoveringChanged( mDiscovering );
 }
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 void BluetoothDiscoveryModel::deviceDiscovered( const QBluetoothDeviceInfo &device )
 {
   for ( int i = 0; i < mFoundDevices.count(); i++ )

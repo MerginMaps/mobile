@@ -349,6 +349,12 @@ qt_add_executable(
   main.cpp
 )
 
+# throw error when #include is missing, guards against not imported preprocessor
+# definitions
+if (CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|GNU)$")
+  target_compile_options(MerginMaps PRIVATE -Werror=undef)
+endif ()
+
 set_target_properties(MerginMaps PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_include_directories(

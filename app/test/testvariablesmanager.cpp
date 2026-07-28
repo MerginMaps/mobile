@@ -19,7 +19,7 @@
 
 #include "merginapi.h"
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
 #endif
 

@@ -37,7 +37,7 @@
 #include "featurelayerpair.h"
 #include "streamingintervaltype.h"
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
 #endif
 
@@ -3055,7 +3055,7 @@ void TestMapTools::testAntennaHeight()
 
 void TestMapTools::testSmallTracking()
 {
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
   QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
 
   RecordingMapTool mapTool;

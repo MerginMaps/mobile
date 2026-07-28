@@ -11,8 +11,8 @@
 #cmakedefine MM_TEST
 #cmakedefine TEST_DATA_DIR "@TEST_DATA_DIR@"
   
-#cmakedefine WITH_BLUETOOTH_PROVIDERS
-#cmakedefine WITH_TRIMBLE_PROVIDERS
+#cmakedefine01 WITH_BLUETOOTH_PROVIDERS
+#cmakedefine01 WITH_TRIMBLE_PROVIDERS
 
 #endif
 

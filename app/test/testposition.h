@@ -28,7 +28,7 @@ class TestPosition: public QObject
 
     void simulatedPosition();
 
-#ifdef WITH_BLUETOOTH_PROVIDERS
+#if WITH_BLUETOOTH_PROVIDERS
     void testBluetoothProviderConnection();
     void testBluetoothProviderPosition();
 #endif
@@ -47,7 +47,7 @@ class TestPosition: public QObject
     void testPositionTransformerNetworkPosition();
     void testPositionTransformerSimulatedPosition();
 
-#ifdef WITH_TRIMBLE_PROVIDERS
+#if WITH_TRIMBLE_PROVIDERS
     void testTrimbleMessageParser();
     void testTrimbleFrameResolver();
     void testTrimbleAntennaHeight();
