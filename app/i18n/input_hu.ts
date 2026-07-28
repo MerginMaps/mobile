@@ -2608,7 +2608,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold</source>
-        <translation>GPS pontossági küszöb</translation>
+        <translation>GPS pontossági korlát</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
