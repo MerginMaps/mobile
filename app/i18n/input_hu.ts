@@ -176,13 +176,13 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
-        <translation>Az értéknek kisebbnek kell lennie, mint %1</translation>
+        <source>Value must be less than or equal to %1</source>
+        <translation>Az értéknek kisebbnek vagy egyenlőnek kell lennie, mint %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
-        <translation>Az értéknek nagyobbnak kell lennie, mint %1</translation>
+        <source>Value must be greater than or equal to %1</source>
+        <translation>Az értéknek nagyobbnak vagy egyenlőnek kell lennie, mint %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="24"/>
@@ -348,12 +348,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation><numerusform>%n évvel ezelőtt</numerusform><numerusform>%n évvel ezelőtt</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2254"/>
+        <location filename="../inpututils.cpp" line="2253"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform><numerusform>Minden részhez legalább %n pontot kell hozzáadni.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2258"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform><numerusform>Legalább %1 pontot kell hozzáadni.</numerusform></translation>
     </message>
@@ -853,12 +853,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="149"/>
         <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
         <translation>A &quot;Kezdés&quot; legyen korábbi, mint &quot;Befejezés&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="148"/>
         <source>To</source>
         <translation>Befejezés: </translation>
     </message>
@@ -1066,17 +1066,17 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A fotóvázlatok mentése nem sikerült, kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="294"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
         <source>Could not create directory %1.</source>
         <translation>%1 mappát nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="359"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Nem sikerült feldolgozni a képet, a fotókönyvtár feloldása nem sikerült</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="374"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
         <source>Failed to process the image</source>
         <translation>Nem sikerült feldolgozni a képet</translation>
     </message>
@@ -1089,12 +1089,12 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Néhány elemet az aktív szűrők elrejthetnek.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="173"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="177"/>
         <source> more</source>
         <translation> több</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="216"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="220"/>
         <source>Add feature</source>
         <translation>Elem hozzáadása</translation>
     </message>
@@ -1102,12 +1102,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="103"/>
         <source>Change link</source>
         <translation>Összekapcsolás módosítása</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="106"/>
         <source>Unlink feature</source>
         <translation>Elem szétkapcsolása</translation>
     </message>
@@ -1663,28 +1663,28 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Aktív</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1234"/>
+        <location filename="../qml/map/MMMapController.qml" line="1237"/>
         <source>Splitting done successfully</source>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1326"/>
+        <location filename="../qml/map/MMMapController.qml" line="1330"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1339"/>
+        <location filename="../qml/map/MMMapController.qml" line="1343"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1356"/>
+        <location filename="../qml/map/MMMapController.qml" line="1364"/>
         <source>Add new part to the geometry</source>
         <translation>Új rész hozzáadása a geometriához</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1454"/>
+        <location filename="../qml/map/MMMapController.qml" line="1461"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -2332,42 +2332,42 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Mezők</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="101"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="102"/>
         <source>Add field</source>
         <translation>Mező hozzáadása</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="126"/>
         <source>Create project</source>
         <translation>Projekt létrehozása</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="130"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="131"/>
         <source>Empty project name</source>
         <translation>A projekt neve üres</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="150"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
         <source>Text</source>
         <translation>Szöveg</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
         <source>Date &amp; Time</source>
         <translation>Dátum &amp; idő</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
         <source>Number</source>
         <translation>Szám</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
         <source>Checkbox</source>
         <translation>Jelölőnégyzet</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="155"/>
         <source>Photo</source>
         <translation>Fénykép</translation>
     </message>

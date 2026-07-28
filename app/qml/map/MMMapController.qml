@@ -1266,6 +1266,16 @@ Item {
     }
   }
 
+
+  Connections {
+    target: mapCanvas.mapSettings
+    function onScaleChanged() {
+      if ( recordingToolsLoader.active ) {
+        recordingToolsLoader.item.recordingMapTool.collectVertices()
+      }
+    }
+  }
+
   Connections {
     target: __activeProject
 
