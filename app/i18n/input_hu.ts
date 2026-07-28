@@ -2899,7 +2899,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="128"/>
         <source>SSO login</source>
-        <translation>Egyszeri bejelentkezés</translation>
+        <translation>Egyszeri bejelentkezés (SSO)</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="129"/>
