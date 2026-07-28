@@ -3446,17 +3446,17 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="148"/>
         <source>DGPS fix</source>
-        <translation>DGPS javítás</translation>
+        <translation>DGPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="151"/>
         <source>PPS fix</source>
-        <translation>PPS javítás</translation>
+        <translation>PPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="154"/>
         <source>RTK fix</source>
-        <translation>RTK javítás</translation>
+        <translation>RTK fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="157"/>
