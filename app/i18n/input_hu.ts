@@ -2879,7 +2879,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="67"/>
         <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Az egyszeri bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="95"/>
