@@ -2673,12 +2673,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in meters</source>
-        <translation>Küszöb intervallum, méterben megadva</translation>
+        <translation>Rögzítési köz, méterben megadva</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Küszöb intervallum, másodpercben megadva</translation>
+        <translation>Rögzítési köz, másodpercben megadva</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
