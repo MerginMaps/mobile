@@ -3027,7 +3027,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="71"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
