@@ -3466,7 +3466,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="160"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Becsült javítás (halott számítás)</translation>
+        <translation>Becsült helyzet (DR)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="163"/>
