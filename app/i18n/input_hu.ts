@@ -2851,7 +2851,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
         <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
-        <translation>Az egyszeri bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
+        <translation>Az egyszeri (SSO) bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
@@ -2869,7 +2869,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="29"/>
         <source>Sign in with SSO</source>
-        <translation>Bejelentkezés egyszeri bejelentkezéssel</translation>
+        <translation>Bejelentkezés egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="58"/>
