@@ -1585,7 +1585,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
-        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja be az alakzatot a terület méréséhez</translation>
+        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja össze az alakzatot a terület méréséhez</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="179"/>
