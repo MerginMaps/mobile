@@ -549,7 +549,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Törlés</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
     </message>
@@ -689,12 +694,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha inkább menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha mégis menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha inkább menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha mégis menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
@@ -718,7 +723,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Le szeretné tölteni ezt a projektet
+        <translation>Le szeretné tölteni ezt a projektet:
  %1 ?</translation>
     </message>
     <message>
@@ -1263,7 +1268,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
         <source>Satellites (in use/view)</source>
-        <translation>Műholdak (használt/látókör)</translation>
+        <translation>Műhold (használt/látható)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="245"/>
@@ -1288,7 +1293,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="311"/>
         <source>Last Fix</source>
-        <translation>Utolsó GPS helyzetmeghatározás</translation>
+        <translation>Utolsó GPS pozíció mérés</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="320"/>
@@ -1537,7 +1542,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
         <source>Continue with SSO</source>
-        <translation>Folytatás egyszeri bejelentkezéssel</translation>
+        <translation>Folytatás egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="140"/>
@@ -1580,7 +1585,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
-        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja be az alakzatot a terület méréséhez</translation>
+        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja össze az alakzatot a terület méréséhez</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="179"/>
@@ -1595,7 +1600,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
-        <translation>streaming</translation>
+        <translation>folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="707"/>
@@ -1635,7 +1640,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="975"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="980"/>
@@ -1655,7 +1660,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1016"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1022"/>
@@ -1668,23 +1673,23 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1330"/>
+        <location filename="../qml/map/MMMapController.qml" line="1340"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1343"/>
+        <location filename="../qml/map/MMMapController.qml" line="1353"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1364"/>
+        <location filename="../qml/map/MMMapController.qml" line="1374"/>
         <source>Add new part to the geometry</source>
         <translation>Új rész hozzáadása a geometriához</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1461"/>
+        <location filename="../qml/map/MMMapController.qml" line="1471"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -2099,7 +2104,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
@@ -2425,7 +2430,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
         <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
-        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 fa támogatott eszközökért és a beállítási útmutatóért.</translation>
+        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 a támogatott eszközökért és a beállítási útmutatóért.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="94"/>
@@ -2603,7 +2608,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
         <source>GPS accuracy threshold</source>
-        <translation>GPS pontossági küszöb</translation>
+        <translation>GPS pontossági korlát</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
@@ -2638,17 +2643,17 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
         <source>Interval threshold type</source>
-        <translation>Intervallum küszöb típusa</translation>
+        <translation>Rögzítési köz alapja</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Válassza ki a küszöb típusát a streaming módhoz</translation>
+        <translation>Folyamatos rögzítés alapja</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
@@ -2658,22 +2663,22 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval</source>
-        <translation>Küszöb intervallum</translation>
+        <translation>Rögzítési köz</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>Streaming mód esetén minden intervallumban hozzáad egy pontot az objektumhoz</translation>
+        <translation>Folyamatos rögzítéskor minden beállított köznél új pontot ad hozzá az aktuális elemhez.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in meters</source>
-        <translation>Küszöb intervallum, méterben megadva</translation>
+        <translation>Rögzítési köz, méterben megadva</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Küszöb intervallum, másodpercben megadva</translation>
+        <translation>Rögzítési köz, másodpercben megadva</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
@@ -2698,7 +2703,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Your project is synced automatically to keep you up to date</source>
-        <translation>A projektje automatikusan szinkronizálódik, hogy naprakész maradhasson</translation>
+        <translation>A projektje automatikusan szinkronizálásra kerül, hogy naprakész maradhasson</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
@@ -2841,12 +2846,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
         <source>SSO login has expired</source>
-        <translation>Az egyszeri bejelentkezése lejárt</translation>
+        <translation>Az egyszeri (SSO) bejelentkezése lejárt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
         <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
-        <translation>Az egyszeri bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
+        <translation>Az egyszeri (SSO) bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
@@ -2864,7 +2869,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="29"/>
         <source>Sign in with SSO</source>
-        <translation>Bejelentkezés egyszeri bejelentkezéssel</translation>
+        <translation>Bejelentkezés egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="58"/>
@@ -2874,7 +2879,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="67"/>
         <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Az egyszeri bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="95"/>
@@ -2894,7 +2899,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="128"/>
         <source>SSO login</source>
-        <translation>Egyszeri bejelentkezés</translation>
+        <translation>Egyszeri bejelentkezés (SSO)</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="129"/>
@@ -2953,7 +2958,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
@@ -2963,12 +2968,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Stop streaming mode</source>
-        <translation>Streaming mód leállítása</translation>
+        <translation>Folyamatos rögzítés leállítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Start streaming mode</source>
-        <translation>Streaming mód indítása</translation>
+        <translation>Folyamatos rögzítés indítása</translation>
     </message>
 </context>
 <context>
@@ -3022,7 +3027,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="71"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
@@ -3148,19 +3153,19 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
-        <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
+        <translation>Probléma van a szerver egyszeri (SSO) bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="934"/>
         <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
-        <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
+        <translation>Hiba történt az egyszeri (SSO) bejelentkezési konfiguráció lekérésekor a szerverről</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="978"/>
         <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
-        <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
+        <translation>A megadott domain tartományban nincs támogatva az egyszeri (SSO) bejelentkezés</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1007"/>
@@ -3250,7 +3255,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginapi.cpp" line="4464"/>
         <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
-        <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés hitelesítése sikertelen</translation>
     </message>
 </context>
 <context>
@@ -3431,42 +3436,42 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="140"/>
         <source>No fix</source>
-        <translation>Nincs javítás</translation>
+        <translation>Nincs pozíció</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>GPS fix, no correction data</source>
-        <translation>GPS javítás, korrekciós adatok nincsenek</translation>
+        <translation>GPS (nincs korrekció)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="148"/>
         <source>DGPS fix</source>
-        <translation>DGPS javítás</translation>
+        <translation>DGPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="151"/>
         <source>PPS fix</source>
-        <translation>PPS javítás</translation>
+        <translation>PPS fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="154"/>
         <source>RTK fix</source>
-        <translation>RTK javítás</translation>
+        <translation>RTK fix</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="157"/>
         <source>RTK float</source>
-        <translation>RTK lebegőpontos</translation>
+        <translation>RTK float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="160"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Becsült javítás (halott számítás)</translation>
+        <translation>Becsült helyzet (DR)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="163"/>
         <source>Unknown fix</source>
-        <translation>Ismeretlen javítás</translation>
+        <translation>Ismeretlen állapot</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="605"/>
