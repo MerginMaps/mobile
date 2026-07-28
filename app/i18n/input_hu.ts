@@ -694,7 +694,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha inkább menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha mégis menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
