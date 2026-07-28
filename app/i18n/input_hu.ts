@@ -3255,7 +3255,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginapi.cpp" line="4464"/>
         <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
-        <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés hitelesítése sikertelen</translation>
     </message>
 </context>
 <context>
