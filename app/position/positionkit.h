@@ -79,6 +79,7 @@ class PositionKit : public QObject
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
     Q_PROPERTY( QString positionProviderName READ positionProviderName NOTIFY positionProviderNameChanged )
     Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
+    Q_PROPERTY( bool hasTrimbleSupport READ hasTrimbleSupport NOTIFY hasTrimbleSupportChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
@@ -139,6 +140,7 @@ class PositionKit : public QObject
 
     Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( const AppSettings *appsettings );
+    static bool hasTrimbleSupport();
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
@@ -181,6 +183,7 @@ class PositionKit : public QObject
 
     void positionProviderChanged( AbstractPositionProvider *provider );
     void positionProviderNameChanged();
+    void hasTrimbleSupportChanged();
 
     void positionChanged( const GeoPosition & );
     void isMockPositionChanged( bool );

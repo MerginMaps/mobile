@@ -271,6 +271,15 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( const AppSetting
   return constructProvider( providerType, providerId, providerName );
 }
 
+bool PositionKit::hasTrimbleSupport()
+{
+#ifdef WITH_TRIMBLE_PROVIDERS
+  return true;
+#else
+  return false;
+#endif
+}
+
 void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
 {
   bool hasAnythingChanged = false;
