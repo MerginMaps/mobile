@@ -1640,7 +1640,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="975"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="980"/>
@@ -2104,7 +2104,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
