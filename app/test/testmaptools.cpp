@@ -13,6 +13,8 @@
 #include <QSignalSpy>
 #include <QList>
 
+#include "mmconfig.h"
+
 #include "qgspoint.h"
 #include "qgslinestring.h"
 #include "qgspolygon.h"
@@ -35,7 +37,7 @@
 #include "featurelayerpair.h"
 #include "streamingintervaltype.h"
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
 #endif
 
@@ -3053,7 +3055,7 @@ void TestMapTools::testAntennaHeight()
 
 void TestMapTools::testSmallTracking()
 {
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
   QgsVectorLayer *pointLayer = new QgsVectorLayer( QStringLiteral( "PointZ?crs=epsg:4326" ), QString(), QStringLiteral( "memory" ) );
 
   RecordingMapTool mapTool;
@@ -3078,7 +3080,7 @@ void TestMapTools::testSmallTracking()
   mapTool.setActiveLayer( pointLayer );
   mapTool.setActiveFeature( QgsFeature() );
 
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
+  AbstractPositionProvider *btProvider = mPositionKit->constructProvider( QStringLiteral( "external_bt" ), QStringLiteral( "AA:AA:FF:AA:00:10" ), QStringLiteral( "testBluetoothProvider" ) );
   mPositionKit->setPositionProvider( btProvider );
 
   NmeaParser parser;

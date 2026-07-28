@@ -81,9 +81,9 @@ else ()
 endif ()
 
 if (IOS)
-  set(HAVE_BLUETOOTH_DEFAULT FALSE)
+  set(WITH_BLUETOOTH_PROVIDERS_DEFAULT FALSE)
 else ()
-  set(HAVE_BLUETOOTH_DEFAULT TRUE)
+  set(WITH_BLUETOOTH_PROVIDERS_DEFAULT TRUE)
 endif ()
 
 if (DEFINED ENV{MM_VERSION_CODE})
@@ -138,8 +138,8 @@ set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
     CACHE BOOL "Whether to build tests"
 )
-set(HAVE_BLUETOOTH
-    ${HAVE_BLUETOOTH_DEFAULT}
+set(WITH_BLUETOOTH_PROVIDERS
+    ${WITH_BLUETOOTH_PROVIDERS_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
 )
 
@@ -264,7 +264,7 @@ if (IOS OR MACOS)
   find_package(Tasn1 REQUIRED)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   find_package(
     Qt6
     COMPONENTS Bluetooth

@@ -759,12 +759,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__layerDetailLegendImageProvider", layerDetailLegendImageProvider );
   engine.addImageProvider( QLatin1String( "LayerDetailLegendImageProvider" ), layerDetailLegendImageProvider );
 
-#ifdef HAVE_BLUETOOTH
-  engine.rootContext()->setContextProperty( "__haveBluetooth", true );
-#else
-  engine.rootContext()->setContextProperty( "__haveBluetooth", false );
-#endif
-
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the
   // one we calculated. In these scenarios we use a ratio between real (our) DPR and DPR reported by QT.

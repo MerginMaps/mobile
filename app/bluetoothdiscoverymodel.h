@@ -17,7 +17,7 @@
 
 #include "mmconfig.h"
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
 #include <QBluetoothDeviceInfo>
 #include <QBluetoothDeviceDiscoveryAgent>
 #endif
@@ -50,7 +50,7 @@ class BluetoothDiscoveryModel : public QAbstractListModel
 
   public slots:
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
     void deviceDiscovered( const QBluetoothDeviceInfo &info );
     void deviceUpdated( const QBluetoothDeviceInfo &info, QBluetoothDeviceInfo::Fields updatedFields );
 #endif
@@ -62,7 +62,7 @@ class BluetoothDiscoveryModel : public QAbstractListModel
   private:
     bool mDiscovering = false;
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
     QList<QBluetoothDeviceInfo> mFoundDevices;
     std::unique_ptr<QBluetoothDeviceDiscoveryAgent> mDiscoveryAgent;
 #endif

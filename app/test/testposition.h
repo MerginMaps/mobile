@@ -28,7 +28,7 @@ class TestPosition: public QObject
 
     void simulatedPosition();
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
     void testBluetoothProviderConnection();
     void testBluetoothProviderPosition();
 #endif

@@ -203,7 +203,7 @@ if (NOT WIN32)
   set(MM_SRCS ${MM_SRCS} static_plugins.cpp)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
   set(MM_HDRS ${MM_HDRS} position/providers/bluetoothpositionprovider.h)
@@ -533,7 +533,7 @@ if (ANDROID)
   target_link_libraries(MerginMaps PRIVATE Qt6::CorePrivate)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
 endif ()
 

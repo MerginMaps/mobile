@@ -16,7 +16,7 @@
 #include "appsettings.h"
 #include "inpututils.h"
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
 #include "providers/bluetoothpositionprovider.h"
 #endif
 #include "providers/internalpositionprovider.h"
@@ -145,7 +145,7 @@ QString PositionKit::positionProviderName() const
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
   if ( type == QStringLiteral( "external_bt" ) )
   {
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
@@ -274,6 +274,15 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( const AppSetting
 bool PositionKit::hasTrimbleSupport()
 {
 #ifdef WITH_TRIMBLE_PROVIDERS
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool PositionKit::hasBluetoothSupport()
+{
+#ifdef WITH_BLUETOOTH_PROVIDERS
   return true;
 #else
   return false;

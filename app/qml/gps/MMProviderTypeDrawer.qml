@@ -27,7 +27,7 @@ MMComponents.MMListDrawer {
     id: providerTypeModel
 
     Component.onCompleted: {
-      if ( __haveBluetooth ) {
+      if ( PositionKit.hasBluetoothSupport ) {
         providerTypeModel.append( { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon } )
       }
 

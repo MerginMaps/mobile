@@ -7,6 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "testvariablesmanager.h"
+
+#include "mmconfig.h"
+
 #include "qgsexpression.h"
 #include "qgsexpressioncontext.h"
 #include "qgsexpressioncontextutils.h"
@@ -16,7 +19,7 @@
 
 #include "merginapi.h"
 
-#ifdef HAVE_BLUETOOTH
+#ifdef WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
 #endif
 
@@ -45,11 +48,11 @@ void TestVariablesManager::cleanup()
 
 void TestVariablesManager::testPositionVariables()
 {
-#ifdef HAVE_BLUETOOTH
   mAppSettings->setGpsAntennaHeight( 0 );
 
-  BluetoothPositionProvider *btProvider = new BluetoothPositionProvider( "AA:AA:FF:AA:00:10", "testBluetoothProvider" );
-  mPositionKit->setPositionProvider( btProvider );
+  AbstractPositionProvider *testProvider = mPositionKit->constructProvider( QStringLiteral( "internal" ),
+    QStringLiteral( "devicegps" ) );
+  mPositionKit->setPositionProvider( testProvider );
 
   NmeaParser parser;
   QString fullNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_full.txt";
@@ -60,7 +63,7 @@ void TestVariablesManager::testPositionVariables()
   GeoPosition pos = GeoPosition::fromQgsGpsInformation( position );
   pos.verticalSpeed = 0;
   pos.magneticVariation = 0;
-  emit btProvider->positionChanged( pos );
+  emit testProvider->positionChanged( pos );
 
   QgsExpressionContext context;
   context << mVariablesManager->positionScope();
@@ -82,14 +85,14 @@ void TestVariablesManager::testPositionVariables()
   evaluateExpression( QStringLiteral( "@position_pdop" ), QStringLiteral( "5.90" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_fix" ), QStringLiteral( "RTK float" ), &context );
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "0.000" ), &context );
-  evaluateExpression( QStringLiteral( "@position_provider_address" ), QStringLiteral( "AA:AA:FF:AA:00:10" ), &context );
-  evaluateExpression( QStringLiteral( "@position_provider_name" ), QStringLiteral( "testBluetoothProvider" ), &context );
-  evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "external_bt" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_address" ), QStringLiteral( "devicegps" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_name" ), QStringLiteral( "Internal" ), &context );
+  evaluateExpression( QStringLiteral( "@position_provider_type" ), QStringLiteral( "internal" ), &context );
 
   mAppSettings->setGpsAntennaHeight( 1.6784 );
   pos.verticalSpeed = 1.345;
   pos.magneticVariation = 14.34;
-  emit btProvider->positionChanged( pos );
+  emit testProvider->positionChanged( pos );
   context << mVariablesManager->positionScope();
 
   evaluateExpression( QStringLiteral( "@position_vertical_speed" ), QStringLiteral( "1.34" ), &context );
@@ -97,7 +100,6 @@ void TestVariablesManager::testPositionVariables()
   evaluateExpression( QStringLiteral( "@position_gps_antenna_height" ), QStringLiteral( "1.678" ), &context );
 
   mAppSettings->setGpsAntennaHeight( 0 );
-#endif
 }
 
 void TestVariablesManager::testUserVariables()
