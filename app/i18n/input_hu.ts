@@ -3436,7 +3436,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="140"/>
         <source>No fix</source>
-        <translation>Nincs javítás</translation>
+        <translation>Nincs pozíció</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
