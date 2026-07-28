@@ -3165,7 +3165,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginapi.cpp" line="978"/>
         <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
-        <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
+        <translation>A megadott domain tartományban nincs támogatva az egyszeri (SSO) bejelentkezés</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1007"/>
