@@ -1293,7 +1293,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="311"/>
         <source>Last Fix</source>
-        <translation>Utolsó GPS helyzetmeghatározás</translation>
+        <translation>Utolsó GPS pozíció</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="320"/>
