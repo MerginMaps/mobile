@@ -2648,7 +2648,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
         <source>Interval threshold type</source>
-        <translation>Intervallum küszöb típusa</translation>
+        <translation>Mérési köz alapja</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
