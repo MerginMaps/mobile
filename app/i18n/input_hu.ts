@@ -2668,7 +2668,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>Streaming mód esetén minden intervallumban hozzáad egy pontot az objektumhoz</translation>
+        <translation>Folyamatos rögzítéskor minden beállított köznél új pontot ad hozzá az aktuális elemhez.</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
