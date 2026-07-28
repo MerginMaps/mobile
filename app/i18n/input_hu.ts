@@ -2663,7 +2663,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
         <source>Threshold interval</source>
-        <translation>Küszöb intervallum</translation>
+        <translation>Rögzítési köz</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
