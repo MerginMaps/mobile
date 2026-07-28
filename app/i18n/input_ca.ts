@@ -549,7 +549,12 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Clar</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Confirmar</translation>
     </message>
@@ -1667,23 +1672,23 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Divisió realitzada amb èxit</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1330"/>
+        <location filename="../qml/map/MMMapController.qml" line="1340"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Seleccioneu algun punt per començar a editar la geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1343"/>
+        <location filename="../qml/map/MMMapController.qml" line="1353"/>
         <source>Record new geometry for the feature</source>
         <translation>Enregistreu una geometria nova per a la característica</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1364"/>
+        <location filename="../qml/map/MMMapController.qml" line="1374"/>
         <source>Add new part to the geometry</source>
         <translation>Afegeix un nou tros a la geometria</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1461"/>
+        <location filename="../qml/map/MMMapController.qml" line="1471"/>
         <source>GPS currently unavailable.</source>
         <translation>El GPS no està disponible ara mateix.</translation>
     </message>
