@@ -549,7 +549,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Törlés</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
     </message>
@@ -1668,23 +1673,23 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1330"/>
+        <location filename="../qml/map/MMMapController.qml" line="1340"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1343"/>
+        <location filename="../qml/map/MMMapController.qml" line="1353"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1364"/>
+        <location filename="../qml/map/MMMapController.qml" line="1374"/>
         <source>Add new part to the geometry</source>
         <translation>Új rész hozzáadása a geometriához</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1461"/>
+        <location filename="../qml/map/MMMapController.qml" line="1471"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
