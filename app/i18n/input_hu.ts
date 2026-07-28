@@ -1542,7 +1542,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
         <source>Continue with SSO</source>
-        <translation>Folytatás egyszeri bejelentkezéssel</translation>
+        <translation>Folytatás egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="140"/>
