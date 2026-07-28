@@ -3461,7 +3461,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="157"/>
         <source>RTK float</source>
-        <translation>RTK lebegőpontos</translation>
+        <translation>RTK float</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="160"/>
