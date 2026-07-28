@@ -699,7 +699,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha inkább menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha mégis menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
