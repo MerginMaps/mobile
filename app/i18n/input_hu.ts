@@ -3441,7 +3441,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="143"/>
         <source>GPS fix, no correction data</source>
-        <translation>GPS javítás, korrekciós adatok nincsenek</translation>
+        <translation>GPS (nincs korrekció)</translation>
     </message>
     <message>
         <location filename="../position/geoposition.cpp" line="148"/>
