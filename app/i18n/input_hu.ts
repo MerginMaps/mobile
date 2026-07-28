@@ -723,7 +723,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Le szeretné tölteni ezt a projektet
+        <translation>Le szeretné tölteni ezt a projektet:
  %1 ?</translation>
     </message>
     <message>
