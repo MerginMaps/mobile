@@ -2703,7 +2703,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Your project is synced automatically to keep you up to date</source>
-        <translation>A projektje automatikusan szinkronizálódik, hogy naprakész maradhasson</translation>
+        <translation>A projektje automatikusan szinkronizálásra kerül, hogy naprakész maradhasson</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
