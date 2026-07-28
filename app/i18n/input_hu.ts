@@ -3471,7 +3471,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../position/geoposition.cpp" line="163"/>
         <source>Unknown fix</source>
-        <translation>Ismeretlen javítás</translation>
+        <translation>Ismeretlen állapot</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="605"/>
