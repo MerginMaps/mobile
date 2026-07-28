@@ -1600,7 +1600,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
-        <translation>streaming</translation>
+        <translation>folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="707"/>
@@ -1660,7 +1660,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1016"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="1022"/>
@@ -2643,7 +2643,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
@@ -2653,7 +2653,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Válassza ki a küszöb típusát a streaming módhoz</translation>
+        <translation>Folyamatos rögzítés alapja</translation>
     </message>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
@@ -2958,7 +2958,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
@@ -2968,12 +2968,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Stop streaming mode</source>
-        <translation>Streaming mód leállítása</translation>
+        <translation>Folyamatos rögzítés leállítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Start streaming mode</source>
-        <translation>Streaming mód indítása</translation>
+        <translation>Folyamatos rögzítés indítása</translation>
     </message>
 </context>
 <context>
