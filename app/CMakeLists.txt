@@ -538,7 +538,6 @@ if (HAVE_BLUETOOTH)
 endif ()
 
 if (WITH_TRIMBLE_PROVIDERS)
-  target_compile_definitions(MerginMaps PRIVATE WITH_TRIMBLE_PROVIDERS)
   target_link_libraries(MerginMaps PUBLIC Qt6::WebSockets)
 endif ()
 
