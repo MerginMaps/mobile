@@ -1268,7 +1268,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
         <source>Satellites (in use/view)</source>
-        <translation>Műholdak (használt/látókör)</translation>
+        <translation>Műhold (használt/látható)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="245"/>
