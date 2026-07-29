@@ -70,11 +70,12 @@ MMPage {
     width: parent.width
     height: parent.height
 
-    MMListView {
-      id: listView
-
+    MMScrollView {
       width: parent.width
       height: parent.height
+
+    MMListView {
+      id: listView
 
       spacing: __style.spacing12
 
@@ -159,6 +160,7 @@ MMPage {
           }
         }
       }
+    }
     }
 
     MMButton {
