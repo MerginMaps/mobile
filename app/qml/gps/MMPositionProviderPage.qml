@@ -150,8 +150,6 @@ MMComponents.MMPage {
         else if ( providerType === "network" ) networkProviderDrawer.open()
         else if ( providerType === "trimble" ) {
           root.activateProvider( "external_trimble", "trimble_tmm", qsTr( "Trimble Mobile Manager" ) )
-          connectingDialogLoader.providerType = "trimble"
-          connectingDialogLoader.active = true
         }
       }
     }
@@ -240,7 +238,7 @@ MMComponents.MMPage {
       asynchronous: true
       sourceComponent: Component { MMExternalProviderConnectionDrawer{} }
 
-      onLoaded: {
+      onLoaded: () => {
         item.providerType = connectingDialogLoader.providerType
         item.open()
       }
@@ -287,6 +285,9 @@ MMComponents.MMPage {
     }
     else if ( type === "external_ip" ) {
       connectingDialogLoader.open( "network" )
+    }
+    else if ( type === "external_trimble" ) {
+      connectingDialogLoader.open( "trimble" )
     }
   }
 }
