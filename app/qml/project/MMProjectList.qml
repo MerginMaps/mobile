@@ -97,7 +97,7 @@ Item {
       width: ListView.view.width
       height: visible ? implicitHeight : 0
 
-      projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
+      projectDisplayName: model.ProjectName
       projectId: model.ProjectId ? model.ProjectId : ""
       projectDescription: model.ProjectDescription ? model.ProjectDescription : ""
       projectIsInSync: model.ProjectSyncPending ? model.ProjectSyncPending : false
@@ -139,7 +139,7 @@ Item {
           return ["changes", "remove"]
         }
         else if ( !model.ProjectIsMergin && model.ProjectIsLocal ) {
-          return ["upload", "remove"]
+          return ["upload", "remove", "rename"]
         }
         return ["download"]
       }
@@ -176,6 +176,12 @@ Item {
       }
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
+      onRenameRequested: {
+        renameDialog.relatedProjectId = projectId
+        renameDialog.newProjectName = model.ProjectName
+        renameDialog.clearRenameError()
+        renameDialog.open()
+      }
     }
   }
 
@@ -303,6 +309,33 @@ Item {
       controllerModel.removeLocalProject( relatedProjectId )
 
       removeDialog.relatedProjectId = ""
+    }
+  }
+
+  MMRenameProjectDialog {
+    id: renameDialog
+
+    onRenameClicked: function( newName ) {
+      if (relatedProjectId === "") {
+        return
+      }
+
+      __inputUtils.log(
+            "Rename project",
+            "Project " + __localProjectsManager.projectName( relatedProjectId ) + " renamed to " + newName + " by " +
+            ( __merginApi.userInfo ? __merginApi.userInfo.username : "unknown" ) + " (" + __localProjectsManager.projectChanges( relatedProjectId ) + ")" )
+
+      let renameResult = controllerModel.renameLocalProject( relatedProjectId, newName )
+
+      if ( renameResult === "" ) {
+        renameDialog.relatedProjectId = ""
+        renameDialog.clearRenameError()
+        renameDialog.close()
+      }
+      else {
+        renameDialog.newProjectName = ""
+        renameDialog.showRenameError( renameResult )
+      }
     }
   }
 
