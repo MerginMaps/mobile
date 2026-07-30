@@ -127,6 +127,9 @@ class ProjectsModel : public QAbstractListModel
     //! Forwards call to LocalProjectsManager to remove local project
     Q_INVOKABLE void removeLocalProject( const QString &projectId );
 
+    //! Forwards call to LocalProjectsManager to rename local project
+    Q_INVOKABLE QString renameLocalProject( const QString &projectId, const QString &newName );
+
     //! Migrates local project to mergin
     Q_INVOKABLE void migrateProject( const QString &projectId );
 

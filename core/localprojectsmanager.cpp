@@ -15,6 +15,12 @@
 
 #include <QDir>
 #include <QDirIterator>
+#include <QSettings>
+
+// Local (never synced to server) override for a project's display name, keyed by its
+// stable projectDir. Stored outside of the Mergin metadata cache since that file is
+// wholesale overwritten with the server's response on every sync (see MerginApi::writeData).
+static const QString sLocalProjectNameSettingsGroup = QStringLiteral( "localProjectNames" );
 
 LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
   : mDataDir( dataDir )
@@ -25,6 +31,10 @@ LocalProjectsManager::LocalProjectsManager( const QString &dataDir )
 void LocalProjectsManager::reloadDataDir()
 {
   mProjects.clear();
+
+  QSettings settings;
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
+
   QStringList entryList = QDir( mDataDir ).entryList( QDir::NoDotAndDotDot | QDir::Dirs );
   for ( const QString &folderName : entryList )
   {
@@ -44,8 +54,17 @@ void LocalProjectsManager::reloadDataDir()
       info.projectName = folderName;
     }
 
+    // A local rename overrides whatever name we just resolved above.
+    const QString customName = settings.value( sLocalProjectNameSettingsGroup + "/" + info.projectDir ).toString();
+    if ( !customName.isEmpty() )
+    {
+      info.projectName = customName;
+    }
+
     mProjects << info;
   }
+
+  settings.endGroup();
 
   QString msg = QString( "Found %1 local projects in %2" ).arg( mProjects.size() ).arg( mDataDir );
   CoreUtils::log( "Local projects", msg );
@@ -114,6 +133,11 @@ void LocalProjectsManager::removeLocalProject( const QString &projectId )
     if ( mProjects[i].id() == projectId )
     {
       emit aboutToRemoveLocalProject( mProjects[i] );
+
+      QSettings settings;
+      settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
+      settings.remove( sLocalProjectNameSettingsGroup + "/" + mProjects[i].projectDir );
+      settings.endGroup();
 
       CoreUtils::removeDir( mProjects[i].projectDir );
       mProjects.removeAt( i );
@@ -248,4 +272,40 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
 
   mProjects << project;
   emit localProjectAdded( project );
+}
+
+QString LocalProjectsManager::renameLocalProject( const QString &projectId, const QString &newName )
+{
+  if ( newName.trimmed().isEmpty() )
+  {
+    return tr( "The project name cannot be empty" );
+  }
+
+  if ( !CoreUtils::isValidName( newName ) )
+  {
+    return tr( "The project name contains invalid characters" );
+  }
+
+  int projectIndex = -1;
+  for ( int i = 0; i < mProjects.count(); ++i )
+  {
+    if ( mProjects[i].id() == projectId )
+    {
+      projectIndex = i;
+    }
+
+    if ( i != projectIndex && mProjects[i].projectName == newName )
+    {
+      return tr( "A project name is already taken" );
+    }
+  }
+
+  QSettings settings;
+  settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
+  settings.setValue( sLocalProjectNameSettingsGroup + "/" + mProjects[projectIndex].projectDir, newName );
+  settings.endGroup();
+
+  mProjects[projectIndex].projectName = newName;
+  emit localProjectDataChanged( mProjects[projectIndex] );
+  return QString();
 }
