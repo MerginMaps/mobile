@@ -49,6 +49,11 @@ Page {
       }
 
       Button {
+        text: "MMRenameProjectDialog"
+        onClicked: renameProjectDialog.open()
+      }
+
+      Button {
         text: "MMDownloadProjectDialog"
         onClicked: downloadProjectDialog.open()
       }
@@ -249,6 +254,15 @@ Page {
     relatedProjectId: "Cool Project"
 
     onRemoveClicked: console.log("on remove clicked")
+  }
+
+  MMRenameProjectDialog {
+    id: renameProjectDialog
+
+    relatedProjectId: "Cool Project"
+    newProjectName: "Even cooler Project"
+
+    onRenameClicked: console.log("on rename clicked")
   }
 
   MMProjectLimitDialog {
