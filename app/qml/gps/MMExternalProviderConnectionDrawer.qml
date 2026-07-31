@@ -180,7 +180,7 @@ MMComponents.MMDrawer {
       return qsTr( "We were not able to connect to the specified IP address." )
     }
     else if ( root.providerType === "trimble" ) {
-      return qsTr( "We were not able to connect to Trimble Mobile Manager." )
+      return qsTr( "We were not able to connect to Trimble Mobile Manager. Please make sure it's installed." )
     }
   }
 

@@ -11,28 +11,19 @@
 
 #ifdef ANDROID
 
-#include <QJniObject>
-#include <QJniEnvironment>
 #include <QtCore/private/qandroidextras_p.h>
 
-static constexpr int TMM_REGISTER_REQUEST_CODE = 0x544D4D52; // "TMMR"
+#include "coreutils.h"
 
-static constexpr char TMM_ACTION_REGISTER[] = "com.trimble.tmm.REGISTER";
+static constexpr int TMM_REGISTER_REQUEST_CODE = 0x544D4D52; // "TMMR" - custom value to pair intent result
+static QString temp = QStringLiteral( "hello" );
 
-static constexpr char TMM_EXTRA_APP_ID[] = "applicationID";
-static constexpr char TMM_EXTRA_RESULT[] = "registrationResult";
-static constexpr char TMM_EXTRA_LOCATION_V2_PORT[] = "locationV2Port";
-
-static constexpr char TMM_RESULT_OK[] = "OK";
-
-// Concrete subclass of the abstract QAndroidActivityResultReceiver.
-// Forwards the result to TrimbleRegistration via a stored pointer.
 class TmmResultReceiver : public QAndroidActivityResultReceiver
 {
   public:
     explicit TmmResultReceiver( TrimbleRegistration *reg ) : mReg( reg ) {}
 
-    void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override
+    void handleActivityResult( const int receiverRequestCode, const int resultCode, const QJniObject &data ) override
     {
       Q_UNUSED( resultCode )
       if ( receiverRequestCode != TMM_REGISTER_REQUEST_CODE || !mReg )
@@ -41,33 +32,31 @@ class TmmResultReceiver : public QAndroidActivityResultReceiver
       if ( !data.isValid() )
       {
         emit mReg->failed( TrimbleRegistration::tr( "No response from Trimble Mobile Manager" ) );
+        CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, no response from Trimble Mobile Manager, probably it's missing." ) );
         return;
       }
 
-      QJniObject resultKey = QJniObject::fromString( QString::fromLatin1( TMM_EXTRA_RESULT ) );
-      QJniObject resultObj = data.callObjectMethod( "getStringExtra",
-                             "(Ljava/lang/String;)Ljava/lang/String;",
-                             resultKey.object<jstring>() );
-      const QString result = resultObj.isValid() ? resultObj.toString() : QString();
+      const QAndroidIntent intent( data );
+      // we can't use intent.extraVariant() function here as it throws errors in Qt code
+      const QString registerResult = intent.handle().callObjectMethod<jstring>( "getStringExtra", QJniObject::fromString( QStringLiteral( "registrationResult" ) ).object<jstring>() ).toString();
 
-      if ( result != QLatin1String( TMM_RESULT_OK ) )
+      if ( registerResult != QStringLiteral( "OK" ) )
       {
-        emit mReg->failed( TrimbleRegistration::tr( "Trimble Mobile Manager registration failed: %1" ).arg( result ) );
+        emit mReg->failed( TrimbleRegistration::tr( "Trimble Mobile Manager registration failed: %1" ).arg( registerResult ) );
+        CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, registration has been refused by Trimble Mobile Manager. Reason: %1." ).arg( registerResult ) );
         return;
       }
+      // we can't use intent.extraVariant() function here as it doesn't parse the data correctly
+      const int locationPortResult = intent.handle().callMethod<jint>( "getIntExtra", QJniObject::fromString( QStringLiteral( "locationV2Port" ) ).object<jstring>(), 0 );
 
-      QJniObject portKey = QJniObject::fromString( QString::fromLatin1( TMM_EXTRA_LOCATION_V2_PORT ) );
-      const int port = data.callMethod<jint>( "getIntExtra",
-                                              "(Ljava/lang/String;I)I",
-                                              portKey.object<jstring>(),
-                                              static_cast<jint>( 0 ) );
-      if ( port <= 0 )
+      if ( !locationPortResult )
       {
         emit mReg->failed( TrimbleRegistration::tr( "Trimble Mobile Manager returned invalid port" ) );
+        CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager returned malformed location data port." ) );
         return;
       }
 
-      emit mReg->registered( port );
+      emit mReg->registered( locationPortResult );
     }
 
   private:
@@ -80,26 +69,13 @@ TrimbleRegistration::TrimbleRegistration( QObject *parent )
 {
 }
 
-TrimbleRegistration::~TrimbleRegistration() = default;
-
 void TrimbleRegistration::requestRegistration( const QString &appId )
 {
-  QJniObject intentAction = QJniObject::fromString( QString::fromLatin1( TMM_ACTION_REGISTER ) );
-  QJniObject intent( "android/content/Intent", "(Ljava/lang/String;)V", intentAction.object<jstring>() );
-  QJniObject appIdStr = QJniObject::fromString( appId );
-  QJniObject extraKey = QJniObject::fromString( QString::fromLatin1( TMM_EXTRA_APP_ID ) );
-  intent.callObjectMethod( "putExtra",
-                           "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
-                           extraKey.object<jstring>(),
-                           appIdStr.object<jstring>() );
+  const QAndroidIntent intent( QStringLiteral( "com.trimble.tmm.REGISTER" ) );
+  // we can't use intent.extraVariant() function here as it writes the string as byte array instead of strings
+  intent.handle().callObjectMethod<QtJniTypes::Intent>( "putExtra", QJniObject::fromString( QStringLiteral( "applicationID" ) ).object<jstring>(), QJniObject::fromString( appId ).object<jstring>() );
 
   QtAndroidPrivate::startActivity( intent, TMM_REGISTER_REQUEST_CODE, mResultReceiver.get() );
-}
-
-void TrimbleRegistration::handleCallback( const QUrl &url )
-{
-  Q_UNUSED( url )
-  // Android registration is intent-based; this callback is iOS-only
 }
 
 #endif // ANDROID

@@ -12,7 +12,6 @@
 
 #include <QObject>
 #include <QString>
-#include <QUrl>
 #include <memory>
 
 #ifdef ANDROID
@@ -25,6 +24,8 @@ class TmmResultReceiver; // defined in trimbleregistrationandroid.cpp
  * Call requestRegistration() once; listen for registered() or failed().
  * Concrete implementations are in trimbleregistrationandroid.cpp (Android)
  * and trimbleregistrationios.mm (iOS).
+ *
+ * TODO: move to native utils when refactoring native utils
  */
 class TrimbleRegistration : public QObject
 {
@@ -32,12 +33,14 @@ class TrimbleRegistration : public QObject
 
   public:
     explicit TrimbleRegistration( QObject *parent = nullptr );
-    ~TrimbleRegistration() override;
+    ~TrimbleRegistration() override = default;
 
     void requestRegistration( const QString &appId );
 
-    // iOS only: called by QDesktopServices URL handler when TMM calls back
-    Q_INVOKABLE void handleCallback( const QUrl &url );
+#ifdef Q_OS_IOS
+  slots:
+    void handleCallback( const QUrl &url );
+#endif
 
   signals:
     void registered( int locationV2Port );
