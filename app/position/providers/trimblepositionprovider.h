@@ -20,13 +20,6 @@ class TrimblePositionProvider : public AbstractPositionProvider
 {
     Q_OBJECT
 
-    enum ReconnectDelay
-    {
-      ShortDelay = 3000,
-      LongDelay = 5000,
-      ExtraLongDelay = 10000
-    };
-
   public:
     TrimblePositionProvider( const QString &id, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~TrimblePositionProvider() override;

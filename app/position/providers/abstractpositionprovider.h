@@ -71,6 +71,14 @@ class AbstractPositionProvider : public QObject
     void setState( const QString &message ); // keeps state enum the same and only changes the message
     void setState( const QString &message, State state );
 
+    // signalizes in how many [ms] we will try to reconnect to GPS again
+    enum ReconnectDelay
+    {
+      ShortDelay = 3000,      // 3 secs
+      LongDelay = 5000,       // 5 secs
+      ExtraLongDelay = 10000  // 10 secs
+    };
+
     // ProviderId - unique id of this provider.
     // For external receiver it holds mac address of a bluetooth device.
     // Internal providers (internal gps and simulated provider) has constant values of "devicegps" and "simulated"
