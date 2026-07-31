@@ -13,6 +13,8 @@
 #include "qgsproject.h"
 #include "qgslayertree.h"
 
+#include "layer/layertreesortfiltermodel.h"
+
 RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
   QgsMapLayerProxyModel{ parent },
   mModel( nullptr )
@@ -42,6 +44,22 @@ bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIn
   }
 
   return mModel->data( index, LayersModel::LayerVisible ).toBool();
+}
+
+bool RecordingLayersProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
+{
+  if ( !mModel || LayerTreeSortFilterModel::sortMethod( QgsProject::instance() ) == LayerTreeSortFilterModel::Alphabetical )
+    return QgsMapLayerProxyModel::lessThan( left, right );
+
+  // preserve the layer order as arranged in the QGIS project's layer tree
+  QgsMapLayer *leftLayer = mModel->layerFromIndex( left );
+  QgsMapLayer *rightLayer = mModel->layerFromIndex( right );
+
+  if ( !leftLayer || !rightLayer )
+    return QgsMapLayerProxyModel::lessThan( left, right );
+
+  const QStringList treeOrder = QgsProject::instance()->layerTreeRoot()->findLayerIds();
+  return treeOrder.indexOf( leftLayer->id() ) < treeOrder.indexOf( rightLayer->id() );
 }
 
 QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
