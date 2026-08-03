@@ -309,9 +309,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation - ( newPosition.antennaHeightApplied ? 0 : antennaHeight() ), mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() ), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation - ( newPosition.antennaHeightApplied ? 0 : antennaHeight() );
+    mPosition.elevation = newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() );
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
@@ -414,9 +414,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( newPosition.quality != mPosition.quality )
+  if ( newPosition.qualityIndicator != mPosition.qualityIndicator )
   {
-    mPosition.quality = newPosition.quality;
+    mPosition.qualityIndicator = newPosition.qualityIndicator;
     hasAnythingChanged = true;
   }
 
@@ -434,16 +434,6 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
     // we also change the name
     emit positionProviderNameChanged();
-  }
-
-  const bool antennaDataChanged = !qgsDoubleNear( newPosition.antennaHeight, mPosition.antennaHeight )
-                                  || newPosition.antennaHeightApplied != mPosition.antennaHeightApplied;
-  if ( antennaDataChanged )
-  {
-    mPosition.antennaHeight = newPosition.antennaHeight;
-    mPosition.antennaHeightApplied = newPosition.antennaHeightApplied;
-    emit antennaHeightChanged();
-    hasAnythingChanged = true;
   }
 
   if ( hasAnythingChanged )
@@ -660,21 +650,15 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
 
 double PositionKit::antennaHeight() const
 {
-  // Display value: provider-streamed height takes precedence; never overwrites AppSettings.
-  if ( mPosition.antennaHeight >= 0 )
-    return mPosition.antennaHeight;
-
-  if ( mAppSettings )
-    return mAppSettings->gpsAntennaHeight();
-
-  return 0;
-}
-
-double PositionKit::antennaHeightToApply() const
-{
-  // If the provider already subtracted antenna height, the app must apply zero.
-  if ( mPosition.antennaHeightApplied )
+  // trimble provider has antenna height defined in TMM, so we "block" application setup
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+#if WITH_TRIMBLE_PROVIDERS
+    return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->antennaHeight();
+#else
     return 0;
+#endif
+  }
 
   if ( mAppSettings )
     return mAppSettings->gpsAntennaHeight();
@@ -682,7 +666,11 @@ double PositionKit::antennaHeightToApply() const
   return 0;
 }
 
-bool PositionKit::antennaHeightApplied() const
+bool PositionKit::requireAntennaHeightTransform() const
 {
-  return mPosition.antennaHeightApplied;
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    return false;
+  }
+  return true;
 }

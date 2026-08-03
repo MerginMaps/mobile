@@ -131,32 +131,30 @@ QString GeoPosition::parseFixStatus() const
   //  9 = WAAS fix (not NMEA standard, but NovAtel receivers report this instead of a 2).
   //
 
-  switch ( quality )
+  switch ( qualityIndicator )
   {
-    case -1:
+    case Qgis::GpsQualityIndicator::Unknown:
       return QObject::tr( "No data" );
 
-    case 0:
+    case Qgis::GpsQualityIndicator::Invalid:
       return QObject::tr( "No fix" );
 
-    case 1:
+    case Qgis::GpsQualityIndicator::GPS:
       return QObject::tr( "GPS fix, no correction data" );
 
-    case 2:
-    // fall through
-    case 9:
+    case Qgis::GpsQualityIndicator::DGPS:
       return QObject::tr( "DGPS fix" );
 
-    case 3:
+    case Qgis::GpsQualityIndicator::PPS:
       return QObject::tr( "PPS fix" );
 
-    case 4:
+    case Qgis::GpsQualityIndicator::RTK:
       return QObject::tr( "RTK fix" );
 
-    case 5:
+    case Qgis::GpsQualityIndicator::FloatRTK:
       return QObject::tr( "RTK float" );
 
-    case 6:
+    case Qgis::GpsQualityIndicator::Estimated:
       return QObject::tr( "Estimated fix (dead reckoning)" );
 
     default:

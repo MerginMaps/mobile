@@ -84,7 +84,6 @@ class PositionKit : public QObject
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
-    Q_PROPERTY( bool antennaHeightApplied READ antennaHeightApplied NOTIFY antennaHeightChanged )
 
   public:
     //! Creates new position kit
@@ -148,8 +147,11 @@ class PositionKit : public QObject
     void setAppSettings( AppSettings *appSettings );
 
     double antennaHeight() const;
-    double antennaHeightToApply() const;
-    bool antennaHeightApplied() const;
+    /*
+     * Trimble provider subtracts antenna height before providing the elevation for MM. For every other provider
+     * subtract antenna height in MM.
+     */
+    Q_INVOKABLE bool requireAntennaHeightTransform() const;
 
     void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
     void setElevationTransformationEnabled( bool elevationTransformationEnabled );

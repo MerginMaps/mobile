@@ -87,7 +87,7 @@ MMPage {
 
       Loader {
         width: parent.width
-        sourceComponent: PositionKit.antennaHeightApplied ? trimbleAntennaHeightComponent : editableAntennaHeightComponent
+        sourceComponent: PositionKit.requireAntennaHeightTransform() ? externalAntennaHeightComponent : editableAntennaHeightComponent
       }
 
       Component {
@@ -108,7 +108,7 @@ MMPage {
       }
 
       Component {
-        id: trimbleAntennaHeightComponent
+        id: externalAntennaHeightComponent
 
         Column {
           width: parent ? parent.width : 0
@@ -117,20 +117,9 @@ MMPage {
           MMSettingsComponents.MMSettingsItem {
             width: parent.width
             title: qsTr("GPS antenna height")
-            value: PositionKit.antennaHeight.toFixed( 3 ) + " m"
-          }
-
-          MMText {
-            width: parent.width
-            text: qsTr("Antenna height is managed by Trimble Mobile Manager")
-            color: __style.greyColor
-            font: __style.t4
-          }
-
-          MMButton {
-            text: qsTr("Open in Trimble Mobile Manager")
-            size: MMButton.Sizes.Small
-            onClicked: {
+            description: qsTr("Antenna height is managed by Trimble Mobile Manager")
+            value: __inputUtils.formatNumber( PositionKit.antennaHeight, 2 ) + " m"
+            onClicked: () => {
               if ( PositionKit.positionProvider )
                 PositionKit.positionProvider.openAntennaHeightPage()
             }

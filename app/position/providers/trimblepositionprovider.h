@@ -30,10 +30,11 @@ class TrimblePositionProvider : public AbstractPositionProvider
 
     QgsCoordinateReferenceSystem sourceCrs() const override;
 
+    // trimble provider provides antenna height from Trimble Mobile Manager
+    double antennaHeight() const;
+    // TODO: move to native utils
     Q_INVOKABLE void openAntennaHeightPage();
 
-    // Visible for unit testing
-    static GeoPosition parseLocationMessage( const QString &json );
     static QgsCoordinateReferenceSystem resolveFrame( const QString &frameName, double epoch );
 
   private slots:
@@ -49,17 +50,21 @@ class TrimblePositionProvider : public AbstractPositionProvider
     void startReconnectTimer();
     void reconnect();
 
+    GeoPosition parseLocationMessage( const QString &json );
+
     TrimbleRegistration *mRegistration = nullptr;
     std::unique_ptr<QWebSocket> mSocket;
+
     QTimer mReconnectTimer;
     QTimer mHeartBeatTimer;
-
-    int mCachedPort = 0;
     int mReconnectDelay = ReconnectDelay::ShortDelay;
     int mSecondsLeftToReconnect = 0;
+
+    int mCachedPort = 0;
     bool mRegistrationInProgress = false;
 
     QgsCoordinateReferenceSystem mSourceCrs;
+    double mAntennaHeight = std::numeric_limits<double>::quiet_NaN();
 };
 
 #endif // TRIMBLEPOSITIONPROVIDER_H
