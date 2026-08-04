@@ -30,7 +30,6 @@
 
 constexpr int ONE_SECOND_MS = 1000;
 constexpr int TMM_WS_V2_DEFAULT_PORT = 9639;
-const QString WEBSOCKET_LOCALHOST_ADDRESS = QStringLiteral( "ws://localhost" );
 
 TrimblePositionProvider::TrimblePositionProvider( const QString &id, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
   : AbstractPositionProvider( id, QStringLiteral( "external_trimble" ), name, positionTransformer, parent )
@@ -284,7 +283,7 @@ void TrimblePositionProvider::connectWebSocket( const int port )
     mHeartBeatTimer.start( ReconnectDelay::ExtraLongDelay );
   } );
 
-  const QUrl url( QStringLiteral( "%1:%2" ).arg( WEBSOCKET_LOCALHOST_ADDRESS, port ) );
+  const QUrl url( QStringLiteral( "ws://localhost:%2" ).arg( port ) );
   setState( tr( "Connecting" ), State::Connecting );
   mSocket->open( url );
 }
