@@ -152,6 +152,10 @@ class PositionKit : public QObject
      * subtract antenna height in MM.
      */
     Q_INVOKABLE bool requireAntennaHeightTransform() const;
+    /*
+     * Opens antenna height setting in Trimble Mobile Manager if using trimble position provider.
+     */
+    Q_INVOKABLE void openAntennaHeightPage() const;
 
     void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
     void setElevationTransformationEnabled( bool elevationTransformationEnabled );

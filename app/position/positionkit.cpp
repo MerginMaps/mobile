@@ -674,3 +674,13 @@ bool PositionKit::requireAntennaHeightTransform() const
   }
   return true;
 }
+
+void PositionKit::openAntennaHeightPage() const
+{
+#if WITH_TRIMBLE_PROVIDERS
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->openAntennaHeightPage();
+  }
+#endif
+}

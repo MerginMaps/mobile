@@ -87,7 +87,7 @@ MMPage {
 
       Loader {
         width: parent.width
-        sourceComponent: PositionKit.requireAntennaHeightTransform() ? externalAntennaHeightComponent : editableAntennaHeightComponent
+        sourceComponent: !PositionKit.requireAntennaHeightTransform() ? externalAntennaHeightComponent : editableAntennaHeightComponent
       }
 
       Component {
@@ -121,7 +121,7 @@ MMPage {
             value: __inputUtils.formatNumber( PositionKit.antennaHeight, 2 ) + " m"
             onClicked: () => {
               if ( PositionKit.positionProvider )
-                PositionKit.positionProvider.openAntennaHeightPage()
+                PositionKit.openAntennaHeightPage()
             }
           }
         }
