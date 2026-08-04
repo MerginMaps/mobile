@@ -14,9 +14,26 @@
 #include <QString>
 #include <memory>
 
-#ifdef ANDROID
-class TmmResultReceiver; // defined in trimbleregistrationandroid.cpp
+#ifdef Q_OS_ANDROID
+#include <private/qandroidextras_p.h>
+class TrimbleRegistration;
 #endif
+
+#ifdef Q_OS_ANDROID
+
+class TrimbleResultReceiver : public QObject, public QAndroidActivityResultReceiver
+{
+    Q_OBJECT
+
+  public:
+    void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
+
+  signals:
+    void registrationFailed( QString reason );
+    void registrationSucceeded( int locationDataPort );
+};
+#endif
+
 
 /**
  * Platform-agnostic async contract for registering with Trimble Mobile Manager.
@@ -47,8 +64,8 @@ class TrimbleRegistration : public QObject
     void failed( const QString &reason );
 
   private:
-#ifdef ANDROID
-    std::unique_ptr<TmmResultReceiver> mResultReceiver;
+#ifdef Q_OS_ANDROID
+    std::unique_ptr<TrimbleResultReceiver> mResultReceiver;
 #endif
 };
 
