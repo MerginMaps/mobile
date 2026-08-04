@@ -214,6 +214,11 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mQgsProject );
     emit positionTrackingSupportedChanged();
     emit mapSketchesEnabledChanged();
+
+    if ( mLocalProject.isValid() )
+    {
+      emit projectSyncCheckRequested( mLocalProject.fullName(), true );
+    }
   }
 
   bool foundErrorsInLoadedProject = validateProject();
@@ -682,4 +687,12 @@ bool ActiveProject::photoSketchingEnabled() const
 FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
+}
+
+void ActiveProject::checkForProjectUpdate()
+{
+  if ( isProjectLoaded() )
+  {
+    emit projectSyncCheckRequested( projectFullName(), true );
+  }
 }
