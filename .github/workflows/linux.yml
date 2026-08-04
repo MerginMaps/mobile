@@ -14,6 +14,9 @@ on:
     - 'test/**'
     - 'CMakeLists.txt'
     - '.github/workflows/linux.yml'
+  pull_request:
+    branches:
+      - master
 
   release:
     types:
