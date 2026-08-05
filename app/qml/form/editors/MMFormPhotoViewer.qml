@@ -105,6 +105,7 @@ MMPrivateComponents.MMBaseInput {
         }
 
         bgndColor: __style.negativeColor
+        bgndHoverColor: Qt.darker( __style.negativeColor, 1.15 )
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
 
