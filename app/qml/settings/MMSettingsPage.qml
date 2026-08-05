@@ -117,8 +117,8 @@ MMPage {
           MMSettingsComponents.MMSettingsItem {
             width: parent.width
             title: qsTr("GPS antenna height")
-            description: qsTr("Antenna height is managed by Trimble Mobile Manager")
-            value: __inputUtils.formatNumber( PositionKit.antennaHeight, 2 ) + " m"
+            description: qsTr("Click here to modify in Trimble Mobile Manager")
+            value: __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
             onClicked: () => {
               if ( PositionKit.positionProvider )
                 PositionKit.openAntennaHeightPage()
