@@ -119,7 +119,10 @@ ApplicationWindow {
   Component.onCompleted: {
 
     // load default project
-    if ( AppSettings.defaultProject ) {
+    if ( AppSettings.startupBehaviour === AppSettings.StartupProjectHome ) {
+      stateManager.state = "projects"
+    }
+    else if ( AppSettings.defaultProject ) {
       let path = AppSettings.defaultProject
 
       if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
