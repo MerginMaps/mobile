@@ -37,6 +37,15 @@ MMPage {
     }
   }
 
+  ListModel {
+    id: startupBehaviourModel
+
+    Component.onCompleted: {
+      startupBehaviourModel.append({ value: AppSettings.StartupRecentProject, text: qsTr("Recent project"), description: qsTr("Jump back into your last project") });
+      startupBehaviourModel.append({ value: AppSettings.StartupProjectHome, text: qsTr("Project home"), description: qsTr("See all your downloaded projects") });
+    }
+  }
+
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
   pageContent: MMScrollView {
@@ -215,6 +224,23 @@ MMPage {
       }
 
       Item { width: 1; height: 1 }
+
+      MMSettingsComponents.MMSettingsDropdown {
+        width: parent.width
+
+        title: qsTr("On app startup")
+        description: qsTr("Choose what opens when you launch the app")
+        drawerTitle: qsTr("Open on startup")
+
+        value: AppSettings.startupBehaviour === AppSettings.StartupProjectHome ? qsTr("Project home") : qsTr("Recent project")
+        currentIndex: AppSettings.startupBehaviour
+
+        model: startupBehaviourModel
+
+        onCurrentIndexChanged: AppSettings.startupBehaviour = currentIndex
+      }
+
+      MMLine {}
 
       MMSettingsComponents.MMSettingsItem {
         width: parent.width

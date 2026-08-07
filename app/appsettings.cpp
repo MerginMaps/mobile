@@ -34,6 +34,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   const bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
   int hapticsTypeInt = settings.value( "hapticsType", 0 ).toInt();
   const HapticsType hapticsType = static_cast<HapticsType>( hapticsTypeInt );
+  int startupBehaviourInt = settings.value( "startupBehaviour", 0 ).toInt();
+  const StartupBehaviour startupBehaviour = static_cast<StartupBehaviour>( startupBehaviourInt );
 
   settings.endGroup();
 
@@ -51,6 +53,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
   setHapticsType( hapticsType );
+  setStartupBehaviour( startupBehaviour );
 }
 
 QString AppSettings::defaultLayer() const
@@ -314,6 +317,21 @@ void AppSettings::setHapticsType( const HapticsType hapticsType )
   setValue( QStringLiteral( "hapticsType" ), hapticsType );
   mHapticsType = hapticsType;
   emit hapticsTypeChanged( hapticsType );
+}
+
+AppSettings::StartupBehaviour AppSettings::startupBehaviour() const
+{
+  return mStartupBehaviour;
+}
+
+void AppSettings::setStartupBehaviour( const StartupBehaviour startupBehaviour )
+{
+  if ( mStartupBehaviour == startupBehaviour )
+    return;
+
+  setValue( QStringLiteral( "startupBehaviour" ), startupBehaviour );
+  mStartupBehaviour = startupBehaviour;
+  emit startupBehaviourChanged( startupBehaviour );
 }
 
 double AppSettings::gpsAntennaHeight() const

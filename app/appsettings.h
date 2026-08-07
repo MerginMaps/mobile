@@ -38,6 +38,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
+    Q_PROPERTY( StartupBehaviour startupBehaviour READ startupBehaviour WRITE setStartupBehaviour NOTIFY startupBehaviourChanged )
 
   public:
     // enum of haptic modes we support
@@ -54,6 +55,14 @@ class AppSettings: public QObject
 #endif
     };
     Q_ENUM( HapticsType )
+
+    // enum of options for what should open when the app starts
+    enum StartupBehaviour
+    {
+      StartupRecentProject = 0,
+      StartupProjectHome
+    };
+    Q_ENUM( StartupBehaviour )
 
     explicit AppSettings( QObject *parent = nullptr );
 
@@ -110,6 +119,9 @@ class AppSettings: public QObject
     HapticsType hapticsType() const;
     void setHapticsType( HapticsType hapticsType );
 
+    StartupBehaviour startupBehaviour() const;
+    void setStartupBehaviour( StartupBehaviour startupBehaviour );
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -129,6 +141,7 @@ class AppSettings: public QObject
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
     void hapticsTypeChanged( HapticsType hapticsType );
+    void startupBehaviourChanged( StartupBehaviour startupBehaviour );
 
     void ignoreMigrateVersionChanged();
 
@@ -169,6 +182,7 @@ class AppSettings: public QObject
     QString mIgnoreMigrateVersion;
 
     HapticsType mHapticsType;
+    StartupBehaviour mStartupBehaviour;
 };
 
 #endif // APPSETTINGS_H
