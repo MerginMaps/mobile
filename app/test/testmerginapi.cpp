@@ -3410,3 +3410,215 @@ void TestMerginApi::testServerVersionIsAtLeast()
   QVERIFY( mApi->serverVersionIsAtLeast( 9999, 9999, 9999 ) );  // equal
   QVERIFY( !mApi->serverVersionIsAtLeast( 10000, 0, 0 ) ); // higher major
 }
+
+void TestMerginApi::testSyncWhileReadingFromGpkg()
+{
+  // QGIS uses WAL for local geopackage access.
+  // This test will fail if for some reason OGR_SQLITE_JOURNAL=DELETE is set
+  // either by us or QGIS at some point. Database will be locked by the reader and
+  // a conflicted copy will be created by geodiff.
+  //
+  // If a gpkg is being read from (eg still rendering in the background) then geodiff
+  // should properly handle it and not create a conflicted copy.
+
+  QString projectName = "testSyncWhileReading";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QStringList conflictFilter = QStringList() << QStringLiteral( "*conflicted copy*" );
+  QVERIFY( QDir( projectDir ).entryList( conflictFilter, QDir::Files ).isEmpty() );
+
+  // somebody else adds a row and pushes version 2
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  // start reading the local gpkg and stop half way through, like a render that is
+  // still in progress. This leaves the SQLite read transaction open and the database is locked if
+  // sqlite journal_mode = DELETE
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+
+  QgsFeatureIterator it = vl->getFeatures();
+  QgsFeature f;
+  QVERIFY( it.nextFeature( f ) );
+
+  // pull version 2 while the gpkg is still being read from
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the server change should have been applied to our file, without creating a conflicted copy
+  QCOMPARE( QDir( projectDir ).entryList( conflictFilter, QDir::Files ), QStringList() );
+
+  QgsVectorLayer *vl2 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl2->isValid() );
+  QCOMPARE( vl2->featureCount(), static_cast<long>( 4 ) );
+  delete vl2;
+}
+
+void TestMerginApi::testSyncWhileWalFilesExist()
+{
+  QString projectName = "testSyncWhileWalFilesExist";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QStringList conflictFilter = QStringList() << QStringLiteral( "*conflicted copy*" );
+  QVERIFY( QDir( projectDir ).entryList( conflictFilter, QDir::Files ).isEmpty() );
+
+  // somebody else adds a row and pushes version 2
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  // Add a feature, commit it to the provider but don't stop editing so the changes are in the -wal file
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+
+  vl->startEditing();
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg-wal" ) );
+
+  // pull version 2 while the layer is in editing mode
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the server change should have been applied to our file, without creating a conflicted copy
+  QCOMPARE( QDir( projectDir ).entryList( conflictFilter, QDir::Files ), QStringList() );
+
+  QgsVectorLayer *vl2 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl2->isValid() );
+
+  // the edits stored in the WAL exist in the final file ( 3 + 1 + 1 )
+  QCOMPARE( vl2->featureCount(), static_cast<long>( 5 ) );
+  delete vl2;
+}
+
+void TestMerginApi::testSyncWhileWalFilesExistWithConflict()
+{
+  QString projectName = "testSyncWhileWalFilesExistWithConflict";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  QStringList conflictFilter = QStringList() << QStringLiteral( "*conflict*" );
+  QVERIFY( QDir( projectDir ).entryList( conflictFilter, QDir::Files ).isEmpty() );
+
+  // two clients add one feature and update an existing one (both the same)
+  {
+    QgsVectorLayer *vl = new QgsVectorLayer( projectDirExtra + "/base.gpkg|layername=simple", "base", "ogr" );
+    QVERIFY( vl->isValid() );
+    QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+    vl->startEditing();
+    QgsFeature f( vl->fields() );
+    vl->addFeature( f );
+    f = vl->getFeature( 1 );
+    f.setAttribute( "rating", 42 );
+    vl->updateFeature( f );
+    vl->commitChanges();
+    delete vl;
+  }
+
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  // now second client does the same but different values to create conflict
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+  vl->startEditing();
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  f = vl->getFeature( 1 );
+  f.setAttribute( "rating", 69 );
+  vl->updateFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg-wal" ) );
+
+  // pull version 2 while the gpkg is still open with changes in the -wal file
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the server change should persist, while the local change should be in a conflict file
+  QCOMPARE( QDir( projectDir ).entryList( conflictFilter, QDir::Files ).count(),  static_cast<long>( 1 ) );
+
+  QgsVectorLayer *vl2 = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl2->isValid() );
+
+  // the edits stored in the WAL must also exist in the final file ( 3 + 1 + 1 )
+  QCOMPARE( vl2->featureCount(), static_cast<long>( 5 ) );
+  delete vl2;
+}
+
+void TestMerginApi::testSyncWhileWalFilesExistWithConflictedCopy()
+{
+  QString projectName = "testSyncWhileWalFilesExistWithConflictedCopy";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  QStringList conflictFilter = QStringList() << QStringLiteral( "*conflict*" );
+  QVERIFY( QDir( projectDir ).entryList( conflictFilter, QDir::Files ).isEmpty() );
+
+  // One client modifies schema, so that other client will generate a conflicted copy
+  bool r0 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r1 = QFile::copy( mTestDataPath + "/added_column.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 );
+
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  // now second client adds a feature,
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+  vl->startEditing();
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg-wal" ) );
+
+  // pull version 2 while the gpkg is still open with changes in the -wal file
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the server change should persist and the local change should be in a conflicted copy
+  QString conflictFilename = "base (conflicted copy, " + mApi->userInfo()->username() + " v1).gpkg";
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg" ) );
+  QVERIFY( QFile::exists( projectDir + "/" + conflictFilename ) );
+
+  QgsVectorLayer *vl2 = new QgsVectorLayer( projectDir + "/" + conflictFilename + "|layername=simple", "base", "ogr" );
+  QVERIFY( vl2->isValid() );
+
+  // the edits stored in the WAL file must exist in the conflicted copy file file
+  QCOMPARE( vl2->featureCount(), static_cast<long>( 4 ) );
+  delete vl2;
+}
