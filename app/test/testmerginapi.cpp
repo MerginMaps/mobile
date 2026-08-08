@@ -1177,7 +1177,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
-  QString conflictFilename = projectDir + "/test1 (conflicted copy, " + mUsername + " v1).txt";
+  QString conflictFilename = projectDir + "/test1 (conflicted copy, " + mApi->userInfo()->username() + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
 
@@ -1201,7 +1201,7 @@ void TestMerginApi::testConflictRemoteUpdateLocalUpdate()
   // verify the result: the server version should be in test1.txt
   // and the local version should go to "test1 (conflicted copy, <username> v<version>).txt"
   // Note: test1.txt conflict file should still be the same
-  QString conflictFilename2 = projectDir + "/test1 (conflicted copy, " + mUsername + " v3).txt";
+  QString conflictFilename2 = projectDir + "/test1 (conflicted copy, " + mApi->userInfo()->username() + " v3).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "remote content 2" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "local content" ) );
   QCOMPARE( readFileContent( conflictFilename2 ), QByteArray( "local content 2" ) );
@@ -1243,7 +1243,7 @@ void TestMerginApi::testConflictRemoteAddLocalAdd()
 
   // verify the result: the server version should be in test1.txt
   // and the local version should go to conflicted copy file
-  QString conflictFilename = projectDir + "/test-new-file (conflicted copy, " + mUsername + " v1).txt";
+  QString conflictFilename = projectDir + "/test-new-file (conflicted copy, " + mApi->userInfo()->username() + " v1).txt";
   QCOMPARE( readFileContent( filename ), QByteArray( "new remote content" ) );
   QCOMPARE( readFileContent( conflictFilename ), QByteArray( "new local content" ) );
 }
@@ -1296,11 +1296,11 @@ void TestMerginApi::testEditConflictScenario()
   QDir projDir( projectDir );
 
   // check the edit conflict file presence
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mApi->userInfo()->username() ) ) );
 
   // when client B downloads changes, he should also have that edit conflict file
   downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
-  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mUsername ) ) );
+  QVERIFY( InputUtils::fileExists( projectDir + "/" + QString( "data (edit conflict, %1 v2).json" ).arg( mApi->userInfo()->username() ) ) );
 }
 
 void TestMerginApi::testUploadWithUpdate()
@@ -1611,7 +1611,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   //
   // check the result
   //
-  QString conflictFilename = "base (conflicted copy, " + mUsername + " v1).gpkg";
+  QString conflictFilename = "base (conflicted copy, " + mApi->userInfo()->username() + " v1).gpkg";
   QVERIFY( QFile::exists( projectDir + "/base.gpkg" ) );
   QVERIFY( QFile::exists( projectDir + "/" + conflictFilename ) );
 
