@@ -624,6 +624,9 @@ void AttributeController::updateOnFeatureChange()
         {
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
           itemData->setRawValue( rememberedValue );
+          // keep originalValue in sync so change-detection (e.g. renamePhotos()) doesn't
+          // mistake a reused value for a freshly captured one
+          itemData->setOriginalValue( rememberedValue );
         }
       }
     }
