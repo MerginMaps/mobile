@@ -68,6 +68,12 @@ class GeodiffUtils
 
     //! Rebases local modified version from base to modified_their version
     static bool rebase( const QString &base, const QString &modified_their, const QString &modified, const QString &conflictfile );
+
+    //! Copies file. If file is gpkg, a sqlite backup is performed so WAL is taken into account
+    static bool copyWalAware( const QString &src, const QString &dst );
+
+    //! Renames file. If file is gpkg, any -wal and -shm files are renamed too
+    static bool renameWalAware( const QString &src, const QString &dst );
 };
 
 #endif // GEODIFFUTILS_H
