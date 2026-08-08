@@ -163,6 +163,9 @@ class TestMerginApi: public QObject
     void testApiRoot();
     void testServerDiagnosticLogsUrl();
     void testServerVersionIsAtLeast();
+    void testSyncWhileReadingFromGpkg();
+    void testSyncWhileWalFilesExist();
+    void testSyncWhileWalFilesExistWithConflict();
 
   private:
     MerginApi *mApi = nullptr;
