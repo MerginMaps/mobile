@@ -729,11 +729,6 @@ int main( int argc, char *argv[] )
   QQuickStyle::setStyle( "Basic" );
 
   initDeclarative();
-  // QGIS environment variables to set
-  // OGR_SQLITE_JOURNAL is set to DELETE to avoid working with WAL files
-  // and properly close connection after writting changes to gpkg.
-  qputenv( "OGR_SQLITE_JOURNAL", "DELETE" );
-
 
   // Register to QQmlEngine
   engine.rootContext()->setContextProperty( "__notificationModel", &notificationModel );
