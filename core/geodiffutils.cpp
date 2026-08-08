@@ -187,3 +187,27 @@ void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
   }
   CoreUtils::log( prefix, msg );
 }
+
+bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
+{
+  if ( src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+  {
+    const int res = GEODIFF_makeCopySqlite( GeodiffContext::instance().handle(), src.toLocal8Bit().constData(), dst.toLocal8Bit().constData() );
+    return res == GEODIFF_SUCCESS;
+  }
+  else
+  {
+    return QFile::copy( src, dst );
+  }
+}
+
+bool GeodiffUtils::renameWalAware(const QString& src, const QString& dst)
+{
+  const bool res = QFile::rename( src, dst );
+  if ( res && src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+  {
+    ( void ) QFile::rename( QStringLiteral( "%1-wal" ).arg( src ), QStringLiteral( "%1-wal" ).arg( dst ) );
+    ( void ) QFile::rename( QStringLiteral( "%1-shm" ).arg( src ), QStringLiteral( "%1-shm" ).arg( dst ) );
+  }
+  return res;
+}
