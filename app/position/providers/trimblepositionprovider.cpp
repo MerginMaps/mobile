@@ -30,6 +30,58 @@
 
 constexpr int ONE_SECOND_MS = 1000;
 constexpr int TMM_WS_V2_DEFAULT_PORT = 9639;
+// Trimble reports just 2D CRS however we have here the 3D variant for further elevation processing
+const QHash<QString, QString> TRIMBLE_REFERENCE_FRAMES =
+{
+  { QStringLiteral( "POSGAR07" ), QStringLiteral( "5342" ) },
+  { QStringLiteral( "GDA94" ), QStringLiteral( "4939" ) },
+  { QStringLiteral( "GDA2020" ), QStringLiteral( "EPSG:7843" ) },
+  { QStringLiteral( "ETRF2000" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "SIRGAS-CON" ), QStringLiteral( "EPSG:4989" ) },
+  { QStringLiteral( "BGS2005" ), QStringLiteral( "EPSG:7797" ) },
+  { QStringLiteral( "RGNC91-93" ), QStringLiteral( "EPSG:4907" ) },
+  { QStringLiteral( "NAD83(CSRS)v7" ), QStringLiteral( "EPSG:8254" ) },
+  { QStringLiteral( "SIRGAS-Chile 2021" ), QStringLiteral( "EPSG:20040" ) },
+  { QStringLiteral( "SIRGAS-Chile 2016" ), QStringLiteral( "EPSG:9152" ) },
+  { QStringLiteral( "CGCS2000" ), QStringLiteral( "EPSG:4480" ) },
+  { QStringLiteral( "MAGNA-SIRGAS(2018)" ), QStringLiteral( "EPSG:4997" ) },
+  { QStringLiteral( "MAGNA-SIRGAS" ), QStringLiteral( "EPSG:4997" ) },
+  { QStringLiteral( "EUREF-DK15" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "EUREF-DK94" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "EST97" ), QStringLiteral( "EPSG:4935" ) },
+  { QStringLiteral( "EUREF-FIN" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "RGF93v2b" ), QStringLiteral( "EPSG:9781" ) },
+  { QStringLiteral( "RGAF09" ), QStringLiteral( "EPSG:5488" ) },
+  { QStringLiteral( "RGFG95" ), QStringLiteral( "EPSG:4967" ) },
+  { QStringLiteral( "RGTAAF07" ), QStringLiteral( "EPSG:7072" ) },
+  { QStringLiteral( "ETRS89-DREF91(R16)" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "ISN2016" ), QStringLiteral( "EPSG:8085" ) },
+  { QStringLiteral( "ITRF2008-India-CORS" ), QStringLiteral( "EPSG:8999" ) },
+  { QStringLiteral( "RDN2008" ), QStringLiteral( "EPSG:6705" ) },
+  { QStringLiteral( "JGD2011" ), QStringLiteral( "EPSG:6667" ) },
+  { QStringLiteral( "JGD2000" ), QStringLiteral( "EPSG:4947" ) },
+  { QStringLiteral( "LKS-92" ), QStringLiteral( "EPSG:4949" ) },
+  { QStringLiteral( "EUREF-NKG-2003" ), QStringLiteral( "EPSG:4951" ) },
+  { QStringLiteral( "ITRF2008-Mexico" ), QStringLiteral( "EPSG:6364" ) },
+  { QStringLiteral( "ETRF2000 (EPOCH:2010.5)" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "NZGD2000" ), QStringLiteral( "EPSG:4959" ) },
+  { QStringLiteral( "EUREF89" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "RGR92" ), QStringLiteral( "EPSG:4971" ) },
+  { QStringLiteral( "KSA-GRF17" ), QStringLiteral( "EPSG:9332" ) },
+  { QStringLiteral( "ETRS89-D96-17" ), QStringLiteral( "EPSG:4937" ) },
+  { QStringLiteral( "KGD2002" ), QStringLiteral( "EPSG:4927" ) },
+  { QStringLiteral( "SWEREF99" ), QStringLiteral( "EPSG:4977" ) },
+  { QStringLiteral( "OSNetv2009" ), QStringLiteral( "EPSG:4277" ) },  // TODO: create 3D CRS here
+  { QStringLiteral( "NAD83(2011) (EPOCH:2010)" ), QStringLiteral( "EPSG:6319" ) },
+  { QStringLiteral( "NAD83(CORS96) (EPOCH:2002)" ), QStringLiteral( "EPSG:6782" ) },
+  { QStringLiteral( "NAD83(PA11) (EPOCH:2010)" ), QStringLiteral( "EPSG:6321" ) },
+  { QStringLiteral( "NAD83(MA11) (EPOCH:2010)" ), QStringLiteral( "EPSG:6324" ) },
+  { QStringLiteral( "ITRF2000" ), QStringLiteral( "EPSG:7909" ) },
+  { QStringLiteral( "ITRF2005" ), QStringLiteral( "EPSG:7910" ) },
+  { QStringLiteral( "ITRF2008" ), QStringLiteral( "EPSG:7911" ) },
+  { QStringLiteral( "ITRF2014" ), QStringLiteral( "EPSG:7912" ) },
+  { QStringLiteral( "WGS84(G1762) current" ), QStringLiteral( "EPSG:4979" ) },
+};
 
 TrimblePositionProvider::TrimblePositionProvider( const QString &id, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
   : AbstractPositionProvider( id, QStringLiteral( "external_trimble" ), name, positionTransformer, parent )
@@ -96,60 +148,25 @@ void TrimblePositionProvider::closeProvider()
     mSocket->abort();
   }
 }
-// ---------------------------------------------------------------------------
-// Frame resolver
-// ---------------------------------------------------------------------------
 
-struct FrameEntry
+QgsCoordinateReferenceSystem TrimblePositionProvider::resolveFrame( const QString &frameName, const double epoch )
 {
-  const char *name;    // prefix match against targetReferenceFrameName
-  const char *authId;  // EPSG or user authority identifier
-};
+  // fallback to PositionKit::positionCrsXXX()
+  if ( frameName.isEmpty() ) return {};
 
-static const FrameEntry KNOWN_FRAMES[] =
-{
-  { "WGS 84",      "EPSG:4979" },
-  { "WGS84",       "EPSG:4979" },
-  { "ITRF2020",    "EPSG:9990" },
-  { "ITRF2014",    "EPSG:7912" },
-  { "ITRF2008",    "EPSG:8999" },
-  { "ITRF2005",    "EPSG:8998" },
-  { "ITRF2000",    "EPSG:8997" },
-  { "ITRF97",      "EPSG:8996" },
-  { "ITRF96",      "EPSG:8995" },
-  { "ITRF94",      "EPSG:8994" },
-  { "ITRF93",      "EPSG:8993" },
-  { "ITRF92",      "EPSG:8992" },
-  { "ITRF91",      "EPSG:8991" },
-  { "ITRF90",      "EPSG:8990" },
-  { "ITRF89",      "EPSG:8989" },
-  { "ITRF88",      "EPSG:8988" },
-  { "NAD83(2011)", "EPSG:6319" },
-  { "NAD83",       "EPSG:4269" },
-  { "ETRS89",      "EPSG:4936" },
-  { "GDA2020",     "EPSG:7843" },
-  { "GDA94",       "EPSG:4939" },
-  { nullptr, nullptr }
-};
-
-QgsCoordinateReferenceSystem TrimblePositionProvider::resolveFrame( const QString &frameName, double epoch )
-{
-  if ( frameName.isEmpty() )
-    return QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:4979" ) ); // WGS84 default
-
-  for ( const FrameEntry *e = KNOWN_FRAMES; e->name; ++e )
+  const QString crsId = TRIMBLE_REFERENCE_FRAMES.value( frameName );
+  if ( !crsId.isEmpty() )
   {
-    if ( frameName.startsWith( QLatin1String( e->name ), Qt::CaseInsensitive ) )
+    QgsCoordinateReferenceSystem newCrs( crsId );
+    if ( epoch >= 0 )
     {
-      QgsCoordinateReferenceSystem crs( QString::fromLatin1( e->authId ) );
-      if ( epoch > 0 )
-        crs.setCoordinateEpoch( epoch );
-      return crs;
+      newCrs.setCoordinateEpoch( epoch );
     }
+    return newCrs;
   }
 
-  QgsDebugMsgLevel( QStringLiteral( "TrimblePositionProvider: unknown frame '%1', falling back to WGS84" ).arg( frameName ), 2 );
-  return QgsCoordinateReferenceSystem( QStringLiteral( "EPSG:4979" ) );
+  CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "TrimblePositionProvider: unknown frame '%1', falling back to WGS84" ).arg( frameName ) );
+  return {};
 }
 
 GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
@@ -242,12 +259,42 @@ GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
     mAntennaHeight = obj.value( QStringLiteral( "antennaHeight" ) ).toDouble( std::numeric_limits<double>::quiet_NaN() );
   }
 
+  const bool referenceFrameFieldExists = obj.contains( QStringLiteral( "targetReferenceFrameName" ) ) && !obj.value( QStringLiteral( "targetReferenceFrameName" ) ).isNull() ;
+  const bool referenceFrameEpochFieldExists = obj.contains( QStringLiteral( "targetReferenceFrameEpoch" ) ) && !obj.value( QStringLiteral( "targetReferenceFrameEpoch" ) ).isNull();
+
+  if ( referenceFrameFieldExists && referenceFrameEpochFieldExists )
+  {
+    const QString frameName = obj.value( QStringLiteral( "targetReferenceFrameName" ) ).toString();
+    const double epoch = obj.value( QStringLiteral( "targetReferenceFrameEpoch" ) ).toDouble( -1 );
+    const QgsCoordinateReferenceSystem newCrs = resolveFrame( frameName, epoch );
+
+    if ( newCrs != mSourceCrs )
+    {
+      mSourceCrs = newCrs;
+      mPositionTransformer->setSourceCrs( newCrs );
+    }
+  }
+
+  if ( obj.contains( QStringLiteral( "geoidModel" ) ) && !obj.value( QStringLiteral( "geoidModel" ) ).isNull() )
+  {
+    mGeoidModelName = obj.value( QStringLiteral( "geoidModel" ) ).toString();
+  }
+  else
+  {
+    mGeoidModelName = QString();
+  }
+
   return pos;
 }
 
 QgsCoordinateReferenceSystem TrimblePositionProvider::sourceCrs() const
 {
   return mSourceCrs;
+}
+
+QString TrimblePositionProvider::geoidModelName() const
+{
+  return mGeoidModelName;
 }
 
 double TrimblePositionProvider::antennaHeight() const
@@ -297,22 +344,6 @@ void TrimblePositionProvider::onTextMessageReceived( const QString &message )
 
   setState( tr( "Connected" ), State::Connected );
   emit positionChanged( newPosition );
-
-  // Update source CRS from reported frame (re-resolve only on change)
-  const QJsonDocument doc = QJsonDocument::fromJson( message.toUtf8() );
-  if ( !doc.isNull() && doc.isObject() )
-  {
-    const QJsonObject obj = doc.object();
-    const QString frameName = obj.value( QStringLiteral( "targetReferenceFrameName" ) ).toString();
-    const double epoch = obj.value( QStringLiteral( "targetReferenceFrameEpoch" ) ).toDouble( 0 );
-    const QgsCoordinateReferenceSystem newCrs = resolveFrame( frameName, epoch );
-
-    if ( newCrs != mSourceCrs )
-    {
-      mSourceCrs = newCrs;
-      emit sourceCrsChanged( mSourceCrs );
-    }
-  }
 }
 
 void TrimblePositionProvider::onSocketError( const QAbstractSocket::SocketError error )

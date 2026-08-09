@@ -42,10 +42,6 @@ QgsCoordinateReferenceSystem PositionKit::positionCrs3D()
   {
     return mPositionCrs3D;
   }
-  if ( mProviderCrs.isValid() )
-  {
-    return mProviderCrs;
-  }
   return QgsCoordinateReferenceSystem::fromEpsgId( 9707 );
 }
 
@@ -60,6 +56,11 @@ QString PositionKit::positionCrs3DGeoidModelName()
   if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock && !std::isnan( mPosition.elevation_diff ) )
   {
     return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
+  }
+
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->geoidModelName();
   }
 
   return {};
@@ -103,22 +104,9 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
 
   mPositionProvider.reset( provider );
 
-  mProviderCrs = QgsCoordinateReferenceSystem(); // reset to WGS84 default
-
   if ( mPositionProvider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
-    connect( mPositionProvider.get(), &AbstractPositionProvider::sourceCrsChanged, this, [this]( const QgsCoordinateReferenceSystem & crs )
-    {
-      mProviderCrs = crs.isValid() ? crs : QgsCoordinateReferenceSystem();
-      refreshPositionTransformer( QgsCoordinateTransformContext() );
-    } );
-
-    // Pick up provider CRS if it's already known (e.g. re-activation)
-    const QgsCoordinateReferenceSystem initial = mPositionProvider->sourceCrs();
-    if ( initial.isValid() )
-      mProviderCrs = initial;
-
     CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->id() ) );
   }
   else // passed nullptr
@@ -480,7 +468,15 @@ void PositionKit::appStateChanged( const Qt::ApplicationState state )
 
 void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
-  const QgsCoordinateReferenceSystem srcCrs = mProviderCrs.isValid() ? mProviderCrs : positionCrs3DEllipsoidHeight();
+  QgsCoordinateReferenceSystem srcCrs;
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    srcCrs = dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->sourceCrs();
+  }
+  else
+  {
+    srcCrs = positionCrs3DEllipsoidHeight();
+  }
   const QgsCoordinateReferenceSystem destCrs = positionCrs3D();
 
   QgsCoordinateTransformContext context = transformContext;

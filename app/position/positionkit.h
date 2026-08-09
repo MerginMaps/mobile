@@ -216,7 +216,6 @@ class PositionKit : public QObject
 
     QgsCoordinateReferenceSystem mPositionCrs3D;
     QgsCoordinateReferenceSystem mVerticalCrs;
-    QgsCoordinateReferenceSystem mProviderCrs; // updated from provider's sourceCrsChanged; invalid = WGS84
     bool mElevationTransformationEnabled = false;
 
     friend class TestPosition;

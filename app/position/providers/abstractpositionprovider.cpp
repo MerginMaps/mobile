@@ -22,11 +22,6 @@ void AbstractPositionProvider::setPosition( QgsPoint )
 {
 }
 
-QgsCoordinateReferenceSystem AbstractPositionProvider::sourceCrs() const
-{
-  return QgsCoordinateReferenceSystem(); // invalid → caller treats as WGS84
-}
-
 QString AbstractPositionProvider::name() const
 {
   return mProviderName;
