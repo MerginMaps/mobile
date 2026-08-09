@@ -176,13 +176,13 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
-        <translation>Číslo musí byť menšie ako %1</translation>
+        <source>Value must be less than or equal to %1</source>
+        <translation>Číslo musí byť menšie ale rovné %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
-        <translation>Číslo musí byť väčšie ako %1</translation>
+        <source>Value must be greater than or equal to %1</source>
+        <translation>Číslo musí byť väčšie alebo rovné %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="24"/>
@@ -348,12 +348,12 @@ a preto nebude pridaný do projektu.</translation>
         <translation><numerusform>pred %n rokom</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2254"/>
+        <location filename="../inpututils.cpp" line="2253"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Musíte pridať aspoň %n bod na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n body na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2258"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Musíte pridať aspoň %n bod.</numerusform><numerusform>Musíte pridať aspoň %n body.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform></translation>
     </message>
@@ -549,7 +549,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Vymazať</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Potvrďte</translation>
     </message>
@@ -853,12 +858,12 @@ a preto nebude pridaný do projektu.</translation>
     </message>
     <message>
         <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="145"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="149"/>
         <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
         <translation>&quot;Od&quot; musí byť skorej ako &quot;Do&quot;</translation>
     </message>
     <message>
-        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="144"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="148"/>
         <source>To</source>
         <translation>Do</translation>
     </message>
@@ -1066,17 +1071,17 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Náčrty na fotke sa nepodarilo uložiť, kontaktujte podporu.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="294"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
         <source>Could not create directory %1.</source>
         <translation>Nepodarilo sa vytvoriť adresár %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="359"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Chyba v spracovaní fotky, nepodarilo sa nájsť zložku fotky</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="374"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
         <source>Failed to process the image</source>
         <translation>Nepodarilo sa spracovať obrázok</translation>
     </message>
@@ -1089,12 +1094,12 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Niektoré objekty môžu byť skryté aktívnymi filtrami</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="173"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="177"/>
         <source> more</source>
         <translation>viac</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="216"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="220"/>
         <source>Add feature</source>
         <translation>Pridať objekt</translation>
     </message>
@@ -1102,12 +1107,12 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="102"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="103"/>
         <source>Change link</source>
         <translation>Zmeniť prepojenie</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="105"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="106"/>
         <source>Unlink feature</source>
         <translation>Odpojiť objekt</translation>
     </message>
@@ -1663,28 +1668,28 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Aktívne</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1234"/>
+        <location filename="../qml/map/MMMapController.qml" line="1237"/>
         <source>Splitting done successfully</source>
         <translation>Rozdelenie sa podarilo</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1326"/>
+        <location filename="../qml/map/MMMapController.qml" line="1340"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vyberte bod pre začatie úpravy geometrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1339"/>
+        <location filename="../qml/map/MMMapController.qml" line="1353"/>
         <source>Record new geometry for the feature</source>
         <translation>Nahrať novú geometriu objektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1356"/>
+        <location filename="../qml/map/MMMapController.qml" line="1374"/>
         <source>Add new part to the geometry</source>
         <translation>Pridať novú časť ku geometrii</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1454"/>
+        <location filename="../qml/map/MMMapController.qml" line="1471"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS momentálne nie je dostupné.</translation>
     </message>
@@ -2332,42 +2337,42 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Stĺpce</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="101"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="102"/>
         <source>Add field</source>
         <translation>Pridať stĺpec</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="125"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="126"/>
         <source>Create project</source>
         <translation>Vytvor projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="130"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="131"/>
         <source>Empty project name</source>
         <translation>Zadajte názov projektu</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="150"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
         <source>Date &amp; Time</source>
         <translation>Dátum &amp; Čas</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
         <source>Number</source>
         <translation>Číslo</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
         <source>Checkbox</source>
         <translation>Zaškrtávacie políčko</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="155"/>
         <source>Photo</source>
         <translation>Fotka</translation>
     </message>
