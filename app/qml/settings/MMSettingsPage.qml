@@ -118,7 +118,7 @@ MMPage {
             width: parent.width
             title: qsTr("GPS antenna height")
             description: qsTr("Click here to modify in Trimble Mobile Manager")
-            value: __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
+            value: Number.isNaN( PositionKit.antennaHeight ) ? qsTr( "N/A" ) : __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
             onClicked: () => {
               if ( PositionKit.positionProvider )
                 PositionKit.openAntennaHeightPage()
