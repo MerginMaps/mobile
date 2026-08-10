@@ -214,11 +214,6 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     emit projectReloaded( mQgsProject );
     emit positionTrackingSupportedChanged();
     emit mapSketchesEnabledChanged();
-
-    if ( mLocalProject.isValid() )
-    {
-      emit projectSyncCheckRequested( mLocalProject.fullName(), true );
-    }
   }
 
   bool foundErrorsInLoadedProject = validateProject();

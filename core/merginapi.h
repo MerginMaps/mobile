@@ -645,7 +645,7 @@ class MerginApi: public QObject
      */
     Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
 
-    Q_INVOKABLE void isProjectSyncNeeded( const QString &projectFullName, bool withAuth );
+    void isProjectSyncNeeded( const QString &projectFullName, bool withAuth );
 
     /**
      * Returns the network manager used for Mergin API requests

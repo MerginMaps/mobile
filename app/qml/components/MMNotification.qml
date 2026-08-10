@@ -115,9 +115,12 @@ Rectangle {
     bgndHoverColor: __style.transparentColor
 
     onClicked: {
-      if ( model.action === MM.NotificationType.SyncProjectAction ) {
+      if ( model.action === MM.NotificationType.SyncProjectAction )
+      {
         __notificationModel.onNotificationClicked( model.id )
-      } else {
+      }
+      else
+      {
         __notificationModel.remove( model.id )
       }
     }

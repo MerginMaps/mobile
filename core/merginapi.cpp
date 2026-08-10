@@ -4620,6 +4620,10 @@ void MerginApi::isProjectSyncNeededFinished()
       }
     }
   }
+  else
+  {
+    CoreUtils::log( "isProjectSyncNeeded " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+  }
   r->deleteLater();
 }
 
