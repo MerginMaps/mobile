@@ -88,8 +88,6 @@ ApplicationWindow {
 
         // Stop/Start sync animation when user goes to map
         syncButton.iconRotateAnimationRunning = ( __syncManager.hasPendingSync( __activeProject.projectFullName() ) )
-
-        __activeProject.checkForProjectUpdate()
       }
       else if ( stateManager.state === "projects" ) {
         projectController.openPanel()
@@ -946,6 +944,17 @@ ApplicationWindow {
     }
   }
 
+  Timer {
+    id: projectUpdateTimer
+
+    interval: 1000
+    repeat: true
+    running: stateManager.state === "map" && !__syncManager.hasPendingSync( __activeProject.projectFullName() )
+    triggeredOnStart: true
+
+    onTriggered: __activeProject.checkForProjectUpdate()
+  }
+
   MMNotificationView {}
 
   MMListDrawer {
@@ -1130,7 +1139,8 @@ ApplicationWindow {
       {
         __notificationModel.addInfo(
           qsTr( "There is a new version of the project available" ),
-          MM.NotificationType.SyncProjectAction
+          MM.NotificationType.SyncProjectAction,
+          15
         )
       }
     }
