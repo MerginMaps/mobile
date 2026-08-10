@@ -178,12 +178,12 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
+        <source>Value must be less than or equal to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
+        <source>Value must be greater than or equal to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -574,7 +574,12 @@ Won&apos;t be added to the project.</source>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1701,23 +1706,23 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1330"/>
+        <location filename="../qml/map/MMMapController.qml" line="1340"/>
         <source>Select some point to start editing the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1343"/>
+        <location filename="../qml/map/MMMapController.qml" line="1353"/>
         <source>Record new geometry for the feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1364"/>
+        <location filename="../qml/map/MMMapController.qml" line="1374"/>
         <source>Add new part to the geometry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1461"/>
+        <location filename="../qml/map/MMMapController.qml" line="1471"/>
         <source>GPS currently unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
