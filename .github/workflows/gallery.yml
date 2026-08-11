@@ -5,6 +5,9 @@ on:
     - 'app/qml/**'
     - 'gallery/**'
     - '.github/workflows/gallery.yml'
+  pull_request:
+    branches:
+      - master
 
   release:
     types:
