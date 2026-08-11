@@ -55,7 +55,7 @@ class TrimbleRegistration : public QObject
     void requestRegistration( const QString &appId );
 
 #ifdef Q_OS_IOS
-  slots:
+  public slots:
     void handleCallback( const QUrl &url );
 #endif
 

@@ -60,7 +60,9 @@ QString PositionKit::positionCrs3DGeoidModelName()
 
   if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
   {
+#if WITH_TRIMBLE_PROVIDERS
     return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->geoidModelName();
+#endif
   }
 
   return {};
@@ -471,7 +473,9 @@ void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContex
   QgsCoordinateReferenceSystem srcCrs;
   if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
   {
+#if WITH_TRIMBLE_PROVIDERS
     srcCrs = dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->sourceCrs();
+#endif
   }
   else
   {
