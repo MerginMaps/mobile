@@ -69,14 +69,14 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
 {
   if ( url.scheme() != MM_CALLBACK_SCHEME )
   {
-    emit self->failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
+    emit failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager responded with wrong scheme." ) );
     return;
   }
 
   if ( url.host() != MM_CALLBACK_URL )
   {
-    emit self->failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
+    emit failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager responded to wrong url." ) );
     QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
     return;

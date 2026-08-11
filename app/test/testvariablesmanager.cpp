@@ -21,6 +21,8 @@
 
 #if WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
+#else
+#include "nmeaparser.h"
 #endif
 
 TestVariablesManager::TestVariablesManager( MerginApi *api, VariablesManager *vm, PositionKit *pk, AppSettings *as )
