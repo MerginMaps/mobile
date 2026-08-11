@@ -21,6 +21,8 @@
 
 #import <UIKit/UIKit.h>
 
+#include "coreutils.h"
+
 static QString MM_CALLBACK_SCHEME = QStringLiteral( "merginmaps" );
 static QString MM_CALLBACK_URL = QStringLiteral( "tmm-registration" );
 
@@ -76,7 +78,7 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
   {
     emit self->failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager responded to wrong url." ) );
-    QDesktopServices::unsetUrlHandler( QString::fromLatin1( MM_CALLBACK_SCHEME ) );
+    QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
     return;
   }
 
@@ -86,7 +88,7 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
   {
     emit failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager responded with malformed JSON." ) );
-    QDesktopServices::unsetUrlHandler( QString::fromLatin1( MM_CALLBACK_SCHEME ) );
+    QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
     return;
   }
 
@@ -97,7 +99,7 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
   {
     emit failed( tr( "Trimble Mobile Manager registration failed: %1" ).arg( registerResult ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, registration has been refused by Trimble Mobile Manager. Reason: %1." ).arg( registerResult ) );
-    QDesktopServices::unsetUrlHandler( QString::fromLatin1( MM_CALLBACK_SCHEME ) );
+    QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
     return;
   }
 
@@ -106,11 +108,11 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
   {
     emit failed( tr( "Trimble Mobile Manager returned invalid port" ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager returned malformed location data port." ) );
-    QDesktopServices::unsetUrlHandler( QString::fromLatin1( MM_CALLBACK_SCHEME ) );
+    QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
     return;
   }
 
-  QDesktopServices::unsetUrlHandler( QString::fromLatin1( MM_CALLBACK_SCHEME ) );
+  QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
   emit registered( locationPort );
 }
 
