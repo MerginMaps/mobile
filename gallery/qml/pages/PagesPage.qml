@@ -193,7 +193,7 @@ Page {
           date: "Mon, 21 August 2023"
           description: "Mergin Maps QGIS plugin is now capable of setting a custom QGIS."
           title: "Ability to set custom name for photos taken in Mergin Maps"
-          link: "hhttps://community.merginmaps.com/changelog"
+          link: "https://community.merginmaps.com/changelog"
         }
 
         function seeChangelogs() {
