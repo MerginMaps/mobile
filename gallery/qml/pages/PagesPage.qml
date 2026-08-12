@@ -186,14 +186,14 @@ Page {
           date: "Mon, 21 August 2023"
           description: "I am pleased to announce that position tracking has been released today as part of Mobile version 2.3.0 and Plugin version 2023.3"
           title: "Position tracking is now available"
-          link: "https://wishlist.merginmaps.com/changelog"
+          link: "https://community.merginmaps.com/changelog"
         }
 
         ListElement {
           date: "Mon, 21 August 2023"
           description: "Mergin Maps QGIS plugin is now capable of setting a custom QGIS."
           title: "Ability to set custom name for photos taken in Mergin Maps"
-          link: "https://wishlist.merginmaps.com/changelog"
+          link: "hhttps://community.merginmaps.com/changelog"
         }
 
         function seeChangelogs() {
