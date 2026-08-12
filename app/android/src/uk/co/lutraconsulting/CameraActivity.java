@@ -27,8 +27,6 @@ import android.net.Uri;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.util.Log;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
@@ -42,8 +40,6 @@ import uk.co.lutraconsulting.OrientationSensor;
 public class CameraActivity extends Activity {
     private static final String TAG = "Camera Activity";
     private static final int CAMERA_CODE = 102;
-    private static final String KEY_TARGET_PATH = "targetPath";
-    private static final String KEY_CAMERA_FILE_PATH = "cameraFilePath";
 
     private String targetPath;
     private File cameraFile;
@@ -61,15 +57,6 @@ public class CameraActivity extends Activity {
                 Context.SENSOR_SERVICE);
         orientationSensor = new OrientationSensor(mSensorManager, null);
         orientationSensor.Register(this, SensorManager.SENSOR_DELAY_NORMAL);
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_CAMERA_FILE_PATH)) {
-            // Process was killed and recreated while the camera app held the foreground.
-            // The capture is already in flight -- resume instead of relaunching it.
-            targetPath = savedInstanceState.getString(KEY_TARGET_PATH);
-            cameraFile = new File(savedInstanceState.getString(KEY_CAMERA_FILE_PATH));
-            Log.d(TAG, "Resumed after process recreation, cameraFile: " + cameraFile.getAbsolutePath());
-            return;
-        }
 
         targetPath = getIntent().getExtras().getString("targetPath");
         Log.d(TAG, "targetPath: " + targetPath);
@@ -90,20 +77,6 @@ public class CameraActivity extends Activity {
                         photoFile);
 
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                takePictureIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                // Explicitly grant URI permission to every app that can resolve this intent.
-                // Required because the URI is passed via EXTRA_OUTPUT rather than setData(),
-                // and some OEM camera apps (confirmed: Motorola) don't reliably honor the
-                // FLAG_GRANT_* flags in that case.
-                List<ResolveInfo> resolvedActivities = getPackageManager()
-                        .queryIntentActivities(takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
-                for (ResolveInfo resolveInfo : resolvedActivities) {
-                    grantUriPermission(resolveInfo.activityInfo.packageName, photoURI,
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                }
-
                 takePictureIntent.putExtra("__RESULT__", "takePictureIntent__RESULT__");
                 startForegroundService(new Intent(this, CameraForegroundService.class));
                 startActivityForResult(takePictureIntent, CAMERA_CODE);
@@ -116,15 +89,6 @@ public class CameraActivity extends Activity {
         }
 
         return;
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(KEY_TARGET_PATH, targetPath);
-        if (cameraFile != null) {
-            outState.putString(KEY_CAMERA_FILE_PATH, cameraFile.getAbsolutePath());
-        }
     }
 
     private File createImageFile(String targetPath) throws IOException {
@@ -158,14 +122,6 @@ public class CameraActivity extends Activity {
         }
 
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            if (cameraFile == null) {
-                Log.e(TAG, "cameraFile is null in onActivityResult - lost capture state.");
-                Intent resultData = getIntent();
-                resultData.putExtra("__RESULT__", "Lost photo capture state.");
-                setResult(Activity.RESULT_CANCELED, resultData);
-                finish();
-                return;
-            }
             Log.d(TAG, "tmp exists: " + cameraFile.exists());
             Log.d(TAG, "tmp path: " + cameraFile.getAbsolutePath());
 
@@ -197,16 +153,6 @@ public class CameraActivity extends Activity {
         super.onDestroy();
         // no-op if it was already stopped in onActivityResult() or never started
         stopService(new Intent(this, CameraForegroundService.class));
-        if (cameraFile != null) {
-            try {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "uk.co.lutraconsulting.fileprovider", cameraFile);
-                revokeUriPermission(photoURI,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            } catch (IllegalArgumentException e) {
-                // cameraFile isn't covered by file_paths.xml -- nothing was granted, nothing to revoke
-            }
-        }
     }
 
     private void extendGPSExifData(long captureTime) {
