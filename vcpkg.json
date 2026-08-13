@@ -90,7 +90,8 @@
             {
               "name": "wayland",
               "platform": "linux"
-            }
+            },
+            "sessionmanager"
           ]
         },
         "qtconnectivity",
