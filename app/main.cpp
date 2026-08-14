@@ -399,11 +399,8 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 }
 
-#ifndef USAGE_REPORT_KEY
-#define USAGE_REPORT_KEY ""
-#endif
-
-static const QString USAGE_REPORT_API_KEY = QStringLiteral( USAGE_REPORT_KEY );
+// TODO: update to the final production endpoint once it exists
+static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://meta.merginmaps.com/analytics" );
 static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
@@ -415,7 +412,7 @@ static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
                                     LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
 {
-  if ( !as->usageReportEnabled() || USAGE_REPORT_API_KEY.isEmpty() )
+  if ( !as->usageReportEnabled() )
     return;
 
   QSettings settings;
@@ -494,14 +491,13 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
 
   const QJsonObject body
   {
-    { QStringLiteral( "api_key" ), USAGE_REPORT_API_KEY },
     { QStringLiteral( "event" ), QStringLiteral( "usage_snapshot" ) },
-    { QStringLiteral( "distinct_id" ), deviceUuid },
+    { QStringLiteral( "device_id" ), deviceUuid },
     { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
 
-  QUrl url( QStringLiteral( "https://eu.i.posthog.com/capture/" ) );
+  QUrl url( USAGE_REPORT_ENDPOINT );
   QNetworkRequest request( url );
   request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
   request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
