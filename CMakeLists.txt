@@ -143,10 +143,6 @@ set(HAVE_BLUETOOTH
     CACHE BOOL "Building with bluetooth position provider"
 )
 
-set(USAGE_REPORT_KEY
-    ""
-    CACHE STRING "API key for anonymous usage reporting"
-)
 
 set(USE_KEYCHAIN
     FALSE
