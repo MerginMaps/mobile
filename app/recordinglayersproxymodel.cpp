@@ -13,8 +13,6 @@
 #include "qgsproject.h"
 #include "qgslayertree.h"
 
-#include "layer/layertreesortfiltermodel.h"
-
 RecordingLayersProxyModel::RecordingLayersProxyModel( QObject *parent ) :
   QgsMapLayerProxyModel{ parent },
   mModel( nullptr )
@@ -38,7 +36,7 @@ bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIn
 
 bool RecordingLayersProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
 {
-  if ( !mModel || LayerTreeSortFilterModel::sortMethod( QgsProject::instance() ) == LayerTreeSortFilterModel::Alphabetical )
+  if ( !mModel || mSortMethod == SortMethodEnum::Alphabetical )
     return QgsMapLayerProxyModel::lessThan( left, right );
 
   // preserve the layer order as arranged in the QGIS project's layer tree
@@ -48,8 +46,8 @@ bool RecordingLayersProxyModel::lessThan( const QModelIndex &left, const QModelI
   if ( !leftLayer || !rightLayer )
     return QgsMapLayerProxyModel::lessThan( left, right );
 
-  const QStringList treeOrder = QgsProject::instance()->layerTreeRoot()->findLayerIds();
-  return treeOrder.indexOf( leftLayer->id() ) < treeOrder.indexOf( rightLayer->id() );
+  const QList<QgsMapLayer *> layerOrder = QgsProject::instance()->layerTreeRoot()->layerOrder();
+  return layerOrder.indexOf( leftLayer ) < layerOrder.indexOf( rightLayer );
 }
 
 QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
@@ -86,8 +84,11 @@ void RecordingLayersProxyModel::setModel( LayersModel *model )
   if ( mModel != model )
   {
     mModel = model;
+    mSortMethod = static_cast<SortMethodEnum>( QgsProject::instance()->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersMethod/Method" ), SortMethodEnum::Alphabetical ) );
+
     setSourceModel( mModel );
     setFilters( Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer );
+
     emit modelChanged();
   }
 }

@@ -27,6 +27,13 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
     Q_PROPERTY( LayersModel *model READ model WRITE setModel NOTIFY modelChanged )
 
   public:
+    enum SortMethodEnum
+    {
+      PreserveQgisOrder = 0,
+      Alphabetical,
+    };
+    Q_ENUM( SortMethodEnum );
+
     Q_INVOKABLE explicit RecordingLayersProxyModel( QObject *parent = nullptr );
 
     bool filterAcceptsRow( int source_row, const QModelIndex &source_parent ) const override;
@@ -52,6 +59,7 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
 
   private:
     LayersModel *mModel;
+    SortMethodEnum mSortMethod = SortMethodEnum::Alphabetical;
 };
 
 #endif // RECORDINGLAYERSPROXYMODEL_H

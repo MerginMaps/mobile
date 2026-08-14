@@ -92,14 +92,10 @@ QModelIndex LayerTreeSortFilterModel::node2index( QgsLayerTreeNode *node ) const
   return mapFromSource( srcIndex );
 }
 
-LayerTreeSortFilterModel::SortMethodEnum LayerTreeSortFilterModel::sortMethod( QgsProject *project )
-{
-  return static_cast<SortMethodEnum>( project->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersMethod/Method" ), SortMethodEnum::Alphabetical ) );
-}
-
 void LayerTreeSortFilterModel::onSourceModelInitialized()
 {
-  if ( sortMethod( mLayerTreeModel->qgsProject() ) == SortMethodEnum::Alphabetical )
+  bool sortMethod = mLayerTreeModel->qgsProject()->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersMethod/Method" ), 1 );
+  if ( sortMethod == SortMethodEnum::Alphabetical )
   {
     sort( 0 );
   }
