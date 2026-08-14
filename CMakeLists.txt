@@ -143,7 +143,6 @@ set(HAVE_BLUETOOTH
     CACHE BOOL "Building with bluetooth position provider"
 )
 
-
 set(USE_KEYCHAIN
     FALSE
     CACHE
