@@ -14,7 +14,5 @@
 #cmakedefine01 WITH_BLUETOOTH_PROVIDERS
 #cmakedefine01 WITH_TRIMBLE_PROVIDERS
 
-#cmakedefine USAGE_REPORT_KEY "@USAGE_REPORT_KEY@"
-
 #endif
 
