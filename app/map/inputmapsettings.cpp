@@ -81,8 +81,13 @@ void InputMapSettings::setExtent( const QgsRectangle &extent )
   if ( mMapSettings.extent() == extent )
     return;
 
+  const bool scaleDidChange = !qgsDoubleNear( mMapSettings.extent().width(), extent.width() );
+
   mMapSettings.setExtent( extent );
   emit extentChanged();
+
+  if ( scaleDidChange )
+    emit scaleChanged();
 }
 
 QgsPoint InputMapSettings::center() const
