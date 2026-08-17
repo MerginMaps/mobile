@@ -176,7 +176,7 @@ void TestCoreUtils::testNameValidation()
     { QStringLiteral( "-project" ), true },
     { QStringLiteral( "proj_ect" ), true },
     { QStringLiteral( "proj.ect" ), true },
-    { QStringLiteral( "proj!ect" ), true },
+    { QStringLiteral( "proj!ect" ), false },
 
     { QStringLiteral( " project" ), false },
     { QStringLiteral( ".project" ), false },

@@ -128,6 +128,7 @@ void SnapUtils::getsnap()
     }
 
     setRecordPoint( layerPoint );
+    setSnapPoint( InputUtils::transformPointToScreenCoordinates( mDestinationLayer->crs(), mMapSettings, layerPoint ) );
 
     if ( snap.hasVertex() )
     {
@@ -186,6 +187,17 @@ void SnapUtils::setCenterPosition( QPointF newCenterPosition )
   initializeRecordPosition();
 }
 
+QPointF SnapUtils::snapPoint() const
+{
+  return mSnapPoint;
+}
+
+void SnapUtils::setSnapPoint( QPointF newSnapPoint )
+{
+  mSnapPoint = newSnapPoint;
+  emit snapPointChanged( mSnapPoint );
+}
+
 QgsPoint SnapUtils::recordPoint() const
 {
   return mRecordPoint;
@@ -206,6 +218,9 @@ void SnapUtils::setSnapped( bool newSnapped )
 {
   if ( mSnapped == newSnapped )
     return;
+
+  if ( !newSnapped ) resetSnapPoint();
+
   mSnapped = newSnapped;
   emit snappedChanged( mSnapped );
 }
@@ -297,6 +312,11 @@ void SnapUtils::initializeRecordPosition()
                            recordpoint );
 
   setRecordPoint( centerPoint );
+}
+
+void SnapUtils::resetSnapPoint()
+{
+  mSnapPoint = QPointF( -1, -1 );
 }
 
 QgsVectorLayer *SnapUtils::destinationLayer() const
