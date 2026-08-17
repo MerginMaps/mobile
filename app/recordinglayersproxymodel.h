@@ -29,10 +29,9 @@ class RecordingLayersProxyModel : public QgsMapLayerProxyModel
   public:
     enum SortMethodEnum
     {
+      Alphabetical = 1,
       PreserveQgisOrder = 0,
-      Alphabetical,
     };
-    Q_ENUM( SortMethodEnum );
 
     Q_INVOKABLE explicit RecordingLayersProxyModel( QObject *parent = nullptr );
 
