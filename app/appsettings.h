@@ -38,7 +38,7 @@ class AppSettings: public QObject
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
-    Q_PROPERTY( StartupBehaviour startupBehaviour READ startupBehaviour WRITE setStartupBehaviour NOTIFY startupBehaviourChanged )
+    Q_PROPERTY( StartupBehavior startupBehavior READ startupBehavior WRITE setStartupBehavior NOTIFY startupBehaviorChanged )
 
   public:
     // enum of haptic modes we support
@@ -57,12 +57,12 @@ class AppSettings: public QObject
     Q_ENUM( HapticsType )
 
     // enum of options for what should open when the app starts
-    enum StartupBehaviour
+    enum StartupBehavior
     {
       StartupRecentProject = 0,
       StartupProjectHome
     };
-    Q_ENUM( StartupBehaviour )
+    Q_ENUM( StartupBehavior )
 
     explicit AppSettings( QObject *parent = nullptr );
 
@@ -119,8 +119,8 @@ class AppSettings: public QObject
     HapticsType hapticsType() const;
     void setHapticsType( HapticsType hapticsType );
 
-    StartupBehaviour startupBehaviour() const;
-    void setStartupBehaviour( StartupBehaviour startupBehaviour );
+    StartupBehavior startupBehavior() const;
+    void setStartupBehavior( StartupBehavior startupBehavior );
 
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
@@ -141,7 +141,7 @@ class AppSettings: public QObject
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
     void hapticsTypeChanged( HapticsType hapticsType );
-    void startupBehaviourChanged( StartupBehaviour startupBehaviour );
+    void startupBehaviorChanged( StartupBehavior startupBehavior );
 
     void ignoreMigrateVersionChanged();
 
@@ -182,7 +182,7 @@ class AppSettings: public QObject
     QString mIgnoreMigrateVersion;
 
     HapticsType mHapticsType;
-    StartupBehaviour mStartupBehaviour;
+    StartupBehavior mStartupBehavior;
 };
 
 #endif // APPSETTINGS_H

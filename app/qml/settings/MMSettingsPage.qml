@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml.Models
 
 import mm 1.0 as MM
 import MMInput
@@ -38,11 +39,11 @@ MMPage {
   }
 
   ListModel {
-    id: startupBehaviourModel
+    id: startupBehaviorModel
 
     Component.onCompleted: {
-      startupBehaviourModel.append({ value: AppSettings.StartupRecentProject, text: qsTr("Recent project"), description: qsTr("Jump back into your last project") });
-      startupBehaviourModel.append({ value: AppSettings.StartupProjectHome, text: qsTr("Project home"), description: qsTr("See all your downloaded projects") });
+      startupBehaviorModel.append({ value: AppSettings.StartupRecentProject, text: qsTr("Recent project"), description: qsTr("Jump back into your last project") });
+      startupBehaviorModel.append({ value: AppSettings.StartupProjectHome, text: qsTr("Project home"), description: qsTr("See all your downloaded projects") });
     }
   }
 
@@ -232,12 +233,12 @@ MMPage {
         description: qsTr("Choose what opens when you launch the app")
         drawerTitle: qsTr("Open on startup")
 
-        value: AppSettings.startupBehaviour === AppSettings.StartupProjectHome ? qsTr("Project home") : qsTr("Recent project")
-        currentIndex: AppSettings.startupBehaviour
+        currentIndex: AppSettings.startupBehavior
 
-        model: startupBehaviourModel
+        model: startupBehaviorModel
+        value: model.count > 0 ? model.get(currentIndex).text : ""
 
-        onCurrentIndexChanged: AppSettings.startupBehaviour = currentIndex
+        onCurrentIndexChanged: AppSettings.startupBehavior = currentIndex
       }
 
       MMLine {}

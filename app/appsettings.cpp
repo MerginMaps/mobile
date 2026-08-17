@@ -19,23 +19,23 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  const QString path = settings.value( "defaultProject", "" ).toString();
+  const QString path = settings.value( QStringLiteral( "defaultProject" ), "" ).toString();
   const QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
-  const double gpsTolerance = settings.value( "gpsTolerance", 10 ).toDouble();
-  const int lineRecordingInterval = settings.value( "lineRecordingInterval", 3 ).toInt();
-  int streamingIntervalType = settings.value( "intervalType", 0 ).toInt();
+  const double gpsTolerance = settings.value( QStringLiteral( "gpsTolerance" ), 10 ).toDouble();
+  const int lineRecordingInterval = settings.value( QStringLiteral( "lineRecordingInterval" ), 3 ).toInt();
+  int streamingIntervalType = settings.value( QStringLiteral( "intervalType" ), 0 ).toInt();
   const StreamingIntervalType::IntervalType intervalType = static_cast<StreamingIntervalType::IntervalType>( streamingIntervalType );
-  const bool reuseLastEnteredValues = settings.value( "reuseLastEnteredValues", false ).toBool();
+  const bool reuseLastEnteredValues = settings.value( QStringLiteral( "reuseLastEnteredValues" ), false ).toBool();
   const QString savedAppVersion = settings.value( QStringLiteral( "appVersion" ), QString() ).toString();
   const QString activeProviderId = settings.value( QStringLiteral( "activePositionProviderId" ) ).toString();
   const bool autosync = settings.value( QStringLiteral( "autosyncAllowed" ), false ).toBool();
-  const double gpsHeight = settings.value( "gpsHeight", 0 ).toDouble();
+  const double gpsHeight = settings.value( QStringLiteral( "gpsHeight" ), 0 ).toDouble();
   const QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
   const bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
-  int hapticsTypeInt = settings.value( "hapticsType", 0 ).toInt();
+  int hapticsTypeInt = settings.value( QStringLiteral( "hapticsType" ), 0 ).toInt();
   const HapticsType hapticsType = static_cast<HapticsType>( hapticsTypeInt );
-  int startupBehaviourInt = settings.value( "startupBehaviour", 0 ).toInt();
-  const StartupBehaviour startupBehaviour = static_cast<StartupBehaviour>( startupBehaviourInt );
+  int startupBehaviorInt = settings.value( QStringLiteral( "startupBehavior" ), 0 ).toInt();
+  const StartupBehavior startupBehavior = static_cast<StartupBehavior>( startupBehaviorInt );
 
   settings.endGroup();
 
@@ -53,7 +53,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
   setHapticsType( hapticsType );
-  setStartupBehaviour( startupBehaviour );
+  setStartupBehavior( startupBehavior );
 }
 
 QString AppSettings::defaultLayer() const
@@ -319,19 +319,19 @@ void AppSettings::setHapticsType( const HapticsType hapticsType )
   emit hapticsTypeChanged( hapticsType );
 }
 
-AppSettings::StartupBehaviour AppSettings::startupBehaviour() const
+AppSettings::StartupBehavior AppSettings::startupBehavior() const
 {
-  return mStartupBehaviour;
+  return mStartupBehavior;
 }
 
-void AppSettings::setStartupBehaviour( const StartupBehaviour startupBehaviour )
+void AppSettings::setStartupBehavior( const StartupBehavior startupBehavior )
 {
-  if ( mStartupBehaviour == startupBehaviour )
+  if ( mStartupBehavior == startupBehavior )
     return;
 
-  setValue( QStringLiteral( "startupBehaviour" ), startupBehaviour );
-  mStartupBehaviour = startupBehaviour;
-  emit startupBehaviourChanged( startupBehaviour );
+  setValue( QStringLiteral( "startupBehavior" ), startupBehavior );
+  mStartupBehavior = startupBehavior;
+  emit startupBehaviorChanged( startupBehavior );
 }
 
 double AppSettings::gpsAntennaHeight() const

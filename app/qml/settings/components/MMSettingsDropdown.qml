@@ -17,7 +17,7 @@ MMSettingsItem {
 
   property var model
   property int currentIndex: -1
-  property string drawerTitle: root.title
+  property string drawerTitle: title
 
   onClicked: {
     if(root.model?.count > 0) {

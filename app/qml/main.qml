@@ -119,10 +119,10 @@ ApplicationWindow {
   Component.onCompleted: {
 
     // load default project
-    if ( AppSettings.startupBehaviour === AppSettings.StartupProjectHome ) {
+    if ( AppSettings.startupBehavior === AppSettings.StartupProjectHome || !AppSettings.defaultProject ) {
       stateManager.state = "projects"
     }
-    else if ( AppSettings.defaultProject ) {
+    else {
       let path = AppSettings.defaultProject
 
       if ( __localProjectsManager.projectIsValid( path ) && __activeProject.load( path ) ) {
@@ -133,9 +133,6 @@ ApplicationWindow {
         AppSettings.defaultProject = ""
         stateManager.state = "projects"
       }
-    }
-    else {
-      stateManager.state = "projects"
     }
 
     // Catch back button click (if no other component catched it so far)
