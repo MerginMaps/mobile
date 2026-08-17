@@ -380,6 +380,11 @@ void ProjectsModel::removeLocalProject( const QString &projectId )
   mLocalProjectsManager->removeLocalProject( projectId );
 }
 
+QString ProjectsModel::renameLocalProject( const QString &projectId, const QString &newName )
+{
+  return mLocalProjectsManager->renameLocalProject( projectId, newName );
+}
+
 void ProjectsModel::migrateProject( const QString &projectId )
 {
   int ix = projectIndexFromId( projectId );
