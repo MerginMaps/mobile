@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import "../components" as MMComponents
+import "../dialogs"
 
 import mm 1.0 as MM
 import MMInput
@@ -42,6 +43,7 @@ Item {
   signal closed()
   signal saveRequested()
   signal editGeometry( var pair )
+  signal resumeDraft()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
@@ -168,8 +170,15 @@ Item {
       onOpenFormClicked: root.panelState = "form"
 
       onEditClicked: {
-        root.panelState = "form"
-        featureForm.state = "edit"
+        if ( __activeProject.featureDraftController.hasDraft ) {
+          // only one drawer should ever be active at a time
+          root.closeDrawer()
+          resumeDraftDialog.open()
+        }
+        else {
+          root.panelState = "form"
+          featureForm.state = "edit"
+        }
       }
 
       onCloseClicked: drawer.close()
@@ -237,6 +246,31 @@ Item {
           featureForm.controller.linkedRelation = root.linkedRelation
         }
       }
+    }
+  }
+
+  onFeatureLayerPairChanged: {
+    if ( panelState === "preview" )
+      previewPanelChanged( previewPanel.implicitHeight )
+  }
+
+  MMResumeDraftDialog {
+    id: resumeDraftDialog
+
+    featureTitle: __activeProject.featureDraftController.draftFeatureTitle
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onResumeClicked: root.resumeDraft()
+    onDiscardClicked: discardDraftDialog.open()
+  }
+
+  MMDiscardDraftDialog {
+    id: discardDraftDialog
+
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onDiscardDraft: {
+      __activeProject.featureDraftController.discardDraft()
     }
   }
 }

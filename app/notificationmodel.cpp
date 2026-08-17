@@ -117,6 +117,11 @@ void NotificationModel::addWarning( const QString &message, const NotificationTy
   add( message, interval, NotificationType::Warning, NotificationType::ExclamationIcon, action );
 }
 
+void NotificationModel::addDraftNotice( const QString &message, const NotificationType::ActionType action, const uint interval )
+{
+  add( message, interval, NotificationType::Warning, NotificationType::InfoIcon, action );
+}
+
 // check for auto removing notification
 void NotificationModel::timerFired()
 {
@@ -154,6 +159,12 @@ void NotificationModel::onNotificationClicked( uint id )
         {
           remove( id );
           emit showSyncFailedDialogClicked();
+          break;
+        }
+        case NotificationType::ActionType::OpenDraftAction:
+        {
+          remove( id );
+          emit openDraftActionClicked();
           break;
         }
         default: break;

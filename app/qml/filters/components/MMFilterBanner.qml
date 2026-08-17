@@ -18,6 +18,8 @@ Rectangle {
   property string text
   property string actionText: ""
 
+  property alias actionButton: actionButton
+
   signal actionClicked()
 
   color: __style.informativeColor
