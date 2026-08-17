@@ -1324,6 +1324,19 @@ Item {
     state = "recordInLayer"
   }
 
+  //! Resumes digitizing a new feature that was interrupted mid-capture
+  function resumeRecording( layer, geometry ) {
+    __activeProject.setActiveLayer( layer )
+    state = "record"
+
+    // recordingToolsLoader only becomes active once state == "record" takes effect
+    Qt.callLater( function() {
+      if ( recordingToolsLoader.item ) {
+        recordingToolsLoader.item.recordingMapTool.resumeCapture( geometry )
+      }
+    } )
+  }
+
   function edit( featurepair ) {
     __activeProject.setActiveLayer( featurepair.layer )
     root.centerToPair( featurepair )

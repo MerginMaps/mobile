@@ -92,6 +92,8 @@ set(MM_QML
     dialogs/MMFormDeleteFeatureDialog.qml
     dialogs/MMProjErrorDialog.qml
     dialogs/MMOutOfDateCustomServerDialog.qml
+    dialogs/MMDiscardDraftDialog.qml
+    dialogs/MMResumeDraftDialog.qml
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml

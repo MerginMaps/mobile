@@ -78,6 +78,9 @@ ActiveProject::ActiveProject( AppSettings &appSettings
 
   mFilterController = std::make_unique<FilterController>();
   connect( this, &ActiveProject::projectReloaded, mFilterController.get(), &FilterController::loadFilterConfig );
+
+  mFeatureDraftController = std::make_unique<FeatureDraftController>();
+  connect( this, &ActiveProject::loadingFinished, mFeatureDraftController.get(), &FeatureDraftController::checkForDraft );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -675,4 +678,9 @@ bool ActiveProject::photoSketchingEnabled() const
 FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
+}
+
+FeatureDraftController *ActiveProject::featureDraftController() const
+{
+  return mFeatureDraftController.get();
 }

@@ -25,6 +25,7 @@
 #include "merginprojectmetadata.h"
 #include "synchronizationoptions.h"
 #include "filter/filtercontroller.h"
+#include "drafts/featuredraftcontroller.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -36,6 +37,7 @@ class ActiveProject: public QObject
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject NOTIFY qgsProjectChanged ) // QgsProject instance of active project, never changes
     Q_PROPERTY( AutosyncController *autosyncController READ autosyncController NOTIFY autosyncControllerChanged )
     Q_PROPERTY( FilterController *filterController READ filterController NOTIFY filterControllerChanged )
+    Q_PROPERTY( FeatureDraftController *featureDraftController READ featureDraftController NOTIFY featureDraftControllerChanged )
     Q_PROPERTY( InputMapSettings *mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     Q_PROPERTY( QString projectRole READ projectRole WRITE setProjectRole NOTIFY projectRoleChanged )
 
@@ -156,6 +158,11 @@ class ActiveProject: public QObject
      */
     FilterController *filterController() const;
 
+    /**
+     * Returns featureDraftController, which detects unsaved feature drafts left behind for this project
+     */
+    FeatureDraftController *featureDraftController() const;
+
   signals:
     void qgsProjectChanged();
     void localProjectChanged( LocalProject project );
@@ -192,6 +199,8 @@ class ActiveProject: public QObject
     void appStateChanged( Qt::ApplicationState state );
 
     void filterControllerChanged( FilterController *controller );
+
+    void featureDraftControllerChanged( FeatureDraftController *controller );
 
   public slots:
     // Reloads project if current project path matches given path (it's the same project)
@@ -235,6 +244,7 @@ class ActiveProject: public QObject
     InputMapSettings *mMapSettings = nullptr;
     std::unique_ptr<AutosyncController> mAutosyncController;
     std::unique_ptr<FilterController> mFilterController;
+    std::unique_ptr<FeatureDraftController> mFeatureDraftController;
 
     QString mProjectLoadingLog;
     QString mProjectRole;
