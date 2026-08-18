@@ -399,8 +399,7 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 }
 
-// TODO: update to the final production endpoint once it exists
-static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://meta.merginmaps.com/analytics" );
+static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://meta.merginmaps.com/dev/telemetry.json" );
 static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
