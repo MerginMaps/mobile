@@ -105,8 +105,6 @@
             android:exported="false"
             />
 
-        <!-- Deliberately no android:process, so it stays in the default process alongside
-             CameraActivity for the priority boost to protect the right process. -->
         <service
             android:name=".CameraForegroundService"
             android:foregroundServiceType="shortService"
