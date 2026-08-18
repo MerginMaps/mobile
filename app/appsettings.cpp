@@ -20,7 +20,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   const QString path = settings.value( QStringLiteral( "defaultProject" ), "" ).toString();
-  const QString layer = settings.value( "defaultLayer/"  + path, "" ).toString();
+  const QString layer = settings.value( QStringLiteral( "defaultLayer/" ) + path, "" ).toString();
   const double gpsTolerance = settings.value( QStringLiteral( "gpsTolerance" ), 10 ).toDouble();
   const int lineRecordingInterval = settings.value( QStringLiteral( "lineRecordingInterval" ), 3 ).toInt();
   int streamingIntervalType = settings.value( QStringLiteral( "intervalType" ), 0 ).toInt();
@@ -65,7 +65,7 @@ void AppSettings::setDefaultLayer( const QString &value )
 {
   if ( defaultLayer() != value )
   {
-    setValue( "defaultLayer/" + mActiveProject, value );
+    setValue( QStringLiteral( "defaultLayer/" ) + mActiveProject, value );
     mDefaultLayers.insert( mActiveProject, value );
     emit defaultLayerChanged();
   }

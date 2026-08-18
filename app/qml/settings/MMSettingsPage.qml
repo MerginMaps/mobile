@@ -229,14 +229,14 @@ MMPage {
       MMSettingsComponents.MMSettingsDropdown {
         width: parent.width
 
-        title: qsTr("On app startup")
+        title: qsTr("Startup behaviour")
         description: qsTr("Choose what opens when you launch the app")
         drawerTitle: qsTr("Open on startup")
 
         currentIndex: AppSettings.startupBehavior
 
         model: startupBehaviorModel
-        value: model.count > 0 ? model.get(currentIndex).text : ""
+        value: model.get(currentIndex).text
 
         onCurrentIndexChanged: AppSettings.startupBehavior = currentIndex
       }
