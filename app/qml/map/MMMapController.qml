@@ -1354,6 +1354,9 @@ Item {
 
     internal.featurePairToEdit = featurepair
     state = "edit"
+
+    // force a redraw - canvas may not have repainted while covered by the form
+    mapCanvas.refresh()
   }
 
   function toggleRedraw() {
