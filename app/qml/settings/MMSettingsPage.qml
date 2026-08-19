@@ -41,10 +41,8 @@ MMPage {
   ListModel {
     id: startupBehaviorModel
 
-    Component.onCompleted: {
-      startupBehaviorModel.append({ value: AppSettings.StartupRecentProject, text: qsTr("Recent project"), description: qsTr("Jump back into your last project") });
-      startupBehaviorModel.append({ value: AppSettings.StartupProjectHome, text: qsTr("Project home"), description: qsTr("See all your downloaded projects") });
-    }
+    ListElement { text: qsTr("Recent project"); description: qsTr("Jump back into your last project") }
+    ListElement { text: qsTr("Project home"); description: qsTr("See all your downloaded projects") }
   }
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
@@ -231,7 +229,6 @@ MMPage {
 
         title: qsTr("Startup behaviour")
         description: qsTr("Choose what opens when you launch the app")
-        drawerTitle: qsTr("Open on startup")
 
         currentIndex: AppSettings.startupBehavior
 
