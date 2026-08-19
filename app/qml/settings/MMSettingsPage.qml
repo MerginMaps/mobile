@@ -41,8 +41,8 @@ MMPage {
   ListModel {
     id: startupBehaviorModel
 
-    ListElement { text: qsTr("Recent project"); description: qsTr("Jump back into your last project") }
-    ListElement { text: qsTr("Project home"); description: qsTr("See all your downloaded projects") }
+    ListElement { text: qsTr("Recent project"); description: qsTr("Jump back into your last project") } // AppSettings.StartupRecentProject
+    ListElement { text: qsTr("Project home"); description: qsTr("See all your downloaded projects") } // AppSettings.StartupProjectHome
   }
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
