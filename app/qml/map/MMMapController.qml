@@ -925,9 +925,6 @@ Item {
       list.delegate: MMListDelegate {
         text: model.layerName
 
-        // TODO: why we need to set hight here?
-        height: __style.menuDrawerHeight
-
         leftContent: MMIcon {
           source: model.iconSource
         }
