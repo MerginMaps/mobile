@@ -1628,68 +1628,68 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Aktív réteg kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="948"/>
+        <location filename="../qml/map/MMMapController.qml" line="945"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>A projektben nem található semmilyen szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="949"/>
+        <location filename="../qml/map/MMMapController.qml" line="946"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Nézze meg, hogy lehet engedélyezni a digitalizálást a projektjében.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="975"/>
+        <location filename="../qml/map/MMMapController.qml" line="972"/>
         <source>More options</source>
         <translation>További lehetőségek</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="977"/>
         <source>Split geometry</source>
         <translation>Geometria felosztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="992"/>
+        <location filename="../qml/map/MMMapController.qml" line="989"/>
         <source>Add part</source>
         <translation>Rész hozzáadása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1004"/>
+        <location filename="../qml/map/MMMapController.qml" line="1001"/>
         <source>Redraw geometry</source>
         <translation>Geometria újrarajzolása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1016"/>
+        <location filename="../qml/map/MMMapController.qml" line="1013"/>
         <source>Streaming mode</source>
         <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1022"/>
+        <location filename="../qml/map/MMMapController.qml" line="1019"/>
         <source>Active</source>
         <translation>Aktív</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1237"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>Splitting done successfully</source>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1340"/>
+        <location filename="../qml/map/MMMapController.qml" line="1337"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1353"/>
+        <location filename="../qml/map/MMMapController.qml" line="1350"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1374"/>
+        <location filename="../qml/map/MMMapController.qml" line="1371"/>
         <source>Add new part to the geometry</source>
         <translation>Új rész hozzáadása a geometriához</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1471"/>
+        <location filename="../qml/map/MMMapController.qml" line="1468"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -2590,173 +2590,203 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMSettingsPage</name>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="35"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>Time elapsed</source>
         <translation>Eltelt idő</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="37"/>
         <source>Distance traveled</source>
         <translation>Megtett távolság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="54"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Recent project</source>
+        <translation>Legutóbbi projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Jump back into your last project</source>
+        <translation>Visszatérés az utolsó projekthez</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>Project home</source>
+        <translation>Projekt kezdőlap</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>See all your downloaded projects</source>
+        <translation>Az összes letöltött projekt megtekintése</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="62"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="73"/>
         <source>GPS accuracy threshold</source>
         <translation>GPS pontossági korlát</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="74"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Meghatározza, hogy a pontosság jelző mikor legyen sárga</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="67"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="75"/>
         <source>GPS accuracy threshold, in meters</source>
         <translation>GPS pontossági küszöb, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="80"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="98"/>
         <source>GPS antenna height</source>
         <translation>GPS antenna magasság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="91"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="99"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Tartalmazza a rúdmagasságot és a GPS vevő antenna magasságát</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="100"/>
         <source>GPS antenna height, in meters</source>
         <translation>GPS antenna magasság, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="112"/>
         <source>Streaming mode</source>
         <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="124"/>
         <source>Interval threshold type</source>
         <translation>Rögzítési köz alapja</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="125"/>
         <source>Choose a type of threshold for streaming mode</source>
         <translation>Folyamatos rögzítés alapja</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>Distance Traveled</source>
         <translation>Megtett távolság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="142"/>
         <source>Threshold interval</source>
         <translation>Rögzítési köz</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="143"/>
         <source>Streaming mode will add a point to the object at each interval</source>
         <translation>Folyamatos rögzítéskor minden beállított köznél új pontot ad hozzá az aktuális elemhez.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
         <source>Threshold interval, in meters</source>
         <translation>Rögzítési köz, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
         <source>Threshold interval, in seconds</source>
         <translation>Rögzítési köz, másodpercben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Recording</source>
         <translation>Rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="167"/>
         <source>Reuse last entered value</source>
         <translation>Utolsó megadott érték újrafelhasználása</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="160"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Minden mező felkínálja az utolsó megadott értékét újrafelhasználásra a következő hozzáadott elemnél</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="170"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="178"/>
         <source>Automatically sync changes</source>
         <translation>Módosítások automatikus szinkronizálása</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Your project is synced automatically to keep you up to date</source>
         <translation>A projektje automatikusan szinkronizálásra kerül, hogy naprakész maradhasson</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>Auto-lock position</source>
         <translation>Automatikus pozíció zárolás</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="182"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="190"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>Minden alkalommal, amikor elkezdi a rögzítést, az alkalmazás GPS helyzetéhez állítja a középpontot</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="202"/>
         <source>Touch Feedback</source>
         <translation>Érintés visszajelzés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="203"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
         <translation>Az alkalmazás képes rezegni vagy hangot adni, új elem létrehozásakor</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="221"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
+        <source>Startup behaviour</source>
+        <translation>Indítási viselkedés</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <source>Choose what opens when you launch the app</source>
+        <translation>Válassza ki, hogy mi nyíljon meg az alkalmazás indításakor</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="245"/>
         <source>About</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="255"/>
         <source>Changelog</source>
         <translation>Változásnapló</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="241"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="265"/>
         <source>Help</source>
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="251"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="275"/>
         <source>Privacy policy</source>
         <translation>Adatvédelmi szabályzat</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="261"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="285"/>
         <source>Terms of service</source>
         <translation>Általános Szerződési Feltételek</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="271"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="295"/>
         <source>Diagnostic log</source>
         <translation>Diagnosztikai napló</translation>
     </message>
@@ -3474,12 +3504,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <translation>Ismeretlen állapot</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="605"/>
+        <location filename="../main.cpp" line="603"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="608"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
