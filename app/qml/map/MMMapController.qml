@@ -1396,6 +1396,7 @@ Item {
     root.centeredToGPS = true
     internal.stakeoutTarget = featurepair
     state = "stakeout"
+    AppSettings.trackUsageFeature( "stakeout" )
   }
 
   function measure() {
