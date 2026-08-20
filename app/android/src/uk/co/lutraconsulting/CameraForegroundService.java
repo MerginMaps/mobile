@@ -21,12 +21,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 
 /**
- * Runs in the app's default process (unlike PositionTrackingService, which deliberately
- * runs in its own :trackingThread) for as long as CameraActivity is waiting on the external
- * camera app, to raise this process's priority and make it much less likely to be picked by
- * the OS's low-memory killer while the (often heavy) OEM camera stack is in the foreground.
+ * Runs in the app's default process for as long as CameraActivity is waiting on the external
+ * camera app, to raise this process's priority and make it much less likely to be killed while
+ * the camera is in the foreground.
  * This is a mitigation, not a guarantee -- under severe enough memory pressure the process can
- * still be killed, which is what CameraActivity's saved-instance-state resume handles.
+ * still be killed; CameraActivity does not currently resume state after that, so a kill mid-wait
+ * causes the camera capture to restart from scratch on the recreated process.
  */
 public class CameraForegroundService extends Service {
 
@@ -59,15 +59,19 @@ public class CameraForegroundService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        if (Build.VERSION.SDK_INT >= 35) { // Android 15 (Vanilla Ice Cream) -- FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+        // We never request the POST_NOTIFICATIONS runtime permission from the user, so this
+        // notification will silently not be shown unless the user has manually enabled it for
+        // the app in system Settings. startForeground() still succeeds and still elevates the
+        // process's priority either way -- the permission only gates the notification's
+        // visibility, not the foreground service state itself.
+        if (Build.VERSION.SDK_INT >= 35) {
             startForeground(SERVICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE);
         } else {
             startForeground(SERVICE_ID, notification);
         }
 
-        // Not START_STICKY: if this service alone gets killed there is nothing useful to resume --
-        // it holds no state, it only exists to keep the process's priority elevated while
-        // CameraActivity waits on startActivityForResult().
+        // if this service alone gets killed there is nothing useful to resume, it only exists to
+        // keep the process's priority elevated while CameraActivity waits on startActivityForResult().
         return START_NOT_STICKY;
     }
 }
