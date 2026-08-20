@@ -41,16 +41,21 @@ Rectangle {
     // center the content
     x: __style.safeAreaLeft
 
+    MMScrollView {
+      anchors.fill: parent
+
+      contentWidth: toolbar.contentWidth
+
     MMListView {
       id: toolbar
 
       onWidthChanged: root.recalculate()
       model: toolbarModel
       delegate: ( model.count === 1 ) && ( menuModel.count === 0 ) ?  longBtnComp : shortBtnComp
-      anchors.fill: parent
       orientation: ListView.Horizontal
       interactive: false
       Component.onCompleted: root.initialize()
+    }
     }
   }
 

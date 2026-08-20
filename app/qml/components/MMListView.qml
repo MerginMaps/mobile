@@ -12,6 +12,7 @@ import QtQuick
 ListView {
 
   id: root
+
   // when flicking up really fast, we should go back to the first item
   onVerticalOvershootChanged: {
     if (verticalOvershoot < -200) {

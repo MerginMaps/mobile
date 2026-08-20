@@ -83,13 +83,15 @@ MMDrawer {
           sourceComponent: defaultEmptyStateComponent
         }
 
+        MMScrollView {
+          width: parent.width
+          height: Math.min( listViewComponent.contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
+
+          visible: listViewComponent.count > 0
+
         MMListView {
           id: listViewComponent
 
-          width: parent.width
-          height: Math.min( contentHeight, root.drawerContentAvailableHeight - internal.searchBarVerticalSpace )
-
-          visible: count > 0
           interactive: contentHeight > height
 
           clip: true
@@ -121,6 +123,7 @@ MMDrawer {
           }
 
           footer: MMListSpacer { height: __style.safeAreaBottom + __style.margin8 + ( root.multiSelect ? confirmButton.height : 0 ) }
+        }
         }
       }
     }

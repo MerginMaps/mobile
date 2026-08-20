@@ -47,13 +47,14 @@ MMComponents.MMPage {
     MMComponents.MMListSpacer { id: spacer; height: __style.spacing40 }
 
     // With changes content
-    MMComponents.MMListView {
-      id: statusList
-
+    MMComponents.MMScrollView {
       anchors.top: spacer.bottom
       anchors.bottom: parent.bottom
       width: parent.width
       visible: statusPanel.hasChanges
+
+    MMComponents.MMListView {
+      id: statusList
 
       model: __merginProjectStatusModel
 
@@ -143,6 +144,7 @@ MMComponents.MMPage {
           }
         }
       }
+    }
     }
   }
 }

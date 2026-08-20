@@ -21,10 +21,11 @@ MMPage {
   pageHeader.title: qsTr( "Changelog" )
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
 
-  pageContent: MMListView {
+  pageContent: MMScrollView {
     width: parent.width
     height: parent.height
 
+  MMListView {
     spacing: __style.spacing20
 
     model: root.model
@@ -48,6 +49,7 @@ MMPage {
     }
 
     footer: root.dataNotReady ? noItemDelegate : spacer
+  }
   }
 
   Component {
