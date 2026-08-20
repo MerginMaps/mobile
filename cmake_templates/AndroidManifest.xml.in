@@ -104,6 +104,13 @@
             android:stopWithTask="true"
             android:exported="false"
             />
+
+        <service
+            android:name=".CameraForegroundService"
+            android:foregroundServiceType="shortService"
+            android:stopWithTask="true"
+            android:exported="false"
+            />
     </application>
 
     <!-- Explicitly mention that we need to use external app for capturing an image and open file-->
