@@ -1628,68 +1628,68 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Vybrať aktívnu vrstvu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="948"/>
+        <location filename="../qml/map/MMMapController.qml" line="945"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>V projekte sa nepodarilo nájsť žiadne upraviteľné vrstvy.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="949"/>
+        <location filename="../qml/map/MMMapController.qml" line="946"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Zistite, ako povoliť digitalizáciu vo vašom projekte.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="975"/>
+        <location filename="../qml/map/MMMapController.qml" line="972"/>
         <source>More options</source>
         <translation>Viac možností</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="977"/>
         <source>Split geometry</source>
         <translation>Rozdeliť geometriu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="992"/>
+        <location filename="../qml/map/MMMapController.qml" line="989"/>
         <source>Add part</source>
         <translation>Pridať časť</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1004"/>
+        <location filename="../qml/map/MMMapController.qml" line="1001"/>
         <source>Redraw geometry</source>
         <translation>Prekresliť geometriu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1016"/>
+        <location filename="../qml/map/MMMapController.qml" line="1013"/>
         <source>Streaming mode</source>
         <translation>Režim streamovania</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1022"/>
+        <location filename="../qml/map/MMMapController.qml" line="1019"/>
         <source>Active</source>
         <translation>Aktívne</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1237"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>Splitting done successfully</source>
         <translation>Rozdelenie sa podarilo</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1340"/>
+        <location filename="../qml/map/MMMapController.qml" line="1337"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Vyberte bod pre začatie úpravy geometrie</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1353"/>
+        <location filename="../qml/map/MMMapController.qml" line="1350"/>
         <source>Record new geometry for the feature</source>
         <translation>Nahrať novú geometriu objektu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1374"/>
+        <location filename="../qml/map/MMMapController.qml" line="1371"/>
         <source>Add new part to the geometry</source>
         <translation>Pridať novú časť ku geometrii</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1471"/>
+        <location filename="../qml/map/MMMapController.qml" line="1468"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS momentálne nie je dostupné.</translation>
     </message>
@@ -2590,173 +2590,203 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMSettingsPage</name>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="35"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>Time elapsed</source>
         <translation>Uplynulý čas</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="37"/>
         <source>Distance traveled</source>
         <translation>Ušlá vzdialenosť</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="54"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Recent project</source>
+        <translation>Nedávny projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Jump back into your last project</source>
+        <translation>Vráťte sa k svojmu poslednému projektu</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>Project home</source>
+        <translation>Zoznam projektov</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>See all your downloaded projects</source>
+        <translation>Zobraziť všetky vaše stiahnuté projekty</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="62"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="73"/>
         <source>GPS accuracy threshold</source>
         <translation>Hranica presnosti</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="74"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Určuje, kedy sa indikátor presnosti zmení na žltú</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="67"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="75"/>
         <source>GPS accuracy threshold, in meters</source>
         <translation>Hranica GPS presnosti, v metroch</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="80"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>Manage GPS receivers</source>
         <translation>Spravovať GPS prijímače</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="98"/>
         <source>GPS antenna height</source>
         <translation>Výška GPS antény</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="91"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="99"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Zahŕňa výšku tyče a výšku antény prijímača GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="100"/>
         <source>GPS antenna height, in meters</source>
         <translation>Výška GPS antény, v metroch</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="112"/>
         <source>Streaming mode</source>
         <translation>Režim streamovania</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="124"/>
         <source>Interval threshold type</source>
         <translation>Typ intervalového prahu</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="125"/>
         <source>Choose a type of threshold for streaming mode</source>
         <translation>Vyberte typ prahu pre režim streamovania</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>Distance Traveled</source>
         <translation>Ušlá vzdialenosť</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="142"/>
         <source>Threshold interval</source>
         <translation>Prahový interval</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="143"/>
         <source>Streaming mode will add a point to the object at each interval</source>
         <translation>Režim streamovania pridá k objektu bod v každom intervale</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
         <source>Threshold interval, in meters</source>
         <translation>Prahový interval, v metroch</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
         <source>Threshold interval, in seconds</source>
         <translation>Prahový interval, v sekundách</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Recording</source>
         <translation>Vytváranie objektov</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="167"/>
         <source>Reuse last entered value</source>
         <translation>Znova použiť poslednú zadanú hodnotu</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="160"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Každé pole ponúka možnosť opätovného použitia jeho hodnoty pri ďalšom objekte</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="170"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="178"/>
         <source>Automatically sync changes</source>
         <translation>Automaticky synchronizovať</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
         <source>Your project is synced automatically to keep you up to date</source>
         <translation>Váš projekt sa synchronizuje automaticky aby ste mali vždy aktuálne informácie. </translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
         <source>Auto-lock position</source>
         <translation>Automatické zamknutie polohy</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="182"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="190"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>Pri každom začiatku nahrávania sa aplikácia vycentruje na GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="202"/>
         <source>Touch Feedback</source>
         <translation>Spätná väzba na dotyk</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="203"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
         <translation>Aplikácia môže vibrovať a prehrávať zvuky pri pridávaní nových objektov</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
         <source>General</source>
         <translation>Všeobecné</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="221"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
+        <source>Startup behaviour</source>
+        <translation>Správanie pri spustení</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <source>Choose what opens when you launch the app</source>
+        <translation>Rozhodnite sa čo sa otvorí pri spustení aplikácie</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="245"/>
         <source>About</source>
         <translation>O programe</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="255"/>
         <source>Changelog</source>
         <translation>Záznam zmien aplikácie</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="241"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="265"/>
         <source>Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="251"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="275"/>
         <source>Privacy policy</source>
         <translation>Podmienky používania</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="261"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="285"/>
         <source>Terms of service</source>
         <translation>Zmluvné podmienky</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="271"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="295"/>
         <source>Diagnostic log</source>
         <translation>Záznam činnosti</translation>
     </message>
@@ -3474,12 +3504,12 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Neznámy fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="605"/>
+        <location filename="../main.cpp" line="603"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Vaša požiadavka bola zaznamenaná. Prosím kontaktujte podporu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="608"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku. Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>
