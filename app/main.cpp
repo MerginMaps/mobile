@@ -559,7 +559,7 @@ int main( int argc, char *argv[] )
   // it is mostly for trimble provider as it opens Trimble Mobile Manager while constructing provider
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [pk, as]( QgsProject * project )
   {
-    Q_UNUSED(project);
+    Q_UNUSED( project );
     pk->setPositionProvider( pk->constructActiveProvider( as ) );
     pk->setAppSettings( as );
   }, Qt::SingleShotConnection );
