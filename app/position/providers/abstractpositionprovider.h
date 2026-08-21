@@ -80,7 +80,7 @@ class AbstractPositionProvider : public QObject
     QString mProviderType;
 
     // ProviderName - name of the provider.
-    // External receiver - name of a bluetooth device
+    // External receiver - name of a bluetooth device / "Network Provider" or user alias / "Trimble Mobile Manager"
     // Internal providers has constant values of "Internal" and "Simulated provider"
     QString mProviderName;
 
