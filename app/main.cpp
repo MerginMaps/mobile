@@ -550,12 +550,19 @@ int main( int argc, char *argv[] )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk->setPositionProvider( pk->constructActiveProvider( as ) );
-  pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
+
+  // delay position provider construction on app start for smoother startup
+  // it is mostly for trimble provider as it opens Trimble Mobile Manager while constructing provider
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [pk, as]( QgsProject * project )
+  {
+    Q_UNUSED(project);
+    pk->setPositionProvider( pk->constructActiveProvider( as ) );
+    pk->setAppSettings( as );
+  }, Qt::SingleShotConnection );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&pk]( QgsProject * project )
   {
