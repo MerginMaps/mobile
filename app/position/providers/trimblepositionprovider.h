@@ -40,25 +40,19 @@ class TrimblePositionProvider : public AbstractPositionProvider
     void onRegistered( int port );
     void onRegistrationFailed( const QString &reason );
     void onTextMessageReceived( const QString &message );
+    void onEventTextMessageReceived( const QString &message );
     void onSocketError( QAbstractSocket::SocketError error );
     void onSocketDisconnected();
-    void onReconnectTimeout();
 
   private:
     void connectWebSocket( int port );
-    void startReconnectTimer();
-    void reconnect();
 
     GeoPosition parseLocationMessage( const QString &json );
     static QgsCoordinateReferenceSystem resolveFrame( const QString &frameName, double epoch );
 
     TrimbleRegistration *mRegistration = nullptr;
-    std::unique_ptr<QWebSocket> mSocket;
-
-    QTimer mReconnectTimer;
-    QTimer mHeartBeatTimer;
-    int mReconnectDelay = ReconnectDelay::ShortDelay;
-    int mSecondsLeftToReconnect = 0;
+    std::unique_ptr<QWebSocket> mPositionSocket;
+    std::unique_ptr<QWebSocket> mEventsSocket;
 
     int mCachedPort = 0;
     bool mRegistrationInProgress = false;

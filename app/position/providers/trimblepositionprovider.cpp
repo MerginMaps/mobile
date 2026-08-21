@@ -100,23 +100,11 @@ const QHash<QString, QString> TRIMBLE_REFERENCE_FRAMES =
 
 TrimblePositionProvider::TrimblePositionProvider( const QString &id, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
   : AbstractPositionProvider( id, QStringLiteral( "external_trimble" ), name, positionTransformer, parent )
-  , mSecondsLeftToReconnect( ReconnectDelay::ShortDelay / ONE_SECOND_MS )
 {
   mRegistration = new TrimbleRegistration( this );
   connect( mRegistration, &TrimbleRegistration::registered, this, &TrimblePositionProvider::onRegistered );
   connect( mRegistration, &TrimbleRegistration::failed, this, &TrimblePositionProvider::onRegistrationFailed );
 
-  mReconnectTimer.setSingleShot( false );
-  mReconnectTimer.setInterval( ONE_SECOND_MS );
-  connect( &mReconnectTimer, &QTimer::timeout, this, &TrimblePositionProvider::onReconnectTimeout );
-
-  mHeartBeatTimer.setSingleShot( true );
-  connect( &mHeartBeatTimer, &QTimer::timeout, this, [this]
-  {
-    setState( tr( "No data" ), State::NoConnection );
-    emit positionChanged( GeoPosition() );
-    startReconnectTimer();
-  } );
 
   TrimblePositionProvider::startUpdates();
 }
@@ -140,27 +128,35 @@ void TrimblePositionProvider::startUpdates()
   }
 
   mRegistrationInProgress = true;
-  setState( tr( "Connecting" ), State::Connecting );
-  mRegistration->requestRegistration( __getTrimbleAppId() );
+  setState( tr( "Connecting to TMM" ), State::Connecting );
+
+  // delay trimble registration to let UI catch up, as the native call is synchronous
+  QTimer::singleShot( 300, this, [this]
+  {
+    mRegistration->requestRegistration( __getTrimbleAppId() );
+  } );
 }
 
 
 void TrimblePositionProvider::stopUpdates()
 {
-  mHeartBeatTimer.stop();
-  mReconnectTimer.stop();
-  if ( mSocket && mSocket->state() == QAbstractSocket::ConnectedState )
-    mSocket->close();
+  if ( mPositionSocket && mPositionSocket->state() == QAbstractSocket::ConnectedState )
+    mPositionSocket->close();
+  if ( mEventsSocket && mEventsSocket->state() == QAbstractSocket::ConnectedState )
+    mEventsSocket->close();
 }
 
 void TrimblePositionProvider::closeProvider()
 {
-  mHeartBeatTimer.stop();
-  mReconnectTimer.stop();
-  if ( mSocket )
+  if ( mPositionSocket )
   {
-    mSocket->disconnect();
-    mSocket->abort();
+    mPositionSocket->disconnect();
+    mPositionSocket->abort();
+  }
+  if ( mEventsSocket )
+  {
+    mEventsSocket->disconnect();
+    mEventsSocket->abort();
   }
 }
 
@@ -321,6 +317,7 @@ void TrimblePositionProvider::onRegistered( const int port )
 {
   mRegistrationInProgress = false;
   mCachedPort = port;
+  setState( tr( "No data" ), State::Connected );
   connectWebSocket( port );
 }
 
@@ -333,85 +330,76 @@ void TrimblePositionProvider::onRegistrationFailed( const QString &reason )
 
 void TrimblePositionProvider::connectWebSocket( const int port )
 {
-  mSocket = std::make_unique<QWebSocket>();
+  mPositionSocket = std::make_unique<QWebSocket>();
+  mEventsSocket = std::make_unique<QWebSocket>();
 
-  connect( mSocket.get(), &QWebSocket::textMessageReceived, this, &TrimblePositionProvider::onTextMessageReceived );
-  connect( mSocket.get(), &QWebSocket::disconnected, this, &TrimblePositionProvider::onSocketDisconnected );
-  connect( mSocket.get(), &QWebSocket::errorOccurred, this, &TrimblePositionProvider::onSocketError );
-  connect( mSocket.get(), &QWebSocket::connected, this, [this]
-  {
-    setState( tr( "Connected" ), State::Connected );
-    mReconnectDelay = ReconnectDelay::ShortDelay;
-    mHeartBeatTimer.start( ReconnectDelay::ExtraLongDelay );
-  } );
+  connect( mPositionSocket.get(), &QWebSocket::textMessageReceived, this, &TrimblePositionProvider::onTextMessageReceived );
+  connect( mEventsSocket.get(), &QWebSocket::textMessageReceived, this, &TrimblePositionProvider::onEventTextMessageReceived );
+  connect( mPositionSocket.get(), &QWebSocket::disconnected, this, &TrimblePositionProvider::onSocketDisconnected );
+  connect( mPositionSocket.get(), &QWebSocket::errorOccurred, this, &TrimblePositionProvider::onSocketError );
 
-  const QUrl url( QStringLiteral( "ws://localhost:%2" ).arg( port ) );
-  setState( tr( "Connecting" ), State::Connecting );
-  mSocket->open( url );
+  const QUrl positionUrl( QStringLiteral( "ws://localhost:%1" ).arg( port ) );
+  const QUrl eventsUrl( QStringLiteral( "ws://localhost:%1/events" ).arg( port ) );
+  mPositionSocket->open( positionUrl );
+  mEventsSocket->open( eventsUrl );
 }
 
 void TrimblePositionProvider::onTextMessageReceived( const QString &message )
 {
-  mHeartBeatTimer.start( ReconnectDelay::ExtraLongDelay );
-
   GeoPosition parsedPosition = parseLocationMessage( message );
   GeoPosition newPosition = mPositionTransformer->processTrimblePosition( parsedPosition );
 
+  // if by any chance we miss the connectionState event we know we are connected as we got position data
   setState( tr( "Connected" ), State::Connected );
   emit positionChanged( newPosition );
+}
+
+void TrimblePositionProvider::onEventTextMessageReceived( const QString &message )
+{
+  const QJsonDocument doc = QJsonDocument::fromJson( message.toUtf8() );
+  if ( doc.isNull() || !doc.isObject() )
+    return;
+
+  const QJsonObject obj = doc.object();
+  const bool isEventMessage = obj.contains( QStringLiteral( "type" ) ) && obj.value( QStringLiteral( "type" ) ).toString() == QStringLiteral( "Event" ) && obj.contains( QStringLiteral( "name" ) );
+  const QString eventName = obj.value( QStringLiteral( "name" ) ).toString() ;
+  if ( isEventMessage && !eventName.isEmpty() )
+  {
+    if ( eventName == QStringLiteral( "ConnectionStateChanged" ) )
+    {
+      const QString connectionStatus = obj.value( QStringLiteral( "connectionState" ) ).toString() ;
+      if ( connectionStatus == QStringLiteral( "Connecting" ) )
+      {
+        setState( tr( "Connecting" ), State::Connecting );
+      }
+      if ( connectionStatus == QStringLiteral( "Connected" ) )
+      {
+        setState( tr( "Connected" ), State::Connected );
+      }
+      if ( connectionStatus == QStringLiteral( "Disconnected" ) )
+      {
+        setState( tr( "Disconnected" ), State::NoConnection );
+      }
+      if ( connectionStatus == QStringLiteral( "Disconnecting" ) )
+      {
+        setState( tr( "Disconnecting" ), State::NoConnection );
+      }
+    }
+  }
 }
 
 void TrimblePositionProvider::onSocketError( const QAbstractSocket::SocketError error )
 {
   Q_UNUSED( error )
   setState( tr( "Disconnected" ), State::NoConnection );
-  CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Socket error occurred: %1" ).arg( mSocket->errorString() ) );
+  CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Socket error occurred: %1" ).arg( mPositionSocket->errorString() ) );
   emit positionChanged( GeoPosition() );
-  startReconnectTimer();
 }
 
 void TrimblePositionProvider::onSocketDisconnected()
 {
-  mHeartBeatTimer.stop();
   setState( tr( "Disconnected" ), State::NoConnection );
   emit positionChanged( GeoPosition() );
-  startReconnectTimer();
-}
-
-void TrimblePositionProvider::startReconnectTimer()
-{
-  mSecondsLeftToReconnect = mReconnectDelay / ONE_SECOND_MS;
-  setState( tr( "Reconnecting in %1 s" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
-  mReconnectTimer.start();
-
-  if ( mReconnectDelay == ReconnectDelay::ShortDelay )
-    mReconnectDelay = ReconnectDelay::LongDelay;
-}
-
-void TrimblePositionProvider::onReconnectTimeout()
-{
-  if ( mSecondsLeftToReconnect <= 1 )
-  {
-    reconnect();
-  }
-  else
-  {
-    mSecondsLeftToReconnect--;
-    setState( tr( "Reconnecting in %1 s" ).arg( mSecondsLeftToReconnect ), State::WaitingToReconnect );
-  }
-}
-
-void TrimblePositionProvider::reconnect()
-{
-  mReconnectTimer.stop();
-  if ( mCachedPort > 0 )
-  {
-    connectWebSocket( mCachedPort );
-  }
-  else
-  {
-    startUpdates(); // re-register
-  }
 }
 
 void TrimblePositionProvider::openAntennaHeightPage()

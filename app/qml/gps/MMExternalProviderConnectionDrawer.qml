@@ -149,6 +149,9 @@ MMComponents.MMDrawer {
       if ( root.positionProvider.id() && root.providerType !== "trimble" ) {
         return qsTr( "Connecting to %1. You can close this panel, the app will continue in the background." ).arg( root.positionProvider.id() )
       }
+      else if ( root.providerType === "trimble" ) {
+        return qsTr( "Trimble Mobile Manager will be opened shortly." )
+      }
       else {
         return qsTr( "Connecting%1" ).arg( root.connectingSuffixAnimation )
       }
