@@ -238,8 +238,8 @@ GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
   if ( obj.contains( QStringLiteral( "totalSatInUse" ) ) && !obj.value( QStringLiteral( "totalSatInUse" ) ).isNull() )
     pos.satellitesUsed = obj.value( QStringLiteral( "totalSatInUse" ) ).toInt( -1 );
 
-  if ( obj.contains( QStringLiteral( "satellites" ) ) && !obj.value( QStringLiteral( "satellites" ) ).isNull() )
-    pos.satellitesVisible = obj.value( QStringLiteral( "satellites" ) ).toInt( -1 );
+  if ( obj.contains( QStringLiteral( "totalSatInView" ) ) && !obj.value( QStringLiteral( "totalSatInView" ) ).isNull() )
+    pos.satellitesVisible = obj.value( QStringLiteral( "totalSatInView" ) ).toInt( -1 );
 
   if ( obj.contains( QStringLiteral( "utcTimeStamp" ) ) && !obj.value( QStringLiteral( "utcTimeStamp" ) ).isNull() )
     pos.utcDateTime = obj.value( QStringLiteral( "utcTimeStamp" ) ).toVariant().toDateTime();
