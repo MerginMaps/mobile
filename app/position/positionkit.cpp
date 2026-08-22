@@ -16,12 +16,15 @@
 #include "appsettings.h"
 #include "inpututils.h"
 
-#ifdef HAVE_BLUETOOTH
+#if WITH_BLUETOOTH_PROVIDERS
 #include "providers/bluetoothpositionprovider.h"
 #endif
 #include "providers/internalpositionprovider.h"
 #include "providers/simulatedpositionprovider.h"
 #include "providers/networkpositionprovider.h"
+#if WITH_TRIMBLE_PROVIDERS
+#include "providers/trimblepositionprovider.h"
+#endif
 #ifdef ANDROID
 #include "providers/androidpositionprovider.h"
 #include <android/log.h>
@@ -53,6 +56,13 @@ QString PositionKit::positionCrs3DGeoidModelName()
   if ( mPositionProvider->type() == QStringLiteral( "internal" ) && !mPosition.isMock && !std::isnan( mPosition.elevation_diff ) )
   {
     return QgsCoordinateReferenceSystem::fromEpsgId( 5773 ).description();
+  }
+
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+#if WITH_TRIMBLE_PROVIDERS
+    return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->geoidModelName();
+#endif
   }
 
   return {};
@@ -99,7 +109,6 @@ void PositionKit::setPositionProvider( AbstractPositionProvider *provider )
   if ( mPositionProvider )
   {
     connect( mPositionProvider.get(), &AbstractPositionProvider::positionChanged, this, &PositionKit::parsePositionUpdate );
-
     CoreUtils::log( QStringLiteral( "PositionKit" ), QStringLiteral( "Changed position provider to: %1" ).arg( provider->id() ) );
   }
   else // passed nullptr
@@ -126,10 +135,19 @@ QString PositionKit::positionProviderName() const
 AbstractPositionProvider *PositionKit::constructProvider( const QString &type, const QString &id, const QString &name )
 {
 
-#ifdef HAVE_BLUETOOTH
+#if WITH_BLUETOOTH_PROVIDERS
   if ( type == QStringLiteral( "external_bt" ) )
   {
     AbstractPositionProvider *provider = new BluetoothPositionProvider( id, name, *mPositionTransformer );
+    QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
+    return provider;
+  }
+#endif
+
+#if WITH_TRIMBLE_PROVIDERS
+  if ( type == QStringLiteral( "external_trimble" ) )
+  {
+    AbstractPositionProvider *provider = new TrimblePositionProvider( id, name, *mPositionTransformer );
     QQmlEngine::setObjectOwnership( provider, QQmlEngine::CppOwnership );
     return provider;
   }
@@ -243,6 +261,24 @@ AbstractPositionProvider *PositionKit::constructActiveProvider( const AppSetting
   return constructProvider( providerType, providerId, providerName );
 }
 
+bool PositionKit::hasTrimbleSupport()
+{
+#if WITH_TRIMBLE_PROVIDERS
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool PositionKit::hasBluetoothSupport()
+{
+#if WITH_BLUETOOTH_PROVIDERS
+  return true;
+#else
+  return false;
+#endif
+}
+
 void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
 {
   bool hasAnythingChanged = false;
@@ -263,9 +299,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation - antennaHeight(), mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() ), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation - antennaHeight();
+    mPosition.elevation = newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() );
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
@@ -368,9 +404,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( newPosition.quality != mPosition.quality )
+  if ( newPosition.qualityIndicator != mPosition.qualityIndicator )
   {
-    mPosition.quality = newPosition.quality;
+    mPosition.qualityIndicator = newPosition.qualityIndicator;
     hasAnythingChanged = true;
   }
 
@@ -434,7 +470,17 @@ void PositionKit::appStateChanged( const Qt::ApplicationState state )
 
 void PositionKit::refreshPositionTransformer( const QgsCoordinateTransformContext &transformContext )
 {
-  const QgsCoordinateReferenceSystem srcCrs = positionCrs3DEllipsoidHeight();
+  QgsCoordinateReferenceSystem srcCrs;
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+#if WITH_TRIMBLE_PROVIDERS
+    srcCrs = dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->sourceCrs();
+#endif
+  }
+  else
+  {
+    srcCrs = positionCrs3DEllipsoidHeight();
+  }
   const QgsCoordinateReferenceSystem destCrs = positionCrs3D();
 
   QgsCoordinateTransformContext context = transformContext;
@@ -604,10 +650,37 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
 
 double PositionKit::antennaHeight() const
 {
-  if ( mAppSettings )
+  // trimble provider has antenna height defined in TMM, so we "block" application setup
+  if ( mPositionProvider && mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
   {
-    return mAppSettings->gpsAntennaHeight();
+#if WITH_TRIMBLE_PROVIDERS
+    return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->antennaHeight();
+#else
+    return 0;
+#endif
   }
 
+  if ( mAppSettings )
+    return mAppSettings->gpsAntennaHeight();
+
   return 0;
+}
+
+bool PositionKit::requireAntennaHeightTransform() const
+{
+  if ( mPositionProvider && mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    return false;
+  }
+  return true;
+}
+
+void PositionKit::openAntennaHeightPage() const
+{
+#if WITH_TRIMBLE_PROVIDERS
+  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  {
+    dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->openAntennaHeightPage();
+  }
+#endif
 }

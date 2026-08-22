@@ -93,16 +93,45 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingsInput {
+      Loader {
         width: parent.width
-        title: qsTr("GPS antenna height")
-        description: qsTr("Includes pole height and GPS receiver’s antenna height")
-        valueDescription: qsTr("GPS antenna height, in meters")
-        value: AppSettings.gpsAntennaHeight
-        suffix: " m"
+        sourceComponent: !PositionKit.requireAntennaHeightTransform() ? externalAntennaHeightComponent : editableAntennaHeightComponent
+      }
 
-        onValueWasChanged: function( newValue ) {
-          AppSettings.gpsAntennaHeight = newValue
+      Component {
+        id: editableAntennaHeightComponent
+
+        MMSettingsComponents.MMSettingsInput {
+          width: parent ? parent.width : 0
+          title: qsTr("GPS antenna height")
+          description: qsTr("Includes pole height and GPS receiver’s antenna height")
+          valueDescription: qsTr("GPS antenna height, in meters")
+          value: AppSettings.gpsAntennaHeight
+          suffix: " m"
+
+          onValueWasChanged: function( newValue ) {
+            AppSettings.gpsAntennaHeight = newValue
+          }
+        }
+      }
+
+      Component {
+        id: externalAntennaHeightComponent
+
+        Column {
+          width: parent ? parent.width : 0
+          spacing: __style.spacing4
+
+          MMSettingsComponents.MMSettingsItem {
+            width: parent.width
+            title: qsTr("GPS antenna height")
+            description: qsTr("Click here to modify in Trimble Mobile Manager")
+            value: Number.isNaN( PositionKit.antennaHeight ) ? qsTr( "N/A" ) : __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
+            onClicked: () => {
+              if ( PositionKit.positionProvider )
+                PositionKit.openAntennaHeightPage()
+            }
+          }
         }
       }
 

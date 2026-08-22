@@ -21,16 +21,25 @@ MMComponents.MMListDrawer {
   drawerHeader.title: qsTr( "Connect new receiver" )
   drawerHeader.titleFont: __style.t2
 
-  onOpened: root.list.currentIndex = -1
+  onOpened: list.currentIndex = -1
+
+  Component.onCompleted: () => {
+    root.list.currentIndex = -1
+  }
 
   list.model: ListModel {
     id: providerTypeModel
 
-    Component.onCompleted: {
-      providerTypeModel.append( [
-        { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon },
-        { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon }
-      ] )
+    Component.onCompleted: () => {
+      if ( PositionKit.hasBluetoothSupport ) {
+        providerTypeModel.append( { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon } )
+      }
+
+      providerTypeModel.append( { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon } )
+
+      if ( PositionKit.hasTrimbleSupport ) {
+        providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble", icon: __style.gpsIcon } )
+      }
     }
   }
 
@@ -77,7 +86,7 @@ MMComponents.MMListDrawer {
       description: parent.description
       checked: parent.ListView.isCurrentItem
 
-      onClicked: {
+      onClicked: () => {
         if ( parent.ListView.isCurrentItem ) {
           parent.ListView.view.currentIndex = -1
         }
@@ -94,16 +103,11 @@ MMComponents.MMListDrawer {
     text: qsTr( "Continue" )
     enabled: root.list.currentIndex !== -1
 
-    onClicked: {
+    onClicked: () => {
       const providerType = providerTypeModel.get( root.list.currentIndex ).type
       root.close()
 
-      if ( providerType === "bluetooth" ) {
-        root.providerSelected("bluetooth")
-      }
-      else if ( providerType === "network" ) {
-        root.providerSelected("network")
-      }
+      root.providerSelected( providerType )
     }
   }
 }
