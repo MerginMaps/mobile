@@ -101,6 +101,7 @@ GeoPosition GeoPosition::fromQgsGpsInformation( const QgsGpsInformation &other )
   out.fixMode = other.fixMode;
   out.fixType = other.fixType;
   out.quality = other.quality;
+  out.qualityIndicator = other.qualityIndicator;
   out.status = other.status;
   out.satPrn = other.satPrn;
   out.satInfoComplete = other.satInfoComplete;

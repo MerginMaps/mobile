@@ -651,7 +651,7 @@ void PositionKit::setAppSettings( AppSettings *appSettings )
 double PositionKit::antennaHeight() const
 {
   // trimble provider has antenna height defined in TMM, so we "block" application setup
-  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  if ( mPositionProvider && mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
   {
 #if WITH_TRIMBLE_PROVIDERS
     return dynamic_cast<TrimblePositionProvider *>( mPositionProvider.get() )->antennaHeight();
@@ -668,7 +668,7 @@ double PositionKit::antennaHeight() const
 
 bool PositionKit::requireAntennaHeightTransform() const
 {
-  if ( mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
+  if ( mPositionProvider && mPositionProvider->type() == QStringLiteral( "external_trimble" ) )
   {
     return false;
   }
