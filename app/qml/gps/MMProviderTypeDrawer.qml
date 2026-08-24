@@ -32,13 +32,13 @@ MMComponents.MMListDrawer {
 
     Component.onCompleted: () => {
       if ( PositionKit.hasBluetoothSupport ) {
-        providerTypeModel.append( { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth", icon: __style.bluetoothIcon } )
+        providerTypeModel.append( { name: qsTr( "Bluetooth" ), description: qsTr( "Bad Elf, Emlid, Juniper, marXact and more" ), type: "bluetooth" } )
       }
 
-      providerTypeModel.append( { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network", icon: __style.networkIcon } )
+      providerTypeModel.append( { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network" } )
 
       if ( PositionKit.hasTrimbleSupport ) {
-        providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble", icon: __style.gpsIcon } )
+        providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble" } )
       }
     }
   }
@@ -70,18 +70,16 @@ MMComponents.MMListDrawer {
     required property string name
     required property string description
     required property string type
-    required property url icon
     required property int index
 
     width: ListView.view.width
     height: checkbox.height + __style.margin12
 
-    MMComponents.MMIconCheckBoxHorizontal {
+    MMComponents.MMCheckBoxHorizontal {
       id: checkbox
 
       width: parent.width
       showBorder: true
-      sourceIcon: parent.icon
       text: parent.name
       description: parent.description
       checked: parent.ListView.isCurrentItem
