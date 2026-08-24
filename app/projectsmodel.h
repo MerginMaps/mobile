@@ -173,6 +173,7 @@ class ProjectsModel : public QAbstractListModel
     void onProjectAdded( const LocalProject &project );
     void onAboutToRemoveProject( const LocalProject &project );
     void onProjectDataChanged( const LocalProject &project );
+    void onProjectRenamed( const QString &oldProjectId, const LocalProject &project );
 
     void onAuthChanged();
 
