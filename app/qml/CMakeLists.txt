@@ -81,7 +81,6 @@ set(MM_QML
     dialogs/MMPositionTrackingDialog.qml
     dialogs/MMProjectLimitDialog.qml
     dialogs/MMRemoveProjectDialog.qml
-    dialogs/MMRenameProjectDialog.qml
     dialogs/MMWelcomeToNewDesignDialog.qml
     dialogs/MMSplittingFailedDialog.qml
     dialogs/MMStorageLimitDialog.qml
@@ -184,6 +183,7 @@ set(MM_QML
     project/components/MMProjectStatusItem.qml
     project/components/MMProjectWizardDelegate.qml
     project/components/MMProjectDelegate.qml
+    project/components/MMRenameProjectDialog.qml
     settings/MMAboutPage.qml
     settings/MMChangelogPage.qml
     settings/MMLogPage.qml

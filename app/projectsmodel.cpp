@@ -53,6 +53,7 @@ void ProjectsModel::initializeProjectsModel()
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectAdded, this, &ProjectsModel::onProjectAdded );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::aboutToRemoveLocalProject, this, &ProjectsModel::onAboutToRemoveProject );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel::onProjectDataChanged );
+  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectRenamed, this, &ProjectsModel::onProjectRenamed );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::dataDirReloaded, this, &ProjectsModel::loadLocalProjects );
 
   emit modelInitialized();
@@ -383,6 +384,32 @@ void ProjectsModel::removeLocalProject( const QString &projectId )
 QString ProjectsModel::renameLocalProject( const QString &projectId, const QString &newName )
 {
   return mLocalProjectsManager->renameLocalProject( projectId, newName );
+}
+
+void ProjectsModel::onProjectRenamed( const QString &oldProjectId, const LocalProject &localProject )
+{
+  int ix = projectIndexFromId( oldProjectId );
+
+  if ( ix < 0 )
+    return;
+
+  Project &project = mProjects[ix];
+
+  project.local = localProject;
+
+  if ( project.isMergin() )
+  {
+    project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+  }
+
+  QModelIndex editIndex = index( ix );
+  emit dataChanged( editIndex, editIndex );
+
+  if ( mActiveProjectId == oldProjectId )
+  {
+    mActiveProjectId = localProject.id();
+    emit activeProjectIdChanged( mActiveProjectId );
+  }
 }
 
 void ProjectsModel::migrateProject( const QString &projectId )

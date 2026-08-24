@@ -53,7 +53,7 @@ class LocalProjectsManager : public QObject
 
     Q_INVOKABLE QString projectName( const QString &projectId ) const;
 
-    Q_INVOKABLE QString renameLocalProject( const QString &projectId, const QString &newName );
+    QString renameLocalProject( const QString &projectId, const QString &newName );
 
     /**
      * Returns changes of a project specified by projectId in the form :
@@ -73,6 +73,7 @@ class LocalProjectsManager : public QObject
   signals:
     void localProjectAdded( const LocalProject &project );
     void localProjectDataChanged( const LocalProject &project );
+    void localProjectRenamed( const QString &oldProjectId, const LocalProject &project );
     void aboutToRemoveLocalProject( const LocalProject &project );
 
     void dataDirReloaded();
