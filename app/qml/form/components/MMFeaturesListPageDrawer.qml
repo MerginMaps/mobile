@@ -96,12 +96,11 @@ Drawer {
           Layout.preferredHeight: __style.spacing20
         }
 
-        MMComponents.MMScrollView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-
         MMComponents.MMListView {
           id: listView
+
+          Layout.fillWidth: true
+          Layout.fillHeight: true
 
           clip: true
 
@@ -114,7 +113,6 @@ Drawer {
           }
 
           footer: MMComponents.MMListSpacer { height: __style.safeAreaBottom + __style.margin8 + ( primarybtn.visible ? primarybtn.height : 0 ) }
-        }
         }
       }
 

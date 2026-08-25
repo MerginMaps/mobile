@@ -43,18 +43,16 @@ MMDrawer {
       }
     }
 
-    MMScrollView {
-      width: parent.width
-      height: Math.min( root.drawerContentAvailableHeight, listViewComponent.contentHeight )
-
     MMListView {
       id: listViewComponent
+
+      width: parent.width
+      height: Math.min( root.drawerContentAvailableHeight, contentHeight )
 
       interactive: contentHeight > height
 
       clip: true
       maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
-    }
     }
   }
 }

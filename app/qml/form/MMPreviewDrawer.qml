@@ -188,12 +188,9 @@ Item {
 
         visible: internal.showFields
 
-        MMComponents.MMScrollView {
-          width: parent.width
-          height: listView.contentHeight
-
         MMComponents.MMListView {
-          id: listView
+          width: parent.width
+          height: contentHeight
 
           spacing: __style.margin8
           interactive: false
@@ -240,7 +237,6 @@ Item {
               MMComponents.MMLine { visible: model.index !== root.controller.fieldModel.rowCount() - 1 }
             }
           }
-        }
         }
       }
 

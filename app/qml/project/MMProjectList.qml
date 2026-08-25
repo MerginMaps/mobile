@@ -47,56 +47,55 @@ Item {
     controllerModel.listProjects( searchText )
   }
 
-  MMComponents.MMScrollView {
+  MMComponents.MMListView {
+    id: listview
+
+    Component.onCompleted: {
+      // set proper footer (add project / fetch more)
+      if ( root.projectModelType === MM.ProjectsModel.LocalProjectsModel ) {
+        listview.footer = addProjectComponent
+      }
+      else
+      {
+        listview.footer = loadingSpinnerComponent
+      }
+    }
+
+    onAtYEndChanged: {
+      if ( atYEnd ) { // user reached end of the list
+        if ( controllerModel.hasMoreProjects && !controllerModel.isLoading ) {
+          controllerModel.fetchAnotherPage( viewModel.searchExpression )
+        }
+      }
+    }
+
     anchors.fill: parent
+    clip: true
+    spacing: root.spacing
 
-    MMComponents.MMListView {
-      id: listview
+    maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
 
-      Component.onCompleted: {
-        // set proper footer (add project / fetch more)
-        if ( root.projectModelType === MM.ProjectsModel.LocalProjectsModel ) {
-          listview.footer = addProjectComponent
-        }
-        else
-        {
-          listview.footer = loadingSpinnerComponent
-        }
+    // Proxy model with source projects model
+    model: MM.ProjectsProxyModel {
+      id: viewModel
+
+      activeProjectAlwaysFirst: root.activeProjectAlwaysFirst
+      projectSourceModel: MM.ProjectsModel {
+        id: controllerModel
+
+        merginApi: __merginApi
+        localProjectsManager: __localProjectsManager
+        syncManager: __syncManager
+        modelType: root.projectModelType
       }
+    }
 
-      onAtYEndChanged: {
-        if ( atYEnd ) { // user reached end of the list
-          if ( controllerModel.hasMoreProjects && !controllerModel.isLoading ) {
-            controllerModel.fetchAnotherPage( viewModel.searchExpression )
-          }
-        }
-      }
+    // Project delegate
+    delegate: MMProjectComponents.MMProjectDelegate {
+      id: projectDelegate
 
-      clip: true
-      spacing: root.spacing
-
-      maximumFlickVelocity: __androidUtils.isAndroid ? __style.scrollVelocityAndroid : maximumFlickVelocity
-
-      // Proxy model with source projects model
-      model: MM.ProjectsProxyModel {
-        id: viewModel
-
-        activeProjectAlwaysFirst: root.activeProjectAlwaysFirst
-        projectSourceModel: MM.ProjectsModel {
-          id: controllerModel
-
-          merginApi: __merginApi
-          localProjectsManager: __localProjectsManager
-          syncManager: __syncManager
-          modelType: root.projectModelType
-        }
-      }
-
-      // Project delegate
-      delegate: MMProjectComponents.MMProjectDelegate {
-        id: projectDelegate
-
-        height: visible ? implicitHeight : 0
+      width: ListView.view.width
+      height: visible ? implicitHeight : 0
 
       projectDisplayName: root.projectModelType === MM.ProjectsModel.WorkspaceProjectsModel ? model.ProjectName : model.ProjectFullName
       projectId: model.ProjectId ? model.ProjectId : ""
@@ -178,7 +177,6 @@ Item {
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
     }
-  }
   }
 
   Component {

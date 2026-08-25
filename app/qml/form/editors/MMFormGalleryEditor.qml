@@ -35,14 +35,11 @@ MMPrivateComponents.MMBaseInput {
            ? qsTr( "Some features may be hidden by active filters" )
            : ""
 
-  inputContent: MMComponents.MMScrollView {
+  inputContent: MMComponents.MMListView {
+    id: rowView
+
     width: parent.width
     height: __style.row120
-
-    contentWidth: rowView.contentWidth
-
-  MMComponents.MMListView {
-    id: rowView
 
     clip: true
     spacing: __style.spacing12
@@ -79,7 +76,6 @@ MMPrivateComponents.MMBaseInput {
     }
 
     header: __activeProject.projectRole !== "reader" ? addFeatureComponent : null
-  }
   }
 
   Component {

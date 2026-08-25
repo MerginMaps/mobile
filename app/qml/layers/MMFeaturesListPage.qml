@@ -65,17 +65,16 @@ MMComponents.MMPage {
       }
     }
 
-    MMComponents.MMScrollView {
+    MMComponents.MMListView {
+      id: listView
+
+      width: parent.width
+
       anchors {
         top: filterBanner.visible ? filterBanner.bottom : searchBar.bottom
         bottom: parent.bottom
-        left: parent.left
-        right: parent.right
         topMargin: filterBanner.visible ? __style.spacing10 : __style.spacing20
       }
-
-    MMComponents.MMListView {
-      id: listView
 
       model: MM.LayerFeaturesModel {
         id: featuresModel
@@ -97,7 +96,6 @@ MMComponents.MMPage {
       footer: MMComponents.MMListSpacer {
         height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
       }
-    }
     }
 
     MMComponents.MMBusyIndicator {
