@@ -17,6 +17,7 @@ MMSettingsItem {
 
   property var model
   property int currentIndex: -1
+  property string drawerTitle: title
 
   onClicked: {
     if(root.model?.count > 0) {
@@ -37,12 +38,13 @@ MMSettingsItem {
 
     MMComponents.MMListDrawer {
 
-      drawerHeader.title: root.title
+      drawerHeader.title: root.drawerTitle
 
       list.model: root.model
 
       list.delegate: MMComponents.MMListDelegate {
         text: model.text
+        secondaryText: model.description ?? ""
 
         rightContent: MMComponents.MMIcon {
           source: __style.doneCircleIcon
