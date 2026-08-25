@@ -1018,6 +1018,8 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
   {
     QString result = evaluateExpression( pair, parentPair, activeProject, expression );
     sanitizePath( result );
+    if ( !result.isEmpty() && !QDir::isAbsolutePath( result ) )
+      result = QDir( homePath ).absoluteFilePath( result );
     return result;
   }
   else
@@ -1029,6 +1031,8 @@ QString InputUtils::resolveTargetDir( const QString &homePath, const QVariantMap
     }
     else
     {
+      if ( !QDir::isAbsolutePath( defaultRoot ) )
+        defaultRoot = QDir( homePath ).absoluteFilePath( defaultRoot );
       return defaultRoot;
     }
   }

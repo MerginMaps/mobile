@@ -222,6 +222,7 @@ class  AttributeController : public QObject
      */
     bool allowTabs( QgsAttributeEditorContainer *container );
 
+    void discardReusedPhotoCopies( bool force );
     //! renames photos if necessary
     void renamePhotos();
     //! save temporary sketched image to original image
