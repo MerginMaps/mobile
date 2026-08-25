@@ -527,7 +527,7 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   };
 
   // Step 1: GET the config to discover the telemetry endpoint URL
-  QUrl configUrl( USAGE_REPORT_CONFIG_URL );
+  QUrl configUrl( USAGE_REPORT_ENDPOINT );
   QNetworkRequest configRequest( configUrl );
   configRequest.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
 
