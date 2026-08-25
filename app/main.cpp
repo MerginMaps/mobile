@@ -402,9 +402,13 @@ static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
  * Attempt to send a weekly usage snapshot if one is due.
- * Collects static device/app data, merges accumulated dynamic data from
- * QSettings, and sends a single HTTP POST. On success, dynamic data is
- * reset and last_reported_at is updated. On failure, silently ignored.
+ *
+ * Two-step process:
+ *   1. GET the config URL to discover the actual telemetry endpoint
+ *   2. POST the snapshot payload to that endpoint
+ *
+ * On success, dynamic data is reset and last_reported_at is updated.
+ * On any failure (config fetch or POST), silently ignored.
  */
 static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
                                     LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
@@ -437,7 +441,6 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   properties.insert( QStringLiteral( "platform" ), InputUtils::appPlatform() );
   properties.insert( QStringLiteral( "os_version" ), QSysInfo::productVersion() );
   properties.insert( QStringLiteral( "project_count" ), localProjectsManager.projects().count() );
-  properties.insert( QStringLiteral( "autosync_enabled" ), as->autosyncAllowed() );
 
   // External provider count
   int externalProviderCount = 0;
@@ -462,10 +465,42 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   }
   properties.insert( QStringLiteral( "server_type" ), serverTypeStr );
   properties.insert( QStringLiteral( "server_version" ), merginApi->apiVersion() );
-  if ( merginApi->subscriptionInfo() )
-    properties.insert( QStringLiteral( "plan_name" ), merginApi->subscriptionInfo()->planAlias() );
+  properties.insert( QStringLiteral( "plan_name" ),
+                     merginApi->subscriptionInfo() ? merginApi->subscriptionInfo()->planAlias() : QString() );
 
-  // Merge accumulated dynamic data
+  // Default values for all dynamic fields — ensures every key is always present
+  // in the snapshot. Actual values from QSettings will overwrite these below.
+
+  // Boolean feature flags
+  properties.insert( QStringLiteral( "filtering" ), false );
+  properties.insert( QStringLiteral( "map_sketching" ), false );
+  properties.insert( QStringLiteral( "map_measuring" ), false );
+  properties.insert( QStringLiteral( "external_gps" ), false );
+  properties.insert( QStringLiteral( "autosync" ), false );
+  properties.insert( QStringLiteral( "reuse_last_value" ), false );
+  properties.insert( QStringLiteral( "bulk_editing" ), false );
+  properties.insert( QStringLiteral( "photo_sketching" ), false );
+  properties.insert( QStringLiteral( "created_project" ), false );
+  properties.insert( QStringLiteral( "stakeout" ), false );
+  properties.insert( QStringLiteral( "layers_search" ), false );
+  properties.insert( QStringLiteral( "features_search" ), false );
+
+  // Numeric counters
+  properties.insert( QStringLiteral( "captured_images" ), 0 );
+  properties.insert( QStringLiteral( "attached_images" ), 0 );
+  properties.insert( QStringLiteral( "workspace_switches" ), 0 );
+  properties.insert( QStringLiteral( "ping_success_count" ), 0 );
+  properties.insert( QStringLiteral( "ping_fail_count" ), 0 );
+  properties.insert( QStringLiteral( "avg_project_load_time_ms" ), 0 );
+
+  // String data
+  properties.insert( QStringLiteral( "external_connection_type" ), QString() );
+  properties.insert( QStringLiteral( "external_name" ), QString() );
+  properties.insert( QStringLiteral( "highest_role" ), QString() );
+  // TODO: populate from GET /v2/workspaces/<id>/service once the endpoint is extended
+  properties.insert( QStringLiteral( "industry" ), QString() );
+
+  // Merge accumulated dynamic data (overwrites defaults with actual values)
   settings.beginGroup( QStringLiteral( "usage_report/data" ) );
   const QStringList keys = settings.childKeys();
   for ( const QString &key : keys )
@@ -480,9 +515,6 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   properties.remove( QStringLiteral( "total_load_time_ms" ) );
   properties.remove( QStringLiteral( "load_count" ) );
 
-  // Suppress IP collection
-  properties.insert( QStringLiteral( "$ip" ), QString() );
-
   // Last reported at
   properties.insert( QStringLiteral( "last_reported_at" ), lastReported.isValid() ? lastReported.toString( Qt::ISODate ) : QString() );
 
@@ -494,26 +526,54 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
 
-  QUrl url( USAGE_REPORT_ENDPOINT );
-  QNetworkRequest request( url );
-  request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
-  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+  // Step 1: GET the config to discover the telemetry endpoint URL
+  QUrl configUrl( USAGE_REPORT_CONFIG_URL );
+  QNetworkRequest configRequest( configUrl );
+  configRequest.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
 
-  QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
-  QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
+  QNetworkReply *configReply = nam->get( configRequest );
+  QObject::connect( configReply, &QNetworkReply::finished, configReply, [configReply, nam, body]()
   {
-    if ( reply->error() == QNetworkReply::NoError )
+    if ( configReply->error() != QNetworkReply::NoError )
     {
-      QSettings s;
-      // Reset dynamic data
-      s.beginGroup( QStringLiteral( "usage_report/data" ) );
-      s.remove( QString() );
-      s.endGroup();
-      // Update last reported
-      s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
+      configReply->deleteLater();
+      return;
     }
-    // On network error: silently ignore — data preserved for next attempt
-    reply->deleteLater();
+
+    const QJsonDocument configDoc = QJsonDocument::fromJson( configReply->readAll() );
+    configReply->deleteLater();
+
+    const QString endpointUrl = configDoc.object()
+                                .value( QStringLiteral( "telemetry" ) ).toObject()
+                                .value( QStringLiteral( "endpoint_url" ) ).toString();
+
+    if ( endpointUrl.isEmpty() )
+    {
+      return;
+    }
+
+    // Step 2: POST the snapshot to the discovered endpoint
+    QUrl url( endpointUrl );
+    QNetworkRequest request( url );
+    request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
+    request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+    QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
+    QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
+    {
+      if ( reply->error() == QNetworkReply::NoError )
+      {
+        QSettings s;
+        // Reset dynamic data
+        s.beginGroup( QStringLiteral( "usage_report/data" ) );
+        s.remove( QString() );
+        s.endGroup();
+        // Update last reported
+        s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
+      }
+      // On network error: silently ignore — data preserved for next attempt
+      reply->deleteLater();
+    } );
   } );
 }
 
@@ -786,16 +846,6 @@ int main( int argc, char *argv[] )
     if ( !as->usageReportEnabled() ) return;
     QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, value );
   };
-
-  // Filtering
-  QObject::connect( &activeProject, &ActiveProject::filterControllerChanged, &lambdaContext, [trackFeature]( FilterController * fc )
-  {
-    if ( !fc ) return;
-    QObject::connect( fc, &FilterController::hasFiltersActivatedChanged, fc, [trackFeature]()
-    {
-      trackFeature( QStringLiteral( "filtering" ) );
-    } );
-  } );
 
   // Auto-sync
   QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [trackFeature]( AutosyncController * ac )
