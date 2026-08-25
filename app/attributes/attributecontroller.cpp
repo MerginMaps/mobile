@@ -1698,6 +1698,13 @@ void AttributeController::renamePhotos()
 
         InputUtils::sanitizePath( newName );
 
+        if ( newName.trimmed().isEmpty() )
+        {
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 evaluated to an empty or NULL name, keeping the original file name" ).arg( mFeatureLayerPair.layer()->name(), field.name() ) );
+          ++formItemsIterator;
+          continue;
+        }
+
         const QFileInfo fi( src );
         newName = QStringLiteral( "%1.%2" ).arg( newName, fi.suffix() );
 
