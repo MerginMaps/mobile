@@ -925,9 +925,6 @@ Item {
       list.delegate: MMListDelegate {
         text: model.layerName
 
-        // TODO: why we need to set hight here?
-        height: __style.menuDrawerHeight
-
         leftContent: MMIcon {
           source: model.iconSource
         }
@@ -1263,6 +1260,16 @@ Item {
     target: mapCanvas.mapSettings
     function onExtentChanged() {
       scaleBar.show()
+    }
+  }
+
+
+  Connections {
+    target: mapCanvas.mapSettings
+    function onScaleChanged() {
+      if ( recordingToolsLoader.active ) {
+        recordingToolsLoader.item.recordingMapTool.collectVertices()
+      }
     }
   }
 
