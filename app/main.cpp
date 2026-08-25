@@ -397,7 +397,7 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 }
 
-static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://meta.merginmaps.com/dev/telemetry.json" );
+static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://api.merginmaps.com/mobile/usage-statistics" );
 static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
@@ -520,60 +520,31 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
 
   const QJsonObject body
   {
-    { QStringLiteral( "event" ), QStringLiteral( "usage_snapshot" ) },
     { QStringLiteral( "device_id" ), deviceUuid },
     { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
 
-  // Step 1: GET the config to discover the telemetry endpoint URL
-  QUrl configUrl( USAGE_REPORT_ENDPOINT );
-  QNetworkRequest configRequest( configUrl );
-  configRequest.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+  QUrl url( USAGE_REPORT_ENDPOINT );
+  QNetworkRequest request( url );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
 
-  QNetworkReply *configReply = nam->get( configRequest );
-  QObject::connect( configReply, &QNetworkReply::finished, configReply, [configReply, nam, body]()
+  QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
+  QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
   {
-    if ( configReply->error() != QNetworkReply::NoError )
+    if ( reply->error() == QNetworkReply::NoError )
     {
-      configReply->deleteLater();
-      return;
+      QSettings s;
+      // Reset dynamic data
+      s.beginGroup( QStringLiteral( "usage_report/data" ) );
+      s.remove( QString() );
+      s.endGroup();
+      // Update last reported
+      s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
     }
-
-    const QJsonDocument configDoc = QJsonDocument::fromJson( configReply->readAll() );
-    configReply->deleteLater();
-
-    const QString endpointUrl = configDoc.object()
-                                .value( QStringLiteral( "telemetry" ) ).toObject()
-                                .value( QStringLiteral( "endpoint_url" ) ).toString();
-
-    if ( endpointUrl.isEmpty() )
-    {
-      return;
-    }
-
-    // Step 2: POST the snapshot to the discovered endpoint
-    QUrl url( endpointUrl );
-    QNetworkRequest request( url );
-    request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
-    request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
-
-    QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
-    QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
-    {
-      if ( reply->error() == QNetworkReply::NoError )
-      {
-        QSettings s;
-        // Reset dynamic data
-        s.beginGroup( QStringLiteral( "usage_report/data" ) );
-        s.remove( QString() );
-        s.endGroup();
-        // Update last reported
-        s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
-      }
-      // On network error: silently ignore — data preserved for next attempt
-      reply->deleteLater();
-    } );
+    // On network error: silently ignore — data preserved for next attempt
+    reply->deleteLater();
   } );
 }
 
