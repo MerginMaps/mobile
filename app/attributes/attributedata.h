@@ -152,6 +152,12 @@ class FormItem
     QVariant rawValue() const;
     void setRawValue( const QVariant &rawValue );
 
+    bool isReusedValue() const;
+    void setReusedValue( bool reused );
+
+    QString reusedCopyPath() const;
+    void setReusedCopyPath( const QString &path );
+
     QgsRelation relation() const;
     QString fieldError() const;
 
@@ -178,6 +184,8 @@ class FormItem
     bool mVisible = false;
     QVariant mOriginalValue; // original unmodified value
     QVariant mRawValue;
+    bool mIsReusedValue = false;
+    QString mReusedCopyPath;
 
     const QgsRelation mRelation; // Only used for FormItemType::Relation
 };
