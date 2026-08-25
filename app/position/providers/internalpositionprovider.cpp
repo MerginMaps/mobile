@@ -173,45 +173,51 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  const bool hasSpeedInfo = localPosition.hasAttribute( QGeoPositionInfo::GroundSpeed );
-  if ( hasSpeedInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::GroundSpeed ), mLastPosition.speed ) )
+  const double newSpeed = localPosition.hasAttribute( QGeoPositionInfo::GroundSpeed ) ?
+                          localPosition.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6 : std::numeric_limits<double>::quiet_NaN(); // convert from m/s to km/h
+  if ( !qgsDoubleNear( newSpeed, mLastPosition.speed ) )
   {
-    mLastPosition.speed = localPosition.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6; // convert from m/s to km/h
+    mLastPosition.speed = newSpeed;
     positionDataHasChanged = true;
   }
 
-  const bool hasVerticalSpeedInfo = localPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed );
-  if ( hasVerticalSpeedInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::VerticalSpeed ), mLastPosition.verticalSpeed ) )
+  const double newVerticalSpeed = localPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) ?
+                                  localPosition.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6 : std::numeric_limits<double>::quiet_NaN(); // convert from m/s to km/h
+  if ( !qgsDoubleNear( newVerticalSpeed, mLastPosition.verticalSpeed ) )
   {
-    mLastPosition.verticalSpeed = localPosition.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6; // convert from m/s to km/h
+    mLastPosition.verticalSpeed = newVerticalSpeed;
     positionDataHasChanged = true;
   }
 
-  const bool hasDirectionInfo = localPosition.hasAttribute( QGeoPositionInfo::Direction );
-  if ( hasDirectionInfo && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::Direction ), mLastPosition.direction ) )
+  const double newDirection = localPosition.hasAttribute( QGeoPositionInfo::Direction ) ?
+                              localPosition.attribute( QGeoPositionInfo::Direction ) : std::numeric_limits<double>::quiet_NaN();
+  if ( !qgsDoubleNear( newDirection, mLastPosition.direction ) )
   {
-    mLastPosition.direction = localPosition.attribute( QGeoPositionInfo::Direction );
+    mLastPosition.direction = newDirection;
     positionDataHasChanged = true;
   }
 
-  const bool hasMagneticVariation = localPosition.hasAttribute( QGeoPositionInfo::MagneticVariation );
-  if ( hasMagneticVariation && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::MagneticVariation ), mLastPosition.magneticVariation ) )
+  const double newMagneticVariation = localPosition.hasAttribute( QGeoPositionInfo::MagneticVariation ) ?
+                                      localPosition.attribute( QGeoPositionInfo::MagneticVariation ) : -1;
+  if ( !qgsDoubleNear( newMagneticVariation, mLastPosition.magneticVariation ) )
   {
-    mLastPosition.magneticVariation = localPosition.attribute( QGeoPositionInfo::MagneticVariation );
+    mLastPosition.magneticVariation = newMagneticVariation;
     positionDataHasChanged = true;
   }
 
-  const bool hasHacc = localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy );
-  if ( hasHacc && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ), mLastPosition.hacc ) )
+  const double newHorizontalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) ?
+                                       localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ) : std::numeric_limits<double>::quiet_NaN();;
+  if ( !qgsDoubleNear( newHorizontalAccuracy, mLastPosition.hacc ) )
   {
-    mLastPosition.hacc = localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy );
+    mLastPosition.hacc = newHorizontalAccuracy;
     positionDataHasChanged = true;
   }
 
-  const bool hasVacc = localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy );
-  if ( hasVacc && !qgsDoubleNear( localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ), mLastPosition.vacc ) )
+  const double newVerticalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) ?
+                                     localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ) : std::numeric_limits<double>::quiet_NaN();;
+  if ( !qgsDoubleNear( newVerticalAccuracy, mLastPosition.vacc ) )
   {
-    mLastPosition.vacc = localPosition.attribute( QGeoPositionInfo::VerticalAccuracy );
+    mLastPosition.vacc = newVerticalAccuracy;
     positionDataHasChanged = true;
   }
 
