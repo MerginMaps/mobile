@@ -94,6 +94,8 @@
     BOOL writeSuccess = NO;
     if ( url && !error )
     {
+      [[NSFileManager defaultManager] createDirectoryAtPath:targetDir withIntermediateDirectories:YES attributes:nil error:nil];
+
       NSError *copyError = nil;
       [[NSFileManager defaultManager] copyItemAtURL:url toURL:[NSURL fileURLWithPath:imagePath] error:&copyError];
       writeSuccess = ( copyError == nil );
