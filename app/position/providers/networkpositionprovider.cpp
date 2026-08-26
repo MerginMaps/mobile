@@ -12,6 +12,8 @@
 #include <QApplication>
 #include <QNetworkDatagram>
 
+#include "coreutils.h"
+
 constexpr int ONE_SECOND_MS = 1000;
 
 NetworkPositionProvider::NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent )
@@ -144,7 +146,10 @@ void NetworkPositionProvider::positionUpdateReceived()
   setState( tr( "Connected" ), State::Connected );
 
   const QString nmeaData( rawNmeaData );
+  CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "Received position message: %1" ).arg( nmeaData ) );
   const QgsGpsInformation gpsInfo = mNmeaParser.parseNmeaString( nmeaData );
+  CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "Number of satellites in view: %1" ).arg( gpsInfo.satellitesInView.count() ) );
+  CoreUtils::log( QStringLiteral( "NetworkPositionProvider" ), QStringLiteral( "Number of satellites in use: %1" ).arg( gpsInfo.satellitesUsed ) );
   GeoPosition transformedPosition = mPositionTransformer->processNetworkPosition( GeoPosition::fromQgsGpsInformation( gpsInfo ) );
 
   emit positionChanged( transformedPosition );

@@ -198,8 +198,10 @@ void BluetoothPositionProvider::positionUpdateReceived()
 
     const QByteArray rawNmea = mSocket->readAll();
     const QString nmea( rawNmea );
-
+    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Received position message: %1" ).arg( nmea ) );
     const QgsGpsInformation data = mNmeaParser.parseNmeaString( nmea );
+    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Number of satellites in view: %1" ).arg( data.satellitesInView.count() ) );
+    CoreUtils::log( QStringLiteral( "BluetoothPositionProvider" ), QStringLiteral( "Number of satellites in use: %1" ).arg( data.satellitesUsed ) );
     GeoPosition positionData = GeoPosition::fromQgsGpsInformation( data );
     GeoPosition transformedPosition = mPositionTransformer->processBluetoothPosition( positionData );
 
