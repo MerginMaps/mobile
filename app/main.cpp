@@ -423,12 +423,12 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   if ( lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
     return;
 
-  // Ensure device UUID exists
-  QString deviceUuid = settings.value( QStringLiteral( "usage_report/device_uuid" ) ).toString();
-  if ( deviceUuid.isEmpty() )
+  // Ensure telemetry UUID exists (separate from the device UUID)
+  QString telemetryId = settings.value( QStringLiteral( "usage_report/telemetry_id" ) ).toString();
+  if ( telemetryId.isEmpty() )
   {
-    deviceUuid = CoreUtils::deviceUuid();
-    settings.setValue( QStringLiteral( "usage_report/device_uuid" ), deviceUuid );
+    telemetryId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    settings.setValue( QStringLiteral( "usage_report/telemetry_id" ), telemetryId );
   }
 
   // Collect static data
@@ -520,7 +520,7 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
 
   const QJsonObject body
   {
-    { QStringLiteral( "device_id" ), deviceUuid },
+    { QStringLiteral( "telemetry_id" ), telemetryId },
     { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
