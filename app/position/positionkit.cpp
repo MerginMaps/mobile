@@ -299,9 +299,9 @@ void PositionKit::parsePositionUpdate( const GeoPosition &newPosition )
     hasAnythingChanged = true;
   }
 
-  if ( !qgsDoubleNear( newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() ), mPosition.elevation ) )
+  if ( !qgsDoubleNear( newPosition.elevation - ( requireAntennaHeightTransform() ? antennaHeight() : 0 ), mPosition.elevation ) )
   {
-    mPosition.elevation = newPosition.elevation - ( requireAntennaHeightTransform() ? 0 : antennaHeight() );
+    mPosition.elevation = newPosition.elevation - ( requireAntennaHeightTransform() ? antennaHeight() : 0 );
     emit altitudeChanged( mPosition.elevation );
     hasAnythingChanged = true;
   }
