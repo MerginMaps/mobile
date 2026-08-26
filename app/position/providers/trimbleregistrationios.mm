@@ -82,8 +82,16 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
     return;
   }
 
-  const QByteArray jsonBytes = QByteArray::fromBase64( url.query().toLatin1() );
-  const QJsonDocument doc = QJsonDocument::fromJson( jsonBytes );
+  const QByteArray::FromBase64Result decodingResult = QByteArray::fromBase64Encoding( url.query().toLatin1() );
+  if ( decodingResult.decodingStatus != QByteArray::Base64DecodingStatus::Ok )
+  {
+    emit failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
+    CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager responded with malformed JSON." ) );
+    QDesktopServices::unsetUrlHandler( MM_CALLBACK_SCHEME );
+    return;
+  }
+
+  const QJsonDocument doc = QJsonDocument::fromJson( decodingResult.decoded );
   if ( doc.isNull() || !doc.isObject() )
   {
     emit failed( tr( "Registration failed, wrong response from Trimble Mobile Manager." ) );
@@ -103,8 +111,8 @@ void TrimbleRegistration::handleCallback( const QUrl &url )
     return;
   }
 
-  const int locationPort = obj.value( QStringLiteral( "locationV2Port" ) ).toInt( -1 );
-  if ( locationPort <= 0 )
+  const int locationPort = obj.value( QStringLiteral( "locationV2Port" ) ).toString().toInt();
+  if ( locationPort == 0 )
   {
     emit failed( tr( "Trimble Mobile Manager returned invalid port" ) );
     CoreUtils::log( QStringLiteral( "TrimblePositionProvider" ), QStringLiteral( "Registration failed, Trimble Mobile Manager returned malformed location data port." ) );
