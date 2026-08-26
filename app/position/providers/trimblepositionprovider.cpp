@@ -28,8 +28,6 @@
 // It defines static QString __getTrimbleAppId().
 #include "trimblesecrets.cpp"
 
-constexpr int ONE_SECOND_MS = 1000;
-constexpr int TMM_WS_V2_DEFAULT_PORT = 9639;
 // Trimble reports just 2D CRS however we have here the 3D variant for further elevation processing
 const QHash<QString, QString> TRIMBLE_REFERENCE_FRAMES =
 {
