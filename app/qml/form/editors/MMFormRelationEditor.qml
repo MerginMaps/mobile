@@ -220,9 +220,15 @@ MMPrivateComponents.MMBaseInput {
       button.text: qsTr( "Add feature" )
 
       onClosed: listLoader.active = false
-      onFeatureClicked: ( featurePair ) => root.openLinkedFeature( featurePair )
+      onFeatureClicked: ( featurePair ) => {
+        root.forceActiveFocus()
+        root.openLinkedFeature( featurePair )
+      }
       onSearchTextChanged: ( searchText ) => rmodel.searchExpression = searchText
-      onButtonClicked: root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
+      onButtonClicked: {
+        root.forceActiveFocus()
+        root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
+      }
 
       Component.onCompleted: open()
     }
