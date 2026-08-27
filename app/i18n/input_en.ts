@@ -2474,11 +2474,6 @@ Won&apos;t be added to the project.</source>
     </message>
     <message>
         <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="41"/>
-        <source>Trimble</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="41"/>
         <source>Trimble receivers via Trimble Mobile Manager</source>
         <translation type="unfinished"></translation>
     </message>

@@ -38,7 +38,7 @@ MMComponents.MMListDrawer {
       providerTypeModel.append( { name: qsTr( "Network (TCP, UDP)" ), description: qsTr( "Emlid RS, EOS and more" ), type: "network" } )
 
       if ( PositionKit.hasTrimbleSupport ) {
-        providerTypeModel.append( { name: qsTr( "Trimble" ), description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble" } )
+        providerTypeModel.append( { name: "Trimble", description: qsTr( "Trimble receivers via Trimble Mobile Manager" ), type: "trimble" } )
       }
     }
   }
