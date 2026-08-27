@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml.Models
 
 import mm 1.0 as MM
 import MMInput
@@ -35,6 +36,13 @@ MMPage {
       intervalTypeModel.append({ value: MM.StreamingIntervalType.Time, text: qsTr("Time elapsed") });
       intervalTypeModel.append({ value: MM.StreamingIntervalType.Distance, text: qsTr("Distance traveled") });
     }
+  }
+
+  ListModel {
+    id: startupBehaviorModel
+
+    ListElement { text: qsTr("Recent project"); description: qsTr("Jump back into your last project") } // AppSettings.StartupRecentProject
+    ListElement { text: qsTr("Project home"); description: qsTr("See all your downloaded projects") } // AppSettings.StartupProjectHome
   }
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
@@ -244,6 +252,22 @@ MMPage {
       }
 
       Item { width: 1; height: 1 }
+
+      MMSettingsComponents.MMSettingsDropdown {
+        width: parent.width
+
+        title: qsTr("Startup behaviour")
+        description: qsTr("Choose what opens when you launch the app")
+
+        currentIndex: AppSettings.startupBehavior
+
+        model: startupBehaviorModel
+        value: model.get(currentIndex).text
+
+        onCurrentIndexChanged: AppSettings.startupBehavior = currentIndex
+      }
+
+      MMLine {}
 
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
