@@ -1988,11 +1988,6 @@ Won&apos;t be added to the project.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="152"/>
-        <source>Trimble Mobile Manager</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="176"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation type="unfinished"></translation>
