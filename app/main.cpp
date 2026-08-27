@@ -402,13 +402,10 @@ static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
  * Attempt to send a weekly usage snapshot if one is due.
- *
- * Two-step process:
- *   1. GET the config URL to discover the actual telemetry endpoint
- *   2. POST the snapshot payload to that endpoint
- *
+ * Collects static device/app data, merges accumulated dynamic data from
+ * QSettings, and POSTs a single JSON payload to the telemetry endpoint.
  * On success, dynamic data is reset and last_reported_at is updated.
- * On any failure (config fetch or POST), silently ignored.
+ * On failure, silently ignored — data is preserved for the next attempt.
  */
 static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
                                     LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
