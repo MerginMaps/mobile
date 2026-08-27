@@ -133,7 +133,7 @@ MMComponents.MMPage {
       text: qsTr( "Connect new receiver" )
 
       onClicked: {
-        if ( __haveBluetooth ) {
+        if ( PositionKit.hasBluetoothSupport || PositionKit.hasTrimbleSupport ) {
           providerTypeDrawer.open()
         }
         else {
@@ -148,6 +148,9 @@ MMComponents.MMPage {
       onProviderSelected: function( providerType ) {
         if ( providerType === "bluetooth" ) bluetoothDiscoveryLoader.active = true
         else if ( providerType === "network" ) networkProviderDrawer.open()
+        else if ( providerType === "trimble" ) {
+          root.activateProvider( "external_trimble", "trimble_tmm", qsTr( "Trimble Mobile Manager" ) )
+        }
       }
     }
 
@@ -235,7 +238,7 @@ MMComponents.MMPage {
       asynchronous: true
       sourceComponent: Component { MMExternalProviderConnectionDrawer{} }
 
-      onLoaded: {
+      onLoaded: () => {
         item.providerType = connectingDialogLoader.providerType
         item.open()
       }
@@ -282,6 +285,9 @@ MMComponents.MMPage {
     }
     else if ( type === "external_ip" ) {
       connectingDialogLoader.open( "network" )
+    }
+    else if ( type === "external_trimble" ) {
+      connectingDialogLoader.open( "trimble" )
     }
   }
 }

@@ -28,7 +28,7 @@ class TestPosition: public QObject
 
     void simulatedPosition();
 
-#ifdef HAVE_BLUETOOTH
+#if WITH_BLUETOOTH_PROVIDERS
     void testBluetoothProviderConnection();
     void testBluetoothProviderPosition();
 #endif
@@ -46,6 +46,12 @@ class TestPosition: public QObject
     void testPositionTransformerInternalDesktopPosition();
     void testPositionTransformerNetworkPosition();
     void testPositionTransformerSimulatedPosition();
+
+#if WITH_TRIMBLE_PROVIDERS
+    void testTrimbleMessageParser();
+    void testTrimbleFrameResolver();
+    void testTrimbleAntennaHeight();
+#endif
 
   private:
     PositionKit *positionKit;
