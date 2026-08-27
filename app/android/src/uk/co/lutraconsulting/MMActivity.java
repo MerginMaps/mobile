@@ -34,6 +34,7 @@ import android.graphics.Color;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.content.ActivityNotFoundException;
 import java.io.File;
@@ -78,38 +79,49 @@ public class MMActivity extends QtActivity
     return getFilesDir().getAbsolutePath();
   }
 
-  void setCustomStatusAndNavBar() 
+  @Override
+  public void onConfigurationChanged(Configuration newConfig)
   {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-      Log.d( TAG, "Unsupported Android version for painting behind system bars." );
-      return;
-    } 
-    else {
-      WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+    super.onConfigurationChanged(newConfig);
 
-      Window window = getWindow();
+    setCustomStatusAndNavBar();
+  }
 
-      // on Android 15+ all apps are edge-to-edge
-      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-        // draw app edge-to-edge
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+  @SuppressWarnings("deprecation")
+  void setCustomStatusAndNavBar()
+  {
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        // make the status bar background color transparent
-        window.setStatusBarColor(Color.TRANSPARENT);
+    Window window = getWindow();
 
-        // make the navigation button background color transparent
-        window.setNavigationBarColor(Color.TRANSPARENT);
-      }
+    // on Android 15+ all apps are edge-to-edge
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+      // draw app edge-to-edge
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
+      // make the status bar background color transparent
+      window.setStatusBarColor(Color.TRANSPARENT);
+
+      // make the navigation button background color transparent
+      window.setNavigationBarColor(Color.TRANSPARENT);
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       // do not show background dim for the navigation buttons
-      window.setNavigationBarContrastEnforced(false); 
+      window.setNavigationBarContrastEnforced(false);
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
       // change the status bar text color to black
       WindowInsetsController insetsController = window.getDecorView().getWindowInsetsController();
-    
-      if (insetsController != null) {
-          insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
-      }
+
+        if (insetsController != null) {
+            insetsController.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+        }
+    } else {
+      // Force the navigation bar icons back to light so they stay visible against the green background.
+      View decorView = getWindow().getDecorView();
+      decorView.setSystemUiVisibility( decorView.getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR );
     }
   }
 

@@ -17,6 +17,7 @@
 #include "qgsvectorlayerutils.h"
 #include "qgslinestring.h"
 #include "qgsmultilinestring.h"
+#include "qgsvertexid.h"
 
 
 MapSketchingController::MapSketchingController( QObject *parent )
@@ -49,10 +50,13 @@ void MapSketchingController::updateHighlight( const QPointF &oldPoint, const QPo
     mScreenPoints = QgsGeometry( new QgsLineString( { QgsPointXY( oldPoint.x(), oldPoint.y() ) } ) );
   }
 
-  // TODO: append instead of insert to zero
-  mScreenPoints.insertVertex( newPoint.x(), newPoint.y(), 0 );
+  // Append point to the geometry
+  const QgsVertexId lastScreenVertex( 0, 0, mScreenPoints.constGet()->vertexCount() );
+  mScreenPoints.get()->insertVertex( lastScreenVertex, QgsPoint( newPoint.x(), newPoint.y() ) );
+
   const QgsPoint p1 = mMapSettings->screenToCoordinate( newPoint );
-  mHighlight.insertVertex( p1, 0 );
+  const QgsVertexId lastHighlightVertex( 0, 0, mHighlight.constGet()->vertexCount() );
+  mHighlight.get()->insertVertex( lastHighlightVertex, p1 );
 
   emit highlightGeometryChanged();
 }
@@ -147,7 +151,13 @@ QgsGeometry MapSketchingController::highlightGeometry() const
 QStringList MapSketchingController::availableColors() const
 {
   const QStringList defaultColors = { "#FFFFFF", "#12181F", "#5E9EE4", "#57B46F", "#FDCB2A", "#FF9C40", "#FF8F93" };
-  return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
+
+  if ( mMapSettings && mMapSettings->project() )
+  {
+    return mMapSettings->project()->readListEntry( QStringLiteral( "Mergin" ), QStringLiteral( "MapSketching/Colors" ), defaultColors );
+  }
+
+  return defaultColors;
 }
 
 void MapSketchingController::clearHighlight()
@@ -187,6 +197,8 @@ void MapSketchingController::setMapSettings( InputMapSettings *settings )
 
   mMapSettings = settings;
   emit mapSettingsChanged();
+
+  setActiveColor( availableColors().first() );
 }
 
 InputMapSettings *MapSketchingController::mapSettings() const

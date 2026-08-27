@@ -128,6 +128,7 @@ MMPrivateComponents.MMBaseInput {
         visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
 
         onClicked: {
+          root.forceActiveFocus()
           sketchingLoader.active = true
           sketchingLoader.focus = true
         }

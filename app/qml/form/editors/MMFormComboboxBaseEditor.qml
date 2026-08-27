@@ -47,6 +47,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   function openDrawer() {
+    forceActiveFocus()
+    
     drawerLoader.active = true
     drawerLoader.focus = true
   }

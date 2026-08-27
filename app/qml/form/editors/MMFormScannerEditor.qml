@@ -77,6 +77,7 @@ MMPrivateComponents.MMBaseSingleLineInput  {
     if (!__inputUtils.acquireCameraPermission())
       return
 
+    forceActiveFocus()
     codeScannerLoader.active = true
     codeScannerLoader.focus = true
   }

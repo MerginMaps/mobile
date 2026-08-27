@@ -9,9 +9,12 @@
 
 #include "layerdetaildata.h"
 
+#include "qgis.h"
 #include "qgslayertree.h"
 #include "qgslegendsettings.h"
 #include "qgslayertreemodel.h"
+
+#include "mmstyle.h"
 
 LayerDetailData::LayerDetailData( QObject *parent )
   : QObject{parent}
@@ -99,6 +102,14 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
 
   // setup render context for legend
   QgsLegendSettings legendSettings;
+
+  QgsTextFormat textFormat = legendSettings.rstyle( Qgis::LegendComponent::SymbolLabel ).textFormat();
+  textFormat.setSize( 14 ); // 14 is the pixel size of MMStyle::p5, used in form widgets
+  textFormat.setSizeUnit( Qgis::RenderUnit::Pixels );
+  textFormat.setColor( MMStyle::nightColor() );
+  legendSettings.rstyle( Qgis::LegendComponent::SymbolLabel ).setTextFormat( textFormat );
+  legendSettings.rstyle( Qgis::LegendComponent::SymbolLabel ).setMargin( 4 ); // match the top and left total margin of the legend
+  legendSettings.rstyle( Qgis::LegendComponent::Title ).setMargin( 0 ); // Our empty Title still adds some margins, so we set those to zero
 
   mLayerTreeNode->setCustomProperty( QStringLiteral( "legend/title-style" ), QStringLiteral( "hidden" ) );
 

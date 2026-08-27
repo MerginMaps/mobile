@@ -287,6 +287,7 @@ MMFormPhotoViewer {
      * Called when clicked on the camera icon to capture an image.
      */
     function capturePhoto() {
+      forceActiveFocus()
       updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
@@ -317,6 +318,7 @@ MMFormPhotoViewer {
      * Then "imageSelected" caught the signal, handles changes and sends signal "valueChanged".
      */
     function chooseFromGallery() {
+      forceActiveFocus()
       updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldIndex )
@@ -336,6 +338,7 @@ MMFormPhotoViewer {
      * \param imagePath Absolute path to an image.
      */
     function removeImage( path ) {
+      forceActiveFocus()
       if ( __inputUtils.fileExists( path ) ) {
         imageDeleteDialog.imagePath = path
         imageDeleteDialog.open()

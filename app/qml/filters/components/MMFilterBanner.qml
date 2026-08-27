@@ -59,6 +59,8 @@ Rectangle {
       text: root.actionText
       fontColor: __style.skyColor
       bgndColor: __style.deepOceanColor
+      bgndColorHover: __style.deepOceanColor
+      fontColorHover: __style.skyColor
 
       onClicked: root.actionClicked()
     }

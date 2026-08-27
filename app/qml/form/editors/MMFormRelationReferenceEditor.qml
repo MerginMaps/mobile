@@ -73,6 +73,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   onRightContentClicked: {
+    forceActiveFocus()
     listLoader.active = true
     listLoader.focus = true
   }

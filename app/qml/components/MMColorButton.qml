@@ -20,8 +20,6 @@ RoundButton {
   implicitWidth: __style.margin48
   implicitHeight: __style.margin48
 
-  anchors.verticalCenter: parent.verticalCenter
-
   contentItem: Rectangle {
     color: root.buttonColor
     radius: width / 2
