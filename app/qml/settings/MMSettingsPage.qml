@@ -98,7 +98,7 @@ MMPage {
         title: qsTr("GPS antenna height")
         description: qsTr("Includes pole height and GPS receiver’s antenna height")
         valueDescription: qsTr("GPS antenna height, in meters")
-        value: AppSettings.gpsAntennaHeight
+        value: __inputUtils.formatNumber(AppSettings.gpsAntennaHeight, 3)
         suffix: " m"
 
         onValueWasChanged: function( newValue ) {
