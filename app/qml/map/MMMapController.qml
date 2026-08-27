@@ -46,8 +46,8 @@ Item {
 
   property MM.MapSketchingController sketchingController: sketchesLoader.item?.controller ?? null
 
-  // Holds the map coordinates of the point the user identified. NaN if identify was triggered from list of features
-  property point identifyLocation: Qt.point(NaN, NaN)
+  // Holds the map coordinates of the point the user identified. null if identify was triggered from list of features
+  property var identifyLocation: null
 
   signal featureIdentified( var pair, var point )
   signal featuresIdentified( var pairs )
@@ -264,7 +264,7 @@ Item {
         }
         else if ( pair.valid )  // root.state === "view"
         {
-          let mapPoint = mapCanvas.mapSettings.screenToCoordinate( screenPoint )
+          const mapPoint = mapCanvas.mapSettings.screenToCoordinate( screenPoint )
           root.featureIdentified( pair, mapPoint )
         }
         else
@@ -1439,11 +1439,11 @@ Item {
     if ( __inputUtils.isEmptyGeometry( identifyHighlight.geometry ) )
       return
 
-    if ( !isNaN( root.identifyLocation.x ) && !isNaN( root.identifyLocation.y ) )
+    if ( root.identifyLocation !== null )
     {
       // when identifying with a point on the map, we preserve scale and may only pan
-      let screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, root.identifyLocation )
-      if ( isNaN( screenPt.x ) || isNaN( screenPt.y ) )
+      const screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, root.identifyLocation )
+      if ( Number.isNaN( screenPt.x ) || Number.isNaN( screenPt.y ) )
         return
 
       mapCanvas.jumpTo( screenPt )
@@ -1451,7 +1451,7 @@ Item {
     else
     {
       // when identifying by picking from feature list, we zoom to the geometry
-      let extent = __inputUtils.drawerCompensatedExtent( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset )
+      const extent = __inputUtils.drawerCompensatedExtent( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset )
       mapCanvas.jumpToExtent( extent )
     }
   }

@@ -176,7 +176,7 @@ Item {
 
       onDoneLoading: {
         if ( root.panelState === "preview" )
-          previewPanelChanged()
+          root.previewPanelChanged()
       }
     }
 

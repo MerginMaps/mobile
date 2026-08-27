@@ -70,7 +70,7 @@ Item {
   {
     rendererPrivate.freeze('jumpTo')
 
-    let oldExtent = mapRenderer.mapSettings.visibleExtent
+    const oldExtent = mapRenderer.mapSettings.visibleExtent
 
     // Disable animation until initial position is set
     jumpExtentAnimator.enabled = false
@@ -150,11 +150,11 @@ Item {
     }
 
     onPercentageChanged: {
-      if ( enabled ) {
-        let tmpMinX = startMinX - percentage * 0.01 * ( startMinX - endMinX )
-        let tmpMinY = startMinY - percentage * 0.01 * ( startMinY - endMinY )
-        let tmpMaxX = startMaxX - percentage * 0.01 * ( startMaxX - endMaxX )
-        let tmpMaxY = startMaxY - percentage * 0.01 * ( startMaxY - endMaxY )
+      if ( jumpExtentAnimator.enabled ) {
+        const tmpMinX = startMinX - percentage * 0.01 * ( startMinX - endMinX )
+        const tmpMinY = startMinY - percentage * 0.01 * ( startMinY - endMinY )
+        const tmpMaxX = startMaxX - percentage * 0.01 * ( startMaxX - endMaxX )
+        const tmpMaxY = startMaxY - percentage * 0.01 * ( startMaxY - endMaxY )
 
         mapRenderer.mapSettings.extent = __inputUtils.extentFromMinMax( tmpMinX, tmpMinY, tmpMaxX, tmpMaxY )
       }

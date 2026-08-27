@@ -104,10 +104,10 @@ ApplicationWindow {
     projDialog.open()
   }
 
-  function identifyFeature( pair, point = Qt.point(NaN, NaN) ) {
+  function identifyFeature( pair, point = null ) {
     map.identifyLocation = point
 
-    let skipPreview = __inputUtils.isEmptyGeometry( pair.feature.geometry )
+    const skipPreview = __inputUtils.isEmptyGeometry( pair.feature.geometry )
     if ( skipPreview ) {
       formsStackManager.openForm( pair, "readOnly", "form" )
     }
@@ -954,7 +954,7 @@ ApplicationWindow {
     drawerHeader.title: qsTr( "Select feature" )
     list.model: MM.StaticFeaturesModel {}
 
-    list. delegate: MMListDelegate {
+    list.delegate: MMListDelegate {
       text: model.FeatureTitle
       secondaryText: model.LayerName
       leftContent: MMIcon { source: model.LayerIcon }

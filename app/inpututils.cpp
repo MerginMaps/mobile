@@ -303,7 +303,7 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   const QgsRectangle bbox = geom.boundingBox();
   QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
 
-  if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
+  if ( bbox.isEmpty() ) // Deal with an empty boudning box e.g : a point
   {
     const QgsVector offset = currentExtent.center() - bbox.center();
     currentExtent -= offset;
@@ -385,8 +385,8 @@ QgsRectangle InputUtils::drawerCompensatedExtent( const QgsGeometry &geom, Input
   {
     QgsRectangle paddedBbox = bbox;
 
-    // Add a offset to encompass handles etc..
-    // This number is based on what feel confortable for the user
+    // Add an offset to encompass handles etc..
+    // This number is based on what feels comfortable for the user
     constexpr double SCALE_FACTOR = 1.18;
     paddedBbox.scale( SCALE_FACTOR );
 
