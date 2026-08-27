@@ -321,8 +321,11 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation )
+QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation )
 {
+  if ( !mapSettings || geom.isNull() || !geom.constGet() )
+    return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
+
   QgsRectangle effectiveExtent( mapSettings->visibleExtent() );
 
   // canvas size in logical pixels; bottomOffset is in logical pixels too and

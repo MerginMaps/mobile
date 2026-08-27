@@ -102,7 +102,7 @@ class InputUtils: public QObject
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
-    Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation );
+    Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation );
 
     /**
      * Returns the extent that the map needs to zoom to so that the \a geom fits (with a safe buffer) the visible part
