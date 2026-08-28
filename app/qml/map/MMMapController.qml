@@ -186,7 +186,6 @@ Item {
       }
 
       case "sketch": {
-        AppSettings.trackUsageFeature( "map_sketching" )
         root.showInfoTextMessage( qsTr( "Select a colour and start sketching on the map. Use two fingers to move or zoom the map." ) )
         root.drawStarted()
         break
@@ -1092,6 +1091,8 @@ Item {
         id: sketchingController
 
         mapSettings: mapCanvas.mapSettings
+
+        onSketched: AppSettings.trackUsageFeature( "map_sketching" )
       }
 
       MMHighlight {
