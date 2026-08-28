@@ -57,6 +57,7 @@
         {
           "name": "gdal",
           "features": [
+            "poppler",
             {
               "name": "tools",
               "platform": "linux | osx"
