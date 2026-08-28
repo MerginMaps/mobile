@@ -19,7 +19,7 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   {
     emit imageSelected( absoluteImagePath, mLastCode );
     if ( mLastCode.isEmpty() )
-      return; // no pending request — ignore
+      return;
     if ( mLastSourceWasCamera )
       emit photoCaptured();
     else
