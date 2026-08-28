@@ -402,10 +402,9 @@ static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 /**
  * Attempt to send a weekly usage snapshot if one is due.
- * Collects static device/app data, merges accumulated dynamic data from
- * QSettings, and POSTs a single JSON payload to the telemetry endpoint.
- * On success, dynamic data is reset and last_reported_at is updated.
- * On failure, silently ignored — data is preserved for the next attempt.
+ * Collects static device/app data, merges accumulated dynamic data from QSettings, and POSTs a single JSON payload to the telemetry endpoint
+ * On success, dynamic data is reset and last_reported_at is updated
+ * On failure, the snapshot is ignored, the data is preserved for the next attempt
  */
 static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
                                     LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
@@ -465,8 +464,8 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
   properties.insert( QStringLiteral( "plan_name" ),
                      merginApi->subscriptionInfo() ? merginApi->subscriptionInfo()->planAlias() : QString() );
 
-  // Default values for all dynamic fields — ensures every key is always present
-  // in the snapshot. Actual values from QSettings will overwrite these below.
+  // Default values for all dynamic fields, this ensures every key is always present in the snapshot
+  // Actual values from QSettings will overwrite these below
 
   // Boolean feature flags
   properties.insert( QStringLiteral( "filtering" ), false );
@@ -540,7 +539,7 @@ static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
       // Update last reported
       s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
     }
-    // On network error: silently ignore — data preserved for next attempt
+    // On network error: ignore, data preserved for next attempt
     reply->deleteLater();
   } );
 }
@@ -792,9 +791,9 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  // ── Usage reporting: accumulate dynamic data via signal connections ──
+  // Gather dynamic data via signal connections
   // Helper lambdas for writing to QSettings usage_report/data/* namespace.
-  // All connections guard on usageReportEnabled before writing.
+  // Always check usageReportEnabled before writing.
   auto trackFeature = [as]( const QString & key )
   {
     if ( !as->usageReportEnabled() ) return;
@@ -904,10 +903,8 @@ int main( int argc, char *argv[] )
     projectLoadTimer->start();
   } );
 
-  // Map sketching (via MapSketchingController — QML_ELEMENT, connect per instance)
-  // Connected alongside projectReloaded below since sketching controller is project-scoped.
-
   // Connectivity ping: HEAD request every 5 minutes
+  // TODO: check the new endpoint and decide on the interval
   QTimer *pingTimer = new QTimer( &lambdaContext );
   QObject::connect( pingTimer, &QTimer::timeout, &lambdaContext, [&usageReportNam, merginApi = ma.get(), as, incrementCounter]()
   {
@@ -1146,7 +1143,7 @@ int main( int argc, char *argv[] )
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
 
-  // Usage reporting: attempt weekly snapshot
+  // Attempt weekly snapshot
   trySubmitUsageSnapshot( &usageReportNam, as, localProjectsManager, ma.get() );
 
   if ( !component.errors().isEmpty() )
