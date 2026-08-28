@@ -86,7 +86,7 @@ MMPrivateComponents.MMBaseInput {
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
-        visible: __activeProject.projectRole !== "reader"
+        visible: (__activeProject.projectRole !== "reader" && !rmodel?.layer.readOnly)
 
         MMComponents.MMIcon {
           anchors.centerIn: parent
