@@ -75,7 +75,7 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: __activeProject.projectRole !== "reader" ? addFeatureComponent : null
+    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer.readOnly) ? addFeatureComponent : null
   }
 
   Component {
