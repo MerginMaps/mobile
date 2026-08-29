@@ -22,6 +22,7 @@ Item {
 
   signal addFeature( var targetLayer )
   signal selectFeature( var featurePair )
+  signal resumeDraft()
 
   MM.LayerTreeSortFilterModel {
     id: layerTreeProxyModel
@@ -106,6 +107,10 @@ Item {
         let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }
+
+      onResumeDraftClicked: {
+        root.resumeDraft()
+      }
     }
   }
 
@@ -128,6 +133,10 @@ Item {
 
       onAddFeatureClicked: function( targetLayer ) {
         root.addFeature( targetLayer )
+      }
+
+      onResumeDraftClicked: {
+        root.resumeDraft()
       }
     }
   }
