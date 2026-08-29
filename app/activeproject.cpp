@@ -683,3 +683,11 @@ FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
 }
+
+void ActiveProject::checkForProjectUpdate()
+{
+  if ( isProjectLoaded() )
+  {
+    emit projectSyncCheckRequested( projectFullName(), true );
+  }
+}

@@ -944,6 +944,17 @@ ApplicationWindow {
     }
   }
 
+  Timer {
+    id: projectUpdateTimer
+
+    interval: 5000
+    repeat: true
+    running: stateManager.state === "map" && __merginApi.userAuth.hasAuthData() && !__syncManager.hasPendingSync( __activeProject.projectFullName() )
+    triggeredOnStart: true
+
+    onTriggered: __activeProject.checkForProjectUpdate()
+  }
+
   MMNotificationView {}
 
   MMListDrawer {
@@ -1121,6 +1132,19 @@ ApplicationWindow {
     {
       ssoExpiredTokenDialog.open()
     }
+
+    function onProjectSyncRequired( projectFullName )
+    {
+      if ( __activeProject.projectFullName() === projectFullName )
+      {
+        projectUpdateTimer.stop()
+        __notificationModel.addInfo(
+          qsTr( "There is a new version of the project available" ),
+          MM.NotificationType.SyncProjectAction,
+          15
+        )
+      }
+    }
   }
 
   Connections {
@@ -1142,6 +1166,9 @@ ApplicationWindow {
     }
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
+    }
+    function onShowProjectNewVersionClicked() {
+      __activeProject.requestSync()
     }
   }
 

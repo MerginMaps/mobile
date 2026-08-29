@@ -176,6 +176,8 @@ class ActiveProject: public QObject
 
     void syncActiveProject( const LocalProject &project, SyncOptions::RequestOrigin requestOrigin );
 
+    void projectSyncCheckRequested( const QString &projectFullName, bool withAuth );
+
     void mapThemeChanged( const QString &mapTheme );
 
     void positionTrackingSupportedChanged();
@@ -200,6 +202,9 @@ class ActiveProject: public QObject
     void setAutosyncEnabled( bool enabled );
 
     void requestSync( SyncOptions::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
+
+    //! Checks whether the currently loaded project has a newer version available on the server
+    Q_INVOKABLE void checkForProjectUpdate();
 
   private:
 
