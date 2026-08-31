@@ -42,7 +42,11 @@ MMComponents.MMPage {
 
       width: parent.width
       delayedSearch: true
-      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
+      onSearchTextChanged: {
+        featuresModel.searchExpression = searchBar.text
+        if ( searchBar.text.length > 0 )
+          AppSettings.trackUsageFeature( "features_search" )
+      }
     }
 
     MMFilterComponents.MMFilterBanner {

@@ -17,6 +17,12 @@ const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
+  // Usage report settings live outside the app group
+  {
+    QSettings settings;
+    mUsageReportEnabled = settings.value( QStringLiteral( "usage_report/enabled" ), true ).toBool();
+  }
+
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   const QString path = settings.value( QStringLiteral( "defaultProject" ), "" ).toString();
@@ -391,4 +397,47 @@ void AppSettings::setWindowPosition( const QList<QVariant> &newWindowPosition )
   setValue( QStringLiteral( "windowPosition" ), QVariant::fromValue( newWindowPosition ) );
 
   emit windowPositionChanged();
+}
+
+bool AppSettings::usageReportEnabled() const
+{
+  return mUsageReportEnabled;
+}
+
+void AppSettings::setUsageReportEnabled( bool enabled )
+{
+  if ( mUsageReportEnabled == enabled )
+    return;
+
+  mUsageReportEnabled = enabled;
+
+  QSettings settings;
+  if ( !mUsageReportEnabled )
+  {
+    // Opt-out: clear all accumulated data but keep the enabled flag
+    settings.beginGroup( QStringLiteral( "usage_report" ) );
+    settings.remove( QString() );
+    settings.endGroup();
+    settings.setValue( QStringLiteral( "usage_report/enabled" ), false );
+  }
+  else
+  {
+    settings.setValue( QStringLiteral( "usage_report/enabled" ), true );
+  }
+
+  emit usageReportEnabledChanged( mUsageReportEnabled );
+}
+
+void AppSettings::trackUsageFeature( const QString &key )
+{
+  if ( !mUsageReportEnabled ) return;
+  QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, true );
+}
+
+void AppSettings::incrementUsageCounter( const QString &key )
+{
+  if ( !mUsageReportEnabled ) return;
+  QSettings s;
+  const QString fullKey = QStringLiteral( "usage_report/data/" ) + key;
+  s.setValue( fullKey, s.value( fullKey, 0 ).toInt() + 1 );
 }

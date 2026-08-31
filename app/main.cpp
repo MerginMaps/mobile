@@ -9,8 +9,16 @@
 
 #include "mmconfig.h"
 
+#include <QDateTime>
+#include <QElapsedTimer>
 #include <QFontDatabase>
+#include <QSettings>
 #include <QGuiApplication>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QtDebug>
@@ -103,6 +111,8 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "filter/filtercontroller.h"
+#include "autosynccontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -387,6 +397,153 @@ void addQmlImportPath( QQmlEngine &engine )
 #endif
 }
 
+static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://api.merginmaps.com/mobile/usage-statistics" );
+static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
+
+/**
+ * Attempt to send a weekly usage snapshot if one is due.
+ * Collects static device/app data, merges accumulated dynamic data from QSettings, and POSTs a single JSON payload to the telemetry endpoint
+ * On success, dynamic data is reset and last_reported_at is updated
+ * On failure, the snapshot is ignored, the data is preserved for the next attempt
+ */
+static void trySubmitUsageSnapshot( QNetworkAccessManager *nam, AppSettings *as,
+                                    LocalProjectsManager &localProjectsManager, MerginApi *merginApi )
+{
+  if ( !as->usageReportEnabled() )
+    return;
+
+  QSettings settings;
+  const QDateTime lastReported = settings.value( QStringLiteral( "usage_report/last_reported_at" ) ).toDateTime();
+  const QDateTime now = QDateTime::currentDateTimeUtc();
+
+  if ( lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
+    return;
+
+  // Ensure telemetry UUID exists (separate from the device UUID)
+  QString telemetryId = settings.value( QStringLiteral( "usage_report/telemetry_id" ) ).toString();
+  if ( telemetryId.isEmpty() )
+  {
+    telemetryId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    settings.setValue( QStringLiteral( "usage_report/telemetry_id" ), telemetryId );
+  }
+
+  // Collect static data
+  QVariantMap properties;
+  properties.insert( QStringLiteral( "app_language" ), QLocale().name() );
+  properties.insert( QStringLiteral( "system_language" ), QLocale::system().name() );
+  properties.insert( QStringLiteral( "device_manufacturer" ), InputUtils::getManufacturer() );
+  properties.insert( QStringLiteral( "device_model" ), InputUtils::getDeviceModel() );
+  properties.insert( QStringLiteral( "app_version" ), CoreUtils::appVersion() );
+  properties.insert( QStringLiteral( "platform" ), InputUtils::appPlatform() );
+  properties.insert( QStringLiteral( "os_version" ), QSysInfo::productVersion() );
+  properties.insert( QStringLiteral( "project_count" ), localProjectsManager.projects().count() );
+
+  // External provider count
+  int externalProviderCount = 0;
+  const QVariantList providers = as->savedPositionProviders();
+  for ( const QVariant &v : providers )
+  {
+    const QStringList p = v.toStringList();
+    if ( p.size() >= 3 && p[2] != QLatin1String( "internal" ) && p[2] != QLatin1String( "simulated" ) )
+      externalProviderCount++;
+  }
+  properties.insert( QStringLiteral( "num_external_providers" ), externalProviderCount );
+
+  // Server info
+  const auto serverType = static_cast<MerginServerType::ServerType>( merginApi->serverType() );
+  QString serverTypeStr;
+  switch ( serverType )
+  {
+    case MerginServerType::SAAS: serverTypeStr = QStringLiteral( "saas" ); break;
+    case MerginServerType::EE:   serverTypeStr = QStringLiteral( "ee" );   break;
+    case MerginServerType::CE:   serverTypeStr = QStringLiteral( "ce" );   break;
+    default:                     serverTypeStr = QStringLiteral( "old" );  break;
+  }
+  properties.insert( QStringLiteral( "server_type" ), serverTypeStr );
+  properties.insert( QStringLiteral( "server_version" ), merginApi->apiVersion() );
+  properties.insert( QStringLiteral( "plan_name" ),
+                     merginApi->subscriptionInfo() ? merginApi->subscriptionInfo()->planAlias() : QString() );
+
+  // Default values for all dynamic fields, this ensures every key is always present in the snapshot
+  // Actual values from QSettings will overwrite these below
+
+  // Boolean feature flags
+  properties.insert( QStringLiteral( "filtering" ), false );
+  properties.insert( QStringLiteral( "map_sketching" ), false );
+  properties.insert( QStringLiteral( "map_measuring" ), false );
+  properties.insert( QStringLiteral( "external_gps" ), false );
+  properties.insert( QStringLiteral( "autosync" ), false );
+  properties.insert( QStringLiteral( "reuse_last_value" ), false );
+  properties.insert( QStringLiteral( "bulk_editing" ), false );
+  properties.insert( QStringLiteral( "photo_sketching" ), false );
+  properties.insert( QStringLiteral( "created_project" ), false );
+  properties.insert( QStringLiteral( "stakeout" ), false );
+  properties.insert( QStringLiteral( "layers_search" ), false );
+  properties.insert( QStringLiteral( "features_search" ), false );
+
+  // Numeric counters
+  properties.insert( QStringLiteral( "captured_images" ), 0 );
+  properties.insert( QStringLiteral( "attached_images" ), 0 );
+  properties.insert( QStringLiteral( "workspace_switches" ), 0 );
+  properties.insert( QStringLiteral( "ping_success_count" ), 0 );
+  properties.insert( QStringLiteral( "ping_fail_count" ), 0 );
+  properties.insert( QStringLiteral( "avg_project_load_time_ms" ), 0 );
+
+  // String data
+  properties.insert( QStringLiteral( "external_connection_type" ), QString() );
+  properties.insert( QStringLiteral( "external_name" ), QString() );
+  properties.insert( QStringLiteral( "highest_role" ), QString() );
+  // TODO: populate from GET /v2/workspaces/<id>/service once the endpoint is extended
+  properties.insert( QStringLiteral( "industry" ), QString() );
+
+  // Merge accumulated dynamic data (overwrites defaults with actual values)
+  settings.beginGroup( QStringLiteral( "usage_report/data" ) );
+  const QStringList keys = settings.childKeys();
+  for ( const QString &key : keys )
+    properties.insert( key, settings.value( key ) );
+  settings.endGroup();
+
+  // Compute average project load time from running totals
+  const qint64 totalMs = properties.value( QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong();
+  const int loadCount = properties.value( QStringLiteral( "load_count" ), 0 ).toInt();
+  if ( loadCount > 0 )
+    properties.insert( QStringLiteral( "avg_project_load_time_ms" ), totalMs / loadCount );
+  properties.remove( QStringLiteral( "total_load_time_ms" ) );
+  properties.remove( QStringLiteral( "load_count" ) );
+
+  // Last reported at
+  properties.insert( QStringLiteral( "last_reported_at" ), lastReported.isValid() ? lastReported.toString( Qt::ISODate ) : QString() );
+
+  const QJsonObject body
+  {
+    { QStringLiteral( "telemetry_id" ), telemetryId },
+    { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
+    { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
+  };
+
+  QUrl url( USAGE_REPORT_ENDPOINT );
+  QNetworkRequest request( url );
+  request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+  QNetworkReply *reply = nam->post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
+  QObject::connect( reply, &QNetworkReply::finished, reply, [reply]()
+  {
+    if ( reply->error() == QNetworkReply::NoError )
+    {
+      QSettings s;
+      // Reset dynamic data
+      s.beginGroup( QStringLiteral( "usage_report/data" ) );
+      s.remove( QString() );
+      s.endGroup();
+      // Update last reported
+      s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
+    }
+    // On network error: ignore, data preserved for next attempt
+    reply->deleteLater();
+  } );
+}
+
 int main( int argc, char *argv[] )
 {
   QgsApplication app( argc, argv, true );
@@ -529,6 +686,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  QNetworkAccessManager usageReportNam;
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -640,9 +798,164 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  // Gather dynamic data via signal connections
+  // Helper lambdas for writing to QSettings usage_report/data/* namespace.
+  // Always check usageReportEnabled before writing.
+  auto trackFeature = [as]( const QString & key )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, true );
+  };
+
+  auto incrementCounter = [as]( const QString & key, int amount = 1 )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings s;
+    const QString fullKey = QStringLiteral( "usage_report/data/" ) + key;
+    s.setValue( fullKey, s.value( fullKey, 0 ).toInt() + amount );
+  };
+
+  auto setUsageData = [as]( const QString & key, const QVariant & value )
+  {
+    if ( !as->usageReportEnabled() ) return;
+    QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, value );
+  };
+
+  // Auto-sync
+  QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [trackFeature]( AutosyncController * ac )
+  {
+    if ( !ac ) return;
+    QObject::connect( ac, &AutosyncController::projectSyncRequested, ac, [trackFeature]( SyncOptions::RequestOrigin origin )
+    {
+      if ( origin == SyncOptions::AutomaticRequest )
+        trackFeature( QStringLiteral( "autosync" ) );
+    } );
+  } );
+
+  // Created project
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [trackFeature]( const QString &, const QString & )
+  {
+    trackFeature( QStringLiteral( "created_project" ) );
+  } );
+
+  // Photo captured vs attached
+  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+
+  // Workspace switches
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [incrementCounter]()
+  {
+    incrementCounter( QStringLiteral( "workspace_switches" ) );
+  } );
+
+  // External GPS provider
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [trackFeature, setUsageData]( AbstractPositionProvider * provider )
+  {
+    if ( !provider ) return;
+    if ( provider->type() == QLatin1String( "internal" ) ) return;
+
+    trackFeature( QStringLiteral( "external_gps" ) );
+
+    const QString id = provider->id();
+    QString connectionType;
+    if ( id == QLatin1String( "simulated" ) )
+      connectionType = QStringLiteral( "mock" );
+    else if ( id.contains( QLatin1Char( ':' ) ) )
+      connectionType = QStringLiteral( "bluetooth" );
+    else
+      connectionType = QStringLiteral( "network" );
+
+    setUsageData( QStringLiteral( "external_connection_type" ), connectionType );
+    setUsageData( QStringLiteral( "external_name" ), provider->name() );
+  } );
+
+  // Highest project role
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [setUsageData, &activeProject]()
+  {
+    const QString role = activeProject.projectRole();
+    auto roleRank = []( const QString & r ) -> int
+    {
+      if ( r == QLatin1String( "owner" ) ) return 5;
+      if ( r == QLatin1String( "admin" ) ) return 4;
+      if ( r == QLatin1String( "writer" ) ) return 3;
+      if ( r == QLatin1String( "reader" ) ) return 2;
+      if ( r == QLatin1String( "guest" ) ) return 1;
+      return 0;
+    };
+
+    QSettings s;
+    const QString current = s.value( QStringLiteral( "usage_report/data/highest_role" ) ).toString();
+    if ( roleRank( role ) > roleRank( current ) )
+      setUsageData( QStringLiteral( "highest_role" ), role );
+  } );
+
+  // Project load time
+  auto projectLoadTimer = std::make_shared<QElapsedTimer>();
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [projectLoadTimer]()
+  {
+    projectLoadTimer->start();
+  } );
+
+  // Connectivity ping: HEAD request every 5 minutes
+  // TODO: check the new endpoint and decide on the interval
+  QTimer *pingTimer = new QTimer( &lambdaContext );
+  QObject::connect( pingTimer, &QTimer::timeout, &lambdaContext, [&usageReportNam, merginApi = ma.get(), as, incrementCounter]()
+  {
+    if ( !as->usageReportEnabled() || merginApi->apiRoot().isEmpty() ) return;
+
+    QUrl url( merginApi->apiRoot() );
+    QNetworkRequest request( url );
+    request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+    QNetworkReply *reply = usageReportNam.head( request );
+    QObject::connect( reply, &QNetworkReply::finished, reply, [reply, incrementCounter]()
+    {
+      if ( reply->error() == QNetworkReply::NoError )
+        incrementCounter( QStringLiteral( "ping_success_count" ) );
+      else
+        incrementCounter( QStringLiteral( "ping_fail_count" ) );
+      reply->deleteLater();
+    } );
+  } );
+  pingTimer->start( 5 * 60 * 1000 ); // 5 minutes
+
+  // Stop ping and clear data on opt-out
+  QObject::connect( as, &AppSettings::usageReportEnabledChanged, &lambdaContext, [pingTimer]( bool enabled )
+  {
+    if ( !enabled )
+      pingTimer->stop();
+    else
+      pingTimer->start( 5 * 60 * 1000 );
+  } );
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, incrementCounter, projectLoadTimer]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
+
+    // Record project load time
+    if ( projectLoadTimer->isValid() )
+    {
+      const qint64 elapsed = projectLoadTimer->elapsed();
+      QSettings s;
+      const QString prefix = QStringLiteral( "usage_report/data/" );
+      s.setValue( prefix + QStringLiteral( "total_load_time_ms" ), s.value( prefix + QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong() + elapsed );
+      s.setValue( prefix + QStringLiteral( "load_count" ), s.value( prefix + QStringLiteral( "load_count" ), 0 ).toInt() + 1 );
+      projectLoadTimer->invalidate();
+    }
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -830,6 +1143,9 @@ int main( int argc, char *argv[] )
 
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
+
+  // Attempt weekly snapshot
+  trySubmitUsageSnapshot( &usageReportNam, as, localProjectsManager, ma.get() );
 
   if ( !component.errors().isEmpty() )
   {
