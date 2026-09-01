@@ -118,11 +118,10 @@ MMDrawer {
       visible: distanceState.state === "closeRange"
     }
 
-    ScrollView {
+    MMScrollView {
       id: gpsScrollView
 
       width: parent.width
-      ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
       ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
       visible: distanceState.state === "closeRange"

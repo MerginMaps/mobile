@@ -2,6 +2,7 @@
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
@@ -10,10 +11,11 @@ import QtQuick
 import QtQuick.Controls
 
 // Drop-in replacement for ListView that also shows a scrollbar on desktop.
-// Wraps a real ListView in a ScrollView internally so callers can keep using
-// it exactly like a plain ListView, without knowing about the wrapping.
+// Rooted in a plain Item rather than ScrollView, so only the properties
+// aliased below are exposed - ScrollView/Pane/Control have their own
+// contentWidth/spacing/padding that would otherwise shadow ListView's.
 
-ScrollView {
+Item {
   id: root
 
   property alias model: listView.model
@@ -25,6 +27,7 @@ ScrollView {
   property alias addDisplaced: listView.addDisplaced
 
   property alias orientation: listView.orientation
+  property alias spacing: listView.spacing
   property alias interactive: listView.interactive
   property alias maximumFlickVelocity: listView.maximumFlickVelocity
   property alias topMargin: listView.topMargin
@@ -34,7 +37,12 @@ ScrollView {
   property alias count: listView.count
 
   property alias contentY: listView.contentY
+  property alias contentWidth: listView.contentWidth
+  property alias contentHeight: listView.contentHeight
   property alias atYEnd: listView.atYEnd
+
+  implicitWidth: scrollView.implicitWidth
+  implicitHeight: scrollView.implicitHeight
 
   function positionViewAtIndex( index, mode ) {
     listView.positionViewAtIndex( index, mode )
@@ -44,24 +52,30 @@ ScrollView {
     listView.positionViewAtEnd()
   }
 
-  rightPadding: ScrollBar.vertical.visible ? ScrollBar.vertical.width * 2 : 0
-  bottomPadding: ScrollBar.horizontal.visible ? ScrollBar.horizontal.height * 2 : 0
+  ScrollView {
+    id: scrollView
 
-  ScrollBar.vertical.policy: !__inputUtils.isMobilePlatform() && listView.orientation === ListView.Vertical && listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
-  ScrollBar.horizontal.policy: !__inputUtils.isMobilePlatform() && listView.orientation === ListView.Horizontal && listView.contentWidth > listView.width ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    anchors.fill: parent
 
-  ListView {
-    id: listView
+    // reserve room for the scrollbar so content isn't drawn under it
+    rightPadding: ScrollBar.vertical.visible ? ScrollBar.vertical.width * 2 : 0
+    bottomPadding: ScrollBar.horizontal.visible ? ScrollBar.horizontal.height * 2 : 0
 
-    spacing: root.spacing
+    // non-interactive lists can't be scrolled, so never show a scrollbar for them
+    ScrollBar.vertical.policy: listView.interactive && !__inputUtils.isMobilePlatform() && listView.orientation === ListView.Vertical && listView.contentHeight > listView.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+    ScrollBar.horizontal.policy: listView.interactive && !__inputUtils.isMobilePlatform() && listView.orientation === ListView.Horizontal && listView.contentWidth > listView.width ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
 
-    // when flicking up really fast, we should go back to the first item
-    onVerticalOvershootChanged: {
-      if (verticalOvershoot < -200) {
-        listView.contentY = -listView.topMargin
-        listView.returnToBounds();
+    ListView {
+      id: listView
+
+      // when flicking up really fast, we should go back to the first item
+      onVerticalOvershootChanged: {
+        if (verticalOvershoot < -200) {
+          listView.contentY = -listView.topMargin
+          listView.returnToBounds();
+        }
       }
+      delegateModelAccess: DelegateModel.ReadWrite
     }
-    delegateModelAccess: DelegateModel.ReadWrite
   }
 }

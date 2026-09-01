@@ -91,12 +91,11 @@ MMComponents.MMDrawer {
       }
     }
 
-    ScrollView {
+    MMComponents.MMScrollView {
         width: parent.width
         height: scrollRow.height
 
         ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.horizontal.interactive: true
 
         contentHeight: scrollRow.height

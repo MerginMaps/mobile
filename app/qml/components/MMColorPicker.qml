@@ -11,7 +11,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 
-ScrollView {
+MMScrollView {
   id: root
 
   required property list<color> colors
@@ -21,8 +21,8 @@ ScrollView {
   signal activeColorChangeRequested( color newColor )
 
   height: scrollRow.height
+  contentWidth: scrollRow.width
   ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-  ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
   Row {
     id: scrollRow
