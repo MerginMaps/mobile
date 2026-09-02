@@ -300,6 +300,26 @@ void FormItem::setOriginalValue( const QVariant &originalValue )
   mOriginalValue = originalValue;
 }
 
+bool FormItem::isReusedValue() const
+{
+  return mIsReusedValue;
+}
+
+void FormItem::setReusedValue( bool reused )
+{
+  mIsReusedValue = reused;
+}
+
+QString FormItem::reusedCopyPath() const
+{
+  return mReusedCopyPath;
+}
+
+void FormItem::setReusedCopyPath( const QString &path )
+{
+  mReusedCopyPath = path;
+}
+
 QgsRelation FormItem::relation() const
 {
   return mRelation;
