@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2026.3.3",
+    "version": "2026.5.0",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
@@ -111,6 +111,10 @@
           ]
         },
         "qtremoteobjects",
+        {
+          "name": "qtwebsockets",
+          "platform": "android | ios"
+        },
         {
           "name": "qtsensors",
           "features": [

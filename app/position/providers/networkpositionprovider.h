@@ -23,14 +23,6 @@ class NetworkPositionProvider : public AbstractPositionProvider
 {
     Q_OBJECT
 
-    // signalizes in how many [ms] we will try to reconnect to GPS again
-    enum ReconnectDelay
-    {
-      ShortDelay = 3000,      // 3 secs
-      LongDelay = 5000,       // 5 secs
-      ExtraLongDelay = 10000  // 10 secs
-    };
-
   public:
     NetworkPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~NetworkPositionProvider() override;

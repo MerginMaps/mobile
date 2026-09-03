@@ -203,10 +203,30 @@ if (NOT WIN32)
   set(MM_SRCS ${MM_SRCS} static_plugins.cpp)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   set(MM_SRCS ${MM_SRCS} position/providers/bluetoothpositionprovider.cpp)
 
   set(MM_HDRS ${MM_HDRS} position/providers/bluetoothpositionprovider.h)
+endif ()
+
+if (WITH_TRIMBLE_PROVIDERS)
+  if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/position/providers/trimblesecrets.cpp)
+    message(
+      FATAL_ERROR
+        "app/position/providers/trimblesecrets.cpp doesn't exist. Decrypt trimblesecrets.cpp.enc or set WITH_TRIMBLE_PROVIDERS=FALSE"
+    )
+  endif ()
+
+  set(MM_HDRS ${MM_HDRS} position/providers/trimbleregistration.h
+              position/providers/trimblepositionprovider.h
+  )
+  set(MM_SRCS ${MM_SRCS} position/providers/trimblepositionprovider.cpp)
+
+  if (ANDROID)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistrationandroid.cpp)
+  elseif (IOS)
+    set(MM_SRCS ${MM_SRCS} position/providers/trimbleregistrationios.mm)
+  endif ()
 endif ()
 
 if (ENABLE_TESTS)
@@ -330,6 +350,12 @@ qt_add_executable(
   ${MM_HDRS}
   main.cpp
 )
+
+# throw error when #include is missing, guards against not imported preprocessor
+# definitions
+if (CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|GNU)$")
+  target_compile_options(MerginMaps PRIVATE -Werror=undef)
+endif ()
 
 set_target_properties(MerginMaps PROPERTIES WIN32_EXECUTABLE TRUE)
 
@@ -515,8 +541,12 @@ if (ANDROID)
   target_link_libraries(MerginMaps PRIVATE Qt6::CorePrivate)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   target_link_libraries(MerginMaps PUBLIC Qt6::Bluetooth)
+endif ()
+
+if (WITH_TRIMBLE_PROVIDERS)
+  target_link_libraries(MerginMaps PUBLIC Qt6::WebSockets)
 endif ()
 
 if (NOT IOS)

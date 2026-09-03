@@ -58,6 +58,14 @@ class PositionTransformer : QObject
     GeoPosition processNetworkPosition( const GeoPosition &geoPosition );
 
     /**
+     * Transform the elevation if the user sets custom vertical CRS. The elevation gets recalculated to ellipsoid elevation
+     * and then back to orthometric based on specified CRS.
+     * \note This method should be used only with TrimblePositionProvider to mitigate unnecessary transformations
+     * \return Copy of passed geoPosition with processed elevation and elevation separation.
+     */
+    GeoPosition processTrimblePosition( const GeoPosition &geoPosition );
+
+    /**
     * Transform the elevation from EPSG:4979 (WGS84 (EPSG:4326) + ellipsoidal height) to specified geoid model
     * (by default EPSG:9707 (WGS84 + EGM96))
     * \note This method should be used only with InternalPositionProvider on Android, which supplies QGeoPositionInfo
