@@ -221,6 +221,7 @@ if (ENABLE_TESTS)
       test/testimageutils.cpp
       test/testlayertree.cpp
       test/testlinks.cpp
+      test/testlocalprojectsmanager.cpp
       test/testmaptools.cpp
       test/testmerginapi.cpp
       test/testmodels.cpp
@@ -248,6 +249,7 @@ if (ENABLE_TESTS)
       test/testimageutils.h
       test/testlayertree.h
       test/testlinks.h
+      test/testlocalprojectsmanager.h
       test/testmaptools.h
       test/testmerginapi.h
       test/testmodels.h

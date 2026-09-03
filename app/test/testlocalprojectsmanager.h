@@ -7,12 +7,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TESTMODELS_H
-#define TESTMODELS_H
+#ifndef TESTLOCALPROJECTSMANAGER_H
+#define TESTLOCALPROJECTSMANAGER_H
 
 #include <QObject>
 
-class TestModels : public QObject
+class TestLocalProjectsManager : public QObject
 {
     Q_OBJECT
 
@@ -20,17 +20,17 @@ class TestModels : public QObject
     void init(); // will be called before each testfunction is executed.
     void cleanup(); // will be called after every testfunction.
 
-    void testStaticFeaturesModel();
-    void testLayerFeaturesModel();
-    void testLayerFeaturesModelSorted();
-    void testValueRelationOrdering();
-    void testValueRelationSearch();
-    void testValueRelationHotreload();
-    void testProjectsModel();
-    void testProjectsProxyModel();
-    void testProjectsModelOnProjectRenamed();
-    void testProjectsModelOnProjectRenamedActiveProject();
+    void testRenameSuccess();
+    void testRenameEmptyName();
+    void testRenameInvalidCharacters();
+    void testRenameNameAlreadyTaken();
+    void testRenameSameName();
+    void testRenameUnknownProject();
+    void testRenameDirectoryCollision();
+    void testRenameTrimsWhitespace();
 
+  private:
+    QString mDataDir;
 };
 
-#endif // TESTMODELS_H
+#endif // TESTLOCALPROJECTSMANAGER_H

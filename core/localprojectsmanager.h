@@ -53,6 +53,8 @@ class LocalProjectsManager : public QObject
 
     Q_INVOKABLE QString projectName( const QString &projectId ) const;
 
+    //! Renames the local project's directory and main QGIS project file to newName.
+    //! Returns an empty string on success, or a user-facing error message on failure.
     QString renameLocalProject( const QString &projectId, const QString &newName );
 
     /**
