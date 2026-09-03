@@ -26,7 +26,6 @@ Item {
   property string searchText: ""
   property int spacing: 0
   property bool activeProjectAlwaysFirst: false
-  property string projectIdToRename: ""
   property alias projectsProxyModel: viewModel
   property alias projectsModel: controllerModel
   property alias listHeader: listview.header
@@ -177,8 +176,8 @@ Item {
       }
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
-      onRenameRequested: {
-        root.projectIdToRename = projectId
+      onRenameRequested: () => {
+        internal.projectIdToRename = projectId
         renameDialog.open()
       }
     }
@@ -315,11 +314,11 @@ Item {
     id: renameDialog
 
     onRenameClicked: function( newName ) {
-      if ( !root.projectIdToRename ) {
+      if ( !internal.projectIdToRename ) {
         return
       }
 
-      const renameResult = controllerModel.renameLocalProject( root.projectIdToRename, newName )
+      const renameResult = controllerModel.renameLocalProject( internal.projectIdToRename, newName )
 
       if ( !renameResult ) {
         renameDialog.close()
@@ -337,5 +336,11 @@ Item {
       controllerModel.syncProject( relatedProjectId )
       downloadProjectDialog.relatedProjectId = ""
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property string projectIdToRename: ""
   }
 }

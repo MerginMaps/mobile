@@ -15,68 +15,37 @@ import "../../inputs"
 MMDrawer {
   id: root
 
-  property string errorText: ""
+  property alias errorText: newNameField.errorMsg
 
   signal renameClicked( string newName )
 
   drawerHeader.title: qsTr( "Rename project" )
   drawerHeader.titleFont: __style.t2
 
-  onOpened: {
-    root.errorText = ""
+  onAboutToShow: () => {
+    newNameField.errorMsg = ""
     newNameField.text = ""
   }
 
   drawerContent: Column {
+    id: contentColumn
+
     width: parent.width
-    spacing: 0
+    spacing: newNameField.errorMsg ? __style.margin12 : __style.spacing40
 
     MMTextInput {
       id: newNameField
 
-      width: parent.width
-      textFieldBackground.color: root.errorText === "" ? __style.lightGreenColor : __style.negativeUltraLightColor
-      textFieldBackground.border.width: root.errorText === "" ? 0 : __style.width2
-      textFieldBackground.border.color: root.errorText === "" ? __style.polarColor : __style.negativeColor
+      width: contentColumn.width
+      textFieldBackground.color: __style.lightGreenColor
 
       placeholderText: qsTr( "Enter the new name" )
 
-      onTextEdited: root.errorText = ""
-    }
-
-    // Fixed-height slot so the drawer does not grow/shrink when the error message appears.
-    Item {
-      width: parent.width
-      height: __style.spacing40
-
-      Row {
-        anchors.verticalCenter: parent.verticalCenter
-
-        width: parent.width
-        spacing: __style.margin4
-
-        visible: root.errorText !== ""
-
-        MMIcon {
-          y: parent.height / 2 - height / 2
-          source: __style.errorCircleIcon
-          color: __style.negativeColor
-          size: __style.icon16
-        }
-
-        MMText {
-          width: parent.width - __style.icon16 - parent.spacing
-          text: root.errorText
-          color: __style.grapeColor
-          font: __style.t4
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-        }
-      }
+      onTextEdited: () => newNameField.errorMsg = ""
     }
 
     MMButton {
-      width: parent.width
+      width: contentColumn.width
 
       text: qsTr( "Confirm" )
 

@@ -397,11 +397,6 @@ void ProjectsModel::onProjectRenamed( const QString &oldProjectId, const LocalPr
 
   project.local = localProject;
 
-  if ( project.isMergin() )
-  {
-    project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
-  }
-
   QModelIndex editIndex = index( ix );
   emit dataChanged( editIndex, editIndex );
 
