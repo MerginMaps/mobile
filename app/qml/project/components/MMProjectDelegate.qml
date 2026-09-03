@@ -25,7 +25,7 @@ Control {
   property bool projectIsInSync: false
   property real projectSyncProgress: 0.0
 
-  property var projectActionButtons: [] // possible values: upload, changes, sync, download, remove
+  property var projectActionButtons: [] // possible values: upload, changes, sync, download, remove, rename
 
   property bool projectIsOpened: false
 
@@ -35,6 +35,7 @@ Control {
   signal removeRequested()
   signal stopSyncRequested()
   signal showChangesRequested()
+  signal renameRequested()
 
   height: implicitHeight
 
@@ -307,6 +308,11 @@ Control {
         "name": qsTr("Upload"),
         "iconSource": __style.uploadIcon,
         "callback": () => root.migrateRequested()
+      },
+      "rename": {
+        "name": qsTr("Rename the local project"),
+        "iconSource": __style.editIcon,
+        "callback": () => root.renameRequested()
       }
     }
   }
