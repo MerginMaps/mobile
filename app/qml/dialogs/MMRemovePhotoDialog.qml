@@ -18,11 +18,11 @@ MMDrawerDialog {
   signal unlinkImage()
 
   property string imagePath
-  property string featureState: ""
+  property bool offerUnlinkOption: true
 
   imageSource: __style.negativeMMSymbolImage
   title: qsTr( "Delete photo?" )
-  description: qsTr( "Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature." )
+  description: root.offerUnlinkOption ? qsTr( "Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature." ) : qsTr( "Would you like to delete the photo?" )
 
   primaryButton {
     text: qsTr( "Delete photo" )
@@ -36,7 +36,7 @@ MMDrawerDialog {
   secondaryButton {
     text: qsTr( "Unlink photo" )
 
-    visible: root.featureState !== "add"
+    visible: root.offerUnlinkOption
 
     fontColor: __style.grapeColor
     fontColorHover: __style.negativeColor

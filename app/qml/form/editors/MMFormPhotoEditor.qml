@@ -129,7 +129,7 @@ MMFormPhotoViewer {
     id: imageDeleteDialog
 
     property string imagePath
-    featureState: root._fieldController.isNewFeature ? "add" : ""
+    offerUnlinkOption: !root._fieldController.isNewFeature
 
     onDeleteImage: {
       // schedule the image for deletion
