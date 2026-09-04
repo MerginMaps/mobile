@@ -16,8 +16,10 @@ import QtQuick.Controls
 ScrollView {
   id: root
 
+  rightPadding: ScrollBar.vertical.visible ? ScrollBar.vertical.width * 2 : 0
+
   contentWidth: availableWidth // to only scroll vertically
 
-  ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+  ScrollBar.vertical.policy: !__inputUtils.isMobilePlatform() && root.contentHeight > root.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
   ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 }

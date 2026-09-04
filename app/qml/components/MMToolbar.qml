@@ -151,6 +151,11 @@ Rectangle {
     toolbarModel.clear()
     menuModel.clear()
 
+    // defer so old delegates finish being removed before new ones are added
+    Qt.callLater( root.populateToolbar )
+  }
+
+  function populateToolbar() {
     // find how many visible buttons we need to place to toolbar or menu
     let visibleButtonsCount = 0
     for ( let i = 0; i < root.model.count; ++i ) {
