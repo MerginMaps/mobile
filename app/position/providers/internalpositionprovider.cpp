@@ -206,7 +206,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   const double newHorizontalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) ?
-                                       localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ) : std::numeric_limits<double>::quiet_NaN();;
+                                       localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ) : std::numeric_limits<double>::quiet_NaN();
   if ( !qgsDoubleNear( newHorizontalAccuracy, mLastPosition.hacc ) )
   {
     mLastPosition.hacc = newHorizontalAccuracy;
@@ -214,7 +214,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   const double newVerticalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) ?
-                                     localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ) : std::numeric_limits<double>::quiet_NaN();;
+                                     localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ) : std::numeric_limits<double>::quiet_NaN();
   if ( !qgsDoubleNear( newVerticalAccuracy, mLastPosition.vacc ) )
   {
     mLastPosition.vacc = newVerticalAccuracy;
