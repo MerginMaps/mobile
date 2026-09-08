@@ -50,8 +50,11 @@ class CoreUtils
     * Returns given path if it does not exist yet, otherwise adds a number to the path in format:
     *  - if path is a directory: "folder" -> "folder (1)"
     *  - if path is a file: "filename.txt" -> "filename (1).txt"
+    *
+    * By default splits the name on the first dot, keeping compound extensions like ".tar.gz"
+    * intact. Pass splitOnLastDot TRUE for names with a dot but only a simple extension.
     */
-    static QString findUniquePath( const QString &path );
+    static QString findUniquePath( const QString &path, bool splitOnLastDot = false );
 
     //! Creates a unique project directory for given project name (used for initial download of a project)
     static QString createUniqueProjectDirectory( const QString &baseDataDir, const QString &projectName );

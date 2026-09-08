@@ -165,7 +165,7 @@ void CoreUtils::appendLog( const QByteArray &data, const QString &path )
   }
 }
 
-QString CoreUtils::findUniquePath( const QString &path )
+QString CoreUtils::findUniquePath( const QString &path, bool splitOnLastDot )
 {
   QFileInfo originalPath( path );
   QString uniquePath = path;
@@ -186,7 +186,9 @@ QString CoreUtils::findUniquePath( const QString &path )
     }
     else // file
     {
-      uniquePath = originalPath.path() + '/' + originalPath.baseName() + " (" + QString::number( i ) + ")." + originalPath.completeSuffix();
+      const QString baseName = splitOnLastDot ? originalPath.completeBaseName() : originalPath.baseName();
+      const QString suffix = splitOnLastDot ? originalPath.suffix() : originalPath.completeSuffix();
+      uniquePath = originalPath.path() + '/' + baseName + " (" + QString::number( i ) + ")." + suffix;
     }
     f.setFile( uniquePath );
   }
