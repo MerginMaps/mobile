@@ -174,7 +174,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   const double newSpeed = localPosition.hasAttribute( QGeoPositionInfo::GroundSpeed ) ?
-                          localPosition.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6 : std::numeric_limits<double>::quiet_NaN(); // convert from m/s to km/h
+                          localPosition.attribute( QGeoPositionInfo::GroundSpeed ) * 3.6 : -1; // convert from m/s to km/h
   if ( !qgsDoubleNear( newSpeed, mLastPosition.speed ) )
   {
     mLastPosition.speed = newSpeed;
@@ -182,7 +182,7 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   const double newVerticalSpeed = localPosition.hasAttribute( QGeoPositionInfo::VerticalSpeed ) ?
-                                  localPosition.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6 : std::numeric_limits<double>::quiet_NaN(); // convert from m/s to km/h
+                                  localPosition.attribute( QGeoPositionInfo::VerticalSpeed ) * 3.6 : -1; // convert from m/s to km/h
   if ( !qgsDoubleNear( newVerticalSpeed, mLastPosition.verticalSpeed ) )
   {
     mLastPosition.verticalSpeed = newVerticalSpeed;
