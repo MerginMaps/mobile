@@ -13,6 +13,9 @@ on:
     - 'cmake_templates/**'
     - 'CMakeLists.txt'
     - '.github/workflows/win.yml'
+  pull_request:
+    branches:
+      - master
 
   release:
     types:
