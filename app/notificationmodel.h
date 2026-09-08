@@ -43,7 +43,8 @@ class NotificationType
       NoAction,
       ShowProjectIssuesAction,
       ShowSwitchWorkspaceAction,
-      ShowSyncFailedDialog
+      ShowSyncFailedDialog,
+      OpenDraftAction
     };
     Q_ENUM( ActionType )
 
@@ -100,6 +101,7 @@ class NotificationModel : public QAbstractListModel
     Q_INVOKABLE void addError( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
     Q_INVOKABLE void addInfo( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
     Q_INVOKABLE void addWarning( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
+    Q_INVOKABLE void addDraftNotice( const QString &message, NotificationType::ActionType action = NotificationType::ActionType::NoAction, uint interval = DEFAULT_NOTIFICATION_EXPIRATION_SECS );
     Q_INVOKABLE void remove( uint id );
     Q_INVOKABLE void onNotificationClicked( uint id );
 
@@ -112,6 +114,7 @@ class NotificationModel : public QAbstractListModel
     void showProjectIssuesActionClicked();
     void showSwitchWorkspaceActionClicked();
     void showSyncFailedDialogClicked();
+    void openDraftActionClicked();
 
   private:
     void add( const QString &message, uint interval, NotificationType::MessageType type = NotificationType::Information, NotificationType::IconType icon = NotificationType::NoneIcon, NotificationType::ActionType action = NotificationType::ActionType::NoAction );

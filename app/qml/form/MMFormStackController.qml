@@ -51,6 +51,7 @@ Item {
 
   signal closed()
   signal editGeometryRequested( var pair )
+  signal resumeDraftRequested()
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
@@ -314,6 +315,9 @@ Item {
 
       onEditGeometry: function( pair ) {
         root.editGeometryRequested( pair )
+      }
+      onResumeDraft: {
+        root.resumeDraftRequested()
       }
       onOpenLinkedFeature: function( linkedFeature ) {
         root.openLinkedFeature( linkedFeature )

@@ -12,6 +12,7 @@ import QtQuick.Controls
 
 import "../components" as MMComponents
 import "../inputs"
+import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -23,6 +24,7 @@ MMComponents.MMPage {
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
   signal searchBarClicked()
+  signal resumeDraftClicked()
 
   pageHeader.title: root.pageTitle
 
@@ -49,14 +51,35 @@ MMComponents.MMPage {
       }
     }
 
+    MMFilterComponents.MMFilterBanner {
+      id: draftBanner
+
+      anchors.top: searchBar.bottom
+      anchors.topMargin: __style.spacing20
+      width: parent.width
+
+      visible: __activeProject.featureDraftController.hasDraft
+
+      color: __style.warningColor
+      text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayerName )
+      actionText: qsTr( "Resume" )
+
+      actionButton.bgndColor: __style.earthColor
+      actionButton.bgndColorHover: __style.earthColor
+      actionButton.fontColor: "white"
+      actionButton.fontColorHover: "white"
+
+      onActionClicked: root.resumeDraftClicked()
+    }
+
     MMLayersList {
       id: layers
 
       width: parent.width
 
       anchors {
-        top: searchBar.bottom
-        topMargin: __style.spacing20
+        top: draftBanner.visible ? draftBanner.bottom : searchBar.bottom
+        topMargin: draftBanner.visible ? __style.spacing10 : __style.spacing20
         bottom: parent.bottom
       }
 

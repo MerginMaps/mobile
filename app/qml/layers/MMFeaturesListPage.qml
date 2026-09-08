@@ -26,6 +26,7 @@ MMComponents.MMPage {
 
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var toLayer )
+  signal resumeDraftClicked()
 
   pageHeader.title: root.selectedLayer ? root.selectedLayer.name + " (" + featuresModel.layerFeaturesCount + ")": ""
   pageBottomMargin: 0
@@ -46,10 +47,34 @@ MMComponents.MMPage {
     }
 
     MMFilterComponents.MMFilterBanner {
-      id: filterBanner
+      id: draftBanner
 
       anchors.top: searchBar.bottom
       anchors.topMargin: __style.spacing20
+
+      width: parent.width
+
+      visible: root.selectedLayer && __activeProject.featureDraftController.hasDraft && __activeProject.featureDraftController.draftLayer === root.selectedLayer
+
+      color: __style.warningColor
+      text: __activeProject.featureDraftController.draftIsEdit
+            ? qsTr( "Unsaved changes on %1" ).arg( __activeProject.featureDraftController.draftFeatureTitle )
+            : qsTr( "There is an unsaved feature" )
+      actionText: qsTr( "Resume" )
+
+      actionButton.bgndColor: __style.earthColor
+      actionButton.bgndColorHover: __style.earthColor
+      actionButton.fontColor: "white"
+      actionButton.fontColorHover: "white"
+
+      onActionClicked: root.resumeDraftClicked()
+    }
+
+    MMFilterComponents.MMFilterBanner {
+      id: filterBanner
+
+      anchors.top: draftBanner.visible ? draftBanner.bottom : searchBar.bottom
+      anchors.topMargin: draftBanner.visible ? __style.spacing10 : __style.spacing20
 
       width: parent.width
 
@@ -71,9 +96,9 @@ MMComponents.MMPage {
       width: parent.width
 
       anchors {
-        top: filterBanner.visible ? filterBanner.bottom : searchBar.bottom
+        top: filterBanner.visible ? filterBanner.bottom : ( draftBanner.visible ? draftBanner.bottom : searchBar.bottom )
         bottom: parent.bottom
-        topMargin: filterBanner.visible ? __style.spacing10 : __style.spacing20
+        topMargin: ( filterBanner.visible || draftBanner.visible ) ? __style.spacing10 : __style.spacing20
       }
 
       model: MM.LayerFeaturesModel {

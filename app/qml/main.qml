@@ -318,7 +318,13 @@ ApplicationWindow {
         onClicked: {
           if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
-            map.record()
+
+            if ( __activeProject.featureDraftController.hasDraft ) {
+              resumeDraftDialog.open()
+            }
+            else {
+              map.record()
+            }
           }
           else {
             __notificationModel.addInfo( qsTr( "No editable layers found." ) )
@@ -507,11 +513,26 @@ ApplicationWindow {
       }
 
       onAddFeature: function( targetLayer ) {
-        let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
-        formsStackManager.openForm( newPair, "add", "form" )
+        let startAdding = function() {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+          formsStackManager.openForm( newPair, "add", "form" )
+        }
+
+        if ( __activeProject.featureDraftController.hasDraft ) {
+          resumeDraftDialog.open()
+        }
+        else {
+          startAdding()
+        }
 
         // If we start supporting addition of spatial features from the layer's list,
         // make sure to change the root state here to "map"
+      }
+
+      onResumeDraft: {
+        mapPanelsStackView.clear( StackView.PopTransition )
+        stateManager.state = "map"
+        resumeFeatureDraft()
       }
     }
   }
@@ -817,6 +838,11 @@ ApplicationWindow {
       map.edit( pair )
     }
 
+    onResumeDraftRequested: {
+      stateManager.state = "map"
+      resumeFeatureDraft()
+    }
+
     onClosed: {
       if ( mapPanelsStackView.depth ) {
         // this must be layers panel as it is the only thing on the stackview currently
@@ -891,6 +917,26 @@ ApplicationWindow {
 
   MMProjErrorDialog {
     id: projDialog
+  }
+
+  MMDiscardDraftDialog {
+    id: discardDraftDialog
+
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onDiscardDraft: {
+      __activeProject.featureDraftController.discardDraft()
+    }
+  }
+
+  MMResumeDraftDialog {
+    id: resumeDraftDialog
+
+    featureTitle: __activeProject.featureDraftController.draftFeatureTitle
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onResumeClicked: resumeFeatureDraft()
+    onDiscardClicked: discardDraftDialog.open()
   }
 
   MMOutOfDateCustomServerDialog{
@@ -1123,6 +1169,26 @@ ApplicationWindow {
     }
   }
 
+  //! Resumes whatever feature draft is currently pending, landing back exactly
+  //! where the user left off - interactive geometry capture, or the form.
+  function resumeFeatureDraft() {
+    const controller = __activeProject.featureDraftController
+    const isEdit = controller.draftIsEdit
+
+    // only a brand new feature needs interactive resume - an existing feature
+    // always has a form to reopen, geometry already included
+    if ( controller.draftStage === "geometryCapture" && !isEdit ) {
+      const layer = controller.draftLayer
+      const geometry = controller.resumeGeometryDraft()
+      map.resumeRecording( layer, geometry )
+    } else {
+      const pair = controller.resumeDraft()
+      formsStackManager.openForm( pair, isEdit ? "edit" : "add", "form" )
+    }
+
+    __notificationModel.addInfo( qsTr( "This is your unsaved changes, continue editing or discard them by navigating back." ) )
+  }
+
   Connections {
     target: __inputProjUtils
     function onProjError( message ) {
@@ -1142,6 +1208,19 @@ ApplicationWindow {
     }
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
+    }
+    function onOpenDraftActionClicked() {
+      resumeFeatureDraft()
+    }
+  }
+
+  Connections {
+    target: __activeProject.featureDraftController
+
+    function onHasDraftChanged() {
+      if ( __activeProject.featureDraftController.hasDraft && map.state === "view" ) {
+        __notificationModel.addDraftNotice( qsTr( "You have unsaved changes. Tap here to open them." ), MM.NotificationType.OpenDraftAction )
+      }
     }
   }
 
