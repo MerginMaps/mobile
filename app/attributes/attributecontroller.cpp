@@ -612,7 +612,7 @@ void AttributeController::updateOnFeatureChange()
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
       mFormItems[itemData->id()]->setRawValue( newVal ); // we need to set raw value as well, as we use it in form now
-      itemData->setReusedValue( false );
+      mFormItems[itemData->id()]->setReusedValue( false );
       if ( mRememberAttributesController && isNewFeature() && newVal.toString().isEmpty() )
       {
         QVariant rememberedValue;
@@ -639,7 +639,7 @@ void AttributeController::updateOnFeatureChange()
             baseName.remove( trailingCounter );
             const QString canonicalName = fi.suffix().isEmpty() ? baseName : QStringLiteral( "%1.%2" ).arg( baseName, fi.suffix() );
 
-            const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( canonicalName, targetDir ) );
+            const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( canonicalName, targetDir ), true );
 
             if ( InputUtils::copyFile( src, dst ) )
             {
@@ -651,7 +651,8 @@ void AttributeController::updateOnFeatureChange()
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
           itemData->setRawValue( valueToUse );
           itemData->setOriginalValue( valueToUse );
-          itemData->setReusedValue( true );
+          // an empty value means there's nothing to reuse, so don't mark it as such
+          itemData->setReusedValue( !valueToUse.toString().isEmpty() );
         }
       }
     }
@@ -817,6 +818,7 @@ void AttributeController::recalculateDefaultValues(
     const QgsField field = item->field();
     const QgsDefaultValue defaultDefinition = field.defaultValueDefinition();
 
+    // don't let a Default Value expression overwrite a value we just reused
     bool shouldApplyDefaultValue =
       !defaultDefinition.expression().isEmpty() &&
       ( isFirstUpdateOfNewFeature || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) ) &&
@@ -1326,6 +1328,7 @@ bool AttributeController::save()
 
   if ( rv )
   {
+    // catches a reused copy that got deleted/replaced before save
     discardReusedPhotoCopies( false );
   }
 
@@ -1622,18 +1625,9 @@ void AttributeController::discardReusedPhotoCopies( bool force )
     const QString copyPath = item->reusedCopyPath();
     if ( !copyPath.isEmpty() )
     {
-      bool stillReferenced = false;
-      if ( !force )
-      {
-        const QVariantMap config = item->editorWidgetConfig();
-        const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
-        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
-        const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
-        const QString currentPath = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
-        stillReferenced = ( currentPath == copyPath );
-      }
-
-      if ( force || !stillReferenced )
+      // isReusedValue() is cleared as soon as the field changes, so it already tells
+      // whether the copy is still the field's current value
+      if ( force || !item->isReusedValue() )
       {
         InputUtils::removeFile( copyPath );
       }
@@ -1716,14 +1710,18 @@ void AttributeController::renamePhotos()
         InputUtils::sanitizePath( newName );
 
         const QFileInfo fi( src );
-        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.completeSuffix() );
+        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.suffix() );
 
-        const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
+        const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ), true );
         if ( InputUtils::renameFile( src, dst ) )
         {
           const QString newValue = InputUtils::getRelativePath( dst, prefix );
           setFormValue( item->id(), newValue );
-          item->setReusedCopyPath( QString() );
+          // keep originalValue() in sync so this doesn't get renamed again on the next save
+          item->setOriginalValue( newValue );
+          // only clear if we actually renamed the tracked clone, not a replacement photo
+          if ( src == item->reusedCopyPath() )
+            item->setReusedCopyPath( QString() );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else

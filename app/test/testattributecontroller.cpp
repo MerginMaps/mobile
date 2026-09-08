@@ -19,6 +19,7 @@
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
+#include "qgsdefaultvalue.h"
 
 #include "attributecontroller.h"
 #include "attributetabproxymodel.h"
@@ -892,6 +893,457 @@ void TestAttributeController::testPhotoRenaming()
 
     QCOMPARE( f.attribute( testcase.fieldIdx ), testcase.expectedNewFieldValue );
   }
+}
+
+void TestAttributeController::testPhotoRenamingCollisionWithDotInName()
+{
+  QString projectName = QStringLiteral( "testPhotoRenamingCollisionWithDotInName" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+
+  // "photo" naming expression is 'image_' + "notes", so a dot in notes lands in the name too
+  const QString collidingPath = projectDir + QStringLiteral( "/image_my.notes.jpg" );
+  QVERIFY( QFile::copy( projectDir + QStringLiteral( "/image1.jpg" ), collidingPath ) );
+  QVERIFY( QFile::exists( collidingPath ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat( surveyLayer->fields() );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "my.notes" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+
+  controller.save();
+
+  const QgsFeature f = controller.featureLayerPair().feature();
+
+  QVERIFY( QFile::exists( collidingPath ) ); // untouched
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_my (1).notes.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_my.notes (1).jpg" ) ) );
+  QCOMPARE( f.attribute( 3 ), QStringLiteral( "image_my.notes (1).jpg" ) );
+}
+
+void TestAttributeController::testPhotoReuseRenamesWithFreshExpressionValue()
+{
+  QString projectName = QStringLiteral( "testPhotoReuseRenamesWithFreshExpressionValue" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  // feature 1: notes = "first" -> naming expression 'image_' + "notes" saves image_first.jpg
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  // mark the photo field to be reused on the next new feature
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // feature 2 reuses the photo but has notes = "second" - expression must re-evaluate fresh
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const QVector<QUuid> items2 = tab2->formItems();
+
+  controller2.setFormValue( items2.at( 2 ), QStringLiteral( "second" ) );
+  controller2.save();
+
+  const QgsFeature f2 = controller2.featureLayerPair().feature();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) ); // untouched
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) ); // fresh name
+  QCOMPARE( f2.attribute( 3 ), QStringLiteral( "image_second.jpg" ) );
+}
+
+void TestAttributeController::testDefaultValueDoesNotOverwriteReusedPhoto()
+{
+  QString projectName = QStringLiteral( "testDefaultValueDoesNotOverwriteReusedPhoto" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  // field-level Default Value, only applied on a brand new feature - same moment as reuse
+  surveyLayer->setDefaultValueDefinition( 3, QgsDefaultValue( QStringLiteral( "'should_not_apply.jpg'" ), false ) );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // feature 2: photo is reused - the Default Value expression must not clobber it
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const FormItem *photoItem2 = controller2.formItem( tab2->formItems().at( 3 ) );
+
+  QVERIFY( photoItem2->isReusedValue() );
+  QVERIFY( !photoItem2->rawValue().toString().isEmpty() );
+  QVERIFY( photoItem2->rawValue().toString() != QStringLiteral( "should_not_apply.jpg" ) );
+}
+
+void TestAttributeController::testDefaultValueAppliesWhenNothingReused()
+{
+  QString projectName = QStringLiteral( "testDefaultValueAppliesWhenNothingReused" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  surveyLayer->setDefaultValueDefinition( 3, QgsDefaultValue( QStringLiteral( "'default_photo.jpg'" ), false ) );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  // photo left empty - nothing to reuse for the next feature
+  controller1.save();
+
+  // feature 2: nothing was reused, so the Default Value expression must still apply
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const FormItem *photoItem2 = controller2.formItem( tab2->formItems().at( 3 ) );
+
+  QVERIFY( !photoItem2->isReusedValue() );
+  QCOMPARE( photoItem2->rawValue().toString(), QStringLiteral( "default_photo.jpg" ) );
+}
+
+void TestAttributeController::testPhotoRenamingNotRepeatedOnResave()
+{
+  QString projectName = QStringLiteral( "testPhotoRenamingNotRepeatedOnResave" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const QVector<QUuid> items2 = tab2->formItems();
+
+  controller2.setFormValue( items2.at( 2 ), QStringLiteral( "second" ) );
+  controller2.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) );
+
+  // save the very same feature again without changing anything - must not re-trigger the rename
+  controller2.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_second (1).jpg" ) ) );
+}
+
+void TestAttributeController::testDiscardReusedPhotoCopyOnRollback()
+{
+  QString projectName = QStringLiteral( "testDiscardReusedPhotoCopyOnRollback" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // feature 2: photo gets reused (cloned), but the draft is discarded before it is ever saved
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const QString clonedRelativePath = controller2.featureLayerPair().feature().attribute( 3 ).toString();
+  QVERIFY( !clonedRelativePath.isEmpty() );
+  const QString clonedAbsolutePath = projectDir + "/" + clonedRelativePath;
+  QVERIFY( QFile::exists( clonedAbsolutePath ) );
+
+  controller2.rollback();
+
+  QVERIFY( !QFile::exists( clonedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+}
+
+void TestAttributeController::testDiscardReusedPhotoCopyOnReplace()
+{
+  QString projectName = QStringLiteral( "testDiscardReusedPhotoCopyOnReplace" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image2.jpg" ) ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // feature 2: photo gets reused (cloned), then replaced with a different photo before saving
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const QVector<QUuid> items2 = tab2->formItems();
+
+  const QString clonedRelativePath = controller2.featureLayerPair().feature().attribute( 3 ).toString();
+  QVERIFY( !clonedRelativePath.isEmpty() );
+  const QString clonedAbsolutePath = projectDir + "/" + clonedRelativePath;
+  QVERIFY( QFile::exists( clonedAbsolutePath ) );
+
+  controller2.setFormValue( items2.at( 2 ), QStringLiteral( "replaced" ) );
+  controller2.setFormValue( items2.at( 3 ), QStringLiteral( "image2.jpg" ) );
+  controller2.save();
+
+  // the orphaned clone from the earlier reuse must be gone, feature 1's photo untouched
+  QVERIFY( !QFile::exists( clonedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_replaced.jpg" ) ) );
+}
+
+void TestAttributeController::testReusedPhotoIsIndependentFile()
+{
+  QString projectName = QStringLiteral( "testReusedPhotoIsIndependentFile" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const QString reusedRelativePath = controller2.featureLayerPair().feature().attribute( 3 ).toString();
+  QVERIFY( !reusedRelativePath.isEmpty() );
+  // must be its own file, not literally feature 1's path
+  QVERIFY( reusedRelativePath != QStringLiteral( "image_first.jpg" ) );
+
+  const QString reusedAbsolutePath = projectDir + "/" + reusedRelativePath;
+  QVERIFY( QFile::exists( reusedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // removing feature 2's file directly must not affect feature 1's, since they're independent
+  QVERIFY( QFile::remove( reusedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
 }
 
 void TestAttributeController::testHtmlAndTextWidgets()

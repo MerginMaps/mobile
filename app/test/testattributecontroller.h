@@ -28,6 +28,31 @@ class TestAttributeController: public QObject
     void testRawValue();
     void testFieldsOutsideForm();
     void testPhotoRenaming();
+
+    //! A collision suffix must be inserted before the real extension, even if the name has a dot
+    void testPhotoRenamingCollisionWithDotInName();
+
+    //! A reused photo must be renamed with the new feature's own expression value, not the old one
+    void testPhotoReuseRenamesWithFreshExpressionValue();
+
+    //! A reused photo must not let a field-level Default Value expression overwrite it
+    void testDefaultValueDoesNotOverwriteReusedPhoto();
+
+    //! When there's nothing to reuse (empty value), the Default Value expression must still apply
+    void testDefaultValueAppliesWhenNothingReused();
+
+    //! Saving the same feature twice must not rename an already-renamed photo again
+    void testPhotoRenamingNotRepeatedOnResave();
+
+    //! Discarding a draft feature must delete the clone made for a reused photo
+    void testDiscardReusedPhotoCopyOnRollback();
+
+    //! Replacing a reused photo before saving must delete the now-orphaned clone
+    void testDiscardReusedPhotoCopyOnReplace();
+
+    //! Reusing a photo must create an independent file, not just copy the path string
+    void testReusedPhotoIsIndependentFile();
+
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 
