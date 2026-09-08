@@ -1717,7 +1717,7 @@ void AttributeController::renamePhotos()
 
         if ( newName.trimmed().isEmpty() )
         {
-          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for %1:%2 evaluated to an empty or NULL name, keeping the original file name" ).arg( mFeatureLayerPair.layer()->name(), field.name() ) );
+          CoreUtils::log( QStringLiteral( "Photo name format" ), QStringLiteral( "Expression for layer %1, feature %2, field %3 evaluated to an empty or NULL name, keeping the original file name" ).arg( mFeatureLayerPair.layer()->name(), QString::number( mFeatureLayerPair.feature().id() ), field.name() ) );
           ++formItemsIterator;
           continue;
         }
