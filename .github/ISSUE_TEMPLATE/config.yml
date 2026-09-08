@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Mergin Maps documentation
+    url: https://merginmaps.com/docs/
+    about: Our comprehensive documentation will help you get and up and running.
+  - name: Mergin Maps community
+    url: https://community.merginmaps.com/b/forum
+    about: If you encounter any issues ask the community for help, you might not be the first one to come across them.
+  - name: Mergin Maps support
+    url: https://support.merginmaps.com/new-ticket
+    about: For users on professional or team plan don't hesitate to contact our support team.
