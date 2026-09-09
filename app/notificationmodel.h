@@ -43,7 +43,8 @@ class NotificationType
       NoAction,
       ShowProjectIssuesAction,
       ShowSwitchWorkspaceAction,
-      ShowSyncFailedDialog
+      ShowSyncFailedDialog,
+      SyncProjectAction
     };
     Q_ENUM( ActionType )
 
@@ -89,7 +90,7 @@ class NotificationModel : public QAbstractListModel
   public:
     enum NotificationModelRoles
     {
-      IdRole = Qt::UserRole + 1, MessageRole, TypeRole, IconRole
+      IdRole = Qt::UserRole + 1, MessageRole, TypeRole, IconRole, ActionRole
     };
     Q_ENUM( NotificationModelRoles )
 
@@ -111,6 +112,7 @@ class NotificationModel : public QAbstractListModel
     void rowCountChanged();
     void showProjectIssuesActionClicked();
     void showSwitchWorkspaceActionClicked();
+    void showProjectNewVersionClicked();
     void showSyncFailedDialogClicked();
 
   private:
