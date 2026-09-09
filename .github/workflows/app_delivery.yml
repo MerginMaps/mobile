@@ -123,7 +123,8 @@ jobs:
                     artifactsFound = true;
                     if (workflowName === 'Android Build' && playStoreLinksDict.length > 0) {
                       const playStoreArtifact = playStoreLinksDict.find(playStoreLink => artifact.name.includes(playStoreLink.type));
-                      commentBody += `|| 📬 | [**${artifact.name}**](${playStoreArtifact.link}) | Google Play Store | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
+                      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(playStoreArtifact.link)}`;
+                      commentBody += `|| 📬 | ![QR code](${qrCodeUrl}) | [Google Play Store](${playStoreArtifact.link}) | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     }
                   }
                 } else {
