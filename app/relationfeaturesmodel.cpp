@@ -75,12 +75,10 @@ void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
 
   if ( !InputUtils::isFeatureIdValid( pair.feature().id() ) )
   {
-    //
-    // Clear the model in case parent feature has invalid id (e.g. is new) and do not populate it
-    //
+    // Parent has no valid id yet (e.g. new feature) - clear features but keep mLayer known.
 
     beginResetModel();
-    reset();
+    mFeatures.clear();
     endResetModel();
   }
   else
@@ -95,6 +93,9 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
   {
     mRelation = relation;
     emit relationChanged( mRelation );
+
+    // set layer early so it's known even before the parent feature has a valid id (e.g. new feature)
+    LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
 
     setup();
   }
