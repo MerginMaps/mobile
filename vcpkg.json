@@ -9,7 +9,7 @@
     },
     "name": "merginmaps-mobile-app",
     "description": "Collect. Share. Publish.",
-    "version": "2026.4.0",
+    "version": "2026.5.0",
     "homepage": "https://github.com/merginmaps/mobile",
     "dependencies": [
         {
@@ -57,6 +57,7 @@
         {
           "name": "gdal",
           "features": [
+            "poppler",
             {
               "name": "tools",
               "platform": "linux | osx"
