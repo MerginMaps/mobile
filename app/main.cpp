@@ -548,12 +548,19 @@ int main( int argc, char *argv[] )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk->setPositionProvider( pk->constructActiveProvider( as ) );
-  pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
+
+  // delay position provider construction on app start for smoother startup
+  // it is mostly for trimble provider as it opens Trimble Mobile Manager while constructing provider
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [pk, as]( QgsProject * project )
+  {
+    Q_UNUSED( project );
+    pk->setPositionProvider( pk->constructActiveProvider( as ) );
+    pk->setAppSettings( as );
+  }, Qt::SingleShotConnection );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&pk]( QgsProject * project )
   {
@@ -756,12 +763,6 @@ int main( int argc, char *argv[] )
   engine.addImageProvider( QLatin1String( "LayerTreeFlatModelPixmapProvider" ), layerTreeFlatModelPixmapProvider );
   engine.rootContext()->setContextProperty( "__layerDetailLegendImageProvider", layerDetailLegendImageProvider );
   engine.addImageProvider( QLatin1String( "LayerDetailLegendImageProvider" ), layerDetailLegendImageProvider );
-
-#ifdef HAVE_BLUETOOTH
-  engine.rootContext()->setContextProperty( "__haveBluetooth", true );
-#else
-  engine.rootContext()->setContextProperty( "__haveBluetooth", false );
-#endif
 
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the

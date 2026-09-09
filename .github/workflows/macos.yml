@@ -119,7 +119,7 @@ jobs:
              -DVCPKG_TARGET_TRIPLET=${{ env.TRIPLET }} \
              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
              -DUSE_MM_SERVER_API_KEY=TRUE \
-             -DHAVE_BLUETOOTH=FALSE \
+             -DWITH_BLUETOOTH_PROVIDERS=FALSE \
              -DUSE_KEYCHAIN=No \
              -DCOVERAGE=TRUE \
              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \

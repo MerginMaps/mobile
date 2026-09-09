@@ -25,6 +25,7 @@ set(MM_QML
     components/MMDrawerHeader.qml
     components/MMHlineText.qml
     components/MMIcon.qml
+    components/MMCheckBoxHorizontal.qml
     components/MMIconCheckBoxHorizontal.qml
     components/MMInfoBox.qml
     components/MMLine.qml
