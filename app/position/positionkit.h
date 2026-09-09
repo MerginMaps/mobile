@@ -79,6 +79,8 @@ class PositionKit : public QObject
     Q_PROPERTY( AbstractPositionProvider *positionProvider READ positionProvider WRITE setPositionProvider NOTIFY positionProviderChanged )
     Q_PROPERTY( QString positionProviderName READ positionProviderName NOTIFY positionProviderNameChanged )
     Q_PROPERTY( bool isMockPosition READ isMockPosition NOTIFY isMockPositionChanged )
+    Q_PROPERTY( bool hasTrimbleSupport READ hasTrimbleSupport NOTIFY hasTrimbleSupportChanged )
+    Q_PROPERTY( bool hasBluetoothSupport READ hasBluetoothSupport NOTIFY hasBluetoothSupportChanged )
 
     Q_PROPERTY( AppSettings *appSettings READ appSettings WRITE setAppSettings NOTIFY appSettingsChanged )
     Q_PROPERTY( double antennaHeight READ antennaHeight NOTIFY antennaHeightChanged )
@@ -138,11 +140,22 @@ class PositionKit : public QObject
 
     Q_INVOKABLE AbstractPositionProvider *constructProvider( const QString &type, const QString &id, const QString &name = QString() );
     Q_INVOKABLE AbstractPositionProvider *constructActiveProvider( const AppSettings *appsettings );
+    static bool hasTrimbleSupport();
+    static bool hasBluetoothSupport();
 
     AppSettings *appSettings() const;
     void setAppSettings( AppSettings *appSettings );
 
     double antennaHeight() const;
+    /*
+     * Trimble provider subtracts antenna height before providing the elevation for MM. For every other provider
+     * subtract antenna height in MM.
+     */
+    Q_INVOKABLE bool requireAntennaHeightTransform() const;
+    /*
+     * Opens antenna height setting in Trimble Mobile Manager if using trimble position provider.
+     */
+    Q_INVOKABLE void openAntennaHeightPage() const;
 
     void setVerticalCrs( const QgsCoordinateReferenceSystem &verticalCrs );
     void setElevationTransformationEnabled( bool elevationTransformationEnabled );
@@ -178,6 +191,8 @@ class PositionKit : public QObject
 
     void positionProviderChanged( AbstractPositionProvider *provider );
     void positionProviderNameChanged();
+    void hasTrimbleSupportChanged();
+    void hasBluetoothSupportChanged();
 
     void positionChanged( const GeoPosition & );
     void isMockPositionChanged( bool );

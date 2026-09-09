@@ -725,10 +725,10 @@ Item {
               return qsTr( "Unknown accuracy" )
             }
 
-            let accuracyText = __inputUtils.formatNumber( PositionKit.horizontalAccuracy, PositionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
-            if ( AppSettings.gpsAntennaHeight > 0 )
+            const accuracyText = __inputUtils.formatNumber( PositionKit.horizontalAccuracy, PositionKit.horizontalAccuracy > 1 ? 1 : 2 ) + " m"
+            if ( PositionKit.antennaHeight > 0 )
             {
-              let gpsText = Number( AppSettings.gpsAntennaHeight.toFixed( 3 ) ) + " m"
+              const gpsText = __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
               return gpsText + " / " + accuracyText
             }
             else

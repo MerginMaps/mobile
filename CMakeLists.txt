@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.22)
 
 # Note: To update version use script/update_all_versions.bash
 set(MM_VERSION_MAJOR "2026")
-set(MM_VERSION_MINOR "3")
-set(MM_VERSION_PATCH "3")
+set(MM_VERSION_MINOR "5")
+set(MM_VERSION_PATCH "0")
 
 if (VCPKG_TARGET_TRIPLET MATCHES ".*ios.*")
   set(IOS TRUE)
@@ -81,9 +81,9 @@ else ()
 endif ()
 
 if (IOS)
-  set(HAVE_BLUETOOTH_DEFAULT FALSE)
+  set(WITH_BLUETOOTH_PROVIDERS_DEFAULT FALSE)
 else ()
-  set(HAVE_BLUETOOTH_DEFAULT TRUE)
+  set(WITH_BLUETOOTH_PROVIDERS_DEFAULT TRUE)
 endif ()
 
 if (DEFINED ENV{MM_VERSION_CODE})
@@ -138,9 +138,16 @@ set(ENABLE_TESTS
     ${ENABLE_TESTS_DEFAULT}
     CACHE BOOL "Whether to build tests"
 )
-set(HAVE_BLUETOOTH
-    ${HAVE_BLUETOOTH_DEFAULT}
+set(WITH_BLUETOOTH_PROVIDERS
+    ${WITH_BLUETOOTH_PROVIDERS_DEFAULT}
     CACHE BOOL "Building with bluetooth position provider"
+)
+
+set(WITH_TRIMBLE_PROVIDERS
+    FALSE
+    CACHE
+      BOOL
+      "Building with Trimble GNSS position provider via Trimble Mobile Manager (mobile only)"
 )
 
 set(USE_KEYCHAIN
@@ -257,12 +264,27 @@ if (IOS OR MACOS)
   find_package(Tasn1 REQUIRED)
 endif ()
 
-if (HAVE_BLUETOOTH)
+if (WITH_BLUETOOTH_PROVIDERS)
   find_package(
     Qt6
     COMPONENTS Bluetooth
     REQUIRED
   )
+endif ()
+
+if (WITH_TRIMBLE_PROVIDERS)
+  if (NOT ANDROID AND NOT IOS)
+    message(
+      FATAL_ERROR
+        "WITH_TRIMBLE_PROVIDERS is only supported on Android and iOS. Set WITH_TRIMBLE_PROVIDERS=FALSE for desktop builds."
+    )
+  else ()
+    find_package(
+      Qt6
+      COMPONENTS WebSockets
+      REQUIRED
+    )
+  endif ()
 endif ()
 
 if (ENABLE_TESTS)
