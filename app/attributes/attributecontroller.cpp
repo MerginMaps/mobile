@@ -612,7 +612,8 @@ void AttributeController::updateOnFeatureChange()
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
       mFormItems[itemData->id()]->setRawValue( newVal ); // we need to set raw value as well, as we use it in form now
-      if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
+      itemData->setReusedValue( false );
+      if ( mRememberAttributesController && isNewFeature() && newVal.toString().isEmpty() )
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributesController->rememberedValue(
@@ -622,8 +623,35 @@ void AttributeController::updateOnFeatureChange()
                                         );
         if ( shouldUseRememberedValue )
         {
-          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
-          itemData->setRawValue( rememberedValue );
+          QVariant valueToUse = rememberedValue;
+
+          if ( itemData->editorWidgetType() == QStringLiteral( "ExternalResource" ) && !rememberedValue.toString().isEmpty() )
+          {
+            const QVariantMap config = itemData->editorWidgetConfig();
+            const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
+            const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
+            const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+            const QString src = InputUtils::getAbsolutePath( rememberedValue.toString(), prefix );
+            const QFileInfo fi( src );
+
+            static const QRegularExpression trailingCounter( QStringLiteral( "\\s\\(\\d+\\)$" ) );
+            QString baseName = fi.completeBaseName();
+            baseName.remove( trailingCounter );
+            const QString canonicalName = fi.suffix().isEmpty() ? baseName : QStringLiteral( "%1.%2" ).arg( baseName, fi.suffix() );
+
+            const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( canonicalName, targetDir ) );
+
+            if ( InputUtils::copyFile( src, dst ) )
+            {
+              valueToUse = InputUtils::getRelativePath( dst, prefix );
+              itemData->setReusedCopyPath( dst );
+            }
+          }
+
+          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
+          itemData->setRawValue( valueToUse );
+          itemData->setOriginalValue( valueToUse );
+          itemData->setReusedValue( true );
         }
       }
     }
@@ -791,7 +819,8 @@ void AttributeController::recalculateDefaultValues(
 
     bool shouldApplyDefaultValue =
       !defaultDefinition.expression().isEmpty() &&
-      ( isFirstUpdateOfNewFeature || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) );
+      ( isFirstUpdateOfNewFeature || ( isFormValueChange && defaultDefinition.applyOnUpdate() ) ) &&
+      !item->isReusedValue();
 
     if ( shouldApplyDefaultValue )
     {
@@ -1211,6 +1240,8 @@ bool AttributeController::deleteFeature()
 
 bool AttributeController::rollback()
 {
+  discardReusedPhotoCopies( true );
+
   if ( !mFeatureLayerPair.layer() )
     return false;
 
@@ -1291,6 +1322,11 @@ bool AttributeController::save()
   if ( featureIsNotYetAdded )
   {
     disconnect( mFeatureLayerPair.layer(), &QgsVectorLayer::featureAdded, this, &AttributeController::onFeatureAdded );
+  }
+
+  if ( rv )
+  {
+    discardReusedPhotoCopies( false );
   }
 
   // Store the feature attributes for future use
@@ -1497,6 +1533,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     QgsField field = item->field();
     QVariant val( value );
 
+    item->setReusedValue( false );
     item->setRawValue( val );
     emit formDataChanged( item->id(), { AttributeFormModel::RawValue } );
 
@@ -1576,6 +1613,36 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
   emit featureIdChanged();
 }
 
+void AttributeController::discardReusedPhotoCopies( bool force )
+{
+  QMap<QUuid, std::shared_ptr<FormItem>>::const_iterator formItemsIterator = mFormItems.constBegin();
+  while ( formItemsIterator != mFormItems.constEnd() )
+  {
+    std::shared_ptr<FormItem> item = formItemsIterator.value();
+    const QString copyPath = item->reusedCopyPath();
+    if ( !copyPath.isEmpty() )
+    {
+      bool stillReferenced = false;
+      if ( !force )
+      {
+        const QVariantMap config = item->editorWidgetConfig();
+        const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
+        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
+        const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+        const QString currentPath = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
+        stillReferenced = ( currentPath == copyPath );
+      }
+
+      if ( force || !stillReferenced )
+      {
+        InputUtils::removeFile( copyPath );
+      }
+      item->setReusedCopyPath( QString() );
+    }
+    ++formItemsIterator;
+  }
+}
+
 void AttributeController::renamePhotos()
 {
   const QStringList photoNameFormat = QgsProject::instance()->entryList( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1" ).arg( mFeatureLayerPair.layer()->id() ) );
@@ -1608,7 +1675,7 @@ void AttributeController::renamePhotos()
         continue;
       }
 
-      if ( item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
+      if ( item->isReusedValue() || item->originalValue() != mFeatureLayerPair.feature().attribute( item->fieldIndex() ) )
       {
         const QString expString = QgsProject::instance()->readEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( mFeatureLayerPair.layer()->id(), field.name() ) );
         QgsExpression exp( expString );
@@ -1656,6 +1723,7 @@ void AttributeController::renamePhotos()
         {
           const QString newValue = InputUtils::getRelativePath( dst, prefix );
           setFormValue( item->id(), newValue );
+          item->setReusedCopyPath( QString() );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else
