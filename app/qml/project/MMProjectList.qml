@@ -139,7 +139,7 @@ Item {
           return ["changes", "remove"]
         }
         else if ( !model.ProjectIsMergin && model.ProjectIsLocal ) {
-          return ["upload", "remove"]
+          return ["upload", "remove", "rename"]
         }
         return ["download"]
       }
@@ -176,6 +176,10 @@ Item {
       }
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
+      onRenameRequested: () => {
+        internal.projectIdToRename = projectId
+        renameDialog.open()
+      }
     }
   }
 
@@ -306,6 +310,25 @@ Item {
     }
   }
 
+  MMProjectComponents.MMRenameProjectDialog {
+    id: renameDialog
+
+    onRenameClicked: function( newName ) {
+      if ( !internal.projectIdToRename ) {
+        return
+      }
+
+      const renameResult = controllerModel.renameLocalProject( internal.projectIdToRename, newName )
+
+      if ( !renameResult ) {
+        renameDialog.close()
+      }
+      else {
+        renameDialog.errorText = renameResult
+      }
+    }
+  }
+
   MMDownloadProjectDialog {
     id: downloadProjectDialog
 
@@ -313,5 +336,11 @@ Item {
       controllerModel.syncProject( relatedProjectId )
       downloadProjectDialog.relatedProjectId = ""
     }
+  }
+
+  QtObject {
+    id: internal
+
+    property string projectIdToRename: ""
   }
 }

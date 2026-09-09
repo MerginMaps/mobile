@@ -22,6 +22,7 @@ set(MM_TESTS
     testImageUtils
     testMapTools
     testLayerTree
+    testLocalProjectsManager
     testActiveProject
     testProjectChecksumCache
     testVariablesManager

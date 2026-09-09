@@ -527,3 +527,97 @@ void TestModels::testProjectsProxyModel()
   QCOMPARE( proxy.data( proxy.index( 1, 0 ), ProjectsModel::Roles::ProjectId ).toString(), p1.id() );
   QCOMPARE( proxy.data( proxy.index( 2, 0 ), ProjectsModel::Roles::ProjectId ).toString(), p0.id() );
 }
+
+void TestModels::testProjectsModelOnProjectRenamed()
+{
+  // A purely local project - no namespace, so its id() is derived from its directory name,
+  // exactly like LocalProjectsManager::renameLocalProject() produces after renaming on disk.
+  Project p0;
+  p0.local.projectName = QStringLiteral( "OriginalName" );
+  p0.local.projectDir = QStringLiteral( "/tmp/OriginalName" );
+
+  Project p1;
+  p1.local.projectNamespace = QStringLiteral( "namespace" );
+  p1.local.projectName = QStringLiteral( "project_A" );
+  p1.local.projectDir = QStringLiteral( "project_A_dir" );
+
+  ProjectsModel model;
+  model.setModelType( ProjectsModel::LocalProjectsModel );
+  model.mProjects << p0 << p1;
+
+  QCOMPARE( model.rowCount(), 2 );
+
+  QString oldId = p0.local.id();
+
+  LocalProject renamed = p0.local;
+  renamed.projectName = QStringLiteral( "NewName" );
+  renamed.projectDir = QStringLiteral( "/tmp/NewName" );
+
+  QVERIFY( oldId != renamed.id() ); // renaming a local-only project does change its id
+
+  QSignalSpy dataChangedSpy( &model, &QAbstractItemModel::dataChanged );
+
+  model.onProjectRenamed( oldId, renamed );
+
+  // this is an in-place update of an existing row, not an add/remove
+  QCOMPARE( model.rowCount(), 2 );
+  QCOMPARE( dataChangedSpy.count(), 1 );
+
+  // the row can be found again via its NEW id - this is exactly the lookup that used to be
+  // broken, since the row was previously only searchable under its OLD (pre-rename) id
+  QModelIndex newIndex = model.projectModelIndexFromId( renamed.id() );
+  QVERIFY( newIndex.isValid() );
+  QCOMPARE( model.data( newIndex, ProjectsModel::Roles::ProjectName ).toString(), QStringLiteral( "NewName" ) );
+  QCOMPARE( model.data( newIndex, ProjectsModel::Roles::ProjectId ).toString(), renamed.id() );
+
+  // the row is no longer reachable under its old id
+  QVERIFY( !model.projectModelIndexFromId( oldId ).isValid() );
+
+  // the other project in the model is untouched
+  QModelIndex otherIndex = model.projectModelIndexFromId( p1.id() );
+  QCOMPARE( model.data( otherIndex, ProjectsModel::Roles::ProjectName ).toString(), QStringLiteral( "project_A" ) );
+}
+
+void TestModels::testProjectsModelOnProjectRenamedActiveProject()
+{
+  Project p0;
+  p0.local.projectName = QStringLiteral( "OriginalName" );
+  p0.local.projectDir = QStringLiteral( "/tmp/OriginalName" );
+
+  Project p1;
+  p1.local.projectNamespace = QStringLiteral( "namespace" );
+  p1.local.projectName = QStringLiteral( "project_A" );
+  p1.local.projectDir = QStringLiteral( "project_A_dir" );
+
+  ProjectsModel model;
+  model.setModelType( ProjectsModel::LocalProjectsModel );
+  model.mProjects << p0 << p1;
+
+  QString oldId = p0.local.id();
+
+  LocalProject renamed = p0.local;
+  renamed.projectName = QStringLiteral( "NewName" );
+  renamed.projectDir = QStringLiteral( "/tmp/NewName" );
+
+  // Renaming a project that is NOT the active one must leave activeProjectId untouched
+  model.setActiveProjectId( p1.id() );
+  QSignalSpy inactiveRenameSpy( &model, &ProjectsModel::activeProjectIdChanged );
+
+  model.onProjectRenamed( oldId, renamed );
+
+  QCOMPARE( model.activeProjectId(), p1.id() );
+  QCOMPARE( inactiveRenameSpy.count(), 0 );
+
+  // Renaming the ACTIVE project must update activeProjectId to follow it
+  model.setActiveProjectId( renamed.id() ); // simulate that the just-renamed project is now active
+  QSignalSpy activeRenameSpy( &model, &ProjectsModel::activeProjectIdChanged );
+
+  LocalProject renamedAgain = renamed;
+  renamedAgain.projectName = QStringLiteral( "NewerName" );
+  renamedAgain.projectDir = QStringLiteral( "/tmp/NewerName" );
+
+  model.onProjectRenamed( renamed.id(), renamedAgain );
+
+  QCOMPARE( model.activeProjectId(), renamedAgain.id() );
+  QCOMPARE( activeRenameSpy.count(), 1 );
+}
