@@ -201,6 +201,7 @@ public class MMActivity extends QtActivity
     String fileName = getFileName( imageUri );
     File newCopyFile = new File( targetPath + "/" + fileName );
     try {
+      newCopyFile.getParentFile().mkdirs();
       newCopyFile.createNewFile();
       InputStream fileStream = getContentResolver().openInputStream( imageUri );
       copyFile( fileStream, newCopyFile );
