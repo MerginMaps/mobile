@@ -523,6 +523,15 @@ build_folder/
 
 Once the project is opened, build it from Xcode.
 
+Or build the project via cmake and execute Xcode commands on Commandline:
+
+```bash
+  xcrun devicectl list devices
+  xcrun devicectl device install app --device 4EA89BF3-XXXXXXXX-XXXXXXXX ./build_folder/app/RelWithDebInfo-iphoneos/MerginMaps.app
+  xcrun devicectl device process launch --console --device 4EA89BF3-XXXXXXXX-XXXXXXXX file:///private/var/containers/Bundle/Application/2DB39FCE-XXXXXXXX-XXXXXXXX/MerginMaps.app/
+```
+the link used in 3rd line is the one returned by 2nd command
+
 # 6. Building macOS <a name="building-macos"></a>
 
 1. Install some dependencies, critically XCode, bison and flex. See "Install Build Dependencies" step in `.github/workflows/macos.yml`
