@@ -105,6 +105,8 @@ MMComponents.MMPage {
             /* Table name within single file */
             id: mainText
 
+            Layout.fillWidth: true
+
             text:itemText
             font: __style.p6
             color: __style.nightColor
@@ -117,7 +119,7 @@ MMComponents.MMPage {
             /* Added rows for table */
             id: addedItem
 
-            width: delegateItem.width
+            Layout.fillWidth: true
             count: inserts
             visible: inserts > 0
             type: MM.MerginProjectStatusModel.Added
@@ -126,7 +128,7 @@ MMComponents.MMPage {
           MMProjectComponents.MMProjectStatusItem {
             /* Edited rows for table */
             id: editedItem
-            width: delegateItem.width
+            Layout.fillWidth: true
             count: updates
             visible: updates > 0
             type: MM.MerginProjectStatusModel.Updated
@@ -136,7 +138,7 @@ MMComponents.MMPage {
             /* Deleted rows for table */
             id: deletedItem
 
-            width: delegateItem.width
+            Layout.fillWidth: true
             count: deletes
             visible: deletes > 0
             type: MM.MerginProjectStatusModel.Deleted

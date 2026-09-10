@@ -101,3 +101,59 @@ jobs:
           fi
 
           echo "OK: No direct StackView usage found."
+
+  no_listview:
+    name: No direct ListView usage in QML
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check for direct ListView instantiation in QML files
+        run: |
+          # MMListView.qml is the approved wrapper — exclude it from the search.
+          # Any other QML file with a bare "ListView" is using the raw Qt component
+          # instead of the wrapper, which breaks Squish test support.
+          matches=$(grep -rn --include="*.qml" \
+            --exclude="MMListView.qml" \
+            '\<ListView[[:space:]]*{' \
+            app/qml/ || true)
+
+          if [ -n "$matches" ]; then
+            echo "ERROR: Direct ListView usage found. Use MMListView instead:"
+            echo ""
+            echo "$matches"
+            exit 1
+          fi
+
+          echo "OK: No direct ListView usage found."
+
+  no_scrollview:
+    name: No direct ScrollView usage in QML
+    if: ( github.repository == 'MerginMaps/mobile' ) && (!contains(github.event.head_commit.message, 'Translate '))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Check for direct ScrollView instantiation in QML files
+        run: |
+          # MMScrollView.qml and MMListView.qml are the approved wrappers (the
+          # latter uses a plain ScrollView internally) — exclude both from the
+          # search. Any other QML file with a bare "ScrollView" is using the raw
+          # Qt component instead of the wrapper, which breaks Squish test support.
+          matches=$(grep -rn --include="*.qml" \
+            --exclude="MMScrollView.qml" \
+            --exclude="MMListView.qml" \
+            '\<ScrollView[[:space:]]*{' \
+            app/qml/ || true)
+
+          if [ -n "$matches" ]; then
+            echo "ERROR: Direct ScrollView usage found. Use MMScrollView instead:"
+            echo ""
+            echo "$matches"
+            exit 1
+          fi
+
+          echo "OK: No direct ScrollView usage found."
