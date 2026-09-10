@@ -2129,7 +2129,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     {
       CoreUtils::log( "pull " + projectFullName, "failed to remove old basefile for: " + filePath );
     }
-    if ( !QFile::copy( dest, basefile ) )
+    if ( !GeodiffUtils::copyWalAware( dest, basefile ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed to copy new basefile for: " + filePath );
     }
@@ -2208,7 +2208,7 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
     hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserInfo->username(), info.localVersion ) );
-    if ( !QFile::rename( dest, newDest ) )
+    if ( !GeodiffUtils::renameWalAware( dest, newDest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
     }
@@ -2263,7 +2263,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
         QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserInfo->username(), info.localVersion ) );
-        if ( !QFile::rename( origPath, newPath ) )
+        if ( !GeodiffUtils::renameWalAware( origPath, newPath ) )
         {
           CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
         }
@@ -3094,7 +3094,7 @@ void MerginApi::pushFinishReplyFinished()
         createPathIfNotExists( basefile );
 
         QString sourcePath = transaction.projectDir + "/" + filePath;
-        if ( !QFile::copy( sourcePath, basefile ) )
+        if ( !GeodiffUtils::copyWalAware( sourcePath, basefile ) )
         {
           CoreUtils::log( "push " + projectFullName, "failed to copy new basefile for: " + filePath );
         }
