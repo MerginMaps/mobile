@@ -51,6 +51,8 @@ class IosUtils: public QObject
 
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
+    void photoCaptured();
+    void photoFromGallery();
     void notifyError( const QString &message );
     void positionKitChanged();
     void compassChanged();
@@ -61,6 +63,7 @@ class IosUtils: public QObject
     Compass *mCompass = nullptr;
 
     QString mLastCode;
+    bool mLastSourceWasCamera = false;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */

@@ -125,6 +125,8 @@ void MapSketchingController::finishDigitizing()
     mLayer->addFeature( feature );
     mLayer->endEditCommand();
   }
+
+  emit sketched();
 }
 
 void MapSketchingController::redo() const

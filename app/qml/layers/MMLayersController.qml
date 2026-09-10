@@ -103,6 +103,7 @@ Item {
       }
 
       onSearchBarClicked: function() {
+        AppSettings.trackUsageFeature( "layers_search" )
         let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }
