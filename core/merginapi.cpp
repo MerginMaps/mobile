@@ -44,6 +44,9 @@ const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm"
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
+const qint64 MerginApi::MAX_UPLOAD_MEDIA_SIZE = 10 * qPow( 1024LL, 3LL );
+const qint64 MerginApi::MAX_UPLOAD_VERSIONED_SIZE = 5 * qPow( 1024LL, 3LL );
+constexpr int MerginApi::MAX_UPLOAD_CHANGES = 100;
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 #ifdef MOBILE_OS
 const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
@@ -2982,16 +2985,55 @@ void MerginApi::pushInfoReplyFinished()
     QList<MerginFile> filesToUpload;
     QList<MerginFile> addedMerginFiles, updatedMerginFiles, deletedMerginFiles;
     QList<MerginFile> diffFiles;
+    int fileCounter = 0;
     for ( QString filePath : transaction.diff.localAdded )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
+
+      if ( isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_VERSIONED_SIZE )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
+        continue;
+      }
+
+      if ( !isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_MEDIA_SIZE )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
+        continue;
+      }
+
+      if ( fileCounter >= MAX_UPLOAD_CHANGES )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
+        break;
+      }
+
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       addedMerginFiles.append( merginFile );
+      fileCounter++;
     }
 
     for ( QString filePath : transaction.diff.localUpdated )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
+
+      if ( isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_VERSIONED_SIZE )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
+        continue;
+      }
+
+      if ( !isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_MEDIA_SIZE )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
+        continue;
+      }
+
+      if ( fileCounter >= MAX_UPLOAD_CHANGES )
+      {
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
+        break;
+      }
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
 
       if ( isFileDiffable( filePath ) )
@@ -3028,6 +3070,7 @@ void MerginApi::pushInfoReplyFinished()
       }
 
       updatedMerginFiles.append( merginFile );
+      fileCounter++;
     }
 
     for ( QString filePath : transaction.diff.localDeleted )

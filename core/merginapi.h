@@ -980,6 +980,9 @@ class MerginApi: public QObject
     QString mApiVersion;
 
     static const int UPLOAD_CHUNK_SIZE;
+    static const qint64 MAX_UPLOAD_MEDIA_SIZE;
+    static const qint64 MAX_UPLOAD_VERSIONED_SIZE;
+    static const int MAX_UPLOAD_CHANGES;
     const int PROJECT_PER_PAGE = 50;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
 
