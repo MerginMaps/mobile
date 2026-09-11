@@ -260,10 +260,11 @@ bool AndroidUtils::requestMediaLocationPermission()
 {
 #ifdef ANDROID
   const double buildVersion = QSysInfo::productVersion().toDouble();
-  // ACCESS_MEDIA_LOCATION is a runtime permission without UI dialog (User do not need to click anything to grant it, it is granted automatically)
-  if ( buildVersion < ANDROID_VERSION_13 )
+  // ACCESS_MEDIA_LOCATION was introduced in Android 10 and requires explicit user consent via a runtime permission dialog
+  if ( buildVersion >= ANDROID_VERSION_10 && !checkAndAcquirePermissions( QStringLiteral( "android.permission.ACCESS_MEDIA_LOCATION" ) ) )
   {
-    return checkAndAcquirePermissions( "android.permission.ACCESS_MEDIA_LOCATION" );
+    CoreUtils::log( QStringLiteral( "AndroidUtils" ), QStringLiteral( "Media location permission denied: GPS EXIF data will not be read from gallery-picked photos" ) );
+    return false;
   }
 #endif
   return true;
@@ -281,7 +282,7 @@ void AndroidUtils::callImagePicker( const QString &targetPath, const QString &co
   mLastCode = code;
   mTargetPath = targetPath;
 
-  // request media location permission to be able to read EXIF metadata from gallery image (only necessary for android < 14)
+  // request media location permission to be able to read unredacted EXIF metadata from gallery image
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
@@ -308,10 +309,6 @@ void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
   }
 
   mLastCode = code;
-
-  // request media location permission to be able to read EXIF metadata from captured image
-  // it is not a mandatory permission, so continue even if it is rejected
-  requestMediaLocationPermission();
 
   const QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
   const QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
