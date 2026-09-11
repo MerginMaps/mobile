@@ -289,6 +289,59 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   return requestId;
 }
 
+void MerginApi::syncProject( const QString &projectNamespace, const QString &projectName, const bool isInitialSync )
+{
+  const QString projectFullName = getFullProjectName( projectNamespace, projectName );
+
+  /**
+   * This an asynchronous implementation of the sync loop. The logic is to do pull -> push and repeat if there are any
+   * local changes not uploaded yet.
+   */
+  auto connection = std::make_shared<QMetaObject::Connection>();
+  *connection = connect( this, &MerginApi::syncTransactionFinished, this,
+                         [this, projectNamespace, projectName, projectFullName, connection, isInitialSync]
+                         ( const QString & finishedProjectFullName, const bool successful, const int version, const TransactionStatus::TransactionType finishedType )
+  {
+    if ( finishedProjectFullName != projectFullName )
+    {
+      return;
+    }
+
+    if ( !successful )
+    {
+      disconnect( *connection );
+      emit syncProjectFinished( projectFullName, false, version );
+      return;
+    }
+
+    if ( finishedType == TransactionStatus::Pull )
+    {
+      pushProject( projectNamespace, projectName, isInitialSync ? true : false );
+      return;
+    }
+
+    // a push just finished - go for another pull if there are still local changes to sync
+    if ( ProjectStatus::hasLocalChanges( mLocalProjects.projectFromMerginName( projectFullName ), supportsSelectiveSync() ) )
+    {
+      pullProject( projectNamespace, projectName );
+      return;
+    }
+
+    disconnect( *connection );
+    emit syncProjectFinished( projectFullName, true, version );
+    emit projectDataChanged( projectFullName );
+  } );
+
+  if ( isInitialSync )
+  {
+    pushProject( projectNamespace, projectName, true );
+  }
+  else
+  {
+    pullProject( projectNamespace, projectName );
+  }
+}
+
 
 void MerginApi::downloadNextItem( const QString &projectFullName )
 {
@@ -548,7 +601,7 @@ void MerginApi::abortPullItems( const QString &projectFullName )
     QDir( transaction.projectDir ).removeRecursively();
   }
 
-  finishProjectSync( projectFullName, false );
+  finishTransaction( projectFullName, false );
 }
 
 void MerginApi::cacheServerConfig()
@@ -597,7 +650,7 @@ void MerginApi::cacheServerConfig()
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -1361,7 +1414,7 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
-          pushProject( projectNamespace, projectName, true );
+          syncProject( projectNamespace, projectName, true );
         }
       }
     }
@@ -2323,7 +2376,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
     mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
 
-  finishProjectSync( projectFullName, true );
+  finishTransaction( projectFullName, true );
 }
 
 
@@ -2360,7 +2413,7 @@ void MerginApi::pushStartReplyFinished()
       if ( transaction.transactionUUID.isEmpty() )
       {
         CoreUtils::log( "push " + projectFullName, QStringLiteral( "Fail! Could not acquire transaction ID" ) );
-        finishProjectSync( projectFullName, false );
+        finishTransaction( projectFullName, false );
       }
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
@@ -2379,7 +2432,7 @@ void MerginApi::pushStartReplyFinished()
       transaction.projectMetadata = data;
       transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-      finishProjectSync( projectFullName, true );
+      finishTransaction( projectFullName, true );
     }
   }
   else
@@ -2422,7 +2475,7 @@ void MerginApi::pushStartReplyFinished()
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName );
     }
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -2487,7 +2540,7 @@ void MerginApi::pushFileReplyFinished()
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -2527,7 +2580,7 @@ void MerginApi::pullInfoReplyFinished()
     transaction.replyPullProjectInfo->deleteLater();
     transaction.replyPullProjectInfo = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -2552,7 +2605,7 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
       emit projectAlreadyOnLatestVersion( projectFullName );
       CoreUtils::log( QStringLiteral( "Pull %1" ).arg( projectFullName ), QStringLiteral( "Project is already on the latest version: %1" ).arg( serverProject.version ) );
 
-      return finishProjectSync( projectFullName, false );
+      return finishTransaction( projectFullName, false );
     }
   }
   else
@@ -2904,17 +2957,6 @@ void MerginApi::pushInfoReplyFinished()
     // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
 
-    // now let's figure a key question: are we on the most recent version of the project
-    // if we're about to do upload? because if not, we need to do pull first
-    if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < serverProject.version )
-    {
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Need pull first: local version %1 | server version %2" )
-                      .arg( projectInfo.localVersion ).arg( serverProject.version ) );
-      transaction.pullBeforePush = true;
-      prepareProjectPull( projectFullName, data );
-      return;
-    }
-
     QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
     MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
 
@@ -2952,7 +2994,7 @@ void MerginApi::pushInfoReplyFinished()
       MerginFile merginFile = findFile( filePath, localFiles );
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
 
-      if ( MerginApi::isFileDiffable( filePath ) )
+      if ( isFileDiffable( filePath ) )
       {
         // try to create a diff
         QString diffName;
@@ -3000,7 +3042,7 @@ void MerginApi::pushInfoReplyFinished()
       transaction.projectMetadata = data;
       transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-      finishProjectSync( projectFullName, true );
+      finishTransaction( projectFullName, true );
       return;
     }
 
@@ -3058,7 +3100,7 @@ void MerginApi::pushInfoReplyFinished()
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -3124,7 +3166,7 @@ void MerginApi::pushFinishReplyFinished()
         CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
     }
 
-    finishProjectSync( projectFullName, true );
+    finishTransaction( projectFullName, true );
   }
   else
   {
@@ -3150,7 +3192,7 @@ void MerginApi::pushFinishReplyFinished()
     transaction.replyPushFinish->deleteLater();
     transaction.replyPushFinish = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -3687,7 +3729,7 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
   return jsonArray;
 }
 
-void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSuccessful )
+void MerginApi::finishTransaction( const QString &projectFullName, bool syncSuccessful )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -3709,7 +3751,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     CoreUtils::log( "sync " + projectFullName, QStringLiteral( "### FAILED ###\n" ) );
   }
 
-  bool pullBeforePush = transaction.pullBeforePush;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
@@ -3719,24 +3760,18 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     emit projectReloadNeededAfterSync( projectFullName );
   }
 
+  const bool versionUpToDate = mLocalProjects.projectFromMerginName( projectFullName ).localVersion == transaction.version;
+  const TransactionStatus::TransactionType transactionType = transaction.type;
   mTransactionalStatus.remove( projectFullName );
 
-  if ( pullBeforePush )
+  // with no changes on server pull will report failed status however we want to continue with the sync loop
+  if ( versionUpToDate && transactionType == TransactionStatus::TransactionType::Pull )
   {
-    CoreUtils::log( "sync " + projectFullName, QStringLiteral( "Continue with push after pull" ) );
-    // we're done only with the download part before the actual upload - so let's continue with upload
-    QString projectNamespace, projectName;
-    extractProjectName( projectFullName, projectNamespace, projectName );
-    pushProject( projectNamespace, projectName );
+    emit syncTransactionFinished( projectFullName, true, newVersion, TransactionStatus::TransactionType::Pull );
   }
   else
   {
-    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion );
-
-    if ( syncSuccessful )
-    {
-      emit projectDataChanged( projectFullName );
-    }
+    emit syncTransactionFinished( projectFullName, syncSuccessful, newVersion, transactionType );
   }
 }
 

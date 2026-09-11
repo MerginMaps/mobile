@@ -55,17 +55,14 @@ void SynchronizationManager::syncProject( const Project &project, SyncOptions::A
   CoreUtils::log( QStringLiteral( "Sync Manager" ), QStringLiteral( "Requested download of project %2" ).arg( project.mergin.projectName ) );
 
   // project is not local yet -> we download it for the first time
-  bool syncHasStarted = mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, auth == SyncOptions::Authorized );
+  mMerginApi->syncProject( project.mergin.projectNamespace, project.mergin.projectName );
 
-  if ( syncHasStarted )
-  {
-    SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
-    process.pending = true;
-    process.strategy = strategy;
-    process.requestOrigin = requestOrigin;
+  SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
+  process.pending = true;
+  process.strategy = strategy;
+  process.requestOrigin = requestOrigin;
 
-    emit syncStarted( project.fullName() );
-  }
+  emit syncStarted( project.fullName() );
 }
 
 void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy, const SyncOptions::
@@ -102,26 +99,14 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
     }
   }
 
-  bool syncHasStarted = false;
+  mMerginApi->syncProject( project.projectNamespace, project.projectName );
 
-  if ( ProjectStatus::hasLocalChanges( project, mMerginApi->supportsSelectiveSync() ) )
-  {
-    syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
-  }
-  else
-  {
-    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, auth == SyncOptions::Authorized );
-  }
+  SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
+  process.pending = true;
+  process.strategy = strategy;
+  process.requestOrigin = requestOrigin;
 
-  if ( syncHasStarted )
-  {
-    SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
-    process.pending = true;
-    process.strategy = strategy;
-    process.requestOrigin = requestOrigin;
-
-    emit syncStarted( projectFullName );
-  }
+  emit syncStarted( projectFullName );
 }
 
 void SynchronizationManager::stopProjectSync( const QString &projectFullname )
