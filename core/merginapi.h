@@ -79,7 +79,7 @@ struct ProjectDiff
            conflictRemoteUpdatedLocalDeleted == other.conflictRemoteUpdatedLocalDeleted;
   }
 
-  QString dump() const
+  QString dump() const // TODO: tell if selective sync is used and if it got changed or not
   {
     QStringList lines;
     lines << "--- project diff ---";
@@ -149,6 +149,13 @@ struct TransactionStatus
     Pull
   };
 
+  struct PushChanges
+  {
+    QList<MerginFile> added;
+    QList<MerginFile> updated;
+    QList<MerginFile> removed;
+  };
+
   qreal totalSize = 0;     //!< total size (in bytes) of files to be pushed or pulled
   qint64 transferedSize = 0;  //!< size (in bytes) of amount of data transferred so far
   QString transactionUUID; //!< only for push. Initially dummy non-empty string, after server confirms a valid UUID, on finish/cancel it is empty
@@ -169,22 +176,22 @@ struct TransactionStatus
   QList<PullTask> pullTasks;  //!< tasks to do at the end of pull when everything has been downloaded
   bool pullItemsAborting = false;   //!< indicates whether we have started to abort requests in replyPullItems
 
-  // push-related data
+  PushChanges pushChanges;
+
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
-  QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
 
   // retry handling
   int retryCount = 0;  //!< current number of retry attempts for failed network requests
   static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
 
   QString projectDir;
-  QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
+  QByteArray projectMetadata;  //!< metadata of the new project (not parsed) WATCH OUT - REUSED TWICE NOW -- TODO!
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
   bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
   bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
 
-  int version = -1;  //!< version to which we are updating / the version which we have uploaded
+  int version = -1;  //!< version to which we are updating / the version which we have uploaded   WATCH OUT - REUSED TWICE NOW -- TODO!
 
   ProjectDiff diff;
 
@@ -206,7 +213,9 @@ class ErrorCode
     {
       Unknown = 0,
       ProjectsLimitHit,
-      StorageLimitHit
+      StorageLimitHit,
+      AnotherUploadRunning,
+      ProjectVersionExists
     };
     Q_ENUM( Value );
 };
@@ -308,7 +317,7 @@ class MerginApi: public QObject
      * \param projectFullName Project's full name to cancel its 4
      * \note pushCanceled() signal is emitted when the reply to the cancel request is received
      */
-    Q_INVOKABLE void cancelPush( const QString &projectFullName );
+    Q_INVOKABLE void cancelPush( const QString &projectFullName ); //TODO: there is nothing to cancel on v2, is there? .. apart from stop upload
 
     /**
      * Cancels pull either (1) before project data download starts or
@@ -390,7 +399,7 @@ class MerginApi: public QObject
     * \param projectNamespace Project namespace that will be detached from Mergin
     * \param projectName Project name that will be detached from Mergin
     */
-    Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser = true );
+    Q_INVOKABLE void detachProjectFromMergin( const QString &projectNamespace, const QString &projectName, bool informUser = true ); // TODO: drop
 
     /**
     * Deletes all local projects and then tries to remove user account.
@@ -410,6 +419,7 @@ class MerginApi: public QObject
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
     static const QString sMerginConfigFile;
+    static const QString sTempChunkId;
     static const QString sDefaultApiRoot;
     static const QString sSyncCanceledMessage;
     static const QString sDefaultReportLogUrl;
@@ -419,13 +429,13 @@ class MerginApi: public QObject
       return sDefaultApiRoot;
     }
 
-    static bool isFileDiffable( const QString &fileName )
+    static bool isFileDiffable( const QString &fileName ) // todo: go to utils
     {
       return fileName.endsWith( ".gpkg" );
     }
 
     //! Get a list of all files that can be used with geodiff
-    QStringList projectDiffableFiles( const QString &projectFullName );
+    QStringList projectDiffableFiles( const QString &projectFullName ); // todo: drop, definition does not exist
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
     static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
@@ -437,7 +447,7 @@ class MerginApi: public QObject
      * \param minor parsed minor number
      * @return true when parsing was successful
      */
-    static bool parseVersion( const QString &version, int &major, int &minor );
+    static bool parseVersion( const QString &version, int &major, int &minor ); // todo: go to utils
 
     /**
     * Parse major, minor and patch version number from version string.
@@ -447,14 +457,14 @@ class MerginApi: public QObject
     * \param patch parsed patch number
     * @return true when parsing was successful
     */
-    static bool parseVersion( const QString &version, int &major, int &minor, int &patch );
+    static bool parseVersion( const QString &version, int &major, int &minor, int &patch ); // todo: go to utils
 
     /**
     * Finds project in merginProjects list according its full name.
     * \param projectPath Full path to project's folder
     * \param metadataFile Relative path of metafile to project's folder
     */
-    Q_INVOKABLE static QString getFullProjectName( QString projectNamespace, QString projectName );
+    Q_INVOKABLE static QString getFullProjectName( QString projectNamespace, QString projectName ); // todo: go to utils, drop invokable
 
     /**
     * Creates an empty project on Mergin server. isPublic determines if the new project will be visible to all or private
@@ -542,7 +552,7 @@ class MerginApi: public QObject
     }
 
     // Returns true for files that are under .mergin folder or contains ignored extension from sIgnoreExtensions
-    static bool isInIgnore( const QFileInfo &info );
+    static bool isInIgnore( const QFileInfo &info ); // todo: go to utils
 
     /**
      * Performs checks and returns if a given file is excluded from the sync.
@@ -566,7 +576,7 @@ class MerginApi: public QObject
     * \param projectNamespace QString to be set as namespace, might not change original value
     * \param projectName QString to be set to name of a project
     */
-    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName );
+    static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName ); // todo: go to utils
 
     bool supportsSelectiveSync() const;
     void setSupportsSelectiveSync( bool supportsSelectiveSync );
@@ -589,7 +599,7 @@ class MerginApi: public QObject
     /**
      * Reads server details and user details from QSettings.
      */
-    void loadCache();
+    void loadCache(); // Should mergin api has any idea of offline cache?
 
     /**
      * Sends non-blocking GET request to the server to list user workspaces.
@@ -628,7 +638,7 @@ class MerginApi: public QObject
     /**
      * Emits API calls that bear user information like username, workspaces and service
      */
-    Q_INVOKABLE void refreshUserData();
+    Q_INVOKABLE void refreshUserData(); //?
 
     /**
      * Returns true if server supports workspaces
@@ -788,8 +798,10 @@ class MerginApi: public QObject
 
     // Push slots
     void pushStartReplyFinished();
+    void pushStartV2ReplyFinished();
     void pushInfoReplyFinished();
     void pushFileReplyFinished();
+    void pushV2FileReplyFinished();
     void pushFinishReplyFinished();
     void pushCancelReplyFinished();
 
@@ -830,20 +842,19 @@ class MerginApi: public QObject
     void abortPullItems( const QString &projectFullName );
 
     /**
-     * Sends non-blocking POST request to the server to upload a file (chunk).
+     * Sends non-blocking POST request to the server to initiate project push.
      * \param projectFullName Namespace/name
-     * \param json project info containing metadata for upload
      */
-    void pushStart( const QString &projectFullName, const QByteArray &json );
+    void pushStart( const QString &projectFullName );
+    void preparePushPayload( const QString &projectFullName );
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
      * \param projectFullName Namespace/name
-     * \param transactionUUID Transaction ID which servers sends on uploadStart
      * \param file Mergin file to upload
      * \param chunkNo Chunk number of given file to be uploaded
      */
-    void pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo = 0 );
+    void pushFile( const QString &projectFullName, MerginFile file, int chunkNo = 0 );
 
     /**
      * Closing request after successful push.
@@ -851,6 +862,7 @@ class MerginApi: public QObject
      * \param transactionUUID transaction UUID to match upload process on the server
      */
     void pushFinish( const QString &projectFullName, const QString &transactionUUID );
+    void pushV2Finish( const QString &projectFullName );
 
     void sendPushCancelRequest( const QString &projectFullName, const QString &transactionUUID );
 
@@ -954,7 +966,9 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3
+      AttrAcceptFlag      = QNetworkRequest::User + 3,
+      AttrChunkNo         = QNetworkRequest::User + 4,
+      AttrChunkSize       = QNetworkRequest::User + 5
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
