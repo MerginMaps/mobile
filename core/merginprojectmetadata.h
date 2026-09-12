@@ -14,13 +14,24 @@
 #include <QList>
 #include <QJsonObject>
 
+struct FileChunkV2
+{
+  // struct used in push v2 when server responds after chunk upload
+  QString id; // chunk id, as generated on server
+  QDateTime valid_until; // chunk can be reused and not reuploaded until this datetime
+};
+
 struct MerginFile
 {
   QString path;
   QString checksum;
   qint64 size;
   QDateTime mtime;
-  QStringList chunks; // used only for upload otherwise suppose to be empty
+
+  QStringList chunks; // pregenerated chunks to upload; only used in v1
+
+  int chunksCountV2; // contains the number of chunks this file should be split to for upload; only used in v2 push
+  QList<FileChunkV2> chunksV2; // contains the list of uploaded chunks; only used in v2
 
   //
   // these are members only used for upload of changed file through a geo-diff

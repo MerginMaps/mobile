@@ -28,3 +28,4 @@ fastlane/report.xml
 CMakeLists.txt.user
 CMakeUserPresets.json
 CLAUDE.md
+.claude/*
