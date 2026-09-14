@@ -40,7 +40,8 @@ QHash<int, QByteArray> NotificationModel::roleNames() const
     { IdRole, "id" },
     { MessageRole, "message" },
     { TypeRole, "type" },
-    { IconRole, "icon" }
+    { IconRole, "icon" },
+    { ActionRole, "action" }
   };
 }
 
@@ -60,6 +61,7 @@ QVariant NotificationModel::data( const QModelIndex &index, int role ) const
   if ( role == MessageRole ) return notification.message();
   if ( role == TypeRole ) return notification.type();
   if ( role == IconRole ) return notification.icon();
+  if ( role == ActionRole ) return notification.action();
 
   return {};
 }
@@ -154,6 +156,12 @@ void NotificationModel::onNotificationClicked( uint id )
         {
           remove( id );
           emit showSyncFailedDialogClicked();
+          break;
+        }
+        case NotificationType::ActionType::SyncProjectAction:
+        {
+          remove( id );
+          emit showProjectNewVersionClicked();
           break;
         }
         default: break;
