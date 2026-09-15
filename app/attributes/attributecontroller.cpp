@@ -20,6 +20,12 @@
 
 #include <QDebug>
 #include <QSet>
+#include <QTimer>
+#include <QDateTime>
+#include <QJsonObject>
+#include <QJsonArray>
+
+#include "featuredraftstorage.h"
 
 #include "qgis.h"
 #include "qgsproject.h"
@@ -41,7 +47,11 @@
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new AttributeTabProxyModel() )
+  , mDraftSaveTimer( new QTimer( this ) )
 {
+  mDraftSaveTimer->setSingleShot( true );
+  mDraftSaveTimer->setInterval( 1000 );
+  connect( mDraftSaveTimer, &QTimer::timeout, this, &AttributeController::saveDraft );
 }
 
 void AttributeController::reset()
@@ -67,8 +77,17 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
     blockSignals( true );
 
     bool hasLayerChanged = mFeatureLayerPair.layer() != pair.layer();
+    // geometry edits round-trip back into this same setter (via the live QML
+    // binding once the geometry-editing map tool hands the feature back) - that
+    // must not wipe attribute changes already tracked for this same feature
+    bool isSameFeature = !hasLayerChanged && mFeatureLayerPair.feature().id() == pair.feature().id();
+
     // Set new active pair
     mFeatureLayerPair = pair;
+    if ( !isSameFeature )
+    {
+      mTouchedFieldIndices.clear();
+    }
     if ( hasLayerChanged )
     {
       // layer changed!
@@ -646,6 +665,72 @@ bool AttributeController::isNewFeature() const
   return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
+QJsonObject AttributeController::attributeToJson( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const
+{
+  QJsonObject attribute;
+  attribute[ QStringLiteral( "name" ) ] = fields.at( fieldIndex ).name();
+  attribute[ QStringLiteral( "type" ) ] = fields.at( fieldIndex ).typeName();
+  attribute[ QStringLiteral( "value" ) ] = QJsonValue::fromVariant( feature.attribute( fieldIndex ) );
+  return attribute;
+}
+
+void AttributeController::saveDraft()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
+  const QgsFeature feature = mFeatureLayerPair.feature();
+  const QgsFields fields = feature.fields();
+  const bool featureIsNew = isNewFeature();
+
+  QJsonArray attributes;
+
+  if ( featureIsNew )
+  {
+    for ( int i = 0; i < feature.attributeCount(); ++i )
+    {
+      attributes.append( attributeToJson( fields, feature, i ) );
+    }
+  }
+  else
+  {
+    for ( int fieldIndex : mTouchedFieldIndices )
+    {
+      if ( fieldIndex >= 0 && fieldIndex < feature.attributeCount() )
+      {
+        attributes.append( attributeToJson( fields, feature, fieldIndex ) );
+      }
+    }
+  }
+
+  QJsonObject draft;
+  draft[ QStringLiteral( "layerId" ) ] = mFeatureLayerPair.layer()->id();
+  draft[ QStringLiteral( "stage" ) ] = QStringLiteral( "attributeForm" );
+  draft[ QStringLiteral( "timestamp" ) ] = QDateTime::currentDateTimeUtc().toString( Qt::ISODate );
+  draft[ QStringLiteral( "attributes" ) ] = attributes;
+
+  if ( featureIsNew )
+  {
+    // existing-feature geometry edits are drafted separately, by RecordingMapTool
+    draft[ QStringLiteral( "geometry" ) ] = feature.geometry().asWkt();
+  }
+  else
+  {
+    draft[ QStringLiteral( "featureId" ) ] = QJsonValue( static_cast<qint64>( feature.id() ) );
+  }
+
+  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+}
+
+void AttributeController::clearDraft()
+{
+  // a pending debounced write must not be allowed to resurrect the draft
+  // after we've just told the storage (and possibly the user) it's gone
+  mDraftSaveTimer->stop();
+
+  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+}
+
 void AttributeController::acquireId()
 {
   if ( !mFeatureLayerPair.layer() )
@@ -1203,6 +1288,7 @@ bool AttributeController::deleteFeature()
   {
     mFeatureLayerPair = FeatureLayerPair();
     emit featureLayerPairChanged();
+    clearDraft();
     emit changesCommited();
   }
 
@@ -1213,6 +1299,8 @@ bool AttributeController::rollback()
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
+
+  clearDraft();
 
   if ( !mFeatureLayerPair.layer()->isEditable() )
   {
@@ -1281,6 +1369,7 @@ bool AttributeController::save()
 
   if ( rv )
   {
+    clearDraft();
     emit changesCommited();
   }
   else
@@ -1509,6 +1598,8 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
+      mTouchedFieldIndices.insert( item->fieldIndex() );
+      mDraftSaveTimer->start();
     }
     recalculateDerivedItems( true, false );
     return true;
