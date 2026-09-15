@@ -53,6 +53,10 @@ class LocalProjectsManager : public QObject
 
     Q_INVOKABLE QString projectName( const QString &projectId ) const;
 
+    //! Renames the local project's directory and main QGIS project file to newName.
+    //! Returns an empty string on success, or a user-facing error message on failure.
+    QString renameLocalProject( const QString &projectId, const QString &newName );
+
     /**
      * Returns changes of a project specified by projectId in the form :
      * (pending changes, features in layer survey: 10 addition, 3 updates, 1 deletion. 10 new files)
@@ -71,6 +75,7 @@ class LocalProjectsManager : public QObject
   signals:
     void localProjectAdded( const LocalProject &project );
     void localProjectDataChanged( const LocalProject &project );
+    void localProjectRenamed( const QString &oldProjectId, const LocalProject &project );
     void aboutToRemoveLocalProject( const LocalProject &project );
 
     void dataDirReloaded();
