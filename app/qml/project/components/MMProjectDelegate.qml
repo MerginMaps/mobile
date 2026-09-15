@@ -38,6 +38,9 @@ Control {
 
   height: implicitHeight
 
+  // shrink to leave room for the list's vertical scrollbar, so content isn't drawn underneath it
+  implicitWidth: ListView.view.width
+
   topPadding: __style.margin20
   rightPadding: __style.margin20
   leftPadding: __style.margin20

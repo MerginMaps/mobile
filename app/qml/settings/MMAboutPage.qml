@@ -20,14 +20,12 @@ MMPage {
 
   pageHeader.title: qsTr( "About" )
 
-  pageContent: ScrollView {
+  pageContent: MMScrollView {
 
     width: parent.width
     height: parent.height
 
-    contentWidth: availableWidth // to only scroll vertically
     ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
     ColumnLayout {
       width: parent.width

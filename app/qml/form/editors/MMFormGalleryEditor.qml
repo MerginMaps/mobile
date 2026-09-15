@@ -54,7 +54,9 @@ MMPrivateComponents.MMBaseInput {
     }
 
     delegate: MMComponents.MMPhotoCard{
-      size: rowView.height
+      // fixed margin, not live scrollbar padding - these are square cards, so
+      // shrinking height also shrinks width, risking an infinite resize loop
+      size: rowView.height - __style.margin12
 
       imageSource: {
         let absolutePath = model.PhotoPath
@@ -82,9 +84,10 @@ MMPrivateComponents.MMBaseInput {
     id: addFeatureComponent
 
     Row {
+      height: rowView.height - __style.margin12
 
       Rectangle {
-        height: rowView.height
+        height: parent.height
         width: height
 
         radius: __style.radius20
