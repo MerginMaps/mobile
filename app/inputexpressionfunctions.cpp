@@ -59,7 +59,12 @@ QVariant ReadExifLatitude::func( const QVariantList &values, const QgsExpression
   if ( resultString.isEmpty() )
     return QVariant();
 
-  return QVariant( InputUtils::convertCoordinateString( resultString ) );
+  double lat = InputUtils::convertCoordinateString( resultString );
+  QString latRef = AndroidUtils::readExif( filepath, QStringLiteral( "GPSLatitudeRef" ) );
+  if ( lat > 0.0 && latRef.startsWith( QLatin1Char( 'S' ), Qt::CaseInsensitive ) )
+    lat = -lat;
+  return QVariant( lat );
+
 #elif defined( Q_OS_IOS )
   double lat = IosUtils::readExif( filepath, GPS_LAT_TAG ).toDouble();
   QString latRef = IosUtils::readExif( filepath, QStringLiteral( "GPSLatitudeRef" ) );
@@ -81,7 +86,12 @@ QVariant ReadExifLongitude::func( const QVariantList &values, const QgsExpressio
   if ( resultString.isEmpty() )
     return QVariant();
 
-  return QVariant( InputUtils::convertCoordinateString( resultString ) );
+  double lon = InputUtils::convertCoordinateString( resultString );
+  QString lonRef = AndroidUtils::readExif( filepath, QStringLiteral( "GPSLongitudeRef" ) );
+  if ( lon > 0.0 && lonRef.startsWith( QLatin1Char( 'W' ), Qt::CaseInsensitive ) )
+    lon = -lon;
+  return QVariant( lon );
+
 #elif defined( Q_OS_IOS )
   double lon = IosUtils::readExif( filepath, GPS_LON_TAG ).toDouble();
   QString lonRef = IosUtils::readExif( filepath, QStringLiteral( "GPSLongitudeRef" ) );
