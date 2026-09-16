@@ -97,8 +97,22 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
     project.files << MerginFile::fromJsonObject( it->toObject() );
   }
 
+  project.id = docObj.value( QStringLiteral( "id" ) ).toString();
   project.name = docObj.value( QStringLiteral( "name" ) ).toString();
-  project.projectNamespace = docObj.value( QStringLiteral( "namespace" ) ).toString();
+
+  if ( docObj.contains( QStringLiteral( "workspace" ) ) )
+  {
+    // v2 project detail
+    QJsonObject workspaceData = docObj.value( QStringLiteral( "workspace" ) ).toObject();
+
+    project.workspaceId = workspaceData.value( QStringLiteral( "id" ) ).toInt();
+    project.workspaceName = workspaceData.value( QStringLiteral( "name" ) ).toString();
+  }
+  else
+  {
+    project.workspaceName = docObj.value( QStringLiteral( "namespace" ) ).toString();
+  }
+
   project.role = docObj.value( QStringLiteral( "role" ) ).toString();
 
   QString versionStr = docObj.value( QStringLiteral( "version" ) ).toString();
@@ -110,15 +124,6 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
   {
     versionStr = versionStr.mid( 1 );
     project.version = versionStr.toInt();
-  }
-
-  if ( docObj.contains( QStringLiteral( "id" ) ) )
-  {
-    project.projectId = docObj.value( QStringLiteral( "id" ) ).toString();
-  }
-  else
-  {
-    project.projectId.clear();
   }
 
   return project;

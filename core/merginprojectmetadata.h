@@ -65,16 +65,18 @@ struct MerginConfig
 //! Metadata read from project info reply or read from cached local .mergin.json file
 struct MerginProjectMetadata
 {
+  QString id; //!< unique project ID (only available in API that supports project IDs)
   QString name;
-  QString projectNamespace;
+  int workspaceId = -1; //! empty when using v1 project detail
+  QString workspaceName;
+
   QString role;
   int version = -1;
   QList<MerginFile> files;
-  QString projectId; //!< unique project ID (only available in API that supports project IDs)
 
   // no project dir, no sync state, ...
 
-  bool isValid() const { return !name.isEmpty() && !projectNamespace.isEmpty(); }
+  bool isValid() const { return !name.isEmpty() && !workspaceName.isEmpty(); }
 
   static MerginProjectMetadata fromJson( const QByteArray &data );
 
