@@ -292,60 +292,6 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
   return requestId;
 }
 
-void MerginApi::syncProject( const QString &projectNamespace, const QString &projectName, const bool isInitialSync )
-{
-  const QString projectFullName = getFullProjectName( projectNamespace, projectName );
-
-  /**
-   * This an asynchronous implementation of the sync loop. The logic is to do pull -> push and repeat if there are any
-   * local changes not uploaded yet.
-   */
-  auto connection = std::make_shared<QMetaObject::Connection>();
-  *connection = connect( this, &MerginApi::syncTransactionFinished, this,
-                         [this, projectNamespace, projectName, projectFullName, connection, isInitialSync]
-                         ( const QString & finishedProjectFullName, const bool successful, const int version, const TransactionStatus::TransactionType finishedType )
-  {
-    if ( finishedProjectFullName != projectFullName )
-    {
-      return;
-    }
-
-    if ( !successful )
-    {
-      disconnect( *connection );
-      emit syncProjectFinished( projectFullName, false, version );
-      return;
-    }
-
-    if ( finishedType == TransactionStatus::Pull )
-    {
-      pushProject( projectNamespace, projectName, isInitialSync ? true : false );
-      return;
-    }
-
-    // a push just finished - go for another pull if there are still local changes to sync
-    if ( ProjectStatus::hasLocalChanges( mLocalProjects.projectFromMerginName( projectFullName ), supportsSelectiveSync() ) )
-    {
-      pullProject( projectNamespace, projectName );
-      return;
-    }
-
-    disconnect( *connection );
-    emit syncProjectFinished( projectFullName, true, version );
-    emit projectDataChanged( projectFullName );
-  } );
-
-  if ( isInitialSync )
-  {
-    pushProject( projectNamespace, projectName, true );
-  }
-  else
-  {
-    pullProject( projectNamespace, projectName );
-  }
-}
-
-
 void MerginApi::downloadNextItem( const QString &projectFullName )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
@@ -1417,7 +1363,7 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
-          syncProject( projectNamespace, projectName, true );
+          pushProject( projectNamespace, projectName, true );
         }
       }
     }
@@ -1928,18 +1874,27 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor, in
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
+bool MerginApi::hasLocalProjectChanges( const QString &projectFullName )
 {
-  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
+  const LocalProject localProject = mLocalProjects.projectFromMerginName( projectFullName );
+  const QString metadataFilePath = localProject.projectDir + "/" + sMetadataFile;
 
-  MerginConfig config;
-  if ( supportsSelectiveSync )
+  // If the project does not have metadata file, there are local changes
+  if ( !QFile::exists( metadataFilePath ) )
   {
-    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+    return true;
   }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
+  const MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( metadataFilePath );
+  const QList<MerginFile> localFiles = getLocalProjectFiles( localProject.projectDir + "/" );
+
+  MerginConfig config;
+  if ( supportsSelectiveSync() )
+  {
+    config = MerginConfig::fromFile( localProject.projectDir + "/" + sMerginConfigFile );
+  }
+
+  return hasLocalChanges( projectMetadata.files, localFiles, localProject.projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )

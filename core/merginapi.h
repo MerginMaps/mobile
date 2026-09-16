@@ -277,16 +277,6 @@ class MerginApi: public QObject
     Q_INVOKABLE QString listProjectsByName( const QStringList &projectNames = QStringList() );
 
     /**
-     * Starts non-blocking synchronisation loop, which first pulls project and then pushes any local changes. The loop
-     * will continue until any local changes are not synced. Encountering unretryable error or retrying maximum number
-     * of times will break the loop.
-     * \param projectNamespace Project's namespace used in request.
-     * \param projectName Project's name used in request.
-     * \param isInitialSync Whether this is the first sync of local project, which has been just created on server.
-     */
-    void syncProject( const QString &projectNamespace, const QString &projectName, bool isInitialSync = false );
-
-    /**
      * Sends non-blocking POST request to the server to pull (download) a project with a given name. On pullProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
      * files are removed. Emits syncTransactionFinished at the end.
@@ -437,7 +427,7 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
-    static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
+    bool hasLocalProjectChanges( const QString &projectFullName );
 
     /**
      * Parse major and minor version number from version string
@@ -699,7 +689,6 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
-    void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
     void syncTransactionFinished( const QString &projectFullName, bool successfully, int version, TransactionStatus::TransactionType transactionType );
     void projectReloadNeededAfterSync( const QString &projectFullName );
     /**
@@ -744,7 +733,6 @@ class MerginApi: public QObject
     void pullFilesStarted();
     void pushFilesStarted();
     void pushCanceled( const QString &projectFullName, bool result );
-    void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
     void projectAttachedToMergin( const QString &projectFullName, const QString &previousProjectName );
 

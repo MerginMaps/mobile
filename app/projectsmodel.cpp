@@ -95,7 +95,7 @@ QVariant ProjectsModel::data( const QModelIndex &index, int role ) const
         }
         else
         {
-          ProjectStatus::Status status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+          ProjectStatus::Status status = ProjectStatus::projectStatus( project, *mBackend );
 
           if ( status == ProjectStatus::NeedsSync )
           {
@@ -285,7 +285,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       if ( res != merginProjects.end() )
       {
         project.mergin = *res;
-        project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+        project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
       }
       else if ( project.local.hasMerginMetadata() )
       {
@@ -295,7 +295,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
         // (listProjectsByName API limits response to max 50 projects)
         project.mergin.projectName = project.local.projectName;
         project.mergin.projectNamespace = project.local.projectNamespace;
-        project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+        project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
       }
 
       mProjects << project;
@@ -317,7 +317,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
         Project project;
 
         MerginApi::extractProjectName( pendingProjectName, project.mergin.projectNamespace, project.mergin.projectName );
-        project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+        project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
 
         mProjects << project;
       }
@@ -340,7 +340,7 @@ void ProjectsModel::mergeProjects( const MerginProjectsList &merginProjects, Mer
       {
         project.local = *match;
       }
-      project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+      project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
 
       mProjects << project;
     }
@@ -429,7 +429,7 @@ void ProjectsModel::onProjectSyncFinished( const QString &projectFullName, bool 
     project.mergin.serverVersion = newVersion;
   }
 
-  project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+  project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
 
   QModelIndex changeIndex = index( ix );
   emit dataChanged( changeIndex, changeIndex, { ProjectSyncPending, ProjectSyncProgress, ProjectStatus } );
@@ -474,7 +474,7 @@ void ProjectsModel::onProjectAdded( const LocalProject &localProject )
     project.local = localProject;
     if ( project.isMergin() )
     {
-      project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+      project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
     }
 
     QModelIndex modelIx = index( ix );
@@ -510,7 +510,7 @@ void ProjectsModel::onAboutToRemoveProject( const LocalProject &localProject )
     {
       // just remove local part
       mProjects[ix].local = LocalProject();
-      mProjects[ix].mergin.status = ProjectStatus::projectStatus( mProjects[ix], mBackend->supportsSelectiveSync() );
+      mProjects[ix].mergin.status = ProjectStatus::projectStatus( mProjects[ix], *mBackend );
 
       QModelIndex modelIx = index( ix );
       emit dataChanged( modelIx, modelIx );
@@ -531,7 +531,7 @@ void ProjectsModel::onProjectDataChanged( const LocalProject &localProject )
 
   if ( project.isMergin() )
   {
-    project.mergin.status = ProjectStatus::projectStatus( project, mBackend->supportsSelectiveSync() );
+    project.mergin.status = ProjectStatus::projectStatus( project, *mBackend );
   }
 
   QModelIndex editIndex = index( ix );

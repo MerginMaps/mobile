@@ -20,18 +20,30 @@
 
 struct SyncProcess
 {
-  qreal progress;
-  bool pending;
-
+  // sync progress should be a number in range <0, 1> or -1 if invalid
+  qreal progress = 0;
+  // whether sync is in progress
+  bool pending = false;
+  // whether it's necessary to reload project after sync is finished (schema changed)
   bool reloadProject = false;
-
-  bool awaitsRetry; // not currently being synced, but awaits to be synced
+  // not currently being synced, but awaits to be synced
+  bool awaitsRetry = false;
+  // number of retries that have been done for retryable errors
   int retriesCount = 0;
+  // TODO: remove?
   SyncOptions::Strategy strategy = SyncOptions::Singleshot;
-  SyncOptions::RequestOrigin requestOrigin;
-  // In future: current state (push/pull)
+  // specifies who requested the sync
+  SyncOptions::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest;
 };
 
+constexpr int DEFAULT_RETRY_INTERVAL_MS = 100000; // 1 minute
+
+/**
+ * Synchronisation manager is a controller class used as interface for managing creation, synchronisation and deletion
+ * of projects to server. Internally it calls functions of MerginApi to manage the process.
+ *
+ * \note This class should be used instead of direct calls to MerginApi.
+ */
 class SynchronizationManager : public QObject
 {
     Q_OBJECT
@@ -40,7 +52,23 @@ class SynchronizationManager : public QObject
 
     explicit SynchronizationManager( MerginApi *merginApi, QObject *parent = nullptr );
 
-    virtual ~SynchronizationManager();
+    ~SynchronizationManager() override = default;
+
+    /**
+     * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
+     *
+     * \param project Project struct instance
+     * \param auth Bears an information whether authorization should be included in sync requests.
+     *                Authorization can be omitted for pull of public projects
+     * \param strategy Describes whether sync will be tried again after temporary error
+     * \param requestOrigin Flags if the request is coming from user or autosync controller
+     */
+    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
+                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
+
+    //! Overloaded method, allows to sync with Project instance. Can be used in case of first download of remote project (it has invalid LocalProject info).
+    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
+                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
 
     //! Stops a running sync process if there is one for project specified by projectFullname
     void stopProjectSync( const QString &projectFullName );
@@ -65,30 +93,16 @@ class SynchronizationManager : public QObject
 
     void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
+    void projectDataChanged( const QString &projectFullName );
 
   public slots:
-
-    /**
-     * \brief syncProject Starts synchronization of a project if there are local/server changes to be applied
-     *
-     * \param project Project struct instance
-     * \param auth Bears an information whether authorization should be included in sync requests.
-     *                Authorization can be omitted for pull of public projects
-     * \param strategy Describes whether sync will be tried again after temporary error
-     * \param requestOrigin Flags if the request is coming from user or autosync controller
-     */
-    void syncProject( const LocalProject &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
-                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
-
-    //! Overloaded method, allows to sync with Project instance. Can be used in case of first download of remote project (it has invalid LocalProject info).
-    void syncProject( const Project &project, SyncOptions::Authorization auth = SyncOptions::Authorized, SyncOptions::Strategy strategy = SyncOptions::Singleshot, SyncOptions
-                      ::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest );
+    void onTransactionFinished( const QString &finishedProjectFullName, bool successful, int version, TransactionStatus::TransactionType finishedTransactionType );
 
     // Handling of synchronization changes from MerginApi
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
-    void onProjectSyncFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
+    void onTransactionFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
     void onProjectReloadNeededAfterSync( const QString &projectFullName );
     void onProjectCreated( const QString &projectName, bool result );
@@ -100,7 +114,7 @@ class SynchronizationManager : public QObject
 
     MerginApi *mMerginApi = nullptr; // not owned
 
-    int mSyncRetryIntervalSeconds = 100000; // 1 minute between sync retries
+    int mSyncRetryIntervalSeconds = DEFAULT_RETRY_INTERVAL_MS; // 1 minute between sync retries
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H

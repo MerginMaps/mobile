@@ -17,23 +17,26 @@
 
 struct Project;
 struct LocalProject;
+class MerginApi;
 
-namespace ProjectStatus
+class ProjectStatus
 {
-  Q_NAMESPACE
-  enum Status
-  {
-    NoVersion,  //!< the project is not downloaded
-    UpToDate,   //!< both server and local copy are in sync with no extra modifications
-    NeedsSync,  //!< server has newer version than what is available locally and/or the project is modified locally
-  };
-  Q_ENUM_NS( Status )
+    Q_GADGET
 
-  //! Returns project state from ProjectStatus::Status enum for the project
-  Status projectStatus( const Project &project, bool supportsSelectiveSync );
+  public:
+    explicit ProjectStatus() = default;
 
-  bool hasLocalChanges( const LocalProject &project, bool supportsSelectiveSync );
-}
+    enum Status
+    {
+      NoVersion,  //!< the project is not downloaded
+      UpToDate,   //!< both server and local copy are in sync with no extra modifications
+      NeedsSync,  //!< server has newer version than what is available locally and/or the project is modified locally
+    };
+    Q_ENUM( Status )
+
+    //! Returns project state from ProjectStatus::Status enum for the project
+    static Status projectStatus( const Project &project, MerginApi &merginApi );
+};
 
 /**
  * \brief The LocalProject struct is used as a struct for projects that are available on the device.

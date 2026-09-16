@@ -60,11 +60,11 @@ class VariablesManager : public QObject
 
   public slots:
     void merginProjectChanged( QgsProject *project );
+    void updateProjectVariables( const QString &projectFullName );
 
   private slots:
     void apiRootChanged();
     void setUserVariables();
-    void setVersionVariable( const QString &projectFullName );
 
   private:
     MerginApi *mMerginApi = nullptr;

@@ -685,6 +685,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &syncManager, &SynchronizationManager::projectDataChanged, vm.get(), &VariablesManager::updateProjectVariables );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );
