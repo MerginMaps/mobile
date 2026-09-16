@@ -26,6 +26,12 @@ class MerginServerType
       SAAS // saas, multiple workspaces and subscriptions
     };
     Q_ENUMS( ServerType )
+
+    enum syncTransactionVersion
+    {
+      v1 = 0,
+      v2
+    };
 };
 
 #endif // MERGINSERVERTYPE_H

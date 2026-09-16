@@ -4059,6 +4059,17 @@ void MerginApi::getServerConfigReplyFinished()
 
       const bool userSelfRegistrationEnabled = doc.object().value( QStringLiteral( "user_self_registration" ) ).toBool( false );
       setUserSelfRegistrationEnabled( userSelfRegistrationEnabled );
+
+      const bool pullV2Enabled = doc.object().value( QStringLiteral( "v2_pull_enabled" ) ).toBool( false );
+      const bool pushV2Enabled = doc.object().value( QStringLiteral( "v2_push_enabled" ) ).toBool( false );
+      if ( pullV2Enabled )
+      {
+        mPullVersion = MerginServerType::syncTransactionVersion::v2;
+      }
+      if ( pushV2Enabled )
+      {
+        mPushVersion = MerginServerType::syncTransactionVersion::v2;
+      }
     }
   }
   else

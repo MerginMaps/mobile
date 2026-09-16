@@ -979,6 +979,8 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
+    MerginServerType::syncTransactionVersion mPullVersion  = MerginServerType::syncTransactionVersion::v1;
+    MerginServerType::syncTransactionVersion mPushVersion  = MerginServerType::syncTransactionVersion::v1;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
