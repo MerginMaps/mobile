@@ -36,7 +36,8 @@ struct SyncProcess
   SyncOptions::RequestOrigin requestOrigin = SyncOptions::RequestOrigin::ManualRequest;
 };
 
-constexpr int DEFAULT_RETRY_INTERVAL_MS = 100000; // 1 minute
+constexpr int DEFAULT_RETRY_INTERVAL_MS = 5000; // 5 seconds
+constexpr int MAXIMUM_RETRY_COUNT = 10;
 
 /**
  * Synchronisation manager is a controller class used as interface for managing creation, synchronisation and deletion
@@ -102,7 +103,7 @@ class SynchronizationManager : public QObject
     void onProjectSyncCanceled( const QString &projectFullName, bool hasError );
     void onProjectSyncProgressChanged( const QString &projectFullName, qreal progress );
     void onProjectSyncFinished( const QString &projectFullName, bool successfully, int version );
-    void onTransactionFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName );
+    void onTransactionFailure( const QString &message, const QString &topic, int httpCode, const QString &projectFullName, const QString &serverErrorCode );
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
     void onProjectReloadNeededAfterSync( const QString &projectFullName );
     void onProjectCreated( const QString &projectName, bool result );
@@ -114,7 +115,7 @@ class SynchronizationManager : public QObject
 
     MerginApi *mMerginApi = nullptr; // not owned
 
-    int mSyncRetryIntervalSeconds = DEFAULT_RETRY_INTERVAL_MS; // 1 minute between sync retries
+    int mSyncRetryIntervalSeconds = DEFAULT_RETRY_INTERVAL_MS;
 };
 
 #endif // SYNCHRONIZATIONMANAGER_H

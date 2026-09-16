@@ -702,7 +702,8 @@ class MerginApi: public QObject
       const QString &message,
       const QString &topic,
       int httpCode = -1,
-      const QString &projectFullName = QLatin1String()
+      const QString &projectFullName = QLatin1String(),
+      const QString &serverErrorCode = QLatin1String()
     );
 
     void storageLimitReached( qreal uploadSize );

@@ -291,7 +291,8 @@ void SynchronizationManager::onTransactionFailure(
   const QString &message,
   const QString &topic,
   const int errorCode,
-  const QString &projectFullName )
+  const QString &projectFullName,
+  const QString &serverErrorCode )
 {
   if ( projectFullName.isEmpty() )
   {
@@ -307,13 +308,9 @@ void SynchronizationManager::onTransactionFailure(
 
   SyncProcess &process = mSyncProcesses[projectFullName];
 
-  const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
+  const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message, serverErrorCode );
 
-  // We only retry twice for synchronization requested by user
-  const bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
-                                process.retriesCount < 2 &&
-                                !SynchronizationError::isPermanent( error ) &&
-                                process.requestOrigin == SyncOptions::ManualRequest;
+  const bool eligibleForRetry = process.retriesCount < MAXIMUM_RETRY_COUNT && !SynchronizationError::isPermanent( error );
 
   if ( process.requestOrigin == SyncOptions::ManualRequest )
   {
@@ -322,7 +319,7 @@ void SynchronizationManager::onTransactionFailure(
 
   if ( eligibleForRetry )
   {
-    process.retriesCount = process.retriesCount + 1;
+    process.retriesCount = process.retriesCount++;
     process.awaitsRetry = true;
 
     QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]

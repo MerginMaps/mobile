@@ -504,7 +504,8 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( serverMsg.isEmpty() )
     {
       if ( r->error() == QNetworkReply::OperationCanceledError )
@@ -520,8 +521,9 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
       // the first failed request will abort all the other pending requests too, and finish pull with error
       abortPullItems( projectFullName );
       // signal a networking error - we may retry
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
+      const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      const QString serverErrorCode = extractServerErrorCode( data );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName, serverErrorCode );
     }
     else
     {
@@ -578,7 +580,8 @@ void MerginApi::cacheServerConfig()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( serverMsg.isEmpty() )
     {
       serverMsg = r->errorString();
@@ -596,8 +599,9 @@ void MerginApi::cacheServerConfig()
       CoreUtils::removeDir( transaction.projectDir );
     }
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName, serverErrorCode );
 
     finishTransaction( projectFullName, false );
   }
@@ -1399,7 +1403,7 @@ void MerginApi::createProjectFinished()
     {
       emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
       emit projectCreationFailed();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName, code );
     }
   }
   r->deleteLater();
@@ -1748,10 +1752,10 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
 
 QString MerginApi::extractServerErrorCode( const QByteArray &data )
 {
-  QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+  const QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
   if ( code.isValid() )
     return code.toString();
-  return QString();
+  return {};
 }
 
 QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
@@ -2431,7 +2435,7 @@ void MerginApi::pushStartReplyFinished()
     else
     {
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, code );
     }
     finishTransaction( projectFullName, false );
   }
@@ -2486,14 +2490,16 @@ void MerginApi::pushFileReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
@@ -2525,15 +2531,17 @@ void MerginApi::pullInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPullProjectInfo->deleteLater();
     transaction.replyPullProjectInfo = nullptr;
@@ -3085,7 +3093,8 @@ void MerginApi::pushInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
@@ -3093,7 +3102,8 @@ void MerginApi::pushInfoReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName );
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
@@ -3168,15 +3178,17 @@ void MerginApi::pushFinishReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
 
     // remove temporary diff files
     const auto diffFiles = transaction.pushDiffFiles;
@@ -4354,19 +4366,21 @@ void MerginApi::createWorkspaceReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
     CoreUtils::log( "create " + workspaceName, message );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
 
     if ( httpCode == 409 )
     {
-      emit networkErrorOccurred( tr( "Workspace %1 already exists" ).arg( workspaceName ), QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+      emit networkErrorOccurred( tr( "Workspace %1 already exists" ).arg( workspaceName ), QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName, serverErrorCode );
     }
     else
     {
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName, serverErrorCode );
     }
   }
   r->deleteLater();
