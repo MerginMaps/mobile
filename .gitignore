@@ -3,6 +3,7 @@
 *.orig
 *.DS_Store
 *.user
+*.qtcreator
 *.idea
 *.vscode
 *.cache
