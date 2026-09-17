@@ -1058,6 +1058,13 @@ ApplicationWindow {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
       }
     }
+
+    function onProjectDataChanged( projectFullName ) {
+      //! if current project has been updated, refresh canvas
+      if ( projectFullName === projectController.activeProjectId ) {
+        map.mapSettings.extentChanged()
+      }
+    }
   }
 
   Connections {
@@ -1088,13 +1095,6 @@ ApplicationWindow {
       projectLimitDialog.open()
 
       syncButton.iconRotateAnimationRunning = false
-    }
-
-    function onProjectDataChanged( projectFullName ) {
-      //! if current project has been updated, refresh canvas
-      if ( projectFullName === projectController.activeProjectId ) {
-        map.mapSettings.extentChanged()
-      }
     }
 
     function onMigrationRequested( version ) {
