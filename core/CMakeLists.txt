@@ -14,6 +14,8 @@ set(MM_CORE_SRCS
     project.cpp
     geodiffutils.cpp
     projectchecksumcache.cpp
+    synchronizationerror.cpp
+    synchronizationmanager.cpp
 )
 
 set(MM_CORE_HDRS
@@ -34,6 +36,9 @@ set(MM_CORE_HDRS
     geodiffutils.h
     projectchecksumcache.h
     credentialstore.h
+    synchronizationerror.h
+    synchronizationmanager.h
+    synchronizationoptions.h
 )
 
 if (USE_MM_SERVER_API_KEY)

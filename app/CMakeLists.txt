@@ -90,8 +90,6 @@ set(MM_SRCS
     snaputils.cpp
     staticfeaturesmodel.cpp
     streamingintervaltype.cpp
-    synchronizationerror.cpp
-    synchronizationmanager.cpp
     valuerelationcontroller.cpp
     valuerelationfeaturesmodel.cpp
     variablesmanager.cpp
@@ -187,9 +185,6 @@ set(MM_HDRS
     snaputils.h
     staticfeaturesmodel.h
     streamingintervaltype.h
-    synchronizationerror.h
-    synchronizationmanager.h
-    synchronizationoptions.h
     valuerelationcontroller.h
     valuerelationfeaturesmodel.h
     variablesmanager.h
