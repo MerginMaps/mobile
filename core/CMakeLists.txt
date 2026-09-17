@@ -64,7 +64,12 @@ else ()
   message(STATUS "Using QSettings to store credentials.")
 endif ()
 
-qt_add_library(mm_core STATIC ${MM_CORE_SRCS} ${MM_CORE_HDRS})
+qt_add_library(
+  mm_core
+  STATIC
+  ${MM_CORE_SRCS}
+  ${MM_CORE_HDRS}
+)
 target_include_directories(mm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(
   mm_core

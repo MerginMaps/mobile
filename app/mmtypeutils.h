@@ -36,7 +36,7 @@ struct ForeignPoint
 
 class SynchronizationErrorDerived : public SynchronizationError
 {
-  Q_GADGET
+    Q_GADGET
 };
 
 namespace SynchronizationErrorsDerivedForeign
