@@ -33,7 +33,7 @@ class SynchronizationError
       ServerError,
       UnknownError
     };
-    Q_ENUMS( ErrorType );
+    Q_ENUM( ErrorType );
 
     /**
      * Parses error from server based on http error code, server message and server error code for server with enabled

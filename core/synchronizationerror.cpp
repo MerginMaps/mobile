@@ -66,7 +66,7 @@ SynchronizationError::ErrorType SynchronizationError::errorType( const int httpE
   return ErrorType::UnknownError;
 }
 
-bool SynchronizationError::isPermanent( ErrorType errorType )
+bool SynchronizationError::isPermanent( const ErrorType errorType )
 {
   switch ( errorType )
   {

@@ -1022,15 +1022,15 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        if ( errorType === MM.SyncError.NotAMerginProject )
+        if ( errorType === SyncError.NotAMerginProject )
         {
           migrateToMerginDialog.open()
         }
-        else if ( errorType === MM.SyncError.NoPermissions )
+        else if ( errorType === SyncError.NoPermissions )
         {
           noPermissionsDialog.open()
         }
-        else if ( errorType === MM.SyncError.AnotherProcessIsRunning && willRetry )
+        else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
         {
           // just banner that we will try again
           __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
