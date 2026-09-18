@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature request
+    url: https://community.merginmaps.com/b/wishlist
+    about: Share your idea or missing feature with community and help us prioritise the most sought after.
+  - name: Mergin Maps documentation
+    url: https://merginmaps.com/docs/
+    about: Our comprehensive documentation will help you get up and running in no time.
+  - name: Mergin Maps community
+    url: https://community.merginmaps.com/b/forum
+    about: If you encounter any issues ask the community for help, you might not be the first one to come across them.
+  - name: Mergin Maps support
+    url: https://support.merginmaps.com/new-ticket
+    about: For users on professional or team plan don't hesitate to contact our support team.

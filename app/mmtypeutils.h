@@ -8,7 +8,8 @@
  ***************************************************************************/
 
 /**
- * This file should be used for explicit declaration of 3rd party types into QML.
+ * This file should be used for explicit declaration of 3rd party types into QML. As well it's used to declare types
+ * from core into QML.
  */
 
 #ifndef MMTYPEUTILS_H
@@ -16,6 +17,8 @@
 
 #include <qgsgeometry.h>
 #include <qqmlintegration.h>
+
+#include "synchronizationerror.h"
 
 struct ForeignGeometry
 {
@@ -30,5 +33,18 @@ struct ForeignPoint
   QML_FOREIGN( QgsPoint )
   QML_VALUE_TYPE( qgsPoint );
 };
+
+class SynchronizationErrorDerived : public SynchronizationError
+{
+    Q_GADGET
+};
+
+namespace SynchronizationErrorsDerivedForeign
+{
+  Q_NAMESPACE
+  QML_NAMED_ELEMENT( SyncError )
+  QML_FOREIGN_NAMESPACE( SynchronizationErrorDerived )
+}
+
 
 #endif //MMTYPEUTILS_H

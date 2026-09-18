@@ -258,7 +258,6 @@ void initDeclarative()
   qmlRegisterUncreatableType<MerginSubscriptionInfo>( "mm", 1, 0, "MerginSubscriptionInfo", "" );
   qmlRegisterUncreatableType<ActiveProject>( "mm", 1, 0, "ActiveProject", "" );
   qmlRegisterUncreatableType<SynchronizationManager>( "mm", 1, 0, "SynchronizationManager", "" );
-  qmlRegisterUncreatableType<SynchronizationError>( "mm", 1, 0, "SyncError", "SyncError Enum" );
   qmlRegisterUncreatableType<MerginApiStatus>( "mm", 1, 0, "MerginApiStatus", "MerginApiStatus Enum" );
   qmlRegisterUncreatableType<MerginServerType>( "mm", 1, 0, "MerginServerType", "MerginServerType Enum" );
   qmlRegisterUncreatableType<MerginSubscriptionStatus>( "mm", 1, 0, "MerginSubscriptionStatus", "MerginSubscriptionStatus Enum" );
@@ -685,6 +684,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &pw, &ProjectWizard::projectCreated, &localProjectsManager, &LocalProjectsManager::addLocalProject );
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, vm.get(), &VariablesManager::merginProjectChanged );
   QObject::connect( &activeProject, &ActiveProject::projectWillBeReloaded, &inputProjUtils, &InputProjUtils::resetHandlers );
+  QObject::connect( &syncManager, &SynchronizationManager::projectDataChanged, vm.get(), &VariablesManager::updateProjectVariables );
   QObject::connect( &syncManager, &SynchronizationManager::syncFinished, &activeProject, [&activeProject]( const QString & projectFullName, bool successfully, int version, bool reloadNeeded )
   {
     Q_UNUSED( successfully );

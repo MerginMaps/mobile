@@ -45,6 +45,9 @@ const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg"
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
 const QString MerginApi::sTempChunkId = QStringLiteral( "temp_chunk_id" );
+const qint64 MerginApi::MAX_UPLOAD_MEDIA_SIZE = 10 * qPow( 1024LL, 3LL );
+const qint64 MerginApi::MAX_UPLOAD_VERSIONED_SIZE = 5 * qPow( 1024LL, 3LL );
+constexpr int MerginApi::MAX_UPLOAD_CHANGES = 100;
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 #ifdef MOBILE_OS
 const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
@@ -292,20 +295,6 @@ void MerginApi::pushInfoReplyFinished()
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
-    // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-
-    // now let's figure a key question: are we on the most recent version of the project
-    // if we're about to do upload? because if not, we need to do pull first
-    if ( projectInfo.isValid() && projectInfo.localVersion != -1 && projectInfo.localVersion < serverProject.version )
-    {
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Need pull first: local version %1 | server version %2" )
-                      .arg( projectInfo.localVersion ).arg( serverProject.version ) );
-      transaction.pullBeforePush = true;
-      prepareProjectPull( projectFullName, data );
-      return;
-    }
-
     transaction.projectMetadata = data;
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
@@ -313,7 +302,8 @@ void MerginApi::pushInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
@@ -321,12 +311,13 @@ void MerginApi::pushInfoReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName );
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -383,10 +374,30 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   }
 
   const bool useV2push = true;
+  int fileCounter = 0;
 
   for ( const QString &filePath : std::as_const( transaction.diff.localAdded ) )
   {
     MerginFile file = findFile( filePath, localFiles );
+
+    if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
+      break;
+    }
+
     file.chunks = generateChunkIdsForSize( file.size );
 
     if ( mSupportsSelectiveSync && filePath == sMerginConfigFile )
@@ -397,11 +408,31 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     }
 
     transaction.pushChanges.added.append( file );
+    fileCounter++;
   }
 
   for ( const QString &filePath : std::as_const( transaction.diff.localUpdated ) )
   {
     MerginFile file = findFile( filePath, localFiles );
+
+    if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
+      break;
+    }
+
     file.chunks = generateChunkIdsForSize( file.size );
 
     if ( MerginApi::isFileDiffable( filePath ) )
@@ -439,10 +470,11 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     {
       // problem, we changed selective sync config locally, this is undefined and sync must stop
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was updated locally, this is undefined and might lead to data loss, aborting push..." ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
     }
 
     transaction.pushChanges.updated.append( file );
+    fileCounter++;
   }
 
   for ( QString filePath : transaction.diff.localDeleted )
@@ -453,10 +485,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   if ( transaction.pushChanges.added.isEmpty() && transaction.pushChanges.updated.isEmpty() && transaction.pushChanges.removed.isEmpty() )
   {
-    finishProjectSync( projectFullName, true );
-
-    // TODO: emit pushFinished( EverythingUploadedState ~ sicko zrobeno );
-
+    finishTransaction( projectFullName, true );
     return;
   }
 
@@ -607,7 +636,6 @@ QString MerginApi::listProjectsByName( const QStringList &projectNames )
 
   return requestId;
 }
-
 
 void MerginApi::downloadNextItem( const QString &projectFullName )
 {
@@ -821,7 +849,8 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( serverMsg.isEmpty() )
     {
       if ( r->error() == QNetworkReply::OperationCanceledError )
@@ -837,8 +866,9 @@ void MerginApi::downloadItemReplyFinished( DownloadQueueItem item )
       // the first failed request will abort all the other pending requests too, and finish pull with error
       abortPullItems( projectFullName );
       // signal a networking error - we may retry
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
+      const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      const QString serverErrorCode = extractServerErrorCode( data );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName, serverErrorCode );
     }
     else
     {
@@ -867,7 +897,7 @@ void MerginApi::abortPullItems( const QString &projectFullName )
     QDir( transaction.projectDir ).removeRecursively();
   }
 
-  finishProjectSync( projectFullName, false );
+  finishTransaction( projectFullName, false );
 }
 
 void MerginApi::cacheServerConfig()
@@ -895,7 +925,8 @@ void MerginApi::cacheServerConfig()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( serverMsg.isEmpty() )
     {
       serverMsg = r->errorString();
@@ -913,10 +944,11 @@ void MerginApi::cacheServerConfig()
       CoreUtils::removeDir( transaction.projectDir );
     }
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: downloadFile" ), httpCode, projectFullName, serverErrorCode );
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -1839,7 +1871,7 @@ void MerginApi::createProjectFinished()
     {
       emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
       emit projectCreationFailed();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName, code );
     }
   }
   r->deleteLater();
@@ -2188,10 +2220,10 @@ bool MerginApi::extractProjectName( const QString &sourceString, QString &projec
 
 QString MerginApi::extractServerErrorCode( const QByteArray &data )
 {
-  QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
+  const QVariant code = extractServerErrorValue( data, QStringLiteral( "code" ) );
   if ( code.isValid() )
     return code.toString();
-  return QString();
+  return {};
 }
 
 QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
@@ -2314,18 +2346,27 @@ bool MerginApi::parseVersion( const QString &version, int &major, int &minor, in
   return true;
 }
 
-bool MerginApi::hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync )
+bool MerginApi::hasLocalProjectChanges( const QString &projectFullName )
 {
-  MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( projectDir + "/" + sMetadataFile );
-  QList<MerginFile> localFiles = getLocalProjectFiles( projectDir + "/" );
+  const LocalProject localProject = mLocalProjects.projectFromMerginName( projectFullName );
+  const QString metadataFilePath = localProject.projectDir + "/" + sMetadataFile;
 
-  MerginConfig config;
-  if ( supportsSelectiveSync )
+  // If the project does not have metadata file, there are local changes
+  if ( !QFile::exists( metadataFilePath ) )
   {
-    config = MerginConfig::fromFile( projectDir + "/" + sMerginConfigFile );
+    return true;
   }
 
-  return hasLocalChanges( projectMetadata.files, localFiles, projectDir, config );
+  const MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromCachedJson( metadataFilePath );
+  const QList<MerginFile> localFiles = getLocalProjectFiles( localProject.projectDir + "/" );
+
+  MerginConfig config;
+  if ( supportsSelectiveSync() )
+  {
+    config = MerginConfig::fromFile( localProject.projectDir + "/" + sMerginConfigFile );
+  }
+
+  return hasLocalChanges( projectMetadata.files, localFiles, localProject.projectDir, config );
 }
 
 QString MerginApi::getTempProjectDir( const QString &projectFullName )
@@ -2765,7 +2806,7 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
     mLocalProjects.addMerginProject( projectDir, projectNamespace, projectName );
   }
 
-  finishProjectSync( projectFullName, true );
+  finishTransaction( projectFullName, true );
 }
 
 
@@ -2802,7 +2843,7 @@ void MerginApi::pushStartReplyFinished()
       if ( transaction.transactionUUID.isEmpty() )
       {
         CoreUtils::log( "push " + projectFullName, QStringLiteral( "Fail! Could not acquire transaction ID" ) );
-        finishProjectSync( projectFullName, false );
+        finishTransaction( projectFullName, false );
       }
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
@@ -2821,7 +2862,7 @@ void MerginApi::pushStartReplyFinished()
       transaction.projectMetadata = data;
       transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-      finishProjectSync( projectFullName, true );
+      finishTransaction( projectFullName, true );
     }
   }
   else
@@ -2862,9 +2903,9 @@ void MerginApi::pushStartReplyFinished()
     else
     {
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, code );
     }
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -3147,7 +3188,8 @@ void MerginApi::pushFileReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
     {
       serverMsg = sSyncCanceledMessage;
@@ -3156,12 +3198,13 @@ void MerginApi::pushFileReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -3188,20 +3231,22 @@ void MerginApi::pullInfoReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "pull " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pullInfo" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPullProjectInfo->deleteLater();
     transaction.replyPullProjectInfo = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -3226,7 +3271,7 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
       emit projectAlreadyOnLatestVersion( projectFullName );
       CoreUtils::log( QStringLiteral( "Pull %1" ).arg( projectFullName ), QStringLiteral( "Project is already on the latest version: %1" ).arg( serverProject.version ) );
 
-      return finishProjectSync( projectFullName, false );
+      return finishTransaction( projectFullName, false );
     }
   }
   else
@@ -3538,6 +3583,18 @@ QList<DownloadQueueItem> MerginApi::itemsForFileDiffs( const MerginFile &file )
   return items;
 }
 
+
+static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
+{
+  for ( const MerginFile &merginFile : files )
+  {
+    if ( merginFile.path == filePath )
+      return merginFile;
+  }
+  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
+  return MerginFile();
+}
+
 void MerginApi::pushFinishReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -3604,19 +3661,21 @@ void MerginApi::pushFinishReplyFinished()
         CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
     }
 
-    finishProjectSync( projectFullName, true );
+    finishTransaction( projectFullName, true );
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
 
     // remove temporary diff files
     for ( const MerginFile &merginFile : transaction.pushChanges.updated )
@@ -3633,7 +3692,7 @@ void MerginApi::pushFinishReplyFinished()
     transaction.replyPushFinish->deleteLater();
     transaction.replyPushFinish = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 }
 
@@ -4185,7 +4244,7 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
   return jsonArray;
 }
 
-void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSuccessful )
+void MerginApi::finishTransaction( const QString &projectFullName, bool syncSuccessful )
 {
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
@@ -4207,7 +4266,6 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     CoreUtils::log( "sync " + projectFullName, QStringLiteral( "### FAILED ###\n" ) );
   }
 
-  bool pullBeforePush = transaction.pullBeforePush;
   QString projectDir = transaction.projectDir;  // keep it before the transaction gets removed
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
@@ -4217,24 +4275,18 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     emit projectReloadNeededAfterSync( projectFullName );
   }
 
+  const bool versionUpToDate = mLocalProjects.projectFromMerginName( projectFullName ).localVersion == transaction.version;
+  const TransactionStatus::TransactionType transactionType = transaction.type;
   mTransactionalStatus.remove( projectFullName );
 
-  if ( pullBeforePush )
+  // with no changes on server pull will report failed status however we want to continue with the sync loop
+  if ( versionUpToDate && transactionType == TransactionStatus::TransactionType::Pull )
   {
-    CoreUtils::log( "sync " + projectFullName, QStringLiteral( "Continue with push after pull" ) );
-    // we're done only with the download part before the actual upload - so let's continue with upload
-    QString projectNamespace, projectName;
-    extractProjectName( projectFullName, projectNamespace, projectName );
-    pushProject( projectNamespace, projectName );
+    emit syncTransactionFinished( projectFullName, true, newVersion, TransactionStatus::TransactionType::Pull );
   }
   else
   {
-    emit syncProjectFinished( projectFullName, syncSuccessful, newVersion );
-
-    if ( syncSuccessful )
-    {
-      emit projectDataChanged( projectFullName );
-    }
+    emit syncTransactionFinished( projectFullName, syncSuccessful, newVersion, transactionType );
   }
 }
 
@@ -4512,6 +4564,17 @@ void MerginApi::getServerConfigReplyFinished()
 
       const bool userSelfRegistrationEnabled = doc.object().value( QStringLiteral( "user_self_registration" ) ).toBool( false );
       setUserSelfRegistrationEnabled( userSelfRegistrationEnabled );
+
+      const bool pullV2Enabled = doc.object().value( QStringLiteral( "v2_pull_enabled" ) ).toBool( false );
+      const bool pushV2Enabled = doc.object().value( QStringLiteral( "v2_push_enabled" ) ).toBool( false );
+      if ( pullV2Enabled )
+      {
+        mPullVersion = MerginServerType::syncTransactionVersion::v2;
+      }
+      if ( pushV2Enabled )
+      {
+        mPushVersion = MerginServerType::syncTransactionVersion::v2;
+      }
     }
   }
   else
@@ -4819,19 +4882,21 @@ void MerginApi::createWorkspaceReplyFinished()
   }
   else
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
     QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
     CoreUtils::log( "create " + workspaceName, message );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
 
     if ( httpCode == 409 )
     {
-      emit networkErrorOccurred( tr( "Workspace %1 already exists" ).arg( workspaceName ), QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+      emit networkErrorOccurred( tr( "Workspace %1 already exists" ).arg( workspaceName ), QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName, serverErrorCode );
     }
     else
     {
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createWorkspace" ), httpCode, workspaceName, serverErrorCode );
     }
   }
   r->deleteLater();

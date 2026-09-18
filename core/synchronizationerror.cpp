@@ -11,9 +11,9 @@
 
 SynchronizationError::SynchronizationError() = default;
 
-SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, const QString &errorMessage )
+SynchronizationError::ErrorType SynchronizationError::errorType( const int httpErrorCode, const QString &errorMessage, const QString &serverErrorCode )
 {
-  if ( errorCode == 400 )
+  if ( httpErrorCode == 400 )
   {
     // 'Another process is running. Please try later.'
     if ( errorMessage.contains( QStringLiteral( "Another process" ) ) )
@@ -27,17 +27,37 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
       return ErrorType::VersionMismatch;
     }
   }
-  else if ( errorCode == 403 )
+  else if ( httpErrorCode == 403 )
   {
     // Cannot sync project
     return ErrorType::NoPermissions;
   }
-  else if ( errorCode == 404 )
+  else if ( httpErrorCode == 404 )
   {
     // Project no longer exists / is on different server
     return ErrorType::ProjectNotFound;
   }
-  else if ( errorCode >= 500 )
+  else if ( httpErrorCode == 409 )
+  {
+    //choose depending on serverErrorCode
+    if ( serverErrorCode == QStringLiteral( "ProjectsLimitHit" ) )
+    {
+      return ErrorType::ProjectLimitHit;
+    }
+    if ( serverErrorCode == QStringLiteral( "StorageLimitHit" ) )
+    {
+      return ErrorType::StorageLimitHit;
+    }
+    if ( serverErrorCode == QStringLiteral( "ProjectVersionExists" ) )
+    {
+      return ErrorType::VersionMismatch;
+    }
+    if ( serverErrorCode == QStringLiteral( "AnotherUploadRunning" ) )
+    {
+      return ErrorType::AnotherProcessIsRunning;
+    }
+  }
+  else if ( httpErrorCode == 429 || httpErrorCode >= 500 )
   {
     // Exceptions in server code or maintenance mode
     return ErrorType::ServerError;
@@ -46,7 +66,7 @@ SynchronizationError::ErrorType SynchronizationError::errorType( int errorCode, 
   return ErrorType::UnknownError;
 }
 
-bool SynchronizationError::isPermanent( ErrorType errorType )
+bool SynchronizationError::isPermanent( const ErrorType errorType )
 {
   switch ( errorType )
   {
