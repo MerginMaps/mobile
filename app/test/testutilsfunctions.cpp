@@ -331,6 +331,7 @@ void TestUtilsFunctions::resolveTargetDir()
 {
   QString homePath = TestUtils::testDataDir();
   QString DEFAULT_ROOT( "DEFAULT/ROOT/PATH" ); // can be not existing path
+  QString ABSOLUTE_DEFAULT_ROOT( "/absolute/default/root/path" ); // can be not existing path
 
   QgsProject *activeProject = nullptr;
   QVariantMap config;
@@ -344,10 +345,16 @@ void TestUtilsFunctions::resolveTargetDir()
   QString resultDir = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
   QCOMPARE( resultDir, homePath );
 
-  // case 2: defined default root config, no expression
+  // case 2: defined default root config as a relative path, no expression - resolved against homePath
   config.insert( QStringLiteral( "DefaultRoot" ), DEFAULT_ROOT );
   QString resultDir2 = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
-  QCOMPARE( resultDir2, DEFAULT_ROOT );
+  QCOMPARE( resultDir2, QStringLiteral( "%1/%2" ).arg( homePath, DEFAULT_ROOT ) );
+  config.clear();
+
+  // case 2b: defined default root config as an already-absolute path, no expression - stays unchanged
+  config.insert( QStringLiteral( "DefaultRoot" ), ABSOLUTE_DEFAULT_ROOT );
+  QString resultDir2b = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
+  QCOMPARE( resultDir2b, ABSOLUTE_DEFAULT_ROOT );
   config.clear();
 
   // case 3: defined expression in config->"PropertyCollection" -> "properties" -> "propertyRootPath" -> "expression"
