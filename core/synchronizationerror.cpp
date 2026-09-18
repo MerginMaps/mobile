@@ -13,6 +13,24 @@ SynchronizationError::SynchronizationError() = default;
 
 SynchronizationError::ErrorType SynchronizationError::errorType( const int httpErrorCode, const QString &errorMessage, const QString &serverErrorCode )
 {
+  //prioritise serverErrorCode parsing before httpErrorCode deduction
+  if ( serverErrorCode == QStringLiteral( "ProjectsLimitHit" ) )
+  {
+    return ErrorType::ProjectLimitHit;
+  }
+  if ( serverErrorCode == QStringLiteral( "StorageLimitHit" ) )
+  {
+    return ErrorType::StorageLimitHit;
+  }
+  if ( serverErrorCode == QStringLiteral( "ProjectVersionExists" ) )
+  {
+    return ErrorType::VersionMismatch;
+  }
+  if ( serverErrorCode == QStringLiteral( "AnotherUploadRunning" ) )
+  {
+    return ErrorType::AnotherProcessIsRunning;
+  }
+
   if ( httpErrorCode == 400 )
   {
     // 'Another process is running. Please try later.'
@@ -36,26 +54,6 @@ SynchronizationError::ErrorType SynchronizationError::errorType( const int httpE
   {
     // Project no longer exists / is on different server
     return ErrorType::ProjectNotFound;
-  }
-  else if ( httpErrorCode == 409 )
-  {
-    //choose depending on serverErrorCode
-    if ( serverErrorCode == QStringLiteral( "ProjectsLimitHit" ) )
-    {
-      return ErrorType::ProjectLimitHit;
-    }
-    if ( serverErrorCode == QStringLiteral( "StorageLimitHit" ) )
-    {
-      return ErrorType::StorageLimitHit;
-    }
-    if ( serverErrorCode == QStringLiteral( "ProjectVersionExists" ) )
-    {
-      return ErrorType::VersionMismatch;
-    }
-    if ( serverErrorCode == QStringLiteral( "AnotherUploadRunning" ) )
-    {
-      return ErrorType::AnotherProcessIsRunning;
-    }
   }
   else if ( httpErrorCode == 429 || httpErrorCode >= 500 )
   {
