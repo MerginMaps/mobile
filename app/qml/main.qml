@@ -1022,15 +1022,15 @@ ApplicationWindow {
     {
       if ( projectFullName === __activeProject.projectFullName() )
       {
-        if ( errorType === MM.SyncError.NotAMerginProject )
+        if ( errorType === SyncError.NotAMerginProject )
         {
           migrateToMerginDialog.open()
         }
-        else if ( errorType === MM.SyncError.NoPermissions )
+        else if ( errorType === SyncError.NoPermissions )
         {
           noPermissionsDialog.open()
         }
-        else if ( errorType === MM.SyncError.AnotherProcessIsRunning && willRetry )
+        else if ( errorType === SyncError.AnotherProcessIsRunning && willRetry )
         {
           // just banner that we will try again
           __notificationModel.addInfo( qsTr( "Somebody else is syncing, we will try again later" ) )
@@ -1056,6 +1056,13 @@ ApplicationWindow {
       if ( projectFullName === __activeProject.projectFullName() )
       {
         __notificationModel.addSuccess( qsTr( "Up to date" ) )
+      }
+    }
+
+    function onProjectDataChanged( projectFullName ) {
+      //! if current project has been updated, refresh canvas
+      if ( projectFullName === projectController.activeProjectId ) {
+        map.mapSettings.extentChanged()
       }
     }
   }
@@ -1088,13 +1095,6 @@ ApplicationWindow {
       projectLimitDialog.open()
 
       syncButton.iconRotateAnimationRunning = false
-    }
-
-    function onProjectDataChanged( projectFullName ) {
-      //! if current project has been updated, refresh canvas
-      if ( projectFullName === projectController.activeProjectId ) {
-        map.mapSettings.extentChanged()
-      }
     }
 
     function onMigrationRequested( version ) {

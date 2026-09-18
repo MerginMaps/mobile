@@ -14,6 +14,8 @@ set(MM_CORE_SRCS
     project.cpp
     geodiffutils.cpp
     projectchecksumcache.cpp
+    synchronizationerror.cpp
+    synchronizationmanager.cpp
 )
 
 set(MM_CORE_HDRS
@@ -34,6 +36,9 @@ set(MM_CORE_HDRS
     geodiffutils.h
     projectchecksumcache.h
     credentialstore.h
+    synchronizationerror.h
+    synchronizationmanager.h
+    synchronizationoptions.h
 )
 
 if (USE_MM_SERVER_API_KEY)
@@ -59,7 +64,12 @@ else ()
   message(STATUS "Using QSettings to store credentials.")
 endif ()
 
-add_library(mm_core STATIC ${MM_CORE_SRCS} ${MM_CORE_HDRS})
+qt_add_library(
+  mm_core
+  STATIC
+  ${MM_CORE_SRCS}
+  ${MM_CORE_HDRS}
+)
 target_include_directories(mm_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(
   mm_core

@@ -24,8 +24,8 @@ SynchronizationManager::SynchronizationManager(
   if ( mMerginApi )
   {
     connect( mMerginApi, &MerginApi::pushCanceled, this, &SynchronizationManager::onProjectSyncCanceled );
-    connect( mMerginApi, &MerginApi::syncProjectFinished, this, &SynchronizationManager::onProjectSyncFinished );
-    connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onProjectSyncFailure );
+    connect( mMerginApi, &MerginApi::syncTransactionFinished, this, &SynchronizationManager::onTransactionFinished );
+    connect( mMerginApi, &MerginApi::networkErrorOccurred, this, &SynchronizationManager::onTransactionFailure );
     connect( mMerginApi, &MerginApi::projectCreated, this, &SynchronizationManager::onProjectCreated );
     connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
@@ -41,8 +41,6 @@ SynchronizationManager::SynchronizationManager(
   }
 }
 
-SynchronizationManager::~SynchronizationManager() = default;
-
 void SynchronizationManager::syncProject( const Project &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy, const SyncOptions::RequestOrigin
     requestOrigin )
 {
@@ -55,17 +53,14 @@ void SynchronizationManager::syncProject( const Project &project, SyncOptions::A
   CoreUtils::log( QStringLiteral( "Sync Manager" ), QStringLiteral( "Requested download of project %2" ).arg( project.mergin.projectName ) );
 
   // project is not local yet -> we download it for the first time
-  bool syncHasStarted = mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName, auth == SyncOptions::Authorized );
+  mMerginApi->pullProject( project.mergin.projectNamespace, project.mergin.projectName );
 
-  if ( syncHasStarted )
-  {
-    SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
-    process.pending = true;
-    process.strategy = strategy;
-    process.requestOrigin = requestOrigin;
+  SyncProcess &process = mSyncProcesses[project.fullName()]; // gets or creates
+  process.pending = true;
+  process.strategy = strategy;
+  process.requestOrigin = requestOrigin;
 
-    emit syncStarted( project.fullName() );
-  }
+  emit syncStarted( project.fullName() );
 }
 
 void SynchronizationManager::syncProject( const LocalProject &project, SyncOptions::Authorization auth, SyncOptions::Strategy strategy, const SyncOptions::
@@ -87,41 +82,31 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
     return;
   }
 
-  QString projectFullName = MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
+  const QString projectFullName = MerginApi::getFullProjectName( project.projectNamespace, project.projectName );
 
   if ( mSyncProcesses.contains( projectFullName ) )
   {
     SyncProcess &process = mSyncProcesses[projectFullName];
+
     if ( process.pending )
     {
       return; // this project is currently syncing
     }
-    else if ( process.awaitsRetry )
+
+    if ( process.awaitsRetry )
     {
       process.awaitsRetry = false;
     }
   }
 
-  bool syncHasStarted = false;
+  mMerginApi->pullProject( project.projectNamespace, project.projectName );
 
-  if ( ProjectStatus::hasLocalChanges( project, mMerginApi->supportsSelectiveSync() ) )
-  {
-    syncHasStarted = mMerginApi->pushProject( project.projectNamespace, project.projectName );
-  }
-  else
-  {
-    syncHasStarted = mMerginApi->pullProject( project.projectNamespace, project.projectName, auth == SyncOptions::Authorized );
-  }
+  SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
+  process.pending = true;
+  process.strategy = strategy;
+  process.requestOrigin = requestOrigin;
 
-  if ( syncHasStarted )
-  {
-    SyncProcess &process = mSyncProcesses[projectFullName]; // gets or creates
-    process.pending = true;
-    process.strategy = strategy;
-    process.requestOrigin = requestOrigin;
-
-    emit syncStarted( projectFullName );
-  }
+  emit syncStarted( projectFullName );
 }
 
 void SynchronizationManager::stopProjectSync( const QString &projectFullname )
@@ -196,6 +181,42 @@ QList<QString> SynchronizationManager::pendingProjects() const
   return mSyncProcesses.keys();
 }
 
+void SynchronizationManager::onTransactionFinished( const QString &finishedProjectFullName, const bool successful, const int version,
+    const TransactionStatus::TransactionType finishedTransactionType )
+{
+  // dangling transaction - ignore
+  if ( !mSyncProcesses.contains( finishedProjectFullName ) )
+  {
+    return;
+  }
+
+  if ( !successful )
+  {
+    onProjectSyncFinished( finishedProjectFullName, false, version );
+    return;
+  }
+
+  if ( finishedTransactionType == TransactionStatus::Pull )
+  {
+    QString projectNamespace, projectName;
+    MerginApi::extractProjectName( finishedProjectFullName, projectNamespace, projectName );
+    mMerginApi->pushProject( projectNamespace, projectName, false );
+    return;
+  }
+
+  // a push just finished - go for another pull if there are still local changes to sync
+  if ( mMerginApi->hasLocalProjectChanges( finishedProjectFullName ) )
+  {
+    QString projectNamespace, projectName;
+    MerginApi::extractProjectName( finishedProjectFullName, projectNamespace, projectName );
+    mMerginApi->pullProject( projectNamespace, projectName );
+    return;
+  }
+
+  onProjectSyncFinished( finishedProjectFullName, true, version );
+  emit projectDataChanged( finishedProjectFullName );
+}
+
 void SynchronizationManager::onProjectSyncCanceled( const QString &projectFullName, bool withError )
 {
   Q_UNUSED( withError )
@@ -229,7 +250,7 @@ void SynchronizationManager::onProjectSyncFinished( const QString &projectFullNa
   }
 }
 
-void SynchronizationManager::onProjectSyncProgressChanged( const QString &projectFullName, qreal progress )
+void SynchronizationManager::onProjectSyncProgressChanged( const QString &projectFullName, const qreal progress )
 {
   if ( mSyncProcesses.contains( projectFullName ) )
   {
@@ -241,7 +262,7 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     //
     // Synchronization was not started via sync manager,
     // let's add it to the manager here.
-    // This is most probably usefull only for tests, where we
+    // This is most probably useful only for tests, where we
     // normally run sync from MerginApi directly
     //
     SyncProcess &process = mSyncProcesses[projectFullName];
@@ -266,11 +287,12 @@ void SynchronizationManager::onProjectCreated( const QString &projectFullName, b
   }
 }
 
-void SynchronizationManager::onProjectSyncFailure(
+void SynchronizationManager::onTransactionFailure(
   const QString &message,
   const QString &topic,
   const int errorCode,
-  const QString &projectFullName )
+  const QString &projectFullName,
+  const QString &serverErrorCode )
 {
   if ( projectFullName.isEmpty() )
   {
@@ -286,13 +308,9 @@ void SynchronizationManager::onProjectSyncFailure(
 
   SyncProcess &process = mSyncProcesses[projectFullName];
 
-  const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
+  const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message, serverErrorCode );
 
-  // We only retry twice for synchronization requested by user
-  const bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
-                                process.retriesCount < 2 &&
-                                !SynchronizationError::isPermanent( error ) &&
-                                process.requestOrigin == SyncOptions::ManualRequest;
+  const bool eligibleForRetry = process.retriesCount < MAXIMUM_RETRY_COUNT && !SynchronizationError::isPermanent( error );
 
   if ( process.requestOrigin == SyncOptions::ManualRequest )
   {
@@ -301,12 +319,12 @@ void SynchronizationManager::onProjectSyncFailure(
 
   if ( eligibleForRetry )
   {
-    process.retriesCount = process.retriesCount + 1;
+    process.retriesCount = process.retriesCount++;
     process.awaitsRetry = true;
 
-    QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]()
+    QTimer::singleShot( mSyncRetryIntervalSeconds, this, [this, projectFullName]
     {
-      LocalProject project = mMerginApi->getLocalProject( projectFullName );
+      const LocalProject project = mMerginApi->getLocalProject( projectFullName );
       syncProject( project );
     } );
   }

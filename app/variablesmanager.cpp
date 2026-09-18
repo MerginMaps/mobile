@@ -21,7 +21,6 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
 
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
-  QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
 }
 
 VariablesManager::~VariablesManager() = default;
@@ -115,7 +114,7 @@ void VariablesManager::setUserVariables()
   QgsExpressionContextUtils::setGlobalVariable( QStringLiteral( "mergin_full_name" ),  mMerginApi->userInfo()->name() );
 }
 
-void VariablesManager::setVersionVariable( const QString &projectFullName )
+void VariablesManager::updateProjectVariables( const QString &projectFullName )
 {
   if ( !mCurrentProject )
     return;

@@ -180,7 +180,6 @@ struct TransactionStatus
   QString projectDir;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed)
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
-  bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
   bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
   bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
 
@@ -280,26 +279,26 @@ class MerginApi: public QObject
     /**
      * Sends non-blocking POST request to the server to pull (download) a project with a given name. On pullProjectReplyFinished,
      * when a response is received, parses data-stream to files and rewrites local files with them. Extra files which don't match server
-     * files are removed. Emits syncProjectFinished at the end.
+     * files are removed. Emits syncTransactionFinished at the end.
      * If update has been successful, updates metadata file of the project.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
      * \param withAuth If True, request is constructed with current authorization
      * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
+    bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
 
     /**
      * Sends non-blocking POST request to the server to push changes in a project with a given name.
      * At the begining it checks if there are any changes on server and pulls them if so.
      * If the pull was successful, it sends post request with list of local changes and modified/newly added files in JSON.
-     * Emits syncProjectFinished at the end.
+     * Emits syncTransactionFinished at the end.
      * \param projectNamespace Project's namespace used in request.
      * \param projectName Project's name used in request.
      * \param isInitialPush indicates if this is first push of the project (project creation)
      * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    Q_INVOKABLE bool pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
+    bool pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush = false );
 
     /**
      * Sends non-blocking POST request to the server to cancel a running push of a project with a given name.
@@ -428,7 +427,7 @@ class MerginApi: public QObject
     QStringList projectDiffableFiles( const QString &projectFullName );
 
     static ProjectDiff localProjectChanges( const QString &projectDir );
-    static bool hasLocalProjectChanges( const QString &projectDir, bool supportsSelectiveSync );
+    bool hasLocalProjectChanges( const QString &projectFullName );
 
     /**
      * Parse major and minor version number from version string
@@ -690,7 +689,7 @@ class MerginApi: public QObject
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
-    void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
+    void syncTransactionFinished( const QString &projectFullName, bool successfully, int version, TransactionStatus::TransactionType transactionType );
     void projectReloadNeededAfterSync( const QString &projectFullName );
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
@@ -703,7 +702,8 @@ class MerginApi: public QObject
       const QString &message,
       const QString &topic,
       int httpCode = -1,
-      const QString &projectFullName = QLatin1String()
+      const QString &projectFullName = QLatin1String(),
+      const QString &serverErrorCode = QLatin1String()
     );
 
     void storageLimitReached( qreal uploadSize );
@@ -734,7 +734,6 @@ class MerginApi: public QObject
     void pullFilesStarted();
     void pushFilesStarted();
     void pushCanceled( const QString &projectFullName, bool result );
-    void projectDataChanged( const QString &projectFullName );
     void projectDetached( const QString &projectFullName );
     void projectAttachedToMergin( const QString &projectFullName, const QString &previousProjectName );
 
@@ -894,8 +893,8 @@ class MerginApi: public QObject
     void finalizeProjectPullCopy( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
     bool finalizeProjectPullApplyDiff( const QString &projectFullName, const QString &projectDir, const QString &tempDir, const QString &filePath, const QList<DownloadQueueItem> &items );
 
-    //! Takes care of removal of the transaction, writing new metadata and emits syncProjectFinished()
-    void finishProjectSync( const QString &projectFullName, bool syncSuccessful );
+    //! Takes care of removal of the transaction, writing new metadata and emits syncTransactionFinished()
+    void finishTransaction( const QString &projectFullName, bool syncSuccessful );
 
     void prepareProjectPull( const QString &projectFullName, const QByteArray &data );
 
@@ -970,6 +969,9 @@ class MerginApi: public QObject
     QString mApiVersion;
 
     static const int UPLOAD_CHUNK_SIZE;
+    static const qint64 MAX_UPLOAD_MEDIA_SIZE;
+    static const qint64 MAX_UPLOAD_VERSIONED_SIZE;
+    static const int MAX_UPLOAD_CHANGES;
     const int PROJECT_PER_PAGE = 50;
     const QString TEMP_FOLDER = QStringLiteral( ".temp/" );
 
@@ -977,6 +979,8 @@ class MerginApi: public QObject
     static QList<DownloadQueueItem> itemsForFileDiffs( const MerginFile &file );
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
+    MerginServerType::syncTransactionVersion mPullVersion  = MerginServerType::syncTransactionVersion::v1;
+    MerginServerType::syncTransactionVersion mPushVersion  = MerginServerType::syncTransactionVersion::v1;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
