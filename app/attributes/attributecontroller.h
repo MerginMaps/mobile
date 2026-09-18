@@ -222,7 +222,8 @@ class  AttributeController : public QObject
      */
     bool allowTabs( QgsAttributeEditorContainer *container );
 
-    void discardReusedPhotoCopies( bool force );
+    //! resolves the storage folder and relative-path prefix for an ExternalResource field
+    void resolveExternalResourcePaths( const QVariantMap &config, QString &targetDir, QString &prefix ) const;
     //! renames photos if necessary
     void renamePhotos();
     //! save temporary sketched image to original image
