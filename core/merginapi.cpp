@@ -190,13 +190,10 @@ MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 bool MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  // Get project ID
-  QString projectId = "271311dd-c09f-4bb1-b88e-77a3d54f9980"; // api testing project
 
   Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
 
   CoreUtils::log( "push " + projectFullName, "### Starting ###" );
-  CoreUtils::log( "push " + projectFullName, "Project ID: " + projectId );
 
   bool useV2Push = true;
   bool useV1Push = false;
@@ -296,7 +293,7 @@ void MerginApi::pushInfoReplyFinished()
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
     transaction.projectMetadata = data;
-    transaction.version = MerginProjectMetadata::fromJson( data ).version;
+    transaction.version = serverProject.version;
 
     preparePushPayload( projectFullName );
   }
@@ -332,6 +329,8 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
   MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
+  transaction.projectId = oldServerProject.id;
+  CoreUtils::log( "push " + projectFullName, "Project ID: " + transaction.projectId );
 
   // Cache mergin-config, since we are on the most recent version, it is sufficient to just read the local version
   if ( transaction.configAllowed )
@@ -963,8 +962,6 @@ void MerginApi::pushFile( const QString &projectFullName, MerginFile file, int c
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  QString projectId = "271311dd-c09f-4bb1-b88e-77a3d54f9980"; // api testing project
-
   QString filePath;
   if ( file.diffName.isEmpty() )
   {
@@ -993,8 +990,7 @@ void MerginApi::pushFile( const QString &projectFullName, MerginFile file, int c
   if ( useV2push )
   {
     Q_ASSERT( chunkID == sTempChunkId );
-
-    QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/chunks" ).arg( projectId ) );
+    const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/chunks" ).arg( transaction.projectId ) );
     request.setUrl( url );
   }
   else // v1 push
@@ -1036,7 +1032,6 @@ void MerginApi::pushStart( const QString &projectFullName )
 
   bool useV1push = false;
   bool useV2push = true;
-  QString projectId = "271311dd-c09f-4bb1-b88e-77a3d54f9980"; // api testing project
 
   //
   // prepare the request JSON body:
@@ -1078,7 +1073,7 @@ void MerginApi::pushStart( const QString &projectFullName )
 
   if ( useV2push )
   {
-    QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( projectId ) );
+    const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( transaction.projectId ) );
     request.setUrl( url );
   }
   else // if ( useV1push )
@@ -1232,8 +1227,6 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  QString projectId = "271311dd-c09f-4bb1-b88e-77a3d54f9980"; // api testing project
-
   // let's make sure all chunks are uploaded and have valid IDs
   for ( const MerginFile file : transaction.pushChanges.added )
   {
@@ -1275,7 +1268,7 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
 
   QNetworkRequest request = getDefaultRequest();
 
-  QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( projectId ) );
+  QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( transaction.projectId ) );
   request.setUrl( url );
 
   request.setRawHeader( "Content-Type", "application/json" );
