@@ -283,17 +283,19 @@ void MerginApi::pushInfoReplyFinished()
   {
     QString url = r->url().toString();
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Downloaded project info." ) );
-    QByteArray data = r->readAll();
+    const QByteArray data = r->readAll();
 
     transaction.replyPushProjectInfo->deleteLater();
     transaction.replyPushProjectInfo = nullptr;
 
-    LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    const LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
     transaction.projectMetadata = data;
-    transaction.version = serverProject.version;
+    const MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromJson( data );
+    transaction.version = projectMetadata.version;
+    transaction.projectId = projectMetadata.id;
 
     preparePushPayload( projectFullName );
   }
