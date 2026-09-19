@@ -195,10 +195,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
   CoreUtils::log( "push " + projectFullName, "### Starting ###" );
 
-  bool useV2Push = true;
-  bool useV1Push = false;
-
-  if ( useV2Push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     CoreUtils::log( "push " + projectFullName, "Using v2 push API" );
   }
@@ -212,7 +209,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
   transaction.configAllowed = mSupportsSelectiveSync;
   transaction.type = TransactionStatus::Push;
 
-  if ( useV1Push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
   {
     //
     // In v1 push we always need to be on the latest version before the upload starts.
@@ -374,7 +371,6 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     // What to do here?
   }
 
-  const bool useV2push = true;
   int fileCounter = 0;
 
   for ( const QString &filePath : std::as_const( transaction.diff.localAdded ) )
@@ -405,7 +401,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     {
       // problem, we changed selective sync config locally, this is undefined and sync must stop
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was added locally, this is undefined and might lead to data loss, aborting push..." ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
     }
 
     transaction.pushChanges.added.append( file );
@@ -987,9 +983,7 @@ void MerginApi::pushFile( const QString &projectFullName, MerginFile file, int c
 
   QNetworkRequest request = getDefaultRequest();
 
-  bool useV2push = true;
-
-  if ( useV2push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     Q_ASSERT( chunkID == sTempChunkId );
     const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/chunks" ).arg( transaction.projectId ) );
@@ -1011,7 +1005,7 @@ void MerginApi::pushFile( const QString &projectFullName, MerginFile file, int c
 
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk: %2/%3" ).arg( file.path ).arg( chunkNo ).arg( file.chunks.count() ) );
 
-  if ( useV2push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     connect( transaction.replyPushFile, &QNetworkReply::finished, this, &MerginApi::pushV2FileReplyFinished );
   }
@@ -1032,9 +1026,6 @@ void MerginApi::pushStart( const QString &projectFullName )
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  bool useV1push = false;
-  bool useV2push = true;
-
   //
   // prepare the request JSON body:
   //
@@ -1054,7 +1045,7 @@ void MerginApi::pushStart( const QString &projectFullName )
   changes.insert( "updated", modified );
   changes.insert( "removed", removed );
 
-  if ( useV1push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
   {
     changes.insert( "renamed", QJsonArray() ); // todo: drop?
   }
@@ -1063,7 +1054,7 @@ void MerginApi::pushStart( const QString &projectFullName )
   json.insert( QStringLiteral( "changes" ), changes );
   json.insert( QStringLiteral( "version" ), QString( "v%1" ).arg( transaction.version ) );
 
-  if ( useV2push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     json.insert( QStringLiteral( "check_only" ), true );
   }
@@ -1073,7 +1064,7 @@ void MerginApi::pushStart( const QString &projectFullName )
 
   QNetworkRequest request = getDefaultRequest();
 
-  if ( useV2push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( transaction.projectId ) );
     request.setUrl( url );
@@ -1090,7 +1081,7 @@ void MerginApi::pushStart( const QString &projectFullName )
   Q_ASSERT( !transaction.replyPushStart );
   transaction.replyPushStart = mManager->post( request, jsonDoc.toJson( QJsonDocument::Compact ) );
 
-  if ( useV2push )
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
   {
     connect( transaction.replyPushStart, &QNetworkReply::finished, this, &MerginApi::pushStartV2ReplyFinished );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Starting push check request: " ) + request.url().toString() );
@@ -1236,7 +1227,7 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
     {
       // some chunks were not uploaded!
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from added files list did not make it to server before push finish!" ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
       return;
     }
   }
@@ -1247,7 +1238,7 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
     {
       // some chunks were not uploaded!
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from updated files list did not make it to server before push finish!" ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
       return;
     }
   }
@@ -2958,7 +2949,7 @@ void MerginApi::pushStartV2ReplyFinished()
       // TODO: further error handling - storage limit hit, initial project upload (delete the fresh project)
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "CHECK FAILED: %1, %2, %3, %4" ).arg( code ).arg( r->errorString() ).arg( serverMsg ).arg( httpErrorCode ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
 
       return;
     }
@@ -3013,7 +3004,7 @@ void MerginApi::pushV2FileReplyFinished()
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
     return;
   }
 
@@ -3030,7 +3021,7 @@ void MerginApi::pushV2FileReplyFinished()
   {
     // Invalid response from the server, abort push, this should not happen though...
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAIL - Received invalid response from chunk upload, aborting..." ) );
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 
   // let's store the uploaded chunk details
@@ -3058,7 +3049,7 @@ void MerginApi::pushV2FileReplyFinished()
       {
         // something terrible must have happened!
         CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in added files.." ) );
-        finishProjectSync( projectFullName, false ); // todo: is any cleanup needed?
+        finishTransaction( projectFullName, false ); // todo: is any cleanup needed?
       }
 
       break;
@@ -3083,7 +3074,7 @@ void MerginApi::pushV2FileReplyFinished()
         {
           // something terrible must have happened!
           CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in updated files.." ) );
-          finishProjectSync( projectFullName, false );
+          finishTransaction( projectFullName, false );
         }
 
         break;
@@ -3576,18 +3567,6 @@ QList<DownloadQueueItem> MerginApi::itemsForFileDiffs( const MerginFile &file )
     items << DownloadQueueItem( file.path, d.second, d.first, -1, -1, true );
   }
   return items;
-}
-
-
-static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
-{
-  for ( const MerginFile &merginFile : files )
-  {
-    if ( merginFile.path == filePath )
-      return merginFile;
-  }
-  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
-  return MerginFile();
 }
 
 void MerginApi::pushFinishReplyFinished()
@@ -4178,14 +4157,12 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
     noOfChunks = 1;
   }
 
-  bool useV2push = true;
-
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
     QString chunkID;
 
-    if ( useV2push )
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
     {
       chunkID = sTempChunkId;
     }
