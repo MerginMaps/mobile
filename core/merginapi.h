@@ -835,7 +835,7 @@ class MerginApi: public QObject
   private:
     MerginProject parseProjectMetadata( const QJsonObject &project );
     MerginProjectsList parseProjectsFromJson( const QJsonDocument &object );
-    static QStringList generateChunkIdsForSize( qint64 fileSize );
+    QStringList generateChunkIdsForSize( qint64 fileSize );
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
     void abortPullItems( const QString &projectFullName );
