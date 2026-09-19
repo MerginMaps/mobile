@@ -23,7 +23,6 @@ MerginFile MerginFile::fromJsonObject( const QJsonObject &merginFileInfo )
   merginFile.checksum = merginFileInfo.value( QStringLiteral( "checksum" ) ).toString();
   merginFile.path = merginFileInfo.value( QStringLiteral( "path" ) ).toString();
   merginFile.size = merginFileInfo.value( QStringLiteral( "size" ) ).toInteger();
-  merginFile.mtime =  QDateTime::fromString( merginFileInfo.value( QStringLiteral( "mtime" ) ).toString(), Qt::ISODateWithMs ).toUTC();
   merginFile.diffSize = 0;
 
   if ( merginFileInfo.contains( QStringLiteral( "history" ) ) )
