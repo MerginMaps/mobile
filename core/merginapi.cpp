@@ -527,9 +527,6 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
                   .arg( transaction.pushQueue.count() ).arg( totalSize ) );
 
 
-  // TODO: Check here if the total number of files to upload is not larger than accepted by the server (100)
-  // TODO: Check here if file size of the individual files to upload is not larger than accepted by server (5 GB for gpkg, 10 GB for other file types)
-
   pushStart( projectFullName );
 }
 
