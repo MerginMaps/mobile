@@ -26,7 +26,6 @@ struct MerginFile
   QString path;
   QString checksum;
   qint64 size;
-  QDateTime mtime;
 
   QStringList chunks; // pregenerated chunks to upload; uuid in v1, temp id in v2 that is filled by server value after chunk is uploaded
 
