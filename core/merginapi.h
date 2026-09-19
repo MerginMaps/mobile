@@ -185,6 +185,7 @@ struct TransactionStatus
   static const int MAX_RETRY_COUNT = 5;  //!< maximum number of retry attempts for failed network requests
 
   QString projectDir;
+  QString projectId;
   QByteArray projectMetadata;  //!< metadata of the new project (not parsed) WATCH OUT - REUSED TWICE NOW -- TODO!
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
