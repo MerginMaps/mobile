@@ -31,13 +31,17 @@ class ChangelogModel : public QAbstractListModel
 
     Q_PROPERTY( bool isLoading READ isLoading NOTIFY isLoadingChanged )
 
-    Q_ENUMS( MyRoles )
+
 
   public:
     enum MyRoles
     {
-      TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole, DateRole
+      TitleRole = Qt::UserRole + 1,
+      DescriptionRole,
+      LinkRole,
+      DateRole
     };
+    Q_ENUM( MyRoles )
 
     ChangelogModel( QObject *parent = nullptr );
 

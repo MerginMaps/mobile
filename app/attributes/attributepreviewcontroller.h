@@ -113,7 +113,7 @@ class AttributePreviewController: public QObject
       HTML,
       Fields
     };
-    Q_ENUMS( PreviewType )
+    Q_ENUM( PreviewType )
 
     AttributePreviewController( QObject *parent = nullptr );
     ~AttributePreviewController() override;
