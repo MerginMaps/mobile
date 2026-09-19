@@ -3,6 +3,7 @@
 *.orig
 *.DS_Store
 *.user
+*.qtcreator
 *.idea
 *.vscode
 *.cache
@@ -28,3 +29,4 @@ fastlane/report.xml
 CMakeLists.txt.user
 CMakeUserPresets.json
 CLAUDE.md
+.claude/*

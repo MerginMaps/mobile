@@ -36,7 +36,7 @@ void LocalProjectsManager::reloadDataDir()
     if ( metadata.isValid() )
     {
       info.projectName = metadata.name;
-      info.projectNamespace = metadata.projectNamespace;
+      info.projectNamespace = metadata.workspaceName;
       info.localVersion = metadata.version;
     }
     else

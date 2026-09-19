@@ -44,6 +44,7 @@ const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm"
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
+const QString MerginApi::sTempChunkId = QStringLiteral( "temp_chunk_id" );
 const qint64 MerginApi::MAX_UPLOAD_MEDIA_SIZE = 10 * qPow( 1024LL, 3LL );
 const qint64 MerginApi::MAX_UPLOAD_VERSIONED_SIZE = 5 * qPow( 1024LL, 3LL );
 constexpr int MerginApi::MAX_UPLOAD_CHANGES = 100;
@@ -56,6 +57,17 @@ const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmap
 const QHostAddress MerginApi::OAUTH2_LISTEN_ADDRESS = QHostAddress::Null;
 constexpr int MerginApi::OAUTH2_LISTEN_PORT = 10042;
 #endif
+
+static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
+{
+  for ( const MerginFile &merginFile : files )
+  {
+    if ( merginFile.path == filePath )
+      return merginFile;
+  }
+  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
+  return MerginFile();
+}
 
 MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   : QObject( parent )
@@ -173,6 +185,336 @@ MerginWorkspaceInfo *MerginApi::workspaceInfo() const
 MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 {
   return mSubscriptionInfo;
+}
+
+bool MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
+{
+  QString projectFullName = getFullProjectName( projectNamespace, projectName );
+
+  Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
+
+  CoreUtils::log( "push " + projectFullName, "### Starting ###" );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    CoreUtils::log( "push " + projectFullName, "Using v2 push API" );
+  }
+  else
+  {
+    CoreUtils::log( "push " + projectFullName, "Using v1 push API" );
+  }
+
+  TransactionStatus transaction;
+  transaction.isInitialPush = isInitialPush;
+  transaction.configAllowed = mSupportsSelectiveSync;
+  transaction.type = TransactionStatus::Push;
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+  {
+    //
+    // In v1 push we always need to be on the latest version before the upload starts.
+    // So we first request project info and then check if we need to pull first.
+    //
+
+    // TODO: we can get rid of this project info request when the sync loop is implemented
+
+    QNetworkReply *reply = getProjectInfo( projectFullName );
+
+    if ( reply )
+    {
+      transaction.replyPushProjectInfo = reply;
+      connect( reply, &QNetworkReply::finished, this, &MerginApi::pushInfoReplyFinished );
+    }
+    else
+    {
+      // TODO: error handling - let user know there is no internet connection
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED to create project info request!" ) );
+      return false;
+    }
+
+    mTransactionalStatus.insert( projectFullName, transaction );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting project info: " ) + reply->request().url().toString() );
+
+    return true;
+  }
+  else
+  {
+    //
+    // In v2 push we don't need to be on the latest version before the upload starts.
+    // We rely on the sync manager to always call PULL before PUSH.
+    //
+
+    LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    transaction.projectDir = projectInfo.projectDir;
+    Q_ASSERT( !transaction.projectDir.isEmpty() );
+
+    if ( projectInfo.localVersion == -1 )
+    {
+      // TODO: this is project creation
+    }
+    else
+    {
+      transaction.version = projectInfo.localVersion;
+    }
+
+    mTransactionalStatus.insert( projectFullName, transaction );
+
+    preparePushPayload( projectFullName );
+  }
+
+  return true;
+}
+
+void MerginApi::pushInfoReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+  Q_ASSERT( r == transaction.replyPushProjectInfo );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    QString url = r->url().toString();
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Downloaded project info." ) );
+    const QByteArray data = r->readAll();
+
+    transaction.replyPushProjectInfo->deleteLater();
+    transaction.replyPushProjectInfo = nullptr;
+
+    const LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+    transaction.projectDir = projectInfo.projectDir;
+    Q_ASSERT( !transaction.projectDir.isEmpty() );
+
+    transaction.projectMetadata = data;
+    const MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromJson( data );
+    transaction.version = projectMetadata.version;
+    transaction.projectId = projectMetadata.id;
+
+    preparePushPayload( projectFullName );
+  }
+  else
+  {
+    const QByteArray data = r->readAll();
+    QString serverMsg = extractServerErrorMsg( data );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+      serverMsg = sSyncCanceledMessage;
+
+    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const QString serverErrorCode = extractServerErrorCode( data );
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName, serverErrorCode );
+
+    transaction.replyPushProjectInfo->deleteLater();
+    transaction.replyPushProjectInfo = nullptr;
+
+    finishTransaction( projectFullName, false );
+  }
+}
+
+void MerginApi::preparePushPayload( const QString &projectFullName )
+{
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
+  transaction.projectDir = projectInfo.projectDir;
+  Q_ASSERT( !transaction.projectDir.isEmpty() );
+
+  QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
+  MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
+  transaction.projectId = oldServerProject.id;
+  CoreUtils::log( "push " + projectFullName, "Project ID: " + transaction.projectId );
+
+  // Cache mergin-config, since we are on the most recent version, it is sufficient to just read the local version
+  if ( transaction.configAllowed )
+  {
+    transaction.config = MerginConfig::fromFile( transaction.projectDir + "/" + MerginApi::sMerginConfigFile );
+  }
+
+  // Calculate local changes
+  transaction.diff = compareProjectFiles(
+                       oldServerProject.files,
+                       oldServerProject.files,
+                       localFiles,
+                       transaction.projectDir,
+                       transaction.configAllowed,
+                       transaction.config
+                     );
+
+  CoreUtils::log( "push " + projectFullName, transaction.diff.dump() );
+
+  if ( transaction.configAllowed && transaction.config.isValid && transaction.config.selectiveSyncEnabled )
+  {
+    const QString sDir = transaction.config.selectiveSyncDir.isEmpty() ? QStringLiteral( " for entire project" ) : QStringLiteral( ", on path: %1" ).arg( transaction.config.selectiveSyncDir );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is enabled%1" ).arg( sDir ) );
+  }
+  else
+  {
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled" ) );
+  }
+
+  if ( !transaction.diff.remoteAdded.isEmpty() ||
+       !transaction.diff.remoteUpdated.isEmpty() ||
+       !transaction.diff.remoteDeleted.isEmpty() ||
+       !transaction.diff.conflictRemoteAddedLocalAdded.isEmpty() ||
+       !transaction.diff.conflictRemoteDeletedLocalUpdated.isEmpty() ||
+       !transaction.diff.conflictRemoteUpdatedLocalDeleted.isEmpty() ||
+       !transaction.diff.conflictRemoteUpdatedLocalUpdated.isEmpty() )
+  {
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Detected remote changes when calculating local changes" ) );
+    // What to do here?
+  }
+
+  int fileCounter = 0;
+
+  for ( const QString &filePath : std::as_const( transaction.diff.localAdded ) )
+  {
+    MerginFile file = findFile( filePath, localFiles );
+
+    if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
+      break;
+    }
+
+    file.chunks = generateChunkIdsForSize( file.size );
+
+    if ( mSupportsSelectiveSync && filePath == sMerginConfigFile )
+    {
+      // problem, we changed selective sync config locally, this is undefined and sync must stop
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was added locally, this is undefined and might lead to data loss, aborting push..." ) );
+      finishTransaction( projectFullName, false );
+    }
+
+    transaction.pushChanges.added.append( file );
+    fileCounter++;
+  }
+
+  for ( const QString &filePath : std::as_const( transaction.diff.localUpdated ) )
+  {
+    MerginFile file = findFile( filePath, localFiles );
+
+    if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      continue;
+    }
+
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
+      break;
+    }
+
+    file.chunks = generateChunkIdsForSize( file.size );
+
+    if ( MerginApi::isFileDiffable( filePath ) )
+    {
+      // try to create a diff
+      QString diffName;
+      int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, filePath, diffName );
+      QString diffPath = transaction.projectDir + "/.mergin/" + diffName;
+      QString basePath = transaction.projectDir + "/.mergin/" + filePath;
+
+      if ( geodiffRes == GEODIFF_SUCCESS )
+      {
+        QByteArray checksumDiff = CoreUtils::calculateChecksum( diffPath );
+
+        // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
+        // basefile (because each of them have applied the diff independently) so we have to fake it
+        QByteArray checksumBase = oldServerProject.fileInfo( filePath ).checksum.toLatin1();
+
+        file.diffName = diffName;
+        file.diffChecksum = QString::fromLatin1( checksumDiff.data(), checksumDiff.size() );
+        file.diffSize = QFileInfo( diffPath ).size();
+        file.diffBaseChecksum = QString::fromLatin1( checksumBase.data(), checksumBase.size() );
+        file.chunks = generateChunkIdsForSize( file.diffSize );
+
+        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 successful: total size %2 bytes" ).arg( filePath ).arg( file.diffSize ) );
+      }
+      else
+      {
+        // TODO: remove the diff file (if exists)
+        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 FAILED with error %2 (will do full upload)" ).arg( filePath ).arg( geodiffRes ) );
+      }
+    }
+
+    if ( mSupportsSelectiveSync && filePath == sMerginConfigFile )
+    {
+      // problem, we changed selective sync config locally, this is undefined and sync must stop
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was updated locally, this is undefined and might lead to data loss, aborting push..." ) );
+      finishTransaction( projectFullName, false );
+    }
+
+    transaction.pushChanges.updated.append( file );
+    fileCounter++;
+  }
+
+  for ( QString filePath : transaction.diff.localDeleted )
+  {
+    MerginFile file = findFile( filePath, oldServerProject.files );
+    transaction.pushChanges.removed.append( file );
+  }
+
+  if ( transaction.pushChanges.added.isEmpty() && transaction.pushChanges.updated.isEmpty() && transaction.pushChanges.removed.isEmpty() )
+  {
+    finishTransaction( projectFullName, true );
+    return;
+  }
+
+  qint64 totalSize = 0;
+  for ( MerginFile file : transaction.pushChanges.added )
+  {
+    totalSize += file.size;
+  }
+
+  for ( MerginFile file : transaction.pushChanges.updated )
+  {
+    if ( !file.diffName.isEmpty() )
+    {
+      totalSize += file.diffSize;
+    }
+    else
+    {
+      totalSize += file.size;
+    }
+  }
+
+  transaction.totalSize = totalSize;
+  transaction.pushQueue = transaction.pushChanges.added + transaction.pushChanges.updated;
+
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "%1 items to upload (total size %2 bytes)" )
+                  .arg( transaction.pushQueue.count() ).arg( totalSize ) );
+
+
+  // TODO: Check here if the total number of files to upload is not larger than accepted by the server (100)
+  // TODO: Check here if file size of the individual files to upload is not larger than accepted by server (5 GB for gpkg, 10 GB for other file types)
+
+  pushStart( projectFullName );
 }
 
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const int page )
@@ -608,7 +950,7 @@ void MerginApi::cacheServerConfig()
 }
 
 
-void MerginApi::pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo )
+void MerginApi::pushFile( const QString &projectFullName, MerginFile file, int chunkNo )
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -618,13 +960,15 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
-  QString chunkID = file.chunks.at( chunkNo );
-
   QString filePath;
   if ( file.diffName.isEmpty() )
+  {
     filePath = transaction.projectDir + "/" + file.path;
-  else  // use diff file instead of full file
+  }
+  else // use diff file instead of full file
+  {
     filePath = transaction.projectDir + "/.mergin/" + file.diffName;
+  }
 
   QFile f( filePath );
   QByteArray data;
@@ -635,20 +979,44 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
     data = f.read( UPLOAD_CHUNK_SIZE );
   }
 
+  const QString chunkID = file.chunks.at( chunkNo );
+
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transactionUUID, chunkID ) );
-  request.setUrl( url );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    Q_ASSERT( chunkID == sTempChunkId );
+    const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/chunks" ).arg( transaction.projectId ) );
+    request.setUrl( url );
+  }
+  else // v1 push
+  {
+    QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/chunk/%1/%2" ).arg( transaction.transactionUUID, chunkID ) );
+    request.setUrl( url );
+  }
+
   request.setRawHeader( "Content-Type", "application/octet-stream" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ), chunkNo );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrChunkSize ), QVariant::fromValue<qint64>( data.size() ) );
 
   Q_ASSERT( !transaction.replyPushFile );
   transaction.replyPushFile = mManager->post( request, data );
-  connect( transaction.replyPushFile, &QNetworkReply::finished, this, &MerginApi::pushFileReplyFinished );
 
-  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading item: " ) + url.toString() );
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk: %2/%3" ).arg( file.path ).arg( chunkNo ).arg( file.chunks.count() ) );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    connect( transaction.replyPushFile, &QNetworkReply::finished, this, &MerginApi::pushV2FileReplyFinished );
+  }
+  else
+  {
+    connect( transaction.replyPushFile, &QNetworkReply::finished, this, &MerginApi::pushFileReplyFinished );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Upload URL: " ) + request.url().toString() );
+  }
 }
 
-void MerginApi::pushStart( const QString &projectFullName, const QByteArray &json )
+void MerginApi::pushStart( const QString &projectFullName )
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
@@ -658,17 +1026,71 @@ void MerginApi::pushStart( const QString &projectFullName, const QByteArray &jso
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
 
+  //
+  // prepare the request JSON body:
+  //
+  // "changes": {
+  //   "added": [...],
+  //   "updated": [...],
+  //   "removed": [...],
+  // }
+  //
+
+  QJsonArray added = prepareUploadChangesJSON( transaction.pushChanges.added );
+  QJsonArray modified = prepareUploadChangesJSON( transaction.pushChanges.updated );
+  QJsonArray removed = prepareUploadChangesJSON( transaction.pushChanges.removed );
+
+  QJsonObject changes;
+  changes.insert( "added", added );
+  changes.insert( "updated", modified );
+  changes.insert( "removed", removed );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+  {
+    changes.insert( "renamed", QJsonArray() ); // todo: drop?
+  }
+
+  QJsonObject json;
+  json.insert( QStringLiteral( "changes" ), changes );
+  json.insert( QStringLiteral( "version" ), QString( "v%1" ).arg( transaction.version ) );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    json.insert( QStringLiteral( "check_only" ), true );
+  }
+
+  QJsonDocument jsonDoc;
+  jsonDoc.setObject( json );
+
   QNetworkRequest request = getDefaultRequest();
-  QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/%1" ).arg( projectFullName ) );
-  request.setUrl( url );
+
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    const QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( transaction.projectId ) );
+    request.setUrl( url );
+  }
+  else // if ( useV1push )
+  {
+    QUrl url( mApiRoot + QStringLiteral( "/v1/project/push/%1" ).arg( projectFullName ) );
+    request.setUrl( url );
+  }
+
   request.setRawHeader( "Content-Type", "application/json" );
   request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
 
   Q_ASSERT( !transaction.replyPushStart );
-  transaction.replyPushStart = mManager->post( request, json );
-  connect( transaction.replyPushStart, &QNetworkReply::finished, this, &MerginApi::pushStartReplyFinished );
+  transaction.replyPushStart = mManager->post( request, jsonDoc.toJson( QJsonDocument::Compact ) );
 
-  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Starting push request: " ) + url.toString() );
+  if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+  {
+    connect( transaction.replyPushStart, &QNetworkReply::finished, this, &MerginApi::pushStartV2ReplyFinished );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Starting push check request: " ) + request.url().toString() );
+  }
+  else
+  {
+    connect( transaction.replyPushStart, &QNetworkReply::finished, this, &MerginApi::pushStartReplyFinished );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Starting push request: " ) + request.url().toString() );
+  }
 }
 
 void MerginApi::cancelPush( const QString &projectFullName )
@@ -788,6 +1210,71 @@ void MerginApi::pushFinish( const QString &projectFullName, const QString &trans
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting transaction finish: " ) + transactionUUID );
 }
 
+void MerginApi::pushV2Finish( const QString &projectFullName )
+{
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+
+  // let's make sure all chunks are uploaded and have valid IDs
+  for ( const MerginFile file : transaction.pushChanges.added )
+  {
+    if ( file.chunks.contains( sTempChunkId ) )
+    {
+      // some chunks were not uploaded!
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from added files list did not make it to server before push finish!" ) );
+      finishTransaction( projectFullName, false );
+      return;
+    }
+  }
+
+  for ( const MerginFile file : transaction.pushChanges.updated )
+  {
+    if ( file.chunks.contains( sTempChunkId ) )
+    {
+      // some chunks were not uploaded!
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from updated files list did not make it to server before push finish!" ) );
+      finishTransaction( projectFullName, false );
+      return;
+    }
+  }
+
+  QJsonArray added = prepareUploadChangesJSON( transaction.pushChanges.added );
+  QJsonArray modified = prepareUploadChangesJSON( transaction.pushChanges.updated );
+  QJsonArray removed = prepareUploadChangesJSON( transaction.pushChanges.removed );
+
+  QJsonObject changes;
+  changes.insert( "added", added );
+  changes.insert( "updated", modified );
+  changes.insert( "removed", removed );
+
+  QJsonObject json;
+  json.insert( QStringLiteral( "changes" ), changes );
+  json.insert( QStringLiteral( "version" ), QString( "v%1" ).arg( transaction.version ) );
+
+  QJsonDocument jsonDoc;
+  jsonDoc.setObject( json );
+
+  QNetworkRequest request = getDefaultRequest();
+
+  QUrl url( mApiRoot + QStringLiteral( "/v2/projects/%1/versions" ).arg( transaction.projectId ) );
+  request.setUrl( url );
+
+  request.setRawHeader( "Content-Type", "application/json" );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ), projectFullName );
+
+  Q_ASSERT( !transaction.replyPushFinish );
+  transaction.replyPushFinish = mManager->post( request, jsonDoc.toJson( QJsonDocument::Compact ) );
+
+  connect( transaction.replyPushFinish, &QNetworkReply::finished, this, &MerginApi::pushFinishReplyFinished );
+
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting to create a new project version: %1" ).arg( transaction.version ) );
+}
+
 bool MerginApi::pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth )
 {
   QString projectFullName = getFullProjectName( projectNamespace, projectName );
@@ -817,39 +1304,6 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
   }
 
   return pullHasStarted;
-}
-
-bool MerginApi::pushProject( const QString &projectNamespace, const QString &projectName, bool isInitialPush )
-{
-  QString projectFullName = getFullProjectName( projectNamespace, projectName );
-  bool pushHasStarted = false;
-
-  CoreUtils::log( "push " + projectFullName, "### Starting ###" );
-
-  QNetworkReply *reply = getProjectInfo( projectFullName );
-  if ( reply )
-  {
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Requesting project info: " ) + reply->request().url().toString() );
-
-    // create entry about pending upload for the project
-    Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
-    mTransactionalStatus.insert( projectFullName, TransactionStatus() );
-    mTransactionalStatus[projectFullName].replyPushProjectInfo = reply;
-    mTransactionalStatus[projectFullName].isInitialPush = isInitialPush;
-    mTransactionalStatus[projectFullName].configAllowed = mSupportsSelectiveSync;
-    mTransactionalStatus[projectFullName].type = TransactionStatus::Push;
-
-    emit syncProjectStatusChanged( projectFullName, 0 );
-
-    connect( reply, &QNetworkReply::finished, this, &MerginApi::pushInfoReplyFinished );
-    pushHasStarted = true;
-  }
-  else
-  {
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED to create project info request!" ) );
-  }
-
-  return pushHasStarted;
 }
 
 void MerginApi::authorize( const QString &login, const QString &password )
@@ -2381,7 +2835,7 @@ void MerginApi::pushStartReplyFinished()
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push request accepted. Transaction ID: " ) + transactionUUID );
 
       MerginFile file = files.first();
-      pushFile( projectFullName, transactionUUID, file );
+      pushFile( projectFullName, file );
       emit pushFilesStarted();
     }
     else  // pushing only files to be removed
@@ -2441,7 +2895,7 @@ void MerginApi::pushStartReplyFinished()
   }
 }
 
-void MerginApi::pushFileReplyFinished()
+void MerginApi::pushStartV2ReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
@@ -2450,42 +2904,272 @@ void MerginApi::pushFileReplyFinished()
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+  Q_ASSERT( r == transaction.replyPushStart );
+
+  //
+  // There are multiple possible outcomes here:
+  //  - no error (204): we continue with push
+  //  - temporary error (409): we still continue with push
+  //  - permanent error (500, 403, storage limit hit and similar): we stop push and abort
+  //
+
+
+  // even for check_only:
+  // - ProjectLocked (423) (permanent)
+  // - VersionAlreadyExists (409) (temp)
+  // - UploadError (422) (permanent)
+  // - StorageLimitHit (422) (permanent)
+  // - 404 (permanent) project of workspace is missing
+  // - 403 (permanent) no permission
+  // - dry run OK (204) (success dry run)
+  //
+  // if not check_only:
+  // - DataSyncError (422) (permanent)
+  // - AnotherUploadRunning (409) (temp)
+  // - UploadError (409 this time?) - version already exists (temp)
+  // - Project detail (201) (success)
+
+  if ( r->error() != QNetworkReply::NoError )
+  {
+    QByteArray data = r->readAll();
+    QString code = extractServerErrorCode( data );
+
+    bool proceedWithPush = EnumHelper::isEqual( code, ErrorCode::ProjectVersionExists ) || EnumHelper::isEqual( code, ErrorCode::AnotherUploadRunning );
+
+    if ( proceedWithPush )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push check received temporary error: %1, continuing further with push" ).arg( code ) );
+    }
+    else
+    {
+      const QString serverMsg = extractServerErrorMsg( data );
+      const int httpErrorCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+
+      // TODO: parse "error" key from the response JSON and log. Some error objects, like UploadError, contains it.
+      // TODO: further error handling - storage limit hit, initial project upload (delete the fresh project)
+
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "CHECK FAILED: %1, %2, %3, %4" ).arg( code ).arg( r->errorString() ).arg( serverMsg ).arg( httpErrorCode ) );
+      finishTransaction( projectFullName, false );
+
+      return;
+    }
+  }
+
+  transaction.replyPushStart->deleteLater();
+  transaction.replyPushStart = nullptr;
+
+  if ( transaction.pushQueue.isEmpty() )
+  {
+    // we do not upload anything, just remove, let's skip to creating the version directly
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Nothing to upload, skipping to create new version" ) );
+
+    pushV2Finish( projectFullName );
+  }
+
+  MerginFile file = transaction.pushQueue.first();
+  pushFile( projectFullName, file );
+
+  emit pushFilesStarted();
+}
+
+void MerginApi::pushV2FileReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+  const int chunkNo = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ) ).toInt();
+  const qint64 chunkSize = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkSize ) ).value<qint64>();
+  Q_ASSERT( chunkNo >= 0 );
+
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
   Q_ASSERT( r == transaction.replyPushFile );
 
-  QStringList params = ( r->url().toString().split( "/" ) );
-  QString transactionUUID = params.at( params.length() - 2 );
-  QString chunkID = params.at( params.length() - 1 );
-  Q_ASSERT( transactionUUID == transaction.transactionUUID );
+  QString chunkID;
 
-  if ( r->error() == QNetworkReply::NoError )
+  if ( r->error() != QNetworkReply::NoError )
   {
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploaded successfully: " ) + chunkID );
+    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
+      serverMsg = sSyncCanceledMessage;
+    }
+
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
+
+    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
 
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
 
-    MerginFile currentFile = transaction.pushQueue.first();
-    int chunkNo = currentFile.chunks.indexOf( chunkID );
-    if ( chunkNo < currentFile.chunks.size() - 1 )
+    finishTransaction( projectFullName, false );
+    return;
+  }
+
+  transaction.replyPushFile->deleteLater();
+  transaction.replyPushFile = nullptr;
+
+  transaction.transferedSize += chunkSize;
+  emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
+
+  MerginFile processedFile = transaction.pushQueue.first();
+
+  QJsonDocument resp = QJsonDocument::fromJson( r->readAll() );
+  if ( !resp.isObject() )
+  {
+    // Invalid response from the server, abort push, this should not happen though...
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAIL - Received invalid response from chunk upload, aborting..." ) );
+    finishTransaction( projectFullName, false );
+  }
+
+  // let's store the uploaded chunk details
+  QJsonObject obj = resp.object();
+
+  FileChunkV2 chunk; // todo: do we even need the structure?
+  chunk.id = obj.value( "id" ).toString();
+  chunk.valid_until = obj.value( "valid_until" ).toVariant().toDateTime();
+
+  bool found = false;
+
+  // let's try to find the file in the list of added files
+  for ( MerginFile &merginFile : transaction.pushChanges.added )
+  {
+    if ( merginFile.path == processedFile.path )
     {
-      pushFile( projectFullName, transactionUUID, currentFile, chunkNo + 1 );
+      found = true;
+
+      if ( chunkNo >= 0 && chunkNo < merginFile.chunks.count() )
+      {
+        Q_ASSERT( merginFile.chunks[chunkNo] == sTempChunkId );
+        merginFile.chunks[chunkNo] = chunk.id;
+      }
+      else
+      {
+        // something terrible must have happened!
+        CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in added files.." ) );
+        finishTransaction( projectFullName, false ); // todo: is any cleanup needed?
+      }
+
+      break;
+    }
+  }
+
+  if ( !found )
+  {
+    // let's try to find the file in the list of updated files, it must be there then
+    for ( MerginFile &merginFile : transaction.pushChanges.updated )
+    {
+      if ( merginFile.path == processedFile.path )
+      {
+        found = true;
+
+        if ( chunkNo >= 0 && chunkNo < merginFile.chunks.count() )
+        {
+          Q_ASSERT( merginFile.chunks[chunkNo] == sTempChunkId );
+          merginFile.chunks[chunkNo] = chunk.id;
+        }
+        else
+        {
+          // something terrible must have happened!
+          CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in updated files.." ) );
+          finishTransaction( projectFullName, false );
+        }
+
+        break;
+      }
+    }
+  }
+
+  if ( !found )
+  {
+    // something terrible must have happened!
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk.." ) );
+  }
+  Q_ASSERT( found );
+
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo ).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
+
+  bool fileFullyUploaded = chunkNo == ( processedFile.chunks.size() - 1 );
+
+  if ( fileFullyUploaded )
+  {
+    // TODO: in order to reuse chunks, we need to store them here somewhere
+
+    transaction.pushQueue.removeFirst();
+
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "File %1 is fully uploaded %2" ).arg( processedFile.path ).arg( ( !processedFile.diffName.isEmpty() ? "via diff" : "" ) ) );
+
+    if ( !transaction.pushQueue.isEmpty() )
+    {
+      MerginFile nextFile = transaction.pushQueue.first();
+      pushFile( projectFullName, nextFile );
     }
     else
     {
-      transaction.transferedSize += currentFile.size;
+      pushV2Finish( projectFullName );
+    }
+  }
+  else
+  {
+    pushFile( projectFullName, processedFile, chunkNo + 1 );
+  }
+}
 
-      emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
+void MerginApi::pushFileReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+  const int chunkNo = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkNo ) ).toInt();
+  const qint64 chunkSize = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrChunkSize ) ).value<qint64>();
+  Q_ASSERT( chunkNo >= 0 );
+
+  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
+  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
+  Q_ASSERT( r == transaction.replyPushFile );
+
+  QStringList params = ( r->url().toString().split( "/" ) );
+  QString transactionUUID = params.at( params.length() - 2 );
+  Q_ASSERT( transactionUUID == transaction.transactionUUID );
+
+  QString chunkID = params.at( params.length() - 1 );
+
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    transaction.replyPushFile->deleteLater();
+    transaction.replyPushFile = nullptr;
+
+    transaction.transferedSize += chunkSize;
+    emit syncProjectStatusChanged( projectFullName, transaction.transferedSize / transaction.totalSize );
+
+    MerginFile processedFile = transaction.pushQueue.first();
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploaded successfully: " ) + chunkID );
+
+    Q_ASSERT( chunkNo < processedFile.chunks.count() );
+
+    bool fileFullyUploaded = chunkNo == ( processedFile.chunks.count() - 1 );
+
+    if ( fileFullyUploaded )
+    {
       transaction.pushQueue.removeFirst();
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "File %1 is fully uploaded %2" ).arg( processedFile.path ).arg( !processedFile.diffName.isEmpty() ? "via diff" : "" ) );
 
       if ( !transaction.pushQueue.isEmpty() )
       {
         MerginFile nextFile = transaction.pushQueue.first();
-        pushFile( projectFullName, transactionUUID, nextFile );
+        pushFile( projectFullName, nextFile );
       }
       else
       {
         pushFinish( projectFullName, transactionUUID );
       }
+    }
+    else
+    {
+      pushFile( projectFullName, processedFile, chunkNo + 1 );
     }
   }
   else
@@ -2493,7 +3177,9 @@ void MerginApi::pushFileReplyFinished()
     const QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
       serverMsg = sSyncCanceledMessage;
+    }
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -2883,235 +3569,6 @@ QList<DownloadQueueItem> MerginApi::itemsForFileDiffs( const MerginFile &file )
   return items;
 }
 
-
-static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
-{
-  for ( const MerginFile &merginFile : files )
-  {
-    if ( merginFile.path == filePath )
-      return merginFile;
-  }
-  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
-  return MerginFile();
-}
-
-
-void MerginApi::pushInfoReplyFinished()
-{
-  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
-  Q_ASSERT( r );
-
-  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
-
-  Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
-  TransactionStatus &transaction = mTransactionalStatus[projectFullName];
-  Q_ASSERT( r == transaction.replyPushProjectInfo );
-
-  if ( r->error() == QNetworkReply::NoError )
-  {
-    QString url = r->url().toString();
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Downloaded project info." ) );
-    QByteArray data = r->readAll();
-
-    transaction.replyPushProjectInfo->deleteLater();
-    transaction.replyPushProjectInfo = nullptr;
-
-    LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
-    transaction.projectDir = projectInfo.projectDir;
-    Q_ASSERT( !transaction.projectDir.isEmpty() );
-
-    // get the latest server version from our reply (we do not update it in LocalProjectsManager though... I guess we don't need to)
-    MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-
-    QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
-    MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-
-    // Cache mergin-config, since we are on the most recent version, it is sufficient to just read the local version
-    if ( transaction.configAllowed )
-    {
-      transaction.config = MerginConfig::fromFile( transaction.projectDir + "/" + MerginApi::sMerginConfigFile );
-    }
-
-    transaction.diff = compareProjectFiles(
-                         oldServerProject.files,
-                         serverProject.files,
-                         localFiles,
-                         transaction.projectDir,
-                         transaction.configAllowed,
-                         transaction.config
-                       );
-
-    CoreUtils::log( "push " + projectFullName, transaction.diff.dump() );
-
-    // TODO: make sure there are no remote files to add/update/remove nor conflicts
-
-    QList<MerginFile> filesToUpload;
-    QList<MerginFile> addedMerginFiles, updatedMerginFiles, deletedMerginFiles;
-    QList<MerginFile> diffFiles;
-    int fileCounter = 0;
-    for ( QString filePath : transaction.diff.localAdded )
-    {
-      MerginFile merginFile = findFile( filePath, localFiles );
-
-      if ( isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_VERSIONED_SIZE )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
-        continue;
-      }
-
-      if ( !isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_MEDIA_SIZE )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
-        continue;
-      }
-
-      if ( fileCounter >= MAX_UPLOAD_CHANGES )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
-        break;
-      }
-
-      merginFile.chunks = generateChunkIdsForSize( merginFile.size );
-      addedMerginFiles.append( merginFile );
-      fileCounter++;
-    }
-
-    for ( QString filePath : transaction.diff.localUpdated )
-    {
-      MerginFile merginFile = findFile( filePath, localFiles );
-
-      if ( isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_VERSIONED_SIZE )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
-        continue;
-      }
-
-      if ( !isFileDiffable( merginFile.path ) && merginFile.size > MAX_UPLOAD_MEDIA_SIZE )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( merginFile.path ) );
-        continue;
-      }
-
-      if ( fileCounter >= MAX_UPLOAD_CHANGES )
-      {
-        CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
-        break;
-      }
-      merginFile.chunks = generateChunkIdsForSize( merginFile.size );
-
-      if ( isFileDiffable( filePath ) )
-      {
-        // try to create a diff
-        QString diffName;
-        int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, filePath, diffName );
-        QString diffPath = transaction.projectDir + "/.mergin/" + diffName;
-        QString basePath = transaction.projectDir + "/.mergin/" + filePath;
-
-        if ( geodiffRes == GEODIFF_SUCCESS )
-        {
-          QByteArray checksumDiff = CoreUtils::calculateChecksum( diffPath );
-
-          // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
-          // basefile (because each of them have applied the diff independently) so we have to fake it
-          QByteArray checksumBase = serverProject.fileInfo( filePath ).checksum.toLatin1();
-
-          merginFile.diffName = diffName;
-          merginFile.diffChecksum = QString::fromLatin1( checksumDiff.data(), checksumDiff.size() );
-          merginFile.diffSize = QFileInfo( diffPath ).size();
-          merginFile.chunks = generateChunkIdsForSize( merginFile.diffSize );
-          merginFile.diffBaseChecksum = QString::fromLatin1( checksumBase.data(), checksumBase.size() );
-
-          diffFiles.append( merginFile );
-
-          CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 successful: total size %2 bytes" ).arg( filePath ).arg( merginFile.diffSize ) );
-        }
-        else
-        {
-          // TODO: remove the diff file (if exists)
-          CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 FAILED with error %2 (will do full upload)" ).arg( filePath ).arg( geodiffRes ) );
-        }
-      }
-
-      updatedMerginFiles.append( merginFile );
-      fileCounter++;
-    }
-
-    for ( QString filePath : transaction.diff.localDeleted )
-    {
-      MerginFile merginFile = findFile( filePath, serverProject.files );
-      deletedMerginFiles.append( merginFile );
-    }
-
-    if ( addedMerginFiles.isEmpty() && updatedMerginFiles.isEmpty() && deletedMerginFiles.isEmpty() )
-    {
-      // if nothing has changed, there is no point to even start upload transaction
-      transaction.projectMetadata = data;
-      transaction.version = MerginProjectMetadata::fromJson( data ).version;
-
-      finishTransaction( projectFullName, true );
-      return;
-    }
-
-    QJsonArray added = prepareUploadChangesJSON( addedMerginFiles );
-    filesToUpload.append( addedMerginFiles );
-
-    QJsonArray modified = prepareUploadChangesJSON( updatedMerginFiles );
-    filesToUpload.append( updatedMerginFiles );
-
-    QJsonArray removed = prepareUploadChangesJSON( deletedMerginFiles );
-    // removed not in filesToUpload
-
-    QJsonObject changes;
-    changes.insert( "added", added );
-    changes.insert( "removed", removed );
-    changes.insert( "updated", modified );
-    changes.insert( "renamed", QJsonArray() );
-
-    qint64 totalSize = 0;
-    for ( MerginFile file : filesToUpload )
-    {
-      if ( !file.diffName.isEmpty() )
-        totalSize += file.diffSize;
-      else
-        totalSize += file.size;
-    }
-
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "%1 items to upload (total size %2 bytes)" )
-                    .arg( filesToUpload.count() ).arg( totalSize ) );
-
-    transaction.totalSize = totalSize;
-    transaction.pushQueue = filesToUpload;
-    transaction.pushDiffFiles = diffFiles;
-
-    QJsonObject json;
-    json.insert( QStringLiteral( "changes" ), changes );
-    json.insert( QStringLiteral( "version" ), QString( "v%1" ).arg( serverProject.version ) );
-    QJsonDocument jsonDoc;
-    jsonDoc.setObject( json );
-
-    pushStart( projectFullName, jsonDoc.toJson( QJsonDocument::Compact ) );
-  }
-  else
-  {
-    const QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = sSyncCanceledMessage;
-
-    QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
-
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    const QString serverErrorCode = extractServerErrorCode( data );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName, serverErrorCode );
-
-    transaction.replyPushProjectInfo->deleteLater();
-    transaction.replyPushProjectInfo = nullptr;
-
-    finishTransaction( projectFullName, false );
-  }
-}
-
 void MerginApi::pushFinishReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
@@ -3127,15 +3584,15 @@ void MerginApi::pushFinishReplyFinished()
   {
     Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
     QByteArray data = r->readAll();
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Transaction finish accepted" ) );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push finish accepted" ) );
 
     transaction.replyPushFinish->deleteLater();
     transaction.replyPushFinish = nullptr;
 
-    transaction.projectMetadata = data;
-    transaction.version = MerginProjectMetadata::fromJson( data ).version;
+    transaction.projectMetadata = data; // WATCH out, we are now overwriting what we had there before with the new project detail!!!
+    transaction.version = MerginProjectMetadata::fromJson( data ).version; // WATCH out, we are now overwriting what we had there before with the new project detail!!!
 
-    //  a new diffable files suppose to have their basefile copies in .mergin
+    // new diffable files are supposed to have their basefile copies in .mergin
     for ( QString filePath : transaction.diff.localAdded )
     {
       if ( MerginApi::isFileDiffable( filePath ) )
@@ -3152,9 +3609,13 @@ void MerginApi::pushFinishReplyFinished()
     }
 
     // clean up diff-related files
-    const auto diffFiles = transaction.pushDiffFiles;
-    for ( const MerginFile &merginFile : diffFiles )
+    for ( const MerginFile &merginFile : transaction.pushChanges.updated )
     {
+      if ( merginFile.diffName.isEmpty() )
+      {
+        continue;
+      }
+
       QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
 
       // update basefile (unmodified file that should be equivalent to the server)
@@ -3191,9 +3652,12 @@ void MerginApi::pushFinishReplyFinished()
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
 
     // remove temporary diff files
-    const auto diffFiles = transaction.pushDiffFiles;
-    for ( const MerginFile &merginFile : diffFiles )
+    for ( const MerginFile &merginFile : transaction.pushChanges.updated )
     {
+      if ( merginFile.diffName.isEmpty() )
+      {
+        continue;
+      }
       QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
       if ( !QFile::remove( diffPath ) )
         CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
@@ -3689,12 +4153,24 @@ QStringList MerginApi::generateChunkIdsForSize( qint64 fileSize )
   // edge case when file is empty, filesize equals zero
   // manually set one chunk so that file will be synced
   if ( fileSize <= 0 )
+  {
     noOfChunks = 1;
+  }
 
   QStringList chunks;
   for ( int i = 0; i < noOfChunks; i++ )
   {
-    QString chunkID = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    QString chunkID;
+
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v2 )
+    {
+      chunkID = sTempChunkId;
+    }
+    else
+    {
+      chunkID = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    }
+
     chunks.append( chunkID );
   }
   return chunks;
@@ -3704,13 +4180,13 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
 {
   QJsonArray jsonArray;
 
-  for ( MerginFile file : files )
+  for ( const MerginFile &file : files )
   {
     QJsonObject fileObject;
     fileObject.insert( "path", file.path );
 
     fileObject.insert( "size", file.size );
-    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) );
+    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) ); // todo: ignore?
 
     if ( !file.diffName.isEmpty() )
     {
@@ -3729,11 +4205,12 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
     }
 
     QJsonArray chunksJson;
-    for ( QString id : file.chunks )
+    for ( const QString &id : file.chunks )
     {
       chunksJson.append( id );
     }
     fileObject.insert( "chunks", chunksJson );
+
     jsonArray.append( fileObject );
   }
   return jsonArray;

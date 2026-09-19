@@ -79,26 +79,40 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
 {
   MerginProjectMetadata project;
 
-  QJsonDocument doc = QJsonDocument::fromJson( data );
+  const QJsonDocument doc = QJsonDocument::fromJson( data );
   if ( !doc.isObject() )
   {
     qDebug() << "MerginProjectMetadata::fromJson: invalid content!";
     return project;
   }
 
-  QJsonObject docObj = doc.object();
+  const QJsonObject docObj = doc.object();
 
   // read metadata about project files
-  QJsonValue vFiles = docObj.value( QStringLiteral( "files" ) );
+  const QJsonValue vFiles = docObj.value( QStringLiteral( "files" ) );
   Q_ASSERT( vFiles.isArray() );
-  QJsonArray vFilesArray = vFiles.toArray();
+  const QJsonArray vFilesArray = vFiles.toArray();
   for ( auto it = vFilesArray.constBegin(); it != vFilesArray.constEnd(); ++it )
   {
     project.files << MerginFile::fromJsonObject( it->toObject() );
   }
 
+  project.id = docObj.value( QStringLiteral( "id" ) ).toString();
   project.name = docObj.value( QStringLiteral( "name" ) ).toString();
-  project.projectNamespace = docObj.value( QStringLiteral( "namespace" ) ).toString();
+
+  if ( docObj.contains( QStringLiteral( "workspace" ) ) )
+  {
+    // v2 project detail
+    const QJsonObject workspaceData = docObj.value( QStringLiteral( "workspace" ) ).toObject();
+
+    project.workspaceId = workspaceData.value( QStringLiteral( "id" ) ).toInt();
+    project.workspaceName = workspaceData.value( QStringLiteral( "name" ) ).toString();
+  }
+  else
+  {
+    project.workspaceName = docObj.value( QStringLiteral( "namespace" ) ).toString();
+  }
+
   project.role = docObj.value( QStringLiteral( "role" ) ).toString();
 
   QString versionStr = docObj.value( QStringLiteral( "version" ) ).toString();
@@ -112,15 +126,6 @@ MerginProjectMetadata MerginProjectMetadata::fromJson( const QByteArray &data )
     project.version = versionStr.toInt();
   }
 
-  if ( docObj.contains( QStringLiteral( "id" ) ) )
-  {
-    project.projectId = docObj.value( QStringLiteral( "id" ) ).toString();
-  }
-  else
-  {
-    project.projectId.clear();
-  }
-
   return project;
 }
 
@@ -131,7 +136,7 @@ MerginProjectMetadata MerginProjectMetadata::fromCachedJson( const QString &meta
   {
     return fromJson( file.readAll() );
   }
-  return MerginProjectMetadata();
+  return {};
 }
 
 MerginFile MerginProjectMetadata::fileInfo( const QString &filePath ) const
@@ -142,7 +147,7 @@ MerginFile MerginProjectMetadata::fileInfo( const QString &filePath ) const
       return merginFile;
   }
   qDebug() << "requested fileInfo() for non-existant file! " << filePath;
-  return MerginFile();
+  return {};
 }
 
 MerginConfig MerginConfig::fromJson( const QByteArray &data )

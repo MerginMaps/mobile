@@ -2695,7 +2695,7 @@ QString TestMerginApi::projectIdFromProjectFullName( MerginApi *api, const QStri
   {
     QByteArray data = r->readAll();
     MerginProjectMetadata serverProject = MerginProjectMetadata::fromJson( data );
-    ret = serverProject.projectId;
+    ret = serverProject.id;
   }
   else
   {

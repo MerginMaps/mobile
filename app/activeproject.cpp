@@ -169,7 +169,7 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
     if ( cfgFile.exists() && cfgFile.isFile() )
     {
       // import the new configuration, if it exists.
-      const QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir.path() ) ).projectId;
+      const QString projectId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir.path() ) ).id;
       const bool ok = mAuthManager->importAuthenticationConfigsFromXml( cfgFile.filePath(), projectId, true );
       CoreUtils::log( "Authentication database", QStringLiteral( "QGIS auth import of %1 configuration(s) : %2" ).arg( mAuthManager->configIds().count() ).arg( ok ? "successful" : "failed" ) );
     }
