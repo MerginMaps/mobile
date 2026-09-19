@@ -404,7 +404,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     {
       // problem, we changed selective sync config locally, this is undefined and sync must stop
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was added locally, this is undefined and might lead to data loss, aborting push..." ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
     }
 
     transaction.pushChanges.added.append( file );
@@ -1241,7 +1241,7 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
     {
       // some chunks were not uploaded!
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from added files list did not make it to server before push finish!" ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
       return;
     }
   }
@@ -1252,7 +1252,7 @@ void MerginApi::pushV2Finish( const QString &projectFullName )
     {
       // some chunks were not uploaded!
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Some chunks from updated files list did not make it to server before push finish!" ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
       return;
     }
   }
@@ -2963,7 +2963,7 @@ void MerginApi::pushStartV2ReplyFinished()
       // TODO: further error handling - storage limit hit, initial project upload (delete the fresh project)
 
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "CHECK FAILED: %1, %2, %3, %4" ).arg( code ).arg( r->errorString() ).arg( serverMsg ).arg( httpErrorCode ) );
-      finishProjectSync( projectFullName, false );
+      finishTransaction( projectFullName, false );
 
       return;
     }
@@ -3018,7 +3018,7 @@ void MerginApi::pushV2FileReplyFinished()
     transaction.replyPushFile->deleteLater();
     transaction.replyPushFile = nullptr;
 
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
     return;
   }
 
@@ -3035,7 +3035,7 @@ void MerginApi::pushV2FileReplyFinished()
   {
     // Invalid response from the server, abort push, this should not happen though...
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAIL - Received invalid response from chunk upload, aborting..." ) );
-    finishProjectSync( projectFullName, false );
+    finishTransaction( projectFullName, false );
   }
 
   // let's store the uploaded chunk details
@@ -3063,7 +3063,7 @@ void MerginApi::pushV2FileReplyFinished()
       {
         // something terrible must have happened!
         CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in added files.." ) );
-        finishProjectSync( projectFullName, false ); // todo: is any cleanup needed?
+        finishTransaction( projectFullName, false ); // todo: is any cleanup needed?
       }
 
       break;
@@ -3088,7 +3088,7 @@ void MerginApi::pushV2FileReplyFinished()
         {
           // something terrible must have happened!
           CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Could not identify chunk index in updated files.." ) );
-          finishProjectSync( projectFullName, false );
+          finishTransaction( projectFullName, false );
         }
 
         break;
@@ -3581,18 +3581,6 @@ QList<DownloadQueueItem> MerginApi::itemsForFileDiffs( const MerginFile &file )
     items << DownloadQueueItem( file.path, d.second, d.first, -1, -1, true );
   }
   return items;
-}
-
-
-static MerginFile findFile( const QString &filePath, const QList<MerginFile> &files )
-{
-  for ( const MerginFile &merginFile : files )
-  {
-    if ( merginFile.path == filePath )
-      return merginFile;
-  }
-  CoreUtils::log( QStringLiteral( "MerginFile" ), QStringLiteral( "requested findFile() for non-existant file: %1" ).arg( filePath ) );
-  return MerginFile();
 }
 
 void MerginApi::pushFinishReplyFinished()
