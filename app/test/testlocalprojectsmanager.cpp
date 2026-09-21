@@ -58,10 +58,12 @@ void TestLocalProjectsManager::testRenameSuccess()
   QCOMPARE( projectId, QStringLiteral( "OriginalName" ) );
 
   QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "NewName" ) );
+  manager.renameLocalProject( projectId, QStringLiteral( "NewName" ) );
 
-  QCOMPARE( result, QString() );
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), true );
   QCOMPARE( renamedSpy.count(), 1 );
   QCOMPARE( renamedSpy.at( 0 ).at( 0 ).toString(), projectId );
 
@@ -84,10 +86,12 @@ void TestLocalProjectsManager::testRenameEmptyName()
   QString projectId = manager.projects().first().id();
 
   QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "   " ) );
+  manager.renameLocalProject( projectId, QStringLiteral( "   " ) );
 
-  QVERIFY( !result.isEmpty() );
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), false );
   QCOMPARE( renamedSpy.count(), 0 );
   QVERIFY( QDir( mDataDir + "/OriginalName" ).exists() );
 }
@@ -100,10 +104,12 @@ void TestLocalProjectsManager::testRenameInvalidCharacters()
   QString projectId = manager.projects().first().id();
 
   QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "Bad/Name" ) );
+  manager.renameLocalProject( projectId, QStringLiteral( "Bad/Name" ) );
 
-  QVERIFY( !result.isEmpty() );
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), false );
   QCOMPARE( renamedSpy.count(), 0 );
   QVERIFY( QDir( mDataDir + "/OriginalName" ).exists() );
 }
@@ -117,10 +123,12 @@ void TestLocalProjectsManager::testRenameNameAlreadyTaken()
   QCOMPARE( manager.projects().size(), 2 );
 
   QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QString result = manager.renameLocalProject( QStringLiteral( "ProjectA" ), QStringLiteral( "ProjectB" ) );
+  manager.renameLocalProject( QStringLiteral( "ProjectA" ), QStringLiteral( "ProjectB" ) );
 
-  QVERIFY( !result.isEmpty() );
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), false );
   QCOMPARE( renamedSpy.count(), 0 );
   QVERIFY( QDir( mDataDir + "/ProjectA" ).exists() );
   QVERIFY( QDir( mDataDir + "/ProjectB" ).exists() );
@@ -134,11 +142,14 @@ void TestLocalProjectsManager::testRenameSameName()
   QString projectId = manager.projects().first().id();
 
   QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "OriginalName" ) );
+  manager.renameLocalProject( projectId, QStringLiteral( "OriginalName" ) );
 
-  QCOMPARE( result, QString() );
-  QCOMPARE( renamedSpy.count(), 0 ); // no-op - nothing should have been touched
+  // a no-op rename still reports success, but nothing on disk is touched
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), true );
+  QCOMPARE( renamedSpy.count(), 1 );
   QVERIFY( QDir( mDataDir + "/OriginalName" ).exists() );
 }
 
@@ -147,9 +158,14 @@ void TestLocalProjectsManager::testRenameUnknownProject()
   LocalProjectsManager manager( mDataDir );
   QCOMPARE( manager.projects().size(), 0 );
 
-  QString result = manager.renameLocalProject( QStringLiteral( "does-not-exist" ), QStringLiteral( "NewName" ) );
+  QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QVERIFY( !result.isEmpty() );
+  manager.renameLocalProject( QStringLiteral( "does-not-exist" ), QStringLiteral( "NewName" ) );
+
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), false );
+  QCOMPARE( renamedSpy.count(), 0 );
 }
 
 void TestLocalProjectsManager::testRenameDirectoryCollision()
@@ -163,9 +179,14 @@ void TestLocalProjectsManager::testRenameDirectoryCollision()
   // manager does not know about (created after it last scanned mDataDir).
   QDir().mkpath( mDataDir + "/NewName" );
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "NewName" ) );
+  QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QCOMPARE( result, QString() );
+  manager.renameLocalProject( projectId, QStringLiteral( "NewName" ) );
+
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), true );
+  QCOMPARE( renamedSpy.count(), 1 );
   QVERIFY( QDir( mDataDir + "/NewName (1)" ).exists() );
 
   LocalProject updated = manager.projectFromProjectId( QStringLiteral( "NewName (1)" ) );
@@ -180,12 +201,51 @@ void TestLocalProjectsManager::testRenameTrimsWhitespace()
   LocalProjectsManager manager( mDataDir );
   QString projectId = manager.projects().first().id();
 
-  QString result = manager.renameLocalProject( projectId, QStringLiteral( "  NewName  " ) );
+  QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
 
-  QCOMPARE( result, QString() );
+  manager.renameLocalProject( projectId, QStringLiteral( "  NewName  " ) );
+
+  QCOMPARE( finishedSpy.count(), 1 );
+  QCOMPARE( finishedSpy.at( 0 ).at( 0 ).toBool(), true );
+  QCOMPARE( renamedSpy.count(), 1 );
   QVERIFY( QDir( mDataDir + "/NewName" ).exists() );
 
   LocalProject updated = manager.projectFromProjectId( QStringLiteral( "NewName" ) );
   QVERIFY( updated.isValid() );
   QCOMPARE( updated.projectName, QStringLiteral( "NewName" ) );
+}
+
+void TestLocalProjectsManager::testCanRenameProjectAccepts()
+{
+  createFakeProject( mDataDir, "OriginalName" );
+
+  LocalProjectsManager manager( mDataDir );
+  QString projectId = manager.projects().first().id();
+
+  QSignalSpy renamedSpy( &manager, &LocalProjectsManager::localProjectRenamed );
+  QSignalSpy finishedSpy( &manager, &LocalProjectsManager::renameLocalProjectFinished );
+
+  QCOMPARE( manager.canRenameProject( projectId, QStringLiteral( "NewName" ) ), QString() );
+  QCOMPARE( manager.canRenameProject( projectId, QStringLiteral( "OriginalName" ) ), QString() ); // unchanged name is fine too
+
+  // canRenameProject() must be side-effect-free
+  QVERIFY( QDir( mDataDir + "/OriginalName" ).exists() );
+  QCOMPARE( manager.projectFromProjectId( projectId ).projectName, QStringLiteral( "OriginalName" ) );
+  QCOMPARE( renamedSpy.count(), 0 );
+  QCOMPARE( finishedSpy.count(), 0 );
+}
+
+void TestLocalProjectsManager::testCanRenameProjectRejects()
+{
+  createFakeProject( mDataDir, "ProjectA" );
+  createFakeProject( mDataDir, "ProjectB" );
+
+  LocalProjectsManager manager( mDataDir );
+  QString projectId = manager.projectFromDirectory( mDataDir + "/ProjectA" ).id();
+
+  QVERIFY( !manager.canRenameProject( projectId, QStringLiteral( "   " ) ).isEmpty() );
+  QVERIFY( !manager.canRenameProject( projectId, QStringLiteral( "Bad/Name" ) ).isEmpty() );
+  QVERIFY( !manager.canRenameProject( projectId, QStringLiteral( "ProjectB" ) ).isEmpty() );
+  QVERIFY( !manager.canRenameProject( QStringLiteral( "does-not-exist" ), QStringLiteral( "NewName" ) ).isEmpty() );
 }

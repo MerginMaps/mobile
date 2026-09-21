@@ -608,7 +608,7 @@ void TestModels::testProjectsModelOnProjectRenamedActiveProject()
   QCOMPARE( model.activeProjectId(), p1.id() );
   QCOMPARE( inactiveRenameSpy.count(), 0 );
 
-  // Renaming the ACTIVE project must update activeProjectId to follow it
+  // Renaming the ACTIVE project must NOT make ProjectsModel follow the id itself anymore
   model.setActiveProjectId( renamed.id() ); // simulate that the just-renamed project is now active
   QSignalSpy activeRenameSpy( &model, &ProjectsModel::activeProjectIdChanged );
 
@@ -618,6 +618,6 @@ void TestModels::testProjectsModelOnProjectRenamedActiveProject()
 
   model.onProjectRenamed( renamed.id(), renamedAgain );
 
-  QCOMPARE( model.activeProjectId(), renamedAgain.id() );
-  QCOMPARE( activeRenameSpy.count(), 1 );
+  QCOMPARE( model.activeProjectId(), renamed.id() );
+  QCOMPARE( activeRenameSpy.count(), 0 );
 }

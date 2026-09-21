@@ -310,7 +310,7 @@ Control {
         "callback": () => root.migrateRequested()
       },
       "rename": {
-        "name": qsTr("Rename the local project"),
+        "name": qsTr("Rename project"),
         "iconSource": __style.editIcon,
         "callback": () => root.renameRequested()
       }
