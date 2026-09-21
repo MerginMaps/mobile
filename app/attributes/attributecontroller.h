@@ -60,6 +60,9 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
 
+    //! Returns TRUE if the feature has not been saved yet (has a new/null feature id)
+    Q_PROPERTY( bool isNewFeature READ isNewFeature NOTIFY featureLayerPairChanged )
+
     // this is never nullptr (a form with no tabs will be parsed as having a single tab)
     Q_PROPERTY( AttributeTabProxyModel *attributeTabProxyModel READ attributeTabProxyModel  NOTIFY attributeTabProxyModelChanged )
 
