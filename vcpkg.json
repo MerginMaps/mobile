@@ -85,7 +85,10 @@
         },
         {
           "name": "qtbase",
-          "default-features": false
+          "default-features": false,
+          "features": [
+            "sessionmanager"
+          ]
         },
         "qtconnectivity",
         "qtdeclarative",
