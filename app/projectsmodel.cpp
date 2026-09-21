@@ -54,6 +54,7 @@ void ProjectsModel::initializeProjectsModel()
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::aboutToRemoveLocalProject, this, &ProjectsModel::onAboutToRemoveProject );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectDataChanged, this, &ProjectsModel::onProjectDataChanged );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::localProjectRenamed, this, &ProjectsModel::onProjectRenamed );
+  QObject::connect( mLocalProjectsManager, &LocalProjectsManager::renameLocalProjectFinished, this, &ProjectsModel::renameLocalProjectFinished );
   QObject::connect( mLocalProjectsManager, &LocalProjectsManager::dataDirReloaded, this, &ProjectsModel::loadLocalProjects );
 
   emit modelInitialized();
@@ -381,9 +382,14 @@ void ProjectsModel::removeLocalProject( const QString &projectId )
   mLocalProjectsManager->removeLocalProject( projectId );
 }
 
-QString ProjectsModel::renameLocalProject( const QString &projectId, const QString &newName )
+QString ProjectsModel::canRenameProject( const QString &projectId, const QString &newName ) const
 {
-  return mLocalProjectsManager->renameLocalProject( projectId, newName );
+  return mLocalProjectsManager->canRenameProject( projectId, newName );
+}
+
+void ProjectsModel::renameLocalProject( const QString &projectId, const QString &newName )
+{
+  mLocalProjectsManager->renameLocalProject( projectId, newName );
 }
 
 void ProjectsModel::onProjectRenamed( const QString &oldProjectId, const LocalProject &localProject )
@@ -399,12 +405,6 @@ void ProjectsModel::onProjectRenamed( const QString &oldProjectId, const LocalPr
 
   QModelIndex editIndex = index( ix );
   emit dataChanged( editIndex, editIndex );
-
-  if ( mActiveProjectId == oldProjectId )
-  {
-    mActiveProjectId = localProject.id();
-    emit activeProjectIdChanged( mActiveProjectId );
-  }
 }
 
 void ProjectsModel::migrateProject( const QString &projectId )

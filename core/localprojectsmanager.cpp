@@ -253,10 +253,8 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   emit localProjectAdded( project );
 }
 
-QString LocalProjectsManager::renameLocalProject( const QString &projectId, const QString &newName )
+QString LocalProjectsManager::validateRename( const QString &projectId, const QString &trimmedName, int *projectIndexOut ) const
 {
-  const QString trimmedName = newName.trimmed();
-
   if ( trimmedName.isEmpty() )
   {
     return tr( "The project name cannot be empty" );
@@ -286,45 +284,73 @@ QString LocalProjectsManager::renameLocalProject( const QString &projectId, cons
     return tr( "Project not found" );
   }
 
-  LocalProject &project = mProjects[projectIndex];
-
-  if ( project.projectName == trimmedName )
+  if ( projectIndexOut )
   {
-    return {}; // name did not change, nothing to rename
+    *projectIndexOut = projectIndex;
   }
 
+  return {};
+}
+
+QString LocalProjectsManager::canRenameProject( const QString &projectId, const QString &newName ) const
+{
+  return validateRename( projectId, newName.trimmed() );
+}
+
+void LocalProjectsManager::renameLocalProject( const QString &projectId, const QString &newName )
+{
+  const QString trimmedName = newName.trimmed();
+
+  int projectIndex = -1;
+  const QString validationError = validateRename( projectId, trimmedName, &projectIndex );
+
+  if ( !validationError.isEmpty() )
+  {
+    CoreUtils::log( "Rename project", validationError );
+    emit renameLocalProjectFinished( false );
+    return;
+  }
+
+  LocalProject &project = mProjects[projectIndex];
   const QString oldProjectId = project.id();
 
-  const QString parentDir = QFileInfo( project.projectDir ).dir().absolutePath();
-  const QString newProjectDir = CoreUtils::findUniquePath( parentDir + "/" + trimmedName );
-
-  if ( !QDir().rename( project.projectDir, newProjectDir ) )
+  if ( project.projectName != trimmedName )
   {
-    CoreUtils::log( "Rename project", QStringLiteral( "Failed to rename directory %1 to %2" ).arg( project.projectDir, newProjectDir ) );
-    return tr( "Failed to rename the project directory" );
-  }
+    // let listeners (e.g. ActiveProject) unload this project before it's renamed on disk
+    emit aboutToRenameLocalProject( oldProjectId );
 
-  if ( !project.qgisProjectFilePath.isEmpty() )
-  {
-    const QString relativeFilePath = QDir( project.projectDir ).relativeFilePath( project.qgisProjectFilePath );
-    const QString oldFilePath = newProjectDir + "/" + relativeFilePath;
+    const QString parentDir = QFileInfo( project.projectDir ).dir().absolutePath();
+    const QString newProjectDir = CoreUtils::findUniquePath( parentDir + "/" + trimmedName );
 
-    QFileInfo oldFileInfo( oldFilePath );
-    const QString newFilePath = oldFileInfo.dir().absoluteFilePath( trimmedName + "." + oldFileInfo.suffix() );
-
-    if ( oldFilePath != newFilePath && QFile::rename( oldFilePath, newFilePath ) )
+    if ( !QDir().rename( project.projectDir, newProjectDir ) )
     {
-      project.qgisProjectFilePath = newFilePath;
+      CoreUtils::log( "Rename project", QStringLiteral( "Failed to rename directory %1 to %2" ).arg( project.projectDir, newProjectDir ) );
+      emit renameLocalProjectFinished( false );
+      return;
     }
-    else
-    {
-      project.qgisProjectFilePath = oldFilePath;
-    }
-  }
 
-  project.projectDir = newProjectDir;
-  project.projectName = trimmedName;
+    if ( !project.qgisProjectFilePath.isEmpty() )
+    {
+      const QString relativeFilePath = QDir( project.projectDir ).relativeFilePath( project.qgisProjectFilePath );
+      const QString oldFilePath = newProjectDir + "/" + relativeFilePath;
+
+      QFileInfo oldFileInfo( oldFilePath );
+      const QString newFilePath = oldFileInfo.dir().absoluteFilePath( trimmedName + "." + oldFileInfo.suffix() );
+
+      if ( oldFilePath != newFilePath && QFile::rename( oldFilePath, newFilePath ) )
+      {
+        project.qgisProjectFilePath = newFilePath;
+      }
+      else
+      {
+        project.qgisProjectFilePath = oldFilePath;
+      }
+    }
+
+    project.projectDir = newProjectDir;
+    project.projectName = trimmedName;
+  }
 
   emit localProjectRenamed( oldProjectId, project );
-  return {};
+  emit renameLocalProjectFinished( true );
 }

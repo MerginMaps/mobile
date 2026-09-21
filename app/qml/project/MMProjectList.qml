@@ -177,8 +177,8 @@ Item {
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
       onRenameRequested: () => {
-        internal.projectIdToRename = projectId
-        renameDialog.open()
+        renameDialogLoader.projectIdToRename = projectId
+        renameDialogLoader.active = true
       }
     }
   }
@@ -310,21 +310,56 @@ Item {
     }
   }
 
-  MMProjectComponents.MMRenameProjectDialog {
-    id: renameDialog
+  Loader {
+    id: renameDialogLoader
 
-    onRenameClicked: function( newName ) {
-      if ( !internal.projectIdToRename ) {
-        return
+    property string projectIdToRename: ""
+
+    active: false
+    asynchronous: true
+
+    sourceComponent: MMProjectComponents.MMRenameProjectDialog {
+      id: renameDialog
+
+      projectId: renameDialogLoader.projectIdToRename
+
+      onRenameClicked: function( newName ) {
+        if ( !renameDialog.projectId ) {
+          return
+        }
+
+        controllerModel.renameLocalProject( renameDialog.projectId, newName )
       }
 
-      const renameResult = controllerModel.renameLocalProject( internal.projectIdToRename, newName )
-
-      if ( !renameResult ) {
-        renameDialog.close()
+      onTextEdited: function( text ) {
+        canRenameCheckTimer.pendingText = text
+        canRenameCheckTimer.restart()
       }
-      else {
-        renameDialog.errorText = renameResult
+
+      onClosed: renameDialogLoader.active = false
+
+      Component.onCompleted: open()
+
+      Connections {
+        target: controllerModel
+
+        function onRenameLocalProjectFinished( success ) {
+          if ( success ) {
+            renameDialog.close()
+          }
+        }
+      }
+
+      Timer {
+        id: canRenameCheckTimer
+
+        property string pendingText: ""
+
+        interval: 300
+
+        onTriggered: {
+          renameDialog.errorText = controllerModel.canRenameProject( renameDialog.projectId, pendingText )
+        }
       }
     }
   }
@@ -336,11 +371,5 @@ Item {
       controllerModel.syncProject( relatedProjectId )
       downloadProjectDialog.relatedProjectId = ""
     }
-  }
-
-  QtObject {
-    id: internal
-
-    property string projectIdToRename: ""
   }
 }

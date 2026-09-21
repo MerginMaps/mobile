@@ -29,6 +29,9 @@ class TestLocalProjectsManager : public QObject
     void testRenameDirectoryCollision();
     void testRenameTrimsWhitespace();
 
+    void testCanRenameProjectAccepts();
+    void testCanRenameProjectRejects();
+
   private:
     QString mDataDir;
 };
