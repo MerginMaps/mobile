@@ -15,9 +15,11 @@ import "../../inputs"
 MMDrawer {
   id: root
 
+  property string projectId: ""
   property alias errorText: newNameField.errorMsg
 
   signal renameClicked( string newName )
+  signal textEdited( string text )
 
   drawerHeader.title: qsTr( "Rename project" )
   drawerHeader.titleFont: __style.t2
@@ -41,7 +43,10 @@ MMDrawer {
 
       placeholderText: qsTr( "Enter the new name" )
 
-      onTextEdited: () => newNameField.errorMsg = ""
+      onTextEdited: ( text ) => {
+        newNameField.errorMsg = ""
+        root.textEdited( text )
+      }
     }
 
     MMButton {
