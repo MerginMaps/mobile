@@ -149,7 +149,7 @@ jobs:
 
       - name: Install Android Tools
         run: |
-          sdkmanager --verbose "platforms;${SDK_PLATFORM}" "build-tools;${SDK_BUILD_TOOLS}" tools platform-tools
+          android sdk install "platforms/${SDK_PLATFORM}" "build-tools/${SDK_BUILD_TOOLS}" platform-tools
 
       - name: Extract GPS keystore
         env:
