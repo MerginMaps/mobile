@@ -59,6 +59,18 @@ ActiveProject::ActiveProject( AppSettings &appSettings
     }
   } );
 
+  // listen to local project rename event to unload mProject before it is renamed on disk
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::aboutToRenameLocalProject,
+    this, [this]( const QString & projectId )
+  {
+    if ( projectId == mLocalProject.id() )
+    {
+      load( QLatin1String() );
+    }
+  } );
+
   // listen to metadata changes of opened LocalProject (e.g. local version update or namespace update)
   QObject::connect(
     &mLocalProjectsManager,
