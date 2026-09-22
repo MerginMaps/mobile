@@ -75,6 +75,7 @@ class AndroidUtils: public QObject
     static constexpr int BLUETOOTH_CODE = 103;
 
     static constexpr int ANDROID_VERSION_13 = 13;
+    static constexpr int ANDROID_VERSION_10 = 10;
 
     void handleActivityResult( int receiverRequestCode, int resultCode, const QJniObject &data ) override;
 #endif
