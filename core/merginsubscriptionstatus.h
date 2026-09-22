@@ -26,7 +26,7 @@ class MerginSubscriptionStatus
       SubscriptionUnsubscribed,
       CanceledSubscription
     };
-    Q_ENUMS( SubscriptionStatus )
+    Q_ENUM( SubscriptionStatus )
 
     static QString toString( const SubscriptionStatus &type );
 };

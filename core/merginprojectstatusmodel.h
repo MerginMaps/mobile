@@ -28,7 +28,7 @@ class MerginProjectStatusModel : public QAbstractListModel
       Changelog, // Diffable file with number of changes per each category (above)
       Message // Error message
     };
-    Q_ENUMS( ProjectChangelogStatus )
+    Q_ENUM( ProjectChangelogStatus )
 
     struct ProjectStatusItem
     {
@@ -51,7 +51,7 @@ class MerginProjectStatusModel : public QAbstractListModel
       Updates,
       Section
     };
-    Q_ENUMS( Roles )
+    Q_ENUM( Roles )
 
     explicit MerginProjectStatusModel( LocalProjectsManager &localProjects, QObject *parent = nullptr );
 
