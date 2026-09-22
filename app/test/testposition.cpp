@@ -212,8 +212,8 @@ void TestPosition::testBluetoothProviderPosition()
   // test if position kit has correct information
   QVERIFY( qgsDoubleNear( positionKit->latitude(), 48.10305 ) );
   QVERIFY( qgsDoubleNear( positionKit->longitude(), 17.1064 ) );
-  QCOMPARE( positionKit->horizontalAccuracy(), -1 );
-  QCOMPARE( positionKit->verticalAccuracy(), -1 );
+  QVERIFY( std::isnan( positionKit->horizontalAccuracy() ) );
+  QVERIFY( std::isnan( positionKit->verticalAccuracy() ) );
   QCOMPARE( positionKit->altitude() + positionKit->antennaHeight(), 171.3 );
   QCOMPARE( positionKit->speed(), -1 );
   QCOMPARE( positionKit->hdop(), -1 );
