@@ -2478,7 +2478,6 @@ QList<MerginFile> MerginApi::getLocalProjectFiles( const QString &projectPath )
     file.path = p;
     QFileInfo info( projectPath + p );
     file.size = info.size();
-    file.mtime = info.lastModified();
     merginFiles.append( file );
   }
 
@@ -4186,8 +4185,6 @@ QJsonArray MerginApi::prepareUploadChangesJSON( const QList<MerginFile> &files )
     fileObject.insert( "path", file.path );
 
     fileObject.insert( "size", file.size );
-    fileObject.insert( "mtime", file.mtime.toString( Qt::ISODateWithMs ) ); // todo: ignore?
-
     if ( !file.diffName.isEmpty() )
     {
       // doing diff-based upload
