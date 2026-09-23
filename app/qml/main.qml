@@ -984,6 +984,15 @@ ApplicationWindow {
     }
   }
 
+  MMUsageReportDialog {
+    id: usageReportDialog
+
+    Component.onCompleted: {
+      if ( !AppSettings.usageReportConsentAsked )
+        open()
+    }
+  }
+
   Connections {
     target: __syncManager
     enabled: stateManager.state === "map"

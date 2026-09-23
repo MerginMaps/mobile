@@ -20,7 +20,8 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   // Usage report settings live outside the app group
   {
     QSettings settings;
-    mUsageReportEnabled = settings.value( QStringLiteral( "usage_report/enabled" ), true ).toBool();
+    mUsageReportEnabled = settings.value( QStringLiteral( "usage_report/enabled" ), false ).toBool();
+    mUsageReportConsentAsked = settings.value( QStringLiteral( "usage_report/consent_asked" ), false ).toBool();
   }
 
   QSettings settings;
@@ -414,8 +415,8 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   QSettings settings;
   if ( !mUsageReportEnabled )
   {
-    // Opt-out: clear all accumulated data but keep the enabled flag
-    settings.beginGroup( QStringLiteral( "usage_report" ) );
+    // Opt-out: clear accumulated data but preserve enabled and consent_asked flags
+    settings.beginGroup( QStringLiteral( "usage_report/data" ) );
     settings.remove( QString() );
     settings.endGroup();
     settings.setValue( QStringLiteral( "usage_report/enabled" ), false );
@@ -426,6 +427,24 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   }
 
   emit usageReportEnabledChanged( mUsageReportEnabled );
+}
+
+bool AppSettings::usageReportConsentAsked() const
+{
+  return mUsageReportConsentAsked;
+}
+
+void AppSettings::setUsageReportConsentAsked( bool asked )
+{
+  if ( mUsageReportConsentAsked == asked )
+    return;
+
+  mUsageReportConsentAsked = asked;
+
+  QSettings settings;
+  settings.setValue( QStringLiteral( "usage_report/consent_asked" ), asked );
+
+  emit usageReportConsentAskedChanged( mUsageReportConsentAsked );
 }
 
 void AppSettings::trackUsageFeature( const QString &key )
