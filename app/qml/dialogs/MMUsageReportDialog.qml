@@ -16,7 +16,7 @@ MMComponents.MMDrawerDialog {
 
   interactive: true
 
-  imageSource: __style.attentionImage
+  imageSource: __style.positiveMMSymbolImage
   title: qsTr( "Help us improve Mergin Maps" )
   description: qsTr( "Share anonymous usage data so we can focus on the features that matter most to you. No personal or project data is ever collected." )
   primaryButton.text: qsTr( "Yes, count me in" )
