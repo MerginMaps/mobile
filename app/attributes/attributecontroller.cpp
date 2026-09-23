@@ -18,6 +18,7 @@
 #include "attributetabmodel.h"
 #include "fieldvalidator.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QSet>
 
@@ -622,8 +623,40 @@ void AttributeController::updateOnFeatureChange()
                                         );
         if ( shouldUseRememberedValue )
         {
-          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, rememberedValue );
-          itemData->setRawValue( rememberedValue );
+          QVariant valueToUse = rememberedValue;
+
+          if ( itemData->editorWidgetType() == QStringLiteral( "ExternalResource" ) && !rememberedValue.toString().isEmpty() )
+          {
+            const QVariantMap config = itemData->editorWidgetConfig();
+            QString targetDir, prefix;
+            resolveExternalResourcePaths( config, targetDir, prefix );
+            const QString src = InputUtils::getAbsolutePath( rememberedValue.toString(), prefix );
+            const QFileInfo fi( src );
+
+            if ( !fi.isFile() )
+            {
+              ++formItemsIterator;
+              continue;
+            }
+
+            // temporary name; renamePhotos() applies the custom naming expression at save
+            QString newName = QDateTime::currentDateTime().toString( QStringLiteral( "yyyyMMdd_HHmmsszzz" ) );
+            if ( !fi.suffix().isEmpty() )
+              newName += QStringLiteral( "." ) + fi.suffix();
+
+            const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
+
+            if ( !InputUtils::copyFile( src, dst ) )
+            {
+              ++formItemsIterator;
+              continue;
+            }
+
+            valueToUse = InputUtils::getRelativePath( dst, prefix );
+          }
+
+          mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
+          itemData->setRawValue( valueToUse );
         }
       }
     }
@@ -1576,6 +1609,13 @@ void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
   emit featureIdChanged();
 }
 
+void AttributeController::resolveExternalResourcePaths( const QVariantMap &config, QString &targetDir, QString &prefix ) const
+{
+  const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
+  targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
+  prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+}
+
 void AttributeController::renamePhotos()
 {
   const QStringList photoNameFormat = QgsProject::instance()->entryList( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1" ).arg( mFeatureLayerPair.layer()->id() ) );
@@ -1636,9 +1676,8 @@ void AttributeController::renamePhotos()
           continue;
         }
 
-        const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
-        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
-        const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+        QString targetDir, prefix;
+        resolveExternalResourcePaths( config, targetDir, prefix );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
         QString newName = val.toString();
 
@@ -1649,13 +1688,15 @@ void AttributeController::renamePhotos()
         InputUtils::sanitizePath( newName );
 
         const QFileInfo fi( src );
-        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.completeSuffix() );
+        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.suffix() );
 
         const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
         if ( InputUtils::renameFile( src, dst ) )
         {
           const QString newValue = InputUtils::getRelativePath( dst, prefix );
           setFormValue( item->id(), newValue );
+          // avoids renaming it again on the next save
+          item->setOriginalValue( newValue );
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else
@@ -1680,9 +1721,8 @@ void AttributeController::saveSketches()
       if ( item->rawValue().isValid() )
       {
         const QVariantMap config = item->editorWidgetConfig();
-        const FeatureLayerPair &parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
-        const QString targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
-        const QString prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+        QString targetDir, prefix;
+        resolveExternalResourcePaths( config, targetDir, prefix );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
 
         const QString tempFilePath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), QUrl::fromLocalFile( QgsProject::instance()->homePath() ).fileName(), src.section( "/", -1 ) );
