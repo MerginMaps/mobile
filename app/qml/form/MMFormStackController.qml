@@ -316,7 +316,7 @@ Item {
       onEditGeometry: function( pair ) {
         root.editGeometryRequested( pair )
       }
-      onResumeDraft: {
+      onResumeDraft: () => {
         root.resumeDraftRequested()
       }
       onOpenLinkedFeature: function( linkedFeature ) {

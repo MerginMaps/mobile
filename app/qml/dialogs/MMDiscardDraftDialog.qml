@@ -30,12 +30,12 @@ MMDrawerDialog {
 
   secondaryButton.text: qsTr( "Do not discard" )
 
-  onPrimaryButtonClicked: {
+  onPrimaryButtonClicked: () => {
     root.discardDraft()
     close()
   }
 
-  onSecondaryButtonClicked: {
+  onSecondaryButtonClicked: () => {
     close()
   }
 }

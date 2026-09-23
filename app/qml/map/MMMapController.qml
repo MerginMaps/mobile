@@ -1336,6 +1336,11 @@ Item {
     __activeProject.setActiveLayer( layer )
     state = "record"
 
+    if ( !geometry.isNull() ) {
+      let mapGeometry = __inputUtils.transformGeometryToMapWithLayer( geometry, layer, mapCanvas.mapSettings )
+      __inputUtils.setExtentToGeom( mapGeometry, mapCanvas.mapSettings )
+    }
+
     // recordingToolsLoader only becomes active once state == "record" takes effect
     Qt.callLater( function() {
       if ( recordingToolsLoader.item ) {

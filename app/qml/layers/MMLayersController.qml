@@ -108,7 +108,7 @@ Item {
         item.forceActiveFocus()
       }
 
-      onResumeDraftClicked: {
+      onResumeDraftClicked: () => {
         root.resumeDraft()
       }
     }
@@ -135,7 +135,7 @@ Item {
         root.addFeature( targetLayer )
       }
 
-      onResumeDraftClicked: {
+      onResumeDraftClicked: () => {
         root.resumeDraft()
       }
     }

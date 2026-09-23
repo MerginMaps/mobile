@@ -27,13 +27,11 @@
 #include <QUndoCommand>
 #include <QTimer>
 #include <QDateTime>
-#include <QJsonObject>
 
 #include "qgsproject.h"
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
-  , mDraftSaveTimer( new QTimer( this ) )
 {
   connect( this, &RecordingMapTool::activeFeatureChanged, this, &RecordingMapTool::prepareEditing );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, &RecordingMapTool::completeEditOperation );
@@ -42,12 +40,12 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateActiveVertexGeometry );
   connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
 
-  mDraftSaveTimer->setSingleShot( true );
-  mDraftSaveTimer->setInterval( 1000 );
-  connect( mDraftSaveTimer, &QTimer::timeout, this, &RecordingMapTool::saveDraft );
+  mDraftSaveTimer.setSingleShot( true );
+  mDraftSaveTimer.setInterval( 1000 );
+  connect( &mDraftSaveTimer, &QTimer::timeout, this, &RecordingMapTool::saveDraft );
   connect( this, &RecordingMapTool::recordedGeometryChanged, this, [ this ]()
   {
-    mDraftSaveTimer->start();
+    mDraftSaveTimer.start();
   } );
 }
 
@@ -1097,7 +1095,7 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 {
-  mDraftSaveTimer->stop();
+  mDraftSaveTimer.stop();
   saveDraft();
 
   bool featureIsValid = FID_IS_NEW( mActiveFeature.id() ) || mActiveFeature.isValid();
@@ -1172,16 +1170,16 @@ void RecordingMapTool::saveDraft()
     return;
   }
 
-  QJsonObject draft;
-  draft[ QStringLiteral( "layerId" ) ] = mActiveLayer->id();
-  draft[ QStringLiteral( "stage" ) ] = QStringLiteral( "geometryCapture" );
-  draft[ QStringLiteral( "timestamp" ) ] = QDateTime::currentDateTimeUtc().toString( Qt::ISODate );
-  draft[ QStringLiteral( "geometry" ) ] = mRecordedGeometry.asWkt();
+  FeatureDraft draft;
+  draft.layerId = mActiveLayer->id();
+  draft.stage = FeatureDraft::GeometryCapture;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
+  draft.geometry = mRecordedGeometry;
 
   if ( isExistingFeature )
   {
     // editing the geometry of an already-existing feature
-    draft[ QStringLiteral( "featureId" ) ] = QJsonValue( static_cast<qint64>( mActiveFeature.id() ) );
+    draft.featureId = mActiveFeature.id();
   }
 
   FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
@@ -1189,7 +1187,7 @@ void RecordingMapTool::saveDraft()
 
 void RecordingMapTool::clearDraft()
 {
-  mDraftSaveTimer->stop();
+  mDraftSaveTimer.stop();
   FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
 }
 

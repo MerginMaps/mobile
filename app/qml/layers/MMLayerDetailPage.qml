@@ -225,7 +225,7 @@ Page {
         root.addFeatureClicked( toLayer )
       }
 
-      onResumeDraftClicked: {
+      onResumeDraftClicked: () => {
         root.resumeDraftClicked()
       }
 

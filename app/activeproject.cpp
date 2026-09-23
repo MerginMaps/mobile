@@ -21,6 +21,7 @@
 
 #include "activeproject.h"
 #include "coreutils.h"
+#include "drafts/featuredraftstorage.h"
 
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
@@ -165,6 +166,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
     mActiveLayer.resetActiveLayer();
+
+    // a new project may resolve to a different draft storage key
+    FeatureDraftStorage::clearCache();
 
     // path to the authentication configuration file
     const QDir projectDir = QFileInfo( filePath ).dir();

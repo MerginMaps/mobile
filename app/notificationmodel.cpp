@@ -161,10 +161,10 @@ void NotificationModel::onNotificationClicked( uint id )
           emit showSyncFailedDialogClicked();
           break;
         }
-        case NotificationType::ActionType::OpenDraftAction:
+        case NotificationType::ActionType::ShowDraftAction:
         {
           remove( id );
-          emit openDraftActionClicked();
+          emit showDraftActionClicked();
           break;
         }
         default: break;

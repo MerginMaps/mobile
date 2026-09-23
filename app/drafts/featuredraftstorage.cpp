@@ -9,48 +9,142 @@
 
 #include "featuredraftstorage.h"
 #include "coreutils.h"
+#include "merginprojectmetadata.h"
 
 #include <QSettings>
 #include <QJsonDocument>
+#include <QJsonArray>
 
-const QString FeatureDraftStorage::QSETTINGS_DRAFTS_GROUP_NAME = QStringLiteral( "featureDrafts" );
+const QString QSETTINGS_DRAFTS_GROUP_NAME = QStringLiteral( "featureDrafts" );
 
-void FeatureDraftStorage::saveDraft( const QString &projectId, const QJsonObject &draft )
+QHash<QString, QString> FeatureDraftStorage::sProjectKeyCache;
+
+void FeatureDraftStorage::saveDraft( const QString &projectDir, const FeatureDraft &draft )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  settings.setValue( settingsKey( projectId ), QJsonDocument( draft ).toJson( QJsonDocument::Compact ) );
+  settings.setValue( settingsKey( projectDir ), QJsonDocument( toJson( draft ) ).toJson( QJsonDocument::Compact ) );
   settings.endGroup();
 
   // explicit flush - a draft must survive a crash, not just a normal exit
   settings.sync();
 }
 
-QJsonObject FeatureDraftStorage::loadDraft( const QString &projectId )
+FeatureDraft FeatureDraftStorage::loadDraft( const QString &projectDir )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  const QByteArray raw = settings.value( settingsKey( projectId ) ).toByteArray();
+  const QByteArray raw = settings.value( settingsKey( projectDir ) ).toByteArray();
   settings.endGroup();
 
   if ( raw.isEmpty() )
   {
-    return QJsonObject();
+    return {};
   }
 
-  return QJsonDocument::fromJson( raw ).object();
+  return fromJson( QJsonDocument::fromJson( raw ).object() );
 }
 
-void FeatureDraftStorage::clearDraft( const QString &projectId )
+void FeatureDraftStorage::clearDraft( const QString &projectDir )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  settings.remove( settingsKey( projectId ) );
+  settings.remove( settingsKey( projectDir ) );
   settings.endGroup();
   settings.sync();
 }
 
-QString FeatureDraftStorage::settingsKey( const QString &projectId )
+void FeatureDraftStorage::clearCache()
 {
-  return QSETTINGS_DRAFTS_GROUP_NAME + "/" + projectId;
+  sProjectKeyCache.clear();
+}
+
+QString FeatureDraftStorage::projectKey( const QString &projectDir )
+{
+  const auto cached = sProjectKeyCache.constFind( projectDir );
+  if ( cached != sProjectKeyCache.constEnd() )
+  {
+    return cached.value();
+  }
+
+  const QString merginId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
+  const QString key = merginId.isEmpty() ? projectDir : merginId;
+
+  sProjectKeyCache.insert( projectDir, key );
+  return key;
+}
+
+QString FeatureDraftStorage::settingsKey( const QString &projectDir )
+{
+  return QSETTINGS_DRAFTS_GROUP_NAME + "/" + projectKey( projectDir );
+}
+
+QJsonObject FeatureDraftStorage::toJson( const FeatureDraft &draft )
+{
+  QJsonObject json;
+  json[ QStringLiteral( "layerId" ) ] = draft.layerId;
+  json[ QStringLiteral( "stage" ) ] = draft.stage == FeatureDraft::GeometryCapture
+                                       ? QStringLiteral( "geometryCapture" ) : QStringLiteral( "attributeForm" );
+  json[ QStringLiteral( "timestamp" ) ] = draft.timestamp.toString( Qt::ISODate );
+
+  if ( !draft.geometry.isNull() )
+  {
+    json[ QStringLiteral( "geometry" ) ] = draft.geometry.asWkt();
+  }
+
+  if ( draft.isExistingFeature() )
+  {
+    json[ QStringLiteral( "featureId" ) ] = QJsonValue( draft.featureId );
+  }
+
+  QJsonArray attributes;
+  for ( const FeatureDraftAttribute &attribute : draft.attributes )
+  {
+    QJsonObject attributeJson;
+    attributeJson[ QStringLiteral( "name" ) ] = attribute.name;
+    attributeJson[ QStringLiteral( "type" ) ] = attribute.typeName;
+    attributeJson[ QStringLiteral( "value" ) ] = QJsonValue::fromVariant( attribute.value );
+    attributes.append( attributeJson );
+  }
+  json[ QStringLiteral( "attributes" ) ] = attributes;
+
+  return json;
+}
+
+FeatureDraft FeatureDraftStorage::fromJson( const QJsonObject &json )
+{
+  if ( json.isEmpty() )
+  {
+    return {};
+  }
+
+  FeatureDraft draft;
+  draft.layerId = json.value( QStringLiteral( "layerId" ) ).toString();
+  draft.stage = json.value( QStringLiteral( "stage" ) ).toString() == QLatin1String( "geometryCapture" )
+                ? FeatureDraft::GeometryCapture : FeatureDraft::AttributeForm;
+  draft.timestamp = QDateTime::fromString( json.value( QStringLiteral( "timestamp" ) ).toString(), Qt::ISODate );
+
+  const QString wkt = json.value( QStringLiteral( "geometry" ) ).toString();
+  if ( !wkt.isEmpty() )
+  {
+    draft.geometry = QgsGeometry::fromWkt( wkt );
+  }
+
+  if ( json.contains( QStringLiteral( "featureId" ) ) )
+  {
+    draft.featureId = json.value( QStringLiteral( "featureId" ) ).toVariant().toLongLong();
+  }
+
+  const QJsonArray attributes = json.value( QStringLiteral( "attributes" ) ).toArray();
+  for ( const auto &attributeValue : attributes )
+  {
+    const QJsonObject attributeJson = attributeValue.toObject();
+    draft.attributes.append( {
+      attributeJson.value( QStringLiteral( "name" ) ).toString(),
+      attributeJson.value( QStringLiteral( "type" ) ).toString(),
+      attributeJson.value( QStringLiteral( "value" ) ).toVariant()
+    } );
+  }
+
+  return draft;
 }

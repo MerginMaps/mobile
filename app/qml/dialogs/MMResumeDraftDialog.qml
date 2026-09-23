@@ -21,7 +21,7 @@ MMDrawerDialog {
   signal discardClicked()
 
   imageSource: __style.neutralMMSymbolImage
-  title: featureTitle !== ""
+  title: featureTitle
          ? qsTr( "You have unsaved changes on feature %1" ).arg( featureTitle )
          : qsTr( "You have unsaved changes on a new feature" )
   description: qsTr( "The app closed before saving your changes on %1, click resume to start editing them again. If not, click discard." ).arg( layerName )
@@ -38,12 +38,12 @@ MMDrawerDialog {
   secondaryButton.fontColor: __style.earthColor
   secondaryButton.fontColorHover: __style.earthColor
 
-  onPrimaryButtonClicked: {
+  onPrimaryButtonClicked: () => {
     root.resumeClicked()
     close()
   }
 
-  onSecondaryButtonClicked: {
+  onSecondaryButtonClicked: () => {
     root.discardClicked()
     close()
   }

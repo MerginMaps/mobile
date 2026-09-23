@@ -15,7 +15,6 @@ import mm 1.0 as MM
 
 import "../inputs"
 import "../components" as MMComponents
-import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -46,80 +45,76 @@ MMComponents.MMPage {
       onSearchTextChanged: featuresModel.searchExpression = searchBar.text
     }
 
-    MMFilterComponents.MMFilterBanner {
-      id: draftBanner
+    ColumnLayout {
+      id: contentColumn
 
       anchors.top: searchBar.bottom
       anchors.topMargin: __style.spacing20
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
 
-      width: parent.width
+      spacing: __style.spacing10
 
-      visible: root.selectedLayer && __activeProject.featureDraftController.hasDraft && __activeProject.featureDraftController.draftLayer === root.selectedLayer
+      MMComponents.MMListBanner {
+        id: draftBanner
 
-      color: __style.warningColor
-      text: __activeProject.featureDraftController.draftIsEdit
-            ? qsTr( "Unsaved changes on %1" ).arg( __activeProject.featureDraftController.draftFeatureTitle )
-            : qsTr( "There is an unsaved feature" )
-      actionText: qsTr( "Resume" )
+        Layout.fillWidth: true
 
-      actionButton.bgndColor: __style.earthColor
-      actionButton.bgndColorHover: __style.earthColor
-      actionButton.fontColor: "white"
-      actionButton.fontColorHover: "white"
+        visible: root.selectedLayer && __activeProject.featureDraftController.hasDraft && __activeProject.featureDraftController.draftLayer === root.selectedLayer
 
-      onActionClicked: root.resumeDraftClicked()
-    }
+        variant: MMComponents.MMListBanner.Warning
+        text: __activeProject.featureDraftController.draftIsExistingFeature
+              ? qsTr( "Unsaved changes on %1" ).arg( __activeProject.featureDraftController.draftFeatureTitle )
+              : qsTr( "There is an unsaved feature" )
+        actionText: qsTr( "Resume" )
 
-    MMFilterComponents.MMFilterBanner {
-      id: filterBanner
-
-      anchors.top: draftBanner.visible ? draftBanner.bottom : searchBar.bottom
-      anchors.topMargin: draftBanner.visible ? __style.spacing10 : __style.spacing20
-
-      width: parent.width
-
-      visible: root.selectedLayer && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer(root.selectedLayer?.id)
-
-      text: qsTr("Active filters applied")
-      actionText: qsTr("Reset")
-
-      onActionClicked: {
-        __activeProject.filterController?.clearLayerFilters( root.selectedLayer.id )
-        featuresModel.reloadFeatures()
-        visible = false
-      }
-    }
-
-    MMComponents.MMListView {
-      id: listView
-
-      width: parent.width
-
-      anchors {
-        top: filterBanner.visible ? filterBanner.bottom : ( draftBanner.visible ? draftBanner.bottom : searchBar.bottom )
-        bottom: parent.bottom
-        topMargin: ( filterBanner.visible || draftBanner.visible ) ? __style.spacing10 : __style.spacing20
+        onActionClicked: () => root.resumeDraftClicked()
       }
 
-      model: MM.LayerFeaturesModel {
-        id: featuresModel
+      MMComponents.MMListBanner {
+        id: filterBanner
 
-        useAttributeTableSortOrder: true
-        layer: root.selectedLayer
-        attributeList: __inputUtils.referencedAttributeIndexes( layer, layer.displayExpression )
+        Layout.fillWidth: true
+
+        visible: root.selectedLayer && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer(root.selectedLayer?.id)
+
+        text: qsTr("Active filters applied")
+        actionText: qsTr("Reset")
+
+        onActionClicked: () => {
+          __activeProject.filterController?.clearLayerFilters( root.selectedLayer.id )
+          featuresModel.reloadFeatures()
+          visible = false
+        }
       }
 
-      clip: true
+      MMComponents.MMListView {
+        id: listView
 
-      delegate: MMComponents.MMListDelegate {
-        text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
-        secondaryText: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        onClicked: root.featureClicked( model.FeaturePair )
-      }
+        model: MM.LayerFeaturesModel {
+          id: featuresModel
 
-      footer: MMComponents.MMListSpacer {
-        height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
+          useAttributeTableSortOrder: true
+          layer: root.selectedLayer
+          attributeList: __inputUtils.referencedAttributeIndexes( layer, layer.displayExpression )
+        }
+
+        clip: true
+
+        delegate: MMComponents.MMListDelegate {
+          text: model.display?.toString()?.replace(/\n/g, ' ') ?? ''
+          secondaryText: model.Description + ( model.SearchResult ? ", " + model.SearchResult.replace(/\n/g, ' ') : "" )
+
+          onClicked: root.featureClicked( model.FeaturePair )
+        }
+
+        footer: MMComponents.MMListSpacer {
+          height: __style.margin20 + ( root.hasToolbar ? 0 : __style.safeAreaBottom ) + ( addButton.visible ? addButton.height : 0 )
+        }
       }
     }
 

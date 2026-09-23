@@ -12,10 +12,9 @@
 
 #include <QObject>
 #include <QString>
-#include <QJsonObject>
 
 #include "featurelayerpair.h"
-#include "qgsgeometry.h"
+#include "featuredraft.h"
 
 class QgsVectorLayer;
 
@@ -39,33 +38,35 @@ class FeatureDraftController : public QObject
     //! The layer the pending draft belongs to (only meaningful when hasDraft is true)
     Q_PROPERTY( QgsVectorLayer *draftLayer READ draftLayer NOTIFY hasDraftChanged )
 
-    //! Which stage the draft was interrupted at: "geometryCapture" or "attributeForm"
-    Q_PROPERTY( QString draftStage READ draftStage NOTIFY hasDraftChanged )
+    //! Which stage the draft was interrupted at
+    Q_PROPERTY( DraftStage draftStage READ draftStage NOTIFY hasDraftChanged )
 
     //! Whether the draft belongs to an existing feature being edited, rather than a new one being added
-    Q_PROPERTY( bool draftIsEdit READ draftIsEdit NOTIFY hasDraftChanged )
+    Q_PROPERTY( bool draftIsExistingFeature READ draftIsExistingFeature NOTIFY hasDraftChanged )
 
     //! Display title of the draft's feature (via the layer's display expression), empty for a new (add-mode) draft
     Q_PROPERTY( QString draftFeatureTitle READ draftFeatureTitle NOTIFY hasDraftChanged )
 
   public:
+    enum DraftStage
+    {
+      GeometryCapture,
+      AttributeForm
+    };
+    Q_ENUM( DraftStage )
+
     explicit FeatureDraftController( QObject *parent = nullptr );
     ~FeatureDraftController() override = default;
 
     bool hasDraft() const;
     QString draftLayerName() const;
     QgsVectorLayer *draftLayer() const;
-    QString draftStage() const;
-    bool draftIsEdit() const;
+    DraftStage draftStage() const;
+    bool draftIsExistingFeature() const;
     QString draftFeatureTitle() const;
 
-    // Rebuilds the draft as a FeatureLayerPair, geometry/attributes overlaid. Draft
-    // stays in storage - the resumed form clears or updates it as usual.
+    //! Rebuilds the draft as a FeatureLayerPair, geometry/attributes overlaid
     Q_INVOKABLE FeatureLayerPair resumeDraft();
-
-    // For a new-feature geometry-capture draft: returns just the geometry, to feed
-    // into RecordingMapTool::resumeCapture() instead of opening the form.
-    Q_INVOKABLE QgsGeometry resumeGeometryDraft();
 
     //! Permanently discards the pending draft for the currently active project
     Q_INVOKABLE void discardDraft();
@@ -79,20 +80,24 @@ class FeatureDraftController : public QObject
 
   private:
     //! Resolves the layer the given draft belongs to, or nullptr if it no longer exists
-    QgsVectorLayer *resolveDraftLayer( const QJsonObject &draft ) const;
+    static QgsVectorLayer *resolveDraftLayer( const FeatureDraft &draft );
 
     // Guards: not older than 10 days, referenced fields still match the layer's
     // schema, and (for an edit-mode draft) the feature still exists.
-    bool isDraftValid( const QJsonObject &draft, QgsVectorLayer *layer ) const;
+    static bool isDraftValid( const FeatureDraft &draft, QgsVectorLayer *layer );
 
-    void setDraft( bool hasDraft, QgsVectorLayer *layer = nullptr, const QString &stage = QString(), bool isEdit = false, const QString &featureTitle = QString() );
+    static DraftStage toQmlStage( FeatureDraft::Stage stage );
+
+    void setDraft( bool hasDraft, QgsVectorLayer *layer = nullptr, DraftStage stage = AttributeForm, bool isExistingFeature = false, const QString &featureTitle = QString() );
 
     bool mHasDraft = false;
     QString mDraftLayerName;
     QgsVectorLayer *mDraftLayer = nullptr; // not owned
-    QString mDraftStage;
-    bool mDraftIsEdit = false;
+    DraftStage mDraftStage = AttributeForm;
+    bool mDraftIsExistingFeature = false;
     QString mDraftFeatureTitle;
+
+    FeatureDraft mCachedDraft; // loaded once in checkForDraft(), reused by resumeDraft()/discardDraft()
 };
 
 #endif // FEATUREDRAFTCONTROLLER_H
