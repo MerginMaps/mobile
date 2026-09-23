@@ -50,6 +50,8 @@ set(MM_SRCS
     androidutils.cpp
     mapsketchingcontroller.cpp
     appsettings.cpp
+    drafts/featuredraftstorage.cpp
+    drafts/featuredraftcontroller.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
     qrcodedecoder.cpp
@@ -147,6 +149,9 @@ set(MM_HDRS
     androidutils.h
     mapsketchingcontroller.h
     appsettings.h
+    drafts/featuredraft.h
+    drafts/featuredraftstorage.h
+    drafts/featuredraftcontroller.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
     qrcodedecoder.h
@@ -255,6 +260,7 @@ if (ENABLE_TESTS)
       test/testprojectchecksumcache.cpp
       test/testmultieditmanager.cpp
       test/testfiltercontroller.cpp
+      test/testfeaturedraftcontroller.cpp
   )
 
   set(MM_HDRS
@@ -282,6 +288,7 @@ if (ENABLE_TESTS)
       test/testprojectchecksumcache.h
       test/testmultieditmanager.h
       test/testfiltercontroller.h
+      test/testfeaturedraftcontroller.h
   )
 
   if (NOT USE_MM_SERVER_API_KEY)
@@ -361,6 +368,7 @@ target_include_directories(
   MerginMaps
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/
          ${CMAKE_CURRENT_SOURCE_DIR}/attributes
+         ${CMAKE_CURRENT_SOURCE_DIR}/drafts
          ${CMAKE_CURRENT_SOURCE_DIR}/filter
          ${CMAKE_CURRENT_SOURCE_DIR}/map
          ${CMAKE_CURRENT_SOURCE_DIR}/layer

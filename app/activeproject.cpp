@@ -21,6 +21,7 @@
 
 #include "activeproject.h"
 #include "coreutils.h"
+#include "drafts/featuredraftstorage.h"
 
 #ifdef ANDROID
 #include "position/tracking/androidtrackingbroadcast.h"
@@ -78,6 +79,9 @@ ActiveProject::ActiveProject( AppSettings &appSettings
 
   mFilterController = std::make_unique<FilterController>();
   connect( this, &ActiveProject::projectReloaded, mFilterController.get(), &FilterController::loadFilterConfig );
+
+  mFeatureDraftController = std::make_unique<FeatureDraftController>();
+  connect( this, &ActiveProject::loadingFinished, mFeatureDraftController.get(), &FeatureDraftController::checkForDraft );
 }
 
 ActiveProject::~ActiveProject() = default;
@@ -162,6 +166,9 @@ bool ActiveProject::forceLoad( const QString &filePath, bool force )
   {
     emit projectWillBeReloaded();
     mActiveLayer.resetActiveLayer();
+
+    // a new project may resolve to a different draft storage key
+    FeatureDraftStorage::clearCache();
 
     // path to the authentication configuration file
     const QDir projectDir = QFileInfo( filePath ).dir();
@@ -682,4 +689,9 @@ bool ActiveProject::photoSketchingEnabled() const
 FilterController *ActiveProject::filterController() const
 {
   return mFilterController.get();
+}
+
+FeatureDraftController *ActiveProject::featureDraftController() const
+{
+  return mFeatureDraftController.get();
 }

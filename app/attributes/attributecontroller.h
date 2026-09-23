@@ -21,14 +21,17 @@
 #include <QVariant>
 #include <memory>
 #include <QMap>
+#include <QSet>
 #include <QVector>
 #include <QUuid>
+#include <QTimer>
 
 #include "featurelayerpair.h"
 #include "attributedata.h"
 #include "attributeformproxymodel.h"
 #include "attributetabproxymodel.h"
 #include "rememberattributescontroller.h"
+#include "featuredraft.h"
 
 #include "qgsfeature.h"
 #include "qgsproject.h"
@@ -188,6 +191,15 @@ class  AttributeController : public QObject
 
     bool isNewFeature() const;
 
+    // Persists touched attributes as a draft, debounced.
+    void saveDraft();
+
+    //! Removes any persisted draft for the current project
+    void clearDraft();
+
+    //! Builds a FeatureDraftAttribute for one attribute, used by saveDraft()
+    FeatureDraftAttribute toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const;
+
     /**
      * Recalculates visibility & constrains & default values
      * Note that reevaluate default values is needed only when an attribnute has changed.
@@ -249,5 +261,10 @@ class  AttributeController : public QObject
 
     AttributeController *mParentController = nullptr; // not owned
     QgsRelation mLinkedRelation;
+
+    QTimer mDraftSaveTimer; // debounces saveDraft()
+
+    //! Indices of fields the user has actually changed this session, used for drafting
+    QSet<int> mTouchedFieldIndices;
 };
 #endif // ATTRIBUTECONTROLLER_H

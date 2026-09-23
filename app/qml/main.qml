@@ -32,6 +32,9 @@ import "./filters"
 ApplicationWindow {
   id: window
 
+  // action to run after a pending draft is discarded
+  property var draftDialogPendingAction: null
+
   visible: true
   x:  __appwindowx
   y:  __appwindowy
@@ -315,10 +318,17 @@ ApplicationWindow {
         text: qsTr("Add")
         iconSource: __style.addIcon
         visible: __activeProject.projectRole !== "reader"
-        onClicked: {
+        onClicked: () => {
           if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
-            map.record()
+
+            if ( __activeProject.featureDraftController.hasDraft ) {
+              window.draftDialogPendingAction = function() { map.record() }
+              resumeDraftDialog.open()
+            }
+            else {
+              map.record()
+            }
           }
           else {
             __notificationModel.addInfo( qsTr( "No editable layers found." ) )
@@ -507,11 +517,27 @@ ApplicationWindow {
       }
 
       onAddFeature: function( targetLayer ) {
-        let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
-        formsStackManager.openForm( newPair, "add", "form" )
+        let startAdding = function() {
+          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+          formsStackManager.openForm( newPair, "add", "form" )
+        }
+
+        if ( __activeProject.featureDraftController.hasDraft ) {
+          window.draftDialogPendingAction = startAdding
+          resumeDraftDialog.open()
+        }
+        else {
+          startAdding()
+        }
 
         // If we start supporting addition of spatial features from the layer's list,
         // make sure to change the root state here to "map"
+      }
+
+      onResumeDraft: () => {
+        mapPanelsStackView.clear( StackView.PopTransition )
+        stateManager.state = "map"
+        resumeFeatureDraft()
       }
     }
   }
@@ -817,6 +843,11 @@ ApplicationWindow {
       map.edit( pair )
     }
 
+    onResumeDraftRequested: () => {
+      stateManager.state = "map"
+      resumeFeatureDraft()
+    }
+
     onClosed: {
       if ( mapPanelsStackView.depth ) {
         // this must be layers panel as it is the only thing on the stackview currently
@@ -891,6 +922,35 @@ ApplicationWindow {
 
   MMProjErrorDialog {
     id: projDialog
+  }
+
+  MMDiscardDraftDialog {
+    id: discardDraftDialog
+
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onDiscardDraft: () => {
+      __activeProject.featureDraftController.discardDraft()
+
+      if ( window.draftDialogPendingAction ) {
+        let action = window.draftDialogPendingAction
+        window.draftDialogPendingAction = null
+        action()
+      }
+    }
+  }
+
+  MMResumeDraftDialog {
+    id: resumeDraftDialog
+
+    featureTitle: __activeProject.featureDraftController.draftFeatureTitle
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onResumeClicked: () => {
+      window.draftDialogPendingAction = null
+      resumeFeatureDraft()
+    }
+    onDiscardClicked: () => discardDraftDialog.open()
   }
 
   MMOutOfDateCustomServerDialog{
@@ -1123,6 +1183,27 @@ ApplicationWindow {
     }
   }
 
+  //! Resumes whatever feature draft is currently pending, landing back exactly
+  //! where the user left off - interactive geometry capture, or the form.
+  function resumeFeatureDraft() {
+    const controller = __activeProject.featureDraftController
+    const isExistingFeature = controller.draftIsExistingFeature
+    const isGeometryCapture = controller.draftStage === MM.FeatureDraftController.GeometryCapture
+    const layer = controller.draftLayer
+
+    const pair = controller.resumeDraft()
+
+    // only a brand new feature needs interactive resume - an existing feature
+    // always has a form to reopen, geometry already included
+    if ( isGeometryCapture && !isExistingFeature ) {
+      map.resumeRecording( layer, __inputUtils.extractGeometry( pair ) )
+    } else {
+      formsStackManager.openForm( pair, isExistingFeature ? "edit" : "add", "form" )
+    }
+
+    __notificationModel.addInfo( qsTr( "These are your unsaved changes, continue editing or discard them by navigating back." ) )
+  }
+
   Connections {
     target: __inputProjUtils
     function onProjError( message ) {
@@ -1142,6 +1223,19 @@ ApplicationWindow {
     }
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
+    }
+    function onShowDraftActionClicked() {
+      resumeFeatureDraft()
+    }
+  }
+
+  Connections {
+    target: __activeProject.featureDraftController
+
+    function onHasDraftChanged() {
+      if ( __activeProject.featureDraftController.hasDraft && map.state === "view" ) {
+        __notificationModel.addDraftNotice( qsTr( "You have unsaved changes. Tap here to open them." ), MM.NotificationType.ShowDraftAction )
+      }
     }
   }
 

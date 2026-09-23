@@ -13,6 +13,7 @@
 #include "abstractmaptool.h"
 
 #include <QObject>
+#include <QTimer>
 #include <qglobal.h>
 
 #include "qgsvertexid.h"
@@ -164,6 +165,11 @@ class RecordingMapTool : public AbstractMapTool
     Q_INVOKABLE FeatureLayerPair getFeatureLayerPair();
 
     Q_INVOKABLE void discardChanges();
+
+    // Resumes digitizing a new feature interrupted mid-capture: registers a fresh
+    // feature on the active layer seeded with this geometry, staying in Record
+    // state so vertices can keep being added. Assumes activeLayer is already set.
+    Q_INVOKABLE void resumeCapture( const QgsGeometry &geometry );
 
     /**
      * Reverts last change from the layer undo stack.
@@ -337,6 +343,12 @@ class RecordingMapTool : public AbstractMapTool
      */
     void avoidIntersections();
 
+    //! Persists the current feature's in-progress geometry as a draft, debounced
+    void saveDraft();
+
+    //! Removes any persisted draft for the current project
+    void clearDraft();
+
     QgsGeometry mRecordedGeometry;
 
     bool mCenteredToGPS = false;
@@ -375,6 +387,8 @@ class RecordingMapTool : public AbstractMapTool
     QgsFeature mActiveFeature;
 
     int mMinUndoStackIndex = 0; // We can not undo more than this index
+
+    QTimer mDraftSaveTimer; // debounces saveDraft()
 };
 
 #endif // RECORDINGMAPTOOL_H
