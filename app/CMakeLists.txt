@@ -149,6 +149,7 @@ set(MM_HDRS
     androidutils.h
     mapsketchingcontroller.h
     appsettings.h
+    drafts/featuredraft.h
     drafts/featuredraftstorage.h
     drafts/featuredraftcontroller.h
     autosynccontroller.h
@@ -260,6 +261,7 @@ if (ENABLE_TESTS)
       test/testprojectchecksumcache.cpp
       test/testmultieditmanager.cpp
       test/testfiltercontroller.cpp
+      test/testfeaturedraftcontroller.cpp
   )
 
   set(MM_HDRS
@@ -288,6 +290,7 @@ if (ENABLE_TESTS)
       test/testprojectchecksumcache.h
       test/testmultieditmanager.h
       test/testfiltercontroller.h
+      test/testfeaturedraftcontroller.h
   )
 
   if (NOT USE_MM_SERVER_API_KEY)

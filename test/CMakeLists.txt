@@ -29,6 +29,7 @@ set(MM_TESTS
     testSketching
     testMultiEditManager
     testFilterController
+    testFeatureDraftController
 )
 
 foreach (test ${MM_TESTS})

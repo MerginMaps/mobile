@@ -169,10 +169,8 @@ Item {
 
       onOpenFormClicked: root.panelState = "form"
 
-      onEditClicked: {
+      onEditClicked: () => {
         if ( __activeProject.featureDraftController.hasDraft ) {
-          // only one drawer should ever be active at a time
-          root.closeDrawer()
           resumeDraftDialog.open()
         }
         else {
@@ -260,8 +258,8 @@ Item {
     featureTitle: __activeProject.featureDraftController.draftFeatureTitle
     layerName: __activeProject.featureDraftController.draftLayerName
 
-    onResumeClicked: root.resumeDraft()
-    onDiscardClicked: discardDraftDialog.open()
+    onResumeClicked: () => root.resumeDraft()
+    onDiscardClicked: () => discardDraftDialog.open()
   }
 
   MMDiscardDraftDialog {
@@ -269,7 +267,7 @@ Item {
 
     layerName: __activeProject.featureDraftController.draftLayerName
 
-    onDiscardDraft: {
+    onDiscardDraft: () => {
       __activeProject.featureDraftController.discardDraft()
     }
   }

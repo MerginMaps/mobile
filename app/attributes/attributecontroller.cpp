@@ -23,8 +23,6 @@
 #include <QSet>
 #include <QTimer>
 #include <QDateTime>
-#include <QJsonObject>
-#include <QJsonArray>
 
 #include "featuredraftstorage.h"
 
@@ -48,11 +46,10 @@
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new AttributeTabProxyModel() )
-  , mDraftSaveTimer( new QTimer( this ) )
 {
-  mDraftSaveTimer->setSingleShot( true );
-  mDraftSaveTimer->setInterval( 1000 );
-  connect( mDraftSaveTimer, &QTimer::timeout, this, &AttributeController::saveDraft );
+  mDraftSaveTimer.setSingleShot( true );
+  mDraftSaveTimer.setInterval( 1000 );
+  connect( &mDraftSaveTimer, &QTimer::timeout, this, &AttributeController::saveDraft );
 }
 
 void AttributeController::reset()
@@ -88,6 +85,12 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
     if ( !isSameFeature )
     {
       mTouchedFieldIndices.clear();
+
+      // draft immediately so a crash before the first keystroke still resumes into the form
+      if ( pair.layer() && isNewFeature() )
+      {
+        saveDraft();
+      }
     }
     if ( hasLayerChanged )
     {
@@ -683,13 +686,9 @@ bool AttributeController::isNewFeature() const
   return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
-QJsonObject AttributeController::attributeToJson( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const
+FeatureDraftAttribute AttributeController::toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const
 {
-  QJsonObject attribute;
-  attribute[ QStringLiteral( "name" ) ] = fields.at( fieldIndex ).name();
-  attribute[ QStringLiteral( "type" ) ] = fields.at( fieldIndex ).typeName();
-  attribute[ QStringLiteral( "value" ) ] = QJsonValue::fromVariant( feature.attribute( fieldIndex ) );
-  return attribute;
+  return { fields.at( fieldIndex ).name(), fields.at( fieldIndex ).typeName(), feature.attribute( fieldIndex ) };
 }
 
 void AttributeController::saveDraft()
@@ -701,40 +700,29 @@ void AttributeController::saveDraft()
   const QgsFields fields = feature.fields();
   const bool featureIsNew = isNewFeature();
 
-  QJsonArray attributes;
+  FeatureDraft draft;
+  draft.layerId = mFeatureLayerPair.layer()->id();
+  draft.stage = FeatureDraft::AttributeForm;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
 
-  if ( featureIsNew )
+  // only touched fields are drafted - an untouched one falls back to its
+  // default value expression on resume rather than a stale recorded value
+  for ( int fieldIndex : mTouchedFieldIndices )
   {
-    for ( int i = 0; i < feature.attributeCount(); ++i )
+    if ( fieldIndex >= 0 && fieldIndex < feature.attributeCount() )
     {
-      attributes.append( attributeToJson( fields, feature, i ) );
+      draft.attributes.append( toDraftAttribute( fields, feature, fieldIndex ) );
     }
   }
-  else
-  {
-    for ( int fieldIndex : mTouchedFieldIndices )
-    {
-      if ( fieldIndex >= 0 && fieldIndex < feature.attributeCount() )
-      {
-        attributes.append( attributeToJson( fields, feature, fieldIndex ) );
-      }
-    }
-  }
-
-  QJsonObject draft;
-  draft[ QStringLiteral( "layerId" ) ] = mFeatureLayerPair.layer()->id();
-  draft[ QStringLiteral( "stage" ) ] = QStringLiteral( "attributeForm" );
-  draft[ QStringLiteral( "timestamp" ) ] = QDateTime::currentDateTimeUtc().toString( Qt::ISODate );
-  draft[ QStringLiteral( "attributes" ) ] = attributes;
 
   if ( featureIsNew )
   {
     // existing-feature geometry edits are drafted separately, by RecordingMapTool
-    draft[ QStringLiteral( "geometry" ) ] = feature.geometry().asWkt();
+    draft.geometry = feature.geometry();
   }
   else
   {
-    draft[ QStringLiteral( "featureId" ) ] = QJsonValue( static_cast<qint64>( feature.id() ) );
+    draft.featureId = feature.id();
   }
 
   FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
@@ -744,7 +732,7 @@ void AttributeController::clearDraft()
 {
   // a pending debounced write must not be allowed to resurrect the draft
   // after we've just told the storage (and possibly the user) it's gone
-  mDraftSaveTimer->stop();
+  mDraftSaveTimer.stop();
 
   FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
 }
@@ -1618,7 +1606,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
       mTouchedFieldIndices.insert( item->fieldIndex() );
-      mDraftSaveTimer->start();
+      mDraftSaveTimer.start();
     }
     recalculateDerivedItems( true, false );
     return true;

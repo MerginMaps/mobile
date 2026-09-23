@@ -10,30 +10,43 @@
 #ifndef FEATUREDRAFTSTORAGE_H
 #define FEATUREDRAFTSTORAGE_H
 
-#include <QString>
+#include <QHash>
 #include <QJsonObject>
 
-// Saves/loads/clears an in-progress feature edit ("draft") per project. Stores
-// a JSON blob - knows nothing about what's inside it or when it's valid.
+#include "featuredraft.h"
+
+// Saves/loads/clears an in-progress feature edit ("draft") per project. The only
+// class that knows a draft is stored as a QSettings-held JSON blob - everyone
+// else works with the plain FeatureDraft struct.
 class FeatureDraftStorage
 {
   public:
     explicit FeatureDraftStorage() = default;
     ~FeatureDraftStorage() = default;
 
-    // Persists the draft payload for the given project, replacing any previous draft for it.
-    static void saveDraft( const QString &projectId, const QJsonObject &draft );
+    // Persists the draft for the given project, replacing any previous draft for it.
+    static void saveDraft( const QString &projectDir, const FeatureDraft &draft );
 
-    // Returns the stored draft payload for the given project, or an empty object if none exists.
-    static QJsonObject loadDraft( const QString &projectId );
+    // Returns the stored draft for the given project, or a default (empty) FeatureDraft if none exists.
+    static FeatureDraft loadDraft( const QString &projectDir );
 
     // Removes the stored draft for the given project, if any.
-    static void clearDraft( const QString &projectId );
+    static void clearDraft( const QString &projectDir );
+
+    // Forgets cached projectDir -> storage key lookups. Call whenever the active project changes.
+    static void clearCache();
 
   private:
-    static QString settingsKey( const QString &projectId );
+    static QJsonObject toJson( const FeatureDraft &draft );
+    static FeatureDraft fromJson( const QJsonObject &json );
 
-    static const QString QSETTINGS_DRAFTS_GROUP_NAME;
+    // Mergin project id when the project is server-linked, otherwise projectDir itself.
+    // Resolving this reads a file from disk, so results are cached by projectDir.
+    static QString projectKey( const QString &projectDir );
+
+    static QString settingsKey( const QString &projectDir );
+
+    static QHash<QString, QString> sProjectKeyCache;
 };
 
 #endif // FEATUREDRAFTSTORAGE_H

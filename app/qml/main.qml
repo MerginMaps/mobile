@@ -32,6 +32,9 @@ import "./filters"
 ApplicationWindow {
   id: window
 
+  // action to run after a pending draft is discarded
+  property var draftDialogPendingAction: null
+
   visible: true
   x:  __appwindowx
   y:  __appwindowy
@@ -317,11 +320,12 @@ ApplicationWindow {
         text: qsTr("Add")
         iconSource: __style.addIcon
         visible: __activeProject.projectRole !== "reader"
-        onClicked: {
+        onClicked: () => {
           if ( __activeProject.projectHasRecordingLayers() ) {
             stateManager.state = "map"
 
             if ( __activeProject.featureDraftController.hasDraft ) {
+              window.draftDialogPendingAction = function() { map.record() }
               resumeDraftDialog.open()
             }
             else {
@@ -521,6 +525,7 @@ ApplicationWindow {
         }
 
         if ( __activeProject.featureDraftController.hasDraft ) {
+          window.draftDialogPendingAction = startAdding
           resumeDraftDialog.open()
         }
         else {
@@ -531,7 +536,7 @@ ApplicationWindow {
         // make sure to change the root state here to "map"
       }
 
-      onResumeDraft: {
+      onResumeDraft: () => {
         mapPanelsStackView.clear( StackView.PopTransition )
         stateManager.state = "map"
         resumeFeatureDraft()
@@ -840,7 +845,7 @@ ApplicationWindow {
       map.edit( pair )
     }
 
-    onResumeDraftRequested: {
+    onResumeDraftRequested: () => {
       stateManager.state = "map"
       resumeFeatureDraft()
     }
@@ -926,8 +931,14 @@ ApplicationWindow {
 
     layerName: __activeProject.featureDraftController.draftLayerName
 
-    onDiscardDraft: {
+    onDiscardDraft: () => {
       __activeProject.featureDraftController.discardDraft()
+
+      if ( window.draftDialogPendingAction ) {
+        let action = window.draftDialogPendingAction
+        window.draftDialogPendingAction = null
+        action()
+      }
     }
   }
 
@@ -937,8 +948,11 @@ ApplicationWindow {
     featureTitle: __activeProject.featureDraftController.draftFeatureTitle
     layerName: __activeProject.featureDraftController.draftLayerName
 
-    onResumeClicked: resumeFeatureDraft()
-    onDiscardClicked: discardDraftDialog.open()
+    onResumeClicked: () => {
+      window.draftDialogPendingAction = null
+      resumeFeatureDraft()
+    }
+    onDiscardClicked: () => discardDraftDialog.open()
   }
 
   MMOutOfDateCustomServerDialog{
@@ -1173,20 +1187,21 @@ ApplicationWindow {
   //! where the user left off - interactive geometry capture, or the form.
   function resumeFeatureDraft() {
     const controller = __activeProject.featureDraftController
-    const isEdit = controller.draftIsEdit
+    const isExistingFeature = controller.draftIsExistingFeature
+    const isGeometryCapture = controller.draftStage === MM.FeatureDraftController.GeometryCapture
+    const layer = controller.draftLayer
+
+    const pair = controller.resumeDraft()
 
     // only a brand new feature needs interactive resume - an existing feature
     // always has a form to reopen, geometry already included
-    if ( controller.draftStage === "geometryCapture" && !isEdit ) {
-      const layer = controller.draftLayer
-      const geometry = controller.resumeGeometryDraft()
-      map.resumeRecording( layer, geometry )
+    if ( isGeometryCapture && !isExistingFeature ) {
+      map.resumeRecording( layer, __inputUtils.extractGeometry( pair ) )
     } else {
-      const pair = controller.resumeDraft()
-      formsStackManager.openForm( pair, isEdit ? "edit" : "add", "form" )
+      formsStackManager.openForm( pair, isExistingFeature ? "edit" : "add", "form" )
     }
 
-    __notificationModel.addInfo( qsTr( "This is your unsaved changes, continue editing or discard them by navigating back." ) )
+    __notificationModel.addInfo( qsTr( "These are your unsaved changes, continue editing or discard them by navigating back." ) )
   }
 
   Connections {
@@ -1209,7 +1224,7 @@ ApplicationWindow {
     function onShowSyncFailedDialogClicked() {
       syncFailedDialog.open()
     }
-    function onOpenDraftActionClicked() {
+    function onShowDraftActionClicked() {
       resumeFeatureDraft()
     }
   }
@@ -1219,7 +1234,7 @@ ApplicationWindow {
 
     function onHasDraftChanged() {
       if ( __activeProject.featureDraftController.hasDraft && map.state === "view" ) {
-        __notificationModel.addDraftNotice( qsTr( "You have unsaved changes. Tap here to open them." ), MM.NotificationType.OpenDraftAction )
+        __notificationModel.addDraftNotice( qsTr( "You have unsaved changes. Tap here to open them." ), MM.NotificationType.ShowDraftAction )
       }
     }
   }

@@ -13,6 +13,7 @@
 #include "abstractmaptool.h"
 
 #include <QObject>
+#include <QTimer>
 #include <qglobal.h>
 
 #include "qgsvertexid.h"
@@ -24,7 +25,6 @@
 
 class PositionKit;
 class QgsVectorLayer;
-class QTimer;
 
 class Vertex
 {
@@ -388,7 +388,7 @@ class RecordingMapTool : public AbstractMapTool
 
     int mMinUndoStackIndex = 0; // We can not undo more than this index
 
-    QTimer *mDraftSaveTimer = nullptr; // owned by this, debounces saveDraft()
+    QTimer mDraftSaveTimer; // debounces saveDraft()
 };
 
 #endif // RECORDINGMAPTOOL_H

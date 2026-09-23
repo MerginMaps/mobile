@@ -9,10 +9,10 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "../components" as MMComponents
 import "../inputs"
-import "../filters/components" as MMFilterComponents
 
 MMComponents.MMPage {
   id: root
@@ -51,53 +51,53 @@ MMComponents.MMPage {
       }
     }
 
-    MMFilterComponents.MMFilterBanner {
-      id: draftBanner
+    ColumnLayout {
+      id: contentColumn
 
       anchors.top: searchBar.bottom
       anchors.topMargin: __style.spacing20
-      width: parent.width
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
 
-      visible: __activeProject.featureDraftController.hasDraft
+      spacing: __style.spacing10
 
-      color: __style.warningColor
-      text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayerName )
-      actionText: qsTr( "Resume" )
+      MMComponents.MMListBanner {
+        id: draftBanner
 
-      actionButton.bgndColor: __style.earthColor
-      actionButton.bgndColorHover: __style.earthColor
-      actionButton.fontColor: "white"
-      actionButton.fontColorHover: "white"
+        Layout.fillWidth: true
 
-      onActionClicked: root.resumeDraftClicked()
-    }
+        visible: __activeProject.featureDraftController.hasDraft
 
-    MMLayersList {
-      id: layers
+        variant: MMComponents.MMListBanner.Warning
+        text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayerName )
+        actionText: qsTr( "Resume" )
 
-      width: parent.width
-
-      anchors {
-        top: draftBanner.visible ? draftBanner.bottom : searchBar.bottom
-        topMargin: draftBanner.visible ? __style.spacing10 : __style.spacing20
-        bottom: parent.bottom
+        onActionClicked: () => root.resumeDraftClicked()
       }
 
-      clip: true
+      MMLayersList {
+        id: layers
 
-      basemodel: root.model
-      parentNodeIndex: root.parentNodeIndex
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-      imageProviderPath: "image://LayerTreeModelPixmapProvider/"
+        clip: true
 
-      footer: MMComponents.MMListFooterSpacer {}
+        basemodel: root.model
+        parentNodeIndex: root.parentNodeIndex
 
-      onNodeClicked: function( node, nodeType, nodeName ) {
-        root.nodeClicked( node, nodeType, nodeName )
-      }
+        imageProviderPath: "image://LayerTreeModelPixmapProvider/"
 
-      onNodeVisibilityClicked: function( node ) {
-        root.nodeVisibilityClicked( node )
+        footer: MMComponents.MMListFooterSpacer {}
+
+        onNodeClicked: function( node, nodeType, nodeName ) {
+          root.nodeClicked( node, nodeType, nodeName )
+        }
+
+        onNodeVisibilityClicked: function( node ) {
+          root.nodeVisibilityClicked( node )
+        }
       }
     }
   }

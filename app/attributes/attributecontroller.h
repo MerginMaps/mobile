@@ -26,13 +26,14 @@
 #include <QSet>
 #include <QVector>
 #include <QUuid>
-#include <QJsonObject>
+#include <QTimer>
 
 #include "featurelayerpair.h"
 #include "attributedata.h"
 #include "attributeformproxymodel.h"
 #include "attributetabproxymodel.h"
 #include "rememberattributescontroller.h"
+#include "featuredraft.h"
 
 #include "qgsfeature.h"
 #include "qgsproject.h"
@@ -44,7 +45,6 @@
 class AttributeFormModel;
 class AttributeTabModel;
 class QgsVectorLayer;
-class QTimer;
 
 /**
  * This is implementation of the controller between Attribute*Model
@@ -193,16 +193,14 @@ class  AttributeController : public QObject
 
     bool isNewFeature() const;
 
-    // Persists attribute changes as a draft, debounced. New feature: all attributes.
-    // Existing feature: only touched fields, so an untouched one is never clobbered
-    // by a concurrent change made elsewhere via sync.
+    // Persists touched attributes as a draft, debounced.
     void saveDraft();
 
     //! Removes any persisted draft for the current project
     void clearDraft();
 
-    //! Builds the {name, type, value} JSON object for one attribute, used by saveDraft()
-    QJsonObject attributeToJson( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const;
+    //! Builds a FeatureDraftAttribute for one attribute, used by saveDraft()
+    FeatureDraftAttribute toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const;
 
     /**
      * Recalculates visibility & constrains & default values
@@ -276,9 +274,9 @@ class  AttributeController : public QObject
     //! files copied from remembered values for the current feature, per form item: field value and absolute path
     QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
 
-    QTimer *mDraftSaveTimer = nullptr; // owned by this, debounces saveDraft()
+    QTimer mDraftSaveTimer; // debounces saveDraft()
 
-    //! Indices of fields the user has actually changed this session - only valid for existing (edit-mode) features
+    //! Indices of fields the user has actually changed this session, used for drafting
     QSet<int> mTouchedFieldIndices;
 };
 #endif // ATTRIBUTECONTROLLER_H
