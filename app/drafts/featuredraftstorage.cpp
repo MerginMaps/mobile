@@ -84,7 +84,7 @@ QJsonObject FeatureDraftStorage::toJson( const FeatureDraft &draft )
   QJsonObject json;
   json[ QStringLiteral( "layerId" ) ] = draft.layerId;
   json[ QStringLiteral( "stage" ) ] = draft.stage == FeatureDraft::GeometryCapture
-                                       ? QStringLiteral( "geometryCapture" ) : QStringLiteral( "attributeForm" );
+                                      ? QStringLiteral( "geometryCapture" ) : QStringLiteral( "attributeForm" );
   json[ QStringLiteral( "timestamp" ) ] = draft.timestamp.toString( Qt::ISODate );
 
   if ( !draft.geometry.isNull() )
@@ -139,7 +139,8 @@ FeatureDraft FeatureDraftStorage::fromJson( const QJsonObject &json )
   for ( const auto &attributeValue : attributes )
   {
     const QJsonObject attributeJson = attributeValue.toObject();
-    draft.attributes.append( {
+    draft.attributes.append(
+    {
       attributeJson.value( QStringLiteral( "name" ) ).toString(),
       attributeJson.value( QStringLiteral( "type" ) ).toString(),
       attributeJson.value( QStringLiteral( "value" ) ).toVariant()
