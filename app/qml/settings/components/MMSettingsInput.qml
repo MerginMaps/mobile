@@ -33,6 +33,8 @@ MMSettingsItem {
 
       drawerHeader.title: root.title
 
+      // clear focus to avoid stale/half-rendered screen on Android
+      onAboutToHide: if ( textInput.textField.activeFocus ) textInput.textField.focus = false
       onClosed: drawerLoader.active = false
 
       drawerContent: MMComponents.MMScrollView {

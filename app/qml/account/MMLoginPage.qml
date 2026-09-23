@@ -197,6 +197,8 @@ MMPage {
 
       drawerHeader.title: qsTr( "Change server" )
 
+      // clear focus to avoid stale/half-rendered screen on Android
+      onAboutToHide: if ( serverURLInput.textField.activeFocus ) serverURLInput.textField.focus = false
       onClosed: changeServerDrawerLoader.active = false
 
       drawerContent: MMScrollView {

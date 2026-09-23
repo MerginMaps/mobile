@@ -119,6 +119,13 @@ MMComponents.MMDrawer {
     portInput.errorMsg = qsTr( "Network position provider with this IP address & port already exists" )
   }
 
+  // clear focus to avoid stale/half-rendered screen on Android
+  onAboutToHide: {
+    ipAddressInput.textField.focus = false
+    portInput.textField.focus = false
+    aliasInput.textField.focus = false
+  }
+
   onClosed: {
     ipAddressInput.textField.clear()
     portInput.textField.clear()

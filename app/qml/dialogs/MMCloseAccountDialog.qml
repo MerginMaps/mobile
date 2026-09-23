@@ -20,6 +20,9 @@ MMDrawer {
 
   signal closeAccountClicked()
 
+  // clear focus to avoid stale/half-rendered screen on Android
+  onAboutToHide: if ( usernameInput.textField.activeFocus ) usernameInput.textField.focus = false
+
   drawerContent: MMScrollView {
 
     width: parent.width

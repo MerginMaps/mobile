@@ -66,6 +66,13 @@ Item {
     leftPadding: 0
     rightPadding: 0
 
+    // clear focus to avoid stale/half-rendered screen on Android
+    onAboutToHide: {
+      let focusItem = drawer.ApplicationWindow.window?.activeFocusItem
+      if ( focusItem )
+        focusItem.focus = false
+    }
+
     StateGroup {
       id: statesManager
 
