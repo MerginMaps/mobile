@@ -40,6 +40,7 @@ class AppSettings: public QObject
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
     Q_PROPERTY( StartupBehavior startupBehavior READ startupBehavior WRITE setStartupBehavior NOTIFY startupBehaviorChanged )
     Q_PROPERTY( bool usageReportEnabled READ usageReportEnabled WRITE setUsageReportEnabled NOTIFY usageReportEnabledChanged )
+    Q_PROPERTY( bool usageReportConsentAsked READ usageReportConsentAsked WRITE setUsageReportConsentAsked NOTIFY usageReportConsentAskedChanged )
 
   public:
     // enum of haptic modes we support
@@ -126,6 +127,9 @@ class AppSettings: public QObject
     bool usageReportEnabled() const;
     void setUsageReportEnabled( bool enabled );
 
+    bool usageReportConsentAsked() const;
+    void setUsageReportConsentAsked( bool asked );
+
     Q_INVOKABLE void trackUsageFeature( const QString &key );
     Q_INVOKABLE void incrementUsageCounter( const QString &key );
 
@@ -155,6 +159,7 @@ class AppSettings: public QObject
     void windowPositionChanged();
 
     void usageReportEnabledChanged( bool enabled );
+    void usageReportConsentAskedChanged( bool asked );
 
   private:
     // Projects path
@@ -192,7 +197,8 @@ class AppSettings: public QObject
 
     HapticsType mHapticsType;
     StartupBehavior mStartupBehavior;
-    bool mUsageReportEnabled = true;
+    bool mUsageReportEnabled = false;
+    bool mUsageReportConsentAsked = false;
 };
 
 #endif // APPSETTINGS_H
