@@ -153,5 +153,7 @@ MMComponents.MMPage {
     ListElement { text: qsTr( "Number" ); type: "Range" }
     ListElement { text: qsTr( "Checkbox" ); type: "CheckBox" }
     ListElement { text: qsTr( "Photo" ); type: "ExternalResource" }
+    ListElement { text: qsTr( "Audio" ); type: "ExternalResourceAudio" }
+    ListElement { text: qsTr( "Video" ); type: "ExternalResourceVideo" }
   }
 }

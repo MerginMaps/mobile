@@ -76,7 +76,7 @@ QgsVectorLayer *ProjectWizard::createGpkgLayer( QString const &projectDir, QList
   for ( int i = 0; i < l->fields().count(); ++i )
   {
     QgsField f = l->fields().at( i );
-    QgsEditorWidgetSetup setup = InputUtils::getEditorWidgetSetup( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
+    const QgsEditorWidgetSetup setup = editorWidgetSetup( f, findWidgetTypeByFieldName( f.name(), fieldsConfig ) );
     l->setEditorWidgetSetup( i, setup );
   }
   l->setRenderer( surveyLayerRenderer() );
@@ -293,10 +293,28 @@ QString ProjectWizard::widgetToType( const QString &widgetType ) const
   if ( widgetType == QStringLiteral( "CheckBox" ) )
     return QStringLiteral( "bool" );
 
-  if ( widgetType == QStringLiteral( "ExternalResource" ) )
+  if ( widgetType == QStringLiteral( "ExternalResource" ) ||
+       widgetType == QStringLiteral( "ExternalResourceAudio" ) ||
+       widgetType == QStringLiteral( "ExternalResourceVideo" ) )
     return QStringLiteral( "text" );
 
   return QStringLiteral( "text" );
+}
+
+QgsEditorWidgetSetup ProjectWizard::editorWidgetSetup( const QgsField &field, const QString &widgetType ) const
+{
+  // audio and video are attachment (ExternalResource) widgets with the document viewer set accordingly
+  if ( widgetType == QStringLiteral( "ExternalResourceAudio" ) )
+  {
+    return InputUtils::getEditorWidgetSetup( field, QStringLiteral( "ExternalResource" ), { { QStringLiteral( "DocumentViewer" ), static_cast<int>( InputUtils::DocumentViewerAudio ) } } );
+  }
+
+  if ( widgetType == QStringLiteral( "ExternalResourceVideo" ) )
+  {
+    return InputUtils::getEditorWidgetSetup( field, QStringLiteral( "ExternalResource" ), { { QStringLiteral( "DocumentViewer" ), static_cast<int>( InputUtils::DocumentViewerVideo ) } } );
+  }
+
+  return InputUtils::getEditorWidgetSetup( field, widgetType );
 }
 
 QString ProjectWizard::findWidgetTypeByFieldName( const QString &name, const QList<FieldConfiguration> &fieldsConfig ) const

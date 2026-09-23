@@ -51,6 +51,8 @@ class ProjectWizard : public QObject
     QMetaType::Type parseType( const QString &type ) const;
     QString widgetToType( const QString &widgetType ) const;
     QString findWidgetTypeByFieldName( const QString &name, const QList<FieldConfiguration> &fieldsConfig ) const;
+    //! Returns editor widget setup for the wizard widget type, "ExternalResourceAudio"/"ExternalResourceVideo" map to attachment widgets
+    QgsEditorWidgetSetup editorWidgetSetup( const QgsField &field, const QString &widgetType ) const;
 
     QString mDataDir;
     std::unique_ptr<QgsMapSettings> mSettings = nullptr;
