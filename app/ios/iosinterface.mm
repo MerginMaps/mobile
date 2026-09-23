@@ -276,6 +276,105 @@ static NSMutableDictionary *getGPSData( PositionKit *positionKit, Compass *compa
   }
 }
 
++( void )showVideoPicker:( int )sourceType : ( IOSImagePicker * )handler
+{
+  UIApplication *app = [UIApplication sharedApplication];
+
+  if ( app.windows.count <= 0 )
+  {
+    return;
+  }
+
+  UIWindow *rootWindow = app.windows[0];
+  UIViewController *rootViewController = rootWindow.rootViewController;
+
+  bool isCamera = ( UIImagePickerControllerSourceType ) sourceType == UIImagePickerControllerSourceTypeCamera;
+
+  if ( !isCamera )
+  {
+    // Gallery: use PHPickerViewController filtered to videos
+    PHPickerConfiguration *config = [[PHPickerConfiguration alloc] init];
+    config.filter = [PHPickerFilter videosFilter];
+    config.selectionLimit = 1;
+
+    PHPickerViewController *picker = [[PHPickerViewController alloc] initWithConfiguration:config];
+    static IOSGalleryPickerDelegate *videoGalleryDelegate = nullptr;
+    videoGalleryDelegate = [[IOSGalleryPickerDelegate alloc] initWithHandler:handler pickVideo:YES];
+    picker.delegate = videoGalleryDelegate;
+
+    [rootViewController presentViewController:picker animated:YES completion:nil];
+    return;
+  }
+
+  if ( ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] ||
+       ![[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera] containsObject:( NSString * )kUTTypeMovie] )
+  {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Video recording"
+                                          message:@"The functionality is not available"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+    [rootViewController presentViewController:alertController animated:YES completion:nil];
+    return;
+  }
+
+  // Camera: use UIImagePickerController in video mode
+  UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+  picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+  picker.mediaTypes = @[( NSString * )kUTTypeMovie];
+  picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModeVideo;
+  picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+
+  static IOSViewDelegate *videoDelegate = nullptr;
+  videoDelegate = [[IOSViewDelegate alloc] initWithHandler:handler];
+
+  // Confirm event
+  videoDelegate->imagePickerControllerDidFinishPickingMediaWithInfo = ^( UIImagePickerController * picker, NSDictionary * info )
+  {
+    QString err;
+    NSURL *mediaURL = info[UIImagePickerControllerMediaURL];
+
+    NSDateFormatter *dateformate = [[NSDateFormatter alloc]init];
+    [dateformate setDateFormat: @"yyyyMMdd_HHmmss"];
+    NSString *ext = ( mediaURL && mediaURL.pathExtension.length > 0 ) ? mediaURL.pathExtension.lowercaseString : @"mov";
+    NSString *fileName = [NSString stringWithFormat:@"VID_%@.%@", [dateformate stringFromDate:[NSDate date]], ext];
+    NSString *videoPath = [videoDelegate->handler->targetDir().toNSString() stringByAppendingPathComponent:fileName];
+
+    if ( !mediaURL )
+    {
+      err = "no video was recorded.";
+    }
+    else
+    {
+      NSError *moveError = nil;
+      [[NSFileManager defaultManager] moveItemAtURL:mediaURL toURL:[NSURL fileURLWithPath:videoPath] error:&moveError];
+      if ( moveError )
+      {
+        err = QString::fromNSString( moveError.localizedDescription );
+      }
+    }
+
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    if ( videoDelegate->handler )
+    {
+      QVariantMap data;
+      data["imagePath"] = QString::fromNSString( videoPath );
+      data["error"] = err;
+      QMetaObject::invokeMethod( videoDelegate->handler, "onImagePickerFinished", Qt::DirectConnection,
+                                 Q_ARG( bool, err.isEmpty() ),
+                                 Q_ARG( const QVariantMap, data ) );
+    }
+  };
+
+  // Cancel event
+  videoDelegate->imagePickerControllerDidCancel = ^( UIImagePickerController * picker )
+  {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+  };
+
+  picker.delegate = videoDelegate;
+  [rootViewController presentViewController:picker animated:YES completion:nil];
+}
+
 + ( NSString * ) readExif:( NSString * ) imageFileURL : ( NSString * )tag
 {
   NSObject *result = readExifAttribute( imageFileURL, tag );

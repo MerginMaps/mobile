@@ -1,7 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>Add.svg</file>
+        <file>AddAudio.svg</file>
         <file>AddImage.svg</file>
+        <file>AddVideo.svg</file>
         <file>Archaeology.svg</file>
         <file>ArrowDown.svg</file>
         <file>ArrowLinkRight.svg</file>
@@ -52,6 +54,7 @@
         <file>FollowGPS-nocoloroverlay.svg</file>
         <file>MapThemes.svg</file>
         <file>Mastodon.svg</file>
+        <file>Microphone.svg</file>
         <file>Minus.svg</file>
         <file>More.svg</file>
         <file>MoreVertical.svg</file>
@@ -62,7 +65,9 @@
         <file>Network.svg</file>
         <file>Other.svg</file>
         <file>Others.svg</file>
+        <file>Pause.svg</file>
         <file>Personal.svg</file>
+        <file>Play.svg</file>
         <file>Plus.svg</file>
         <file>PositionTracking.svg</file>
         <file>Projects.svg</file>

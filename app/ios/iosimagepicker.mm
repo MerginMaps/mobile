@@ -31,6 +31,16 @@ void IOSImagePicker::callCameraDirect( IOSImagePicker *handler )
   [IOSInterface showImagePicker:UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera:handler];
 }
 
+void IOSImagePicker::showVideoPickerDirect( IOSImagePicker *handler )
+{
+  [IOSInterface showVideoPicker:UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypePhotoLibrary:handler];
+}
+
+void IOSImagePicker::callVideoCameraDirect( IOSImagePicker *handler )
+{
+  [IOSInterface showVideoPicker:UIImagePickerControllerSourceType::UIImagePickerControllerSourceTypeCamera:handler];
+}
+
 QString IOSImagePicker::readExifDirect( const QString &filepath, const QString &tag )
 {
   NSString *result = [IOSInterface readExif:filepath.toNSString():tag.toNSString()];

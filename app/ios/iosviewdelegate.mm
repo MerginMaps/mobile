@@ -52,14 +52,21 @@
 @implementation IOSGalleryPickerDelegate
 {
   QPointer<IOSImagePicker> _handler;
+  BOOL _pickVideo;
 }
 
 - ( instancetype ) initWithHandler:( IOSImagePicker * )handler
+{
+  return [self initWithHandler:handler pickVideo:NO];
+}
+
+- ( instancetype ) initWithHandler:( IOSImagePicker * )handler pickVideo:( BOOL )pickVideo
 {
   self = [super init];
   if ( self )
   {
     _handler = handler;
+    _pickVideo = pickVideo;
   }
   return self;
 }
@@ -83,12 +90,18 @@
   NSDateFormatter *df = [[NSDateFormatter alloc] init];
   [df setDateFormat:@"yyyyMMdd_HHmmss"];
   NSString *baseName = [df stringFromDate:[NSDate date]];
+  if ( _pickVideo )
+  {
+    baseName = [@"VID_" stringByAppendingString:baseName];
+  }
   NSString *targetDir = _handler->targetDir().toNSString();
+  NSString *typeIdentifier = _pickVideo ? @"public.movie" : @"public.image";
+  NSString *defaultExt = _pickVideo ? @"mov" : @"jpg";
 
-  [result.itemProvider loadFileRepresentationForTypeIdentifier:@"public.image"
+  [result.itemProvider loadFileRepresentationForTypeIdentifier:typeIdentifier
    completionHandler: ^ ( NSURL * url, NSError * error )
   {
-    NSString *ext = ( url && url.pathExtension.length > 0 ) ? url.pathExtension.lowercaseString : @"jpg";
+    NSString *ext = ( url && url.pathExtension.length > 0 ) ? url.pathExtension.lowercaseString : defaultExt;
     NSString *imagePath = [targetDir stringByAppendingPathComponent:[baseName stringByAppendingFormat:@".%@", ext]];
 
     BOOL writeSuccess = NO;
@@ -101,7 +114,7 @@
 
     if ( !writeSuccess )
     {
-      CoreUtils::log( "iOS photo picker", QStringLiteral( "Gallery Picker: failed to write image data to %1" ).arg( QString::fromNSString( imagePath ) ) );
+      CoreUtils::log( "iOS photo picker", QStringLiteral( "Gallery Picker: failed to write media data to %1" ).arg( QString::fromNSString( imagePath ) ) );
     }
 
     dispatch_async( dispatch_get_main_queue(), ^
@@ -112,7 +125,7 @@
         resultData["imagePath"] = QString::fromNSString( imagePath );
         if ( !writeSuccess )
         {
-          resultData["error"] = QStringLiteral( "Copying image from gallery failed." );
+          resultData["error"] = _pickVideo ? QStringLiteral( "Copying video from gallery failed." ) : QStringLiteral( "Copying image from gallery failed." );
         }
         QMetaObject::invokeMethod( _handler, "onImagePickerFinished", Qt::DirectConnection,
                                    Q_ARG( bool, writeSuccess ),

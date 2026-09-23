@@ -39,6 +39,8 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Program requires access to camera to take pictures for features on map</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Program requires access to microphone to record audio and video attachments for features on map</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Program requires GPS to show you current position on map and capture spatial data for surveying</string>
 	<key>NSLocationAlwaysUsageDescription</key>

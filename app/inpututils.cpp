@@ -1163,8 +1163,13 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     if ( isMultiEdit )
       return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
-    else
-      return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
+
+    // audio and video attachments have their own editor, everything else is treated as a photo
+    const int documentViewer = config.value( QStringLiteral( "DocumentViewer" ), DocumentViewerImage ).toInt();
+    if ( documentViewer == DocumentViewerAudio || documentViewer == DocumentViewerVideo )
+      return QUrl( path.arg( QLatin1String( "MMFormMediaEditor" ) ) );
+
+    return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
   {

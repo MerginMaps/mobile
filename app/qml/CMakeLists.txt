@@ -113,12 +113,15 @@ set(MM_QML
     form/components/calendar/MMMonthGrid.qml
     form/components/calendar/MMTimeTumbler.qml
     form/components/calendar/MMTumbler.qml
+    form/components/media/MMAudioRecorderDrawer.qml
+    form/components/media/MMMediaPlayer.qml
     form/components/photo/MMPhotoAttachment.qml
     form/components/photo/MMPhotoPreview.qml
     form/components/MMFormActionBar.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml
+    form/editors/MMFormMediaEditor.qml
     form/editors/MMFormNotAvailable.qml
     form/editors/MMFormNumberEditor.qml
     form/editors/MMFormPhotoEditor.qml

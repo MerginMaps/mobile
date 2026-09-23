@@ -37,6 +37,10 @@ class IosUtils: public QObject
 
     Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
+    //! Opens gallery to pick a video, emits mediaSelected when the video is copied to targetPath
+    Q_INVOKABLE void callVideoPicker( const QString &targetPath, const QString &code = "" );
+    //! Opens camera to record a video, emits mediaSelected when the video is saved to targetPath
+    Q_INVOKABLE void callVideoCamera( const QString &targetPath, const QString &code = "" );
     IOSImagePicker *imagePicker() const;
     static QString readExif( const QString &filepath, const QString &tag );
 
@@ -51,6 +55,7 @@ class IosUtils: public QObject
 
   signals:
     void imageSelected( const QString &imagePath, const QString &code );
+    void mediaSelected( const QString &mediaPath, const QString &code );
     void notifyError( const QString &message );
     void positionKitChanged();
     void compassChanged();
@@ -61,6 +66,7 @@ class IosUtils: public QObject
     Compass *mCompass = nullptr;
 
     QString mLastCode;
+    bool mLastRequestIsVideo = false;
     /**
      * Calls the objective-c function to disable idle timer to prevent screen from sleeping.
      */

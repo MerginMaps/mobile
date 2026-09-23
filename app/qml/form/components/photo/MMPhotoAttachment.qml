@@ -19,6 +19,13 @@ Rectangle {
   radius: __style.radius20
 
   property bool hasCameraCapability: true
+  property bool hasChooseCapability: true
+
+  // allows reusing the component for other attachment types (audio, video)
+  property url captureIconSource: __style.addImageIcon
+  property string captureText: qsTr("Take a picture")
+  property url chooseIconSource: __style.morePhotosIcon
+  property string chooseText: qsTr("From gallery")
 
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
@@ -32,7 +39,7 @@ Rectangle {
     Rectangle {
       id: takePictureBox
 
-      width: hasCameraCapability ? parent.width / 2 - parent.spacing / 2 : 0
+      width: hasCameraCapability ? ( hasChooseCapability ? parent.width / 2 - parent.spacing / 2 : parent.width ) : 0
       height: parent.height
       color: __style.lightGreenColor
       radius: root.radius
@@ -45,7 +52,7 @@ Rectangle {
 
         MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
-          source: __style.addImageIcon
+          source: root.captureIconSource
           color: root.enabled ? __style.forestColor : __style.mediumGreyColor
         }
 
@@ -53,7 +60,7 @@ Rectangle {
           width: parent.width
 
           font: __style.p6
-          text: qsTr("Take a picture")
+          text: root.captureText
 
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
@@ -72,10 +79,11 @@ Rectangle {
     Rectangle {
       id: chooseFromGaleryBox
 
-      width: hasCameraCapability ? parent.width / 2 - parent.spacing / 2 : parent.width
+      width: hasChooseCapability ? ( hasCameraCapability ? parent.width / 2 - parent.spacing / 2 : parent.width ) : 0
       height: parent.height
       color: __style.lightGreenColor
       radius: root.radius
+      visible: hasChooseCapability
 
       Column {
         width: parent.width
@@ -84,7 +92,7 @@ Rectangle {
 
         MMComponents.MMIcon {
           anchors.horizontalCenter: parent.horizontalCenter
-          source: __style.morePhotosIcon
+          source: root.chooseIconSource
           color: root.enabled ? __style.forestColor : __style.mediumGreyColor
         }
 
@@ -92,7 +100,7 @@ Rectangle {
           width: parent.width
 
           font: __style.p6
-          text: qsTr("From gallery")
+          text: root.chooseText
 
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter

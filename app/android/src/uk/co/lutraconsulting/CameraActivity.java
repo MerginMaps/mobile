@@ -42,6 +42,7 @@ public class CameraActivity extends Activity {
     private static final int CAMERA_CODE = 102;
 
     private String targetPath;
+    private boolean captureVideo;
     private File cameraFile;
 
     private SensorManager mSensorManager;
@@ -59,14 +60,15 @@ public class CameraActivity extends Activity {
         orientationSensor.Register(this, SensorManager.SENSOR_DELAY_NORMAL);
 
         targetPath = getIntent().getExtras().getString("targetPath");
-        Log.d(TAG, "targetPath: " + targetPath);
+        captureVideo = getIntent().getExtras().getBoolean("captureVideo", false);
+        Log.d(TAG, "targetPath: " + targetPath + ", captureVideo: " + captureVideo);
 
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(captureVideo ? MediaStore.ACTION_VIDEO_CAPTURE : MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
             File photoFile = null;
             try {
-                photoFile = createImageFile(targetPath);
+                photoFile = captureVideo ? createVideoFile() : createImageFile(targetPath);
             } catch (IOException ex) {
                 // Handled in else branch since photoFile == null;
             }
@@ -77,6 +79,7 @@ public class CameraActivity extends Activity {
                         photoFile);
 
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 takePictureIntent.putExtra("__RESULT__", "takePictureIntent__RESULT__");
                 startForegroundService(new Intent(this, CameraForegroundService.class));
                 startActivityForResult(takePictureIntent, CAMERA_CODE);
@@ -109,6 +112,19 @@ public class CameraActivity extends Activity {
         return cameraFile;
     }
 
+    private File createVideoFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        cameraFile = File.createTempFile(
+                "VID_" + timeStamp + "_", /* prefix */
+                ".mp4", /* suffix */
+                getCacheDir() /* directory */
+        );
+
+        Log.d(TAG, "currentVideoPath: " + cameraFile.getAbsolutePath());
+        return cameraFile;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult()");
@@ -126,7 +142,14 @@ public class CameraActivity extends Activity {
             Log.d(TAG, "tmp path: " + cameraFile.getAbsolutePath());
 
             try {
-                extendGPSExifData(cameraFile.lastModified());
+                if (captureVideo) {
+                    // some camera apps ignore EXTRA_OUTPUT for videos and return the recording as content URI instead
+                    if (cameraFile.length() == 0 && data != null && data.getData() != null) {
+                        copyStream(getContentResolver().openInputStream(data.getData()), cameraFile);
+                    }
+                } else {
+                    extendGPSExifData(cameraFile.lastModified());
+                }
                 copyFile(cameraFile, new File(targetPath, cameraFile.getName()));
                 if (data == null) {
                     data = getIntent();
@@ -178,11 +201,13 @@ public class CameraActivity extends Activity {
 
     private void copyFile(File src, File dst) throws IOException {
         Log.d(TAG, "Copied file: " + src.getAbsolutePath() + " to file: " + dst.getAbsolutePath());
-        InputStream in = null;
+        copyStream(new FileInputStream(src), dst);
+    }
+
+    private void copyStream(InputStream in, File dst) throws IOException {
         OutputStream out = null;
 
         try {
-            in = new FileInputStream(src);
             out = new FileOutputStream(dst);
             // Transfer bytes from in to out
             byte[] buf = new byte[1024];
@@ -191,7 +216,7 @@ public class CameraActivity extends Activity {
                 out.write(buf, 0, len);
             }
         } catch (IOException e) {
-            throw new IOException("Cannot copy a photo to working directory.");
+            throw new IOException(captureVideo ? "Cannot copy a video to working directory." : "Cannot copy a photo to working directory.");
         } finally {
             if (in != null)
                 in.close();

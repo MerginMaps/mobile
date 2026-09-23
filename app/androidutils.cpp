@@ -313,6 +313,62 @@ void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
   // it is not a mandatory permission, so continue even if it is rejected
   requestMediaLocationPermission();
 
+  startCameraActivity( targetPath, false, CAMERA_CODE );
+#else
+  Q_UNUSED( targetPath )
+  Q_UNUSED( code )
+#endif
+}
+
+void AndroidUtils::callVideoCamera( const QString &targetPath, const QString &code )
+{
+#ifdef ANDROID
+  if ( !requestCameraPermission() )
+  {
+    return;
+  }
+
+  mLastCode = code;
+
+  startCameraActivity( targetPath, true, VIDEO_CAMERA_CODE );
+#else
+  Q_UNUSED( targetPath )
+  Q_UNUSED( code )
+#endif
+}
+
+void AndroidUtils::callMediaPicker( const QString &targetPath, const QString &mimeType, const QString &code )
+{
+#ifdef ANDROID
+  if ( !requestStoragePermission() )
+  {
+    return;
+  }
+
+  mLastCode = code;
+  mTargetPath = targetPath;
+
+  const QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField( "android/content/Intent", "ACTION_OPEN_DOCUMENT", "Ljava/lang/String;" );
+  QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", ACTION_OPEN_DOCUMENT.object<jstring>() );
+
+  if ( ACTION_OPEN_DOCUMENT.isValid() && intent.isValid() )
+  {
+    const QJniObject CATEGORY_OPENABLE = QJniObject::getStaticObjectField( "android/content/Intent", "CATEGORY_OPENABLE", "Ljava/lang/String;" );
+    intent = intent.callObjectMethod( "setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString( mimeType ).object<jstring>() );
+    intent = intent.callObjectMethod( "addCategory", "(Ljava/lang/String;)Landroid/content/Intent;", CATEGORY_OPENABLE.object<jstring>() );
+    intent = intent.callObjectMethod( "putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", QJniObject::fromString( "EXTRA_LOCAL_ONLY" ).object<jstring>(), true );
+    QtAndroidPrivate::startActivity( intent.object<jobject>(), MEDIA_FILE_CODE, this ); // this as receiver
+  }
+#else
+  Q_UNUSED( targetPath )
+  Q_UNUSED( mimeType )
+  Q_UNUSED( code )
+#endif
+}
+
+#ifdef ANDROID
+void AndroidUtils::startCameraActivity( const QString &targetPath, bool captureVideo, int requestCode )
+{
   const QJniObject activity = QJniObject::fromString( QStringLiteral( "uk.co.lutraconsulting.CameraActivity" ) );
   const QJniObject intent = QJniObject( "android/content/Intent", "(Ljava/lang/String;)V", activity.object<jstring>() );
 
@@ -329,14 +385,17 @@ void AndroidUtils::callCamera( const QString &targetPath, const QString &code )
                            extra.object<jstring>(),
                            my_prefix.object<jstring>() );
 
+  intent.callObjectMethod( "putExtra",
+                           "(Ljava/lang/String;Z)Landroid/content/Intent;",
+                           QJniObject::fromString( "captureVideo" ).object<jstring>(),
+                           static_cast<jboolean>( captureVideo ) );
+
   if ( intent.isValid() )
   {
-    QtAndroidPrivate::startActivity( intent.object<jobject>(), CAMERA_CODE, this );
+    QtAndroidPrivate::startActivity( intent.object<jobject>(), requestCode, this );
   }
-#else
-  Q_UNUSED( targetPath )
-#endif
 }
+#endif
 
 #ifdef ANDROID
 void AndroidUtils::handleActivityResult( const int receiverRequestCode, const int resultCode, const QJniObject &data )
@@ -374,10 +433,10 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
     return;
   }
 
-  if ( receiverRequestCode == MEDIA_CODE && resultCode == RESULT_OK )
+  if ( ( receiverRequestCode == MEDIA_CODE || receiverRequestCode == MEDIA_FILE_CODE ) && resultCode == RESULT_OK )
   {
-    // we call importImage method which copies the image from gallery to project and returns the project image path
-    // as we can't keep the access to images outside the app
+    // we call importImage method which copies the file from gallery to project and returns the project file path
+    // as we can't keep the access to files outside the app
     const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
     const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     const QString newUri = activity.callObjectMethod( "importImage",
@@ -385,15 +444,21 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
                            uri.object(),
                            QJniObject::fromString( mTargetPath ).object<jstring>() )
                            .toString();
-    emit imageSelected( newUri, mLastCode );
+    if ( receiverRequestCode == MEDIA_FILE_CODE )
+      emit mediaSelected( newUri, mLastCode );
+    else
+      emit imageSelected( newUri, mLastCode );
   }
-  else if ( receiverRequestCode == CAMERA_CODE && resultCode == RESULT_OK )
+  else if ( ( receiverRequestCode == CAMERA_CODE || receiverRequestCode == VIDEO_CAMERA_CODE ) && resultCode == RESULT_OK )
   {
     const QJniObject RESULT_STRING = QJniObject::fromString( QStringLiteral( "__RESULT__" ) );
     const QJniObject absolutePathJNI = data.callObjectMethod( "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;", RESULT_STRING.object<jstring>() );
     const QString absolutePath = absolutePathJNI.toString();
 
-    emit imageSelected( absolutePath, mLastCode );
+    if ( receiverRequestCode == VIDEO_CAMERA_CODE )
+      emit mediaSelected( absolutePath, mLastCode );
+    else
+      emit imageSelected( absolutePath, mLastCode );
   }
   else
   {

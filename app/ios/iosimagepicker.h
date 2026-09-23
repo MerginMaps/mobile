@@ -45,6 +45,18 @@ class IOSImagePicker : public QObject
     Q_INVOKABLE void callCamera( const QString  &targetDir, PositionKit *positionKit, Compass *compass );
 
     /**
+    * Opens gallery picker for videos. Selected video is copied to targetDir and imageCaptured is emitted.
+    * \param targetDir - String representing directory path where selected video suppose to be saved.
+    */
+    Q_INVOKABLE void showVideoPicker( const QString &targetDir );
+
+    /**
+    * Opens camera in video mode. Recorded video is saved to targetDir and imageCaptured is emitted.
+    * \param targetDir - String representing directory path where recorded video suppose to be saved.
+    */
+    Q_INVOKABLE void callVideoCamera( const QString &targetDir );
+
+    /**
      * Calls the objective-c function to read EXIF metadata.
      */
     static QString readExifDirect( const QString &filepath, const QString &tag );
@@ -84,5 +96,13 @@ class IOSImagePicker : public QObject
      * Calls the objective-c function to open camera.
      */
     void callCameraDirect( IOSImagePicker *handler );
+    /**
+     * Calls the objective-c function to show video picker.
+     */
+    void showVideoPickerDirect( IOSImagePicker *handler );
+    /**
+     * Calls the objective-c function to open camera in video mode.
+     */
+    void callVideoCameraDirect( IOSImagePicker *handler );
 };
 #endif // IOSIMAGEPICKER_H

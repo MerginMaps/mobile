@@ -67,12 +67,27 @@ class AndroidUtils: public QObject
       */
     Q_INVOKABLE void callImagePicker( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE void callCamera( const QString &targetPath, const QString &code = "" );
+
+    /**
+      * Starts ACTION_OPEN_DOCUMENT activity to pick an audio or video file. The selected file is copied
+      * to the targetPath and mediaSelected signal is emitted with the path of the copy.
+      * \param mimeType mime type filter of the picker, e.g. "audio/*" or "video/*"
+      */
+    Q_INVOKABLE void callMediaPicker( const QString &targetPath, const QString &mimeType, const QString &code = "" );
+
+    /**
+      * Starts native camera to record a video. When the recording is done, it is copied to the targetPath
+      * and mediaSelected signal is emitted.
+      */
+    Q_INVOKABLE void callVideoCamera( const QString &targetPath, const QString &code = "" );
     Q_INVOKABLE static bool openFile( const QString &filePath );
 
 #ifdef ANDROID
     static constexpr int MEDIA_CODE = 101;
     static constexpr int CAMERA_CODE = 102;
     static constexpr int BLUETOOTH_CODE = 103;
+    static constexpr int MEDIA_FILE_CODE = 104;
+    static constexpr int VIDEO_CAMERA_CODE = 105;
 
     static constexpr int ANDROID_VERSION_13 = 13;
 
@@ -81,6 +96,7 @@ class AndroidUtils: public QObject
 
   signals:
     void imageSelected( QString imagePath, QString code );
+    void mediaSelected( QString mediaPath, QString code );
     void bluetoothEnabled( bool state );
     void notifyInfo( const QString &msg );
     void notifyError( const QString &msg );
@@ -90,6 +106,9 @@ class AndroidUtils: public QObject
     QString mTargetPath;
 
 #ifdef ANDROID
+    //! Starts uk.co.lutraconsulting.CameraActivity which copies the captured photo/video to targetPath
+    void startCameraActivity( const QString &targetPath, bool captureVideo, int requestCode );
+
     QBluetoothLocalDevice mBluetooth;
 #endif
 };

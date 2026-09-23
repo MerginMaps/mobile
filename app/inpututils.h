@@ -50,6 +50,20 @@ class InputUtils: public QObject
 {
     Q_OBJECT
   public:
+
+    /**
+     * Mirrors QgsExternalResourceWidget::DocumentViewerContent, which is stored
+     * under the "DocumentViewer" key of the ExternalResource (attachment) widget config.
+     */
+    enum DocumentViewerContent
+    {
+      DocumentViewerNoContent = 0,
+      DocumentViewerImage,
+      DocumentViewerWeb,
+      DocumentViewerAudio, //!< Since QGIS 3.30
+      DocumentViewerVideo, //!< Since QGIS 3.30
+    };
+
     explicit InputUtils( QObject *parent = nullptr );
     explicit InputUtils( AndroidUtils *au, QObject *parent = nullptr );
     ~InputUtils() override = default;

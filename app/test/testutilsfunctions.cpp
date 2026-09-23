@@ -266,6 +266,25 @@ void TestUtilsFunctions::loadQmlComponent()
 
   QUrl valuemap =  mUtils->getFormEditorType( "valuemap" );
   QCOMPARE( valuemap.path(), QString( "../form/editors/MMFormValueMapEditor.qml" ) );
+
+  QUrl photo = mUtils->getFormEditorType( "ExternalResource" );
+  QCOMPARE( photo.path(), QString( "../form/editors/MMFormPhotoEditor.qml" ) );
+
+  QVariantMap config;
+  config.insert( QStringLiteral( "DocumentViewer" ), InputUtils::DocumentViewerImage );
+  photo = mUtils->getFormEditorType( "ExternalResource", config );
+  QCOMPARE( photo.path(), QString( "../form/editors/MMFormPhotoEditor.qml" ) );
+
+  config.insert( QStringLiteral( "DocumentViewer" ), InputUtils::DocumentViewerAudio );
+  QUrl audio = mUtils->getFormEditorType( "ExternalResource", config );
+  QCOMPARE( audio.path(), QString( "../form/editors/MMFormMediaEditor.qml" ) );
+
+  config.insert( QStringLiteral( "DocumentViewer" ), InputUtils::DocumentViewerVideo );
+  QUrl video = mUtils->getFormEditorType( "ExternalResource", config );
+  QCOMPARE( video.path(), QString( "../form/editors/MMFormMediaEditor.qml" ) );
+
+  QUrl multiEdit = mUtils->getFormEditorType( "ExternalResource", config, QgsField(), QgsRelation(), QString(), true );
+  QCOMPARE( multiEdit.path(), QString( "../form/editors/MMFormNotAvailable.qml" ) );
 }
 
 void TestUtilsFunctions::getRelativePath()

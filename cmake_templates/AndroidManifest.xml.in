@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/> <!-- Recording audio attachments in forms -->
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/> <!-- Reading compass while taking a picture -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
@@ -27,6 +28,7 @@
     <!-- %%INSERT_FEATURES -->
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.any" android:required="false"/>
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
 
     <supports-screens
         android:anyDensity="true"

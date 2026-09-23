@@ -42,6 +42,7 @@ UINavigationControllerDelegate>
  */
 @interface IOSGalleryPickerDelegate : NSObject <PHPickerViewControllerDelegate>
 - ( instancetype ) initWithHandler:( IOSImagePicker * )handler;
+- ( instancetype ) initWithHandler:( IOSImagePicker * )handler pickVideo:( BOOL )pickVideo;
 @end
 
 #endif // IOSVIEWDELEGATE_H

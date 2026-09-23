@@ -17,7 +17,10 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
   mImagePicker = new IOSImagePicker();
   QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString & absoluteImagePath )
   {
-    emit imageSelected( absoluteImagePath, mLastCode );
+    if ( mLastRequestIsVideo )
+      emit mediaSelected( absoluteImagePath, mLastCode );
+    else
+      emit imageSelected( absoluteImagePath, mLastCode );
   } );
   QObject::connect( mImagePicker, &IOSImagePicker::notifyError, this, &IosUtils::notifyError );
 }
@@ -34,13 +37,29 @@ bool IosUtils::isIos() const
 void IosUtils::callImagePicker( const QString &targetPath, const QString &code )
 {
   mLastCode = code;
+  mLastRequestIsVideo = false;
   mImagePicker->showImagePicker( targetPath );
 }
 
 void IosUtils::callCamera( const QString &targetPath, const QString &code )
 {
   mLastCode = code;
+  mLastRequestIsVideo = false;
   mImagePicker->callCamera( targetPath, mPositionKit, mCompass );
+}
+
+void IosUtils::callVideoPicker( const QString &targetPath, const QString &code )
+{
+  mLastCode = code;
+  mLastRequestIsVideo = true;
+  mImagePicker->showVideoPicker( targetPath );
+}
+
+void IosUtils::callVideoCamera( const QString &targetPath, const QString &code )
+{
+  mLastCode = code;
+  mLastRequestIsVideo = true;
+  mImagePicker->callVideoCamera( targetPath );
 }
 
 IOSImagePicker *IosUtils::imagePicker() const

@@ -45,6 +45,26 @@ void IOSImagePicker::callCamera( const QString &targetDir, PositionKit *position
 #endif
 }
 
+void IOSImagePicker::showVideoPicker( const QString &targetDir )
+{
+#ifdef Q_OS_IOS
+  setTargetDir( targetDir );
+  showVideoPickerDirect( this );
+#else
+  Q_UNUSED( targetDir )
+#endif
+}
+
+void IOSImagePicker::callVideoCamera( const QString &targetDir )
+{
+#ifdef Q_OS_IOS
+  setTargetDir( targetDir );
+  callVideoCameraDirect( this );
+#else
+  Q_UNUSED( targetDir )
+#endif
+}
+
 QString IOSImagePicker::targetDir() const
 {
   return mTargetDir;

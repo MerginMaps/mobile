@@ -27,6 +27,7 @@
 */
 @interface IOSInterface : NSObject
 +( void )showImagePicker:( int )sourceType : ( IOSImagePicker * )hander;
++( void )showVideoPicker:( int )sourceType : ( IOSImagePicker * )handler;
 +( QString )handleCameraPhoto:( NSDictionary * )info:( NSString * )imagePath;
 +( NSString * )readExif:( NSString * ) imageFileURL:( NSString * )tag;
 

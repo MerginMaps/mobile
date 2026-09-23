@@ -108,6 +108,11 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl zoomToProjectIcon READ zoomToProjectIcon CONSTANT )
     Q_PROPERTY( QUrl settingsIcon READ settingsIcon CONSTANT )
     Q_PROPERTY( QUrl addImageIcon READ addImageIcon CONSTANT )
+    Q_PROPERTY( QUrl addAudioIcon READ addAudioIcon CONSTANT )
+    Q_PROPERTY( QUrl addVideoIcon READ addVideoIcon CONSTANT )
+    Q_PROPERTY( QUrl microphoneIcon READ microphoneIcon CONSTANT )
+    Q_PROPERTY( QUrl playIcon READ playIcon CONSTANT )
+    Q_PROPERTY( QUrl pauseIcon READ pauseIcon CONSTANT )
     Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
@@ -423,6 +428,11 @@ class MMStyle: public QObject
     static QUrl settingsIcon() {return QUrl( "qrc:/Settings.svg" );}
     static QUrl zoomToProjectIcon() {return QUrl( "qrc:/ZoomToProject.svg" );}
     static QUrl addImageIcon() {return QUrl( "qrc:/AddImage.svg" );}
+    static QUrl addAudioIcon() {return QUrl( "qrc:/AddAudio.svg" );}
+    static QUrl addVideoIcon() {return QUrl( "qrc:/AddVideo.svg" );}
+    static QUrl microphoneIcon() {return QUrl( "qrc:/Microphone.svg" );}
+    static QUrl playIcon() {return QUrl( "qrc:/Play.svg" );}
+    static QUrl pauseIcon() {return QUrl( "qrc:/Pause.svg" );}
     static QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
     static QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
     static QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}
