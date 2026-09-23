@@ -376,13 +376,17 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   const bool useV2push = true;
   int fileCounter = 0;
 
-  for ( auto filePath = localDiff.localAdded.begin(); filePath != localDiff.localAdded.end(); ++filePath )
+  for ( auto filePath = localDiff.localAdded.begin(); filePath != localDiff.localAdded.end(); )
   {
     if ( fileCounter >= MAX_UPLOAD_CHANGES )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
-      filePath = localDiff.localAdded.erase( filePath );
-      continue;
+      // remove remaining items of localDiff.localAdded
+      while ( filePath != localDiff.localAdded.end() )
+      {
+        filePath = localDiff.localAdded.erase( filePath );
+      }
+      break;
     }
 
     MerginFile file = findFile( *filePath, localFiles );
@@ -412,6 +416,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
     transaction.pushChanges.added.append( file );
     fileCounter++;
+    ++filePath;
   }
 
   if ( fileCounter >= MAX_UPLOAD_CHANGES )
@@ -419,13 +424,17 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     localDiff.localUpdated.clear();
   }
 
-  for ( auto filePath = localDiff.localUpdated.begin(); filePath != localDiff.localUpdated.end(); ++filePath )
+  for ( auto filePath = localDiff.localUpdated.begin(); filePath != localDiff.localUpdated.end(); )
   {
     if ( fileCounter >= MAX_UPLOAD_CHANGES )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
-      filePath = localDiff.localUpdated.erase( filePath );
-      continue;
+      // remove remaining items of localDiff.localUpdated
+      while ( filePath != localDiff.localUpdated.end() )
+      {
+        filePath = localDiff.localUpdated.erase( filePath );
+      }
+      break;
     }
 
     MerginFile file = findFile( *filePath, localFiles );
@@ -486,11 +495,12 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
     transaction.pushChanges.updated.append( file );
     fileCounter++;
+    ++filePath;
   }
 
   transaction.diff = localDiff;
 
-  for ( const QString &filePath : transaction.diff.localDeleted )
+  for ( const QString &filePath : std::as_const( transaction.diff.localDeleted ) )
   {
     MerginFile file = findFile( filePath, oldServerProject.files );
     transaction.pushChanges.removed.append( file );
