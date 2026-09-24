@@ -100,7 +100,7 @@ namespace TestUtils
 
 #define COMPARENEAR(actual, expected, epsilon) \
   do {\
-    if (!QTest::compare_helper((qAbs(actual - expected) <= epsilon), \
+    if (!QTest::compare_helper((qAbs((actual) - (expected)) <= (epsilon)), \
     QString{"Compared values are not the same in respect to epsilon %1"} \
   .arg(epsilon).toLocal8Bit().constData(), \
   QTest::toString(actual), \
