@@ -55,6 +55,11 @@ GeoPosition PositionTransformer::processNetworkPosition( const GeoPosition &geoP
   return processBluetoothPosition( geoPosition );
 }
 
+GeoPosition PositionTransformer::processTrimblePosition( const GeoPosition &geoPosition )
+{
+  return processBluetoothPosition( geoPosition );
+}
+
 GeoPosition PositionTransformer::processAndroidPosition( GeoPosition geoPosition )
 {
   if ( geoPosition.elevation != std::numeric_limits<double>::quiet_NaN() )

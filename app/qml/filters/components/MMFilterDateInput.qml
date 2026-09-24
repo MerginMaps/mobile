@@ -58,7 +58,11 @@ Column {
           return Qt.formatDate( root.currentValue[0] )
         }
 
-        onTextClicked: fromCalendarLoader.active = true
+        onTextClicked: {
+          root.forceActiveFocus()
+          fromCalendarLoader.active = true
+        }
+        
         onRightContentClicked: {
           if (checked) {
             textField.clear()
@@ -149,7 +153,11 @@ Column {
           return Qt.formatDate( root.currentValue[1] )
         }
 
-        onTextClicked: toCalendarLoader.active = true
+        onTextClicked: {
+          root.forceActiveFocus()
+          toCalendarLoader.active = true
+        }
+
         onRightContentClicked: {
           if (checked) {
             textField.clear()

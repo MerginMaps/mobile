@@ -10,20 +10,19 @@
 import QtQuick
 import QtQuick.Controls.impl
 
-import mm 1.0 as MM
+import MMInput
 
 Item {
     id: root
 
-    /*required*/ property var qgsProject
-    /*required*/ property var mapSettings
+    required property var qgsProject
+    required property var mapSettings
     property bool shouldUseSnapping: false
 
     property point center: Qt.point( root.width / 2, root.height / 2 )
 
-    property var recordPoint: snapUtils.recordPoint
-
-    property point screenPoint: snapUtils.snapped && __activeLayer.vectorLayer ? __inputUtils.transformPointToScreenCoordinates(__activeLayer.vectorLayer.crs, mapSettings, recordPoint) : center
+    property qgsPoint recordPoint : snapUtils.recordPoint
+    property point screenPoint : snapUtils.snapped ? snapUtils.snapPoint : root.center
 
     property real outerSize: 60 * __dp
     property real innerDotSize: 10 * __dp
@@ -31,7 +30,7 @@ Item {
     property alias crosshairForeground: crosshairForeground
     property alias snapUtils: snapUtils
 
-    MM.SnapUtils {
+    SnapUtils {
       id: snapUtils
 
       centerPosition: root.center
@@ -39,7 +38,6 @@ Item {
       qgsProject: root.qgsProject
       useSnapping: root.shouldUseSnapping
       destinationLayer: __activeLayer.vectorLayer
-
     }
 
     Image {
@@ -166,7 +164,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && ( snapUtils.snapType === MM.SnapUtils.Vertex || snapUtils.snapType === MM.SnapUtils.Other ) ? 100 : 0
+      opacity: snapUtils.snapped && ( snapUtils.snapType === SnapUtils.Vertex || snapUtils.snapType === SnapUtils.Other ) ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {
@@ -176,7 +174,7 @@ Item {
         }
       }
 
-      rotation: snapUtils.snapType === MM.SnapUtils.Other ? 0 : 45
+      rotation: snapUtils.snapType === SnapUtils.Other ? 0 : 45
 
       Behavior on rotation {
         PropertyAnimation {
@@ -217,7 +215,7 @@ Item {
         }
       }
 
-      opacity: snapUtils.snapped && snapUtils.snapType === MM.SnapUtils.Segment ? 100 : 0
+      opacity: snapUtils.snapped && snapUtils.snapType === SnapUtils.Segment ? 100 : 0
 
       Behavior on opacity {
         PropertyAnimation {

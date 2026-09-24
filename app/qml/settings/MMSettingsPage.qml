@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQml.Models
 
 import mm 1.0 as MM
 import MMInput
@@ -35,6 +36,13 @@ MMPage {
       intervalTypeModel.append({ value: MM.StreamingIntervalType.Time, text: qsTr("Time elapsed") });
       intervalTypeModel.append({ value: MM.StreamingIntervalType.Distance, text: qsTr("Distance traveled") });
     }
+  }
+
+  ListModel {
+    id: startupBehaviorModel
+
+    ListElement { text: qsTr("Recent project"); description: qsTr("Jump back into your last project") } // AppSettings.StartupRecentProject
+    ListElement { text: qsTr("Project home"); description: qsTr("See all your downloaded projects") } // AppSettings.StartupProjectHome
   }
 
   pageBottomMarginPolicy: MMPage.BottomMarginPolicy.PaintBehindSystemBar
@@ -85,16 +93,45 @@ MMPage {
 
       MMLine {}
 
-      MMSettingsComponents.MMSettingsInput {
+      Loader {
         width: parent.width
-        title: qsTr("GPS antenna height")
-        description: qsTr("Includes pole height and GPS receiver’s antenna height")
-        valueDescription: qsTr("GPS antenna height, in meters")
-        value: AppSettings.gpsAntennaHeight
-        suffix: " m"
+        sourceComponent: !PositionKit.requireAntennaHeightTransform() ? externalAntennaHeightComponent : editableAntennaHeightComponent
+      }
 
-        onValueWasChanged: function( newValue ) {
-          AppSettings.gpsAntennaHeight = newValue
+      Component {
+        id: editableAntennaHeightComponent
+
+        MMSettingsComponents.MMSettingsInput {
+          width: parent ? parent.width : 0
+          title: qsTr("GPS antenna height")
+          description: qsTr("Includes pole height and GPS receiver’s antenna height")
+          valueDescription: qsTr("GPS antenna height, in meters")
+          value: __inputUtils.formatNumber(AppSettings.gpsAntennaHeight, 3)
+          suffix: " m"
+
+          onValueWasChanged: function( newValue ) {
+            AppSettings.gpsAntennaHeight = newValue
+          }
+        }
+      }
+
+      Component {
+        id: externalAntennaHeightComponent
+
+        Column {
+          width: parent ? parent.width : 0
+          spacing: __style.spacing4
+
+          MMSettingsComponents.MMSettingsItem {
+            width: parent.width
+            title: qsTr("GPS antenna height")
+            description: qsTr("Click here to modify in Trimble Mobile Manager")
+            value: Number.isNaN( PositionKit.antennaHeight ) ? qsTr( "N/A" ) : __inputUtils.formatNumber( PositionKit.antennaHeight, 3 ) + " m"
+            onClicked: () => {
+              if ( PositionKit.positionProvider )
+                PositionKit.openAntennaHeightPage()
+            }
+          }
         }
       }
 
@@ -215,6 +252,22 @@ MMPage {
       }
 
       Item { width: 1; height: 1 }
+
+      MMSettingsComponents.MMSettingsDropdown {
+        width: parent.width
+
+        title: qsTr("Startup behaviour")
+        description: qsTr("Choose what opens when you launch the app")
+
+        currentIndex: AppSettings.startupBehavior
+
+        model: startupBehaviorModel
+        value: model.get(currentIndex).text
+
+        onCurrentIndexChanged: AppSettings.startupBehavior = currentIndex
+      }
+
+      MMLine {}
 
       MMSettingsComponents.MMSettingsItem {
         width: parent.width

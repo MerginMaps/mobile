@@ -112,6 +112,7 @@ Column {
   }
 
   function openDrawer() {
+    forceActiveFocus()
     dropdownDrawerLoader.active = true
     dropdownDrawerLoader.focus = true
   }

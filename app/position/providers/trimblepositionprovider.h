@@ -1,0 +1,65 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef TRIMBLEPOSITIONPROVIDER_H
+#define TRIMBLEPOSITIONPROVIDER_H
+
+#include <QTimer>
+#include <QWebSocket>
+
+#include "abstractpositionprovider.h"
+#include "trimbleregistration.h"
+
+class TrimblePositionProvider : public AbstractPositionProvider
+{
+    Q_OBJECT
+
+  public:
+    TrimblePositionProvider( const QString &id, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
+    ~TrimblePositionProvider() override;
+
+    void startUpdates() override;
+    void stopUpdates() override;
+    void closeProvider() override;
+
+    QgsCoordinateReferenceSystem sourceCrs() const;
+    QString geoidModelName() const;
+
+    // trimble provider provides antenna height from Trimble Mobile Manager
+    double antennaHeight() const;
+    // TODO: move to native utils
+    Q_INVOKABLE void openAntennaHeightPage();
+
+  private slots:
+    void onRegistered( int port );
+    void onRegistrationFailed( const QString &reason );
+    void onTextMessageReceived( const QString &message );
+    void onEventTextMessageReceived( const QString &message );
+    void onSocketError( QAbstractSocket::SocketError error );
+    void onSocketDisconnected();
+
+  private:
+    void connectWebSocket( int port );
+
+    GeoPosition parseLocationMessage( const QString &json );
+    static QgsCoordinateReferenceSystem resolveFrame( const QString &frameName, double epoch );
+
+    TrimbleRegistration *mRegistration = nullptr;
+    std::unique_ptr<QWebSocket> mPositionSocket;
+    std::unique_ptr<QWebSocket> mEventsSocket;
+
+    int mCachedPort = 0;
+    bool mRegistrationInProgress = false;
+
+    QgsCoordinateReferenceSystem mSourceCrs;
+    double mAntennaHeight = std::numeric_limits<double>::quiet_NaN();
+    QString mGeoidModelName;
+};
+
+#endif // TRIMBLEPOSITIONPROVIDER_H

@@ -290,6 +290,9 @@ class InputMapSettings : public QObject
     //! \copydoc InputMapSettings::extent
     void extentChanged();
 
+    //! Fired after extentChanged() if the new extent is on a different map scale
+    void scaleChanged();
+
     //! \copydoc InputMapSettings::destinationCrs
     void destinationCrsChanged();
 

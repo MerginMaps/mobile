@@ -96,13 +96,18 @@ MMPrivateComponents.MMBaseSingleLineInput {
       id: dateTimeDrawer
 
       title: root._fieldTitle
-      dateTime: root._fieldValueIsNull || root._fieldHasMixedValues ? new Date() : dateTransformer.toJsDate( root._fieldValue )
+      dateTime: root.hasInvalidFieldValue() ? new Date() : dateTransformer.toJsDate( root._fieldValue )
       hasDatePicker: root.includesDate
       hasTimePicker: root.includesTime
       showSeconds: root.showSeconds
+      showClearButton: !root._fieldValueIsNull
 
       onPrimaryButtonClicked: {
         root.newDateSelected( dateTime )
+      }
+
+      onClearButtonClicked: {
+        root.editorValueChanged( null, true )
       }
 
       onClosed: dateTimeDrawerLoader.active = false
@@ -112,12 +117,16 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   function openCalendar() {
-    if (root._fieldValueIsNull || _fieldHasMixedValues) {
-      root.openPicker( new Date() )
-    }
-    else {
-      root.openPicker( dateTransformer.toJsDate(root._fieldValue) )
-    }
+    forceActiveFocus()
+
+    dateTimeDrawerLoader.active = true
+    dateTimeDrawerLoader.focus = true
+  }
+
+  function hasInvalidFieldValue() {
+    return root._fieldValueIsNull
+        || root._fieldHasMixedValues
+        || (root._fieldValue ?? true)
   }
 
   QtObject {
@@ -183,10 +192,5 @@ MMPrivateComponents.MMBaseSingleLineInput {
       let jsDate = dateTransformer.toJsDate(qtDate)
       return Qt.formatDateTime(jsDate, root._fieldConfig['display_format'])
     }
-  }
-
-  function openPicker(requestedDate) {
-    dateTimeDrawerLoader.active = true
-    dateTimeDrawerLoader.focus = true
   }
 }

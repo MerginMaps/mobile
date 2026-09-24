@@ -285,16 +285,18 @@ class RecordingMapTool : public AbstractMapTool
   public slots:
     void onPositionChanged();
 
-  private slots:
-    void prepareEditing();
-    void onFeatureAdded( QgsFeatureId newFeatureId );
-
     /**
      * Creates nodes index. Extracts existing geometry vertices and generates virtual
      * vertices representing midpoints (for lines and polygons) and start/end points
      * (for lines).
+     * This is also called whenever the map scale changes so that start/end point positions
+     * can have a stable pixel offset. Also to skip midpoints for segments below a size threshold.
      */
     void collectVertices();
+
+  private slots:
+    void prepareEditing();
+    void onFeatureAdded( QgsFeatureId newFeatureId );
 
     /**
      * Creates geometries represeinting existing nodes, midpoints (for lines and polygons),

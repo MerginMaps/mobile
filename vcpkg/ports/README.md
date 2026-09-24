@@ -7,3 +7,4 @@
 - qtdeclarative - optimization to decrease package size
 - qtpositioning - Android service fix & iOS orthometric position hack
 - libsecret - Build with -Dbash_completion=disabled to avoid PermissionError: [Errno 13] Permission denied: '/usr/share/bash-completion/completions/secret-tool'
+- libaec - Change from Gitlab to Github oficial repository as Gitlab was ratelimiting strongly and upstream didn't swap yet 

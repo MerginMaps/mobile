@@ -82,13 +82,23 @@
 
   NSDateFormatter *df = [[NSDateFormatter alloc] init];
   [df setDateFormat:@"yyyyMMdd_HHmmss"];
-  NSString *fileName = [[df stringFromDate:[NSDate date]] stringByAppendingString:@".jpg"];
-  NSString *imagePath = [_handler->targetDir().toNSString() stringByAppendingPathComponent:fileName];
+  NSString *baseName = [df stringFromDate:[NSDate date]];
+  NSString *targetDir = _handler->targetDir().toNSString();
 
-  [result.itemProvider loadDataRepresentationForTypeIdentifier:@"public.jpeg"
-   completionHandler: ^ ( NSData * data, NSError * error )
+  [result.itemProvider loadFileRepresentationForTypeIdentifier:@"public.image"
+   completionHandler: ^ ( NSURL * url, NSError * error )
   {
-    BOOL writeSuccess = data && !error && [data writeToFile:imagePath atomically:YES];
+    NSString *ext = ( url && url.pathExtension.length > 0 ) ? url.pathExtension.lowercaseString : @"jpg";
+    NSString *imagePath = [targetDir stringByAppendingPathComponent:[baseName stringByAppendingFormat:@".%@", ext]];
+
+    BOOL writeSuccess = NO;
+    if ( url && !error )
+    {
+      NSError *copyError = nil;
+      [[NSFileManager defaultManager] copyItemAtURL:url toURL:[NSURL fileURLWithPath:imagePath] error:&copyError];
+      writeSuccess = ( copyError == nil );
+    }
+
     if ( !writeSuccess )
     {
       CoreUtils::log( "iOS photo picker", QStringLiteral( "Gallery Picker: failed to write image data to %1" ).arg( QString::fromNSString( imagePath ) ) );

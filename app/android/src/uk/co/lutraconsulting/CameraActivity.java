@@ -78,6 +78,7 @@ public class CameraActivity extends Activity {
 
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 takePictureIntent.putExtra("__RESULT__", "takePictureIntent__RESULT__");
+                startForegroundService(new Intent(this, CameraForegroundService.class));
                 startActivityForResult(takePictureIntent, CAMERA_CODE);
             } else {
                 Intent activityIntent = getIntent();
@@ -115,6 +116,11 @@ public class CameraActivity extends Activity {
         Log.d(TAG, "resultCode: " + resultCode);
         orientationSensor.Unregister();
 
+        if (requestCode == CAMERA_CODE) {
+            // no-op if it isn't running (e.g. process was killed and recreated), stops it either way
+            stopService(new Intent(this, CameraForegroundService.class));
+        }
+
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(TAG, "tmp exists: " + cameraFile.exists());
             Log.d(TAG, "tmp path: " + cameraFile.getAbsolutePath());
@@ -140,6 +146,13 @@ public class CameraActivity extends Activity {
             // TODO: after copy, verify if is correctly copied and then remove the old one
         }
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // no-op if it was already stopped in onActivityResult() or never started
+        stopService(new Intent(this, CameraForegroundService.class));
     }
 
     private void extendGPSExifData(long captureTime) {

@@ -20,7 +20,7 @@
 const QString helpRoot = QStringLiteral( "https://merginmaps.com/docs" );
 const QString helpDeskMail = QStringLiteral( "support@merginmaps.com" );
 const QString mmWeb = QStringLiteral( "https://merginmaps.com" );
-const QString changelogRss = QStringLiteral( "https://wishlist.merginmaps.com/rss/changelog.xml" );
+const QString changelogRss = QStringLiteral( "https://community.merginmaps.com/rss/changelog.xml" );
 
 const QString utmTagHelp = QStringLiteral( "?utm_source=input-help&utm_medium=help&utm_campaign=input" );
 const QString utmTagSubscription = QStringLiteral( "?utm_source=input-subs&utm_medium=subs&utm_campaign=input" );

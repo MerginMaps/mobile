@@ -48,6 +48,7 @@
             android:screenOrientation="unspecified"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
+            android:enableOnBackInvokedCallback="false"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -101,6 +102,13 @@
             android:process=":trackingThread"
             android:name=".PositionTrackingService"
             android:foregroundServiceType="location"
+            android:stopWithTask="true"
+            android:exported="false"
+            />
+
+        <service
+            android:name=".CameraForegroundService"
+            android:foregroundServiceType="shortService"
             android:stopWithTask="true"
             android:exported="false"
             />

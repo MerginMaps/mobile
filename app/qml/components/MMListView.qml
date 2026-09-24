@@ -19,4 +19,5 @@ ListView {
       root.returnToBounds();
     }
   }
+  delegateModelAccess: DelegateModel.ReadWrite
 }

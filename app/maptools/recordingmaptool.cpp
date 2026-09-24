@@ -79,8 +79,7 @@ void RecordingMapTool::addPoint( const QgsPoint &point )
 
   fixZM( pointToAdd );
 
-  // apply gps antenna height
-  if ( QgsWkbTypes::hasZ( pointToAdd.wkbType() ) && mPositionKit && mPositionKit->antennaHeight() > 0 )
+  if ( QgsWkbTypes::hasZ( pointToAdd.wkbType() ) && mPositionKit && mPositionKit->requireAntennaHeightTransform() )
   {
     pointToAdd.setZ( pointToAdd.z() - mPositionKit->antennaHeight() );
   }
@@ -1364,7 +1363,8 @@ QgsPoint RecordingMapTool::handlePoint( QgsPoint p1, QgsPoint p2 )
     return QgsPoint();
   }
 
-  double h = 15 * mapSettings()->mapUnitsPerPixel();
+  constexpr int HANDLE_PIXEL_OFFSET = 42;
+  double h = HANDLE_PIXEL_OFFSET * mapSettings()->mapUnitsPerPixel();
   double factor = QgsUnitTypes::fromUnitToUnitFactor( mapSettings()->destinationCrs().mapUnits(), mActiveLayer->crs().mapUnits() );
   QgsDistanceArea da;
   da.setEllipsoid( QStringLiteral( "WGS84" ) );

@@ -31,7 +31,33 @@ bool RecordingLayersProxyModel::filterAcceptsRow( int source_row, const QModelIn
   QModelIndex index = mModel->index( source_row, 0, source_parent );
   QgsMapLayer *layer = mModel->layerFromIndex( index );
 
+  if ( layer )
+  {
+    bool isPrivate = layer->flags().testFlag( QgsMapLayer::LayerFlag::Private );
+
+    if ( isPrivate )
+    {
+      return false;
+    }
+  }
+
   return mModel->data( index, LayersModel::LayerVisible ).toBool();
+}
+
+bool RecordingLayersProxyModel::lessThan( const QModelIndex &left, const QModelIndex &right ) const
+{
+  if ( !mModel || mSortMethod == SortMethodEnum::Alphabetical )
+    return QgsMapLayerProxyModel::lessThan( left, right );
+
+  // preserve the layer order as arranged in the QGIS project's layer tree
+  QgsMapLayer *leftLayer = mModel->layerFromIndex( left );
+  QgsMapLayer *rightLayer = mModel->layerFromIndex( right );
+
+  if ( !leftLayer || !rightLayer )
+    return QgsMapLayerProxyModel::lessThan( left, right );
+
+  const QList<QgsMapLayer *> layerOrder = QgsProject::instance()->layerTreeRoot()->layerOrder();
+  return layerOrder.indexOf( leftLayer ) < layerOrder.indexOf( rightLayer );
 }
 
 QList<QgsMapLayer *> RecordingLayersProxyModel::layers() const
@@ -68,8 +94,11 @@ void RecordingLayersProxyModel::setModel( LayersModel *model )
   if ( mModel != model )
   {
     mModel = model;
+    mSortMethod = static_cast<SortMethodEnum>( QgsProject::instance()->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "SortLayersMethod/Method" ), SortMethodEnum::Alphabetical ) );
+
     setSourceModel( mModel );
     setFilters( Qgis::LayerFilter::HasGeometry | Qgis::LayerFilter::WritableLayer );
+
     emit modelChanged();
   }
 }

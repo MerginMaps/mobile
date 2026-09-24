@@ -280,6 +280,10 @@ Item {
     id: shape
     anchors.fill: parent
 
+    // The newer CurveRenderer is used for dashed lines to avoid a bug causing off-screen lines to be generated as empty
+    // see https://github.com/MerginMaps/mobile/issues/2280
+    preferredRendererType: highlight.lineStrokeStyle === ShapePath.DashLine ? Shape.CurveRenderer : Shape.UnknownRenderer
+
     transform: Matrix4x4 {
         // the formula for x coordinate for map to screen coordinates conversion goes like this:
         //   x_screen = (x_map + offset_x) * scale / ddp
