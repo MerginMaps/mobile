@@ -318,7 +318,7 @@ MMComponents.MMDrawer {
               width: parent.width / 2
 
               title: qsTr( "GPS antenna height" )
-              value: AppSettings.gpsAntennaHeight > 0 ? __inputUtils.formatNumber(AppSettings.gpsAntennaHeight, 3) + " m" : qsTr( "Not set" )
+              value: PositionKit.antennaHeight > 0 ? __inputUtils.formatNumber(PositionKit.antennaHeight, 3) + " m" : qsTr( "Not set" )
 
               alignmentRight: Positioner.index % 2 === 1
             }

@@ -26,13 +26,6 @@ class BluetoothPositionProvider : public AbstractPositionProvider
 {
     Q_OBJECT
 
-    // signalizes in how many [ms] we will try to reconnect to GPS again
-    enum ReconnectDelay
-    {
-      ShortDelay = 3000,
-      LongDelay = 5000
-    };
-
   public:
     BluetoothPositionProvider( const QString &addr, const QString &name, PositionTransformer &positionTransformer, QObject *parent = nullptr );
     ~BluetoothPositionProvider() override;

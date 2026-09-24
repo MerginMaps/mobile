@@ -31,7 +31,7 @@ class SynchronizationError
       ServerError,
       UnknownError
     };
-    Q_ENUMS( ErrorType );
+    Q_ENUM( ErrorType );
 
     //! Parses error from server based on error code and message and returns one
     //! of SyncError types. "Other" is returned for unknown errors.

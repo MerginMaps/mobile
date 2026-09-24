@@ -28,7 +28,7 @@ class FieldValidator : public QObject
       Warning,  //!< field can be saved, but there are soft constraints not met
       Error     //!< field can not be saved
     };
-    Q_ENUMS( ValidationStatus )
+    Q_ENUM( ValidationStatus )
 
     explicit FieldValidator( QObject *parent = nullptr );
 
