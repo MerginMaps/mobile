@@ -186,7 +186,8 @@ QString CoreUtils::findUniquePath( const QString &path )
     }
     else // file
     {
-      uniquePath = originalPath.path() + '/' + originalPath.baseName() + " (" + QString::number( i ) + ")." + originalPath.completeSuffix();
+      // split on the last dot, so a dot in the base name isn't mistaken for the extension
+      uniquePath = originalPath.path() + '/' + originalPath.completeBaseName() + " (" + QString::number( i ) + ")." + originalPath.suffix();
     }
     f.setFile( uniquePath );
   }
