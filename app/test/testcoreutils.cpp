@@ -139,7 +139,7 @@ void TestCoreUtils::testFindUniquePath()
     { "folderA", "folderA (1)" },
     { "non.txt", "non.txt" },
     { "data.gpkg", "data.gpkg" },
-    { "arch.tar.gz", "arch (1).tar.gz" },
+    { "arch.tar.gz", "arch.tar (1).gz" },
     { "folderA/folder", "folderA/folder" },
     { "folderA/fileA.txt", "folderA/fileA (2).txt" },
     { "folderA/fileB.txt", "folderA/fileB (1).txt" },
