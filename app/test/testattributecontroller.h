@@ -28,6 +28,9 @@ class TestAttributeController: public QObject
     void testRawValue();
     void testFieldsOutsideForm();
     void testPhotoRenaming();
+
+    //! A collision suffix must be inserted before the real extension, even if the name has a dot
+    void testPhotoRenamingCollisionWithDotInName();
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 
