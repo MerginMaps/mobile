@@ -14,6 +14,7 @@
 #include "qgslegendsettings.h"
 #include "qgslayertreemodel.h"
 
+#include "coreutils.h"
 #include "mmstyle.h"
 
 LayerDetailData::LayerDetailData( QObject *parent )
@@ -39,6 +40,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   mName = QString();
   mLayerId = QString();
   mIsVisible = false;
+  mIsValid = false;
   mIsSpatial = false;
   mIsVectorLayer = false;
 
@@ -50,6 +52,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit nameChanged( mName );
     emit layerIdChanged( mLayerId );
     emit isVisibleChanged( mIsVisible );
+    emit isValidChanged( mIsValid );
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
@@ -64,6 +67,7 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
     emit nameChanged( mName );
     emit layerIdChanged( mLayerId );
     emit isVisibleChanged( mIsVisible );
+    emit isValidChanged( mIsValid );
     emit isSpatialChanged( mIsSpatial );
     emit isVectorLayerChanged( mIsVectorLayer );
     emit vectorLayerChanged( nullptr );
@@ -79,6 +83,18 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
 
   mLayerId = nodeLayer->layerId();
   emit layerIdChanged( mLayerId );
+
+  mIsValid = nodeLayer->layer()->isValid();
+  emit isValidChanged( mIsValid );
+
+  // Log invalid layers
+  if ( !mIsValid )
+  {
+    QgsError layerError = nodeLayer->layer()->error();
+    const QString reason = !layerError.isEmpty() ? layerError.summary()
+                            : ( nodeLayer->layer()->dataProvider() ? nodeLayer->layer()->dataProvider()->error().summary() : QString() );
+    CoreUtils::log( QStringLiteral( "Layer detail" ), QStringLiteral( "Opened invalid layer %1: %2" ).arg( mName, reason ) );
+  }
 
   mIsSpatial = nodeLayer->layer()->isSpatial();
   emit isSpatialChanged( mIsSpatial );
@@ -190,6 +206,11 @@ QgsMapLayer *LayerDetailData::mapLayer() const
 bool LayerDetailData::isVisible() const
 {
   return mIsVisible;
+}
+
+bool LayerDetailData::isValid() const
+{
+  return mIsValid;
 }
 
 QgsLegendRenderer *LayerDetailData::legendRenderer() const
