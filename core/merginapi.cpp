@@ -338,16 +338,16 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   }
 
   // Calculate local changes
-  transaction.diff = compareProjectFiles(
-                       oldServerProject.files,
-                       oldServerProject.files,
-                       localFiles,
-                       transaction.projectDir,
-                       transaction.configAllowed,
-                       transaction.config
-                     );
+  ProjectDiff localDiff = compareProjectFiles(
+                            oldServerProject.files,
+                            oldServerProject.files,
+                            localFiles,
+                            transaction.projectDir,
+                            transaction.configAllowed,
+                            transaction.config
+                          );
 
-  CoreUtils::log( "push " + projectFullName, transaction.diff.dump() );
+  CoreUtils::log( "push " + projectFullName, localDiff.dump() );
 
   if ( transaction.configAllowed && transaction.config.isValid && transaction.config.selectiveSyncEnabled )
   {
@@ -359,13 +359,13 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled" ) );
   }
 
-  if ( !transaction.diff.remoteAdded.isEmpty() ||
-       !transaction.diff.remoteUpdated.isEmpty() ||
-       !transaction.diff.remoteDeleted.isEmpty() ||
-       !transaction.diff.conflictRemoteAddedLocalAdded.isEmpty() ||
-       !transaction.diff.conflictRemoteDeletedLocalUpdated.isEmpty() ||
-       !transaction.diff.conflictRemoteUpdatedLocalDeleted.isEmpty() ||
-       !transaction.diff.conflictRemoteUpdatedLocalUpdated.isEmpty() )
+  if ( !localDiff.remoteAdded.isEmpty() ||
+       !localDiff.remoteUpdated.isEmpty() ||
+       !localDiff.remoteDeleted.isEmpty() ||
+       !localDiff.conflictRemoteAddedLocalAdded.isEmpty() ||
+       !localDiff.conflictRemoteDeletedLocalUpdated.isEmpty() ||
+       !localDiff.conflictRemoteUpdatedLocalDeleted.isEmpty() ||
+       !localDiff.conflictRemoteUpdatedLocalUpdated.isEmpty() )
   {
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Detected remote changes when calculating local changes" ) );
     // What to do here?
@@ -373,31 +373,38 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   int fileCounter = 0;
 
-  for ( const QString &filePath : std::as_const( transaction.diff.localAdded ) )
+  for ( auto filePath = localDiff.localAdded.begin(); filePath != localDiff.localAdded.end(); )
   {
-    MerginFile file = findFile( filePath, localFiles );
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
+      // remove remaining items of localDiff.localAdded
+      while ( filePath != localDiff.localAdded.end() )
+      {
+        filePath = localDiff.localAdded.erase( filePath );
+      }
+      break;
+    }
+
+    MerginFile file = findFile( *filePath, localFiles );
 
     if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      filePath = localDiff.localAdded.erase( filePath );
       continue;
     }
 
     if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      filePath = localDiff.localAdded.erase( filePath );
       continue;
-    }
-
-    if ( fileCounter >= MAX_UPLOAD_CHANGES )
-    {
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
-      break;
     }
 
     file.chunks = generateChunkIdsForSize( file.size );
 
-    if ( mSupportsSelectiveSync && filePath == sMerginConfigFile )
+    if ( mSupportsSelectiveSync && *filePath == sMerginConfigFile )
     {
       // problem, we changed selective sync config locally, this is undefined and sync must stop
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was added locally, this is undefined and might lead to data loss, aborting push..." ) );
@@ -406,39 +413,52 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
     transaction.pushChanges.added.append( file );
     fileCounter++;
+    ++filePath;
   }
 
-  for ( const QString &filePath : std::as_const( transaction.diff.localUpdated ) )
+  if ( fileCounter >= MAX_UPLOAD_CHANGES )
   {
-    MerginFile file = findFile( filePath, localFiles );
+    localDiff.localUpdated.clear();
+  }
+
+  for ( auto filePath = localDiff.localUpdated.begin(); filePath != localDiff.localUpdated.end(); )
+  {
+    if ( fileCounter >= MAX_UPLOAD_CHANGES )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files reached, push will be split to multiple versions" ) );
+      // remove remaining items of localDiff.localUpdated
+      while ( filePath != localDiff.localUpdated.end() )
+      {
+        filePath = localDiff.localUpdated.erase( filePath );
+      }
+      break;
+    }
+
+    MerginFile file = findFile( *filePath, localFiles );
 
     if ( isFileDiffable( file.path ) && file.size > MAX_UPLOAD_VERSIONED_SIZE )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Versionable file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      filePath = localDiff.localUpdated.erase( filePath );
       continue;
     }
 
     if ( !isFileDiffable( file.path ) && file.size > MAX_UPLOAD_MEDIA_SIZE )
     {
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "Media file \"%1\" exceeded maximum upload size" ).arg( file.path ) );
+      filePath = localDiff.localUpdated.erase( filePath );
       continue;
-    }
-
-    if ( fileCounter >= MAX_UPLOAD_CHANGES )
-    {
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Maximum amount of changed files exceeded" ) );
-      break;
     }
 
     file.chunks = generateChunkIdsForSize( file.size );
 
-    if ( MerginApi::isFileDiffable( filePath ) )
+    if ( isFileDiffable( *filePath ) )
     {
       // try to create a diff
       QString diffName;
-      int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, filePath, diffName );
+      int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, *filePath, diffName );
       QString diffPath = transaction.projectDir + "/.mergin/" + diffName;
-      QString basePath = transaction.projectDir + "/.mergin/" + filePath;
+      QString basePath = transaction.projectDir + "/.mergin/" + *filePath;
 
       if ( geodiffRes == GEODIFF_SUCCESS )
       {
@@ -446,7 +466,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
         // TODO: this is ugly. our basefile may not need to have the same checksum as the server's
         // basefile (because each of them have applied the diff independently) so we have to fake it
-        QByteArray checksumBase = oldServerProject.fileInfo( filePath ).checksum.toLatin1();
+        QByteArray checksumBase = oldServerProject.fileInfo( *filePath ).checksum.toLatin1();
 
         file.diffName = diffName;
         file.diffChecksum = QString::fromLatin1( checksumDiff.data(), checksumDiff.size() );
@@ -454,16 +474,16 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
         file.diffBaseChecksum = QString::fromLatin1( checksumBase.data(), checksumBase.size() );
         file.chunks = generateChunkIdsForSize( file.diffSize );
 
-        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 successful: total size %2 bytes" ).arg( filePath ).arg( file.diffSize ) );
+        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 successful: total size %2 bytes" ).arg( *filePath ).arg( file.diffSize ) );
       }
       else
       {
         // TODO: remove the diff file (if exists)
-        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 FAILED with error %2 (will do full upload)" ).arg( filePath ).arg( geodiffRes ) );
+        CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 FAILED with error %2 (will do full upload)" ).arg( *filePath ).arg( geodiffRes ) );
       }
     }
 
-    if ( mSupportsSelectiveSync && filePath == sMerginConfigFile )
+    if ( mSupportsSelectiveSync && *filePath == sMerginConfigFile )
     {
       // problem, we changed selective sync config locally, this is undefined and sync must stop
       CoreUtils::log( "push " + projectFullName, QStringLiteral( "PROBLEM! Selective sync config was updated locally, this is undefined and might lead to data loss, aborting push..." ) );
@@ -472,9 +492,12 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
     transaction.pushChanges.updated.append( file );
     fileCounter++;
+    ++filePath;
   }
 
-  for ( QString filePath : transaction.diff.localDeleted )
+  transaction.diff = localDiff;
+
+  for ( const QString &filePath : std::as_const( transaction.diff.localDeleted ) )
   {
     MerginFile file = findFile( filePath, oldServerProject.files );
     transaction.pushChanges.removed.append( file );
@@ -487,12 +510,12 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   }
 
   qint64 totalSize = 0;
-  for ( MerginFile file : transaction.pushChanges.added )
+  for ( const MerginFile &file : transaction.pushChanges.added )
   {
     totalSize += file.size;
   }
 
-  for ( MerginFile file : transaction.pushChanges.updated )
+  for ( const MerginFile &file : transaction.pushChanges.updated )
   {
     if ( !file.diffName.isEmpty() )
     {
@@ -510,9 +533,6 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   CoreUtils::log( "push " + projectFullName, QStringLiteral( "%1 items to upload (total size %2 bytes)" )
                   .arg( transaction.pushQueue.count() ).arg( totalSize ) );
 
-
-  // TODO: Check here if the total number of files to upload is not larger than accepted by the server (100)
-  // TODO: Check here if file size of the individual files to upload is not larger than accepted by server (5 GB for gpkg, 10 GB for other file types)
 
   pushStart( projectFullName );
 }
