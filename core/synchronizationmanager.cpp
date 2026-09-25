@@ -204,8 +204,8 @@ void SynchronizationManager::onTransactionFinished( const QString &finishedProje
     return;
   }
 
-  // a push just finished - go for another pull if there are still local changes to sync
-  if ( mMerginApi->hasLocalProjectChanges( finishedProjectFullName ) )
+  // a push just finished - repeat the sync cycle if there are still local changes to sync
+  if ( MerginApi::hasLocalChanges( mMerginApi->getLocalProject( finishedProjectFullName ).projectDir ) )
   {
     QString projectNamespace, projectName;
     MerginApi::extractProjectName( finishedProjectFullName, projectNamespace, projectName );

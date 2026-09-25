@@ -35,7 +35,7 @@ class ProjectStatus
     Q_ENUM( Status )
 
     //! Returns project state from ProjectStatus::Status enum for the project
-    static Status projectStatus( const Project &project, MerginApi &merginApi );
+    static Status projectStatus( const Project &project );
 };
 
 /**

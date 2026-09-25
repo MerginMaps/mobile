@@ -148,7 +148,7 @@ class TestMerginApi: public QObject
     void testAutosync();
     void testAutosyncFailure();
     void testUpdateProjectMetadataRole();
-    void testMerginConfigFromFile();
+    void testSelectiveSyncConfigFromFile();
     void testHasLocalChangesWithSelectiveSyncEnabled();
     void testHasLocalProjectChanges();
     void testOfflineCache();
@@ -200,8 +200,8 @@ class TestMerginApi: public QObject
     void deleteRemoteProjectNow( MerginApi *api, const QString &projectNamespace, const QString &projectName );
 
     //! Downloads a remote project to the local drive, extended version also sets server version
-    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );
-    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName );
+    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion, bool ignoreSelectiveSync = false );
+    void downloadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, bool ignoreSelectiveSync = false );
 
     //! Uploads any local changes in the local project to the remote project, extended version also sets server version
     void uploadRemoteProject( MerginApi *api, const QString &projectNamespace, const QString &projectName, int &serverVersion );
