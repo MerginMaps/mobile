@@ -703,6 +703,8 @@ ApplicationWindow {
       width: window.width
 
       onEditSelected: {
+        if ( selectedCount > 1 )
+          AppSettings.trackUsageFeature( "bulk_editing" )
         let pair = map.multiEditManager.editableFeature()
         formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
         multiSelectPanel.formOpened = true
@@ -978,6 +980,15 @@ ApplicationWindow {
 
     Component.onCompleted: {
       if ( __showWelcomeToNewDesignDialog )
+        open()
+    }
+  }
+
+  MMUsageReportDialog {
+    id: usageReportDialog
+
+    Component.onCompleted: {
+      if ( !AppSettings.usageReportConsentAsked )
         open()
     }
   }

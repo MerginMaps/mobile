@@ -11,6 +11,7 @@
 
 #include <QFontDatabase>
 #include <QGuiApplication>
+#include <QSettings>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QtDebug>
@@ -103,6 +104,9 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "filter/filtercontroller.h"
+#include "autosynccontroller.h"
+#include "usagereportcontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -529,6 +533,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  UsageReportController usageReportController( as, &localProjectsManager, ma.get() );
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -640,9 +645,103 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  // Gather dynamic usage data via signal connections
+  UsageReportController &urc = usageReportController;
+
+  // Auto-sync
+  QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [&urc]( AutosyncController * ac )
+  {
+    if ( !ac ) return;
+    QObject::connect( ac, &AutosyncController::projectSyncRequested, ac, [&urc]( SyncOptions::RequestOrigin origin )
+    {
+      if ( origin == SyncOptions::AutomaticRequest )
+        urc.trackFeature( QStringLiteral( "autosync" ) );
+    } );
+  } );
+
+  // Created project
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [&urc]( const QString &, const QString & )
+  {
+    urc.trackFeature( QStringLiteral( "created_project" ) );
+  } );
+
+  // Photo captured vs attached
+  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+
+  // Workspace switches
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "workspace_switches" ) );
+  } );
+
+  // External GPS provider
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&urc]( AbstractPositionProvider * provider )
+  {
+    if ( !provider ) return;
+    if ( provider->type() == QLatin1String( "internal" ) ) return;
+
+    urc.trackFeature( QStringLiteral( "external_gps" ) );
+
+    const QString id = provider->id();
+    QString connectionType;
+    if ( id == QLatin1String( "simulated" ) )
+      connectionType = QStringLiteral( "mock" );
+    else if ( id.contains( QLatin1Char( ':' ) ) )
+      connectionType = QStringLiteral( "bluetooth" );
+    else
+      connectionType = QStringLiteral( "network" );
+
+    urc.setData( QStringLiteral( "external_connection_type" ), connectionType );
+    urc.setData( QStringLiteral( "external_name" ), provider->name() );
+  } );
+
+  // Highest project role
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, &activeProject]()
+  {
+    const QString role = activeProject.projectRole();
+    auto roleRank = []( const QString & r ) -> int
+    {
+      if ( r == QLatin1String( "owner" ) ) return 5;
+      if ( r == QLatin1String( "admin" ) ) return 4;
+      if ( r == QLatin1String( "writer" ) ) return 3;
+      if ( r == QLatin1String( "reader" ) ) return 2;
+      if ( r == QLatin1String( "guest" ) ) return 1;
+      return 0;
+    };
+
+    QSettings s;
+    const QString current = s.value( QStringLiteral( "usage_report/data/highest_role" ) ).toString();
+    if ( roleRank( role ) > roleRank( current ) )
+      urc.setData( QStringLiteral( "highest_role" ), role );
+  } );
+
+  // Project load time
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&urc]()
+  {
+    urc.startLoadTimer();
+  } );
+
+  urc.startPingTimer();
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &urc]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
+    urc.recordLoadTime();
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -830,6 +929,9 @@ int main( int argc, char *argv[] )
 
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
+
+  // Attempt weekly snapshot
+  usageReportController.trySubmitSnapshot();
 
   if ( !component.errors().isEmpty() )
   {
