@@ -4477,7 +4477,7 @@ void MerginApi::updateWorkspaceService( const QString &workspaceId, const QStrin
   connect( reply, &QNetworkReply::finished, this, &MerginApi::updateWorkspaceStorageLimitFinished );
 
   CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
-                  QStringLiteral( "Updating workspace: " ).arg( url.toString() ) );
+                  QStringLiteral( "Updating workspace: %1" ).arg( url.toString() ) );
 }
 
 void MerginApi::updateWorkspaceStorageLimitFinished()
@@ -4488,12 +4488,16 @@ void MerginApi::updateWorkspaceStorageLimitFinished()
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( QStringLiteral( "update workspace storage limit" ), QStringLiteral( "Successfully updated workspace limits" ) );
+
+    emit workspaceLimitsUpdated();
   }
   else
   {
     CoreUtils::log( QStringLiteral( "update workspace storage limit" ),
-                    QStringLiteral( "Error: " ).arg( r->errorString() ) );
+                    QStringLiteral( "Error: %1" ).arg( r->errorString() ) );
   }
+
+  r->deleteLater();
 }
 
 void MerginApi::getServerConfig()

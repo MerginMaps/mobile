@@ -785,6 +785,8 @@ class MerginApi: public QObject
 
     void userSelfRegistrationEnabledChanged();
 
+    void workspaceLimitsUpdated();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
