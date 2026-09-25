@@ -131,7 +131,7 @@ void UsageReportController::trySubmitSnapshot()
   if ( telemetryId.isEmpty() )
   {
     telemetryId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
-    settings.setValue( QStringLiteral( "usage_report/telemetry_id" ), telemetryId );
+    settings.setValue( QStringLiteral( "usage_report/device_id" ), telemetryId );
   }
 
   // Collect static data
@@ -223,7 +223,7 @@ void UsageReportController::trySubmitSnapshot()
 
   const QJsonObject body
   {
-    { QStringLiteral( "telemetry_id" ), telemetryId },
+    { QStringLiteral( "device_id" ), telemetryId },
     { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
