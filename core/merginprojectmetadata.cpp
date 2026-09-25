@@ -145,40 +145,39 @@ MerginFile MerginProjectMetadata::fileInfo( const QString &filePath ) const
     if ( merginFile.path == filePath )
       return merginFile;
   }
-  qDebug() << "requested fileInfo() for non-existant file! " << filePath;
+
   return {};
 }
 
-MerginConfig MerginConfig::fromJson( const QByteArray &data )
+SelectiveSyncConfig SelectiveSyncConfig::fromJson( const QByteArray &data )
 {
   QJsonDocument doc = QJsonDocument::fromJson( data );
-  MerginConfig config;
+  SelectiveSyncConfig config;
 
   if ( doc.isObject() )
   {
     QJsonObject docObj = doc.object();
-    config.selectiveSyncEnabled = docObj.value( QStringLiteral( "input-selective-sync" ) ).toBool( false );
-    config.selectiveSyncDir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
+    config.enabled = docObj.value( QStringLiteral( "input-selective-sync" ) ).toBool( false );
+    config.dir = docObj.value( QStringLiteral( "input-selective-sync-dir" ) ).toString();
     config.isValid = true;
   }
   else
   {
-    CoreUtils::log( QStringLiteral( "MerginConfig" ), QStringLiteral( "Invalid content of a config file!" ) );
+    CoreUtils::log( QStringLiteral( "Selective sync" ), QStringLiteral( "Invalid content of mergin-config.json file!" ) );
   }
 
   return config;
 }
 
-MerginConfig MerginConfig::fromFile( const QString &filePath )
+SelectiveSyncConfig SelectiveSyncConfig::fromFile( const QString &filePath )
 {
-  MerginConfig config;
   QFile file( filePath );
 
   if ( file.open( QIODevice::ReadOnly ) )
   {
     QByteArray data = file.readAll();
-    config = MerginConfig::fromJson( data );
+    return SelectiveSyncConfig::fromJson( data );
   }
 
-  return config;
+  return {};
 }

@@ -165,7 +165,7 @@ QString LocalProjectsManager::projectChanges( const QString &projectId )
 
   if ( project.isValid() )
   {
-    return MerginApi::localProjectChanges( project.projectDir ).dump();
+    return MerginApi::localChanges( project.projectDir ).dump();
   }
 
   return QString();

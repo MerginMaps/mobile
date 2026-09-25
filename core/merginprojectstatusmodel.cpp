@@ -128,7 +128,7 @@ bool MerginProjectStatusModel::loadProjectInfo( const QString &projectFullName )
   LocalProject projectInfo = mLocalProjects.projectFromMerginName( projectFullName );
   if ( !projectInfo.projectDir.isEmpty() )
   {
-    ProjectDiff diff = MerginApi::localProjectChanges( projectInfo.projectDir );
+    ProjectDiff diff = MerginApi::localChanges( projectInfo.projectDir );
 
     bool hasLocalChanges = !diff.localAdded.isEmpty() || !diff.localUpdated.isEmpty() || !diff.localDeleted.isEmpty();
 
