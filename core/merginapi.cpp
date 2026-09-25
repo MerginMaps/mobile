@@ -248,18 +248,59 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
-    if ( projectInfo.localVersion == -1 )
+    if ( transaction.isInitialPush )
     {
-      // TODO: this is project creation
+      // We do not know the project ID because project creation API
+      // does not send it out ATM, we need to find the project and parse the project ID
+
+      // NOTE: this is a workaround until server is fixed...
+      QNetworkReply *reply = getProjectInfo( projectFullName, mUserAuth->hasAuthData() );
+
+      if ( !reply )
+      {
+        return false;
+      }
+
+      mTransactionalStatus.insert( projectFullName, transaction );
+
+      CoreUtils::log( QStringLiteral( "Project id lookup" ), QStringLiteral( "Looking for ID of the freshly baked project - %1" ).arg( projectFullName ) );
+
+      mTransactionalStatus.insert( projectFullName, transaction );
+
+      connect( reply, &QNetworkReply::finished, this, [this, projectFullName](){
+
+        QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+        Q_ASSERT( r );
+
+        if ( r->error() == QNetworkReply::NoError )
+        {
+          const QByteArray data = r->readAll();
+
+          const MerginProjectMetadata projectMetadata = MerginProjectMetadata::fromJson( data );
+
+          mTransactionalStatus[projectFullName].projectId = projectMetadata.id;
+          mTransactionalStatus[projectFullName].version = 0;
+          CoreUtils::log( "Project id lookup", QStringLiteral( "Found the project! ID: %1" ).arg( projectMetadata.id ) );
+
+          preparePushPayload( projectFullName );
+        }
+        else
+        {
+          CoreUtils::log( "Project id lookup", QStringLiteral( "Error occured, finito." ) );
+        }
+
+        r->deleteLater();
+        return;
+      });
     }
     else
     {
       transaction.version = projectInfo.localVersion;
+
+      mTransactionalStatus.insert( projectFullName, transaction );
+
+      preparePushPayload( projectFullName );
     }
-
-    mTransactionalStatus.insert( projectFullName, transaction );
-
-    preparePushPayload( projectFullName );
   }
 
   return true;
@@ -328,8 +369,14 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   QList<MerginFile> localFiles = getLocalProjectFiles( transaction.projectDir + "/" );
   MerginProjectMetadata oldServerProject = MerginProjectMetadata::fromCachedJson( transaction.projectDir + "/" + sMetadataFile );
-  transaction.projectId = oldServerProject.id;
+
+  if ( transaction.projectId.isEmpty() && !oldServerProject.id.isEmpty() )
+  {
+    transaction.projectId = oldServerProject.id;
+  }
+
   CoreUtils::log( "push " + projectFullName, "Project ID: " + transaction.projectId );
+  Q_ASSERT( !transaction.projectId.isEmpty() );
 
   // Check if selective sync is ignored or not in this project
   bool selectiveSyncIgnored = QFileInfo::exists( transaction.projectDir + "/" + sIgnoreSelectiveSyncFileFlag );
@@ -3332,6 +3379,7 @@ void MerginApi::prepareProjectPull( const QString &projectFullName, const QByteA
 
   if ( !transaction.ignoreSelectiveSync )
   {
+    prepareSelectiveSyncConfig( projectFullName );
   }
   else
   {
