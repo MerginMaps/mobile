@@ -23,6 +23,7 @@ import android.os.VibrationAttributes;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.DisplayCutout;
 import android.view.Window;
 import android.view.WindowManager;
@@ -72,6 +73,20 @@ public class MMActivity extends QtActivity
     splashScreen.setKeepOnScreenCondition( () -> keepSplashScreenVisible );
 
     setCustomStatusAndNavBar();
+    View decorView = getWindow().getDecorView();
+    decorView.getViewTreeObserver().addOnGlobalLayoutListener(
+      new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            WindowInsets insets = decorView.getRootWindowInsets();
+            if (insets != null &&
+                !insets.isVisible(WindowInsets.Type.ime())) {
+                decorView.requestLayout();
+            }
+          }
+        }
+      });
   }
 
   public String homePath()
