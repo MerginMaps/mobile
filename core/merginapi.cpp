@@ -267,7 +267,8 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
       mTransactionalStatus.insert( projectFullName, transaction );
 
-      connect( reply, &QNetworkReply::finished, this, [this, projectFullName](){
+      connect( reply, &QNetworkReply::finished, this, [this, projectFullName]()
+      {
 
         QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
         Q_ASSERT( r );
@@ -291,7 +292,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
         r->deleteLater();
         return;
-      });
+      } );
     }
     else
     {
@@ -1352,7 +1353,7 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
 
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     TransactionStatus transaction;
-    
+
     transaction.replyPullProjectInfo = reply;
     transaction.type = TransactionStatus::Pull;
 
@@ -3183,7 +3184,7 @@ void MerginApi::pushV2FileReplyFinished()
   }
   Q_ASSERT( found );
 
-  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1 ).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
 
   bool fileFullyUploaded = chunkNo == ( processedFile.chunks.size() - 1 );
 
