@@ -408,7 +408,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   }
   else
   {
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled" ) );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled in the project" ) );
   }
 
   if ( !localDiff.remoteAdded.isEmpty() ||
@@ -557,6 +557,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   if ( transaction.pushChanges.added.isEmpty() && transaction.pushChanges.updated.isEmpty() && transaction.pushChanges.removed.isEmpty() )
   {
+    CoreUtils::log( "push " + projectFullName, "There are no local changes, stoppping push" );
     finishTransaction( projectFullName, false ); // -- false here intentionally so that stamp does not get overwritten!
     return;
   }
@@ -1907,6 +1908,7 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
+          CoreUtils::log( "create " + projectFullName, QStringLiteral( "Continuing with push" ) );
           pushProject( projectNamespace, projectName, true );
         }
       }
@@ -3055,6 +3057,7 @@ void MerginApi::pushStartV2ReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Nothing to upload, skipping to create new version" ) );
 
     pushV2Finish( projectFullName );
+    return;
   }
 
   MerginFile file = transaction.pushQueue.first();
