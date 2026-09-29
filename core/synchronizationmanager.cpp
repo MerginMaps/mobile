@@ -32,10 +32,14 @@ SynchronizationManager::SynchronizationManager(
     connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
     connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&]( const QString & projectFullName )
     {
-      const SyncProcess &process = mSyncProcesses[projectFullName];
-      if ( process.requestOrigin == SyncOptions::ManualRequest )
+      if ( mSyncProcesses.contains( projectFullName ) )
       {
-        emit projectAlreadyOnLatestVersion( projectFullName );
+        const SyncProcess &process = mSyncProcesses[projectFullName];
+
+        if ( process.requestOrigin == SyncOptions::ManualRequest )
+        {
+          emit projectAlreadyOnLatestVersion( projectFullName );
+        }
       }
     } );
   }
@@ -184,7 +188,7 @@ QList<QString> SynchronizationManager::pendingProjects() const
 void SynchronizationManager::onTransactionFinished( const QString &finishedProjectFullName, const bool successful, const int version,
     const TransactionStatus::TransactionType finishedTransactionType )
 {
-  // dangling transaction - ignore
+  // dangling transaction - push/pull started outside of this class (e.g. autotests)
   if ( !mSyncProcesses.contains( finishedProjectFullName ) )
   {
     return;
@@ -257,21 +261,6 @@ void SynchronizationManager::onProjectSyncProgressChanged( const QString &projec
     mSyncProcesses[projectFullName].progress = progress;
     emit syncProgressChanged( projectFullName, progress );
   }
-  else if ( progress >= 0 )
-  {
-    //
-    // Synchronization was not started via sync manager,
-    // let's add it to the manager here.
-    // This is most probably useful only for tests, where we
-    // normally run sync from MerginApi directly
-    //
-    SyncProcess &process = mSyncProcesses[projectFullName];
-    process.pending = true;
-    process.progress = progress;
-    emit syncStarted( projectFullName );
-    emit syncProgressChanged( projectFullName, progress );
-  }
-
 }
 
 void SynchronizationManager::onProjectCreated( const QString &projectFullName, bool result )
