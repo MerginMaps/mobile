@@ -267,7 +267,8 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
       mTransactionalStatus.insert( projectFullName, transaction );
 
-      connect( reply, &QNetworkReply::finished, this, [this, projectFullName](){
+      connect( reply, &QNetworkReply::finished, this, [this, projectFullName]()
+      {
 
         QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
         Q_ASSERT( r );
@@ -291,7 +292,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
         r->deleteLater();
         return;
-      });
+      } );
     }
     else
     {
@@ -408,7 +409,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
   }
   else
   {
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled" ) );
+    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Selective sync is not enabled in the project" ) );
   }
 
   if ( !localDiff.remoteAdded.isEmpty() ||
@@ -557,6 +558,7 @@ void MerginApi::preparePushPayload( const QString &projectFullName )
 
   if ( transaction.pushChanges.added.isEmpty() && transaction.pushChanges.updated.isEmpty() && transaction.pushChanges.removed.isEmpty() )
   {
+    CoreUtils::log( "push " + projectFullName, "There are no local changes, stoppping push" );
     finishTransaction( projectFullName, false ); // -- false here intentionally so that stamp does not get overwritten!
     return;
   }
@@ -1351,7 +1353,7 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
 
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     TransactionStatus transaction;
-    
+
     transaction.replyPullProjectInfo = reply;
     transaction.type = TransactionStatus::Pull;
 
@@ -1907,6 +1909,7 @@ void MerginApi::createProjectFinished()
         QDir projectDir( info.projectDir );
         if ( projectDir.exists() && !projectDir.isEmpty() )
         {
+          CoreUtils::log( "create " + projectFullName, QStringLiteral( "Continuing with push" ) );
           pushProject( projectNamespace, projectName, true );
         }
       }
@@ -3055,6 +3058,7 @@ void MerginApi::pushStartV2ReplyFinished()
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Nothing to upload, skipping to create new version" ) );
 
     pushV2Finish( projectFullName );
+    return;
   }
 
   MerginFile file = transaction.pushQueue.first();
@@ -3180,7 +3184,7 @@ void MerginApi::pushV2FileReplyFinished()
   }
   Q_ASSERT( found );
 
-  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1 ).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
 
   bool fileFullyUploaded = chunkNo == ( processedFile.chunks.size() - 1 );
 

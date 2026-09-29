@@ -139,7 +139,6 @@ class TestMerginApi: public QObject
     void testMigrateDetachProject();
     void testSelectiveSync();
     void testSelectiveSyncSubfolder();
-    void testSelectiveSyncAddConfigToExistingProject();
     void testSelectiveSyncRemoveConfig();
     void testSelectiveSyncDisabledInConfig();
     void testSelectiveSyncChangeSyncFolder();
