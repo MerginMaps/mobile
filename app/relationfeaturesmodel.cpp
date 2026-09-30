@@ -48,12 +48,13 @@ QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 
 void RelationFeaturesModel::setup()
 {
+  LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
+
   if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
     return;
 
   QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
 
-  LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
 }
 
@@ -93,11 +94,6 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
   {
     mRelation = relation;
     emit relationChanged( mRelation );
-
-    if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
-    {
-      LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
-    }
 
     setup();
   }
