@@ -49,6 +49,7 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
     QNetworkReply *reply = mNam.head( request );
     connect( reply, &QNetworkReply::finished, reply, [this, reply]()
     {
+      incrementCounter( QStringLiteral( "ping_total_count" ) );
       if ( reply->error() == QNetworkReply::NoError )
         incrementCounter( QStringLiteral( "ping_success_count" ) );
       else
@@ -93,12 +94,13 @@ void UsageReportController::setData( const QString &key, const QVariant &value )
 
 void UsageReportController::startLoadTimer()
 {
+  if ( !isEnabled() ) return;
   mLoadTimer.start();
 }
 
 void UsageReportController::recordLoadTime()
 {
-  if ( !mLoadTimer.isValid() ) return;
+  if ( !isEnabled() || !mLoadTimer.isValid() ) return;
 
   const qint64 elapsed = mLoadTimer.elapsed();
   QSettings s;
@@ -110,11 +112,24 @@ void UsageReportController::recordLoadTime()
 
 void UsageReportController::startPingTimer()
 {
+  if ( !isEnabled() ) return;
   // TODO: check the new endpoint and decide on the interval
   mPingTimer->start( 5 * 60 * 1000 ); // 5 minutes
 }
 
+// Temporary: bypass interval check for testing
+void UsageReportController::forceSubmitSnapshot()
+{
+  submitSnapshot( true );
+}
+
+// Temporary: indirection to support forceSubmitSnapshot — collapse back to trySubmitSnapshot() when removing
 void UsageReportController::trySubmitSnapshot()
+{
+  submitSnapshot( false );
+}
+
+void UsageReportController::submitSnapshot( bool force )
 {
   if ( !isEnabled() )
     return;
@@ -123,7 +138,7 @@ void UsageReportController::trySubmitSnapshot()
   const QDateTime lastReported = settings.value( QStringLiteral( "usage_report/last_reported_at" ) ).toDateTime();
   const QDateTime now = QDateTime::currentDateTimeUtc();
 
-  if ( lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
+  if ( !force && lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
     return;
 
   // Ensure telemetry UUID exists (separate from the device UUID)
@@ -131,7 +146,7 @@ void UsageReportController::trySubmitSnapshot()
   if ( telemetryId.isEmpty() )
   {
     telemetryId = CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
-    settings.setValue( QStringLiteral( "usage_report/device_id" ), telemetryId );
+    settings.setValue( QStringLiteral( "usage_report/telemetry_id" ), telemetryId );
   }
 
   // Collect static data
@@ -194,6 +209,7 @@ void UsageReportController::trySubmitSnapshot()
   properties.insert( QStringLiteral( "workspace_switches" ), 0 );
   properties.insert( QStringLiteral( "ping_success_count" ), 0 );
   properties.insert( QStringLiteral( "ping_fail_count" ), 0 );
+  properties.insert( QStringLiteral( "ping_total_count" ), 0 );
   properties.insert( QStringLiteral( "avg_project_load_time_ms" ), 0 );
 
   // String data

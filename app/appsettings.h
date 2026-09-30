@@ -133,6 +133,9 @@ class AppSettings: public QObject
     Q_INVOKABLE void trackUsageFeature( const QString &key );
     Q_INVOKABLE void incrementUsageCounter( const QString &key );
 
+    // Temporary: request an immediate usage snapshot (bypasses interval check)
+    Q_INVOKABLE void requestImmediateUsageSnapshot();
+
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
 
@@ -160,6 +163,9 @@ class AppSettings: public QObject
 
     void usageReportEnabledChanged( bool enabled );
     void usageReportConsentAskedChanged( bool asked );
+
+    // Temporary: emitted when QML requests an immediate snapshot
+    void immediateUsageSnapshotRequested();
 
   private:
     // Projects path
