@@ -94,8 +94,10 @@ void RelationFeaturesModel::setRelation( QgsRelation relation )
     mRelation = relation;
     emit relationChanged( mRelation );
 
-    // set layer early so it's known even before the parent feature has a valid id (e.g. new feature)
-    LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
+    if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
+    {
+      LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
+    }
 
     setup();
   }
