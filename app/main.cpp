@@ -222,6 +222,38 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
+// Resolves one preferred language at a time, since uiLanguages() can rank a
+// language's own base form behind an exact match for a less-preferred one.
+static bool loadInputTranslation( QTranslator &translator )
+{
+  auto tryLanguage = [ &translator ]( QLocale::Language language )
+  {
+    return translator.load( QLocale( language ), "input", "_", ":/" );
+  };
+
+  QLocale::Language previousTierLanguage = QLocale::AnyLanguage;
+
+  for ( const QString &lang : QLocale().uiLanguages() )
+  {
+    QLocale candidate( lang );
+
+    if ( previousTierLanguage != QLocale::AnyLanguage && candidate.language() != previousTierLanguage
+         && tryLanguage( previousTierLanguage ) )
+    {
+      return true;
+    }
+
+    if ( translator.load( candidate, "input", "_", ":/" ) )
+    {
+      return true;
+    }
+
+    previousTierLanguage = candidate.language();
+  }
+
+  return previousTierLanguage != QLocale::AnyLanguage && tryLanguage( previousTierLanguage );
+}
+
 static void init_qgis( const QString &pkgPath )
 {
   QgsApplication::init();
@@ -436,17 +468,15 @@ int main( int argc, char *argv[] )
   setEnvironmentQgisPrefixPath();
 
   // Initialize translations
-  QLocale locale;
-
   QTranslator inputTranslator;
-  if ( inputTranslator.load( locale, "input", "_", ":/" ) )
+  if ( loadInputTranslation( inputTranslator ) )
   {
     app.installTranslator( &inputTranslator );
-    qDebug() <<  "Loaded input translation" << app.locale() << "for" << locale;
+    qDebug() << "Loaded input translation" << inputTranslator.language() << "(" << inputTranslator.filePath() << ")";
   }
   else
   {
-    qDebug() <<  "Error in loading input translation for " << locale;
+    qDebug() << "No input translation found, using built-in strings";
   }
 
   QString appBundleDir;
