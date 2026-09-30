@@ -881,6 +881,18 @@ Item {
           }
         }
 
+        // Temporary: test button to send analytics snapshot immediately
+        MMMapButton {
+          id: sendAnalyticsButton
+
+          iconSource: __style.uploadIcon
+
+          onClicked: {
+            AppSettings.requestImmediateUsageSnapshot()
+            __notificationModel.addSuccess( qsTr( "Usage snapshot sent" ) )
+          }
+        }
+
         MMMapButton {
           id: gpsButton
 

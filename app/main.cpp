@@ -645,6 +645,9 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
+  // Temporary: immediate snapshot trigger from QML test button
+  QObject::connect( as, &AppSettings::immediateUsageSnapshotRequested, &usageReportController, &UsageReportController::forceSubmitSnapshot );
+
   // Gather dynamic usage data via signal connections
   UsageReportController &urc = usageReportController;
 
@@ -711,8 +714,10 @@ int main( int argc, char *argv[] )
   } );
 
   // Highest project role
-  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, &activeProject]()
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, as, &activeProject]()
   {
+    if ( !as->usageReportEnabled() ) return;
+
     const QString role = activeProject.projectRole();
     auto roleRank = []( const QString & r ) -> int
     {

@@ -37,10 +37,13 @@ class UsageReportController : public QObject
     void recordLoadTime();
 
     void trySubmitSnapshot();
+    // Temporary: bypass interval check for testing
+    void forceSubmitSnapshot();
 
     void startPingTimer();
 
   private:
+    void submitSnapshot( bool force ); // Temporary: remove force param when removing forceSubmitSnapshot
     bool isEnabled() const;
 
     AppSettings *mAppSettings = nullptr;

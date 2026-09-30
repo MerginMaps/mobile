@@ -460,3 +460,9 @@ void AppSettings::incrementUsageCounter( const QString &key )
   const QString fullKey = QStringLiteral( "usage_report/data/" ) + key;
   s.setValue( fullKey, s.value( fullKey, 0 ).toInt() + 1 );
 }
+
+// Temporary: request an immediate usage snapshot for testing
+void AppSettings::requestImmediateUsageSnapshot()
+{
+  emit immediateUsageSnapshotRequested();
+}
