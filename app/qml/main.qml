@@ -988,8 +988,9 @@ ApplicationWindow {
     id: usageReportDialog
 
     Component.onCompleted: {
-      if ( !AppSettings.usageReportConsentAsked )
-        open()
+      // Temporary: always show for testing
+      //if ( !AppSettings.usageReportConsentAsked )
+      open()
     }
   }
 
