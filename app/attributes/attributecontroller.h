@@ -227,6 +227,9 @@ class  AttributeController : public QObject
 
     //! resolves the storage folder and relative-path prefix for an ExternalResource field
     void resolveExternalResourcePaths( const QVariantMap &config, QString &targetDir, QString &prefix ) const;
+    //! copies the remembered external resource file to a new uniquely named file, so the new feature does not share it with the previous one
+    //! returns false (and logs the problem) if the source is not a valid file or the copy fails
+    bool cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath ) const;
     //! renames photos if necessary
     void renamePhotos();
     //! save temporary sketched image to original image
