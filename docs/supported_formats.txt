@@ -40,7 +40,7 @@ Supported Formats: (ro:read-only, rw:read-write, +:write from scratch, u:update,
   SRTMHGT -raster- (rwv): SRTMHGT File Format (*.hgt)
   Leveller -raster- (rw+v): Leveller heightfield (*.ter)
   Terragen -raster- (rw+v): Terragen heightfield (*.ter)
-  netCDF -raster,multidimensional raster,vector- (rw+uvs): Network Common Data Format (*.nc)
+  netCDF -raster,multidimensional raster,vector- (rw+us): Network Common Data Format (*.nc)
   ISIS3 -raster- (rw+v): USGS Astrogeology ISIS cube (Version 3) (*.lbl, *.cub)
   ISIS2 -raster- (rov): USGS Astrogeology ISIS cube (Version 2)
   PDS -raster- (rov): NASA Planetary Data System
@@ -65,7 +65,7 @@ Supported Formats: (ro:read-only, rw:read-write, +:write from scratch, u:update,
   MAP -raster- (rov): OziExplorer .MAP
   KMLSUPEROVERLAY -raster- (rwv): Kml Super Overlay (*.kml, *.kmz)
   WEBP -raster- (rwv): WEBP (*.webp)
-  PDF -raster,vector- (w+): Geospatial PDF (*.pdf)
+  PDF -raster,vector- (rw+uvs): Geospatial PDF (*.pdf)
   MBTiles -raster,vector- (rw+v): MBTiles (*.mbtiles)
   PLMOSAIC -raster- (ro): Planet Labs Mosaics API
   CALS -raster- (rwv): CALS (Type 1) (*.cal, *.ct1)
@@ -144,11 +144,11 @@ Supported Formats: (ro:read-only, rw:read-write, +:write from scratch, u:update,
 Supported Formats: (ro:read-only, rw:read-write, +:write from scratch, u:update, v:virtual-I/O s:subdatasets)
   MEM -raster,multidimensional raster,vector- (rw+): In Memory raster, vector and multidimensional raster
   PCIDSK -raster,vector- (rw+uv): PCIDSK Database File (*.pix)
-  netCDF -raster,multidimensional raster,vector- (rw+uvs): Network Common Data Format (*.nc)
+  netCDF -raster,multidimensional raster,vector- (rw+us): Network Common Data Format (*.nc)
   PDS4 -raster,vector- (rw+uvs): NASA Planetary Data System 4 (*.xml)
   VICAR -raster,vector- (rw+v): MIPL VICAR file
   JP2OpenJPEG -raster,vector- (rwv): JPEG-2000 driver based on JP2OpenJPEG library (*.jp2, *.j2k)
-  PDF -raster,vector- (w+): Geospatial PDF (*.pdf)
+  PDF -raster,vector- (rw+uvs): Geospatial PDF (*.pdf)
   MBTiles -raster,vector- (rw+v): MBTiles (*.mbtiles)
   BAG -raster,multidimensional raster,vector- (rw+v): Bathymetry Attributed Grid (*.bag)
   EEDA -vector- (ro): Earth Engine Data API
