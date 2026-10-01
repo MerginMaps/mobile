@@ -8,6 +8,8 @@
  ***************************************************************************/
 
 #include "QtDebug"
+#include <QDir>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -249,6 +251,18 @@ bool TestUtils::generateProjectFolder( const QString &rootPath, const QJsonDocum
   }
 
   return allGood;
+}
+
+QString TestUtils::createFakeLocalProject( const QString &dataDir, const QString &name )
+{
+  const QString projectDir = dataDir + "/" + name;
+  QDir().mkpath( projectDir );
+
+  QFile qgzFile( projectDir + "/" + name + ".qgz" );
+  qgzFile.open( QIODevice::WriteOnly );
+  qgzFile.close();
+
+  return projectDir;
 }
 
 QgsProject *TestUtils::loadPlanesTestProject()

@@ -384,7 +384,7 @@ void ProjectsModel::removeLocalProject( const QString &projectId )
 
 QString ProjectsModel::canRenameProject( const QString &projectId, const QString &newName ) const
 {
-  return mLocalProjectsManager->canRenameProject( projectId, newName );
+  return mLocalProjectsManager->validateRename( projectId, newName );
 }
 
 void ProjectsModel::renameLocalProject( const QString &projectId, const QString &newName )
