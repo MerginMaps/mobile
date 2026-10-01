@@ -627,32 +627,13 @@ void AttributeController::updateOnFeatureChange()
 
           if ( itemData->editorWidgetType() == QStringLiteral( "ExternalResource" ) && !rememberedValue.toString().isEmpty() )
           {
-            const QVariantMap config = itemData->editorWidgetConfig();
-            QString targetDir, prefix;
-            resolveExternalResourcePaths( config, targetDir, prefix );
-            const QString src = InputUtils::getAbsolutePath( rememberedValue.toString(), prefix );
-            const QFileInfo fi( src );
-
-            if ( !fi.isFile() )
+            QString clonedPath;
+            if ( !cloneExternalResource( *itemData, rememberedValue.toString(), clonedPath ) )
             {
               ++formItemsIterator;
               continue;
             }
-
-            // temporary name; renamePhotos() applies the custom naming expression at save
-            QString newName = QDateTime::currentDateTime().toString( QStringLiteral( "yyyyMMdd_HHmmsszzz" ) );
-            if ( !fi.suffix().isEmpty() )
-              newName += QStringLiteral( "." ) + fi.suffix();
-
-            const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
-
-            if ( !InputUtils::copyFile( src, dst ) )
-            {
-              ++formItemsIterator;
-              continue;
-            }
-
-            valueToUse = InputUtils::getRelativePath( dst, prefix );
+            valueToUse = clonedPath;
           }
 
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
@@ -1614,6 +1595,36 @@ void AttributeController::resolveExternalResourcePaths( const QVariantMap &confi
   const FeatureLayerPair parentPair = mParentController ? mParentController->featureLayerPair() : FeatureLayerPair();
   targetDir = InputUtils::resolveTargetDir( QgsProject::instance()->homePath(), config, mFeatureLayerPair, parentPair, QgsProject::instance() );
   prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
+}
+
+bool AttributeController::cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath ) const
+{
+  QString targetDir, prefix;
+  resolveExternalResourcePaths( item.editorWidgetConfig(), targetDir, prefix );
+  const QString src = InputUtils::getAbsolutePath( rememberedPath, prefix );
+  const QFileInfo fi( src );
+
+  if ( !fi.isFile() )
+  {
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "User wanted to reuse photo value, but the value is not a valid file: %1" ).arg( src ) );
+    return false;
+  }
+
+  // temporary name; renamePhotos() applies the custom naming expression at save
+  QString newName = QDateTime::currentDateTime().toString( QStringLiteral( "yyyyMMdd_HHmmsszzz" ) );
+  if ( !fi.suffix().isEmpty() )
+    newName += QStringLiteral( "." ) + fi.suffix();
+
+  const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
+
+  if ( !InputUtils::copyFile( src, dst ) )
+  {
+    CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "User wanted to reuse photo value, but the file could not be copied from %1 to %2" ).arg( src, dst ) );
+    return false;
+  }
+
+  newRelativePath = InputUtils::getRelativePath( dst, prefix );
+  return true;
 }
 
 void AttributeController::renamePhotos()
