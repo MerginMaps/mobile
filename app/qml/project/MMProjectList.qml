@@ -321,14 +321,12 @@ Item {
     sourceComponent: MMProjectComponents.MMRenameProjectDialog {
       id: renameDialog
 
-      projectId: renameDialogLoader.projectIdToRename
-
       onRenameClicked: function( newName ) {
-        if ( !renameDialog.projectId ) {
+        if ( !renameDialogLoader.projectIdToRename ) {
           return
         }
 
-        controllerModel.renameLocalProject( renameDialog.projectId, newName )
+        controllerModel.renameLocalProject( renameDialogLoader.projectIdToRename, newName )
       }
 
       onTextEdited: function( text ) {
@@ -358,7 +356,7 @@ Item {
         interval: 300
 
         onTriggered: {
-          renameDialog.errorText = controllerModel.canRenameProject( renameDialog.projectId, pendingText )
+          renameDialog.errorText = controllerModel.canRenameProject( renameDialogLoader.projectIdToRename, pendingText )
         }
       }
     }

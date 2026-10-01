@@ -15,7 +15,6 @@ import "../../inputs"
 MMDrawer {
   id: root
 
-  property string projectId: ""
   property alias errorText: newNameField.errorMsg
 
   signal renameClicked( string newName )

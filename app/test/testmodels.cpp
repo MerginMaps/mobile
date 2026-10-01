@@ -534,7 +534,7 @@ void TestModels::testProjectsModelOnProjectRenamed()
   // exactly like LocalProjectsManager::renameLocalProject() produces after renaming on disk.
   Project p0;
   p0.local.projectName = QStringLiteral( "OriginalName" );
-  p0.local.projectDir = QStringLiteral( "/tmp/OriginalName" );
+  p0.local.projectDir = QDir::tempPath() + QStringLiteral( "/OriginalName" );
 
   Project p1;
   p1.local.projectNamespace = QStringLiteral( "namespace" );
@@ -551,7 +551,7 @@ void TestModels::testProjectsModelOnProjectRenamed()
 
   LocalProject renamed = p0.local;
   renamed.projectName = QStringLiteral( "NewName" );
-  renamed.projectDir = QStringLiteral( "/tmp/NewName" );
+  renamed.projectDir = QDir::tempPath() + QStringLiteral( "/NewName" );
 
   QVERIFY( oldId != renamed.id() ); // renaming a local-only project does change its id
 
@@ -582,7 +582,7 @@ void TestModels::testProjectsModelOnProjectRenamedActiveProject()
 {
   Project p0;
   p0.local.projectName = QStringLiteral( "OriginalName" );
-  p0.local.projectDir = QStringLiteral( "/tmp/OriginalName" );
+  p0.local.projectDir = QDir::tempPath() + QStringLiteral( "/OriginalName" );
 
   Project p1;
   p1.local.projectNamespace = QStringLiteral( "namespace" );
@@ -597,7 +597,7 @@ void TestModels::testProjectsModelOnProjectRenamedActiveProject()
 
   LocalProject renamed = p0.local;
   renamed.projectName = QStringLiteral( "NewName" );
-  renamed.projectDir = QStringLiteral( "/tmp/NewName" );
+  renamed.projectDir = QDir::tempPath() + QStringLiteral( "/NewName" );
 
   // Renaming a project that is NOT the active one must leave activeProjectId untouched
   model.setActiveProjectId( p1.id() );
@@ -614,7 +614,7 @@ void TestModels::testProjectsModelOnProjectRenamedActiveProject()
 
   LocalProject renamedAgain = renamed;
   renamedAgain.projectName = QStringLiteral( "NewerName" );
-  renamedAgain.projectDir = QStringLiteral( "/tmp/NewerName" );
+  renamedAgain.projectDir = QDir::tempPath() + QStringLiteral( "/NewerName" );
 
   model.onProjectRenamed( renamed.id(), renamedAgain );
 

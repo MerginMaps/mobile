@@ -253,8 +253,16 @@ void LocalProjectsManager::addProject( const QString &projectDir, const QString 
   emit localProjectAdded( project );
 }
 
-QString LocalProjectsManager::validateRename( const QString &projectId, const QString &trimmedName, int *projectIndexOut ) const
+QString LocalProjectsManager::validateRename( const QString &projectId, const QString &newName ) const
 {
+  int projectIndex = -1;
+  return validateRename( projectId, newName, projectIndex );
+}
+
+QString LocalProjectsManager::validateRename( const QString &projectId, const QString &newName, int &projectIndexOut ) const
+{
+  const QString trimmedName = newName.trimmed();
+
   if ( trimmedName.isEmpty() )
   {
     return tr( "The project name cannot be empty" );
@@ -275,7 +283,7 @@ QString LocalProjectsManager::validateRename( const QString &projectId, const QS
 
     if ( i != projectIndex && mProjects[i].projectName == trimmedName )
     {
-      return tr( "A project name is already taken" );
+      return tr( "The project name is already taken" );
     }
   }
 
@@ -284,17 +292,9 @@ QString LocalProjectsManager::validateRename( const QString &projectId, const QS
     return tr( "Project not found" );
   }
 
-  if ( projectIndexOut )
-  {
-    *projectIndexOut = projectIndex;
-  }
+  projectIndexOut = projectIndex;
 
   return {};
-}
-
-QString LocalProjectsManager::canRenameProject( const QString &projectId, const QString &newName ) const
-{
-  return validateRename( projectId, newName.trimmed() );
 }
 
 void LocalProjectsManager::renameLocalProject( const QString &projectId, const QString &newName )
@@ -302,7 +302,7 @@ void LocalProjectsManager::renameLocalProject( const QString &projectId, const Q
   const QString trimmedName = newName.trimmed();
 
   int projectIndex = -1;
-  const QString validationError = validateRename( projectId, trimmedName, &projectIndex );
+  const QString validationError = validateRename( projectId, trimmedName, projectIndex );
 
   if ( !validationError.isEmpty() )
   {
@@ -322,6 +322,8 @@ void LocalProjectsManager::renameLocalProject( const QString &projectId, const Q
     const QString parentDir = QFileInfo( project.projectDir ).dir().absolutePath();
     const QString newProjectDir = CoreUtils::findUniquePath( parentDir + "/" + trimmedName );
 
+    // rename the directory first - if this fails, nothing has been changed yet, so we keep the
+    // project as it is and just report the failure
     if ( !QDir().rename( project.projectDir, newProjectDir ) )
     {
       CoreUtils::log( "Rename project", QStringLiteral( "Failed to rename directory %1 to %2" ).arg( project.projectDir, newProjectDir ) );
@@ -329,6 +331,8 @@ void LocalProjectsManager::renameLocalProject( const QString &projectId, const Q
       return;
     }
 
+    // the QGIS project file now lives in the renamed directory, so rename it to match the new name too;
+    // this is best-effort - if it fails, the project still works, we just keep pointing to the old file name
     if ( !project.qgisProjectFilePath.isEmpty() )
     {
       const QString relativeFilePath = QDir( project.projectDir ).relativeFilePath( project.qgisProjectFilePath );
