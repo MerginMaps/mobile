@@ -20,6 +20,10 @@
 
 #include <QDebug>
 #include <QSet>
+#include <QTimer>
+#include <QDateTime>
+
+#include "featuredraftstorage.h"
 
 #include "qgis.h"
 #include "qgsproject.h"
@@ -42,6 +46,9 @@ AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new AttributeTabProxyModel() )
 {
+  mDraftSaveTimer.setSingleShot( true );
+  mDraftSaveTimer.setInterval( 1000 );
+  connect( &mDraftSaveTimer, &QTimer::timeout, this, &AttributeController::saveDraft );
 }
 
 void AttributeController::reset()
@@ -67,8 +74,23 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
     blockSignals( true );
 
     bool hasLayerChanged = mFeatureLayerPair.layer() != pair.layer();
+    // geometry edits round-trip back into this same setter (via the live QML
+    // binding once the geometry-editing map tool hands the feature back) - that
+    // must not wipe attribute changes already tracked for this same feature
+    bool isSameFeature = !hasLayerChanged && mFeatureLayerPair.feature().id() == pair.feature().id();
+
     // Set new active pair
     mFeatureLayerPair = pair;
+    if ( !isSameFeature )
+    {
+      mTouchedFieldIndices.clear();
+
+      // draft immediately so a crash before the first keystroke still resumes into the form
+      if ( pair.layer() && isNewFeature() )
+      {
+        saveDraft();
+      }
+    }
     if ( hasLayerChanged )
     {
       // layer changed!
@@ -646,6 +668,57 @@ bool AttributeController::isNewFeature() const
   return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
+FeatureDraftAttribute AttributeController::toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const
+{
+  return { fields.at( fieldIndex ).name(), fields.at( fieldIndex ).typeName(), feature.attribute( fieldIndex ) };
+}
+
+void AttributeController::saveDraft()
+{
+  if ( !mFeatureLayerPair.layer() )
+    return;
+
+  const QgsFeature feature = mFeatureLayerPair.feature();
+  const QgsFields fields = feature.fields();
+  const bool featureIsNew = isNewFeature();
+
+  FeatureDraft draft;
+  draft.layerId = mFeatureLayerPair.layer()->id();
+  draft.stage = FeatureDraft::AttributeForm;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
+
+  // only touched fields are drafted - an untouched one falls back to its
+  // default value expression on resume rather than a stale recorded value
+  for ( int fieldIndex : mTouchedFieldIndices )
+  {
+    if ( fieldIndex >= 0 && fieldIndex < feature.attributeCount() )
+    {
+      draft.attributes.append( toDraftAttribute( fields, feature, fieldIndex ) );
+    }
+  }
+
+  if ( featureIsNew )
+  {
+    // existing-feature geometry edits are drafted separately, by RecordingMapTool
+    draft.geometry = feature.geometry();
+  }
+  else
+  {
+    draft.featureId = feature.id();
+  }
+
+  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+}
+
+void AttributeController::clearDraft()
+{
+  // a pending debounced write must not be allowed to resurrect the draft
+  // after we've just told the storage (and possibly the user) it's gone
+  mDraftSaveTimer.stop();
+
+  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+}
+
 void AttributeController::acquireId()
 {
   if ( !mFeatureLayerPair.layer() )
@@ -1203,6 +1276,7 @@ bool AttributeController::deleteFeature()
   {
     mFeatureLayerPair = FeatureLayerPair();
     emit featureLayerPairChanged();
+    clearDraft();
     emit changesCommited();
   }
 
@@ -1213,6 +1287,8 @@ bool AttributeController::rollback()
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
+
+  clearDraft();
 
   if ( !mFeatureLayerPair.layer()->isEditable() )
   {
@@ -1281,6 +1357,7 @@ bool AttributeController::save()
 
   if ( rv )
   {
+    clearDraft();
     emit changesCommited();
   }
   else
@@ -1509,6 +1586,8 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
+      mTouchedFieldIndices.insert( item->fieldIndex() );
+      mDraftSaveTimer.start();
     }
     recalculateDerivedItems( true, false );
     return true;

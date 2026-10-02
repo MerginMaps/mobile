@@ -31,6 +31,7 @@
 #include "testprojectchecksumcache.h"
 #include "testmultieditmanager.h"
 #include "testfiltercontroller.h"
+#include "testfeaturedraftcontroller.h"
 
 InputTests::InputTests() = default;
 
@@ -210,6 +211,11 @@ int InputTests::runTest() const
   {
     TestFilterController filterControllerTest;
     nFailed = QTest::qExec( &filterControllerTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testFeatureDraftController" )
+  {
+    TestFeatureDraftController featureDraftControllerTest;
+    nFailed = QTest::qExec( &featureDraftControllerTest, mTestArgs );
   }
   else
   {

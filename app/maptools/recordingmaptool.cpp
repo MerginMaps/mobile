@@ -21,9 +21,14 @@
 
 #include "position/positionkit.h"
 #include "coreutils.h"
+#include "featuredraftstorage.h"
 
 #include <QUndoStack>
 #include <QUndoCommand>
+#include <QTimer>
+#include <QDateTime>
+
+#include "qgsproject.h"
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
@@ -34,6 +39,14 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateVisibleItems );
   connect( this, &RecordingMapTool::activeVertexChanged, this, &RecordingMapTool::updateActiveVertexGeometry );
   connect( this, &RecordingMapTool::stateChanged, this, &RecordingMapTool::updateVisibleItems );
+
+  mDraftSaveTimer.setSingleShot( true );
+  mDraftSaveTimer.setInterval( 1000 );
+  connect( &mDraftSaveTimer, &QTimer::timeout, this, &RecordingMapTool::saveDraft );
+  connect( this, &RecordingMapTool::recordedGeometryChanged, this, [ this ]()
+  {
+    mDraftSaveTimer.start();
+  } );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -1082,6 +1095,9 @@ void RecordingMapTool::releaseVertex( const QgsPoint &point )
 
 FeatureLayerPair RecordingMapTool::getFeatureLayerPair()
 {
+  mDraftSaveTimer.stop();
+  saveDraft();
+
   bool featureIsValid = FID_IS_NEW( mActiveFeature.id() ) || mActiveFeature.isValid();
 
   if ( mActiveLayer && featureIsValid )
@@ -1115,6 +1131,64 @@ void RecordingMapTool::discardChanges()
 
     mActiveLayer->triggerRepaint();
   }
+
+  clearDraft();
+}
+
+void RecordingMapTool::resumeCapture( const QgsGeometry &geometry )
+{
+  if ( !mActiveLayer )
+    return;
+
+  // register a blank feature first, same as addPoint() does for vertex 1,
+  // so it gets a real id before we apply the resumed geometry to it
+  mActiveFeature = QgsFeature();
+  mActiveFeature.setFields( mActiveLayer->fields(), true );
+  mLastRecordedPoint = QgsPoint();
+
+  mActiveLayer->beginEditCommand( QStringLiteral( "Add new feature" ) );
+  mActiveLayer->addFeature( mActiveFeature );
+  mActiveLayer->endEditCommand();
+
+  mRecordedGeometry = geometry;
+  mActiveLayer->beginEditCommand( QStringLiteral( "Resume feature" ) );
+  emit recordedGeometryChanged( mRecordedGeometry );
+}
+
+void RecordingMapTool::saveDraft()
+{
+  if ( !mActiveLayer || !mActiveFeature.isValid() )
+    return;
+
+  const bool isExistingFeature = !( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) );
+
+  // geometry still matches the feature's original shape - nothing actually
+  // edited yet (just opened for viewing), so there's nothing to draft
+  if ( isExistingFeature && mRecordedGeometry.equals( mActiveFeature.geometry() ) )
+  {
+    clearDraft();
+    return;
+  }
+
+  FeatureDraft draft;
+  draft.layerId = mActiveLayer->id();
+  draft.stage = FeatureDraft::GeometryCapture;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
+  draft.geometry = mRecordedGeometry;
+
+  if ( isExistingFeature )
+  {
+    // editing the geometry of an already-existing feature
+    draft.featureId = mActiveFeature.id();
+  }
+
+  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+}
+
+void RecordingMapTool::clearDraft()
+{
+  mDraftSaveTimer.stop();
+  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
 }
 
 void RecordingMapTool::onFeatureAdded( QgsFeatureId newFeatureId )
