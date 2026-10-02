@@ -27,6 +27,7 @@ class LayerDetailData : public QObject
     Q_PROPERTY( QString name READ name NOTIFY nameChanged )
     Q_PROPERTY( QString layerId READ layerId NOTIFY layerIdChanged )
     Q_PROPERTY( bool isVisible READ isVisible NOTIFY isVisibleChanged )
+    Q_PROPERTY( bool isValid READ isValid NOTIFY isValidChanged )
     Q_PROPERTY( bool isSpatial READ isSpatial NOTIFY isSpatialChanged )
     Q_PROPERTY( bool isVectorLayer READ isVectorLayer NOTIFY isVectorLayerChanged )
     Q_PROPERTY( QgsVectorLayer *vectorLayer READ vectorLayer NOTIFY vectorLayerChanged )
@@ -40,6 +41,7 @@ class LayerDetailData : public QObject
     void setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode );
 
     bool isVisible() const;
+    bool isValid() const;
     bool isSpatial() const;
     bool isVectorLayer() const;
     const QString &name() const;
@@ -54,6 +56,7 @@ class LayerDetailData : public QObject
   signals:
     void isSpatialChanged( bool showLegned );
     void isVisibleChanged( bool isVisible );
+    void isValidChanged( bool isValid );
     void isVectorLayerChanged( bool isVectorLayer );
     void nameChanged( const QString &name );
     void layerIdChanged( const QString &layerId );
@@ -69,6 +72,7 @@ class LayerDetailData : public QObject
     QString mLayerId;
     bool mIsSpatial = false;
     bool mIsVisible = false;
+    bool mIsValid = false;
     bool mIsVectorLayer = false;
 };
 
