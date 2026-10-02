@@ -184,6 +184,7 @@ set(MM_QML
     project/components/MMProjectStatusItem.qml
     project/components/MMProjectWizardDelegate.qml
     project/components/MMProjectDelegate.qml
+    project/components/MMRenameProjectDialog.qml
     settings/MMAboutPage.qml
     settings/MMChangelogPage.qml
     settings/MMLogPage.qml
