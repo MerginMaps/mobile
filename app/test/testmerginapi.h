@@ -151,6 +151,10 @@ class TestMerginApi: public QObject
     void testMerginConfigFromFile();
     void testHasLocalChangesWithSelectiveSyncEnabled();
     void testHasLocalProjectChanges();
+    void testSyncWhileReadingFromGpkg();
+    void testSyncWhileWalFilesExist();
+    void testSyncWhileWalFilesExistWithConflict();
+    void testSyncWhileWalFilesExistWithConflictedCopy();
     void testOfflineCache();
     void testRegisterAndDelete();
     void testCreateWorkspace();
