@@ -42,6 +42,8 @@ bool TrackingManager::startTracking( QString dataPath, TrackingUtils::UpdateFreq
     return false;
   }
 
+  mFile.setFileName( dataPath + QStringLiteral( "/tracking_data.txt" ) );
+
   buildBackend( updateFrequency, positionKit );
 
   if ( !mBackend.get() )
@@ -54,13 +56,7 @@ bool TrackingManager::startTracking( QString dataPath, TrackingUtils::UpdateFreq
   mGeometry.set( line );
 
   mIsRunning = true;
-  mStartTime = QDateTime::currentDateTime(); // TODO: shall we read this start time from somewhere else? If the app gets closed in the meantime, we lose this information... -> maybe we should read it from the first point
-
-  Q_UNUSED( dataPath ); // TODO: use the project data path!
-  QDir appData( QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) );
-  QString trackingFilePath = appData.absoluteFilePath( QStringLiteral( "tracking_data.txt" ) );
-
-  mFile.setFileName( trackingFilePath );
+  mStartTime = QDateTime::currentDateTime(); // TODO: read this from the file in case it is not empty
 
   connect( mBackend.get(), &AbstractTrackingBackend::positionUpdated, this, &TrackingManager::onPositionUpdated );
 

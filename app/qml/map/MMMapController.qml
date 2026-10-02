@@ -373,14 +373,14 @@ Item {
     asynchronous: true
     active: false
 
-    sourceComponent: Component {
+    sourceComponent: Component { // TODO: move to standalone component group
       Item {
 
         MM.TrackingHighlight {
           id: trackingHighlight
 
           mapPosition: mapPositionSource.mapPosition
-          mapSettings: mapCanvas.mapSettings
+          mapSettings: mapCanvas.mapSettings // Use mapCanvas.mapSettings.destinationCrs instead of passing mapSettings
           trackedGeometry: __activeProject.trackingManager.geometry
 
           // TODO: do just -> trackedGeometry: __activeProject.trackingManager?.geometry

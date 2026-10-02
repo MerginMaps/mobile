@@ -1534,12 +1534,12 @@ QString InputUtils::dumpScreenInfo() const
     double sizeX = static_cast<double>( width ) / dpiX * 25.4;
     double sizeY = static_cast<double>( height ) / dpiY * 25.4;
 
-    msg += tr( "screen resolution: %1x%2 px\n" ).arg( width ).arg( height );
-    msg += tr( "screen DPI: %1x%2\n" ).arg( dpiX ).arg( dpiY );
-    msg += tr( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
-    msg += tr( "reported device pixel ratio: %1\n" ).arg( screen->devicePixelRatio() );
-    msg += tr( "calculated device pixel ratio: %1\n" ).arg( calculateScreenDpr() );
-    msg += tr( "used dp scale: %1" ).arg( calculateDpRatio() );
+    msg += QStringLiteral( "screen resolution: %1x%2 px\n" ).arg( width, height );
+    msg += QStringLiteral( "screen DPI: %1x%2\n" ).arg( dpiX, dpiY );
+    msg += QStringLiteral( "screen size: %1x%2 mm\n" ).arg( QString::number( sizeX, 'f', 0 ), QString::number( sizeY, 'f', 0 ) );
+    msg += QStringLiteral( "reported device pixel ratio: %1\n" ).arg( screen->devicePixelRatio() );
+    msg += QStringLiteral( "calculated device pixel ratio: %1\n" ).arg( calculateScreenDpr() );
+    msg += QStringLiteral( "used dp scale: %1" ).arg( calculateDpRatio() );
   }
   else
   {

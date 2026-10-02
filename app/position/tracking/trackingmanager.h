@@ -35,8 +35,12 @@ class TrackingManager : public QObject
 
     explicit TrackingManager( QObject *parent = nullptr );
 
-    //! Builds tracking backend and starts to listen to position updates.
-    //! Position updates are stored to the tracking file in dataPath folder
+    /**
+     * Builds tracking backend and starts to listen to position updates.
+     * Position updates are stored to a dedicated file, inside dataPath folder.
+     * 
+     * PositionKit is used only on desktop builds.
+     */
     bool startTracking( QString dataPath, TrackingUtils::UpdateFrequency updateFrequency, PositionKit *positionKit );
 
     bool stopTracking();
