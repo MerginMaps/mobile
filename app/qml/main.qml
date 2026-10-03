@@ -104,15 +104,16 @@ ApplicationWindow {
     projDialog.open()
   }
 
-  function identifyFeature( pair ) {
-    let hasNullGeometry = pair.feature.geometry.isNull
+  function identifyFeature( pair, point = null ) {
+    map.identifyLocation = point
 
-    if ( hasNullGeometry ) {
+    const skipPreview = __inputUtils.isEmptyGeometry( pair.feature.geometry )
+    if ( skipPreview ) {
       formsStackManager.openForm( pair, "readOnly", "form" )
     }
     else if ( pair.valid ) {
       map.highlightPair( pair )
-      formsStackManager.openForm( pair, "readOnly", "preview")
+      formsStackManager.openForm( pair, "readOnly", "preview" )
     }
   }
 
@@ -180,8 +181,8 @@ ApplicationWindow {
       return 0
     }
 
-    onFeatureIdentified: function( pair ) {
-      formsStackManager.openForm( pair, "readOnly", "preview" );
+    onFeatureIdentified: function( pair, point ) {
+      window.identifyFeature( pair, point )
     }
 
     onFeaturesIdentified: function( pairs ) {
@@ -190,6 +191,7 @@ ApplicationWindow {
     }
 
     onNothingIdentified: {
+      map.hideHighlight()
       formsStackManager.closeDrawer()
     }
 
@@ -860,8 +862,8 @@ ApplicationWindow {
       closeDrawer()
     }
 
-    onPreviewPanelChanged: function( panelHeight ) {
-      map.jumpToHighlighted( panelHeight - mapToolbar.height )
+    onPreviewPanelChanged: {
+      map.jumpToHighlighted()
     }
   }
 
@@ -952,15 +954,13 @@ ApplicationWindow {
     drawerHeader.title: qsTr( "Select feature" )
     list.model: MM.StaticFeaturesModel {}
 
-    list. delegate: MMListDelegate {
+    list.delegate: MMListDelegate {
       text: model.FeatureTitle
       secondaryText: model.LayerName
       leftContent: MMIcon { source: model.LayerIcon }
       onClicked: {
-        let pair = model.FeaturePair
         featurePairSelection.close()
-        map.highlightPair( pair )
-        formsStackManager.openForm( pair, "readOnly", "preview" );
+        window.identifyFeature( model.FeaturePair );
       }
     }
 
