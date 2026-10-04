@@ -10,7 +10,6 @@
 #ifndef FEATUREDRAFTSTORAGE_H
 #define FEATUREDRAFTSTORAGE_H
 
-#include <QHash>
 #include <QJsonObject>
 
 #include "featuredraft.h"
@@ -25,28 +24,19 @@ class FeatureDraftStorage
     ~FeatureDraftStorage() = default;
 
     // Persists the draft for the given project, replacing any previous draft for it.
-    static void saveDraft( const QString &projectDir, const FeatureDraft &draft );
+    static void saveDraft( const QString &projectId, const FeatureDraft &draft );
 
     // Returns the stored draft for the given project, or a default (empty) FeatureDraft if none exists.
-    static FeatureDraft loadDraft( const QString &projectDir );
+    static FeatureDraft loadDraft( const QString &projectId );
 
     // Removes the stored draft for the given project, if any.
-    static void clearDraft( const QString &projectDir );
-
-    // Forgets cached projectDir -> storage key lookups. Call whenever the active project changes.
-    static void clearCache();
+    static void clearDraft( const QString &projectId );
 
   private:
     static QJsonObject toJson( const FeatureDraft &draft );
     static FeatureDraft fromJson( const QJsonObject &json );
 
-    // Mergin project id when the project is server-linked, otherwise projectDir itself.
-    // Resolving this reads a file from disk, so results are cached by projectDir.
-    static QString projectKey( const QString &projectDir );
-
-    static QString settingsKey( const QString &projectDir );
-
-    static QHash<QString, QString> sProjectKeyCache;
+    static QString settingsKey( const QString &projectId );
 };
 
 #endif // FEATUREDRAFTSTORAGE_H

@@ -17,6 +17,7 @@
 #include <qglobal.h>
 
 #include "qgsvertexid.h"
+#include "featuredraftcontroller.h"
 #include "qgsgeometry.h"
 #include "qgsvectorlayer.h"
 #include "position/positionkit.h"
@@ -88,6 +89,9 @@ class RecordingMapTool : public AbstractMapTool
 
     Q_PROPERTY( QgsVectorLayer *activeLayer READ activeLayer WRITE setActiveLayer NOTIFY activeLayerChanged )
     Q_PROPERTY( PositionKit *positionKit READ positionKit WRITE setPositionKit NOTIFY positionKitChanged )
+
+    //! Stores drafts of the recorded geometry, so they can be resumed after a crash
+    Q_PROPERTY( FeatureDraftController *draftController READ draftController WRITE setDraftController NOTIFY draftControllerChanged )
 
     Q_PROPERTY( QgsGeometry recordedGeometry READ recordedGeometry WRITE setRecordedGeometry NOTIFY recordedGeometryChanged )
     Q_PROPERTY( QgsGeometry existingVertices READ existingVertices WRITE setExistingVertices NOTIFY existingVerticesChanged )
@@ -201,6 +205,9 @@ class RecordingMapTool : public AbstractMapTool
     bool centeredToGPS() const;
     void setCenteredToGPS( bool newCenteredToGPS );
 
+    FeatureDraftController *draftController() const;
+    void setDraftController( FeatureDraftController *draftController );
+
     const RecordingType &recordingType() const;
     void setRecordingType( const RecordingType &newRecordingType );
 
@@ -261,6 +268,7 @@ class RecordingMapTool : public AbstractMapTool
   signals:
     void activeLayerChanged( QgsVectorLayer *activeLayer );
     void centeredToGPSChanged( bool centeredToGPS );
+    void draftControllerChanged();
     void positionKitChanged( PositionKit *positionKit );
     void recordedGeometryChanged( const QgsGeometry &recordedGeometry );
     void recordingIntervalChanged( int lineRecordingInterval );
@@ -389,6 +397,7 @@ class RecordingMapTool : public AbstractMapTool
     int mMinUndoStackIndex = 0; // We can not undo more than this index
 
     QTimer mDraftSaveTimer; // debounces saveDraft()
+    FeatureDraftController *mDraftController = nullptr; // not owned
 };
 
 #endif // RECORDINGMAPTOOL_H

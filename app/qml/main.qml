@@ -32,8 +32,9 @@ import "./filters"
 ApplicationWindow {
   id: window
 
-  // action to run after a pending draft is discarded
-  property var draftDialogPendingAction: null
+  // action to run after the draft is discarded: "record" or "addFeature"
+  property string pendingAction: ""
+  property var pendingActionLayer: null // layer for "addFeature"
 
   visible: true
   x:  __appwindowx
@@ -323,7 +324,7 @@ ApplicationWindow {
             stateManager.state = "map"
 
             if ( __activeProject.featureDraftController.hasDraft ) {
-              window.draftDialogPendingAction = function() { map.record() }
+              window.pendingAction = "record"
               resumeDraftDialog.open()
             }
             else {
@@ -517,17 +518,13 @@ ApplicationWindow {
       }
 
       onAddFeature: function( targetLayer ) {
-        let startAdding = function() {
-          let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
-          formsStackManager.openForm( newPair, "add", "form" )
-        }
-
         if ( __activeProject.featureDraftController.hasDraft ) {
-          window.draftDialogPendingAction = startAdding
+          window.pendingAction = "addFeature"
+          window.pendingActionLayer = targetLayer
           resumeDraftDialog.open()
         }
         else {
-          startAdding()
+          addFeatureToLayer( targetLayer )
         }
 
         // If we start supporting addition of spatial features from the layer's list,
@@ -932,11 +929,14 @@ ApplicationWindow {
     onDiscardDraft: () => {
       __activeProject.featureDraftController.discardDraft()
 
-      if ( window.draftDialogPendingAction ) {
-        let action = window.draftDialogPendingAction
-        window.draftDialogPendingAction = null
-        action()
+      if ( window.pendingAction === "record" ) {
+        map.record()
       }
+      else if ( window.pendingAction === "addFeature" ) {
+        addFeatureToLayer( window.pendingActionLayer )
+      }
+
+      clearPendingAction()
     }
   }
 
@@ -947,7 +947,7 @@ ApplicationWindow {
     layerName: __activeProject.featureDraftController.draftLayerName
 
     onResumeClicked: () => {
-      window.draftDialogPendingAction = null
+      clearPendingAction()
       resumeFeatureDraft()
     }
     onDiscardClicked: () => discardDraftDialog.open()
@@ -1191,17 +1191,39 @@ ApplicationWindow {
     const isGeometryCapture = controller.draftStage === MM.FeatureDraftController.GeometryCapture
     const layer = controller.draftLayer
 
-    const pair = controller.resumeDraft()
+    const pair = controller.loadDraft()
 
-    // only a brand new feature needs interactive resume - an existing feature
-    // always has a form to reopen, geometry already included
+    // the draft is no longer valid and was discarded
+    if ( !pair.layer ) {
+      return
+    }
+
+    // the open form may belong to another feature
+    formsStackManager.closeAll()
+
     if ( isGeometryCapture && !isExistingFeature ) {
       map.resumeRecording( layer, __inputUtils.extractGeometry( pair ) )
-    } else {
-      formsStackManager.openForm( pair, isExistingFeature ? "edit" : "add", "form" )
+    }
+    else if ( isGeometryCapture ) {
+      // open the form first, so finishing the geometry edit returns to it
+      formsStackManager.openForm( pair, "edit", "form", true )
+      map.edit( pair )
+    }
+    else {
+      formsStackManager.openForm( pair, isExistingFeature ? "edit" : "add", "form", true )
     }
 
     __notificationModel.addInfo( qsTr( "These are your unsaved changes, continue editing or discard them by navigating back." ) )
+  }
+
+  function addFeatureToLayer( targetLayer ) {
+    let newPair = __inputUtils.createFeatureLayerPair( targetLayer, __inputUtils.emptyGeometry(), __variablesManager )
+    formsStackManager.openForm( newPair, "add", "form" )
+  }
+
+  function clearPendingAction() {
+    window.pendingAction = ""
+    window.pendingActionLayer = null
   }
 
   Connections {

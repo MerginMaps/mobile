@@ -10,6 +10,7 @@
 #include "featuredraftcontroller.h"
 #include "featuredraftstorage.h"
 #include "inpututils.h"
+#include "coreutils.h"
 
 #include <QDateTime>
 
@@ -53,10 +54,18 @@ QString FeatureDraftController::draftFeatureTitle() const
   return mDraftFeatureTitle;
 }
 
-void FeatureDraftController::checkForDraft()
+void FeatureDraftController::checkForDraft( const QString &projectId )
 {
-  const QString projectId = QgsProject::instance()->homePath();
-  const FeatureDraft draft = FeatureDraftStorage::loadDraft( projectId );
+  mProjectId = projectId;
+
+  if ( mProjectId.isEmpty() )
+  {
+    mCachedDraft = FeatureDraft();
+    setDraft( false );
+    return;
+  }
+
+  const FeatureDraft draft = FeatureDraftStorage::loadDraft( mProjectId );
 
   if ( draft.isEmpty() )
   {
@@ -69,7 +78,7 @@ void FeatureDraftController::checkForDraft()
 
   if ( !layer || !isDraftValid( draft, layer ) )
   {
-    FeatureDraftStorage::clearDraft( projectId );
+    clearDraft();
     mCachedDraft = FeatureDraft();
     setDraft( false );
     return;
@@ -88,7 +97,7 @@ void FeatureDraftController::checkForDraft()
   setDraft( true, layer, toQmlStage( draft.stage ), draft.isExistingFeature(), featureTitle );
 }
 
-FeatureLayerPair FeatureDraftController::resumeDraft()
+FeatureLayerPair FeatureDraftController::loadDraft()
 {
   if ( !mHasDraft )
     return {};
@@ -98,7 +107,7 @@ FeatureLayerPair FeatureDraftController::resumeDraft()
   // re-validated against the cached draft - state may have changed since checkForDraft()
   if ( !layer || !isDraftValid( mCachedDraft, layer ) )
   {
-    FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+    clearDraft();
     mCachedDraft = FeatureDraft();
     setDraft( false );
     return {};
@@ -118,11 +127,17 @@ FeatureLayerPair FeatureDraftController::resumeDraft()
       QgsGeometry geometry = draft.geometry;
       pair.featureRef().setGeometry( geometry );
 
-      // push into the layer too, so the map shows the resumed shape right away
-      // instead of the stale committed one until the next vertex edit
-      layer->startEditing();
-      layer->changeGeometry( draft.featureId, geometry );
-      layer->triggerRepaint();
+      // apply to the layer too, so the map shows the drafted geometry;
+      // startEditing() returns false if the layer is already editable
+      if ( layer->isEditable() || layer->startEditing() )
+      {
+        layer->changeGeometry( draft.featureId, geometry );
+        layer->triggerRepaint();
+      }
+      else
+      {
+        CoreUtils::log( QStringLiteral( "Feature draft" ), QStringLiteral( "Could not start editing layer %1 to apply drafted geometry" ).arg( layer->name() ) );
+      }
     }
   }
   else
@@ -155,9 +170,25 @@ void FeatureDraftController::discardDraft()
   if ( !mHasDraft )
     return;
 
-  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+  clearDraft();
   mCachedDraft = FeatureDraft();
   setDraft( false );
+}
+
+void FeatureDraftController::saveDraft( const FeatureDraft &draft ) const
+{
+  if ( mProjectId.isEmpty() )
+    return;
+
+  FeatureDraftStorage::saveDraft( mProjectId, draft );
+}
+
+void FeatureDraftController::clearDraft() const
+{
+  if ( mProjectId.isEmpty() )
+    return;
+
+  FeatureDraftStorage::clearDraft( mProjectId );
 }
 
 QgsVectorLayer *FeatureDraftController::resolveDraftLayer( const FeatureDraft &draft )

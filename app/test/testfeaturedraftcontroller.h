@@ -26,8 +26,9 @@ class TestFeatureDraftController : public QObject
     void draftWithRemovedFieldIgnored();
     void draftWithChangedFieldTypeIgnored();
     void existingFeatureDraftRequiresLiveFeature();
-    void resumeDraftAppliesGeometryAndAttributesButKeepsStorage();
+    void loadDraftAppliesGeometryAndAttributesButKeepsStorage();
     void discardDraftClearsStorage();
+    void draftsAreStoredPerProject();
 };
 
 #endif // TESTFEATUREDRAFTCONTROLLER_H

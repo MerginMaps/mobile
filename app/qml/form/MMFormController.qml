@@ -22,6 +22,7 @@ Item {
 
   property var project
   property var featureLayerPair
+  property bool restoringDraft: false // see AttributeController.restoringDraft
 
   // child features in relations need to have these set in order to prefill their foreign keys
   property var linkedRelation
@@ -200,14 +201,16 @@ Item {
 
       controller: MM.AttributeController {
         variablesManager: __variablesManager
+        draftController: __activeProject.featureDraftController
 
         rememberAttributesController: MM.RememberAttributesController {
           rememberValuesAllowed: AppSettings.reuseLastEnteredValues
           activeProjectId: __activeProject.localProject.id()
         }
-        // NOTE: order matters, we want to init variables manager before
-        // assigning FeatureLayerPair, as VariablesManager is required
+        // NOTE: order matters, we want to init variables manager and restoringDraft
+        // before assigning FeatureLayerPair, as VariablesManager is required
         // for correct expression evaluation
+        restoringDraft: root.restoringDraft
         featureLayerPair: root.featureLayerPair
       }
 

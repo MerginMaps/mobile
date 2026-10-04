@@ -66,17 +66,23 @@ class FeatureDraftController : public QObject
     QString draftFeatureTitle() const;
 
     //! Rebuilds the draft as a FeatureLayerPair, geometry/attributes overlaid
-    Q_INVOKABLE FeatureLayerPair resumeDraft();
+    Q_INVOKABLE FeatureLayerPair loadDraft();
 
     //! Permanently discards the pending draft for the currently active project
     Q_INVOKABLE void discardDraft();
+
+    //! Stores the draft for the active project, replacing the previous one
+    void saveDraft( const FeatureDraft &draft ) const;
+
+    //! Removes the stored draft of the active project
+    void clearDraft() const;
 
   signals:
     void hasDraftChanged();
 
   public slots:
-    //! Checks the active project (QgsProject::instance()) for a pending draft
-    void checkForDraft();
+    //! Sets projectId as the active project and checks it for a draft
+    void checkForDraft( const QString &projectId );
 
   private:
     //! Resolves the layer the given draft belongs to, or nullptr if it no longer exists
@@ -90,6 +96,7 @@ class FeatureDraftController : public QObject
 
     void setDraft( bool hasDraft, QgsVectorLayer *layer = nullptr, DraftStage stage = AttributeForm, bool isExistingFeature = false, const QString &featureTitle = QString() );
 
+    QString mProjectId;
     bool mHasDraft = false;
     QString mDraftLayerName;
     QgsVectorLayer *mDraftLayer = nullptr; // not owned
@@ -97,7 +104,7 @@ class FeatureDraftController : public QObject
     bool mDraftIsExistingFeature = false;
     QString mDraftFeatureTitle;
 
-    FeatureDraft mCachedDraft; // loaded once in checkForDraft(), reused by resumeDraft()/discardDraft()
+    FeatureDraft mCachedDraft; // loaded once in checkForDraft(), reused by loadDraft()/discardDraft()
 };
 
 #endif // FEATUREDRAFTCONTROLLER_H

@@ -21,14 +21,11 @@
 
 #include "position/positionkit.h"
 #include "coreutils.h"
-#include "featuredraftstorage.h"
 
 #include <QUndoStack>
 #include <QUndoCommand>
 #include <QTimer>
 #include <QDateTime>
-
-#include "qgsproject.h"
 
 RecordingMapTool::RecordingMapTool( QObject *parent )
   : AbstractMapTool{parent}
@@ -1157,7 +1154,7 @@ void RecordingMapTool::resumeCapture( const QgsGeometry &geometry )
 
 void RecordingMapTool::saveDraft()
 {
-  if ( !mActiveLayer || !mActiveFeature.isValid() )
+  if ( !mDraftController || !mActiveLayer || !mActiveFeature.isValid() )
     return;
 
   const bool isExistingFeature = !( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) );
@@ -1182,13 +1179,17 @@ void RecordingMapTool::saveDraft()
     draft.featureId = mActiveFeature.id();
   }
 
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  mDraftController->saveDraft( draft );
 }
 
 void RecordingMapTool::clearDraft()
 {
   mDraftSaveTimer.stop();
-  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+
+  if ( mDraftController )
+  {
+    mDraftController->clearDraft();
+  }
 }
 
 void RecordingMapTool::onFeatureAdded( QgsFeatureId newFeatureId )
@@ -1488,6 +1489,20 @@ bool Vertex::isValid() const
 }
 
 // Getters / setters
+FeatureDraftController *RecordingMapTool::draftController() const
+{
+  return mDraftController;
+}
+
+void RecordingMapTool::setDraftController( FeatureDraftController *draftController )
+{
+  if ( mDraftController == draftController )
+    return;
+
+  mDraftController = draftController;
+  emit draftControllerChanged();
+}
+
 bool RecordingMapTool::centeredToGPS() const
 {
   return mCenteredToGPS;

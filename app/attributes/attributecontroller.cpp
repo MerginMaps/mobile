@@ -23,7 +23,6 @@
 #include <QTimer>
 #include <QDateTime>
 
-#include "featuredraftstorage.h"
 
 #include "qgis.h"
 #include "qgsproject.h"
@@ -74,23 +73,8 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
     blockSignals( true );
 
     bool hasLayerChanged = mFeatureLayerPair.layer() != pair.layer();
-    // geometry edits round-trip back into this same setter (via the live QML
-    // binding once the geometry-editing map tool hands the feature back) - that
-    // must not wipe attribute changes already tracked for this same feature
-    bool isSameFeature = !hasLayerChanged && mFeatureLayerPair.feature().id() == pair.feature().id();
-
     // Set new active pair
     mFeatureLayerPair = pair;
-    if ( !isSameFeature )
-    {
-      mTouchedFieldIndices.clear();
-
-      // draft immediately so a crash before the first keystroke still resumes into the form
-      if ( pair.layer() && isNewFeature() )
-      {
-        saveDraft();
-      }
-    }
     if ( hasLayerChanged )
     {
       // layer changed!
@@ -99,6 +83,12 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
 
     // feature changed!
     updateOnFeatureChange();
+
+    // save right away, so a crash before the first edit can still be resumed
+    if ( mFeatureLayerPair.layer() && isNewFeature() )
+    {
+      saveDraft();
+    }
 
     // Done, emit signals
     blockSignals( false );
@@ -215,6 +205,34 @@ void AttributeController::setVariablesManager( VariablesManager *variablesManage
   {
     mVariablesManager = variablesManager;
     emit variablesManagerChanged();
+  }
+}
+
+FeatureDraftController *AttributeController::draftController() const
+{
+  return mDraftController;
+}
+
+void AttributeController::setDraftController( FeatureDraftController *draftController )
+{
+  if ( mDraftController != draftController )
+  {
+    mDraftController = draftController;
+    emit draftControllerChanged();
+  }
+}
+
+bool AttributeController::restoringDraft() const
+{
+  return mRestoringDraft;
+}
+
+void AttributeController::setRestoringDraft( bool restoringDraft )
+{
+  if ( mRestoringDraft != restoringDraft )
+  {
+    mRestoringDraft = restoringDraft;
+    emit restoringDraftChanged();
   }
 }
 
@@ -634,7 +652,7 @@ void AttributeController::updateOnFeatureChange()
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
       mFormItems[itemData->id()]->setRawValue( newVal ); // we need to set raw value as well, as we use it in form now
-      if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
+      if ( mRememberAttributesController && isNewFeature() && !mRestoringDraft ) // this is a new feature
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributesController->rememberedValue(
@@ -659,7 +677,7 @@ void AttributeController::updateOnFeatureChange()
   {
     formValueChange = mFeatureLayerPair.layer()->editBuffer()->changedGeometries().contains( feature.id() );
   }
-  recalculateDerivedItems( formValueChange, isNewFeature() );
+  recalculateDerivedItems( formValueChange, isNewFeature() && !mRestoringDraft );
 }
 
 bool AttributeController::isNewFeature() const
@@ -668,14 +686,9 @@ bool AttributeController::isNewFeature() const
   return FID_IS_NEW( id ) || FID_IS_NULL( id );
 }
 
-FeatureDraftAttribute AttributeController::toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const
-{
-  return { fields.at( fieldIndex ).name(), fields.at( fieldIndex ).typeName(), feature.attribute( fieldIndex ) };
-}
-
 void AttributeController::saveDraft()
 {
-  if ( !mFeatureLayerPair.layer() )
+  if ( !mDraftController || !mFeatureLayerPair.layer() )
     return;
 
   const QgsFeature feature = mFeatureLayerPair.feature();
@@ -687,14 +700,10 @@ void AttributeController::saveDraft()
   draft.stage = FeatureDraft::AttributeForm;
   draft.timestamp = QDateTime::currentDateTimeUtc();
 
-  // only touched fields are drafted - an untouched one falls back to its
-  // default value expression on resume rather than a stale recorded value
-  for ( int fieldIndex : mTouchedFieldIndices )
+  // all attributes are stored, so derived values can be restored without re-evaluating them
+  for ( int fieldIndex = 0; fieldIndex < fields.count() && fieldIndex < feature.attributeCount(); ++fieldIndex )
   {
-    if ( fieldIndex >= 0 && fieldIndex < feature.attributeCount() )
-    {
-      draft.attributes.append( toDraftAttribute( fields, feature, fieldIndex ) );
-    }
+    draft.attributes.append( { fields.at( fieldIndex ).name(), fields.at( fieldIndex ).typeName(), feature.attribute( fieldIndex ) } );
   }
 
   if ( featureIsNew )
@@ -707,7 +716,7 @@ void AttributeController::saveDraft()
     draft.featureId = feature.id();
   }
 
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  mDraftController->saveDraft( draft );
 }
 
 void AttributeController::clearDraft()
@@ -716,7 +725,10 @@ void AttributeController::clearDraft()
   // after we've just told the storage (and possibly the user) it's gone
   mDraftSaveTimer.stop();
 
-  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+  if ( mDraftController )
+  {
+    mDraftController->clearDraft();
+  }
 }
 
 void AttributeController::acquireId()
@@ -1586,7 +1598,6 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
-      mTouchedFieldIndices.insert( item->fieldIndex() );
       mDraftSaveTimer.start();
     }
     recalculateDerivedItems( true, false );
