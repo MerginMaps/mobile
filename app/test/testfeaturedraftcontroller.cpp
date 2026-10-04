@@ -20,6 +20,10 @@
 
 namespace
 {
+  // Mergin project ids contain a slash
+  const QString TEST_PROJECT_ID = QStringLiteral( "testNamespace/testDraftProject" );
+  const QString OTHER_PROJECT_ID = QStringLiteral( "testNamespace/otherDraftProject" );
+
   QgsVectorLayer *addTestLayer()
   {
     QgsVectorLayer *layer = new QgsVectorLayer(
@@ -45,13 +49,14 @@ namespace
 
 void TestFeatureDraftController::init()
 {
-  FeatureDraftStorage::clearCache();
-  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+  FeatureDraftStorage::clearDraft( TEST_PROJECT_ID );
+  FeatureDraftStorage::clearDraft( OTHER_PROJECT_ID );
 }
 
 void TestFeatureDraftController::cleanup()
 {
-  FeatureDraftStorage::clearDraft( QgsProject::instance()->homePath() );
+  FeatureDraftStorage::clearDraft( TEST_PROJECT_ID );
+  FeatureDraftStorage::clearDraft( OTHER_PROJECT_ID );
   QgsProject::instance()->clear();
 }
 
@@ -64,10 +69,10 @@ void TestFeatureDraftController::validNewFeatureGeometryDraftDetected()
   draft.stage = FeatureDraft::GeometryCapture;
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( controller.hasDraft() );
   QCOMPARE( controller.draftStage(), FeatureDraftController::GeometryCapture );
@@ -87,10 +92,10 @@ void TestFeatureDraftController::validExistingFeatureAttributeDraftDetected()
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.featureId = featureId;
   draft.attributes.append( { QStringLiteral( "fldtxt" ), QStringLiteral( "string" ), QStringLiteral( "two" ) } );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( controller.hasDraft() );
   QCOMPARE( controller.draftStage(), FeatureDraftController::AttributeForm );
@@ -106,13 +111,13 @@ void TestFeatureDraftController::expiredDraftIgnoredAndCleared()
   draft.stage = FeatureDraft::GeometryCapture;
   draft.timestamp = QDateTime::currentDateTimeUtc().addDays( -11 ); // older than the 10-day guard
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( !controller.hasDraft() );
-  QVERIFY( FeatureDraftStorage::loadDraft( QgsProject::instance()->homePath() ).isEmpty() );
+  QVERIFY( FeatureDraftStorage::loadDraft( TEST_PROJECT_ID ).isEmpty() );
 }
 
 void TestFeatureDraftController::draftWithRemovedFieldIgnored()
@@ -125,10 +130,10 @@ void TestFeatureDraftController::draftWithRemovedFieldIgnored()
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
   draft.attributes.append( { QStringLiteral( "doesNotExist" ), QStringLiteral( "string" ), QStringLiteral( "value" ) } );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( !controller.hasDraft() );
 }
@@ -144,10 +149,10 @@ void TestFeatureDraftController::draftWithChangedFieldTypeIgnored()
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
   // fldint is actually an "integer" field - a mismatched recorded type means the schema changed since
   draft.attributes.append( { QStringLiteral( "fldint" ), QStringLiteral( "string" ), QStringLiteral( "1" ) } );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( !controller.hasDraft() );
 }
@@ -161,15 +166,15 @@ void TestFeatureDraftController::existingFeatureDraftRequiresLiveFeature()
   draft.stage = FeatureDraft::AttributeForm;
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.featureId = 999999; // no such feature was ever added to the layer
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
 
   QVERIFY( !controller.hasDraft() );
 }
 
-void TestFeatureDraftController::resumeDraftAppliesGeometryAndAttributesButKeepsStorage()
+void TestFeatureDraftController::loadDraftAppliesGeometryAndAttributesButKeepsStorage()
 {
   QgsVectorLayer *layer = addTestLayer();
 
@@ -179,13 +184,13 @@ void TestFeatureDraftController::resumeDraftAppliesGeometryAndAttributesButKeeps
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
   draft.attributes.append( { QStringLiteral( "fldtxt" ), QStringLiteral( "string" ), QStringLiteral( "resumed" ) } );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
   QVERIFY( controller.hasDraft() );
 
-  const FeatureLayerPair pair = controller.resumeDraft();
+  const FeatureLayerPair pair = controller.loadDraft();
 
   QCOMPARE( pair.layer(), layer );
   QCOMPARE( pair.feature().attribute( QStringLiteral( "fldtxt" ) ).toString(), QStringLiteral( "resumed" ) );
@@ -193,7 +198,7 @@ void TestFeatureDraftController::resumeDraftAppliesGeometryAndAttributesButKeeps
 
   // pending state is cleared, but the draft itself stays in storage until save/rollback clears it
   QVERIFY( !controller.hasDraft() );
-  QVERIFY( !FeatureDraftStorage::loadDraft( QgsProject::instance()->homePath() ).isEmpty() );
+  QVERIFY( !FeatureDraftStorage::loadDraft( TEST_PROJECT_ID ).isEmpty() );
 }
 
 void TestFeatureDraftController::discardDraftClearsStorage()
@@ -205,14 +210,47 @@ void TestFeatureDraftController::discardDraftClearsStorage()
   draft.stage = FeatureDraft::GeometryCapture;
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
-  FeatureDraftStorage::saveDraft( QgsProject::instance()->homePath(), draft );
+  FeatureDraftStorage::saveDraft( TEST_PROJECT_ID, draft );
 
   FeatureDraftController controller;
-  controller.checkForDraft();
+  controller.checkForDraft( TEST_PROJECT_ID );
   QVERIFY( controller.hasDraft() );
 
   controller.discardDraft();
 
   QVERIFY( !controller.hasDraft() );
-  QVERIFY( FeatureDraftStorage::loadDraft( QgsProject::instance()->homePath() ).isEmpty() );
+  QVERIFY( FeatureDraftStorage::loadDraft( TEST_PROJECT_ID ).isEmpty() );
+}
+
+void TestFeatureDraftController::draftsAreStoredPerProject()
+{
+  QgsVectorLayer *layer = addTestLayer();
+
+  FeatureDraft draft;
+  draft.layerId = layer->id();
+  draft.stage = FeatureDraft::GeometryCapture;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
+  draft.geometry = QgsGeometry::fromWkt( QStringLiteral( "Point (1 2)" ) );
+  FeatureDraftStorage::saveDraft( OTHER_PROJECT_ID, draft );
+
+  FeatureDraftController controller;
+
+  // a draft of a different project is not offered
+  controller.checkForDraft( TEST_PROJECT_ID );
+  QVERIFY( !controller.hasDraft() );
+
+  // without an active project, nothing is offered and nothing is written
+  controller.checkForDraft( QString() );
+  QVERIFY( !controller.hasDraft() );
+  controller.saveDraft( draft );
+  QVERIFY( FeatureDraftStorage::loadDraft( QString() ).isEmpty() );
+
+  // saveDraft() and clearDraft() use the project from checkForDraft()
+  controller.checkForDraft( TEST_PROJECT_ID );
+  controller.saveDraft( draft );
+  QVERIFY( !FeatureDraftStorage::loadDraft( TEST_PROJECT_ID ).isEmpty() );
+
+  controller.clearDraft();
+  QVERIFY( FeatureDraftStorage::loadDraft( TEST_PROJECT_ID ).isEmpty() );
+  QVERIFY( !FeatureDraftStorage::loadDraft( OTHER_PROJECT_ID ).isEmpty() );
 }

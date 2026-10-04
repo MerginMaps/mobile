@@ -9,7 +9,6 @@
 
 #include "featuredraftstorage.h"
 #include "coreutils.h"
-#include "merginprojectmetadata.h"
 
 #include <QSettings>
 #include <QJsonDocument>
@@ -17,24 +16,22 @@
 
 const QString QSETTINGS_DRAFTS_GROUP_NAME = QStringLiteral( "featureDrafts" );
 
-QHash<QString, QString> FeatureDraftStorage::sProjectKeyCache;
-
-void FeatureDraftStorage::saveDraft( const QString &projectDir, const FeatureDraft &draft )
+void FeatureDraftStorage::saveDraft( const QString &projectId, const FeatureDraft &draft )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  settings.setValue( settingsKey( projectDir ), QJsonDocument( toJson( draft ) ).toJson( QJsonDocument::Compact ) );
+  settings.setValue( settingsKey( projectId ), QJsonDocument( toJson( draft ) ).toJson( QJsonDocument::Compact ) );
   settings.endGroup();
 
   // explicit flush - a draft must survive a crash, not just a normal exit
   settings.sync();
 }
 
-FeatureDraft FeatureDraftStorage::loadDraft( const QString &projectDir )
+FeatureDraft FeatureDraftStorage::loadDraft( const QString &projectId )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  const QByteArray raw = settings.value( settingsKey( projectDir ) ).toByteArray();
+  const QByteArray raw = settings.value( settingsKey( projectId ) ).toByteArray();
   settings.endGroup();
 
   if ( raw.isEmpty() )
@@ -45,38 +42,18 @@ FeatureDraft FeatureDraftStorage::loadDraft( const QString &projectDir )
   return fromJson( QJsonDocument::fromJson( raw ).object() );
 }
 
-void FeatureDraftStorage::clearDraft( const QString &projectDir )
+void FeatureDraftStorage::clearDraft( const QString &projectId )
 {
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
-  settings.remove( settingsKey( projectDir ) );
+  settings.remove( settingsKey( projectId ) );
   settings.endGroup();
   settings.sync();
 }
 
-void FeatureDraftStorage::clearCache()
+QString FeatureDraftStorage::settingsKey( const QString &projectId )
 {
-  sProjectKeyCache.clear();
-}
-
-QString FeatureDraftStorage::projectKey( const QString &projectDir )
-{
-  const auto cached = sProjectKeyCache.constFind( projectDir );
-  if ( cached != sProjectKeyCache.constEnd() )
-  {
-    return cached.value();
-  }
-
-  const QString merginId = MerginProjectMetadata::fromCachedJson( CoreUtils::getProjectMetadataPath( projectDir ) ).projectId;
-  const QString key = merginId.isEmpty() ? projectDir : merginId;
-
-  sProjectKeyCache.insert( projectDir, key );
-  return key;
-}
-
-QString FeatureDraftStorage::settingsKey( const QString &projectDir )
-{
-  return QSETTINGS_DRAFTS_GROUP_NAME + "/" + projectKey( projectDir );
+  return QSETTINGS_DRAFTS_GROUP_NAME + "/" + projectId;
 }
 
 QJsonObject FeatureDraftStorage::toJson( const FeatureDraft &draft )

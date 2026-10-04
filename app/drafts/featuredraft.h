@@ -18,8 +18,7 @@
 #include "qgsgeometry.h"
 #include "qgsfeature.h"
 
-// One touched attribute captured for a draft - the type name lets isDraftValid()
-// detect a field that has since changed shape.
+//! One attribute of a draft, typeName is used to detect a changed field type
 struct FeatureDraftAttribute
 {
   QString name;

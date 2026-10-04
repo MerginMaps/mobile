@@ -23,7 +23,6 @@
 #include <QMap>
 #include <QHash>
 #include <QPair>
-#include <QSet>
 #include <QVector>
 #include <QUuid>
 #include <QTimer>
@@ -33,7 +32,7 @@
 #include "attributeformproxymodel.h"
 #include "attributetabproxymodel.h"
 #include "rememberattributescontroller.h"
-#include "featuredraft.h"
+#include "featuredraftcontroller.h"
 
 #include "qgsfeature.h"
 #include "qgsproject.h"
@@ -97,6 +96,15 @@ class  AttributeController : public QObject
      */
     Q_PROPERTY( QgsRelation linkedRelation READ linkedRelation WRITE setLinkedRelation NOTIFY linkedRelationChanged )
 
+    //! Stores drafts of the edited feature, so they can be resumed after a crash
+    Q_PROPERTY( FeatureDraftController *draftController READ draftController WRITE setDraftController NOTIFY draftControllerChanged )
+
+    /**
+     * TRUE when featureLayerPair is restored from a draft. Its attributes are then shown as stored,
+     * without applying remembered values or default values. Must be set before featureLayerPair.
+     */
+    Q_PROPERTY( bool restoringDraft READ restoringDraft WRITE setRestoringDraft NOTIFY restoringDraftChanged )
+
 
   public:
     AttributeController( QObject *parent = nullptr );
@@ -154,6 +162,12 @@ class  AttributeController : public QObject
     const QgsRelation &linkedRelation() const;
     void setLinkedRelation( const QgsRelation &newLinkedRelation );
 
+    FeatureDraftController *draftController() const;
+    void setDraftController( FeatureDraftController *draftController );
+
+    bool restoringDraft() const;
+    void setRestoringDraft( bool restoringDraft );
+
   public slots:
     void onFeatureAdded( QgsFeatureId newFeatureId );
 
@@ -167,6 +181,8 @@ class  AttributeController : public QObject
     void hasValidationErrorsChanged();
     void parentControllerChanged();
     void linkedRelationChanged();
+    void draftControllerChanged();
+    void restoringDraftChanged();
 
     void formDataChanged( QUuid uuid, QVector<int> roles = QVector<int>() );
     void tabDataChanged( int id );
@@ -193,14 +209,11 @@ class  AttributeController : public QObject
 
     bool isNewFeature() const;
 
-    // Persists touched attributes as a draft, debounced.
+    //! Stores the current feature as a draft
     void saveDraft();
 
     //! Removes any persisted draft for the current project
     void clearDraft();
-
-    //! Builds a FeatureDraftAttribute for one attribute, used by saveDraft()
-    FeatureDraftAttribute toDraftAttribute( const QgsFields &fields, const QgsFeature &feature, int fieldIndex ) const;
 
     /**
      * Recalculates visibility & constrains & default values
@@ -275,8 +288,7 @@ class  AttributeController : public QObject
     QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
 
     QTimer mDraftSaveTimer; // debounces saveDraft()
-
-    //! Indices of fields the user has actually changed this session, used for drafting
-    QSet<int> mTouchedFieldIndices;
+    FeatureDraftController *mDraftController = nullptr; // not owned
+    bool mRestoringDraft = false;
 };
 #endif // ATTRIBUTECONTROLLER_H
