@@ -889,7 +889,7 @@ Item {
 
           onClicked: {
             AppSettings.requestImmediateUsageSnapshot()
-            __notificationModel.addSuccess( qsTr( "Usage snapshot sent" ) )
+            __notificationModel.addInfo( qsTr( "Usage snapshot requested" ) )
           }
         }
 
