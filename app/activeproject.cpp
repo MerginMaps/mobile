@@ -361,6 +361,8 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
     }
     mAutosyncController.reset();
   }
+
+  emit autosyncControllerChanged( mAutosyncController.get() );
 }
 
 void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin )
