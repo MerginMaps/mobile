@@ -109,10 +109,10 @@ QString AndroidUtils::readExif( const QString &filePath, const QString &tag )
   const QJniObject jFilePath = QJniObject::fromString( filePath );
   const QJniObject jTag = QJniObject::fromString( tag );
   const QJniObject attribute = QJniObject::callStaticObjectMethod( "uk.co.lutraconsulting.EXIFUtils",
-                               "getEXIFAttribute",
-                               "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
-                               jFilePath.object<jstring>(),
-                               jTag.object<jstring>() );
+    "getEXIFAttribute",
+    "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+    jFilePath.object<jstring>(),
+    jTag.object<jstring>() );
   return attribute.toString();
 #else
   Q_UNUSED( filePath )
@@ -378,9 +378,9 @@ void AndroidUtils::handleActivityResult( const int receiverRequestCode, const in
     const QJniObject uri = data.callObjectMethod( "getData", "()Landroid/net/Uri;" );
     const QJniObject activity = QJniObject( QNativeInterface::QAndroidApplication::context() );
     const QString newUri = activity.callObjectMethod( "importImage",
-                           "(Landroid/net/Uri;Ljava/lang/String;)Ljava/lang/String;",
-                           uri.object(),
-                           QJniObject::fromString( mTargetPath ).object<jstring>() )
+      "(Landroid/net/Uri;Ljava/lang/String;)Ljava/lang/String;",
+      uri.object(),
+      QJniObject::fromString( mTargetPath ).object<jstring>() )
                            .toString();
     emit imageSelected( newUri, mLastCode );
   }

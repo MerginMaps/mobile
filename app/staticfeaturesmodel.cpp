@@ -58,9 +58,9 @@ QgsGeometry StaticFeaturesModel::collectGeometries( InputMapSettings *targetSett
       continue;
 
     const QgsGeometry geom = InputUtils::transformGeometry( pair.feature().geometry(),
-                             pair.layer()->crs(),
-                             targetSettings->destinationCrs(),
-                             targetSettings->transformContext() );
+      pair.layer()->crs(),
+      targetSettings->destinationCrs(),
+      targetSettings->transformContext() );
     geoms.append( geom );
   }
 
