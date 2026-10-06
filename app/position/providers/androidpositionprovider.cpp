@@ -195,7 +195,7 @@ AndroidPositionProvider::~AndroidPositionProvider()
 bool AndroidPositionProvider::isFusedAvailable()
 {
   return QJniObject::callStaticMethod<jboolean>( "uk/co/lutraconsulting/MMAndroidPosition", "isFusedLocationProviderAvailable",
-      "(Landroid/content/Context;)Z", QNativeInterface::QAndroidApplication::context() );
+         "(Landroid/content/Context;)Z", QNativeInterface::QAndroidApplication::context() );
 }
 
 QString AndroidPositionProvider::fusedErrorString()

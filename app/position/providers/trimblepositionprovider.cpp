@@ -406,8 +406,8 @@ void TrimblePositionProvider::openAntennaHeightPage()
   QJniObject intentAction = QJniObject::fromString( QStringLiteral( "com.trimble.tmm.OPENANTENNAHEIGHT" ) );
   QJniObject intent( "android/content/Intent", "(Ljava/lang/String;)V", intentAction.object<jstring>() );
   QJniObject activity = QJniObject::callStaticObjectMethod( "org/qtproject/qt/android/QtNative",
-    "activity",
-    "()Landroid/app/Activity;" );
+                        "activity",
+                        "()Landroid/app/Activity;" );
   if ( activity.isValid() )
     activity.callMethod<void>( "startActivity", "(Landroid/content/Intent;)V", intent.object() );
 #elif defined(Q_OS_IOS)
