@@ -345,7 +345,7 @@ TestUtils::RelationTestLayers TestUtils::createRelationTestLayers( Qgis::Relatio
   layers.grandchild = new QgsVectorLayer( QStringLiteral( "None?field=pk:integer&field=child_fk:integer" ), QStringLiteral( "grandchild" ), QStringLiteral( "memory" ) );
   QgsProject::instance()->addMapLayers( { layers.parent, layers.child, layers.grandchild } );
 
-  const auto addFeatures = []( QgsVectorLayer *layer, const QList<QVariantList> &attributes )
+  const auto addFeatures = []( QgsVectorLayer * layer, const QList<QVariantList> &attributes )
   {
     QgsFeatureList features;
     for ( const QVariantList &featureAttributes : attributes )
@@ -364,7 +364,7 @@ TestUtils::RelationTestLayers TestUtils::createRelationTestLayers( Qgis::Relatio
   addFeatures( layers.child, { { 10, 1 }, { 11, 1 }, { 20, 2 } } );
   addFeatures( layers.grandchild, { { 100, 10 }, { 200, 20 } } );
 
-  const auto addRelation = [strength]( QgsVectorLayer *referencing, QgsVectorLayer *referenced, const QString &field )
+  const auto addRelation = [strength]( QgsVectorLayer * referencing, QgsVectorLayer * referenced, const QString & field )
   {
     QgsRelation relation { QgsRelationContext( QgsProject::instance() ) };
     relation.setId( referencing->name() + QStringLiteral( "_relation" ) );
