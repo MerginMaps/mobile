@@ -1170,7 +1170,7 @@ AttributeFormProxyModel *AttributeController::attributeFormProxyModelForTab( int
   }
 }
 
-bool AttributeController::deleteFeature()
+bool AttributeController::deleteFeature( bool deleteAllLinkedFeatures )
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
@@ -1187,6 +1187,11 @@ bool AttributeController::deleteFeature()
   if ( featureIsNotYetAdded )
   {
     rv = mFeatureLayerPair.layer()->rollBack();
+  }
+  else if ( !InputUtils::deleteLinkedFeatures( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() }, deleteAllLinkedFeatures ) )
+  {
+    // keep the feature if its linked features could not be deleted
+    rv = false;
   }
   else
   {
@@ -1207,6 +1212,14 @@ bool AttributeController::deleteFeature()
   }
 
   return rv;
+}
+
+bool AttributeController::hasCompositionChildren() const
+{
+  if ( !mFeatureLayerPair.layer() || !InputUtils::isFeatureIdValid( mFeatureLayerPair.feature().id() ) )
+    return false;
+
+  return InputUtils::hasCompositionChildren( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() } );
 }
 
 bool AttributeController::rollback()

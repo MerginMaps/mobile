@@ -81,6 +81,20 @@ namespace TestUtils
                                          const QString &fieldType,
                                          const QString &layerName = QStringLiteral( "FilterTestLayer" ) );
 
+  //! Parent, child and grandchild layers linked by relations
+  struct RelationTestLayers
+  {
+    QgsVectorLayer *parent = nullptr;
+    QgsVectorLayer *child = nullptr;
+    QgsVectorLayer *grandchild = nullptr;
+  };
+
+  /**
+   * Adds parent, child and grandchild memory layers to QgsProject::instance(), linked by relations of the given strength.
+   * Parents have feature ids 1 and 2. Parent 1 has two children, parent 2 has one, and one child of each parent has a grandchild.
+   */
+  RelationTestLayers createRelationTestLayers( Qgis::RelationshipStrength strength );
+
   //! Appends a single feature to layer via the data provider; value is stored in the named field. Returns false if addFeatures() fails.
   bool addFeatureToLayer( QgsVectorLayer *layer, const QString &fieldName, const QVariant &value );
 

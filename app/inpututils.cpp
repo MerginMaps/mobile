@@ -40,6 +40,7 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsrelationmanager.h"
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsmultipoint.h"
@@ -1609,6 +1610,146 @@ QString InputUtils::dateTimeFieldFormat( const QString &fieldFormat )
 bool InputUtils::isFeatureIdValid( qint64 featureId )
 {
   return !FID_IS_NEW( featureId ) && !FID_IS_NULL( featureId );
+}
+
+namespace
+{
+  //! Collects the features and all features linked to them, layers are listed in the order they were found
+  void collectFeaturesToDelete( QgsVectorLayer *layer, const QgsFeatureIds &fids, bool allRelations, QList<QgsVectorLayer *> &layers, QHash<QgsVectorLayer *, QgsFeatureIds> &features )
+  {
+    // skipping already collected features also stops cyclic relations
+    const QgsFeatureIds newFids = fids - features.value( layer );
+    if ( newFids.isEmpty() )
+      return;
+
+    if ( !features.contains( layer ) )
+      layers << layer;
+
+    features[layer].unite( newFids );
+
+    const QList<QgsRelation> relations = QgsProject::instance()->relationManager()->referencedRelations( layer );
+    for ( const QgsRelation &relation : relations )
+    {
+      if ( !allRelations && relation.strength() != Qgis::RelationshipStrength::Composition )
+        continue;
+
+      QgsVectorLayer *childLayer = relation.referencingLayer();
+      if ( !childLayer )
+        continue;
+
+      QgsFeatureIds childFids;
+      QgsFeatureIterator parentIt = layer->getFeatures( QgsFeatureRequest().setFilterFids( newFids ) );
+      QgsFeature parent;
+      while ( parentIt.nextFeature( parent ) )
+      {
+        QgsFeatureRequest childRequest = relation.getRelatedFeaturesRequest( parent );
+        childRequest.setFlags( Qgis::FeatureRequestFlag::NoGeometry ).setNoAttributes();
+
+        QgsFeatureIterator childIt = childLayer->getFeatures( childRequest );
+        QgsFeature child;
+        while ( childIt.nextFeature( child ) )
+        {
+          childFids.insert( child.id() );
+        }
+      }
+
+      collectFeaturesToDelete( childLayer, childFids, allRelations, layers, features );
+    }
+  }
+}
+
+bool InputUtils::hasCompositionChildren( QgsVectorLayer *layer, const QgsFeatureIds &fids )
+{
+  if ( !layer || fids.isEmpty() )
+    return false;
+
+  QList<QgsVectorLayer *> layers;
+  QHash<QgsVectorLayer *, QgsFeatureIds> features;
+  collectFeaturesToDelete( layer, fids, false, layers, features );
+
+  int count = 0;
+  for ( const QgsFeatureIds &layerFids : std::as_const( features ) )
+  {
+    count += layerFids.size();
+  }
+
+  return count > fids.size();
+}
+
+bool InputUtils::deleteLinkedFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids, bool deleteAllLinkedFeatures )
+{
+  if ( !layer || fids.isEmpty() )
+    return false;
+
+  QList<QgsVectorLayer *> layers;
+  QHash<QgsVectorLayer *, QgsFeatureIds> features;
+  collectFeaturesToDelete( layer, fids, deleteAllLinkedFeatures, layers, features );
+
+  // the features themselves are deleted by the caller
+  features[layer].subtract( fids );
+
+  // delete from all layers before committing any of them, so a failed deletion changes nothing
+  QList<QgsVectorLayer *> editedLayers;
+  bool deleted = true;
+  for ( QgsVectorLayer *layerToEdit : std::as_const( layers ) )
+  {
+    const QgsFeatureIds fidsToDelete = features.value( layerToEdit );
+    if ( fidsToDelete.isEmpty() )
+      continue;
+
+    if ( !layerToEdit->isEditable() && !layerToEdit->startEditing() )
+    {
+      CoreUtils::log( QStringLiteral( "Delete linked features" ), QStringLiteral( "Could not start editing layer %1" ).arg( layerToEdit->name() ) );
+      deleted = false;
+      break;
+    }
+
+    editedLayers << layerToEdit;
+
+    if ( !layerToEdit->deleteFeatures( fidsToDelete ) )
+    {
+      CoreUtils::log( QStringLiteral( "Delete linked features" ), QStringLiteral( "Could not delete features from layer %1" ).arg( layerToEdit->name() ) );
+      deleted = false;
+      break;
+    }
+  }
+
+  if ( !deleted )
+  {
+    for ( QgsVectorLayer *editedLayer : std::as_const( editedLayers ) )
+    {
+      editedLayer->rollBack();
+    }
+    return false;
+  }
+
+  // layers are found from parents to children, commit children first so no parent is removed while its children stay;
+  // layer is committed by the caller after the features themselves are deleted
+  for ( int i = layers.size() - 1; i >= 0; --i )
+  {
+    QgsVectorLayer *layerToCommit = layers.at( i );
+    if ( layerToCommit == layer || !editedLayers.contains( layerToCommit ) )
+      continue;
+
+    if ( !layerToCommit->commitChanges() )
+    {
+      CoreUtils::log( QStringLiteral( "Delete linked features" ), QStringLiteral( "Failed to commit changes of layer %1:\n%2" )
+                      .arg( layerToCommit->name(), layerToCommit->commitErrors().join( QLatin1Char( '\n' ) ) ) );
+
+      for ( int j = i; j >= 0; --j )
+      {
+        if ( editedLayers.contains( layers.at( j ) ) )
+        {
+          layers.at( j )->rollBack();
+        }
+      }
+      return false;
+    }
+
+    layerToCommit->triggerRepaint();
+  }
+
+  return true;
 }
 
 QgsRectangle InputUtils::stakeoutPathExtent(

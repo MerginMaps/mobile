@@ -49,6 +49,9 @@ class MultiEditManager : public QObject
     //! Deletes selected or toggled features upon called
     Q_INVOKABLE void deleteSelectedFeatures();
 
+    //! Returns TRUE if deleting the selected features would also delete features linked to them by composition relations
+    Q_INVOKABLE bool selectedFeaturesHaveCompositionChildren() const;
+
     //! Returns multipart geometry of all geometries in the model, in map crs
     QgsGeometry collectGeometry() const { return mModel->collectGeometries( mMapSettings ); }
 
@@ -64,6 +67,8 @@ class MultiEditManager : public QObject
   private:
     //! create mTempLayer with fields from the layer in the model data, and a single empty feature
     void createTemporaryLayer();
+
+    QgsFeatureIds selectedFeatureIds() const;
 
     std::unique_ptr<QgsVectorLayer> mTempLayer;
     std::unique_ptr<StaticFeaturesModel> mModel;

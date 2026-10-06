@@ -710,6 +710,7 @@ ApplicationWindow {
 
       onDeleteSelected: {
         deleteDialog.countToDelete = selectedCount
+        deleteDialog.deletesLinkedFeatures = map.multiEditManager.selectedFeaturesHaveCompositionChildren()
         deleteDialog.open()
       }
 
@@ -726,7 +727,9 @@ ApplicationWindow {
     property int countToDelete: 0
 
     title: qsTr( "Delete %n feature(s)", "", countToDelete )
-    description: qsTr( "Delete %n selected feature(s)?", "", countToDelete )
+    description: deletesLinkedFeatures
+                 ? qsTr( "Delete %n selected feature(s)? Their linked features will also be deleted.", "", countToDelete )
+                 : qsTr( "Delete %n selected feature(s)?", "", countToDelete )
 
     primaryButton.text: qsTr( "Yes, I want to delete" )
     secondaryButton.text: qsTr( "No, thanks" )
