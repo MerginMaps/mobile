@@ -7,6 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "testmultieditmanager.h"
+#include "testutils.h"
+
+#include "qgsproject.h"
+#include "qgsrelationmanager.h"
 
 void TestMultiEditManager::init()
 {
@@ -73,4 +77,25 @@ void TestMultiEditManager::testDeleteSelectedFeatures()
 
   FeatureLayerPair editable = mManager->editableFeature();
   QVERIFY( !editable.isValid() );
+}
+
+void TestMultiEditManager::testDeleteSelectedFeaturesWithCompositionChildren()
+{
+  QgsProject::instance()->clear();
+  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
+  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+
+  mManager->initialize( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+  mManager->toggleSelect( FeatureLayerPair( layers.parent->getFeature( 2 ), layers.parent ) );
+
+  QVERIFY( mManager->selectedFeaturesHaveCompositionChildren() );
+
+  mManager->deleteSelectedFeatures();
+
+  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 0 );
+
+  QgsProject::instance()->clear();
 }

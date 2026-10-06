@@ -42,6 +42,9 @@ class TestAttributeController: public QObject
      * to the parent feature's referenced field value (FID).
      */
     void testPrefillRelationReferenceField();
+    void testDeleteFeatureWithCompositionChildren();
+    void testDeleteFeatureWithAssociationChildren();
+    void testDiscardNewFeatureDeletesLinkedFeatures();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

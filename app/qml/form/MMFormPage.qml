@@ -236,7 +236,10 @@ Page {
         iconSource: __style.deleteIcon
         iconColor: root.layerIsSpatial ? __style.polarColor : __style.grapeColor
         bgColor: root.layerIsSpatial ? __style.grassColor : __style.negativeColor
-        onClicked: deleteDialog.open()
+        onClicked: {
+          deleteDialog.deletesLinkedFeatures = root.controller.hasCompositionChildren()
+          deleteDialog.open()
+        }
       }
 
       MMComponents.MMToolbarButton {
@@ -411,7 +414,8 @@ Page {
     id: deleteDialog
 
     onDeleteFeature: {
-      root.controller.deleteFeature()
+      // a new feature is discarded, so everything linked to it goes too
+      root.controller.deleteFeature( root.state === "add" )
       root.canceled()
     }
   }
@@ -464,7 +468,8 @@ Page {
     let shouldRemoveFeature = root.state === "add" && __inputUtils.isFeatureIdValid( featureId )
 
     if ( shouldRemoveFeature ) {
-      root.controller.deleteFeature()
+      // linked features added to it in the meantime are removed too
+      root.controller.deleteFeature( true )
     }
 
     parent.focus = true

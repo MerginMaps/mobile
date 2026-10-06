@@ -504,6 +504,19 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool isFeatureIdValid( qint64 featureId );
 
     /**
+     * Returns TRUE if deleting the features would also delete features linked to them by composition relations
+     */
+    static bool hasCompositionChildren( QgsVectorLayer *layer, const QgsFeatureIds &fids );
+
+    /**
+     * Deletes features linked to the features and commits the changed layers, except \a layer itself.
+     * The features themselves are not deleted, call this before deleting them and committing \a layer.
+     * Linked features are followed through composition relations, or through all relations
+     * when \a deleteAllLinkedFeatures is TRUE. Nested relations are followed as well.
+     */
+    static bool deleteLinkedFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids, bool deleteAllLinkedFeatures = false );
+
+    /**
      * Returns widget setup according the field type - supports only basic types.
      * Note that external widget cannot be guessed from type since its the very same as text.
      * @param field QgsField
