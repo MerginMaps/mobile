@@ -1213,7 +1213,7 @@ ApplicationWindow {
       formsStackManager.openForm( pair, isExistingFeature ? "edit" : "add", "form", true )
     }
 
-    __notificationModel.addInfo( qsTr( "These are your unsaved changes, continue editing or discard them by navigating back." ) )
+    __notificationModel.addInfo( qsTr( "Changes restored. Go back to discard." ) )
   }
 
   function addFeatureToLayer( targetLayer ) {
