@@ -91,8 +91,17 @@ void LayerDetailData::setLayerTreeNode( QgsLayerTreeNode *newLayerTreeNode )
   if ( !mIsValid )
   {
     QgsError layerError = nodeLayer->layer()->error();
-    const QString reason = !layerError.isEmpty() ? layerError.summary()
-                           : ( nodeLayer->layer()->dataProvider() ? nodeLayer->layer()->dataProvider()->error().summary() : QString() );
+    QString reason;
+
+    if ( !layerError.isEmpty() )
+    {
+      reason = layerError.summary();
+    }
+    else if ( nodeLayer->layer()->dataProvider() )
+    {
+      reason = nodeLayer->layer()->dataProvider()->error().summary();
+    }
+
     CoreUtils::log( QStringLiteral( "Layer detail" ), QStringLiteral( "Opened invalid layer %1: %2" ).arg( mName, reason ) );
   }
 
