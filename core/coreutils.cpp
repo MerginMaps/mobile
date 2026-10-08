@@ -187,7 +187,7 @@ QString CoreUtils::findUniquePath( const QString &path )
     else // file
     {
       // split on the last dot, so a dot in the base name isn't mistaken for the extension
-      uniquePath = originalPath.path() + '/' + originalPath.completeBaseName() + " (" + QString::number( i ) + ")." + originalPath.suffix();
+      uniquePath = QStringLiteral( "%1/%2 (%3).%4" ).arg( originalPath.path(), originalPath.completeBaseName(), QString::number( i ), originalPath.suffix() );
     }
     f.setFile( uniquePath );
   }
