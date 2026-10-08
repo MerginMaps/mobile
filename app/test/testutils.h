@@ -73,6 +73,10 @@ namespace TestUtils
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
 
+  //! Creates a fake local project directory dataDir/name containing an empty name.qgz file,
+  //! so LocalProjectsManager can discover it. Returns the project directory path.
+  QString createFakeLocalProject( const QString &dataDir, const QString &name );
+
   bool testExifPositionMetadataExists( const QString &imageSource );
 
   //! Creates an in-memory layer with a single field of the given type and registers it in QgsProject::instance()

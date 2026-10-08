@@ -139,7 +139,7 @@ Item {
           return ["changes", "remove"]
         }
         else if ( !model.ProjectIsMergin && model.ProjectIsLocal ) {
-          return ["upload", "remove"]
+          return ["upload", "remove", "rename"]
         }
         return ["download"]
       }
@@ -176,6 +176,11 @@ Item {
       }
       onStopSyncRequested: controllerModel.stopProjectSync( projectId )
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
+      onRenameRequested: () => {
+        renameDialogLoader.projectIdToRename = projectId
+        renameDialogLoader.projectNameToRename = model.ProjectName
+        renameDialogLoader.active = true
+      }
     }
   }
 
@@ -303,6 +308,61 @@ Item {
       controllerModel.removeLocalProject( relatedProjectId )
 
       removeDialog.relatedProjectId = ""
+    }
+  }
+
+  Loader {
+    id: renameDialogLoader
+
+    property string projectIdToRename: ""
+    property string projectNameToRename: ""
+
+    active: false
+    asynchronous: true
+
+    sourceComponent: MMProjectComponents.MMRenameProjectDialog {
+      id: renameDialog
+
+      projectName: renameDialogLoader.projectNameToRename
+
+      onRenameClicked: function( newName ) {
+        if ( !renameDialogLoader.projectIdToRename ) {
+          return
+        }
+
+        controllerModel.renameLocalProject( renameDialogLoader.projectIdToRename, newName )
+      }
+
+      onTextEdited: function( text ) {
+        canRenameCheckTimer.pendingText = text
+        canRenameCheckTimer.restart()
+      }
+
+      onClosed: renameDialogLoader.active = false
+
+      Component.onCompleted: open()
+
+      Connections {
+        target: controllerModel
+
+        function onRenameLocalProjectFinished( success ) {
+          if ( success ) {
+            renameDialog.close()
+          }
+        }
+      }
+
+      Timer {
+        id: canRenameCheckTimer
+
+        property string pendingText: ""
+
+        interval: 300
+
+        onTriggered: {
+          renameDialog.errorText = controllerModel.canRenameProject( renameDialogLoader.projectIdToRename, pendingText )
+        }
+      }
     }
   }
 
