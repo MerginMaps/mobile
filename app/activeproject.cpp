@@ -300,7 +300,19 @@ bool ActiveProject::validateProject()
     if ( !layer->isValid() )
     {
       errorsFound = true;
-      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer %1" ).arg( layer->name() ) );
+      QgsError layerError = layer->error();
+      QString reason;
+
+      if ( !layerError.isEmpty() )
+      {
+        reason = layerError.summary();
+      }
+      else if ( layer->dataProvider() )
+      {
+        reason = layer->dataProvider()->error().summary();
+      }
+
+      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer %1: %2" ).arg( layer->name(), reason ) );
       emit reportIssue( tr( "Layer" ) + ": " + layer->name(), tr( "Unable to load source " ) + ": " + layer->publicSource() );
     }
     else
