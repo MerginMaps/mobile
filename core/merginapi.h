@@ -195,8 +195,8 @@ struct TransactionStatus
 
   ProjectDiff diff;
 
-  bool configAllowed = false; //!< if true, seeks for mergin-config and alters synchronization process based on it
-  MerginConfig config; //!< defines additional behavior of the transaction (e.g. selective sync)
+  SelectiveSyncConfig selectiveSync; //!< defines if selective sync is used in this project and if so, in which folder. Read from mergin-config.json
+  bool ignoreSelectiveSync = false; //!< if true, treats mergin-config.json as a regular file, does not use selective sync. Useful for testing. Cached after initial download and automatically reused in further syncs.
 
   TransactionType type;
 };
@@ -229,8 +229,6 @@ class MerginApi: public QObject
     Q_PROPERTY( MerginSubscriptionInfo *subscriptionInfo READ subscriptionInfo NOTIFY subscriptionInfoChanged )
     Q_PROPERTY( QString apiRoot READ apiRoot WRITE setApiRoot NOTIFY apiRootChanged )
     Q_PROPERTY( bool apiSupportsSubscriptions READ apiSupportsSubscriptions NOTIFY apiSupportsSubscriptionsChanged )
-    // supportsSelectiveSync if true, fetches mergin-config.json in project and changes sync behavior based on its content (selective sync)
-    Q_PROPERTY( bool supportsSelectiveSync READ supportsSelectiveSync NOTIFY supportsSelectiveSyncChanged )
     Q_PROPERTY( /*MerginApiStatus::ApiStatus*/ int apiVersionStatus READ apiVersionStatus NOTIFY apiVersionStatusChanged )
     Q_PROPERTY( /*MerginServerType::ServerType*/ int serverType READ serverType NOTIFY serverTypeChanged )
     Q_PROPERTY( bool apiSupportsWorkspaces READ apiSupportsWorkspaces NOTIFY apiSupportsWorkspacesChanged )
@@ -294,9 +292,10 @@ class MerginApi: public QObject
      * \param projectNamespace Project's namespace used in request.
      * \param projectName  Project's name used in request.
      * \param withAuth If True, request is constructed with current authorization
+     * \param ignoreSelectiveSync If True, this project is downloaded without support for selective sync <<! Works only for first-time download
      * \return true when sync has started, false otherwise (e.g. due to a missing authorization or invalid server)
      */
-    bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true );
+    bool pullProject( const QString &projectNamespace, const QString &projectName, bool withAuth = true, bool ignoreSelectiveSync = false );
 
     /**
      * Sends non-blocking POST request to the server to push changes in a project with a given name.
@@ -418,7 +417,8 @@ class MerginApi: public QObject
     static const int MINIMUM_SERVER_VERSION_MINOR = 2;
     static const QString sMetadataFile;
     static const QString sMetadataFolder;
-    static const QString sMerginConfigFile;
+    static const QString sSelectiveSyncConfigFile;
+    static const QString sIgnoreSelectiveSyncFileFlag;
     static const QString sTempChunkId;
     static const QString sDefaultApiRoot;
     static const QString sSyncCanceledMessage;
@@ -436,9 +436,6 @@ class MerginApi: public QObject
 
     //! Get a list of all files that can be used with geodiff
     QStringList projectDiffableFiles( const QString &projectFullName ); // todo: drop, definition does not exist
-
-    static ProjectDiff localProjectChanges( const QString &projectDir );
-    bool hasLocalProjectChanges( const QString &projectFullName );
 
     /**
      * Parse major and minor version number from version string
@@ -515,9 +512,11 @@ class MerginApi: public QObject
       const QList<MerginFile> &localFiles,
       const QString &projectDir,
       bool allowConfig = false,
-      const MerginConfig &config = MerginConfig(),
-      const MerginConfig &lastSyncConfig = MerginConfig()
+      const SelectiveSyncConfig &config = {},
+      const SelectiveSyncConfig &lastSyncConfig = {}
     );
+
+    static ProjectDiff localChanges( const QString &projectDir );
 
     /**
      * Finds if project files from two sources are same
@@ -529,13 +528,17 @@ class MerginApi: public QObject
      *   - there is any local file missing in "old" server version files
      *   - there is different checksum of any non-diffable file (e.g. CSV file)
      *   - there is different content of any diffable file (e.g. GeoPackage)
+     *
+     * The function returns early, compared to localChanges() that returns the full ProjectDiff
      */
+    static bool hasLocalChanges( const QString &projectDir );
     static bool hasLocalChanges(
       const QList<MerginFile> &oldServerFiles,
       const QList<MerginFile> &localFiles,
       const QString &projectDir,
-      const MerginConfig config
+      const SelectiveSyncConfig config
     );
+
 
     static QList<MerginFile> getLocalProjectFiles( const QString &projectPath );
 
@@ -561,10 +564,10 @@ class MerginApi: public QObject
      * otherwise a project dir is considered as selective-sync-dir and therefore the path check is redundant
      * (since given filePath is relative to the project dir.).
      * @param filePath Relative path of a file to project directory.
-     * @param config MerginConfig parsed from JSON, selective-sync properties are read from it.
+     * @param config SelectiveSyncConfig parsed from JSON, selective-sync properties are read from it.
      * @return True, if a file at given filePath suppose to be excluded from sync.
      */
-    static bool excludeFromSync( const QString &filePath, const MerginConfig &config );
+    static bool excludeFromSync( const QString &filePath, const SelectiveSyncConfig &config );
 
     bool apiSupportsSubscriptions() const;
     void setApiSupportsSubscriptions( bool apiSupportsSubscriptions );
@@ -577,9 +580,6 @@ class MerginApi: public QObject
     * \param projectName QString to be set to name of a project
     */
     static bool extractProjectName( const QString &sourceString, QString &projectNamespace, QString &projectName ); // todo: go to utils
-
-    bool supportsSelectiveSync() const;
-    void setSupportsSelectiveSync( bool supportsSelectiveSync );
 
     /**
      * Determine Mergin server type by querying /config endpoint.
@@ -695,7 +695,6 @@ class MerginApi: public QObject
 
   signals:
     void apiSupportsSubscriptionsChanged();
-    void supportsSelectiveSyncChanged();
 
     void listProjectsFinished( const MerginProjectsList &merginProjects, int projectCount, int page, QString requestId );
     void listProjectsFailed();
@@ -740,7 +739,6 @@ class MerginApi: public QObject
     void workspaceInfoChanged();
     void subscriptionInfoChanged();
     void activeWorkspaceChanged();
-    void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void pullFilesStarted();
     void pushFilesStarted();
@@ -787,6 +785,8 @@ class MerginApi: public QObject
 
     void userSelfRegistrationEnabledChanged();
 
+    void workspaceLimitsUpdated();
+
   private slots:
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
@@ -794,7 +794,7 @@ class MerginApi: public QObject
     // Pull slots
     void pullInfoReplyFinished();
     void downloadItemReplyFinished( DownloadQueueItem item );
-    void cacheServerConfig();
+    void cacheSelectiveSyncConfig();
 
     // Push slots
     void pushStartReplyFinished();
@@ -913,9 +913,9 @@ class MerginApi: public QObject
 
     void startProjectPull( const QString &projectFullName );
 
-    //! Takes care of finding the correct config file, appends it to current transaction and proceeds with project pull
-    void prepareDownloadConfig( const QString &projectFullName, bool downloaded = false );
-    void requestServerConfig( const QString &projectFullName );
+    //! Takes care of finding the correct selective sync config file, appends it to current transaction and proceeds with project pull
+    void prepareSelectiveSyncConfig( const QString &projectFullName, bool downloaded = false );
+    void requestSelectiveSyncConfig( const QString &projectFullName );
 
     //! Starts download request of another item
     void downloadNextItem( const QString &projectFullName );
@@ -978,7 +978,6 @@ class MerginApi: public QObject
     QEventLoop mAuthLoopEvent;
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
-    bool mSupportsSelectiveSync = true;
     bool mApiSupportsSso = false;
     bool mUserSelfRegistrationEnabled = false;
     QString mApiVersion;

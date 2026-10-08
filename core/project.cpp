@@ -33,7 +33,7 @@ QString MerginProject::id() const
   return MerginApi::getFullProjectName( projectNamespace, projectName );
 }
 
-ProjectStatus::Status ProjectStatus::projectStatus( const Project &project, MerginApi &merginApi )
+ProjectStatus::Status ProjectStatus::projectStatus( const Project &project )
 {
   if ( !project.isMergin() || !project.isLocal() ) // This is not a Mergin project or not downloaded project
     return ProjectStatus::NoVersion;
@@ -50,7 +50,7 @@ ProjectStatus::Status ProjectStatus::projectStatus( const Project &project, Merg
     return ProjectStatus::NeedsSync;
   }
 
-  if ( merginApi.hasLocalProjectChanges( project.fullName() ) )
+  if ( MerginApi::hasLocalChanges( project.local.projectDir ) )
   {
     return ProjectStatus::NeedsSync;
   }

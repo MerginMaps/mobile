@@ -182,7 +182,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
 
   // change the data plan
   QString workspaceId = QString::number( api->userInfo()->activeWorkspaceId() );
-  QSignalSpy wsStorageSpy( api, &MerginApi::updateWorkspaceService );
+  QSignalSpy wsStorageSpy( api, &MerginApi::workspaceLimitsUpdated );
 
   // Create JSON payload to change the data plan
   QString payload = QString( R"({
@@ -200,7 +200,7 @@ void TestUtils::generateRandomUser( MerginApi *api, QString &username, QString &
     qDebug() << "Updated the storage limit" << username;
   }
 
-// this needs to be cleared, as the user will be authorized in the test cases.
+  // this needs to be cleared, as the user will be authorized in the test cases.
   api->clearAuth();
 
 }
