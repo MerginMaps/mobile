@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: This templated is intended for experienced users, if you're unsure discuss your issue with community or contact support.
+about: This template is intended for experienced users/contributors, if you're unsure discuss your issue with community or contact support.
 title: ''
 labels: ''
 assignees: ''

@@ -126,7 +126,7 @@ Drawer {
         }
 
         text: qsTr( "Add feature" )
-        visible: __activeProject.projectRole !== "reader"
+        visible: __activeProject.projectRole !== "reader" && !listView.model?.layer?.readOnly
 
         onClicked: {
           root.close()

@@ -23,7 +23,7 @@ class StreamingIntervalType
       Time = 0, // time-based recording
       Distance, // distance-based recording
     };
-    Q_ENUMS( IntervalType )
+    Q_ENUM( IntervalType )
 };
 
 #endif // STREAMINGINTERVALTYPE_H

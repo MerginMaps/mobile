@@ -26,7 +26,7 @@ class MerginApiStatus
       OK, // server version satisfied requirements
       INCOMPATIBLE // server version below requirements
     };
-    Q_ENUMS( VersionStatus )
+    Q_ENUM( VersionStatus )
 };
 
 #endif // MERGINAPISTATUS_H

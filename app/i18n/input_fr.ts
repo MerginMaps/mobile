@@ -1078,22 +1078,22 @@ Ne sera pas ajouté au projet.</translation>
         <translation>Fichiers d&apos;image (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="184"/>
         <source>Photo sketches could not be saved, please contact support.</source>
         <translation>Les annotations de la photo n&apos;ont pas été sauvegardées, merci de contacter le support.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="296"/>
         <source>Could not create directory %1.</source>
         <translation>Impossible de créer le répertoire %1.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="363"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Échec du traitement de l&apos;image, la recherche du répertoire de la photo n&apos;a pas aboutie</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="378"/>
         <source>Failed to process the image</source>
         <translation>Échec du traitement de l&apos;image.</translation>
     </message>
@@ -2497,22 +2497,27 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMRemovePhotoDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Delete photo?</source>
         <translation>Supprimer la photo ?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
-        <translation>Voulez-vous supprimer ou détacher la photo ? Supprimer efface complètement la photo du projet alors que Détacher garde la photo dans le projet mais efface le lien avec cette entité</translation>
+        <translation>Voulez-vous supprimer ou détacher la photo ? Supprimer efface complètement la photo du projet alors que Détacher garde la photo dans le projet mais efface le lien avec cette entité.</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
+        <source>Would you like to delete the photo?</source>
+        <translation>Voulez-vous supprimer la photo ?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="28"/>
         <source>Delete photo</source>
         <translation>Supprimer la photo</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="37"/>
         <source>Unlink photo</source>
         <translation>Détacher la photo</translation>
     </message>

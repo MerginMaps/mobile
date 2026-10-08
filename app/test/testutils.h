@@ -73,12 +73,6 @@ namespace TestUtils
    */
   bool generateProjectFolder( const QString &rootPath, const QJsonDocument &structure );
 
-  void testLayerHasGeometry();
-  void testLayerVisible();
-  void testIsPositionTrackingLayer();
-  void testMapLayerFromName();
-  void testIsValidUrl();
-
   bool testExifPositionMetadataExists( const QString &imageSource );
 
   //! Creates an in-memory layer with a single field of the given type and registers it in QgsProject::instance()

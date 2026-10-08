@@ -23,7 +23,7 @@ class StreamingIntervalType
       Time = 0, // time-based recording
       Distance, // distance-based recording
     };
-    Q_ENUMS( IntervalType )
+    Q_ENUM( IntervalType )
 };
 
 class PositionProviderType
@@ -39,7 +39,7 @@ class PositionProviderType
       NoConnection,
       WaitingToReconnect
     };
-    Q_ENUMS( ProviderType )
+    Q_ENUM( ProviderType )
 };
 
 class ProjectStatus
@@ -54,7 +54,7 @@ class ProjectStatus
       UpToDate,   //!< both server and local copy are in sync with no extra modifications
       NeedsSync,  //!< server has newer version than what is available locally and/or the project is modified locally
     };
-    Q_ENUMS( Status )
+    Q_ENUM( Status )
 };
 
 #endif // ENUMS_H
