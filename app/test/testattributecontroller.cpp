@@ -19,6 +19,7 @@
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
+#include "qgsrelationmanager.h"
 
 #include "attributecontroller.h"
 #include "attributetabproxymodel.h"
@@ -1271,4 +1272,68 @@ void TestAttributeController::testPrefillRelationReferenceField()
   // compare that the rawValue is updated after setting the linked relation
   QVERIFY( fkItem );
   QCOMPARE( fkItem->rawValue(), parentFeature.attribute( QStringLiteral( "fid" ) ) );
+}
+
+void TestAttributeController::testDeleteFeatureWithCompositionChildren()
+{
+  QgsProject::instance()->clear();
+  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
+  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+
+  QVERIFY( controller.hasCompositionChildren() );
+  QVERIFY( controller.deleteFeature() );
+
+  // parent 1, both its children and their grandchild are deleted, parent 2 is untouched
+  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 1 );
+  QVERIFY( !layers.parent->isEditable() && !layers.child->isEditable() && !layers.grandchild->isEditable() );
+
+  QgsProject::instance()->clear();
+}
+
+void TestAttributeController::testDeleteFeatureWithAssociationChildren()
+{
+  QgsProject::instance()->clear();
+  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
+  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+
+  QVERIFY( !controller.hasCompositionChildren() );
+  QVERIFY( controller.deleteFeature() );
+
+  // only the parent is deleted
+  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 3 );
+  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 2 );
+
+  QgsProject::instance()->clear();
+}
+
+void TestAttributeController::testDiscardNewFeatureDeletesLinkedFeatures()
+{
+  QgsProject::instance()->clear();
+  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
+  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+
+  // parent 1 stands for a new feature that only got its id to add linked features
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+
+  QVERIFY( controller.deleteFeature( true ) );
+
+  // linked features are deleted even though the relations are associations
+  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 1 );
+
+  QgsProject::instance()->clear();
 }

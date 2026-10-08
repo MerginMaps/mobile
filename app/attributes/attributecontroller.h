@@ -114,7 +114,16 @@ class  AttributeController : public QObject
     AttributeTabProxyModel *attributeTabProxyModel() const;
     AttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
-    Q_INVOKABLE bool deleteFeature();
+    /**
+     * Deletes the feature together with features linked to it by composition relations.
+     * Set \a deleteAllLinkedFeatures to TRUE when discarding a new feature, so the features
+     * linked to it by any relation are deleted too.
+     */
+    Q_INVOKABLE bool deleteFeature( bool deleteAllLinkedFeatures = false );
+
+    //! Returns TRUE if deleting the feature would also delete features linked to it by composition relations
+    Q_INVOKABLE bool hasCompositionChildren() const;
+
     Q_INVOKABLE bool rollback();
     Q_INVOKABLE bool save();
     Q_INVOKABLE void acquireId();
