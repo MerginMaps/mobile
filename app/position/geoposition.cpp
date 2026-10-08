@@ -16,13 +16,10 @@ GeoPosition::GeoPosition() : QgsGpsInformation()
   longitude = std::numeric_limits<double>::quiet_NaN();
   elevation = std::numeric_limits<double>::quiet_NaN();
   elevation_diff = std::numeric_limits<double>::quiet_NaN();
-  direction = -1;
   speed = -1;
   pdop = -1;
   hdop = -1;
   vdop = -1;
-  hacc = -1;
-  vacc = -1;
   satellitesUsed = -1;
 }
 
