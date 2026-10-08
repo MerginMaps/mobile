@@ -59,7 +59,7 @@ void TestVariablesManager::testPositionVariables()
   NmeaParser parser;
   QString fullNmeaPositionFilePath = TestUtils::testDataDir() + "/position/nmea_petrzalka_full.txt";
   QFile fullNmeaFile( fullNmeaPositionFilePath );
-  fullNmeaFile.open( QFile::ReadOnly );
+  QVERIFY( fullNmeaFile.open( QFile::ReadOnly ) );
   QVERIFY( fullNmeaFile.isOpen() );
   QgsGpsInformation position = parser.parseNmeaString( fullNmeaFile.readAll() );
   GeoPosition pos = GeoPosition::fromQgsGpsInformation( position );
