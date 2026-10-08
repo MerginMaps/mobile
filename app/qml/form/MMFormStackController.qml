@@ -51,15 +51,17 @@ Item {
 
   signal closed()
   signal editGeometryRequested( var pair )
+  signal resumeDraftRequested()
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
   signal previewPanelChanged( var panelHeight )
 
-  function openForm( pair, formState, panelState ) {
+  function openForm( pair, formState, panelState, restoringDraft = false ) {
     if ( formsStack.depth === 0 )
     {
       let props = {
+        restoringDraft: restoringDraft,
         featureLayerPair: pair,
         formState: formState,
         panelState: panelState
@@ -70,6 +72,8 @@ Item {
     else
     {
       latest = formsStack.get( 0 )
+      // must be set before featureLayerPair, see AttributeController.restoringDraft
+      latest.restoringDraft = restoringDraft
       latest.featureLayerPair = pair
       latest.formState = formState
       latest.panelState = panelState
@@ -314,6 +318,9 @@ Item {
 
       onEditGeometry: function( pair ) {
         root.editGeometryRequested( pair )
+      }
+      onResumeDraft: () => {
+        root.resumeDraftRequested()
       }
       onOpenLinkedFeature: function( linkedFeature ) {
         root.openLinkedFeature( linkedFeature )

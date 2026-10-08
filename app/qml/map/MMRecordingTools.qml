@@ -72,6 +72,7 @@ Item {
     property bool isUsingPosition: mapTool.centeredToGPS || mapTool.recordingType == MM.RecordingMapTool.StreamMode
 
     mapSettings: root.map.mapSettings
+    draftController: __activeProject.featureDraftController
 
     recordPoint: crosshair.recordPoint
 

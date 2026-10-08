@@ -10,17 +10,21 @@
 import QtQuick
 import QtQuick.Layouts
 
-import "../../components" as MMComponents
+import "."
 
 Rectangle {
   id: root
+
+  enum Variant { Informative, Warning }
+
+  property int variant: MMListBanner.Informative
 
   property string text
   property string actionText: ""
 
   signal actionClicked()
 
-  color: __style.informativeColor
+  color: variant === MMListBanner.Warning ? __style.warningColor : __style.informativeColor
   radius: __style.radius8
   implicitHeight: row.implicitHeight + 2 * __style.margin8
 
@@ -37,7 +41,7 @@ Rectangle {
 
     spacing: __style.spacing10
 
-    MMComponents.MMText {
+    MMText {
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignVCenter
 
@@ -48,19 +52,19 @@ Rectangle {
       elide: Text.ElideNone
     }
 
-    MMComponents.MMButton {
+    MMButton {
       id: actionButton
 
       visible: root.actionText !== ""
       Layout.alignment: Qt.AlignVCenter
 
-      type: MMComponents.MMButton.Types.Tertiary
-      size: MMComponents.MMButton.Sizes.ExtraSmall
+      type: MMButton.Types.Tertiary
+      size: MMButton.Sizes.ExtraSmall
       text: root.actionText
-      fontColor: __style.skyColor
-      bgndColor: __style.deepOceanColor
-      bgndColorHover: __style.deepOceanColor
-      fontColorHover: __style.skyColor
+      fontColor: root.variant === MMListBanner.Warning ? __style.polarColor : __style.skyColor
+      bgndColor: root.variant === MMListBanner.Warning ? __style.earthColor : __style.deepOceanColor
+      bgndColorHover: bgndColor
+      fontColorHover: fontColor
 
       onClicked: root.actionClicked()
     }

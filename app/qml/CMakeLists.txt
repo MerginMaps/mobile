@@ -29,6 +29,7 @@ set(MM_QML
     components/MMIconCheckBoxHorizontal.qml
     components/MMInfoBox.qml
     components/MMLine.qml
+    components/MMListBanner.qml
     components/MMListDelegate.qml
     components/MMListDrawer.qml
     components/MMListFooterSpacer.qml
@@ -65,7 +66,6 @@ set(MM_QML
     components/private/MMToolbarLongButton.qml
     components/private/MMToolbarShortButton.qml
     filters/MMFiltersDrawer.qml
-    filters/components/MMFilterBanner.qml
     filters/components/MMFilterBoolInput.qml
     filters/components/MMFilterDateInput.qml
     filters/components/MMFilterDropdownValueMapInput.qml
@@ -93,6 +93,8 @@ set(MM_QML
     dialogs/MMFormDeleteFeatureDialog.qml
     dialogs/MMProjErrorDialog.qml
     dialogs/MMOutOfDateCustomServerDialog.qml
+    dialogs/MMDiscardDraftDialog.qml
+    dialogs/MMResumeDraftDialog.qml
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
