@@ -248,7 +248,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
     transaction.projectDir = projectInfo.projectDir;
     Q_ASSERT( !transaction.projectDir.isEmpty() );
 
-    if ( transaction.isInitialPush )
+    if ( isInitialPush )
     {
       // We do not know the project ID because project creation API
       // does not send it out ATM, we need to find the project and parse the project ID
@@ -261,13 +261,12 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
         return false;
       }
 
-      mTransactionalStatus.insert( projectFullName, transaction );
-
       CoreUtils::log( QStringLiteral( "Project id lookup" ), QStringLiteral( "Looking for ID of the freshly baked project - %1" ).arg( projectFullName ) );
 
       mTransactionalStatus.insert( projectFullName, transaction );
 
-      connect( reply, &QNetworkReply::finished, this, [this, projectFullName](){
+      connect( reply, &QNetworkReply::finished, this, [this, projectFullName]()
+      {
 
         QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
         Q_ASSERT( r );
@@ -291,7 +290,7 @@ bool MerginApi::pushProject( const QString &projectNamespace, const QString &pro
 
         r->deleteLater();
         return;
-      });
+      } );
     }
     else
     {
@@ -1351,7 +1350,7 @@ bool MerginApi::pullProject( const QString &projectNamespace, const QString &pro
 
     Q_ASSERT( !mTransactionalStatus.contains( projectFullName ) );
     TransactionStatus transaction;
-    
+
     transaction.replyPullProjectInfo = reply;
     transaction.type = TransactionStatus::Pull;
 
@@ -3180,7 +3179,7 @@ void MerginApi::pushV2FileReplyFinished()
   }
   Q_ASSERT( found );
 
-  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
+  CoreUtils::log( "push " + projectFullName, QStringLiteral( "Uploading file: %1, chunk %2/%3 successful, received id: %4, valid until: %5" ).arg( processedFile.path ).arg( chunkNo + 1 ).arg( processedFile.chunks.count() ).arg( chunk.id ).arg( chunk.valid_until.toString() ) );
 
   bool fileFullyUploaded = chunkNo == ( processedFile.chunks.size() - 1 );
 
