@@ -178,6 +178,7 @@ Item {
       onShowChangesRequested: root.showLocalChangesRequested( projectId )
       onRenameRequested: () => {
         renameDialogLoader.projectIdToRename = projectId
+        renameDialogLoader.projectNameToRename = model.ProjectName
         renameDialogLoader.active = true
       }
     }
@@ -314,12 +315,15 @@ Item {
     id: renameDialogLoader
 
     property string projectIdToRename: ""
+    property string projectNameToRename: ""
 
     active: false
     asynchronous: true
 
     sourceComponent: MMProjectComponents.MMRenameProjectDialog {
       id: renameDialog
+
+      projectName: renameDialogLoader.projectNameToRename
 
       onRenameClicked: function( newName ) {
         if ( !renameDialogLoader.projectIdToRename ) {

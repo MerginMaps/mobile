@@ -15,6 +15,7 @@ import "../../inputs"
 MMDrawer {
   id: root
 
+  property string projectName: "" // current name, prefilled when the drawer opens
   property alias errorText: newNameField.errorMsg
 
   signal renameClicked( string newName )
@@ -25,7 +26,7 @@ MMDrawer {
 
   onAboutToShow: () => {
     newNameField.errorMsg = ""
-    newNameField.text = ""
+    newNameField.text = root.projectName
   }
 
   drawerContent: Column {
@@ -42,9 +43,10 @@ MMDrawer {
 
       placeholderText: qsTr( "Enter the new name" )
 
-      onTextEdited: ( text ) => {
-        newNameField.errorMsg = ""
-        root.textEdited( text )
+      // textChanged also covers the clear button, which does not emit textEdited
+      onTextChanged: {
+        newNameField.errorMsg = newNameField.text.trim() ? "" : qsTr( "The project name cannot be empty" )
+        root.textEdited( newNameField.text )
       }
     }
 
@@ -52,6 +54,7 @@ MMDrawer {
       width: contentColumn.width
 
       text: qsTr( "Confirm" )
+      enabled: !newNameField.errorMsg
 
       onClicked: {
         root.renameClicked( newNameField.text )
