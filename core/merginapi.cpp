@@ -1186,8 +1186,11 @@ void MerginApi::cancelPush( const QString &projectFullName )
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload file" ) );
     transaction.replyPushFile->abort();  // will trigger pushFileReplyFinished slot and emit sync finished
 
-    // also need to cancel the transaction
-    sendPushCancelRequest( projectFullName, transactionUUID );
+    // server using v1 push needs to get cancel the transaction request
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+    {
+      sendPushCancelRequest( projectFullName, transactionUUID );
+    }
   }
   else if ( transaction.replyPushFinish )
   {
@@ -1195,7 +1198,11 @@ void MerginApi::cancelPush( const QString &projectFullName )
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload finish" ) );
     transaction.replyPushFinish->abort();  // will trigger pushFinishReplyFinished slot and emit sync finished
 
-    sendPushCancelRequest( projectFullName, transactionUUID );
+    // server using v1 push needs to get cancel the transaction request
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+    {
+      sendPushCancelRequest( projectFullName, transactionUUID );
+    }
   }
   else
   {
