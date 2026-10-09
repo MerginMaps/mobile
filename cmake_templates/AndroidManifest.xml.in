@@ -69,6 +69,13 @@
                 <data android:pathPrefix="/mobile/sso-redirect" />
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="merginmaps" android:host="mobile" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name" 
                 android:value="-- %%INSERT_APP_LIB_NAME%% --" />

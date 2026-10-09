@@ -46,7 +46,7 @@ const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" <
 const int MerginApi::UPLOAD_CHUNK_SIZE = 10 * 1024 * 1024; // Should be the same as on the server
 const QString MerginApi::sSyncCanceledMessage = QObject::tr( "Synchronisation canceled" );
 #ifdef MOBILE_OS
-const QString MerginApi::CALLBACK_URL = QStringLiteral( "https://hello.merginmaps.com/mobile/sso-redirect" );
+const QString MerginApi::CALLBACK_URL = QStringLiteral( "merginmaps://mobile/sso-redirect" );
 #else
 // We use QHostAddress::Null so that LocalHost is used and if that fails try LocalHostIPv6
 // see https://doc.qt.io/qt-6/qoauthhttpserverreplyhandler.html#listen
