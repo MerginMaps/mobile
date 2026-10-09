@@ -338,16 +338,24 @@ void MerginApi::pushInfoReplyFinished()
   }
   else
   {
-    const QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
+    QString serverMsg;
+    QString serverErrorCode;
+
     if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
       serverMsg = sSyncCanceledMessage;
+    }
+    else
+    {
+      const QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+    }
 
     QString message = QStringLiteral( "Network API error: %1(): %2" ).arg( QStringLiteral( "projectInfo" ), r->errorString() );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    const QString serverErrorCode = extractServerErrorCode( data );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushInfo" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushProjectInfo->deleteLater();
@@ -1186,8 +1194,11 @@ void MerginApi::cancelPush( const QString &projectFullName )
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload file" ) );
     transaction.replyPushFile->abort();  // will trigger pushFileReplyFinished slot and emit sync finished
 
-    // also need to cancel the transaction
-    sendPushCancelRequest( projectFullName, transactionUUID );
+    // server using v1 push needs to get cancel the transaction request
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+    {
+      sendPushCancelRequest( projectFullName, transactionUUID );
+    }
   }
   else if ( transaction.replyPushFinish )
   {
@@ -1195,7 +1206,11 @@ void MerginApi::cancelPush( const QString &projectFullName )
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload finish" ) );
     transaction.replyPushFinish->abort();  // will trigger pushFinishReplyFinished slot and emit sync finished
 
-    sendPushCancelRequest( projectFullName, transactionUUID );
+    // server using v1 push needs to get cancel the transaction request
+    if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
+    {
+      sendPushCancelRequest( projectFullName, transactionUUID );
+    }
   }
   else
   {
@@ -2945,13 +2960,21 @@ void MerginApi::pushStartReplyFinished()
   }
   else
   {
-    QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = sSyncCanceledMessage;
+    QString serverMsg;
+    QString serverErrorCode;
+    bool showLimitReachedDialog = false;
 
-    QString code = extractServerErrorCode( data );
-    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
+      serverMsg = sSyncCanceledMessage;
+    }
+    else
+    {
+      QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+      showLimitReachedDialog = EnumHelper::isEqual( serverErrorCode, ErrorCode::StorageLimitHit );
+    }
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
@@ -2962,16 +2985,17 @@ void MerginApi::pushStartReplyFinished()
     {
       const QList<MerginFile> files = transaction.pushQueue;
       qreal uploadSize = 0;
-      for ( const MerginFile &f : files )
+      for ( const MerginFile &file : files )
       {
-        uploadSize += f.size;
+        uploadSize += file.size;
       }
       emit storageLimitReached( uploadSize );
 
       // remove project if it was first time sync - migration
       if ( transaction.isInitialPush )
       {
-        QString projectNamespace, projectName;
+        QString projectNamespace;
+        QString projectName;
         extractProjectName( projectFullName, projectNamespace, projectName );
 
         detachProjectFromMergin( projectNamespace, projectName, false );
@@ -2981,7 +3005,7 @@ void MerginApi::pushStartReplyFinished()
     else
     {
       int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, code );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, serverErrorCode );
     }
     finishTransaction( projectFullName, false );
   }
@@ -3083,15 +3107,19 @@ void MerginApi::pushV2FileReplyFinished()
 
   if ( r->error() != QNetworkReply::NoError )
   {
-    QString serverMsg = extractServerErrorMsg( r->readAll() );
+    QString serverMsg;
     if ( r->error() == QNetworkReply::OperationCanceledError )
     {
       serverMsg = sSyncCanceledMessage;
     }
+    else
+    {
+      serverMsg = extractServerErrorMsg( r->readAll() );
+    }
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName );
 
     transaction.replyPushFile->deleteLater();
@@ -3267,17 +3295,23 @@ void MerginApi::pushFileReplyFinished()
   }
   else
   {
-    const QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
+    QString serverMsg;
+    QString serverErrorCode;
+
     if ( r->error() == QNetworkReply::OperationCanceledError )
     {
       serverMsg = sSyncCanceledMessage;
     }
+    else
+    {
+      const QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+    }
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    const QString serverErrorCode = extractServerErrorCode( data );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFile" ), httpCode, projectFullName, serverErrorCode );
 
     transaction.replyPushFile->deleteLater();
@@ -3731,16 +3765,24 @@ void MerginApi::pushFinishReplyFinished()
   }
   else
   {
-    const QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
+    QString serverMsg;
+    QString serverErrorCode;
+
     if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
       serverMsg = sSyncCanceledMessage;
+    }
+    else
+    {
+      const QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+    }
 
     QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
     const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    const QString serverErrorCode = extractServerErrorCode( data );
     emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
 
     // remove temporary diff files
@@ -3752,7 +3794,9 @@ void MerginApi::pushFinishReplyFinished()
       }
       QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
       if ( !QFile::remove( diffPath ) )
+      {
         CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
+      }
     }
 
     transaction.replyPushFinish->deleteLater();
