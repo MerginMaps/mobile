@@ -105,6 +105,7 @@ void TestCoreUtils::testFindUniquePath()
       "another (1).txt",
       "another (2).txt",
       "arch.tar.gz",
+      "my.archive.tar.gz",
       "image_my.notes.jpg",
       "image_my.notes (1).jpg",
       "photo_2024.01.05.jpg",
@@ -112,7 +113,9 @@ void TestCoreUtils::testFindUniquePath()
       "my photo.jpg",
       "gap.txt",
       "gap (2).txt",
-      "data (conflicted copy, user v2).gpkg"
+      "data (conflicted copy, user v2).gpkg",
+      "README",
+      ".gitignore"
     ]
   })json";
 
@@ -131,7 +134,8 @@ void TestCoreUtils::testFindUniquePath()
     { "folderA", "folderA (1)" },
     { "non.txt", "non.txt" },
     { "data.gpkg", "data.gpkg" },
-    { "arch.tar.gz", "arch.tar (1).gz" },
+    { "arch.tar.gz", "arch (1).tar.gz" },
+    { "my.archive.tar.gz", "my.archive (1).tar.gz" },
     { "image_my.notes.jpg", "image_my.notes (2).jpg" },
     { "image_my.other.jpg", "image_my.other.jpg" },
     { "folder.with.dots", "folder.with.dots (1)" },
@@ -143,6 +147,8 @@ void TestCoreUtils::testFindUniquePath()
     { "gap.txt", "gap (1).txt" },
     { "another (1).txt", "another (1) (1).txt" },
     { "data (conflicted copy, user v2).gpkg", "data (conflicted copy, user v2) (1).gpkg" },
+    { "README", "README (1)" },
+    { ".gitignore", ".gitignore (1)" },
     { "folderA/folder", "folderA/folder" },
     { "folderA/fileA.txt", "folderA/fileA (2).txt" },
     { "folderA/fileB.txt", "folderA/fileB (1).txt" },
