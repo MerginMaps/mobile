@@ -603,6 +603,8 @@ void AttributeController::updateOnFeatureChange()
 
   const QgsFeature feature = mFeatureLayerPair.feature();
 
+  mClonedExternalResources.clear();
+
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
   {
@@ -628,12 +630,14 @@ void AttributeController::updateOnFeatureChange()
           if ( itemData->editorWidgetType() == QStringLiteral( "ExternalResource" ) && !rememberedValue.toString().isEmpty() )
           {
             QString clonedPath;
-            if ( !cloneExternalResource( *itemData, rememberedValue.toString(), clonedPath ) )
+            QString clonedAbsolutePath;
+            if ( !cloneExternalResource( *itemData, rememberedValue.toString(), clonedPath, clonedAbsolutePath ) )
             {
               ++formItemsIterator;
               continue;
             }
             valueToUse = clonedPath;
+            mClonedExternalResources.insert( itemData->id(), { clonedPath, clonedAbsolutePath } );
           }
 
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
@@ -1247,6 +1251,7 @@ bool AttributeController::save()
   if ( !mFeatureLayerPair.layer() )
     return false;
 
+  moveClonedExternalResources();
   saveSketches();
   renamePhotos();
 
@@ -1597,10 +1602,11 @@ void AttributeController::resolveExternalResourcePaths( const QVariantMap &confi
   prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
 }
 
-bool AttributeController::cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath ) const
+bool AttributeController::cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath, QString &newAbsolutePath ) const
 {
+  const QVariantMap config = item.editorWidgetConfig();
   QString targetDir, prefix;
-  resolveExternalResourcePaths( item.editorWidgetConfig(), targetDir, prefix );
+  resolveExternalResourcePaths( config, targetDir, prefix );
   const QString src = InputUtils::getAbsolutePath( rememberedPath, prefix );
   const QFileInfo fi( src );
 
@@ -1608,6 +1614,13 @@ bool AttributeController::cloneExternalResource( const FormItem &item, const QSt
   {
     CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "User wanted to reuse photo value, but the value is not a valid file: %1" ).arg( src ) );
     return false;
+  }
+
+  // the folder can depend on values not filled in yet, the copy is moved to the right folder at save
+  if ( targetDir.isEmpty() )
+  {
+    targetDir = QgsProject::instance()->homePath();
+    prefix = InputUtils::resolvePrefixForRelativePath( config[ QStringLiteral( "RelativeStorage" ) ].toInt(), QgsProject::instance()->homePath(), targetDir );
   }
 
   // temporary name; renamePhotos() applies the custom naming expression at save
@@ -1624,7 +1637,40 @@ bool AttributeController::cloneExternalResource( const FormItem &item, const QSt
   }
 
   newRelativePath = InputUtils::getRelativePath( dst, prefix );
+  newAbsolutePath = dst;
   return true;
+}
+
+void AttributeController::moveClonedExternalResources()
+{
+  for ( auto it = mClonedExternalResources.begin(); it != mClonedExternalResources.end(); ++it )
+  {
+    const std::shared_ptr<FormItem> item = mFormItems.value( it.key() );
+    if ( !item )
+      continue;
+
+    // the user replaced or removed the reused photo
+    if ( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString() != it.value().first )
+      continue;
+
+    QString targetDir, prefix;
+    resolveExternalResourcePaths( item->editorWidgetConfig(), targetDir, prefix );
+
+    const QFileInfo src( it.value().second );
+    if ( targetDir.isEmpty() || QDir( targetDir ) == src.absoluteDir() )
+      continue;
+
+    const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( src.fileName(), targetDir ) );
+    if ( !InputUtils::renameFile( src.absoluteFilePath(), dst ) )
+    {
+      CoreUtils::log( QStringLiteral( "Attribute Controller" ), QStringLiteral( "Could not move reused photo from %1 to %2" ).arg( src.absoluteFilePath(), dst ) );
+      continue;
+    }
+
+    const QString newValue = InputUtils::getRelativePath( dst, prefix );
+    setFormValue( item->id(), newValue );
+    it.value() = { newValue, dst };
+  }
 }
 
 void AttributeController::renamePhotos()
