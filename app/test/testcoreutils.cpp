@@ -249,6 +249,27 @@ void TestCoreUtils::testNameValidation()
   }
 }
 
+void TestCoreUtils::testReservedName()
+{
+  QVector< QPair< QString, bool > > testcases =
+  {
+    { QStringLiteral( "admin" ), true },
+    { QStringLiteral( "ADMIN" ), true },
+    { QStringLiteral( "mergin" ), true },
+    { QStringLiteral( "CON" ), true },
+    { QStringLiteral( "com1" ), true },
+    { QStringLiteral( "administrator" ), false },
+    { QStringLiteral( "my admin" ), false },
+    { QStringLiteral( "project" ), false },
+    { QStringLiteral( "pro/ject" ), false },
+  };
+
+  for ( const auto &test : testcases )
+  {
+    QCOMPARE( CoreUtils::isReservedName( test.first ), test.second );
+  }
+}
+
 void TestCoreUtils::testNameAbbr()
 {
   QVector< QPair< QString, QString > > testcases =

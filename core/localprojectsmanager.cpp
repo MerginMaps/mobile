@@ -268,6 +268,11 @@ QString LocalProjectsManager::validateRename( const QString &projectId, const QS
     return tr( "The project name cannot be empty" );
   }
 
+  if ( CoreUtils::isReservedName( trimmedName ) )
+  {
+    return tr( "This project name is not allowed" );
+  }
+
   if ( !CoreUtils::isValidName( trimmedName ) )
   {
     return tr( "The project name contains invalid characters" );

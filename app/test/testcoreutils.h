@@ -24,6 +24,7 @@ class TestCoreUtils : public QObject
     void testFindUniquePath();
     void testHasProjectFileExtension();
     void testNameValidation();
+    void testReservedName();
     void testNameAbbr();
     void testReplaceValueInJson();
 };

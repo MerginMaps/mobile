@@ -233,6 +233,7 @@ void TestLocalProjectsManager::testValidateRenameRejects()
   QVERIFY( !manager.validateRename( projectId, QString() ).isEmpty() );
   QVERIFY( !manager.validateRename( projectId, QStringLiteral( "   " ) ).isEmpty() );
   QVERIFY( !manager.validateRename( projectId, QStringLiteral( "Bad/Name" ) ).isEmpty() );
+  QCOMPARE( manager.validateRename( projectId, QStringLiteral( "admin" ) ), QStringLiteral( "This project name is not allowed" ) );
   QVERIFY( !manager.validateRename( projectId, QStringLiteral( "OtherProject" ) ).isEmpty() );
   QVERIFY( !manager.validateRename( QStringLiteral( "does-not-exist" ), QStringLiteral( "NewName" ) ).isEmpty() );
 }
