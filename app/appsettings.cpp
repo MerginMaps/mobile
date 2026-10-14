@@ -415,10 +415,12 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   QSettings settings;
   if ( !mUsageReportEnabled )
   {
-    // Opt-out: clear accumulated data but preserve enabled and consent_asked flags
+    // Opt-out: clear accumulated data and identity, preserve consent_asked flag
     settings.beginGroup( QStringLiteral( "usage_report/data" ) );
     settings.remove( QString() );
     settings.endGroup();
+    settings.remove( QStringLiteral( "usage_report/telemetry_id" ) );
+    settings.remove( QStringLiteral( "usage_report/last_reported_at" ) );
     settings.setValue( QStringLiteral( "usage_report/enabled" ), false );
   }
   else

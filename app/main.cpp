@@ -696,21 +696,24 @@ int main( int argc, char *argv[] )
   QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&urc]( AbstractPositionProvider * provider )
   {
     if ( !provider ) return;
-    if ( provider->type() == QLatin1String( "internal" ) ) return;
+
+    // simulated provider has type "internal", so check it by id first
+    const QString type = provider->type();
+    QString connectionType;
+    if ( provider->id() == QLatin1String( "simulated" ) )
+      connectionType = QStringLiteral( "mock" );
+    else if ( type == QLatin1String( "external_bt" ) )
+      connectionType = QStringLiteral( "bluetooth" );
+    else if ( type == QLatin1String( "external_ip" ) )
+      connectionType = QStringLiteral( "network" );
+    else if ( type == QLatin1String( "external_trimble" ) )
+      connectionType = QStringLiteral( "trimble" );
+    else
+      return; // internal
 
     urc.trackFeature( QStringLiteral( "external_gps" ) );
-
-    const QString id = provider->id();
-    QString connectionType;
-    if ( id == QLatin1String( "simulated" ) )
-      connectionType = QStringLiteral( "mock" );
-    else if ( id.contains( QLatin1Char( ':' ) ) )
-      connectionType = QStringLiteral( "bluetooth" );
-    else
-      connectionType = QStringLiteral( "network" );
-
     urc.setData( QStringLiteral( "external_connection_type" ), connectionType );
-    urc.setData( QStringLiteral( "external_name" ), provider->name() );
+    urc.setData( QStringLiteral( "external_brand" ), UsageReportController::externalProviderBrand( type, provider->name() ) );
   } );
 
   // Highest project role
@@ -934,9 +937,6 @@ int main( int argc, char *argv[] )
 
   QQmlComponent component( &engine, QUrl( "qrc:/com.merginmaps/imports/MMInput/main.qml" ) );
   QObject *object = component.create();
-
-  // Attempt weekly snapshot
-  usageReportController.trySubmitSnapshot();
 
   if ( !component.errors().isEmpty() )
   {
