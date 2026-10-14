@@ -42,6 +42,12 @@ class UsageReportController : public QObject
 
     void startPingTimer();
 
+    /**
+     * Returns brand of the external GNSS receiver, never the provider name itself (it can be set by the user).
+     * Returns "other" for unrecognised bluetooth devices and "unknown" when the brand can not be derived.
+     */
+    static QString externalProviderBrand( const QString &providerType, const QString &providerName );
+
   private:
     void submitSnapshot( bool force ); // Temporary: remove force param when removing forceSubmitSnapshot
     bool isEnabled() const;
@@ -53,6 +59,7 @@ class UsageReportController : public QObject
     QNetworkAccessManager mNam;
     QTimer *mPingTimer = nullptr;
     QElapsedTimer mLoadTimer;
+    bool mSnapshotInFlight = false;
 };
 
 #endif // USAGEREPORTCONTROLLER_H

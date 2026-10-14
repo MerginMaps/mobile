@@ -26,6 +26,7 @@
 #include <QUuid>
 
 static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://api.merginmaps.com/mobile/usage-statistics" );
+static const QString CONNECTIVITY_CHECK_ENDPOINT = QStringLiteral( "https://isonline.merginmaps.com/generate_204" );
 static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
 
 UsageReportController::UsageReportController( AppSettings *appSettings,
@@ -40,9 +41,13 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
   mPingTimer = new QTimer( this );
   connect( mPingTimer, &QTimer::timeout, this, [this]()
   {
-    if ( !isEnabled() || mMerginApi->apiRoot().isEmpty() ) return;
+    if ( !isEnabled() ) return;
 
-    QUrl url( mMerginApi->apiRoot() );
+    // Weekly snapshot is checked here rather than at startup, so server info is already fetched
+    // and long-running sessions (common on mobile) still report
+    trySubmitSnapshot();
+
+    QUrl url( CONNECTIVITY_CHECK_ENDPOINT );
     QNetworkRequest request( url );
     request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
 
@@ -50,7 +55,9 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
     connect( reply, &QNetworkReply::finished, reply, [this, reply]()
     {
       incrementCounter( QStringLiteral( "ping_total_count" ) );
-      if ( reply->error() == QNetworkReply::NoError )
+      // Only 204 means online, captive portals redirect to a login page that returns 200
+      const int status = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      if ( reply->error() == QNetworkReply::NoError && status == 204 )
         incrementCounter( QStringLiteral( "ping_success_count" ) );
       else
         incrementCounter( QStringLiteral( "ping_fail_count" ) );
@@ -117,6 +124,30 @@ void UsageReportController::startPingTimer()
   mPingTimer->start( 5 * 60 * 1000 ); // 5 minutes
 }
 
+QString UsageReportController::externalProviderBrand( const QString &providerType, const QString &providerName )
+{
+  if ( providerType == QLatin1String( "external_trimble" ) )
+    return QStringLiteral( "trimble" );
+
+  // network provider name is an alias typed by the user, it says nothing about the device
+  if ( providerType != QLatin1String( "external_bt" ) )
+    return QStringLiteral( "unknown" );
+
+  // bluetooth name is broadcast by the device and usually starts with its model name
+  // TODO: fill in confirmed broadcast name prefixes per brand (next telemetry version)
+  static const QList<QPair<QString, QString>> BRAND_PREFIXES =
+  {
+  };
+
+  for ( const QPair<QString, QString> &prefix : BRAND_PREFIXES )
+  {
+    if ( providerName.startsWith( prefix.first, Qt::CaseInsensitive ) )
+      return prefix.second;
+  }
+
+  return QStringLiteral( "other" );
+}
+
 // Temporary: bypass interval check for testing
 void UsageReportController::forceSubmitSnapshot()
 {
@@ -131,7 +162,7 @@ void UsageReportController::trySubmitSnapshot()
 
 void UsageReportController::submitSnapshot( bool force )
 {
-  if ( !isEnabled() )
+  if ( !isEnabled() || mSnapshotInFlight )
     return;
 
   QSettings settings;
@@ -214,7 +245,7 @@ void UsageReportController::submitSnapshot( bool force )
 
   // String data
   properties.insert( QStringLiteral( "external_connection_type" ), QString() );
-  properties.insert( QStringLiteral( "external_name" ), QString() );
+  properties.insert( QStringLiteral( "external_brand" ), QString() );
   properties.insert( QStringLiteral( "highest_role" ), QString() );
   // TODO: populate from GET /v2/workspaces/<id>/service once the endpoint is extended
   properties.insert( QStringLiteral( "industry" ), QString() );
@@ -222,9 +253,11 @@ void UsageReportController::submitSnapshot( bool force )
   // Merge accumulated dynamic data (overwrites defaults with actual values)
   settings.beginGroup( QStringLiteral( "usage_report/data" ) );
   const QStringList keys = settings.childKeys();
+  QVariantMap sentData;
   for ( const QString &key : keys )
-    properties.insert( key, settings.value( key ) );
+    sentData.insert( key, settings.value( key ) );
   settings.endGroup();
+  properties.insert( sentData );
 
   // Compute average project load time from running totals
   const qint64 totalMs = properties.value( QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong();
@@ -249,15 +282,35 @@ void UsageReportController::submitSnapshot( bool force )
   request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
   request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
 
+  mSnapshotInFlight = true;
   QNetworkReply *reply = mNam.post( request, QJsonDocument( body ).toJson( QJsonDocument::Compact ) );
-  connect( reply, &QNetworkReply::finished, reply, [reply]()
+  connect( reply, &QNetworkReply::finished, this, [this, reply, sentData]()
   {
-    if ( reply->error() == QNetworkReply::NoError )
+    mSnapshotInFlight = false;
+    // Skip if the user opted out meanwhile, opt-out already cleared the data
+    if ( reply->error() == QNetworkReply::NoError && isEnabled() )
     {
       QSettings s;
-      // Reset dynamic data
+      // Reset sent data, keeping whatever changed while the request was in flight
       s.beginGroup( QStringLiteral( "usage_report/data" ) );
-      s.remove( QString() );
+      for ( auto it = sentData.cbegin(); it != sentData.cend(); ++it )
+      {
+        const QVariant current = s.value( it.key() );
+        if ( current == it.value() )
+        {
+          s.remove( it.key() );
+          continue;
+        }
+
+        // counters incremented in the meantime keep only the new increments,
+        // a lower value means the counter was reset (opt-out and back in), keep it as is
+        bool sentIsNumber = false;
+        bool currentIsNumber = false;
+        const qlonglong sentNumber = it.value().toLongLong( &sentIsNumber );
+        const qlonglong currentNumber = current.toLongLong( &currentIsNumber );
+        if ( sentIsNumber && currentIsNumber && currentNumber >= sentNumber )
+          s.setValue( it.key(), currentNumber - sentNumber );
+      }
       s.endGroup();
       // Update last reported
       s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
