@@ -379,10 +379,10 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
   }
   else
   {
-    if ( mAutosyncController )
-    {
-      mAutosyncController->disconnect();
-    }
+    if ( !mAutosyncController )
+      return;
+
+    mAutosyncController->disconnect();
     mAutosyncController.reset();
   }
 
