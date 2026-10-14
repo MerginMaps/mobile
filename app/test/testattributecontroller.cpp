@@ -1071,6 +1071,85 @@ void TestAttributeController::testReusedPhotoIsIndependentFile()
   QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
 }
 
+void TestAttributeController::testReusedPhotoFollowsPathExpression()
+{
+  QString projectName = QStringLiteral( "testReusedPhotoFollowsPathExpression" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  // photos are stored in a subfolder named after the "notes" field, relative to the project
+  QVariantMap config = surveyLayer->editorWidgetSetup( 3 ).config();
+  config[ QStringLiteral( "RelativeStorage" ) ] = 1;
+  config[ QStringLiteral( "PropertyCollection" ) ] = QVariantMap
+  {
+    {
+      QStringLiteral( "properties" ), QVariantMap
+      {
+        { QStringLiteral( "propertyRootPath" ), QVariantMap { { QStringLiteral( "expression" ), QStringLiteral( "@project_folder + '/Photos/' + \"notes\"" ) } } }
+      }
+    }
+  };
+  surveyLayer->setEditorWidgetSetup( 3, QgsEditorWidgetSetup( QStringLiteral( "ExternalResource" ), config ) );
+
+  // without photo naming, renamePhotos() does not move the file, so the reused copy is only moved by the fix
+  QgsProject::instance()->removeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( surveyLayer->id(), surveyLayer->fields().at( 3 ).name() ) );
+
+  QVERIFY( QDir().mkpath( projectDir + QStringLiteral( "/Photos/Open" ) ) );
+  QVERIFY( QFile::copy( projectDir + QStringLiteral( "/image1.jpg" ), projectDir + QStringLiteral( "/Photos/Open/image1.jpg" ) ) );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  // feature 1 with its own photo
+  QgsFeature feat1( surveyLayer->fields() );
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( FeatureLayerPair( feat1, surveyLayer ) );
+
+  const QVector<QUuid> items1 = controller1.tabItem( 0 )->formItems();
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "Open" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "Photos/Open/image1.jpg" ) );
+  controller1.save();
+
+  QCOMPARE( controller1.featureLayerPair().feature().attribute( 3 ).toString(), QStringLiteral( "Photos/Open/image1.jpg" ) );
+
+  // features 2 and 3 reuse the photo, their folder is only known once "notes" is filled in
+  const QStringList folders = { QStringLiteral( "Pending" ), QStringLiteral( "Done" ) };
+  for ( const QString &folder : folders )
+  {
+    QgsFeature feat( surveyLayer->fields() );
+    AttributeController controller;
+    controller.setRememberAttributesController( &remController );
+    controller.setFeatureLayerPair( FeatureLayerPair( feat, surveyLayer ) );
+
+    QVERIFY( !controller.featureLayerPair().feature().attribute( 3 ).toString().isEmpty() );
+
+    const QVector<QUuid> items = controller.tabItem( 0 )->formItems();
+    controller.setFormValue( items.at( 2 ), folder );
+    controller.save();
+
+    const QString photoPath = controller.featureLayerPair().feature().attribute( 3 ).toString();
+    QVERIFY( photoPath.startsWith( QStringLiteral( "Photos/%1/" ).arg( folder ) ) );
+    QVERIFY( QFile::exists( projectDir + "/" + photoPath ) );
+  }
+
+  // the original photo is untouched and no temporary copy is left in the project folder
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/Photos/Open/image1.jpg" ) ) );
+  QVERIFY( QDir( projectDir ).entryList( { QStringLiteral( "2*.jpg" ) }, QDir::Files ).isEmpty() );
+}
+
 void TestAttributeController::testHtmlAndTextWidgets()
 {
   QString projectDir = TestUtils::testDataDir() + "/expressions";

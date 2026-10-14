@@ -38,6 +38,9 @@ class TestAttributeController: public QObject
     //! Reusing a photo must create an independent file, not just copy the path string
     void testReusedPhotoIsIndependentFile();
 
+    //! A reused photo must end up in the folder resolved from the new feature's values
+    void testReusedPhotoFollowsPathExpression();
+
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 
