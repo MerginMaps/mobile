@@ -88,51 +88,46 @@ void TestCoreUtils::testFindUniquePath()
   QVERIFY( projectDir.exists() );
   QVERIFY( projectDir.entryList( QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs ).isEmpty() );
 
-  //
-  // Create test files in the following structure:
-  //
-  // - folderA
-  //   |- fileA.txt
-  //   |- fileA (1).txt
-  //   |- fileB.txt
-  //   |- folderAB
-  //   |- folderAB (1)
-  //
-  // - file.txt
-  // - another.txt
-  // - another (1).txt
-  // - another (2).txt
-  // - arch.tar.gz
-  //
-
-  QString structure = "{"
-                      " \"folderA\": {"
-                      "  \"files\": ["
-                      "   \"fileA.txt\", "
-                      "   \"fileA (1).txt\", "
-                      "   \"fileB.txt\""
-                      "  ],"
-                      "  \"folderAB\": {},"
-                      "  \"folderAB (1)\": {}"
-                      " },"
-                      " \"files\": [ "
-                      "  \"file.txt\", "
-                      "  \"another.txt\", "
-                      "  \"another (1).txt\", "
-                      "  \"another (2).txt\", "
-                      "  \"arch.tar.gz\""
-                      " ]"
-                      "}";
+  // each object is a folder, "files" lists the files created in it
+  const QString structure = R"json({
+    "folderA": {
+      "files": [ "fileA.txt", "fileA (1).txt", "fileB.txt", "dotted.name.txt" ],
+      "folderAB": {},
+      "folderAB (1)": {}
+    },
+    "folder.with.dots": {
+      "files": [ "file.txt" ]
+    },
+    "dir.txt": {},
+    "files": [
+      "file.txt",
+      "another.txt",
+      "another (1).txt",
+      "another (2).txt",
+      "arch.tar.gz",
+      "my.archive.tar.gz",
+      "image_my.notes.jpg",
+      "image_my.notes (1).jpg",
+      "photo_2024.01.05.jpg",
+      "IMG.JPG",
+      "my photo.jpg",
+      "gap.txt",
+      "gap (2).txt",
+      "data (conflicted copy, user v2).gpkg",
+      "README",
+      ".gitignore"
+    ]
+  })json";
 
   QVERIFY( TestUtils::generateProjectFolder( projectPath, QJsonDocument::fromJson( structure.toUtf8() ) ) );
 
-  struct combination
+  struct testcase
   {
     QString path;
     QString expectedOutput;
   };
 
-  QVector<combination> testcases =
+  QVector<testcase> testcases =
   {
     { "file.txt", "file (1).txt" },
     { "another.txt", "another (3).txt" },
@@ -140,15 +135,32 @@ void TestCoreUtils::testFindUniquePath()
     { "non.txt", "non.txt" },
     { "data.gpkg", "data.gpkg" },
     { "arch.tar.gz", "arch (1).tar.gz" },
+    { "my.archive.tar.gz", "my.archive (1).tar.gz" },
+    { "image_my.notes.jpg", "image_my.notes (2).jpg" },
+    { "image_my.other.jpg", "image_my.other.jpg" },
+    { "folder.with.dots", "folder.with.dots (1)" },
+    { "folder.with.dots/file.txt", "folder.with.dots/file (1).txt" },
+    { "dir.txt", "dir.txt (1)" },
+    { "photo_2024.01.05.jpg", "photo_2024.01.05 (1).jpg" },
+    { "IMG.JPG", "IMG (1).JPG" },
+    { "my photo.jpg", "my photo (1).jpg" },
+    { "gap.txt", "gap (1).txt" },
+    { "another (1).txt", "another (1) (1).txt" },
+    { "data (conflicted copy, user v2).gpkg", "data (conflicted copy, user v2) (1).gpkg" },
+    { "README", "README (1)" },
+    { ".gitignore", ".gitignore (1)" },
     { "folderA/folder", "folderA/folder" },
     { "folderA/fileA.txt", "folderA/fileA (2).txt" },
     { "folderA/fileB.txt", "folderA/fileB (1).txt" },
     { "folderA/fileC.txt", "folderA/fileC.txt" },
     { "folderA/folderAB", "folderA/folderAB (2)" },
+    { "folderA/dotted.name.txt", "folderA/dotted.name (1).txt" },
   };
 
   for ( const auto &c : testcases )
   {
+    qInfo() << QStringLiteral( "Testing path %1" ).arg( c.path );
+
     QString foundPath = CoreUtils::findUniquePath( projectPath + "/" + c.path );
     QCOMPARE( foundPath, projectPath + "/" + c.expectedOutput );
   }

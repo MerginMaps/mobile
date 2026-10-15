@@ -1649,7 +1649,7 @@ void AttributeController::renamePhotos()
         InputUtils::sanitizePath( newName );
 
         const QFileInfo fi( src );
-        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.completeSuffix() );
+        newName = QStringLiteral( "%1.%2" ).arg( newName, fi.suffix() );
 
         const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( newName, targetDir ) );
         if ( InputUtils::renameFile( src, dst ) )

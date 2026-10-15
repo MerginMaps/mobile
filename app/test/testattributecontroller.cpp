@@ -894,6 +894,50 @@ void TestAttributeController::testPhotoRenaming()
   }
 }
 
+void TestAttributeController::testPhotoRenamingCollisionWithDotInName()
+{
+  QString projectName = QStringLiteral( "testPhotoRenamingCollisionWithDotInName" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+
+  // "photo" naming expression is 'image_' + "notes", so a dot in notes lands in the name too
+  const QString collidingPath = projectDir + QStringLiteral( "/image_my.notes.jpg" );
+  QVERIFY( QFile::copy( projectDir + QStringLiteral( "/image1.jpg" ), collidingPath ) );
+  QVERIFY( QFile::exists( collidingPath ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat( surveyLayer->fields() );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "my.notes" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+
+  controller.save();
+
+  const QgsFeature f = controller.featureLayerPair().feature();
+
+  QVERIFY( QFile::exists( collidingPath ) ); // untouched
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_my (1).notes.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_my.notes (1).jpg" ) ) );
+  QCOMPARE( f.attribute( 3 ), QStringLiteral( "image_my.notes (1).jpg" ) );
+}
+
 void TestAttributeController::testHtmlAndTextWidgets()
 {
   QString projectDir = TestUtils::testDataDir() + "/expressions";
