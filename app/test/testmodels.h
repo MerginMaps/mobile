@@ -28,6 +28,8 @@ class TestModels : public QObject
     void testValueRelationHotreload();
     void testProjectsModel();
     void testProjectsProxyModel();
+    void testProjectsModelOnProjectRenamed();
+    void testProjectsModelOnProjectRenamedActiveProject();
 
 };
 

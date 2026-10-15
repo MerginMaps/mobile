@@ -279,19 +279,24 @@ bool CoreUtils::isValidName( const QString &name )
   if ( invalidFirstCharacterRe.match( name ).hasMatch() )
     return false;
 
-  // name must not be a reserved Windows device filename (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
-  static QRegularExpression invalidFilenameRe( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
-  if ( invalidFilenameRe.match( name ).hasMatch() )
-    return false;
-
-  // name must not be a word reserved by Mergin Maps / Lutra Consulting
-  static QRegularExpression reservedWordRe( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
-  if ( reservedWordRe.match( name ).hasMatch() )
+  if ( isReservedName( name ) )
     return false;
 
   // name must contain only word characters, whitespace, '-' or '.'
   static QRegularExpression validCharactersRe( R"(^[\w\s\-\.]+$)", QRegularExpression::UseUnicodePropertiesOption );
   return validCharactersRe.match( name ).hasMatch();
+}
+
+bool CoreUtils::isReservedName( const QString &name )
+{
+  // name must not be a reserved Windows device filename (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
+  static QRegularExpression invalidFilenameRe( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
+  if ( invalidFilenameRe.match( name ).hasMatch() )
+    return true;
+
+  // name must not be a word reserved by Mergin Maps / Lutra Consulting
+  static QRegularExpression reservedWordRe( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  return reservedWordRe.match( name ).hasMatch();
 }
 
 QString CoreUtils::nameAbbr( const QString &name, const QString &email )

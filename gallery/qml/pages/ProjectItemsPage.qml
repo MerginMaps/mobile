@@ -48,7 +48,7 @@ MMPage {
         projectIsInSync: true
         projectSyncProgress: 1/4
 
-        projectActionButtons: ["download", "sync", "remove"]
+        projectActionButtons: ["download", "sync", "remove", "rename"]
 
         state: "NeedsSync"
 
@@ -61,6 +61,7 @@ MMPage {
         }
         onRemoveRequested: console.log("onRemoveRequested")
         onMigrateRequested: console.log("onMigrateRequested")
+        onRenameRequested: console.log("onRenameRequested")
 
         Timer {
           id: syncAnimator
