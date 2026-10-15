@@ -12,6 +12,9 @@ on:
       - 'cmake_templates/**'
       - 'CMakeLists.txt'
       - '.github/workflows/android.yml'
+  pull_request:
+    branches:
+      - master
 
   release:
     types:
