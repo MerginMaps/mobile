@@ -132,6 +132,8 @@ class TestMerginApi: public QObject
     void testDiffUpdateBasic();
     void testDiffUpdateWithRebase();
     void testDiffUpdateWithRebaseFailed();
+    void testReloadNeededAfterCopyAndApplyDiff();
+    void testReloadNeededAfterRemoteDelete();
     void testUpdateWithDiffs();
     void testUpdateWithMissedVersion();
     void testMigrateProject();

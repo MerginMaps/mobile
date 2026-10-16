@@ -1622,6 +1622,75 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
 }
 
+void TestMerginApi::testReloadNeededAfterCopyAndApplyDiff()
+{
+  // a pull that both replaces a whole gpkg (Copy) and applies a diff to another gpkg (ApplyDiff)
+  // must request a project reload - the replaced file is still open in QGIS otherwise
+
+  QString projectName = "testReloadNeededAfterCopyAndApplyDiff";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  QVERIFY( QFileInfo::exists( projectDir + "/.mergin/base.gpkg" ) );
+
+  //
+  // with mApiExtra: add a new gpkg (pulled as Copy) and modify base.gpkg (pulled as ApplyDiff)
+  //
+
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  bool r0 = QFile::copy( mTestDataPath + "/added_column.gpkg", projectDirExtra + "/other.gpkg" );
+  bool r1 = QFile::remove( projectDirExtra + "/base.gpkg" );
+  bool r2 = QFile::copy( mTestDataPath + "/added_row.gpkg", projectDirExtra + "/base.gpkg" );
+  QVERIFY( r0 && r1 && r2 );
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  QSignalSpy spy( mApi, &MerginApi::projectReloadNeededAfterSync );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QVERIFY( QFile::exists( projectDir + "/other.gpkg" ) );
+  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+
+  // the successful ApplyDiff of base.gpkg must not clear the reload request made by the Copy of other.gpkg
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 0 ).toString(), mWorkspaceName + "/" + projectName );
+}
+
+void TestMerginApi::testReloadNeededAfterRemoteDelete()
+{
+  // a pull that deletes a gpkg must request a project reload - layers are still pointing to the removed file otherwise
+
+  QString projectName = "testReloadNeededAfterRemoteDelete";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+
+  // add a second gpkg on the server so that it can be deleted later
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  QVERIFY( QFile::copy( mTestDataPath + "/added_column.gpkg", projectDirExtra + "/other.gpkg" ) );
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  QVERIFY( QFile::exists( projectDir + "/other.gpkg" ) );
+
+  // delete the gpkg on the server
+  QVERIFY( QFile::remove( projectDirExtra + "/other.gpkg" ) );
+  uploadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+
+  QSignalSpy spy( mApi, &MerginApi::projectReloadNeededAfterSync );
+
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QVERIFY( !QFile::exists( projectDir + "/other.gpkg" ) );
+
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy.takeFirst().at( 0 ).toString(), mWorkspaceName + "/" + projectName );
+}
+
 void TestMerginApi::testUpdateWithDiffs()
 {
   // a test case where we download initial version (v1), then there will be
