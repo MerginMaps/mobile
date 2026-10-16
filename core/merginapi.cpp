@@ -2098,10 +2098,15 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
   QString dest = projectDir + "/" + filePath;
   createPathIfNotExists( dest );
 
-  QFile f( dest );
+  // assemble the file next to the project (inside .mergin so it is never seen as a local change) and then
+  // move it over dest - dest may still be open (e.g. by a rendering job) and must not be truncated in place
+  QString assembled = projectDir + "/.mergin/" + CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+  createPathIfNotExists( assembled );
+
+  QFile f( assembled );
   if ( !f.open( QIODevice::WriteOnly ) )
   {
-    CoreUtils::log( "pull " + projectFullName, "Failed to open file for writing " + dest );
+    CoreUtils::log( "pull " + projectFullName, "Failed to open file for writing " + assembled );
     return;
   }
 
@@ -2112,12 +2117,21 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     if ( !fTmp.open( QIODevice::ReadOnly ) )
     {
       CoreUtils::log( "pull " + projectFullName, "Failed to open temp file for reading " + item.tempFileName );
+      f.close();
+      QFile::remove( assembled );
       return;
     }
     f.write( fTmp.readAll() );
   }
 
   f.close();
+
+  if ( !GeodiffUtils::replaceWalAware( assembled, dest ) )
+  {
+    CoreUtils::log( "pull " + projectFullName, "Failed to replace " + dest + " with new content" );
+    QFile::remove( assembled );
+    return;
+  }
 
   // if diffable, copy to .mergin dir so we have a basefile
   if ( MerginApi::isFileDiffable( filePath ) )
@@ -2208,13 +2222,17 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
     hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserInfo->username(), info.localVersion ) );
-    if ( !GeodiffUtils::renameWalAware( dest, newDest ) )
+    // copy rather than rename: dest may still be open, and a backup copy also includes changes still in its -wal
+    if ( !GeodiffUtils::copyWalAware( dest, newDest ) )
     {
-      CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
+      CoreUtils::log( "pull " + projectFullName, "failed to create conflicting file after failed geodiff rebase: " + filePath );
     }
-    if ( !QFile::copy( src, dest ) )
+    // src becomes the new basefile below, so put a copy of it in place of dest
+    QString serverCopy = projectDir + "/.mergin/" + CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    if ( !QFile::copy( src, serverCopy ) || !GeodiffUtils::replaceWalAware( serverCopy, dest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed to update local conflicting file after failed geodiff rebase: " + filePath );
+      QFile::remove( serverCopy );
     }
   }
 
@@ -2263,13 +2281,14 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
         QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserInfo->username(), info.localVersion ) );
-        if ( !GeodiffUtils::renameWalAware( origPath, newPath ) )
+        // copy rather than rename: the file may still be open, and a backup copy also includes changes still in its -wal
+        if ( !GeodiffUtils::copyWalAware( origPath, newPath ) )
         {
-          CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
+          CoreUtils::log( "pull " + projectFullName, "failed to create conflicting file: " + finalizationItem.filePath );
         }
         else
         {
-          CoreUtils::log( "pull " + projectFullName, "Local file renamed due to conflict with server: " + finalizationItem.filePath );
+          CoreUtils::log( "pull " + projectFullName, "Local file copied due to conflict with server: " + finalizationItem.filePath );
         }
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
         break;
@@ -2287,8 +2306,8 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
       case PullTask::Delete:
       {
         CoreUtils::log( "pull " + projectFullName, "Removing local file: " + finalizationItem.filePath );
-        QFile file( projectDir + "/" + finalizationItem.filePath );
-        file.remove();
+        if ( !GeodiffUtils::removeWalAware( projectDir + "/" + finalizationItem.filePath ) )
+          CoreUtils::log( "pull " + projectFullName, "Failed to remove local file: " + finalizationItem.filePath );
         break;
       }
     }

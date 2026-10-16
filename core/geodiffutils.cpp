@@ -9,11 +9,14 @@
 
 #include "geodiffutils.h"
 
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTemporaryFile>
 #include <QUuid>
+
+#include <filesystem>
 
 #include <geodiff.h>
 #include "coreutils.h"
@@ -201,13 +204,43 @@ bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
   }
 }
 
-bool GeodiffUtils::renameWalAware( const QString &src, const QString &dst )
+static bool removeWalFiles( const QString &path )
 {
-  const bool res = QFile::rename( src, dst );
-  if ( res && src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+  if ( !path.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+    return true;
+
+  for ( const QString &suffix : { QStringLiteral( "-wal" ), QStringLiteral( "-shm" ) } )
   {
-    ( void ) QFile::rename( QStringLiteral( "%1-wal" ).arg( src ), QStringLiteral( "%1-wal" ).arg( dst ) );
-    ( void ) QFile::rename( QStringLiteral( "%1-shm" ).arg( src ), QStringLiteral( "%1-shm" ).arg( dst ) );
+    const QString sidecar = path + suffix;
+    if ( QFile::exists( sidecar ) && !QFile::remove( sidecar ) )
+    {
+      CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to remove %1" ).arg( sidecar ) );
+      return false;
+    }
   }
-  return res;
+  return true;
+}
+
+bool GeodiffUtils::removeWalAware( const QString &path )
+{
+  if ( !removeWalFiles( path ) )
+    return false;
+
+  return QFile::remove( path );
+}
+
+bool GeodiffUtils::replaceWalAware( const QString &src, const QString &dst )
+{
+  if ( !removeWalFiles( dst ) )
+    return false;
+
+  // unlike QFile::rename, std::filesystem::rename replaces an existing destination
+  std::error_code ec;
+  std::filesystem::rename( QFileInfo( src ).filesystemAbsoluteFilePath(), QFileInfo( dst ).filesystemAbsoluteFilePath(), ec );
+  if ( ec )
+  {
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to replace %1: %2" ).arg( dst, QString::fromStdString( ec.message() ) ) );
+    return false;
+  }
+  return true;
 }

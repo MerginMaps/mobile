@@ -72,8 +72,18 @@ class GeodiffUtils
     //! Copies file. If file is gpkg, a sqlite backup is performed so WAL is taken into account
     static bool copyWalAware( const QString &src, const QString &dst );
 
-    //! Renames file. If file is gpkg, any -wal and -shm files are renamed too
-    static bool renameWalAware( const QString &src, const QString &dst );
+    /**
+     * Removes file. If file is gpkg, its -wal and -shm files are removed first, so a stale WAL
+     * is never left next to the path. Returns false (and keeps the main file) if they cannot be removed.
+     */
+    static bool removeWalAware( const QString &path );
+
+    /**
+     * Moves "src" over "dst", replacing it. "src" must be a complete file not opened by anyone.
+     * If "dst" is gpkg, its -wal and -shm files are removed first, so they are not replayed onto the new content.
+     * Readers that still have "dst" open keep reading the old content (POSIX), the file is never truncated in place.
+     */
+    static bool replaceWalAware( const QString &src, const QString &dst );
 };
 
 #endif // GEODIFFUTILS_H
