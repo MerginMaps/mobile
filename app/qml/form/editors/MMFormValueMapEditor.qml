@@ -144,8 +144,8 @@ MMFormComboboxBaseEditor {
       for ( let i = 0; i < config.length; i++ )
       {
         const modelItem = {
-          text: Object.keys( config[i] )[0],
-          value: Object.values( config[i] )[0]
+          text: Object.keys( config[i] )[0] ?? "",
+          value: Object.values( config[i] )[0] ?? "" // an empty row in QGIS comes as undefined
         }
 
         // filter out nulls
