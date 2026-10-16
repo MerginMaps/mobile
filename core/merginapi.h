@@ -646,6 +646,13 @@ class MerginApi: public QObject
     Q_INVOKABLE void reloadProjectRole( const QString &projectFullName );
 
     /**
+     * Logs in again with the stored login and password, used when the server rejects a token that has not expired yet.
+     * Emits sessionExpired() if the password is no longer accepted and sessionCheckFinished() in any case.
+     * Returns false if the session can not be checked, like for SSO or without stored credentials.
+     */
+    bool verifySession();
+
+    /**
      * Returns the network manager used for Mergin API requests
      */
     QNetworkAccessManager *networkManager() const
@@ -715,6 +722,8 @@ class MerginApi: public QObject
     void notifyError( const QString &message );
     void authRequested();
     void ssoLoginExpired();
+    void sessionExpired();
+    void sessionCheckFinished( bool sessionExpired );
     void authChanged();
     void authFailed();
     void registrationSucceeded();
@@ -962,6 +971,8 @@ class MerginApi: public QObject
     static const QSet<QString> sIgnoreImageExtensions;
     static const QSet<QString> sIgnoreFiles;
     QEventLoop mAuthLoopEvent;
+    bool mSessionCheckPending = false;
+    QByteArray mLastVerifiedToken; // token obtained by the last session check, to not check the same token again
     MerginApiStatus::VersionStatus mApiVersionStatus = MerginApiStatus::VersionStatus::UNKNOWN;
     bool mApiSupportsSubscriptions = false;
     bool mSupportsSelectiveSync = true;

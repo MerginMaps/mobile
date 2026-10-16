@@ -30,6 +30,7 @@ SynchronizationManager::SynchronizationManager(
     connect( mMerginApi, &MerginApi::projectAttachedToMergin, this, &SynchronizationManager::onProjectAttachedToMergin );
     connect( mMerginApi, &MerginApi::syncProjectStatusChanged, this, &SynchronizationManager::onProjectSyncProgressChanged );
     connect( mMerginApi, &MerginApi::projectReloadNeededAfterSync, this, &SynchronizationManager::onProjectReloadNeededAfterSync );
+    connect( mMerginApi, &MerginApi::sessionCheckFinished, this, &SynchronizationManager::onSessionCheckFinished );
     connect( mMerginApi, &MerginApi::projectAlreadyOnLatestVersion, this, [&]( const QString & projectFullName )
     {
       const SyncProcess &process = mSyncProcesses[projectFullName];
@@ -214,7 +215,7 @@ void SynchronizationManager::onProjectSyncFinished( const QString &projectFullNa
     SyncProcess &process = mSyncProcesses[projectFullName];
     bool reloadNeeded = process.reloadProject;
 
-    if ( !successfully && process.awaitsRetry )
+    if ( !successfully && ( process.awaitsRetry || process.awaitsSessionCheck ) )
     {
       // sync has failed, but we will try to sync again
       process.pending = false;
@@ -288,6 +289,15 @@ void SynchronizationManager::onProjectSyncFailure(
 
   const SynchronizationError::ErrorType error = SynchronizationError::errorType( errorCode, message );
 
+  // the server also refuses the sync when it ended the session, like after a password change
+  if ( error == SynchronizationError::NoPermissions && !process.sessionChecked && mMerginApi->verifySession() )
+  {
+    process.sessionChecked = true;
+    process.awaitsSessionCheck = true;
+    process.pending = false;
+    return;
+  }
+
   // We only retry twice for synchronization requested by user
   const bool eligibleForRetry = process.strategy == SyncOptions::Retry &&
                                 process.retriesCount < 2 &&
@@ -314,6 +324,35 @@ void SynchronizationManager::onProjectSyncFailure(
   {
     mSyncProcesses.remove( projectFullName );
     emit syncFinished( projectFullName, false, -1, false );
+  }
+}
+
+void SynchronizationManager::onSessionCheckFinished( bool sessionExpired )
+{
+  const QStringList projects = mSyncProcesses.keys();
+  for ( const QString &projectFullName : projects )
+  {
+    SyncProcess &process = mSyncProcesses[projectFullName];
+    if ( !process.awaitsSessionCheck )
+      continue;
+
+    process.awaitsSessionCheck = false;
+
+    if ( !sessionExpired && mMerginApi->userAuth()->hasValidToken() )
+    {
+      // logged in again, the refusal could have been caused by the old token
+      syncProject( mMerginApi->getLocalProject( projectFullName ), SyncOptions::Authorized, process.strategy, process.requestOrigin );
+      if ( mSyncProcesses.value( projectFullName ).pending )
+        continue;
+    }
+    else if ( !sessionExpired && process.requestOrigin == SyncOptions::ManualRequest )
+    {
+      // the session could not be checked, report the original error
+      emit syncError( projectFullName, SynchronizationError::NoPermissions );
+    }
+
+    // an expired session is reported by MerginApi::sessionExpired(), syncFinished() was already emitted for the failed sync
+    mSyncProcesses.remove( projectFullName );
   }
 }
 
