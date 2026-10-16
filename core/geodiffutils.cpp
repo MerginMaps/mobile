@@ -192,7 +192,7 @@ bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
 {
   if ( src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
   {
-    const int res = GEODIFF_makeCopySqlite( GeodiffContext::instance().handle(), src.toLocal8Bit().constData(), dst.toLocal8Bit().constData() );
+    const int res = GEODIFF_makeCopySqlite( GeodiffContext::instance().handle(), src.toUtf8().constData(), dst.toUtf8().constData() );
     return res == GEODIFF_SUCCESS;
   }
   else
@@ -201,7 +201,7 @@ bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
   }
 }
 
-bool GeodiffUtils::renameWalAware( const QString& src, const QString& dst )
+bool GeodiffUtils::renameWalAware( const QString &src, const QString &dst )
 {
   const bool res = QFile::rename( src, dst );
   if ( res && src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
