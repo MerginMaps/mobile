@@ -29,6 +29,7 @@ class TestVariablesManager: public QObject
 
     void testPositionVariables();
     void testUserVariables();
+    void testProjectRoleVariable();
 
   private:
     MerginApi *mApi;
