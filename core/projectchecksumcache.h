@@ -33,6 +33,12 @@ class ProjectChecksumCache
     /**
      * Returns Sha1 checksum of file (with-caching)
      * Recalculates checksum for an entry not in cache
+     *
+     * For a gpkg with a non-empty -wal file, returns a checksum combining the (cached) checksum of the main
+     * file with the checksum of the -wal file, which is always recalculated: changes that only live in the WAL
+     * do not alter the main file, so its checksum alone could wrongly match the server one. Such a checksum
+     * is only meant for change detection (a mismatch on a diffable file is then resolved by geodiff),
+     * it does not correspond to the file content on the server.
      * \param path relative path of the file to mProjectDir
      */
     QString get( const QString &path );
@@ -47,6 +53,9 @@ class ProjectChecksumCache
   private:
     QString cacheFilePath() const;
     QString cacheDirPath() const;
+
+    //! Returns Sha1 checksum of the file itself (with-caching), regardless of any -wal file
+    QString mainFileChecksum( const QString &path );
 
     struct CacheValue
     {

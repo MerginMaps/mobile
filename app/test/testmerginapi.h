@@ -157,6 +157,7 @@ class TestMerginApi: public QObject
     void testSyncWhileWalFilesExist();
     void testSyncWhileWalFilesExistWithConflict();
     void testSyncWhileWalFilesExistWithConflictedCopy();
+    void testPushWithChangesOnlyInWal();
     void testOfflineCache();
     void testRegisterAndDelete();
     void testCreateWorkspace();

@@ -3581,6 +3581,50 @@ void TestMerginApi::testSyncWhileWalFilesExist()
   delete vl2;
 }
 
+void TestMerginApi::testPushWithChangesOnlyInWal()
+{
+  // edits that are committed but only live in the -wal file of a gpkg must be detected and pushed
+
+  QString projectName = "testPushWithChangesOnlyInWal";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+  vl->startEditing();
+  const QByteArray mainChecksumBeforeEdit = CoreUtils::calculateChecksum( projectDir + "/base.gpkg" );
+
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file only
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg-wal" ) );
+  QCOMPARE( CoreUtils::calculateChecksum( projectDir + "/base.gpkg" ), mainChecksumBeforeEdit );
+
+  // the change is detected even though the main file did not change
+  QVERIFY( MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // push while the layer is still in editing mode
+  uploadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the basefile matches what was pushed
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // the other client gets the feature that lived in the -wal file
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  QgsVectorLayer *vlExtra = new QgsVectorLayer( projectDirExtra + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vlExtra->isValid() );
+  QCOMPARE( vlExtra->featureCount(), static_cast<long>( 4 ) );
+  delete vlExtra;
+}
+
 void TestMerginApi::testSyncWhileWalFilesExistWithConflict()
 {
   QString projectName = "testSyncWhileWalFilesExistWithConflict";
