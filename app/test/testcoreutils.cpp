@@ -10,8 +10,11 @@
 #include "testcoreutils.h"
 #include "coreutils.h"
 #include "testutils.h"
+#include "geodiffutils.h"
 
 #include <QtTest/QtTest>
+
+#include <qgsvectorlayer.h>
 
 void TestCoreUtils::init()
 {
@@ -351,4 +354,68 @@ void TestCoreUtils::testReplaceValueInJson()
   }
 
   QFile::remove( testFilePath );
+}
+
+void TestCoreUtils::testCopyWalAware()
+{
+  // a copy of a gpkg in WAL mode includes the data still in the -wal file and is itself in rollback mode
+  // (header bytes 18-19 == 1), without any -wal/-shm files
+
+  const QString dir = QDir::tempPath() + QStringLiteral( "/testCopyWalAware" );
+  QDir( dir ).removeRecursively();
+  QVERIFY( QDir().mkpath( dir ) );
+
+  auto headerVersions = []( const QString & path )
+  {
+    QFile f( path );
+    if ( !f.open( QIODevice::ReadOnly ) )
+      return QByteArray();
+    return f.read( 20 ).mid( 18, 2 );
+  };
+
+  const QString src = dir + QStringLiteral( "/src.gpkg" );
+  QVERIFY( QFile::copy( TestUtils::testDataDir() + QStringLiteral( "/diff_project/base.gpkg" ), src ) );
+  QFile::setPermissions( src, QFile::ReadOwner | QFile::WriteOwner );
+
+  QgsVectorLayer *vl = new QgsVectorLayer( src + QStringLiteral( "|layername=simple" ), QStringLiteral( "src" ), QStringLiteral( "ogr" ) );
+  QVERIFY( vl->isValid() );
+  const long featureCount = vl->featureCount();
+  vl->startEditing();
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( src + QStringLiteral( "-wal" ) ) );
+  QCOMPARE( headerVersions( src ), QByteArray( 2, 2 ) );
+
+  // copy while the source is still open with data in its -wal file
+  const QString dst = dir + QStringLiteral( "/dst.gpkg" );
+  QVERIFY( GeodiffUtils::copyWalAware( src, dst ) );
+  delete vl;
+
+  QCOMPARE( headerVersions( dst ), QByteArray( 2, 1 ) );
+  QVERIFY( !QFile::exists( dst + QStringLiteral( "-wal" ) ) );
+  QVERIFY( !QFile::exists( dst + QStringLiteral( "-shm" ) ) );
+
+  QgsVectorLayer *vlCopy = new QgsVectorLayer( dst + QStringLiteral( "|layername=simple" ), QStringLiteral( "dst" ), QStringLiteral( "ogr" ) );
+  QVERIFY( vlCopy->isValid() );
+  QCOMPARE( vlCopy->featureCount(), featureCount + 1 );
+  delete vlCopy;
+
+  // a copy of a gpkg in rollback mode stays in rollback mode
+  const QString dst2 = dir + QStringLiteral( "/dst2.gpkg" );
+  QCOMPARE( headerVersions( TestUtils::testDataDir() + QStringLiteral( "/diff_project/base.gpkg" ) ), QByteArray( 2, 1 ) );
+  QVERIFY( GeodiffUtils::copyWalAware( TestUtils::testDataDir() + QStringLiteral( "/diff_project/base.gpkg" ), dst2 ) );
+  QCOMPARE( headerVersions( dst2 ), QByteArray( 2, 1 ) );
+
+  // non-gpkg files are copied as they are
+  const QString txtSrc = dir + QStringLiteral( "/file.txt" );
+  QFile txt( txtSrc );
+  QVERIFY( txt.open( QIODevice::WriteOnly ) );
+  txt.write( "not a database" );
+  txt.close();
+  QVERIFY( GeodiffUtils::copyWalAware( txtSrc, dir + QStringLiteral( "/file2.txt" ) ) );
+  QCOMPARE( CoreUtils::calculateChecksum( dir + QStringLiteral( "/file2.txt" ) ), CoreUtils::calculateChecksum( txtSrc ) );
+
+  QDir( dir ).removeRecursively();
 }

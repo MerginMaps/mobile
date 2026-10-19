@@ -26,6 +26,7 @@ class TestCoreUtils : public QObject
     void testNameValidation();
     void testNameAbbr();
     void testReplaceValueInJson();
+    void testCopyWalAware();
 };
 
 #endif // TESTCOREUTILS_H

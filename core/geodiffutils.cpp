@@ -191,12 +191,46 @@ void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
   CoreUtils::log( prefix, msg );
 }
 
+/**
+ * SQLite's backup copies page 1 of the source as is, so a copy of a database in WAL mode keeps the WAL marker
+ * (header bytes 18-19 == 2) although the copy itself was written in rollback mode. Mark it back as rollback mode,
+ * the same way "PRAGMA journal_mode = DELETE" does, so it can be opened without creating -wal/-shm files
+ * (e.g. in read-only locations) and is uploaded just like any other gpkg.
+ * Only safe on a file nobody has open and without -wal content, which holds for a freshly made copy.
+ *
+ * This should be removed once GEODIFF_makeCopySqlite is updated to leave the gpkg in rollback mode.
+ */
+static void clearWalMarker( const QString &path )
+{
+  if ( QFile::exists( path + QStringLiteral( "-wal" ) ) || QFile::exists( path + QStringLiteral( "-shm" ) ) )
+    return;
+
+  QFile f( path );
+  if ( !f.open( QIODevice::ReadWrite ) )
+  {
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to open %1 to clear the WAL marker" ).arg( path ) );
+    return;
+  }
+
+  const QByteArray header = f.read( 20 );
+  const QByteArray magic( "SQLite format 3\0", 16 );
+  if ( header.size() != 20 || !header.startsWith( magic ) || header.at( 18 ) != 2 || header.at( 19 ) != 2 )
+    return;  // not a sqlite database marked as WAL - leave it untouched
+
+  if ( !f.seek( 18 ) || f.write( QByteArray( 2, 1 ) ) != 2 )
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to clear the WAL marker of %1" ).arg( path ) );
+}
+
 bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
 {
   if ( src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
   {
     const int res = GEODIFF_makeCopySqlite( GeodiffContext::instance().handle(), src.toUtf8().constData(), dst.toUtf8().constData() );
-    return res == GEODIFF_SUCCESS;
+    if ( res != GEODIFF_SUCCESS )
+      return false;
+
+    clearWalMarker( dst );
+    return true;
   }
   else
   {
