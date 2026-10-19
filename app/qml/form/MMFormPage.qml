@@ -236,10 +236,7 @@ Page {
         iconSource: __style.deleteIcon
         iconColor: root.layerIsSpatial ? __style.polarColor : __style.grapeColor
         bgColor: root.layerIsSpatial ? __style.grassColor : __style.negativeColor
-        onClicked: {
-          deleteDialog.deletesLinkedFeatures = root.controller.hasCompositionChildren()
-          deleteDialog.open()
-        }
+        onClicked: deleteDialog.open()
       }
 
       MMComponents.MMToolbarButton {
@@ -412,6 +409,8 @@ Page {
 
   MMFormDeleteFeatureDialog {
     id: deleteDialog
+
+    deletesLinkedFeatures: root.controller?.hasCompositionChildren ?? false
 
     onDeleteFeature: {
       // a new feature is discarded, so everything linked to it goes too

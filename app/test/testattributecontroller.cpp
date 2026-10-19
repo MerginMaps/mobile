@@ -1276,64 +1276,62 @@ void TestAttributeController::testPrefillRelationReferenceField()
 
 void TestAttributeController::testDeleteFeatureWithCompositionChildren()
 {
-  QgsProject::instance()->clear();
-  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Composition );
-  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
-  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteFeatureWithCompositionChildren" ), Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
 
   AttributeController controller;
-  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
 
   QVERIFY( controller.hasCompositionChildren() );
   QVERIFY( controller.deleteFeature() );
 
-  // parent 1, both its children and their grandchild are deleted, parent 2 is untouched
-  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
-  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 1 );
-  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 1 );
-  QVERIFY( !layers.parent->isEditable() && !layers.child->isEditable() && !layers.grandchild->isEditable() );
+  // the main feature, its sub feature and both subsub features are deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
+  QVERIFY( !layers.main->isEditable() && !layers.sub->isEditable() && !layers.subsub->isEditable() );
 
   QgsProject::instance()->clear();
 }
 
 void TestAttributeController::testDeleteFeatureWithAssociationChildren()
 {
-  QgsProject::instance()->clear();
-  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Association );
-  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
-  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteFeatureWithAssociationChildren" ), Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
 
   AttributeController controller;
-  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
 
   QVERIFY( !controller.hasCompositionChildren() );
   QVERIFY( controller.deleteFeature() );
 
-  // only the parent is deleted
-  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
-  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 3 );
-  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 2 );
+  // only the main feature is deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 2 );
 
   QgsProject::instance()->clear();
 }
 
 void TestAttributeController::testDiscardNewFeatureDeletesLinkedFeatures()
 {
-  QgsProject::instance()->clear();
-  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Association );
-  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
-  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+  // a discarded new feature takes all its children with it, whatever the relation strength
+  const QList<Qgis::RelationshipStrength> strengths = { Qgis::RelationshipStrength::Association, Qgis::RelationshipStrength::Composition };
+  for ( const Qgis::RelationshipStrength strength : strengths )
+  {
+    const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDiscardNewFeatureDeletesLinkedFeatures" ), strength );
+    QVERIFY( layers.main && layers.sub && layers.subsub );
 
-  // parent 1 stands for a new feature that only got its id to add linked features
-  AttributeController controller;
-  controller.setFeatureLayerPair( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
+    // the main feature stands for a new feature that only got its id to add children
+    AttributeController controller;
+    controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
 
-  QVERIFY( controller.deleteFeature( true ) );
+    QVERIFY( controller.deleteFeature( true ) );
 
-  // linked features are deleted even though the relations are associations
-  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 1 );
-  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 1 );
-  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 1 );
+    QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+    QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+    QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
 
-  QgsProject::instance()->clear();
+    QgsProject::instance()->clear();
+  }
 }

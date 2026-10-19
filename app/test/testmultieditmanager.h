@@ -35,6 +35,7 @@ class TestMultiEditManager : public QObject
     void testToggleSelectSameLayer();
     void testDeleteSelectedFeatures();
     void testDeleteSelectedFeaturesWithCompositionChildren();
+    void testDeleteSelectedFeaturesWithAssociationChildren();
 
 };
 

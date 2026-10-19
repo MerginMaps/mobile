@@ -63,6 +63,9 @@ class  AttributeController : public QObject
     //! Returns TRUE if the feature has not been saved yet (has a new/null feature id)
     Q_PROPERTY( bool isNewFeature READ isNewFeature NOTIFY featureLayerPairChanged )
 
+    //! Returns TRUE if the feature has a child linked to it by a composition relation, deleting the feature deletes it too
+    Q_PROPERTY( bool hasCompositionChildren READ hasCompositionChildren NOTIFY featureLayerPairChanged )
+
     // this is never nullptr (a form with no tabs will be parsed as having a single tab)
     Q_PROPERTY( AttributeTabProxyModel *attributeTabProxyModel READ attributeTabProxyModel  NOTIFY attributeTabProxyModelChanged )
 
@@ -121,8 +124,7 @@ class  AttributeController : public QObject
      */
     Q_INVOKABLE bool deleteFeature( bool deleteAllLinkedFeatures = false );
 
-    //! Returns TRUE if deleting the feature would also delete features linked to it by composition relations
-    Q_INVOKABLE bool hasCompositionChildren() const;
+    bool hasCompositionChildren() const;
 
     Q_INVOKABLE bool rollback();
     Q_INVOKABLE bool save();

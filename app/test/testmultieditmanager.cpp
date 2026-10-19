@@ -81,21 +81,37 @@ void TestMultiEditManager::testDeleteSelectedFeatures()
 
 void TestMultiEditManager::testDeleteSelectedFeaturesWithCompositionChildren()
 {
-  QgsProject::instance()->clear();
-  const TestUtils::RelationTestLayers layers = TestUtils::createRelationTestLayers( Qgis::RelationshipStrength::Composition );
-  QVERIFY( layers.parent->isValid() && layers.child->isValid() && layers.grandchild->isValid() );
-  QCOMPARE( QgsProject::instance()->relationManager()->relations().size(), 2 );
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteSelectedFeaturesWithCompositionChildren" ), Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
 
-  mManager->initialize( FeatureLayerPair( layers.parent->getFeature( 1 ), layers.parent ) );
-  mManager->toggleSelect( FeatureLayerPair( layers.parent->getFeature( 2 ), layers.parent ) );
+  mManager->initialize( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
 
   QVERIFY( mManager->selectedFeaturesHaveCompositionChildren() );
 
   mManager->deleteSelectedFeatures();
 
-  QCOMPARE( static_cast<int>( layers.parent->featureCount() ), 0 );
-  QCOMPARE( static_cast<int>( layers.child->featureCount() ), 0 );
-  QCOMPARE( static_cast<int>( layers.grandchild->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
+
+  QgsProject::instance()->clear();
+}
+
+void TestMultiEditManager::testDeleteSelectedFeaturesWithAssociationChildren()
+{
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteSelectedFeaturesWithAssociationChildren" ), Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
+
+  mManager->initialize( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+  QVERIFY( !mManager->selectedFeaturesHaveCompositionChildren() );
+
+  mManager->deleteSelectedFeatures();
+
+  // only the selected main feature is deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 2 );
 
   QgsProject::instance()->clear();
 }

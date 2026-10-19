@@ -351,49 +351,28 @@ QgsVectorLayer *TestUtils::createFilterTestLayer( const QString &fieldName, cons
   return layer;
 }
 
-TestUtils::RelationTestLayers TestUtils::createRelationTestLayers( Qgis::RelationshipStrength strength )
+TestUtils::RelationTestLayers TestUtils::loadRelationsTestProject( const QString &testName, Qgis::RelationshipStrength strength )
 {
-  RelationTestLayers layers;
-  layers.parent = new QgsVectorLayer( QStringLiteral( "None?field=pk:integer" ), QStringLiteral( "parent" ), QStringLiteral( "memory" ) );
-  layers.child = new QgsVectorLayer( QStringLiteral( "None?field=pk:integer&field=parent_fk:integer" ), QStringLiteral( "child" ), QStringLiteral( "memory" ) );
-  layers.grandchild = new QgsVectorLayer( QStringLiteral( "None?field=pk:integer&field=child_fk:integer" ), QStringLiteral( "grandchild" ), QStringLiteral( "memory" ) );
-  QgsProject::instance()->addMapLayers( { layers.parent, layers.child, layers.grandchild } );
+  const QString projectDir = QDir::tempPath() + QStringLiteral( "/MM_test_projects/" ) + testName;
+  QDir( projectDir ).removeRecursively();
+  InputUtils::cpDir( testDataDir() + QStringLiteral( "/project_relations" ), projectDir );
+  QgsProject::instance()->read( projectDir + QStringLiteral( "/proj.qgz" ) );
 
-  const auto addFeatures = []( QgsVectorLayer * layer, const QList<QVariantList> &attributes )
+  QgsRelationManager *relationManager = QgsProject::instance()->relationManager();
+  QList<QgsRelation> relations = relationManager->relations().values();
+  for ( QgsRelation &relation : relations )
   {
-    QgsFeatureList features;
-    for ( const QVariantList &featureAttributes : attributes )
-    {
-      QgsFeature feature( layer->fields() );
-      for ( int i = 0; i < featureAttributes.size(); ++i )
-      {
-        feature.setAttribute( i, featureAttributes.at( i ) );
-      }
-      features << feature;
-    }
-    layer->dataProvider()->addFeatures( features );
-  };
-
-  addFeatures( layers.parent, { { 1 }, { 2 } } );
-  addFeatures( layers.child, { { 10, 1 }, { 11, 1 }, { 20, 2 } } );
-  addFeatures( layers.grandchild, { { 100, 10 }, { 200, 20 } } );
-
-  const auto addRelation = [strength]( QgsVectorLayer * referencing, QgsVectorLayer * referenced, const QString & field )
-  {
-    QgsRelation relation { QgsRelationContext( QgsProject::instance() ) };
-    relation.setId( referencing->name() + QStringLiteral( "_relation" ) );
-    relation.setName( relation.id() );
-    relation.setReferencingLayer( referencing->id() );
-    relation.setReferencedLayer( referenced->id() );
-    relation.addFieldPair( field, QStringLiteral( "pk" ) );
     relation.setStrength( strength );
-    QgsProject::instance()->relationManager()->addRelation( relation );
+  }
+  relationManager->setRelations( relations );
+
+  const auto layerByName = []( const QString &name ) -> QgsVectorLayer *
+  {
+    const QList<QgsMapLayer *> layers = QgsProject::instance()->mapLayersByName( name );
+    return layers.isEmpty() ? nullptr : qobject_cast<QgsVectorLayer *>( layers.first() );
   };
 
-  addRelation( layers.child, layers.parent, QStringLiteral( "parent_fk" ) );
-  addRelation( layers.grandchild, layers.child, QStringLiteral( "child_fk" ) );
-
-  return layers;
+  return { layerByName( QStringLiteral( "main" ) ), layerByName( QStringLiteral( "sub" ) ), layerByName( QStringLiteral( "subsub" ) ) };
 }
 
 bool TestUtils::addFeatureToLayer( QgsVectorLayer *layer, const QString &fieldName, const QVariant &value )

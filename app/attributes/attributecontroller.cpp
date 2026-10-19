@@ -35,6 +35,7 @@
 #include "qgsexpressioncontextutils.h"
 #include "qgsrelation.h"
 #include "inpututils.h"
+#include "linkedfeatures.h"
 #include "coreutils.h"
 #include "mixedattributevalue.h"
 
@@ -1188,7 +1189,7 @@ bool AttributeController::deleteFeature( bool deleteAllLinkedFeatures )
   {
     rv = mFeatureLayerPair.layer()->rollBack();
   }
-  else if ( !InputUtils::deleteLinkedFeatures( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() }, deleteAllLinkedFeatures ) )
+  else if ( !LinkedFeatures::deleteChildFeatures( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() }, deleteAllLinkedFeatures ) )
   {
     // keep the feature if its linked features could not be deleted
     rv = false;
@@ -1219,7 +1220,7 @@ bool AttributeController::hasCompositionChildren() const
   if ( !mFeatureLayerPair.layer() || !InputUtils::isFeatureIdValid( mFeatureLayerPair.feature().id() ) )
     return false;
 
-  return InputUtils::hasCompositionChildren( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() } );
+  return LinkedFeatures::hasCompositionChildren( mFeatureLayerPair.layer(), mFeatureLayerPair.feature().id() );
 }
 
 bool AttributeController::rollback()

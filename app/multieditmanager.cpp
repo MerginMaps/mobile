@@ -17,7 +17,7 @@
 #include "qgsauxiliarystorage.h"
 #include "qgis.h"
 #include "coreutils.h"
-#include "inpututils.h"
+#include "linkedfeatures.h"
 
 
 MultiEditManager::MultiEditManager( QObject *parent )
@@ -172,7 +172,7 @@ void MultiEditManager::deleteSelectedFeatures()
     return;
   }
 
-  if ( !InputUtils::deleteLinkedFeatures( mLayer, fids ) )
+  if ( !LinkedFeatures::deleteChildFeatures( mLayer, fids ) )
   {
     CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not delete linked features of selected features from %1" ).arg( mLayer->name() ) );
     return;
@@ -194,7 +194,14 @@ bool MultiEditManager::selectedFeaturesHaveCompositionChildren() const
   if ( !mModel || !mLayer )
     return false;
 
-  return InputUtils::hasCompositionChildren( mLayer, selectedFeatureIds() );
+  const QgsFeatureIds fids = selectedFeatureIds();
+  for ( QgsFeatureId fid : fids )
+  {
+    if ( LinkedFeatures::hasCompositionChildren( mLayer, fid ) )
+      return true;
+  }
+
+  return false;
 }
 
 QgsFeatureIds MultiEditManager::selectedFeatureIds() const
