@@ -366,7 +366,7 @@ TestUtils::RelationTestLayers TestUtils::loadRelationsTestProject( const QString
   }
   relationManager->setRelations( relations );
 
-  const auto layerByName = []( const QString &name ) -> QgsVectorLayer *
+  const auto layerByName = []( const QString & name ) -> QgsVectorLayer *
   {
     const QList<QgsMapLayer *> layers = QgsProject::instance()->mapLayersByName( name );
     return layers.isEmpty() ? nullptr : qobject_cast<QgsVectorLayer *>( layers.first() );
