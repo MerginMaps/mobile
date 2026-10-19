@@ -20,6 +20,9 @@
 
 #include <QDebug>
 #include <QSet>
+#include <QTimer>
+#include <QDateTime>
+
 
 #include "qgis.h"
 #include "qgsproject.h"
@@ -42,6 +45,9 @@ AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
   , mAttributeTabProxyModel( new AttributeTabProxyModel() )
 {
+  mDraftSaveTimer.setSingleShot( true );
+  mDraftSaveTimer.setInterval( 1000 );
+  connect( &mDraftSaveTimer, &QTimer::timeout, this, &AttributeController::saveDraft );
 }
 
 void AttributeController::reset()
@@ -77,6 +83,12 @@ void AttributeController::setFeatureLayerPair( const FeatureLayerPair &pair )
 
     // feature changed!
     updateOnFeatureChange();
+
+    // save right away, so a crash before the first edit can still be resumed
+    if ( mFeatureLayerPair.layer() && isNewFeature() )
+    {
+      saveDraft();
+    }
 
     // Done, emit signals
     blockSignals( false );
@@ -193,6 +205,34 @@ void AttributeController::setVariablesManager( VariablesManager *variablesManage
   {
     mVariablesManager = variablesManager;
     emit variablesManagerChanged();
+  }
+}
+
+FeatureDraftController *AttributeController::draftController() const
+{
+  return mDraftController;
+}
+
+void AttributeController::setDraftController( FeatureDraftController *draftController )
+{
+  if ( mDraftController != draftController )
+  {
+    mDraftController = draftController;
+    emit draftControllerChanged();
+  }
+}
+
+bool AttributeController::restoringDraft() const
+{
+  return mRestoringDraft;
+}
+
+void AttributeController::setRestoringDraft( bool restoringDraft )
+{
+  if ( mRestoringDraft != restoringDraft )
+  {
+    mRestoringDraft = restoringDraft;
+    emit restoringDraftChanged();
   }
 }
 
@@ -612,7 +652,7 @@ void AttributeController::updateOnFeatureChange()
       const QVariant newVal = feature.attribute( fieldIndex );
       mFormItems[itemData->id()]->setOriginalValue( newVal );
       mFormItems[itemData->id()]->setRawValue( newVal ); // we need to set raw value as well, as we use it in form now
-      if ( mRememberAttributesController && isNewFeature() ) // this is a new feature
+      if ( mRememberAttributesController && isNewFeature() && !mRestoringDraft ) // this is a new feature
       {
         QVariant rememberedValue;
         bool shouldUseRememberedValue = mRememberAttributesController->rememberedValue(
@@ -637,13 +677,58 @@ void AttributeController::updateOnFeatureChange()
   {
     formValueChange = mFeatureLayerPair.layer()->editBuffer()->changedGeometries().contains( feature.id() );
   }
-  recalculateDerivedItems( formValueChange, isNewFeature() );
+  recalculateDerivedItems( formValueChange, isNewFeature() && !mRestoringDraft );
 }
 
 bool AttributeController::isNewFeature() const
 {
   QgsFeatureId id = mFeatureLayerPair.feature().id();
   return FID_IS_NEW( id ) || FID_IS_NULL( id );
+}
+
+void AttributeController::saveDraft()
+{
+  if ( !mDraftController || !mFeatureLayerPair.layer() )
+    return;
+
+  const QgsFeature feature = mFeatureLayerPair.feature();
+  const QgsFields fields = feature.fields();
+  const bool featureIsNew = isNewFeature();
+
+  FeatureDraft draft;
+  draft.layerId = mFeatureLayerPair.layer()->id();
+  draft.stage = FeatureDraft::AttributeForm;
+  draft.timestamp = QDateTime::currentDateTimeUtc();
+
+  // all attributes are stored, so derived values can be restored without re-evaluating them
+  for ( int fieldIndex = 0; fieldIndex < fields.count() && fieldIndex < feature.attributeCount(); ++fieldIndex )
+  {
+    draft.attributes.append( { fields.at( fieldIndex ).name(), fields.at( fieldIndex ).typeName(), feature.attribute( fieldIndex ) } );
+  }
+
+  if ( featureIsNew )
+  {
+    // existing-feature geometry edits are drafted separately, by RecordingMapTool
+    draft.geometry = feature.geometry();
+  }
+  else
+  {
+    draft.featureId = feature.id();
+  }
+
+  mDraftController->saveDraft( draft );
+}
+
+void AttributeController::clearDraft()
+{
+  // a pending debounced write must not be allowed to resurrect the draft
+  // after we've just told the storage (and possibly the user) it's gone
+  mDraftSaveTimer.stop();
+
+  if ( mDraftController )
+  {
+    mDraftController->clearDraft();
+  }
 }
 
 void AttributeController::acquireId()
@@ -1203,6 +1288,7 @@ bool AttributeController::deleteFeature()
   {
     mFeatureLayerPair = FeatureLayerPair();
     emit featureLayerPairChanged();
+    clearDraft();
     emit changesCommited();
   }
 
@@ -1213,6 +1299,8 @@ bool AttributeController::rollback()
 {
   if ( !mFeatureLayerPair.layer() )
     return false;
+
+  clearDraft();
 
   if ( !mFeatureLayerPair.layer()->isEditable() )
   {
@@ -1281,6 +1369,7 @@ bool AttributeController::save()
 
   if ( rv )
   {
+    clearDraft();
     emit changesCommited();
   }
   else
@@ -1509,6 +1598,7 @@ bool AttributeController::setFormValue( const QUuid &id, QVariant value )
     {
       mFeatureLayerPair.featureRef().setAttribute( item->fieldIndex(), val );
       emit formDataChanged( item->id(), { AttributeFormModel::AttributeValue, AttributeFormModel::RawValueIsNull, AttributeFormModel::HasMixedValues } );
+      mDraftSaveTimer.start();
     }
     recalculateDerivedItems( true, false );
     return true;

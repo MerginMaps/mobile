@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import "../components" as MMComponents
 import "../inputs"
@@ -23,6 +24,7 @@ MMComponents.MMPage {
   signal nodeClicked( var node, string nodeType, string nodeName )
   signal nodeVisibilityClicked( var node )
   signal searchBarClicked()
+  signal resumeDraftClicked()
 
   pageHeader.title: root.pageTitle
 
@@ -49,32 +51,53 @@ MMComponents.MMPage {
       }
     }
 
-    MMLayersList {
-      id: layers
+    ColumnLayout {
+      id: contentColumn
 
-      width: parent.width
+      anchors.top: searchBar.bottom
+      anchors.topMargin: __style.spacing20
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
 
-      anchors {
-        top: searchBar.bottom
-        topMargin: __style.spacing20
-        bottom: parent.bottom
+      spacing: __style.spacing10
+
+      MMComponents.MMListBanner {
+        id: draftBanner
+
+        Layout.fillWidth: true
+
+        visible: __activeProject.featureDraftController.hasDraft
+
+        variant: MMComponents.MMListBanner.Warning
+        text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayerName )
+        actionText: qsTr( "Resume" )
+
+        onActionClicked: () => root.resumeDraftClicked()
       }
 
-      clip: true
+      MMLayersList {
+        id: layers
 
-      basemodel: root.model
-      parentNodeIndex: root.parentNodeIndex
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-      imageProviderPath: "image://LayerTreeModelPixmapProvider/"
+        clip: true
 
-      footer: MMComponents.MMListFooterSpacer {}
+        basemodel: root.model
+        parentNodeIndex: root.parentNodeIndex
 
-      onNodeClicked: function( node, nodeType, nodeName ) {
-        root.nodeClicked( node, nodeType, nodeName )
-      }
+        imageProviderPath: "image://LayerTreeModelPixmapProvider/"
 
-      onNodeVisibilityClicked: function( node ) {
-        root.nodeVisibilityClicked( node )
+        footer: MMComponents.MMListFooterSpacer {}
+
+        onNodeClicked: function( node, nodeType, nodeName ) {
+          root.nodeClicked( node, nodeType, nodeName )
+        }
+
+        onNodeVisibilityClicked: function( node ) {
+          root.nodeVisibilityClicked( node )
+        }
       }
     }
   }

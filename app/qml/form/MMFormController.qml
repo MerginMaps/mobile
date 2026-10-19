@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import "../components" as MMComponents
+import "../dialogs"
 
 import mm 1.0 as MM
 import MMInput
@@ -21,6 +22,7 @@ Item {
 
   property var project
   property var featureLayerPair
+  property bool restoringDraft: false // see AttributeController.restoringDraft
 
   // child features in relations need to have these set in order to prefill their foreign keys
   property var linkedRelation
@@ -42,6 +44,7 @@ Item {
   signal closed()
   signal saveRequested()
   signal editGeometry( var pair )
+  signal resumeDraft()
   signal openLinkedFeature( var linkedFeature )
   signal createLinkedFeature( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
@@ -172,9 +175,14 @@ Item {
 
       onOpenFormClicked: root.panelState = "form"
 
-      onEditClicked: {
-        root.panelState = "form"
-        featureForm.state = "edit"
+      onEditClicked: () => {
+        if ( __activeProject.featureDraftController.hasDraft ) {
+          resumeDraftDialog.open()
+        }
+        else {
+          root.panelState = "form"
+          featureForm.state = "edit"
+        }
       }
 
       onCloseClicked: drawer.close()
@@ -193,14 +201,16 @@ Item {
 
       controller: MM.AttributeController {
         variablesManager: __variablesManager
+        draftController: __activeProject.featureDraftController
 
         rememberAttributesController: MM.RememberAttributesController {
           rememberValuesAllowed: AppSettings.reuseLastEnteredValues
           activeProjectId: __activeProject.localProject.id()
         }
-        // NOTE: order matters, we want to init variables manager before
-        // assigning FeatureLayerPair, as VariablesManager is required
+        // NOTE: order matters, we want to init variables manager and restoringDraft
+        // before assigning FeatureLayerPair, as VariablesManager is required
         // for correct expression evaluation
+        restoringDraft: root.restoringDraft
         featureLayerPair: root.featureLayerPair
       }
 
@@ -247,5 +257,25 @@ Item {
   onFeatureLayerPairChanged: {
     if ( panelState === "preview" )
       previewPanelChanged( previewPanel.implicitHeight )
+  }
+
+  MMResumeDraftDialog {
+    id: resumeDraftDialog
+
+    featureTitle: __activeProject.featureDraftController.draftFeatureTitle
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onResumeClicked: () => root.resumeDraft()
+    onDiscardClicked: () => discardDraftDialog.open()
+  }
+
+  MMDiscardDraftDialog {
+    id: discardDraftDialog
+
+    layerName: __activeProject.featureDraftController.draftLayerName
+
+    onDiscardDraft: () => {
+      __activeProject.featureDraftController.discardDraft()
+    }
   }
 }

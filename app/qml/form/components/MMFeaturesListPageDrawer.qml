@@ -13,7 +13,6 @@ import QtQuick.Layouts
 
 import "../../inputs" as MMInputs
 import "../../components" as MMComponents
-import "../../filters/components" as MMFilters
 
 //
 // Special type of drawer/page -> looks like page, but it is actually Drawer
@@ -82,7 +81,7 @@ Drawer {
 
         MMComponents.MMListSpacer { Layout.preferredHeight: __style.spacing20 }
 
-        MMFilters.MMFilterBanner {
+        MMComponents.MMListBanner {
           id: filterBanner
 
           visible: __activeProject.filterController?.hasActiveFilterOnLayer( listView.model?.layer?.id )
