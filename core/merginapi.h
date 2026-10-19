@@ -172,6 +172,7 @@ struct TransactionStatus
   // push-related data
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
   QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
+  QHash<QString, QString> pushSnapshots;  //!< file path -> snapshot name (relative to .mergin dir) of gpkgs being uploaded in full, removed at the end of sync
 
   // retry handling
   int retryCount = 0;  //!< current number of retry attempts for failed network requests
@@ -856,6 +857,14 @@ class MerginApi: public QObject
 
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
+
+    /**
+     * Creates a consistent copy of a file to be uploaded in full (for gpkg a sqlite backup, which includes the -wal content)
+     * in the .mergin dir, registers it in the transaction and updates the file's snapshotName, checksum and size from it.
+     * Only needed for diffable files, which may still be changing or have data only in their -wal file.
+     * Returns false if the copy could not be created.
+     */
+    bool createPushSnapshot( TransactionStatus &transaction, MerginFile &file );
 
     static QSet<QString> listFiles( const QString &projectPath );
 

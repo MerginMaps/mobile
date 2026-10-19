@@ -3625,6 +3625,99 @@ void TestMerginApi::testPushWithChangesOnlyInWal()
   delete vlExtra;
 }
 
+void TestMerginApi::testPushAddedGpkgWithChangesOnlyInWal()
+{
+  // a new gpkg with data only in its -wal file must be uploaded with that data
+
+  QString projectName = "testPushAddedGpkgWithChangesOnlyInWal";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+  QVERIFY( QFile::copy( projectDir + "/base.gpkg", projectDir + "/other.gpkg" ) );
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/other.gpkg|layername=simple", "other", "ogr" );
+  QVERIFY( vl->isValid() );
+  QCOMPARE( vl->featureCount(), static_cast<long>( 3 ) );
+  vl->startEditing();
+  const QByteArray mainChecksumBeforeEdit = CoreUtils::calculateChecksum( projectDir + "/other.gpkg" );
+
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file only
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/other.gpkg-wal" ) );
+  QCOMPARE( CoreUtils::calculateChecksum( projectDir + "/other.gpkg" ), mainChecksumBeforeEdit );
+
+  // push while the layer is still in editing mode
+  uploadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the uploaded snapshot became the basefile, nothing else is left behind
+  QVERIFY( QFile::exists( projectDir + "/.mergin/other.gpkg" ) );
+  QCOMPARE( QDir( projectDir + "/.mergin" ).entryList( QStringList() << QStringLiteral( "*-snapshot-*" ), QDir::Files ), QStringList() );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+
+  // the other client gets the new file including the feature that lived in the -wal file
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  QgsVectorLayer *vlExtra = new QgsVectorLayer( projectDirExtra + "/other.gpkg|layername=simple", "other", "ogr" );
+  QVERIFY( vlExtra->isValid() );
+  QCOMPARE( vlExtra->featureCount(), static_cast<long>( 4 ) );
+  delete vlExtra;
+}
+
+void TestMerginApi::testPushFullUploadWithChangesOnlyInWal()
+{
+  // an updated gpkg for which a diff cannot be created (schema change) is uploaded in full -
+  // the upload must include data that only lives in its -wal file
+
+  QString projectName = "testPushFullUploadWithChangesOnlyInWal";
+  QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QString projectDirExtra = mApiExtra->projectsPath() + "/" + projectName;
+
+  createRemoteProject( mApi, mWorkspaceName, projectName, mTestDataPath + "/" + "diff_project" + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  // change the schema locally, so creating a diff fails and a full upload is done
+  QVERIFY( QFile::remove( projectDir + "/base.gpkg" ) );
+  QVERIFY( QFile::copy( mTestDataPath + "/added_column.gpkg", projectDir + "/base.gpkg" ) );
+  QCOMPARE( GeodiffUtils::diffableFilePendingChanges( projectDir, "base.gpkg", true ), QString( "ERROR" ) );
+
+  QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vl->isValid() );
+  const long featureCount = vl->featureCount();
+  const int fieldCount = vl->fields().count();
+  vl->startEditing();
+  const QByteArray mainChecksumBeforeEdit = CoreUtils::calculateChecksum( projectDir + "/base.gpkg" );
+
+  QgsFeature f( vl->fields() );
+  vl->addFeature( f );
+  // save but don't stop editing so -wal file is preserved. The added feature now lives in the -wal file only
+  vl->commitChanges( false );
+  QVERIFY( QFile::exists( projectDir + "/base.gpkg-wal" ) );
+  QCOMPARE( CoreUtils::calculateChecksum( projectDir + "/base.gpkg" ), mainChecksumBeforeEdit );
+
+  // push while the layer is still in editing mode
+  uploadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  delete vl;
+
+  // the uploaded snapshot became the basefile, nothing else is left behind
+  QCOMPARE( QDir( projectDir + "/.mergin" ).entryList( QStringList() << QStringLiteral( "*-snapshot-*" ), QDir::Files ), QStringList() );
+  QVERIFY( !MerginApi::hasLocalProjectChanges( projectDir, mApi->supportsSelectiveSync() ) );
+  QVERIFY( !GeodiffUtils::hasPendingChanges( projectDir, "base.gpkg" ) );
+
+  // the other client gets the new schema including the feature that lived in the -wal file
+  downloadRemoteProject( mApiExtra, mWorkspaceName, projectName );
+  QgsVectorLayer *vlExtra = new QgsVectorLayer( projectDirExtra + "/base.gpkg|layername=simple", "base", "ogr" );
+  QVERIFY( vlExtra->isValid() );
+  QCOMPARE( vlExtra->fields().count(), fieldCount );
+  QCOMPARE( vlExtra->featureCount(), featureCount + 1 );
+  delete vlExtra;
+}
+
 void TestMerginApi::testSyncWhileWalFilesExistWithConflict()
 {
   QString projectName = "testSyncWhileWalFilesExistWithConflict";
