@@ -216,7 +216,7 @@ GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
   }
 
   if ( obj.contains( QStringLiteral( "bearing" ) ) && !obj.value( QStringLiteral( "bearing" ) ).isNull() )
-    pos.direction = obj.value( QStringLiteral( "bearing" ) ).toDouble( -1 );
+    pos.direction = obj.value( QStringLiteral( "bearing" ) ).toDouble( std::numeric_limits<double>::quiet_NaN() );
 
   if ( obj.contains( QStringLiteral( "pdop" ) ) && !obj.value( QStringLiteral( "pdop" ) ).isNull() )
     pos.pdop = obj.value( QStringLiteral( "pdop" ) ).toDouble( -1 );
@@ -228,10 +228,10 @@ GeoPosition TrimblePositionProvider::parseLocationMessage( const QString &json )
     pos.vdop = obj.value( QStringLiteral( "vdop" ) ).toDouble( -1 );
 
   if ( obj.contains( QStringLiteral( "hrms" ) ) && !obj.value( QStringLiteral( "hrms" ) ).isNull() )
-    pos.hacc = obj.value( QStringLiteral( "hrms" ) ).toDouble( -1 );
+    pos.hacc = obj.value( QStringLiteral( "hrms" ) ).toDouble( std::numeric_limits<double>::quiet_NaN() );
 
   if ( obj.contains( QStringLiteral( "vrms" ) ) && !obj.value( QStringLiteral( "vrms" ) ).isNull() )
-    pos.vacc = obj.value( QStringLiteral( "vrms" ) ).toDouble( -1 );
+    pos.vacc = obj.value( QStringLiteral( "vrms" ) ).toDouble( std::numeric_limits<double>::quiet_NaN() );
 
   if ( obj.contains( QStringLiteral( "totalSatInUse" ) ) && !obj.value( QStringLiteral( "totalSatInUse" ) ).isNull() )
     pos.satellitesUsed = obj.value( QStringLiteral( "totalSatInUse" ) ).toInt( -1 );
