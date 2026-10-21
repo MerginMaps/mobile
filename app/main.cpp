@@ -222,6 +222,45 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
+// Resolves one preferred language at a time, since uiLanguages() can rank a
+// language's own base form behind an exact match for a less-preferred one.
+static bool loadMMTranslation( QTranslator &translator )
+{
+  auto tryLanguage = [ &translator ]( QLocale::Language language )
+  {
+    return translator.load( QLocale( language ), QStringLiteral( "input" ), QStringLiteral( "_" ), QStringLiteral( ":/" ) );
+  };
+
+  QLocale::Language previousTierLanguage = QLocale::AnyLanguage;
+
+  const QStringList uiLanguages = QLocale().uiLanguages();
+  for ( const QString &lang : uiLanguages )
+  {
+    const QLocale candidate( lang );
+
+    if ( previousTierLanguage != QLocale::AnyLanguage && candidate.language() != previousTierLanguage
+         && tryLanguage( previousTierLanguage ) )
+    {
+      return true;
+    }
+
+    if ( translator.load( candidate, QStringLiteral( "input" ), QStringLiteral( "_" ), QStringLiteral( ":/" ) ) )
+    {
+      return true;
+    }
+
+    previousTierLanguage = candidate.language();
+  }
+
+  if ( previousTierLanguage != QLocale::AnyLanguage && tryLanguage( previousTierLanguage ) )
+  {
+    return true;
+  }
+
+  // none of the preferred languages is translated
+  return tryLanguage( QLocale::English );
+}
+
 static void init_qgis( const QString &pkgPath )
 {
   QgsApplication::init();
@@ -229,10 +268,8 @@ static void init_qgis( const QString &pkgPath )
 #ifdef MOBILE_OS
   // QGIS plugins on Android are in the same path as other libraries
   QgsApplication::setPluginPath( QApplication::applicationDirPath() );
-  QgsApplication::setPkgDataPath( pkgPath );
-#else
-  Q_UNUSED( pkgPath )
 #endif
+  QgsApplication::setPkgDataPath( pkgPath );
 
   QgsApplication::initQgis();
 
@@ -438,17 +475,15 @@ int main( int argc, char *argv[] )
   setEnvironmentQgisPrefixPath();
 
   // Initialize translations
-  QLocale locale;
-
-  QTranslator inputTranslator;
-  if ( inputTranslator.load( locale, "input", "_", ":/" ) )
+  QTranslator translator;
+  if ( loadMMTranslation( translator ) )
   {
-    app.installTranslator( &inputTranslator );
-    qDebug() <<  "Loaded input translation" << app.locale() << "for" << locale;
+    QgsApplication::installTranslator( &translator );
+    qDebug() << "Loaded MM translation" << translator.language() << "(" << translator.filePath() << ")";
   }
   else
   {
-    qDebug() <<  "Error in loading input translation for " << locale;
+    qDebug() << "No MM translation found, using built-in strings";
   }
 
   QString appBundleDir;
@@ -550,12 +585,19 @@ int main( int argc, char *argv[] )
   {
     as->setActivePositionProviderId( provider ? provider->id() : QLatin1String() );
   } );
-  pk->setPositionProvider( pk->constructActiveProvider( as ) );
-  pk->setAppSettings( as );
 
   // Lambda context object can be used in all lambda functions defined here,
   // it secures lambdas, so that they are destroyed when this object is destroyed to avoid crashes.
   QObject lambdaContext;
+
+  // delay position provider construction on app start for smoother startup
+  // it is mostly for trimble provider as it opens Trimble Mobile Manager while constructing provider
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [pk, as]( QgsProject * project )
+  {
+    Q_UNUSED( project );
+    pk->setPositionProvider( pk->constructActiveProvider( as ) );
+    pk->setAppSettings( as );
+  }, Qt::SingleShotConnection );
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [&pk]( QgsProject * project )
   {
@@ -758,12 +800,6 @@ int main( int argc, char *argv[] )
   engine.addImageProvider( QLatin1String( "LayerTreeFlatModelPixmapProvider" ), layerTreeFlatModelPixmapProvider );
   engine.rootContext()->setContextProperty( "__layerDetailLegendImageProvider", layerDetailLegendImageProvider );
   engine.addImageProvider( QLatin1String( "LayerDetailLegendImageProvider" ), layerDetailLegendImageProvider );
-
-#ifdef HAVE_BLUETOOTH
-  engine.rootContext()->setContextProperty( "__haveBluetooth", true );
-#else
-  engine.rootContext()->setContextProperty( "__haveBluetooth", false );
-#endif
 
   // Even though enabling QT's HighDPI scaling removes the need to multiply pixel values with dp,
   // there are screens that need a "little help", because system DPR has different value than the

@@ -21,6 +21,8 @@
 #include <QVariant>
 #include <memory>
 #include <QMap>
+#include <QHash>
+#include <QPair>
 #include <QVector>
 #include <QUuid>
 
@@ -59,6 +61,9 @@ class  AttributeController : public QObject
      * FeatureLayerPair for the model. Input for attributes model.
      */
     Q_PROPERTY( FeatureLayerPair featureLayerPair READ featureLayerPair WRITE setFeatureLayerPair NOTIFY featureLayerPairChanged )
+
+    //! Returns TRUE if the feature has not been saved yet (has a new/null feature id)
+    Q_PROPERTY( bool isNewFeature READ isNewFeature NOTIFY featureLayerPairChanged )
 
     // this is never nullptr (a form with no tabs will be parsed as having a single tab)
     Q_PROPERTY( AttributeTabProxyModel *attributeTabProxyModel READ attributeTabProxyModel  NOTIFY attributeTabProxyModelChanged )
@@ -222,6 +227,13 @@ class  AttributeController : public QObject
      */
     bool allowTabs( QgsAttributeEditorContainer *container );
 
+    //! resolves the storage folder and relative-path prefix for an ExternalResource field
+    void resolveExternalResourcePaths( const QVariantMap &config, QString &targetDir, QString &prefix ) const;
+    //! copies the remembered external resource file to a new uniquely named file, so the new feature does not share it with the previous one
+    //! returns false (and logs the problem) if the source is not a valid file or the copy fails
+    bool cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath, QString &newAbsolutePath ) const;
+    //! moves files copied by cloneExternalResource() to the folder resolved from the feature's final values
+    void moveClonedExternalResources();
     //! renames photos if necessary
     void renamePhotos();
     //! save temporary sketched image to original image
@@ -246,5 +258,8 @@ class  AttributeController : public QObject
 
     AttributeController *mParentController = nullptr; // not owned
     QgsRelation mLinkedRelation;
+
+    //! files copied from remembered values for the current feature, per form item: field value and absolute path
+    QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
 };
 #endif // ATTRIBUTECONTROLLER_H

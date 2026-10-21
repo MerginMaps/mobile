@@ -59,6 +59,18 @@ ActiveProject::ActiveProject( AppSettings &appSettings
     }
   } );
 
+  // listen to local project rename event to unload mProject before it is renamed on disk
+  QObject::connect(
+    &mLocalProjectsManager,
+    &LocalProjectsManager::aboutToRenameLocalProject,
+    this, [this]( const QString & projectId )
+  {
+    if ( projectId == mLocalProject.id() )
+    {
+      load( QLatin1String() );
+    }
+  } );
+
   // listen to metadata changes of opened LocalProject (e.g. local version update or namespace update)
   QObject::connect(
     &mLocalProjectsManager,
@@ -300,7 +312,19 @@ bool ActiveProject::validateProject()
     if ( !layer->isValid() )
     {
       errorsFound = true;
-      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer %1" ).arg( layer->name() ) );
+      QgsError layerError = layer->error();
+      QString reason;
+
+      if ( !layerError.isEmpty() )
+      {
+        reason = layerError.summary();
+      }
+      else if ( layer->dataProvider() )
+      {
+        reason = layer->dataProvider()->error().summary();
+      }
+
+      CoreUtils::log( QStringLiteral( "Project load" ), QStringLiteral( "Invalid layer %1: %2" ).arg( layer->name(), reason ) );
       emit reportIssue( tr( "Layer" ) + ": " + layer->name(), tr( "Unable to load source " ) + ": " + layer->publicSource() );
     }
     else

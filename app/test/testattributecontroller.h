@@ -28,6 +28,19 @@ class TestAttributeController: public QObject
     void testRawValue();
     void testFieldsOutsideForm();
     void testPhotoRenaming();
+
+    //! A reused photo must be renamed with the new feature's own expression value, not the old one
+    void testPhotoReuseRenamesWithFreshExpressionValue();
+
+    //! Saving the same feature twice must not rename an already-renamed photo again
+    void testPhotoRenamingNotRepeatedOnResave();
+
+    //! Reusing a photo must create an independent file, not just copy the path string
+    void testReusedPhotoIsIndependentFile();
+
+    //! A reused photo must end up in the folder resolved from the new feature's values
+    void testReusedPhotoFollowsPathExpression();
+
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 

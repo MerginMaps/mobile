@@ -549,7 +549,12 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Törlés</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
     </message>
@@ -689,12 +694,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="26"/>
         <source>Clicking ‘Yes’ discards your changes to the geometry. If you would like to save the changes instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha inkább menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti a geometrián végzett módosításokat. Ha mégis menteni szeretné a változtatásokat, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="30"/>
         <source>Clicking ‘Yes’ discards your new geometry and no feature will be saved. If you would like to save the geometry instead, hit ‘No’ and then ‘Done’ in the toolbar.</source>
-        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha inkább menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
+        <translation>Az &apos;Igen&apos; gombra kattintva elveti az új geometriát, és egyetlen elem sem kerül mentésre. Ha mégis menteni szeretné a geometriát, nyomja meg a &apos;Nem&apos;, majd a &apos;Kész&apos; gombot az eszköztáron.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMDiscardGeometryChangesDialog.qml" line="37"/>
@@ -718,7 +723,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <location filename="../qml/dialogs/MMDownloadProjectDialog.qml" line="25"/>
         <source>Would you like to download project
  %1 ?</source>
-        <translation>Le szeretné tölteni ezt a projektet
+        <translation>Le szeretné tölteni ezt a projektet:
  %1 ?</translation>
     </message>
     <message>
@@ -735,64 +740,76 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMExternalProviderConnectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="38"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="132"/>
         <source>Connecting to external receiver</source>
         <translation>Csatlakozás külső vevőhöz</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="40"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
-        <source>Connecting to</source>
-        <translation>Kapcsolódás ehhez: </translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="41"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="46"/>
-        <source>Connecting</source>
-        <translation>Kapcsolódás</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="43"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="146"/>
         <source>You might be asked to pair your device during this process.</source>
         <translation>A folyamat során szükség lehet az eszköze párosítására.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
-        <source>. You can close this panel, the app will continue in the background.</source>
-        <translation>. Bezárhatja ezt a panelt, az alkalmazás a háttérben folytatja működését.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="55"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="47"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="65"/>
-        <source>Failed to connect to</source>
-        <translation>Nem sikerült kapcsolódni ehhez: </translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="68"/>
+        <source>%1%2You can close this message, we will try to repeatedly connect to your device.</source>
+        <translation>%1%2 Bezárhatja ezt az üzenetet, megpróbálunk ismételten csatlakozni az eszközéhez.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="80"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="136"/>
+        <source>Connecting to %1</source>
+        <translation>Csatlakozás: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="139"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="156"/>
+        <source>Connecting%1</source>
+        <translation>Csatlakozás: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="150"/>
+        <source>Connecting to %1. You can close this panel, the app will continue in the background.</source>
+        <translation>Kapcsolódás a következőhöz: %1. Bezárhatja ezt a panelt, az alkalmazás a háttérben folytatja a műveletet.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="153"/>
+        <source>Trimble Mobile Manager will be opened shortly.</source>
+        <translation>A Trimble Mobile Manager hamarosan megnyílik.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="163"/>
+        <source>Failed to connect</source>
+        <translation>Nem sikerült csatlakozni</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="174"/>
+        <source>Failed to connect to %1</source>
+        <translation>Nem sikerült kapcsolódni a következőhöz: %1 </translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="180"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>Nem sikerült csatlakozni a megadott eszközhöz. Ellenőrizze, hogy az eszköz be van-e kapcsolva, illetve csatlakoztatható állapotban van-e.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="70"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="81"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="183"/>
         <source>We were not able to connect to the specified IP address.</source>
         <translation>Nem sikerült csatlakozni a megadott IP-címhez.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="71"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="83"/>
-        <source>Learn more</source>
-        <translation>További információ</translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="186"/>
+        <source>We were not able to connect to Trimble Mobile Manager. Please make sure it&apos;s installed.</source>
+        <translation>Nem sikerült kapcsolódni a Trimble Mobile Manager alkalmazáshoz. Kérjük, ellenőrizze, hogy telepítve van-e.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="82"/>
-        <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation>Bezárhatja ezt az üzenetet, megpróbálunk ismételten csatlakozni az eszközéhez.</translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="59"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
+        <source>Learn more</source>
+        <translation>További információ</translation>
     </message>
 </context>
 <context>
@@ -1061,22 +1078,22 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Kép fájlok (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="184"/>
         <source>Photo sketches could not be saved, please contact support.</source>
         <translation>A fotóvázlatok mentése nem sikerült, kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="296"/>
         <source>Could not create directory %1.</source>
         <translation>%1 mappát nem sikerült létrehozni.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="363"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Nem sikerült feldolgozni a képet, a fotókönyvtár feloldása nem sikerült</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="378"/>
         <source>Failed to process the image</source>
         <translation>Nem sikerült feldolgozni a képet</translation>
     </message>
@@ -1263,7 +1280,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
         <source>Satellites (in use/view)</source>
-        <translation>Műholdak (használt/látókör)</translation>
+        <translation>Műhold (használt/látható)</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="245"/>
@@ -1288,7 +1305,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="311"/>
         <source>Last Fix</source>
-        <translation>Utolsó GPS helyzetmeghatározás</translation>
+        <translation>Utolsó GPS pozíció mérés</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMGpsDataDrawer.qml" line="320"/>
@@ -1537,7 +1554,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="125"/>
         <source>Continue with SSO</source>
-        <translation>Folytatás egyszeri bejelentkezéssel</translation>
+        <translation>Folytatás egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMLoginPage.qml" line="140"/>
@@ -1580,7 +1597,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
-        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja be az alakzatot a terület méréséhez</translation>
+        <translation>Adjon hozzá pontokat a távolság méréséhez, zárja össze az alakzatot a terület méréséhez</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="179"/>
@@ -1595,7 +1612,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
-        <translation>streaming</translation>
+        <translation>folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="707"/>
@@ -1623,68 +1640,68 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Aktív réteg kiválasztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="948"/>
+        <location filename="../qml/map/MMMapController.qml" line="945"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>A projektben nem található semmilyen szerkeszthető réteg.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="949"/>
+        <location filename="../qml/map/MMMapController.qml" line="946"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Nézze meg, hogy lehet engedélyezni a digitalizálást a projektjében.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="975"/>
+        <location filename="../qml/map/MMMapController.qml" line="972"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="977"/>
         <source>Split geometry</source>
         <translation>Geometria felosztása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="992"/>
+        <location filename="../qml/map/MMMapController.qml" line="989"/>
         <source>Add part</source>
         <translation>Rész hozzáadása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1004"/>
+        <location filename="../qml/map/MMMapController.qml" line="1001"/>
         <source>Redraw geometry</source>
         <translation>Geometria újrarajzolása</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1016"/>
+        <location filename="../qml/map/MMMapController.qml" line="1013"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1022"/>
+        <location filename="../qml/map/MMMapController.qml" line="1019"/>
         <source>Active</source>
         <translation>Aktív</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1237"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>Splitting done successfully</source>
         <translation>A felosztás sikeresen megtörtént</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1330"/>
+        <location filename="../qml/map/MMMapController.qml" line="1337"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Válasszon ki egy pontot a geometria szerkesztésének megkezdéséhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1343"/>
+        <location filename="../qml/map/MMMapController.qml" line="1350"/>
         <source>Record new geometry for the feature</source>
         <translation>Új geometria létrehozása az elemhez</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1364"/>
+        <location filename="../qml/map/MMMapController.qml" line="1371"/>
         <source>Add new part to the geometry</source>
         <translation>Új rész hozzáadása a geometriához</translation>
     </message>
     <message>
         <location filename="../qml/map/MMMapController.qml" line="130"/>
-        <location filename="../qml/map/MMMapController.qml" line="1461"/>
+        <location filename="../qml/map/MMMapController.qml" line="1468"/>
         <source>GPS currently unavailable.</source>
         <translation>A GPS jelenleg nem elérhető.</translation>
     </message>
@@ -1938,18 +1955,18 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Új vevő csatlakoztatása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="176"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation>A külső vevőkhöz való csatlakozás Bluetooth kapcsolattal nincs támogatva</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="174"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="177"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>iOS rendszer esetén ez a funkció nem érhető el. A hardverszállító biztosíthat egy egyéni alkalmazást, ami csatlakozik a vevőhöz, és beállítja a pozíciót. Az alkalmazás továbbra is úgy fogja észlelni, mintha ez a telefon/táblagép belső GPS-e lenne.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="199"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="202"/>
         <source>Internal</source>
         <translation>Belső</translation>
     </message>
@@ -1964,7 +1981,7 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Külső</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="261"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="264"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
@@ -2099,7 +2116,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
@@ -2403,32 +2420,37 @@ Nem lesz hozzáadva a projekthez.</translation>
         <translation>Új vevő csatlakoztatása</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
         <source>Bad Elf, Emlid, Juniper, marXact and more</source>
         <translation>Bad Elf, Emlid, Juniper, marXact stb.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
         <source>Network (TCP, UDP)</source>
         <translation>Hálózat (TCP, UDP)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
         <source>Emlid RS, EOS and more</source>
         <translation>Emlid RS, EOS stb.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
-        <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
-        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 fa támogatott eszközökért és a beállítási útmutatóért.</translation>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="41"/>
+        <source>Trimble receivers via Trimble Mobile Manager</source>
+        <translation>Trimble vevők a Trimble Mobile Managerrel</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="94"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="49"/>
+        <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
+        <translation>A külső vevők a gyártótól függően különböző csatlakozási módokat használnak. Válasszon egy csatlakozási típust az alábbiak közül, vagy  %1tekintse meg a dokumentációt%2 a támogatott eszközökért és a beállítási útmutatóért.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="101"/>
         <source>Continue</source>
         <translation>Tovább</translation>
     </message>
@@ -2475,22 +2497,27 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMRemovePhotoDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Delete photo?</source>
         <translation>Törli a fényképet?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
         <translation>Törölni vagy szétkapcsolni szeretné a fényképet? A törlés teljesen eltávolítja a fényképet a projektből, míg a szétkapcsolás megtartja a fényképet a projektben, de eltávolítja a kapcsolatát a megadott elemből.</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
+        <source>Would you like to delete the photo?</source>
+        <translation>Szeretné törölni a fényképet?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="28"/>
         <source>Delete photo</source>
         <translation>Fénykép törlése</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="37"/>
         <source>Unlink photo</source>
         <translation>Fénykép szétkapcsolása</translation>
     </message>
@@ -2585,173 +2612,214 @@ Nem lesz hozzáadva a projekthez.</translation>
 <context>
     <name>MMSettingsPage</name>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="35"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Time elapsed</source>
         <translation>Eltelt idő</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="37"/>
         <source>Distance traveled</source>
         <translation>Megtett távolság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="54"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Recent project</source>
+        <translation>Legutóbbi projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Jump back into your last project</source>
+        <translation>Visszatérés az utolsó projekthez</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>Project home</source>
+        <translation>Projekt kezdőlap</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>See all your downloaded projects</source>
+        <translation>Az összes letöltött projekt megtekintése</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="62"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="73"/>
         <source>GPS accuracy threshold</source>
-        <translation>GPS pontossági küszöb</translation>
+        <translation>GPS pontossági korlát</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="74"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Meghatározza, hogy a pontosság jelző mikor legyen sárga</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="67"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="75"/>
         <source>GPS accuracy threshold, in meters</source>
         <translation>GPS pontossági küszöb, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="80"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>Manage GPS receivers</source>
         <translation>GPS vevők kezelése</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="106"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>GPS antenna height</source>
         <translation>GPS antenna magasság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="91"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="107"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Tartalmazza a rúdmagasságot és a GPS vevő antenna magasságát</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="108"/>
         <source>GPS antenna height, in meters</source>
         <translation>GPS antenna magasság, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="128"/>
+        <source>Click here to modify in Trimble Mobile Manager</source>
+        <translation>Koppintson ide a Trimble Mobile Managerben történő módosításhoz</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="129"/>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="141"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="153"/>
         <source>Interval threshold type</source>
-        <translation>Intervallum küszöb típusa</translation>
+        <translation>Rögzítési köz alapja</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="154"/>
         <source>Choose a type of threshold for streaming mode</source>
-        <translation>Válassza ki a küszöb típusát a streaming módhoz</translation>
+        <translation>Folyamatos rögzítés alapja</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Distance Traveled</source>
         <translation>Megtett távolság</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Threshold interval</source>
-        <translation>Küszöb intervallum</translation>
+        <translation>Rögzítési köz</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="172"/>
         <source>Streaming mode will add a point to the object at each interval</source>
-        <translation>Streaming mód esetén minden intervallumban hozzáad egy pontot az objektumhoz</translation>
+        <translation>Folyamatos rögzítéskor minden beállított köznél új pontot ad hozzá az aktuális elemhez.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in meters</source>
-        <translation>Küszöb intervallum, méterben megadva</translation>
+        <translation>Rögzítési köz, méterben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in seconds</source>
-        <translation>Küszöb intervallum, másodpercben megadva</translation>
+        <translation>Rögzítési köz, másodpercben megadva</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="185"/>
         <source>Recording</source>
         <translation>Rögzítés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="196"/>
         <source>Reuse last entered value</source>
         <translation>Utolsó megadott érték újrafelhasználása</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="160"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="197"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Minden mező felkínálja az utolsó megadott értékét újrafelhasználásra a következő hozzáadott elemnél</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="170"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="207"/>
         <source>Automatically sync changes</source>
         <translation>Módosítások automatikus szinkronizálása</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="208"/>
         <source>Your project is synced automatically to keep you up to date</source>
-        <translation>A projektje automatikusan szinkronizálódik, hogy naprakész maradhasson</translation>
+        <translation>A projektje automatikusan szinkronizálásra kerül, hogy naprakész maradhasson</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
         <source>Auto-lock position</source>
         <translation>Automatikus pozíció zárolás</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="182"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="219"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>Minden alkalommal, amikor elkezdi a rögzítést, az alkalmazás GPS helyzetéhez állítja a középpontot</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
         <source>Touch Feedback</source>
         <translation>Érintés visszajelzés</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="232"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
         <translation>Az alkalmazás képes rezegni vagy hangot adni, új elem létrehozásakor</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="247"/>
         <source>General</source>
         <translation>Általános</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="221"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="259"/>
+        <source>Startup behaviour</source>
+        <translation>Indítási viselkedés</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="260"/>
+        <source>Choose what opens when you launch the app</source>
+        <translation>Válassza ki, hogy mi nyíljon meg az alkalmazás indításakor</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="274"/>
         <source>About</source>
         <translation>Névjegy</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="284"/>
         <source>Changelog</source>
         <translation>Változásnapló</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="241"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="294"/>
         <source>Help</source>
         <translation>Segítség</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="251"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="304"/>
         <source>Privacy policy</source>
         <translation>Adatvédelmi szabályzat</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="261"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="314"/>
         <source>Terms of service</source>
         <translation>Általános Szerződési Feltételek</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="271"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="324"/>
         <source>Diagnostic log</source>
         <translation>Diagnosztikai napló</translation>
     </message>
@@ -2841,12 +2909,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="20"/>
         <source>SSO login has expired</source>
-        <translation>Az egyszeri bejelentkezése lejárt</translation>
+        <translation>Az egyszeri (SSO) bejelentkezése lejárt</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="21"/>
         <source>Your SSO login has expired. To access your remote projects and be able to synchronize, you need to log in again.</source>
-        <translation>Az egyszeri bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
+        <translation>Az egyszeri (SSO) bejelentkezési adatai lejártak. A távoli projektek eléréséhez és a szinkronizáláshoz újra be kell jelentkezni.</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMSsoExpiredTokenDialog.qml" line="22"/>
@@ -2864,7 +2932,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="29"/>
         <source>Sign in with SSO</source>
-        <translation>Bejelentkezés egyszeri bejelentkezéssel</translation>
+        <translation>Bejelentkezés egyszeri (SSO) bejelentkezéssel</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="58"/>
@@ -2874,7 +2942,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="67"/>
         <source>By continuing with SSO, you accept the %1Terms and Conditions%3 and %2Privacy Policy%3</source>
-        <translation>Az egyszeri bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés használatával elfogadja a %1Általános Szerződési Feltételeket%3 és az %2Adatvédelmi szabályzatot%3</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="95"/>
@@ -2894,7 +2962,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="128"/>
         <source>SSO login</source>
-        <translation>Egyszeri bejelentkezés</translation>
+        <translation>Egyszeri bejelentkezés (SSO)</translation>
     </message>
     <message>
         <location filename="../qml/account/MMSsoPage.qml" line="129"/>
@@ -2953,7 +3021,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="22"/>
         <source>Streaming mode</source>
-        <translation>Streaming mód</translation>
+        <translation>Folyamatos rögzítés</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="23"/>
@@ -2963,12 +3031,12 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Stop streaming mode</source>
-        <translation>Streaming mód leállítása</translation>
+        <translation>Folyamatos rögzítés leállítása</translation>
     </message>
     <message>
         <location filename="../qml/dialogs/MMStreamingModeDialog.qml" line="24"/>
         <source>Start streaming mode</source>
-        <translation>Streaming mód indítása</translation>
+        <translation>Folyamatos rögzítés indítása</translation>
     </message>
 </context>
 <context>
@@ -3022,7 +3090,7 @@ Nem lesz hozzáadva a projekthez.</translation>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="71"/>
         <source>More options</source>
-        <translation>Több lehetőség</translation>
+        <translation>További lehetőségek</translation>
     </message>
     <message>
         <location filename="../qml/components/MMToolbar.qml" line="135"/>
@@ -3148,19 +3216,19 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
     <message>
         <location filename="../../core/merginapi.cpp" line="926"/>
         <source>There is a problem with the server&apos;s SSO configuration. Contact the administrator.</source>
-        <translation>Probléma van a szerver egyszeri bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
+        <translation>Probléma van a szerver egyszeri (SSO) bejelentkezési konfigurációjával. Lépjen kapcsolatba a rendszergazdával.</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="934"/>
         <location filename="../../core/merginapi.cpp" line="994"/>
         <source>Error getting the SSO configuration from the server</source>
-        <translation>Hiba történt az egyszeri bejelentkezési konfiguráció lekérésekor a szerverről</translation>
+        <translation>Hiba történt az egyszeri (SSO) bejelentkezési konfiguráció lekérésekor a szerverről</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="978"/>
         <location filename="../../core/merginapi.cpp" line="992"/>
         <source>SSO is not supported for the specified domain</source>
-        <translation>A megadott domain tartományban nincs támogatva az egyszeri bejelentkezés</translation>
+        <translation>A megadott domain tartományban nincs támogatva az egyszeri (SSO) bejelentkezés</translation>
     </message>
     <message>
         <location filename="../../core/merginapi.cpp" line="1007"/>
@@ -3250,7 +3318,7 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../../core/merginapi.cpp" line="4464"/>
         <location filename="../../core/merginapi.cpp" line="4491"/>
         <source>SSO authorization failed</source>
-        <translation>Az egyszeri bejelentkezés hitelesítése sikertelen</translation>
+        <translation>Az egyszeri (SSO) bejelentkezés hitelesítése sikertelen</translation>
     </message>
 </context>
 <context>
@@ -3301,12 +3369,12 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="121"/>
+        <location filename="../position/positionkit.cpp" line="130"/>
         <source>External (Mock)</source>
         <translation>Külső (Színlelt)</translation>
     </message>
     <message>
-        <location filename="../position/positionkit.cpp" line="148"/>
+        <location filename="../position/positionkit.cpp" line="166"/>
         <source>Network device</source>
         <translation>Hálózati eszköz</translation>
     </message>
@@ -3424,57 +3492,57 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../position/geoposition.cpp" line="137"/>
+        <location filename="../position/geoposition.cpp" line="138"/>
         <source>No data</source>
         <translation>Nincs adat</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="140"/>
+        <location filename="../position/geoposition.cpp" line="141"/>
         <source>No fix</source>
-        <translation>Nincs javítás</translation>
+        <translation>Nincs pozíció</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="144"/>
         <source>GPS fix, no correction data</source>
-        <translation>GPS javítás, korrekciós adatok nincsenek</translation>
+        <translation>GPS (nincs korrekció)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="148"/>
+        <location filename="../position/geoposition.cpp" line="147"/>
         <source>DGPS fix</source>
-        <translation>DGPS javítás</translation>
+        <translation>DGPS fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="151"/>
+        <location filename="../position/geoposition.cpp" line="150"/>
         <source>PPS fix</source>
-        <translation>PPS javítás</translation>
+        <translation>PPS fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="154"/>
+        <location filename="../position/geoposition.cpp" line="153"/>
         <source>RTK fix</source>
-        <translation>RTK javítás</translation>
+        <translation>RTK fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="157"/>
+        <location filename="../position/geoposition.cpp" line="156"/>
         <source>RTK float</source>
-        <translation>RTK lebegőpontos</translation>
+        <translation>RTK float</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="160"/>
+        <location filename="../position/geoposition.cpp" line="159"/>
         <source>Estimated fix (dead reckoning)</source>
-        <translation>Becsült javítás (halott számítás)</translation>
+        <translation>Becsült helyzet (DR)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="163"/>
+        <location filename="../position/geoposition.cpp" line="162"/>
         <source>Unknown fix</source>
-        <translation>Ismeretlen javítás</translation>
+        <translation>Ismeretlen állapot</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="605"/>
+        <location filename="../main.cpp" line="610"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Jelentés elküldve. Kérjük, vegye fel a kapcsolatot az ügyfélszolgálattal.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="615"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nem sikerült elküldeni a jelentést. Kérjük, ellenőrizze az internet kapcsolatát.</translation>
     </message>
@@ -3495,6 +3563,60 @@ legfeljebb %1 letöltött projektet engedélyez.</translation>
         <location filename="../position/providers/simulatedpositionprovider.cpp" line="72"/>
         <source>Connected</source>
         <translation>Csatlakozva</translation>
+    </message>
+</context>
+<context>
+    <name>TrimblePositionProvider</name>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="129"/>
+        <source>Connecting to TMM</source>
+        <translation>Kapcsolódás a TMM-hez</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="318"/>
+        <source>No data</source>
+        <translation>Nincs adat</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="351"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="375"/>
+        <source>Connected</source>
+        <translation>Kapcsolódva</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="371"/>
+        <source>Connecting</source>
+        <translation>Kapcsolódás</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="379"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="392"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="399"/>
+        <source>Disconnected</source>
+        <translation>Kapcsolat bontva</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="383"/>
+        <source>Disconnecting</source>
+        <translation>Kapcsolat bontása</translation>
+    </message>
+</context>
+<context>
+    <name>TrimbleRegistration</name>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="28"/>
+        <source>No response from Trimble Mobile Manager</source>
+        <translation>Nincs válasz a Trimble Mobile Manager alkalmazástól.</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="39"/>
+        <source>Trimble Mobile Manager registration failed: %1</source>
+        <translation>A Trimble Mobile Manager regisztrációja sikertelen: %1</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="48"/>
+        <source>Trimble Mobile Manager returned invalid port</source>
+        <translation>A Trimble Mobile Manager érvénytelen portot adott vissza</translation>
     </message>
 </context>
 <context>

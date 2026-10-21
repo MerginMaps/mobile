@@ -48,12 +48,13 @@ QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 
 void RelationFeaturesModel::setup()
 {
+  LayerFeaturesModel::setLayer( mRelation.isValid() ? mRelation.referencingLayer() : nullptr );
+
   if ( !mRelation.isValid() || !mParentFeatureLayerPair.isValid() )
     return;
 
   QObject::connect( mRelation.referencingLayer(), &QgsVectorLayer::afterCommitChanges, this, &RelationFeaturesModel::populate );
 
-  LayerFeaturesModel::setLayer( mRelation.referencingLayer() );
   populate();
 }
 
@@ -75,12 +76,10 @@ void RelationFeaturesModel::setParentFeatureLayerPair( FeatureLayerPair pair )
 
   if ( !InputUtils::isFeatureIdValid( pair.feature().id() ) )
   {
-    //
-    // Clear the model in case parent feature has invalid id (e.g. is new) and do not populate it
-    //
+    // Parent has no valid id yet (e.g. new feature) - clear features but keep mLayer known.
 
     beginResetModel();
-    reset();
+    mFeatures.clear();
     endResetModel();
   }
   else

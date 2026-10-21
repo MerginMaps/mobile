@@ -25,7 +25,7 @@ class MerginServerType
       EE, // ee, multiple workspaces
       SAAS // saas, multiple workspaces and subscriptions
     };
-    Q_ENUMS( ServerType )
+    Q_ENUM( ServerType )
 };
 
 #endif // MERGINSERVERTYPE_H

@@ -118,11 +118,13 @@ jobs:
 
                 if (artifacts.length > 0) {
                   for (const artifact of artifacts) {
-                    commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifact.archive_download_url}) | Expires: ${new Date(artifact.expires_at).toLocaleDateString('en-GB')} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
+                    const artifactUrl = `${latestRun.html_url}/artifacts/${artifact.id}`;
+                    commentBody += `|**${workflowName}**| 📬 | [**${artifact.name}**](${artifactUrl}) | Expires: ${new Date(artifact.expires_at).toLocaleDateString('en-GB')} | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     artifactsFound = true;
                     if (workflowName === 'Android Build' && playStoreLinksDict.length > 0) {
                       const playStoreArtifact = playStoreLinksDict.find(playStoreLink => artifact.name.includes(playStoreLink.type));
-                      commentBody += `|| 📬 | [**${artifact.name}**](${playStoreArtifact.link}) | Google Play Store | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
+                      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(playStoreArtifact.link)}`;
+                      commentBody += `|| 📬 | ![QR code](${qrCodeUrl}) | [Google Play Store](${playStoreArtifact.link}) | [#${latestRun.run_number}](${latestRun.html_url}) |\n`;
                     }
                   }
                 } else {

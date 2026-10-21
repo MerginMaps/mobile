@@ -60,6 +60,7 @@ Open workflow file for your platform/target and see the version of libraries use
 
 ## 2.1 Secrets <a name="secrets"></a>
 
+### Mergin API
 To communicate with MerginAPI, some endpoints need to attach `api_key`. To not leak API_KEY,
 the source code that returns the API_KEYS is encrypted.
 
@@ -76,16 +77,33 @@ manifest files.
 
 encrypt
 
-```
+```bash
 cd core/
 openssl aes-256-cbc -in merginsecrets.cpp -out merginsecrets.cpp.enc -md md5
 ```
 
 decrypt
 
-```
+```bash
 cd core/
 openssl aes-256-cbc -d -in merginsecrets.cpp.enc -out merginsecrets.cpp -md md5
+```
+### Trimble
+Similar approach has been used with APP ID for Trimble Mobile Manager. Having access to this file shouldn't be necessary. 
+You can always defer the build to CI.
+
+encrypt
+
+```bash
+cd app/position/providers
+openssl aes-256-cbc -in trimblesecrets.cpp -out trimblesecrets.cpp.enc -md md5
+```
+
+decrypt
+
+```bash
+cd app/position/providers
+openssl aes-256-cbc -d -in trimblesecrets.cpp.enc -out trimblesecrets.cpp -md md5
 ```
 
 ## 2.2 Code formatting <a name="code-formatting"></a>
@@ -109,7 +127,7 @@ to install QtCreator and Qt on your host to be able to release translations.
 Dependencies are build with vcpkg. To fix the version of libraries, you need to download vcpkg and checkout to git commit specified
 in the file `VCPKG_BASELINE` in the repository. The VCPKG repository **HAS TO BE** outside the mobile repository.
 
-```
+```bash
 git clone https://github.com/microsoft/vcpkg.git
 VCPKG_TAG=`cat mobile/VCPKG_BASELINE`
 git checkout ${VCPKG_TAG}
@@ -130,7 +148,7 @@ Steps to build and run mobile app:
 
 1. Install some dependencies, critically bison and flex. See "Install Build Dependencies" step in `.github/workflows/linux.yml`
 
-   ```
+   ```bash
    sudo apt-get install -y \
          gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libegl1-mesa-dev \
          libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev \
@@ -163,7 +181,7 @@ Steps to build and run mobile app:
 
    To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
 
-   ```
+   ```bash
    mkdir -p build
    cd build
    cmake \
@@ -182,13 +200,13 @@ Steps to build and run mobile app:
 
 4. Build application
 
-   ```
+   ```bash
    ninja
    ```
 
 5. Run mobile app
 
-   ```
+   ```bash
    ./app/MerginMaps
    ```
 
@@ -227,7 +245,7 @@ For building ABIs see https://www.qt.io/blog/android-multi-abi-builds-are-back
    can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local
    binary vcpkg cache.
 
-   ```
+   ```bash
      export ANDROID_NDK_HOME=/home/<user>/android/ndk/<current_version>
      export ANDROID_SDK_ROOT=/home/<user>/android
      export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
@@ -287,7 +305,7 @@ To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
 
 To build the project, go to the build folder and run the following command:
 
-```
+```bash
 ninja
 ```
 
@@ -343,7 +361,7 @@ build_folder/
    can take considerable time (e.g. an hour). Subsequent runs will be faster as the libraries without change will be taken from local
    binary vcpkg cache.
 
-   ```
+   ```bash
      export ANDROID_NDK_HOME=/Users/<user>/android/ndk/<current_version>
      export ANDROID_SDK_ROOT=/Users/<user>/android
      export QT_ANDROID_KEYSTORE_ALIAS=<local-alias>
@@ -406,13 +424,13 @@ build_folder/
 
    To build the project, go to the build folder and run the following command:
 
-   ```
+   ```bash
    ninja
    ```
 
    Once built, navigate to the path and run MerginMaps:
 
-   ```
+   ```bash
    build_folder/
       app/
          MerginMaps
@@ -457,7 +475,7 @@ mobile app for Android on Windows, please help us to update this section.
 
    Note: make sure you adjust VCPKG_HOST_TRIPLET and CMAKE_SYSTEM_PROCESSOR if you use x64-osx host machine.
 
-   ```
+   ```bash
    cd build
 
    export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
@@ -469,14 +487,14 @@ mobile app for Android on Windows, please help us to update this section.
      -DCMAKE_SYSTEM_PROCESSOR=aarch64 \
      -DVCPKG_TARGET_TRIPLET=arm64-ios \
      -DCMAKE_TOOLCHAIN_FILE=<path-to-directory>/vcpkg/scripts/buildsystems/vcpkg.cmake \
-     -D ENABLE_BITCODE=OFF \
-     -D ENABLE_ARC=ON \
-     -D CMAKE_CXX_VISIBILITY_PRESET=hidden \
-     -D CMAKE_SYSTEM_NAME=iOS \
+     -DENABLE_BITCODE=OFF \
+     -DENABLE_ARC=ON \
+     -DCMAKE_CXX_VISIBILITY_PRESET=hidden \
+     -DCMAKE_SYSTEM_NAME=iOS \
      -DIOS=TRUE \
      -DUSE_MM_SERVER_API_KEY=FALSE \
-     -G "Xcode" \
      -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+     -G "Xcode" \
      -S ../mobile \
      -B ./
    ```
@@ -485,7 +503,7 @@ mobile app for Android on Windows, please help us to update this section.
 
 Now you can create a build (either on command line or by setting these variables in Qt Creator)
 
-```
+```bash
   cd build
 
   xcodebuild \
@@ -509,7 +527,7 @@ Once the project is opened, build it from Xcode.
 
 1. Install some dependencies, critically XCode, bison and flex. See "Install Build Dependencies" step in `.github/workflows/macos.yml`
 
-```
+```bash
    brew install cmake automake bison flex gnu-sed autoconf-archive libtool ninja pkg-config
 ```
 
@@ -534,7 +552,7 @@ Once the project is opened, build it from Xcode.
 
    Note: for **x64-osx** (intel laptops) build use **x64-osx** VCPKG_TARGET_TRIPLET instead of **arm64-osx** (Mx laptops)
 
-   ```
+   ```bash
    cd build
 
    export PATH=$(brew --prefix flex)/bin:$(brew --prefix bison)/bin:$(brew --prefix gettext)/bin:$PATH;\
@@ -555,12 +573,12 @@ Once the project is opened, build it from Xcode.
 
 4. Build application
 
-   ```
+   ```bash
    ninja
    ```
 
 5. Run the mobile app
-   ```
+   ```bash
    ./app/MerginMaps.app/Contents/MacOS/MerginMaps
    ```
 
@@ -569,7 +587,7 @@ Once the project is opened, build it from Xcode.
 1. Install some dependencies. See `.github/workflows/win.yml`
    Critically Visual Studio, cmake, bison and flex. Setup build VS environment (adjust to your version)
 
-```
+```shell
 "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
 ```
 
@@ -595,31 +613,31 @@ Once the project is opened, build it from Xcode.
 
    To use USE_MM_SERVER_API_KEY read [Secrets](#secrets) section.
 
-   ```
+   ```shell
    mkdir build
    cd build
 
    cmake ^
      -DCMAKE_BUILD_TYPE=Debug ^
      -DCMAKE_TOOLCHAIN_FILE:PATH="<path-to-directory>/vcpkg/scripts/buildsystems/vcpkg.cmake" ^
-     -G "Visual Studio 17 2022" ^
-     -A x64 ^
      -DVCPKG_TARGET_TRIPLET=x64-windows ^
      -DUSE_MM_SERVER_API_KEY=FALSE ^
      -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ^
+     -A x64 ^
+     -G "Visual Studio 17 2022" ^
      -S ../mobile ^
      -B .
    ```
 
 4. Build application
 
-   ```
+   ```shell
    cd build
    cmake --build . --config Release --verbose
    ```
 
 5. Run the mobile app
-   ```
+   ```shell
    ./app/MerginMaps.exe
    ```
 

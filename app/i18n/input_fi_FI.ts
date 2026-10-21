@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>General</source>
         <translation>Yleiset</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="289"/>
+        <location filename="../activeproject.cpp" line="292"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Kartta ja työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer</source>
         <translation>Taso</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="301"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Unable to load source </source>
         <translation>Lähteen avaaminen epäonnistui</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="310"/>
+        <location filename="../activeproject.cpp" line="313"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projektiiin on asetettu virheellinen CRS (koordinaattijärjestelmä). Nauhoitus työkalut käyttäytyvät saattavat käyttäytyä virheellisesti.</translation>
     </message>
@@ -90,22 +90,22 @@
 <context>
     <name>AndroidUtils</name>
     <message>
-        <location filename="../androidutils.cpp" line="259"/>
+        <location filename="../androidutils.cpp" line="225"/>
         <source>Storage permission is permanently denied, please allow it in settings in order to load pictures from gallery</source>
         <translation>Tallennusoikeus on evätty pysyvästi, ole hyvä ja salli se asetuksissa ladataksesi kuvia galleriasta</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="263"/>
+        <location filename="../androidutils.cpp" line="229"/>
         <source>Mergin Maps needs a storage permission in order to load pictures from gallery</source>
         <translation>Mergin Maps tarvitsee tallennusluvan kuvien lataamiseen galleriasta</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="281"/>
+        <location filename="../androidutils.cpp" line="247"/>
         <source>Camera permission is permanently denied, please allow it in settings</source>
         <translation>Kameran käyttöoikeus on evätty pysyvästi, salli se asetuksissa</translation>
     </message>
     <message>
-        <location filename="../androidutils.cpp" line="285"/>
+        <location filename="../androidutils.cpp" line="251"/>
         <source>We need a camera permission in order to take a photo</source>
         <translation>Tarvitsemme kameran luvan ottaaksemme kuvia</translation>
     </message>
@@ -121,40 +121,40 @@
 <context>
     <name>BluetoothPositionProvider</name>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="49"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="194"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="38"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="183"/>
         <source>No connection</source>
         <translation>Ei yhteyttä</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="90"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="79"/>
         <source>Reconnecting</source>
         <translation>Yhdistetään uudelleen</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="122"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="130"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="111"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="119"/>
         <source>No connection, reconnecting in (%1)</source>
         <translation>Ei yhteyttä, yhdistetään uudelleen (%1)</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="148"/>
         <source>Bluetooth permission disabled</source>
         <translation>Bluetooth ei käytössä</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="170"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="159"/>
         <source>Could not connect to device, not paired</source>
         <translation>Ei voitu muodostaa yhteyttä laitteeseen, ei paritettu</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="186"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="175"/>
         <source>Connecting to %1</source>
         <translation>Yhdistetään %1</translation>
     </message>
     <message>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="190"/>
-        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="208"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="179"/>
+        <location filename="../position/providers/bluetoothpositionprovider.cpp" line="197"/>
         <source>Connected</source>
         <translation>Yhdistetty</translation>
     </message>
@@ -176,13 +176,13 @@
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="22"/>
-        <source>Value must be lower than %1</source>
-        <translation>Arvon on oltava pienempi kuin %1</translation>
+        <source>Value must be less than or equal to %1</source>
+        <translation>Arvon on oltava pienempi tai yhtä suuri kuin %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="23"/>
-        <source>Value must be higher than %1</source>
-        <translation>Arvon on oltava suurempi kuin %1</translation>
+        <source>Value must be greater than or equal to %1</source>
+        <translation>Arvon on oltava suurempi tai yhtä suuri kuin %1</translation>
     </message>
     <message>
         <location filename="../attributes/fieldvalidator.cpp" line="24"/>
@@ -234,17 +234,32 @@
 <context>
     <name>FieldsModel</name>
     <message>
-        <location filename="../fieldsmodel.cpp" line="19"/>
+        <location filename="../fieldsmodel.cpp" line="16"/>
+        <source>Date</source>
+        <translation>Päivämäärä</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="17"/>
+        <source>Notes</source>
+        <translation>Muistiinpanot</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="18"/>
+        <source>Photo</source>
+        <translation>Valokuva</translation>
+    </message>
+    <message>
+        <location filename="../fieldsmodel.cpp" line="27"/>
         <source>Please fill a name of previous field before adding a new field.</source>
         <translation>Täytä edellisen kentän nimi ennen uuden kentän lisäämistä.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="23"/>
+        <location filename="../fieldsmodel.cpp" line="31"/>
         <source>Field %1 already exists.</source>
         <translation>Kenttä %1 on jo olemassa.</translation>
     </message>
     <message>
-        <location filename="../fieldsmodel.cpp" line="108"/>
+        <location filename="../fieldsmodel.cpp" line="115"/>
         <source>Field %1 already exists. 
 Won&apos;t be added to the project.</source>
         <translation>Kenttä %1 on jo olemassa. 
@@ -333,12 +348,12 @@ Sitä ei lisätä projektiin.</translation>
         <translation><numerusform>%n vuotta sitten</numerusform><numerusform>%n vuotta sitten</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2213"/>
+        <location filename="../inpututils.cpp" line="2253"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Sinun on lisättävä jokaiseen osaan vähintään %n pistettä.</numerusform><numerusform>Sinun on lisättävä jokaiseen osaan vähintään %n pistettä.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2217"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Sinun on lisättävä vähintään %n piste/pistettä.</numerusform><numerusform>Sinun on lisättävä vähintään %n piste/pistettä.</numerusform></translation>
     </message>
@@ -491,34 +506,6 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
-    <name>MMAddPositionProviderDrawer</name>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="24"/>
-        <source>Connect to bluetooth device</source>
-        <translation>Yhdistä bluetooth laitteeseen</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="48"/>
-        <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
-        <translation>Bluetoothin tulee olla päällä, jotta voit yhdistää ulkoiseen vastaanottimeen. Ota se käyttöön järjestelmän asetuksissa.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="58"/>
-        <source>Unknown device</source>
-        <translation>Tuntematon laite</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="94"/>
-        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
-        <translation>Sinun on otettava Bluetooth käyttöön, jotta voit yhdistää uuteen GPS vastaanottimeen</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMAddPositionProviderDrawer.qml" line="113"/>
-        <source>Looking for devices</source>
-        <translation>Etsitään laitteita</translation>
-    </message>
-</context>
-<context>
     <name>MMAmPmSwitch</name>
     <message>
         <location filename="../qml/form/components/calendar/MMAmPmSwitch.qml" line="41"/>
@@ -532,52 +519,42 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
-    <name>MMBluetoothConnectionDrawer</name>
+    <name>MMBluetoothProviderDrawer</name>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="29"/>
-        <source>Connecting to</source>
-        <translation>Yhdistetään </translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="25"/>
+        <source>Bluetooth Connection</source>
+        <translation>Bluetooth-yhteys</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="30"/>
-        <source>Connecting</source>
-        <translation>Yhdistetään </translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="51"/>
+        <source>Bluetooth permission is required in order to connect to external receivers. Please enable it in system settings</source>
+        <translation>Bluetooth-lupa tarvitaan ulkoisiin vastaanottimiin yhdistämiseksi. Ota se käyttöön järjestelmän asetuksista.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="34"/>
-        <source>Connected</source>
-        <translation>Yhdistetty</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="65"/>
+        <source>Unknown device</source>
+        <translation>Tuntematon laite</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="39"/>
-        <source>Failed to connect to</source>
-        <translation>Yhdistäminen epäonnistui</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="101"/>
+        <source>You need to enable Bluetooth in order to connect new GPS receiver</source>
+        <translation>Sinun on otettava Bluetooth käyttöön, jotta voit yhdistää uuteen GPS vastaanottimeen</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="48"/>
-        <source>You might be asked to pair your device during this process.</source>
-        <translation>Sinua saatetaan pyytää muodostamaan laitepari prosessin aikana.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="57"/>
-        <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation>Voit sulkea tämän viestin, jatkamme yrittämistä muodostaa yhteys laitteeseesi.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="62"/>
-        <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
-        <translation>Emme voi yhdistää määriteltyyn laitteeseen. Varmista, että laitteessasi on virta päällä ja että siihen voidaan yhdistää.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMBluetoothConnectionDrawer.qml" line="117"/>
-        <source>Learn more</source>
-        <translation>Lue lisää</translation>
+        <location filename="../qml/gps/MMBluetoothProviderDrawer.qml" line="140"/>
+        <source>Scanning for devices</source>
+        <translation>Etsitään laitteita</translation>
     </message>
 </context>
 <context>
     <name>MMCalendarDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="58"/>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="36"/>
+        <source>Clear</source>
+        <translation>Tyhjennä</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMCalendarDrawer.qml" line="73"/>
         <source>Confirm</source>
         <translation>Vahvista</translation>
     </message>
@@ -760,9 +737,94 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMExternalProviderConnectionDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="132"/>
+        <source>Connecting to external receiver</source>
+        <translation>Yhdistetään ulkoiseen vastaanottimeen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="146"/>
+        <source>You might be asked to pair your device during this process.</source>
+        <translation>Sinua saatetaan pyytää muodostamaan laitepari tämän prosessin aikana.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="47"/>
+        <source>Connected</source>
+        <translation>Yhdistetty</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="68"/>
+        <source>%1%2You can close this message, we will try to repeatedly connect to your device.</source>
+        <translation>%1%2Voit sulkea tämän viestin, yritämme yhdistää laitteeseesi toistuvasti.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="136"/>
+        <source>Connecting to %1</source>
+        <translation>Yhdistetään %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="139"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="156"/>
+        <source>Connecting%1</source>
+        <translation>Yhdistetään%1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="150"/>
+        <source>Connecting to %1. You can close this panel, the app will continue in the background.</source>
+        <translation>Yhdistetään kohteeseen %1. Voit sulkea tämän paneelin, sovellus jatkaa toimintaa taustalla.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="153"/>
+        <source>Trimble Mobile Manager will be opened shortly.</source>
+        <translation>Trimble Mobile Manager avataan pian.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="163"/>
+        <source>Failed to connect</source>
+        <translation>Failed to connect</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="174"/>
+        <source>Failed to connect to %1</source>
+        <translation>Failed to connect to %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="180"/>
+        <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
+        <translation>Määritettyyn laitteeseen ei saatu yhteyttä. Varmista, että laitteessa on virta kytkettynä ja siihen voidaan muodostaa yhteys.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="183"/>
+        <source>We were not able to connect to the specified IP address.</source>
+        <translation>Määritettyyn IP-osoitteeseen ei saatu yhteyttä.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="186"/>
+        <source>We were not able to connect to Trimble Mobile Manager. Please make sure it&apos;s installed.</source>
+        <translation>Trimble Mobile Manageriin ei saatu yhteyttä. Varmista, että se on asennettu.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="59"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
+        <source>Learn more</source>
+        <translation>Lue lisää</translation>
+    </message>
+</context>
+<context>
     <name>MMFeaturesListPage</name>
     <message>
-        <location filename="../qml/layers/MMFeaturesListPage.qml" line="95"/>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="58"/>
+        <source>Active filters applied</source>
+        <translation>Aktiivisia suodattimia käytössä</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="59"/>
+        <source>Reset</source>
+        <translation>Palauta</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMFeaturesListPage.qml" line="115"/>
         <source>Add feature</source>
         <translation>Lisää kohde</translation>
     </message>
@@ -770,14 +832,140 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFeaturesListPageDrawer</name>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="71"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="78"/>
         <source>Search for features...</source>
         <translation>Etsi kohteita...</translation>
     </message>
     <message>
-        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="107"/>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="91"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Joitakin kohteita saattaa olla piilotettuna aktiivisten suodattimien vuoksi</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/components/MMFeaturesListPageDrawer.qml" line="128"/>
         <source>Add feature</source>
         <translation>Lisää kohde</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterBoolInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="46"/>
+        <source>True</source>
+        <translation>Tosi</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterBoolInput.qml" line="47"/>
+        <source>False</source>
+        <translation>Epätosi</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDateInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="53"/>
+        <source>From</source>
+        <translation>Alkaen</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="54"/>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="149"/>
+        <source>&quot;From&quot; must be sooner than &quot;To&quot;</source>
+        <translation>&quot;Alkaen&quot;-päivämäärän on oltava ennen &quot;Päättyen&quot;-päivämäärää</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDateInput.qml" line="148"/>
+        <source>To</source>
+        <translation>Päättyen</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownUniqueValuesInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="49"/>
+        <source>Select...</source>
+        <translation>Valitse...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownUniqueValuesInput.qml" line="50"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valittu(a) arvo(a)</numerusform><numerusform>%n valittu(a) arvo(a)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueMapInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="48"/>
+        <source>Select...</source>
+        <translation>Select...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueMapInput.qml" line="49"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valittu(a) arvo(a)</numerusform><numerusform>%n valittu(a) arvo(a)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterDropdownValueRelationInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="49"/>
+        <source>Select...</source>
+        <translation>Valitse...</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/filters/components/MMFilterDropdownValueRelationInput.qml" line="50"/>
+        <source>%n selected value(s)</source>
+        <translation><numerusform>%n valittu(a) arvo(a)</numerusform><numerusform>%n valittu(a) arvo(a)</numerusform></translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterRangeInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="47"/>
+        <source>Min</source>
+        <translation>Min</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="49"/>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="63"/>
+        <source>&quot;Min&quot; must be less than &quot;Max&quot;</source>
+        <translation>&quot;Min&quot; pitää olla vähemmän kuin &quot;Max&quot;</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/components/MMFilterRangeInput.qml" line="61"/>
+        <source>Max</source>
+        <translation>Max</translation>
+    </message>
+</context>
+<context>
+    <name>MMFilterTextInput</name>
+    <message>
+        <location filename="../qml/filters/components/MMFilterTextInput.qml" line="37"/>
+        <source>Type to filter...</source>
+        <translation>Suodata kirjoittamalla...</translation>
+    </message>
+</context>
+<context>
+    <name>MMFiltersDrawer</name>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="52"/>
+        <source>Filters</source>
+        <translation>Suodattimet</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="58"/>
+        <source>Reset</source>
+        <translation>Palauta</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="93"/>
+        <source>No filtering</source>
+        <translation>Ei suodatusta</translation>
+    </message>
+    <message>
+        <location filename="../qml/filters/MMFiltersDrawer.qml" line="203"/>
+        <source>Apply filters</source>
+        <translation>Käytä suodattimia</translation>
     </message>
 </context>
 <context>
@@ -822,6 +1010,14 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMFormGalleryEditor</name>
+    <message>
+        <location filename="../qml/form/editors/MMFormGalleryEditor.qml" line="35"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Joitakin kohteita saattaa olla piilotettuna aktiivisten suodattimien vuoksi</translation>
+    </message>
+</context>
+<context>
     <name>MMFormNotAvailable</name>
     <message>
         <location filename="../qml/form/editors/MMFormNotAvailable.qml" line="26"/>
@@ -832,28 +1028,28 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormPage</name>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="109"/>
+        <location filename="../qml/form/MMFormPage.qml" line="117"/>
         <source>New feature</source>
         <translation>Uusi kohde</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="110"/>
-        <location filename="../qml/form/MMFormPage.qml" line="214"/>
+        <location filename="../qml/form/MMFormPage.qml" line="118"/>
+        <location filename="../qml/form/MMFormPage.qml" line="222"/>
         <source>Edit feature</source>
         <translation>Muokkaa kohdetta</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="111"/>
+        <location filename="../qml/form/MMFormPage.qml" line="119"/>
         <source>Edit selected features</source>
         <translation>Muokkaa valittua kohdetta</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="227"/>
+        <location filename="../qml/form/MMFormPage.qml" line="235"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="236"/>
+        <location filename="../qml/form/MMFormPage.qml" line="244"/>
         <source>Edit geometry</source>
         <translation>Muokkaa geometriaa</translation>
     </message>
@@ -886,17 +1082,17 @@ Sitä ei lisätä projektiin.</translation>
         <translation>Valokuvapiirroksia ei voitu tallentaa, ota yhteyttä tukeen.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="293"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
         <source>Could not create directory %1.</source>
         <translation>Hakemistoa %1 ei voitu luoda.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="358"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Kuvan käsittely epäonnistui: kuvahakemistoa ei löytynyt.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="373"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
         <source>Failed to process the image</source>
         <translation>Kuvan prosessointi epäonnistui</translation>
     </message>
@@ -904,12 +1100,17 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="168"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="47"/>
+        <source>Some features may be hidden by active filters</source>
+        <translation>Joitakin kohteita saattaa olla piilotettuna aktiivisten suodattimien vuoksi</translation>
+    </message>
+    <message>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="177"/>
         <source> more</source>
         <translation>lisää</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="211"/>
+        <location filename="../qml/form/editors/MMFormRelationEditor.qml" line="220"/>
         <source>Add feature</source>
         <translation>Lisää kohde</translation>
     </message>
@@ -917,12 +1118,12 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormRelationReferenceEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="101"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="103"/>
         <source>Change link</source>
         <translation>Muuta linkkiä</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="104"/>
+        <location filename="../qml/form/editors/MMFormRelationReferenceEditor.qml" line="106"/>
         <source>Unlink feature</source>
         <translation>Poista kohteen linkitys</translation>
     </message>
@@ -969,159 +1170,159 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="94"/>
-        <source>No items</source>
-        <translation>Ei kohteita</translation>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <source>Clear</source>
+        <translation>Tyhjennä</translation>
     </message>
 </context>
 <context>
     <name>MMFormValueRelationEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="80"/>
-        <source>No items</source>
-        <translation>Ei kohteita</translation>
+        <location filename="../qml/form/editors/MMFormValueRelationEditor.qml" line="77"/>
+        <source>Clear</source>
+        <translation>Tyhjennä</translation>
     </message>
 </context>
 <context>
     <name>MMGpsDataDrawer</name>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="28"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="27"/>
         <source>GPS info</source>
         <translation>GPS info</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="65"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="69"/>
         <source>Source</source>
         <translation>Lähde</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="66"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="70"/>
         <source>No receiver</source>
         <translation>Ei vastaanotinta</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="78"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="82"/>
         <source>Status</source>
         <translation>Tila</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="95"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="99"/>
         <source>Longitude</source>
         <translation>Pituusaste</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="98"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="105"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="117"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="124"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="136"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="151"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="166"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="181"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="196"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="211"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="244"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="261"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="278"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="295"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="308"/>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="328"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="102"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="109"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="121"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="128"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="140"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="155"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="170"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="185"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="200"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="215"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="233"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="248"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="265"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="282"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="299"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="312"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="332"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="114"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="118"/>
         <source>Latitude</source>
         <translation>Leveysaste</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="133"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="137"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="148"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="152"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="163"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="167"/>
         <source>Horizontal accuracy</source>
         <translation>Vaakasuuntainen tarkkuus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="178"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="182"/>
         <source>Vertical accuracy</source>
         <translation>Pystysuuntainen tarkkuus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="193"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="197"/>
         <source>Altitude</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
         <source>Orthometric height, using %1 geoid</source>
         <translation>Ortometrinen korkeus, käyttäen %1 geoidia</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="202"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="206"/>
         <source>Elevation using unspecified grid</source>
         <translation>Korkeus käyttämällä määrittelemätöntä ruudukkoa</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="208"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="212"/>
         <source>Fix quality</source>
         <translation>Sijainnin laatu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="225"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="229"/>
         <source>Satellites (in use/view)</source>
         <translation>Satelliitit (käytössä/näkyvissä)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="241"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="245"/>
         <source>HDOP</source>
         <translation>HDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="258"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="262"/>
         <source>VDOP</source>
         <translation>VDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="275"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="279"/>
         <source>PDOP</source>
         <translation>PDOP</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="292"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="296"/>
         <source>Speed</source>
         <translation>Nopeus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="307"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="311"/>
         <source>Last Fix</source>
         <translation>Viimeinen sijainti</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="316"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="320"/>
         <source>GPS antenna height</source>
         <translation>GPS antennin korkeus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="317"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="321"/>
         <source>Not set</source>
         <translation>Ei asetettu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="325"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="329"/>
         <source>Geoid separation</source>
         <translation>Geoidierottelu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="343"/>
+        <location filename="../qml/gps/MMGpsDataDrawer.qml" line="357"/>
         <source>Manage GPS receivers</source>
         <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
@@ -1129,97 +1330,97 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMHowYouFoundUsPage</name>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="31"/>
         <source>Search engine (Google, ...)</source>
         <translation>Hakukone (Google, ...)</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="32"/>
         <source>Blog</source>
         <translation>Blogi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="33"/>
         <source>Mouth</source>
         <translation>Kuulin toiselta</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="34"/>
         <source>QGIS website</source>
         <translation>QGIS kotisivu</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="35"/>
         <source>Application store</source>
         <translation>Sovelluskauppa</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="36"/>
         <source>Teacher</source>
         <translation>Opettaja</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="37"/>
         <source>Conference</source>
         <translation>Konferenssi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="39"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="38"/>
         <source>Social media</source>
         <translation>Sosiaalinen media</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="42"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="41"/>
         <source>Other</source>
         <translation>Muu</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="130"/>
         <source>YouTube</source>
         <translation>YouTube</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="131"/>
         <source>Twitter</source>
         <translation>Twitter/X</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="132"/>
         <source>Facebook</source>
         <translation>Facebook</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="134"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="133"/>
         <source>LinkedIn</source>
         <translation>LinkedIn</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="135"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="134"/>
         <source>Mastodon</source>
         <translation>Mastodon</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="136"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="135"/>
         <source>Reddit</source>
         <translation>Reddit</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="173"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="172"/>
         <source>Continue</source>
         <translation>Jatka</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="205"/>
         <source>Where did you hear about us?</source>
         <translation>Missä kuulit meistä?</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="207"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="206"/>
         <source>Please specify the source</source>
         <translation>Tarkenna lähteesi</translation>
     </message>
     <message>
-        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="222"/>
+        <location filename="../qml/account/MMHowYouFoundUsPage.qml" line="221"/>
         <source>Source</source>
         <translation>Lähde</translation>
     </message>
@@ -1227,32 +1428,32 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMLayerDetailPage</name>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="84"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="79"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="85"/>
         <source>Visible on map</source>
         <translation>Näkyy kartalla</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="103"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
         <source>Legend</source>
         <translation>Selite</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="156"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="162"/>
         <source>Attribution</source>
         <translation>Nimeäminen</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="240"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="246"/>
         <source>Features</source>
         <translation>Kohteet</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="255"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="261"/>
         <source>Layer info</source>
         <translation>Tason tiedot</translation>
     </message>
@@ -1279,14 +1480,22 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMListEmptyLoaderDelegate</name>
+    <message>
+        <location filename="../qml/components/MMListEmptyLoaderDelegate.qml" line="28"/>
+        <source>No items</source>
+        <translation>Ei kohteita</translation>
+    </message>
+</context>
+<context>
     <name>MMListMultiselectDrawer</name>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="59"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="60"/>
         <source>Search</source>
         <translation>Hae</translation>
     </message>
     <message>
-        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="142"/>
+        <location filename="../qml/components/MMListMultiselectDrawer.qml" line="139"/>
         <source>Confirm selection</source>
         <translation>Vahvista valinta</translation>
     </message>
@@ -1375,113 +1584,123 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMMapController</name>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="125"/>
+        <location filename="../qml/map/MMMapController.qml" line="126"/>
         <source>Mark the geometry on the map and click record</source>
         <translation>Merkitse geometria karttaan ja klikkaa tallenna</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="154"/>
+        <location filename="../qml/map/MMMapController.qml" line="155"/>
         <source>Create line to split the selected feature</source>
         <translation>Piirrä viiva jakaaksesi valittu kohde</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="171"/>
+        <location filename="../qml/map/MMMapController.qml" line="172"/>
         <source>Add points to measure distance, close the shape to measure area</source>
         <translation>Lisää pisteitä etäisyyden mittaamiseksi, sulje muoto pinta-alan mittaamiseksi</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="178"/>
+        <location filename="../qml/map/MMMapController.qml" line="179"/>
         <source>Tap on features to add or remove from the selection</source>
         <translation>Napauta kohdetta lisätäksesi tai poistaaksesi niitä valinnasta</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="184"/>
+        <location filename="../qml/map/MMMapController.qml" line="185"/>
         <source>Select a colour and start sketching on the map. Use two fingers to move or zoom the map.</source>
         <translation>Valitse väri ja aloita piirtäminen kartalle. Siirrä tai zoomaa karttaa kahdella sormella.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="630"/>
+        <location filename="../qml/map/MMMapController.qml" line="631"/>
         <source>streaming</source>
         <translation>tallennus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="706"/>
+        <location filename="../qml/map/MMMapController.qml" line="707"/>
         <source>Connecting to %1</source>
         <translation>Yhdistetään %1</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="720"/>
+        <location filename="../qml/map/MMMapController.qml" line="721"/>
         <source>Connected, no position</source>
         <translation>Yhdistetty, ei sijaintia</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="724"/>
+        <location filename="../qml/map/MMMapController.qml" line="725"/>
         <source>Unknown accuracy</source>
         <translation>Tuntematon tarkkuus</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="866"/>
+        <location filename="../qml/map/MMMapController.qml" line="890"/>
         <source>GPS currently unavailable</source>
         <translation>GPS ei ole nyt käytettävissä </translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="890"/>
+        <location filename="../qml/map/MMMapController.qml" line="914"/>
         <source>Choose Active Layer</source>
         <translation>Valitse aktiivinen taso</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="924"/>
+        <location filename="../qml/map/MMMapController.qml" line="945"/>
         <source>Could not find any editable layers in the project.</source>
         <translation>Projektista ei löytynyt tasoa, jota voi edioida</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="925"/>
+        <location filename="../qml/map/MMMapController.qml" line="946"/>
         <source>See how to enable digitizing in your project.</source>
         <translation>Katso, kuinka otat digitoinnin käyttöön projektissasi.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="951"/>
+        <location filename="../qml/map/MMMapController.qml" line="972"/>
         <source>More options</source>
         <translation>Lisää valintoja</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="956"/>
+        <location filename="../qml/map/MMMapController.qml" line="977"/>
         <source>Split geometry</source>
         <translation>Jaa geometria</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="968"/>
+        <location filename="../qml/map/MMMapController.qml" line="989"/>
+        <source>Add part</source>
+        <translation>Lisää osa</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="1001"/>
         <source>Redraw geometry</source>
         <translation>Piirrä geometria uudelleen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="980"/>
+        <location filename="../qml/map/MMMapController.qml" line="1013"/>
         <source>Streaming mode</source>
         <translation>Nauhoitustila</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="986"/>
+        <location filename="../qml/map/MMMapController.qml" line="1019"/>
         <source>Active</source>
         <translation>Aktiivinen</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1198"/>
+        <location filename="../qml/map/MMMapController.qml" line="1234"/>
         <source>Splitting done successfully</source>
         <translation>Jako suoritettu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1289"/>
+        <location filename="../qml/map/MMMapController.qml" line="1337"/>
         <source>Select some point to start editing the geometry</source>
         <translation>Valitse jokin piste geometrian muokkaamiseksi.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="1302"/>
+        <location filename="../qml/map/MMMapController.qml" line="1350"/>
         <source>Record new geometry for the feature</source>
         <translation>Tallenna uusi geometria kohteelle</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMMapController.qml" line="129"/>
-        <location filename="../qml/map/MMMapController.qml" line="1401"/>
+        <location filename="../qml/map/MMMapController.qml" line="1371"/>
+        <source>Add new part to the geometry</source>
+        <translation>Lisää uusi osa geometriaan</translation>
+    </message>
+    <message>
+        <location filename="../qml/map/MMMapController.qml" line="130"/>
+        <location filename="../qml/map/MMMapController.qml" line="1468"/>
         <source>GPS currently unavailable.</source>
         <translation>GPS ei ole nyt käytettävissä </translation>
     </message>
@@ -1507,7 +1726,7 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMMeasureCrosshair</name>
     <message>
-        <location filename="../qml/map/components/MMMeasureCrosshair.qml" line="93"/>
+        <location filename="../qml/map/components/MMMeasureCrosshair.qml" line="92"/>
         <source>Close shape</source>
         <translation>Sulje muoto</translation>
     </message>
@@ -1515,37 +1734,37 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMMeasureDrawer</name>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="54"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="53"/>
         <source>Measure</source>
         <translation>Mittaa</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="77"/>
         <source>Perimeter</source>
         <translation>Ympärysmitta</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="77"/>
         <source>Length</source>
         <translation>Pituus</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="91"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="84"/>
         <source>Area</source>
         <translation>Pinta-ala</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="97"/>
         <source>Close shape</source>
         <translation>Sulje muoto</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="97"/>
         <source>Add point</source>
         <translation>Lisää piste</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMMeasureDrawer.qml" line="111"/>
+        <location filename="../qml/gps/MMMeasureDrawer.qml" line="104"/>
         <source>Done</source>
         <translation>Valmis</translation>
     </message>
@@ -1605,6 +1824,70 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMNetworkProviderDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="20"/>
+        <source>Network connection</source>
+        <translation>Verkkoyhteys</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="29"/>
+        <source>Enter the IP address and port for your receiver. You can find these in your manufacturer&apos;s app. TCP and UDP connections are supported. Optionally, add a nickname to tell your receivers apart.</source>
+        <translation>Syötä vastaanottimesi IP-osoite ja portti. Löydät ne valmistajan sovelluksesta. TCP- ja UDP-yhteydet ovat tuettuja. Voit myös lisätä lempinimen erottaaksesi vastaanottimet toisistaan.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="43"/>
+        <source>IP Address</source>
+        <translation>IP-osoite</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="55"/>
+        <source>Port</source>
+        <translation>Portti</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="69"/>
+        <source>Receiver nickname (optional)</source>
+        <translation>Vastaanottimen lempinimi (valinnainen)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="70"/>
+        <source>External receiver</source>
+        <translation>Ulkoinen vastaanotin</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="76"/>
+        <source>Confirm</source>
+        <translation>Vahvista</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="86"/>
+        <source>IP address is required</source>
+        <translation>IP-osoite vaaditaan</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="89"/>
+        <source>Enter a valid IP address or hostname</source>
+        <translation>Syötä voimassa oleva IP-osoite tai isäntänimi</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="97"/>
+        <source>Port is required</source>
+        <translation>Portti vaaditaan</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="100"/>
+        <source>Enter a valid port (1–65535)</source>
+        <translation>Syötä kelvollinen portti (1–65535)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="118"/>
+        <location filename="../qml/gps/MMNetworkProviderDrawer.qml" line="119"/>
+        <source>Network position provider with this IP address &amp; port already exists</source>
+        <translation>Tällä IP-osoitteella ja portilla varustettu verkon sijaintipalvelu on jo olemassa</translation>
+    </message>
+</context>
+<context>
     <name>MMNoPermissionsDialog</name>
     <message>
         <location filename="../qml/dialogs/MMNoPermissionsDialog.qml" line="18"/>
@@ -1661,42 +1944,43 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMPositionProviderPage</name>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="83"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="70"/>
         <source>Unknown device</source>
         <translation>Tuntematon laite</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
-        <source>Internal receivers</source>
-        <translation>Sisäiset vastaanottimet</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="111"/>
-        <source>External receivers</source>
-        <translation>Ulkoiset vastaanottimet</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="136"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="133"/>
         <source>Connect new receiver</source>
         <translation>Yhdistä uuteen vastaanottimeen</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="147"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="176"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation>Yhteyden muodostamista ulkoisiin vastaanottimiin Bluetoothin kautta ei ole tuettu</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="148"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="177"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>Tämä toiminto ei ole käytettävissä iOS-laitteissa. Laitteistotoimittajasi voi tarjota mukautetun sovelluksen, joka muodostaa yhteyden vastaanottimeen ja asettaa sijainnin. Tällöin sovellus luulee yhä, että kyseessä on puhelimesi/tablettisi sisäinen GPS.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="202"/>
         <source>Internal</source>
         <translation>Sisäinen</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="238"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <source>%1 receivers</source>
+        <translation>%1 vastaanotinta</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
+        <source>External</source>
+        <translation>Ulkoinen</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="264"/>
         <source>Manage GPS receivers</source>
         <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
@@ -1783,30 +2067,30 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMProjectController</name>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="204"/>
-        <location filename="../qml/project/MMProjectController.qml" line="377"/>
+        <location filename="../qml/project/MMProjectController.qml" line="203"/>
+        <location filename="../qml/project/MMProjectController.qml" line="376"/>
         <source>Home</source>
         <translation>Alku</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="207"/>
-        <location filename="../qml/project/MMProjectController.qml" line="386"/>
+        <location filename="../qml/project/MMProjectController.qml" line="206"/>
+        <location filename="../qml/project/MMProjectController.qml" line="385"/>
         <source>Projects</source>
         <translation>Projektit</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="209"/>
-        <location filename="../qml/project/MMProjectController.qml" line="395"/>
+        <location filename="../qml/project/MMProjectController.qml" line="208"/>
+        <location filename="../qml/project/MMProjectController.qml" line="394"/>
         <source>Explore</source>
         <translation>Tutki</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="261"/>
+        <location filename="../qml/project/MMProjectController.qml" line="260"/>
         <source>Unsupported server, please contact your server administrator.</source>
         <translation>Palvelinta ei tueta, ota yhteyttä palvelimen järjestelmänvalvojaan.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectController.qml" line="468"/>
+        <location filename="../qml/project/MMProjectController.qml" line="467"/>
         <source>Download a project and start collecting.</source>
         <translation>Lataa projekti ja aloita keräämään dataa.</translation>
     </message>
@@ -1900,12 +2184,12 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMProjectIssuesPage</name>
     <message>
-        <location filename="../qml/project/MMProjectIssuesPage.qml" line="32"/>
+        <location filename="../qml/project/MMProjectIssuesPage.qml" line="31"/>
         <source>Project issues</source>
         <translation>Projektin ongelmat</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectIssuesPage.qml" line="83"/>
+        <location filename="../qml/project/MMProjectIssuesPage.qml" line="82"/>
         <source>QGIS log</source>
         <translation>QGIS loki</translation>
     </message>
@@ -2049,34 +2333,59 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMProjectWizardPage</name>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="22"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="23"/>
         <source>Create Project</source>
         <translation>Luo projekti</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="44"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="45"/>
         <source>Project name</source>
         <translation>Projektin nimi</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="54"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="55"/>
         <source>Fields</source>
         <translation>Kentät</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="99"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="102"/>
         <source>Add field</source>
         <translation>Lisää kenttä</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="123"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="126"/>
         <source>Create project</source>
         <translation>Luo projekti</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectWizardPage.qml" line="128"/>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="131"/>
         <source>Empty project name</source>
         <translation>Tyhjän projektin nimi</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="151"/>
+        <source>Text</source>
+        <translation>Teksti</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="152"/>
+        <source>Date &amp; Time</source>
+        <translation>Päivämäärä &amp; Aika</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="153"/>
+        <source>Number</source>
+        <translation>Numero</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="154"/>
+        <source>Checkbox</source>
+        <translation>Valintaruutu</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/MMProjectWizardPage.qml" line="155"/>
+        <source>Photo</source>
+        <translation>Valokuva</translation>
     </message>
 </context>
 <context>
@@ -2103,40 +2412,83 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMProviderTypeDrawer</name>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="21"/>
+        <source>Connect new receiver</source>
+        <translation>Yhdistä uusi vastaanotin</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
+        <source>Bluetooth</source>
+        <translation>Bluetooth</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
+        <source>Bad Elf, Emlid, Juniper, marXact and more</source>
+        <translation>Bad Elf, Emlid, Juniper, marXact ja muita</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
+        <source>Network (TCP, UDP)</source>
+        <translation>Network (TCP, UDP)</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
+        <source>Emlid RS, EOS and more</source>
+        <translation>Emlid RS, EOS ja muita</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="41"/>
+        <source>Trimble receivers via Trimble Mobile Manager</source>
+        <translation>Trimble-vastaanottimet Trimble Mobile Managerin kautta</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="49"/>
+        <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
+        <translation>Ulkoiset vastaanottimet käyttävät eri yhdistämistapoja valmistajasta riippuen. Valitse yhteystyyppi alta tai %1tutustu dokumentaatioomme%2 nähdäksesi tuetut laitteet ja asennusohjeet.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="101"/>
+        <source>Continue</source>
+        <translation>Jatka</translation>
+    </message>
+</context>
+<context>
     <name>MMRecordingTools</name>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="57"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="59"/>
         <source>Geometry was removed to avoid overlaps with other features. Tap &quot;Edit Geometry&quot; to draw a new one.</source>
         <translation>Geometria poistettiin päällekkäisyyksien välttämiseksi muiden kohteiden kanssa. Napauta &quot;Muokkaa geometriaa&quot; piirtääksesi uuden.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="63"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="65"/>
         <source>Geometry was adjusted to avoid overlaps with other features.</source>
         <translation>Geometriaa on muutettu päällekkäisyyksien välttämiseksi muiden kohteiden kanssa.</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="196"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="198"/>
         <source>Undo</source>
         <translation>Kumoa</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="206"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="208"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="223"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="225"/>
         <source>Release</source>
         <translation>Julkaisu</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="239"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="241"/>
         <source>Add</source>
         <translation>Lisää</translation>
     </message>
     <message>
-        <location filename="../qml/map/MMRecordingTools.qml" line="258"/>
-        <location filename="../qml/map/MMRecordingTools.qml" line="288"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="260"/>
+        <location filename="../qml/map/MMRecordingTools.qml" line="290"/>
         <source>Record</source>
         <translation>Tallenna</translation>
     </message>
@@ -2190,29 +2542,47 @@ Sitä ei lisätä projektiin.</translation>
     </message>
 </context>
 <context>
+    <name>MMSegmentControl</name>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="21"/>
+        <source>All</source>
+        <translation>Kaikki</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="22"/>
+        <source>True</source>
+        <translation>Tosi</translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MMSegmentControl.qml" line="23"/>
+        <source>False</source>
+        <translation>Epätosi</translation>
+    </message>
+</context>
+<context>
     <name>MMSelectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="52"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="51"/>
         <source>Select features</source>
         <translation>Valitse kohteita</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="75"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="74"/>
         <source>%n Feature(s) selected</source>
         <translation><numerusform>%n kohde(tta) valittu</numerusform><numerusform>%n kohde(tta) valittu</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="85"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="84"/>
         <source>on layer %1</source>
         <translation>Tasolla %1</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="114"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="113"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMSelectionDrawer.qml" line="120"/>
+        <location filename="../qml/gps/MMSelectionDrawer.qml" line="119"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -2236,173 +2606,214 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMSettingsPage</name>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="35"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Time elapsed</source>
         <translation>Kulunut aika</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="37"/>
         <source>Distance traveled</source>
         <translation>Kuljettu matka</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="54"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Recent project</source>
+        <translation>Viimeisimmät projekti</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="44"/>
+        <source>Jump back into your last project</source>
+        <translation>Palaa edelliseen projektiisi</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>Project home</source>
+        <translation>Projektin kotisivu</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="45"/>
+        <source>See all your downloaded projects</source>
+        <translation>Näytä kaikki ladatut projektit</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="62"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="65"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="73"/>
         <source>GPS accuracy threshold</source>
         <translation>GPS tarkkuuden raja-arvot</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="66"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="74"/>
         <source>Determines when the accuracy indicator turns yellow</source>
         <translation>Määrittää milloin tarkkuusosoitin muuttuu keltaiseksi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="67"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="75"/>
         <source>GPS accuracy threshold, in meters</source>
         <translation>GPS tarkkuuden raja-arvot metreinä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="80"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="88"/>
         <source>Manage GPS receivers</source>
         <translation>Hallinnoi GPS vastaanottimia</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="90"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="106"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>GPS antenna height</source>
         <translation>GPS antennin korkeus</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="91"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="107"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Sisältäen tangon ja GPS vastaanottimen korkeuden</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="92"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="108"/>
         <source>GPS antenna height, in meters</source>
         <translation>GPS antennin korkeus metreinä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="104"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="128"/>
+        <source>Click here to modify in Trimble Mobile Manager</source>
+        <translation>Määritä asetukset Trimble Mobile Managerissa napsauttamalla tästä</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="129"/>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="141"/>
         <source>Streaming mode</source>
         <translation>Nauhoitustila</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="116"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="153"/>
         <source>Interval threshold type</source>
         <translation>Intervallin raja-arvon tyyppi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="117"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="154"/>
         <source>Choose a type of threshold for streaming mode</source>
         <translation>Valitse nauhoitustilan rajaarvon tyyppi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="119"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Distance Traveled</source>
         <translation>Kuljettu matka</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="134"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Threshold interval</source>
         <translation>Raja-arvon intervalli</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="135"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="172"/>
         <source>Streaming mode will add a point to the object at each interval</source>
         <translation>Nauhoitustilä lisää pisteen kohteeseen jokaisessa määritetyssä välissä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in meters</source>
         <translation>Raja-arvon tallennusväli, metreinä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="136"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in seconds</source>
         <translation>Raja-arvon tallennusväli, sekunteina</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="148"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="185"/>
         <source>Recording</source>
         <translation>Tallennetaan</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="159"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="196"/>
         <source>Reuse last entered value</source>
         <translation>Käytä uudelleen viimeksi syötettyä arvoa</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="160"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="197"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Jokainen kenttä tarjoaa vaihtoehdon käyttää arvoaan uudelleen seuraavassa kohteessa</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="170"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="207"/>
         <source>Automatically sync changes</source>
         <translation>Synkronoi muutokset automaattisesti</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="208"/>
         <source>Your project is synced automatically to keep you up to date</source>
         <translation>Projektisi synkronoidaan automaattisesti, jotta pysyt ajan tasalla</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="181"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
         <source>Auto-lock position</source>
         <translation>Lukitse automaattisesti sijainti</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="182"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="219"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>Aina kun aloitat tallennuksen, sovellus keskittää sijaintiisi</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="194"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
         <source>Touch Feedback</source>
         <translation>Kosketuspalaute</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="195"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="232"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
         <translation>Sovellus voi väristä ja soittaa äänen ominaisuutta lisättäessä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="210"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="247"/>
         <source>General</source>
         <translation>Yleiset</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="221"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="259"/>
+        <source>Startup behaviour</source>
+        <translation>Käynnistyskäyttäytyminen</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="260"/>
+        <source>Choose what opens when you launch the app</source>
+        <translation>Valitse, mitä avataan, kun käynnistät sovelluksen</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="274"/>
         <source>About</source>
         <translation>Yleistä</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="284"/>
         <source>Changelog</source>
         <translation>Muutosloki</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="241"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="294"/>
         <source>Help</source>
         <translation>Tuki</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="251"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="304"/>
         <source>Privacy policy</source>
         <translation>Tietosuojakäytäntö</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="261"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="314"/>
         <source>Terms of service</source>
         <translation>Käyttöehdot</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="271"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="324"/>
         <source>Diagnostic log</source>
         <translation>Diagnostiikka loki</translation>
     </message>
@@ -2556,22 +2967,22 @@ Sitä ei lisätä projektiin.</translation>
 <context>
     <name>MMStakeoutDrawer</name>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="91"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="90"/>
         <source>Stake out</source>
         <translation>Merkintä</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="105"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="104"/>
         <source>Feature</source>
         <translation>Kohde</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="111"/>
         <source>Distance</source>
         <translation>Etäisyys</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="113"/>
+        <location filename="../qml/gps/MMStakeoutDrawer.qml" line="112"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
@@ -2918,15 +3329,62 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     </message>
 </context>
 <context>
+    <name>NetworkPositionProvider</name>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="40"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="173"/>
+        <source>No connection</source>
+        <translation>Ei yhteyttä</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="103"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="144"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="164"/>
+        <source>Connected</source>
+        <translation>Yhdistetty</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="159"/>
+        <source>Connecting to %1</source>
+        <translation>Yhdistetään kohteeseen %1</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="190"/>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="210"/>
+        <source>No connection, reconnecting in (%1)</source>
+        <translation>Ei yhteyttä, yhdistetään uudelleen (%1)</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/networkpositionprovider.cpp" line="199"/>
+        <source>Reconnecting</source>
+        <translation>Yhdistetään uudelleen</translation>
+    </message>
+</context>
+<context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="122"/>
+        <location filename="../position/positionkit.cpp" line="130"/>
         <source>External (Mock)</source>
         <translation>Ulkoinen (Simuloitu)</translation>
+    </message>
+    <message>
+        <location filename="../position/positionkit.cpp" line="166"/>
+        <source>Network device</source>
+        <translation>Verkkolaite</translation>
     </message>
 </context>
 <context>
     <name>PositionProvidersModel</name>
+    <message>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="22"/>
+        <source>Simulated provider</source>
+        <translation>Simuloitu palvelu</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="22"/>
+        <source>Simulated position around point</source>
+        <translation>Simuloitu sijainti pisteen ympärillä</translation>
+    </message>
     <message>
         <location filename="../position/providers/positionprovidersmodel.cpp" line="31"/>
         <source>Internal</source>
@@ -2963,14 +3421,16 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
         <translation>Käytössä vain GPS</translation>
     </message>
     <message>
-        <location filename="../position/providers/positionprovidersmodel.cpp" line="145"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="153"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="220"/>
         <source> Bluetooth device</source>
         <translation>Bluetooth laite</translation>
     </message>
     <message>
-        <location filename="../position/providers/positionprovidersmodel.cpp" line="201"/>
-        <source>Bluetooth device</source>
-        <translation>Bluetooth laite</translation>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="153"/>
+        <location filename="../position/providers/positionprovidersmodel.cpp" line="220"/>
+        <source> Network device</source>
+        <translation>Verkkolaite</translation>
     </message>
 </context>
 <context>
@@ -2994,12 +3454,12 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
 <context>
     <name>ProjectWizard</name>
     <message>
-        <location filename="../projectwizard.cpp" line="161"/>
+        <location filename="../projectwizard.cpp" line="157"/>
         <source>Project name contains invalid characters</source>
         <translation>Projektin nimi sisältää virheellisiä merkkejä</translation>
     </message>
     <message>
-        <location filename="../projectwizard.cpp" line="215"/>
+        <location filename="../projectwizard.cpp" line="211"/>
         <source>Project %1 created</source>
         <translation>Projekti %1 luotu</translation>
     </message>
@@ -3026,57 +3486,57 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../position/geoposition.cpp" line="137"/>
+        <location filename="../position/geoposition.cpp" line="138"/>
         <source>No data</source>
         <translation>Ei dataa</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="140"/>
+        <location filename="../position/geoposition.cpp" line="141"/>
         <source>No fix</source>
         <translation>Ei sijaintia</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="144"/>
         <source>GPS fix, no correction data</source>
         <translation>GPS sijainti, ei korjausdataa</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="148"/>
+        <location filename="../position/geoposition.cpp" line="147"/>
         <source>DGPS fix</source>
         <translation>DGPS fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="151"/>
+        <location filename="../position/geoposition.cpp" line="150"/>
         <source>PPS fix</source>
         <translation>PPS fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="154"/>
+        <location filename="../position/geoposition.cpp" line="153"/>
         <source>RTK fix</source>
         <translation>RTK fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="157"/>
+        <location filename="../position/geoposition.cpp" line="156"/>
         <source>RTK float</source>
         <translation>RTK kelluja</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="160"/>
+        <location filename="../position/geoposition.cpp" line="159"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Arvioitu sijainti (merkintälasku)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="163"/>
+        <location filename="../position/geoposition.cpp" line="162"/>
         <source>Unknown fix</source>
         <translation>Tuntematon sijainti</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="611"/>
+        <location filename="../main.cpp" line="610"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Raportti lähetetty. Ota yhteyttä tukeen</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="616"/>
+        <location filename="../main.cpp" line="615"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Raportin lähettäminen epäonnistui. Tarkista internet yhteytesi.</translation>
     </message>
@@ -3100,135 +3560,202 @@ käyttämään tällä hetkellä vain %1 ladatuista projekteista.</translation>
     </message>
 </context>
 <context>
+    <name>TrimblePositionProvider</name>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="129"/>
+        <source>Connecting to TMM</source>
+        <translation>Yhdistetään TMM-palveluun</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="318"/>
+        <source>No data</source>
+        <translation>Ei dataa</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="351"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="375"/>
+        <source>Connected</source>
+        <translation>Yhdistetty</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="371"/>
+        <source>Connecting</source>
+        <translation>Yhdistetään </translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="379"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="392"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="399"/>
+        <source>Disconnected</source>
+        <translation>Katkaistu</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="383"/>
+        <source>Disconnecting</source>
+        <translation>Katkaistaan</translation>
+    </message>
+</context>
+<context>
+    <name>TrimbleRegistration</name>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="28"/>
+        <source>No response from Trimble Mobile Manager</source>
+        <translation>Ei vastausta Trimble Mobile Managerilta</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="39"/>
+        <source>Trimble Mobile Manager registration failed: %1</source>
+        <translation>Rekisteröinti Trimble Mobile Manageriin epäonnistui: %1</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="48"/>
+        <source>Trimble Mobile Manager returned invalid port</source>
+        <translation>Trimble Mobile Manager palautti virheellisen portin</translation>
+    </message>
+</context>
+<context>
+    <name>UniqueValuesFilterModel</name>
+    <message>
+        <location filename="../filter/uniquevaluesfiltermodel.cpp" line="50"/>
+        <source>No value</source>
+        <translation>Ei arvoa</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="305"/>
         <source>Sync</source>
         <translation>Synkronoi</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="306"/>
+        <location filename="../qml/main.qml" line="315"/>
         <source>Add</source>
         <translation>Lisää</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="324"/>
         <source>No editable layers found.</source>
         <translation>Muokattavia tasoja ei löytynyt.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="321"/>
+        <location filename="../qml/main.qml" line="330"/>
         <source>Layers</source>
         <translation>Tasot</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="330"/>
+        <location filename="../qml/main.qml" line="339"/>
         <source>Projects</source>
         <translation>Projektit</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="338"/>
+        <location filename="../qml/main.qml" line="347"/>
         <source>Zoom to project</source>
         <translation>Zoomaa projektiin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="347"/>
+        <location filename="../qml/main.qml" line="356"/>
         <source>Map themes</source>
         <translation>Karttateemat</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="358"/>
+        <location filename="../qml/main.qml" line="365"/>
+        <source>Filters</source>
+        <translation>Suodattimet</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="377"/>
         <source>Position tracking</source>
         <translation>Sijainnin nauhoitus</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="369"/>
+        <location filename="../qml/main.qml" line="388"/>
         <source>Measure</source>
         <translation>Mittaa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="375"/>
+        <location filename="../qml/main.qml" line="394"/>
         <source>Local changes</source>
         <translation>Paikalliset muutokset</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="384"/>
+        <location filename="../qml/main.qml" line="403"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="589"/>
-        <location filename="../qml/main.qml" line="597"/>
+        <location filename="../qml/main.qml" line="620"/>
+        <location filename="../qml/main.qml" line="628"/>
         <source>not tracking</source>
         <translation>Reitin tallennus ei ole päällä</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="697"/>
+        <location filename="../qml/main.qml" line="728"/>
         <source>Delete %n feature(s)</source>
         <translation><numerusform>Poista %n kohde/kohteet</numerusform><numerusform>Poista %n kohde/kohteet</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/main.qml" line="698"/>
+        <location filename="../qml/main.qml" line="729"/>
         <source>Delete %n selected feature(s)?</source>
         <translation><numerusform>Poista %n valitut kohteet?</numerusform><numerusform>Poista %n valitut kohteet?</numerusform></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="700"/>
+        <location filename="../qml/main.qml" line="731"/>
         <source>Yes, I want to delete</source>
         <translation>Kyllä, haluan poistaa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="701"/>
+        <location filename="../qml/main.qml" line="732"/>
         <source>No, thanks</source>
         <translation>Ei, kiitos</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="921"/>
+        <location filename="../qml/main.qml" line="952"/>
         <source>Select feature</source>
         <translation>Valitse kohde</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1005"/>
+        <location filename="../qml/main.qml" line="1036"/>
         <source>Somebody else is syncing, we will try again later</source>
         <translation>Joku toinen synkronoi parhaillaan, yritämme uudelleen myöhemmin</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1037"/>
+        <location filename="../qml/main.qml" line="1068"/>
         <source>Failed to communicate with server. Try improving your network connection.</source>
         <translation>Palvelin yhteys epäonnistui. Yritä parantaa verkkoyhteyttäsi.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1027"/>
+        <location filename="../qml/main.qml" line="1058"/>
         <source>Up to date</source>
         <translation>Ajantasalla</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1148"/>
+        <location filename="../qml/main.qml" line="1179"/>
         <source>There were issues loading the project. %1View details%2</source>
         <translation>Ongelmia ladattaessa projektia. %1Näytä yksityiskohdat%2</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="824"/>
+        <location filename="../qml/main.qml" line="855"/>
         <source>Stake out is disabled because location is unavailable!</source>
         <translation>Merkintä on poistettu käytöstä, koska sijainti ei ole saatavilla!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="974"/>
+        <location filename="../qml/main.qml" line="1005"/>
         <source>Successfully synchronised</source>
         <translation>Synkronoitu onnistuneesti</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1012"/>
+        <location filename="../qml/main.qml" line="1043"/>
         <source>There was an issue during synchronisation, we will try again. Click to learn more</source>
         <translation>Synkronoinnissa tapahtui virhe, yritämme uudelleen. Klikkaa lukeaksesi lisää.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1169"/>
+        <location filename="../qml/main.qml" line="1200"/>
         <source>Could not read the project file:</source>
         <translation>Ei voitu lukea projektitiedostoa:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="1202"/>
+        <location filename="../qml/main.qml" line="1233"/>
         <source>Press back again to quit the app</source>
         <translation>Paina takaisin uudestaan sulkeaksesi sovelluksen.</translation>
     </message>

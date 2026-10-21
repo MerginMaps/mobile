@@ -47,7 +47,7 @@ class FormItem
       Spacer,
       RichText
     };
-    Q_ENUMS( FormItemType )
+    Q_ENUM( FormItemType )
 
     FormItem(
       const QUuid &id,

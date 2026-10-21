@@ -3,15 +3,19 @@ set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-TOOLS_DIR="$PROJECT_DIR/build/vcpkg_installed/x64-linux/tools/gdal"
-
 # Find the tools directory dynamically in (x64-linux | x64-osx | arm64-osx)
-TOOLS_DIR=$(find "$PROJECT_DIR/build/vcpkg_installed" -maxdepth 2 -type d \
-    \( -name "x64-linux" -o -name "x64-osx" -o -name "arm64-osx" \) \
-    -exec echo {}/tools/gdal \; | head -n 1)
+# within any build directory of the project (*build*/vcpkg_installed/<triplet>/tools/gdal)
+TOOLS_DIR=""
+for dir in "$PROJECT_DIR"/*build*/vcpkg_installed/{x64-linux,x64-osx,arm64-osx}/tools/gdal; do
+    if [[ -d "$dir" ]]; then
+        TOOLS_DIR="$dir"
+        BUILD_DIR="$(cd "$dir/../../../.." && pwd)"
+        break
+    fi
+done
 
 if [[ -z "$TOOLS_DIR" ]]; then
-    echo "Error: Could not find tools/gdal directory under build/vcpkg_installed."
+    echo "Error: Could not find tools/gdal directory under any *build*/vcpkg_installed in $PROJECT_DIR."
     exit 1
 fi
 
@@ -40,6 +44,14 @@ check_command "$OGRINFO"
     "$OGRINFO" --formats
 } > "$OUTPUT_FILE"
 
-$PROJECT_DIR/build/app/MerginMaps --generate_QGIS_formats
+# On macOS the binary is inside the app bundle
+if [[ -x "$BUILD_DIR/app/MerginMaps.app/Contents/MacOS/MerginMaps" ]]; then
+    MM_APP="$BUILD_DIR/app/MerginMaps.app/Contents/MacOS/MerginMaps"
+else
+    MM_APP="$BUILD_DIR/app/MerginMaps"
+fi
+check_command "$MM_APP"
+
+"$MM_APP" --generate_QGIS_formats
 
 echo "Formats info saved to $OUTPUT_FILE"

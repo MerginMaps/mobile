@@ -127,6 +127,12 @@ class ProjectsModel : public QAbstractListModel
     //! Forwards call to LocalProjectsManager to remove local project
     Q_INVOKABLE void removeLocalProject( const QString &projectId );
 
+    //! Forwards call to LocalProjectsManager to check whether a rename is valid
+    Q_INVOKABLE QString canRenameProject( const QString &projectId, const QString &newName ) const;
+
+    //! Forwards call to LocalProjectsManager to rename local project
+    Q_INVOKABLE void renameLocalProject( const QString &projectId, const QString &newName );
+
     //! Migrates local project to mergin
     Q_INVOKABLE void migrateProject( const QString &projectId );
 
@@ -170,6 +176,7 @@ class ProjectsModel : public QAbstractListModel
     void onProjectAdded( const LocalProject &project );
     void onAboutToRemoveProject( const LocalProject &project );
     void onProjectDataChanged( const LocalProject &project );
+    void onProjectRenamed( const QString &oldProjectId, const LocalProject &project );
 
     void onAuthChanged();
 
@@ -192,6 +199,8 @@ class ProjectsModel : public QAbstractListModel
     void localProjectsManagerChanged( LocalProjectsManager *projectsManager );
 
     void activeProjectIdChanged( QString projectId );
+
+    void renameLocalProjectFinished( bool success );
 
   private:
 

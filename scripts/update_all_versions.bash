@@ -31,12 +31,6 @@ sed -i.orig -E "s|\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"|\"version\": \"$MAJOR\
 sed -i.orig -E "s|https://github.com/MerginMaps/mobile/tree/[0-9]+\.[0-9]+\.[0-9]|https://github.com/MerginMaps/mobile/tree/$MAJOR\.$MINOR\.$BUILD|g" $ZENODO_FILE
 rm -f $ZENODO_FILE.orig
 
-# CITATION.cff
-CITATION_FILE=$DIR/../CITATION.cff
-echo "patching $CITATION_FILE"
-sed -i.orig -E "s|cff-version: [0-9]+\.[0-9]+\.[0-9]+|cff-version: $MAJOR\.$MINOR\.$BUILD|g" $CITATION_FILE
-rm -f $CITATION_FILE.orig
-
 # vcpkg.json
 VCPKG_FILE=$DIR/../vcpkg.json
 echo "patching $VCPKG_FILE"

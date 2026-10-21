@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create new report of issue (customers please contact support first)
+about: This template is intended for experienced users/contributors, if you're unsure discuss your issue with community or contact support.
 title: ''
 labels: ''
 assignees: ''

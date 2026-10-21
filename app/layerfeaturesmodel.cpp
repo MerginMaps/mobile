@@ -91,7 +91,7 @@ void LayerFeaturesModel::populate()
 {
   cancelPendingRequests();
 
-  if ( mLayer && mLayer->dataProvider() )
+  if ( mLayer && mLayer->isValid() && mLayer->dataProvider() )
   {
     mFetchingResults = true;
     emit fetchingResultsChanged( mFetchingResults );
