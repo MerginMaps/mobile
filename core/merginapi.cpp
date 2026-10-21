@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 #include "merginapi.h"
+#include "synchronizationerror.h"
 
 #include <QtNetwork>
 #include <QJsonDocument>
@@ -30,7 +31,6 @@
 #include "coreutils.h"
 #include "geodiffutils.h"
 #include "localprojectsmanager.h"
-#include "../app/enumhelper.h"
 #include "merginerrortypes.h"
 
 #include <geodiff.h>
@@ -1915,36 +1915,42 @@ void MerginApi::createProjectFinished()
   }
   else
   {
-    QByteArray data = r->readAll();
-    QString code = extractServerErrorCode( data );
-    QString serverMsg = extractServerErrorMsg( data );
-    QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
-    int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::ProjectsLimitHit );
-    bool userMissingPermissions = ( httpCode == 403 );
+    const QByteArray data = r->readAll();
+    const QString code = extractServerErrorCode( data );
+    const QString serverMsg = extractServerErrorMsg( data );
+    const QString message = QStringLiteral( "FAILED - %1: %2" ).arg( r->errorString(), serverMsg );
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    const SynchronizationError::ErrorType error = SynchronizationError::errorType( httpCode, serverMsg, code );
 
     CoreUtils::log( "create " + projectFullName, message );
 
     emit projectCreated( projectFullName, false );
 
-    if ( showLimitReachedDialog )
+    switch ( error )
     {
-      int maxProjects = 0;
-      QVariant maxProjectVariant = extractServerErrorValue( data, "projects_quota" );
-      if ( maxProjectVariant.isValid() )
-        maxProjects = maxProjectVariant.toInt();
-      emit projectLimitReached( maxProjects, serverMsg );
-    }
-    else if ( userMissingPermissions )
-    {
-      emit notifyError( tr( "You don't have permission to create new projects in this workspace." ) );
-      emit projectCreationFailed();
-    }
-    else
-    {
-      emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
-      emit projectCreationFailed();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName, code );
+      case SynchronizationError::ErrorType::ProjectLimitHit:
+      {
+        int maxProjects = 0;
+        const QVariant maxProjectVariant = extractServerErrorValue( data, "projects_quota" );
+        if ( maxProjectVariant.isValid() )
+        {
+          maxProjects = maxProjectVariant.toInt();
+        }
+        emit projectLimitReached( maxProjects, serverMsg );
+        break;
+      }
+      case SynchronizationError::ErrorType::NoPermissions:
+      {
+        emit notifyError( tr( "You don't have permission to create new projects in this workspace." ) );
+        emit projectCreationFailed();
+        break;
+      }
+      default:
+      {
+        emit notifyError( tr( "Couldn't create the project. Please try again later or contact support if the problem persists." ) );
+        emit projectCreationFailed();
+        emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: createProject" ), httpCode, projectName, code );
+      }
     }
   }
   r->deleteLater();
@@ -2299,20 +2305,28 @@ QString MerginApi::extractServerErrorCode( const QByteArray &data )
   return {};
 }
 
+QString MerginApi::extractServerErrorDescription( const QByteArray &data )
+{
+  const QVariant code = extractServerErrorValue( data, QStringLiteral( "error" ) );
+  if ( code.isValid() )
+    return code.toString();
+  return {};
+}
+
 QVariant MerginApi::extractServerErrorValue( const QByteArray &data, const QString &key )
 {
-  QJsonDocument doc = QJsonDocument::fromJson( data );
+  const QJsonDocument doc = QJsonDocument::fromJson( data );
   if ( doc.isObject() )
   {
-    QJsonObject obj = doc.object();
+    const QJsonObject obj = doc.object();
     if ( obj.contains( key ) )
     {
-      QJsonValue val = obj.value( key );
+      const QJsonValue val = obj.value( key );
       return val.toVariant();
     }
   }
 
-  return QVariant();
+  return {};
 }
 
 QString MerginApi::extractServerErrorMsg( const QByteArray &data )
@@ -2945,26 +2959,35 @@ void MerginApi::pushStartReplyFinished()
   }
   else
   {
-    QByteArray data = r->readAll();
-    QString serverMsg = extractServerErrorMsg( data );
-    if ( r->error() == QNetworkReply::OperationCanceledError )
-      serverMsg = sSyncCanceledMessage;
+    QString serverMsg;
+    QString serverErrorCode;
+    SynchronizationError::ErrorType error = SynchronizationError::ErrorType::NoError;
+    const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
-    QString code = extractServerErrorCode( data );
-    bool showLimitReachedDialog = EnumHelper::isEqual( code, ErrorCode::StorageLimitHit );
+    if ( r->error() == QNetworkReply::OperationCanceledError )
+    {
+      serverMsg = sSyncCanceledMessage;
+    }
+    else
+    {
+      const QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+      error = SynchronizationError::errorType( httpCode, serverMsg, serverErrorCode );
+    }
 
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1. %2" ).arg( r->errorString(), serverMsg ) );
 
     transaction.replyPushStart->deleteLater();
     transaction.replyPushStart = nullptr;
 
-    if ( showLimitReachedDialog )
+    if ( error == SynchronizationError::ErrorType::StorageLimitHit )
     {
       const QList<MerginFile> files = transaction.pushQueue;
       qreal uploadSize = 0;
-      for ( const MerginFile &f : files )
+      for ( const MerginFile &file : files )
       {
-        uploadSize += f.size;
+        uploadSize += file.size;
       }
       emit storageLimitReached( uploadSize );
 
@@ -2980,8 +3003,7 @@ void MerginApi::pushStartReplyFinished()
     }
     else
     {
-      int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, code );
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStartReply" ), httpCode, projectFullName, serverErrorCode );
     }
     finishTransaction( projectFullName, false );
   }
@@ -2992,11 +3014,14 @@ void MerginApi::pushStartV2ReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
-  QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
+  const QString projectFullName = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrProjectFullName ) ).toString();
 
   Q_ASSERT( mTransactionalStatus.contains( projectFullName ) );
   TransactionStatus &transaction = mTransactionalStatus[projectFullName];
   Q_ASSERT( r == transaction.replyPushStart );
+
+  transaction.replyPushStart->deleteLater();
+  transaction.replyPushStart = nullptr;
 
   //
   // There are multiple possible outcomes here:
@@ -3005,50 +3030,65 @@ void MerginApi::pushStartV2ReplyFinished()
   //  - permanent error (500, 403, storage limit hit and similar): we stop push and abort
   //
 
-
-  // even for check_only:
-  // - ProjectLocked (423) (permanent)
-  // - VersionAlreadyExists (409) (temp)
-  // - UploadError (422) (permanent)
-  // - StorageLimitHit (422) (permanent)
-  // - 404 (permanent) project of workspace is missing
-  // - 403 (permanent) no permission
-  // - dry run OK (204) (success dry run)
-  //
-  // if not check_only:
-  // - DataSyncError (422) (permanent)
-  // - AnotherUploadRunning (409) (temp)
-  // - UploadError (409 this time?) - version already exists (temp)
-  // - Project detail (201) (success)
-
   if ( r->error() != QNetworkReply::NoError )
   {
-    QByteArray data = r->readAll();
-    QString code = extractServerErrorCode( data );
+    QString serverMsg;
+    QString serverErrorCode;
+    QString serverErrorDesc;
+    SynchronizationError::ErrorType error = SynchronizationError::ErrorType::NoError;
+    const int httpErrorCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
 
-    bool proceedWithPush = EnumHelper::isEqual( code, ErrorCode::ProjectVersionExists ) || EnumHelper::isEqual( code, ErrorCode::AnotherUploadRunning );
-
-    if ( proceedWithPush )
+    if ( r->error() == QNetworkReply::OperationCanceledError )
     {
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push check received temporary error: %1, continuing further with push" ).arg( code ) );
+      serverMsg = sSyncCanceledMessage;
     }
     else
     {
-      const QString serverMsg = extractServerErrorMsg( data );
-      const int httpErrorCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+      const QByteArray data = r->readAll();
+      serverMsg = extractServerErrorMsg( data );
+      serverErrorCode = extractServerErrorCode( data );
+      serverErrorDesc = extractServerErrorDescription( data ).isEmpty() ? QStringLiteral( "no description" ) : extractServerErrorDescription( data );
+      error = SynchronizationError::errorType( httpErrorCode, serverMsg, serverErrorCode );
+    }
 
-      // TODO: parse "error" key from the response JSON and log. Some error objects, like UploadError, contains it.
-      // TODO: further error handling - storage limit hit, initial project upload (delete the fresh project)
+    if ( !SynchronizationError::isPermanent( error ) )
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Push check received temporary error: %1, continuing further with push" ).arg( serverErrorCode ) );
+    }
+    else
+    {
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "CHECK FAILED: %1, %2, %3, %4, %5" ).arg( serverErrorCode, r->errorString(), serverMsg, serverErrorDesc, QVariant( httpErrorCode ).toString() ) );
 
-      CoreUtils::log( "push " + projectFullName, QStringLiteral( "CHECK FAILED: %1, %2, %3, %4" ).arg( code ).arg( r->errorString() ).arg( serverMsg ).arg( httpErrorCode ) );
+      if ( error == SynchronizationError::ErrorType::StorageLimitHit )
+      {
+        const QList<MerginFile> files = transaction.pushQueue;
+        qreal uploadSize = 0;
+        for ( const MerginFile &file : files )
+        {
+          uploadSize += file.size;
+        }
+        emit storageLimitReached( uploadSize );
+
+        // remove project if it was first time sync - migration
+        if ( transaction.isInitialPush )
+        {
+          QString projectNamespace, projectName;
+          extractProjectName( projectFullName, projectNamespace, projectName );
+
+          detachProjectFromMergin( projectNamespace, projectName, false );
+          deleteProject( projectNamespace, projectName, false );
+        }
+      }
+      else
+      {
+        emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushStart" ), httpErrorCode, projectFullName, serverErrorCode );
+      }
+
       finishTransaction( projectFullName, false );
 
       return;
     }
   }
-
-  transaction.replyPushStart->deleteLater();
-  transaction.replyPushStart = nullptr;
 
   if ( transaction.pushQueue.isEmpty() )
   {
@@ -3733,15 +3773,20 @@ void MerginApi::pushFinishReplyFinished()
   {
     const QByteArray data = r->readAll();
     QString serverMsg = extractServerErrorMsg( data );
+    const QString serverErrorDesc = extractServerErrorDescription( data ).isEmpty() ? QStringLiteral( "no description" ) : extractServerErrorDescription( data );
     if ( r->error() == QNetworkReply::OperationCanceledError )
       serverMsg = sSyncCanceledMessage;
 
-    QString message = QStringLiteral( "Network API error: %1(): %2. %3" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg );
+    const QString message = QStringLiteral( "Network API error: %1(): %2. %3, %4" ).arg( QStringLiteral( "pushFinish" ), r->errorString(), serverMsg, serverErrorDesc );
     CoreUtils::log( "push " + projectFullName, QStringLiteral( "FAILED - %1" ).arg( message ) );
 
     const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
     const QString serverErrorCode = extractServerErrorCode( data );
-    emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
+    const SynchronizationError::ErrorType error = SynchronizationError::errorType( httpCode, serverMsg, serverErrorCode );
+    if ( SynchronizationError::isPermanent( error ) )
+    {
+      emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: pushFinish" ), httpCode, projectFullName, serverErrorCode );
+    }
 
     // remove temporary diff files
     for ( const MerginFile &merginFile : transaction.pushChanges.updated )
@@ -3750,7 +3795,7 @@ void MerginApi::pushFinishReplyFinished()
       {
         continue;
       }
-      QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
+      const QString diffPath = transaction.projectDir + "/.mergin/" + merginFile.diffName;
       if ( !QFile::remove( diffPath ) )
         CoreUtils::log( "push " + projectFullName, "Failed to remove diff: " + diffPath );
     }

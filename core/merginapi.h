@@ -205,21 +205,6 @@ typedef QHash<QString, TransactionStatus> Transactions;
 
 Q_DECLARE_METATYPE( Transactions );
 
-class ErrorCode
-{
-    Q_GADGET
-  public:
-    enum Value
-    {
-      Unknown = 0,
-      ProjectsLimitHit,
-      StorageLimitHit,
-      AnotherUploadRunning,
-      ProjectVersionExists
-    };
-    Q_ENUM( Value );
-};
-
 class MerginApi: public QObject
 {
     Q_OBJECT
@@ -879,6 +864,12 @@ class MerginApi: public QObject
     * \param data Data received from mergin server on a request failed.
     */
     QString extractServerErrorCode( const QByteArray &data );
+    /**
+    * Extracts description of error. This nformation might be supplied by servers using sync v2 endpoints.
+    * If its not json or value cannot be parsed, QString() is return;
+    * \param data Data received from mergin server on a request failed.
+    */
+    QString extractServerErrorDescription( const QByteArray &data );
     /**
     * Extracts value of an error json. If its not json or value cannot be parsed, QVariant() is return;
     * \param data Data received from mergin server on a request failed.
