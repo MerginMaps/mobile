@@ -41,6 +41,8 @@ class TestAttributeController: public QObject
     //! A reused photo must end up in the folder resolved from the new feature's values
     void testReusedPhotoFollowsPathExpression();
 
+    //! A collision suffix must be inserted before the real extension, even if the name has a dot
+    void testPhotoRenamingCollisionWithDotInName();
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 
