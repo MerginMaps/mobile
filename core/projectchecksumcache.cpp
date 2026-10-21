@@ -81,6 +81,24 @@ ProjectChecksumCache::~ProjectChecksumCache()
 
 QString ProjectChecksumCache::get( const QString &path )
 {
+  const QString checksum = mainFileChecksum( path );
+  if ( checksum.isEmpty() || !MerginApi::isFileDiffable( path ) )
+    return checksum;
+
+  // changes may live only in the -wal file of a gpkg, without touching the main file
+  const QString walPath = mProjectDir + "/" + path + QStringLiteral( "-wal" );
+  if ( QFileInfo( walPath ).size() <= 0 )
+    return checksum;
+
+  // the -wal file is usually small (it gets checkpointed into the main file regularly), so it is not cached
+  QCryptographicHash hash( QCryptographicHash::Sha1 );
+  hash.addData( checksum.toLatin1() );
+  hash.addData( CoreUtils::calculateChecksum( walPath ) );
+  return QString::fromLatin1( hash.result().toHex() );
+}
+
+QString ProjectChecksumCache::mainFileChecksum( const QString &path )
+{
   QDateTime localLastModified = QFileInfo( mProjectDir + "/" + path ).lastModified();
 
   auto match = mCache.find( path );

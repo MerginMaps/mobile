@@ -172,6 +172,7 @@ struct TransactionStatus
   // push-related data
   QList<MerginFile> pushQueue; //!< pending list of files to push (at the end of transaction it is empty)
   QList<MerginFile> pushDiffFiles;  //!< these are just diff files for push - we don't remove them when pushing chunks (needed for finalization)
+  QHash<QString, QString> pushSnapshots;  //!< file path -> snapshot name (relative to .mergin dir) of gpkgs being uploaded in full, removed at the end of sync
 
   // retry handling
   int retryCount = 0;  //!< current number of retry attempts for failed network requests
@@ -182,7 +183,7 @@ struct TransactionStatus
   bool firstTimeDownload = false;   //!< only for update. whether this is first time to download the project (on failure we would also remove the project folder)
   bool pullBeforePush = false; //!< true when we're first doing update before doing actual upload. Used in sync finalization to figure out whether restart with upload or finish.
   bool isInitialPush = false; //!< true when we are first time uploading the project - migration to Mergin
-  bool gpkgSchemaChanged = false; //!< true when GPKG schema changes found
+  bool projectReloadNeeded = false; //!< true when pull replaced or deleted files, so the project needs to be reloaded
 
   int version = -1;  //!< version to which we are updating / the version which we have uploaded
 
@@ -856,6 +857,14 @@ class MerginApi: public QObject
 
     bool writeData( const QByteArray &data, const QString &path );
     void createPathIfNotExists( const QString &filePath );
+
+    /**
+     * Creates a consistent copy of a file to be uploaded in full (for gpkg a sqlite backup, which includes the -wal content)
+     * in the .mergin dir, registers it in the transaction and updates the file's snapshotName, checksum and size from it.
+     * Only needed for diffable files, which may still be changing or have data only in their -wal file.
+     * Returns false if the copy could not be created.
+     */
+    bool createPushSnapshot( TransactionStatus &transaction, MerginFile &file );
 
     static QSet<QString> listFiles( const QString &projectPath );
 
