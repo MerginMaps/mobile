@@ -58,7 +58,7 @@ MMFormPhotoViewer {
 
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
-  property var _fieldIndex: parent.fieldIndex
+  property string _fieldItemId: parent.fieldItemId
   property bool _fieldValueIsNull: parent.fieldValueIsNull
 
   property string _fieldHomePath: parent.fieldHomePath
@@ -190,7 +190,7 @@ MMFormPhotoViewer {
 
     // used for both gallery and camera
     function onImageSelected( imagePath, index ) {
-      if ( root._fieldIndex.toString() === index.toString() ) {
+      if ( root._fieldItemId === index.toString() ) {
         internal.imageSelected( imagePath )
       }
     }
@@ -201,7 +201,7 @@ MMFormPhotoViewer {
 
     // used for both gallery and camera
     function onImageSelected( imagePath, index ) {
-      if ( root._fieldIndex.toString() === index.toString() ) {
+      if ( root._fieldItemId === index.toString() ) {
         internal.imageCaptured( imagePath )
       }
     }
@@ -297,10 +297,10 @@ MMFormPhotoViewer {
       }
 
       if ( __androidUtils.isAndroid ) {
-        __androidUtils.callCamera( targetDir, root._fieldIndex )
+        __androidUtils.callCamera( targetDir, root._fieldItemId )
       }
       else if ( __iosUtils.isIos ) {
-        __iosUtils.callCamera( targetDir, root._fieldIndex )
+        __iosUtils.callCamera( targetDir, root._fieldItemId )
       }
       else {
         // This should never happen
@@ -322,10 +322,10 @@ MMFormPhotoViewer {
       forceActiveFocus()
       updateTargetDir()
       if ( __androidUtils.isAndroid ) {
-        __androidUtils.callImagePicker( targetDir, root._fieldIndex )
+        __androidUtils.callImagePicker( targetDir, root._fieldItemId )
       }
       else if ( __iosUtils.isIos ) {
-        __iosUtils.callImagePicker( targetDir, root._fieldIndex )
+        __iosUtils.callImagePicker( targetDir, root._fieldItemId )
       }
       else {
         desktopGalleryPicker.open()

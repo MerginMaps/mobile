@@ -307,6 +307,7 @@ Page {
 
         property var field: model.Field
         property var fieldIndex: model.FieldIndex
+        property string fieldItemId: model.FormItemId
         property var fieldWidget: model.EditorWidget
         property var fieldConfig: model.EditorWidgetConfig
 
