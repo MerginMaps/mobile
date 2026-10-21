@@ -106,6 +106,14 @@ void InputMapCanvasMap::refreshMap()
   if ( !mapSettings.hasValidSettings() )
     return;
 
+  // Expands the map canvas output size and extent by a factor of 3 to create a 3x3 virtual grid.
+  // This pre-renders margin areas to ensure fluid navigation and prevent blank spaces during pan gestures.
+  mapSettings.setOutputSize( mapSettings.outputSize() * 3 );
+  QgsRectangle expandedExtent = mapSettings.extent();
+  QgsPointXY center = expandedExtent.center();
+  expandedExtent.scale( 3.0, &center );
+  mapSettings.setExtent( expandedExtent );
+
   //build the expression context
   QgsExpressionContext expressionContext;
   expressionContext << QgsExpressionContextUtils::globalScope()
@@ -283,7 +291,6 @@ void InputMapCanvasMap::onExtentChanged()
   refresh();
 }
 
-
 void InputMapCanvasMap::onTemporalStateChanged()
 {
   clearTemporalCache();
@@ -296,11 +303,23 @@ void InputMapCanvasMap::updateTransform()
 {
   QgsRectangle imageExtent = mImageMapSettings.visibleExtent();
   QgsRectangle newExtent = mMapSettings->mapSettings().visibleExtent();
-  setScale( imageExtent.width() / newExtent.width() );
 
-  QgsPointXY pixelPt = mMapSettings->coordinateToScreen( QgsPoint( imageExtent.xMinimum(), imageExtent.yMaximum() ) );
-  setX( pixelPt.x() );
-  setY( pixelPt.y() );
+  // setScale( imageExtent.width() / newExtent.width() );
+  // QgsPointXY pixelPt = mMapSettings->coordinateToScreen( QgsPoint( imageExtent.xMinimum(), imageExtent.yMaximum() ) );
+  // setX( pixelPt.x() );
+  // setY( pixelPt.y() );
+
+  // Adjusts the transformation scale and centering to account for the 3x expanded map canvas.
+  // This ensures the visible viewport remains correctly positioned at the center of the pre-rendered image.
+  double currentScale = ( imageExtent.width() / newExtent.width() ) / 3.0;
+  setScale( currentScale );
+  QgsPoint centerPoint( imageExtent.center() );
+  QgsPointXY screenCenter = mMapSettings->coordinateToScreen( centerPoint );
+
+  QRectF bounds = boundingRect();
+  setX( screenCenter.x() - (bounds.width() / 2.0) * currentScale );
+  setY( screenCenter.y() - (bounds.height() / 2.0) * currentScale );
+
 }
 
 int InputMapCanvasMap::mapUpdateInterval() const
@@ -393,7 +412,15 @@ QSGNode *InputMapCanvasMap::updatePaintNode( QSGNode *oldNode, QQuickItem::Updat
     }
   }
 
-  node->setRect( rect );
+  //node->setRect( rect );
+
+  // Scales the texture node's bounding rectangle to match the 3x expanded map canvas area
+  // and translates it to maintain the visible viewport at the exact center of the virtual grid.
+  QRectF superRect = rect;
+  superRect.setSize( rect.size() * 3 );
+  superRect.translate( -rect.width(), -rect.height() );
+  node->setRect( superRect );
+
 
   return node;
 }
@@ -482,6 +509,7 @@ void InputMapCanvasMap::zoomToFullExtent()
       extent.combineExtentWith( layer->extent() );
     }
   }
+
   mMapSettings->setExtent( extent );
 
   refresh();
