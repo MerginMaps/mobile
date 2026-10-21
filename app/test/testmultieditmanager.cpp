@@ -7,6 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "testmultieditmanager.h"
+#include "testutils.h"
+
+#include "qgsproject.h"
+#include "qgsrelationmanager.h"
 
 void TestMultiEditManager::init()
 {
@@ -73,4 +77,41 @@ void TestMultiEditManager::testDeleteSelectedFeatures()
 
   FeatureLayerPair editable = mManager->editableFeature();
   QVERIFY( !editable.isValid() );
+}
+
+void TestMultiEditManager::testDeleteSelectedFeaturesWithCompositionChildren()
+{
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteSelectedFeaturesWithCompositionChildren" ), Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
+
+  mManager->initialize( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+  QVERIFY( mManager->selectedFeaturesHaveCompositionChildren() );
+
+  mManager->deleteSelectedFeatures();
+
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
+
+  QgsProject::instance()->clear();
+}
+
+void TestMultiEditManager::testDeleteSelectedFeaturesWithAssociationChildren()
+{
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteSelectedFeaturesWithAssociationChildren" ), Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
+
+  mManager->initialize( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+  QVERIFY( !mManager->selectedFeaturesHaveCompositionChildren() );
+
+  mManager->deleteSelectedFeatures();
+
+  // only the selected main feature is deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 2 );
+
+  QgsProject::instance()->clear();
 }

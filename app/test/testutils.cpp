@@ -24,6 +24,7 @@
 
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
+#include "qgsrelationmanager.h"
 #include "qgsfeature.h"
 
 void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QString &username, QString &password )
@@ -348,6 +349,30 @@ QgsVectorLayer *TestUtils::createFilterTestLayer( const QString &fieldName, cons
 
   QgsProject::instance()->addMapLayer( layer );
   return layer;
+}
+
+TestUtils::RelationTestLayers TestUtils::loadRelationsTestProject( const QString &testName, Qgis::RelationshipStrength strength )
+{
+  const QString projectDir = QDir::tempPath() + QStringLiteral( "/MM_test_projects/" ) + testName;
+  QDir( projectDir ).removeRecursively();
+  InputUtils::cpDir( testDataDir() + QStringLiteral( "/project_relations" ), projectDir );
+  QgsProject::instance()->read( projectDir + QStringLiteral( "/proj.qgz" ) );
+
+  QgsRelationManager *relationManager = QgsProject::instance()->relationManager();
+  QList<QgsRelation> relations = relationManager->relations().values();
+  for ( QgsRelation &relation : relations )
+  {
+    relation.setStrength( strength );
+  }
+  relationManager->setRelations( relations );
+
+  const auto layerByName = []( const QString & name ) -> QgsVectorLayer *
+  {
+    const QList<QgsMapLayer *> layers = QgsProject::instance()->mapLayersByName( name );
+    return layers.isEmpty() ? nullptr : qobject_cast<QgsVectorLayer *>( layers.first() );
+  };
+
+  return { layerByName( QStringLiteral( "main" ) ), layerByName( QStringLiteral( "sub" ) ), layerByName( QStringLiteral( "subsub" ) ) };
 }
 
 bool TestUtils::addFeatureToLayer( QgsVectorLayer *layer, const QString &fieldName, const QVariant &value )

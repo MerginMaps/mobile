@@ -70,6 +70,7 @@ set(MM_SRCS
     inputhelp.cpp
     inputprojutils.cpp
     inpututils.cpp
+    linkedfeatures.cpp
     inpututils_p.cpp
     invitationsmodel.cpp
     invitationsproxymodel.cpp
@@ -168,6 +169,7 @@ set(MM_HDRS
     inputhelp.h
     inputprojutils.h
     inpututils.h
+    linkedfeatures.h
     inpututils_p.h
     invitationsmodel.h
     invitationsproxymodel.h

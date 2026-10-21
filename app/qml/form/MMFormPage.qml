@@ -410,8 +410,11 @@ Page {
   MMFormDeleteFeatureDialog {
     id: deleteDialog
 
+    deletesLinkedFeatures: root.controller?.hasCompositionChildren ?? false
+
     onDeleteFeature: {
-      root.controller.deleteFeature()
+      // a new feature is discarded, so everything linked to it goes too
+      root.controller.deleteFeature( root.state === "add" )
       root.canceled()
     }
   }
@@ -464,7 +467,8 @@ Page {
     let shouldRemoveFeature = root.state === "add" && __inputUtils.isFeatureIdValid( featureId )
 
     if ( shouldRemoveFeature ) {
-      root.controller.deleteFeature()
+      // linked features added to it in the meantime are removed too
+      root.controller.deleteFeature( true )
     }
 
     parent.focus = true

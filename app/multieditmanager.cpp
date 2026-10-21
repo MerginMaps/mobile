@@ -17,6 +17,7 @@
 #include "qgsauxiliarystorage.h"
 #include "qgis.h"
 #include "coreutils.h"
+#include "linkedfeatures.h"
 
 
 MultiEditManager::MultiEditManager( QObject *parent )
@@ -158,12 +159,7 @@ void MultiEditManager::deleteSelectedFeatures()
   if ( !mModel || mModel->count() == 0 || !mLayer )
     return;
 
-  QgsFeatureIds fids;
-  fids.reserve( mModel->rowCount() );
-  for ( int i = 0; i < mModel->rowCount(); ++i )
-  {
-    fids.insert( mModel->data( mModel->index( i, 0 ), FeaturesModel::FeatureId ).value<QgsFeatureId>() );
-  }
+  const QgsFeatureIds fids = selectedFeatureIds();
 
   if ( fids.isEmpty() )
   {
@@ -176,6 +172,12 @@ void MultiEditManager::deleteSelectedFeatures()
     return;
   }
 
+  if ( !LinkedFeatures::deleteChildFeatures( mLayer, fids ) )
+  {
+    CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not delete linked features of selected features from %1" ).arg( mLayer->name() ) );
+    return;
+  }
+
   const bool success = mLayer->deleteFeatures( fids );
   if ( success )
   {
@@ -185,6 +187,32 @@ void MultiEditManager::deleteSelectedFeatures()
     mLayer->triggerRepaint();
     CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
   }
+}
+
+bool MultiEditManager::selectedFeaturesHaveCompositionChildren() const
+{
+  if ( !mModel || !mLayer )
+    return false;
+
+  const QgsFeatureIds fids = selectedFeatureIds();
+  for ( QgsFeatureId fid : fids )
+  {
+    if ( LinkedFeatures::hasCompositionChildren( mLayer, fid ) )
+      return true;
+  }
+
+  return false;
+}
+
+QgsFeatureIds MultiEditManager::selectedFeatureIds() const
+{
+  QgsFeatureIds fids;
+  fids.reserve( mModel->rowCount() );
+  for ( int i = 0; i < mModel->rowCount(); ++i )
+  {
+    fids.insert( mModel->data( mModel->index( i, 0 ), FeaturesModel::FeatureId ).value<QgsFeatureId>() );
+  }
+  return fids;
 }
 
 void MultiEditManager::createTemporaryLayer()

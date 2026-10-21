@@ -19,6 +19,7 @@
 #include "qgsapplication.h"
 #include "qgsvectorlayer.h"
 #include "qgsproject.h"
+#include "qgsrelationmanager.h"
 
 #include "attributecontroller.h"
 #include "attributetabproxymodel.h"
@@ -1527,4 +1528,66 @@ void TestAttributeController::testPrefillRelationReferenceField()
   // compare that the rawValue is updated after setting the linked relation
   QVERIFY( fkItem );
   QCOMPARE( fkItem->rawValue(), parentFeature.attribute( QStringLiteral( "fid" ) ) );
+}
+
+void TestAttributeController::testDeleteFeatureWithCompositionChildren()
+{
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteFeatureWithCompositionChildren" ), Qgis::RelationshipStrength::Composition );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+  QVERIFY( controller.hasCompositionChildren() );
+  QVERIFY( controller.deleteFeature() );
+
+  // the main feature, its sub feature and both subsub features are deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
+  QVERIFY( !layers.main->isEditable() && !layers.sub->isEditable() && !layers.subsub->isEditable() );
+
+  QgsProject::instance()->clear();
+}
+
+void TestAttributeController::testDeleteFeatureWithAssociationChildren()
+{
+  const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDeleteFeatureWithAssociationChildren" ), Qgis::RelationshipStrength::Association );
+  QVERIFY( layers.main && layers.sub && layers.subsub );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+  QVERIFY( !controller.hasCompositionChildren() );
+  QVERIFY( controller.deleteFeature() );
+
+  // only the main feature is deleted
+  QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+  QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 1 );
+  QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 2 );
+
+  QgsProject::instance()->clear();
+}
+
+void TestAttributeController::testDiscardNewFeatureDeletesLinkedFeatures()
+{
+  // a discarded new feature takes all its children with it, whatever the relation strength
+  const QList<Qgis::RelationshipStrength> strengths = { Qgis::RelationshipStrength::Association, Qgis::RelationshipStrength::Composition };
+  for ( const Qgis::RelationshipStrength strength : strengths )
+  {
+    const TestUtils::RelationTestLayers layers = TestUtils::loadRelationsTestProject( QStringLiteral( "testDiscardNewFeatureDeletesLinkedFeatures" ), strength );
+    QVERIFY( layers.main && layers.sub && layers.subsub );
+
+    // the main feature stands for a new feature that only got its id to add children
+    AttributeController controller;
+    controller.setFeatureLayerPair( FeatureLayerPair( layers.main->getFeature( 1 ), layers.main ) );
+
+    QVERIFY( controller.deleteFeature( true ) );
+
+    QCOMPARE( static_cast<int>( layers.main->featureCount() ), 0 );
+    QCOMPARE( static_cast<int>( layers.sub->featureCount() ), 0 );
+    QCOMPARE( static_cast<int>( layers.subsub->featureCount() ), 0 );
+
+    QgsProject::instance()->clear();
+  }
 }
