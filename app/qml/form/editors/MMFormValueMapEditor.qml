@@ -71,9 +71,8 @@ MMFormComboboxBaseEditor {
     for ( let i = 0; i < listModel.count; i++ ) {
       let item_i = listModel.get( i )
 
-      // _fieldValue must be compared to undefined to handle empty rows correctly. 
-      // This handles NULL, "" and undefined values correctly.
-      if ( ( _fieldValue !== undefined) && _fieldValue.toString() === item_i.value.toString() ) {
+      // skip null/undefined, but still match a real "" value for spacers to work correctly
+      if ( (_fieldValue || _fieldValue === "" ) && _fieldValue.toString() === item_i.value.toString() ) {
         text = item_i.text
         preselectedItems = [item_i.value]
       }
