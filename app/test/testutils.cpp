@@ -43,19 +43,23 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
     // let's make sure we do not mess with the public instance
     Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
   }
+  // wait for the server config so that serverType() is up to date and not a stale value from settings
+  QSignalSpy spyServerType( api, &MerginApi::serverTypeChanged );
   api->setApiRoot( apiRoot );
+  spyServerType.wait( TestUtils::LONG_REPLY );
   qDebug() << "MERGIN API ROOT:" << apiRoot;
 
   // test user needs to be set
   // check if there are environmental variables for the username and the password
   const bool hasTestUserEnvVar = getenv( "TEST_API_USERNAME" ) != nullptr && getenv( "TEST_API_PASSWORD" ) != nullptr;
   const bool hasEETestUserEnvVar = getenv( "TEST_EE_API_USERNAME" ) != nullptr && getenv( "TEST_EE_API_PASSWORD" ) != nullptr;
+  qDebug() << "MERGIN server type:" << api->serverType();
   if ( hasTestUserEnvVar )
   {
     username = getenv( "TEST_API_USERNAME" );
     password = getenv( "TEST_API_PASSWORD" );
   }
-  else if ( hasEETestUserEnvVar && api->serverType() == MerginServerType::EE)
+  else if ( hasEETestUserEnvVar && api->serverType() == MerginServerType::EE )
   {
     username = getenv( "TEST_EE_API_USERNAME" );
     password = getenv( "TEST_EE_API_PASSWORD" );
