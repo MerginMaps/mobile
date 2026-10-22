@@ -2463,6 +2463,11 @@ void TestMerginApi::testRegisterAndDelete()
   QSKIP( "testRegisterAndDelete requires USE_MM_SERVER_API_KEY" );
 #endif
 
+  if ( mApi->serverType() == MerginServerType::EE )
+  {
+    QSKIP( "EE servers don't support registration from mobile" );
+  }
+
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
@@ -2499,6 +2504,11 @@ void TestMerginApi::testCreateWorkspace()
 #if defined(USE_MERGIN_DUMMY_API_KEY)
   QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
+  if ( mApi->serverType() == MerginServerType::EE )
+  {
+    QSKIP( "EE servers don't support registration from mobile" );
+  }
+
   // we need to register new user for tests and assign its credentials to env vars
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
@@ -2847,7 +2857,16 @@ void TestMerginApi::testServerType()
   mApi->getServerConfig();
   spy.wait( TestUtils::SHORT_REPLY );
   QCOMPARE( spy.count(), 0 );
-  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+
+  // if TEST_EE_API_USERNAME is specified and it equals mUsername, we can expect that we are testing EE server
+  if ( getenv( "TEST_EE_API_USERNAME" ) != nullptr && getenv( "TEST_EE_API_USERNAME" ) == mUsername )
+  {
+    QCOMPARE( mApi->serverType(), MerginServerType::EE );
+  }
+  else
+  {
+    QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+  }
 }
 
 void TestMerginApi::testServerDiagnosticLogsUrl()
