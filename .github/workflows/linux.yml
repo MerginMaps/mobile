@@ -140,7 +140,9 @@ jobs:
 
       - name: Run tests
         env: 
-          QT_QPA_PLATFORM: "offscreen"  
+          QT_QPA_PLATFORM: "offscreen"
+          TEST_EE_API_USERNAME: ${{ secrets.TEST_EE_API_USERNAME }}
+          TEST_EE_API_PASSWORD: ${{ secrets.TEST_EE_API_PASSWORD }}
         run: |
           cd build-mm-db/
           xvfb-run --server-args="-screen 0 640x480x24" ctest --output-on-failure

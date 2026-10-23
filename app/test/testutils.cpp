@@ -16,6 +16,7 @@
 #include <QSignalSpy>
 #include <exiv2/exiv2.hpp>
 
+#include "merginservertype.h"
 #include "mmconfig.h"
 #include "testutils.h"
 #include "coreutils.h"
@@ -31,33 +32,44 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   Q_ASSERT( api );
 
   // Test server url needs to be set
-  if ( ::getenv( "TEST_MERGIN_URL" ) == nullptr )
+  if ( getenv( "TEST_MERGIN_URL" ) == nullptr )
   {
     // if there is none, just default to the dev one
     apiRoot = QStringLiteral( "https://app.dev.merginmaps.com/" );
   }
   else
   {
-    apiRoot = ::getenv( "TEST_MERGIN_URL" );
+    apiRoot = getenv( "TEST_MERGIN_URL" );
     // let's make sure we do not mess with the public instance
     Q_ASSERT( apiRoot != MerginApi::sDefaultApiRoot );
   }
+  // wait for the server config so that serverType() is up to date and not a stale value from settings
+  QSignalSpy spyServerType( api, &MerginApi::serverTypeChanged );
   api->setApiRoot( apiRoot );
+  spyServerType.wait( TestUtils::LONG_REPLY );
   qDebug() << "MERGIN API ROOT:" << apiRoot;
 
   // test user needs to be set
   // check if there are environmental variables for the username and the password
-  if ( ::getenv( "TEST_API_USERNAME" ) == nullptr && ::getenv( "TEST_API_PASSWORD" ) == nullptr )
+  const bool hasTestUserEnvVar = getenv( "TEST_API_USERNAME" ) != nullptr && getenv( "TEST_API_PASSWORD" ) != nullptr;
+  const bool hasEETestUserEnvVar = getenv( "TEST_EE_API_USERNAME" ) != nullptr && getenv( "TEST_EE_API_PASSWORD" ) != nullptr;
+  qDebug() << "MERGIN server type:" << api->serverType();
+  if ( hasTestUserEnvVar )
+  {
+    username = getenv( "TEST_API_USERNAME" );
+    password = getenv( "TEST_API_PASSWORD" );
+  }
+  else if ( hasEETestUserEnvVar && api->serverType() == MerginServerType::EE )
+  {
+    username = getenv( "TEST_EE_API_USERNAME" );
+    password = getenv( "TEST_EE_API_PASSWORD" );
+  }
+  else
   {
     // generate a random email and pasword
     // create the user on the server
     // create a workspace for the user
     generateRandomUser( api, username, password );
-  }
-  else
-  {
-    username = ::getenv( "TEST_API_USERNAME" );
-    password = ::getenv( "TEST_API_PASSWORD" );
   }
 }
 
