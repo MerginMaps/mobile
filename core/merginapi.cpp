@@ -3942,6 +3942,14 @@ void MerginApi::getServerConfigReplyFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
+  // api root might have changed while the request was running, ignore the outdated reply
+  if ( !r->request().url().toString().startsWith( mApiRoot ) )
+  {
+    CoreUtils::log( "Config", QStringLiteral( "Ignoring reply from outdated server: " ) + r->request().url().toString() );
+    r->deleteLater();
+    return;
+  }
+
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "Config", QStringLiteral( "Success" ) );
