@@ -135,7 +135,7 @@ jobs:
           TEST_EE_API_PASSWORD: ${{ secrets.TEST_EE_API_PASSWORD }}
         run: |
           cd build-mm-db/
-          ctest --output-on-failure
+          ctest --output-on-failure --test-output-size-failed 20000000 --test-output-truncation middle
 
       - name: build app (release)
         run: |
