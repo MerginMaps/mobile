@@ -104,6 +104,23 @@ MMPrivateComponents.MMBaseInput {
         }
       }
 
+      Rectangle {
+        width: emptyText.contentWidth + 24 * __dp
+        height: privates.itemHeight
+        radius: 8 * __dp
+        color: __style.lightGreenColor
+        visible: !newRelation.visible && repeater.count === 0
+
+        Text {
+          id: emptyText
+
+          anchors.centerIn: parent
+          font: __style.t4
+          text: qsTr( "No features" )
+          color: __style.mediumGreyColor
+        }
+      }
+
       Repeater {
         id: repeater
 
