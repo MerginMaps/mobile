@@ -22,6 +22,7 @@ MMPrivateComponents.MMBaseInput {
   property MM.AttributeController _fieldController: parent.fieldController
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldActiveProject: parent.fieldActiveProject
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property string _fieldTitle: parent.fieldTitle
@@ -75,7 +76,7 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly) ? addFeatureComponent : emptyComponent
+    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && _fieldIsEditable) ? addFeatureComponent : ( rowView.count === 0 ? emptyComponent : null )
   }
 
   Component {

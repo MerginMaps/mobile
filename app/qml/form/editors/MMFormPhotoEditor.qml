@@ -87,6 +87,8 @@ MMFormPhotoViewer {
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
   shouldShowValidation: !_fieldFormIsReadOnly
 
+  canEditPhoto: _fieldIsEditable && __activeProject.projectRole !== "reader"
+
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 

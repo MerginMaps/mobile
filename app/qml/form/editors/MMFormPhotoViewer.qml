@@ -30,6 +30,7 @@ MMPrivateComponents.MMBaseInput {
 
   property string photoUrl: ""
   property bool hasCameraCapability: true
+  property bool canEditPhoto: true
 
   property var photoComponent: photo
   property PhotoSketchingController sketchingController
@@ -139,7 +140,8 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: photoStateGroup.state === "notSet" && root.editState === "enabled" && __activeProject.projectRole !== "reader"
+      visible: photoStateGroup.state === "notSet" && root.canEditPhoto
+      enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability
 
@@ -155,7 +157,7 @@ MMPrivateComponents.MMBaseInput {
       radius: parent.radius
       color: __style.lightGreenColor
 
-      visible: photoStateGroup.state === "notSet" && ( root.editState !== "enabled" || __activeProject.projectRole === "reader" )
+      visible: photoStateGroup.state === "notSet" && !root.canEditPhoto
 
       MMComponents.MMText {
         anchors.centerIn: parent
