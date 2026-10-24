@@ -179,7 +179,9 @@ bool AttributeFormModel::setData( const QModelIndex &index, const QVariant &valu
     {
       const FormItem *item = mController->formItem( uuid );
 
-      if ( item->rawValue() == value )
+      // QVariant equality treats a null string and an empty string as equal content,
+      // so also compare the null state to avoid skipping a NULL -> "" change.
+      if ( item->rawValue().isNull() == value.isNull() && item->rawValue() == value )
       {
         return false;
       }

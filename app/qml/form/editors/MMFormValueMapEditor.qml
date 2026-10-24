@@ -61,7 +61,13 @@ MMFormComboboxBaseEditor {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  on_FieldValueChanged: {
+  // _fieldValue alone doesn't change when going NULL -> "" (a null-but-typed empty string
+  // and a real empty string both stringify to the same JS ""), so _fieldValueIsNull must
+  // also be watched to catch that transition.
+  on_FieldValueChanged: updateSelectionFromFieldValue()
+  on_FieldValueIsNullChanged: updateSelectionFromFieldValue()
+
+  function updateSelectionFromFieldValue() {
     if ( _fieldValueIsNull || _fieldValue === undefined ) {
       text = ""
       preselectedItems = []
