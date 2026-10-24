@@ -76,7 +76,15 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && _fieldIsEditable) ? addFeatureComponent : ( rowView.count === 0 ? emptyComponent : null )
+    header: {
+      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && _fieldIsEditable )
+        return addFeatureComponent
+
+      if ( rowView.count === 0 )
+        return emptyComponent
+
+      return null
+    }
   }
 
   Component {
