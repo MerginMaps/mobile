@@ -30,6 +30,7 @@ MMPrivateComponents.MMBaseInput {
 
   property string photoUrl: ""
   property bool hasCameraCapability: true
+  property bool canEditPhoto: true
 
   property var photoComponent: photo
   property PhotoSketchingController sketchingController
@@ -108,7 +109,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.projectRole !== "reader"
 
         onClicked: root.trashClicked()
       }
@@ -125,7 +126,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.projectRole !== "reader" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
 
         onClicked: {
           root.forceActiveFocus()
@@ -139,13 +140,33 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: photoStateGroup.state === "notSet"
+      visible: photoStateGroup.state === "notSet" && root.canEditPhoto
       enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability
 
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
+    }
+
+    Rectangle {
+      width: parent.width - 2 * __style.margin20
+      height: parent.height - 2 * __style.margin20
+
+      anchors.centerIn: parent
+      radius: parent.radius
+      color: __style.lightGreenColor
+
+      visible: photoStateGroup.state === "notSet" && !root.canEditPhoto
+
+      MMComponents.MMText {
+        anchors.centerIn: parent
+        text: qsTr( "No image" )
+        font.pixelSize: __style.fontSize14
+        color: __style.mediumGreyColor
+
+        visible: parent.visible
+      }
     }
   }
 

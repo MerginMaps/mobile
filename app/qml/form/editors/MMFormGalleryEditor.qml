@@ -22,6 +22,7 @@ MMPrivateComponents.MMBaseInput {
   property MM.AttributeController _fieldController: parent.fieldController
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldActiveProject: parent.fieldActiveProject
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property string _fieldTitle: parent.fieldTitle
@@ -75,7 +76,15 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly) ? addFeatureComponent : null
+    header: {
+      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && _fieldIsEditable )
+        return addFeatureComponent
+
+      if ( rowView.count === 0 )
+        return emptyComponent
+
+      return null
+    }
   }
 
   Component {
@@ -108,6 +117,36 @@ MMPrivateComponents.MMBaseInput {
 
       MMComponents.MMListSpacer {
         width: rowView.spacing
+      }
+    }
+  }
+
+  Component {
+    id: emptyComponent
+
+    Rectangle {
+      height: rowView.height
+      width: rowView.height
+
+      radius: __style.radius20
+      color: __style.polarColor
+
+      Rectangle {
+        width: parent.width * 0.8
+        height: parent.height * 0.8
+
+        anchors.centerIn: parent
+        radius: parent.radius
+        color: __style.lightGreenColor
+
+        MMComponents.MMText {
+          anchors.centerIn: parent
+          text: qsTr( "No images" )
+          font.pixelSize: __style.fontSize14
+          color: __style.mediumGreyColor
+
+          visible: parent.visible
+        }
       }
     }
   }
