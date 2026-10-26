@@ -450,7 +450,8 @@ Item {
     hasDirection: positionDirectionSource.hasDirection
 
     // direction is relative to the north, but the marker is drawn on the (possibly rotated) screen
-    direction: positionDirectionSource.direction + mapCanvas.mapSettings.rotation
+    direction: positionDirectionSource.direction
+    mapRotation: mapCanvas.mapSettings.rotation
     hasPosition: PositionKit.hasPosition
 
     horizontalAccuracy: PositionKit.horizontalAccuracy
@@ -905,6 +906,8 @@ Item {
             return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
           }
 
+          iconSize: root.isMapRotated ? __style.icon32 : __style.icon24
+
           // compass needle always points to the north
           iconRotation: root.isMapRotated ? mapCanvas.mapSettings.rotation : 0
 
@@ -920,20 +923,15 @@ Item {
               return
             }
 
-            if ( root.centeredToGPS && !internal.isEditingGeometry ) {
-              // already following GPS, next step is to follow also the heading of the device
-              if ( !positionDirectionSource.hasDirection ) {
-                __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
-                return
-              }
-              root.headingUp = true
-              mapRotator.rotateTo( -positionDirectionSource.direction )
-              return
-            }
-
             root.centeredToGPS = true
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
+
+            // map is pointing north, so we also start to follow the direction of the device (if we know it)
+            if ( !internal.isEditingGeometry && positionDirectionSource.hasDirection ) {
+              root.headingUp = true
+              mapRotator.rotateTo( -positionDirectionSource.direction )
+            }
           }
         }
       }
@@ -1184,7 +1182,8 @@ Item {
       if ( !active ) return
 
       // rotate around the position of the device if we are following its heading, otherwise around the center of the map
-      let pivot = root.headingUp ? mapPositionSource.screenPosition : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
+      // screenPosition is QgsPointXY, rotate() needs a point
+      let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
       let delta = ( angle - mapCanvas.mapSettings.rotation ) % 360
       if ( delta > 180 ) delta -= 360
       else if ( delta <= -180 ) delta += 360
