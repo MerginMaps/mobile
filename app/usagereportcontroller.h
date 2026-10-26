@@ -29,9 +29,15 @@ class UsageReportController : public QObject
                                     MerginApi *merginApi,
                                     QObject *parent = nullptr );
 
-    void trackFeature( const QString &key );
+    Q_INVOKABLE void trackFeature( const QString &key );
     void incrementCounter( const QString &key, int amount = 1 );
     void setData( const QString &key, const QVariant &value );
+
+    //! Tracks external GNSS usage, does nothing for the internal provider
+    void trackExternalProvider( const QString &providerId, const QString &providerType, const QString &providerName );
+
+    //! Stores the role if it is higher than the highest role stored so far
+    void trackProjectRole( const QString &role );
 
     void startLoadTimer();
     void recordLoadTime();
@@ -41,6 +47,7 @@ class UsageReportController : public QObject
     void forceSubmitSnapshot();
 
     void startPingTimer();
+    void startSnapshotTimer();
 
     /**
      * Returns brand of the external GNSS receiver, never the provider name itself (it can be set by the user).
@@ -48,8 +55,24 @@ class UsageReportController : public QObject
      */
     static QString externalProviderBrand( const QString &providerType, const QString &providerName );
 
+    /**
+     * Returns connection type of the provider ("mock", "bluetooth", "network", "trimble")
+     * or an empty string for the internal provider.
+     */
+    static QString externalConnectionType( const QString &providerId, const QString &providerType );
+
+    /**
+     * Returns rank of the project role, higher means more permissions.
+     */
+    static int projectRoleRank( const QString &role );
+
+  signals:
+    //! Emitted after a snapshot was submitted and the sent data was reset
+    void snapshotSubmitted();
+
   private:
     void submitSnapshot( bool force ); // Temporary: remove force param when removing forceSubmitSnapshot
+    void checkConnectivity();
     bool isEnabled() const;
 
     AppSettings *mAppSettings = nullptr;
@@ -58,6 +81,7 @@ class UsageReportController : public QObject
 
     QNetworkAccessManager mNam;
     QTimer *mPingTimer = nullptr;
+    QTimer *mSnapshotTimer = nullptr;
     QElapsedTimer mLoadTimer;
     bool mSnapshotInFlight = false;
 };
