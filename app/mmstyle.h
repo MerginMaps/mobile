@@ -132,6 +132,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl globeIcon READ globeIcon CONSTANT )
     Q_PROPERTY( QUrl globalIcon READ globalIcon CONSTANT )
     Q_PROPERTY( QUrl gpsIcon READ gpsIcon CONSTANT )
+    Q_PROPERTY( QUrl compassIcon READ compassIcon CONSTANT )
     Q_PROPERTY( QUrl gpsAntennaHeightIcon READ gpsAntennaHeightIcon CONSTANT )
     Q_PROPERTY( QUrl hideIcon READ hideIcon CONSTANT )
     Q_PROPERTY( QUrl homeIcon READ homeIcon CONSTANT )
@@ -447,6 +448,7 @@ class MMStyle: public QObject
     static QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     static QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
     static QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
+    static QUrl compassIcon() {return QUrl( "qrc:/Compass.svg" );}
     static QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
     static QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     static QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}

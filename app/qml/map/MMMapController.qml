@@ -36,6 +36,11 @@ Item {
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
+  // when true (and centered to GPS), the map is rotated so that the direction of the device points up
+  property bool headingUp: false
+
+  readonly property bool isMapRotated: headingUp || Math.abs( mapCanvas.mapSettings.rotation ) > 0.5
+
   property var mapToolComponent: {
     measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
   }
@@ -115,6 +120,12 @@ Item {
       name: "inactive" // ignores touch input
     }
   ]
+
+  onCenteredToGPSChanged: {
+    if ( !centeredToGPS ) {
+      headingUp = false
+    }
+  }
 
   onStateChanged: {
     // We call this first because when previous state is 'view' and `centeredToGPS` is true
@@ -272,7 +283,10 @@ Item {
       }
     }
 
-    onUserInteractedWithMap: root.centeredToGPS = false
+    onUserInteractedWithMap: {
+      root.centeredToGPS = false
+      mapRotator.active = false
+    }
 
     onLongPressed: function( point ) {
       // Alter position of simulated provider
@@ -433,7 +447,8 @@ Item {
     yPos: mapPositionSource.screenPosition.y
     hasDirection: positionDirectionSource.hasDirection
 
-    direction: positionDirectionSource.direction
+    // direction is relative to the north, but the marker is drawn on the (possibly rotated) screen
+    direction: positionDirectionSource.direction + mapCanvas.mapSettings.rotation
     hasPosition: PositionKit.hasPosition
 
     horizontalAccuracy: PositionKit.horizontalAccuracy
@@ -883,13 +898,37 @@ Item {
         MMMapButton {
           id: gpsButton
 
-          iconSource: root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
+          iconSource: {
+            if ( root.isMapRotated ) return __style.compassIcon
+            return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
+          }
+
+          // compass needle always points to the north
+          iconRotation: root.isMapRotated ? mapCanvas.mapSettings.rotation : 0
 
           onClicked: {
+            if ( root.isMapRotated ) {
+              root.headingUp = false
+              mapRotator.rotateTo( 0 )
+              return
+            }
+
             if ( gpsStateGroup.state === "unavailable" ) {
               __notificationModel.addError( qsTr( "GPS currently unavailable" ) )
               return
             }
+
+            if ( root.centeredToGPS ) {
+              // already following GPS, next step is to follow also the heading of the device
+              if ( !positionDirectionSource.hasDirection ) {
+                __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
+                return
+              }
+              root.headingUp = true
+              mapRotator.rotateTo( -positionDirectionSource.direction )
+              return
+            }
+
             root.centeredToGPS = true
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
@@ -1120,6 +1159,61 @@ Item {
   }
 
   MM.Compass { id: deviceCompass }
+
+  // Smoothly rotates the map. While active, changes of angle (animated) are applied to the map.
+  QtObject {
+    id: mapRotator
+
+    property bool active: false
+    property bool animated: true
+    property real angle: 0
+
+    function rotateTo( target ) {
+      // start the animation from the current rotation
+      animated = false
+      angle = mapCanvas.mapSettings.rotation
+      animated = true
+
+      active = true
+      angle = target
+    }
+
+    onAngleChanged: {
+      if ( !active ) return
+
+      // rotate around the position of the device if we are following its heading, otherwise around the center of the map
+      let pivot = root.headingUp ? mapPositionSource.screenPosition : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
+      let delta = ( angle - mapCanvas.mapSettings.rotation ) % 360
+      if ( delta > 180 ) delta -= 360
+      else if ( delta <= -180 ) delta += 360
+
+      mapCanvas.rotate( pivot, delta )
+    }
+
+    Behavior on angle {
+      enabled: mapRotator.animated
+
+      RotationAnimation {
+        direction: RotationAnimation.Shortest
+        duration: 250
+
+        onRunningChanged: {
+          // we are done when we are back to north, heading up mode keeps the rotator active
+          if ( !running && !root.headingUp ) mapRotator.active = false
+        }
+      }
+    }
+  }
+
+  Connections {
+    target: positionDirectionSource
+
+    function onDirectionChanged() {
+      if ( root.headingUp ) {
+        mapRotator.angle = -positionDirectionSource.direction
+      }
+    }
+  }
 
   MM.MapPosition {
     id: mapPositionSource
