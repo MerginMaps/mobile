@@ -448,7 +448,7 @@ class MMStyle: public QObject
     static QUrl globeIcon() {return QUrl( "qrc:/Globe.svg" );}
     static QUrl globalIcon() {return QUrl( "qrc:/Global.svg" );}
     static QUrl gpsIcon() {return QUrl( "qrc:/GPSIcon.svg" );}
-    static QUrl compassIcon() {return QUrl( "qrc:/Compass.svg" );}
+    static QUrl compassIcon() {return QUrl( "qrc:/Compass-nocoloroverlay.svg" );}
     static QUrl gpsAntennaHeightIcon() {return QUrl( "qrc:/GPSAntennaHeight.svg" );}
     static QUrl hideIcon() {return QUrl( "qrc:/Hide.svg" );}
     static QUrl homeIcon() {return QUrl( "qrc:/Home.svg" );}
