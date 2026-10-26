@@ -704,7 +704,7 @@ ApplicationWindow {
 
       onEditSelected: {
         if ( selectedCount > 1 )
-          AppSettings.trackUsageFeature( "bulk_editing" )
+          __usageReportController.trackFeature( "bulk_editing" )
         let pair = map.multiEditManager.editableFeature()
         formsStackManager.openForm( pair, selectedCount === 1 ? "edit" : "multiEdit", "form" );
         multiSelectPanel.formOpened = true

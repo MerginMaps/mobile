@@ -238,6 +238,11 @@ class MerginApi: public QObject
     MerginWorkspaceInfo *workspaceInfo() const;
     MerginSubscriptionInfo *subscriptionInfo() const;
 
+    //! Plan and industry of the active workspace, empty when not available, used for the usage report
+    QString workspacePlanName() const;
+    QString workspacePlanAlias() const;
+    QString workspaceIndustry() const;
+
     /**
      * Returns path of the local directory in which all projects are stored.
      * Each project is one sub-directory.
@@ -344,6 +349,7 @@ class MerginApi: public QObject
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
+    void getWorkspaceServiceDetails();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE QString resetPasswordUrl();
 
@@ -947,6 +953,9 @@ class MerginApi: public QObject
     MerginUserInfo *mUserInfo; //owned by this (qml grouped-properties)
     MerginWorkspaceInfo *mWorkspaceInfo; //owned by this (qml grouped-properties)
     MerginSubscriptionInfo *mSubscriptionInfo; //owned by this (qml grouped-properties)
+    QString mWorkspacePlanName;
+    QString mWorkspacePlanAlias;
+    QString mWorkspaceIndustry;
     MerginUserAuth *mUserAuth; //owned by this (qml grouped-properties)
 
     enum CustomAttribute

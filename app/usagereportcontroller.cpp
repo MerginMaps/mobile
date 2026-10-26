@@ -13,7 +13,6 @@
 #include "inpututils.h"
 #include "merginapi.h"
 #include "merginservertype.h"
-#include "merginsubscriptioninfo.h"
 #include "localprojectsmanager.h"
 
 #include <QDateTime>
@@ -28,6 +27,8 @@
 static const QString USAGE_REPORT_ENDPOINT = QStringLiteral( "https://api.merginmaps.com/mobile/usage-statistics" );
 static const QString CONNECTIVITY_CHECK_ENDPOINT = QStringLiteral( "https://isonline.merginmaps.com/generate_204" );
 static const int USAGE_REPORT_INTERVAL_SECS = 7 * 24 * 3600; // 1 week
+static const int SNAPSHOT_CHECK_INTERVAL_MS = 60 * 60 * 1000; // 1 hour, also the delay before retrying a failed snapshot
+static const int SNAPSHOT_FIRST_CHECK_DELAY_MS = 60 * 1000; // give MerginApi time to fetch the server info after start-up
 
 UsageReportController::UsageReportController( AppSettings *appSettings,
     LocalProjectsManager *localProjectsManager,
@@ -39,38 +40,23 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
   , mMerginApi( merginApi )
 {
   mPingTimer = new QTimer( this );
-  connect( mPingTimer, &QTimer::timeout, this, [this]()
-  {
-    if ( !isEnabled() ) return;
+  connect( mPingTimer, &QTimer::timeout, this, &UsageReportController::checkConnectivity );
 
-    // Weekly snapshot is checked here rather than at startup, so server info is already fetched
-    // and long-running sessions (common on mobile) still report
-    trySubmitSnapshot();
-
-    QUrl url( CONNECTIVITY_CHECK_ENDPOINT );
-    QNetworkRequest request( url );
-    request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
-
-    QNetworkReply *reply = mNam.head( request );
-    connect( reply, &QNetworkReply::finished, reply, [this, reply]()
-    {
-      incrementCounter( QStringLiteral( "ping_total_count" ) );
-      // Only 204 means online, captive portals redirect to a login page that returns 200
-      const int status = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-      if ( reply->error() == QNetworkReply::NoError && status == 204 )
-        incrementCounter( QStringLiteral( "ping_success_count" ) );
-      else
-        incrementCounter( QStringLiteral( "ping_fail_count" ) );
-      reply->deleteLater();
-    } );
-  } );
+  mSnapshotTimer = new QTimer( this );
+  connect( mSnapshotTimer, &QTimer::timeout, this, &UsageReportController::trySubmitSnapshot );
 
   connect( mAppSettings, &AppSettings::usageReportEnabledChanged, this, [this]( bool enabled )
   {
     if ( !enabled )
+    {
       mPingTimer->stop();
+      mSnapshotTimer->stop();
+    }
     else
+    {
       mPingTimer->start( 5 * 60 * 1000 );
+      startSnapshotTimer();
+    }
   } );
 }
 
@@ -99,6 +85,28 @@ void UsageReportController::setData( const QString &key, const QVariant &value )
   QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, value );
 }
 
+void UsageReportController::trackExternalProvider( const QString &providerId, const QString &providerType, const QString &providerName )
+{
+  if ( !isEnabled() ) return;
+
+  const QString connectionType = externalConnectionType( providerId, providerType );
+  if ( connectionType.isEmpty() )
+    return;
+
+  trackFeature( QStringLiteral( "external_gps" ) );
+  setData( QStringLiteral( "external_connection_type" ), connectionType );
+  setData( QStringLiteral( "external_brand" ), externalProviderBrand( providerType, providerName ) );
+}
+
+void UsageReportController::trackProjectRole( const QString &role )
+{
+  if ( !isEnabled() ) return;
+
+  const QString current = QSettings().value( QStringLiteral( "usage_report/data/highest_role" ) ).toString();
+  if ( projectRoleRank( role ) > projectRoleRank( current ) )
+    setData( QStringLiteral( "highest_role" ), role );
+}
+
 void UsageReportController::startLoadTimer()
 {
   if ( !isEnabled() ) return;
@@ -122,6 +130,43 @@ void UsageReportController::startPingTimer()
   if ( !isEnabled() ) return;
   // TODO: check the new endpoint and decide on the interval
   mPingTimer->start( 5 * 60 * 1000 ); // 5 minutes
+}
+
+void UsageReportController::startSnapshotTimer()
+{
+  if ( !isEnabled() ) return;
+
+  // Start the first period right away, the check below is delayed
+  QSettings settings;
+  if ( !settings.contains( QStringLiteral( "usage_report/last_reported_at" ) ) && !settings.contains( QStringLiteral( "usage_report/period_started_at" ) ) )
+    settings.setValue( QStringLiteral( "usage_report/period_started_at" ), QDateTime::currentDateTimeUtc() );
+
+  // The snapshot is checked once shortly after start-up and then every hour. This covers long-running
+  // sessions (common on mobile) and retries a failed snapshot, as a failed attempt keeps the snapshot due.
+  mSnapshotTimer->start( SNAPSHOT_CHECK_INTERVAL_MS );
+  QTimer::singleShot( SNAPSHOT_FIRST_CHECK_DELAY_MS, this, &UsageReportController::trySubmitSnapshot );
+}
+
+void UsageReportController::checkConnectivity()
+{
+  if ( !isEnabled() ) return;
+
+  QUrl url( CONNECTIVITY_CHECK_ENDPOINT );
+  QNetworkRequest request( url );
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+  QNetworkReply *reply = mNam.head( request );
+  connect( reply, &QNetworkReply::finished, reply, [this, reply]()
+  {
+    incrementCounter( QStringLiteral( "ping_total_count" ) );
+    // Only 204 means online, captive portals redirect to a login page that returns 200
+    const int status = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( reply->error() == QNetworkReply::NoError && status == 204 )
+      incrementCounter( QStringLiteral( "ping_success_count" ) );
+    else
+      incrementCounter( QStringLiteral( "ping_fail_count" ) );
+    reply->deleteLater();
+  } );
 }
 
 QString UsageReportController::externalProviderBrand( const QString &providerType, const QString &providerName )
@@ -148,6 +193,32 @@ QString UsageReportController::externalProviderBrand( const QString &providerTyp
   return QStringLiteral( "other" );
 }
 
+QString UsageReportController::externalConnectionType( const QString &providerId, const QString &providerType )
+{
+  // simulated provider has type "internal", so check it by id first
+  if ( providerId == QLatin1String( "simulated" ) )
+    return QStringLiteral( "mock" );
+  if ( providerType == QLatin1String( "external_bt" ) )
+    return QStringLiteral( "bluetooth" );
+  if ( providerType == QLatin1String( "external_ip" ) )
+    return QStringLiteral( "network" );
+  if ( providerType == QLatin1String( "external_trimble" ) )
+    return QStringLiteral( "trimble" );
+
+  return QString(); // internal
+}
+
+int UsageReportController::projectRoleRank( const QString &role )
+{
+  if ( role == QLatin1String( "owner" ) ) return 6;
+  if ( role == QLatin1String( "admin" ) ) return 5;
+  if ( role == QLatin1String( "writer" ) ) return 4;
+  if ( role == QLatin1String( "editor" ) ) return 3;
+  if ( role == QLatin1String( "reader" ) ) return 2;
+  if ( role == QLatin1String( "guest" ) ) return 1;
+  return 0;
+}
+
 // Temporary: bypass interval check for testing
 void UsageReportController::forceSubmitSnapshot()
 {
@@ -169,8 +240,23 @@ void UsageReportController::submitSnapshot( bool force )
   const QDateTime lastReported = settings.value( QStringLiteral( "usage_report/last_reported_at" ) ).toDateTime();
   const QDateTime now = QDateTime::currentDateTimeUtc();
 
-  if ( !force && lastReported.isValid() && lastReported.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
-    return;
+  if ( !force )
+  {
+    // The first period starts when the user opts in, there is no data to report before that
+    QDateTime periodStart = lastReported;
+    if ( !periodStart.isValid() )
+    {
+      periodStart = settings.value( QStringLiteral( "usage_report/period_started_at" ) ).toDateTime();
+      if ( !periodStart.isValid() )
+      {
+        settings.setValue( QStringLiteral( "usage_report/period_started_at" ), now );
+        return;
+      }
+    }
+
+    if ( periodStart.secsTo( now ) < USAGE_REPORT_INTERVAL_SECS )
+      return;
+  }
 
   // Ensure telemetry UUID exists (separate from the device UUID)
   QString telemetryId = settings.value( QStringLiteral( "usage_report/telemetry_id" ) ).toString();
@@ -214,8 +300,12 @@ void UsageReportController::submitSnapshot( bool force )
   }
   properties.insert( QStringLiteral( "server_type" ), serverTypeStr );
   properties.insert( QStringLiteral( "server_version" ), mMerginApi->apiVersion() );
-  properties.insert( QStringLiteral( "plan_name" ),
-                     mMerginApi->subscriptionInfo() ? mMerginApi->subscriptionInfo()->planAlias() : QString() );
+  properties.insert( QStringLiteral( "plan_name" ), mMerginApi->workspacePlanName() );
+  properties.insert( QStringLiteral( "plan" ), QVariantMap
+  {
+    { QStringLiteral( "name" ), mMerginApi->workspacePlanName() },
+    { QStringLiteral( "alias" ), mMerginApi->workspacePlanAlias() }
+  } );
 
   // Default values for all dynamic fields, this ensures every key is always present in the snapshot
   // Actual values from QSettings will overwrite these below
@@ -247,17 +337,26 @@ void UsageReportController::submitSnapshot( bool force )
   properties.insert( QStringLiteral( "external_connection_type" ), QString() );
   properties.insert( QStringLiteral( "external_brand" ), QString() );
   properties.insert( QStringLiteral( "highest_role" ), QString() );
-  // TODO: populate from GET /v2/workspaces/<id>/service once the endpoint is extended
-  properties.insert( QStringLiteral( "industry" ), QString() );
+  properties.insert( QStringLiteral( "industry" ), mMerginApi->workspaceIndustry() );
 
   // Merge accumulated dynamic data (overwrites defaults with actual values)
   settings.beginGroup( QStringLiteral( "usage_report/data" ) );
   const QStringList keys = settings.childKeys();
   QVariantMap sentData;
   for ( const QString &key : keys )
-    sentData.insert( key, settings.value( key ) );
+  {
+    const QVariant stored = settings.value( key );
+    sentData.insert( key, stored );
+
+    // Not every platform keeps value types in QSettings (e.g. ini files on Android), values can be read back as strings.
+    // Send the type of the default, so the payload is the same on all platforms.
+    QVariant value = stored;
+    const QVariant defaultValue = properties.value( key );
+    if ( defaultValue.isValid() && value.metaType() != defaultValue.metaType() )
+      value.convert( defaultValue.metaType() );
+    properties.insert( key, value );
+  }
   settings.endGroup();
-  properties.insert( sentData );
 
   // Compute average project load time from running totals
   const qint64 totalMs = properties.value( QStringLiteral( "total_load_time_ms" ), 0 ).toLongLong();
@@ -314,6 +413,7 @@ void UsageReportController::submitSnapshot( bool force )
       s.endGroup();
       // Update last reported
       s.setValue( QStringLiteral( "usage_report/last_reported_at" ), QDateTime::currentDateTimeUtc() );
+      emit snapshotSubmitted();
     }
     // On network error: ignore, data preserved for next attempt
     reply->deleteLater();

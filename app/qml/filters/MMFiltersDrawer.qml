@@ -204,7 +204,7 @@ MMComponents.MMDrawer {
 
       onClicked: {
         __activeProject.filterController.processFilters(internal.filterValues)
-        AppSettings.trackUsageFeature( "filtering" )
+        __usageReportController.trackFeature( "filtering" )
         root.close()
       }
     }

@@ -11,7 +11,6 @@
 
 #include <QFontDatabase>
 #include <QGuiApplication>
-#include <QSettings>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QtDebug>
@@ -104,7 +103,6 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
-#include "filter/filtercontroller.h"
 #include "autosynccontroller.h"
 #include "usagereportcontroller.h"
 
@@ -655,7 +653,7 @@ int main( int argc, char *argv[] )
   QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [&urc]( AutosyncController * ac )
   {
     if ( !ac ) return;
-    QObject::connect( ac, &AutosyncController::projectSyncRequested, ac, [&urc]( SyncOptions::RequestOrigin origin )
+    QObject::connect( ac, &AutosyncController::projectSyncRequested, &urc, [&urc]( SyncOptions::RequestOrigin origin )
     {
       if ( origin == SyncOptions::AutomaticRequest )
         urc.trackFeature( QStringLiteral( "autosync" ) );
@@ -697,46 +695,25 @@ int main( int argc, char *argv[] )
   {
     if ( !provider ) return;
 
-    // simulated provider has type "internal", so check it by id first
-    const QString type = provider->type();
-    QString connectionType;
-    if ( provider->id() == QLatin1String( "simulated" ) )
-      connectionType = QStringLiteral( "mock" );
-    else if ( type == QLatin1String( "external_bt" ) )
-      connectionType = QStringLiteral( "bluetooth" );
-    else if ( type == QLatin1String( "external_ip" ) )
-      connectionType = QStringLiteral( "network" );
-    else if ( type == QLatin1String( "external_trimble" ) )
-      connectionType = QStringLiteral( "trimble" );
-    else
-      return; // internal
-
-    urc.trackFeature( QStringLiteral( "external_gps" ) );
-    urc.setData( QStringLiteral( "external_connection_type" ), connectionType );
-    urc.setData( QStringLiteral( "external_brand" ), UsageReportController::externalProviderBrand( type, provider->name() ) );
+    urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
   } );
 
   // Highest project role
-  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, as, &activeProject]()
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, &activeProject]()
   {
-    if ( !as->usageReportEnabled() ) return;
-
-    const QString role = activeProject.projectRole();
-    auto roleRank = []( const QString & r ) -> int
-    {
-      if ( r == QLatin1String( "owner" ) ) return 5;
-      if ( r == QLatin1String( "admin" ) ) return 4;
-      if ( r == QLatin1String( "writer" ) ) return 3;
-      if ( r == QLatin1String( "reader" ) ) return 2;
-      if ( r == QLatin1String( "guest" ) ) return 1;
-      return 0;
-    };
-
-    QSettings s;
-    const QString current = s.value( QStringLiteral( "usage_report/data/highest_role" ) ).toString();
-    if ( roleRank( role ) > roleRank( current ) )
-      urc.setData( QStringLiteral( "highest_role" ), role );
+    urc.trackProjectRole( activeProject.projectRole() );
   } );
+
+  // Provider and role describe the current state, not events, and the collected data is reset after each snapshot.
+  // Record them again so a provider or role that stays unchanged is still reported in the next period.
+  auto trackCurrentState = [&urc, pk, &activeProject]()
+  {
+    if ( AbstractPositionProvider *provider = pk->positionProvider() )
+      urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+    urc.trackProjectRole( activeProject.projectRole() );
+  };
+  QObject::connect( &urc, &UsageReportController::snapshotSubmitted, &lambdaContext, trackCurrentState );
+  trackCurrentState();
 
   // Project load time
   QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&urc]()
@@ -745,6 +722,7 @@ int main( int argc, char *argv[] )
   } );
 
   urc.startPingTimer();
+  urc.startSnapshotTimer();
 
   QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &urc]()
   {
@@ -855,6 +833,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
+  engine.rootContext()->setContextProperty( "__usageReportController", &usageReportController );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );
