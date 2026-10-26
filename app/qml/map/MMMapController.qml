@@ -909,7 +909,7 @@ Item {
           // time of the last tap that took us back to the position, see below
           property double lastCenteredTapTime: 0
 
-          iconSize: root.isMapRotated ? __style.icon32 : __style.icon24
+          iconSize: root.isMapRotated ? __style.mapItemHeight * 0.8 : __style.icon24
 
           // compass needle always points to the north
           iconRotation: root.isMapRotated ? mapCanvas.mapSettings.rotation : 0
