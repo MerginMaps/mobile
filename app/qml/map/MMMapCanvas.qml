@@ -36,6 +36,9 @@ Item {
   // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
+  // when false, the map can not be rotated by the user
+  property bool rotationEnabled: true
+
   property alias mapSettings: mapRenderer.mapSettings
   property alias isRendering: mapRenderer.isRendering
 
@@ -192,6 +195,8 @@ Item {
     onPinchUpdated: function ( pinch ) {
       mapRenderer.pan( pinch.center, pinch.previousCenter )
       mapRenderer.zoom( pinch.center, pinch.previousScale / pinch.scale )
+
+      if ( !mapRoot.rotationEnabled ) return
 
       if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold )
       {
