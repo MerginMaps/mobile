@@ -154,6 +154,11 @@ class InputMapCanvasMap : public QQuickItem
     void zoom( QPointF center, qreal scale );
 
     /**
+     * Rotates the map by given angle (in degrees, clockwise) around the given screen position
+     */
+    void rotate( QPointF center, qreal angle );
+
+    /**
      * Set map setting's extent (pan the map) based on the difference of positions
      */
     void pan( QPointF oldPos, QPointF newPos );
