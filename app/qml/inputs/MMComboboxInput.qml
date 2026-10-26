@@ -35,6 +35,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   onRightContentClicked: { drawerLoader.active = true; drawerLoader.focus = true }
 
   textField.readOnly: true
+  textField.activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
 
   text: {
     if ( !comboboxModel ) return "";
