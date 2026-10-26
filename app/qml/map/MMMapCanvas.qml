@@ -208,7 +208,7 @@ Item {
           __androidUtils.vibrate()
         }
         else if ( __iosUtils.isIos ) {
-          __iosUtils.vibrate()
+          __iosUtils.impactFeedback()
         }
       }
 
