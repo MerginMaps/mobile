@@ -171,7 +171,7 @@ Item {
 
     // rotation (in degrees) the fingers have to travel before the map starts to rotate,
     // so that a regular zoom does not rotate the map by accident
-    readonly property real rotationThreshold: 8
+    readonly property real rotationThreshold: 15
 
     // when the map rotation gets this close to north (in degrees), it snaps to it
     readonly property real northSnapAngle: 4
