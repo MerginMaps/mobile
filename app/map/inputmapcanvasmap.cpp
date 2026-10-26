@@ -13,6 +13,7 @@
  */
 
 #include <QQuickWindow>
+#include <QSignalBlocker>
 #include <QSGSimpleTextureNode>
 #include <QScreen>
 
@@ -84,13 +85,21 @@ void InputMapCanvasMap::rotate( QPointF center, qreal angle )
 {
   const QgsPoint pivot( mMapSettings->screenToCoordinate( center ) );
 
-  // rotation is applied around the center of the map, so we pan afterwards
-  // to keep the pivot under the same screen position
-  mMapSettings->setRotation( mMapSettings->rotation() + angle );
+  {
+    // rotation is applied around the center of the map, so we pan afterwards
+    // to keep the pivot under the same screen position. Signals are blocked so that
+    // nobody (e.g. following of GPS position) sees the intermediate state.
+    const QSignalBlocker blocker( mMapSettings.get() );
 
-  const QgsPoint pivotNow( mMapSettings->screenToCoordinate( center ) );
-  const QgsPoint mapCenter = mMapSettings->center();
-  mMapSettings->setCenter( QgsPoint( mapCenter.x() + pivot.x() - pivotNow.x(), mapCenter.y() + pivot.y() - pivotNow.y() ) );
+    mMapSettings->setRotation( mMapSettings->rotation() + angle );
+
+    const QgsPoint pivotNow( mMapSettings->screenToCoordinate( center ) );
+    const QgsPoint mapCenter = mMapSettings->center();
+    mMapSettings->setCenter( QgsPoint( mapCenter.x() + pivot.x() - pivotNow.x(), mapCenter.y() + pivot.y() - pivotNow.y() ) );
+  }
+
+  emit mMapSettings->rotationChanged();
+  emit mMapSettings->extentChanged();
 }
 
 void InputMapCanvasMap::pan( QPointF oldPos, QPointF newPos )
