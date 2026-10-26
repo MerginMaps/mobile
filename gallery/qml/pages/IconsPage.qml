@@ -68,7 +68,6 @@ ScrollView {
             GalleryComponents.IconLine { name: "globeIcon"; source: __style.globeIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "gpsAntennaHeightIcon"; source: __style.gpsAntennaHeightIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "gpsIcon"; source: __style.gpsIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
-            GalleryComponents.IconLine { name: "compassIcon"; source: __style.compassIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "hideIcon"; source: __style.hideIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "layersIcon"; source: __style.layersIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }
             GalleryComponents.IconLine { name: "minusIcon"; source: __style.minusIcon; showRect: checkboxBorder.checked; invertColors: checkboxColor.checked }

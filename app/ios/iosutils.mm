@@ -74,10 +74,21 @@ bool IosUtils::openFileImpl( const QString &filePath )
   return true;
 }
 
-void IosUtils::impactFeedback()
+static UIImpactFeedbackGenerator *impactGenerator()
 {
   // the generator is created once and kept prepared, so that the tap has no latency
   static UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+  return generator;
+}
+
+void IosUtils::prepareImpactFeedback()
+{
+  [impactGenerator() prepare];
+}
+
+void IosUtils::impactFeedback()
+{
+  UIImpactFeedbackGenerator *generator = impactGenerator();
   [generator impactOccurred];
   [generator prepare];
 }
