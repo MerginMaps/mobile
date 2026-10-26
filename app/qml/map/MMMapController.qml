@@ -256,6 +256,8 @@ Item {
 
     mapSettings.project: __activeProject.qgsProject
 
+    rotationEnabled: !internal.isEditingGeometry
+
     MM.IdentifyKit {
       id: identifyKit
 
@@ -920,7 +922,7 @@ Item {
               return
             }
 
-            if ( root.centeredToGPS ) {
+            if ( root.centeredToGPS && !internal.isEditingGeometry ) {
               // already following GPS, next step is to follow also the heading of the device
               if ( !positionDirectionSource.hasDirection ) {
                 __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
@@ -1397,6 +1399,22 @@ Item {
     property bool streamingModeButtonVisible: !internal.isPointLayer || internal.isMultiPartLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
+
+    // map is kept pointing north while the geometry is being edited, the rotation is restored afterwards
+    property bool isEditingGeometry: root.state === "record" || root.state === "recordInLayer" || root.state === "edit" || root.state === "split"
+    property real rotationBeforeEditing: 0
+
+    onIsEditingGeometryChanged: {
+      if ( isEditingGeometry ) {
+        rotationBeforeEditing = root.headingUp ? 0 : mapCanvas.mapSettings.rotation
+        root.headingUp = false
+        mapRotator.rotateTo( 0 )
+      }
+      else if ( rotationBeforeEditing !== 0 ) {
+        mapRotator.rotateTo( rotationBeforeEditing )
+        rotationBeforeEditing = 0
+      }
+    }
     property bool centeredToGPSBeforeStakeout
     property var stakeoutTarget
 
