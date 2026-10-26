@@ -421,6 +421,7 @@ void AppSettings::setUsageReportEnabled( bool enabled )
     settings.endGroup();
     settings.remove( QStringLiteral( "usage_report/telemetry_id" ) );
     settings.remove( QStringLiteral( "usage_report/last_reported_at" ) );
+    settings.remove( QStringLiteral( "usage_report/period_started_at" ) );
     settings.setValue( QStringLiteral( "usage_report/enabled" ), false );
   }
   else
@@ -447,20 +448,6 @@ void AppSettings::setUsageReportConsentAsked( bool asked )
   settings.setValue( QStringLiteral( "usage_report/consent_asked" ), asked );
 
   emit usageReportConsentAskedChanged( mUsageReportConsentAsked );
-}
-
-void AppSettings::trackUsageFeature( const QString &key )
-{
-  if ( !mUsageReportEnabled ) return;
-  QSettings().setValue( QStringLiteral( "usage_report/data/" ) + key, true );
-}
-
-void AppSettings::incrementUsageCounter( const QString &key )
-{
-  if ( !mUsageReportEnabled ) return;
-  QSettings s;
-  const QString fullKey = QStringLiteral( "usage_report/data/" ) + key;
-  s.setValue( fullKey, s.value( fullKey, 0 ).toInt() + 1 );
 }
 
 // Temporary: request an immediate usage snapshot for testing

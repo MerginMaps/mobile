@@ -78,7 +78,7 @@ Dialog {
       bgndColor: __style.grassColor
 
       onClicked: {
-        AppSettings.trackUsageFeature( "photo_sketching" )
+        __usageReportController.trackFeature( "photo_sketching" )
         root.close()
         root.controller.backupSketches()
       }

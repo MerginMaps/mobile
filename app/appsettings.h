@@ -130,9 +130,6 @@ class AppSettings: public QObject
     bool usageReportConsentAsked() const;
     void setUsageReportConsentAsked( bool asked );
 
-    Q_INVOKABLE void trackUsageFeature( const QString &key );
-    Q_INVOKABLE void incrementUsageCounter( const QString &key );
-
     // Temporary: request an immediate usage snapshot (bypasses interval check)
     Q_INVOKABLE void requestImmediateUsageSnapshot();
 
