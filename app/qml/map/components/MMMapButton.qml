@@ -19,6 +19,7 @@ Item {
 
   property alias iconSource: icon.source
   property alias iconRotation: icon.rotation
+  property alias iconSize: icon.size
   property color bgndColor: __style.polarColor
 
   signal clicked
