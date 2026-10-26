@@ -59,21 +59,17 @@ Item {
   property real polygonRingWidth: 8 * __dp
   property real polygonRingBorderWidth: 0 // on top of ring width
 
-  // properties used by markers (not able to use values directly from mapTransform
-  // (no direct access to matrix no mapSettings' visible extent)
-  property real mapTransformScale: __inputUtils.mapSettingsScale(mapSettings)
-  property real mapTransformOffsetX: __inputUtils.mapSettingsOffsetX(mapSettings)
-  property real mapTransformOffsetY: __inputUtils.mapSettingsOffsetY(mapSettings)
-  property real displayDevicePixelRatio: __inputUtils.mapSettingsDPR( mapSettings )
+  // Affine transform from map coordinates to screen coordinates (including map rotation) as [a, b, c, d, e, f]:
+  //   x_screen = a * x_map + b * y_map + e
+  //   y_screen = c * x_map + d * y_map + f
+  property var mapTransform: __inputUtils.mapSettingsTransform( mapSettings )
 
   // Reference view settings used for transformation of coordinates (needed for lines and polygons).
   // We convert their coordinates to screen coordinates of the current view, and then as user pans/zooms
   // the map, we use a transform to adjust the shape. The reason is that the transform uses single
   // precision floats, and if we used just map coordinates, we get numerical errors when the map gets
   // zoomed in. This approach is more stable (but does not avoid the issue 100%)
-  property real refTransformScale: 1
-  property real refTransformOffsetX: 0
-  property real refTransformOffsetY: 0
+  property var refTransform: [1, 0, 0, 0, 1, 0]
 
   QtObject {
     id: internal
@@ -85,25 +81,17 @@ Item {
   Connections {
       target: mapSettings
       function onVisibleExtentChanged() {
-          mapTransformScale = __inputUtils.mapSettingsScale(mapSettings)
-          mapTransformOffsetX = __inputUtils.mapSettingsOffsetX(mapSettings)
-          mapTransformOffsetY = __inputUtils.mapSettingsOffsetY(mapSettings)
-          displayDevicePixelRatio = __inputUtils.mapSettingsDPR( mapSettings )
+          mapTransform = __inputUtils.mapSettingsTransform( mapSettings )
       }
   }
 
   onGeometryChanged: constructHighlights()
 
-  // Transforms X coordinate from map CRS to screen XY with regards to scale and HighDPI
-  function transformX( xcoord )
+  // Transforms point from map CRS to screen XY with regards to scale, rotation and HighDPI
+  function transformPoint( transform, xcoord, ycoord )
   {
-    return ( xcoord + highlight.mapTransformOffsetX ) * highlight.mapTransformScale / displayDevicePixelRatio
-  }
-
-  // Transforms Y coordinate from map CRS to screen XY with regards to scale and HighDPI
-  function transformY( ycoord )
-  {
-    return -( ycoord + highlight.mapTransformOffsetY ) * highlight.mapTransformScale / displayDevicePixelRatio
+    return Qt.point( transform[0] * xcoord + transform[1] * ycoord + transform[4],
+                     transform[2] * xcoord + transform[3] * ycoord + transform[5] )
   }
 
   function constructHighlights()
@@ -130,9 +118,7 @@ Item {
       return;
     }
 
-    refTransformOffsetX = mapTransformOffsetX
-    refTransformOffsetY = mapTransformOffsetY
-    refTransformScale = mapTransformScale
+    refTransform = mapTransform
 
     let data = __inputUtils.extractGeometryCoordinates( highlight.geometry )
 
@@ -198,9 +184,7 @@ Item {
           // Draw lines for points in the segment
           for ( k = i; k < i + pointsCount * 2; k += 2 )
           {
-            let x1 = transformX( data[k] )
-            let y1 = transformY( data[k+1] )
-            newPath.push( Qt.point( x1, y1 ) )
+            newPath.push( transformPoint( refTransform, data[k], data[k+1] ) )
           }
           i = k
 
@@ -240,8 +224,11 @@ Item {
 
       property int markerType: highlight.markerType
 
-      x: ( posX *  highlight.mapTransformScale + highlight.mapTransformOffsetX *  highlight.mapTransformScale ) / displayDevicePixelRatio - ( highlight.markerWidth / 2 )
-      y: ( posY * -highlight.mapTransformScale + highlight.mapTransformOffsetY * -highlight.mapTransformScale ) / displayDevicePixelRatio - highlight.markerHeight
+      // marker stays upright when the map is rotated, only its position changes
+      property point screenPoint: highlight.transformPoint( highlight.mapTransform, posX, posY )
+
+      x: screenPoint.x - ( highlight.markerWidth / 2 )
+      y: screenPoint.y - highlight.markerHeight
 
       width: highlight.markerWidth
       height: highlight.markerHeight
@@ -285,19 +272,36 @@ Item {
     preferredRendererType: highlight.lineStrokeStyle === ShapePath.DashLine ? Shape.CurveRenderer : Shape.UnknownRenderer
 
     transform: Matrix4x4 {
-        // the formula for x coordinate for map to screen coordinates conversion goes like this:
-        //   x_screen = (x_map + offset_x) * scale / ddp
-        // this matrix is just doing transform from old view settings (scale, offset_x, offset_y) for which we have
-        // calculated coordinates in constructHighlight to new view settings (that are active now).
+        // this matrix is just doing transform from old view settings (scale, rotation, offset) for which we have
+        // calculated coordinates in constructHighlight to new view settings (that are active now):
+        //   relative = current * inverse( reference ), where both are map to screen affine transforms
         id: shapeTransform
-        property real scale: mapTransformScale / refTransformScale
-        property real offsetX:  (mapTransformOffsetX - refTransformOffsetX) * mapTransformScale / displayDevicePixelRatio
-        property real offsetY: -(mapTransformOffsetY - refTransformOffsetY) * mapTransformScale / displayDevicePixelRatio
 
-        matrix: Qt.matrix4x4( scale, 0,     0, offsetX,
-                              0,     scale, 0, offsetY,
-                              0,     0,     1, 0,
-                              0,     0,     0, 1)
+        property real refDet: refTransform[0] * refTransform[3] - refTransform[1] * refTransform[2]
+        property real curDet: mapTransform[0] * mapTransform[3] - mapTransform[1] * mapTransform[2]
+
+        // uniform scale change, used to negate the scaling of the stroke width
+        property real scale: Math.sqrt( Math.abs( curDet / refDet ) )
+
+        // inverse of the reference transform
+        property real i11: refTransform[3] / refDet
+        property real i12: -refTransform[1] / refDet
+        property real i21: -refTransform[2] / refDet
+        property real i22: refTransform[0] / refDet
+        property real i13: -( i11 * refTransform[4] + i12 * refTransform[5] )
+        property real i23: -( i21 * refTransform[4] + i22 * refTransform[5] )
+
+        property real m11: mapTransform[0] * i11 + mapTransform[1] * i21
+        property real m12: mapTransform[0] * i12 + mapTransform[1] * i22
+        property real m13: mapTransform[0] * i13 + mapTransform[1] * i23 + mapTransform[4]
+        property real m21: mapTransform[2] * i11 + mapTransform[3] * i21
+        property real m22: mapTransform[2] * i12 + mapTransform[3] * i22
+        property real m23: mapTransform[2] * i13 + mapTransform[3] * i23 + mapTransform[5]
+
+        matrix: Qt.matrix4x4( m11, m12, 0, m13,
+                              m21, m22, 0, m23,
+                              0,   0,   1, 0,
+                              0,   0,   0, 1)
     }
 
     Component {  id: componentMoveTo; PathMove { } }
