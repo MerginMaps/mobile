@@ -908,6 +908,9 @@ Item {
             return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
           }
 
+          // time of the last tap that took us back to the position, see below
+          property double lastCenteredTapTime: 0
+
           iconSize: root.isMapRotated ? __style.mapItemHeight * 0.8 : __style.icon24
 
           // compass needle always points to the north
@@ -926,6 +929,9 @@ Item {
             }
 
             if ( root.centeredToGPS && !internal.isEditingGeometry ) {
+              // ignore a quick second tap (double tap), so the map does not start to rotate unexpectedly
+              if ( Date.now() - gpsButton.lastCenteredTapTime < 600 ) return
+
               // already following GPS, next step is to follow also the direction of the device
               if ( !positionDirectionSource.hasDirection ) {
                 __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
@@ -937,6 +943,7 @@ Item {
             }
 
             root.centeredToGPS = true
+            gpsButton.lastCenteredTapTime = Date.now()
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
           }
