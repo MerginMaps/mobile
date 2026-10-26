@@ -923,15 +923,20 @@ Item {
               return
             }
 
+            if ( root.centeredToGPS && !internal.isEditingGeometry ) {
+              // already following GPS, next step is to follow also the direction of the device
+              if ( !positionDirectionSource.hasDirection ) {
+                __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
+                return
+              }
+              root.headingUp = true
+              mapRotator.rotateTo( -positionDirectionSource.direction, 0.4 )
+              return
+            }
+
             root.centeredToGPS = true
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
-
-            // map is pointing north, so we also start to follow the direction of the device (if we know it)
-            if ( !internal.isEditingGeometry && positionDirectionSource.hasDirection ) {
-              root.headingUp = true
-              mapRotator.rotateTo( -positionDirectionSource.direction )
-            }
           }
         }
       }
@@ -1160,48 +1165,39 @@ Item {
 
   MM.Compass { id: deviceCompass }
 
-  // Smoothly rotates the map. While active, changes of angle (animated) are applied to the map.
+  // Rotates the map towards the target angle with easing (the remaining distance shrinks exponentially),
+  // so changes of the target (e.g. device direction updates) result in a smooth movement.
   QtObject {
     id: mapRotator
 
     property bool active: false
-    property bool animated: true
-    property real angle: 0
+    property real target: 0 // wanted rotation of the map in degrees
+    property real tau: 0.15 // time constant of the easing in seconds, the higher the slower
 
-    function rotateTo( target ) {
-      // start the animation from the current rotation
-      animated = false
-      angle = mapCanvas.mapSettings.rotation
-      animated = true
-
+    function rotateTo( newTarget, newTau = 0.15 ) {
+      target = newTarget
+      tau = newTau
       active = true
-      angle = target
     }
 
-    onAngleChanged: {
-      if ( !active ) return
+    property FrameAnimation frames: FrameAnimation {
+      running: mapRotator.active
 
-      // rotate around the position of the device if we are following its heading, otherwise around the center of the map
-      // screenPosition is QgsPointXY, rotate() needs a point
-      let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
-      let delta = ( angle - mapCanvas.mapSettings.rotation ) % 360
-      if ( delta > 180 ) delta -= 360
-      else if ( delta <= -180 ) delta += 360
+      onTriggered: {
+        let delta = ( mapRotator.target - mapCanvas.mapSettings.rotation ) % 360
+        if ( delta > 180 ) delta -= 360
+        else if ( delta <= -180 ) delta += 360
 
-      mapCanvas.rotate( pivot, delta )
-    }
+        let isDone = Math.abs( delta ) < 0.1
+        let step = isDone ? delta : delta * ( 1 - Math.exp( -frameTime / mapRotator.tau ) )
 
-    Behavior on angle {
-      enabled: mapRotator.animated
+        // rotate around the position of the device if we are following its heading, otherwise around the center of the map
+        // screenPosition is QgsPointXY, rotate() needs a point
+        let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
+        if ( Math.abs( step ) > 0.001 ) mapCanvas.rotate( pivot, step )
 
-      RotationAnimation {
-        direction: RotationAnimation.Shortest
-        duration: 250
-
-        onRunningChanged: {
-          // we are done when we are back to north, heading up mode keeps the rotator active
-          if ( !running && !root.headingUp ) mapRotator.active = false
-        }
+        // heading up mode keeps the rotator active
+        if ( isDone && !root.headingUp ) mapRotator.active = false
       }
     }
   }
@@ -1211,7 +1207,7 @@ Item {
 
     function onDirectionChanged() {
       if ( root.headingUp ) {
-        mapRotator.angle = -positionDirectionSource.direction
+        mapRotator.target = -positionDirectionSource.direction
       }
     }
   }
