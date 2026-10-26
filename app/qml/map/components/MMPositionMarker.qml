@@ -18,10 +18,6 @@ Item {
 
   property real direction: 0 // relative to the north
   property real mapRotation: 0 // the marker is drawn on the (possibly rotated) screen
-
-  // only the change of the direction is animated, map rotation is applied immediately
-  property real smoothDirection: direction
-  Behavior on smoothDirection { RotationAnimation { direction: RotationAnimation.Shortest; duration: 500 } }
   property bool hasDirection: true
   
   property real horizontalAccuracy: 0.5
@@ -49,19 +45,28 @@ Item {
     Behavior on width { NumberAnimation { properties: "width"; duration: 250 }}
   }
 
-  Image {
-    id: direction
+  // zero sized item at the position, rotated together with the map so the direction is drawn correctly on the screen
+  Item {
+    x: root.xPos
+    y: root.yPos
+    rotation: root.mapRotation
 
-    x: root.xPos - width / 2
-    y: root.yPos - height
-    width: root.size * 2
-    height: width
-    visible: root.hasDirection
-    source: root.trackingMode ? __style.trackingDirectionImage : __style.directionImage
-    fillMode: Image.PreserveAspectFit
-    rotation: root.smoothDirection + root.mapRotation
-    transformOrigin: Item.Bottom
-    smooth: true
+    Image {
+      id: direction
+
+      x: -width / 2
+      y: -height
+      width: root.size * 2
+      height: width
+      visible: root.hasDirection
+      source: root.trackingMode ? __style.trackingDirectionImage : __style.directionImage
+      fillMode: Image.PreserveAspectFit
+      rotation: root.direction
+      transformOrigin: Item.Bottom
+      smooth: true
+
+      Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+    }
   }
 
   Rectangle {
