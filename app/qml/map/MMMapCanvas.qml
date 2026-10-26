@@ -99,6 +99,12 @@ Item {
     mapRenderer.pan( oldPos, newPos )
   }
 
+  // Rotates the map by angle (in degrees, clockwise) around the center (screen point)
+  function rotate( center, angle )
+  {
+    mapRenderer.rotate( center, angle )
+  }
+
   Item {
     id: jumpAnimator
 
