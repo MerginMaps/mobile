@@ -902,17 +902,22 @@ Item {
           id: gpsButton
 
           iconSource: {
-            if ( root.isMapRotated ) return __style.compassIcon
+            // the compass is drawn instead of the icon when the map is rotated
+            if ( root.isMapRotated ) return ""
             return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
           }
 
           // time of the last tap that took us back to the position, see below
           property double lastCenteredTapTime: 0
 
-          iconSize: root.isMapRotated ? __style.mapItemHeight * 0.8 : __style.icon24
+          MMCompass {
+            anchors.centerIn: parent
+            size: gpsButton.height
+            visible: root.isMapRotated
 
-          // compass needle always points to the north
-          iconRotation: root.isMapRotated ? mapCanvas.mapSettings.rotation : 0
+            // N always points to the north
+            rotation: mapCanvas.mapSettings.rotation
+          }
 
           onClicked: {
             if ( root.isMapRotated ) {
@@ -936,7 +941,7 @@ Item {
                 return
               }
               root.headingUp = true
-              mapRotator.rotateTo( -positionDirectionSource.direction, 0.4 )
+              mapRotator.rotateTo( -positionDirectionSource.direction, 0.8, 80 )
               return
             }
 
@@ -1180,11 +1185,27 @@ Item {
     property bool active: false
     property real target: 0 // wanted rotation of the map in degrees
     property real tau: 0.15 // time constant of the easing in seconds, the higher the slower
+    property real maxSpeed: 720 // the map never rotates faster than this (degrees per second)
 
-    function rotateTo( newTarget, newTau = 0.15 ) {
+    // rendering is stopped while the map is rotating, otherwise each step would restart the rendering
+    property bool isFrozen: false
+
+    function rotateTo( newTarget, newTau = 0.15, newMaxSpeed = 720 ) {
       target = newTarget
       tau = newTau
+      maxSpeed = newMaxSpeed
       active = true
+    }
+
+    function unfreeze() {
+      if ( isFrozen ) {
+        isFrozen = false
+        mapCanvas.unfreezeRendering( "rotator" )
+      }
+    }
+
+    onActiveChanged: {
+      if ( !active ) unfreeze()
     }
 
     property FrameAnimation frames: FrameAnimation {
@@ -1196,15 +1217,29 @@ Item {
         else if ( delta <= -180 ) delta += 360
 
         let isDone = Math.abs( delta ) < 0.1
-        let step = isDone ? delta : delta * ( 1 - Math.exp( -frameTime / mapRotator.tau ) )
+        let step = delta
+        if ( !isDone ) {
+          step = delta * ( 1 - Math.exp( -frameTime / mapRotator.tau ) )
+
+          let maxStep = mapRotator.maxSpeed * frameTime
+          if ( Math.abs( step ) > maxStep ) step = step > 0 ? maxStep : -maxStep
+
+          if ( !mapRotator.isFrozen ) {
+            mapRotator.isFrozen = true
+            mapCanvas.freezeRendering( "rotator" )
+          }
+        }
 
         // rotate around the position of the device if we are following its heading, otherwise around the center of the map
         // screenPosition is QgsPointXY, rotate() needs a point
         let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
         if ( Math.abs( step ) > 0.001 ) mapCanvas.rotate( pivot, step )
 
-        // heading up mode keeps the rotator active
-        if ( isDone && !root.headingUp ) mapRotator.active = false
+        if ( isDone ) {
+          // map is not moving anymore, render it. Heading up mode keeps the rotator active
+          mapRotator.unfreeze()
+          if ( !root.headingUp ) mapRotator.active = false
+        }
       }
     }
   }
@@ -1214,7 +1249,14 @@ Item {
 
     function onDirectionChanged() {
       if ( root.headingUp ) {
-        mapRotator.target = -positionDirectionSource.direction
+        // small changes are ignored (compass is noisy), so the map does not react to every little move of the device
+        let change = ( -positionDirectionSource.direction - mapRotator.target ) % 360
+        if ( change > 180 ) change -= 360
+        else if ( change <= -180 ) change += 360
+
+        if ( Math.abs( change ) > 6 ) {
+          mapRotator.target = -positionDirectionSource.direction
+        }
       }
     }
   }

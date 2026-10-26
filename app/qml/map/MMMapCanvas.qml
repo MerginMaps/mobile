@@ -79,6 +79,18 @@ Item {
     mapRenderer.pan( oldPos, newPos )
   }
 
+  // Rendering of the map is stopped until it is unfrozen, use it during animations.
+  // Every id needs to be unfrozen on its own.
+  function freezeRendering( id )
+  {
+    rendererPrivate.freeze( id )
+  }
+
+  function unfreezeRendering( id )
+  {
+    rendererPrivate.unfreeze( id )
+  }
+
   // Rotates the map by angle (in degrees, clockwise) around the center (screen point)
   function rotate( center, angle )
   {
@@ -145,6 +157,15 @@ Item {
         return a
       }
 
+      // gets the haptic hardware ready, so the tap at north is not delayed
+      function prepareVibration() {
+        if ( AppSettings.hapticsType !== AppSettings.HapticsVibration && AppSettings.hapticsType !== AppSettings.HapticsVibrationSound ) return
+
+        if ( __iosUtils.isIos ) {
+          __iosUtils.prepareImpactFeedback()
+        }
+      }
+
       function vibrate() {
         if ( AppSettings.hapticsType !== AppSettings.HapticsVibration && AppSettings.hapticsType !== AppSettings.HapticsVibrationSound ) return
 
@@ -184,6 +205,7 @@ Item {
     onPinchStarted: {
       mapRoot.userInteractedWithMap()
       rendererPrivate.freeze( freezeId )
+      rendererPrivate.prepareVibration()
 
       isRotating = false
     }
