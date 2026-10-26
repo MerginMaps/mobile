@@ -906,7 +906,7 @@ Item {
             return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
           }
 
-          iconSize: root.isMapRotated ? __style.icon32 : __style.icon24
+          iconSize: root.isMapRotated ? __style.mapItemHeight * 0.8 : __style.icon24
 
           // compass needle always points to the north
           iconRotation: root.isMapRotated ? mapCanvas.mapSettings.rotation : 0
