@@ -291,6 +291,10 @@ void InputMapSettings::setRotation( double rotation )
   else if ( rotation <= -180.0 )
     rotation += 360.0;
 
+  // get rid of the floating point noise around north
+  if ( qgsDoubleNear( rotation, 0, 1e-6 ) )
+    rotation = 0;
+
   if ( qgsDoubleNear( mMapSettings.rotation(), rotation ) )
     return;
 
