@@ -10,9 +10,9 @@
 import QtQuick
 
 //
-// Compass drawn on top of a map button. It is built on top of the location icon: a dot in the middle
-// with four ticks, and the cardinal points as far as possible from the center (near the edge of the button).
-// Rotate the item to point the N to the north.
+// Compass drawn on top of a map button, similar to the compass of other map apps: the ticks around the edge
+// follow the rotation of the map (the north is the red one), and the letter in the middle is fixed and
+// tells which cardinal point is at the top of the screen.
 //
 
 Item {
@@ -21,80 +21,82 @@ Item {
   // size of the button the compass is drawn on
   property real size: __style.mapItemHeight
 
-  readonly property color northColor: "#E8553A"
-  readonly property color letterColor: __style.forestColor
-  readonly property real margin: size * 0.06
-  readonly property real tickLength: size * 0.07
-  readonly property real tickOffset: size * 0.13 // distance of the tick from the center
+  // rotation of the map in degrees, the north tick is rotated with it
+  property real mapRotation: 0
+
+  readonly property color northColor: __style.grapeColor
+  readonly property color mainColor: __style.forestColor
+  readonly property color secondaryColor: __style.mediumGreyColor
+
+  readonly property real tickMargin: size * 0.07 // distance of the ticks from the edge
+  readonly property real mainTickLength: size * 0.12
+  readonly property real secondaryTickLength: size * 0.07
+
+  // bearing of the top of the screen, rounded to the closest cardinal point
+  readonly property int cardinalIndex: Math.round( ( ( 360 - mapRotation ) % 360 + 360 ) % 360 / 90 ) % 4
+
+  readonly property var cardinalPoints: [
+    //: Short name of the north, shown in the compass on the map
+    qsTr( "N" ),
+    //: Short name of the east, shown in the compass on the map
+    qsTr( "E" ),
+    //: Short name of the south, shown in the compass on the map
+    qsTr( "S" ),
+    //: Short name of the west, shown in the compass on the map
+    qsTr( "W" )
+  ]
 
   width: size
   height: size
 
-  Rectangle {
+  // smooth edges of the shapes
+  layer.enabled: true
+  layer.samples: 4
+
+  // full size item, so that the ticks rotate around the center of the compass
+  Item {
+    anchors.fill: parent
+    rotation: root.mapRotation
+
+    Repeater {
+      model: 24 // a tick every 15 degrees
+
+      Item {
+        required property int index
+
+        readonly property bool isMain: index % 6 === 0 // north, east, south, west
+        readonly property bool isNorth: index === 0
+
+        anchors.fill: parent
+        rotation: index * 15
+
+        Rectangle {
+          x: root.width / 2 - width / 2
+          y: root.tickMargin
+          width: {
+            if ( parent.isNorth ) return root.size * 0.045
+            if ( parent.isMain ) return root.size * 0.035
+            return root.size * 0.025
+          }
+          height: parent.isMain ? root.mainTickLength : root.secondaryTickLength
+          radius: width / 2
+          antialiasing: true
+          color: {
+            if ( parent.isNorth ) return root.northColor
+            if ( parent.isMain ) return root.mainColor
+            return root.secondaryColor
+          }
+        }
+      }
+    }
+  }
+
+  Text {
     anchors.centerIn: parent
-    width: root.size * 0.1
-    height: width
-    radius: width / 2
-    color: __style.forestColor
-  }
-
-  Repeater {
-    model: 4
-
-    Rectangle {
-      required property int index
-
-      width: root.tickLength
-      height: root.size * 0.04
-      radius: height / 2
-      color: index === 0 ? root.northColor : __style.forestColor
-
-      // ticks are placed on the north, east, south and west
-      x: root.width / 2 - width / 2 + Math.sin( index * Math.PI / 2 ) * ( root.tickOffset + width / 2 )
-      y: root.height / 2 - height / 2 - Math.cos( index * Math.PI / 2 ) * ( root.tickOffset + width / 2 )
-      rotation: index % 2 === 0 ? 90 : 0
-    }
-  }
-
-  component Letter: Text {
-    color: root.letterColor
-    font.family: internal.fontFamily
-    font.pixelSize: root.size * 0.23
-    font.weight: Font.DemiBold
-  }
-
-  Letter {
-    text: "N"
-    color: root.northColor
-    anchors.horizontalCenter: parent.horizontalCenter
-    y: root.margin - ( height - contentHeight ) / 2
-  }
-
-  Letter {
-    text: "S"
-    anchors.horizontalCenter: parent.horizontalCenter
-    y: root.height - root.margin - contentHeight - ( height - contentHeight ) / 2
-  }
-
-  Letter {
-    text: "W"
-    x: root.margin
-    anchors.verticalCenter: parent.verticalCenter
-  }
-
-  Letter {
-    text: "E"
-    x: root.width - root.margin - width
-    anchors.verticalCenter: parent.verticalCenter
-  }
-
-  QtObject {
-    id: internal
-
-    // font of the device, not the font of the app
-    readonly property string fontFamily: {
-      if ( Qt.platform.os === "ios" || Qt.platform.os === "osx" ) return ".AppleSystemUIFont"
-      return "sans-serif"
-    }
+    text: root.cardinalPoints[root.cardinalIndex]
+    color: root.mainColor
+    font.family: __style.t1.family
+    font.weight: __style.t1.weight
+    font.pixelSize: root.size * 0.34
   }
 }

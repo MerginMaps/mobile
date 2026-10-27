@@ -32,6 +32,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   const double gpsHeight = settings.value( QStringLiteral( "gpsHeight" ), 0 ).toDouble();
   const QString ignoreMigrateVersion = settings.value( QStringLiteral( "ignoreMigrateVersion" ) ).toString();
   const bool autolockPosition = settings.value( QStringLiteral( "autolockPosition" ), true ).toBool();
+  const bool mapRotationEnabled = settings.value( QStringLiteral( "mapRotationEnabled" ), false ).toBool();
   int hapticsTypeInt = settings.value( QStringLiteral( "hapticsType" ), 0 ).toInt();
   const HapticsType hapticsType = static_cast<HapticsType>( hapticsTypeInt );
   int startupBehaviorInt = settings.value( QStringLiteral( "startupBehavior" ), 0 ).toInt();
@@ -52,6 +53,7 @@ AppSettings::AppSettings( QObject *parent ): QObject( parent )
   setGpsAntennaHeight( gpsHeight );
   setIgnoreMigrateVersion( ignoreMigrateVersion );
   setAutolockPosition( autolockPosition );
+  setMapRotationEnabled( mapRotationEnabled );
   setHapticsType( hapticsType );
   setStartupBehavior( startupBehavior );
 }
@@ -302,6 +304,21 @@ void AppSettings::setAutolockPosition( bool autolockPosition )
   mAutolockPosition = autolockPosition;
   setValue( QStringLiteral( "autolockPosition" ), autolockPosition );
   emit autolockPositionChanged( mAutolockPosition );
+}
+
+bool AppSettings::mapRotationEnabled() const
+{
+  return mMapRotationEnabled;
+}
+
+void AppSettings::setMapRotationEnabled( bool mapRotationEnabled )
+{
+  if ( mMapRotationEnabled == mapRotationEnabled )
+    return;
+
+  mMapRotationEnabled = mapRotationEnabled;
+  setValue( QStringLiteral( "mapRotationEnabled" ), mapRotationEnabled );
+  emit mapRotationEnabledChanged( mMapRotationEnabled );
 }
 
 AppSettings::HapticsType AppSettings::hapticsType() const
