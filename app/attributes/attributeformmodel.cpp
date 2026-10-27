@@ -17,6 +17,7 @@
 #include "attributecontroller.h"
 #include "attributedata.h"
 #include "mixedattributevalue.h"
+#include "qgis.h"
 
 AttributeFormModel::AttributeFormModel( QObject *parent, AttributeController *controller, const QVector<QUuid> &data )
   : QAbstractListModel( parent )
@@ -179,7 +180,7 @@ bool AttributeFormModel::setData( const QModelIndex &index, const QVariant &valu
     {
       const FormItem *item = mController->formItem( uuid );
 
-      if ( item->rawValue() == value )
+      if ( qgsVariantEqual( item->rawValue(), value ) )
       {
         return false;
       }
