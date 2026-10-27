@@ -435,7 +435,11 @@ void InputMapCanvasMap::geometryChange( const QRectF &newGeometry, const QRectF 
   if ( newGeometry.size() != oldGeometry.size() )
   {
     mMapSettings->setOutputSize( newGeometry.size().toSize() );
-    refresh();
+
+    // the size changed (e.g. the screen was rotated), the old image does not cover the canvas anymore,
+    // so render even if the rendering is frozen (e.g. while the map is rotating)
+    if ( !mMapSettings->outputSize().isNull() )
+      mRefreshTimer.start( 1 );
   }
 }
 

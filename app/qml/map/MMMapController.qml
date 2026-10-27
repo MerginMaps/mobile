@@ -127,6 +127,17 @@ Item {
     }
   }
 
+  Connections {
+    target: AppSettings
+
+    function onMapRotationEnabledChanged() {
+      if ( !AppSettings.mapRotationEnabled ) {
+        root.headingUp = false
+        mapRotator.rotateTo( 0 )
+      }
+    }
+  }
+
   onStateChanged: {
     // We call this first because when previous state is 'view' and `centeredToGPS` is true
     // the map may still not be centered. It's only centered after a certain threshold is exceeded.
@@ -253,7 +264,7 @@ Item {
 
     mapSettings.project: __activeProject.qgsProject
 
-    rotationEnabled: !internal.isEditingGeometry
+    rotationEnabled: AppSettings.mapRotationEnabled && !internal.isEditingGeometry
 
     MM.IdentifyKit {
       id: identifyKit
@@ -916,7 +927,7 @@ Item {
             visible: root.isMapRotated
 
             // N always points to the north
-            rotation: mapCanvas.mapSettings.rotation
+            mapRotation: mapCanvas.mapSettings.rotation
           }
 
           onClicked: {
@@ -931,7 +942,7 @@ Item {
               return
             }
 
-            if ( root.centeredToGPS && !internal.isEditingGeometry ) {
+            if ( AppSettings.mapRotationEnabled && root.centeredToGPS && !internal.isEditingGeometry ) {
               // ignore a quick second tap (double tap), so the map does not start to rotate unexpectedly
               if ( Date.now() - gpsButton.lastCenteredTapTime < 600 ) return
 
