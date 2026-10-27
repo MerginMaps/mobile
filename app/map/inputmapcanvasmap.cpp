@@ -106,12 +106,13 @@ void InputMapCanvasMap::refreshMap()
   if ( !mapSettings.hasValidSettings() )
     return;
 
-  // Expands the map canvas output size and extent by a factor of 3 to create a 3x3 virtual grid.
-  // This pre-renders margin areas to ensure fluid navigation and prevent blank spaces during pan gestures.
-  mapSettings.setOutputSize( mapSettings.outputSize() * 3 );
+  // Calculates the total buffer scale from the margin ratio per side (e.g., 0.5 ratio -> 2.0x total scale)
+  const double totalScale = 1.0 + ( 2.0 * MARGIN_RATIO );
+
+  mapSettings.setOutputSize( mapSettings.outputSize() * totalScale );
   QgsRectangle expandedExtent = mapSettings.extent();
   QgsPointXY center = expandedExtent.center();
-  expandedExtent.scale( 3.0, &center );
+  expandedExtent.scale( totalScale, &center );
   mapSettings.setExtent( expandedExtent );
 
   //build the expression context
@@ -301,25 +302,21 @@ void InputMapCanvasMap::onTemporalStateChanged()
 
 void InputMapCanvasMap::updateTransform()
 {
-  QgsRectangle imageExtent = mImageMapSettings.visibleExtent();
-  QgsRectangle newExtent = mMapSettings->mapSettings().visibleExtent();
+    QgsRectangle imageExtent = mImageMapSettings.visibleExtent();
+    QgsRectangle newExtent = mMapSettings->mapSettings().visibleExtent();
 
-  // setScale( imageExtent.width() / newExtent.width() );
-  // QgsPointXY pixelPt = mMapSettings->coordinateToScreen( QgsPoint( imageExtent.xMinimum(), imageExtent.yMaximum() ) );
-  // setX( pixelPt.x() );
-  // setY( pixelPt.y() );
+    const double totalScale = 1.0 + ( 2.0 * MARGIN_RATIO );
 
-  // Adjusts the transformation scale and centering to account for the 3x expanded map canvas.
-  // This ensures the visible viewport remains correctly positioned at the center of the pre-rendered image.
-  double currentScale = ( imageExtent.width() / newExtent.width() ) / 3.0;
-  setScale( currentScale );
-  QgsPoint centerPoint( imageExtent.center() );
-  QgsPointXY screenCenter = mMapSettings->coordinateToScreen( centerPoint );
+    double currentScale = ( imageExtent.width() / newExtent.width() ) / totalScale;
+    setScale( currentScale );
+    QgsPoint centerPoint( imageExtent.center() );
+    QgsPointXY screenCenter = mMapSettings->coordinateToScreen( centerPoint );
 
-  QRectF bounds = boundingRect();
-  setX( screenCenter.x() - (bounds.width() / 2.0) * currentScale );
-  setY( screenCenter.y() - (bounds.height() / 2.0) * currentScale );
+    QRectF bounds = boundingRect();
 
+    // Offset position so that the center of the expanded texture aligns exactly with the center of the viewport
+    setX( screenCenter.x() - ( bounds.width() * totalScale / 2.0 ) * currentScale );
+    setY( screenCenter.y() - ( bounds.height() * totalScale / 2.0 ) * currentScale );
 }
 
 int InputMapCanvasMap::mapUpdateInterval() const
@@ -412,15 +409,12 @@ QSGNode *InputMapCanvasMap::updatePaintNode( QSGNode *oldNode, QQuickItem::Updat
     }
   }
 
-  //node->setRect( rect );
-
-  // Scales the texture node's bounding rectangle to match the 3x expanded map canvas area
-  // and translates it to maintain the visible viewport at the exact center of the virtual grid.
+  // Scales the texture node's bounding rectangle to match the expanded map canvas area.
+  const double totalScale = 1.0 + ( 2.0 * MARGIN_RATIO );
   QRectF superRect = rect;
-  superRect.setSize( rect.size() * 3 );
-  superRect.translate( -rect.width(), -rect.height() );
-  node->setRect( superRect );
+  superRect.setSize( rect.size() * totalScale );
 
+  node->setRect( superRect );
 
   return node;
 }
