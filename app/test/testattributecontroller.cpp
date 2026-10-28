@@ -27,6 +27,7 @@
 #include "attributeformmodel.h"
 #include "imageutils.h"
 #include "inpututils.h"
+#include "qgsvariantutils.h"
 
 void TestAttributeController::init()
 {
@@ -1571,4 +1572,66 @@ void TestAttributeController::testPrefillRelationReferenceField()
   // compare that the rawValue is updated after setting the linked relation
   QVERIFY( fkItem );
   QCOMPARE( fkItem->rawValue(), parentFeature.attribute( QStringLiteral( "fid" ) ) );
+}
+
+void TestAttributeController::testNullNumericFieldCanBeSetToZeroThroughModel()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  const int num1FieldIndex = surveyLayer->fields().indexFromName( QStringLiteral( "num1" ) );
+  QVERIFY( num1FieldIndex >= 0 );
+  const QgsField num1Field = surveyLayer->fields().at( num1FieldIndex );
+
+  // Simulate an EXISTING feature whose num1 field is NULL, as it would come back from a
+  // provider like GeoPackage/OGR: a typed-but-null QVariant, not a plain invalid QVariant()
+  // (which is instead what a brand new, not-yet-saved feature gets - see QgsVectorLayerUtils::createFeatures()).
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  feat.setAttribute( num1FieldIndex, QgsVariantUtils::createNullVariant( num1Field.type() ) );
+
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+
+  const FormItem *num1Item = nullptr;
+  for ( const QUuid &id : items )
+  {
+    const FormItem *item = controller.formItem( id );
+    if ( item && item->field().name() == QLatin1String( "num1" ) )
+    {
+      num1Item = item;
+      break;
+    }
+  }
+  QVERIFY( num1Item );
+  QVERIFY( num1Item->rawValue().isNull() );
+
+  AttributeFormProxyModel *proxyModel = controller.attributeFormProxyModelForTab( 0 );
+  QVERIFY( proxyModel );
+  AttributeFormModel *formModel = qobject_cast<AttributeFormModel *>( proxyModel->sourceModel() );
+  QVERIFY( formModel );
+
+  const int row = items.indexOf( num1Item->id() );
+  QVERIFY( row >= 0 );
+  const QModelIndex modelIndex = formModel->index( row, 0 );
+
+  // This is exactly what MMFormPage.qml does on a keystroke: model.AttributeValue = newVal
+  const bool updated = formModel->setData( modelIndex, QVariant( QStringLiteral( "0" ) ), AttributeFormModel::AttributeValue );
+  QVERIFY2( updated, "setData() must not silently swallow a NULL -> \"0\" edit (see https://github.com/MerginMaps/mobile/issues/2999)" );
+
+  QCOMPARE( controller.featureLayerPair().feature().attribute( num1FieldIndex ), QVariant( 0.0 ) );
+  QCOMPARE( num1Item->rawValue().isNull(), false );
 }

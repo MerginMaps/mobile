@@ -57,6 +57,9 @@ class TestAttributeController: public QObject
      * to the parent feature's referenced field value (FID).
      */
     void testPrefillRelationReferenceField();
+
+    //! A NULL numeric field must be settable to 0 through the model
+    void testNullNumericFieldCanBeSetToZeroThroughModel();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H
