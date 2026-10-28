@@ -1764,6 +1764,7 @@ qreal InputUtils::distanceBetweenGpsAndFeature( QgsPoint gpsPosition, const Feat
   }
 
   QgsDistanceArea distanceArea;
+  distanceArea.setEllipsoid( QgsProject::instance()->ellipsoid() );
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
 
   qreal distance = distanceArea.measureLine( transformedPosition, transformedTarget );
@@ -1812,6 +1813,7 @@ qreal InputUtils::angleBetweenGpsAndFeature( QgsPoint gpsPoint, const FeatureLay
   }
 
   QgsDistanceArea distanceArea;
+  distanceArea.setEllipsoid( QgsProject::instance()->ellipsoid() );
   distanceArea.setSourceCrs( mapSettings->destinationCrs(), mapSettings->transformContext() );
 
   return distanceArea.bearing( transformedPosition, transformedTarget );
