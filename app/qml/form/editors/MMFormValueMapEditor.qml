@@ -61,7 +61,13 @@ MMFormComboboxBaseEditor {
     root.rememberValueBoxClicked( checkboxChecked )
   }
 
-  on_FieldValueChanged: {
+  // _fieldValue alone doesn't change when going NULL -> "" (a null-but-typed empty string
+  // and a real empty string both stringify to the same JS ""), so _fieldValueIsNull must
+  // also be watched to catch that transition.
+  on_FieldValueChanged: updateSelectionFromFieldValue()
+  on_FieldValueIsNullChanged: updateSelectionFromFieldValue()
+
+  function updateSelectionFromFieldValue() {
     if ( _fieldValueIsNull || _fieldValue === undefined ) {
       text = ""
       preselectedItems = []
@@ -71,7 +77,8 @@ MMFormComboboxBaseEditor {
     for ( let i = 0; i < listModel.count; i++ ) {
       let item_i = listModel.get( i )
 
-      if ( _fieldValue && _fieldValue.toString() === item_i.value.toString() ) {
+      // skip null/undefined, but still match a real "" value for spacers to work correctly
+      if ( (_fieldValue || _fieldValue === "" ) && _fieldValue.toString() === item_i.value.toString() ) {
         text = item_i.text
         preselectedItems = [item_i.value]
       }
@@ -144,8 +151,8 @@ MMFormComboboxBaseEditor {
       for ( let i = 0; i < config.length; i++ )
       {
         const modelItem = {
-          text: Object.keys( config[i] )[0],
-          value: Object.values( config[i] )[0]
+          text: Object.keys( config[i] )[0] ?? "",
+          value: Object.values( config[i] )[0] ?? "" // an empty row in QGIS comes as undefined
         }
 
         // filter out nulls
