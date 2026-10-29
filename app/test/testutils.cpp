@@ -56,16 +56,19 @@ void TestUtils::merginGetAuthCredentials( MerginApi *api, QString &apiRoot, QStr
   qDebug() << "MERGIN server type:" << api->serverType();
   if ( hasTestUserEnvVar )
   {
+    qDebug() << "Using TEST_API env variable user";
     username = getenv( "TEST_API_USERNAME" );
     password = getenv( "TEST_API_PASSWORD" );
   }
   else if ( hasEETestUserEnvVar && api->serverType() == MerginServerType::EE )
   {
+    qDebug() << "Using TEST_EE_API env variable user";
     username = getenv( "TEST_EE_API_USERNAME" );
     password = getenv( "TEST_EE_API_PASSWORD" );
   }
   else
   {
+    qDebug() << "Using generated user";
     // generate a random email and pasword
     // create the user on the server
     // create a workspace for the user
