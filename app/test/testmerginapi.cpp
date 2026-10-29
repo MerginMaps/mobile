@@ -170,6 +170,51 @@ void TestMerginApi::testListProjectsByName()
   QVERIFY( ourProject.remoteError.isEmpty() );
 }
 
+void TestMerginApi::testSessionCheckAfterRejectedToken()
+{
+  const QString login = mApi->userAuth()->login();
+  const QString password = mApi->userAuth()->password();
+
+  // replaces the token with one the server rejects, but that has not expired locally
+  auto setRejectedToken = [this]()
+  {
+    mApi->userAuth()->blockSignals( true );
+    mApi->userAuth()->setAuthToken( QByteArrayLiteral( "rejected-token" ) );
+    mApi->userAuth()->setTokenExpiration( QDateTime::currentDateTimeUtc().addSecs( 3600 ) );
+    mApi->userAuth()->blockSignals( false );
+  };
+
+  QSignalSpy checkSpy( mApi, &MerginApi::sessionCheckFinished );
+  QSignalSpy expiredSpy( mApi, &MerginApi::sessionExpired );
+
+  // the stored password still works, so a new token is obtained
+  setRejectedToken();
+  mApi->getUserInfo();
+  QVERIFY( checkSpy.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( checkSpy.at( 0 ).at( 0 ).toBool(), false );
+  QCOMPARE( expiredSpy.count(), 0 );
+  QVERIFY( mApi->userAuth()->hasValidToken() );
+  QVERIFY( mApi->userAuth()->authToken() != QByteArrayLiteral( "rejected-token" ) );
+
+  // the stored password is no longer accepted, like after a password change
+  setRejectedToken();
+  mApi->userAuth()->blockSignals( true );
+  mApi->userAuth()->setPassword( password + QStringLiteral( "-changed" ) );
+  mApi->userAuth()->blockSignals( false );
+  mApi->getUserInfo();
+  QVERIFY( checkSpy.wait( TestUtils::LONG_REPLY ) );
+  QCOMPARE( checkSpy.at( 1 ).at( 0 ).toBool(), true );
+  QCOMPARE( expiredSpy.count(), 1 );
+  QVERIFY( !mApi->userAuth()->hasAuthData() );
+
+  // the expired session signed the user out, log in again for the following tests
+  TestUtils::authorizeUser( mApi, login, password );
+  QVERIFY( mApi->userAuth()->hasValidToken() );
+  QString workspace;
+  TestUtils::selectFirstWorkspace( mApi, workspace );
+  QCOMPARE( workspace, mWorkspaceName );
+}
+
 /**
  * Download project from a scratch using fetch endpoint.
  */

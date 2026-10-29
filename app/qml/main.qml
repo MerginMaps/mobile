@@ -935,6 +935,15 @@ ApplicationWindow {
     }
   }
 
+  MMSessionExpiredDialog {
+    id: sessionExpiredDialog
+
+    onSignInRequested: {
+      stateManager.state = "projects"
+      projectController.showLogin()
+    }
+  }
+
   MMSsoExpiredTokenDialog {
     id: ssoExpiredTokenDialog
 
@@ -1120,6 +1129,11 @@ ApplicationWindow {
     function onSsoLoginExpired()
     {
       ssoExpiredTokenDialog.open()
+    }
+
+    function onSessionExpired()
+    {
+      sessionExpiredDialog.open()
     }
   }
 
