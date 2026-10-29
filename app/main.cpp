@@ -103,6 +103,8 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "autosynccontroller.h"
+#include "usagereportcontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -566,6 +568,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  UsageReportController usageReportController( as, &localProjectsManager, ma.get() );
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -677,9 +680,91 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  // Temporary: immediate snapshot trigger from QML test button
+  QObject::connect( as, &AppSettings::immediateUsageSnapshotRequested, &usageReportController, &UsageReportController::forceSubmitSnapshot );
+
+  // Gather dynamic usage data via signal connections
+  UsageReportController &urc = usageReportController;
+
+  // Auto-sync
+  QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [&urc]( AutosyncController * ac )
+  {
+    if ( !ac ) return;
+    QObject::connect( ac, &AutosyncController::projectSyncRequested, &urc, [&urc]( SyncOptions::RequestOrigin origin )
+    {
+      if ( origin == SyncOptions::AutomaticRequest )
+        urc.trackFeature( QStringLiteral( "autosync" ) );
+    } );
+  } );
+
+  // Created project
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [&urc]( const QString &, const QString & )
+  {
+    urc.trackFeature( QStringLiteral( "created_project" ) );
+  } );
+
+  // Photo captured vs attached
+  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+  } );
+  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+  } );
+
+  // Workspace switches
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&urc]()
+  {
+    urc.incrementCounter( QStringLiteral( "workspace_switches" ) );
+  } );
+
+  // External GPS provider
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&urc]( AbstractPositionProvider * provider )
+  {
+    if ( !provider ) return;
+
+    urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+  } );
+
+  // Highest project role
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, &activeProject]()
+  {
+    urc.trackProjectRole( activeProject.projectRole() );
+  } );
+
+  // Provider and role describe the current state, not events, and the collected data is reset after each snapshot.
+  // Record them again so a provider or role that stays unchanged is still reported in the next period.
+  auto trackCurrentState = [&urc, pk, &activeProject]()
+  {
+    if ( AbstractPositionProvider *provider = pk->positionProvider() )
+      urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+    urc.trackProjectRole( activeProject.projectRole() );
+  };
+  QObject::connect( &urc, &UsageReportController::snapshotSubmitted, &lambdaContext, trackCurrentState );
+  trackCurrentState();
+
+  // Project load time
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&urc]()
+  {
+    urc.startLoadTimer();
+  } );
+
+  urc.startPingTimer();
+  urc.startSnapshotTimer();
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &urc]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
+    urc.recordLoadTime();
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
@@ -785,6 +870,7 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
+  engine.rootContext()->setContextProperty( "__usageReportController", &usageReportController );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );

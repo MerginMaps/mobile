@@ -96,6 +96,7 @@ MerginApi::MerginApi( LocalProjectsManager &localProjects, QObject *parent )
   } );
   QObject::connect( this, &MerginApi::processInvitationFinished, this, &MerginApi::getUserInfo );
   QObject::connect( this, &MerginApi::getWorkspaceInfoFinished, this, &MerginApi::getServiceInfo );
+  QObject::connect( this, &MerginApi::getWorkspaceInfoFinished, this, &MerginApi::getWorkspaceServiceDetails );
   QObject::connect( mUserInfo, &MerginUserInfo::userInfoChanged, this, &MerginApi::userInfoChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::activeWorkspaceChanged );
   QObject::connect( mUserInfo, &MerginUserInfo::activeWorkspaceChanged, this, &MerginApi::getWorkspaceInfo );
@@ -170,6 +171,21 @@ MerginWorkspaceInfo *MerginApi::workspaceInfo() const
 MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 {
   return mSubscriptionInfo;
+}
+
+QString MerginApi::workspacePlanName() const
+{
+  return mWorkspacePlanName;
+}
+
+QString MerginApi::workspacePlanAlias() const
+{
+  return mWorkspacePlanAlias;
+}
+
+QString MerginApi::workspaceIndustry() const
+{
+  return mWorkspaceIndustry;
 }
 
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const int page )
@@ -1230,8 +1246,57 @@ void MerginApi::getServiceInfoReplyFinished()
   r->deleteLater();
 }
 
+void MerginApi::getWorkspaceServiceDetails()
+{
+  mWorkspacePlanName.clear();
+  mWorkspacePlanAlias.clear();
+  mWorkspaceIndustry.clear();
+
+  const auto workspaceId = mUserInfo->activeWorkspaceId();
+  if ( mServerType != MerginServerType::SAAS || workspaceId < 0 )
+  {
+    return;
+  }
+
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  QUrl url( mApiRoot + QStringLiteral( "/v2/workspaces/%1/service" ).arg( workspaceId ) );
+  request.setUrl( url );
+
+  QNetworkReply *reply = mManager->get( request );
+  CoreUtils::log( "Workspace service", QStringLiteral( "Requesting workspace service details: " ) + url.toString() );
+
+  connect( reply, &QNetworkReply::finished, this, [this, reply, workspaceId]()
+  {
+    // only used for the usage report, so a failure is just logged and the values stay empty
+    // the reply is ignored when the workspace was switched in the meantime
+    if ( reply->error() == QNetworkReply::NoError && workspaceId == mUserInfo->activeWorkspaceId() )
+    {
+      const QJsonObject docObj = QJsonDocument::fromJson( reply->readAll() ).object();
+      const QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+      mWorkspacePlanName = planObj.value( QStringLiteral( "name" ) ).toString();
+      mWorkspacePlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+      mWorkspaceIndustry = docObj.value( QStringLiteral( "industry" ) ).toString(); // can be null
+    }
+    else if ( reply->error() != QNetworkReply::NoError )
+    {
+      CoreUtils::log( "Workspace service", QStringLiteral( "FAILED - %1" ).arg( reply->errorString() ) );
+    }
+
+    reply->deleteLater();
+  } );
+}
+
 void MerginApi::clearAuth()
 {
+  mWorkspacePlanName.clear();
+  mWorkspacePlanAlias.clear();
+  mWorkspaceIndustry.clear();
+
   mUserAuth->blockSignals( true );
   mUserInfo->blockSignals( true );
   mWorkspaceInfo->blockSignals( true );
