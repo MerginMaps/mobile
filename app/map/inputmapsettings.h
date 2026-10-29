@@ -69,8 +69,8 @@ class InputMapSettings : public QObject
     Q_PROPERTY( double mapUnitsPerPoint READ mapUnitsPerPoint NOTIFY mapUnitsPerPointChanged )
 
     /**
-     * The rotation of the resulting map image, in degrees clockwise.
-     * Map canvas rotation support is not implemented, 0 is used
+     * The rotation of the resulting map image, in degrees clockwise, normalized to (-180, 180].
+     * It is a runtime state only: it is reset to 0 when a project is loaded.
      */
     Q_PROPERTY( double rotation READ rotation WRITE setRotation NOTIFY rotationChanged )
 

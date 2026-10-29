@@ -13,6 +13,7 @@
  */
 
 #include <QQuickWindow>
+#include <QSignalBlocker>
 #include <QSGSimpleTextureNode>
 #include <QScreen>
 
@@ -42,6 +43,7 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   connect( &mMapUpdateTimer, &QTimer::timeout, this, &InputMapCanvasMap::renderJobUpdated );
 
   connect( mMapSettings.get(), &InputMapSettings::extentChanged, this, &InputMapCanvasMap::onExtentChanged );
+  connect( mMapSettings.get(), &InputMapSettings::rotationChanged, this, &InputMapCanvasMap::onExtentChanged );
   connect( mMapSettings.get(), &InputMapSettings::layersChanged, this, &InputMapCanvasMap::onLayersChanged );
   connect( mMapSettings.get(), &InputMapSettings::temporalStateChanged, this, &InputMapCanvasMap::onTemporalStateChanged );
 
@@ -77,6 +79,27 @@ void InputMapCanvasMap::zoom( QPointF center, qreal scale )
   // same as zoomWithCenter (no coordinate transformations are needed)
   extent.scale( scale, &newCenter );
   mMapSettings->setExtent( extent );
+}
+
+void InputMapCanvasMap::rotate( QPointF center, qreal angle )
+{
+  const QgsPoint pivot( mMapSettings->screenToCoordinate( center ) );
+
+  {
+    // rotation is applied around the center of the map, so we pan afterwards
+    // to keep the pivot under the same screen position. Signals are blocked so that
+    // nobody (e.g. following of GPS position) sees the intermediate state.
+    const QSignalBlocker blocker( mMapSettings.get() );
+
+    mMapSettings->setRotation( mMapSettings->rotation() + angle );
+
+    const QgsPoint pivotNow( mMapSettings->screenToCoordinate( center ) );
+    const QgsPoint mapCenter = mMapSettings->center();
+    mMapSettings->setCenter( QgsPoint( mapCenter.x() + pivot.x() - pivotNow.x(), mapCenter.y() + pivot.y() - pivotNow.y() ) );
+  }
+
+  emit mMapSettings->rotationChanged();
+  emit mMapSettings->extentChanged();
 }
 
 void InputMapCanvasMap::pan( QPointF oldPos, QPointF newPos )
@@ -294,11 +317,13 @@ void InputMapCanvasMap::onTemporalStateChanged()
 
 void InputMapCanvasMap::updateTransform()
 {
-  QgsRectangle imageExtent = mImageMapSettings.visibleExtent();
-  QgsRectangle newExtent = mMapSettings->mapSettings().visibleExtent();
-  setScale( imageExtent.width() / newExtent.width() );
+  setScale( mImageMapSettings.mapUnitsPerPixel() / mMapSettings->mapSettings().mapUnitsPerPixel() );
 
-  QgsPointXY pixelPt = mMapSettings->coordinateToScreen( QgsPoint( imageExtent.xMinimum(), imageExtent.yMaximum() ) );
+  // the rendered image may have been rendered with a different rotation, so we place its top left corner
+  // and rotate it (around that corner, see transformOrigin) to match the current view
+  const QgsPointXY imageOrigin = mImageMapSettings.mapToPixel().toMapCoordinates( 0, 0 );
+  const QgsPointXY pixelPt = mMapSettings->coordinateToScreen( QgsPoint( imageOrigin ) );
+  setRotation( mMapSettings->rotation() - mImageMapSettings.rotation() );
   setX( pixelPt.x() );
   setY( pixelPt.y() );
 }

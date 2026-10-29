@@ -47,6 +47,12 @@ class IosUtils: public QObject
 
 #ifdef Q_OS_IOS
     static Q_INVOKABLE void vibrate();
+
+    //! Light haptic tap, much cheaper than vibrate() so it is safe to use during gestures
+    static Q_INVOKABLE void impactFeedback();
+
+    //! Wakes up the haptic hardware so that the following impactFeedback() has no delay
+    static Q_INVOKABLE void prepareImpactFeedback();
 #endif
 
   signals:

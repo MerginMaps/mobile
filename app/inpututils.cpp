@@ -301,7 +301,8 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
     return;
 
   const QgsRectangle bbox = geom.boundingBox();
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  // extent (not visibleExtent) is used as it is not affected by the map rotation
+  QgsRectangle currentExtent = mapSettings->extent();
 
   if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
   {
@@ -311,6 +312,16 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   else
   {
     currentExtent = bbox;
+
+    if ( !qgsDoubleNear( mapSettings->rotation(), 0 ) )
+    {
+      // extent is defined in the rotated frame, so we need to fit the bbox as it appears on the rotated map
+      const double angle = qDegreesToRadians( mapSettings->rotation() );
+      const double halfWidth = std::fabs( bbox.width() / 2 * std::cos( angle ) ) + std::fabs( bbox.height() / 2 * std::sin( angle ) );
+      const double halfHeight = std::fabs( bbox.width() / 2 * std::sin( angle ) ) + std::fabs( bbox.height() / 2 * std::cos( angle ) );
+      const QgsPointXY center = bbox.center();
+      currentExtent = QgsRectangle( center.x() - halfWidth, center.y() - halfHeight, center.x() + halfWidth, center.y() + halfHeight );
+    }
 
     // Add a offset to encompass handles etc..
     // This number is based on what feel confortable for the user
@@ -390,22 +401,15 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( InputMapSettings *ms )
+QVariantList InputUtils::mapSettingsTransform( InputMapSettings *ms )
 {
-  if ( !ms ) return 1;
-  return 1 / ms->mapUnitsPerPixel();
-}
+  if ( !ms ) return { 1, 0, 0, 0, 1, 0 };
 
-double InputUtils::mapSettingsOffsetX( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().xMinimum();
-}
+  const QPointF origin = ms->coordinateToScreen( QgsPoint( 0, 0 ) );
+  const QPointF unitX = ms->coordinateToScreen( QgsPoint( 1, 0 ) );
+  const QPointF unitY = ms->coordinateToScreen( QgsPoint( 0, 1 ) );
 
-double InputUtils::mapSettingsOffsetY( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().yMaximum();
+  return { unitX.x() - origin.x(), unitY.x() - origin.x(), unitX.y() - origin.y(), unitY.y() - origin.y(), origin.x(), origin.y() };
 }
 
 double InputUtils::mapSettingsDPR( InputMapSettings *ms )

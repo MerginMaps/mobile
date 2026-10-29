@@ -36,6 +36,11 @@ Item {
   property bool isStreaming: recordingToolsLoader.active ? recordingToolsLoader.item.recordingMapTool.recordingType === MM.RecordingMapTool.StreamMode : false
   property bool centeredToGPS: false
 
+  // when true (and centered to GPS), the map is rotated so that the direction of the device points up
+  property bool headingUp: false
+
+  readonly property bool isMapRotated: headingUp || Math.abs( mapCanvas.mapSettings.rotation ) > 0.5
+
   property var mapToolComponent: {
     measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
   }
@@ -115,6 +120,12 @@ Item {
       name: "inactive" // ignores touch input
     }
   ]
+
+  onCenteredToGPSChanged: {
+    if ( !centeredToGPS ) {
+      headingUp = false
+    }
+  }
 
   onStateChanged: {
     // We call this first because when previous state is 'view' and `centeredToGPS` is true
@@ -242,6 +253,8 @@ Item {
 
     mapSettings.project: __activeProject.qgsProject
 
+    rotationEnabled: !internal.isEditingGeometry
+
     MM.IdentifyKit {
       id: identifyKit
 
@@ -272,7 +285,10 @@ Item {
       }
     }
 
-    onUserInteractedWithMap: root.centeredToGPS = false
+    onUserInteractedWithMap: {
+      root.centeredToGPS = false
+      mapRotator.active = false
+    }
 
     onLongPressed: function( point ) {
       // Alter position of simulated provider
@@ -433,7 +449,9 @@ Item {
     yPos: mapPositionSource.screenPosition.y
     hasDirection: positionDirectionSource.hasDirection
 
+    // direction is relative to the north, but the marker is drawn on the (possibly rotated) screen
     direction: positionDirectionSource.direction
+    mapRotation: mapCanvas.mapSettings.rotation
     hasPosition: PositionKit.hasPosition
 
     horizontalAccuracy: PositionKit.horizontalAccuracy
@@ -883,14 +901,52 @@ Item {
         MMMapButton {
           id: gpsButton
 
-          iconSource: root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
+          iconSource: {
+            // the compass is drawn instead of the icon when the map is rotated
+            if ( root.isMapRotated ) return ""
+            return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
+          }
+
+          // time of the last tap that took us back to the position, see below
+          property double lastCenteredTapTime: 0
+
+          MMCompass {
+            anchors.centerIn: parent
+            size: gpsButton.height
+            visible: root.isMapRotated
+
+            // N always points to the north
+            rotation: mapCanvas.mapSettings.rotation
+          }
 
           onClicked: {
+            if ( root.isMapRotated ) {
+              root.headingUp = false
+              mapRotator.rotateTo( 0 )
+              return
+            }
+
             if ( gpsStateGroup.state === "unavailable" ) {
               __notificationModel.addError( qsTr( "GPS currently unavailable" ) )
               return
             }
+
+            if ( root.centeredToGPS && !internal.isEditingGeometry ) {
+              // ignore a quick second tap (double tap), so the map does not start to rotate unexpectedly
+              if ( Date.now() - gpsButton.lastCenteredTapTime < 600 ) return
+
+              // already following GPS, next step is to follow also the direction of the device
+              if ( !positionDirectionSource.hasDirection ) {
+                __notificationModel.addWarning( qsTr( "Device direction currently unavailable" ) )
+                return
+              }
+              root.headingUp = true
+              mapRotator.rotateTo( -positionDirectionSource.direction, 0.8, 80 )
+              return
+            }
+
             root.centeredToGPS = true
+            gpsButton.lastCenteredTapTime = Date.now()
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
           }
@@ -1121,6 +1177,90 @@ Item {
 
   MM.Compass { id: deviceCompass }
 
+  // Rotates the map towards the target angle with easing (the remaining distance shrinks exponentially),
+  // so changes of the target (e.g. device direction updates) result in a smooth movement.
+  QtObject {
+    id: mapRotator
+
+    property bool active: false
+    property real target: 0 // wanted rotation of the map in degrees
+    property real tau: 0.15 // time constant of the easing in seconds, the higher the slower
+    property real maxSpeed: 720 // the map never rotates faster than this (degrees per second)
+
+    // rendering is stopped while the map is rotating, otherwise each step would restart the rendering
+    property bool isFrozen: false
+
+    function rotateTo( newTarget, newTau = 0.15, newMaxSpeed = 720 ) {
+      target = newTarget
+      tau = newTau
+      maxSpeed = newMaxSpeed
+      active = true
+    }
+
+    function unfreeze() {
+      if ( isFrozen ) {
+        isFrozen = false
+        mapCanvas.unfreezeRendering( "rotator" )
+      }
+    }
+
+    onActiveChanged: {
+      if ( !active ) unfreeze()
+    }
+
+    property FrameAnimation frames: FrameAnimation {
+      running: mapRotator.active
+
+      onTriggered: {
+        let delta = ( mapRotator.target - mapCanvas.mapSettings.rotation ) % 360
+        if ( delta > 180 ) delta -= 360
+        else if ( delta <= -180 ) delta += 360
+
+        let isDone = Math.abs( delta ) < 0.1
+        let step = delta
+        if ( !isDone ) {
+          step = delta * ( 1 - Math.exp( -frameTime / mapRotator.tau ) )
+
+          let maxStep = mapRotator.maxSpeed * frameTime
+          if ( Math.abs( step ) > maxStep ) step = step > 0 ? maxStep : -maxStep
+
+          if ( !mapRotator.isFrozen ) {
+            mapRotator.isFrozen = true
+            mapCanvas.freezeRendering( "rotator" )
+          }
+        }
+
+        // rotate around the position of the device if we are following its heading, otherwise around the center of the map
+        // screenPosition is QgsPointXY, rotate() needs a point
+        let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
+        if ( Math.abs( step ) > 0.001 ) mapCanvas.rotate( pivot, step )
+
+        if ( isDone ) {
+          // map is not moving anymore, render it. Heading up mode keeps the rotator active
+          mapRotator.unfreeze()
+          if ( !root.headingUp ) mapRotator.active = false
+        }
+      }
+    }
+  }
+
+  Connections {
+    target: positionDirectionSource
+
+    function onDirectionChanged() {
+      if ( root.headingUp ) {
+        // small changes are ignored (compass is noisy), so the map does not react to every little move of the device
+        let change = ( -positionDirectionSource.direction - mapRotator.target ) % 360
+        if ( change > 180 ) change -= 360
+        else if ( change <= -180 ) change += 360
+
+        if ( Math.abs( change ) > 6 ) {
+          mapRotator.target = -positionDirectionSource.direction
+        }
+      }
+    }
+  }
+
   MM.MapPosition {
     id: mapPositionSource
 
@@ -1301,6 +1441,22 @@ Item {
     property bool streamingModeButtonVisible: !internal.isPointLayer || internal.isMultiPartLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
+
+    // map is kept pointing north while the geometry is being edited, the rotation is restored afterwards
+    property bool isEditingGeometry: root.state === "record" || root.state === "recordInLayer" || root.state === "edit" || root.state === "split"
+    property real rotationBeforeEditing: 0
+
+    onIsEditingGeometryChanged: {
+      if ( isEditingGeometry ) {
+        rotationBeforeEditing = root.headingUp ? 0 : mapCanvas.mapSettings.rotation
+        root.headingUp = false
+        mapRotator.rotateTo( 0 )
+      }
+      else if ( rotationBeforeEditing !== 0 ) {
+        mapRotator.rotateTo( rotationBeforeEditing )
+        rotationBeforeEditing = 0
+      }
+    }
     property bool centeredToGPSBeforeStakeout
     property var stakeoutTarget
 
