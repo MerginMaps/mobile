@@ -58,6 +58,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField.readOnly: true
+  textField.activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
 
   textField.onReleased: { // can be opened even when the field is readonly
     let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )

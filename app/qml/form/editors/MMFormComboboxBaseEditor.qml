@@ -28,6 +28,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   property alias dropdownLoader: drawerLoader
 
   textField.readOnly: true
+  textField.activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
 
   onTextClicked: openDrawer()
 
