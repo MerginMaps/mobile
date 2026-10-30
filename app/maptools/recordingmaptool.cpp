@@ -40,10 +40,7 @@ RecordingMapTool::RecordingMapTool( QObject *parent )
   mDraftSaveTimer.setSingleShot( true );
   mDraftSaveTimer.setInterval( 1000 );
   connect( &mDraftSaveTimer, &QTimer::timeout, this, &RecordingMapTool::saveDraft );
-  connect( this, &RecordingMapTool::recordedGeometryChanged, this, [ this ]()
-  {
-    mDraftSaveTimer.start();
-  } );
+  connect( this, &RecordingMapTool::recordedGeometryChanged, &mDraftSaveTimer, QOverload<>::of( &QTimer::start ) );
 }
 
 RecordingMapTool::~RecordingMapTool() = default;
@@ -1148,7 +1145,6 @@ void RecordingMapTool::resumeCapture( const QgsGeometry &geometry )
   mActiveLayer->endEditCommand();
 
   mRecordedGeometry = geometry;
-  mActiveLayer->beginEditCommand( QStringLiteral( "Resume feature" ) );
   emit recordedGeometryChanged( mRecordedGeometry );
 }
 
@@ -1157,7 +1153,7 @@ void RecordingMapTool::saveDraft()
   if ( !mDraftController || !mActiveLayer || !mActiveFeature.isValid() )
     return;
 
-  const bool isExistingFeature = !( FID_IS_NEW( mActiveFeature.id() ) || FID_IS_NULL( mActiveFeature.id() ) );
+  const bool isExistingFeature = InputUtils::isFeatureIdValid( mActiveFeature.id() );
 
   // geometry still matches the feature's original shape - nothing actually
   // edited yet (just opened for viewing), so there's nothing to draft
@@ -1169,7 +1165,7 @@ void RecordingMapTool::saveDraft()
 
   FeatureDraft draft;
   draft.layerId = mActiveLayer->id();
-  draft.stage = FeatureDraft::GeometryCapture;
+  draft.stage = FeatureDraftStage::DraftStage::GeometryCapture;
   draft.timestamp = QDateTime::currentDateTimeUtc();
   draft.geometry = mRecordedGeometry;
 

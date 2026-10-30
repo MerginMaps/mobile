@@ -60,7 +60,7 @@ QJsonObject FeatureDraftStorage::toJson( const FeatureDraft &draft )
 {
   QJsonObject json;
   json[ QStringLiteral( "layerId" ) ] = draft.layerId;
-  json[ QStringLiteral( "stage" ) ] = draft.stage == FeatureDraft::GeometryCapture
+  json[ QStringLiteral( "stage" ) ] = draft.stage == FeatureDraftStage::DraftStage::GeometryCapture
                                       ? QStringLiteral( "geometryCapture" ) : QStringLiteral( "attributeForm" );
   json[ QStringLiteral( "timestamp" ) ] = draft.timestamp.toString( Qt::ISODate );
 
@@ -98,7 +98,7 @@ FeatureDraft FeatureDraftStorage::fromJson( const QJsonObject &json )
   FeatureDraft draft;
   draft.layerId = json.value( QStringLiteral( "layerId" ) ).toString();
   draft.stage = json.value( QStringLiteral( "stage" ) ).toString() == QLatin1String( "geometryCapture" )
-                ? FeatureDraft::GeometryCapture : FeatureDraft::AttributeForm;
+                ? FeatureDraftStage::DraftStage::GeometryCapture : FeatureDraftStage::DraftStage::AttributeForm;
   draft.timestamp = QDateTime::fromString( json.value( QStringLiteral( "timestamp" ) ).toString(), Qt::ISODate );
 
   const QString wkt = json.value( QStringLiteral( "geometry" ) ).toString();

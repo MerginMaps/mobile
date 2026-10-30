@@ -697,7 +697,7 @@ void AttributeController::saveDraft()
 
   FeatureDraft draft;
   draft.layerId = mFeatureLayerPair.layer()->id();
-  draft.stage = FeatureDraft::AttributeForm;
+  draft.stage = FeatureDraftStage::DraftStage::AttributeForm;
   draft.timestamp = QDateTime::currentDateTimeUtc();
 
   // all attributes are stored, so derived values can be restored without re-evaluating them

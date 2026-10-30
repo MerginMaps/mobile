@@ -22,7 +22,7 @@ Item {
 
   property var project
   property var featureLayerPair
-  property bool restoringDraft: false // see AttributeController.restoringDraft
+  property alias restoringDraft: attributeController.restoringDraft
 
   // child features in relations need to have these set in order to prefill their foreign keys
   property var linkedRelation
@@ -200,6 +200,8 @@ Item {
       project: root.project
 
       controller: MM.AttributeController {
+        id: attributeController
+
         variablesManager: __variablesManager
         draftController: __activeProject.featureDraftController
 
@@ -210,7 +212,6 @@ Item {
         // NOTE: order matters, we want to init variables manager and restoringDraft
         // before assigning FeatureLayerPair, as VariablesManager is required
         // for correct expression evaluation
-        restoringDraft: root.restoringDraft
         featureLayerPair: root.featureLayerPair
       }
 
@@ -263,7 +264,7 @@ Item {
     id: resumeDraftDialog
 
     featureTitle: __activeProject.featureDraftController.draftFeatureTitle
-    layerName: __activeProject.featureDraftController.draftLayerName
+    layerName: __activeProject.featureDraftController.draftLayer?.name ?? ""
 
     onResumeClicked: () => root.resumeDraft()
     onDiscardClicked: () => discardDraftDialog.open()
@@ -272,7 +273,7 @@ Item {
   MMDiscardDraftDialog {
     id: discardDraftDialog
 
-    layerName: __activeProject.featureDraftController.draftLayerName
+    layerName: __activeProject.featureDraftController.draftLayer?.name ?? ""
 
     onDiscardDraft: () => {
       __activeProject.featureDraftController.discardDraft()

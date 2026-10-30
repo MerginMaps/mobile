@@ -32,9 +32,13 @@ import "./filters"
 ApplicationWindow {
   id: window
 
-  // action to run after the draft is discarded: "record" or "addFeature"
-  property string pendingAction: ""
-  property var pendingActionLayer: null // layer for "addFeature"
+  // action to run after the draft is discarded, and the layer it applies to
+  QtObject {
+    id: pendingDraftAction
+
+    property string action: "" // "record" or "addFeature"
+    property var layer: null // layer for "addFeature"
+  }
 
   visible: true
   x:  __appwindowx
@@ -324,7 +328,7 @@ ApplicationWindow {
             stateManager.state = "map"
 
             if ( __activeProject.featureDraftController.hasDraft ) {
-              window.pendingAction = "record"
+              pendingDraftAction.action = "record"
               resumeDraftDialog.open()
             }
             else {
@@ -519,8 +523,8 @@ ApplicationWindow {
 
       onAddFeature: function( targetLayer ) {
         if ( __activeProject.featureDraftController.hasDraft ) {
-          window.pendingAction = "addFeature"
-          window.pendingActionLayer = targetLayer
+          pendingDraftAction.action = "addFeature"
+          pendingDraftAction.layer = targetLayer
           resumeDraftDialog.open()
         }
         else {
@@ -924,16 +928,16 @@ ApplicationWindow {
   MMDiscardDraftDialog {
     id: discardDraftDialog
 
-    layerName: __activeProject.featureDraftController.draftLayerName
+    layerName: __activeProject.featureDraftController.draftLayer?.name ?? ""
 
     onDiscardDraft: () => {
       __activeProject.featureDraftController.discardDraft()
 
-      if ( window.pendingAction === "record" ) {
+      if ( pendingDraftAction.action === "record" ) {
         map.record()
       }
-      else if ( window.pendingAction === "addFeature" ) {
-        addFeatureToLayer( window.pendingActionLayer )
+      else if ( pendingDraftAction.action === "addFeature" ) {
+        addFeatureToLayer( pendingDraftAction.layer )
       }
 
       clearPendingAction()
@@ -944,7 +948,7 @@ ApplicationWindow {
     id: resumeDraftDialog
 
     featureTitle: __activeProject.featureDraftController.draftFeatureTitle
-    layerName: __activeProject.featureDraftController.draftLayerName
+    layerName: __activeProject.featureDraftController.draftLayer?.name ?? ""
 
     onResumeClicked: () => {
       clearPendingAction()
@@ -1188,13 +1192,13 @@ ApplicationWindow {
   function resumeFeatureDraft() {
     const controller = __activeProject.featureDraftController
     const isExistingFeature = controller.draftIsExistingFeature
-    const isGeometryCapture = controller.draftStage === MM.FeatureDraftController.GeometryCapture
+    const isGeometryCapture = controller.draftStage === DraftStage.GeometryCapture
     const layer = controller.draftLayer
 
-    const pair = controller.loadDraft()
+    const pair = controller.applyDraft()
 
     // the draft is no longer valid and was discarded
-    if ( !pair.layer ) {
+    if ( !pair.valid ) {
       return
     }
 
@@ -1222,8 +1226,8 @@ ApplicationWindow {
   }
 
   function clearPendingAction() {
-    window.pendingAction = ""
-    window.pendingActionLayer = null
+    pendingDraftAction.action = ""
+    pendingDraftAction.layer = null
   }
 
   Connections {

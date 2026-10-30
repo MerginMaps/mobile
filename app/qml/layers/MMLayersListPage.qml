@@ -70,7 +70,7 @@ MMComponents.MMPage {
         visible: __activeProject.featureDraftController.hasDraft
 
         variant: MMComponents.MMListBanner.Warning
-        text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayerName )
+        text: qsTr( "%1 has unsaved changes" ).arg( __activeProject.featureDraftController.draftLayer?.name ?? "" )
         actionText: qsTr( "Resume" )
 
         onActionClicked: () => root.resumeDraftClicked()
