@@ -29,11 +29,6 @@ bool FeatureDraftController::hasDraft() const
   return mHasDraft;
 }
 
-QString FeatureDraftController::draftLayerName() const
-{
-  return mDraftLayerName;
-}
-
 QgsVectorLayer *FeatureDraftController::draftLayer() const
 {
   return mDraftLayer;
@@ -46,7 +41,7 @@ FeatureDraftController::DraftStage FeatureDraftController::draftStage() const
 
 bool FeatureDraftController::draftIsExistingFeature() const
 {
-  return mDraftIsExistingFeature;
+  return mCachedDraft.isExistingFeature();
 }
 
 QString FeatureDraftController::draftFeatureTitle() const
@@ -54,11 +49,12 @@ QString FeatureDraftController::draftFeatureTitle() const
   return mDraftFeatureTitle;
 }
 
-void FeatureDraftController::checkForDraft( const QString &projectId )
+void FeatureDraftController::checkForDraft( const QString &projectId, QgsProject *project )
 {
   mProjectId = projectId;
+  mProject = project;
 
-  if ( mProjectId.isEmpty() )
+  if ( mProjectId.isEmpty() || !mProject )
   {
     mCachedDraft = FeatureDraft();
     setDraft( false );
@@ -74,13 +70,11 @@ void FeatureDraftController::checkForDraft( const QString &projectId )
     return;
   }
 
-  QgsVectorLayer *layer = resolveDraftLayer( draft );
+  QgsVectorLayer *layer = resolveDraftLayer( draft, mProject );
 
   if ( !layer || !isDraftValid( draft, layer ) )
   {
-    clearDraft();
-    mCachedDraft = FeatureDraft();
-    setDraft( false );
+    clearDraft(); // also resets mCachedDraft and the pending state
     return;
   }
 
@@ -91,25 +85,24 @@ void FeatureDraftController::checkForDraft( const QString &projectId )
   if ( draft.isExistingFeature() )
   {
     const QgsFeature feature = layer->getFeature( draft.featureId );
-    featureTitle = InputUtils::featureTitle( FeatureLayerPair( feature, layer ), QgsProject::instance() );
+    featureTitle = InputUtils::featureTitle( FeatureLayerPair( feature, layer ), mProject );
   }
 
-  setDraft( true, layer, toQmlStage( draft.stage ), draft.isExistingFeature(), featureTitle );
+  setDraft( true, layer, draft.stage, featureTitle );
 }
 
-FeatureLayerPair FeatureDraftController::loadDraft()
+FeatureLayerPair FeatureDraftController::applyDraft()
 {
   if ( !mHasDraft )
     return {};
 
-  QgsVectorLayer *layer = mDraftLayer;
+  // re-resolved and re-validated here: a sync-triggered reload can replace the project's layers
+  // or change/remove the drafted feature without checkForDraft() running again to catch it
+  QgsVectorLayer *layer = resolveDraftLayer( mCachedDraft, mProject );
 
-  // re-validated against the cached draft - state may have changed since checkForDraft()
   if ( !layer || !isDraftValid( mCachedDraft, layer ) )
   {
-    clearDraft();
-    mCachedDraft = FeatureDraft();
-    setDraft( false );
+    clearDraft(); // also resets mCachedDraft and the pending state
     return {};
   }
 
@@ -158,8 +151,8 @@ FeatureLayerPair FeatureDraftController::loadDraft()
     }
   }
 
-  // draft stays in storage - only the pending state (the prompt) is cleared here
-  mCachedDraft = FeatureDraft();
+  // only the prompt is dismissed here; AttributeController/RecordingMapTool call clearDraft()
+  // once the edit actually concludes (save, cancel or delete)
   setDraft( false );
 
   return pair;
@@ -171,8 +164,6 @@ void FeatureDraftController::discardDraft()
     return;
 
   clearDraft();
-  mCachedDraft = FeatureDraft();
-  setDraft( false );
 }
 
 void FeatureDraftController::saveDraft( const FeatureDraft &draft ) const
@@ -183,17 +174,22 @@ void FeatureDraftController::saveDraft( const FeatureDraft &draft ) const
   FeatureDraftStorage::saveDraft( mProjectId, draft );
 }
 
-void FeatureDraftController::clearDraft() const
+void FeatureDraftController::clearDraft()
 {
   if ( mProjectId.isEmpty() )
     return;
 
   FeatureDraftStorage::clearDraft( mProjectId );
+  mCachedDraft = FeatureDraft();
+  setDraft( false );
 }
 
-QgsVectorLayer *FeatureDraftController::resolveDraftLayer( const FeatureDraft &draft )
+QgsVectorLayer *FeatureDraftController::resolveDraftLayer( const FeatureDraft &draft, QgsProject *project )
 {
-  return qobject_cast<QgsVectorLayer *>( QgsProject::instance()->mapLayer( draft.layerId ) );
+  if ( !project )
+    return nullptr;
+
+  return qobject_cast<QgsVectorLayer *>( project->mapLayer( draft.layerId ) );
 }
 
 bool FeatureDraftController::isDraftValid( const FeatureDraft &draft, QgsVectorLayer *layer )
@@ -201,6 +197,11 @@ bool FeatureDraftController::isDraftValid( const FeatureDraft &draft, QgsVectorL
   if ( !draft.timestamp.isValid() || draft.timestamp.secsTo( QDateTime::currentDateTimeUtc() ) > MAX_DRAFT_AGE_SECS )
   {
     return false;
+  }
+
+  if ( draft.isExistingFeature() && !layer->getFeature( draft.featureId ).isValid() )
+  {
+    return false; // the feature this draft was editing no longer exists
   }
 
   const QgsFields fields = layer->fields();
@@ -220,30 +221,16 @@ bool FeatureDraftController::isDraftValid( const FeatureDraft &draft, QgsVectorL
     }
   }
 
-  if ( draft.isExistingFeature() && !layer->getFeature( draft.featureId ).isValid() )
-  {
-    return false; // the feature this draft was editing no longer exists
-  }
-
   return true;
 }
 
-FeatureDraftController::DraftStage FeatureDraftController::toQmlStage( FeatureDraft::Stage stage )
+void FeatureDraftController::setDraft( bool hasDraft, QgsVectorLayer *layer, DraftStage stage, const QString &featureTitle )
 {
-  return stage == FeatureDraft::GeometryCapture ? GeometryCapture : AttributeForm;
-}
-
-void FeatureDraftController::setDraft( bool hasDraft, QgsVectorLayer *layer, DraftStage stage, bool isExistingFeature, const QString &featureTitle )
-{
-  const QString layerName = layer ? layer->name() : QString();
-
-  if ( mHasDraft != hasDraft || mDraftLayer != layer || mDraftStage != stage || mDraftIsExistingFeature != isExistingFeature || mDraftFeatureTitle != featureTitle )
+  if ( mHasDraft != hasDraft || mDraftLayer != layer || mDraftStage != stage || mDraftFeatureTitle != featureTitle )
   {
     mHasDraft = hasDraft;
     mDraftLayer = layer;
-    mDraftLayerName = layerName;
     mDraftStage = stage;
-    mDraftIsExistingFeature = isExistingFeature;
     mDraftFeatureTitle = featureTitle;
     emit hasDraftChanged();
   }

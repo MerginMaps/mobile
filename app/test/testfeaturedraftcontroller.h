@@ -26,7 +26,8 @@ class TestFeatureDraftController : public QObject
     void draftWithRemovedFieldIgnored();
     void draftWithChangedFieldTypeIgnored();
     void existingFeatureDraftRequiresLiveFeature();
-    void loadDraftAppliesGeometryAndAttributesButKeepsStorage();
+    void applyDraftAppliesGeometryAndAttributesButKeepsStorage();
+    void singleVertexLineGeometryDraftResumesValid();
     void discardDraftClearsStorage();
     void draftsAreStoredPerProject();
 };

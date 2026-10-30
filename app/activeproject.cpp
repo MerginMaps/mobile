@@ -94,7 +94,7 @@ ActiveProject::ActiveProject( AppSettings &appSettings
   mFeatureDraftController = std::make_unique<FeatureDraftController>();
   connect( this, &ActiveProject::loadingFinished, this, [this]()
   {
-    mFeatureDraftController->checkForDraft( mLocalProject.id() );
+    mFeatureDraftController->checkForDraft( mLocalProject.id(), mQgsProject );
   } );
 }
 

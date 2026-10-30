@@ -14,6 +14,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QPointer>
 #include <qglobal.h>
 
 #include "qgsvertexid.h"
@@ -397,7 +398,7 @@ class RecordingMapTool : public AbstractMapTool
     int mMinUndoStackIndex = 0; // We can not undo more than this index
 
     QTimer mDraftSaveTimer; // debounces saveDraft()
-    FeatureDraftController *mDraftController = nullptr; // not owned
+    QPointer<FeatureDraftController> mDraftController; // not owned
 };
 
 #endif // RECORDINGMAPTOOL_H

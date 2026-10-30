@@ -1338,7 +1338,7 @@ Item {
     __activeProject.setActiveLayer( layer )
     state = "record"
 
-    if ( !geometry.isNull() ) {
+    if ( !geometry.isNull ) {
       let mapGeometry = __inputUtils.transformGeometryToMapWithLayer( geometry, layer, mapCanvas.mapSettings )
       __inputUtils.setExtentToGeom( mapGeometry, mapCanvas.mapSettings )
     }

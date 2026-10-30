@@ -10,6 +10,7 @@
 #ifndef FEATUREDRAFT_H
 #define FEATUREDRAFT_H
 
+#include <QObject>
 #include <QString>
 #include <QDateTime>
 #include <QVariant>
@@ -17,6 +18,25 @@
 
 #include "qgsgeometry.h"
 #include "qgsfeature.h"
+
+#include "inpututils.h"
+
+#include <qqmlintegration.h>
+
+//! Which stage a draft was interrupted at. Namespaced so it can be shared by
+//! FeatureDraft and FeatureDraftController, and registered for QML as DraftStage
+namespace FeatureDraftStage
+{
+  Q_NAMESPACE
+  QML_NAMED_ELEMENT( DraftStage )
+
+  enum class DraftStage
+  {
+    GeometryCapture,
+    AttributeForm
+  };
+  Q_ENUM_NS( DraftStage )
+}
 
 //! One attribute of a draft, typeName is used to detect a changed field type
 struct FeatureDraftAttribute
@@ -30,19 +50,13 @@ struct FeatureDraftAttribute
 // class that knows how this maps to the on-disk (QSettings/JSON) format.
 struct FeatureDraft
 {
-  enum Stage
-  {
-    GeometryCapture,
-    AttributeForm
-  };
-
   bool isEmpty() const { return layerId.isEmpty(); }
 
   // Whether this draft belongs to an existing feature being edited, rather than a new one being added
-  bool isExistingFeature() const { return !FID_IS_NULL( featureId ) && !FID_IS_NEW( featureId ); }
+  bool isExistingFeature() const { return InputUtils::isFeatureIdValid( featureId ); }
 
   QString layerId;
-  Stage stage = AttributeForm;
+  FeatureDraftStage::DraftStage stage = FeatureDraftStage::DraftStage::AttributeForm;
   QDateTime timestamp;
   QgsGeometry geometry;
   QVector<FeatureDraftAttribute> attributes;

@@ -26,6 +26,7 @@
 #include <QVector>
 #include <QUuid>
 #include <QTimer>
+#include <QPointer>
 
 #include "featurelayerpair.h"
 #include "attributedata.h"
@@ -288,7 +289,7 @@ class  AttributeController : public QObject
     QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
 
     QTimer mDraftSaveTimer; // debounces saveDraft()
-    FeatureDraftController *mDraftController = nullptr; // not owned
+    QPointer<FeatureDraftController> mDraftController; // not owned
     bool mRestoringDraft = false;
 };
 #endif // ATTRIBUTECONTROLLER_H
