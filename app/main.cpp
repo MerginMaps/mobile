@@ -104,6 +104,7 @@
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
 #include "quickcapturecontroller.h"
+#include "fieldprofile.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -775,6 +776,13 @@ int main( int argc, char *argv[] )
 
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
+
+  // branding (colours, logo) from the field profile of the opened project, remembered for the next start
+  FieldProfile::restoreBranding( style );
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, style, [style]( QgsProject * project )
+  {
+    FieldProfile::applyBranding( style, project );
+  } );
 
   // App window settings
   // - Mobile app is always maximized - size and position is ignored

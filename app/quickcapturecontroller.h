@@ -27,9 +27,8 @@ class VariablesManager;
  * expressions (e.g. now(), @mm_username, @position_horizontal_accuracy), so the whole
  * behaviour is configured in the QGIS project.
  *
- * Configuration is read from the "quickCapture" section of the field profile, a JSON file
- * named field-profile.json placed next to the QGIS project file. It is synced with the project
- * like any other file, so changing it changes the app behaviour on all devices:
+ * Configuration is read from the "quickCapture" section of the field profile (see FieldProfile).
+ * It is synced with the project like any other file, so changing it changes the app behaviour on all devices:
  *
  * {
  *   "version": 1,
@@ -86,9 +85,6 @@ class QuickCaptureController : public QObject
     bool enabled() const;
     QVariantList types() const;
     QStringList mediaKinds() const;
-
-    //! File name of the field profile, expected next to the QGIS project file
-    static const QString FIELD_PROFILE_FILE;
 
   signals:
     void qgsProjectChanged();

@@ -14,6 +14,7 @@
 #include <QFont>
 #include <QColor>
 #include <QUrl>
+#include <QHash>
 
 class MMStyle: public QObject
 {
@@ -47,16 +48,16 @@ class MMStyle: public QObject
     Q_PROPERTY( double fontLineHeight22 READ number22 CONSTANT )
 
     // Colors - primary palette
-    Q_PROPERTY( QColor grassColor READ grassColor CONSTANT )
-    Q_PROPERTY( QColor forestColor READ forestColor CONSTANT )
+    Q_PROPERTY( QColor grassColor READ grassColor NOTIFY styleChanged )
+    Q_PROPERTY( QColor forestColor READ forestColor NOTIFY styleChanged )
     Q_PROPERTY( QColor nightColor READ nightColor CONSTANT )
     Q_PROPERTY( QColor polarColor READ polarColor CONSTANT )
     Q_PROPERTY( QColor transparentColor READ transparentColor CONSTANT )
 
     // Colors - secondary palette
-    Q_PROPERTY( QColor lightGreenColor READ lightGreenColor CONSTANT )
-    Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor CONSTANT )
-    Q_PROPERTY( QColor darkGreenColor READ darkGreenColor CONSTANT )
+    Q_PROPERTY( QColor lightGreenColor READ lightGreenColor NOTIFY styleChanged )
+    Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor NOTIFY styleChanged )
+    Q_PROPERTY( QColor darkGreenColor READ darkGreenColor NOTIFY styleChanged )
     Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
     Q_PROPERTY( QColor darkGreyColor READ darkGreyColor CONSTANT )
     Q_PROPERTY( QColor mediumGreyColor READ mediumGreyColor CONSTANT )
@@ -228,12 +229,12 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl noPermissionsImage READ noPermissionsImage CONSTANT )
     Q_PROPERTY( QUrl signInImage READ signInImage CONSTANT )
     Q_PROPERTY( QUrl warnLogoImage READ warnLogoImage CONSTANT )
-    Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage CONSTANT )
+    Q_PROPERTY( QUrl mmLogoImage READ mmLogoImage NOTIFY styleChanged )
     Q_PROPERTY( QUrl lutraLogoImage READ lutraLogoImage CONSTANT )
     Q_PROPERTY( QUrl directionImage READ directionImage CONSTANT )
     Q_PROPERTY( QUrl mapPinImage READ mapPinImage CONSTANT )
     Q_PROPERTY( QUrl trackingDirectionImage READ trackingDirectionImage CONSTANT )
-    Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage CONSTANT )
+    Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage NOTIFY styleChanged )
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
@@ -371,15 +372,15 @@ class MMStyle: public QObject
     QFont p6() const {return fontFactory( 12, false );}
     QFont p7() const {return fontFactory( 10, false );}
 
-    static QColor grassColor() {return QColor::fromString( "#73D19C" );}
-    static QColor forestColor() {return QColor::fromString( "#004C45" );}
+    static QColor grassColor() {return sBrandColors.value( QStringLiteral( "accent" ), QColor::fromString( "#73D19C" ) );}
+    static QColor forestColor() {return sBrandColors.value( QStringLiteral( "primary" ), QColor::fromString( "#004C45" ) );}
     static QColor nightColor() {return QColor::fromString( "#12181F" );}
     static QColor polarColor() {return QColor::fromString( "#FFFFFF" );}
     static QColor transparentColor() {return QColor::fromString( "transparent" );}
 
-    static QColor lightGreenColor() {return QColor::fromString( "#EFF5F3" );}
-    static QColor mediumGreenColor() {return QColor::fromString( "#B7CDC4" );}
-    static QColor darkGreenColor() {return QColor::fromString( "#6E9991" );}
+    static QColor lightGreenColor() {return sBrandColors.value( QStringLiteral( "background" ), QColor::fromString( "#EFF5F3" ) );}
+    static QColor mediumGreenColor() {return sBrandColors.value( QStringLiteral( "secondary" ), QColor::fromString( "#B7CDC4" ) );}
+    static QColor darkGreenColor() {return sBrandColors.value( QStringLiteral( "secondaryDark" ), QColor::fromString( "#6E9991" ) );}
     static QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
     static QColor darkGreyColor() {return QColor::fromString( "#41464C" );}
     static QColor mediumGreyColor() {return QColor::fromString( "#A0A3A5" );}
@@ -533,11 +534,11 @@ class MMStyle: public QObject
     static QUrl followGPSNoColorOverlayIcon() {return QUrl( "qrc:/FollowGPS-nocoloroverlay.svg" );}
 
     static QUrl loadingIndicatorImage() {return QUrl( "qrc:/images/LoadingIndicator.svg" );}
-    static QUrl mmLogoImage() {return QUrl( "qrc:/images/MMLogo.svg" );}
+    static QUrl mmLogoImage() {return sBrandLogo.isEmpty() ? QUrl( "qrc:/images/MMLogo.svg" ) : sBrandLogo;}
     static QUrl lutraLogoImage() {return QUrl( "qrc:/images/LutraLogo.svg" );}
     static QUrl trackingDirectionImage() {return QUrl( "qrc:/images/TrackingDirection.svg" );}
     static QUrl directionImage() {return QUrl( "qrc:/images/Direction.svg" );}
-    static QUrl mmSymbolImage() {return QUrl( "qrc:/images/MMSymbol.svg" );}
+    static QUrl mmSymbolImage() {return sBrandLogo.isEmpty() ? QUrl( "qrc:/images/MMSymbol.svg" ) : sBrandLogo;}
     static QUrl acceptInvitationLogoImage() {return QUrl( "qrc:/images/AcceptInvitationLogoImage.svg" ); }
     static QUrl acceptInvitationImage() {return QUrl( "qrc:/images/AcceptInvitationImage.svg" ); }
     static QUrl uploadImage() {return QUrl( "qrc:/images/UploadImage.svg" );}
@@ -787,6 +788,17 @@ class MMStyle: public QObject
       emit safeAreaLeftChanged( mSafeAreaLeft );
     }
 
+    /**
+     * Overrides the brand colours (keys "primary", "accent", "background", "secondary", "secondaryDark")
+     * and the Mergin Maps logo, empty values restore the defaults. See FieldProfile.
+     */
+    void setBranding( const QHash<QString, QColor> &colors, const QUrl &logo )
+    {
+      sBrandColors = colors;
+      sBrandLogo = logo;
+      emit styleChanged();
+    }
+
   signals:
     void styleChanged();
 
@@ -810,6 +822,9 @@ class MMStyle: public QObject
     }
 
     qreal mDp;
+
+    static inline QHash<QString, QColor> sBrandColors;
+    static inline QUrl sBrandLogo;
 
     double mSafeAreaTop = 0;
     double mSafeAreaRight = 0;

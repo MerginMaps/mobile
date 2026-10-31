@@ -57,6 +57,7 @@ set(MM_SRCS
     compass.cpp
     featurelayerpair.cpp
     featuresmodel.cpp
+    fieldprofile.cpp
     fieldsmodel.cpp
     filter/uniquevaluesfiltermodel.cpp
     filter/valuemapfiltermodel.cpp
@@ -156,6 +157,7 @@ set(MM_HDRS
     enumhelper.h
     featurelayerpair.h
     featuresmodel.h
+    fieldprofile.h
     fieldsmodel.h
     filter/uniquevaluesfiltermodel.h
     filter/valuemapfiltermodel.h

@@ -12,11 +12,10 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QJsonDocument>
-#include <QJsonObject>
 
 #include "coreutils.h"
 #include "featurelayerpair.h"
+#include "fieldprofile.h"
 #include "inpututils.h"
 #include "variablesmanager.h"
 #include "position/positionkit.h"
@@ -24,8 +23,6 @@
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
 #include "qgseditorwidgetsetup.h"
-
-const QString QuickCaptureController::FIELD_PROFILE_FILE = QStringLiteral( "field-profile.json" );
 
 QuickCaptureController::QuickCaptureController( QObject *parent )
   : QObject( parent )
@@ -42,30 +39,7 @@ void QuickCaptureController::reload()
     return;
   }
 
-  QFile profileFile( QFileInfo( mProject->fileName() ).absoluteDir().absoluteFilePath( FIELD_PROFILE_FILE ) );
-  if ( !profileFile.exists() )
-  {
-    emit configurationChanged();
-    return;
-  }
-
-  if ( !profileFile.open( QIODevice::ReadOnly ) )
-  {
-    CoreUtils::log( QStringLiteral( "Quick capture" ), QStringLiteral( "Could not read %1" ).arg( profileFile.fileName() ) );
-    emit configurationChanged();
-    return;
-  }
-
-  QJsonParseError parseError;
-  const QJsonDocument doc = QJsonDocument::fromJson( profileFile.readAll(), &parseError );
-  if ( !doc.isObject() )
-  {
-    CoreUtils::log( QStringLiteral( "Quick capture" ), QStringLiteral( "Invalid field profile: %1" ).arg( parseError.errorString() ) );
-    emit configurationChanged();
-    return;
-  }
-
-  const QVariantMap config = doc.object().toVariantMap().value( QStringLiteral( "quickCapture" ) ).toMap();
+  const QVariantMap config = FieldProfile::read( mProject ).value( QStringLiteral( "quickCapture" ) ).toMap();
   if ( config.isEmpty() )
   {
     emit configurationChanged();
