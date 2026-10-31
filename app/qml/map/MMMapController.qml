@@ -895,6 +895,7 @@ Item {
           visible: root.state === "view" && quickCaptureTools.pointCaptureEnabled
           iconSource: __style.quickPointIcon
           bgndColor: __style.grassColor
+          iconColor: __style.onAccentColor
 
           onClicked: quickCaptureTools.capturePoint()
         }

@@ -64,7 +64,7 @@ CheckBox {
 
       source: __style.checkmarkIcon
 
-      color: root.enabled ? __style.forestColor : __style.mediumGreenColor
+      color: root.enabled ? __style.onAccentColor : __style.mediumGreenColor
       visible: root.checked
       size: root.small ? __style.icon16 : __style.icon24
     }

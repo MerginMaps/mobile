@@ -19,6 +19,7 @@ Item {
 
   property alias iconSource: icon.source
   property color bgndColor: __style.polarColor
+  property color iconColor: __style.forestColor
 
   signal clicked
   signal clickAndHold
@@ -36,7 +37,7 @@ Item {
       id: icon
 
       anchors.centerIn: parent
-      color: __style.forestColor
+      color: control.iconColor
     }
 
     MouseArea {

@@ -21,13 +21,13 @@ Button {
   property int size: MMButton.Sizes.Regular
 
   property color fontColor: {
-    if ( type === MMButton.Types.Primary ) return __style.forestColor
+    if ( type === MMButton.Types.Primary ) return __style.onAccentColor
     if ( type === MMButton.Types.Secondary ) return __style.forestColor
     if ( type === MMButton.Types.Tertiary ) return __style.forestColor
   }
 
   property color iconColor: {
-    if ( type === MMButton.Types.Primary ) return __style.forestColor
+    if ( type === MMButton.Types.Primary ) return __style.onAccentColor
     if ( type === MMButton.Types.Secondary ) return __style.forestColor
     if ( type === MMButton.Types.Tertiary ) return __style.forestColor
   }

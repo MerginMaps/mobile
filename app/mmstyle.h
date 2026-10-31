@@ -58,6 +58,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QColor lightGreenColor READ lightGreenColor NOTIFY styleChanged )
     Q_PROPERTY( QColor mediumGreenColor READ mediumGreenColor NOTIFY styleChanged )
     Q_PROPERTY( QColor darkGreenColor READ darkGreenColor NOTIFY styleChanged )
+    Q_PROPERTY( QColor onAccentColor READ onAccentColor NOTIFY styleChanged ) // text and icons on grassColor backgrounds
     Q_PROPERTY( QColor greyColor READ greyColor CONSTANT )
     Q_PROPERTY( QColor darkGreyColor READ darkGreyColor CONSTANT )
     Q_PROPERTY( QColor mediumGreyColor READ mediumGreyColor CONSTANT )
@@ -381,6 +382,7 @@ class MMStyle: public QObject
     static QColor lightGreenColor() {return sBrandColors.value( QStringLiteral( "background" ), QColor::fromString( "#EFF5F3" ) );}
     static QColor mediumGreenColor() {return sBrandColors.value( QStringLiteral( "secondary" ), QColor::fromString( "#B7CDC4" ) );}
     static QColor darkGreenColor() {return sBrandColors.value( QStringLiteral( "secondaryDark" ), QColor::fromString( "#6E9991" ) );}
+    static QColor onAccentColor() {return sBrandColors.value( QStringLiteral( "onAccent" ), forestColor() );}
     static QColor greyColor() {return QColor::fromString( "#E2E2E2" );}
     static QColor darkGreyColor() {return QColor::fromString( "#41464C" );}
     static QColor mediumGreyColor() {return QColor::fromString( "#A0A3A5" );}
@@ -789,7 +791,7 @@ class MMStyle: public QObject
     }
 
     /**
-     * Overrides the brand colours (keys "primary", "accent", "background", "secondary", "secondaryDark")
+     * Overrides the brand colours (keys "primary", "accent", "onAccent", "background", "secondary", "secondaryDark")
      * and the Mergin Maps logo, empty values restore the defaults. See FieldProfile.
      */
     void setBranding( const QHash<QString, QColor> &colors, const QUrl &logo )

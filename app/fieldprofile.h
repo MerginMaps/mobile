@@ -30,6 +30,7 @@ class MMStyle;
  *     "colors": {
  *       "primary": "#1F3A5F",        // text, icons and dark surfaces (default #004C45)
  *       "accent": "#9CC3E6",         // primary buttons and highlights (default #73D19C)
+ *       "onAccent": "#1F3A5F",       // text and icons on accent backgrounds (default: primary)
  *       "background": "#F2F5F9",     // page backgrounds (default #EFF5F3)
  *       "secondary": "#C3D1E0",      // borders and secondary surfaces (default #B7CDC4)
  *       "secondaryDark": "#6B7F95"   // disabled and secondary text (default #6E9991)

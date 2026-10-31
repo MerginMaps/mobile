@@ -44,6 +44,7 @@ MMComponents.MMListView {
 
     contentItem: MMComponents.MMText {
       text: model.Name
+      color: tabDelegate.isSelected ? __style.onAccentColor : __style.forestColor
 
       font: __style.t4
 

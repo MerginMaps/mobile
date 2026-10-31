@@ -127,7 +127,7 @@ Page {
       visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
 
       iconSource: __style.checkmarkIcon
-      iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
+      iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.onAccentColor
       bgndColor: controller.hasValidationErrors ? __style.negativeColor : __style.grassColor
 
       onClicked: root.save()
