@@ -103,6 +103,7 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "quickcapturecontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -334,6 +335,7 @@ void initDeclarative()
   qmlRegisterType< PositionTrackingHighlight >( "mm", 1, 0, "PositionTrackingHighlight" );
   qmlRegisterType< MultiEditManager >( "mm", 1, 0, "MultiEditManager" );
   qmlRegisterType< MapSketchingController >( "mm", 1, 0, "MapSketchingController" );
+  qmlRegisterType< QuickCaptureController >( "mm", 1, 0, "QuickCaptureController" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );

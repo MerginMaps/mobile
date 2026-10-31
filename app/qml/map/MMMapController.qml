@@ -881,6 +881,25 @@ Item {
         }
 
         MMMapButton {
+          id: quickMediaButton
+
+          visible: root.state === "view" && quickCaptureTools.mediaCaptureEnabled
+          iconSource: __style.cameraIcon
+
+          onClicked: quickCaptureTools.captureMedia()
+        }
+
+        MMMapButton {
+          id: quickPointButton
+
+          visible: root.state === "view" && quickCaptureTools.pointCaptureEnabled
+          iconSource: __style.quickPointIcon
+          bgndColor: __style.grassColor
+
+          onClicked: quickCaptureTools.capturePoint()
+        }
+
+        MMMapButton {
           id: gpsButton
 
           iconSource: root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
@@ -1117,6 +1136,10 @@ Item {
 
   MMSplittingFailedDialog {
     id: splittingFailedDialog
+  }
+
+  MMQuickCaptureTools {
+    id: quickCaptureTools
   }
 
   MM.Compass { id: deviceCompass }

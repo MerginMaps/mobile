@@ -113,6 +113,8 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl microphoneIcon READ microphoneIcon CONSTANT )
     Q_PROPERTY( QUrl playIcon READ playIcon CONSTANT )
     Q_PROPERTY( QUrl pauseIcon READ pauseIcon CONSTANT )
+    Q_PROPERTY( QUrl cameraIcon READ cameraIcon CONSTANT )
+    Q_PROPERTY( QUrl quickPointIcon READ quickPointIcon CONSTANT )
     Q_PROPERTY( QUrl archaeologyIcon READ archaeologyIcon CONSTANT )
     Q_PROPERTY( QUrl arrowDownIcon READ arrowDownIcon CONSTANT )
     Q_PROPERTY( QUrl arrowLinkRightIcon READ arrowLinkRightIcon CONSTANT )
@@ -433,6 +435,8 @@ class MMStyle: public QObject
     static QUrl microphoneIcon() {return QUrl( "qrc:/Microphone.svg" );}
     static QUrl playIcon() {return QUrl( "qrc:/Play.svg" );}
     static QUrl pauseIcon() {return QUrl( "qrc:/Pause.svg" );}
+    static QUrl cameraIcon() {return QUrl( "qrc:/Camera.svg" );}
+    static QUrl quickPointIcon() {return QUrl( "qrc:/QuickPoint.svg" );}
     static QUrl archaeologyIcon() {return QUrl( "qrc:/Archaeology.svg" );}
     static QUrl arrowDownIcon() {return QUrl( "qrc:/ArrowDown.svg" );}
     static QUrl arrowLinkRightIcon() {return QUrl( "qrc:/ArrowLinkRight.svg" );}

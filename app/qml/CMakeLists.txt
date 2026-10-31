@@ -167,6 +167,7 @@ set(MM_QML
     map/MMStakeoutTools.qml
     map/MMRecordingTools.qml
     map/MMMeasurementTools.qml
+    map/MMQuickCaptureTools.qml
     map/components/MMHidingBox.qml
     map/components/MMCrosshair.qml
     map/components/MMMeasureCrosshair.qml
