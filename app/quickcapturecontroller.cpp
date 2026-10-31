@@ -189,27 +189,37 @@ bool QuickCaptureController::captureMedia( const QString &kind, const QString &m
   return true;
 }
 
-bool QuickCaptureController::saveFeature( const QVariantMap &attributes, const QString &successMessage )
+FeatureLayerPair QuickCaptureController::prepareFeature( const QVariant &typeValue )
+{
+  QVariantMap attributes;
+  if ( !mTypeField.isEmpty() && typeValue.isValid() )
+    attributes.insert( mTypeField, typeValue );
+
+  double accuracy = -1;
+  return createFeature( attributes, accuracy );
+}
+
+FeatureLayerPair QuickCaptureController::createFeature( const QVariantMap &attributes, double &accuracy )
 {
   QgsVectorLayer *layer = captureLayer();
   if ( !layer || !mVariablesManager || !mVariablesManager->positionKit() )
   {
     emit captureFailed( tr( "Quick capture is not available in this project" ) );
-    return false;
+    return FeatureLayerPair();
   }
 
   PositionKit *positionKit = mVariablesManager->positionKit();
   if ( !positionKit->hasPosition() || positionKit->positionCoordinate().isEmpty() )
   {
     emit captureFailed( tr( "GPS position is not available" ) );
-    return false;
+    return FeatureLayerPair();
   }
 
-  const double accuracy = positionKit->horizontalAccuracy();
+  accuracy = positionKit->horizontalAccuracy();
   if ( mMaxHorizontalAccuracy > 0 && ( accuracy < 0 || accuracy > mMaxHorizontalAccuracy ) )
   {
     emit captureFailed( tr( "GPS accuracy is too low (required %1 m)" ).arg( mMaxHorizontalAccuracy ) );
-    return false;
+    return FeatureLayerPair();
   }
 
   QgsPoint position = positionKit->positionCoordinate();
@@ -223,7 +233,7 @@ bool QuickCaptureController::saveFeature( const QVariantMap &attributes, const Q
   if ( geometries.isEmpty() )
   {
     emit captureFailed( tr( "Could not create the point" ) );
-    return false;
+    return FeatureLayerPair();
   }
   const QgsGeometry geometry = geometries.first();
 
@@ -239,6 +249,18 @@ bool QuickCaptureController::saveFeature( const QVariantMap &attributes, const Q
     feature.setAttribute( it.key(), it.value() );
   }
 
+  return pair;
+}
+
+bool QuickCaptureController::saveFeature( const QVariantMap &attributes, const QString &successMessage )
+{
+  double accuracy = -1;
+  FeatureLayerPair pair = createFeature( attributes, accuracy );
+  if ( !pair.isValid() )
+    return false;
+
+  QgsVectorLayer *layer = pair.layer();
+  QgsFeature &feature = pair.featureRef();
   layer->startEditing();
   layer->addFeature( feature );
 

@@ -17,6 +17,8 @@
 #include <QStringList>
 #include <QMap>
 
+#include "featurelayerpair.h"
+
 class QgsProject;
 class QgsVectorLayer;
 class VariablesManager;
@@ -35,8 +37,10 @@ class VariablesManager;
  *   "quickCapture": {
  *     "layer": "observations",              // layer name or id, must be a point layer
  *     "typeField": "obs_type",              // field set by the chosen quick capture type
- *     "types": [ { "label": "Inaccessible road", "value": "inaccessible_road" } ],
- *                                           // optional, defaults to the typeField's value map
+ *     "types": [ { "label": "Inaccessible road", "value": "inaccessible_road" },
+ *                { "label": "Note", "value": "note", "form": true } ],
+ *                                           // optional, defaults to the typeField's value map;
+ *                                           // "form": true opens the feature form instead of saving right away
  *     "maxHorizontalAccuracy": 50,          // optional, refuse capture when GPS accuracy is worse (metres)
  *     "media": {                            // optional, enables the media button
  *       "typeValue": "field_note",          // optional, type field value of media points
@@ -66,6 +70,13 @@ class QuickCaptureController : public QObject
 
     //! Saves a point at the current GPS position with the type field set to \a typeValue
     Q_INVOKABLE bool capturePoint( const QVariant &typeValue );
+
+    /**
+     * Returns a new, not yet saved point at the current GPS position with default values and
+     * the type field set to \a typeValue, to be completed in the feature form (types with "form": true).
+     * Returns an invalid pair and emits captureFailed when the point cannot be created.
+     */
+    Q_INVOKABLE FeatureLayerPair prepareFeature( const QVariant &typeValue );
 
     //! Returns the folder where the media file of \a kind ("photo", "audio" or "video") should be stored
     Q_INVOKABLE QString mediaTargetDir( const QString &kind ) const;
@@ -98,6 +109,7 @@ class QuickCaptureController : public QObject
     QgsVectorLayer *captureLayer() const;
     QVariantMap fieldConfig( const QString &fieldName ) const;
     QString typeLabel( const QVariant &typeValue ) const;
+    FeatureLayerPair createFeature( const QVariantMap &attributes, double &accuracy );
     bool saveFeature( const QVariantMap &attributes, const QString &successMessage );
     void clearConfiguration();
 

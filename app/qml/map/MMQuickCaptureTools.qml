@@ -20,7 +20,8 @@ import "../form/components/media" as MMMediaComponents
  * Field values come from the layer's default values, the behaviour is configured
  * in the field-profile.json file of the project, see QuickCaptureController.
  *
- * - capturePoint() lets the user pick a type (e.g. "Inaccessible road") and saves the point
+ * - capturePoint() lets the user pick a type (e.g. "Inaccessible road") and saves the point;
+ *   types with "form": true (e.g. "Note") open the feature form instead, see featureFormRequested
  * - captureMedia() lets the user take a photo, record audio or record a video and saves a point with it
  */
 
@@ -30,13 +31,16 @@ Item {
   readonly property bool pointCaptureEnabled: controller.enabled
   readonly property bool mediaCaptureEnabled: controller.mediaKinds.length > 0
 
+  //! A new point to complete in the feature form, not saved yet
+  signal featureFormRequested( var pair )
+
   function capturePoint() {
     const types = controller.types
     if ( types.length === 0 ) {
       controller.capturePoint( undefined )
     }
     else if ( types.length === 1 ) {
-      controller.capturePoint( types[0].value )
+      internal.captureType( types[0] )
     }
     else {
       typesDrawerLoader.active = true
@@ -102,8 +106,8 @@ Item {
         leftContent: MMIcon { source: __style.quickPointIcon }
 
         onClicked: {
-          controller.capturePoint( modelData.value )
           typesDrawer.close()
+          internal.captureType( modelData )
         }
       }
     }
@@ -227,6 +231,18 @@ Item {
 
     readonly property string photoCode: "quickCapturePhoto"
     readonly property string videoCode: "quickCaptureVideo"
+
+    function captureType( type ) {
+      if ( type.form ) {
+        const pair = controller.prepareFeature( type.value )
+        if ( pair.valid ) {
+          root.featureFormRequested( pair )
+        }
+      }
+      else {
+        controller.capturePoint( type.value )
+      }
+    }
 
     function startMediaCapture( kind ) {
       const targetDir = controller.mediaTargetDir( kind )

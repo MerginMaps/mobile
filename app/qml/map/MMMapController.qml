@@ -1141,6 +1141,11 @@ Item {
 
   MMQuickCaptureTools {
     id: quickCaptureTools
+
+    // same as finishing a recording: the form opens to complete and save the new point
+    onFeatureFormRequested: function( pair ) {
+      root.recordingFinished( pair )
+    }
   }
 
   MM.Compass { id: deviceCompass }
