@@ -147,7 +147,9 @@ bool QuickCaptureController::captureMedia( const QString &kind, const QString &m
   const QString sourcePath = InputUtils::getRelativePath( mediaPath, QString() );
   QString absolutePath = QDir( targetDir ).absoluteFilePath( QFileInfo( sourcePath ).fileName() );
 
-  if ( QFileInfo( sourcePath ).absoluteFilePath() != QFileInfo( absolutePath ).absoluteFilePath() )
+  // the Android camera already copies the captured file to the target folder and returns its temporary path
+  const bool copyNeeded = !QFileInfo::exists( absolutePath );
+  if ( copyNeeded )
   {
     InputUtils::createDirectory( targetDir );
     if ( !InputUtils::copyFile( sourcePath, absolutePath ) )
@@ -179,8 +181,9 @@ bool QuickCaptureController::captureMedia( const QString &kind, const QString &m
 
   if ( !saveFeature( attributes, message ) )
   {
-    // do not leave orphaned files in the project
-    QFile::remove( absolutePath );
+    // do not leave orphaned copies in the project, files that were already there are kept
+    if ( copyNeeded )
+      QFile::remove( absolutePath );
     return false;
   }
   return true;
