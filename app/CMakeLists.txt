@@ -426,6 +426,14 @@ if (MACOS)
                MACOSX_BUNDLE_SHORT_VERSION_STRING ${MM_VERSION_CODE}
                XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@loader_path/Libraries"
                XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME TRUE
+               MACOSX_BUNDLE_ICON_FILE MerginMaps.icns
+  )
+
+  # app icon - static .icns (generated from the iOS app icon, stored in the repo)
+  set(MACOS_ICNS_FILE ${CMAKE_CURRENT_SOURCE_DIR}/macos/MerginMaps.icns)
+  target_sources(MerginMaps PRIVATE ${MACOS_ICNS_FILE})
+  set_source_files_properties(
+    ${MACOS_ICNS_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources
   )
 endif ()
 
