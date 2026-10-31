@@ -250,6 +250,13 @@ Item {
     }
 
     onClicked: function( point ) {
+      // choosing the start or destination of a route
+      if ( root.state === "view" && routingTools.pickingPoint > 0 )
+      {
+        routingTools.pickPoint( Qt.point( point.x, point.y ) )
+        return
+      }
+
       if ( root.state === "view" || root.state === "multiSelect" )
       {
         let screenPoint = Qt.point( point.x, point.y )
@@ -279,6 +286,13 @@ Item {
       if ( PositionKit.positionProvider && PositionKit.positionProvider.id() === "simulated" )
       {
         PositionKit.positionProvider.setPosition( __inputUtils.mapPointToGps( Qt.point( point.x, point.y ), mapCanvas.mapSettings ) )
+      }
+
+      // with routing enabled, long press offers directions to the point
+      if ( root.state === "view" && routingTools.enabled )
+      {
+        routingTools.openAt( Qt.point( point.x, point.y ) )
+        return
       }
 
       if ( root.state === "view" )
@@ -473,6 +487,19 @@ Item {
     active: root.state === "measure"
 
     sourceComponent: measurementToolsComponent
+  }
+
+  MMRoutingTools {
+    id: routingTools
+
+    anchors.fill: parent
+    map: mapCanvas
+    visible: root.state === "view"
+
+    onFollowGpsRequested: {
+      root.centeredToGPS = true
+      mapCanvas.jumpTo( mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition ) )
+    }
   }
 
   // map available content within safe area
