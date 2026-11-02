@@ -68,6 +68,8 @@ MMPage {
           id: descText
 
           text: qsTr("We are bringing the benefits of open source GIS to businesses without compromises")
+          // the Mergin Maps tagline does not fit an organisation's own branding
+          visible: !__style.isBranded
           font: __style.p5
           color: __style.nightColor
           wrapMode: Text.WordWrap

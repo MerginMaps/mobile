@@ -237,6 +237,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QUrl mapPinImage READ mapPinImage CONSTANT )
     Q_PROPERTY( QUrl trackingDirectionImage READ trackingDirectionImage CONSTANT )
     Q_PROPERTY( QUrl mmSymbolImage READ mmSymbolImage NOTIFY styleChanged )
+    Q_PROPERTY( bool isBranded READ isBranded NOTIFY styleChanged ) // a project applied its own colours or logo
     Q_PROPERTY( QUrl positionTrackingRunningImage READ positionTrackingRunningImage CONSTANT )
     Q_PROPERTY( QUrl positionTrackingStartImage READ positionTrackingStartImage CONSTANT )
     Q_PROPERTY( QUrl syncImage READ syncImage CONSTANT )
@@ -796,6 +797,8 @@ class MMStyle: public QObject
      * Overrides the brand colours (keys "primary", "accent", "onAccent", "background", "secondary", "secondaryDark")
      * and the Mergin Maps logo, empty values restore the defaults. See FieldProfile.
      */
+    static bool isBranded() {return !sBrandColors.isEmpty() || !sBrandLogo.isEmpty();}
+
     void setBranding( const QHash<QString, QColor> &colors, const QUrl &logo )
     {
       sBrandColors = colors;
