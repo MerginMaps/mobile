@@ -297,7 +297,8 @@ QgsVectorTileLayer *ProjectWizard::createBackgroundLayer()
 
 void ProjectWizard::writeProject( QgsProject &project, const QString &projectDir, const QString &projectName, QgsMapLayer *extentLayer, const QList<QgsMapLayer *> &layers )
 {
-  const QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
+  // plain .qgs: no archive step, so nothing can fail while zipping the project
+  const QString projectFilepath( QString( "%1/%2.qgs" ).arg( projectDir ).arg( projectName ) );
 
   project.addMapLayers( layers );
 
@@ -312,7 +313,12 @@ void ProjectWizard::writeProject( QgsProject &project, const QString &projectDir
            this, &ProjectWizard::writeMapCanvasSetting );
 
   project.setCrs( projectCrs );
-  project.write( projectFilepath );
+  if ( !project.write( projectFilepath ) )
+  {
+    CoreUtils::log( QStringLiteral( "Create project" ), QStringLiteral( "Failed to write %1: %2" ).arg( projectFilepath, project.error() ) );
+    emit projectCreationFailed( tr( "Failed to create project" ) );
+    return;
+  }
 
   const QString folderName = projectDir.mid( mDataDir.size() + 1 );
   emit notifySuccess( tr( "Project %1 created" ).arg( folderName ) );
