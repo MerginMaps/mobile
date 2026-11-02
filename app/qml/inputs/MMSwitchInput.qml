@@ -26,6 +26,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   signal toggled()
 
   textField.readOnly: true
+  textField.activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
 
   rightContent: MMComponents.MMSwitch {
     id: switchComponent
