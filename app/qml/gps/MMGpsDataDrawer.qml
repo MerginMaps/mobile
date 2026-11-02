@@ -166,7 +166,7 @@ MMComponents.MMDrawer {
 
               title: qsTr( "Horizontal accuracy" )
               value: {
-                if ( !PositionKit.hasPosition || PositionKit.horizontalAccuracy < 0 ) {
+                if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.horizontalAccuracy ) ) {
                   return qsTr( "N/A" )
                 }
 
@@ -181,7 +181,7 @@ MMComponents.MMDrawer {
 
               title: qsTr( "Vertical accuracy" )
               value: {
-                if ( !PositionKit.hasPosition || PositionKit.verticalAccuracy < 0 ) {
+                if ( !PositionKit.hasPosition || Number.isNaN( PositionKit.verticalAccuracy ) ) {
                   return qsTr( "N/A" )
                 }
 
