@@ -245,6 +245,13 @@ Item {
     }
 
     function startMediaCapture( kind ) {
+      // e.g. recording is forbidden in this area: warn before opening the camera or recorder
+      const reason = controller.mediaNotAllowedReason( kind )
+      if ( reason ) {
+        __notificationModel.addError( reason )
+        return
+      }
+
       const targetDir = controller.mediaTargetDir( kind )
       if ( !__inputUtils.createDirectory( targetDir ) ) {
         __inputUtils.log( "Quick capture", "Could not create directory " + targetDir )

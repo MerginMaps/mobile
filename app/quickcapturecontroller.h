@@ -82,6 +82,13 @@ class QuickCaptureController : public QObject
     Q_INVOKABLE QString mediaTargetDir( const QString &kind ) const;
 
     /**
+     * Returns why a photo, audio or video (\a kind) cannot be captured at the current GPS position,
+     * e.g. a hard constraint of the layer forbids recording there, or an empty string when it can.
+     * Checked before opening the camera or recorder, so the user is warned instead of recording.
+     */
+    Q_INVOKABLE QString mediaNotAllowedReason( const QString &kind );
+
+    /**
      * Saves a point at the current GPS position with the media file at \a mediaPath attached.
      * The file is copied to the media target folder if it is not there yet.
      */
@@ -109,7 +116,9 @@ class QuickCaptureController : public QObject
     QgsVectorLayer *captureLayer() const;
     QVariantMap fieldConfig( const QString &fieldName ) const;
     QString typeLabel( const QVariant &typeValue ) const;
-    FeatureLayerPair createFeature( const QVariantMap &attributes, double &accuracy );
+    FeatureLayerPair createFeature( const QVariantMap &attributes, double &accuracy, QString *error = nullptr );
+    //! Returns the descriptions of the layer's hard constraints the feature does not meet (empty if it meets all)
+    QString failedHardConstraints( const FeatureLayerPair &pair ) const;
     bool saveFeature( const QVariantMap &attributes, const QString &successMessage );
     void clearConfiguration();
 

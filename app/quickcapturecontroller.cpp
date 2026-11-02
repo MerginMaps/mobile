@@ -22,6 +22,7 @@
 
 #include "qgsproject.h"
 #include "qgsvectorlayer.h"
+#include "qgsvectorlayerutils.h"
 #include "qgseditorwidgetsetup.h"
 
 QuickCaptureController::QuickCaptureController( QObject *parent )
@@ -199,27 +200,75 @@ FeatureLayerPair QuickCaptureController::prepareFeature( const QVariant &typeVal
   return createFeature( attributes, accuracy );
 }
 
-FeatureLayerPair QuickCaptureController::createFeature( const QVariantMap &attributes, double &accuracy )
+QString QuickCaptureController::mediaNotAllowedReason( const QString &kind )
 {
+  if ( !mMediaFields.contains( kind ) )
+    return tr( "Could not attach the file" );
+
+  // a placeholder file name stands for the media the user would record here
+  QVariantMap attributes;
+  attributes.insert( mMediaFields.value( kind ), QStringLiteral( "pending" ) );
+  if ( !mTypeField.isEmpty() && mMediaTypeValue.isValid() )
+    attributes.insert( mTypeField, mMediaTypeValue );
+
+  double accuracy = -1;
+  QString error;
+  const FeatureLayerPair pair = createFeature( attributes, accuracy, &error );
+  if ( !pair.isValid() )
+    return error;
+
+  return failedHardConstraints( pair );
+}
+
+QString QuickCaptureController::failedHardConstraints( const FeatureLayerPair &pair ) const
+{
+  QgsVectorLayer *layer = pair.layer();
+  if ( !layer )
+    return QString();
+
+  QStringList messages;
+  const QgsFields fields = layer->fields();
+  for ( int i = 0; i < fields.count(); ++i )
+  {
+    QStringList errors;
+    if ( !QgsVectorLayerUtils::validateAttribute( layer, pair.feature(), i, errors, QgsFieldConstraints::ConstraintStrengthHard ) )
+    {
+      const QString description = fields.at( i ).constraints().constraintDescription();
+      messages << ( description.isEmpty() ? errors.join( QStringLiteral( "; " ) ) : description );
+    }
+  }
+  messages.removeDuplicates();
+  return messages.join( QLatin1Char( '\n' ) );
+}
+
+FeatureLayerPair QuickCaptureController::createFeature( const QVariantMap &attributes, double &accuracy, QString *error )
+{
+  // reports the error to the caller when asked, otherwise to the user
+  auto fail = [this, error]( const QString & message )
+  {
+    if ( error )
+      *error = message;
+    else
+      emit captureFailed( message );
+    return FeatureLayerPair();
+  };
+
   QgsVectorLayer *layer = captureLayer();
   if ( !layer || !mVariablesManager || !mVariablesManager->positionKit() )
   {
-    emit captureFailed( tr( "Quick capture is not available in this project" ) );
-    return FeatureLayerPair();
+    return fail( tr( "Quick capture is not available in this project" ) );
   }
 
   PositionKit *positionKit = mVariablesManager->positionKit();
   if ( !positionKit->hasPosition() || positionKit->positionCoordinate().isEmpty() )
   {
-    emit captureFailed( tr( "GPS position is not available" ) );
-    return FeatureLayerPair();
+    return fail( tr( "GPS position is not available" ) );
   }
 
   accuracy = positionKit->horizontalAccuracy();
   if ( mMaxHorizontalAccuracy > 0 && ( accuracy < 0 || accuracy > mMaxHorizontalAccuracy ) )
   {
-    emit captureFailed( tr( "GPS accuracy is too low (required %1 m)" ).arg( mMaxHorizontalAccuracy ) );
-    return FeatureLayerPair();
+    return fail( tr( "GPS accuracy is too low (required %1 m)" ).arg( mMaxHorizontalAccuracy ) );
   }
 
   QgsPoint position = positionKit->positionCoordinate();
@@ -232,8 +281,7 @@ FeatureLayerPair QuickCaptureController::createFeature( const QVariantMap &attri
   const QVector<QgsGeometry> geometries = geometryInLayerCrs.coerceToType( layer->wkbType() );
   if ( geometries.isEmpty() )
   {
-    emit captureFailed( tr( "Could not create the point" ) );
-    return FeatureLayerPair();
+    return fail( tr( "Could not create the point" ) );
   }
   const QgsGeometry geometry = geometries.first();
 
@@ -258,6 +306,14 @@ bool QuickCaptureController::saveFeature( const QVariantMap &attributes, const Q
   FeatureLayerPair pair = createFeature( attributes, accuracy );
   if ( !pair.isValid() )
     return false;
+
+  // the layer's hard constraints apply as in the form, e.g. geofencing
+  const QString constraintsMessage = failedHardConstraints( pair );
+  if ( !constraintsMessage.isEmpty() )
+  {
+    emit captureFailed( constraintsMessage );
+    return false;
+  }
 
   QgsVectorLayer *layer = pair.layer();
   QgsFeature &feature = pair.featureRef();
