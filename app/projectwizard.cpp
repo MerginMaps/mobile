@@ -22,6 +22,14 @@
 #include "qgssymbol.h"
 #include "qgsmarkersymbol.h"
 #include "qgssinglesymbolrenderer.h"
+#include "qgscategorizedsymbolrenderer.h"
+#include "qgsfillsymbol.h"
+#include "qgsproperty.h"
+
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 const QString TILES_URL = QStringLiteral( "https://tiles.merginmaps.com" );
 
@@ -210,6 +218,282 @@ void ProjectWizard::createProject( QString const &projectNameRaw, const FieldsMo
   const QString folderName = projectDir.mid( mDataDir.size() + 1 );
   emit notifySuccess( tr( "Project %1 created" ).arg( folderName ) );
   emit projectCreated( projectDir, projectName );
+}
+
+namespace
+{
+  struct ObservationType
+  {
+    const char *value;
+    const char *label;
+    const char *color;
+    Qgis::MarkerShape shape;
+    bool form;
+  };
+
+  // common observations for ad-hoc field collection; "note" opens the form to type the text
+  const QList<ObservationType> OBSERVATION_TYPES =
+  {
+    { "note", QT_TRANSLATE_NOOP( "ProjectWizard", "Note" ), "#3E5C76", Qgis::MarkerShape::Square, true },
+    { "inaccessible_road", QT_TRANSLATE_NOOP( "ProjectWizard", "Inaccessible road" ), "#D7191C", Qgis::MarkerShape::Circle, false },
+    { "flooded_road", QT_TRANSLATE_NOOP( "ProjectWizard", "Flooded road" ), "#0098C7", Qgis::MarkerShape::Circle, false },
+    { "checkpoint", QT_TRANSLATE_NOOP( "ProjectWizard", "Checkpoint" ), "#F28E2B", Qgis::MarkerShape::Diamond, false },
+    { "damaged_bridge", QT_TRANSLATE_NOOP( "ProjectWizard", "Damaged bridge" ), "#7B3294", Qgis::MarkerShape::Diamond, false },
+    { "security_incident", QT_TRANSLATE_NOOP( "ProjectWizard", "Security incident" ), "#1A1A1A", Qgis::MarkerShape::Triangle, false },
+    { "health_facility", QT_TRANSLATE_NOOP( "ProjectWizard", "Health facility" ), "#2CA25F", Qgis::MarkerShape::Square, false },
+    { "health_warning", QT_TRANSLATE_NOOP( "ProjectWizard", "Health warning" ), "#A6611A", Qgis::MarkerShape::Triangle, false },
+    { "water_point", QT_TRANSLATE_NOOP( "ProjectWizard", "Water point" ), "#1F5FBF", Qgis::MarkerShape::Circle, false },
+    { "displaced_people", QT_TRANSLATE_NOOP( "ProjectWizard", "Displaced people" ), "#66A61E", Qgis::MarkerShape::Pentagon, false },
+  };
+
+  // media captured with quick capture are drawn by the attachment they carry
+  const QList<ObservationType> MEDIA_SYMBOLS =
+  {
+    { "photo_note", QT_TRANSLATE_NOOP( "ProjectWizard", "Photo" ), "#E7298A", Qgis::MarkerShape::Circle, false },
+    { "audio_note", QT_TRANSLATE_NOOP( "ProjectWizard", "Audio note" ), "#00897B", Qgis::MarkerShape::Circle, false },
+    { "video_note", QT_TRANSLATE_NOOP( "ProjectWizard", "Video" ), "#3949AB", Qgis::MarkerShape::Circle, false },
+    { "field_note", QT_TRANSLATE_NOOP( "ProjectWizard", "Field note" ), "#6B6B6B", Qgis::MarkerShape::Circle, false },
+  };
+
+  QgsMarkerSymbol *observationSymbol( const ObservationType &type )
+  {
+    QgsSimpleMarkerSymbolLayer *marker = new QgsSimpleMarkerSymbolLayer( type.shape, 4.0 );
+    marker->setFillColor( QColor( type.color ) );
+    marker->setStrokeColor( QColor( QStringLiteral( "white" ) ) );
+    marker->setStrokeWidth( 0.6 );
+    return new QgsMarkerSymbol( QgsSymbolLayerList() << marker );
+  }
+}
+
+bool ProjectWizard::prepareProjectDir( const QString &projectNameRaw, QString &projectDir, QString &projectName )
+{
+  if ( !CoreUtils::isValidName( projectNameRaw ) )
+  {
+    emit projectCreationFailed( tr( "Project name contains invalid characters" ) );
+    return false;
+  }
+
+  projectName = InputUtils::sanitizeNode( projectNameRaw );
+  projectDir = CoreUtils::createUniqueProjectDirectory( mDataDir, projectName );
+  return true;
+}
+
+QgsVectorTileLayer *ProjectWizard::createBackgroundLayer()
+{
+  QgsDataSourceUri dsUri;
+  dsUri.setParam( QStringLiteral( "type" ), QStringLiteral( "xyz" ) );
+  dsUri.setParam( QStringLiteral( "url" ), QStringLiteral( "%1/data/default/{z}/{x}/{y}.pbf" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "styleUrl" ), QStringLiteral( "%1/styles/default.json" ).arg( TILES_URL ) );
+  dsUri.setParam( QStringLiteral( "zmin" ), QStringLiteral( "0" ) );
+  dsUri.setParam( QStringLiteral( "zmax" ), QStringLiteral( "14" ) );
+  QgsVectorTileLayer *bgLayer = new QgsVectorTileLayer( dsUri.encodedUri(), QStringLiteral( "OpenMapTiles (OSM)" ) );
+  bool ok;
+  QString error = bgLayer->loadDefaultStyle( ok );
+  QgsLayerMetadata metadata;
+  metadata.setRights( QStringList() << QStringLiteral( "© OpenMapTiles © OpenStreetMap contributors" ) );
+  bgLayer->setMetadata( metadata );
+  return bgLayer;
+}
+
+void ProjectWizard::writeProject( QgsProject &project, const QString &projectDir, const QString &projectName, QgsMapLayer *extentLayer, const QList<QgsMapLayer *> &layers )
+{
+  const QString projectFilepath( QString( "%1/%2.qgz" ).arg( projectDir ).arg( projectName ) );
+
+  project.addMapLayers( layers );
+
+  const QgsCoordinateReferenceSystem projectCrs( PROJECT_CRS_ID );
+  mSettings->setExtent( extentLayer->extent() );
+  mSettings->setEllipsoid( "WGS84" );
+  mSettings->setDestinationCrs( projectCrs );
+  mSettings->setLayers( layers );
+
+  // Using writeProject signal to append mapCanvas project setting
+  connect( &project, &QgsProject::writeProject,
+           this, &ProjectWizard::writeMapCanvasSetting );
+
+  project.setCrs( projectCrs );
+  project.write( projectFilepath );
+
+  const QString folderName = projectDir.mid( mDataDir.size() + 1 );
+  emit notifySuccess( tr( "Project %1 created" ).arg( folderName ) );
+  emit projectCreated( projectDir, projectName );
+}
+
+QgsVectorLayer *ProjectWizard::createObservationsLayer( const QString &projectDir )
+{
+  const QString gpkgPath( QStringLiteral( "%1/data.gpkg" ).arg( projectDir ) );
+  const QString layerName( tr( "Observations" ) );
+
+  QgsFields fields;
+  fields.append( QgsField( QStringLiteral( "obs_type" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "notes" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "photo" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "audio" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "video" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "surveyor" ), QMetaType::QString, QStringLiteral( "text" ) ) );
+  fields.append( QgsField( QStringLiteral( "captured_at" ), QMetaType::QDateTime, QStringLiteral( "datetime" ) ) );
+  fields.append( QgsField( QStringLiteral( "gps_accuracy" ), QMetaType::Double, QStringLiteral( "real" ) ) );
+
+  QgsVectorFileWriter::SaveVectorOptions options;
+  options.driverName = QStringLiteral( "GPKG" );
+  options.layerName = layerName;
+  options.fileEncoding = QStringLiteral( "UTF-8" );
+  std::unique_ptr<QgsVectorFileWriter> writer( QgsVectorFileWriter::create(
+        gpkgPath, fields, Qgis::WkbType::PointZ, QgsCoordinateReferenceSystem( LAYER_CRS_ID ),
+        QgsCoordinateTransformContext(), options ) );
+  writer.reset();
+
+  QgsVectorLayer *layer = new QgsVectorLayer( QStringLiteral( "%1|layername=%2" ).arg( gpkgPath, layerName ), layerName, QStringLiteral( "ogr" ) );
+
+  QVariantList valueMap;
+  for ( const ObservationType &type : OBSERVATION_TYPES )
+    valueMap << QVariantMap( { { tr( type.label ), QString::fromLatin1( type.value ) } } );
+  valueMap << QVariantMap( { { tr( "Field note (media)" ), QStringLiteral( "field_note" ) } } );
+
+  const QgsFields layerFields = layer->fields();
+  for ( int i = 0; i < layerFields.count(); ++i )
+  {
+    const QgsField field = layerFields.at( i );
+    const QString name = field.name();
+    if ( name == QLatin1String( "obs_type" ) )
+      layer->setEditorWidgetSetup( i, QgsEditorWidgetSetup( QStringLiteral( "ValueMap" ), { { QStringLiteral( "map" ), valueMap } } ) );
+    else if ( name == QLatin1String( "notes" ) )
+      layer->setEditorWidgetSetup( i, InputUtils::getEditorWidgetSetup( field, QStringLiteral( "TextEdit" ), { { QStringLiteral( "isMultiline" ), true } } ) );
+    else if ( name == QLatin1String( "photo" ) )
+      layer->setEditorWidgetSetup( i, editorWidgetSetup( field, QStringLiteral( "ExternalResource" ) ) );
+    else if ( name == QLatin1String( "audio" ) )
+      layer->setEditorWidgetSetup( i, editorWidgetSetup( field, QStringLiteral( "ExternalResourceAudio" ) ) );
+    else if ( name == QLatin1String( "video" ) )
+      layer->setEditorWidgetSetup( i, editorWidgetSetup( field, QStringLiteral( "ExternalResourceVideo" ) ) );
+    else
+      layer->setEditorWidgetSetup( i, InputUtils::getEditorWidgetSetup( field ) );
+  }
+
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "surveyor" ) ), QgsDefaultValue( QStringLiteral( "@mm_username" ) ) );
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "captured_at" ) ), QgsDefaultValue( QStringLiteral( "now()" ) ) );
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "gps_accuracy" ) ), QgsDefaultValue( QStringLiteral( "round(@position_horizontal_accuracy, 1)" ) ) );
+
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "obs_type" ) ), tr( "Observation" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "notes" ) ), tr( "Notes" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "photo" ) ), tr( "Photo" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "audio" ) ), tr( "Audio note" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "video" ) ), tr( "Video" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "surveyor" ) ), tr( "Surveyor" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "captured_at" ) ), tr( "Captured at" ) );
+  layer->setFieldAlias( layerFields.indexOf( QStringLiteral( "gps_accuracy" ) ), tr( "GPS accuracy (m)" ) );
+
+  // one colour and shape per type; media points by the attachment they carry
+  const QString classification = QStringLiteral(
+                                   "CASE WHEN \"obs_type\" = 'field_note' THEN "
+                                   "CASE WHEN coalesce(\"video\", '') <> '' THEN 'video_note' "
+                                   "WHEN coalesce(\"audio\", '') <> '' THEN 'audio_note' "
+                                   "WHEN coalesce(\"photo\", '') <> '' THEN 'photo_note' "
+                                   "ELSE 'field_note' END ELSE \"obs_type\" END" );
+  QgsCategoryList categories;
+  for ( const ObservationType &type : OBSERVATION_TYPES + MEDIA_SYMBOLS )
+    categories << QgsRendererCategory( QString::fromLatin1( type.value ), observationSymbol( type ), tr( type.label ) );
+  layer->setRenderer( new QgsCategorizedSymbolRenderer( classification, categories ) );
+
+  return layer;
+}
+
+QgsVectorLayer *ProjectWizard::createMapSketchesLayer( const QString &projectDir )
+{
+  // same layer as the Mergin Maps QGIS plugin creates for map sketching
+  const QString gpkgPath( QStringLiteral( "%1/map_sketches.gpkg" ).arg( projectDir ) );
+  const QString layerName( QStringLiteral( "Map sketches" ) );
+
+  QgsFields fields;
+  fields.append( QgsField( QStringLiteral( "color" ), QMetaType::QString ) );
+  fields.append( QgsField( QStringLiteral( "author" ), QMetaType::QString ) );
+  fields.append( QgsField( QStringLiteral( "created_at" ), QMetaType::QDateTime ) );
+  fields.append( QgsField( QStringLiteral( "width" ), QMetaType::Double ) );
+  fields.append( QgsField( QStringLiteral( "attr1" ), QMetaType::Double ) );
+  fields.append( QgsField( QStringLiteral( "attr2" ), QMetaType::Double ) );
+  fields.append( QgsField( QStringLiteral( "attr3" ), QMetaType::QString ) );
+  fields.append( QgsField( QStringLiteral( "attr4" ), QMetaType::QString ) );
+
+  QgsVectorFileWriter::SaveVectorOptions options;
+  options.driverName = QStringLiteral( "GPKG" );
+  options.layerName = layerName;
+  std::unique_ptr<QgsVectorFileWriter> writer( QgsVectorFileWriter::create(
+        gpkgPath, fields, Qgis::WkbType::MultiLineStringZM, QgsCoordinateReferenceSystem( LAYER_CRS_ID ),
+        QgsCoordinateTransformContext(), options ) );
+  writer.reset();
+
+  QgsVectorLayer *layer = new QgsVectorLayer( gpkgPath, layerName, QStringLiteral( "ogr" ) );
+  const QgsFields layerFields = layer->fields();
+  layer->setEditorWidgetSetup( layerFields.indexOf( QStringLiteral( "fid" ) ), QgsEditorWidgetSetup( QStringLiteral( "Hidden" ), QVariantMap() ) );
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "author" ) ), QgsDefaultValue( QStringLiteral( "@mm_username" ) ) );
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "created_at" ) ), QgsDefaultValue( QStringLiteral( "now()" ) ) );
+  layer->setDefaultValueDefinition( layerFields.indexOf( QStringLiteral( "width" ) ), QgsDefaultValue( QStringLiteral( "0.6" ) ) );
+
+  QVariantMap props;
+  props[QStringLiteral( "line_width" )] = QStringLiteral( "0.6" );
+  props[QStringLiteral( "line_color" )] = QgsSymbolLayerUtils::encodeColor( QColor( QStringLiteral( "#FFFFFF" ) ) );
+  std::unique_ptr<QgsLineSymbol> symbol = QgsLineSymbol::createSimple( props );
+  symbol->symbolLayer( 0 )->setDataDefinedProperty( QgsSymbolLayer::Property::StrokeColor, QgsProperty::fromExpression( QStringLiteral( "\"color\"" ) ) );
+  symbol->symbolLayer( 0 )->setDataDefinedProperty( QgsSymbolLayer::Property::StrokeWidth, QgsProperty::fromExpression( QStringLiteral( "\"width\"" ) ) );
+  layer->setRenderer( new QgsSingleSymbolRenderer( symbol.release() ) );
+  return layer;
+}
+
+void ProjectWizard::createFieldObservationProject( QString const &projectNameRaw )
+{
+  QString projectDir;
+  QString projectName;
+  if ( !prepareProjectDir( projectNameRaw, projectDir, projectName ) )
+    return;
+
+  QgsProject project;
+
+  QgsVectorTileLayer *bgLayer = createBackgroundLayer();
+  QgsVectorLayer *observations = createObservationsLayer( projectDir );
+  QgsVectorLayer *sketches = createMapSketchesLayer( projectDir );
+  QgsVectorLayer *trackingLayer = createTrackingLayer( QStringLiteral( "%1/tracking_layer.gpkg" ).arg( projectDir ) );
+
+  project.writeEntry( "Mergin", "PositionTracking/Enabled", true );
+  project.writeEntry( "Mergin", "PositionTracking/TrackingLayer", trackingLayer->id() );
+  project.writeEntry( "Mergin", "PositionTracking/UpdateFrequency", 0 );
+  project.writeEntry( "Mergin", "MapSketching/Enabled", true );
+  project.writeEntry( "Mergin", "MapSketching/Layer", sketches->id() );
+  project.writeEntry( "Mergin", "PhotoQuality", 2 );
+
+  // quick capture for the observations, see FieldProfile and QuickCaptureController
+  QJsonArray types;
+  for ( const ObservationType &type : OBSERVATION_TYPES )
+  {
+    QJsonObject t { { QStringLiteral( "label" ), tr( type.label ) }, { QStringLiteral( "value" ), QString::fromLatin1( type.value ) } };
+    if ( type.form )
+      t[QStringLiteral( "form" )] = true;
+    types << t;
+  }
+  const QJsonObject profile
+  {
+    { QStringLiteral( "version" ), 1 },
+    {
+      QStringLiteral( "quickCapture" ), QJsonObject
+      {
+        { QStringLiteral( "layer" ), observations->name() },
+        { QStringLiteral( "typeField" ), QStringLiteral( "obs_type" ) },
+        { QStringLiteral( "types" ), types },
+        {
+          QStringLiteral( "media" ), QJsonObject
+          {
+            { QStringLiteral( "typeValue" ), QStringLiteral( "field_note" ) },
+            { QStringLiteral( "photoField" ), QStringLiteral( "photo" ) },
+            { QStringLiteral( "audioField" ), QStringLiteral( "audio" ) },
+            { QStringLiteral( "videoField" ), QStringLiteral( "video" ) }
+          }
+        }
+      }
+    }
+  };
+  QFile profileFile( QStringLiteral( "%1/field-profile.json" ).arg( projectDir ) );
+  if ( profileFile.open( QIODevice::WriteOnly ) )
+    profileFile.write( QJsonDocument( profile ).toJson() );
+
+  writeProject( project, projectDir, projectName, bgLayer, QList<QgsMapLayer *>() << observations << sketches << trackingLayer << bgLayer );
 }
 
 void ProjectWizard::writeMapCanvasSetting( QDomDocument &doc )

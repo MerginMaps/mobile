@@ -15,6 +15,8 @@
 #include "qgsvectorlayer.h"
 #include "qgsmapsettings.h"
 
+class QgsVectorTileLayer;
+
 /**
  * Controller for creating new Input project.
  */
@@ -32,6 +34,13 @@ class ProjectWizard : public QObject
      */
     Q_INVOKABLE void createProject( QString const &projectName, const FieldsModel *fieldsModel );
 
+    /**
+     * Creates a ready-to-use project for ad-hoc field collection: an Observations point layer with common
+     * types (e.g. inaccessible road, health warning), photo, audio and video fields and automatic surveyor,
+     * time and GPS accuracy; quick capture for that layer; map sketching; position tracking; OSM base map.
+     */
+    Q_INVOKABLE void createFieldObservationProject( QString const &projectName );
+
   public slots:
     //! To append "mapcanvas" property to project file required to correctly show a project.
     void writeMapCanvasSetting( QDomDocument &doc );
@@ -46,6 +55,11 @@ class ProjectWizard : public QObject
   private:
     QgsVectorLayer *createGpkgLayer( QString const &projectDir, QList<FieldConfiguration> const &fieldsConfig );
     QgsVectorLayer *createTrackingLayer( const QString &trackingGpkgPath );
+    QgsVectorLayer *createObservationsLayer( const QString &projectDir );
+    QgsVectorLayer *createMapSketchesLayer( const QString &projectDir );
+    QgsVectorTileLayer *createBackgroundLayer();
+    bool prepareProjectDir( const QString &projectNameRaw, QString &projectDir, QString &projectName );
+    void writeProject( QgsProject &project, const QString &projectDir, const QString &projectName, QgsMapLayer *extentLayer, const QList<QgsMapLayer *> &layers );
     QgsFields createFields( const QList<FieldConfiguration> &fieldsConfig ) const;
     QgsSingleSymbolRenderer *surveyLayerRenderer();
     QMetaType::Type parseType( const QString &type ) const;

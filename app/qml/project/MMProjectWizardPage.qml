@@ -48,6 +48,37 @@ MMComponents.MMPage {
 
       MMComponents.MMListSpacer { height: __style.margin20 }
 
+      // ready-made project for ad-hoc collection: no fields to set up
+      MMComponents.MMButton {
+        id: fieldObservationButton
+
+        width: parent.width
+        text: qsTr( "Create field observation project" )
+        iconSourceLeft: __style.quickPointIcon
+
+        onClicked: {
+          if ( !projectNameField.text ) {
+            __notificationModel.addWarning( qsTr( "Empty project name" ) )
+          }
+          else {
+            __projectWizard.createFieldObservationProject( projectNameField.text )
+          }
+        }
+      }
+
+      MMComponents.MMText {
+        id: fieldObservationInfo
+
+        width: parent.width
+        topPadding: __style.margin8
+        text: qsTr( "Quick capture of common observations, photo, audio and video, map sketching and an OpenStreetMap base map. Or set up your own fields below." )
+        color: __style.nightColor
+        font: __style.p6
+        wrapMode: Text.WordWrap
+      }
+
+      MMComponents.MMListSpacer { height: __style.margin20 }
+
       MMComponents.MMText {
         id: attributesLabel
 
@@ -64,7 +95,7 @@ MMComponents.MMPage {
 
         model: fieldsModel
         width: parent.width
-        height: parent.height - __style.margin20 - projectNameField.height - __style.margin20 - attributesLabel.height
+        height: parent.height - __style.margin20 - projectNameField.height - __style.margin20 - fieldObservationButton.height - fieldObservationInfo.height - __style.margin20 - attributesLabel.height
         clip: true
         spacing: __style.margin20
 
