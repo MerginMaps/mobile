@@ -105,6 +105,7 @@
 #include "mapsketchingcontroller.h"
 #include "quickcapturecontroller.h"
 #include "routingcontroller.h"
+#include "securityalertscontroller.h"
 #include "fieldprofile.h"
 
 #include "projectsmodel.h"
@@ -339,6 +340,7 @@ void initDeclarative()
   qmlRegisterType< MapSketchingController >( "mm", 1, 0, "MapSketchingController" );
   qmlRegisterType< QuickCaptureController >( "mm", 1, 0, "QuickCaptureController" );
   qmlRegisterType< RoutingController >( "mm", 1, 0, "RoutingController" );
+  qmlRegisterType< SecurityAlertsController >( "mm", 1, 0, "SecurityAlertsController" );
 
   qmlRegisterUncreatableType< QgsUnitTypes >( "qgs", 1, 0, "QgsUnitTypes", "Only enums from QgsUnitTypes can be used" );
   qmlRegisterType< QgsVectorLayer >( "qgs", 1, 0, "VectorLayer" );

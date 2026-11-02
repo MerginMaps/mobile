@@ -502,6 +502,13 @@ Item {
     }
   }
 
+  MMSecurityAlerts {
+    anchors.fill: parent
+    // in other states the top of the map holds the recording and editing toolbars
+    visible: root.state === "view"
+    topOffset: routingTools.visible ? routingTools.occupiedHeight : 0
+  }
+
   // map available content within safe area
   Item {
     anchors {

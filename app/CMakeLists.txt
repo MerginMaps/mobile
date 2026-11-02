@@ -87,6 +87,7 @@ set(MM_SRCS
     projectwizard.cpp
     quickcapturecontroller.cpp
     routingcontroller.cpp
+    securityalertscontroller.cpp
     relationfeaturesmodel.cpp
     relationreferencefeaturesmodel.cpp
     scalebarkit.cpp
@@ -187,6 +188,7 @@ set(MM_HDRS
     projectwizard.h
     quickcapturecontroller.h
     routingcontroller.h
+    securityalertscontroller.h
     relationfeaturesmodel.h
     relationreferencefeaturesmodel.h
     scalebarkit.h

@@ -39,6 +39,14 @@ Item {
   property int pickingPoint: 0
   property bool panelOpen: false
 
+  //! Height taken at the top of the map by the visible routing card, so other banners can go below it
+  readonly property real occupiedHeight: {
+    if ( planningCard.visible ) return planningCard.y + planningCard.height
+    if ( pickCard.visible ) return pickCard.y + pickCard.height
+    if ( navigationBanner.visible ) return navigationBanner.y + navigationBanner.height
+    return 0
+  }
+
   //! Asks the map to follow the GPS position (navigation started)
   signal followGpsRequested()
 
@@ -259,6 +267,8 @@ Item {
 
   // picking a point on the map
   Rectangle {
+    id: pickCard
+
     visible: root.pickingPoint > 0
 
     anchors {
@@ -308,6 +318,8 @@ Item {
 
   // navigation banner
   Rectangle {
+    id: navigationBanner
+
     visible: controller.navigating
 
     anchors {
