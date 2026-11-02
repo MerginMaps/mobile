@@ -105,6 +105,7 @@ class TestMerginApi: public QObject
 
     void testListProject();
     void testListProjectsByName();
+    void testSessionCheckAfterRejectedToken();
     void testDownloadProject();
     void testDownloadWithNetworkError();
     void testDownloadWithNetworkErrorRecovery();
