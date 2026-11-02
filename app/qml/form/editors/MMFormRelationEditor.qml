@@ -31,6 +31,7 @@ MMPrivateComponents.MMBaseInput {
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldActiveProject: parent.fieldActiveProject
   property MM.AttributeController _fieldController: parent.fieldController
+  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property string _fieldTitle: parent.fieldTitle
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -86,7 +87,7 @@ MMPrivateComponents.MMBaseInput {
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
-        visible: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly)
+        visible: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && root._fieldIsEditable)
 
         MMComponents.MMIcon {
           anchors.centerIn: parent
@@ -101,6 +102,23 @@ MMPrivateComponents.MMBaseInput {
             root.forceActiveFocus() // clear focus from all elements to prevent freezing #3483
             root.createLinkedFeature( root._fieldController.featureLayerPair, root._fieldAssociatedRelation )
           }
+        }
+      }
+
+      Rectangle {
+        width: emptyText.contentWidth + 24 * __dp
+        height: privates.itemHeight
+        radius: 8 * __dp
+        color: __style.lightGreenColor
+        visible: !newRelation.visible && repeater.count === 0
+
+        Text {
+          id: emptyText
+
+          anchors.centerIn: parent
+          font: __style.t4
+          text: qsTr( "No features" )
+          color: __style.mediumGreyColor
         }
       }
 
