@@ -13,6 +13,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QFontDatabase>
+#include <QGuiApplication>
 #include <QHash>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -21,6 +23,7 @@
 
 #include "coreutils.h"
 #include "mmstyle.h"
+#include "termstranslator.h"
 
 #include "qgsproject.h"
 
@@ -28,6 +31,8 @@ const QString FieldProfile::FILE_NAME = QStringLiteral( "field-profile.json" );
 
 static const QString BRANDING_COLORS_KEY = QStringLiteral( "fieldProfile/brandingColors" );
 static const QString BRANDING_LOGO_KEY = QStringLiteral( "fieldProfile/brandingLogo" );
+static const QString BRANDING_FONT_KEY = QStringLiteral( "fieldProfile/brandingFont" );
+static const QString TERMS_KEY = QStringLiteral( "fieldProfile/terms" );
 
 QString FieldProfile::filePath( const QgsProject *project )
 {
@@ -65,23 +70,32 @@ void FieldProfile::applyBranding( MMStyle *style, const QgsProject *project )
   const QVariantMap branding = read( project ).value( QStringLiteral( "branding" ) ).toMap();
   const QVariantMap colors = branding.value( QStringLiteral( "colors" ) ).toMap();
 
-  QString logoPath;
-  const QString logo = branding.value( QStringLiteral( "logo" ) ).toString();
-  if ( !logo.isEmpty() )
+  const QDir projectDir = QFileInfo( filePath( project ) ).absoluteDir();
+  // one file or a list of files, e.g. the regular and bold font
+  auto brandingFiles = [&branding, &projectDir]( const QString & key )
   {
-    logoPath = QFileInfo( filePath( project ) ).absoluteDir().absoluteFilePath( logo );
-    if ( !QFileInfo::exists( logoPath ) )
+    QStringList paths;
+    const QStringList values = branding.value( key ).toStringList();
+    for ( const QString &value : values )
     {
-      CoreUtils::log( QStringLiteral( "Field profile" ), QStringLiteral( "Logo %1 not found" ).arg( logoPath ) );
-      logoPath.clear();
+      const QString path = projectDir.absoluteFilePath( value );
+      if ( QFileInfo::exists( path ) )
+        paths << path;
+      else
+        CoreUtils::log( QStringLiteral( "Field profile" ), QStringLiteral( "Branding %1 %2 not found" ).arg( key, path ) );
     }
-  }
+    return paths;
+  };
 
-  setBranding( style, colors, logoPath );
+  const QString logoPath = brandingFiles( QStringLiteral( "logo" ) ).value( 0 );
+  const QStringList fontPaths = brandingFiles( QStringLiteral( "font" ) );
+
+  setBranding( style, colors, logoPath, fontPaths );
 
   QSettings settings;
   settings.setValue( BRANDING_COLORS_KEY, colors );
   settings.setValue( BRANDING_LOGO_KEY, logoPath );
+  settings.setValue( BRANDING_FONT_KEY, fontPaths );
 }
 
 void FieldProfile::restoreBranding( MMStyle *style )
@@ -89,18 +103,69 @@ void FieldProfile::restoreBranding( MMStyle *style )
   QSettings settings;
   const QVariantMap colors = settings.value( BRANDING_COLORS_KEY ).toMap();
   QString logoPath = settings.value( BRANDING_LOGO_KEY ).toString();
+  QStringList fontPaths = settings.value( BRANDING_FONT_KEY ).toStringList();
 
   // the project may have been removed from the device since
   if ( !logoPath.isEmpty() && !QFileInfo::exists( logoPath ) )
     logoPath.clear();
+  fontPaths.removeIf( []( const QString & path ) { return !QFileInfo::exists( path ); } );
 
-  setBranding( style, colors, logoPath );
+  setBranding( style, colors, logoPath, fontPaths );
 }
 
-void FieldProfile::setBranding( MMStyle *style, const QVariantMap &colors, const QString &logoPath )
+bool FieldProfile::applyTerms( TermsTranslator *translator, const QgsProject *project )
+{
+  if ( !translator )
+    return false;
+
+  const QVariantMap terms = read( project ).value( QStringLiteral( "terms" ) ).toMap();
+  QSettings().setValue( TERMS_KEY, terms );
+
+  if ( terms == translator->terms() )
+    return false;
+
+  translator->setTerms( terms );
+  return true;
+}
+
+void FieldProfile::restoreTerms( TermsTranslator *translator )
+{
+  if ( translator )
+    translator->setTerms( QSettings().value( TERMS_KEY ).toMap() );
+}
+
+QString FieldProfile::fontFamily( const QStringList &fontPaths )
+{
+  static QHash<QString, QString> sFamilies; // font file -> family, a font file is loaded only once
+
+  for ( const QString &fontPath : fontPaths )
+  {
+    if ( sFamilies.contains( fontPath ) )
+      continue;
+
+    const int id = QFontDatabase::addApplicationFont( fontPath );
+    const QStringList families = QFontDatabase::applicationFontFamilies( id );
+    if ( id == -1 || families.isEmpty() )
+      CoreUtils::log( QStringLiteral( "Field profile" ), QStringLiteral( "Could not load font %1" ).arg( fontPath ) );
+    sFamilies.insert( fontPath, families.value( 0 ) );
+  }
+
+  // the family of the first font, the other files are its weights and styles
+  return fontPaths.isEmpty() ? QString() : sFamilies.value( fontPaths.first() );
+}
+
+void FieldProfile::setBranding( MMStyle *style, const QVariantMap &colors, const QString &logoPath, const QStringList &fontPaths )
 {
   if ( !style )
     return;
+
+  // texts not using the style fonts follow the application font
+  static const QFont sDefaultFont = QGuiApplication::font();
+  const QString family = fontFamily( fontPaths );
+  QFont appFont = sDefaultFont;
+  if ( !family.isEmpty() )
+    appFont.setFamily( family );
+  QGuiApplication::setFont( appFont );
 
   QHash<QString, QColor> brandColors;
   for ( auto it = colors.constBegin(); it != colors.constEnd(); ++it )
@@ -112,5 +177,5 @@ void FieldProfile::setBranding( MMStyle *style, const QVariantMap &colors, const
       CoreUtils::log( QStringLiteral( "Field profile" ), QStringLiteral( "Invalid colour %1 for %2" ).arg( it.value().toString(), it.key() ) );
   }
 
-  style->setBranding( brandColors, logoPath.isEmpty() ? QUrl() : QUrl::fromLocalFile( logoPath ) );
+  style->setBranding( brandColors, logoPath.isEmpty() ? QUrl() : QUrl::fromLocalFile( logoPath ), family );
 }

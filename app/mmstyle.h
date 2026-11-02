@@ -21,21 +21,21 @@ class MMStyle: public QObject
     Q_OBJECT
 
     // Fonts
-    Q_PROPERTY( QFont h1 READ h1 CONSTANT )
-    Q_PROPERTY( QFont h2 READ h2 CONSTANT )
-    Q_PROPERTY( QFont h3 READ h3 CONSTANT )
-    Q_PROPERTY( QFont t1 READ t1 CONSTANT )
-    Q_PROPERTY( QFont t2 READ t2 CONSTANT )
-    Q_PROPERTY( QFont t3 READ t3 CONSTANT )
-    Q_PROPERTY( QFont t4 READ t4 CONSTANT )
-    Q_PROPERTY( QFont t5 READ t5 CONSTANT )
-    Q_PROPERTY( QFont p1 READ p1 CONSTANT )
-    Q_PROPERTY( QFont p2 READ p2 CONSTANT )
-    Q_PROPERTY( QFont p3 READ p3 CONSTANT )
-    Q_PROPERTY( QFont p4 READ p4 CONSTANT )
-    Q_PROPERTY( QFont p5 READ p5 CONSTANT )
-    Q_PROPERTY( QFont p6 READ p6 CONSTANT )
-    Q_PROPERTY( QFont p7 READ p7 CONSTANT )
+    Q_PROPERTY( QFont h1 READ h1 NOTIFY styleChanged )
+    Q_PROPERTY( QFont h2 READ h2 NOTIFY styleChanged )
+    Q_PROPERTY( QFont h3 READ h3 NOTIFY styleChanged )
+    Q_PROPERTY( QFont t1 READ t1 NOTIFY styleChanged )
+    Q_PROPERTY( QFont t2 READ t2 NOTIFY styleChanged )
+    Q_PROPERTY( QFont t3 READ t3 NOTIFY styleChanged )
+    Q_PROPERTY( QFont t4 READ t4 NOTIFY styleChanged )
+    Q_PROPERTY( QFont t5 READ t5 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p1 READ p1 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p2 READ p2 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p3 READ p3 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p4 READ p4 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p5 READ p5 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p6 READ p6 NOTIFY styleChanged )
+    Q_PROPERTY( QFont p7 READ p7 NOTIFY styleChanged )
     Q_PROPERTY( double fontLineHeight60 READ number60 CONSTANT )
     Q_PROPERTY( double fontLineHeight48 READ number48 CONSTANT )
     Q_PROPERTY( double fontLineHeight44 READ number44 CONSTANT )
@@ -794,15 +794,16 @@ class MMStyle: public QObject
     }
 
     /**
-     * Overrides the brand colours (keys "primary", "accent", "onAccent", "background", "secondary", "secondaryDark")
-     * and the Mergin Maps logo, empty values restore the defaults. See FieldProfile.
+     * Overrides the brand colours (keys "primary", "accent", "onAccent", "background", "secondary", "secondaryDark"),
+     * the Mergin Maps logo and the font family, empty values restore the defaults. See FieldProfile.
      */
     static bool isBranded() {return !sBrandColors.isEmpty() || !sBrandLogo.isEmpty();}
 
-    void setBranding( const QHash<QString, QColor> &colors, const QUrl &logo )
+    void setBranding( const QHash<QString, QColor> &colors, const QUrl &logo, const QString &fontFamily = QString() )
     {
       sBrandColors = colors;
       sBrandLogo = logo;
+      sBrandFontFamily = fontFamily;
       emit styleChanged();
     }
 
@@ -818,6 +819,8 @@ class MMStyle: public QObject
     QFont fontFactory( int pixelSize, bool bold ) const
     {
       QFont f;
+      if ( !sBrandFontFamily.isEmpty() )
+        f.setFamily( sBrandFontFamily );
       f.setPixelSize( pixelSize * mDp );
 
       if ( bold )
@@ -832,6 +835,7 @@ class MMStyle: public QObject
 
     static inline QHash<QString, QColor> sBrandColors;
     static inline QUrl sBrandLogo;
+    static inline QString sBrandFontFamily;
 
     double mSafeAreaTop = 0;
     double mSafeAreaRight = 0;

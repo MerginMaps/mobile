@@ -40,7 +40,9 @@ class VariablesManager;
  *     "types": [ { "label": "Inaccessible road", "value": "inaccessible_road" },
  *                { "label": "Note", "value": "note", "form": true } ],
  *                                           // optional, defaults to the typeField's value map;
- *                                           // "form": true opens the feature form instead of saving right away
+ *                                           // "form": true opens the feature form instead of saving right away;
+ *                                           // "icon": image in the project folder, defaults to the type's map symbol
+ *     "view": "grid",                       // optional, "grid" of large icons (default) or "list"
  *     "maxHorizontalAccuracy": 50,          // optional, refuse capture when GPS accuracy is worse (metres)
  *     "media": {                            // optional, enables the media button
  *       "typeValue": "field_note",          // optional, type field value of media points
@@ -61,6 +63,8 @@ class QuickCaptureController : public QObject
     Q_PROPERTY( bool enabled READ enabled NOTIFY configurationChanged )
     Q_PROPERTY( QVariantList types READ types NOTIFY configurationChanged )
     Q_PROPERTY( QStringList mediaKinds READ mediaKinds NOTIFY configurationChanged ) // subset of "photo", "audio", "video"
+    //! Types are shown as a grid of large icons ("view": "grid", default) or as a list ("view": "list")
+    Q_PROPERTY( bool gridView READ gridView NOTIFY configurationChanged )
 
   public:
     explicit QuickCaptureController( QObject *parent = nullptr );
@@ -103,6 +107,7 @@ class QuickCaptureController : public QObject
     bool enabled() const;
     QVariantList types() const;
     QStringList mediaKinds() const;
+    bool gridView() const { return mGridView; }
 
   signals:
     void qgsProjectChanged();
@@ -116,6 +121,8 @@ class QuickCaptureController : public QObject
     QgsVectorLayer *captureLayer() const;
     QVariantMap fieldConfig( const QString &fieldName ) const;
     QString typeLabel( const QVariant &typeValue ) const;
+    //! Returns the symbol drawn on the map for the type as a PNG data URL, or an empty string
+    QString symbolIcon( QgsVectorLayer *layer, int typeFieldIndex, const QVariant &typeValue ) const;
     FeatureLayerPair createFeature( const QVariantMap &attributes, double &accuracy, QString *error = nullptr );
     //! Returns the descriptions of the layer's hard constraints the feature does not meet (empty if it meets all)
     QString failedHardConstraints( const FeatureLayerPair &pair ) const;
@@ -131,6 +138,7 @@ class QuickCaptureController : public QObject
     double mMaxHorizontalAccuracy = -1;
     QMap<QString, QString> mMediaFields; // media kind -> attachment field name
     QVariant mMediaTypeValue;
+    bool mGridView = true;
 };
 
 #endif // QUICKCAPTURECONTROLLER_H

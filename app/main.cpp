@@ -107,6 +107,7 @@
 #include "routingcontroller.h"
 #include "securityalertscontroller.h"
 #include "fieldprofile.h"
+#include "termstranslator.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -456,6 +457,11 @@ int main( int argc, char *argv[] )
     qDebug() <<  "Error in loading input translation for " << locale;
   }
 
+  // organisation's own terminology from the field profile, asked before the app translation
+  TermsTranslator termsTranslator( &inputTranslator );
+  FieldProfile::restoreTerms( &termsTranslator );
+  app.installTranslator( &termsTranslator );
+
   QString appBundleDir;
 #ifdef ANDROID
   appBundleDir = dataDir + "/qgis-data";
@@ -781,11 +787,13 @@ int main( int argc, char *argv[] )
   MMStyle *style = new MMStyle( &engine, dp );
   engine.rootContext()->setContextProperty( "__style", style );
 
-  // branding (colours, logo) from the field profile of the opened project, remembered for the next start
+  // branding (colours, logo, font) and terms from the field profile of the opened project, remembered for the next start
   FieldProfile::restoreBranding( style );
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, style, [style]( QgsProject * project )
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, style, [style, &termsTranslator, &engine]( QgsProject * project )
   {
     FieldProfile::applyBranding( style, project );
+    if ( FieldProfile::applyTerms( &termsTranslator, project ) )
+      engine.retranslate();
   } );
 
   // App window settings

@@ -9,9 +9,12 @@
 
 #include "quickcapturecontroller.h"
 
+#include <QBuffer>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QPixmap>
+#include <QUrl>
 
 #include "coreutils.h"
 #include "featurelayerpair.h"
@@ -24,6 +27,11 @@
 #include "qgsvectorlayer.h"
 #include "qgsvectorlayerutils.h"
 #include "qgseditorwidgetsetup.h"
+#include "qgsexpressioncontextutils.h"
+#include "qgsmarkersymbol.h"
+#include "qgsrendercontext.h"
+#include "qgsrenderer.h"
+#include "qgssymbollayerutils.h"
 
 QuickCaptureController::QuickCaptureController( QObject *parent )
   : QObject( parent )
@@ -92,6 +100,21 @@ void QuickCaptureController::reload()
     }
   }
 
+  // icon of each type: an image from the project ("icon") or the type's symbol on the map
+  const QDir projectDir = QFileInfo( FieldProfile::filePath( mProject ) ).absoluteDir();
+  for ( QVariant &item : mTypes )
+  {
+    QVariantMap type = item.toMap();
+    const QString icon = type.value( QStringLiteral( "icon" ) ).toString();
+    if ( !icon.isEmpty() && QFileInfo::exists( projectDir.absoluteFilePath( icon ) ) )
+      type[QStringLiteral( "iconSource" )] = QUrl::fromLocalFile( projectDir.absoluteFilePath( icon ) ).toString();
+    else
+      type[QStringLiteral( "iconSource" )] = symbolIcon( layer, typeFieldIndex, type.value( QStringLiteral( "value" ) ) );
+    item = type;
+  }
+
+  mGridView = config.value( QStringLiteral( "view" ), QStringLiteral( "grid" ) ).toString() != QLatin1String( "list" );
+
   const QVariantMap media = config.value( QStringLiteral( "media" ) ).toMap();
   mMediaTypeValue = media.value( QStringLiteral( "typeValue" ) );
 
@@ -112,6 +135,46 @@ void QuickCaptureController::reload()
   }
 
   emit configurationChanged();
+}
+
+QString QuickCaptureController::symbolIcon( QgsVectorLayer *layer, int typeFieldIndex, const QVariant &typeValue ) const
+{
+  if ( !layer->renderer() )
+    return QString();
+
+  QgsFeature feature( layer->fields() );
+  feature.setGeometry( QgsGeometry::fromPointXY( QgsPointXY( 0, 0 ) ) );
+  if ( typeFieldIndex >= 0 )
+    feature.setAttribute( typeFieldIndex, typeValue );
+
+  QgsRenderContext context;
+  context.setExpressionContext( QgsExpressionContext( QgsExpressionContextUtils::globalProjectLayerScopes( layer ) ) );
+  context.expressionContext().setFeature( feature );
+
+  std::unique_ptr<QgsFeatureRenderer> renderer( layer->renderer()->clone() );
+  renderer->startRender( context, layer->fields() );
+  QgsSymbol *symbol = renderer->symbolForFeature( feature, context );
+  std::unique_ptr<QgsSymbol> iconSymbol( symbol ? symbol->clone() : nullptr );
+  renderer->stopRender( context );
+
+  if ( !iconSymbol )
+    return QString();
+
+  // map symbols are a few millimetres, draw them to fill the icon
+  const int iconSize = 128;
+  if ( QgsMarkerSymbol *marker = dynamic_cast<QgsMarkerSymbol *>( iconSymbol.get() ) )
+  {
+    marker->setSizeUnit( Qgis::RenderUnit::Pixels );
+    marker->setSize( iconSize * 0.8 );
+  }
+
+  const QPixmap pixmap = QgsSymbolLayerUtils::symbolPreviewPixmap( iconSymbol.get(), QSize( iconSize, iconSize ), 0, nullptr, false, &context.expressionContext() );
+
+  QByteArray png;
+  QBuffer buffer( &png );
+  buffer.open( QIODevice::WriteOnly );
+  pixmap.save( &buffer, "PNG" );
+  return QStringLiteral( "data:image/png;base64," ) + QString::fromLatin1( png.toBase64() );
 }
 
 bool QuickCaptureController::capturePoint( const QVariant &typeValue )
