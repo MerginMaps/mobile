@@ -267,7 +267,13 @@ Item {
 
     mapSettings.project: __activeProject.qgsProject
 
-    rotationEnabled: AppSettings.mapRotationEnabled && !internal.isEditingGeometry
+    // while following the direction of the device the map is rotated by it, so the fingers can only zoom
+    rotationEnabled: AppSettings.mapRotationEnabled && !internal.isEditingGeometry && !root.headingUp
+    pinchKeepsFollowing: root.headingUp
+
+    // the map is rendered bigger so it covers the screen when it is rotated, and it is rendered again after this rotation (in degrees)
+    overscan: AppSettings.mapRotationEnabled && ( root.isMapRotated || mapCanvas.rotationPreparing )
+    rotationRenderThreshold: 30
 
     MM.IdentifyKit {
       id: identifyKit
@@ -1200,9 +1206,6 @@ Item {
     property real tau: 0.15 // time constant of the easing in seconds, the higher the slower
     property real maxSpeed: 720 // the map never rotates faster than this (degrees per second)
 
-    // rendering is stopped while the map is rotating, otherwise each step would restart the rendering
-    property bool isFrozen: false
-
     function rotateTo( newTarget, newTau = 0.15, newMaxSpeed = 720 ) {
       target = newTarget
       tau = newTau
@@ -1210,19 +1213,9 @@ Item {
       active = true
     }
 
-    function unfreeze() {
-      if ( isFrozen ) {
-        isFrozen = false
-        mapCanvas.unfreezeRendering( "rotator" )
-      }
-    }
-
-    onActiveChanged: {
-      if ( !active ) unfreeze()
-    }
-
     property FrameAnimation frames: FrameAnimation {
-      running: mapRotator.active
+      // the map is rotated when it is rendered big enough, otherwise the corners of the canvas would be empty
+      running: mapRotator.active && mapCanvas.overscanReady
 
       onTriggered: {
         let delta = ( mapRotator.target - mapCanvas.mapSettings.rotation ) % 360
@@ -1236,11 +1229,6 @@ Item {
 
           let maxStep = mapRotator.maxSpeed * frameTime
           if ( Math.abs( step ) > maxStep ) step = step > 0 ? maxStep : -maxStep
-
-          if ( !mapRotator.isFrozen ) {
-            mapRotator.isFrozen = true
-            mapCanvas.freezeRendering( "rotator" )
-          }
         }
 
         // rotate around the position of the device if we are following its heading, otherwise around the center of the map
@@ -1249,8 +1237,7 @@ Item {
         if ( Math.abs( step ) > 0.001 ) mapCanvas.rotate( pivot, step )
 
         if ( isDone ) {
-          // map is not moving anymore, render it. Heading up mode keeps the rotator active
-          mapRotator.unfreeze()
+          // Heading up mode keeps the rotator active
           if ( !root.headingUp ) mapRotator.active = false
         }
       }
