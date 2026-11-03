@@ -20,6 +20,7 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QRegularExpression>
 #include <QSettings>
 #include <QSysInfo>
 #include <QUuid>
@@ -174,20 +175,84 @@ QString UsageReportController::externalProviderBrand( const QString &providerTyp
   if ( providerType == QLatin1String( "external_trimble" ) )
     return QStringLiteral( "trimble" );
 
-  // network provider name is an alias typed by the user, it says nothing about the device
-  if ( providerType != QLatin1String( "external_bt" ) )
+  if ( providerType != QLatin1String( "external_bt" ) && providerType != QLatin1String( "external_ip" ) )
     return QStringLiteral( "unknown" );
 
-  // bluetooth name is broadcast by the device and usually starts with its model name
-  // TODO: fill in confirmed broadcast name prefixes per brand (next telemetry version)
-  static const QList<QPair<QString, QString>> BRAND_PREFIXES =
+  // Network provider brand
+  // Either usually contains the brand ("LEICA GS18") or only the model ("RX2")
+  // First, match the brand name anywhere in the name, second, if not found, match the way brands name their models
+  // Both are matched case-insensitively and map to a canonical brand name
+  static const QList<QPair<QRegularExpression, QString>> BRAND_PATTERNS = []
   {
-  };
+    const QRegularExpression::PatternOption i = QRegularExpression::CaseInsensitiveOption;
+    return QList<QPair<QRegularExpression, QString>>
+    {
+      { QRegularExpression( QStringLiteral( "emlid|(?<![a-z0-9])reach(?![a-z0-9])" ), i ), QStringLiteral( "Emlid" ) },
+      { QRegularExpression( QStringLiteral( "leica" ), i ), QStringLiteral( "Leica" ) },
+      { QRegularExpression( QStringLiteral( "trimble" ), i ), QStringLiteral( "Trimble" ) },
+      { QRegularExpression( QStringLiteral( "topcon" ), i ), QStringLiteral( "Topcon" ) },
+      { QRegularExpression( QStringLiteral( "stonex" ), i ), QStringLiteral( "Stonex" ) },
+      { QRegularExpression( QStringLiteral( "spectra|(?<![a-z0-9])magellan(?![a-z0-9])" ), i ), QStringLiteral( "Spectra Geospatial" ) },
+      { QRegularExpression( QStringLiteral( "chcnav|(?<![a-z0-9])chc(?![a-z0-9])" ), i ), QStringLiteral( "CHC Navigation" ) },
+      { QRegularExpression( QStringLiteral( "geomax" ), i ), QStringLiteral( "GeoMax" ) },
+      { QRegularExpression( QStringLiteral( "hi[ _-]?target" ), i ), QStringLiteral( "Hi-Target" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])south(?![a-z0-9])" ), i ), QStringLiteral( "South" ) },
+      { QRegularExpression( QStringLiteral( "nordalp" ), i ), QStringLiteral( "Nordalp" ) },
+      { QRegularExpression( QStringLiteral( "septentrio" ), i ), QStringLiteral( "Septentrio" ) },
+      { QRegularExpression( QStringLiteral( "hemisphere" ), i ), QStringLiteral( "Hemisphere" ) },
+      { QRegularExpression( QStringLiteral( "sx[ _-]?blue" ), i ), QStringLiteral( "SXblue" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])eos(?![a-z0-9])" ), i ), QStringLiteral( "Eos Positioning" ) },
+      { QRegularExpression( QStringLiteral( "bad[ _-]?elf" ), i ), QStringLiteral( "Bad Elf" ) },
+      { QRegularExpression( QStringLiteral( "juniper" ), i ), QStringLiteral( "Juniper Systems" ) },
+      { QRegularExpression( QStringLiteral( "garmin" ), i ), QStringLiteral( "Garmin" ) },
+      { QRegularExpression( QStringLiteral( "ardusimple|simple[ _-]?rtk" ), i ), QStringLiteral( "ArduSimple" ) },
+      { QRegularExpression( QStringLiteral( "sparkfun" ), i ), QStringLiteral( "SparkFun" ) },
+      { QRegularExpression( QStringLiteral( "u[ _-]?blox" ), i ), QStringLiteral( "u-blox" ) },
+      { QRegularExpression( QStringLiteral( "unicore" ), i ), QStringLiteral( "Unicore" ) },
+      { QRegularExpression( QStringLiteral( "tersus" ), i ), QStringLiteral( "Tersus" ) },
+      { QRegularExpression( QStringLiteral( "comnav" ), i ), QStringLiteral( "ComNav" ) },
+      { QRegularExpression( QStringLiteral( "unistrong" ), i ), QStringLiteral( "UniStrong" ) },
+      { QRegularExpression( QStringLiteral( "javad" ), i ), QStringLiteral( "Javad" ) },
+      { QRegularExpression( QStringLiteral( "carlson" ), i ), QStringLiteral( "Carlson" ) },
+      { QRegularExpression( QStringLiteral( "altus" ), i ), QStringLiteral( "Altus" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])fjd(?![a-z0-9])" ), i ), QStringLiteral( "FJD" ) },
+    };
+  }();
 
-  for ( const QPair<QString, QString> &prefix : BRAND_PREFIXES )
+  // model-only names, e.g. "RX2" -> Emlid. Each pattern needs a border before it, so it does not match inside random names
+  static const QList<QPair<QRegularExpression, QString>> MODEL_PATTERNS = []
   {
-    if ( providerName.startsWith( prefix.first, Qt::CaseInsensitive ) )
-      return prefix.second;
+    const QRegularExpression::PatternOption i = QRegularExpression::CaseInsensitiveOption;
+    return QList<QPair<QRegularExpression, QString>>
+    {
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(rx|rs)[ _-]?[1-4]\\+?(?![a-z0-9])|(?<![a-z0-9])rs4[ _-]?pro" ), i ), QStringLiteral( "Emlid" ) },          // RX2, RS2, RS3, RS4 (Pro)
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])gs[ _-]?(0[7-9]|1\\d|2\\d)(?![a-z0-9])|(?<![a-z0-9])gg0[2-9]" ), i ), QStringLiteral( "Leica" ) }, // GS07 ... GS25, GG04
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])sp[ _-]?(60|80|85|90)(m|h)?(?![a-z0-9])" ), i ), QStringLiteral( "Spectra Geospatial" ) },    // SP60, SP80, SP85, SP90m
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])i(50|60|70|73|80|83|90)\\+?(?![a-z0-9])|(?<![a-z0-9])x(91|900)\\+?" ), i ), QStringLiteral( "CHC Navigation" ) }, // i50 ... i90, X91+, X900+
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])s(800|850|80g)[a-z]?(?![a-z0-9])" ), i ), QStringLiteral( "Stonex" ) },               // S800, S850, S80G
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])v(90|100|200|300|500)(\\+| ?plus)?(?![a-z0-9])|(?<![a-z0-9])vrtk" ), i ), QStringLiteral( "Hi-Target" ) }, // V90, V100, V500, vRTK
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(s760)(?![a-z0-9])" ), i ), QStringLiteral( "South" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(hiper|grs[ _-]?1|gr[ _-]?5|net[ _-]?g5)" ), i ), QStringLiteral( "Topcon" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])zenith[ _-]?\\d{2}" ), i ), QStringLiteral( "GeoMax" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(mosaic|asterx)" ), i ), QStringLiteral( "Septentrio" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])arrow[ _-]?(100|200|gold)" ), i ), QStringLiteral( "Eos Positioning" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(geode|gns[ _-]?[23])" ), i ), QStringLiteral( "Juniper Systems" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])glo(?![a-z0-9])" ), i ), QStringLiteral( "Garmin" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(f9p|zed[ _-]?f9)" ), i ), QStringLiteral( "u-blox" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])um9\\d{2}" ), i ), QStringLiteral( "Unicore" ) },
+    };
+  }();
+
+  for ( const auto &pattern : BRAND_PATTERNS )
+  {
+    if ( pattern.first.match( providerName ).hasMatch() )
+      return pattern.second;
+  }
+
+  for ( const auto &pattern : MODEL_PATTERNS )
+  {
+    if ( pattern.first.match( providerName ).hasMatch() )
+      return pattern.second;
   }
 
   return QStringLiteral( "other" );
