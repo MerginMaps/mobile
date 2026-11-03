@@ -315,7 +315,7 @@ void UsageReportController::submitSnapshot( bool force )
   properties.insert( QStringLiteral( "map_sketching" ), false );
   properties.insert( QStringLiteral( "map_measuring" ), false );
   properties.insert( QStringLiteral( "external_gps" ), false );
-  properties.insert( QStringLiteral( "autosync" ), false );
+  properties.insert( QStringLiteral( "autosync" ), mAppSettings->autosyncAllowed() );
   properties.insert( QStringLiteral( "reuse_last_value" ), false );
   properties.insert( QStringLiteral( "bulk_editing" ), false );
   properties.insert( QStringLiteral( "photo_sketching" ), false );

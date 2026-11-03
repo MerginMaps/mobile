@@ -686,15 +686,12 @@ int main( int argc, char *argv[] )
   // Gather dynamic usage data via signal connections
   UsageReportController &urc = usageReportController;
 
-  // Auto-sync
-  QObject::connect( &activeProject, &ActiveProject::autosyncControllerChanged, &lambdaContext, [&urc]( AutosyncController * ac )
+  // Auto-sync: remember when it gets turned on, so it still counts if turned off again before the snapshot.
+  // If it's on at snapshot time, UsageReportController reads the setting itself.
+  QObject::connect( as, &AppSettings::autosyncAllowedChanged, &lambdaContext, [&urc]( bool allowed )
   {
-    if ( !ac ) return;
-    QObject::connect( ac, &AutosyncController::projectSyncRequested, &urc, [&urc]( SyncOptions::RequestOrigin origin )
-    {
-      if ( origin == SyncOptions::AutomaticRequest )
-        urc.trackFeature( QStringLiteral( "autosync" ) );
-    } );
+    if ( allowed )
+      urc.trackFeature( QStringLiteral( "autosync" ) );
   } );
 
   // Created project
