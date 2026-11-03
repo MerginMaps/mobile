@@ -406,6 +406,16 @@ int main( int argc, char *argv[] )
   QCoreApplication::setApplicationName( "Input" ); // used by QSettings
   QCoreApplication::setApplicationVersion( version );
 
+#ifdef ANDROID
+  // geodiff (sync) and QDir::tempPath() (e.g. zipping projects) use TMPDIR and fall back to /tmp, which does not
+  // exist on Android: give them a temporary folder in the app cache
+  if ( qEnvironmentVariableIsEmpty( "TMPDIR" ) )
+  {
+    const QString tempDir = QStandardPaths::writableLocation( QStandardPaths::CacheLocation ) + QStringLiteral( "/tmp" );
+    QDir().mkpath( tempDir );
+    qputenv( "TMPDIR", tempDir.toUtf8() );
+  }
+#endif
 
 #ifdef ANDROID
   // Fix rendering problems on some Android devices - see https://bugreports.qt.io/browse/QTBUG-134089
