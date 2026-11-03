@@ -451,7 +451,9 @@ void ProjectWizard::createFieldObservationProject( QString const &projectNameRaw
   if ( !prepareProjectDir( projectNameRaw, projectDir, projectName ) )
     return;
 
-  QgsProject project;
+  // no embedded project style database: it is a project attachment, and saving attachments needs a zip archive,
+  // which fails on some Android devices (the project file is then not written at all)
+  QgsProject project( nullptr, Qgis::ProjectCapabilities() );
 
   QgsVectorTileLayer *bgLayer = createBackgroundLayer();
   QgsVectorLayer *observations = createObservationsLayer( projectDir );
