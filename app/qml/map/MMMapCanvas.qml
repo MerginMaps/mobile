@@ -39,8 +39,17 @@ Item {
   // when false, the map can not be rotated by the user
   property bool rotationEnabled: true
 
+  // pinch gesture (zoom) does not end following of the position when this is set
+  property bool pinchKeepsFollowing: false
+
+  // the fingers started to rotate the map, but not enough to rotate it yet. It is time to prepare the rendering.
+  property bool rotationPreparing: false
+
   property alias mapSettings: mapRenderer.mapSettings
   property alias isRendering: mapRenderer.isRendering
+  property alias overscan: mapRenderer.overscan
+  readonly property alias overscanReady: mapRenderer.overscanReady
+  property alias rotationRenderThreshold: mapRenderer.rotationRenderThreshold
 
   // Requests map redraw
   function refresh() {
@@ -197,28 +206,37 @@ Item {
     // when the map rotation gets this close to north (in degrees), it snaps to it
     readonly property real northSnapAngle: 4
 
+    // when the fingers rotate this much (in degrees), the map is rendered bigger for the rotation (it takes some time)
+    readonly property real rotationPrepareAngle: 5
+
     // rotation as requested by the fingers, i.e. not affected by the snapping to north
     property real fingersRotation: 0
     property real previousPinchRotation: 0
     property bool isRotating: false
 
     onPinchStarted: {
-      mapRoot.userInteractedWithMap()
+      console.log( "ROTDEBUG pinchStarted rotationEnabled:", mapRoot.rotationEnabled, "rotation:", pinch.rotation, "scale:", pinch.scale ) // TEMP
+      if ( !mapRoot.pinchKeepsFollowing ) mapRoot.userInteractedWithMap()
       rendererPrivate.freeze( freezeId )
       rendererPrivate.prepareVibration()
 
       isRotating = false
+      rotationPreparing = false
     }
 
     onPinchFinished: {
       rendererPrivate.unfreeze( freezeId )
+      rotationPreparing = false
     }
 
     onPinchUpdated: function ( pinch ) {
+      console.log( "ROTDEBUG pinchUpdated rotationEnabled:", mapRoot.rotationEnabled, "rotation:", pinch.rotation, "scale:", pinch.scale, "isRotating:", isRotating ) // TEMP
       mapRenderer.pan( pinch.center, pinch.previousCenter )
       mapRenderer.zoom( pinch.center, pinch.previousScale / pinch.scale )
 
       if ( !mapRoot.rotationEnabled ) return
+
+      if ( !rotationPreparing && Math.abs( pinch.rotation ) > rotationPrepareAngle ) rotationPreparing = true
 
       if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold )
       {
