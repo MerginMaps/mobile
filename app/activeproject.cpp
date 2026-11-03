@@ -379,14 +379,12 @@ void ActiveProject::setAutosyncEnabled( bool enabled )
   }
   else
   {
-    if ( !mAutosyncController )
-      return;
-
-    mAutosyncController->disconnect();
+    if ( mAutosyncController )
+    {
+      mAutosyncController->disconnect();
+    }
     mAutosyncController.reset();
   }
-
-  emit autosyncControllerChanged( mAutosyncController.get() );
 }
 
 void ActiveProject::requestSync( const SyncOptions::RequestOrigin requestOrigin )
