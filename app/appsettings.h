@@ -36,6 +36,7 @@ class AppSettings: public QObject
     Q_PROPERTY( double gpsAntennaHeight READ gpsAntennaHeight WRITE setGpsAntennaHeight NOTIFY gpsAntennaHeightChanged )
     Q_PROPERTY( QString ignoreMigrateVersion READ ignoreMigrateVersion WRITE setIgnoreMigrateVersion NOTIFY ignoreMigrateVersionChanged )
     Q_PROPERTY( bool autolockPosition READ autolockPosition WRITE setAutolockPosition NOTIFY autolockPositionChanged )
+    Q_PROPERTY( bool mapRotationEnabled READ mapRotationEnabled WRITE setMapRotationEnabled NOTIFY mapRotationEnabledChanged )
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
     Q_PROPERTY( StartupBehavior startupBehavior READ startupBehavior WRITE setStartupBehavior NOTIFY startupBehaviorChanged )
@@ -113,6 +114,9 @@ class AppSettings: public QObject
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
 
+    bool mapRotationEnabled() const;
+    void setMapRotationEnabled( bool mapRotationEnabled );
+
     QList<QVariant> windowPosition() const;
     void setWindowPosition( const QList<QVariant> &newWindowPosition );
 
@@ -140,6 +144,7 @@ class AppSettings: public QObject
 
     void autosyncAllowedChanged( bool autosyncAllowed );
     void autolockPositionChanged( bool autolockPosition );
+    void mapRotationEnabledChanged( bool mapRotationEnabled );
     void hapticsTypeChanged( HapticsType hapticsType );
     void startupBehaviorChanged( StartupBehavior startupBehavior );
 
@@ -178,6 +183,7 @@ class AppSettings: public QObject
     QString mActivePositionProviderId;
     bool mAutosyncAllowed = false;
     bool mAutolockPosition = true;
+    bool mMapRotationEnabled = false; // experimental, opt-in
     double mGpsAntennaHeight = 0;
     QString mIgnoreMigrateVersion;
 
