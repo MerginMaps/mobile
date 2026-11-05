@@ -14,7 +14,10 @@
 #include "qgsmemoryproviderutils.h"
 #include "qgsexpressioncontextutils.h"
 #include "qgsvectorlayerjoininfo.h"
+#include "qgsvectorlayerutils.h"
 #include "qgsauxiliarystorage.h"
+#include "qgsvectorlayer.h"
+#include "qgsproject.h"
 #include "qgis.h"
 #include "coreutils.h"
 #include "linkedfeatures.h"
@@ -172,18 +175,20 @@ void MultiEditManager::deleteSelectedFeatures()
     return;
   }
 
-  if ( !LinkedFeatures::deleteChildFeatures( mLayer, fids ) )
+  QgsVectorLayer::DeleteContext ctx( true, QgsProject::instance() );
+  mLayer->deleteFeatures( fids, &ctx );
+  // the return value above is unreliable with diamond-shaped relations, so don't check it
+
+  // ctx.handledLayers() misses nested cascades, so walk the composition tree ourselves instead
+  if ( !LinkedFeatures::commitCascadedChildren( mLayer, LinkedFeatures::editedCompositionLayers( mLayer ) ) )
   {
     CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Could not delete linked features of selected features from %1" ).arg( mLayer->name() ) );
     return;
   }
 
-  const bool success = mLayer->deleteFeatures( fids );
-  if ( success )
+  if ( mLayer->commitChanges() )
   {
     mModel->populate( {} );
-    // commit the changes to stop editing the layer
-    mLayer->commitChanges();
     mLayer->triggerRepaint();
     CoreUtils::log( QStringLiteral( "Multi Edit Manager" ), QStringLiteral( "Deleted %1 features from %2" ).arg( fids.size() ).arg( mLayer->name() ) );
   }
@@ -195,13 +200,26 @@ bool MultiEditManager::selectedFeaturesHaveCompositionChildren() const
     return false;
 
   const QgsFeatureIds fids = selectedFeatureIds();
-  for ( QgsFeatureId fid : fids )
+  if ( fids.isEmpty() )
+    return false;
+
+  // impactsCascadeFeatures() also flags joins with cascade delete, so skip it when one is set up
+  const QList<QgsVectorLayerJoinInfo> joins = mLayer->vectorJoins();
+  for ( const QgsVectorLayerJoinInfo &join : joins )
   {
-    if ( LinkedFeatures::hasCompositionChildren( mLayer, fid ) )
-      return true;
+    if ( join.hasCascadedDelete() )
+    {
+      for ( QgsFeatureId fid : fids )
+      {
+        if ( LinkedFeatures::hasCompositionChildren( mLayer, fid ) )
+          return true;
+      }
+      return false;
+    }
   }
 
-  return false;
+  QgsVectorLayerUtils::QgsDuplicateFeatureContext ctx;
+  return QgsVectorLayerUtils::impactsCascadeFeatures( mLayer, fids, QgsProject::instance(), ctx );
 }
 
 QgsFeatureIds MultiEditManager::selectedFeatureIds() const

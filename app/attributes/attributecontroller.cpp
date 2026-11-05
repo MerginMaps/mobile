@@ -28,6 +28,7 @@
 #include "qgsattributeeditorrelation.h"
 #include "qgsattributeeditorcontainer.h"
 #include "qgsvectorlayerutils.h"
+#include "qgsvectorlayerjoininfo.h"
 #include "qgsattributeeditorspacerelement.h"
 #include "qgsattributeeditortextelement.h"
 #include "qgsattributeeditorhtmlelement.h"
@@ -1189,15 +1190,27 @@ bool AttributeController::deleteFeature( bool deleteAllLinkedFeatures )
   {
     rv = mFeatureLayerPair.layer()->rollBack();
   }
-  else if ( !LinkedFeatures::deleteChildFeatures( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() }, deleteAllLinkedFeatures ) )
+  else if ( deleteAllLinkedFeatures )
   {
-    // keep the feature if its linked features could not be deleted
-    rv = false;
+    // QGIS's cascade delete only covers composition relations, so discarding stays custom
+    if ( !LinkedFeatures::deleteAllLinkedChildFeatures( mFeatureLayerPair.layer(), { mFeatureLayerPair.feature().id() } ) )
+    {
+      rv = false;
+    }
+    else
+    {
+      isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
+      rv = commit();
+    }
   }
   else
   {
-    isDeleted = mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id() );
-    rv = commit();
+    QgsVectorLayer::DeleteContext ctx( true, QgsProject::instance() );
+    mFeatureLayerPair.layer()->deleteFeature( mFeatureLayerPair.feature().id(), &ctx );
+    // the return value above is unreliable with diamond-shaped relations, so don't check it
+
+    // ctx.handledLayers() misses nested cascades, so walk the composition tree ourselves instead
+    rv = LinkedFeatures::commitCascadedChildren( mFeatureLayerPair.layer(), LinkedFeatures::editedCompositionLayers( mFeatureLayerPair.layer() ) ) && commit();
   }
 
   if ( !isDeleted || !rv )
@@ -1217,10 +1230,20 @@ bool AttributeController::deleteFeature( bool deleteAllLinkedFeatures )
 
 bool AttributeController::hasCompositionChildren() const
 {
-  if ( !mFeatureLayerPair.layer() || !InputUtils::isFeatureIdValid( mFeatureLayerPair.feature().id() ) )
+  QgsVectorLayer *layer = mFeatureLayerPair.layer();
+  if ( !layer || !InputUtils::isFeatureIdValid( mFeatureLayerPair.feature().id() ) )
     return false;
 
-  return LinkedFeatures::hasCompositionChildren( mFeatureLayerPair.layer(), mFeatureLayerPair.feature().id() );
+  // impactsCascadeFeatures() also flags joins with cascade delete, so skip it when one is set up
+  const QList<QgsVectorLayerJoinInfo> joins = layer->vectorJoins();
+  for ( const QgsVectorLayerJoinInfo &join : joins )
+  {
+    if ( join.hasCascadedDelete() )
+      return LinkedFeatures::hasCompositionChildren( layer, mFeatureLayerPair.feature().id() );
+  }
+
+  QgsVectorLayerUtils::QgsDuplicateFeatureContext ctx;
+  return QgsVectorLayerUtils::impactsCascadeFeatures( layer, { mFeatureLayerPair.feature().id() }, QgsProject::instance(), ctx );
 }
 
 bool AttributeController::rollback()
