@@ -3719,6 +3719,22 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     emit projectReloadNeededAfterSync( projectFullName );
   }
 
+  // role might have changed on the server even if there's nothing else to sync, so check it separately
+  if ( !transaction.projectMetadata.isEmpty() )
+  {
+    QString serverRole = MerginProjectMetadata::fromJson( transaction.projectMetadata ).role;
+    QString cachedRole = getCachedProjectRole( projectFullName );
+
+    if ( !serverRole.isEmpty() && serverRole != cachedRole )
+    {
+      if ( updateCachedProjectRole( projectFullName, serverRole ) )
+      {
+        emit projectRoleUpdated( projectFullName, serverRole );
+        CoreUtils::log( "sync " + projectFullName, QStringLiteral( "Project role updated to %1" ).arg( serverRole ) );
+      }
+    }
+  }
+
   mTransactionalStatus.remove( projectFullName );
 
   if ( pullBeforePush )
