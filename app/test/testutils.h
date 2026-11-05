@@ -93,11 +93,7 @@ namespace TestUtils
     QgsVectorLayer *subsub = nullptr;
   };
 
-  /**
-   * Copies the project_relations test project to a temporary folder named \a testName and loads it.
-   * Its layers main -> sub -> subsub are linked by two relations, both set to \a strength.
-   * Main has one feature (fid 1), which has one sub feature, which has two subsub features.
-   */
+  //! Copies and loads the project_relations test project into \a testName, with main->sub->subsub related at \a strength (1 main, 1 sub, 2 subsub features)
   RelationTestLayers loadRelationsTestProject( const QString &testName, Qgis::RelationshipStrength strength );
 
   //! Appends a single feature to layer via the data provider; value is stored in the named field. Returns false if addFeatures() fails.

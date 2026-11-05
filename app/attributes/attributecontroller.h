@@ -117,11 +117,7 @@ class  AttributeController : public QObject
     AttributeTabProxyModel *attributeTabProxyModel() const;
     AttributeFormProxyModel *attributeFormProxyModelForTab( int tabRow ) const;
 
-    /**
-     * Deletes the feature together with features linked to it by composition relations.
-     * Set \a deleteAllLinkedFeatures to TRUE when discarding a new feature, so the features
-     * linked to it by any relation are deleted too.
-     */
+    //! Deletes the feature and its composition children; \a deleteAllLinkedFeatures also deletes features linked by any relation, for discarding a new feature
     Q_INVOKABLE bool deleteFeature( bool deleteAllLinkedFeatures = false );
 
     bool hasCompositionChildren() const;

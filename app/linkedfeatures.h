@@ -11,6 +11,7 @@
 #define LINKEDFEATURES_H
 
 #include <QHash>
+#include <QList>
 
 #include "qgsfeatureid.h"
 
@@ -25,17 +26,21 @@ class LinkedFeatures
     //! Returns TRUE if the feature has at least one child linked to it by a composition relation
     static bool hasCompositionChildren( QgsVectorLayer *layer, QgsFeatureId fid );
 
-    /**
-     * Deletes the children of the parent features \a fids from \a layer, including their nested children, and commits the child layers.
-     * Children are followed through composition relations, or through all relations when \a allRelations is TRUE.
-     * The parent features are not deleted and \a layer is not committed, the caller does that afterwards.
-     * Returns FALSE and rolls back the child layers if a child could not be deleted.
-     */
-    static bool deleteChildFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids, bool allRelations = false );
+    //! Commits every layer in \a handledLayers other than \a layer itself, rolling all back if one is not editable or fails to commit
+    static bool commitCascadedChildren( QgsVectorLayer *layer, const QList<QgsVectorLayer *> &handledLayers );
+
+    //! Returns \a layer and the layers QGIS's own cascade delete actually left editable; use in place of DeleteContext::handledLayers(), which misses nested cascades
+    static QList<QgsVectorLayer *> editedCompositionLayers( QgsVectorLayer *layer );
+
+    //! Deletes the children of \a fids from \a layer through every relation; used only when discarding a new feature
+    static bool deleteAllLinkedChildFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids );
 
   private:
     //! Adds the features and, recursively, their children to \a features
-    static void collectFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids, bool allRelations, QHash<QgsVectorLayer *, QgsFeatureIds> &features );
+    static void collectFeatures( QgsVectorLayer *layer, const QgsFeatureIds &fids, QHash<QgsVectorLayer *, QgsFeatureIds> &features );
+
+    //! Returns \a layer and every layer reachable from it through composition relations
+    static QList<QgsVectorLayer *> compositionLayerTree( QgsVectorLayer *layer );
 };
 
 #endif // LINKEDFEATURES_H
