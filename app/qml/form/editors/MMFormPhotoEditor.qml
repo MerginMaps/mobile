@@ -189,8 +189,8 @@ MMFormPhotoViewer {
     target: __androidUtils
 
     // used for both gallery and camera
-    function onImageSelected( imagePath, index ) {
-      if ( root._fieldItemId === index.toString() ) {
+    function onImageSelected( imagePath, fieldId ) {
+      if ( root._fieldItemId === fieldId ) {
         internal.imageSelected( imagePath )
       }
     }
@@ -200,8 +200,8 @@ MMFormPhotoViewer {
     target: __iosUtils
 
     // used for both gallery and camera
-    function onImageSelected( imagePath, index ) {
-      if ( root._fieldItemId === index.toString() ) {
+    function onImageSelected( imagePath, fieldId ) {
+      if ( root._fieldItemId === fieldId ) {
         internal.imageCaptured( imagePath )
       }
     }
