@@ -31,6 +31,10 @@ struct MerginFile
   QString diffBaseChecksum;  //!< checksum of the base file
   qint64 diffSize;           //!< size (in bytes) of the diff file
 
+  //! if non-empty, a consistent copy of the file taken at the start of the push for a full upload (filename relative to project's .mergin dir).
+  //! Full uploads read from it instead of the project file, which may still change (or have data only in its -wal file)
+  QString snapshotName;
+
   //
   // these are members only user for update of changed file through geodiff
   // (could be multiple diffs that need to be applied sequentially)

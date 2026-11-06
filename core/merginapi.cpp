@@ -602,6 +602,30 @@ void MerginApi::cacheServerConfig()
 }
 
 
+bool MerginApi::createPushSnapshot( TransactionStatus &transaction, MerginFile &file )
+{
+  // the project file may still be open and changing, and may have changes only in its -wal file:
+  // take a consistent copy via sqlite and push exactly that (checksum, size, diff and content)
+  const QString snapshotName = file.path + "-snapshot-" + CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+  const QString snapshotPath = transaction.projectDir + "/.mergin/" + snapshotName;
+  createPathIfNotExists( snapshotPath );
+
+  if ( !GeodiffUtils::copyWalAware( transaction.projectDir + "/" + file.path, snapshotPath ) )
+  {
+    CoreUtils::log( "push", "Failed to create snapshot of " + file.path );
+    QFile::remove( snapshotPath );
+    return false;
+  }
+
+  transaction.pushSnapshots.insert( file.path, snapshotName );
+
+  const QByteArray checksum = CoreUtils::calculateChecksum( snapshotPath );
+  file.snapshotName = snapshotName;
+  file.checksum = QString::fromLatin1( checksum.data(), checksum.size() );
+  file.size = QFileInfo( snapshotPath ).size();
+  return true;
+}
+
 void MerginApi::pushFile( const QString &projectFullName, const QString &transactionUUID, MerginFile file, int chunkNo )
 {
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
@@ -615,10 +639,12 @@ void MerginApi::pushFile( const QString &projectFullName, const QString &transac
   QString chunkID = file.chunks.at( chunkNo );
 
   QString filePath;
-  if ( file.diffName.isEmpty() )
-    filePath = transaction.projectDir + "/" + file.path;
-  else  // use diff file instead of full file
+  if ( !file.diffName.isEmpty() )  // use diff file instead of full file
     filePath = transaction.projectDir + "/.mergin/" + file.diffName;
+  else if ( !file.snapshotName.isEmpty() )  // use the consistent copy taken at the start of the push
+    filePath = transaction.projectDir + "/.mergin/" + file.snapshotName;
+  else
+    filePath = transaction.projectDir + "/" + file.path;
 
   QFile f( filePath );
   QByteArray data;
@@ -2098,10 +2124,15 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
   QString dest = projectDir + "/" + filePath;
   createPathIfNotExists( dest );
 
-  QFile f( dest );
+  // assemble the file next to the project (inside .mergin so it is never seen as a local change) and then
+  // move it over dest - dest may still be open (e.g. by a rendering job) and must not be truncated in place
+  QString assembled = projectDir + "/.mergin/" + CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+  createPathIfNotExists( assembled );
+
+  QFile f( assembled );
   if ( !f.open( QIODevice::WriteOnly ) )
   {
-    CoreUtils::log( "pull " + projectFullName, "Failed to open file for writing " + dest );
+    CoreUtils::log( "pull " + projectFullName, "Failed to open file for writing " + assembled );
     return;
   }
 
@@ -2112,12 +2143,21 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     if ( !fTmp.open( QIODevice::ReadOnly ) )
     {
       CoreUtils::log( "pull " + projectFullName, "Failed to open temp file for reading " + item.tempFileName );
+      f.close();
+      QFile::remove( assembled );
       return;
     }
     f.write( fTmp.readAll() );
   }
 
   f.close();
+
+  if ( !GeodiffUtils::replaceWalAware( assembled, dest ) )
+  {
+    CoreUtils::log( "pull " + projectFullName, "Failed to replace " + dest + " with new content" );
+    QFile::remove( assembled );
+    return;
+  }
 
   // if diffable, copy to .mergin dir so we have a basefile
   if ( MerginApi::isFileDiffable( filePath ) )
@@ -2129,7 +2169,7 @@ void MerginApi::finalizeProjectPullCopy( const QString &projectFullName, const Q
     {
       CoreUtils::log( "pull " + projectFullName, "failed to remove old basefile for: " + filePath );
     }
-    if ( !QFile::copy( dest, basefile ) )
+    if ( !GeodiffUtils::copyWalAware( dest, basefile ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed to copy new basefile for: " + filePath );
     }
@@ -2208,13 +2248,17 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
     hasConflicts = true;
     LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
     QString newDest = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( dest, mUserInfo->username(), info.localVersion ) );
-    if ( !QFile::rename( dest, newDest ) )
+    // copy rather than rename: dest may still be open, and a backup copy also includes changes still in its -wal
+    if ( !GeodiffUtils::copyWalAware( dest, newDest ) )
     {
-      CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file after failed geodiff rebase: " + filePath );
+      CoreUtils::log( "pull " + projectFullName, "failed to create conflicting file after failed geodiff rebase: " + filePath );
     }
-    if ( !QFile::copy( src, dest ) )
+    // src becomes the new basefile below, so put a copy of it in place of dest
+    QString serverCopy = projectDir + "/.mergin/" + CoreUtils::uuidWithoutBraces( QUuid::createUuid() );
+    if ( !QFile::copy( src, serverCopy ) || !GeodiffUtils::replaceWalAware( serverCopy, dest ) )
     {
       CoreUtils::log( "pull " + projectFullName, "failed to update local conflicting file after failed geodiff rebase: " + filePath );
+      QFile::remove( serverCopy );
     }
   }
 
@@ -2263,13 +2307,14 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
         QString origPath = projectDir + "/" + finalizationItem.filePath;
         LocalProject info = mLocalProjects.projectFromMerginName( projectFullName );
         QString newPath = CoreUtils::findUniquePath( CoreUtils::generateConflictedCopyFileName( origPath, mUserInfo->username(), info.localVersion ) );
-        if ( !QFile::rename( origPath, newPath ) )
+        // copy rather than rename: the file may still be open, and a backup copy also includes changes still in its -wal
+        if ( !GeodiffUtils::copyWalAware( origPath, newPath ) )
         {
-          CoreUtils::log( "pull " + projectFullName, "failed rename of conflicting file: " + finalizationItem.filePath );
+          CoreUtils::log( "pull " + projectFullName, "failed to create conflicting file: " + finalizationItem.filePath );
         }
         else
         {
-          CoreUtils::log( "pull " + projectFullName, "Local file renamed due to conflict with server: " + finalizationItem.filePath );
+          CoreUtils::log( "pull " + projectFullName, "Local file copied due to conflict with server: " + finalizationItem.filePath );
         }
         finalizeProjectPullCopy( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
         break;
@@ -2278,17 +2323,17 @@ void MerginApi::finalizeProjectPull( const QString &projectFullName )
       case PullTask::ApplyDiff:
       {
         // applying diff can result in conflicted copy too, in this case
-        // we need to update gpkgSchemaChanged flag.
+        // we need to update projectReloadNeeded flag.
         bool res = finalizeProjectPullApplyDiff( projectFullName, projectDir, tempProjectDir, finalizationItem.filePath, finalizationItem.data );
-        transaction.gpkgSchemaChanged = res;
+        transaction.projectReloadNeeded |= res;
         break;
       }
 
       case PullTask::Delete:
       {
         CoreUtils::log( "pull " + projectFullName, "Removing local file: " + finalizationItem.filePath );
-        QFile file( projectDir + "/" + finalizationItem.filePath );
-        file.remove();
+        if ( !GeodiffUtils::removeWalAware( projectDir + "/" + finalizationItem.filePath ) )
+          CoreUtils::log( "pull " + projectFullName, "Failed to remove local file: " + finalizationItem.filePath );
         break;
       }
     }
@@ -2618,7 +2663,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
-    transaction.gpkgSchemaChanged = true;
+    transaction.projectReloadNeeded = true;
   }
 
   for ( QString filePath : transaction.diff.remoteUpdated )
@@ -2635,7 +2680,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::Copy, filePath, items );
-      transaction.gpkgSchemaChanged = true;
+      transaction.projectReloadNeeded = true;
     }
   }
 
@@ -2654,7 +2699,7 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     {
       QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
       transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
-      transaction.gpkgSchemaChanged = true;
+      transaction.projectReloadNeeded = true;
     }
   }
 
@@ -2664,13 +2709,15 @@ void MerginApi::startProjectPull( const QString &projectFullName )
     MerginFile file = serverProject.fileInfo( filePath );
     QList<DownloadQueueItem> items = itemsForFileChunks( file, transaction.version );
     transaction.pullTasks << PullTask( PullTask::CopyConflict, filePath, items );
-    transaction.gpkgSchemaChanged = true;
+    transaction.projectReloadNeeded = true;
   }
 
   // schedule removed files to be deleted
   for ( QString filePath : transaction.diff.remoteDeleted )
   {
     transaction.pullTasks << PullTask( PullTask::Delete, filePath, QList<DownloadQueueItem>() );
+    if ( isFileDiffable( filePath ) )
+      transaction.projectReloadNeeded = true;
   }
 
   // prepare the download queue
@@ -2943,6 +2990,11 @@ void MerginApi::pushInfoReplyFinished()
     for ( QString filePath : transaction.diff.localAdded )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
+      if ( isFileDiffable( filePath ) && !createPushSnapshot( transaction, merginFile ) )
+      {
+        finishProjectSync( projectFullName, false );
+        return;
+      }
       merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       addedMerginFiles.append( merginFile );
     }
@@ -2950,11 +3002,11 @@ void MerginApi::pushInfoReplyFinished()
     for ( QString filePath : transaction.diff.localUpdated )
     {
       MerginFile merginFile = findFile( filePath, localFiles );
-      merginFile.chunks = generateChunkIdsForSize( merginFile.size );
 
       if ( MerginApi::isFileDiffable( filePath ) )
       {
-        // try to create a diff
+        // try to create a diff - geodiff reads the file through sqlite, so the diff is consistent and includes
+        // changes in the -wal file, and the basefile gets updated from the diff itself (no snapshot needed)
         QString diffName;
         int geodiffRes = GeodiffUtils::createChangeset( transaction.projectDir, filePath, diffName );
         QString diffPath = transaction.projectDir + "/.mergin/" + diffName;
@@ -2983,6 +3035,17 @@ void MerginApi::pushInfoReplyFinished()
           // TODO: remove the diff file (if exists)
           CoreUtils::log( "push " + projectFullName, QString( "Geodiff create changeset on %1 FAILED with error %2 (will do full upload)" ).arg( filePath ).arg( geodiffRes ) );
         }
+      }
+
+      if ( merginFile.diffName.isEmpty() )
+      {
+        // full upload
+        if ( isFileDiffable( filePath ) && !createPushSnapshot( transaction, merginFile ) )
+        {
+          finishProjectSync( projectFullName, false );
+          return;
+        }
+        merginFile.chunks = generateChunkIdsForSize( merginFile.size );
       }
 
       updatedMerginFiles.append( merginFile );
@@ -3085,19 +3148,21 @@ void MerginApi::pushFinishReplyFinished()
     transaction.projectMetadata = data;
     transaction.version = MerginProjectMetadata::fromJson( data ).version;
 
-    //  a new diffable files suppose to have their basefile copies in .mergin
-    for ( QString filePath : transaction.diff.localAdded )
+    // diffable files uploaded in full (new files, or updated ones where creating a diff failed) get the uploaded
+    // snapshot as their basefile, so it is equivalent to the server version even if the file changed meanwhile
+    for ( auto it = transaction.pushSnapshots.begin(); it != transaction.pushSnapshots.end(); )
     {
-      if ( MerginApi::isFileDiffable( filePath ) )
-      {
-        QString basefile = transaction.projectDir + "/.mergin/" + filePath;
-        createPathIfNotExists( basefile );
+      QString basefile = transaction.projectDir + "/.mergin/" + it.key();
+      createPathIfNotExists( basefile );
 
-        QString sourcePath = transaction.projectDir + "/" + filePath;
-        if ( !QFile::copy( sourcePath, basefile ) )
-        {
-          CoreUtils::log( "push " + projectFullName, "failed to copy new basefile for: " + filePath );
-        }
+      if ( GeodiffUtils::replaceWalAware( transaction.projectDir + "/.mergin/" + it.value(), basefile ) )
+      {
+        it = transaction.pushSnapshots.erase( it );
+      }
+      else
+      {
+        CoreUtils::log( "push " + projectFullName, "failed to update basefile for: " + it.key() );
+        ++it;
       }
     }
 
@@ -3694,6 +3759,14 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
 
   emit syncProjectStatusChanged( projectFullName, -1 );   // -1 means there's no sync going on
 
+  // remove snapshots of pushed files that did not become basefiles
+  for ( const QString &snapshotName : std::as_const( transaction.pushSnapshots ) )
+  {
+    if ( !QFile::remove( transaction.projectDir + "/.mergin/" + snapshotName ) )
+      CoreUtils::log( "sync " + projectFullName, "Failed to remove snapshot: " + snapshotName );
+  }
+  transaction.pushSnapshots.clear();
+
   if ( syncSuccessful )
   {
     // update the local metadata file
@@ -3714,7 +3787,7 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
   ProjectDiff diff = transaction.diff;
   int newVersion = syncSuccessful ? transaction.version : -1;
 
-  if ( transaction.gpkgSchemaChanged || projectFileHasBeenUpdated( diff ) || authConfigurationHasChanged( diff ) )
+  if ( transaction.projectReloadNeeded || projectFileHasBeenUpdated( diff ) || authConfigurationHasChanged( diff ) )
   {
     emit projectReloadNeededAfterSync( projectFullName );
   }
