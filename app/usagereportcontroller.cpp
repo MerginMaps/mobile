@@ -154,8 +154,6 @@ void UsageReportController::checkConnectivity()
 
   // The system knows when the device has no connection (airplane mode, no Wi-Fi or mobile data), so we won't ping in that case.
   static const bool reachabilityAvailable = QNetworkInformation::loadBackendByFeatures( QNetworkInformation::Feature::Reachability );
-  // Temporary: log which path the check takes, remove after testing on devices
-  CoreUtils::log( QStringLiteral( "Usage report" ), QStringLiteral( "connectivity check: backend loaded: %1, reachability: %2" ).arg( reachabilityAvailable ).arg( reachabilityAvailable ? static_cast<int>( QNetworkInformation::instance()->reachability() ) : -1 ) );
 
   if ( reachabilityAvailable && QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Disconnected )
   {
@@ -175,7 +173,6 @@ void UsageReportController::checkConnectivity()
     incrementCounter( QStringLiteral( "ping_total_count" ) );
     // Only 204 means online, captive portals redirect to a login page that returns 200
     const int status = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
-    CoreUtils::log( QStringLiteral( "Usage report" ), QStringLiteral( "connectivity ping finished: status %1, error %2" ).arg( status ).arg( reply->error() ) ); // Temporary
     if ( reply->error() == QNetworkReply::NoError && status == 204 )
       incrementCounter( QStringLiteral( "ping_success_count" ) );
     else
