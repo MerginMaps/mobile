@@ -76,6 +76,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->field();
     case FieldIndex:
       return item->fieldIndex();
+    case FormItemId:
+      return item->id().toString();
     case AttributeFormModel::Group:
       return item->groupName();
     case Visible:
@@ -138,6 +140,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[Relation] = QByteArray( "Relation" );
   roles[RawValue] = QByteArray( "RawValue" );
   roles[HasMixedValues] = QByteArray( "HasMixedValues" );
+  roles[FormItemId] = QByteArray( "FormItemId" );
 
   return roles;
 }
