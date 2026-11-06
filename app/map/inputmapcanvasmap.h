@@ -191,6 +191,13 @@ class InputMapCanvasMap : public QQuickItem
     void zoomToFullExtent();
     void clearTemporalCache();
 
+    // Margin ratio added to EACH side of the visible screen.
+    // Examples:
+    //   0.50 -> Adds HALF a screen to each side (total canvas size = 2.0x).
+    //   1.00 -> Adds ONE FULL screen to each side (maximum size, total canvas = 3.0x).
+    //   0.25 -> Adds 1/4 of a screen to each side (total canvas size = 1.5x).
+    static constexpr double MARGIN_RATIO = 0.5;
+
     std::unique_ptr<InputMapSettings> mMapSettings;
     bool mPinching = false;
     QPoint mPinchStartPoint;
