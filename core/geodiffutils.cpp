@@ -174,6 +174,103 @@ bool GeodiffUtils::rebase( const QString &base, const QString &modified_their, c
   return ( res == GEODIFF_SUCCESS );
 }
 
+GeodiffUtils::FeatureIdMapping GeodiffUtils::findRemappedFeatureIds( const QString &dbPath, const QString &localChangesJson, const QString &rebasedChangesJson )
+{
+  // fetch GeoPackage schema, extract table names and indices of primary key columns
+  QHash<QString, int> pkColumns;
+  {
+    QTemporaryFile schemaFile;
+    if ( !schemaFile.open() )
+    {
+      return {};
+    }
+    schemaFile.close();
+
+    const int res = GEODIFF_schema( GeodiffContext::instance().handle(), "sqlite", nullptr, dbPath.toUtf8(), schemaFile.fileName().toUtf8() );
+    if ( res != GEODIFF_SUCCESS || !schemaFile.open() )
+    {
+      return {};
+    }
+
+    const QJsonArray tables = QJsonDocument::fromJson( schemaFile.readAll() ).object()["geodiff_schema"].toArray();
+    for ( const auto &table : tables )
+    {
+      const QJsonArray columns = table.toObject()["columns"].toArray();
+      for ( int i = 0; i < columns.size(); ++i )
+      {
+        if ( columns[i].toObject()["primary_key"].toBool() )
+        {
+          pkColumns.insert( table.toObject()["table"].toString(), i );
+          break;
+        }
+      }
+    }
+  }
+
+  const QHash<QString, QList<qint64>> localInserts = extractPrimaryKeysfromChangeset( pkColumns, localChangesJson );
+  if ( localInserts.isEmpty() )
+  {
+    return {};
+  }
+
+  // create the final mapping of old IDs to new IDs, we make an assumption here: we expect geodiff to create the new IDs list in the same order
+  // as the old IDs list.
+  // NOTE: Geodiff should expose this functionality as API, this is just temporary solution until the API is available
+  FeatureIdMapping mapping;
+  const QHash<QString, QList<qint64>> rebasedInserts = extractPrimaryKeysfromChangeset( pkColumns, rebasedChangesJson );
+  for ( const QString &layer : localInserts.keys() )
+  {
+    const QList<qint64> idList = localInserts.value( layer );
+    for ( int i = 0; i < idList.size(); i++ )
+    {
+      const QPair<qint64, qint64> ids = { idList.at( i ), rebasedInserts.value( layer ).at( i )};
+      if ( mapping.contains( layer ) )
+      {
+        mapping[layer].append( ids );
+      }
+      else
+      {
+        mapping.insert( layer, {ids} );
+      }
+    }
+  }
+
+  return mapping;
+}
+
+QHash<QString, QList<qint64>> GeodiffUtils::extractPrimaryKeysfromChangeset( const QHash<QString, int> &primaryKeyColumns, const QString &jsonChangeset )
+{
+  QHash<QString, QList<qint64>> tableIds;
+  const QJsonArray entries = QJsonDocument::fromJson( jsonChangeset.toUtf8() ).object()["geodiff"].toArray();
+  for ( const auto &entry : entries )
+  {
+    const QJsonObject entryObj = entry.toObject();
+    const QString table = entryObj["table"].toString();
+    if ( entryObj["type"].toString() != QLatin1String( "insert" ) || !primaryKeyColumns.contains( table ) )
+    {
+      continue;
+    }
+
+    const QJsonArray changes = entryObj["changes"].toArray();
+    for ( const auto &change : changes )
+    {
+      const QJsonObject changeObj = change.toObject();
+      if ( changeObj["column"].toInt() == primaryKeyColumns[table] )
+      {
+        if ( tableIds.contains( table ) )
+        {
+          tableIds[table].append( changeObj["new"].toInteger( -1 ) );
+        }
+        else
+        {
+          tableIds.insert( table, {changeObj["new"].toInteger( -1 ) } );
+        }
+      }
+    }
+  }
+  return tableIds;
+}
+
 void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
 {
   QString prefix;

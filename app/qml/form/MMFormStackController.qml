@@ -156,6 +156,23 @@ Item {
     formsStack.clear(StackView.Immediate)
   }
 
+  // Open form can be synchronised on the background and it's ID can be changed, which will make the form data incorrect.
+  // If the current form is in readOnly state sync could be triggered and we will update the form.
+  // From the received ID mapping refresh feature held by active form.
+  function refreshForms( featureIdsRemap ) {
+    const form = _getActiveForm()
+
+    if ( !form || form.formState !== "readOnly" ) {
+      return
+    }
+
+    const pair = __inputUtils.refreshFeatureLayerPair( form.featureLayerPair, featureIdsRemap )
+
+    if ( pair.valid ) {
+      form.featureLayerPair = pair
+    }
+  }
+
   function openLinkedFeature( linkedFeature ) {
     let props = {
       featureLayerPair: linkedFeature,
@@ -287,6 +304,14 @@ Item {
           syncWhenFormCloses = false
         }
       }
+    }
+  }
+
+  Connections {
+    target: __activeProject
+
+    function onFeatureIdsRemapped( remap ) {
+      root.refreshForms( remap )
     }
   }
 

@@ -10,6 +10,7 @@
 #ifndef GEODIFFUTILS_H
 #define GEODIFFUTILS_H
 
+#include <QHash>
 #include <QMap>
 #include <QString>
 
@@ -41,6 +42,9 @@ class GeodiffUtils
 
     typedef QMap<QString, TableSummary> ChangesetSummary;
 
+    //! Table name with list of mapped old IDs to new IDs
+    using FeatureIdMapping = QHash<QString, QList<QPair<qint64, qint64>>>;
+
     //! Tests whether the file has changed according to geodiff compared to the original server version
     static bool hasPendingChanges( const QString &projectDir, const QString &filePath );
 
@@ -68,6 +72,24 @@ class GeodiffUtils
 
     //! Rebases local modified version from base to modified_their version
     static bool rebase( const QString &base, const QString &modified_their, const QString &modified, const QString &conflictfile );
+
+    /**
+     * Finds primary keys of locally inserted rows that have been changed by rebase (when both
+     * we and the server inserted a row with the same primary key, our row gets a new one).
+     * \param dbPath geopackage file, used to find primary key columns
+     * \param localChangesJson local changes (listChanges output) before rebase
+     * \param rebasedChangesJson local changes (listChanges output) after rebase
+     */
+    static FeatureIdMapping findRemappedFeatureIds( const QString &dbPath, const QString &localChangesJson, const QString &rebasedChangesJson );
+
+  private:
+
+    /**
+     * Based on primary key indices in tables parse changeset of geopackage and return map of table names with list of primary keys, which have been inserted.
+     * \param primaryKeyColumns map of table names and index of primary key column
+     * \param jsonChangeset Geodiff generated changeset
+     */
+    static QHash<QString, QList<qint64>> extractPrimaryKeysfromChangeset( const QHash<QString, int> &primaryKeyColumns, const QString &jsonChangeset );
 };
 
 #endif // GEODIFFUTILS_H
