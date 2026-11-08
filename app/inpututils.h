@@ -580,6 +580,16 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
 
     /**
+     * Creates the blank canvas a signature is drawn onto. \see ImageUtils::createSignatureCanvas()
+     */
+    Q_INVOKABLE static bool createSignatureCanvas( const QString &path, int width, int height );
+
+    /**
+     * Stamps the current timestamp/position into the signature canvas. \see ImageUtils::writeGpsAndTimestamp()
+     */
+    Q_INVOKABLE static bool writeSignatureMetadata( const QString &path, bool hasPosition, double latitude, double longitude, double altitude );
+
+    /**
      * Creates an empty geometry matching layer WKB type
      */
     Q_INVOKABLE static QgsGeometry createGeometryForLayer( QgsVectorLayer *layer );

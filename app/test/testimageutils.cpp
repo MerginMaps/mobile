@@ -13,6 +13,8 @@
 
 #include <QTemporaryDir>
 #include <QImage>
+#include <QDateTime>
+#include <QTimeZone>
 #include <exiv2/exiv2.hpp>
 
 void TestImageUtils::init()
@@ -78,4 +80,51 @@ void TestImageUtils::testClearOrientationMetadata()
   const auto xmpIterator = xmpData.findKey( Exiv2::XmpKey( "Xmp.tiff.Orientation" ) );
   QVERIFY( xmpIterator != xmpData.end() ); // key should be preserved, just reset to 1
   QCOMPARE( QString::fromStdString( xmpIterator->toString() ), QStringLiteral( "1" ) );
+}
+
+void TestImageUtils::testWriteGpsAndTimestamp()
+{
+  const QTemporaryDir dir;
+  const QString path = dir.filePath( QStringLiteral( "signature.png" ) );
+
+  QImage blankImage( 10, 10, QImage::Format_RGB32 );
+  blankImage.fill( Qt::white );
+  QVERIFY( blankImage.save( path, "PNG" ) );
+
+  const QDateTime dateTimeUtc( QDate( 2026, 1, 2 ), QTime( 3, 4, 5 ), QTimeZone::UTC );
+  QVERIFY( ImageUtils::writeGpsAndTimestamp( path, dateTimeUtc, true, 51.5074, -0.1278, 11.0 ) );
+
+  const std::unique_ptr image( Exiv2::ImageFactory::open( path.toStdString() ) );
+  image->readMetadata();
+  Exiv2::ExifData &exifData = image->exifData();
+  QVERIFY( !exifData.empty() );
+
+  QCOMPARE( QString::fromStdString( exifData["Exif.Image.DateTime"].toString() ), QStringLiteral( "2026:01:02 03:04:05" ) );
+  QCOMPARE( QString::fromStdString( exifData["Exif.GPSInfo.GPSLatitudeRef"].toString() ), QStringLiteral( "N" ) );
+  QCOMPARE( QString::fromStdString( exifData["Exif.GPSInfo.GPSLongitudeRef"].toString() ), QStringLiteral( "W" ) );
+
+  const Exiv2::Rational latDegrees = exifData["Exif.GPSInfo.GPSLatitude"].toRational( 0 );
+  QCOMPARE( latDegrees.first, 51 );
+  const Exiv2::Rational lonDegrees = exifData["Exif.GPSInfo.GPSLongitude"].toRational( 0 );
+  QCOMPARE( lonDegrees.first, 0 );
+}
+
+void TestImageUtils::testWriteGpsAndTimestampWithoutPosition()
+{
+  const QTemporaryDir dir;
+  const QString path = dir.filePath( QStringLiteral( "signature.png" ) );
+
+  QImage blankImage( 10, 10, QImage::Format_RGB32 );
+  blankImage.fill( Qt::white );
+  QVERIFY( blankImage.save( path, "PNG" ) );
+
+  const QDateTime dateTimeUtc( QDate( 2026, 1, 2 ), QTime( 3, 4, 5 ), QTimeZone::UTC );
+  QVERIFY( ImageUtils::writeGpsAndTimestamp( path, dateTimeUtc, false, 0.0, 0.0, 0.0 ) );
+
+  const std::unique_ptr image( Exiv2::ImageFactory::open( path.toStdString() ) );
+  image->readMetadata();
+  Exiv2::ExifData &exifData = image->exifData();
+
+  QCOMPARE( QString::fromStdString( exifData["Exif.Image.DateTime"].toString() ), QStringLiteral( "2026:01:02 03:04:05" ) );
+  QVERIFY( exifData.findKey( Exiv2::ExifKey( "Exif.GPSInfo.GPSLatitude" ) ) == exifData.end() );
 }
