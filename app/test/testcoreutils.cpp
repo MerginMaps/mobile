@@ -418,7 +418,7 @@ void TestCoreUtils::testFindRemappedFeatureIds()
   }
   QVERIFY( layer->commitChanges() );
 
-  const QString localChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo(ours).fileName(), false );
+  const QString localChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo( ours ).fileName(), false );
   QVERIFY( !localChanges.isEmpty() );
 
   QVERIFY( GeodiffUtils::rebase( base, their, ours, dir.filePath( "conflict.json" ) ) );
@@ -426,10 +426,10 @@ void TestCoreUtils::testFindRemappedFeatureIds()
   QVERIFY( QFile::remove( base ) );
   QVERIFY( QFile::copy( their, base ) );
 
-  const QString rebasedChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo(ours).fileName(), false );
+  const QString rebasedChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo( ours ).fileName(), false );
   const GeodiffUtils::FeatureIdMapping mapping = GeodiffUtils::findRemappedFeatureIds( ours, localChanges, rebasedChanges );
 
-  const GeodiffUtils::FeatureIdMapping expectedMapping = {{QStringLiteral("simple"), {{4, 5}, {5,6}}}};
+  const GeodiffUtils::FeatureIdMapping expectedMapping = {{QStringLiteral( "simple" ), {{4, 5}, {5, 6}}}};
   QCOMPARE( mapping, expectedMapping );
 
   QCOMPARE( layer->getFeature( 5 ).attribute( "name" ).toString(), QStringLiteral( "first" ) );
@@ -439,6 +439,6 @@ void TestCoreUtils::testFindRemappedFeatureIds()
   // no local inserts -> no mapping
   QVERIFY( QFile::remove( base ) );
   QVERIFY( QFile::copy( ours, base ) );
-  const QString noLocalChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo(ours).fileName(), false );
+  const QString noLocalChanges = GeodiffUtils::diffableFilePendingChanges( dir.path(), QFileInfo( ours ).fileName(), false );
   QCOMPARE( GeodiffUtils::findRemappedFeatureIds( ours, noLocalChanges, QString() ), GeodiffUtils::FeatureIdMapping() );
 }
