@@ -29,9 +29,7 @@ Rectangle {
     anchors.margins: __style.margin10
 
     radius: root.radius
-    color: __style.transparentColor
-    border.color: __style.skyColor
-    border.width: 1
+    color: __style.lightGreenColor
 
     Column {
       anchors.centerIn: parent
@@ -39,7 +37,7 @@ Rectangle {
 
       MMComponents.MMIcon {
         anchors.horizontalCenter: parent.horizontalCenter
-        source: __style.signatureIcon
+        source: __style.redrawGeometryIcon
         color: root.enabled ? __style.forestColor : __style.mediumGreyColor
       }
 
