@@ -11,6 +11,7 @@ import QtQuick
 
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
+import "../components/photo" as MMPhotoComponents
 import "../components/signature" as MMSignatureComponents
 
 /*
@@ -67,6 +68,16 @@ MMPrivateComponents.MMBaseInput {
         }
       }
 
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          if ( signatureImage.status === Image.Ready ) {
+            previewLoader.active = true
+            previewLoader.focus = true
+          }
+        }
+      }
+
       MMComponents.MMRoundButton {
         anchors {
           right: parent.right
@@ -93,6 +104,22 @@ MMPrivateComponents.MMBaseInput {
       enabled: root.editState === "enabled"
 
       onSignNowClicked: root.signNowClicked()
+    }
+  }
+
+  Loader {
+    id: previewLoader
+
+    asynchronous: true
+    active: false
+    sourceComponent: previewComponent
+  }
+
+  Component {
+    id: previewComponent
+
+    MMPhotoComponents.MMPhotoPreview {
+      photoUrl: root.signatureUrl
     }
   }
 }

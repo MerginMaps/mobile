@@ -59,11 +59,7 @@ MMFormSignatureViewer {
 
   signatureUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
 
-  on_FieldValueChanged: {
-    internal.setImageSource()
-    // after editing geometry this needs to be triggered to recover an unsaved drawing for components which were not in view
-    signatureSketchingController.prepareController()
-  }
+  on_FieldValueChanged: internal.setImageSource()
   on_FieldValueIsNullChanged: internal.setImageSource()
 
   onSignNowClicked: internal.signNow()
@@ -133,6 +129,9 @@ MMFormSignatureViewer {
       photoUrl: internal.canvasUrl
       controller: signatureSketchingController
 
+      showColorPicker: false
+      hintText: qsTr( "Draw your signature and confirm" )
+
       onClosed: signatureDialogLoader.active = false
     }
   }
@@ -194,12 +193,15 @@ MMFormSignatureViewer {
       if ( __inputUtils.fileExists( absolutePath ) ) {
         root.signatureState = "valid"
         resolvedImageSource = __inputUtils.localFileToUrl( absolutePath )
-        tempSketchedImageSource = ""
 
-        // point the controller back at this file so prepareController() can recover a pending temp backup
-        pendingSignaturePath = absolutePath
-        signatureConfirmed = true
-        canvasUrl = resolvedImageSource
+        // after editing geometry this needs to be triggered to recover an unsaved drawing for components which were not in view
+        if ( canvasUrl !== resolvedImageSource ) {
+          tempSketchedImageSource = ""
+          pendingSignaturePath = absolutePath
+          signatureConfirmed = true
+          canvasUrl = resolvedImageSource
+          signatureSketchingController.prepareController()
+        }
       }
       else {
         root.signatureState = "notAvailable"

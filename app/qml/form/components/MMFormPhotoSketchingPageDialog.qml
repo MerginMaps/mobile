@@ -31,6 +31,9 @@ Dialog {
   property string photoUrl: ""
   property PhotoSketchingController controller
 
+  property bool showColorPicker: true
+  property string hintText: ""
+
   parent: Overlay.overlay
   width: parent.width
   height: parent.height
@@ -198,6 +201,8 @@ Dialog {
     MMComponents.MMListSpacer { implicitHeight: __style.margin20 }
 
     MMComponents.MMColorPicker {
+      visible: root.showColorPicker
+
       colors: [__style.photoSketchingWhiteColor, __style.photoSketchingBlackColor, __style.photoSketchingBlueColor, __style.photoSketchingGreenColor, __style.photoSketchingYellowColor, __style.photoSketchingOrangeColor, __style.photoSketchingPinkColor]
       activeColor: root.controller.activeColor
 
@@ -208,6 +213,21 @@ Dialog {
       Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
 
       onActiveColorChangeRequested: newColor => root.controller.activeColor = newColor
+    }
+
+    MMComponents.MMText {
+      visible: !root.showColorPicker
+      opacity: root.controller.canUndo ? 0 : 1
+      text: root.hintText
+
+      font: __style.p5
+      color: __style.mediumGreyColor
+      horizontalAlignment: Text.AlignHCenter
+
+      Layout.fillWidth: true
+      Layout.bottomMargin: __style.pageMargins + __style.safeAreaBottom
+      Layout.leftMargin: __style.pageMargins + __style.safeAreaLeft
+      Layout.rightMargin: __style.pageMargins + __style.safeAreaRight
     }
   }
 
