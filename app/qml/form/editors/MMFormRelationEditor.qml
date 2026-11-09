@@ -116,7 +116,10 @@ MMPrivateComponents.MMBaseInput {
           id: emptyText
 
           anchors.centerIn: parent
-          font: __style.t4
+          font.family: __style.t4.family
+          font.pixelSize: __style.t4.pixelSize
+          font.weight: __style.t4.weight
+          font.italic: true
           text: qsTr( "No features" )
           color: __style.mediumGreyColor
         }

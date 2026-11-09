@@ -77,7 +77,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     header: {
-      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && _fieldIsEditable )
+      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && root._fieldIsEditable )
         return addFeatureComponent
 
       if ( rowView.count === 0 )
@@ -142,10 +142,10 @@ MMPrivateComponents.MMBaseInput {
         MMComponents.MMText {
           anchors.centerIn: parent
           text: qsTr( "No images" )
-          font.pixelSize: __style.fontSize14
+          font.family: __style.p5.family
+          font.pixelSize: __style.p5.pixelSize
+          font.italic: true
           color: __style.mediumGreyColor
-
-          visible: parent.visible
         }
       }
     }

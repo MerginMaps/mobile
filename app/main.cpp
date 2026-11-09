@@ -720,7 +720,8 @@ int main( int argc, char *argv[] )
   // we ship our fonts because they do not need to be installed on the target platform
   QStringList fonts;
   fonts << ":/Inter-Regular.ttf"
-        << ":/Inter-SemiBold.ttf";
+        << ":/Inter-SemiBold.ttf"
+        << ":/Inter-Italic.ttf";
 
   for ( QString font : fonts )
   {

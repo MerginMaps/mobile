@@ -109,7 +109,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.deleteIcon
         iconColor: __style.grapeColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.projectRole !== "reader"
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet"
 
         onClicked: root.trashClicked()
       }
@@ -126,7 +126,7 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.projectRole !== "reader" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
 
         onClicked: {
           root.forceActiveFocus()
@@ -137,6 +137,8 @@ MMPrivateComponents.MMBaseInput {
     }
 
     MMPhotoComponents.MMPhotoAttachment {
+      id: photoAttachment
+
       width: parent.width
       height: parent.height
 
@@ -157,15 +159,15 @@ MMPrivateComponents.MMBaseInput {
       radius: parent.radius
       color: __style.lightGreenColor
 
-      visible: photoStateGroup.state === "notSet" && !root.canEditPhoto
+      visible: photoStateGroup.state === "notSet" && !photoAttachment.visible
 
       MMComponents.MMText {
         anchors.centerIn: parent
         text: qsTr( "No image" )
-        font.pixelSize: __style.fontSize14
+        font.family: __style.p5.family
+        font.pixelSize: __style.p5.pixelSize
+        font.italic: true
         color: __style.mediumGreyColor
-
-        visible: parent.visible
       }
     }
   }
