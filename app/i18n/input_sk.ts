@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>General</source>
         <translation>Všeobecné</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Projekt má priradený neplatný CRS. Mapa a nástroje nemusia fungovať správne!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="328"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer</source>
         <translation>Vrstva</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="328"/>
         <source>Unable to load source </source>
         <translation>Nepodarilo sa načítať zdroj</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Projekt má priradený neplatný CRS. Nástroje na vytváranie objektov nemusia fungovať správne!</translation>
     </message>
@@ -348,12 +348,12 @@ a preto nebude pridaný do projektu.</translation>
         <translation><numerusform>pred %n rokom</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform><numerusform>pred %n rokmi</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2253"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Musíte pridať aspoň %n bod na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n body na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform><numerusform>Musíte pridať aspoň %n bodov na každú časť geometrie.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2257"/>
+        <location filename="../inpututils.cpp" line="2261"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Musíte pridať aspoň %n bod.</numerusform><numerusform>Musíte pridať aspoň %n body.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform><numerusform>Musíte pridať aspoň %n bodov.</numerusform></translation>
     </message>
@@ -375,19 +375,44 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="213"/>
         <source>Download failed, remove and retry</source>
         <translation>Sťahovanie zlyhalo, vymažte projekt a skúste znova</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="233"/>
         <source>Found multiple QGIS project files</source>
         <translation>Našlo sa viacero QGIS projektov</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="238"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Nenašiel sa žiaden QGIS projekt</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="268"/>
+        <source>The project name cannot be empty</source>
+        <translation>Názov projektu nemôže byť prázdny</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="273"/>
+        <source>This project name is not allowed</source>
+        <translation>Tento názov projektu nie je povolený</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="278"/>
+        <source>The project name contains invalid characters</source>
+        <translation>Názov projektu obsahuje nepovolené znaky</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="291"/>
+        <source>The project name is already taken</source>
+        <translation>Názov projektu už je použitý</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="297"/>
+        <source>Project not found</source>
+        <translation>Projekt nebol nájdený</translation>
     </message>
 </context>
 <context>
@@ -1055,7 +1080,7 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Upraviť geometriu</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="450"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Objekt nemohol byť uložený. Prosím, skontrolujte všetky povinné polia</translation>
     </message>
@@ -1171,7 +1196,7 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="96"/>
         <source>Clear</source>
         <translation>Vymazať</translation>
     </message>
@@ -1429,32 +1454,42 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMLayerDetailPage</name>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="84"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="77"/>
+        <source>Layer unavailable</source>
+        <translation>Vrstva nie je dostupná </translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
+        <source>This layer couldn&apos;t be loaded. Check your connection or contact your administrator.</source>
+        <translation>Táto vrstva sa nedá načítať. Skontrolujte svoje pripojenie na internet alebo kontaktuje vášho administrátora.</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
         <source>Settings</source>
         <translation>Nastavenia</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="85"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="110"/>
         <source>Visible on map</source>
         <translation>Zobraziť na mape</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="134"/>
         <source>Legend</source>
         <translation>Legenda</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="162"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="187"/>
         <source>Attribution</source>
         <translation>Atribúcia</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="246"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="271"/>
         <source>Features</source>
         <translation>Objekty</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="261"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="286"/>
         <source>Layer info</source>
         <translation>Info o vrstve</translation>
     </message>
@@ -2099,49 +2134,54 @@ a preto nebude pridaný do projektu.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Synchronizácia zmien projektu</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Prosím, nezatvárajte aplikáciu.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Viac možností</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Stiahnuť</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Synchronizuj projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Lokálne zmeny</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Odstrániť zo zariadenia</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Nahrať</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="313"/>
+        <source>Rename project</source>
+        <translation>Premenovať projekt</translation>
     </message>
 </context>
 <context>
@@ -2226,32 +2266,32 @@ a preto nebude pridaný do projektu.</translation>
         <translation>Nie je možné synchronizovať projekt. Uistite sa, že ste prihlásený a máte dostatočné práva. </translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="214"/>
+        <location filename="../qml/project/MMProjectList.qml" line="219"/>
         <source>Create project</source>
         <translation>Vytvor projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="239"/>
+        <location filename="../qml/project/MMProjectList.qml" line="244"/>
         <source>Let&apos;s get started</source>
         <translation>Začnime!</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="240"/>
+        <location filename="../qml/project/MMProjectList.qml" line="245"/>
         <source>First step is to create your brand new project.</source>
         <translation>Prvým krokom je vytvorenie úplne nového projektu.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>Unable to get the list of projects.</source>
         <translation>Nepodarilo sa získať zoznam projektov.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>No projects found</source>
         <translation>Žiadne projekty!</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="277"/>
+        <location filename="../qml/project/MMProjectList.qml" line="282"/>
         <source>Retry</source>
         <translation>Skúsiť znovu</translation>
     </message>
@@ -2545,6 +2585,29 @@ a preto nebude pridaný do projektu.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
+    </message>
+</context>
+<context>
+    <name>MMRenameProjectDialog</name>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="24"/>
+        <source>Rename project</source>
+        <translation>Premenovať projekt</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="44"/>
+        <source>Enter the new name</source>
+        <translation>Zadajte nové meno</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="48"/>
+        <source>The project name cannot be empty</source>
+        <translation>Názov projektu nemôže byť prázdny</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="56"/>
+        <source>Confirm</source>
+        <translation>Potvrdiť</translation>
     </message>
 </context>
 <context>
@@ -3300,23 +3363,23 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Projekt bol odpojený z Mergin</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4265"/>
+        <location filename="../../core/merginapi.cpp" line="4289"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Názov pracovného priestoru obsahuje neplatné znaky</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4332"/>
+        <location filename="../../core/merginapi.cpp" line="4356"/>
         <source>Workspace %1 already exists</source>
         <translation>Stĺpec s názvom %1 už existuje.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4438"/>
+        <location filename="../../core/merginapi.cpp" line="4462"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Teraz môžte túto stránku zavrieť a vrátiť sa do Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4464"/>
-        <location filename="../../core/merginapi.cpp" line="4491"/>
+        <location filename="../../core/merginapi.cpp" line="4488"/>
+        <location filename="../../core/merginapi.cpp" line="4515"/>
         <source>SSO authorization failed</source>
         <translation>SSO autorizácia prebehla neúspešne</translation>
     </message>
@@ -3473,18 +3536,18 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="102"/>
+        <location filename="../projectsmodel.cpp" line="104"/>
         <source>Pending changes to synchronise</source>
         <translation>Zmeny čakajúce na synchronizáciu</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="107"/>
+        <location filename="../projectsmodel.cpp" line="109"/>
         <source>Local project, not uploaded</source>
         <translation>Lokálny projekt</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="115"/>
-        <location filename="../projectsmodel.cpp" line="119"/>
+        <location filename="../projectsmodel.cpp" line="117"/>
+        <location filename="../projectsmodel.cpp" line="121"/>
         <source>Updated %1</source>
         <translation>Aktualizované %1</translation>
     </message>
@@ -3537,12 +3600,12 @@ povoľuje maximálne %1 stiahnutých projektov.</translation>
         <translation>Neznámy fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="647"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Vaša požiadavka bola zaznamenaná. Prosím kontaktujte podporu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="615"/>
+        <location filename="../main.cpp" line="652"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Nepodarilo sa odoslať požiadavku. Prosím skontrolujte vaše internetové pripojenie.</translation>
     </message>
