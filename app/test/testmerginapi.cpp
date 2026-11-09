@@ -1357,6 +1357,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   QCOMPARE( changes, QString( "ERROR" ) );  // local diff should fail
 
   QSignalSpy spy( mApi, &MerginApi::projectReloadNeededAfterSync );
+  const QSignalSpy spyRemapped( mApi, &MerginApi::projectFeatureIdsRemapped );
 
   // update our local version now
   downloadRemoteProject( mApi, mWorkspaceName, projectName );
@@ -1364,6 +1365,8 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   // check that projectReloadNeededAfterSync is emited and has correct argument
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 0 ).toString(), mWorkspaceName + "/"  + projectName );
+
+  QCOMPARE( spyRemapped.count(), 0 );
 
   //
   // check the result

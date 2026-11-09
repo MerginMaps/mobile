@@ -2238,7 +2238,7 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   }
 
   // calculate local changes after rebase
-  if ( !localChanges.isEmpty() )
+  if ( !localChanges.isEmpty()  && res )
   {
     const QString rebasedLocalChanges = GeodiffUtils::diffableFilePendingChanges( projectDir, filePath, false );
     const GeodiffUtils::FeatureIdMapping mapping = GeodiffUtils::findRemappedFeatureIds( dest, localChanges, rebasedLocalChanges );
