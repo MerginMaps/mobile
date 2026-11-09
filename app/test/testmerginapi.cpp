@@ -3030,6 +3030,35 @@ void TestMerginApi::testUpdateProjectMetadataRole()
   deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
 }
 
+void TestMerginApi::testProjectRoleUpdatedOnUpToDateSync()
+{
+  QString projectName = "testProjectRoleUpdatedOnUpToDateSync";
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QString fullProjectName = MerginApi::getFullProjectName( mWorkspaceName, projectName );
+
+  // Test 1: simulate a stale cached role, as if it changed on the server while offline
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "owner" ) );
+  QVERIFY( mApi->updateCachedProjectRole( fullProjectName, QStringLiteral( "reader" ) ) );
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "reader" ) );
+
+  // Test 2: project is already at the latest version, so the sync finishes as "up to date",
+  // but the role should still get corrected from the server
+  QSignalSpy roleSpy( mApi, &MerginApi::projectRoleUpdated );
+  QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
+  mApi->pullProject( mWorkspaceName, projectName );
+  QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+
+  QCOMPARE( roleSpy.count(), 1 );
+  QCOMPARE( roleSpy.takeFirst().at( 1 ).toString(), QString( "owner" ) );
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "owner" ) );
+
+  // Clean up
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
+}
+
 void TestMerginApi::testDownloadWithNetworkError()
 {
   // Store original manager

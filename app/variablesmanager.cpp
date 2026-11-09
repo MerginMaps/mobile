@@ -22,6 +22,8 @@ VariablesManager::VariablesManager( MerginApi *merginApi, QObject *parent )
   QObject::connect( mMerginApi, &MerginApi::apiRootChanged, this, &VariablesManager::apiRootChanged );
   QObject::connect( mMerginApi, &MerginApi::userInfoChanged, this, &VariablesManager::setUserVariables );
   QObject::connect( mMerginApi, &MerginApi::projectDataChanged, this, &VariablesManager::setVersionVariable );
+  QObject::connect( mMerginApi, &MerginApi::projectRoleUpdated, this, &VariablesManager::setVersionVariable );
+  QObject::connect( mMerginApi, &MerginApi::authChanged, this, &VariablesManager::setProjectVariables );
 }
 
 VariablesManager::~VariablesManager() = default;
@@ -34,6 +36,7 @@ void VariablesManager::removeMerginProjectVariables( QgsProject *project )
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_name" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_full_name" ) );
   QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_version" ) );
+  QgsExpressionContextUtils::removeProjectVariable( project, QStringLiteral( "mm_project_role" ) );
 }
 
 void VariablesManager::registerInputExpressionFunctions()
@@ -198,6 +201,10 @@ void VariablesManager::setProjectVariables()
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_version" ), metadata.version );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_name" ),  metadata.name );
     QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_full_name" ),  mMerginApi->getFullProjectName( metadata.projectNamespace,  metadata.name ) );
+
+    // cached role works offline, empty when signed out
+    const QString role = mMerginApi->userAuth()->hasAuthData() ? metadata.role : QString();
+    QgsExpressionContextUtils::setProjectVariable( mCurrentProject, QStringLiteral( "mm_project_role" ), role );
   }
   else
   {
