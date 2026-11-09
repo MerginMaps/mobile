@@ -271,10 +271,10 @@ bool ImageUtils::writeGpsAndTimestamp( const QString &path, const QDateTime &dat
 
       exifData["Exif.GPSInfo.GPSDateStamp"] = dateTimeUtc.toString( QStringLiteral( "yyyy:MM:dd" ) ).toStdString();
       exifData["Exif.GPSInfo.GPSTimeStamp"] = QStringLiteral( "%1/1 %2/1 %3/1" )
-          .arg( dateTimeUtc.time().hour() )
-          .arg( dateTimeUtc.time().minute() )
-          .arg( dateTimeUtc.time().second() )
-          .toStdString();
+                                              .arg( dateTimeUtc.time().hour() )
+                                              .arg( dateTimeUtc.time().minute() )
+                                              .arg( dateTimeUtc.time().second() )
+                                              .toStdString();
     }
 
     image->writeMetadata();
