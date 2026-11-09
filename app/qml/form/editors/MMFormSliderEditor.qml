@@ -61,7 +61,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
     text: _fieldHasMixedValues ? "" : Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
     placeholderText: _fieldHasMixedValues ? _fieldValue : ""
     readOnly: true
-    activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
   }
 
   rightContentMouseArea.enabled: false

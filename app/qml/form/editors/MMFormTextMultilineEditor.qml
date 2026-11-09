@@ -88,7 +88,6 @@ MMPrivateComponents.MMBaseInput {
     placeholderTextColor: __style.darkGreyColor
 
     readOnly: root.editState !== "enabled"
-    selectByMouse: true
 
     background: Rectangle {
 

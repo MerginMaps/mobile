@@ -147,11 +147,10 @@ MMBaseInput {
         readOnly: root.editState === "readOnly" || root.editState === "disabled"
 
         // Read-only fields still take focus on press, so users can select and copy their text.
-        // Picker-style editors (calendar, combobox, switch, ...) turn this off,
+        // Inputs that open a drawer (calendar, combobox, ...) turn this off,
         // because focusing them crashed the app on iOS.
         // See https://github.com/MerginMaps/mobile/pull/4561
         activeFocusOnPress: true
-        selectByMouse: true
 
         // Ensure the text is scrolled to the beginning
         Component.onCompleted: ensureVisible( 0 )
