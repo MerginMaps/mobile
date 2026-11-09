@@ -37,6 +37,8 @@ class TestUtilsFunctions: public QObject
     void resolveTargetDir();
     void testExtractPointFromFeature();
     void testStakeoutPathExtent();
+    void testWhereToPanWhenIdentifying();
+    void testDrawerCompensatedExtent();
     void testDistanceBetweenGpsAndFeature();
     void testAngleBetweenGpsAndFeature();
     void testIsPointLayerFeature();
@@ -49,7 +51,6 @@ class TestUtilsFunctions: public QObject
     void testParsePositionUpdates();
     void testFormatDistanceInProjectUnit();
     void testFormatAreaInProjectUnit();
-    void testRelevantGeometryCenterToScreenCoordinates();
     void testIsValidEmail();
     void testSanitizePath();
     void testUniqueString();

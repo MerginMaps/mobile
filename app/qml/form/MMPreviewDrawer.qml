@@ -35,6 +35,8 @@ Item {
   signal selectMoreClicked( var feature )
   signal stakeoutClicked( var feature )
   signal closeClicked()
+  // this signal fires once after content-layout has settled when the feature changes
+  signal doneLoading()
 
   MouseArea {
     anchors.fill: parent
@@ -268,6 +270,23 @@ Item {
       }
 
       MMComponents.MMListFooterSpacer { height: __style.safeAreaBottom + __style.margin20 }
+    }
+  }
+
+  Timer {
+    id: heightDebounceTimer
+    interval: 100
+    onTriggered: root.doneLoading()
+  }
+
+  onImplicitHeightChanged: {
+    heightDebounceTimer.restart()
+  }
+
+  Connections {
+    target: controller
+    function onFeatureLayerPairChanged() {
+      heightDebounceTimer.start()
     }
   }
 
