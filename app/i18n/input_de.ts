@@ -397,7 +397,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="273"/>
         <source>This project name is not allowed</source>
-        <translation>Dieser Projektname ist nicht erlaubt</translation>
+        <translation>Der Projektname ist nicht erlaubt</translation>
     </message>
     <message>
         <location filename="../../core/localprojectsmanager.cpp" line="278"/>
