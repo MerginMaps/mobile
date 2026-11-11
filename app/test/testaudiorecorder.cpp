@@ -767,6 +767,40 @@ void TestAudioRecorder::testPendingAudioOutsideProject()
   QVERIFY( !QFile::exists( tempPath ) );
 }
 
+void TestAudioRecorder::testPendingAudioKeptOnGeometryEdit()
+{
+  const QString projectDir = openTestProject( QStringLiteral( "testPendingAudioKeptOnGeometryEdit" ) );
+  QVERIFY( !projectDir.isEmpty() );
+
+  QgsVectorLayer *layer = surveyLayer();
+  QVERIFY( layer && layer->isValid() );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( FeatureLayerPair( QgsFeature( layer->fields() ), layer ) );
+
+  const QVector<QUuid> items = controller.tabItem( 0 )->formItems();
+  const QString audioId = items.at( AUDIO_FIELD_INDEX ).toString();
+  const QString tempPath = createTemporaryRecording();
+
+  controller.setFormValue( items.at( NOTES_FIELD_INDEX ), QStringLiteral( "before editing" ) );
+  QVERIFY( controller.addPendingAudio( audioId, tempPath ) );
+  const QString value = controller.featureLayerPair().feature().attribute( AUDIO_FIELD_INDEX ).toString();
+
+  // editing the geometry takes the feature of the form and gives it back with another geometry
+  QgsFeature edited = controller.featureLayerPair().feature();
+  edited.setGeometry( QgsGeometry::fromWkt( QStringLiteral( "POINT( 1 2 )" ) ) );
+  controller.setFeatureLayerPair( FeatureLayerPair( edited, layer ) );
+
+  // the recording and the other values are still there
+  QCOMPARE( controller.featureLayerPair().feature().attribute( NOTES_FIELD_INDEX ).toString(), QStringLiteral( "before editing" ) );
+  QCOMPARE( controller.featureLayerPair().feature().attribute( AUDIO_FIELD_INDEX ).toString(), value );
+  QCOMPARE( controller.pendingAudioPath( audioId ), QFileInfo( tempPath ).absoluteFilePath() );
+
+  QVERIFY( controller.save() );
+  QVERIFY( QFile::exists( projectDir + "/" + value ) );
+  QVERIFY( !QFile::exists( tempPath ) );
+}
+
 void TestAudioRecorder::testTemporaryFilesRemoved()
 {
   // files left by a previous run of the app are removed on start

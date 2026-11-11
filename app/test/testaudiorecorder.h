@@ -38,6 +38,7 @@ class TestAudioRecorder : public QObject
     void testRecorderReplacesFile();
     void testRecorderWatchdog();
     void testPendingAudioOutsideProject();
+    void testPendingAudioKeptOnGeometryEdit();
     void testTemporaryFilesRemoved();
     void testRecorderImport();
 

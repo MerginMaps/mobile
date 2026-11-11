@@ -256,10 +256,7 @@ Page {
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
         visible: root.layerIsSpatial && __activeProject.projectRole !== "reader"
-        onClicked: {
-          internal.stopRecordingBeforeLeaving()
-          root.editGeometryRequested( root.controller.featureLayerPair )
-        }
+        onClicked: internal.editGeometry()
       }
     }
 
@@ -460,6 +457,7 @@ Page {
     // the feature is not saved without its recording, the form stays open
     onRecordingFailed: function( fieldItemId, message ) {
       internal.saveWhenRecordingStops = false
+      internal.editGeometryWhenRecordingStops = false
       __notificationModel.addError( message )
     }
 
@@ -543,6 +541,7 @@ Page {
   function rollbackAndClose() {
     // a running recording is discarded with the other changes, a save waiting for it is dropped
     internal.saveWhenRecordingStops = false
+    internal.editGeometryWhenRecordingStops = false
     audioRecorder.discardRecording()
 
     // remove feature if we are in "add" mode and it already has valid ID
@@ -580,13 +579,31 @@ Page {
     property real formSpacing: 20 * __dp
 
     property bool saveWhenRecordingStops: false
+    property bool editGeometryWhenRecordingStops: false
 
-    // continues the save that waited for the recording to be finalised
+    // continues the save or the geometry editing that waited for the recording to be finalised
     function continueAfterRecording() {
       if ( saveWhenRecordingStops ) {
         saveWhenRecordingStops = false
+        editGeometryWhenRecordingStops = false
         root.save()
       }
+      else if ( editGeometryWhenRecordingStops ) {
+        editGeometryWhenRecordingStops = false
+        root.editGeometryRequested( root.controller.featureLayerPair )
+      }
+    }
+
+    // The form gets the edited feature back with the values it has when the editing starts. A running recording
+    // is stopped and kept first, so its file is among them and is still in the field when the user comes back
+    function editGeometry() {
+      if ( audioRecorder.isRecording ) {
+        editGeometryWhenRecordingStops = true
+        stopRecordingBeforeLeaving()
+        return
+      }
+
+      root.editGeometryRequested( root.controller.featureLayerPair )
     }
 
     // switches to the tab with the recording field and scrolls to it
