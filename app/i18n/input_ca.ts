@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>El projecte té assignat un CRS no vàlid. El mapa i les eines tenen un comportament indefinit!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="328"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer</source>
         <translation>Capa</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="328"/>
         <source>Unable to load source </source>
         <translation>No es pot carregar la font</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>La capa té assignat un CRS no vàlid. Les eines de gravació tenen un comportament indefinit.</translation>
     </message>
@@ -348,12 +348,12 @@ No s&apos;afegirà al projecte.</translation>
         <translation><numerusform>fa %n any(s)</numerusform><numerusform>fa %n any(s)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2253"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform> </numerusform><numerusform>Cal que afegiu com a mínim %n punt(s) a cada part.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2257"/>
+        <location filename="../inpututils.cpp" line="2261"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform> 25</numerusform><numerusform>Cal que afegiu com a mínim %n punt(s).</numerusform></translation>
     </message>
@@ -375,19 +375,44 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="213"/>
         <source>Download failed, remove and retry</source>
         <translation>S&apos;ha produït un error en descarregar, suprimiu i torneu a provar </translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="233"/>
         <source>Found multiple QGIS project files</source>
         <translation>Hem trobat diversos arxius de projecte de QGIS</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="238"/>
         <source>Failed to find a QGIS project file</source>
         <translation>No hem trobat cap arxiu de projecte de QGIS</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="268"/>
+        <source>The project name cannot be empty</source>
+        <translation>El nom del projecte no pot estar buit</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="273"/>
+        <source>This project name is not allowed</source>
+        <translation>Aquest nom de projecte no està permès</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="278"/>
+        <source>The project name contains invalid characters</source>
+        <translation>El nom del projecte conté caràcters no vàlids</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="291"/>
+        <source>The project name is already taken</source>
+        <translation>El nom del projecte ja està en ús</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="297"/>
+        <source>Project not found</source>
+        <translation>No s&apos;ha trobat el projecte</translation>
     </message>
 </context>
 <context>
@@ -1054,7 +1079,7 @@ No s&apos;afegirà al projecte.</translation>
         <translation>Editar geometria</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="450"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>No s&apos;ha pogut desar la característica, si us plau, comproveu tots els camps obligatoris</translation>
     </message>
@@ -1170,7 +1195,7 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="96"/>
         <source>Clear</source>
         <translation>Netejar</translation>
     </message>
@@ -1428,32 +1453,42 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMLayerDetailPage</name>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="84"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="77"/>
+        <source>Layer unavailable</source>
+        <translation>Capa no disponible</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
+        <source>This layer couldn&apos;t be loaded. Check your connection or contact your administrator.</source>
+        <translation>No s&apos;ha pogut carregar aquesta capa. Comproveu la connexió o contacteu amb l&apos;administrador.</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
         <source>Settings</source>
         <translation>Configuracions</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="85"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="110"/>
         <source>Visible on map</source>
         <translation>Visible en el mapa</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="134"/>
         <source>Legend</source>
         <translation>Llegenda</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="162"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="187"/>
         <source>Attribution</source>
         <translation>Atribució</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="246"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="271"/>
         <source>Features</source>
         <translation>Característiques</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="261"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="286"/>
         <source>Layer info</source>
         <translation>Informació de capa</translation>
     </message>
@@ -2099,49 +2134,54 @@ No s&apos;afegirà al projecte.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>S&apos;està sincronitzant els canvis del projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Si us plau no tanqueu la aplicació.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Atura</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Més opcions</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Descarrega</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Sincronitzar el projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Canvis locals</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Elimina del dispositiu</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Carrega</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="313"/>
+        <source>Rename project</source>
+        <translation>Canvia el nom del projecte</translation>
     </message>
 </context>
 <context>
@@ -2226,32 +2266,32 @@ No s&apos;afegirà al projecte.</translation>
         <translation>No s&apos;ha pogut sincronitzar el projecte, si us plau, assegureu-vos que heu iniciat sessió i teniu els permisos suficients.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="214"/>
+        <location filename="../qml/project/MMProjectList.qml" line="219"/>
         <source>Create project</source>
         <translation>Crear projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="239"/>
+        <location filename="../qml/project/MMProjectList.qml" line="244"/>
         <source>Let&apos;s get started</source>
         <translation>Comencem</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="240"/>
+        <location filename="../qml/project/MMProjectList.qml" line="245"/>
         <source>First step is to create your brand new project.</source>
         <translation>El primer pas és crear el vostre nou projecte.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>Unable to get the list of projects.</source>
         <translation>No es pot obtenir la llista de projectes.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>No projects found</source>
         <translation>No s&apos;ha trobat cap projecte</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="277"/>
+        <location filename="../qml/project/MMProjectList.qml" line="282"/>
         <source>Retry</source>
         <translation>Tornar-ho a provar</translation>
     </message>
@@ -2545,6 +2585,29 @@ No s&apos;afegirà al projecte.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
+    </message>
+</context>
+<context>
+    <name>MMRenameProjectDialog</name>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="24"/>
+        <source>Rename project</source>
+        <translation>Canvia el nom del projecte</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="44"/>
+        <source>Enter the new name</source>
+        <translation>Introduïu el nou nom</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="48"/>
+        <source>The project name cannot be empty</source>
+        <translation>El nom del projecte no pot estar buit</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="56"/>
+        <source>Confirm</source>
+        <translation>Confirma</translation>
     </message>
 </context>
 <context>
@@ -3300,23 +3363,23 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>Projecte desconnectat del servidor</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4265"/>
+        <location filename="../../core/merginapi.cpp" line="4289"/>
         <source>Workspace name contains invalid characters</source>
         <translation>El nom de l&apos;espai de treball conté caràcters no vàlids</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4332"/>
+        <location filename="../../core/merginapi.cpp" line="4356"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espai de treball %1 ja existeix</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4438"/>
+        <location filename="../../core/merginapi.cpp" line="4462"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Ara podeu tancar aquesta pàgina i tornar a Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4464"/>
-        <location filename="../../core/merginapi.cpp" line="4491"/>
+        <location filename="../../core/merginapi.cpp" line="4488"/>
+        <location filename="../../core/merginapi.cpp" line="4515"/>
         <source>SSO authorization failed</source>
         <translation>L&apos;autorització SSO ha fallat</translation>
     </message>
@@ -3473,18 +3536,18 @@ només permet fins a %1 projectes baixats.</translation>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="102"/>
+        <location filename="../projectsmodel.cpp" line="104"/>
         <source>Pending changes to synchronise</source>
         <translation>Canvis pendents per sincronitzar</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="107"/>
+        <location filename="../projectsmodel.cpp" line="109"/>
         <source>Local project, not uploaded</source>
         <translation>Projecte local, no carregat</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="115"/>
-        <location filename="../projectsmodel.cpp" line="119"/>
+        <location filename="../projectsmodel.cpp" line="117"/>
+        <location filename="../projectsmodel.cpp" line="121"/>
         <source>Updated %1</source>
         <translation>Actualitzat %1</translation>
     </message>
@@ -3537,12 +3600,12 @@ només permet fins a %1 projectes baixats.</translation>
         <translation>Posició desconeguda</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="647"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Informe enviat. Poseu-vos en contacte amb el servei d&apos;assistència.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="615"/>
+        <location filename="../main.cpp" line="652"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>No s&apos;ha pogut enviar l&apos;informe. Comproveu la vostra connexió a Internet.</translation>
     </message>
