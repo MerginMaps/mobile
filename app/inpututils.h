@@ -16,7 +16,6 @@
 #include <QObject>
 #include <QtGlobal>
 #include <QUuid>
-#include <QObject>
 #include <QString>
 #include <QUrl>
 #include <QtPositioning/QGeoCoordinate>
@@ -25,21 +24,19 @@
 #include <limits>
 
 #include "inputhelp.h"
-#include "merginapi.h"
 #include "androidutils.h"
 #include "featurelayerpair.h"
 #include "inputmapsettings.h"
 #include "qgis.h"
 #include "qgsexpressioncontextutils.h"
-#include "qgsmessagelog.h"
 #include "qgspoint.h"
 #include "qgspointxy.h"
-#include "qgsunittypes.h"
-#include "inputmapsettings.h"
-#include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 #include "position/mapposition.h"
+#include "merginprojectmetadata.h"
 
+class QLocale;
+class QTranslator;
 class QgsFeature;
 class QgsVectorLayer;
 class QgsCoordinateReferenceSystem;

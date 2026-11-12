@@ -32,7 +32,6 @@
 #include "qgscoordinatetransform.h"
 #include "qgsdistancearea.h"
 #include "qgslogger.h"
-#include "qgsvectorlayer.h"
 #include "qgsfeature.h"
 #include "qgsapplication.h"
 #include "qgsvaluerelationfieldformatter.h"
@@ -40,11 +39,10 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
-#include "qgslinestring.h"
-#include "qgspolygon.h"
 #include "qgsmultipoint.h"
 #include "qgsmultilinestring.h"
 #include "qgsmultipolygon.h"
+#include <qgsmessagelog.h>
 
 #include "mmstyle.h"
 #include "featurelayerpair.h"
@@ -58,6 +56,9 @@
 #include <Qt>
 #include <QDir>
 #include <QFile>
+#include <QHash>
+#include <QLocale>
+#include <QTranslator>
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDesktopServices>

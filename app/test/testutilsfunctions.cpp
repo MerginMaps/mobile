@@ -35,7 +35,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
 #include <QTemporaryDir>
-#include <QLocale>
+#include <QTranslator>
 #include <QUrl>
 
 const int DAY_IN_SECS = 60 * 60 * 24;
