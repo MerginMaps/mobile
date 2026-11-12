@@ -419,7 +419,7 @@ QVariantList InputUtils::mapSettingsTransform( InputMapSettings *ms )
   const QgsPoint center = ms->center();
   const QPointF centerOnScreen = ms->coordinateToScreen( center );
 
-  return { a, b, c, d, centerOnScreen.x() - a *center.x() - b *center.y(), centerOnScreen.y() - c *center.x() - d *center.y() };
+  return { a, b, c, d, centerOnScreen.x() - a * center.x() - b * center.y(), centerOnScreen.y() - c * center.x() - d * center.y() };
 }
 
 QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context )
