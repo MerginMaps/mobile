@@ -22,7 +22,6 @@ MMPrivateComponents.MMBaseInput {
   property MM.AttributeController _fieldController: parent.fieldController
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldActiveProject: parent.fieldActiveProject
-  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property string _fieldTitle: parent.fieldTitle
@@ -35,6 +34,8 @@ MMPrivateComponents.MMBaseInput {
   infoMsg: root._fieldAssociatedRelation && __activeProject.filterController?.filteringAvailable && __activeProject.filterController?.hasActiveFilterOnLayer( rmodel?.layer?.id )
            ? qsTr( "Some features may be hidden by active filters" )
            : ""
+
+  property real _photoCardSize: rowView.height
 
   inputContent: MMComponents.MMListView {
     id: rowView
@@ -55,7 +56,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     delegate: MMComponents.MMPhotoCard{
-      size: rowView.height
+      size: root._photoCardSize
 
       imageSource: {
         let absolutePath = model.PhotoPath
@@ -77,7 +78,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     header: {
-      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && root._fieldIsEditable )
+      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly )
         return addFeatureComponent
 
       if ( rowView.count === 0 )
@@ -125,8 +126,8 @@ MMPrivateComponents.MMBaseInput {
     id: emptyComponent
 
     Rectangle {
-      height: rowView.height
-      width: rowView.height
+      height: root._photoCardSize
+      width: root._photoCardSize
 
       radius: __style.radius20
       color: __style.polarColor
@@ -142,10 +143,8 @@ MMPrivateComponents.MMBaseInput {
         MMComponents.MMText {
           anchors.centerIn: parent
           text: qsTr( "No images" )
-          font.family: __style.p5.family
-          font.pixelSize: __style.p5.pixelSize
-          font.italic: true
-          color: __style.mediumGreyColor
+          font: __style.t4Italic
+          color: __style.darkGreyColor
         }
       }
     }

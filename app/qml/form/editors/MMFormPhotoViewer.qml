@@ -164,10 +164,8 @@ MMPrivateComponents.MMBaseInput {
       MMComponents.MMText {
         anchors.centerIn: parent
         text: qsTr( "No image" )
-        font.family: __style.p5.family
-        font.pixelSize: __style.p5.pixelSize
-        font.italic: true
-        color: __style.mediumGreyColor
+        font: __style.t4Italic
+        color: __style.darkGreyColor
       }
     }
   }

@@ -31,7 +31,6 @@ MMPrivateComponents.MMBaseInput {
   property var _fieldAssociatedRelation: parent.fieldAssociatedRelation
   property var _fieldActiveProject: parent.fieldActiveProject
   property MM.AttributeController _fieldController: parent.fieldController
-  property bool _fieldIsEditable: parent.fieldIsEditable
 
   property string _fieldTitle: parent.fieldTitle
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
@@ -87,7 +86,7 @@ MMPrivateComponents.MMBaseInput {
         height: privates.itemHeight
         radius: 8 * __dp
         color: __style.lightGreenColor
-        visible: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly && root._fieldIsEditable)
+        visible: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly)
 
         MMComponents.MMIcon {
           anchors.centerIn: parent
@@ -116,12 +115,9 @@ MMPrivateComponents.MMBaseInput {
           id: emptyText
 
           anchors.centerIn: parent
-          font.family: __style.t4.family
-          font.pixelSize: __style.t4.pixelSize
-          font.weight: __style.t4.weight
-          font.italic: true
+          font: __style.t4Italic
           text: qsTr( "No features" )
-          color: __style.mediumGreyColor
+          color: __style.darkGreyColor
         }
       }
 
