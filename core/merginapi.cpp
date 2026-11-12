@@ -1434,6 +1434,8 @@ void MerginApi::authorizeFinished()
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
 
+  bool sessionWasExpired = false;
+
   if ( r->error() == QNetworkReply::NoError )
   {
     CoreUtils::log( "auth", QStringLiteral( "Success" ) );
@@ -1468,7 +1470,12 @@ void MerginApi::authorizeFinished()
       // our user got blocked on the server by admin or owner
       // lets show error to user and let him try different credentials
       emit authFailed();
-      emit notifyError( serverMsg );
+
+      // the session expired dialog explains it when checking the session
+      if ( mSessionCheckPending )
+        sessionWasExpired = true;
+      else
+        emit notifyError( serverMsg );
 
       mUserAuth->blockSignals( true );
       mUserAuth->setLogin( QString() );
@@ -1486,6 +1493,22 @@ void MerginApi::authorizeFinished()
 
     // in case of any error, just clean token and request new one
     mUserAuth->clearTokenData();
+  }
+
+  if ( mSessionCheckPending )
+  {
+    mSessionCheckPending = false;
+    if ( mUserAuth->hasValidToken() )
+      mLastVerifiedToken = mUserAuth->authToken();
+
+    if ( sessionWasExpired )
+    {
+      CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Session expired, the stored password is no longer valid" ) );
+      // sign out completely, so the cached user info (like the avatar) does not stay
+      clearAuth();
+      emit sessionExpired();
+    }
+    emit sessionCheckFinished( sessionWasExpired );
   }
 
   if ( mAuthLoopEvent.isRunning() )
@@ -1688,8 +1711,12 @@ bool MerginApi::validateAuth()
         emit ssoLoginExpired();
         return false;
       case MerginUserAuth::AuthMethod::Password:
+      {
+        const bool waitedForSessionCheck = mSessionCheckPending;
         refreshAuthToken();
-        return true;
+        // no valid token after the session check means the session expired
+        return waitedForSessionCheck ? mUserAuth->hasValidToken() : true;
+      }
     }
   }
 
@@ -3222,10 +3249,15 @@ void MerginApi::getUserInfoFinished()
     // prevents that. The correct solution is to get rid of the QEventLoop and to have more rigorous
     // flow of network requests.
     static bool firstTimeExpiredTokenAnd401 = true;
-    if ( firstTimeExpiredTokenAnd401 && r->attribute( QNetworkRequest::HttpStatusCodeAttribute ) == 401 &&
+    const int status = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+    if ( firstTimeExpiredTokenAnd401 && status == 401 &&
          !mUserAuth->authToken().isEmpty() && mUserAuth->tokenExpiration() < QDateTime().currentDateTimeUtc() )
     {
       firstTimeExpiredTokenAnd401 = false;
+    }
+    else if ( status == 401 && mUserAuth->hasValidToken() && mUserAuth->authToken() != mLastVerifiedToken && verifySession() )
+    {
+      // the server ended the session although the token has not expired, like after a password change
     }
     else
     {
@@ -3606,6 +3638,22 @@ MerginProjectsList MerginApi::parseProjectsFromJson( const QJsonDocument &doc )
   return result;
 }
 
+bool MerginApi::verifySession()
+{
+  if ( mUserAuth->authMethod() != MerginUserAuth::AuthMethod::Password || !mUserAuth->hasAuthData() )
+    return false;
+
+  if ( !mSessionCheckPending )
+  {
+    CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Server rejected the current token, logging in again to check the session" ) );
+    mSessionCheckPending = true;
+    mUserAuth->clearTokenData();
+    authorize( mUserAuth->login(), mUserAuth->password() );
+  }
+
+  return true;
+}
+
 void MerginApi::refreshAuthToken()
 {
   switch ( mUserAuth->authMethod() )
@@ -3617,6 +3665,14 @@ void MerginApi::refreshAuthToken()
       if ( !mUserAuth->hasAuthData() )
       {
         CoreUtils::log( QStringLiteral( "Auth" ), QStringLiteral( "Can not refresh token, missing credentials" ) );
+        return;
+      }
+
+      // a session check is already logging in again, wait for it instead of logging in a second time
+      if ( mSessionCheckPending )
+      {
+        if ( !mAuthLoopEvent.isRunning() )
+          mAuthLoopEvent.exec();
         return;
       }
 
