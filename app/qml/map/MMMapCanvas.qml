@@ -215,28 +215,26 @@ Item {
     property bool isRotating: false
 
     onPinchStarted: {
-      console.log( "ROTDEBUG pinchStarted rotationEnabled:", mapRoot.rotationEnabled, "rotation:", pinch.rotation, "scale:", pinch.scale ) // TEMP
       if ( !mapRoot.pinchKeepsFollowing ) mapRoot.userInteractedWithMap()
       rendererPrivate.freeze( freezeId )
-      rendererPrivate.prepareVibration()
+      if ( mapRoot.rotationEnabled ) rendererPrivate.prepareVibration()
 
       isRotating = false
-      rotationPreparing = false
+      mapRoot.rotationPreparing = false
     }
 
     onPinchFinished: {
       rendererPrivate.unfreeze( freezeId )
-      rotationPreparing = false
+      mapRoot.rotationPreparing = false
     }
 
     onPinchUpdated: function ( pinch ) {
-      console.log( "ROTDEBUG pinchUpdated rotationEnabled:", mapRoot.rotationEnabled, "rotation:", pinch.rotation, "scale:", pinch.scale, "isRotating:", isRotating ) // TEMP
       mapRenderer.pan( pinch.center, pinch.previousCenter )
       mapRenderer.zoom( pinch.center, pinch.previousScale / pinch.scale )
 
       if ( !mapRoot.rotationEnabled ) return
 
-      if ( !rotationPreparing && Math.abs( pinch.rotation ) > rotationPrepareAngle ) rotationPreparing = true
+      if ( !mapRoot.rotationPreparing && Math.abs( pinch.rotation ) > rotationPrepareAngle ) mapRoot.rotationPreparing = true
 
       if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold )
       {

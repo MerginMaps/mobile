@@ -403,19 +403,23 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
 
 QVariantList InputUtils::mapSettingsTransform( InputMapSettings *ms )
 {
-  if ( !ms ) return { 1, 0, 0, 0, 1, 0 };
+  if ( !ms ) return { 1, 0, 0, 1, 0, 0 };
 
-  const QPointF origin = ms->coordinateToScreen( QgsPoint( 0, 0 ) );
-  const QPointF unitX = ms->coordinateToScreen( QgsPoint( 1, 0 ) );
-  const QPointF unitY = ms->coordinateToScreen( QgsPoint( 0, 1 ) );
+  const double mapUnitsPerPoint = ms->mapUnitsPerPixel() * ms->devicePixelRatio();
+  if ( !std::isfinite( mapUnitsPerPoint ) || mapUnitsPerPoint <= 0 ) return { 1, 0, 0, 1, 0, 0 };
 
-  return { unitX.x() - origin.x(), unitY.x() - origin.x(), unitX.y() - origin.y(), unitY.y() - origin.y(), origin.x(), origin.y() };
-}
+  // The scale and the rotation are computed directly and only the offset is taken from a transformed point
+  // computing everything from transformed points far away, like the origin would lose precision when the map is zoomed in.
+  const double angle = qDegreesToRadians( ms->rotation() );
+  const double a = std::cos( angle ) / mapUnitsPerPoint;
+  const double b = std::sin( angle ) / mapUnitsPerPoint;
+  const double c = b;
+  const double d = -a;
 
-double InputUtils::mapSettingsDPR( InputMapSettings *ms )
-{
-  if ( !ms ) return 1;
-  return ms->devicePixelRatio();
+  const QgsPoint center = ms->center();
+  const QPointF centerOnScreen = ms->coordinateToScreen( center );
+
+  return { a, b, c, d, centerOnScreen.x() - a *center.x() - b *center.y(), centerOnScreen.y() - c *center.x() - d *center.y() };
 }
 
 QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context )

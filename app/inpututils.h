@@ -100,16 +100,11 @@ class InputUtils: public QObject
      */
     Q_INVOKABLE QPointF relevantGeometryCenterToScreenCoordinates( const QgsGeometry &geom, InputMapSettings *mapSettings );
 
-    // utility functions to extract information from map settings
-    // (in theory this data should be directly available from .MapTransform
-    // but they are not currently, so this is a workaround we need for display of markers)
-
     /**
      * Returns affine transform from map coordinates to screen coordinates (including map rotation)
      * as a list [a, b, c, d, e, f], where: screenX = a * x + b * y + e, screenY = c * x + d * y + f
      */
     Q_INVOKABLE QVariantList mapSettingsTransform( InputMapSettings *ms );
-    Q_INVOKABLE double mapSettingsDPR( InputMapSettings *ms );
 
     //! Converts geometry to destination CRS if not already
     static QgsGeometry transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, QgsVectorLayer *targetLayer );

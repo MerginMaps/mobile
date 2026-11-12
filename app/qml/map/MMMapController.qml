@@ -127,17 +127,6 @@ Item {
     }
   }
 
-  Connections {
-    target: AppSettings
-
-    function onMapRotationEnabledChanged() {
-      if ( !AppSettings.mapRotationEnabled ) {
-        root.headingUp = false
-        mapRotator.rotateTo( 0 )
-      }
-    }
-  }
-
   onStateChanged: {
     // We call this first because when previous state is 'view' and `centeredToGPS` is true
     // the map may still not be centered. It's only centered after a certain threshold is exceeded.
@@ -265,11 +254,12 @@ Item {
     mapSettings.project: __activeProject.qgsProject
 
     // while following the direction of the device the map is rotated by it, so the fingers can only zoom
-    rotationEnabled: AppSettings.mapRotationEnabled && !internal.isEditingGeometry && !root.headingUp
+    rotationEnabled: AppSettings.mapRotationEnabled && !root.headingUp
     pinchKeepsFollowing: root.headingUp
 
-    // the map is rendered bigger so it covers the screen when it is rotated, and it is rendered again after this rotation (in degrees)
-    overscan: AppSettings.mapRotationEnabled && ( root.isMapRotated || mapCanvas.rotationPreparing )
+    // the map is rendered bigger only while its rotation is changing, so the picture covers the screen in between the renderings.
+    // A map that stays rotated is rendered in the size of the screen. It is rendered again after this rotation (in degrees)
+    overscan: AppSettings.mapRotationEnabled && ( root.headingUp || mapRotator.active || mapCanvas.rotationPreparing )
     rotationRenderThreshold: 30
 
     MM.IdentifyKit {
@@ -918,28 +908,19 @@ Item {
         MMMapButton {
           id: gpsButton
 
+          // time of the last tap that took us back to the position, see onClicked
+          property double lastCenteredTapTime: 0
+
           iconSource: {
             // the compass is drawn instead of the icon when the map is rotated
             if ( root.isMapRotated ) return ""
             return root.centeredToGPS ? __style.followGPSNoColorOverlayIcon : __style.gpsIcon
           }
 
-          // time of the last tap that took us back to the position, see below
-          property double lastCenteredTapTime: 0
-
-          MMCompass {
-            anchors.centerIn: parent
-            size: gpsButton.height
-            visible: root.isMapRotated
-
-            // N always points to the north
-            mapRotation: mapCanvas.mapSettings.rotation
-          }
-
           onClicked: {
             if ( root.isMapRotated ) {
               root.headingUp = false
-              mapRotator.rotateTo( 0 )
+              mapRotator.rotateToNorth()
               return
             }
 
@@ -948,7 +929,7 @@ Item {
               return
             }
 
-            if ( AppSettings.mapRotationEnabled && root.centeredToGPS && !internal.isEditingGeometry ) {
+            if ( AppSettings.mapRotationEnabled && root.centeredToGPS ) {
               // ignore a quick second tap (double tap), so the map does not start to rotate unexpectedly
               if ( Date.now() - gpsButton.lastCenteredTapTime < 600 ) return
 
@@ -958,7 +939,7 @@ Item {
                 return
               }
               root.headingUp = true
-              mapRotator.rotateTo( -positionDirectionSource.direction, 0.8, 80 )
+              mapRotator.rotateTo( -positionDirectionSource.direction, 0.35, 240 )
               return
             }
 
@@ -966,6 +947,18 @@ Item {
             gpsButton.lastCenteredTapTime = Date.now()
             let screenPt = mapCanvas.mapSettings.coordinateToScreen( mapPositionSource.mapPosition )
             mapCanvas.jumpTo( screenPt )
+          }
+
+          Loader {
+            anchors.centerIn: parent
+            active: root.isMapRotated
+
+            sourceComponent: MMCompass {
+              size: gpsButton.height
+
+              // N always points to the north
+              mapRotation: mapCanvas.mapSettings.rotation
+            }
           }
         }
       }
@@ -1211,9 +1204,34 @@ Item {
       active = true
     }
 
+    // nothing is started when the map already points to the north, so the map is not rendered again for no reason
+    function rotateToNorth() {
+      if ( mapCanvas.mapSettings.rotation !== 0 ) {
+        rotateTo( 0 )
+      }
+      else {
+        active = false
+      }
+    }
+
+    // The rotation waits for the bigger picture only for a short time. When the rendering is slow (e.g. the map tiles
+    // have to be downloaded), the map starts to rotate anyway, with the corners of the canvas empty for a while.
+    property bool overscanWaitExpired: false
+
+    property Timer overscanWait: Timer {
+      interval: 250
+      running: mapRotator.active && !mapCanvas.overscanReady
+
+      onTriggered: mapRotator.overscanWaitExpired = true
+    }
+
+    onActiveChanged: {
+      if ( !active ) overscanWaitExpired = false
+    }
+
     property FrameAnimation frames: FrameAnimation {
       // the map is rotated when it is rendered big enough, otherwise the corners of the canvas would be empty
-      running: mapRotator.active && mapCanvas.overscanReady
+      running: mapRotator.active && ( mapCanvas.overscanReady || mapRotator.overscanWaitExpired )
 
       onTriggered: {
         let delta = ( mapRotator.target - mapCanvas.mapSettings.rotation ) % 360
@@ -1243,18 +1261,33 @@ Item {
   }
 
   Connections {
+    target: AppSettings
+
+    function onMapRotationEnabledChanged() {
+      if ( !AppSettings.mapRotationEnabled ) {
+        root.headingUp = false
+        mapRotator.rotateToNorth()
+      }
+    }
+  }
+
+  Connections {
+    target: __activeProject
+
+    // the rotation is reset when a project is loaded, so the follow direction mode ends too
+    function onProjectReloaded( qgsProject ) {
+      root.headingUp = false
+      mapRotator.rotateToNorth()
+    }
+  }
+
+  Connections {
     target: positionDirectionSource
 
     function onDirectionChanged() {
-      if ( root.headingUp ) {
-        // small changes are ignored (compass is noisy), so the map does not react to every little move of the device
-        let change = ( -positionDirectionSource.direction - mapRotator.target ) % 360
-        if ( change > 180 ) change -= 360
-        else if ( change <= -180 ) change += 360
-
-        if ( Math.abs( change ) > 6 ) {
-          mapRotator.target = -positionDirectionSource.direction
-        }
+      if ( root.headingUp && positionDirectionSource.hasDirection ) {
+        // the direction source already ignores small changes (compass is noisy), the easing of the rotator does the rest
+        mapRotator.target = -positionDirectionSource.direction
       }
     }
   }
@@ -1439,22 +1472,6 @@ Item {
     property bool streamingModeButtonVisible: !internal.isPointLayer || internal.isMultiPartLayer
 
     property var extentBeforeStakeout // extent that we return to once stakeout finishes
-
-    // map is kept pointing north while the geometry is being edited, the rotation is restored afterwards
-    property bool isEditingGeometry: root.state === "record" || root.state === "recordInLayer" || root.state === "edit" || root.state === "split"
-    property real rotationBeforeEditing: 0
-
-    onIsEditingGeometryChanged: {
-      if ( isEditingGeometry ) {
-        rotationBeforeEditing = root.headingUp ? 0 : mapCanvas.mapSettings.rotation
-        root.headingUp = false
-        mapRotator.rotateTo( 0 )
-      }
-      else if ( rotationBeforeEditing !== 0 ) {
-        mapRotator.rotateTo( rotationBeforeEditing )
-        rotationBeforeEditing = 0
-      }
-    }
     property bool centeredToGPSBeforeStakeout
     property var stakeoutTarget
 
