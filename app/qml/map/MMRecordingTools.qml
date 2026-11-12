@@ -157,6 +157,7 @@ Item {
     hasDirection: positionMarkerComponent.hasDirection
 
     direction: positionMarkerComponent.direction
+    mapRotation: positionMarkerComponent.mapRotation
     hasPosition: positionMarkerComponent.hasPosition
 
     horizontalAccuracy: positionMarkerComponent.horizontalAccuracy

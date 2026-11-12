@@ -69,7 +69,7 @@ Item {
   // the map, we use a transform to adjust the shape. The reason is that the transform uses single
   // precision floats, and if we used just map coordinates, we get numerical errors when the map gets
   // zoomed in. This approach is more stable (but does not avoid the issue 100%)
-  property var refTransform: [1, 0, 0, 0, 1, 0]
+  property var refTransform: [1, 0, 0, 1, 0, 0]
 
   QtObject {
     id: internal

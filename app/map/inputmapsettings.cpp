@@ -18,7 +18,6 @@
 #include "inputmapsettings.h"
 
 #include "qgsmaplayer.h"
-#include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
 
 InputMapSettings::InputMapSettings( QObject *parent )
@@ -243,6 +242,9 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
                                    QDateTime::fromString( endString, Qt::ISODateWithMs ) ) );
   }
 
+  // readXml below overwrites the rotation, so remember it to know whether it has changed
+  const double rotationBeforeRead = mMapSettings.rotation();
+
   QDomNodeList nodes = doc.elementsByTagName( "mapcanvas" );
   bool foundTheMapCanvas = false;
   for ( int i = 0; i < nodes.size(); i++ )
@@ -254,7 +256,6 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     {
       foundTheMapCanvas = true;
       mMapSettings.readXml( node );
-
     }
   }
   if ( !foundTheMapCanvas )
@@ -264,7 +265,9 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
   }
 
   // rotation is a runtime-only state of the canvas, it is not restored from the project
-  setRotation( 0 );
+  mMapSettings.setRotation( 0 );
+  if ( !qgsDoubleNear( rotationBeforeRead, 0 ) )
+    emit rotationChanged();
 
   mMapSettings.setTransformContext( mProject->transformContext() );
   mMapSettings.setPathResolver( mProject->pathResolver() );

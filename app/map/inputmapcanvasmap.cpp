@@ -13,10 +13,11 @@
  */
 
 #include <QQuickWindow>
-#include <cmath>
 #include <QSignalBlocker>
 #include <QSGSimpleTextureNode>
 #include <QScreen>
+#include <algorithm>
+#include <cmath>
 
 #include "qgis.h"
 #include "qgsexpressioncontextutils.h"
@@ -33,6 +34,10 @@
 #include "inputmapcanvasmap.h"
 #include "inputmapsettings.h"
 
+// the picture is not rendered again when the map is rotated less than this angle (in degrees) from it
+static constexpr double ROTATION_TOLERANCE = 0.5;
+// the biggest side (in pixels) of the picture rendered for the overscan, keeps it within texture size limits of the GPUs
+static constexpr int MAX_OVERSCAN_SIDE = 4096;
 
 InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   : QQuickItem( parent )
@@ -162,7 +167,7 @@ void InputMapCanvasMap::refreshMap()
     // render a square as big as the diagonal of the canvas (same scale, same center), so the picture covers
     // the canvas also when it is rotated by any angle
     const QSize size = mapSettings.outputSize();
-    const int side = static_cast<int>( std::ceil( std::hypot( size.width(), size.height() ) ) );
+    const int side = std::min( MAX_OVERSCAN_SIDE, static_cast<int>( std::ceil( std::hypot( size.width(), size.height() ) ) ) );
     const QgsPointXY center = mapSettings.extent().center();
     const double halfSize = side * mapSettings.mapUnitsPerPixel() / 2;
 
@@ -361,7 +366,7 @@ void InputMapCanvasMap::checkRotationRender()
     return;
 
   const double diff = rotationDifference();
-  if ( diff < 0.5 )
+  if ( diff < ROTATION_TOLERANCE )
     return;
 
   if ( mJob )
@@ -391,7 +396,7 @@ void InputMapCanvasMap::onRotationSettled()
     return;
   }
 
-  if ( rotationDifference() >= 0.5 )
+  if ( rotationDifference() >= ROTATION_TOLERANCE )
     refreshForRotation();
 }
 
@@ -569,10 +574,12 @@ void InputMapCanvasMap::geometryChange( const QRectF &newGeometry, const QRectF 
   {
     mMapSettings->setOutputSize( newGeometry.size().toSize() );
 
-    // the size changed (e.g. the screen was rotated), the old image does not cover the canvas anymore,
-    // so render even if the rendering is frozen (e.g. while the map is rotating)
     if ( !mMapSettings->outputSize().isNull() )
-      mRefreshTimer.start( 1 );
+    {
+      // keep the old image at the right place until the new one is rendered
+      updateTransform();
+      refresh();
+    }
   }
 }
 

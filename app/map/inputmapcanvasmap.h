@@ -89,16 +89,16 @@ class InputMapCanvasMap : public QQuickItem
     Q_PROPERTY( bool overscan READ overscan WRITE setOverscan NOTIFY overscanChanged )
 
     /**
-     * While the map is being rotated by rotate(), the map is rendered again only when it differs from the rendered
-     * picture by at least this angle (in degrees) or when it stops rotating. In between, the rendered picture is rotated.
-     * The picture is replaced only when the rendering is finished.
-     */
-    /**
      * TRUE when the rendered picture is big enough for the overscan (or the overscan is off). The map should not be rotated
      * before that, otherwise the corners of the canvas would be empty.
      */
     Q_PROPERTY( bool overscanReady READ overscanReady NOTIFY overscanReadyChanged )
 
+    /**
+     * While the map is being rotated by rotate(), the map is rendered again only when it differs from the rendered
+     * picture by at least this angle (in degrees) or when it stops rotating. In between, the rendered picture is rotated.
+     * The picture is replaced only when the rendering is finished.
+     */
     Q_PROPERTY( qreal rotationRenderThreshold READ rotationRenderThreshold WRITE setRotationRenderThreshold NOTIFY rotationRenderThresholdChanged )
 
   public:
@@ -155,8 +155,14 @@ class InputMapCanvasMap : public QQuickItem
 
     //! \copydoc InputMapCanvasMap::freeze
     void freezeChanged();
+
+    //! \copydoc InputMapCanvasMap::overscan
     void overscanChanged();
+
+    //! \copydoc InputMapCanvasMap::overscanReady
     void overscanReadyChanged();
+
+    //! \copydoc InputMapCanvasMap::rotationRenderThreshold
     void rotationRenderThresholdChanged();
 
     //! \copydoc InputMapCanvasMap::isRendering
