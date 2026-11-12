@@ -145,7 +145,6 @@ MMBaseInput {
         implicitWidth: width
 
         readOnly: root.editState === "readOnly" || root.editState === "disabled"
-        activeFocusOnPress: !readOnly // Important due to crashes on iOS, see https://github.com/MerginMaps/mobile/pull/4561
 
         // Ensure the text is scrolled to the beginning
         Component.onCompleted: ensureVisible( 0 )

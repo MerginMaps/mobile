@@ -26,6 +26,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
   // date and dropdown types open pickers instead of accepting keyboard input
   textField.readOnly: root.type === MMFilterBaseInput.InputType.Date || root.type === MMFilterBaseInput.InputType.Dropdown
+  // picker types must not take focus, it crashed the app on iOS, see #4561
+  textField.activeFocusOnPress: !( root.type === MMFilterBaseInput.InputType.Date || root.type === MMFilterBaseInput.InputType.Dropdown )
   textField.inputMethodHints: root.type === MMFilterBaseInput.InputType.Number ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
   textField.color: {
     if ( root.editState === "readOnly" ) return __style.nightColor
