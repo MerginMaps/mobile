@@ -1057,7 +1057,7 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   // Some very basic checks, so we do not validate everything
   if ( marketingChannel.isEmpty() || industry.isEmpty() )
   {
-    QString msg = tr( "Marketing source cannot be empty" );
+    const QString msg = tr( "Marketing source cannot be empty" );
     emit postRegistrationFailed( msg );
     return;
   }
@@ -1065,14 +1065,14 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   // Some very basic checks, so we do not validate everything
   if ( industry.isEmpty() )
   {
-    QString msg = tr( "Industry cannot be empty" );
+    const QString msg = tr( "Industry cannot be empty" );
     emit postRegistrationFailed( msg );
     return;
   }
   // request
-  QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
-  QUrl url( urlString );
+  QNetworkRequest request = getDefaultRequest();
+  const QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
+  const QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
 
@@ -1082,12 +1082,9 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   jsonObject.insert( QStringLiteral( "marketing_channel" ), marketingChannel );
   jsonObject.insert( QStringLiteral( "subscribe" ), wantsNewsletter );
   jsonDoc.setObject( jsonObject );
-  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-  QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]()
-  {
-    this->postRegistrationFinished();
-  } );
+  const QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  const QNetworkReply *reply = mManager->post( request, json );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::postRegistrationFinished );
   CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
 }
 
