@@ -88,6 +88,9 @@ set(MM_QML
     dialogs/MMStreamingModeDialog.qml
     dialogs/MMSyncFailedDialog.qml
     dialogs/MMRemovePhotoDialog.qml
+    dialogs/MMRemoveAudioDialog.qml
+    dialogs/MMReplaceAudioDialog.qml
+    dialogs/MMMicrophonePermissionDialog.qml
     dialogs/MMFormSaveChangesDialog.qml
     dialogs/MMFormEditFailedDialog.qml
     dialogs/MMFormDeleteFeatureDialog.qml
@@ -103,9 +106,11 @@ set(MM_QML
     form/MMFormController.qml
     form/MMPreviewDrawer.qml
     form/components/MMFormTabBar.qml
+    form/components/MMFormRecordingIndicator.qml
     form/components/MMCalendarDrawer.qml
     form/components/MMFeaturesListPageDrawer.qml
     form/components/MMFormPhotoSketchingPageDialog.qml
+    form/components/audio/MMAudioAttachment.qml
     form/components/calendar/MMAmPmSwitch.qml
     form/components/calendar/MMDateTimePicker.qml
     form/components/calendar/MMDateTumbler.qml
@@ -116,6 +121,8 @@ set(MM_QML
     form/components/photo/MMPhotoAttachment.qml
     form/components/photo/MMPhotoPreview.qml
     form/components/MMFormActionBar.qml
+    form/editors/MMFormAudioEditor.qml
+    form/editors/MMFormAudioViewer.qml
     form/editors/MMFormCalendarEditor.qml
     form/editors/MMFormComboboxBaseEditor.qml
     form/editors/MMFormGalleryEditor.qml

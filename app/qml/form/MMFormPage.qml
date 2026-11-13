@@ -15,6 +15,7 @@ import QtQuick.Dialogs
 
 import mm 1.0 as MM
 import qgs 1.0 as QGS
+import MMInput
 
 import "../components" as MMComponents
 import "./components" as MMFormComponents
@@ -84,12 +85,7 @@ Page {
 
   Keys.onReleased: function( event ) {
     if ( event.key === Qt.Key_Back || event.key === Qt.Key_Escape ) {
-      if ( root.controller.hasAnyChanges )  {
-        saveChangesDialog.open()
-      }
-      else {
-        root.rollbackAndClose()
-      }
+      root.requestClose()
       event.accepted = true;
     }
   }
@@ -103,34 +99,48 @@ Page {
 
   header: MMComponents.MMPageHeader {
 
-    onBackClicked: {
-      if ( root.controller.hasAnyChanges )  {
-        saveChangesDialog.open()
-      }
-      else {
-        root.rollbackAndClose()
-      }
-    }
+    onBackClicked: root.requestClose()
 
 
     title: {
+      // the recording indicator takes the room of the title
+      if ( audioRecorder.isRecording ) return ""
       if ( root.state === "add" ) return qsTr( "New feature" )
       else if ( root.state === "edit" ) return qsTr( "Edit feature" )
       else if ( root.state === "multiEdit" ) return qsTr( "Edit selected features" )
       return __inputUtils.featureTitle( root.controller.featureLayerPair, __activeProject.qgsProject )
     }
 
-    rightItemContent: MMComponents.MMRoundButton {
+    rightItemContent: Row {
 
       anchors.verticalCenter: parent.verticalCenter
 
-      visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
+      spacing: __style.margin8
 
-      iconSource: __style.checkmarkIcon
-      iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
-      bgndColor: controller.hasValidationErrors ? __style.negativeColor : __style.grassColor
+      MMFormComponents.MMFormRecordingIndicator {
+        id: recordingIndicator
 
-      onClicked: root.save()
+        anchors.verticalCenter: parent.verticalCenter
+
+        visible: audioRecorder.isRecording
+        duration: audioRecorder.duration
+
+        onClicked: internal.showRecordingField()
+        onStopClicked: audioRecorder.stopRecording()
+      }
+
+      MMComponents.MMRoundButton {
+
+        anchors.verticalCenter: parent.verticalCenter
+
+        visible: root.state === "add" || root.state === "edit" || root.state === "multiEdit"
+
+        iconSource: __style.checkmarkIcon
+        iconColor: controller.hasValidationErrors ? __style.grapeColor : __style.forestColor
+        bgndColor: controller.hasValidationErrors ? __style.negativeColor : __style.grassColor
+
+        onClicked: root.save()
+      }
     }
   }
 
@@ -174,8 +184,10 @@ Page {
           id: pageDelegate
 
           property int tabIndex: model.TabIndex // from the repeater
+          property alias listView: formListView
 
           MMComponents.MMListView {
+            id: formListView
 
             anchors {
               fill: parent
@@ -244,7 +256,7 @@ Page {
         text: qsTr( "Edit geometry" )
         iconSource: __style.editIcon
         visible: root.layerIsSpatial && __activeProject.projectRole !== "reader"
-        onClicked: root.editGeometryRequested( root.controller.featureLayerPair )
+        onClicked: internal.editGeometry()
       }
     }
 
@@ -324,6 +336,7 @@ Page {
         property var fieldAssociatedRelation: model.Relation
         property MM.AttributeController fieldController: root.controller
         property string fieldHomePath: root.project ? root.project.homePath : "" // for photo editor
+        property AudioRecorderController fieldAudioRecorder: audioRecorder // for audio editor, outlives the delegate
 
         property bool fieldRememberValueSupported: root.controller.rememberAttributesController.rememberValuesAllowed && root.state === "add" && model.EditorWidget !== "Hidden" && Type === MM.FormItem.Field
         property bool fieldRememberValueState: model.RememberValue ? true : false
@@ -352,6 +365,8 @@ Page {
         }
 
         function onCreateLinkedFeature( parentFeature, relation ) {
+          internal.stopRecordingBeforeLeaving()
+
           let parentHasValidId = __inputUtils.isFeatureIdValid( parentFeature.feature.id )
 
           if ( parentHasValidId ) {
@@ -366,6 +381,7 @@ Page {
         }
 
         function onOpenLinkedFeature( linkedFeature ) {
+          internal.stopRecordingBeforeLeaving()
           root.openLinkedFeature( linkedFeature )
         }
       }
@@ -412,6 +428,7 @@ Page {
     id: deleteDialog
 
     onDeleteFeature: {
+      audioRecorder.discardRecording()
       root.controller.deleteFeature()
       root.canceled()
     }
@@ -419,6 +436,51 @@ Page {
 
   MMFormEditFailedDialog {
     id: editingFailedDialog
+  }
+
+  MMMicrophonePermissionDialog {
+    id: microphonePermissionDialog
+  }
+
+  // lives here and not in the audio editor, so recording continues while the editor is scrolled out of view
+  AudioRecorderController {
+    id: audioRecorder
+
+    attributeController: root.controller
+
+    // A pending save continues from the result of the recording and not from isRecordingChanged,
+    // which comes first: a failed recording must not save the feature
+    onRecordingFinished: function( fieldItemId ) {
+      internal.continueAfterRecording()
+    }
+
+    // the feature is not saved without its recording, the form stays open
+    onRecordingFailed: function( fieldItemId, message ) {
+      internal.saveWhenRecordingStops = false
+      internal.editGeometryWhenRecordingStops = false
+      __notificationModel.addError( message )
+    }
+
+    onRecordingInterrupted: function( fieldItemId, message ) {
+      __notificationModel.addWarning( message )
+    }
+
+    // only one field records at a time
+    onRecordingBusy: function( fieldItemId ) {
+      if ( audioRecorder.activeFieldTitle ) {
+        __notificationModel.addWarning( qsTr( "Stop recording “%1” first" ).arg( audioRecorder.activeFieldTitle ) )
+      }
+      else {
+        __notificationModel.addWarning( qsTr( "Stop the current recording first" ) )
+      }
+      recordingIndicator.nudge()
+    }
+
+    onMaximumDurationWarning: {
+      __notificationModel.addWarning( qsTr( "Recording stops automatically at %1 minutes" ).arg( Math.round( audioRecorder.maximumDuration / 60000 ) ) )
+    }
+
+    onMicrophonePermissionDenied: microphonePermissionDialog.open()
   }
 
   Connections {
@@ -446,6 +508,13 @@ Page {
   }
 
   function save() {
+    // the recording is assigned to its field once it is finalised, then the save continues
+    if ( audioRecorder.isRecording ) {
+      internal.saveWhenRecordingStops = true
+      audioRecorder.stopRecording()
+      return
+    }
+
     if ( controller.hasValidationErrors )
     {
       __notificationModel.addError( qsTr( 'Feature could not be saved, please check all required fields' ) )
@@ -458,7 +527,23 @@ Page {
     controller.save()
   }
 
+  function requestClose() {
+    // A running recording counts as an unsaved change: "save" stops and keeps it with the feature,
+    // "no" discards it together with the other changes
+    if ( audioRecorder.isRecording || root.controller.hasAnyChanges ) {
+      saveChangesDialog.open()
+    }
+    else {
+      root.rollbackAndClose()
+    }
+  }
+
   function rollbackAndClose() {
+    // a running recording is discarded with the other changes, a save waiting for it is dropped
+    internal.saveWhenRecordingStops = false
+    internal.editGeometryWhenRecordingStops = false
+    audioRecorder.discardRecording()
+
     // remove feature if we are in "add" mode and it already has valid ID
     // it was saved to prefill relation reference field in child layer
     let featureId = root.controller.featureLayerPair.feature.id
@@ -492,5 +577,63 @@ Page {
     id: internal
 
     property real formSpacing: 20 * __dp
+
+    property bool saveWhenRecordingStops: false
+    property bool editGeometryWhenRecordingStops: false
+
+    // continues the save or the geometry editing that waited for the recording to be finalised
+    function continueAfterRecording() {
+      if ( saveWhenRecordingStops ) {
+        saveWhenRecordingStops = false
+        editGeometryWhenRecordingStops = false
+        root.save()
+      }
+      else if ( editGeometryWhenRecordingStops ) {
+        editGeometryWhenRecordingStops = false
+        root.editGeometryRequested( root.controller.featureLayerPair )
+      }
+    }
+
+    // The form gets the edited feature back with the values it has when the editing starts. A running recording
+    // is stopped and kept first, so its file is among them and is still in the field when the user comes back
+    function editGeometry() {
+      if ( audioRecorder.isRecording ) {
+        editGeometryWhenRecordingStops = true
+        stopRecordingBeforeLeaving()
+        return
+      }
+
+      root.editGeometryRequested( root.controller.featureLayerPair )
+    }
+
+    // switches to the tab with the recording field and scrolls to it
+    function showRecordingField() {
+      const fieldItemId = audioRecorder.activeFieldItemId
+      if ( !fieldItemId ) {
+        return
+      }
+
+      for ( let tab = 0; tab < swipeViewRepeater.count; tab++ ) {
+        const page = swipeViewRepeater.itemAt( tab )
+        const formModel = page.listView.model
+
+        for ( let row = 0; row < formModel.rowCount(); row++ ) {
+          if ( formModel.data( formModel.index( row, 0 ), MM.AttributeFormModel.FormItemId ) === fieldItemId ) {
+            tabBar.currentIndex = tab
+            page.listView.positionViewAtIndex( row, ListView.Center )
+            return
+          }
+        }
+      }
+
+      // the field is not in the form at the moment, e.g. hidden by its visibility expression
+      __notificationModel.addWarning( qsTr( "The field being recorded is hidden at the moment" ) )
+    }
+
+    // The header indicator is the only sign of a running recording and only one form records at a time,
+    // so the recording does not continue when the form is hidden or covered by another form
+    function stopRecordingBeforeLeaving() {
+      audioRecorder.interruptRecording( qsTr( "Recording stopped because you left the form" ) )
+    }
   }
 }

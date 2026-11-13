@@ -419,6 +419,11 @@ class InputUtils: public QObject
     Q_INVOKABLE static const QUrl getFormEditorType( const QString &widgetNameIn, const QVariantMap &config = QVariantMap(), const QgsField &field = QgsField(), const QgsRelation &relation = QgsRelation(), const QString &editorTitle = QString(), bool isMultiEdit = false );
 
     /**
+     * Returns true if the ExternalResource (attachment) widget config has its integrated document viewer set to Audio.
+     */
+    Q_INVOKABLE static bool isAudioExternalResource( const QVariantMap &config );
+
+    /**
      * \copydoc QgsCoordinateFormatter::format()
      */
     Q_INVOKABLE static QString formatPoint(

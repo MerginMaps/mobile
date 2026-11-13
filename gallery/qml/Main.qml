@@ -244,6 +244,10 @@ ApplicationWindow {
           source: "PhotosPage.qml"
         }
         ListElement {
+          title: "Audio"
+          source: "AudioPage.qml"
+        }
+        ListElement {
           title: "Map"
           source: "MapPage.qml"
         }

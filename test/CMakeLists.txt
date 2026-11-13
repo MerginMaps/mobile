@@ -29,6 +29,7 @@ set(MM_TESTS
     testSketching
     testMultiEditManager
     testFilterController
+    testAudioRecorder
 )
 
 foreach (test ${MM_TESTS})

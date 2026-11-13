@@ -1114,6 +1114,14 @@ const QUrl InputUtils::getThemeIcon( const QString &name )
   return QUrl( path );
 }
 
+bool InputUtils::isAudioExternalResource( const QVariantMap &config )
+{
+  // QgsExternalResourceWidget::DocumentViewerContent::Audio (NoContent, Image, Web, Audio, Video), QGIS 3.30+
+  // the enum lives in qgis_gui which the app does not link, hence the plain value
+  constexpr int AUDIO_DOCUMENT_VIEWER = 3;
+  return config.value( QStringLiteral( "DocumentViewer" ) ).toInt() == AUDIO_DOCUMENT_VIEWER;
+}
+
 const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVariantMap &config, const QgsField &field, const QgsRelation &relation, const QString &editorTitle, bool isMultiEdit )
 {
   QString widgetName = widgetNameIn.toLower();
@@ -1167,6 +1175,8 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     if ( isMultiEdit )
       return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
+    else if ( isAudioExternalResource( config ) )
+      return QUrl( path.arg( QLatin1String( "MMFormAudioEditor" ) ) );
     else
       return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }

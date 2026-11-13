@@ -50,6 +50,7 @@ set(MM_SRCS
     androidutils.cpp
     mapsketchingcontroller.cpp
     appsettings.cpp
+    audiorecordercontroller.cpp
     autosynccontroller.cpp
     bluetoothdiscoverymodel.cpp
     qrcodedecoder.cpp
@@ -147,6 +148,7 @@ set(MM_HDRS
     androidutils.h
     mapsketchingcontroller.h
     appsettings.h
+    audiorecordercontroller.h
     autosynccontroller.h
     bluetoothdiscoverymodel.h
     qrcodedecoder.h
@@ -235,6 +237,7 @@ if (ENABLE_TESTS)
       test/inputtests.cpp
       test/testattributecontroller.cpp
       test/testattributepreviewcontroller.cpp
+      test/testaudiorecorder.cpp
       test/testcoreutils.cpp
       test/testformeditors.cpp
       test/testidentifykit.cpp
@@ -263,6 +266,7 @@ if (ENABLE_TESTS)
       test/inputtests.h
       test/testattributecontroller.h
       test/testattributepreviewcontroller.h
+      test/testaudiorecorder.h
       test/testcoreutils.h
       test/testformeditors.h
       test/testidentifykit.h
