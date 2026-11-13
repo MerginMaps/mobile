@@ -75,8 +75,8 @@ jobs:
             -k "$MERGINSECRETS_DECRYPT_KEY" \
             -md md5
 
-      - name: Ccache
-        uses: hendrikmuhs/ccache-action@v1.2
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2.25
         with:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
@@ -157,10 +157,10 @@ jobs:
           lcov --list coverage.info
 
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: build-mm-db/coverage.info
+          file: build-mm-db/coverage.info
           fail-on-error: false
 
       - name: Build app (release)
@@ -185,7 +185,7 @@ jobs:
 
       - name: Get timestamp
         id: time
-        uses: josStorer/get-current-time@v2.0.2
+        uses: josStorer/get-current-time@v2.1.3
         with:
           format: 'YYYYMMDD'
 
