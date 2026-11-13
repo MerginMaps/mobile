@@ -75,8 +75,8 @@ jobs:
             -k "$MERGINSECRETS_DECRYPT_KEY" \
             -md md5
 
-      - name: Ccache
-        uses: hendrikmuhs/ccache-action@v1.2
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2.25
         with:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
