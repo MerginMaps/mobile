@@ -92,7 +92,7 @@ class SynchronizationManager : public QObject
     void syncProgressChanged( const QString &projectFullName, qreal progress );
     void syncFinished( const QString &projectFullName, bool success, int newVersion, bool reloadNeeded );
 
-    void syncError( const QString &projectFullName, int errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
+    void syncError( const QString &projectFullName, SynchronizationError::ErrorType errorType, bool willRetry = false, const QString &errorMessage = QLatin1String() );
     void projectAlreadyOnLatestVersion( const QString &projectFullName );
     void projectDataChanged( const QString &projectFullName );
 

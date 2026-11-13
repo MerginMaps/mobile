@@ -150,7 +150,6 @@ set(MM_HDRS
     qrcodedecoder.h
     changelogmodel.h
     compass.h
-    enumhelper.h
     featurelayerpair.h
     featuresmodel.h
     fieldsmodel.h

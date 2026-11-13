@@ -30,6 +30,18 @@ SynchronizationError::ErrorType SynchronizationError::errorType( const int httpE
   {
     return ErrorType::AnotherProcessIsRunning;
   }
+  if ( serverErrorCode == QStringLiteral( "ProjectLocked" ) )
+  {
+    return ErrorType::ProjectLocked;
+  }
+  if ( serverErrorCode == QStringLiteral( "UploadError" ) )
+  {
+    return ErrorType::UploadError;
+  }
+  if ( serverErrorCode == QStringLiteral( "DataSyncError" ) )
+  {
+    return ErrorType::DataSyncError;
+  }
 
   if ( httpErrorCode == 400 )
   {
@@ -55,7 +67,11 @@ SynchronizationError::ErrorType SynchronizationError::errorType( const int httpE
     // Project no longer exists / is on different server
     return ErrorType::ProjectNotFound;
   }
-  else if ( httpErrorCode == 429 || httpErrorCode >= 500 )
+  else if ( httpErrorCode == 429 )
+  {
+    return ErrorType::RateLimiting;
+  }
+  else if ( httpErrorCode >= 500 )
   {
     // Exceptions in server code or maintenance mode
     return ErrorType::ServerError;
@@ -68,11 +84,12 @@ bool SynchronizationError::isPermanent( const ErrorType errorType )
 {
   switch ( errorType )
   {
-    case AnotherProcessIsRunning:
+    case ErrorType::AnotherProcessIsRunning:
       [[fallthrough]];
-    case VersionMismatch:
+    case ErrorType::VersionMismatch:
       [[fallthrough]];
-    case ServerError: return false;
+    case ErrorType::RateLimiting:
+      return false;
 
     default: return true;
   }

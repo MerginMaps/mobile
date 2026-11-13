@@ -20,7 +20,7 @@ class SynchronizationError
   public:
     explicit SynchronizationError();
 
-    enum ErrorType
+    enum class ErrorType
     {
       NoError = 0,
       AnotherProcessIsRunning,
@@ -28,8 +28,12 @@ class SynchronizationError
       NotAMerginProject,
       ProjectNotFound,
       ProjectLimitHit,
+      ProjectLocked,
       StorageLimitHit,
       VersionMismatch,
+      UploadError,
+      DataSyncError,
+      RateLimiting,
       ServerError,
       UnknownError
     };

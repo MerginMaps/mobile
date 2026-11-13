@@ -81,7 +81,7 @@ void SynchronizationManager::syncProject( const LocalProject &project, SyncOptio
   {
     if ( requestOrigin == SyncOptions::ManualRequest )
     {
-      emit syncError( project.id(), SynchronizationError::NotAMerginProject );
+      emit syncError( project.id(), SynchronizationError::ErrorType::NotAMerginProject );
     }
     return;
   }
