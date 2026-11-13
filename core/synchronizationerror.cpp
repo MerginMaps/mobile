@@ -36,12 +36,6 @@ SynchronizationError::ErrorType SynchronizationError::errorType( const int httpE
   }
   if ( serverErrorCode == QStringLiteral( "UploadError" ) )
   {
-    // there is a special case during push v2 where UploadError returns with 409 instead of 422,
-    // which indicates that the version already exists
-    if ( httpErrorCode == 409 )
-    {
-      return ErrorType::VersionMismatch;
-    }
     return ErrorType::UploadError;
   }
   if ( serverErrorCode == QStringLiteral( "DataSyncError" ) )
