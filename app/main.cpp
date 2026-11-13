@@ -222,45 +222,6 @@ static void setEnvironmentQgisPrefixPath()
   qDebug() << "QGIS_PREFIX_PATH: " << QString::fromLocal8Bit( qgetenv( "QGIS_PREFIX_PATH" ) );
 }
 
-// Resolves one preferred language at a time, since uiLanguages() can rank a
-// language's own base form behind an exact match for a less-preferred one.
-static bool loadMMTranslation( QTranslator &translator )
-{
-  auto tryLanguage = [ &translator ]( QLocale::Language language )
-  {
-    return translator.load( QLocale( language ), QStringLiteral( "input" ), QStringLiteral( "_" ), QStringLiteral( ":/" ) );
-  };
-
-  QLocale::Language previousTierLanguage = QLocale::AnyLanguage;
-
-  const QStringList uiLanguages = QLocale().uiLanguages();
-  for ( const QString &lang : uiLanguages )
-  {
-    const QLocale candidate( lang );
-
-    if ( previousTierLanguage != QLocale::AnyLanguage && candidate.language() != previousTierLanguage
-         && tryLanguage( previousTierLanguage ) )
-    {
-      return true;
-    }
-
-    if ( translator.load( candidate, QStringLiteral( "input" ), QStringLiteral( "_" ), QStringLiteral( ":/" ) ) )
-    {
-      return true;
-    }
-
-    previousTierLanguage = candidate.language();
-  }
-
-  if ( previousTierLanguage != QLocale::AnyLanguage && tryLanguage( previousTierLanguage ) )
-  {
-    return true;
-  }
-
-  // none of the preferred languages is translated
-  return tryLanguage( QLocale::English );
-}
-
 static void init_qgis( const QString &pkgPath )
 {
   QgsApplication::init();
@@ -476,14 +437,14 @@ int main( int argc, char *argv[] )
 
   // Initialize translations
   QTranslator translator;
-  if ( loadMMTranslation( translator ) )
+  if ( InputUtils::loadTranslation( translator ) )
   {
     QgsApplication::installTranslator( &translator );
-    qDebug() << "Loaded MM translation" << translator.language() << "(" << translator.filePath() << ")";
+    qDebug() << QStringLiteral( "Loaded MM translation" ) << translator.language() << QStringLiteral( "(" ) << translator.filePath() << QStringLiteral( ")" );
   }
   else
   {
-    qDebug() << "No MM translation found, using built-in strings";
+    qDebug() << QStringLiteral( "No MM translation found, using built-in strings" );
   }
 
   QString appBundleDir;

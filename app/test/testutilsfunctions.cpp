@@ -35,7 +35,7 @@
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
 #include <QTemporaryDir>
-#include <QLocale>
+#include <QTranslator>
 #include <QUrl>
 
 const int DAY_IN_SECS = 60 * 60 * 24;
@@ -1197,4 +1197,167 @@ void TestUtilsFunctions::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "://example.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
+}
+
+void TestUtilsFunctions::testParentLocale()
+{
+  QCOMPARE( InputUtils::parentLocale( QLocale( "pt_AO" ) ), QStringLiteral( "pt_PT" ) );
+  QCOMPARE( InputUtils::parentLocale( QLocale( "pt_MZ" ) ), QStringLiteral( "pt_PT" ) );
+  QCOMPARE( InputUtils::parentLocale( QLocale( "es_MX" ) ), QStringLiteral( "es_419" ) );
+  QCOMPARE( InputUtils::parentLocale( QLocale( "es_US" ) ), QStringLiteral( "es_419" ) );
+
+  // locales that are their own parent or have no parent we ship
+  QVERIFY( InputUtils::parentLocale( QLocale( "pt_BR" ) ).isEmpty() );
+  QVERIFY( InputUtils::parentLocale( QLocale( "pt_PT" ) ).isEmpty() );
+  QVERIFY( InputUtils::parentLocale( QLocale( "es_ES" ) ).isEmpty() );
+  QVERIFY( InputUtils::parentLocale( QLocale( "en_US" ) ).isEmpty() );
+}
+
+void TestUtilsFunctions::testTranslationFilePath_data()
+{
+  // uiLanguages are lists as returned by QLocale::uiLanguages() on macOS/iOS and Android
+  // for the given device languages (and region), Android lists are shortened
+  QTest::addColumn<QStringList>( "uiLanguages" );
+  QTest::addColumn<QString>( "expected" );
+
+  // a later language must not win over the base form of a more preferred one (#4524)
+  QTest::newRow( "en-GB, sk-SK [region SK]" )
+      << QStringList { "en-Latn-GB", "en-GB", "en-Latn-SK", "en-SK", "sk-Latn-SK", "sk-SK", "sk-Latn", "sk", "en-Latn", "en" }
+      << "en";
+  QTest::newRow( "en-GB, sk-SK (Android)" )
+      << QStringList { "en-Latn-GB", "en-GB", "sk-Latn-SK", "sk-SK", "sk-Latn", "sk", "en-AU-u-fw-mon-mu-celsius", "en-Latn-AU", "en-AU-u-fw-mon-mu", "en-AU-u", "en-AU", "en-Latn", "en" }
+      << "en";
+  QTest::newRow( "de-AT, en-US (Android)" )
+      << QStringList { "de-Latn-AT", "de-AT", "en-Latn-US", "en-US", "en-Latn", "en", "de-Latn-BE", "de-BE", "de-Latn", "de" }
+      << "de";
+  QTest::newRow( "sk-SK, en-GB" )
+      << QStringList { "sk-Latn-SK", "sk-SK", "sk-Latn", "sk", "en-Latn-GB", "en-GB", "en-Latn", "en" }
+      << "sk_SK";
+  QTest::newRow( "sk-SK-u-mu-celsius, en-GB (Android)" )
+      << QStringList { "sk-SK-u-mu-celsius", "sk-Latn-SK", "sk-Latn", "sk", "sk-SK-u-mu", "en-Latn-GB", "en-GB", "en-Latn", "en" }
+      << "sk_SK";
+
+  // Traditional Chinese must not get the Simplified Chinese translation
+  QTest::newRow( "zh-Hant-TW, en-US" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "en-Latn-US", "en-US", "en-Latn", "en", "zh" }
+      << "en";
+  QTest::newRow( "zh-Hant-TW, ja-JP" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "ja-Jpan-JP", "ja-JP", "ja-Jpan", "ja", "zh" }
+      << "ja_JP";
+  QTest::newRow( "zh-Hant-TW" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "zh" }
+      << "en";
+  QTest::newRow( "zh-Hant-TW [region US]" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "zh-Hant-US", "zh-US", "zh" }
+      << "en";
+  QTest::newRow( "zh-TW, en-US (Android)" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "en-Latn-US", "en-US", "en-Latn", "en", "zh" }
+      << "en";
+  QTest::newRow( "zh-Hant-HK, en-GB (Android)" )
+      << QStringList { "zh-Hant-HK", "zh-HK", "zh-Hant", "en-Latn-GB", "en-GB", "en-AU-u-fw-mon-mu-celsius", "en-Latn-AU", "en-AU", "sk-Latn-SK", "sk-SK", "sk-Latn", "sk", "zh", "en-Latn", "en" }
+      << "en";
+  QTest::newRow( "zh-Hant-TW, zh-Hans-CN" )
+      << QStringList { "zh-Hant-TW", "zh-TW", "zh-Hant", "zh-Hans-CN", "zh-CN", "zh-Hans", "zh" }
+      << "zh_CN";
+  QTest::newRow( "zh-Hans-CN, en-US" )
+      << QStringList { "zh-Hans-CN", "zh-CN", "zh-Hans", "zh", "en-Latn-US", "en-US", "en-Latn", "en" }
+      << "zh_CN";
+  QTest::newRow( "zh-Hans-SG, en-US [region US]" )
+      << QStringList { "zh-Hans-SG", "zh-SG", "zh-Hans-US", "en-Latn-US", "en-US", "en-Latn", "en", "zh-Hans", "zh" }
+      << "zh";
+
+  // Cyrillic Azerbaijani must not get the Latin translation
+  QTest::newRow( "az-Cyrl-AZ, en-US" )
+      << QStringList { "az-Cyrl-AZ", "az-Cyrl", "en-Latn-US", "en-US", "en-Latn", "en", "az" }
+      << "en";
+  QTest::newRow( "az-Cyrl-AZ" )
+      << QStringList { "az-Cyrl-AZ", "az-Cyrl", "az" }
+      << "en";
+  QTest::newRow( "az-Cyrl-AZ, az-Latn-AZ" )
+      << QStringList { "az-Cyrl-AZ", "az-Cyrl", "az-Latn-AZ", "az-AZ", "az-Latn", "az" }
+      << "az_AZ";
+
+  // regional variants
+  QTest::newRow( "es-MX, es-419" )
+      << QStringList { "es-Latn-MX", "es-MX", "es-Latn-419", "es-419", "es-Latn", "es" }
+      << "es_419";
+  QTest::newRow( "es-MX" )
+      << QStringList { "es-Latn-MX", "es-MX", "es-Latn", "es" }
+      << "es_419";
+  QTest::newRow( "es-ES" )
+      << QStringList { "es-Latn-ES", "es-ES", "es-Latn", "es" }
+      << "es_ES";
+  QTest::newRow( "pt-AO" )
+      << QStringList { "pt-Latn-AO", "pt-AO", "pt-Latn", "pt" }
+      << "pt_PT";
+  QTest::newRow( "pt-BR" )
+      << QStringList { "pt-Latn-BR", "pt-BR", "pt-Latn", "pt" }
+      << "pt_BR";
+  QTest::newRow( "ar-SA" )
+      << QStringList { "ar-Arab-SA", "ar-SA", "ar-Arab", "ar" }
+      << "ar";
+  QTest::newRow( "ar-EG" )
+      << QStringList { "ar-Arab-EG", "ar-EG", "ar-Arab", "ar" }
+      << "ar_EG";
+  QTest::newRow( "ja-US, de-DE [region US]" )
+      << QStringList { "ja-Jpan-US", "ja-US", "ja-Jpan", "ja", "de-Latn-DE", "de-DE", "de-Latn", "de" }
+      << "ja_JP";
+  QTest::newRow( "in-ID, en-US (Android legacy code)" )
+      << QStringList { "id-Latn-ID", "id-ID", "id-Latn", "id", "en-Latn-US", "en-US", "en-Latn", "en" }
+      << "id_ID";
+
+  // nothing translated
+  QTest::newRow( "ru-RU, uk-UA" )
+      << QStringList { "ru-Cyrl-RU", "ru-RU", "ru-Cyrl", "ru", "uk-Cyrl-UA", "uk-UA", "uk-Cyrl", "uk" }
+      << "en";
+  QTest::newRow( "empty" ) << QStringList() << "en";
+  QTest::newRow( "invalid tags" ) << QStringList { "", "C", "xx-YY" } << "en";
+}
+
+void TestUtilsFunctions::testTranslationFilePath()
+{
+  QFETCH( QStringList, uiLanguages );
+  QFETCH( QString, expected );
+
+  // fixed set of translation files, so the test does not depend on translations we currently ship
+  const QStringList translations =
+  {
+    "ar", "ar_EG", "az", "az_AZ", "de", "en", "es", "es_419", "es_ES", "id_ID", "ja_JP",
+    "pt_BR", "pt_PT", "sk", "sk_SK", "zh", "zh_CN"
+  };
+
+  QTemporaryDir dir;
+  QVERIFY( dir.isValid() );
+  for ( const QString &translation : translations )
+  {
+    QFile file( dir.filePath( QStringLiteral( "input_%1.qm" ).arg( translation ) ) );
+    QVERIFY( file.open( QIODevice::WriteOnly ) );
+  }
+
+  const QString path = InputUtils::translationFilePath( uiLanguages, dir.path() );
+  QCOMPARE( path, dir.filePath( QStringLiteral( "input_%1.qm" ).arg( expected ) ) );
+}
+
+void TestUtilsFunctions::testTranslationFilePathWithoutEnglish()
+{
+  QTemporaryDir dir;
+  QVERIFY( dir.isValid() );
+  QFile file( dir.filePath( QStringLiteral( "input_sk.qm" ) ) );
+  QVERIFY( file.open( QIODevice::WriteOnly ) );
+  file.close();
+
+  QCOMPARE( InputUtils::translationFilePath( { "sk-Latn-SK", "sk-SK", "sk-Latn", "sk" }, dir.path() ), file.fileName() );
+  QVERIFY( InputUtils::translationFilePath( { "de-Latn-DE", "de-DE", "de-Latn", "de" }, dir.path() ).isEmpty() );
+}
+
+void TestUtilsFunctions::testTranslationFromResources()
+{
+  // the translations bundled in the app resources can be resolved and loaded
+  const QString path = InputUtils::translationFilePath( { "en-Latn-GB", "en-GB", "en-Latn-SK", "en-SK", "sk-Latn-SK", "sk-SK", "sk-Latn", "sk", "en-Latn", "en" } );
+  QCOMPARE( path, QStringLiteral( ":/input_en.qm" ) );
+
+  QTranslator translator;
+  QVERIFY( translator.load( InputUtils::translationFilePath( { "sk-Latn-SK", "sk-SK", "sk-Latn", "sk" } ) ) );
+  QVERIFY( !translator.isEmpty() );
+  QCOMPARE( translator.filePath(), QStringLiteral( ":/input_sk_SK.qm" ) );
 }

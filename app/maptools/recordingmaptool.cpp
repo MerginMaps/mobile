@@ -18,6 +18,7 @@
 #include "qgsmultipolygon.h"
 #include "qgsrendercontext.h"
 #include "qgsvectorlayereditbuffer.h"
+#include "qgsunittypes.h"
 
 #include "position/positionkit.h"
 #include "coreutils.h"

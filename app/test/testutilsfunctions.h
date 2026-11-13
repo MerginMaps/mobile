@@ -58,6 +58,11 @@ class TestUtilsFunctions: public QObject
     void testIsPositionTrackingLayer();
     void testMapLayerFromName();
     void testIsValidUrl();
+    void testParentLocale();
+    void testTranslationFilePath_data();
+    void testTranslationFilePath();
+    void testTranslationFilePathWithoutEnglish();
+    void testTranslationFromResources();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );
