@@ -212,7 +212,7 @@ MMPage {
         title: qsTr( "Industry" )
         placeholderText: internal.specifyIndustryText
 
-        onTextEdited: ( text ) => root.selectedText = "other;" + text
+        onTextEdited: ( text ) => root.selectedText = text
 
         Component.onCompleted: textField.forceActiveFocus()
       }
