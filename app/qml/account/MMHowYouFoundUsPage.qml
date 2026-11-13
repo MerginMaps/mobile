@@ -221,7 +221,7 @@ MMPage {
         title: qsTr( "Source" )
         placeholderText: internal.specifySourceText
 
-        onTextChanged: root.selectedText = text
+        onTextChanged: root.selectedText = "other;" + text
 
         Component.onCompleted: textField.forceActiveFocus()
       }
