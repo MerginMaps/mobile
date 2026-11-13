@@ -25,6 +25,7 @@
 #include "merginprojectmetadata.h"
 #include "synchronizationoptions.h"
 #include "filter/filtercontroller.h"
+#include "geodiffutils.h"
 
 /**
  * \brief The ActiveProject class can load a QGIS project and holds its data.
@@ -193,9 +194,18 @@ class ActiveProject: public QObject
 
     void filterControllerChanged( FilterController *controller );
 
+    /**
+     * Emitted when sync changed ids of some features in the project.
+     * \param remap layer id -> ( old feature id as string -> new feature id )
+     */
+    void featureIdsRemapped( const QVariantMap &remap );
+
   public slots:
     // Reloads project if current project path matches given path (it's the same project)
     bool reloadProject( QString projectDir );
+
+    //! Translates feature ids changed by sync in geopackage \a filePath to project layers and emits featureIdsRemapped()
+    void remapFeatureIds( const QString &filePath, const GeodiffUtils::FeatureIdMapping &mapping );
 
     void setAutosyncEnabled( bool enabled );
 

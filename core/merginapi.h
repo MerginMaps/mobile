@@ -36,6 +36,7 @@
 #include "merginuserinfo.h"
 #include "merginworkspaceinfo.h"
 #include "merginuserauth.h"
+#include "geodiffutils.h"
 
 #ifdef MOBILE_OS
 class QOAuthUriSchemeReplyHandler;
@@ -692,6 +693,15 @@ class MerginApi: public QObject
     void listProjectsByNameFinished( const MerginProjectsList &merginProjects, QString requestId );
     void syncProjectFinished( const QString &projectFullName, bool successfully, int version );
     void projectReloadNeededAfterSync( const QString &projectFullName );
+
+    /**
+     * Emitted when pull changed some local feature IDs.
+     * \param projectFullName name of project getting synced
+     * \param filePath absolute path of geopackage which was rebased
+     * \param mapping HashMap of tables and list of changed IDs
+     */
+    void projectFeatureIdsRemapped( const QString &projectFullName, const QString &filePath, const GeodiffUtils::FeatureIdMapping &mapping );
+
     /**
      * Emitted when sync starts/finishes or the progress changes - useful to give a clue in the GUI about the status.
      * Normally progress is in interval [0, 1] as data get pushed or pulled.

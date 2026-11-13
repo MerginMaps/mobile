@@ -18,6 +18,7 @@
 #include "qgslayertreegroup.h"
 #include "qgsmapthemecollection.h"
 #include "qgsapplication.h"
+#include "qgsproviderregistry.h"
 
 #include "activeproject.h"
 #include "coreutils.h"
@@ -360,6 +361,40 @@ bool ActiveProject::reloadProject( QString projectDir )
     return result;
   }
   return false;
+}
+
+void ActiveProject::remapFeatureIds( const QString &filePath, const GeodiffUtils::FeatureIdMapping &mapping )
+{
+  const QString canonicalFilePath = QFileInfo( filePath ).canonicalFilePath();
+  QVariantMap remap;
+
+  const QMap<QString, QgsMapLayer *> layers = mQgsProject->mapLayers();
+  for ( QgsMapLayer *mapLayer : layers )
+  {
+    const QgsVectorLayer *layer = qobject_cast<QgsVectorLayer *>( mapLayer );
+    if ( !layer || layer->providerType() != QLatin1String( "ogr" ) )
+      continue;
+
+    const QVariantMap uriParts = QgsProviderRegistry::instance()->decodeUri( layer->providerType(), layer->source() );
+    if ( QFileInfo( uriParts.value( QStringLiteral( "path" ) ).toString() ).canonicalFilePath() != canonicalFilePath )
+      continue;
+
+    const QString tableName = uriParts.value( QStringLiteral( "layerName" ) ).toString();
+    if ( !mapping.contains( tableName ) )
+      continue;
+
+    QVariantMap layerRemap;
+    for ( auto it = mapping[tableName].constBegin(); it != mapping[tableName].constEnd(); ++it )
+    {
+      layerRemap.insert( QString::number( it->first ), it->second );
+    }
+    remap.insert( layer->id(), layerRemap );
+  }
+
+  if ( !remap.isEmpty() )
+  {
+    emit featureIdsRemapped( remap );
+  }
 }
 
 void ActiveProject::setAutosyncEnabled( bool enabled )

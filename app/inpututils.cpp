@@ -1843,6 +1843,26 @@ QString InputUtils::featureTitle( const FeatureLayerPair &pair, QgsProject *proj
   return title;
 }
 
+FeatureLayerPair InputUtils::refreshFeatureLayerPair( const FeatureLayerPair &pair, const QVariantMap &featureIdsRemap )
+{
+  QgsVectorLayer *layer = pair.layer();
+  if ( !layer || !isFeatureIdValid( pair.feature().id() ) )
+  {
+    return pair;
+  }
+
+  const QVariantMap layerRemap = featureIdsRemap.value( layer->id() ).toMap();
+  const QgsFeatureId fid = layerRemap.value( QString::number( pair.feature().id() ), pair.feature().id() ).toLongLong();
+
+  QgsFeature feature;
+  if ( !layer->getFeatures( QgsFeatureRequest( fid ) ).nextFeature( feature ) )
+  {
+    return {};
+  }
+
+  return { feature, layer };
+}
+
 FeatureLayerPair InputUtils::createFeatureLayerPair(
   QgsVectorLayer *layer,
   const QgsGeometry &geometry,

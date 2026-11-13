@@ -28,7 +28,6 @@
 
 #include "projectchecksumcache.h"
 #include "coreutils.h"
-#include "geodiffutils.h"
 #include "localprojectsmanager.h"
 #include "../app/enumhelper.h"
 #include "merginerrortypes.h"
@@ -2190,11 +2189,14 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
   //
   bool hasConflicts = false;
 
-  bool res = GeodiffUtils::rebase( basefile,
-                                   src,
-                                   dest,
-                                   conflictfile
-                                 );
+  // remember local changes, so we can find out which inserted features got new ids during rebase
+  const QString localChanges = GeodiffUtils::diffableFilePendingChanges( projectDir, filePath, false );
+
+  const bool res = GeodiffUtils::rebase( basefile,
+                                         src,
+                                         dest,
+                                         conflictfile
+                                       );
   if ( res )
   {
     CoreUtils::log( "pull " + projectFullName, "geodiff rebase successful: " + filePath );
@@ -2234,6 +2236,19 @@ bool MerginApi::finalizeProjectPullApplyDiff( const QString &projectFullName, co
 
     // TODO: this is a critical failure - we should abort pull
   }
+
+  // calculate local changes after rebase
+  if ( !localChanges.isEmpty()  && res )
+  {
+    const QString rebasedLocalChanges = GeodiffUtils::diffableFilePendingChanges( projectDir, filePath, false );
+    const GeodiffUtils::FeatureIdMapping mapping = GeodiffUtils::findRemappedFeatureIds( dest, localChanges, rebasedLocalChanges );
+    if ( !mapping.isEmpty() )
+    {
+      CoreUtils::log( "pull " + projectFullName, QStringLiteral( "Rebase changed ids of locally inserted features in tables: %1" ).arg( mapping.keys().join( ", " ) ) );
+      emit projectFeatureIdsRemapped( projectFullName, dest, mapping );
+    }
+  }
+
   return hasConflicts;
 }
 

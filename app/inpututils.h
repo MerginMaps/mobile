@@ -542,6 +542,13 @@ class InputUtils: public QObject
     // Returns the title of the feature
     Q_INVOKABLE static QString featureTitle( const FeatureLayerPair &pair, QgsProject *project );
 
+    /**
+     * Fetches the current version of the pair's feature from its layer, e.g. after sync changed the data.
+     * \param featureIdsRemap feature ids changed by sync, see ActiveProject::featureIdsRemapped
+     * \returns refreshed pair, invalid pair if the feature does not exist anymore
+     */
+    Q_INVOKABLE static FeatureLayerPair refreshFeatureLayerPair( const FeatureLayerPair &pair, const QVariantMap &featureIdsRemap = QVariantMap() );
+
     //! Creates featureLayerPair from geometry and layer, evaluates its expressions and returns it.
     Q_INVOKABLE static FeatureLayerPair createFeatureLayerPair( QgsVectorLayer *layer = nullptr, const QgsGeometry &geometry = QgsGeometry(), VariablesManager *variablesmanager = nullptr, QgsExpressionContextScope *additionalScope = nullptr );
 
