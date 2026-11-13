@@ -389,17 +389,21 @@ void TestPosition::testPositionTracking()
   PositionTrackingManager manager;
 
   QSignalSpy isTrackingSpy( &manager, &PositionTrackingManager::isTrackingPositionChanged );
+  QSignalSpy positionKitSpy( &manager, &PositionTrackingManager::positionKitChanged );
 
   QVERIFY( manager.trackedGeometry().isEmpty() );
 
   manager.setQgsProject( QgsProject::instance() );
   manager.setTrackingBackend( PositionTrackingManager::constructTrackingBackend( QgsProject::instance(), positionKit ) );
+  manager.setPositionKit( positionKit );
 
   QVERIFY( manager.trackingBackend() );
 
   QCOMPARE( isTrackingSpy.count(), 1 );
   QCOMPARE( isTrackingSpy.takeFirst().at( 0 ), true );
   QCOMPARE( manager.isTrackingPosition(), true );
+
+  QCOMPARE( positionKitSpy.count(), 1 );
 
   QSignalSpy trackingSpy( &manager, &PositionTrackingManager::trackedGeometryChanged );
 
