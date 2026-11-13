@@ -30,6 +30,7 @@ MMPrivateComponents.MMBaseInput {
 
   property string photoUrl: ""
   property bool hasCameraCapability: true
+  property bool canEditPhoto: true
 
   property var photoComponent: photo
   property PhotoSketchingController sketchingController
@@ -136,16 +137,36 @@ MMPrivateComponents.MMBaseInput {
     }
 
     MMPhotoComponents.MMPhotoAttachment {
+      id: photoAttachment
+
       width: parent.width
       height: parent.height
 
-      visible: photoStateGroup.state === "notSet"
+      visible: photoStateGroup.state === "notSet" && root.canEditPhoto
       enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability
 
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
+    }
+
+    Rectangle {
+      width: parent.width - 2 * __style.margin20
+      height: parent.height - 2 * __style.margin20
+
+      anchors.centerIn: parent
+      radius: parent.radius
+      color: __style.lightGreenColor
+
+      visible: photoStateGroup.state === "notSet" && !photoAttachment.visible
+
+      MMComponents.MMText {
+        anchors.centerIn: parent
+        text: qsTr( "No image" )
+        font: __style.t4Italic
+        color: __style.darkGreyColor
+      }
     }
   }
 

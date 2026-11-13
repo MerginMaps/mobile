@@ -35,6 +35,8 @@ MMPrivateComponents.MMBaseInput {
            ? qsTr( "Some features may be hidden by active filters" )
            : ""
 
+  property real _photoCardSize: rowView.height
+
   inputContent: MMComponents.MMListView {
     id: rowView
 
@@ -54,7 +56,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     delegate: MMComponents.MMPhotoCard{
-      size: rowView.height
+      size: root._photoCardSize
 
       imageSource: {
         let absolutePath = model.PhotoPath
@@ -75,7 +77,15 @@ MMPrivateComponents.MMBaseInput {
       }
     }
 
-    header: (__activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly) ? addFeatureComponent : null
+    header: {
+      if ( __activeProject.projectRole !== "reader" && !rmodel?.layer?.readOnly )
+        return addFeatureComponent
+
+      if ( rowView.count === 0 )
+        return emptyComponent
+
+      return null
+    }
   }
 
   Component {
@@ -108,6 +118,34 @@ MMPrivateComponents.MMBaseInput {
 
       MMComponents.MMListSpacer {
         width: rowView.spacing
+      }
+    }
+  }
+
+  Component {
+    id: emptyComponent
+
+    Rectangle {
+      height: root._photoCardSize
+      width: root._photoCardSize
+
+      radius: __style.radius20
+      color: __style.polarColor
+
+      Rectangle {
+        width: parent.width * 0.8
+        height: parent.height * 0.8
+
+        anchors.centerIn: parent
+        radius: parent.radius
+        color: __style.lightGreenColor
+
+        MMComponents.MMText {
+          anchors.centerIn: parent
+          text: qsTr( "No images" )
+          font: __style.t4Italic
+          color: __style.darkGreyColor
+        }
       }
     }
   }
