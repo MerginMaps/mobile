@@ -301,7 +301,8 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
     return;
 
   const QgsRectangle bbox = geom.boundingBox();
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  // extent (not visibleExtent) is used as it is not affected by the map rotation
+  QgsRectangle currentExtent = mapSettings->extent();
 
   if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
   {
@@ -311,6 +312,16 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   else
   {
     currentExtent = bbox;
+
+    if ( !qgsDoubleNear( mapSettings->rotation(), 0 ) )
+    {
+      // extent is defined in the rotated frame, so we need to fit the bbox as it appears on the rotated map
+      const double angle = qDegreesToRadians( mapSettings->rotation() );
+      const double halfWidth = std::fabs( bbox.width() / 2 * std::cos( angle ) ) + std::fabs( bbox.height() / 2 * std::sin( angle ) );
+      const double halfHeight = std::fabs( bbox.width() / 2 * std::sin( angle ) ) + std::fabs( bbox.height() / 2 * std::cos( angle ) );
+      const QgsPointXY center = bbox.center();
+      currentExtent = QgsRectangle( center.x() - halfWidth, center.y() - halfHeight, center.x() + halfWidth, center.y() + halfHeight );
+    }
 
     // Add a offset to encompass handles etc..
     // This number is based on what feel confortable for the user
@@ -390,28 +401,25 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( InputMapSettings *ms )
+QVariantList InputUtils::mapSettingsTransform( InputMapSettings *ms )
 {
-  if ( !ms ) return 1;
-  return 1 / ms->mapUnitsPerPixel();
-}
+  if ( !ms ) return { 1, 0, 0, 1, 0, 0 };
 
-double InputUtils::mapSettingsOffsetX( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().xMinimum();
-}
+  const double mapUnitsPerPoint = ms->mapUnitsPerPixel() * ms->devicePixelRatio();
+  if ( !std::isfinite( mapUnitsPerPoint ) || mapUnitsPerPoint <= 0 ) return { 1, 0, 0, 1, 0, 0 };
 
-double InputUtils::mapSettingsOffsetY( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().yMaximum();
-}
+  // The scale and the rotation are computed directly and only the offset is taken from a transformed point
+  // computing everything from transformed points far away, like the origin would lose precision when the map is zoomed in.
+  const double angle = qDegreesToRadians( ms->rotation() );
+  const double a = std::cos( angle ) / mapUnitsPerPoint;
+  const double b = std::sin( angle ) / mapUnitsPerPoint;
+  const double c = b;
+  const double d = -a;
 
-double InputUtils::mapSettingsDPR( InputMapSettings *ms )
-{
-  if ( !ms ) return 1;
-  return ms->devicePixelRatio();
+  const QgsPoint center = ms->center();
+  const QPointF centerOnScreen = ms->coordinateToScreen( center );
+
+  return { a, b, c, d, centerOnScreen.x() - a * center.x() - b * center.y(), centerOnScreen.y() - c * center.x() - d * center.y() };
 }
 
 QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context )

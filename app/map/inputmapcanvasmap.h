@@ -82,6 +82,25 @@ class InputMapCanvasMap : public QQuickItem
      */
     Q_PROPERTY( bool incrementalRendering READ incrementalRendering WRITE setIncrementalRendering NOTIFY incrementalRenderingChanged )
 
+    /**
+     * When TRUE, the map is rendered to a square as big as the diagonal of the canvas, so the picture still covers the
+     * whole canvas when it is rotated (by any angle) before the next rendering is finished.
+     */
+    Q_PROPERTY( bool overscan READ overscan WRITE setOverscan NOTIFY overscanChanged )
+
+    /**
+     * TRUE when the rendered picture is big enough for the overscan (or the overscan is off). The map should not be rotated
+     * before that, otherwise the corners of the canvas would be empty.
+     */
+    Q_PROPERTY( bool overscanReady READ overscanReady NOTIFY overscanReadyChanged )
+
+    /**
+     * While the map is being rotated by rotate(), the map is rendered again only when it differs from the rendered
+     * picture by at least this angle (in degrees) or when it stops rotating. In between, the rendered picture is rotated.
+     * The picture is replaced only when the rendering is finished.
+     */
+    Q_PROPERTY( qreal rotationRenderThreshold READ rotationRenderThreshold WRITE setRotationRenderThreshold NOTIFY rotationRenderThresholdChanged )
+
   public:
     //! Create map canvas map
     explicit InputMapCanvasMap( QQuickItem *parent = nullptr );
@@ -91,6 +110,15 @@ class InputMapCanvasMap : public QQuickItem
 
     //! \copydoc InputMapCanvasMap::mapSettings
     InputMapSettings *mapSettings() const;
+
+    //! \copydoc InputMapCanvasMap::overscan
+    bool overscan() const;
+    void setOverscan( bool overscan );
+    bool overscanReady() const;
+
+    //! \copydoc InputMapCanvasMap::rotationRenderThreshold
+    qreal rotationRenderThreshold() const;
+    void setRotationRenderThreshold( qreal threshold );
 
     //! \copydoc InputMapCanvasMap::freeze
     bool freeze() const;
@@ -128,6 +156,15 @@ class InputMapCanvasMap : public QQuickItem
     //! \copydoc InputMapCanvasMap::freeze
     void freezeChanged();
 
+    //! \copydoc InputMapCanvasMap::overscan
+    void overscanChanged();
+
+    //! \copydoc InputMapCanvasMap::overscanReady
+    void overscanReadyChanged();
+
+    //! \copydoc InputMapCanvasMap::rotationRenderThreshold
+    void rotationRenderThresholdChanged();
+
     //! \copydoc InputMapCanvasMap::isRendering
     void isRenderingChanged();
 
@@ -152,6 +189,11 @@ class InputMapCanvasMap : public QQuickItem
      * Set map setting's extent (zoom the map) on the center by given scale
      */
     void zoom( QPointF center, qreal scale );
+
+    /**
+     * Rotates the map by given angle (in degrees, clockwise) around the given screen position
+     */
+    void rotate( QPointF center, qreal angle );
 
     /**
      * Set map setting's extent (pan the map) based on the difference of positions
@@ -179,6 +221,8 @@ class InputMapCanvasMap : public QQuickItem
     void onExtentChanged();
     void onLayersChanged();
     void onTemporalStateChanged();
+    void checkRotationRender();
+    void onRotationSettled();
 
   private:
 
@@ -188,8 +232,11 @@ class InputMapCanvasMap : public QQuickItem
     void destroyJob( QgsMapRendererJob *job );
     QgsMapSettings prepareMapSettings() const;
     void updateTransform();
+    void setImageFromJob();
     void zoomToFullExtent();
     void clearTemporalCache();
+    void refreshForRotation();
+    double rotationDifference() const;
 
     std::unique_ptr<InputMapSettings> mMapSettings;
     bool mPinching = false;
@@ -207,6 +254,14 @@ class InputMapCanvasMap : public QQuickItem
     bool mIncrementalRendering = false;
     bool mSilentRefresh = false;
     bool mDeferredRefreshPending = false;
+    bool mRotating = false; // inside of rotate(), see onExtentChanged
+    bool mOverscan = false;
+    bool mJobOverscan = false; // the last started job was rendered with the overscan
+    bool mImageOverscan = false; // the current picture was rendered with the overscan
+    qreal mRotationRenderThreshold = 45;
+    bool mRotationRender = false; // the current rendering job was started because of the rotation
+    bool mRotationRenderRequested = false; // the next rendering job will be started because of the rotation
+    QTimer mRotationSettleTimer; // fires when the map stopped rotating
 
     QQuickWindow *mWindow = nullptr;
 };

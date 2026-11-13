@@ -12,11 +12,12 @@
  * File: qgsquickmapsettings.cpp by (C) 2014 by Matthias Kuhn
  */
 
+#include <cmath>
+
 #include "qgis.h"
 #include "inputmapsettings.h"
 
 #include "qgsmaplayer.h"
-#include "qgsmessagelog.h"
 #include "qgsprojectviewsettings.h"
 
 InputMapSettings::InputMapSettings( QObject *parent )
@@ -241,6 +242,9 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
                                    QDateTime::fromString( endString, Qt::ISODateWithMs ) ) );
   }
 
+  // readXml below overwrites the rotation, so remember it to know whether it has changed
+  const double rotationBeforeRead = mMapSettings.rotation();
+
   QDomNodeList nodes = doc.elementsByTagName( "mapcanvas" );
   bool foundTheMapCanvas = false;
   for ( int i = 0; i < nodes.size(); i++ )
@@ -252,9 +256,6 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     {
       foundTheMapCanvas = true;
       mMapSettings.readXml( node );
-
-      if ( !qgsDoubleNear( mMapSettings.rotation(), 0 ) )
-        QgsMessageLog::logMessage( QStringLiteral( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( mMapSettings.rotation() ) );
     }
   }
   if ( !foundTheMapCanvas )
@@ -263,7 +264,10 @@ void InputMapSettings::onReadProject( const QDomDocument &doc )
     mMapSettings.setExtent( mProject->viewSettings()->fullExtent() );
   }
 
+  // rotation is a runtime-only state of the canvas, it is not restored from the project
   mMapSettings.setRotation( 0 );
+  if ( !qgsDoubleNear( rotationBeforeRead, 0 ) )
+    emit rotationChanged();
 
   mMapSettings.setTransformContext( mProject->transformContext() );
   mMapSettings.setPathResolver( mProject->pathResolver() );
@@ -283,8 +287,22 @@ double InputMapSettings::rotation() const
 
 void InputMapSettings::setRotation( double rotation )
 {
-  if ( !qgsDoubleNear( rotation, 0 ) )
-    QgsMessageLog::logMessage( QStringLiteral( "Map Canvas rotation is not supported. Resetting from %1 to 0." ).arg( rotation ) );
+  // normalize to (-180, 180] so that north is always 0
+  rotation = std::fmod( rotation, 360.0 );
+  if ( rotation > 180.0 )
+    rotation -= 360.0;
+  else if ( rotation <= -180.0 )
+    rotation += 360.0;
+
+  // get rid of the floating point noise around north
+  if ( qgsDoubleNear( rotation, 0, 1e-6 ) )
+    rotation = 0;
+
+  if ( qgsDoubleNear( mMapSettings.rotation(), rotation ) )
+    return;
+
+  mMapSettings.setRotation( rotation );
+  emit rotationChanged();
 }
 
 QColor InputMapSettings::backgroundColor() const
