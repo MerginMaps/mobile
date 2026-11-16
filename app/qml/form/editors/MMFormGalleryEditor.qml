@@ -126,8 +126,8 @@ MMPrivateComponents.MMBaseInput {
     id: emptyComponent
 
     Rectangle {
-      height: root._photoCardSize
-      width: root._photoCardSize
+      height: rowView.height
+      width: rowView.height
 
       radius: __style.radius20
       color: __style.polarColor
