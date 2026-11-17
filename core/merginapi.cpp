@@ -1202,13 +1202,12 @@ void MerginApi::cancelPush( const QString &projectFullName )
   }
   else if ( transaction.replyPushFinish )
   {
-    QString transactionUUID = transaction.transactionUUID;  // copy transaction uuid as the transaction object will be gone after abort
-    CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload finish" ) );
-    transaction.replyPushFinish->abort();  // will trigger pushFinishReplyFinished slot and emit sync finished
-
-    // server using v1 push needs to get cancel the transaction request
     if ( mPushVersion == MerginServerType::syncTransactionVersion::v1 )
     {
+      const QString transactionUUID = transaction.transactionUUID;  // copy transaction uuid as the transaction object will be gone after abort
+      CoreUtils::log( "push " + projectFullName, QStringLiteral( "Aborting upload finish" ) );
+      transaction.replyPushFinish->abort();  // will trigger pushFinishReplyFinished slot and emit sync finished
+
       sendPushCancelRequest( projectFullName, transactionUUID );
     }
   }
