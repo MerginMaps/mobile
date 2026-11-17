@@ -316,7 +316,7 @@ class MerginApi: public QObject
      * \param projectFullName Project's full name to cancel its 4
      * \note pushCanceled() signal is emitted when the reply to the cancel request is received
      */
-    Q_INVOKABLE void cancelPush( const QString &projectFullName ); //TODO: there is nothing to cancel on v2, is there? .. apart from stop upload
+    void cancelPush( const QString &projectFullName );
 
     /**
      * Cancels pull either (1) before project data download starts or
