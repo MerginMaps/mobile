@@ -18,6 +18,8 @@ Item {
   property string text: ""
   property bool textVisible: false
   property int size: 120 * __dp
+  // audio attachments have no thumbnail, a tile with an icon is shown instead
+  property bool isAudio: false
 
   signal clicked(url path)
 
@@ -44,6 +46,20 @@ Item {
     id: bngImage
     anchors.fill: root
     fillMode: Image.PreserveAspectCrop
+    visible: !root.isAudio
+  }
+
+  Rectangle {
+    anchors.fill: root
+    visible: root.isAudio
+    color: __style.polarColor
+
+    MMIcon {
+      anchors.centerIn: parent
+      source: __style.audioFileIcon
+      color: __style.forestColor
+      size: __style.icon32
+    }
   }
 
   MultiEffect{

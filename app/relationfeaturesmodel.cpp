@@ -34,6 +34,11 @@ QVariant RelationFeaturesModel::data( const QModelIndex &index, int role ) const
     const FeatureLayerPair pair = LayerFeaturesModel::data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
     return relationPhotoPath( pair );
   }
+  else if ( role == IsAudio )
+  {
+    const FeatureLayerPair pair = LayerFeaturesModel::data( index, FeaturesModel::FeaturePair ).value<FeatureLayerPair>();
+    return relationIsAudio( pair );
+  }
   else
     return LayerFeaturesModel::data( index, role );
 }
@@ -42,6 +47,7 @@ QHash<int, QByteArray> RelationFeaturesModel::roleNames() const
 {
   QHash<int, QByteArray> roles = LayerFeaturesModel::roleNames();
   roles[PhotoPath] = QStringLiteral( "PhotoPath" ).toLatin1();
+  roles[IsAudio] = QStringLiteral( "IsAudio" ).toLatin1();
 
   return roles;
 }
@@ -121,6 +127,15 @@ QVariant RelationFeaturesModel::relationPhotoPath( const FeatureLayerPair &featu
   QString finalPath = InputUtils::resolvePath( path, homePath(), config, featurePair, QgsProject::instance() );
 
   return QVariant( finalPath );
+}
+
+bool RelationFeaturesModel::relationIsAudio( const FeatureLayerPair &featurePair ) const
+{
+  const int fieldIndex = photoFieldIndex( featurePair.layer() );
+  if ( fieldIndex < 0 )
+    return false;
+
+  return InputUtils::isAudioExternalResource( featurePair.layer()->editorWidgetSetup( fieldIndex ).config() );
 }
 
 int RelationFeaturesModel::photoFieldIndex( QgsVectorLayer *layer ) const

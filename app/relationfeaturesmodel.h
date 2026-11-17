@@ -40,6 +40,7 @@ class RelationFeaturesModel : public LayerFeaturesModel
     enum RelationModelRoles
     {
       PhotoPath = LayerModelRoles::LastRole + 1,
+      IsAudio,
     };
     Q_ENUM( RelationModelRoles );
 
@@ -68,6 +69,8 @@ class RelationFeaturesModel : public LayerFeaturesModel
 
   private:
     QVariant relationPhotoPath( const FeatureLayerPair &featurePair ) const;
+    //! true if the attachment field of the child feature uses the Audio document viewer
+    bool relationIsAudio( const FeatureLayerPair &featurePair ) const;
 
     /**
      * Searches and returns first index of photo field if the field is type of 'ExternalResource'.

@@ -55,6 +55,7 @@ MMPrivateComponents.MMBaseInput {
 
     delegate: MMComponents.MMPhotoCard{
       size: rowView.height
+      isAudio: model.IsAudio
 
       imageSource: {
         let absolutePath = model.PhotoPath
