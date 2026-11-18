@@ -349,7 +349,6 @@ class MerginApi: public QObject
     Q_INVOKABLE void getUserInfo();
     Q_INVOKABLE void getWorkspaceInfo();
     Q_INVOKABLE void getServiceInfo();
-    void getWorkspaceServiceDetails();
     Q_INVOKABLE void clearAuth();
     Q_INVOKABLE QString resetPasswordUrl();
 
@@ -784,6 +783,7 @@ class MerginApi: public QObject
     void userSelfRegistrationEnabledChanged();
 
   private slots:
+    void getWorkspaceServiceDetails();
     void listProjectsReplyFinished( QString requestId );
     void listProjectsByNameReplyFinished( QString requestId );
 

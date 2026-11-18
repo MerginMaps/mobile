@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QElapsedTimer>
 #include <QNetworkAccessManager>
+#include <QPointer>
 #include <QTimer>
 
 class AppSettings;
@@ -30,24 +31,6 @@ class UsageReportController : public QObject
                                     QObject *parent = nullptr );
 
     Q_INVOKABLE void trackFeature( const QString &key );
-    void incrementCounter( const QString &key, int amount = 1 );
-    void setData( const QString &key, const QVariant &value );
-
-    //! Tracks external GNSS usage, does nothing for the internal provider
-    void trackExternalProvider( const QString &providerId, const QString &providerType, const QString &providerName );
-
-    //! Stores the role if it is higher than the highest role stored so far
-    void trackProjectRole( const QString &role );
-
-    void startLoadTimer();
-    void recordLoadTime();
-
-    void trySubmitSnapshot();
-    // Temporary: bypass interval check for testing
-    void forceSubmitSnapshot();
-
-    void startPingTimer();
-    void startSnapshotTimer();
 
     /**
      * Returns brand of the external GNSS receiver, never the provider name itself (it can be set by the user).
@@ -66,22 +49,45 @@ class UsageReportController : public QObject
      */
     static int projectRoleRank( const QString &role );
 
+  public slots:
+    void incrementCounter( const QString &key, int amount = 1 );
+
+    //! Tracks external GNSS usage, does nothing for the internal provider
+    void trackExternalProvider( const QString &providerId, const QString &providerType, const QString &providerName );
+
+    //! Stores the role if it is higher than the highest role stored so far
+    void trackProjectRole( const QString &role );
+
+    void startLoadTimer();
+    void recordLoadTime();
+
+    // Temporary: bypass interval check for testing
+    void forceSubmitSnapshot();
+
+    void startPingTimer();
+    void startSnapshotTimer();
+
   signals:
     //! Emitted after a snapshot was submitted and the sent data was reset
     void snapshotSubmitted();
 
   private:
+    void setData( const QString &key, const QVariant &value );
+    void trySubmitSnapshot();
     void submitSnapshot( bool force ); // Temporary: remove force param when removing forceSubmitSnapshot
     void checkConnectivity();
     bool isEnabled() const;
 
-    AppSettings *mAppSettings = nullptr;
-    LocalProjectsManager *mLocalProjectsManager = nullptr;
-    MerginApi *mMerginApi = nullptr;
+    //! Returns a map with every key of the snapshot set to its default value, so all keys are always present
+    QVariantMap emptyUsageDataMap() const;
+
+    QPointer<AppSettings> mAppSettings;
+    QPointer<LocalProjectsManager> mLocalProjectsManager;
+    QPointer<MerginApi> mMerginApi;
 
     QNetworkAccessManager mNam;
-    QTimer *mPingTimer = nullptr;
-    QTimer *mSnapshotTimer = nullptr;
+    QTimer mPingTimer;
+    QTimer mSnapshotTimer;
     QElapsedTimer mLoadTimer;
     bool mSnapshotInFlight = false;
 };

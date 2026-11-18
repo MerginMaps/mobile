@@ -44,9 +44,9 @@ MMComponents.MMPage {
       delayedSearch: true
       onSearchTextChanged: {
         // track only when a new search starts, not on every text change
-        if ( searchBar.text.length > 0 && featuresModel.searchExpression === "" )
+        if ( searchBar.searchText.length > 0 && featuresModel.searchExpression === "" )
           __usageReportController.trackFeature( "features_search" )
-        featuresModel.searchExpression = searchBar.text
+        featuresModel.searchExpression = searchBar.searchText
       }
     }
 

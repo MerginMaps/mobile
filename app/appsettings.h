@@ -111,6 +111,8 @@ class AppSettings: public QObject
     void setIgnoreMigrateVersion( const QString &version );
 
     static const QString POSITION_PROVIDERS_GROUP;
+    //! Settings group of the usage report (inside the app group)
+    static const QString USAGE_REPORT_GROUP;
 
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );

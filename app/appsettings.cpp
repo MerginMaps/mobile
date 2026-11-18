@@ -14,14 +14,16 @@
 #include <QFileInfo>
 
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
+const QString AppSettings::USAGE_REPORT_GROUP = QStringLiteral( "inputApp/usageReport" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
-  // Usage report settings live outside the app group
   {
     QSettings settings;
-    mUsageReportEnabled = settings.value( QStringLiteral( "usage_report/enabled" ), false ).toBool();
-    mUsageReportConsentAsked = settings.value( QStringLiteral( "usage_report/consent_asked" ), false ).toBool();
+    settings.beginGroup( USAGE_REPORT_GROUP );
+    mUsageReportEnabled = settings.value( QStringLiteral( "enabled" ), false ).toBool();
+    mUsageReportConsentAsked = settings.value( QStringLiteral( "consent_asked" ), false ).toBool();
+    settings.endGroup();
   }
 
   QSettings settings;
@@ -413,21 +415,21 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   mUsageReportEnabled = enabled;
 
   QSettings settings;
+  settings.beginGroup( USAGE_REPORT_GROUP );
   if ( !mUsageReportEnabled )
   {
     // Opt-out: clear accumulated data and identity, preserve consent_asked flag
-    settings.beginGroup( QStringLiteral( "usage_report/data" ) );
-    settings.remove( QString() );
-    settings.endGroup();
-    settings.remove( QStringLiteral( "usage_report/telemetry_id" ) );
-    settings.remove( QStringLiteral( "usage_report/last_reported_at" ) );
-    settings.remove( QStringLiteral( "usage_report/period_started_at" ) );
-    settings.setValue( QStringLiteral( "usage_report/enabled" ), false );
+    settings.remove( QStringLiteral( "data" ) );
+    settings.remove( QStringLiteral( "telemetry_id" ) );
+    settings.remove( QStringLiteral( "last_reported_at" ) );
+    settings.remove( QStringLiteral( "period_started_at" ) );
+    settings.setValue( QStringLiteral( "enabled" ), false );
   }
   else
   {
-    settings.setValue( QStringLiteral( "usage_report/enabled" ), true );
+    settings.setValue( QStringLiteral( "enabled" ), true );
   }
+  settings.endGroup();
 
   emit usageReportEnabledChanged( mUsageReportEnabled );
 }
@@ -445,7 +447,9 @@ void AppSettings::setUsageReportConsentAsked( bool asked )
   mUsageReportConsentAsked = asked;
 
   QSettings settings;
-  settings.setValue( QStringLiteral( "usage_report/consent_asked" ), asked );
+  settings.beginGroup( USAGE_REPORT_GROUP );
+  settings.setValue( QStringLiteral( "consent_asked" ), asked );
+  settings.endGroup();
 
   emit usageReportConsentAskedChanged( mUsageReportConsentAsked );
 }

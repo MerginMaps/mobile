@@ -37,6 +37,7 @@ MMComponents.MMDrawerDialog {
   }
 
   onSecondaryButtonClicked: {
+    AppSettings.usageReportEnabled = false
     AppSettings.usageReportConsentAsked = true
     close()
   }

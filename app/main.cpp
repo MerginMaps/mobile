@@ -684,84 +684,83 @@ int main( int argc, char *argv[] )
   QObject::connect( as, &AppSettings::immediateUsageSnapshotRequested, &usageReportController, &UsageReportController::forceSubmitSnapshot );
 
   // Gather dynamic usage data via signal connections
-  UsageReportController &urc = usageReportController;
 
   // Auto-sync: remember when it gets turned on, so it still counts if turned off again before the snapshot.
   // If it's on at snapshot time, UsageReportController reads the setting itself.
-  QObject::connect( as, &AppSettings::autosyncAllowedChanged, &lambdaContext, [&urc]( bool allowed )
+  QObject::connect( as, &AppSettings::autosyncAllowedChanged, &lambdaContext, [&usageReportController]( bool allowed )
   {
     if ( allowed )
-      urc.trackFeature( QStringLiteral( "autosync" ) );
+      usageReportController.trackFeature( QStringLiteral( "autosync" ) );
   } );
 
   // Created project
-  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [&urc]( const QString &, const QString & )
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [&usageReportController]( const QString &, const QString & )
   {
-    urc.trackFeature( QStringLiteral( "created_project" ) );
+    usageReportController.trackFeature( QStringLiteral( "created_project" ) );
   } );
 
   // Photo captured vs attached
-  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [&urc]()
+  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [&usageReportController]()
   {
-    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+    usageReportController.incrementCounter( QStringLiteral( "captured_images" ) );
   } );
-  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [&urc]()
+  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [&usageReportController]()
   {
-    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+    usageReportController.incrementCounter( QStringLiteral( "attached_images" ) );
   } );
-  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [&urc]()
+  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [&usageReportController]()
   {
-    urc.incrementCounter( QStringLiteral( "captured_images" ) );
+    usageReportController.incrementCounter( QStringLiteral( "captured_images" ) );
   } );
-  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [&urc]()
+  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [&usageReportController]()
   {
-    urc.incrementCounter( QStringLiteral( "attached_images" ) );
+    usageReportController.incrementCounter( QStringLiteral( "attached_images" ) );
   } );
 
   // Workspace switches
-  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&urc]()
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&usageReportController]()
   {
-    urc.incrementCounter( QStringLiteral( "workspace_switches" ) );
+    usageReportController.incrementCounter( QStringLiteral( "workspace_switches" ) );
   } );
 
   // External GPS provider
-  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&urc]( AbstractPositionProvider * provider )
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&usageReportController]( AbstractPositionProvider * provider )
   {
     if ( !provider ) return;
 
-    urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+    usageReportController.trackExternalProvider( provider->id(), provider->type(), provider->name() );
   } );
 
   // Highest project role
-  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&urc, &activeProject]()
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&usageReportController, &activeProject]()
   {
-    urc.trackProjectRole( activeProject.projectRole() );
+    usageReportController.trackProjectRole( activeProject.projectRole() );
   } );
 
   // Provider and role describe the current state, not events, and the collected data is reset after each snapshot.
   // Record them again so a provider or role that stays unchanged is still reported in the next period.
-  auto trackCurrentState = [&urc, pk, &activeProject]()
+  auto trackCurrentState = [&usageReportController, pk, &activeProject]()
   {
     if ( AbstractPositionProvider *provider = pk->positionProvider() )
-      urc.trackExternalProvider( provider->id(), provider->type(), provider->name() );
-    urc.trackProjectRole( activeProject.projectRole() );
+      usageReportController.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+    usageReportController.trackProjectRole( activeProject.projectRole() );
   };
-  QObject::connect( &urc, &UsageReportController::snapshotSubmitted, &lambdaContext, trackCurrentState );
+  QObject::connect( &usageReportController, &UsageReportController::snapshotSubmitted, &lambdaContext, trackCurrentState );
   trackCurrentState();
 
   // Project load time
-  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&urc]()
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&usageReportController]()
   {
-    urc.startLoadTimer();
+    usageReportController.startLoadTimer();
   } );
 
-  urc.startPingTimer();
-  urc.startSnapshotTimer();
+  usageReportController.startPingTimer();
+  usageReportController.startSnapshotTimer();
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &urc]()
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &usageReportController]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
-    urc.recordLoadTime();
+    usageReportController.recordLoadTime();
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()
