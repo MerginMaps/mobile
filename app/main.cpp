@@ -103,6 +103,7 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "audiorecordercontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -462,6 +463,9 @@ int main( int argc, char *argv[] )
     projectDir = tests.initTestingDir();
   }
 #endif
+
+  // recordings of forms that were open when the app was closed
+  AudioRecorderController::removeTemporaryFiles();
 
   QDir projectsDirectory( projectDir );
   if ( !projectsDirectory.exists() )

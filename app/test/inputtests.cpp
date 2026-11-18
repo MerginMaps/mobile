@@ -32,6 +32,7 @@
 #include "testprojectchecksumcache.h"
 #include "testmultieditmanager.h"
 #include "testfiltercontroller.h"
+#include "testaudiorecorder.h"
 
 InputTests::InputTests() = default;
 
@@ -192,6 +193,11 @@ int InputTests::runTest() const
   {
     TestSketching sketchingTest;
     nFailed = QTest::qExec( &sketchingTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testAudioRecorder" )
+  {
+    TestAudioRecorder audioRecorderTest;
+    nFailed = QTest::qExec( &audioRecorderTest, mTestArgs );
   }
   else if ( mTestRequested == "--testMerginApi" )
   {

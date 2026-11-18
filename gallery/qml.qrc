@@ -24,6 +24,7 @@
         <file>qml/pages/ToolbarPage.qml</file>
         <file>qml/pages/ProjectItemsPage.qml</file>
         <file>qml/pages/PhotosPage.qml</file>
+        <file>qml/pages/AudioPage.qml</file>
         <file>qml/pages/EditorsPage.qml</file>
         <file>qml/pages/OnboardingPage.qml</file>
         <file>qml/pages/FormPage.qml</file>
@@ -107,6 +108,7 @@
         <file>../app/qml/form/components/calendar/MMDateTumbler.qml</file>
         <file>../app/qml/form/components/photo/MMPhotoAttachment.qml</file>
         <file>../app/qml/form/components/photo/MMPhotoPreview.qml</file>
+        <file>../app/qml/form/components/audio/MMAudioAttachment.qml</file>
         <file>../app/qml/form/components/MMFormPhotoSketchingPageDialog.qml</file>
         <file>../app/qml/form/editors/MMFormCalendarEditor.qml</file>
         <file>../app/qml/form/editors/MMFormComboboxBaseEditor.qml</file>
@@ -114,6 +116,7 @@
         <file>../app/qml/form/editors/MMFormNumberEditor.qml</file>
         <file>../app/qml/form/editors/MMFormPhotoViewer.qml</file>
         <file>../app/qml/form/editors/MMFormPhotoEditor.qml</file>
+        <file>../app/qml/form/editors/MMFormAudioViewer.qml</file>
         <file>../app/qml/form/editors/MMFormRelationEditor.qml</file>
         <file>../app/qml/form/editors/MMFormScannerEditor.qml</file>
         <file>../app/qml/form/editors/MMFormSliderEditor.qml</file>
@@ -150,6 +153,8 @@
         <file>../app/qml/dialogs/MMMissingAuthDialog.qml</file>
         <file>../app/qml/dialogs/MMFormSaveChangesDialog.qml</file>
         <file>../app/qml/dialogs/MMRemovePhotoDialog.qml</file>
+        <file>../app/qml/dialogs/MMRemoveAudioDialog.qml</file>
+        <file>../app/qml/dialogs/MMReplaceAudioDialog.qml</file>
         <file>../app/qml/dialogs/MMFormDeleteFeatureDialog.qml</file>
         <file>../app/qml/dialogs/MMFormEditFailedDialog.qml</file>
         <file>../app/qml/dialogs/MMProjErrorDialog.qml</file>
