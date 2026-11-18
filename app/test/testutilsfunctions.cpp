@@ -1400,6 +1400,60 @@ void TestUtilsFunctions::testMapCanvasRotationRenderRest()
   QCOMPARE( InputMapCanvasMap::rotationRenderRest( 9000, 160, 0 ), qint64( 2000 ) );
 }
 
+void TestUtilsFunctions::testMapCanvasRotationBreak()
+{
+  // angles are compared the shorter way around the circle
+  QCOMPARE( InputMapCanvasMap::angleDistance( 10, 4 ), 6.0 );
+  QCOMPARE( InputMapCanvasMap::angleDistance( 4, 10 ), 6.0 );
+  QCOMPARE( InputMapCanvasMap::angleDistance( 179, -179 ), 2.0 );
+  QCOMPARE( InputMapCanvasMap::angleDistance( 350, 10 ), 20.0 );
+  QCOMPARE( InputMapCanvasMap::angleDistance( 0, 180 ), 180.0 );
+
+  InputMapCanvasMap canvas;
+  InputMapSettings *ms = canvas.mapSettings();
+  ms->setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
+  ms->setOutputSize( QSize( 400, 800 ) );
+  ms->setExtent( QgsRectangle( 0, 0, 400, 800 ) );
+  const QPointF center( 200, 400 );
+
+  canvas.setRenderAfterBreak( true );
+  QVERIFY( !canvas.mRotationBreakTimer.isActive() ); // nothing to render yet
+
+  // a turn starts a break
+  canvas.rotate( center, 10 );
+  QVERIFY( canvas.mRotationBreakTimer.isActive() );
+  QCOMPARE( canvas.mRotationBreakStart, 10.0 );
+
+  // a wobble within the break does not start a new one
+  canvas.rotate( center, 2 );
+  canvas.rotate( center, -4 );
+  QCOMPARE( canvas.mRotationBreakStart, 10.0 );
+
+  // a bigger turn starts a new break
+  canvas.rotate( center, 10 );
+  QCOMPARE( canvas.mRotationBreakStart, 18.0 );
+
+  // across the south too
+  canvas.rotate( center, 160 );
+  QCOMPARE( canvas.mRotationBreakStart, 178.0 );
+  canvas.rotate( center, 3 ); // -179
+  QCOMPARE( canvas.mRotationBreakStart, 178.0 );
+  canvas.rotate( center, 2 ); // -177
+  QCOMPARE( canvas.mRotationBreakStart, -177.0 );
+
+  // at the end of the break the turned map is rendered
+  QVERIFY( !canvas.mRotationRenderRequested );
+  canvas.onRotationBreak();
+  QVERIFY( canvas.mRotationRenderRequested );
+  QVERIFY( !canvas.mRotationBreakTimer.isActive() );
+
+  // the other mode does not use the break
+  canvas.setRenderAfterBreak( false );
+  QVERIFY( !canvas.mRotationBreakTimer.isActive() );
+  canvas.rotate( center, 20 );
+  QVERIFY( !canvas.mRotationBreakTimer.isActive() );
+}
+
 void TestUtilsFunctions::testCompassUserOrientation()
 {
   using Reading = QOrientationReading;

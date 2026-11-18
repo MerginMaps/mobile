@@ -48,6 +48,10 @@ static constexpr int ROTATION_SETTLE_TIME_MS = 400;
 static constexpr double ROTATION_SETTLE_RENDER_NOW_DEG = 10;
 // tolerance for rounding errors when checking that the picture covers the canvas
 static constexpr double PICTURE_EDGE_TOLERANCE_PX = 1;
+// renderAfterBreak: the rotation is in a break when it stays within this angle (the hand holding the device wobbles)...
+static constexpr double ROTATION_BREAK_ANGLE_DEG = 3;
+// ... for this time
+static constexpr int ROTATION_BREAK_TIME_MS = 1000;
 
 InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   : QQuickItem( parent )
@@ -78,6 +82,9 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   // onRotationSettled() changes the interval to wait for the pause, so always start it with an explicit interval
   mRotationSettleTimer.setInterval( ROTATION_SETTLE_TIME_MS );
   connect( &mRotationSettleTimer, &QTimer::timeout, this, &InputMapCanvasMap::onRotationSettled );
+  mRotationBreakTimer.setSingleShot( true );
+  mRotationBreakTimer.setInterval( ROTATION_BREAK_TIME_MS );
+  connect( &mRotationBreakTimer, &QTimer::timeout, this, &InputMapCanvasMap::onRotationBreak );
   setTransformOrigin( QQuickItem::TopLeft );
   setFlags( QQuickItem::ItemHasContents );
 }
@@ -374,6 +381,12 @@ void InputMapCanvasMap::checkRotationRender()
   if ( mFreeze || mMapSettings->outputSize().isNull() )
     return;
 
+  if ( mRenderAfterBreak )
+  {
+    checkRotationBreak();
+    return;
+  }
+
   const double diff = rotationDifference();
   if ( diff < ROTATION_TOLERANCE )
     return;
@@ -395,7 +408,7 @@ void InputMapCanvasMap::checkRotationRender()
 
 void InputMapCanvasMap::onRotationSettled()
 {
-  if ( mFreeze || mMapSettings->outputSize().isNull() )
+  if ( mFreeze || mRenderAfterBreak || mMapSettings->outputSize().isNull() )
     return;
 
   if ( mJob )
@@ -419,12 +432,50 @@ void InputMapCanvasMap::onRotationSettled()
 
 double InputMapCanvasMap::rotationDifference() const
 {
-  double diff = std::fmod( mMapSettings->rotation() - mImageMapSettings.rotation(), 360.0 );
+  return angleDistance( mMapSettings->rotation(), mImageMapSettings.rotation() );
+}
+
+double InputMapCanvasMap::angleDistance( double angle1, double angle2 )
+{
+  double diff = std::fmod( angle1 - angle2, 360.0 );
   if ( diff > 180 )
     diff -= 360;
   else if ( diff < -180 )
     diff += 360;
   return std::abs( diff );
+}
+
+void InputMapCanvasMap::checkRotationBreak()
+{
+  const double rotation = mMapSettings->rotation();
+
+  if ( angleDistance( rotation, mRotationBreakStart ) > ROTATION_BREAK_ANGLE_DEG )
+  {
+    // the map turned, a new break starts here
+    mRotationBreakStart = rotation;
+    mRotationBreakTimer.start();
+  }
+  else if ( !mRotationBreakTimer.isActive() && rotationDifference() > ROTATION_BREAK_ANGLE_DEG )
+  {
+    // still in a break that has already ended, but the picture is off (e.g. it was rendered during the turn)
+    mRotationBreakTimer.start();
+  }
+}
+
+void InputMapCanvasMap::onRotationBreak()
+{
+  if ( mFreeze || !mRenderAfterBreak || mMapSettings->outputSize().isNull() )
+    return;
+
+  if ( mJob )
+  {
+    // try again when the running rendering is (probably) finished
+    mRotationBreakTimer.start();
+    return;
+  }
+
+  if ( rotationDifference() >= ROTATION_TOLERANCE )
+    refreshForRotation();
 }
 
 bool InputMapCanvasMap::pictureCoversCanvas() const
@@ -482,6 +533,7 @@ qint64 InputMapCanvasMap::rotationRenderRest( qint64 lastRenderDuration, qint64 
 void InputMapCanvasMap::refreshForRotation()
 {
   mRotationSettleTimer.stop();
+  mRotationBreakTimer.stop();
   mRotationRenderRequested = true;
   mRefreshTimer.start( 1 );
 }
@@ -573,6 +625,27 @@ void InputMapCanvasMap::setRotationRenderThreshold( qreal threshold )
 
   mRotationRenderThreshold = threshold;
   emit rotationRenderThresholdChanged();
+}
+
+bool InputMapCanvasMap::renderAfterBreak() const
+{
+  return mRenderAfterBreak;
+}
+
+void InputMapCanvasMap::setRenderAfterBreak( bool renderAfterBreak )
+{
+  if ( mRenderAfterBreak == renderAfterBreak )
+    return;
+
+  mRenderAfterBreak = renderAfterBreak;
+
+  // each mode has its own timer, a pending render of the other mode is checked again in this one
+  mRotationSettleTimer.stop();
+  mRotationBreakTimer.stop();
+  mRotationBreakStart = mMapSettings->rotation();
+  checkRotationRender();
+
+  emit renderAfterBreakChanged();
 }
 
 bool InputMapCanvasMap::freeze() const
