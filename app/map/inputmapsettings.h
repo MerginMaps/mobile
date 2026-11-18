@@ -198,6 +198,12 @@ class InputMapSettings : public QObject
     //! \copydoc InputMapSettings::rotation
     void setRotation( double rotation );
 
+    /**
+     * Rotates the map by \a angle (degrees, clockwise) around the \a pivot screen position, emitting each change signal once.
+     * Use InputMapCanvasMap::rotate(), which also paces the rendering.
+     */
+    void rotate( const QPointF &pivot, double angle );
+
     //! \copydoc InputMapSettings::backgroundColor
     QColor backgroundColor() const;
 
@@ -348,6 +354,7 @@ class InputMapSettings : public QObject
     QgsProject *mProject = nullptr;
     QgsMapSettings mMapSettings;
     qreal mDevicePixelRatio = 1.0;
+    bool mRotatingAroundPoint = false; // inside of rotate(), between the two signals
 };
 
 #endif // INPUTMAPSETTINGS_H
