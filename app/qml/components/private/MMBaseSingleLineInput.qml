@@ -176,6 +176,16 @@ MMBaseInput {
             root.textClicked()
           }
         }
+
+        // Qt can't start a selection in unfocused read-only fields (and never on iOS),
+        // so long press focuses the field and selects the word, then the native handles and copy menu take over
+        onPressAndHold: function( event ) {
+          if ( !readOnly || !activeFocusOnPress ) return
+
+          forceActiveFocus()
+          cursorPosition = positionAt( event.x, event.y )
+          selectWord()
+        }
       }
 
       Item {
