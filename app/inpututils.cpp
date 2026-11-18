@@ -321,22 +321,25 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   mapSettings->setExtent( currentExtent );
 }
 
-QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation )
+QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, double topOffset, const QPointF &identifyLocation )
 {
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
 
   QgsRectangle effectiveExtent( mapSettings->visibleExtent() );
 
-  // canvas size in logical pixels; bottomOffset is in logical pixels too and
+  // canvas size in logical pixels; bottomOffset/topOffset is in logical pixels too and
   // screenToCoordinate() expects logical pixel coordinates
   const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
   const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
   const QPointF bottomPoint( canvasWidth / 2.0, canvasHeight - bottomOffset );
+  const QPointF topPoint( canvasWidth / 2.0, topOffset );
 
   const QgsPoint bottomPointMap = mapSettings->screenToCoordinate( bottomPoint );
+  const QgsPoint topPointMap = mapSettings->screenToCoordinate( topPoint );
 
   effectiveExtent.setYMinimum( bottomPointMap.y() );
+  effectiveExtent.setYMaximum( topPointMap.y() );
 
   // Now we calculate a safeEffectiveExtent, slightly smaller, so that we don't allow geometries too close to the screen borders
   constexpr double EXTENT_BUFFER_SCALE = 0.82;

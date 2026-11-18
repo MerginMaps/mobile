@@ -1442,7 +1442,7 @@ Item {
     if ( root.identifyLocation !== null )
     {
       // when identifying with a point on the map, we preserve scale and may only pan
-      const screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, root.identifyLocation )
+      const screenPt = __inputUtils.whereToPanWhenIdentifying( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset, __style.safeAreaTop, root.identifyLocation )
       if ( Number.isNaN( screenPt.x ) || Number.isNaN( screenPt.y ) )
         return
 

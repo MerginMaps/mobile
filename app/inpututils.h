@@ -98,11 +98,12 @@ class InputUtils: public QObject
      * \param geom The geometry identified
      * \param mapSettings Current map settings
      * \param bottomOffset Pixel size (height) of drawer that may be covering the map canvas, eg preview panel
+     * \param topOffset Pixel size (height) of top safe area (status bar) that's covering the top of map
      * \param identifyLocation The map coords of the location the user clicked for identification
      *
      * Nota Bene: Assume geometry and map canvas CRS are the same
      */
-    Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, const QPointF &identifyLocation );
+    Q_INVOKABLE static QPointF whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, double topOffset, const QPointF &identifyLocation );
 
     /**
      * Returns the extent that the map needs to zoom to so that the \a geom fits (with a safe buffer) the visible part
