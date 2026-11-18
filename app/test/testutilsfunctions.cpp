@@ -31,6 +31,7 @@
 
 #include "mmstyle.h"
 #include "inputmapcanvasmap.h"
+#include "compass.h"
 
 #include "testutils.h"
 
@@ -1336,6 +1337,7 @@ void TestUtilsFunctions::testMapCanvasRotate()
 
   QSignalSpy rotationSpy( ms, &InputMapSettings::rotationChanged );
   QSignalSpy extentSpy( ms, &InputMapSettings::extentChanged );
+  QSignalSpy visibleExtentSpy( ms, &InputMapSettings::visibleExtentChanged );
 
   // the map point under the pivot stays under it
   const QPointF pivot( 120, 610 );
@@ -1345,6 +1347,7 @@ void TestUtilsFunctions::testMapCanvasRotate()
   QCOMPARE( ms->rotation(), 40.0 );
   QCOMPARE( rotationSpy.count(), 1 );
   QCOMPARE( extentSpy.count(), 1 );
+  QCOMPARE( visibleExtentSpy.count(), 1 ); // listeners are updated once per rotation step
 
   QPointF pivotNow = ms->coordinateToScreen( pivotOnMap );
   QVERIFY( qgsDoubleNear( pivotNow.x(), pivot.x(), 1e-6 ) );
@@ -1366,4 +1369,163 @@ void TestUtilsFunctions::testMapCanvasRotate()
   canvas.rotate( QPointF( 200, 400 ), 33 );
   QVERIFY( qgsDoubleNear( ms->center().x(), center.x(), 1e-6 ) );
   QVERIFY( qgsDoubleNear( ms->center().y(), center.y(), 1e-6 ) );
+
+  // rotation set directly still updates the visible extent
+  visibleExtentSpy.clear();
+  ms->setRotation( 50 );
+  QCOMPARE( visibleExtentSpy.count(), 1 );
+}
+
+void TestUtilsFunctions::testMapCanvasRotationRenderRest()
+{
+  // the pause is as long as the last rendering
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 5, 0 ), qint64( 300 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 5, 100 ), qint64( 200 ) );
+
+  // the pause is over
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 5, 300 ), qint64( 0 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 5, 5000 ), qint64( 0 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 0, 0, 0 ), qint64( 0 ) );
+
+  // the pause after a very long rendering is limited
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 2000, 5, 0 ), qint64( 2000 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 9000, 5, 0 ), qint64( 2000 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 9000, 5, 1500 ), qint64( 500 ) );
+
+  // the start of the rendering blocked the UI, the pause is at least 1 s
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 29, 0 ), qint64( 300 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 30, 0 ), qint64( 1000 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 300, 30, 400 ), qint64( 600 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 1500, 30, 0 ), qint64( 1500 ) );
+  QCOMPARE( InputMapCanvasMap::rotationRenderRest( 9000, 160, 0 ), qint64( 2000 ) );
+}
+
+void TestUtilsFunctions::testCompassUserOrientation()
+{
+  using Reading = QOrientationReading;
+
+  const QList<Reading::Orientation> deviceOrientations =
+  {
+    Reading::Undefined, Reading::TopUp, Reading::TopDown, Reading::LeftUp, Reading::RightUp, Reading::FaceUp, Reading::FaceDown
+  };
+  const QList<int> userOrientations = { 0, 90, 180, 270 };
+
+  // UI in the native orientation or upside down: the physical orientation must not change the direction
+  for ( const Reading::Orientation deviceOrientation : deviceOrientations )
+  {
+    for ( const int current : userOrientations )
+    {
+      QCOMPARE( Compass::userOrientation( Qt::PortraitOrientation, Qt::PortraitOrientation, deviceOrientation, current ), 0 );
+      QCOMPARE( Compass::userOrientation( Qt::InvertedPortraitOrientation, Qt::PortraitOrientation, deviceOrientation, current ), 180 );
+
+      QCOMPARE( Compass::userOrientation( Qt::LandscapeOrientation, Qt::LandscapeOrientation, deviceOrientation, current ), 0 );
+      QCOMPARE( Compass::userOrientation( Qt::InvertedLandscapeOrientation, Qt::LandscapeOrientation, deviceOrientation, current ), 180 );
+    }
+  }
+
+  // UI a quarter turn from native: the sensor tells which side
+  const QList<QPair<Qt::ScreenOrientation, Qt::ScreenOrientation>> quarters =
+  {
+    { Qt::LandscapeOrientation, Qt::PortraitOrientation }, { Qt::InvertedLandscapeOrientation, Qt::PortraitOrientation },
+    { Qt::PortraitOrientation, Qt::LandscapeOrientation }, { Qt::InvertedPortraitOrientation, Qt::LandscapeOrientation }
+  };
+  for ( const auto &[screenOrientation, nativeOrientation] : quarters )
+  {
+    for ( const int current : userOrientations )
+    {
+      QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::RightUp, current ), 90 );
+      QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::LeftUp, current ), 270 );
+    }
+
+    // the device lies flat, the known side is kept
+    QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::FaceUp, 90 ), 90 );
+    QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::FaceUp, 270 ), 270 );
+    QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::FaceDown, 90 ), 90 );
+    QCOMPARE( Compass::userOrientation( screenOrientation, nativeOrientation, Reading::Undefined, 270 ), 270 );
+  }
+
+  // side unknown, the screen decides (verified on iOS only)
+  QCOMPARE( Compass::userOrientation( Qt::LandscapeOrientation, Qt::PortraitOrientation, Reading::FaceUp, 0 ), 270 );
+  QCOMPARE( Compass::userOrientation( Qt::LandscapeOrientation, Qt::PortraitOrientation, Reading::TopUp, 180 ), 270 );
+  QCOMPARE( Compass::userOrientation( Qt::InvertedLandscapeOrientation, Qt::PortraitOrientation, Reading::FaceUp, 0 ), 90 );
+  QCOMPARE( Compass::userOrientation( Qt::InvertedLandscapeOrientation, Qt::PortraitOrientation, Reading::TopUp, 180 ), 90 );
+}
+
+void TestUtilsFunctions::testCompassSmoothing()
+{
+  // the smoothed azimuth is in range (-180, 180], the test compares it in range [0, 360)
+  auto smoothed = []( const Compass & compass )
+  {
+    const qreal azimuth = compass.smoothedAzimuth();
+    return azimuth < 0 ? azimuth + 360 : azimuth;
+  };
+
+  // rotation (counter-clockwise) becomes a clockwise azimuth in (-180, 180]
+  QCOMPARE( Compass::azimuthFromRotation( 0 ), 0.0 );
+  QCOMPARE( Compass::azimuthFromRotation( -90 ), 90.0 ); // east
+  QCOMPARE( Compass::azimuthFromRotation( 90 ), -90.0 ); // west
+  QCOMPARE( Compass::azimuthFromRotation( 180 ), 180.0 );
+  QCOMPARE( Compass::azimuthFromRotation( -180 ), 180.0 );
+  QCOMPARE( Compass::azimuthFromRotation( 10 ), -10.0 );
+
+  // the first azimuth is taken as it is
+  {
+    Compass compass;
+    compass.addAzimuth( 123, 0 );
+    QVERIFY( qgsDoubleNear( smoothed( compass ), 123, 1e-6 ) );
+    compass.addAzimuth( -100, 60000 );
+    QVERIFY( qgsDoubleNear( compass.smoothedAzimuth(), -100, 1e-3 ) ); // west is negative, as from the compass on Android
+  }
+
+  // noise around the south (Android jumps between 180 and -180) stays at the south, a plain average would point north
+  {
+    Compass compass;
+    for ( int i = 0; i < 50; ++i )
+    {
+      compass.addAzimuth( i % 2 ? 175 : -175, 20 );
+      const qreal azimuth = smoothed( compass );
+      QVERIFY2( azimuth >= 175 && azimuth <= 185, qPrintable( QString::number( azimuth ) ) );
+    }
+    QVERIFY( qgsDoubleNear( smoothed( compass ), 180, 1 ) );
+  }
+
+  // the same around the north, the result is in range [0, 360)
+  {
+    Compass compass;
+    for ( int i = 0; i < 50; ++i )
+    {
+      compass.addAzimuth( i % 2 ? 5 : -5, 20 );
+      const qreal azimuth = smoothed( compass );
+      QVERIFY2( azimuth <= 5 || ( azimuth >= 355 && azimuth < 360 ), qPrintable( QString::number( azimuth ) ) );
+    }
+  }
+
+  // the noise is reduced
+  {
+    Compass compass;
+    compass.addAzimuth( 90, 0 );
+    compass.addAzimuth( 100, 20 );
+    QVERIFY( smoothed( compass ) > 90 && smoothed( compass ) < 91 );
+  }
+
+  // a real turn is followed the shorter way (350 -> 20 over north)
+  {
+    Compass compass;
+    compass.addAzimuth( 350, 0 );
+    compass.addAzimuth( 20, 20 );
+    const qreal azimuth = smoothed( compass );
+    QVERIFY2( azimuth > 350 && azimuth < 360, qPrintable( QString::number( azimuth ) ) );
+
+    for ( int i = 0; i < 100; ++i )
+      compass.addAzimuth( 20, 20 );
+    QVERIFY( qgsDoubleNear( smoothed( compass ), 20, 0.1 ) );
+  }
+
+  // after a long pause the new azimuth is taken (almost) as it is
+  {
+    Compass compass;
+    compass.addAzimuth( 10, 0 );
+    compass.addAzimuth( 200, 60000 );
+    QVERIFY( qgsDoubleNear( smoothed( compass ), 200, 1e-3 ) );
+  }
 }

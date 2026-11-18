@@ -13,7 +13,6 @@
  */
 
 #include <QQuickWindow>
-#include <QSignalBlocker>
 #include <QSGSimpleTextureNode>
 #include <QScreen>
 #include <algorithm>
@@ -38,6 +37,17 @@
 static constexpr double ROTATION_TOLERANCE = 0.5;
 // the biggest side (in pixels) of the picture rendered for the overscan, keeps it within texture size limits of the GPUs
 static constexpr int MAX_OVERSCAN_SIDE = 4096;
+// longest pause between two renderings started by the rotation, see rotationRenderAllowed()
+static constexpr qint64 MAX_ROTATION_RENDER_REST_MS = 2000;
+// a rendering whose start blocks the UI at least this long causes a visible hiccup, so the pause after it is longer
+static constexpr qint64 SLOW_RENDER_START_MS = 30;
+static constexpr qint64 MIN_REST_AFTER_SLOW_START_MS = 1000;
+// the map stopped rotating after this time without rotation
+static constexpr int ROTATION_SETTLE_TIME_MS = 400;
+// when the map stops this far from the picture, it is rendered right away, without the pause (tilted labels look wrong)
+static constexpr double ROTATION_SETTLE_RENDER_NOW_DEG = 10;
+// tolerance for rounding errors when checking that the picture covers the canvas
+static constexpr double PICTURE_EDGE_TOLERANCE_PX = 1;
 
 InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   : QQuickItem( parent )
@@ -49,7 +59,12 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   connect( &mMapUpdateTimer, &QTimer::timeout, this, &InputMapCanvasMap::renderJobUpdated );
 
   connect( mMapSettings.get(), &InputMapSettings::extentChanged, this, &InputMapCanvasMap::onExtentChanged );
-  connect( mMapSettings.get(), &InputMapSettings::rotationChanged, this, &InputMapCanvasMap::onExtentChanged );
+  connect( mMapSettings.get(), &InputMapSettings::rotationChanged, this, [this]
+  {
+    // rotate() announces the extent change right after, handled once there
+    if ( !mRotating )
+      onExtentChanged();
+  } );
   connect( mMapSettings.get(), &InputMapSettings::layersChanged, this, &InputMapCanvasMap::onLayersChanged );
   connect( mMapSettings.get(), &InputMapSettings::temporalStateChanged, this, &InputMapCanvasMap::onTemporalStateChanged );
 
@@ -60,7 +75,8 @@ InputMapCanvasMap::InputMapCanvasMap( QQuickItem *parent )
   mMapUpdateTimer.setInterval( 250 );
   mRefreshTimer.setSingleShot( true );
   mRotationSettleTimer.setSingleShot( true );
-  mRotationSettleTimer.setInterval( 400 );
+  // onRotationSettled() changes the interval to wait for the pause, so always start it with an explicit interval
+  mRotationSettleTimer.setInterval( ROTATION_SETTLE_TIME_MS );
   connect( &mRotationSettleTimer, &QTimer::timeout, this, &InputMapCanvasMap::onRotationSettled );
   setTransformOrigin( QQuickItem::TopLeft );
   setFlags( QQuickItem::ItemHasContents );
@@ -92,24 +108,8 @@ void InputMapCanvasMap::zoom( QPointF center, qreal scale )
 
 void InputMapCanvasMap::rotate( QPointF center, qreal angle )
 {
-  const QgsPoint pivot( mMapSettings->screenToCoordinate( center ) );
-
-  {
-    // rotation is applied around the center of the map, so we pan afterwards
-    // to keep the pivot under the same screen position. Signals are blocked so that
-    // nobody (e.g. following of GPS position) sees the intermediate state.
-    const QSignalBlocker blocker( mMapSettings.get() );
-
-    mMapSettings->setRotation( mMapSettings->rotation() + angle );
-
-    const QgsPoint pivotNow( mMapSettings->screenToCoordinate( center ) );
-    const QgsPoint mapCenter = mMapSettings->center();
-    mMapSettings->setCenter( QgsPoint( mapCenter.x() + pivot.x() - pivotNow.x(), mapCenter.y() + pivot.y() - pivotNow.y() ) );
-  }
-
   mRotating = true;
-  emit mMapSettings->rotationChanged();
-  emit mMapSettings->extentChanged();
+  mMapSettings->rotate( center, angle );
   mRotating = false;
 }
 
@@ -134,6 +134,10 @@ void InputMapCanvasMap::pan( QPointF oldPos, QPointF newPos )
 
 void InputMapCanvasMap::refreshMap()
 {
+  // the start of the rendering blocks the UI thread, see rotationRenderRest()
+  QElapsedTimer startDuration;
+  startDuration.start();
+
   stopRendering(); // if any...
 
   QgsMapSettings mapSettings = mMapSettings->mapSettings();
@@ -196,6 +200,8 @@ void InputMapCanvasMap::refreshMap()
   mJob->setCache( mCache.get() );
 
   mJob->start();
+  mRenderTimer.start();
+  mLastRenderStartDuration = startDuration.elapsed();
 
   if ( !mSilentRefresh )
   {
@@ -248,6 +254,9 @@ void InputMapCanvasMap::renderJobFinished()
   mLabelingResults = mJob->takeLabelingResults();
 
   setImageFromJob();
+
+  mLastRenderDuration = mRenderTimer.elapsed();
+  mRenderRestTimer.start();
 
   // now we are in a slot called from mJob - do not delete it immediately
   // so the class is still valid when the execution returns to the class
@@ -374,14 +383,14 @@ void InputMapCanvasMap::checkRotationRender()
     // do not cancel the running rendering, wait for it. A rendering started by the rotation checks again when it is
     // finished, for the others we check when the map stops rotating
     if ( !mRotationRender )
-      mRotationSettleTimer.start();
+      mRotationSettleTimer.start( ROTATION_SETTLE_TIME_MS );
     return;
   }
 
-  if ( diff >= mRotationRenderThreshold )
+  if ( diff >= mRotationRenderThreshold && rotationRenderAllowed() )
     refreshForRotation();
   else
-    mRotationSettleTimer.start(); // restarted on every step, so it fires when the map stops rotating
+    mRotationSettleTimer.start( ROTATION_SETTLE_TIME_MS ); // restarted on every step, so it fires when the map stops rotating
 }
 
 void InputMapCanvasMap::onRotationSettled()
@@ -392,12 +401,20 @@ void InputMapCanvasMap::onRotationSettled()
   if ( mJob )
   {
     // try again when the running rendering is (probably) finished
-    mRotationSettleTimer.start();
+    mRotationSettleTimer.start( ROTATION_SETTLE_TIME_MS );
     return;
   }
 
-  if ( rotationDifference() >= ROTATION_TOLERANCE )
+  const double diff = rotationDifference();
+  if ( diff < ROTATION_TOLERANCE )
+    return;
+
+  // The map stopped: a visibly tilted picture is replaced right away, small differences (e.g. the device
+  // wobbling in follow-direction) wait for the pause, otherwise the map would render all the time.
+  if ( diff >= ROTATION_SETTLE_RENDER_NOW_DEG || rotationRenderAllowed() )
     refreshForRotation();
+  else
+    mRotationSettleTimer.start( static_cast<int>( std::max<qint64>( rotationRenderRest(), 1 ) ) ); // render when the pause ends
 }
 
 double InputMapCanvasMap::rotationDifference() const
@@ -408,6 +425,58 @@ double InputMapCanvasMap::rotationDifference() const
   else if ( diff < -180 )
     diff += 360;
   return std::abs( diff );
+}
+
+bool InputMapCanvasMap::pictureCoversCanvas() const
+{
+  const QSize imageSize = mImageMapSettings.outputSize();
+  if ( mImage.isNull() || imageSize.isEmpty() )
+    return false;
+
+  const QSizeF canvasSize = boundingRect().size();
+  const QPointF corners[] = { QPointF( 0, 0 ), QPointF( canvasSize.width(), 0 ), QPointF( 0, canvasSize.height() ), QPointF( canvasSize.width(), canvasSize.height() ) };
+
+  for ( const QPointF &corner : corners )
+  {
+    // canvas corner in picture pixels
+    const QgsPointXY pt = mImageMapSettings.mapToPixel().transform( QgsPointXY( mMapSettings->screenToCoordinate( corner ) ) );
+    if ( pt.x() < -PICTURE_EDGE_TOLERANCE_PX || pt.y() < -PICTURE_EDGE_TOLERANCE_PX || pt.x() > imageSize.width() + PICTURE_EDGE_TOLERANCE_PX || pt.y() > imageSize.height() + PICTURE_EDGE_TOLERANCE_PX )
+      return false;
+  }
+
+  return true;
+}
+
+bool InputMapCanvasMap::rotationRenderAllowed() const
+{
+  // While the map keeps rotating, it pauses after each rendering for as long as the rendering took and rotates the old
+  // picture meanwhile, so heavy projects do not render nonstop. Projects whose rendering start blocks the UI pause
+  // longer, see rotationRenderRest().
+  if ( !mRenderRestTimer.isValid() )
+    return true;
+
+  // empty parts of the canvas are worse than rendering too often
+  if ( !pictureCoversCanvas() )
+    return true;
+
+  return rotationRenderRest() == 0;
+}
+
+qint64 InputMapCanvasMap::rotationRenderRest() const
+{
+  if ( !mRenderRestTimer.isValid() )
+    return 0;
+
+  return rotationRenderRest( mLastRenderDuration, mLastRenderStartDuration, mRenderRestTimer.elapsed() );
+}
+
+qint64 InputMapCanvasMap::rotationRenderRest( qint64 lastRenderDuration, qint64 lastRenderStartDuration, qint64 sinceRenderFinished )
+{
+  qint64 rest = std::min( lastRenderDuration, MAX_ROTATION_RENDER_REST_MS );
+  if ( lastRenderStartDuration >= SLOW_RENDER_START_MS )
+    rest = std::max( rest, MIN_REST_AFTER_SLOW_START_MS );
+
+  return std::max<qint64>( 0, rest - sinceRenderFinished );
 }
 
 void InputMapCanvasMap::refreshForRotation()

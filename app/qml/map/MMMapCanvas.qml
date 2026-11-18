@@ -201,13 +201,13 @@ Item {
 
     // rotation (in degrees) the fingers have to travel before the map starts to rotate,
     // so that a regular zoom does not rotate the map by accident
-    readonly property real rotationThreshold: 15
+    readonly property real rotationThreshold: 10
 
     // when the map rotation gets this close to north (in degrees), it snaps to it
     readonly property real northSnapAngle: 4
 
     // when the fingers rotate this much (in degrees), the map is rendered bigger for the rotation (it takes some time)
-    readonly property real rotationPrepareAngle: 5
+    readonly property real rotationPrepareAngle: 3
 
     // rotation as requested by the fingers, i.e. not affected by the snapping to north
     property real fingersRotation: 0

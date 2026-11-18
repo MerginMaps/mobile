@@ -28,7 +28,12 @@ InputMapSettings::InputMapSettings( QObject *parent )
   connect( this, &InputMapSettings::extentChanged, this, &InputMapSettings::mapUnitsPerPixelChanged );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::mapUnitsPerPixelChanged );
   connect( this, &InputMapSettings::extentChanged, this, &InputMapSettings::visibleExtentChanged );
-  connect( this, &InputMapSettings::rotationChanged, this, &InputMapSettings::visibleExtentChanged );
+  connect( this, &InputMapSettings::rotationChanged, this, [this]
+  {
+    // rotate() announces the visible extent once, with the extent
+    if ( !mRotatingAroundPoint )
+      emit visibleExtentChanged();
+  } );
   connect( this, &InputMapSettings::outputSizeChanged, this, &InputMapSettings::visibleExtentChanged );
 }
 
@@ -303,6 +308,27 @@ void InputMapSettings::setRotation( double rotation )
 
   mMapSettings.setRotation( rotation );
   emit rotationChanged();
+}
+
+void InputMapSettings::rotate( const QPointF &pivot, double angle )
+{
+  const QgsPoint pivotOnMap = screenToCoordinate( pivot );
+
+  {
+    // rotate around the center, then pan to keep the pivot in place; signals are blocked to hide the intermediate state
+    const QSignalBlocker blocker( this );
+
+    setRotation( rotation() + angle );
+
+    const QgsPoint pivotNow = screenToCoordinate( pivot );
+    const QgsPoint mapCenter = center();
+    setCenter( QgsPoint( mapCenter.x() + pivotOnMap.x() - pivotNow.x(), mapCenter.y() + pivotOnMap.y() - pivotNow.y() ) );
+  }
+
+  mRotatingAroundPoint = true;
+  emit rotationChanged();
+  mRotatingAroundPoint = false;
+  emit extentChanged();
 }
 
 QColor InputMapSettings::backgroundColor() const

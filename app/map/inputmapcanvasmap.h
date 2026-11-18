@@ -17,6 +17,7 @@
 
 #include "inputmapsettings.h"
 
+#include <QElapsedTimer>
 #include <QFutureSynchronizer>
 #include <QTimer>
 #include <QtQuick/QQuickItem>
@@ -237,6 +238,12 @@ class InputMapCanvasMap : public QQuickItem
     void clearTemporalCache();
     void refreshForRotation();
     double rotationDifference() const;
+    bool pictureCoversCanvas() const;
+    bool rotationRenderAllowed() const;
+    qint64 rotationRenderRest() const; // remaining pause before the next rendering started by the rotation (in milliseconds)
+
+    //! Returns the remaining pause before the next rotation rendering, all times in milliseconds
+    static qint64 rotationRenderRest( qint64 lastRenderDuration, qint64 lastRenderStartDuration, qint64 sinceRenderFinished );
 
     std::unique_ptr<InputMapSettings> mMapSettings;
     bool mPinching = false;
@@ -258,12 +265,18 @@ class InputMapCanvasMap : public QQuickItem
     bool mOverscan = false;
     bool mJobOverscan = false; // the last started job was rendered with the overscan
     bool mImageOverscan = false; // the current picture was rendered with the overscan
-    qreal mRotationRenderThreshold = 45;
+    qreal mRotationRenderThreshold = 60;
     bool mRotationRender = false; // the current rendering job was started because of the rotation
     bool mRotationRenderRequested = false; // the next rendering job will be started because of the rotation
     QTimer mRotationSettleTimer; // fires when the map stopped rotating
+    QElapsedTimer mRenderTimer; // measures the running rendering job
+    QElapsedTimer mRenderRestTimer; // time since the last rendering job finished
+    qint64 mLastRenderDuration = 0; // how long the last finished rendering took (in milliseconds)
+    qint64 mLastRenderStartDuration = 0; // how long the start of the last rendering blocked the UI (in milliseconds)
 
     QQuickWindow *mWindow = nullptr;
+
+    friend class TestUtilsFunctions;
 };
 
 #endif // INPUTMAPCANVASMAP_H
