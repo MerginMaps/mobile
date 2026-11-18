@@ -32,7 +32,6 @@
 #include "qgscoordinatetransform.h"
 #include "qgsdistancearea.h"
 #include "qgslogger.h"
-#include "qgsvectorlayer.h"
 #include "qgsfeature.h"
 #include "qgsapplication.h"
 #include "qgsvaluerelationfieldformatter.h"
@@ -40,11 +39,10 @@
 #include "qgslayertree.h"
 #include "qgsprojectviewsettings.h"
 #include "qgsvectorlayerutils.h"
-#include "qgslinestring.h"
-#include "qgspolygon.h"
 #include "qgsmultipoint.h"
 #include "qgsmultilinestring.h"
 #include "qgsmultipolygon.h"
+#include <qgsmessagelog.h>
 
 #include "mmstyle.h"
 #include "featurelayerpair.h"
@@ -58,6 +56,9 @@
 #include <Qt>
 #include <QDir>
 #include <QFile>
+#include <QHash>
+#include <QLocale>
+#include <QTranslator>
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDesktopServices>
@@ -2499,4 +2500,102 @@ bool InputUtils::isValidUrl( const QString &link )
 bool InputUtils::isValidEmail( const QString &email )
 {
   return CoreUtils::isValidEmail( email );
+}
+
+QString InputUtils::parentLocale( const QLocale &locale )
+{
+  static const QStringList ptPT = { "AO", "CH", "CV", "GQ", "GW", "LU", "MO", "MZ", "ST", "TL" };
+  static const QStringList es419 = { "AR", "BO", "BR", "BZ", "CL", "CO", "CR", "CU", "DO", "EC", "GT", "HN",
+                                     "MX", "NI", "PA", "PE", "PR", "PY", "SV", "US", "UY", "VE"
+                                   };
+
+  const QString territory = QLocale::territoryToCode( locale.territory() );
+  if ( locale.language() == QLocale::Portuguese && ptPT.contains( territory ) )
+  {
+    return QStringLiteral( "pt_PT" );
+  }
+  if ( locale.language() == QLocale::Spanish && es419.contains( territory ) )
+  {
+    return QStringLiteral( "es_419" );
+  }
+  return {};
+}
+
+QString InputUtils::translationFilePath( const QStringList &uiLanguages, const QString &directory )
+{
+  const QDir dir( directory );
+
+  // files are looked up by their exact name, QTranslator's own lookup would
+  // truncate the name until something exists (zh_Hant_TW -> zh, es_MX -> es)
+  auto existingFile = [&dir]( const QString & suffix ) -> QString
+  {
+    const QString path = dir.filePath( QStringLiteral( "input_" ) + suffix + QStringLiteral( ".qm" ) );
+    return QFile::exists( path ) ? path : QString();
+  };
+
+  // a file named after a locale is only usable if that locale is written in the requested script
+  auto existingFileInScript = [&existingFile]( const QString & suffix, QLocale::Script script ) -> QString
+  {
+    return QLocale( suffix ).script() == script ? existingFile( suffix ) : QString();
+  };
+
+  QHash<QLocale::Language, QLocale::Script> lastScript;
+
+  for ( const QString &tag : uiLanguages )
+  {
+    QLocale pref( tag );
+    if ( pref.language() == QLocale::C )
+    {
+      continue;
+    }
+
+    // Qt also lists script-less forms such as "zh-US" for "zh-Hant-US", which QLocale
+    // would read as Simplified; they inherit the script of the preceding tag of that language
+    const QStringList subtags = tag.split( '-' );
+    const bool hasScript = std::any_of( subtags.cbegin() + 1, subtags.cend(), []( const QString & subtag )
+    {
+      return subtag.size() == 4 && subtag.at( 0 ).isLetter();
+    } );
+
+    if ( hasScript )
+    {
+      lastScript.insert( pref.language(), pref.script() );
+    }
+    else if ( lastScript.contains( pref.language() ) )
+    {
+      pref = QLocale( pref.language(), lastScript.value( pref.language() ), pref.territory() );
+    }
+
+    const QString lang = QLocale::languageToCode( pref.language() );
+
+    // exact region, e.g. sk_SK (QLocale already maps unsupported regions, ja-US -> ja_JP)
+    QString path = existingFileInScript( lang + '_' + QLocale::territoryToCode( pref.territory() ), pref.script() );
+
+    // parent locale, e.g. pt_AO -> pt_PT
+    const QString parent = parentLocale( pref );
+    if ( path.isEmpty() && !parent.isEmpty() )
+    {
+      path = existingFile( parent );
+    }
+
+    // base language, e.g. en, de
+    if ( path.isEmpty() )
+    {
+      path = existingFileInScript( lang, pref.script() );
+    }
+
+    if ( !path.isEmpty() )
+    {
+      return path;
+    }
+  }
+
+  // none of the preferred languages is translated
+  return existingFile( QStringLiteral( "en" ) );
+}
+
+bool InputUtils::loadTranslation( QTranslator &translator )
+{
+  const QString path = translationFilePath( QLocale().uiLanguages() );
+  return !path.isEmpty() && translator.load( path );
 }

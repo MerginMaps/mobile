@@ -16,7 +16,6 @@
 #include <QObject>
 #include <QtGlobal>
 #include <QUuid>
-#include <QObject>
 #include <QString>
 #include <QUrl>
 #include <QtPositioning/QGeoCoordinate>
@@ -25,21 +24,19 @@
 #include <limits>
 
 #include "inputhelp.h"
-#include "merginapi.h"
 #include "androidutils.h"
 #include "featurelayerpair.h"
 #include "inputmapsettings.h"
 #include "qgis.h"
 #include "qgsexpressioncontextutils.h"
-#include "qgsmessagelog.h"
 #include "qgspoint.h"
 #include "qgspointxy.h"
-#include "qgsunittypes.h"
-#include "inputmapsettings.h"
-#include "featurelayerpair.h"
 #include "qgscoordinateformatter.h"
 #include "position/mapposition.h"
+#include "merginprojectmetadata.h"
 
+class QLocale;
+class QTranslator;
 class QgsFeature;
 class QgsVectorLayer;
 class QgsCoordinateReferenceSystem;
@@ -639,6 +636,30 @@ class InputUtils: public QObject
      * We do some very basic checks if the string looks like email.
      */
     Q_INVOKABLE static bool isValidEmail( const QString &email );
+
+    /**
+     * Returns the CLDR parent locale name of \a locale for the regional variants we ship
+     * translations for, e.g. "pt_PT" for pt_AO or "es_419" for es_MX. Returns an empty
+     * string if there is no such parent.
+     */
+    static QString parentLocale( const QLocale &locale );
+
+    /**
+     * Returns the path of the translation file ("input_<locale>.qm" in \a directory) for the most
+     * preferred language in \a uiLanguages (ordered as returned by QLocale::uiLanguages()).
+     *
+     * \note Each preferred language is resolved completely (region, parent locale, base language)
+     * before moving on to the next one, and a fallback is only accepted if it is written in
+     * the same script (e.g. zh-Hant never gets Simplified Chinese "zh").
+     * Falls back to the English translation, returns an empty string if that does not exist either.
+     */
+    static QString translationFilePath( const QStringList &uiLanguages, const QString &directory = QStringLiteral( ":/" ) );
+
+    /**
+     * Loads the app translation for the system's preferred languages into \a translator.
+     * \see translationFilePath()
+     */
+    static bool loadTranslation( QTranslator &translator );
 
     /**
      * Replaces invalid path related characters with underscores '_'

@@ -10,6 +10,7 @@
 #include "inputprojutils.h"
 
 #include <QDebug>
+#include <QDirIterator>
 #include <QDir>
 #include <QFileInfo>
 
