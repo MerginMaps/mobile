@@ -491,13 +491,13 @@ void TestUtilsFunctions::testWhereToPanWhenIdentifying()
     // point hidden under the drawer -> map should pan so that the point
     // ends up centered in the unobstructed part of the canvas
     const QgsGeometry hiddenPoint = QgsGeometry::fromPointXY( QgsPointXY( 20, 10 ) );
-    QPointF pan = mUtils->whereToPanWhenIdentifying( hiddenPoint, &ms, bottomOffset, QPointF( 20, 10 ) );
+    QPointF pan = InputUtils::whereToPanWhenIdentifying( hiddenPoint, &ms, bottomOffset, 0, QPointF( 20, 10 ) );
     COMPARENEAR( pan.x(), 200.0, 1e-4 );
     COMPARENEAR( pan.y(), 620.0, 1e-4 );
 
     // point well inside the unobstructed area -> no pan needed
     const QgsGeometry visiblePoint = QgsGeometry::fromPointXY( QgsPointXY( 20, 40 ) );
-    pan = mUtils->whereToPanWhenIdentifying( visiblePoint, &ms, bottomOffset, QPointF( 20, 40 ) );
+    pan = InputUtils::whereToPanWhenIdentifying( visiblePoint, &ms, bottomOffset, 0, QPointF( 20, 40 ) );
     QVERIFY( std::isnan( pan.x() ) );
     QVERIFY( std::isnan( pan.y() ) );
   }
