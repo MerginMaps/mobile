@@ -14,6 +14,7 @@
 #include <qglobal.h>
 #include <QQmlEngine>
 #include <QTimer>
+#include <QPointer>
 
 #include "abstracttrackingbackend.h"
 
@@ -40,6 +41,7 @@ class PositionTrackingManager : public QObject
     Q_PROPERTY( QgsProject *qgsProject READ qgsProject WRITE setQgsProject NOTIFY qgsProjectChanged )
     Q_PROPERTY( VariablesManager *variablesManager READ variablesManager WRITE setVariablesManager NOTIFY variablesManagerChanged )
     Q_PROPERTY( AbstractTrackingBackend *trackingBackend READ trackingBackend WRITE setTrackingBackend NOTIFY trackingBackendChanged )
+    Q_PROPERTY( PositionKit *positionKit WRITE setPositionKit NOTIFY positionKitChanged )
 
   public:
     explicit PositionTrackingManager( QObject *parent = nullptr );
@@ -65,6 +67,8 @@ class PositionTrackingManager : public QObject
 
     VariablesManager *variablesManager() const;
     void setVariablesManager( VariablesManager *newVariablesManager );
+
+    void setPositionKit( PositionKit *newPositionKit );
 
     //! Returns CRS of the tracked geometry
     Q_INVOKABLE QgsCoordinateReferenceSystem crs() const;
@@ -94,6 +98,8 @@ class PositionTrackingManager : public QObject
 
     void qgsProjectChanged( QgsProject *qgsProject );
 
+    void positionKitChanged( PositionKit *positionKit );
+
     void variablesManagerChanged( VariablesManager *variablesManager );
 
     void startTimeChanged( QDateTime startTime );
@@ -115,6 +121,7 @@ class PositionTrackingManager : public QObject
     QString mLayerId;
     QgsProject *mQgsProject = nullptr; // not owned
     VariablesManager *mVariablesManager = nullptr; // not owned
+    QPointer<PositionKit> mPositionKit = nullptr;
 
     QgsGeometry mTrackedGeometry;
 

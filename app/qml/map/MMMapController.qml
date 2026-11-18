@@ -388,6 +388,7 @@ Item {
 
           variablesManager: __variablesManager
           qgsProject: __activeProject.qgsProject
+          positionKit: PositionKit
 
           onAbort: () => root.setTracking( false )
           onTrackingErrorOccured: ( message ) => __notificationModel.addError( message )
