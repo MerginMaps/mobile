@@ -59,6 +59,13 @@ class TestUtilsFunctions: public QObject
     void testIsPositionTrackingLayer();
     void testMapLayerFromName();
     void testIsValidUrl();
+    void testMapRotation();
+    void testSetExtentToGeomRotated();
+    void testMapSettingsTransform();
+    void testMapCanvasRotate();
+    void testMapCanvasRotationRenderRest();
+    void testCompassUserOrientation();
+    void testCompassSmoothing();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

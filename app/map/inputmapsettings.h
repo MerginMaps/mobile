@@ -69,8 +69,8 @@ class InputMapSettings : public QObject
     Q_PROPERTY( double mapUnitsPerPoint READ mapUnitsPerPoint NOTIFY mapUnitsPerPointChanged )
 
     /**
-     * The rotation of the resulting map image, in degrees clockwise.
-     * Map canvas rotation support is not implemented, 0 is used
+     * The rotation of the resulting map image, in degrees clockwise, normalized to (-180, 180].
+     * It is a runtime state only: it is reset to 0 when a project is loaded.
      */
     Q_PROPERTY( double rotation READ rotation WRITE setRotation NOTIFY rotationChanged )
 
@@ -197,6 +197,12 @@ class InputMapSettings : public QObject
 
     //! \copydoc InputMapSettings::rotation
     void setRotation( double rotation );
+
+    /**
+     * Rotates the map by \a angle (degrees, clockwise) around the \a pivot screen position, emitting each change signal once.
+     * Use InputMapCanvasMap::rotate(), which also paces the rendering.
+     */
+    void rotate( const QPointF &pivot, double angle );
 
     //! \copydoc InputMapSettings::backgroundColor
     QColor backgroundColor() const;
@@ -348,6 +354,7 @@ class InputMapSettings : public QObject
     QgsProject *mProject = nullptr;
     QgsMapSettings mMapSettings;
     qreal mDevicePixelRatio = 1.0;
+    bool mRotatingAroundPoint = false; // inside of rotate(), between the two signals
 };
 
 #endif // INPUTMAPSETTINGS_H

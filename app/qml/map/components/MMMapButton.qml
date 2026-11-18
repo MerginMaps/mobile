@@ -37,6 +37,7 @@ Item {
 
       anchors.centerIn: parent
       color: __style.forestColor
+      visible: icon.source.toString() !== ""
     }
 
     MouseArea {
