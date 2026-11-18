@@ -25,6 +25,7 @@ import android.app.NotificationManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
+import android.location.LocationRequest;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -200,6 +201,8 @@ public class PositionTrackingService extends Service implements LocationListener
             sendStatusUpdateMessage( "ERROR #GPS_UNAVAILABLE: GPS is not available!" );
             stopSelf();
             stopForeground( true );
+
+            return START_NOT_STICKY; // do not bother recreating it
         }
         else {
             boolean fineLocationAccessGranted = checkSelfPermission( Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED;
@@ -209,6 +212,8 @@ public class PositionTrackingService extends Service implements LocationListener
                 sendStatusUpdateMessage( "ERROR #PERMISSIONS: missing location permissions!" );
                 stopSelf();
                 stopForeground(true);
+
+                return START_NOT_STICKY; // do not bother recreating it
             }
             
             long timeInterval = MIN_TIME_BW_UPDATES;
@@ -222,12 +227,29 @@ public class PositionTrackingService extends Service implements LocationListener
                 distanceInterval = (long) intent.getDoubleExtra( "uk.co.lutraconsulting.tracking.distanceInterval", 1 );
             }
 
-            locationManager.requestLocationUpdates(
-                positionProvider,
-                timeInterval,
-                distanceInterval,
-                this
-            );
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {
+                // The legacy call without LocationRequest does not turn GPS on for the fused provider (#4588)
+                LocationRequest locationRequest = new LocationRequest.Builder( timeInterval )
+                    .setQuality( LocationRequest.QUALITY_HIGH_ACCURACY )
+                    .setMinUpdateIntervalMillis( timeInterval ) // defaults to 1/6 of the interval otherwise
+                    .setMinUpdateDistanceMeters( distanceInterval )
+                    .build();
+
+                locationManager.requestLocationUpdates(
+                    positionProvider,
+                    locationRequest,
+                    getMainExecutor(),
+                    this
+                );
+            }
+            else {
+                locationManager.requestLocationUpdates(
+                    positionProvider,
+                    timeInterval,
+                    distanceInterval,
+                    this
+                );
+            }
 
             sendStatusUpdateMessage( "Started to listen to position updates!" );
         }
