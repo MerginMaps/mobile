@@ -731,6 +731,13 @@ int main( int argc, char *argv[] )
       activeProject.reloadProject( activeProject.qgsProject()->homePath() );
     }
   } );
+  QObject::connect( ma.get(), &MerginApi::projectFeatureIdsRemapped, &activeProject, [&activeProject]( const QString & projectFullName, const QString & filePath, const GeodiffUtils::FeatureIdMapping & mapping )
+  {
+    if ( activeProject.projectFullName() == projectFullName )
+    {
+      activeProject.remapFeatureIds( filePath, mapping );
+    }
+  } );
   QObject::connect( QgsApplication::messageLog(),
                     static_cast<void ( QgsMessageLog::* )( const QString &message, const QString &tag, Qgis::MessageLevel level )>( &QgsMessageLog::messageReceived ),
                     &iu,
