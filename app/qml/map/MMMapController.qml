@@ -261,6 +261,8 @@ Item {
     // (kept while rotated, it is slow to render). It is rendered again after this rotation (in degrees)
     overscan: AppSettings.mapRotationEnabled && ( root.isMapRotated || mapRotator.active || mapCanvas.rotationPreparing )
     rotationRenderThreshold: 60
+    // following the direction of the device, the map is rendered only when the device is held steady for a moment
+    renderAfterBreak: root.headingUp
 
     MM.IdentifyKit {
       id: identifyKit
