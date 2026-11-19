@@ -35,8 +35,6 @@ MMPrivateComponents.MMBaseInput {
            ? qsTr( "Some features may be hidden by active filters" )
            : ""
 
-  property real _photoCardSize: rowView.height
-
   inputContent: MMComponents.MMListView {
     id: rowView
 
@@ -56,7 +54,7 @@ MMPrivateComponents.MMBaseInput {
     }
 
     delegate: MMComponents.MMPhotoCard{
-      size: root._photoCardSize
+      size: rowView.height
 
       imageSource: {
         let absolutePath = model.PhotoPath
