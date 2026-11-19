@@ -11,9 +11,12 @@
 #define PHOTODRAWINGCONTROLLER_H
 
 #include <QPointF>
+#include <QRectF>
 #include <QObject>
 #include <QColor>
 #include <QtQml/qqmlregistration.h>
+
+class QPainter;
 
 
 /**
@@ -47,6 +50,8 @@ class PhotoSketchingController: public QObject
     Q_PROPERTY( QColor activeColor MEMBER mPenColor WRITE setActiveColor NOTIFY activeColorChanged );
     Q_PROPERTY( double photoScale MEMBER mPhotoScale WRITE setPhotoScale NOTIFY photoScaleChanged );
     Q_PROPERTY( int sketchWidth READ sketchWidth NOTIFY sketchWidthChanged );
+    // drawing a signature: taps are kept as dots and the strokes are saved to a new image sized to them
+    Q_PROPERTY( bool signatureMode MEMBER mSignatureMode NOTIFY signatureModeChanged );
 
   public:
     explicit PhotoSketchingController( QObject *parent = nullptr ): QObject( parent ) {};
@@ -85,11 +90,17 @@ class PhotoSketchingController: public QObject
     // returns the temporary photo path if it exists and if not original path
     Q_INVOKABLE QUrl getCurrentPhotoPath() const;
 
+    // bounding box of all lines in image coordinates, empty if there are no lines
+    Q_INVOKABLE QRectF sketchBounds() const;
+
     /**
      * gets triggered on creation and checks if file with same name as mPhotoSource exists in temp folder, if yes set
      * it as current photoSource. Also saves the original mPhotoSource to mOriginalPhotoSource
      */
     Q_INVOKABLE void prepareController();
+
+    // temp folder path of a sketch backup, projectHomePath can also be just the project folder name
+    Q_INVOKABLE static QString tempSketchPath( const QString &projectHomePath, const QString &fileName );
 
     static int sketchWidth();
 
@@ -98,6 +109,7 @@ class PhotoSketchingController: public QObject
     void activeColorChanged();
     void photoScaleChanged();
     void sketchWidthChanged();
+    void signatureModeChanged();
     void tempPhotoSourceChanged( const QString &newPath );
 
     void newPathAdded( int pathIndex );
@@ -108,12 +120,19 @@ class PhotoSketchingController: public QObject
     void sketchesSavingError();
 
   private:
+    // saves the signature strokes to a new image in the temporary folder
+    void backupSignature();
+
+    // draws the active paths with their colors
+    void drawPaths( QPainter &painter ) const;
+
     double mPhotoScale = 1.0;
     QString mPhotoSource;
     QString mOriginalPhotoSource;
     QString mProjectName;
     QColor mPenColor = QColor( Qt::white );
     bool mCanUndo = false;
+    bool mSignatureMode = false;
     ColorPath mCurrentLine = ColorPath( mPenColor, {} );
     // it's a vector of polylines by color
     QVector<ColorPath> mPaths;

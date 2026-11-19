@@ -19,13 +19,22 @@ MMDrawerDialog {
 
   property string imagePath
   property bool offerUnlinkOption: true
+  property bool signatureMode: false
 
   imageSource: __style.negativeMMSymbolImage
-  title: qsTr( "Delete photo?" )
-  description: root.offerUnlinkOption ? qsTr( "Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature." ) : qsTr( "Would you like to delete the photo?" )
+  title: root.signatureMode ? qsTr( "Delete signature?" ) : qsTr( "Delete photo?" )
+  description: {
+    if ( root.signatureMode )
+      return qsTr( "Deleting removes the signature from this feature entirely. The feature will need to be signed again." )
+
+    if ( root.offerUnlinkOption )
+      return qsTr( "Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature." )
+
+    return qsTr( "Would you like to delete the photo?" )
+  }
 
   primaryButton {
-    text: qsTr( "Delete photo" )
+    text: root.signatureMode ? qsTr( "Delete signature" ) : qsTr( "Delete photo" )
 
     fontColor: __style.grapeColor
     bgndColor: __style.negativeColor

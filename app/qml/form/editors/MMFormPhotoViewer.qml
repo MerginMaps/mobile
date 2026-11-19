@@ -15,6 +15,7 @@ import MMInput
 import "../../components" as MMComponents
 import "../../components/private" as MMPrivateComponents
 import "../components/photo" as MMPhotoComponents
+import "../components/signature" as MMSignatureComponents
 import "../components" as MMFormComponents
 
 /*
@@ -22,7 +23,7 @@ import "../components" as MMFormComponents
  * Its purpose is to show image based on the provided URL.
  * It is not combined with MMPhotoFormEditor as it would be not possible to use it in the gallery then.
  *
- * Serves as a base class for MMPhotoFormEditor.
+ * Serves as a base class for MMPhotoFormEditor, which also edits signatures.
  */
 
 MMPrivateComponents.MMBaseInput {
@@ -30,15 +31,20 @@ MMPrivateComponents.MMBaseInput {
 
   property string photoUrl: ""
   property bool hasCameraCapability: true
+  property bool canEditPhoto: true
+  property bool signatureMode: false // signature instead of photo, it can be signed or deleted but not drawn on
 
   property var photoComponent: photo
   property PhotoSketchingController sketchingController
   property alias photoState: photoStateGroup.state
+  readonly property bool hasOpenDialog: previewLoader.active || sketchingLoader.active // keeps the form delegate alive, see MMFormPage
 
   signal trashClicked()
   signal capturePhotoClicked()
   signal chooseFromGalleryClicked()
   signal drawOnPhotoClicked()
+  signal signNowClicked()
+  signal sketchingCanceled()
 
   StateGroup {
     id: photoStateGroup
@@ -78,7 +84,7 @@ MMPrivateComponents.MMBaseInput {
       isLocalFile: root.photoUrl.startsWith( "file:///")
       cache: false
 
-      fillMode: Image.PreserveAspectCrop
+      fillMode: root.signatureMode ? Image.PreserveAspectFit : Image.PreserveAspectCrop
 
       onStatusChanged: {
       if ( status === Image.Error ) {
@@ -125,13 +131,9 @@ MMPrivateComponents.MMBaseInput {
         iconSource: __style.drawIcon
         iconColor: __style.forestColor
 
-        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
+        visible: root.editState === "enabled" && photoStateGroup.state !== "notSet" && !root.signatureMode && __activeProject.photoSketchingEnabled && root.photoUrl.startsWith("file:///")
 
-        onClicked: {
-          root.forceActiveFocus()
-          sketchingLoader.active = true
-          sketchingLoader.focus = true
-        }
+        onClicked: root.openSketching()
       }
     }
 
@@ -139,13 +141,41 @@ MMPrivateComponents.MMBaseInput {
       width: parent.width
       height: parent.height
 
-      visible: photoStateGroup.state === "notSet"
+      visible: photoStateGroup.state === "notSet" && root.canEditPhoto && !root.signatureMode
       enabled: root.editState === "enabled"
 
       hasCameraCapability: root.hasCameraCapability
 
       onCapturePhotoClicked: root.capturePhotoClicked()
       onChooseFromGalleryClicked: root.chooseFromGalleryClicked()
+    }
+
+    MMSignatureComponents.MMSignatureAttachment {
+      width: parent.width
+      height: parent.height
+
+      visible: photoStateGroup.state === "notSet" && root.canEditPhoto && root.signatureMode
+      enabled: root.editState === "enabled"
+
+      onSignNowClicked: root.signNowClicked()
+    }
+
+    Rectangle {
+      width: parent.width - 2 * __style.margin20
+      height: parent.height - 2 * __style.margin20
+
+      anchors.centerIn: parent
+      radius: parent.radius
+      color: __style.lightGreenColor
+
+      visible: photoStateGroup.state === "notSet" && !root.canEditPhoto
+
+      MMComponents.MMText {
+        anchors.centerIn: parent
+        text: root.signatureMode ? qsTr( "No signature" ) : qsTr( "No image" )
+        font: __style.t4Italic
+        color: __style.darkGreyColor
+      }
     }
   }
 
@@ -178,12 +208,20 @@ MMPrivateComponents.MMBaseInput {
     MMFormComponents.MMFormPhotoSketchingPageDialog {
       photoUrl: root.photoUrl
       controller: root.sketchingController
+      signatureMode: root.signatureMode
 
       Component.onCompleted: open()
 
       onClosed: {
         sketchingLoader.active = false
       }
+      onRejected: root.sketchingCanceled()
     }
+  }
+
+  function openSketching() {
+    root.forceActiveFocus()
+    sketchingLoader.active = true
+    sketchingLoader.focus = true
   }
 }

@@ -22,6 +22,8 @@ class TestImageUtils : public QObject
 
     void testRescale();
     void testClearOrientationMetadata();
+    void testWriteGpsAndTimestamp();
+    void testWriteGpsAndTimestampWithoutPosition();
 };
 
 #endif // TESTIMAGEUTILS_H

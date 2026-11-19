@@ -1224,7 +1224,7 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     if ( isMultiEdit )
       return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
-    else
+    else // also signatures, see isSignatureField()
       return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
@@ -2215,6 +2215,17 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
 {
   int quality = activeProject->readNumEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoQuality" ), 0 );
   return ImageUtils::rescale( path, quality );
+}
+
+bool InputUtils::isSignatureField( const QgsField &field )
+{
+  // HACK: no dedicated widget type for signatures yet, detected by name/alias like the QR scanner
+  return field.name().contains( "signature", Qt::CaseInsensitive ) || field.alias().contains( "signature", Qt::CaseInsensitive );
+}
+
+bool InputUtils::writeSignatureMetadata( const QString &path, bool hasPosition, double latitude, double longitude, double altitude )
+{
+  return ImageUtils::writeGpsAndTimestamp( path, QDateTime::currentDateTimeUtc(), hasPosition, latitude, longitude, altitude );
 }
 
 QgsGeometry InputUtils::createGeometryForLayer( QgsVectorLayer *layer )

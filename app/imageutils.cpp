@@ -14,6 +14,8 @@
 #include <QFileInfo>
 #include <QImage>
 
+#include <cmath>
+
 #include <exiv2/exiv2.hpp>
 
 bool ImageUtils::copyExifMetadata( const QString &sourceImage, const QString &targetImage )
@@ -184,7 +186,81 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
   }
   catch ( const Exiv2::Error &e )
   {
-    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: " ).arg( e.what() ) );
+    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: %1" ).arg( e.what() ) );
+    return false;
+  }
+}
+
+namespace
+{
+  // converts decimal degrees to the degrees, minutes and seconds rationals used by GPS EXIF tags
+  std::string degreesToExifDms( double value )
+  {
+    value = std::fabs( value );
+    const int degrees = static_cast<int>( value );
+    value = ( value - degrees ) * 60.0;
+    const int minutes = static_cast<int>( value );
+    value = ( value - minutes ) * 60.0;
+    // seconds in hundredths to keep the position precise
+    const int centiseconds = static_cast<int>( std::round( value * 100.0 ) );
+
+    return QStringLiteral( "%1/1 %2/1 %3/100" ).arg( degrees ).arg( minutes ).arg( centiseconds ).toStdString();
+  }
+}
+
+bool ImageUtils::writeGpsAndTimestamp( const QString &path, const QDateTime &dateTimeUtc, bool hasPosition, double latitude, double longitude, double altitude )
+{
+  if ( !QFileInfo::exists( path ) )
+  {
+    CoreUtils::log( "Writing EXIF", QStringLiteral( "Image does not exist: %1" ).arg( path ) );
+    return false;
+  }
+
+  try
+  {
+    const std::unique_ptr image( Exiv2::ImageFactory::open( path.toStdString() ) );
+    if ( !image )
+    {
+      CoreUtils::log( "Writing EXIF", QStringLiteral( "Failed to open image: %1" ).arg( path ) );
+      return false;
+    }
+
+    image->readMetadata();
+    Exiv2::ExifData &exifData = image->exifData();
+
+    const std::string exifDateTime = dateTimeUtc.toString( QStringLiteral( "yyyy:MM:dd HH:mm:ss" ) ).toStdString();
+    exifData["Exif.Image.DateTime"] = exifDateTime;
+    exifData["Exif.Photo.DateTimeOriginal"] = exifDateTime;
+    exifData["Exif.Photo.DateTimeDigitized"] = exifDateTime;
+
+    if ( hasPosition )
+    {
+      exifData["Exif.GPSInfo.GPSVersionID"] = "2 2 0 0";
+      exifData["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
+
+      exifData["Exif.GPSInfo.GPSLatitude"] = degreesToExifDms( latitude );
+      exifData["Exif.GPSInfo.GPSLatitudeRef"] = latitude >= 0.0 ? "N" : "S";
+
+      exifData["Exif.GPSInfo.GPSLongitude"] = degreesToExifDms( longitude );
+      exifData["Exif.GPSInfo.GPSLongitudeRef"] = longitude >= 0.0 ? "E" : "W";
+
+      exifData["Exif.GPSInfo.GPSAltitude"] = QStringLiteral( "%1/1" ).arg( static_cast<int>( std::round( std::fabs( altitude ) ) ) ).toStdString();
+      exifData["Exif.GPSInfo.GPSAltitudeRef"] = altitude < 0.0 ? "1" : "0";
+
+      exifData["Exif.GPSInfo.GPSDateStamp"] = dateTimeUtc.toString( QStringLiteral( "yyyy:MM:dd" ) ).toStdString();
+      exifData["Exif.GPSInfo.GPSTimeStamp"] = QStringLiteral( "%1/1 %2/1 %3/1" )
+                                              .arg( dateTimeUtc.time().hour() )
+                                              .arg( dateTimeUtc.time().minute() )
+                                              .arg( dateTimeUtc.time().second() )
+                                              .toStdString();
+    }
+
+    image->writeMetadata();
+    return true;
+  }
+  catch ( const Exiv2::Error &e )
+  {
+    CoreUtils::log( "Writing EXIF", QStringLiteral( "Failed to write GPS/timestamp metadata: %1" ).arg( e.what() ) );
     return false;
   }
 }

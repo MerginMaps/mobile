@@ -290,6 +290,9 @@ Page {
       // In future, better to filter such fields in the field proxy model instead
       visible: Type !== MM.FormItem.Invalid && Type !== MM.FormItem.Container
 
+      // keeps the delegate alive while its editor has a dialog open, e.g. after rotating the device
+      ListView.delayRemove: formEditorsLoader.item?.hasOpenDialog ?? false
+
       Loader {
         id: formEditorsLoader
 

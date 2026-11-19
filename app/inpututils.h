@@ -597,6 +597,16 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
 
     /**
+     * Returns true if the external resource field holds a drawn signature instead of a photo.
+     */
+    Q_INVOKABLE static bool isSignatureField( const QgsField &field );
+
+    /**
+     * Stamps the current timestamp and position into a saved signature. \see ImageUtils::writeGpsAndTimestamp()
+     */
+    Q_INVOKABLE static bool writeSignatureMetadata( const QString &path, bool hasPosition, double latitude, double longitude, double altitude );
+
+    /**
      * Creates an empty geometry matching layer WKB type
      */
     Q_INVOKABLE static QgsGeometry createGeometryForLayer( QgsVectorLayer *layer );
