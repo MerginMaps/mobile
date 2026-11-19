@@ -580,12 +580,12 @@ class InputUtils: public QObject
     Q_INVOKABLE static bool rescaleImage( const QString &path, QgsProject *activeProject );
 
     /**
-     * Creates the blank canvas a signature is drawn onto. \see ImageUtils::createSignatureCanvas()
+     * Returns true if the external resource field holds a drawn signature instead of a photo.
      */
-    Q_INVOKABLE static bool createSignatureCanvas( const QString &path, int width, int height );
+    Q_INVOKABLE static bool isSignatureField( const QgsField &field );
 
     /**
-     * Stamps the current timestamp/position into the signature canvas. \see ImageUtils::writeGpsAndTimestamp()
+     * Stamps the current timestamp and position into a saved signature. \see ImageUtils::writeGpsAndTimestamp()
      */
     Q_INVOKABLE static bool writeSignatureMetadata( const QString &path, bool hasPosition, double latitude, double longitude, double altitude );
 

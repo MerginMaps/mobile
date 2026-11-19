@@ -13,7 +13,7 @@ import QtQuick.Controls
 import "../../../components" as MMComponents
 
 /*
- * Empty-state UI for the signature field, shown when no signature has been drawn yet.
+ * Sign now button of the signature field, shown when there is no signature yet.
  */
 
 Rectangle {
@@ -26,28 +26,35 @@ Rectangle {
 
   Rectangle {
     anchors.fill: parent
-    anchors.margins: __style.margin10
+    anchors.margins: __style.margin20
 
     radius: root.radius
     color: __style.lightGreenColor
 
     Column {
+      width: parent.width
       anchors.centerIn: parent
       spacing: 8 * __dp
 
       MMComponents.MMIcon {
         anchors.horizontalCenter: parent.horizontalCenter
         source: __style.redrawGeometryIcon
+        size: __style.icon32
         color: root.enabled ? __style.forestColor : __style.mediumGreyColor
       }
 
       MMComponents.MMText {
+        width: parent.width
+
         font: __style.p5
         text: qsTr("Sign now")
-        color: root.enabled ? __style.forestColor : __style.mediumGreyColor
+        color: __style.nightColor
 
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideMiddle
+
+        visible: root.enabled
       }
     }
 

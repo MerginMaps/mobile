@@ -38,6 +38,7 @@
 #include "inpututils.h"
 #include "coreutils.h"
 #include "mixedattributevalue.h"
+#include "photosketchingcontroller.h"
 
 AttributeController::AttributeController( QObject *parent )
   : QObject( parent )
@@ -1789,10 +1790,16 @@ void AttributeController::saveSketches()
         resolveExternalResourcePaths( config, targetDir, prefix );
         const QString src = InputUtils::getAbsolutePath( mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString(), prefix );
 
-        const QString tempFilePath = QString( "%1/%2/%3" ).arg( QDir::temp().absolutePath(), QUrl::fromLocalFile( QgsProject::instance()->homePath() ).fileName(), src.section( "/", -1 ) );
+        const QString tempFilePath = PhotoSketchingController::tempSketchPath( QgsProject::instance()->homePath(), src.section( "/", -1 ) );
         if ( QFile::exists( tempFilePath ) )
         {
-          if ( InputUtils::removeFile( src ) && InputUtils::renameFile( tempFilePath, src ) )
+          // a new signature has no original file yet
+          if ( QFile::exists( src ) && !InputUtils::removeFile( src ) )
+          {
+            CoreUtils::log( "Photo sketching", "Failed to remove original image before saving sketches: " + src );
+          }
+
+          if ( InputUtils::renameFile( tempFilePath, src ) )
           {
             CoreUtils::log( "Photo Sketching", "Image sketches saved to: " + src );
           }

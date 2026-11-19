@@ -45,14 +45,35 @@ bool ColorPath::operator==( const ColorPath &other ) const
  */
 
 
+namespace
+{
+  // a single point is not drawn, so a dot is drawn as a tiny line
+  QVector<QPointF> drawablePoints( const QVector<QPointF> &points, bool keepDots )
+  {
+    if ( keepDots && points.size() == 1 )
+    {
+      return { points.first(), points.first() + QPointF( 0.1, 0 ) };
+    }
+    return points;
+  }
+}
+
 void PhotoSketchingController::newSketch()
 {
   mCurrentLine = ColorPath( mPenColor, {} );
   // drawing with stylus adds these shadow sketches with just one point, which break the undo user experience
-  if ( !mActivePaths.isEmpty() && mActivePaths.last().mPoints.size() == 1 )
+  if ( !mSignatureMode && !mActivePaths.isEmpty() && mActivePaths.last().mPoints.size() == 1 )
   {
     mPaths.removeLast();
     mActivePaths.removeLast();
+    // QML syncs its shapes with mPaths through this signal
+    emit lastPathRemoved();
+
+    if ( mActivePaths.empty() && mCanUndo )
+    {
+      mCanUndo = false;
+      emit canUndoChanged();
+    }
   }
 }
 
@@ -96,6 +117,9 @@ void PhotoSketchingController::undo()
     emit lastPathRemoved();
   }
 
+  // the next point starts a new line
+  mCurrentLine = ColorPath( mPenColor, {} );
+
   if ( !mActivePaths.empty() && !mCanUndo )
   {
     mCanUndo = true;
@@ -122,8 +146,15 @@ void PhotoSketchingController::clear()
 
 void PhotoSketchingController::backupSketches()
 {
-  const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  if ( mSignatureMode )
+  {
+    backupSignature();
+    mActivePaths.clear();
+    mCanUndo = false;
+    return;
+  }
+
+  const QString photoPath = tempSketchPath( mProjectName, QUrl( mPhotoSource ).fileName() );
   if ( !QFile::exists( photoPath ) )
   {
     // create new temp file
@@ -142,29 +173,7 @@ void PhotoSketchingController::backupSketches()
 
   QPainter painter( &image );
   painter.setRenderHint( QPainter::Antialiasing );
-
-  const int pathCount = static_cast<int>( mActivePaths.size() );
-
-  for ( int i = 0; i < pathCount; ++i )
-  {
-    const QColor color = mActivePaths.at( i ).mColor;
-    const QVector<QPointF> points = mActivePaths.at( i ).mPoints;
-
-    if ( points.isEmpty() )
-      continue;
-
-    const QPen pen( color, SKETCH_WIDTH * mPhotoScale );
-    painter.setPen( pen );
-
-    QPainterPath path;
-    path.moveTo( points.first() );
-    for ( int j = 1; j < points.size(); ++j )
-    {
-      path.lineTo( points.at( j ) );
-    }
-
-    painter.drawPath( path );
-  }
+  drawPaths( painter );
 
   if ( !image.save( photoPath ) )
   {
@@ -190,10 +199,65 @@ void PhotoSketchingController::backupSketches()
   mCanUndo = false;
 }
 
+void PhotoSketchingController::backupSignature()
+{
+  const QString signaturePath = tempSketchPath( mProjectName, QUrl( mPhotoSource ).fileName() );
+  if ( mActivePaths.isEmpty() )
+  {
+    CoreUtils::log( "Sign feature", "Nothing drawn, signature not saved to: " + signaturePath );
+    emit sketchesSavingError();
+    return;
+  }
+
+  // the image is only as large as the signature plus padding
+  const QRectF bounds = sketchBounds();
+  const qreal padding = std::max( bounds.width(), bounds.height() ) / 25 + SKETCH_WIDTH * mPhotoScale;
+  const QRect imageRect = bounds.adjusted( -padding, -padding, padding, padding ).toAlignedRect();
+
+  QImage image( imageRect.size(), QImage::Format_RGB32 );
+  image.fill( Qt::white );
+
+  QPainter painter( &image );
+  painter.setRenderHint( QPainter::Antialiasing );
+  painter.translate( -imageRect.topLeft() );
+  drawPaths( painter );
+  painter.end();
+
+  if ( !InputUtils::createDirectory( QFileInfo( signaturePath ).absolutePath() ) || !image.save( signaturePath, "PNG" ) )
+  {
+    CoreUtils::log( "Sign feature", "Failed to save signature to: " + signaturePath );
+    emit sketchesSavingError();
+    return;
+  }
+
+  CoreUtils::log( "Sign feature", "Signature saved to: " + signaturePath );
+  emit tempPhotoSourceChanged( signaturePath );
+}
+
+void PhotoSketchingController::drawPaths( QPainter &painter ) const
+{
+  for ( const ColorPath &colorPath : mActivePaths )
+  {
+    const QVector<QPointF> points = drawablePoints( colorPath.mPoints, mSignatureMode );
+    if ( points.isEmpty() )
+      continue;
+
+    painter.setPen( QPen( colorPath.mColor, SKETCH_WIDTH * mPhotoScale ) );
+
+    QPainterPath path;
+    path.moveTo( points.first() );
+    for ( int i = 1; i < points.size(); ++i )
+    {
+      path.lineTo( points.at( i ) );
+    }
+
+    painter.drawPath( path );
+  }
+}
+
 void PhotoSketchingController::removeBackupSketches()
 {
-  const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  const QString photoPath = tempSketchPath( mProjectName, QUrl( mPhotoSource ).fileName() );
   if ( QFile::exists( photoPath ) )
   {
     InputUtils::removeFile( photoPath );
@@ -242,15 +306,14 @@ ColorPath PhotoSketchingController::getPath( const int row ) const
   {
     shapePoints.append( point / mPhotoScale );
   }
-  colorPath.mPoints = shapePoints;
+  colorPath.mPoints = drawablePoints( shapePoints, mSignatureMode );
 
   return colorPath;
 }
 
 QUrl PhotoSketchingController::getCurrentPhotoPath() const
 {
-  const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  const QString photoPath = tempSketchPath( mProjectName, QUrl( mPhotoSource ).fileName() );
   if ( QFile::exists( photoPath ) )
   {
     return { photoPath };
@@ -259,17 +322,43 @@ QUrl PhotoSketchingController::getCurrentPhotoPath() const
   return { mOriginalPhotoSource };
 }
 
+QRectF PhotoSketchingController::sketchBounds() const
+{
+  if ( mPaths.isEmpty() )
+    return {};
+
+  // QRectF::united() ignores the zero sized rectangle of a single point, so the bounds are collected by hand
+  QPointF topLeft = mPaths.first().mPoints.first();
+  QPointF bottomRight = topLeft;
+  for ( const ColorPath &path : mPaths )
+  {
+    for ( const QPointF &point : path.mPoints )
+    {
+      topLeft = QPointF( std::min( topLeft.x(), point.x() ), std::min( topLeft.y(), point.y() ) );
+      bottomRight = QPointF( std::max( bottomRight.x(), point.x() ), std::max( bottomRight.y(), point.y() ) );
+    }
+  }
+
+  return { topLeft, bottomRight };
+}
+
 void PhotoSketchingController::prepareController()
 {
   mProjectName = QUrl::fromLocalFile( mProjectName ).fileName();
   mOriginalPhotoSource = QUrl( mPhotoSource ).toLocalFile();
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
-  const QString savePath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
+  const QString savePath = tempSketchPath( mProjectName, photoFileName );
   if ( !photoFileName.isEmpty() && QFile::exists( savePath ) )
   {
     mPhotoSource = QUrl::fromLocalFile( savePath ).toString();
     emit tempPhotoSourceChanged( savePath );
   }
+}
+
+QString PhotoSketchingController::tempSketchPath( const QString &projectHomePath, const QString &fileName )
+{
+  const QString projectName = QUrl::fromLocalFile( projectHomePath ).fileName();
+  return QString( "%1/%2/%3" ).arg( QDir::tempPath(), projectName, fileName );
 }
 
 int PhotoSketchingController::sketchWidth()

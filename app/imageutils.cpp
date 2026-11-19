@@ -10,11 +10,9 @@
 #include "imageutils.h"
 
 #include "coreutils.h"
-#include "mmstyle.h"
 
 #include <QFileInfo>
 #include <QImage>
-#include <QPainter>
 
 #include <cmath>
 
@@ -188,41 +186,14 @@ bool ImageUtils::clearOrientationMetadata( const QString &sourceImage )
   }
   catch ( const Exiv2::Error &e )
   {
-    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: " ).arg( e.what() ) );
+    CoreUtils::log( "Editing EXIF", QStringLiteral( "Failed to clear orientation: %1" ).arg( e.what() ) );
     return false;
   }
-}
-
-bool ImageUtils::createSignatureCanvas( const QString &path, int width, int height )
-{
-  if ( width <= 0 || height <= 0 )
-    return false;
-
-  QImage image( width, height, QImage::Format_RGB32 );
-  image.fill( Qt::white );
-
-  constexpr double guideLineBottomMargin = 0.15;
-  constexpr double guideLineSideMargin = 0.1;
-  const int guideLineY = static_cast<int>( height * ( 1 - guideLineBottomMargin ) );
-
-  QPainter painter( &image );
-  painter.setRenderHint( QPainter::Antialiasing );
-  painter.setPen( QPen( MMStyle::mediumGreyColor(), 2 ) );
-  painter.drawLine( QPointF( width * guideLineSideMargin, guideLineY ), QPointF( width * ( 1 - guideLineSideMargin ), guideLineY ) );
-  painter.end();
-
-  if ( !image.save( path, "PNG" ) )
-  {
-    CoreUtils::log( "Creating signature canvas", QStringLiteral( "Failed to save blank image to: %1" ).arg( path ) );
-    return false;
-  }
-
-  return true;
 }
 
 namespace
 {
-  // Converts a decimal degrees value into the "deg/1 min/1 sec/1" rational format expected by GPS EXIF tags.
+  // converts decimal degrees to the degrees, minutes and seconds rationals used by GPS EXIF tags
   std::string degreesToExifDms( double value )
   {
     value = std::fabs( value );
@@ -230,22 +201,29 @@ namespace
     value = ( value - degrees ) * 60.0;
     const int minutes = static_cast<int>( value );
     value = ( value - minutes ) * 60.0;
-    const int seconds = static_cast<int>( value );
+    // seconds in hundredths to keep the position precise
+    const int centiseconds = static_cast<int>( std::round( value * 100.0 ) );
 
-    return QStringLiteral( "%1/1 %2/1 %3/1" ).arg( degrees ).arg( minutes ).arg( seconds ).toStdString();
+    return QStringLiteral( "%1/1 %2/1 %3/100" ).arg( degrees ).arg( minutes ).arg( centiseconds ).toStdString();
   }
 }
 
 bool ImageUtils::writeGpsAndTimestamp( const QString &path, const QDateTime &dateTimeUtc, bool hasPosition, double latitude, double longitude, double altitude )
 {
   if ( !QFileInfo::exists( path ) )
+  {
+    CoreUtils::log( "Writing EXIF", QStringLiteral( "Image does not exist: %1" ).arg( path ) );
     return false;
+  }
 
   try
   {
     const std::unique_ptr image( Exiv2::ImageFactory::open( path.toStdString() ) );
     if ( !image )
+    {
+      CoreUtils::log( "Writing EXIF", QStringLiteral( "Failed to open image: %1" ).arg( path ) );
       return false;
+    }
 
     image->readMetadata();
     Exiv2::ExifData &exifData = image->exifData();

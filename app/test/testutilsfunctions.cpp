@@ -270,6 +270,21 @@ void TestUtilsFunctions::loadQmlComponent()
   QCOMPARE( valuemap.path(), QString( "../form/editors/MMFormValueMapEditor.qml" ) );
 }
 
+void TestUtilsFunctions::testIsSignatureField()
+{
+  QgsField field( QStringLiteral( "photo" ) );
+  QVERIFY( !InputUtils::isSignatureField( field ) );
+
+  field.setAlias( QStringLiteral( "Owner Signature" ) );
+  QVERIFY( InputUtils::isSignatureField( field ) );
+
+  QVERIFY( InputUtils::isSignatureField( QgsField( QStringLiteral( "SIGNATURE_1" ) ) ) );
+
+  // signatures are edited by the photo editor too
+  const QUrl editor = mUtils->getFormEditorType( "externalresource", QVariantMap(), field );
+  QCOMPARE( editor.path(), QString( "../form/editors/MMFormPhotoEditor.qml" ) );
+}
+
 void TestUtilsFunctions::getRelativePath()
 {
   QString prefixPath = QStringLiteral( "%1/" ).arg( TestUtils::testDataDir() );

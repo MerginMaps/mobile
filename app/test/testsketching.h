@@ -24,7 +24,12 @@ class TestSketching : public QObject
     void cleanup();
 
     void testNewSketch();
+    void testNewSketchRemovesShadowSketch();
     void testUndoSketch();
+    void testUndoDoesNotRestoreSketch();
+    void testSignatureDots();
+    void testSketchBounds();
+    void testSignatureBackup();
     void testChangeColor();
     void testChangePhotoSize();
     void testSaveSketches();

@@ -105,6 +105,12 @@ void TestImageUtils::testWriteGpsAndTimestamp()
 
   const Exiv2::Rational latDegrees = exifData["Exif.GPSInfo.GPSLatitude"].toRational( 0 );
   QCOMPARE( latDegrees.first, 51 );
+  // 51.5074 = 51° 30' 26.64"
+  const Exiv2::Rational latMinutes = exifData["Exif.GPSInfo.GPSLatitude"].toRational( 1 );
+  QCOMPARE( latMinutes.first, 30 );
+  const Exiv2::Rational latSeconds = exifData["Exif.GPSInfo.GPSLatitude"].toRational( 2 );
+  QCOMPARE( latSeconds.first, 2664 );
+  QCOMPARE( latSeconds.second, 100 );
   const Exiv2::Rational lonDegrees = exifData["Exif.GPSInfo.GPSLongitude"].toRational( 0 );
   QCOMPARE( lonDegrees.first, 0 );
 }

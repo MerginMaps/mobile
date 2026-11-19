@@ -32,6 +32,7 @@ class TestUtilsFunctions: public QObject
     void loadIcon();
     void fileExists();
     void loadQmlComponent();
+    void testIsSignatureField();
     void getRelativePath();
     void resolvePhotoPath();
     void resolveTargetDir();

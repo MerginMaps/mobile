@@ -26,15 +26,10 @@ class ImageUtils
     static bool copyExifMetadata( const QString &sourceImage, const QString &targetImage );
 
     /**
-     * Writes a timestamp and, optionally, a GPS position into an image's EXIF metadata.
+     * Writes a timestamp and optionally a GPS position to the image's EXIF metadata.
      * \return bool if successful
      */
     static bool writeGpsAndTimestamp( const QString &path, const QDateTime &dateTimeUtc, bool hasPosition, double latitude, double longitude, double altitude );
-
-    /**
-     * Creates the blank canvas a signature is drawn onto, with a baseline guide line near the bottom.
-     */
-    static bool createSignatureCanvas( const QString &path, int width, int height );
 
     /**
      * Rescales image to the given quality taking into account its orientation

@@ -128,8 +128,6 @@ set(MM_QML
     form/editors/MMFormRelationReferenceEditor.qml
     form/editors/MMFormRichTextViewer.qml
     form/editors/MMFormScannerEditor.qml
-    form/editors/MMFormSignatureEditor.qml
-    form/editors/MMFormSignatureViewer.qml
     form/editors/MMFormSliderEditor.qml
     form/editors/MMFormSpacer.qml
     form/editors/MMFormSwitchEditor.qml

@@ -1167,10 +1167,7 @@ const QUrl InputUtils::getFormEditorType( const QString &widgetNameIn, const QVa
   {
     if ( isMultiEdit )
       return QUrl( path.arg( QLatin1String( "MMFormNotAvailable" ) ) );
-    // HACK: no dedicated widget type for signatures yet, detected by name/alias like the QR scanner above
-    else if ( field.name().contains( "signature", Qt::CaseInsensitive ) || field.alias().contains( "signature", Qt::CaseInsensitive ) )
-      return QUrl( path.arg( QLatin1String( "MMFormSignatureEditor" ) ) );
-    else
+    else // also signatures, see isSignatureField()
       return QUrl( path.arg( QLatin1String( "MMFormPhotoEditor" ) ) );
   }
   else if ( widgetName == QStringLiteral( "richtext" ) )
@@ -2158,9 +2155,10 @@ bool InputUtils::rescaleImage( const QString &path, QgsProject *activeProject )
   return ImageUtils::rescale( path, quality );
 }
 
-bool InputUtils::createSignatureCanvas( const QString &path, int width, int height )
+bool InputUtils::isSignatureField( const QgsField &field )
 {
-  return ImageUtils::createSignatureCanvas( path, width, height );
+  // HACK: no dedicated widget type for signatures yet, detected by name/alias like the QR scanner
+  return field.name().contains( "signature", Qt::CaseInsensitive ) || field.alias().contains( "signature", Qt::CaseInsensitive );
 }
 
 bool InputUtils::writeSignatureMetadata( const QString &path, bool hasPosition, double latitude, double longitude, double altitude )

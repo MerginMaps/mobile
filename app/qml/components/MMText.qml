@@ -20,6 +20,7 @@ Text {
                             (root.font == __style.t2) ||
                             (root.font == __style.t3) ||
                             (root.font == __style.t4) ||
+                            (root.font == __style.t4Italic) ||
                             (root.font == __style.t5) ||
                             (root.font == __style.p1) ||
                             (root.font == __style.p2) ||
@@ -43,6 +44,7 @@ Text {
     if (root.font == __style.t2) return __style.fontLineHeight28;
     if (root.font == __style.t3) return __style.fontLineHeight26;
     if (root.font == __style.t4) return __style.fontLineHeight24;
+    if (root.font == __style.t4Italic) return __style.fontLineHeight24;
     if (root.font == __style.t5) return __style.fontLineHeight22;
     if (root.font == __style.p1) return __style.fontLineHeight44;
     if (root.font == __style.p2) return __style.fontLineHeight36;
@@ -62,6 +64,7 @@ Text {
         (root.font == __style.t2) ||
         (root.font == __style.t3) ||
         (root.font == __style.t4) ||
+        (root.font == __style.t4Italic) ||
         (root.font == __style.t5)
       ) {
       return __style.forestColor

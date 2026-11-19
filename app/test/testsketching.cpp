@@ -66,6 +66,27 @@ void TestSketching::testNewSketch()
   QCOMPARE( spy2.count(), 4 );
 }
 
+void TestSketching::testNewSketchRemovesShadowSketch()
+{
+  // a single point sketch, e.g. a stylus shadow sketch
+  mController->newSketch();
+  mController->addPoint( {500, 500} );
+  QCOMPARE( mController->mActivePaths.size(), 1 );
+  QCOMPARE( mController->mPaths.size(), 1 );
+
+  const QSignalSpy spy( mController.get(), &PhotoSketchingController::lastPathRemoved );
+  const QSignalSpy spy2( mController.get(), &PhotoSketchingController::canUndoChanged );
+  QVERIFY( spy.isValid() );
+  QVERIFY( spy2.isValid() );
+
+  // the shadow sketch is dropped and QML is notified
+  mController->newSketch();
+  QCOMPARE( mController->mActivePaths.size(), 0 );
+  QCOMPARE( mController->mPaths.size(), 0 );
+  QCOMPARE( spy.count(), 1 );
+  QCOMPARE( spy2.count(), 1 );
+}
+
 void TestSketching::testUndoSketch()
 {
   // add sketches
@@ -106,6 +127,105 @@ void TestSketching::testUndoSketch()
   QCOMPARE( mController->mPaths.size(), 0 );
   QCOMPARE( spy.count(), 3 );
   QCOMPARE( spy2.count(), 1 );
+}
+
+void TestSketching::testUndoDoesNotRestoreSketch()
+{
+  mController->newSketch();
+  mController->addPoint( {500, 500} );
+  mController->addPoint( {800, 500} );
+  mController->addPoint( {800, 800} );
+
+  mController->undo();
+  QCOMPARE( mController->mPaths.size(), 0 );
+  QVERIFY( !mController->mCanUndo );
+
+  // the next point starts a new line, even without newSketch()
+  mController->addPoint( {200, 200} );
+  QCOMPARE( mController->mPaths.size(), 1 );
+  QCOMPARE( mController->mPaths.last().mPoints.count(), 1 );
+
+  mController->newSketch();
+  mController->addPoint( {300, 300} );
+  mController->addPoint( {400, 400} );
+  mController->undo();
+  QCOMPARE( mController->mPaths.size(), 0 );
+  QVERIFY( !mController->mCanUndo );
+}
+
+void TestSketching::testSignatureDots()
+{
+  mController->mSignatureMode = true;
+
+  // a tap, then a regular line
+  mController->newSketch();
+  mController->addPoint( {500, 500} );
+  mController->newSketch();
+  mController->addPoint( {600, 600} );
+  mController->addPoint( {700, 700} );
+
+  QCOMPARE( mController->mPaths.size(), 2 );
+  QCOMPARE( mController->mPaths.first().mPoints.count(), 1 );
+
+  // the dot is drawn as a tiny line
+  QCOMPARE( mController->getPath( 0 ).mPoints.count(), 2 );
+  QCOMPARE( mController->getPath( 1 ).mPoints.count(), 2 );
+
+  mController->undo();
+  mController->undo();
+  QCOMPARE( mController->mPaths.size(), 0 );
+  QVERIFY( !mController->mCanUndo );
+
+  mController->mSignatureMode = false;
+}
+
+void TestSketching::testSketchBounds()
+{
+  const double photoScale = mController->mPhotoScale;
+  mController->setPhotoScale( 1.0 );
+
+  QVERIFY( mController->sketchBounds().isNull() );
+
+  mController->newSketch();
+  mController->addPoint( {500, 300} );
+  QCOMPARE( mController->sketchBounds(), QRectF( 500, 300, 0, 0 ) );
+
+  mController->addPoint( {800, 500} );
+  mController->newSketch();
+  mController->addPoint( {200, 400} );
+  QCOMPARE( mController->sketchBounds(), QRectF( QPointF( 200, 300 ), QPointF( 800, 500 ) ) );
+
+  mController->setPhotoScale( photoScale );
+}
+
+void TestSketching::testSignatureBackup()
+{
+  const QString photoSource = mController->mPhotoSource;
+  const double photoScale = mController->mPhotoScale;
+  mController->mSignatureMode = true;
+  mController->mPhotoSource = QUrl::fromLocalFile( mTempDir.filePath( QStringLiteral( "signature.png" ) ) ).toString();
+  mController->setPhotoScale( 1.0 );
+  mController->setActiveColor( QColor( Qt::black ) );
+
+  mController->newSketch();
+  mController->addPoint( { -100, 50 } );
+  mController->addPoint( {100, 150} );
+
+  const QSignalSpy spy( mController.get(), &PhotoSketchingController::tempPhotoSourceChanged );
+  mController->backupSketches();
+
+  mController->mSignatureMode = false;
+  mController->mPhotoSource = photoSource;
+  mController->setPhotoScale( photoScale );
+
+  QCOMPARE( spy.count(), 1 );
+
+  // the image is as large as the strokes plus padding, negative coordinates included
+  const QString signaturePath = spy.at( 0 ).at( 0 ).toString();
+  const QImage image( signaturePath );
+  QFile::remove( signaturePath );
+  QCOMPARE( image.size(), QSize( 224, 124 ) );
+  QCOMPARE( image.pixelColor( 112, 62 ), QColor( Qt::black ) );
 }
 
 void TestSketching::testChangeColor()

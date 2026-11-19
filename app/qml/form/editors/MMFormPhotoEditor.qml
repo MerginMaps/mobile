@@ -51,11 +51,20 @@ import "../../dialogs"
  * absolute path            |  image path                     |   /home/john/photos/img0001.jpg
  * relative to default path |  image path - default path      |   img0001.jpg
  * relative to project path |  image path - project home path |   photos/img0001.jpg
+ *
+ *
+ * Signatures
+ * ----------
+ *
+ * A field detected by InputUtils::isSignatureField() is edited in signatureMode. The drawn signature is saved
+ * to the temp folder and saveSketches() moves it to its final path when the form is saved.
+ * A signature can only be deleted, not redrawn.
  */
 
 MMFormPhotoViewer {
   id: root
 
+  property var _field: parent.field
   property var _fieldValue: parent.fieldValue
   property var _fieldConfig: parent.fieldConfig
   property var _fieldIndex: parent.fieldIndex
@@ -81,17 +90,29 @@ MMFormPhotoViewer {
 
   title: _fieldShouldShowTitle ? _fieldTitle : ""
 
-  warningMsg: photoState === "notAvailable" ? qsTr( "Photo is missing." ) : _fieldWarningMessage
+  warningMsg: {
+    if ( photoState !== "notAvailable" )
+      return _fieldWarningMessage
+
+    if ( signatureMode )
+      return qsTr( "Signature is missing." )
+
+    return qsTr( "Photo is missing." )
+  }
   errorMsg: _fieldErrorMessage
 
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
   shouldShowValidation: !_fieldFormIsReadOnly
 
+  canEditPhoto: _fieldIsEditable && __activeProject.projectRole !== "reader"
+
   hasCheckbox: _fieldRememberValueSupported
   checkboxChecked: _fieldRememberValueState
 
-  photoUrl: internal.tempSketchedImageSource ? internal.tempSketchedImageSource : internal.resolvedImageSource
+  // signatureTempUrl passes the signature file name to the sketching controller while signing
+  photoUrl: internal.tempSketchedImageSource || internal.resolvedImageSource || internal.signatureTempUrl
   hasCameraCapability: __androidUtils.isAndroid || __iosUtils.isIos
+  signatureMode: !!_field && __inputUtils.isSignatureField( _field )
 
   on_FieldValueChanged: function (){
     internal.setImageSource()
@@ -103,6 +124,8 @@ MMFormPhotoViewer {
 
   onCapturePhotoClicked: internal.capturePhoto()
   onChooseFromGalleryClicked: internal.chooseFromGallery()
+  onSignNowClicked: internal.signNow()
+  onSketchingCanceled: internal.discardPendingSignature()
   onTrashClicked: internal.removeImage( __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath ) )
 
   onCheckboxCheckedChanged: {
@@ -129,7 +152,8 @@ MMFormPhotoViewer {
     id: imageDeleteDialog
 
     property string imagePath
-    offerUnlinkOption: !root._fieldController.isNewFeature
+    offerUnlinkOption: !root._fieldController.isNewFeature && !root.signatureMode
+    signatureMode: root.signatureMode
 
     onDeleteImage: {
       // schedule the image for deletion
@@ -152,7 +176,7 @@ MMFormPhotoViewer {
 
   Loader {
     id: photoSketchingLoader
-    active: __activeProject.photoSketchingEnabled
+    active: root.signatureMode || __activeProject.photoSketchingEnabled
 
     sourceComponent: photoSketchingComponent
 
@@ -167,6 +191,7 @@ MMFormPhotoViewer {
     PhotoSketchingController {
       photoSource: root.photoUrl
       projectName: root._fieldActiveProject.homePath
+      signatureMode: root.signatureMode
     }
   }
 
@@ -174,6 +199,10 @@ MMFormPhotoViewer {
     target: root.sketchingController
 
     function onTempPhotoSourceChanged( newPath ){
+      if ( internal.isSigning ) {
+        internal.confirmSignature( newPath )
+      }
+
       if ( internal.tempSketchedImageSource === __inputUtils.localFileToUrl( newPath ) ){
         internal.tempSketchedImageSource = ""
       }
@@ -181,7 +210,12 @@ MMFormPhotoViewer {
     }
 
     function onSketchesSavingError(){
-      __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
+      if ( root.signatureMode ) {
+        __notificationModel.addError( qsTr( "Signature could not be saved, please contact support." ) )
+      }
+      else {
+        __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
+      }
     }
   }
 
@@ -209,7 +243,9 @@ MMFormPhotoViewer {
 
   function callbackOnFormSaved() {
     if ( internal.imageSourceToDelete ) {
-      __inputUtils.removeFile( internal.imageSourceToDelete )
+      if ( !__inputUtils.removeFile( internal.imageSourceToDelete ) ) {
+        __inputUtils.log( "Remove image", "Could not remove deleted image " + internal.imageSourceToDelete )
+      }
       internal.imageSourceToDelete = ""
     }
   }
@@ -255,6 +291,26 @@ MMFormPhotoViewer {
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
+    property bool isSigning // signature is being drawn
+    property string signatureFinalPath // where the signature is moved on form save
+    property string signatureTempUrl // where the signature is saved when confirmed
+
+    /**
+     * A new signature stays in the temp folder until the form is saved, so it is looked up there too.
+     */
+    function resolveExistingPath( absolutePath ) {
+      if ( __inputUtils.fileExists( absolutePath ) ) {
+        return absolutePath
+      }
+
+      if ( !root.signatureMode ) {
+        return ""
+      }
+
+      const tempPath = root.sketchingController.tempSketchPath( root._fieldActiveProject.homePath, __inputUtils.getFileName( absolutePath ) )
+      return __inputUtils.fileExists( tempPath ) ? tempPath : ""
+    }
+
     //
     // Sets path or url of the assigned photo to the resolvedImageSource.
     //  - resolvedImageSource is the actual path on the device or a remote url,
@@ -268,10 +324,11 @@ MMFormPhotoViewer {
       }
 
       const absolutePath = __inputUtils.getAbsolutePath( root._fieldValue, internal.prefixToRelativePath )
+      const existingPath = resolveExistingPath( absolutePath )
 
-      if ( __inputUtils.fileExists( absolutePath ) ) {
+      if ( existingPath ) {
         root.photoState = "valid"
-        resolvedImageSource = __inputUtils.localFileToUrl( absolutePath )
+        resolvedImageSource = __inputUtils.localFileToUrl( existingPath )
         tempSketchedImageSource = ""
       }
       else if ( __inputUtils.isValidUrl( absolutePath ) ) {
@@ -279,6 +336,7 @@ MMFormPhotoViewer {
           resolvedImageSource = absolutePath;
       }
       else {
+        __inputUtils.log( "Image Loading", "Image file not found: " + absolutePath )
         root.photoState = "notAvailable"
         resolvedImageSource = ""
       }
@@ -340,7 +398,7 @@ MMFormPhotoViewer {
      */
     function removeImage( path ) {
       forceActiveFocus()
-      if ( __inputUtils.fileExists( path ) ) {
+      if ( resolveExistingPath( path ) ) {
         imageDeleteDialog.imagePath = path
         imageDeleteDialog.open()
       }
@@ -415,6 +473,62 @@ MMFormPhotoViewer {
           sketchingController.prepareController()
         }
       }
+    }
+
+    /**
+     * Called when "Sign now" is clicked. Opens the sketching dialog for a new signature.
+     */
+    function signNow() {
+      forceActiveFocus()
+      discardPendingSignature()
+      updateTargetDir()
+      if ( !__inputUtils.createDirectory( targetDir ) )
+      {
+        __inputUtils.log( "Sign feature", "Could not create directory " + targetDir );
+        __notificationModel.addError( qsTr( "Could not create directory %1." ).arg( targetDir ) )
+        return
+      }
+
+      const username = __merginApi.userInfo?.username || "unknown"
+      const timestamp = Qt.formatDateTime( new Date(), "yyyyMMdd_HHmmsszzz" )
+      const filename = "signature-" + username + "-" + timestamp + ".png"
+
+      signatureFinalPath = __inputUtils.getAbsolutePath( filename, targetDir )
+      signatureTempUrl = __inputUtils.localFileToUrl( root.sketchingController.tempSketchPath( root._fieldActiveProject.homePath, filename ) )
+
+      // otherwise the sketch of a deleted signature would be passed to the controller
+      tempSketchedImageSource = ""
+      isSigning = true
+
+      root.sketchingController.clear()
+      root.sketchingController.activeColor = __style.photoSketchingBlackColor
+      root.sketchingController.prepareController()
+
+      root.openSketching()
+    }
+
+    /**
+     * Called when the drawn signature is saved. Stamps the metadata and sets the field value.
+     */
+    function confirmSignature( signaturePath ) {
+      isSigning = false
+      // changes photoUrl, so the form image reloads the saved signature
+      signatureTempUrl = ""
+
+      // on failure the signature is kept without metadata
+      __inputUtils.writeSignatureMetadata( signaturePath, PositionKit.hasPosition, PositionKit.latitude, PositionKit.longitude, PositionKit.altitude )
+
+      const newValue = __inputUtils.getRelativePath( signatureFinalPath, prefixToRelativePath )
+      root.editorValueChanged( newValue, newValue === "" || newValue === null )
+    }
+
+    /**
+     * Resets the state of a canceled sign session, nothing is saved until the signature is confirmed.
+     */
+    function discardPendingSignature() {
+      isSigning = false
+      signatureFinalPath = ""
+      signatureTempUrl = ""
     }
 
     /**
