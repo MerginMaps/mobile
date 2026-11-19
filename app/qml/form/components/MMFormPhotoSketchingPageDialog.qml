@@ -266,33 +266,38 @@ Dialog {
           }
         }
 
-        PointHandler {
-          id: pointHandler
+        Item {
+          // on top of the photo, which would otherwise take the presses with its own mouse area
+          anchors.fill: parent
 
-          // a single handler, so newSketch() is always called before the first point of a line
-          onActiveChanged: {
-            if ( pointHandler.active ) {
-              root.controller.newSketch()
-            }
-          }
+          PointHandler {
+            id: pointHandler
 
-          onPointChanged: {
-            if ( !pointHandler.active ) {
-              return
-            }
-
-            // the handler gets notified even when drag continues outside the viewport
-            const position = pointHandler.point.position
-            const outsideViewport = position.x < 0 || position.x > viewport.width || position.y < 0 || position.y > viewport.height
-
-            const shapePosition = Qt.point( position.x - shape.x, position.y - shape.y )
-            const outsidePhoto = !root.signatureMode && ( shapePosition.x < 0 || shapePosition.x > shape.width || shapePosition.y < 0 || shapePosition.y > shape.height )
-
-            if ( outsideViewport || outsidePhoto ) {
-              return
+            // a single handler, so newSketch() is always called before the first point of a line
+            onActiveChanged: {
+              if ( pointHandler.active ) {
+                root.controller.newSketch()
+              }
             }
 
-            root.controller.addPoint( shapePosition )
+            onPointChanged: {
+              if ( !pointHandler.active ) {
+                return
+              }
+
+              // the handler gets notified even when drag continues outside the viewport
+              const position = pointHandler.point.position
+              const outsideViewport = position.x < 0 || position.x > viewport.width || position.y < 0 || position.y > viewport.height
+
+              const shapePosition = Qt.point( position.x - shape.x, position.y - shape.y )
+              const outsidePhoto = !root.signatureMode && ( shapePosition.x < 0 || shapePosition.x > shape.width || shapePosition.y < 0 || shapePosition.y > shape.height )
+
+              if ( outsideViewport || outsidePhoto ) {
+                return
+              }
+
+              root.controller.addPoint( shapePosition )
+            }
           }
         }
 
