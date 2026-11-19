@@ -27,6 +27,7 @@ class MMStyle: public QObject
     Q_PROPERTY( QFont t2 READ t2 CONSTANT )
     Q_PROPERTY( QFont t3 READ t3 CONSTANT )
     Q_PROPERTY( QFont t4 READ t4 CONSTANT )
+    Q_PROPERTY( QFont t4Italic READ t4Italic CONSTANT )
     Q_PROPERTY( QFont t5 READ t5 CONSTANT )
     Q_PROPERTY( QFont p1 READ p1 CONSTANT )
     Q_PROPERTY( QFont p2 READ p2 CONSTANT )
@@ -354,6 +355,7 @@ class MMStyle: public QObject
     QFont t2() const {return fontFactory( 16, true );}
     QFont t3() const {return fontFactory( 14, true );}
     QFont t4() const {return fontFactory( 12, true );}
+    QFont t4Italic() const {return fontFactory( 12, true, true );}
     QFont t5() const {return fontFactory( 10, true );}
 
     QFont p1() const {return fontFactory( 32, false );}
@@ -782,7 +784,7 @@ class MMStyle: public QObject
     void safeAreaLeftChanged( double safeAreaLeft );
 
   private:
-    QFont fontFactory( int pixelSize, bool bold ) const
+    QFont fontFactory( int pixelSize, bool bold, bool italic = false ) const
     {
       QFont f;
       f.setPixelSize( pixelSize * mDp );
@@ -790,6 +792,11 @@ class MMStyle: public QObject
       if ( bold )
       {
         f.setWeight( QFont::DemiBold );
+      }
+
+      if ( italic )
+      {
+        f.setItalic( true );
       }
 
       return f;
