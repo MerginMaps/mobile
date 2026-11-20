@@ -53,6 +53,14 @@ class LocalProjectsManager : public QObject
 
     Q_INVOKABLE QString projectName( const QString &projectId ) const;
 
+    //! Returns an empty string if newName (trimmed) is a valid, available name for projectId, or a
+    //! user-facing error message otherwise. Does not touch the filesystem.
+    QString validateRename( const QString &projectId, const QString &newName ) const;
+
+    //! Renames the local project's directory and main QGIS project file to newName.
+    //! Reports the outcome via renameLocalProjectFinished(); failures are logged, not returned.
+    void renameLocalProject( const QString &projectId, const QString &newName );
+
     /**
      * Returns changes of a project specified by projectId in the form :
      * (pending changes, features in layer survey: 10 addition, 3 updates, 1 deletion. 10 new files)
@@ -71,12 +79,18 @@ class LocalProjectsManager : public QObject
   signals:
     void localProjectAdded( const LocalProject &project );
     void localProjectDataChanged( const LocalProject &project );
+    void localProjectRenamed( const QString &oldProjectId, const LocalProject &project );
+    void renameLocalProjectFinished( bool success );
+    void aboutToRenameLocalProject( const QString &projectId );
     void aboutToRemoveLocalProject( const LocalProject &project );
 
     void dataDirReloaded();
 
   private:
     void addProject( const QString &projectDir, const QString &projectNamespace, const QString &projectName );
+
+    //! Same as the public validateRename(), but on success also outputs projectId's index in mProjects
+    QString validateRename( const QString &projectId, const QString &newName, int &projectIndexOut ) const;
 
     QString mDataDir;   //!< directory with all local projects
     LocalProjectsList mProjects;

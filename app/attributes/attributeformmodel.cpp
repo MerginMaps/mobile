@@ -17,6 +17,7 @@
 #include "attributecontroller.h"
 #include "attributedata.h"
 #include "mixedattributevalue.h"
+#include "qgis.h"
 
 AttributeFormModel::AttributeFormModel( QObject *parent, AttributeController *controller, const QVector<QUuid> &data )
   : QAbstractListModel( parent )
@@ -75,6 +76,8 @@ QVariant AttributeFormModel::data( const QModelIndex &index, int role ) const
       return item->field();
     case FieldIndex:
       return item->fieldIndex();
+    case FormItemId:
+      return item->id().toString();
     case AttributeFormModel::Group:
       return item->groupName();
     case Visible:
@@ -137,6 +140,7 @@ QHash<int, QByteArray> AttributeFormModel::roleNames() const
   roles[Relation] = QByteArray( "Relation" );
   roles[RawValue] = QByteArray( "RawValue" );
   roles[HasMixedValues] = QByteArray( "HasMixedValues" );
+  roles[FormItemId] = QByteArray( "FormItemId" );
 
   return roles;
 }
@@ -179,7 +183,7 @@ bool AttributeFormModel::setData( const QModelIndex &index, const QVariant &valu
     {
       const FormItem *item = mController->formItem( uuid );
 
-      if ( item->rawValue() == value )
+      if ( qgsVariantEqual( item->rawValue(), value ) )
       {
         return false;
       }

@@ -333,6 +333,7 @@ void TestUtilsFunctions::resolveTargetDir()
 {
   QString homePath = TestUtils::testDataDir();
   QString DEFAULT_ROOT( "DEFAULT/ROOT/PATH" ); // can be not existing path
+  QString ABSOLUTE_DEFAULT_ROOT( "/absolute/default/root/path" ); // can be not existing path
 
   QgsProject *activeProject = nullptr;
   QVariantMap config;
@@ -346,10 +347,16 @@ void TestUtilsFunctions::resolveTargetDir()
   QString resultDir = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
   QCOMPARE( resultDir, homePath );
 
-  // case 2: defined default root config, no expression
+  // case 2: defined default root config as a relative path, no expression - resolved against homePath
   config.insert( QStringLiteral( "DefaultRoot" ), DEFAULT_ROOT );
   QString resultDir2 = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
-  QCOMPARE( resultDir2, DEFAULT_ROOT );
+  QCOMPARE( resultDir2, QStringLiteral( "%1/%2" ).arg( homePath, DEFAULT_ROOT ) );
+  config.clear();
+
+  // case 2b: defined default root config as an already-absolute path, no expression - stays unchanged
+  config.insert( QStringLiteral( "DefaultRoot" ), ABSOLUTE_DEFAULT_ROOT );
+  QString resultDir2b = mUtils->resolveTargetDir( homePath, config, pair, FeatureLayerPair(), activeProject );
+  QCOMPARE( resultDir2b, ABSOLUTE_DEFAULT_ROOT );
   config.clear();
 
   // case 3: defined expression in config->"PropertyCollection" -> "properties" -> "propertyRootPath" -> "expression"
@@ -472,6 +479,72 @@ void TestUtilsFunctions::testStakeoutPathExtent()
   for ( const auto &test : testcasesDistance2Scale )
   {
     COMPARENEAR( mUtils->distanceToScale( test.distance ), test.expectedScale, 0.1 );
+  }
+}
+
+void TestUtilsFunctions::testWhereToPanWhenIdentifying()
+{
+  // bottomOffset and the returned screen point are in logical pixels,
+  // so the result must not depend on the device pixel ratio
+  const QVector<qreal> dprs = { 1.0, 2.0 };
+  for ( const qreal dpr : dprs )
+  {
+    InputMapSettings ms;
+    ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+    ms.setDevicePixelRatio( dpr );
+    ms.setOutputSize( QSize( 400, 620 ) );
+    ms.setExtent( QgsRectangle( 0, 0, 40, 62 ) ); // 0.1 map units per logical pixel
+
+    const double bottomOffset = 200; // drawer covers screen y in [420, 620] ~ map y in [0, 20]
+
+    // point hidden under the drawer -> map should pan so that the point
+    // ends up centered in the unobstructed part of the canvas
+    const QgsGeometry hiddenPoint = QgsGeometry::fromPointXY( QgsPointXY( 20, 10 ) );
+    QPointF pan = InputUtils::whereToPanWhenIdentifying( hiddenPoint, &ms, bottomOffset, 0, QPointF( 20, 10 ) );
+    COMPARENEAR( pan.x(), 200.0, 1e-4 );
+    COMPARENEAR( pan.y(), 620.0, 1e-4 );
+
+    // point well inside the unobstructed area -> no pan needed
+    const QgsGeometry visiblePoint = QgsGeometry::fromPointXY( QgsPointXY( 20, 40 ) );
+    pan = InputUtils::whereToPanWhenIdentifying( visiblePoint, &ms, bottomOffset, 0, QPointF( 20, 40 ) );
+    QVERIFY( std::isnan( pan.x() ) );
+    QVERIFY( std::isnan( pan.y() ) );
+  }
+}
+
+void TestUtilsFunctions::testDrawerCompensatedExtent()
+{
+  // bottomOffset is in logical pixels, so the result must not depend on the device pixel ratio
+  const QVector<qreal> dprs = { 1.0, 2.0 };
+  for ( const qreal dpr : dprs )
+  {
+    InputMapSettings ms;
+    ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+    ms.setDevicePixelRatio( dpr );
+    ms.setOutputSize( QSize( 400, 620 ) );
+    ms.setExtent( QgsRectangle( 0, 0, 40, 62 ) ); // 0.1 map units per logical pixel
+
+    const double bottomOffset = 200; // drawer covers screen y in [420, 620]
+
+    // point geometry -> scale is kept, center shifts down by bottomOffset / 2
+    // in screen space so the point is centered in the unobstructed part
+    const QgsGeometry point = QgsGeometry::fromPointXY( QgsPointXY( 20, 10 ) );
+    QgsRectangle extent = InputUtils::drawerCompensatedExtent( point, &ms, bottomOffset );
+    COMPARENEAR( extent.width(), 40.0, 1e-4 );
+    COMPARENEAR( extent.height(), 62.0, 1e-4 );
+    COMPARENEAR( extent.center().x(), 20.0, 1e-4 );
+    COMPARENEAR( extent.center().y(), 0.0, 1e-4 );
+
+    // non-empty bounding box -> zoom so the padded bbox fits the part of the
+    // canvas not covered by the drawer, centered in it
+    const QgsGeometry line = QgsGeometry::fromPolylineXY( { QgsPointXY( 10, 10 ), QgsPointXY( 30, 20 ) } );
+    extent = InputUtils::drawerCompensatedExtent( line, &ms, bottomOffset );
+
+    // padded bbox is 23.6 x 11.8 -> 0.059 map units per logical pixel to fit 400 x 420
+    COMPARENEAR( extent.width(), 400 * 0.059, 1e-4 );
+    COMPARENEAR( extent.height(), 620 * 0.059, 1e-4 );
+    COMPARENEAR( extent.center().x(), 20.0, 1e-4 );
+    COMPARENEAR( extent.center().y(), 15.0 - bottomOffset / 2.0 * 0.059, 1e-4 );
   }
 }
 
@@ -954,23 +1027,6 @@ void TestUtilsFunctions::testFormatAreaInProjectUnit()
 
   area2str = mUtils->formatAreaInProjectUnit( 7000, 1, project );
   QVERIFY( area2str == "1.7 ac" );
-}
-
-void TestUtilsFunctions::testRelevantGeometryCenterToScreenCoordinates()
-{
-  InputMapSettings ms;
-  ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 3857 ) );
-  ms.setOutputSize( QSize( 436, 690 ) );
-  QgsGeometry geom = QgsGeometry::fromWkt( "LineString (605540.02427726075984538 5422974.88796170614659786, 618450.11232534842565656 5430064.85434877127408981, 631042.73919192561879754 5418953.71299590915441513, 652418.458746955730021 5431228.87868097703903913)" );
-  double epsilon = 0.1;
-
-  // Case when the geometry can fully be contained within the extent
-  ms.setExtent( QgsRectangle( 595290, 5.35402e+06, 661796, 5.45927e+06 ) );
-  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 220.861, 224.065 ), epsilon ), true );
-
-  // Case when we cut the geometry to current extent
-  ms.setExtent( QgsRectangle( 599032, 5.40671e+06, 619818, 5.43961e+06 ) );
-  QCOMPARE( InputUtils::equals( mUtils->relevantGeometryCenterToScreenCoordinates( geom, &ms ), QPointF( 286.261, 304.496 ), epsilon ), true );
 }
 
 void TestUtilsFunctions::testIsValidEmail()

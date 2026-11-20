@@ -39,8 +39,8 @@ Item {
           return root.height // form is the highest always
         }
         else if ( form.panelState === "preview" ) {
-          if ( form.drawerHeight > maxHeight ) {
-            maxHeight = form.drawerHeight
+          if ( form.previewPanelHeight > maxHeight ) {
+            maxHeight = form.previewPanelHeight
           }
         }
       }
@@ -54,7 +54,7 @@ Item {
   signal createLinkedFeatureRequested( var targetLayer, var parentPair )
   signal multiSelectFeature( var feature )
   signal stakeoutFeature( var feature )
-  signal previewPanelChanged( var panelHeight )
+  signal previewPanelChanged()
 
   function openForm( pair, formState, panelState ) {
     if ( formsStack.depth === 0 )
@@ -308,8 +308,8 @@ Item {
         formsStack.syncWhenFormCloses = true
       }
 
-      onPreviewPanelChanged: function( panelHeight ) {
-        root.previewPanelChanged( panelHeight )
+      onPreviewPanelChanged: {
+        root.previewPanelChanged()
       }
 
       onEditGeometry: function( pair ) {

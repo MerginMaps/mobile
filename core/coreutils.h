@@ -98,6 +98,11 @@ class CoreUtils
     static bool isValidName( const QString &name );
 
     /**
+     * Check whether given name is reserved, like a Windows device name or a word reserved by Mergin Maps
+     */
+    static bool isReservedName( const QString &name );
+
+    /**
      * Get name abbreviation
      * E.g.
      *   Pat Norris -> PN

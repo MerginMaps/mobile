@@ -57,6 +57,31 @@ Page {
   }
 
   Component {
+    id: layerUnavailablePageComponent
+
+    MMComponents.MMPage {
+      id: layerUnavailablePage
+
+      pageHeader.title: layerDetailData.name
+      onBackClicked: root.closePage()
+
+      pageContent: Item {
+        width: parent.width
+        height: parent.height
+
+        MMComponents.MMMessage {
+          anchors.centerIn: parent
+          width: parent.width - 2 * __style.margin20
+
+          image: __style.negativeMMSymbolImage
+          title: qsTr( "Layer unavailable" )
+          description: qsTr( "This layer couldn't be loaded. Check your connection or contact your administrator." )
+        }
+      }
+    }
+  }
+
+  Component {
     id: layerDetailPageComponent
 
     MMComponents.MMPage {
@@ -282,6 +307,11 @@ Page {
     //
     // * there is an exception, we do not want to show features of the map sketches layer
     //
+
+    if ( !layerDetailData.isValid ) {
+      content.addItem( layerUnavailablePageComponent.createObject( content ) )
+      return
+    }
 
     const isSketchingLayer = layerDetailData.layerId === __activeProject.mapSketchesLayerId()
 

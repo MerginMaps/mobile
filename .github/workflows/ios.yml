@@ -60,8 +60,8 @@ jobs:
         with:
           xcode-version: ${{ env.XC_VERSION }}
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2.25
         with:
           key: ccache-${{ env.TRIPLET }}
           max-size: 200M
@@ -179,6 +179,7 @@ jobs:
             -DWITH_TRIMBLE_PROVIDERS=TRUE \
             -DUSE_KEYCHAIN=No \
             -DCMAKE_INSTALL_PREFIX:PATH=../install-mm \
+            -DQT_USE_RISKY_DSYM_ARCHIVING_WORKAROUND=ON \
             -G "Xcode" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -S ${{ github.workspace }}/mm \

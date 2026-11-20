@@ -18,6 +18,7 @@
 #include "testutils.h"
 
 #include "merginapi.h"
+#include "coreutils.h"
 
 #if WITH_BLUETOOTH_PROVIDERS
 #include "position/providers/bluetoothpositionprovider.h"
@@ -124,6 +125,75 @@ void TestVariablesManager::testUserVariables()
   evaluateExpression( QStringLiteral( "@mm_user_email" ), mApi->userInfo()->email(), &context );
   evaluateExpression( QStringLiteral( "@mm_username" ), mApi->userInfo()->username(), &context );
   evaluateExpression( QStringLiteral( "@mm_full_name" ), mApi->userInfo()->name(), &context );
+}
+
+void TestVariablesManager::testProjectRoleVariable()
+{
+  QString apiRoot, username, password;
+  TestUtils::merginGetAuthCredentials( mApi, apiRoot, username, password );
+  if ( TestUtils::needsToAuthorizeAgain( mApi, username ) )
+  {
+    TestUtils::authorizeUser( mApi, username, password );
+  }
+
+  // local Mergin project with the role cached in its metadata
+  const QString projectNamespace = QStringLiteral( "testNamespace" );
+  const QString projectName = QStringLiteral( "testProjectRoleVariable" );
+  const QString projectDir = mApi->projectsPath() + "/" + projectName;
+  QDir( projectDir ).removeRecursively();
+  QVERIFY( QDir().mkpath( projectDir + "/.mergin" ) );
+
+  QFile qgzFile( projectDir + "/" + projectName + ".qgz" );
+  QVERIFY( qgzFile.open( QIODevice::WriteOnly ) );
+  qgzFile.close();
+
+  const QString metadataPath = projectDir + "/" + MerginApi::sMetadataFile;
+  QFile metadataFile( metadataPath );
+  QVERIFY( metadataFile.open( QIODevice::WriteOnly ) );
+  metadataFile.write( QStringLiteral( R"({"name": "%1", "namespace": "%2", "version": "v1", "role": "editor", "files": []})" )
+                      .arg( projectName, projectNamespace ).toUtf8() );
+  metadataFile.close();
+
+  mApi->localProjectsManager().addMerginProject( projectDir, projectNamespace, projectName );
+  const LocalProject localProject = mApi->localProjectsManager().projectFromMerginName( projectNamespace, projectName );
+  QVERIFY( localProject.isValid() );
+
+  QgsProject project;
+  project.setFileName( localProject.qgisProjectFilePath );
+  mVariablesManager->merginProjectChanged( &project );
+
+  QgsExpressionContext context;
+  context << QgsExpressionContextUtils::projectScope( &project );
+
+  evaluateExpression( QStringLiteral( "@mm_project_role" ), QStringLiteral( "editor" ), &context );
+
+  // role changed on the server
+  QVERIFY( CoreUtils::replaceValueInJson( metadataPath, "role", QStringLiteral( "writer" ) ) );
+  emit mApi->projectRoleUpdated( localProject.fullName(), QStringLiteral( "writer" ) );
+
+  context = QgsExpressionContext();
+  context << QgsExpressionContextUtils::projectScope( &project );
+  evaluateExpression( QStringLiteral( "@mm_project_role" ), QStringLiteral( "writer" ), &context );
+
+  // signed out
+  mApi->userAuth()->clear();
+
+  context = QgsExpressionContext();
+  context << QgsExpressionContextUtils::projectScope( &project );
+  evaluateExpression( QStringLiteral( "@mm_project_role" ), QString(), &context );
+
+  // not a Mergin project
+  QgsProject otherProject;
+  otherProject.setFileName( QDir::tempPath() + QStringLiteral( "/notMergin.qgz" ) );
+  mVariablesManager->merginProjectChanged( &otherProject );
+
+  context = QgsExpressionContext();
+  context << QgsExpressionContextUtils::projectScope( &otherProject );
+  QVERIFY( !context.hasVariable( QStringLiteral( "mm_project_role" ) ) );
+
+  mVariablesManager->merginProjectChanged( nullptr );
+  mApi->localProjectsManager().removeLocalProject( localProject.id() );
+  TestUtils::authorizeUser( mApi, username, password );
 }
 
 GeoPosition TestVariablesManager::testGeoPosition()

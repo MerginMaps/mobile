@@ -61,6 +61,7 @@ class  AttributeFormModel : public QAbstractListModel
       Relation, //!< QgsRelation instance for this item, empty if it is not a relation
       RawValue,
       HasMixedValues, //!< TRUE when editing multiple features that have different value for this attribute
+      FormItemId, //!< Unique id of the form item, it differs between forms even for the same field
     };
 
     Q_ENUM( AttributeFormRoles )

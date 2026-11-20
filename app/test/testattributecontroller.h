@@ -28,6 +28,21 @@ class TestAttributeController: public QObject
     void testRawValue();
     void testFieldsOutsideForm();
     void testPhotoRenaming();
+
+    //! A reused photo must be renamed with the new feature's own expression value, not the old one
+    void testPhotoReuseRenamesWithFreshExpressionValue();
+
+    //! Saving the same feature twice must not rename an already-renamed photo again
+    void testPhotoRenamingNotRepeatedOnResave();
+
+    //! Reusing a photo must create an independent file, not just copy the path string
+    void testReusedPhotoIsIndependentFile();
+
+    //! A reused photo must end up in the folder resolved from the new feature's values
+    void testReusedPhotoFollowsPathExpression();
+
+    //! A collision suffix must be inserted before the real extension, even if the name has a dot
+    void testPhotoRenamingCollisionWithDotInName();
     void testHtmlAndTextWidgets();
     void testVirtualFields();
 
@@ -42,6 +57,9 @@ class TestAttributeController: public QObject
      * to the parent feature's referenced field value (FID).
      */
     void testPrefillRelationReferenceField();
+
+    //! A NULL numeric field must be settable to 0 through the model
+    void testNullNumericFieldCanBeSetToZeroThroughModel();
 };
 
 #endif // TESTATTRIBUTECONTROLLER_H

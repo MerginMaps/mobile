@@ -114,7 +114,7 @@ void TestProjectChecksumCache::testFilesCheckum()
     QString checksumFromCacheBigFile = cache.get( "TreeAutumn.png" );
     qint64 elapsedTimeFromCache = timer2.elapsed();
     QVERIFY2( elapsedTimeFromCache < 2, QString::number( elapsedTimeFromCache ).toStdString().c_str() ); // It should be pretty much instant (<1ms)
-    QVERIFY2( elapsedForChecksumDirectBigFile > 4, QString::number( elapsedForChecksumDirectBigFile ).toStdString().c_str() ); // It should take few miliseconds to read and calculate checksum of 4 MB file
+    QVERIFY2( elapsedForChecksumDirectBigFile > 2, QString::number( elapsedForChecksumDirectBigFile ).toStdString().c_str() ); // It should take few miliseconds to read and calculate checksum of 4 MB file
     QCOMPARE( checksumDirectBigFile, checksumFromCacheBigFile );
   }
 

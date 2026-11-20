@@ -39,7 +39,7 @@ const QString MerginApi::sMetadataFile = QStringLiteral( "/.mergin/mergin.json" 
 const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com" );
-const QString MerginApi::sDefaultReportLogUrl =  QStringLiteral( "https://g4pfq226j0.execute-api.eu-west-1.amazonaws.com/mergin_client_log_submit" );
+const QString MerginApi::sDefaultReportLogUrl =  QStringLiteral( "https://api.merginmaps.com/logs" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
@@ -1083,7 +1083,7 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   // Some very basic checks, so we do not validate everything
   if ( marketingChannel.isEmpty() || industry.isEmpty() )
   {
-    QString msg = tr( "Marketing source cannot be empty" );
+    const QString msg = tr( "Marketing source cannot be empty" );
     emit postRegistrationFailed( msg );
     return;
   }
@@ -1091,14 +1091,14 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   // Some very basic checks, so we do not validate everything
   if ( industry.isEmpty() )
   {
-    QString msg = tr( "Industry cannot be empty" );
+    const QString msg = tr( "Industry cannot be empty" );
     emit postRegistrationFailed( msg );
     return;
   }
   // request
-  QNetworkRequest request = getDefaultRequest( false );
-  QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
-  QUrl url( urlString );
+  QNetworkRequest request = getDefaultRequest();
+  const QString urlString = mApiRoot + QStringLiteral( "/v1/post-register" );
+  const QUrl url( urlString );
   request.setUrl( url );
   request.setRawHeader( "Content-Type", "application/json" );
 
@@ -1108,12 +1108,9 @@ void MerginApi::postRegisterUser( const QString &marketingChannel, const QString
   jsonObject.insert( QStringLiteral( "marketing_channel" ), marketingChannel );
   jsonObject.insert( QStringLiteral( "subscribe" ), wantsNewsletter );
   jsonDoc.setObject( jsonObject );
-  QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
-  QNetworkReply *reply = mManager->post( request, json );
-  connect( reply, &QNetworkReply::finished, this, [ = ]()
-  {
-    this->postRegistrationFinished();
-  } );
+  const QByteArray json = jsonDoc.toJson( QJsonDocument::Compact );
+  const QNetworkReply *reply = mManager->post( request, json );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::postRegistrationFinished );
   CoreUtils::log( "auth", QStringLiteral( "Requesting post-registration: " ) + url.toString() );
 }
 
@@ -3792,6 +3789,22 @@ void MerginApi::finishProjectSync( const QString &projectFullName, bool syncSucc
     emit projectReloadNeededAfterSync( projectFullName );
   }
 
+  // role might have changed on the server even if there's nothing else to sync, so check it separately
+  if ( !transaction.projectMetadata.isEmpty() )
+  {
+    QString serverRole = MerginProjectMetadata::fromJson( transaction.projectMetadata ).role;
+    QString cachedRole = getCachedProjectRole( projectFullName );
+
+    if ( !serverRole.isEmpty() && serverRole != cachedRole )
+    {
+      if ( updateCachedProjectRole( projectFullName, serverRole ) )
+      {
+        emit projectRoleUpdated( projectFullName, serverRole );
+        CoreUtils::log( "sync " + projectFullName, QStringLiteral( "Project role updated to %1" ).arg( serverRole ) );
+      }
+    }
+  }
+
   mTransactionalStatus.remove( projectFullName );
 
   if ( pullBeforePush )
@@ -4014,6 +4027,14 @@ void MerginApi::getServerConfigReplyFinished()
 {
   QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
   Q_ASSERT( r );
+
+  // api root might have changed while the request was running, ignore the outdated reply
+  if ( !r->request().url().toString().startsWith( mApiRoot ) )
+  {
+    CoreUtils::log( "Config", QStringLiteral( "Ignoring reply from outdated server: " ) + r->request().url().toString() );
+    r->deleteLater();
+    return;
+  }
 
   if ( r->error() == QNetworkReply::NoError )
   {

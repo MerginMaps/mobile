@@ -27,6 +27,7 @@
 #include "attributeformmodel.h"
 #include "imageutils.h"
 #include "inpututils.h"
+#include "qgsvariantutils.h"
 
 void TestAttributeController::init()
 {
@@ -894,6 +895,306 @@ void TestAttributeController::testPhotoRenaming()
   }
 }
 
+void TestAttributeController::testPhotoReuseRenamesWithFreshExpressionValue()
+{
+  QString projectName = QStringLiteral( "testPhotoReuseRenamesWithFreshExpressionValue" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  // feature 1: notes = "first" -> naming expression 'image_' + "notes" saves image_first.jpg
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  // mark the photo field to be reused on the next new feature
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // feature 2 reuses the photo but has notes = "second" - expression must re-evaluate fresh
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const QVector<QUuid> items2 = tab2->formItems();
+
+  controller2.setFormValue( items2.at( 2 ), QStringLiteral( "second" ) );
+  controller2.save();
+
+  const QgsFeature f2 = controller2.featureLayerPair().feature();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) ); // untouched
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) ); // fresh name
+  QCOMPARE( f2.attribute( 3 ), QStringLiteral( "image_second.jpg" ) );
+}
+
+void TestAttributeController::testPhotoRenamingNotRepeatedOnResave()
+{
+  QString projectName = QStringLiteral( "testPhotoRenamingNotRepeatedOnResave" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const TabItem *tab2 = controller2.tabItem( 0 );
+  const QVector<QUuid> items2 = tab2->formItems();
+
+  controller2.setFormValue( items2.at( 2 ), QStringLiteral( "second" ) );
+  controller2.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) );
+
+  // save the very same feature again without changing anything - must not re-trigger the rename
+  controller2.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_second.jpg" ) ) );
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_second (1).jpg" ) ) );
+}
+
+void TestAttributeController::testReusedPhotoIsIndependentFile()
+{
+  QString projectName = QStringLiteral( "testReusedPhotoIsIndependentFile" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  QgsFeature feat1( surveyLayer->fields() );
+  FeatureLayerPair pair1( feat1, surveyLayer );
+
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( pair1 );
+
+  const TabItem *tab1 = controller1.tabItem( 0 );
+  const QVector<QUuid> items1 = tab1->formItems();
+
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "first" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "image1.jpg" ) );
+  controller1.save();
+
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  QgsFeature feat2( surveyLayer->fields() );
+  FeatureLayerPair pair2( feat2, surveyLayer );
+
+  AttributeController controller2;
+  controller2.setRememberAttributesController( &remController );
+  controller2.setFeatureLayerPair( pair2 );
+
+  const QString reusedRelativePath = controller2.featureLayerPair().feature().attribute( 3 ).toString();
+  QVERIFY( !reusedRelativePath.isEmpty() );
+  // must be its own file, not literally feature 1's path
+  QVERIFY( reusedRelativePath != QStringLiteral( "image_first.jpg" ) );
+
+  const QString reusedAbsolutePath = projectDir + "/" + reusedRelativePath;
+  QVERIFY( QFile::exists( reusedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+
+  // removing feature 2's file directly must not affect feature 1's, since they're independent
+  QVERIFY( QFile::remove( reusedAbsolutePath ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_first.jpg" ) ) );
+}
+
+void TestAttributeController::testReusedPhotoFollowsPathExpression()
+{
+  QString projectName = QStringLiteral( "testReusedPhotoFollowsPathExpression" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  // photos are stored in a subfolder named after the "notes" field, relative to the project
+  QVariantMap config = surveyLayer->editorWidgetSetup( 3 ).config();
+  config[ QStringLiteral( "RelativeStorage" ) ] = 1;
+  config[ QStringLiteral( "PropertyCollection" ) ] = QVariantMap
+  {
+    {
+      QStringLiteral( "properties" ), QVariantMap
+      {
+        { QStringLiteral( "propertyRootPath" ), QVariantMap { { QStringLiteral( "expression" ), QStringLiteral( "@project_folder + '/Photos/' + \"notes\"" ) } } }
+      }
+    }
+  };
+  surveyLayer->setEditorWidgetSetup( 3, QgsEditorWidgetSetup( QStringLiteral( "ExternalResource" ), config ) );
+
+  // without photo naming, renamePhotos() does not move the file, so the reused copy is only moved by the fix
+  QgsProject::instance()->removeEntry( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1/%2" ).arg( surveyLayer->id(), surveyLayer->fields().at( 3 ).name() ) );
+
+  QVERIFY( QDir().mkpath( projectDir + QStringLiteral( "/Photos/Open" ) ) );
+  QVERIFY( QFile::copy( projectDir + QStringLiteral( "/image1.jpg" ), projectDir + QStringLiteral( "/Photos/Open/image1.jpg" ) ) );
+
+  RememberAttributesController remController;
+  remController.reset();
+  remController.setRememberValuesAllowed( true );
+
+  // feature 1 with its own photo
+  QgsFeature feat1( surveyLayer->fields() );
+  AttributeController controller1;
+  controller1.setRememberAttributesController( &remController );
+  controller1.setFeatureLayerPair( FeatureLayerPair( feat1, surveyLayer ) );
+
+  const QVector<QUuid> items1 = controller1.tabItem( 0 )->formItems();
+  remController.setShouldRememberValue( surveyLayer, 3, true );
+
+  controller1.setFormValue( items1.at( 2 ), QStringLiteral( "Open" ) );
+  controller1.setFormValue( items1.at( 3 ), QStringLiteral( "Photos/Open/image1.jpg" ) );
+  controller1.save();
+
+  QCOMPARE( controller1.featureLayerPair().feature().attribute( 3 ).toString(), QStringLiteral( "Photos/Open/image1.jpg" ) );
+
+  // features 2 and 3 reuse the photo, their folder is only known once "notes" is filled in
+  const QStringList folders = { QStringLiteral( "Pending" ), QStringLiteral( "Done" ) };
+  for ( const QString &folder : folders )
+  {
+    QgsFeature feat( surveyLayer->fields() );
+    AttributeController controller;
+    controller.setRememberAttributesController( &remController );
+    controller.setFeatureLayerPair( FeatureLayerPair( feat, surveyLayer ) );
+
+    QVERIFY( !controller.featureLayerPair().feature().attribute( 3 ).toString().isEmpty() );
+
+    const QVector<QUuid> items = controller.tabItem( 0 )->formItems();
+    controller.setFormValue( items.at( 2 ), folder );
+    controller.save();
+
+    const QString photoPath = controller.featureLayerPair().feature().attribute( 3 ).toString();
+    QVERIFY( photoPath.startsWith( QStringLiteral( "Photos/%1/" ).arg( folder ) ) );
+    QVERIFY( QFile::exists( projectDir + "/" + photoPath ) );
+  }
+
+  // the original photo is untouched and no temporary copy is left in the project folder
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/Photos/Open/image1.jpg" ) ) );
+  QVERIFY( QDir( projectDir ).entryList( { QStringLiteral( "2*.jpg" ) }, QDir::Files ).isEmpty() );
+}
+
+void TestAttributeController::testPhotoRenamingCollisionWithDotInName()
+{
+  QString projectName = QStringLiteral( "testPhotoRenamingCollisionWithDotInName" );
+  QString projectDir = QDir::tempPath() + "/MM_test_projects/" + projectName;
+
+  QDir tempDir( projectDir );
+  QVERIFY( tempDir.removeRecursively() );
+
+  QVERIFY( InputUtils::cpDir( TestUtils::testDataDir() + "/test_photo_rename", projectDir ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image1.jpg" ) ) );
+
+  // "photo" naming expression is 'image_' + "notes", so a dot in notes lands in the name too
+  const QString collidingPath = projectDir + QStringLiteral( "/image_my.notes.jpg" );
+  QVERIFY( QFile::copy( projectDir + QStringLiteral( "/image1.jpg" ), collidingPath ) );
+  QVERIFY( QFile::exists( collidingPath ) );
+
+  QVERIFY( QgsProject::instance()->read( projectDir + QStringLiteral( "/test_photo_rename.qgz" ) ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "Survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  QgsFeature feat( surveyLayer->fields() );
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+
+  controller.setFormValue( items.at( 2 ), QStringLiteral( "my.notes" ) );
+  controller.setFormValue( items.at( 3 ), QStringLiteral( "image1.jpg" ) );
+
+  controller.save();
+
+  const QgsFeature f = controller.featureLayerPair().feature();
+
+  QVERIFY( QFile::exists( collidingPath ) ); // untouched
+  QVERIFY( !QFile::exists( projectDir + QStringLiteral( "/image_my (1).notes.jpg" ) ) );
+  QVERIFY( QFile::exists( projectDir + QStringLiteral( "/image_my.notes (1).jpg" ) ) );
+  QCOMPARE( f.attribute( 3 ), QStringLiteral( "image_my.notes (1).jpg" ) );
+}
+
 void TestAttributeController::testHtmlAndTextWidgets()
 {
   QString projectDir = TestUtils::testDataDir() + "/expressions";
@@ -1271,4 +1572,66 @@ void TestAttributeController::testPrefillRelationReferenceField()
   // compare that the rawValue is updated after setting the linked relation
   QVERIFY( fkItem );
   QCOMPARE( fkItem->rawValue(), parentFeature.attribute( QStringLiteral( "fid" ) ) );
+}
+
+void TestAttributeController::testNullNumericFieldCanBeSetToZeroThroughModel()
+{
+  QString projectDir = TestUtils::testDataDir() + "/expressions";
+  QString projectName = "project.qgz";
+
+  QVERIFY( QgsProject::instance()->read( projectDir + "/" + projectName ) );
+
+  QgsMapLayer *layer = QgsProject::instance()->mapLayersByName( QStringLiteral( "survey" ) ).at( 0 );
+  QgsVectorLayer *surveyLayer = static_cast<QgsVectorLayer *>( layer );
+
+  QVERIFY( surveyLayer && surveyLayer->isValid() );
+
+  const int num1FieldIndex = surveyLayer->fields().indexFromName( QStringLiteral( "num1" ) );
+  QVERIFY( num1FieldIndex >= 0 );
+  const QgsField num1Field = surveyLayer->fields().at( num1FieldIndex );
+
+  // Simulate an EXISTING feature whose num1 field is NULL, as it would come back from a
+  // provider like GeoPackage/OGR: a typed-but-null QVariant, not a plain invalid QVariant()
+  // (which is instead what a brand new, not-yet-saved feature gets - see QgsVectorLayerUtils::createFeatures()).
+  QgsFeature feat;
+  feat.setValid( true );
+  feat.setFields( surveyLayer->fields(), true );
+  feat.setAttribute( num1FieldIndex, QgsVariantUtils::createNullVariant( num1Field.type() ) );
+
+  FeatureLayerPair pair( feat, surveyLayer );
+
+  AttributeController controller;
+  controller.setFeatureLayerPair( pair );
+
+  const TabItem *tab = controller.tabItem( 0 );
+  const QVector<QUuid> items = tab->formItems();
+
+  const FormItem *num1Item = nullptr;
+  for ( const QUuid &id : items )
+  {
+    const FormItem *item = controller.formItem( id );
+    if ( item && item->field().name() == QLatin1String( "num1" ) )
+    {
+      num1Item = item;
+      break;
+    }
+  }
+  QVERIFY( num1Item );
+  QVERIFY( num1Item->rawValue().isNull() );
+
+  AttributeFormProxyModel *proxyModel = controller.attributeFormProxyModelForTab( 0 );
+  QVERIFY( proxyModel );
+  AttributeFormModel *formModel = qobject_cast<AttributeFormModel *>( proxyModel->sourceModel() );
+  QVERIFY( formModel );
+
+  const int row = items.indexOf( num1Item->id() );
+  QVERIFY( row >= 0 );
+  const QModelIndex modelIndex = formModel->index( row, 0 );
+
+  // This is exactly what MMFormPage.qml does on a keystroke: model.AttributeValue = newVal
+  const bool updated = formModel->setData( modelIndex, QVariant( QStringLiteral( "0" ) ), AttributeFormModel::AttributeValue );
+  QVERIFY2( updated, "setData() must not silently swallow a NULL -> \"0\" edit (see https://github.com/MerginMaps/mobile/issues/2999)" );
+
+  QCOMPARE( controller.featureLayerPair().feature().attribute( num1FieldIndex ), QVariant( 0.0 ) );
+  QCOMPARE( num1Item->rawValue().isNull(), false );
 }

@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Le projet n&apos;a pas de CRS valide. La carte et les outils ont un comportement non défini !</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="328"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer</source>
         <translation>Couche</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="328"/>
         <source>Unable to load source </source>
         <translation>Impossible de charger la source de données</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>La couche n&apos;a pas de CRS valide. Les outils d&apos;enregistrement ont un comportement non défini.</translation>
     </message>
@@ -348,12 +348,12 @@ Ne sera pas ajouté au projet.</translation>
         <translation><numerusform>il y a %n année(s)</numerusform><numerusform>il y a %n année(s)</numerusform><numerusform>il y a %n année(s)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2253"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Vous devez ajouter au minimum %n point(s) à chaque partie.</numerusform><numerusform>Vous devez ajouter au minimum %n point(s) à chaque partie.</numerusform><numerusform>Vous devez ajouter au minimum %n point(s) à chaque partie.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2257"/>
+        <location filename="../inpututils.cpp" line="2261"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Vous devez ajouter au minimum %n point(s).</numerusform><numerusform>Vous devez ajouter au minimum %n point(s).</numerusform><numerusform>Vous devez ajouter au minimum %n point(s).</numerusform></translation>
     </message>
@@ -375,19 +375,44 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="213"/>
         <source>Download failed, remove and retry</source>
         <translation>Téléchargement échoué, supprimer et réessayer</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="233"/>
         <source>Found multiple QGIS project files</source>
         <translation>Des fichiers de projet QGIS multiples ont été trouvés</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="238"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Impossible de trouver un fichier de projet QGIS</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="268"/>
+        <source>The project name cannot be empty</source>
+        <translation>Le nom du projet ne peut pas être vide</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="273"/>
+        <source>This project name is not allowed</source>
+        <translation>Ce nom de projet n&apos;est pas autorisé</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="278"/>
+        <source>The project name contains invalid characters</source>
+        <translation>Le nom du projet contient des caractères non acceptés.</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="291"/>
+        <source>The project name is already taken</source>
+        <translation>Ce nom de projet est déjà pris</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="297"/>
+        <source>Project not found</source>
+        <translation>Projet introuvable</translation>
     </message>
 </context>
 <context>
@@ -1055,7 +1080,7 @@ Ne sera pas ajouté au projet.</translation>
         <translation>Modifier la géométrie</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="450"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Impossible d&apos;enregistrer l&apos;élément, veuillez vérifier tous les champs obligatoires.</translation>
     </message>
@@ -1171,7 +1196,7 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="96"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
@@ -1429,32 +1454,42 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMLayerDetailPage</name>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="84"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="77"/>
+        <source>Layer unavailable</source>
+        <translation>Couche non disponible</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
+        <source>This layer couldn&apos;t be loaded. Check your connection or contact your administrator.</source>
+        <translation>Cette couche ne peut pas être chargée. Vérifier votre connexion ou contacter votre administrateur.</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="85"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="110"/>
         <source>Visible on map</source>
         <translation>Visible sur la carte</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="134"/>
         <source>Legend</source>
         <translation>Légende</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="162"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="187"/>
         <source>Attribution</source>
         <translation>Attribution</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="246"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="271"/>
         <source>Features</source>
         <translation>Eléments</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="261"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="286"/>
         <source>Layer info</source>
         <translation>Informations sur la couche</translation>
     </message>
@@ -2099,49 +2134,54 @@ Ne sera pas ajouté au projet.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Synchronisation des modifications du projet</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Veuillez ne pas fermer l&apos;application.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Arreter</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Plus d&apos;options</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Synchronisez le projet</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Modifications locales</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Supprimer de l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Charger</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="313"/>
+        <source>Rename project</source>
+        <translation>Renommer le projet</translation>
     </message>
 </context>
 <context>
@@ -2226,32 +2266,32 @@ Ne sera pas ajouté au projet.</translation>
         <translation>Impossible de synchroniser le projet, veuillez vérifier que vous êtes connecté et que vous disposez des droits suffisants</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="214"/>
+        <location filename="../qml/project/MMProjectList.qml" line="219"/>
         <source>Create project</source>
         <translation>Créer un projet</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="239"/>
+        <location filename="../qml/project/MMProjectList.qml" line="244"/>
         <source>Let&apos;s get started</source>
         <translation>Commençons</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="240"/>
+        <location filename="../qml/project/MMProjectList.qml" line="245"/>
         <source>First step is to create your brand new project.</source>
         <translation>La première étape consiste à créer un nouveau projet.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>Unable to get the list of projects.</source>
         <translation>Impossible de récupérer la liste des projets.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>No projects found</source>
         <translation>Aucun projet n&apos;a été trouvé</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="277"/>
+        <location filename="../qml/project/MMProjectList.qml" line="282"/>
         <source>Retry</source>
         <translation>Réessayer</translation>
     </message>
@@ -2545,6 +2585,29 @@ Ne sera pas ajouté au projet.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>MMRenameProjectDialog</name>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="24"/>
+        <source>Rename project</source>
+        <translation>Renommer le projet</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="44"/>
+        <source>Enter the new name</source>
+        <translation>Saisir le nouveau nom</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="48"/>
+        <source>The project name cannot be empty</source>
+        <translation>Le nom du projet ne peut pas être vide</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="56"/>
+        <source>Confirm</source>
+        <translation>Confirmer</translation>
     </message>
 </context>
 <context>
@@ -3299,23 +3362,23 @@ only allows up to %1 downloaded projects.</source>
         <translation>Projet séparé du serveur</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4265"/>
+        <location filename="../../core/merginapi.cpp" line="4289"/>
         <source>Workspace name contains invalid characters</source>
         <translation>L&apos;espace de travail contient des caractères invalides</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4332"/>
+        <location filename="../../core/merginapi.cpp" line="4356"/>
         <source>Workspace %1 already exists</source>
         <translation>L&apos;espace de travail %1 est déjà existant</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4438"/>
+        <location filename="../../core/merginapi.cpp" line="4462"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation>Vous pouvez fermer cette page et revenir sur Mergin Maps</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4464"/>
-        <location filename="../../core/merginapi.cpp" line="4491"/>
+        <location filename="../../core/merginapi.cpp" line="4488"/>
+        <location filename="../../core/merginapi.cpp" line="4515"/>
         <source>SSO authorization failed</source>
         <translation>L&apos;autorisation de connexion SSO a échoué</translation>
     </message>
@@ -3472,18 +3535,18 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="102"/>
+        <location filename="../projectsmodel.cpp" line="104"/>
         <source>Pending changes to synchronise</source>
         <translation>Modifications en attente d&apos;être synchronisées</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="107"/>
+        <location filename="../projectsmodel.cpp" line="109"/>
         <source>Local project, not uploaded</source>
         <translation>Projet local non téléversé sur le cloud</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="115"/>
-        <location filename="../projectsmodel.cpp" line="119"/>
+        <location filename="../projectsmodel.cpp" line="117"/>
+        <location filename="../projectsmodel.cpp" line="121"/>
         <source>Updated %1</source>
         <translation>Mis à jour %1</translation>
     </message>
@@ -3536,12 +3599,12 @@ only allows up to %1 downloaded projects.</source>
         <translation>Fix inconnu</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="610"/>
+        <location filename="../main.cpp" line="647"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Rapport soumis. Merci de contacter le support</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="615"/>
+        <location filename="../main.cpp" line="652"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Impossible de transmettre le rapport. Merci de vérifier votre connexion à Internet</translation>
     </message>

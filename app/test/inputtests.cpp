@@ -27,6 +27,7 @@
 #include "testimageutils.h"
 #include "testmaptools.h"
 #include "testlayertree.h"
+#include "testlocalprojectsmanager.h"
 #include "testactiveproject.h"
 #include "testprojectchecksumcache.h"
 #include "testmultieditmanager.h"
@@ -171,6 +172,11 @@ int InputTests::runTest() const
   {
     TestLayerTree layerTreeTest;
     nFailed = QTest::qExec( &layerTreeTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testLocalProjectsManager" )
+  {
+    TestLocalProjectsManager localProjectsManagerTest;
+    nFailed = QTest::qExec( &localProjectsManagerTest, mTestArgs );
   }
   else if ( mTestRequested == "--testActiveProject" )
   {

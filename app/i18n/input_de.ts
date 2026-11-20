@@ -2,28 +2,28 @@
 <context>
     <name>ActiveProject</name>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="292"/>
+        <location filename="../activeproject.cpp" line="304"/>
         <source>Project has invalid CRS assigned. Map and tools have undefined behaviour!</source>
         <translation>Dem Projekt ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Karte und Werkzeuge verhalten sich undefiniert!</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="328"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer</source>
         <translation>Layer</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="304"/>
+        <location filename="../activeproject.cpp" line="328"/>
         <source>Unable to load source </source>
         <translation>Kann Quelldatei nicht laden</translation>
     </message>
     <message>
-        <location filename="../activeproject.cpp" line="313"/>
+        <location filename="../activeproject.cpp" line="337"/>
         <source>Layer has invalid CRS assigned. Recording tools have undefined behaviour.</source>
         <translation>Dem Layer ist ein ungültiges Koordinatenreferenzsystem zugewiesen. Aufnahme- und Speicherfunktionen verhalten sich undefiniert!</translation>
     </message>
@@ -348,12 +348,12 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation><numerusform>vor %n Jahr(en)</numerusform><numerusform>vor %n Jahr(en)</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2253"/>
+        <location filename="../inpututils.cpp" line="2257"/>
         <source>You need to add at least %n point(s) to every part.</source>
         <translation><numerusform>Sie müssen mindestens %1 Punkt(e) zu jedem Teil hinzufügen.</numerusform><numerusform>Sie müssen mindestens %1 Punkt(e) zu jedem Teil hinzufügen.</numerusform></translation>
     </message>
     <message numerus="yes">
-        <location filename="../inpututils.cpp" line="2257"/>
+        <location filename="../inpututils.cpp" line="2261"/>
         <source>You need to add at least %n point(s).</source>
         <translation><numerusform>Sie müssen mindestens %n Punkt(e) hinzufügen.</numerusform><numerusform>Sie müssen mindestens %n Punkt(e) hinzufügen.</numerusform></translation>
     </message>
@@ -375,19 +375,44 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>LocalProjectsManager</name>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="210"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="213"/>
         <source>Download failed, remove and retry</source>
         <translation>Download fehlgeschlagen. Datei entfernen und erneut versuchen.</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="230"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="233"/>
         <source>Found multiple QGIS project files</source>
         <translation>Mehrere QGIS-Projektdateien gefunden</translation>
     </message>
     <message>
-        <location filename="../../core/localprojectsmanager.cpp" line="235"/>
+        <location filename="../../core/localprojectsmanager.cpp" line="238"/>
         <source>Failed to find a QGIS project file</source>
         <translation>Es konnte keine QGIS-Projektdatei gefunden werden.</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="268"/>
+        <source>The project name cannot be empty</source>
+        <translation>Der Projektname darf nicht leer sein</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="273"/>
+        <source>This project name is not allowed</source>
+        <translation>Der Projektname ist nicht erlaubt</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="278"/>
+        <source>The project name contains invalid characters</source>
+        <translation>Der Projektname enthält ungültige Zeichen</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="291"/>
+        <source>The project name is already taken</source>
+        <translation>Der Projektname existiert bereits</translation>
+    </message>
+    <message>
+        <location filename="../../core/localprojectsmanager.cpp" line="297"/>
+        <source>Project not found</source>
+        <translation>Projekt nicht gefunden</translation>
     </message>
 </context>
 <context>
@@ -739,64 +764,76 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMExternalProviderConnectionDrawer</name>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="38"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="132"/>
         <source>Connecting to external receiver</source>
         <translation>Verbindung mit externem Empfänger wird hergestellt</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="40"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
-        <source>Connecting to</source>
-        <translation>Verbindung zu</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="41"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="46"/>
-        <source>Connecting</source>
-        <translation>Verbinde</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="43"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="146"/>
         <source>You might be asked to pair your device during this process.</source>
         <translation>Während dieses Vorgangs werden Sie möglicherweise aufgefordert, das Gerät zu koppeln.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="45"/>
-        <source>. You can close this panel, the app will continue in the background.</source>
-        <translation>Dieses Fenster kann geschlossen werden. Die App läuft im Hintergrund weiter.</translation>
-    </message>
-    <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="55"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="47"/>
         <source>Connected</source>
         <translation>Verbunden</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="65"/>
-        <source>Failed to connect to</source>
-        <translation>Verbindung zu fehlgeschlagen</translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="68"/>
+        <source>%1%2You can close this message, we will try to repeatedly connect to your device.</source>
+        <translation>%1%2Sie können diese Meldung schließen, wir werden weiterhin versuchen, eine Verbindung zu Ihrem Gerät herzustellen.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="80"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="136"/>
+        <source>Connecting to %1</source>
+        <translation>Verbindung herstellen zu %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="139"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="156"/>
+        <source>Connecting%1</source>
+        <translation>Verbinde%1</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="150"/>
+        <source>Connecting to %1. You can close this panel, the app will continue in the background.</source>
+        <translation>Verbindung zu %1 wird hergestellt. Sie können dieses Fenster schließen, die App läuft im Hintergrund weiter.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="153"/>
+        <source>Trimble Mobile Manager will be opened shortly.</source>
+        <translation>Trimble Mobile Manager wird in Kürze geöffnet.</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="163"/>
+        <source>Failed to connect</source>
+        <translation>Verbindung konnte nicht hergestellt werden</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="174"/>
+        <source>Failed to connect to %1</source>
+        <translation>Die Verbindung zu %1 konnte nicht hergestellt werden</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="180"/>
         <source>We were not able to connect to the specified device. Please make sure your device is powered on and can be connected to.</source>
         <translation>Verbindung zum angegebenen Gerät konnte nicht hergestellt werden. Bitte stellen Sie sicher, dass das Gerät eingeschaltet und erreichbar ist.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="70"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="81"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="183"/>
         <source>We were not able to connect to the specified IP address.</source>
         <translation>Verbindung zur angegebenen IP-Adresse konnte nicht hergestellt werden.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="71"/>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="83"/>
-        <source>Learn more</source>
-        <translation>Mehr erfahren</translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="186"/>
+        <source>We were not able to connect to Trimble Mobile Manager. Please make sure it&apos;s installed.</source>
+        <translation>Die Verbindung zum Trimble Mobile Manager war nicht möglich. Bitte stelle sicher, dass er installiert ist.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="82"/>
-        <source>You can close this message, we will try to repeatedly connect to your device.</source>
-        <translation>Diese Meldung kann geschlossen werden. Es wird weiterhin versucht, eine Verbindung zum Gerät herzustellen.</translation>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="59"/>
+        <location filename="../qml/gps/MMExternalProviderConnectionDrawer.qml" line="69"/>
+        <source>Learn more</source>
+        <translation>Mehr erfahren</translation>
     </message>
 </context>
 <context>
@@ -1042,7 +1079,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Geometrie bearbeiten</translation>
     </message>
     <message>
-        <location filename="../qml/form/MMFormPage.qml" line="450"/>
+        <location filename="../qml/form/MMFormPage.qml" line="451"/>
         <source>Feature could not be saved, please check all required fields</source>
         <translation>Objekt konnte nicht gespeichert werden, bitte überprüfen Sie alle Pflichtfelder.</translation>
     </message>
@@ -1065,22 +1102,22 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Bilddateien (*.gif *.png *.jpg)</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="183"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="184"/>
         <source>Photo sketches could not be saved, please contact support.</source>
         <translation>Foto Sketches konnten nicht gespeichert werden. Kontaktieren Sie bitte den Support.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="295"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="296"/>
         <source>Could not create directory %1.</source>
         <translation>Ordner %1 konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="362"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="363"/>
         <source>Failed to process the image, photo directory resolving failed</source>
         <translation>Bild konnte nicht verarbeitet werden, das Fotoverzeichnis konnte nicht ermittelt werden.</translation>
     </message>
     <message>
-        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="377"/>
+        <location filename="../qml/form/editors/MMFormPhotoEditor.qml" line="378"/>
         <source>Failed to process the image</source>
         <translation>Das Bild konnte nicht verarbeitet werden.</translation>
     </message>
@@ -1158,7 +1195,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMFormValueMapEditor</name>
     <message>
-        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="89"/>
+        <location filename="../qml/form/editors/MMFormValueMapEditor.qml" line="96"/>
         <source>Clear</source>
         <translation>Löschen</translation>
     </message>
@@ -1416,32 +1453,42 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMLayerDetailPage</name>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="84"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="77"/>
+        <source>Layer unavailable</source>
+        <translation>Layer nicht verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="78"/>
+        <source>This layer couldn&apos;t be loaded. Check your connection or contact your administrator.</source>
+        <translation>Dieser Layer konnte nicht geladen werden. Überprüfen Sie Ihre Verbindung oder wenden Sie sich an Ihren Administrator.</translation>
+    </message>
+    <message>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="85"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="110"/>
         <source>Visible on map</source>
         <translation>Auf der Karte sichtbar </translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="109"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="134"/>
         <source>Legend</source>
         <translation>Legende</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="162"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="187"/>
         <source>Attribution</source>
         <translation>Attribuierung</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="246"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="271"/>
         <source>Features</source>
         <translation>Objekte</translation>
     </message>
     <message>
-        <location filename="../qml/layers/MMLayerDetailPage.qml" line="261"/>
+        <location filename="../qml/layers/MMLayerDetailPage.qml" line="286"/>
         <source>Layer info</source>
         <translation>Layer-Info</translation>
     </message>
@@ -1942,18 +1989,18 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Neuen Empfänger verbinden</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="173"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="176"/>
         <source>Connecting to external receivers via bluetooth is not supported</source>
         <translation>Eine Verbindung zu externen Empfängern über Bluetooth wird nicht unterstützt.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="174"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="177"/>
         <source>This function is not available on iOS. Your hardware vendor may provide a custom app that connects to the receiver and sets position. The app will still think it is the internal GPS of your phone/tablet.</source>
         <translation>Diese Funktion ist auf iOS nicht verfügbar. Ihr Hardware-Hersteller könnte eine spezielle App bereitstellen, die sich mit dem Empfänger verbindet und die Position bereitstellt. Mergin Maps wird dann dennoch annehmen, dass es sich um das interne GPS Ihres Handys/Tablets handelt.</translation>
     </message>
     <message>
         <location filename="../qml/gps/MMPositionProviderPage.qml" line="108"/>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="199"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="202"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
@@ -1968,7 +2015,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Extern</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMPositionProviderPage.qml" line="261"/>
+        <location filename="../qml/gps/MMPositionProviderPage.qml" line="264"/>
         <source>Manage GPS receivers</source>
         <translation>GPS-Empfänger verwalten</translation>
     </message>
@@ -2086,49 +2133,54 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMProjectDelegate</name>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="141"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="142"/>
         <source>Synchronising project changes</source>
         <translation>Synchronisiere Änderungen im Projekt</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="189"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="190"/>
         <source>Please don&apos;t close the app.</source>
         <translation>Bitte App nicht schließen.</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="212"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="213"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="243"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="244"/>
         <source>More options</source>
         <translation>Mehr Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="287"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="288"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="292"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="293"/>
         <source>Synchronise project</source>
         <translation>Projekt synchronisieren</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="297"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="298"/>
         <source>Local changes</source>
         <translation>Änderungen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="302"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="303"/>
         <source>Remove from device</source>
         <translation>Vom Gerät entfernen</translation>
     </message>
     <message>
-        <location filename="../qml/project/components/MMProjectDelegate.qml" line="307"/>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="308"/>
         <source>Upload</source>
         <translation>Hochladen</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMProjectDelegate.qml" line="313"/>
+        <source>Rename project</source>
+        <translation>Projekt umbenennen</translation>
     </message>
 </context>
 <context>
@@ -2213,32 +2265,32 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation> Das Projekt konnte nicht synchronisiert werden. Bitte stellen Sie sicher, dass Sie angemeldet sind und über ausreichende Rechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="214"/>
+        <location filename="../qml/project/MMProjectList.qml" line="219"/>
         <source>Create project</source>
         <translation>Projekt erstellen</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="239"/>
+        <location filename="../qml/project/MMProjectList.qml" line="244"/>
         <source>Let&apos;s get started</source>
         <translation>Lassen Sie uns anfangen!</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="240"/>
+        <location filename="../qml/project/MMProjectList.qml" line="245"/>
         <source>First step is to create your brand new project.</source>
         <translation>Im ersten Schritt erstellen wir ein neues Projekt.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>Unable to get the list of projects.</source>
         <translation>Die Liste der Projekte kann nicht abgerufen werden.</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="248"/>
+        <location filename="../qml/project/MMProjectList.qml" line="253"/>
         <source>No projects found</source>
         <translation>Keine Projekte gefunden!</translation>
     </message>
     <message>
-        <location filename="../qml/project/MMProjectList.qml" line="277"/>
+        <location filename="../qml/project/MMProjectList.qml" line="282"/>
         <source>Retry</source>
         <translation>Wiederholen</translation>
     </message>
@@ -2407,32 +2459,37 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>Neuen Empfänger verbinden</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="31"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="35"/>
         <source>Bad Elf, Emlid, Juniper, marXact and more</source>
         <translation>Bad Elf, Emlid, Juniper, marXact und weitere</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
         <source>Network (TCP, UDP)</source>
         <translation>Netzwerk (TCP, UDP)</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="32"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="38"/>
         <source>Emlid RS, EOS and more</source>
         <translation>Emlid RS, EOS und weitere</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="40"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="41"/>
+        <source>Trimble receivers via Trimble Mobile Manager</source>
+        <translation>Trimble-Empfänger über den Trimble Mobile Manager</translation>
+    </message>
+    <message>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="49"/>
         <source>External receivers use different connection methods depending on the manufacturer. Select a connection type below, or %1check our documentation%2 for supported devices and setup instructions.</source>
         <translation>Externe Empfänger verwenden je nach Hersteller unterschiedliche Verbindungsmethoden. Wählen Sie unten einen Verbindungstyp aus oder %1lesen Sie unsere Dokumentation%2 zu unterstützten Geräten und Einrichtungshinweisen.</translation>
     </message>
     <message>
-        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="94"/>
+        <location filename="../qml/gps/MMProviderTypeDrawer.qml" line="101"/>
         <source>Continue</source>
         <translation>Weiter</translation>
     </message>
@@ -2479,22 +2536,27 @@ Wird dem Projekt nicht hinzugefügt.</translation>
 <context>
     <name>MMRemovePhotoDialog</name>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="23"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
         <source>Delete photo?</source>
         <translation>Foto löschen?</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="24"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
         <source>Would you like to delete or unlink the photo? Deleting removes the photo from your project entirely, while unlinking keeps the photo in your project but removes it from this specific feature.</source>
         <translation>Möchten Sie das Foto löschen oder die Verknüpfung aufheben? Durch das Löschen wird das Foto vollständig aus Ihrem Projekt entfernt. Durch das Aufheben der Verknüpfung verbleibt das Foto in Ihrem Projekt, ist aber nicht mehr mit dem spezifischen Objekt verknüpft.</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="27"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="25"/>
+        <source>Would you like to delete the photo?</source>
+        <translation>Möchtest du das Foto löschen?</translation>
+    </message>
+    <message>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="28"/>
         <source>Delete photo</source>
         <translation>Foto löschen</translation>
     </message>
     <message>
-        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="36"/>
+        <location filename="../qml/dialogs/MMRemovePhotoDialog.qml" line="37"/>
         <source>Unlink photo</source>
         <translation>Foto-Verknüpfung aufheben</translation>
     </message>
@@ -2521,6 +2583,29 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <location filename="../qml/dialogs/MMRemoveProjectDialog.qml" line="27"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
+    </message>
+</context>
+<context>
+    <name>MMRenameProjectDialog</name>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="24"/>
+        <source>Rename project</source>
+        <translation>Projekt umbenennen</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="44"/>
+        <source>Enter the new name</source>
+        <translation>Geben Sie den neuen Namen ein</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="48"/>
+        <source>The project name cannot be empty</source>
+        <translation>Der Projektname darf nicht leer sein</translation>
+    </message>
+    <message>
+        <location filename="../qml/project/components/MMRenameProjectDialog.qml" line="56"/>
+        <source>Confirm</source>
+        <translation>Bestätigen</translation>
     </message>
 </context>
 <context>
@@ -2589,7 +2674,7 @@ Wird dem Projekt nicht hinzugefügt.</translation>
     <name>MMSettingsPage</name>
     <message>
         <location filename="../qml/settings/MMSettingsPage.qml" line="36"/>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Time elapsed</source>
         <translation>Verstrichene Zeit</translation>
     </message>
@@ -2644,147 +2729,158 @@ Wird dem Projekt nicht hinzugefügt.</translation>
         <translation>GPS-Empfänger verwalten</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="98"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="106"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
         <source>GPS antenna height</source>
         <translation>GPS-Antennenhöhe</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="99"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="107"/>
         <source>Includes pole height and GPS receiver’s antenna height</source>
         <translation>Ist die Stabhöhe + die Höhe der GPS-Empfängerantenne</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="100"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="108"/>
         <source>GPS antenna height, in meters</source>
         <translation>GPS-Antennenhöhe, in Metern</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="112"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="128"/>
+        <source>Click here to modify in Trimble Mobile Manager</source>
+        <translation>Hier klicken, um im Trimble Mobile Manager zu ändern</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="129"/>
+        <source>N/A</source>
+        <translation>n.v.</translation>
+    </message>
+    <message>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="141"/>
         <source>Streaming mode</source>
         <translation>Aufzeichnungs-Modus</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="124"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="153"/>
         <source>Interval threshold type</source>
         <translation>Typ des Aufzeichnungsintervalls</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="125"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="154"/>
         <source>Choose a type of threshold for streaming mode</source>
         <translation>Wählen Sie eine Intervall-Typ für die automatische Aufzeichnung.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="127"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
         <source>Distance Traveled</source>
         <translation>Zurückgelegte Distanz</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="142"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="171"/>
         <source>Threshold interval</source>
         <translation>Intervall-Schwelle</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="143"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="172"/>
         <source>Streaming mode will add a point to the object at each interval</source>
         <translation>Im Aufzeichnungs-Modus wird nach jedem Intervall ein Punkt zum Objekt hinzugefügt.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in meters</source>
         <translation>Intervall-Schwelle, in Metern</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="144"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="173"/>
         <source>Threshold interval, in seconds</source>
         <translation>Intervall-Schwelle, in Sekunden</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="156"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="185"/>
         <source>Recording</source>
         <translation>Aufnahme</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="167"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="196"/>
         <source>Reuse last entered value</source>
         <translation>Zuletzt eingegebenen Wert wiederverwenden</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="168"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="197"/>
         <source>Each field offers an option to reuse its value on the next feature</source>
         <translation>Jedes Feld bietet die Option, denselben Wert wieder für das nächste Objekt zu verwenden.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="178"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="207"/>
         <source>Automatically sync changes</source>
         <translation>Änderungen werden automatisch synchronisiert.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="179"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="208"/>
         <source>Your project is synced automatically to keep you up to date</source>
         <translation>Das Projekt wird automatisch synchronisiert.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="189"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
         <source>Auto-lock position</source>
         <translation>Position auto-sperren </translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="190"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="219"/>
         <source>Each time you start recording, the app centers to GPS</source>
         <translation>Bei jedem Start der Aufnahme, zentriert sich die App auf die GPS-Position.</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="202"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
         <source>Touch Feedback</source>
         <translation>Haptisches Feedback</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="203"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="232"/>
         <source>The app can vibrate and play a sound when adding a feature</source>
         <translation>Die App kann beim Hinzufügen eines Features vibrieren und einen Ton abspielen</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="218"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="247"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="230"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="259"/>
         <source>Startup behaviour</source>
         <translation>Startverhalten</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="231"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="260"/>
         <source>Choose what opens when you launch the app</source>
         <translation>Festlegen, was beim Start der App geöffnet wird</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="245"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="274"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="255"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="284"/>
         <source>Changelog</source>
         <translation>Änderungen</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="265"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="294"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="275"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="304"/>
         <source>Privacy policy</source>
         <translation>Datenschutzrichtlinien</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="285"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="314"/>
         <source>Terms of service</source>
         <translation>Nutzungsbedingungen</translation>
     </message>
     <message>
-        <location filename="../qml/settings/MMSettingsPage.qml" line="295"/>
+        <location filename="../qml/settings/MMSettingsPage.qml" line="324"/>
         <source>Diagnostic log</source>
         <translation>Diagnoseprotokoll</translation>
     </message>
@@ -3264,23 +3360,23 @@ only allows up to %1 downloaded projects.</source>
         <translation>Projekt vom Server getrennt</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4265"/>
+        <location filename="../../core/merginapi.cpp" line="4289"/>
         <source>Workspace name contains invalid characters</source>
         <translation>Der Name des Arbeitsbereiches enthält ungültige Zeichen.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4332"/>
+        <location filename="../../core/merginapi.cpp" line="4356"/>
         <source>Workspace %1 already exists</source>
         <translation>Arbeitsbereich %1 ist bereits vorhanden.</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4438"/>
+        <location filename="../../core/merginapi.cpp" line="4462"/>
         <source>You can now close this page and return to Mergin Maps</source>
         <translation> Sie können diese Seite jetzt schließen und zu Mergin Maps zurückkehren</translation>
     </message>
     <message>
-        <location filename="../../core/merginapi.cpp" line="4464"/>
-        <location filename="../../core/merginapi.cpp" line="4491"/>
+        <location filename="../../core/merginapi.cpp" line="4488"/>
+        <location filename="../../core/merginapi.cpp" line="4515"/>
         <source>SSO authorization failed</source>
         <translation>SSO-Autorisierung fehlgeschlagen</translation>
     </message>
@@ -3333,12 +3429,12 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>PositionKit</name>
     <message>
-        <location filename="../position/positionkit.cpp" line="121"/>
+        <location filename="../position/positionkit.cpp" line="130"/>
         <source>External (Mock)</source>
         <translation>Extern (Simuliert)</translation>
     </message>
     <message>
-        <location filename="../position/positionkit.cpp" line="148"/>
+        <location filename="../position/positionkit.cpp" line="166"/>
         <source>Network device</source>
         <translation>Netzwerkgerät</translation>
     </message>
@@ -3437,18 +3533,18 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>ProjectsModel</name>
     <message>
-        <location filename="../projectsmodel.cpp" line="102"/>
+        <location filename="../projectsmodel.cpp" line="104"/>
         <source>Pending changes to synchronise</source>
         <translation>Zur Synchronisierung anstehende Änderungen </translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="107"/>
+        <location filename="../projectsmodel.cpp" line="109"/>
         <source>Local project, not uploaded</source>
         <translation>Lokales Projekt, nicht hochgeladen</translation>
     </message>
     <message>
-        <location filename="../projectsmodel.cpp" line="115"/>
-        <location filename="../projectsmodel.cpp" line="119"/>
+        <location filename="../projectsmodel.cpp" line="117"/>
+        <location filename="../projectsmodel.cpp" line="121"/>
         <source>Updated %1</source>
         <translation>%1 aktualisiert</translation>
     </message>
@@ -3456,57 +3552,57 @@ only allows up to %1 downloaded projects.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../position/geoposition.cpp" line="137"/>
+        <location filename="../position/geoposition.cpp" line="138"/>
         <source>No data</source>
         <translation>Keine Daten</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="140"/>
+        <location filename="../position/geoposition.cpp" line="141"/>
         <source>No fix</source>
         <translation>Kein Fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="143"/>
+        <location filename="../position/geoposition.cpp" line="144"/>
         <source>GPS fix, no correction data</source>
         <translation>GPS-Fix, keine Korrekturdaten</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="148"/>
+        <location filename="../position/geoposition.cpp" line="147"/>
         <source>DGPS fix</source>
         <translation>DGPS-Fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="151"/>
+        <location filename="../position/geoposition.cpp" line="150"/>
         <source>PPS fix</source>
         <translation>PPS-Fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="154"/>
+        <location filename="../position/geoposition.cpp" line="153"/>
         <source>RTK fix</source>
         <translation>RTK-Fix</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="157"/>
+        <location filename="../position/geoposition.cpp" line="156"/>
         <source>RTK float</source>
         <translation>RTK-Float</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="160"/>
+        <location filename="../position/geoposition.cpp" line="159"/>
         <source>Estimated fix (dead reckoning)</source>
         <translation>Geschätzter Fix (Koppelnavigation)</translation>
     </message>
     <message>
-        <location filename="../position/geoposition.cpp" line="163"/>
+        <location filename="../position/geoposition.cpp" line="162"/>
         <source>Unknown fix</source>
         <translation>Unbekannter Fix</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="603"/>
+        <location filename="../main.cpp" line="647"/>
         <source>Report submitted. Please contact the support</source>
         <translation>Bericht gesendet. Bitte wenden Sie sich an den Support</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="608"/>
+        <location filename="../main.cpp" line="652"/>
         <source>Failed to submit report. Please check your internet connection.</source>
         <translation>Bericht konnte nicht gesendet werden. Bitte Internetverbindung überprüfen.</translation>
     </message>
@@ -3527,6 +3623,60 @@ only allows up to %1 downloaded projects.</source>
         <location filename="../position/providers/simulatedpositionprovider.cpp" line="72"/>
         <source>Connected</source>
         <translation>Verbunden</translation>
+    </message>
+</context>
+<context>
+    <name>TrimblePositionProvider</name>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="129"/>
+        <source>Connecting to TMM</source>
+        <translation>Verbinde mit TMM</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="318"/>
+        <source>No data</source>
+        <translation>Keine Daten</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="351"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="375"/>
+        <source>Connected</source>
+        <translation>Verbunden</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="371"/>
+        <source>Connecting</source>
+        <translation>Verbinde</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="379"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="392"/>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="399"/>
+        <source>Disconnected</source>
+        <translation>Getrennt</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimblepositionprovider.cpp" line="383"/>
+        <source>Disconnecting</source>
+        <translation>Trennen</translation>
+    </message>
+</context>
+<context>
+    <name>TrimbleRegistration</name>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="28"/>
+        <source>No response from Trimble Mobile Manager</source>
+        <translation>Keine Antwort vom Trimble Mobile Manager</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="39"/>
+        <source>Trimble Mobile Manager registration failed: %1</source>
+        <translation>Registrierung beim Trimble Mobile Manager fehlgeschlagen: %1</translation>
+    </message>
+    <message>
+        <location filename="../position/providers/trimbleregistrationandroid.cpp" line="48"/>
+        <source>Trimble Mobile Manager returned invalid port</source>
+        <translation>Der Trimble Mobile Manager hat einen ungültigen Port zurückgegeben</translation>
     </message>
 </context>
 <context>

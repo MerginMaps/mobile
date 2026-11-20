@@ -23,6 +23,7 @@
 #include <QStorageInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMimeDatabase>
 
 #include "qcoreapplication.h"
 
@@ -173,6 +174,28 @@ QString CoreUtils::findUniquePath( const QString &path )
   // are we dealing with directory?
   bool isDirectory = originalPath.isDir();
 
+  // compound extensions known to the MIME database stay together, like tar.bz2,
+  // otherwise split on the last dot, so a dot in the base name isn't mistaken for the extension
+  const QString fileName = originalPath.fileName();
+  QString suffix = QMimeDatabase().suffixForFileName( fileName );
+  QString baseName;
+  if ( fileName.startsWith( '.' ) && fileName.count( '.' ) == 1 )
+  {
+    // hidden file without extension, like .gitignore
+    suffix.clear();
+    baseName = fileName;
+  }
+  else if ( suffix.isEmpty() )
+  {
+    suffix = originalPath.suffix();
+    baseName = originalPath.completeBaseName();
+  }
+  else
+  {
+    suffix = fileName.right( suffix.size() ); // keep the original case
+    baseName = fileName.chopped( suffix.size() + 1 );
+  }
+
   int i = 0;
   QFileInfo f( uniquePath );
 
@@ -186,7 +209,14 @@ QString CoreUtils::findUniquePath( const QString &path )
     }
     else // file
     {
-      uniquePath = originalPath.path() + '/' + originalPath.baseName() + " (" + QString::number( i ) + ")." + originalPath.completeSuffix();
+      if ( suffix.isEmpty() )
+      {
+        uniquePath = QStringLiteral( "%1/%2 (%3)" ).arg( originalPath.path(), baseName, QString::number( i ) );
+      }
+      else
+      {
+        uniquePath = QStringLiteral( "%1/%2 (%3).%4" ).arg( originalPath.path(), baseName, QString::number( i ), suffix );
+      }
     }
     f.setFile( uniquePath );
   }
@@ -279,19 +309,24 @@ bool CoreUtils::isValidName( const QString &name )
   if ( invalidFirstCharacterRe.match( name ).hasMatch() )
     return false;
 
-  // name must not be a reserved Windows device filename (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
-  static QRegularExpression invalidFilenameRe( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
-  if ( invalidFilenameRe.match( name ).hasMatch() )
-    return false;
-
-  // name must not be a word reserved by Mergin Maps / Lutra Consulting
-  static QRegularExpression reservedWordRe( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
-  if ( reservedWordRe.match( name ).hasMatch() )
+  if ( isReservedName( name ) )
     return false;
 
   // name must contain only word characters, whitespace, '-' or '.'
   static QRegularExpression validCharactersRe( R"(^[\w\s\-\.]+$)", QRegularExpression::UseUnicodePropertiesOption );
   return validCharactersRe.match( name ).hasMatch();
+}
+
+bool CoreUtils::isReservedName( const QString &name )
+{
+  // name must not be a reserved Windows device filename (CON, PRN, AUX, NUL, COM1-9, LPT1-9)
+  static QRegularExpression invalidFilenameRe( R"(^CON$|^PRN$|^AUX$|^NUL$|^COM\d$|^LPT\d)", QRegularExpression::CaseInsensitiveOption );
+  if ( invalidFilenameRe.match( name ).hasMatch() )
+    return true;
+
+  // name must not be a word reserved by Mergin Maps / Lutra Consulting
+  static QRegularExpression reservedWordRe( R"(^support$|^helpdesk$|^merginmaps$|^lutraconsulting$|^mergin$|^lutra$|^input$|^sales$|^admin$)", QRegularExpression::CaseInsensitiveOption );
+  return reservedWordRe.match( name ).hasMatch();
 }
 
 QString CoreUtils::nameAbbr( const QString &name, const QString &email )

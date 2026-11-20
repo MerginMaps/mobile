@@ -2783,6 +2783,11 @@ void TestMerginApi::testRegisterAndDelete()
   QSKIP( "testRegisterAndDelete requires USE_MM_SERVER_API_KEY" );
 #endif
 
+  if ( mApi->serverType() == MerginServerType::EE )
+  {
+    QSKIP( "EE servers don't support registration from mobile" );
+  }
+
   QString password = mApi->userAuth()->password();
 
   QString quiteRandom = CoreUtils::uuidWithoutBraces( QUuid::createUuid() ).right( 15 ).replace( "-", "" );
@@ -2819,6 +2824,11 @@ void TestMerginApi::testCreateWorkspace()
 #if defined(USE_MERGIN_DUMMY_API_KEY)
   QSKIP( "testCreateWorkspace requires USE_MM_SERVER_API_KEY" );
 #endif
+  if ( mApi->serverType() == MerginServerType::EE )
+  {
+    QSKIP( "EE servers don't support registration from mobile" );
+  }
+
   // we need to register new user for tests and assign its credentials to env vars
   QString password = TestUtils::generatePassword();
   QString email = TestUtils::generateEmail();
@@ -2918,7 +2928,16 @@ void TestMerginApi::testServerType()
   mApi->getServerConfig();
   spy.wait( TestUtils::SHORT_REPLY );
   QCOMPARE( spy.count(), 0 );
-  QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+
+  // if TEST_EE_API_USERNAME is specified and it equals mUsername, we can expect that we are testing EE server
+  if ( getenv( "TEST_EE_API_USERNAME" ) != nullptr && getenv( "TEST_EE_API_USERNAME" ) == mUsername )
+  {
+    QCOMPARE( mApi->serverType(), MerginServerType::EE );
+  }
+  else
+  {
+    QCOMPARE( mApi->serverType(), MerginServerType::SAAS );
+  }
 }
 
 void TestMerginApi::testServerDiagnosticLogsUrl()
@@ -3077,6 +3096,35 @@ void TestMerginApi::testUpdateProjectMetadataRole()
   QVERIFY( spy.wait() );
   cachedRole = mApi->getCachedProjectRole( fullProjectName );
   QCOMPARE( cachedRole, QString( "owner" ) );
+
+  // Clean up
+  deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
+}
+
+void TestMerginApi::testProjectRoleUpdatedOnUpToDateSync()
+{
+  QString projectName = "testProjectRoleUpdatedOnUpToDateSync";
+
+  createRemoteProject( mApiExtra, mWorkspaceName, projectName, mTestDataPath + "/" + TEST_PROJECT_NAME + "/" );
+  downloadRemoteProject( mApi, mWorkspaceName, projectName );
+
+  QString fullProjectName = MerginApi::getFullProjectName( mWorkspaceName, projectName );
+
+  // Test 1: simulate a stale cached role, as if it changed on the server while offline
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "owner" ) );
+  QVERIFY( mApi->updateCachedProjectRole( fullProjectName, QStringLiteral( "reader" ) ) );
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "reader" ) );
+
+  // Test 2: project is already at the latest version, so the sync finishes as "up to date",
+  // but the role should still get corrected from the server
+  QSignalSpy roleSpy( mApi, &MerginApi::projectRoleUpdated );
+  QSignalSpy finishSpy( mApi, &MerginApi::syncProjectFinished );
+  mApi->pullProject( mWorkspaceName, projectName );
+  QVERIFY( finishSpy.wait( TestUtils::LONG_REPLY ) );
+
+  QCOMPARE( roleSpy.count(), 1 );
+  QCOMPARE( roleSpy.takeFirst().at( 1 ).toString(), QString( "owner" ) );
+  QCOMPARE( mApi->getCachedProjectRole( fullProjectName ), QString( "owner" ) );
 
   // Clean up
   deleteRemoteProjectNow( mApi, mWorkspaceName, projectName );
