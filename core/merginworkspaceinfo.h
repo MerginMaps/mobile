@@ -34,6 +34,14 @@ class MerginWorkspaceInfo: public QObject
 
     QString role() const;
 
+    //! Sets plan and industry from the reply of the workspace service endpoint, an empty object clears them
+    void setServiceDetailsFromJson( const QJsonObject &docObj );
+
+    //! Plan and industry of the workspace, empty when not available
+    QString planName() const;
+    QString planAlias() const;
+    QString industry() const;
+
   signals:
     void workspaceInfoChanged();
 
@@ -41,6 +49,9 @@ class MerginWorkspaceInfo: public QObject
     double mDiskUsage = 0.0; // in Bytes
     double mStorageLimit = 0.0; // in Bytes
     QString mRole; // user's role in this workspace
+    QString mPlanName;
+    QString mPlanAlias;
+    QString mIndustry;
 };
 
 #endif // MERGINWORKSPACEINFO_H

@@ -113,6 +113,11 @@ class AppSettings: public QObject
     static const QString POSITION_PROVIDERS_GROUP;
     //! Settings group of the usage report (inside the app group)
     static const QString USAGE_REPORT_GROUP;
+    //! Keys inside USAGE_REPORT_GROUP, shared with UsageReportController so the opt-out clears all of them
+    static const QString USAGE_REPORT_DATA_KEY;
+    static const QString USAGE_REPORT_TELEMETRY_ID_KEY;
+    static const QString USAGE_REPORT_LAST_REPORTED_KEY;
+    static const QString USAGE_REPORT_PERIOD_STARTED_KEY;
 
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );

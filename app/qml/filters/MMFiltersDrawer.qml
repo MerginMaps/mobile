@@ -10,6 +10,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls
+import MMInput
 
 import "../components" as MMComponents
 
@@ -204,7 +205,7 @@ MMComponents.MMDrawer {
 
       onClicked: {
         __activeProject.filterController.processFilters(internal.filterValues)
-        __usageReportController.trackFeature( "filtering" )
+        UsageReportController.trackFeature( "filtering" )
         root.close()
       }
     }

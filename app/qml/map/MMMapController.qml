@@ -174,7 +174,7 @@ Item {
       case "measure": {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
-        __usageReportController.trackFeature( "map_measuring" )
+        UsageReportController.trackFeature( "map_measuring" )
         root.measureStarted()
         break
       }
@@ -1104,7 +1104,7 @@ Item {
 
         mapSettings: mapCanvas.mapSettings
 
-        onSketched: __usageReportController.trackFeature( "map_sketching" )
+        onSketched: UsageReportController.trackFeature( "map_sketching" )
       }
 
       MMHighlight {
@@ -1411,7 +1411,7 @@ Item {
     root.centeredToGPS = true
     internal.stakeoutTarget = featurepair
     state = "stakeout"
-    __usageReportController.trackFeature( "stakeout" )
+    UsageReportController.trackFeature( "stakeout" )
   }
 
   function measure() {

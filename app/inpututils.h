@@ -701,6 +701,23 @@ class InputUtils: public QObject
     //! Trivial constructor for QgsRectangle since the actual constructor is not invokable
     Q_INVOKABLE static QgsRectangle extentFromMinMax( double xMin, double yMin, double xMax, double yMax );
 
+    /**
+     * Returns brand of the external GNSS receiver, never the provider name itself (it can be set by the user).
+     * Returns "other" for unrecognised bluetooth devices and "unknown" when the brand can not be derived.
+     */
+    static QString externalProviderBrand( const QString &providerType, const QString &providerName );
+
+    /**
+     * Returns connection type of the provider ("mock", "bluetooth", "network", "trimble")
+     * or an empty string for the internal provider.
+     */
+    static QString externalConnectionType( const QString &providerId, const QString &providerType );
+
+    /**
+     * Returns rank of the project role, higher means more permissions.
+     */
+    static int projectRoleRank( const QString &role );
+
   public slots:
     void onQgsLogMessageReceived( const QString &message, const QString &tag, Qgis::MessageLevel level );
 

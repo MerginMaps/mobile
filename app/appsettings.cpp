@@ -15,6 +15,10 @@
 
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
 const QString AppSettings::USAGE_REPORT_GROUP = QStringLiteral( "inputApp/usageReport" );
+const QString AppSettings::USAGE_REPORT_DATA_KEY = QStringLiteral( "data" );
+const QString AppSettings::USAGE_REPORT_TELEMETRY_ID_KEY = QStringLiteral( "telemetry_id" );
+const QString AppSettings::USAGE_REPORT_LAST_REPORTED_KEY = QStringLiteral( "last_reported_at" );
+const QString AppSettings::USAGE_REPORT_PERIOD_STARTED_KEY = QStringLiteral( "period_started_at" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
@@ -419,10 +423,10 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   if ( !mUsageReportEnabled )
   {
     // Opt-out: clear accumulated data and identity, preserve consent_asked flag
-    settings.remove( QStringLiteral( "data" ) );
-    settings.remove( QStringLiteral( "telemetry_id" ) );
-    settings.remove( QStringLiteral( "last_reported_at" ) );
-    settings.remove( QStringLiteral( "period_started_at" ) );
+    settings.remove( USAGE_REPORT_DATA_KEY );
+    settings.remove( USAGE_REPORT_TELEMETRY_ID_KEY );
+    settings.remove( USAGE_REPORT_LAST_REPORTED_KEY );
+    settings.remove( USAGE_REPORT_PERIOD_STARTED_KEY );
     settings.setValue( QStringLiteral( "enabled" ), false );
   }
   else

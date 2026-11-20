@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 import QtQuick
+import MMInput
 
 import "../components" as MMComponents
 

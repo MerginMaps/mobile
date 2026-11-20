@@ -121,6 +121,9 @@ class  AttributeController : public QObject
     Q_INVOKABLE bool save();
     Q_INVOKABLE void acquireId();
 
+    //! Returns true if at least one remembered value (reuse last entered values) was prefilled in the current feature
+    Q_INVOKABLE bool rememberedValuesApplied() const;
+
     int tabCount() const;
 
     // for data modification use setForm*Value() functions
@@ -261,5 +264,7 @@ class  AttributeController : public QObject
 
     //! files copied from remembered values for the current feature, per form item: field value and absolute path
     QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
+
+    bool mRememberedValuesApplied = false;
 };
 #endif // ATTRIBUTECONTROLLER_H

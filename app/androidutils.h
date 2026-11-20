@@ -82,8 +82,6 @@ class AndroidUtils: public QObject
 
   signals:
     void imageSelected( QString imagePath, QString code );
-    void photoCaptured();
-    void photoFromGallery();
     void bluetoothEnabled( bool state );
     void notifyInfo( const QString &msg );
     void notifyError( const QString &msg );

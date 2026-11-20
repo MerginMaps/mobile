@@ -699,28 +699,13 @@ int main( int argc, char *argv[] )
     usageReportController.trackFeature( QStringLiteral( "created_project" ) );
   } );
 
-  // Photo captured vs attached
-  QObject::connect( &androidUtils, &AndroidUtils::photoCaptured, &lambdaContext, [&usageReportController]()
+  // Workspace switches, only a change from one workspace to another (not login, logout or start-up)
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&usageReportController, userInfo = ma->userInfo(), lastWorkspaceId = ma->userInfo()->activeWorkspaceId()]() mutable
   {
-    usageReportController.incrementCounter( QStringLiteral( "captured_images" ) );
-  } );
-  QObject::connect( &androidUtils, &AndroidUtils::photoFromGallery, &lambdaContext, [&usageReportController]()
-  {
-    usageReportController.incrementCounter( QStringLiteral( "attached_images" ) );
-  } );
-  QObject::connect( &iosUtils, &IosUtils::photoCaptured, &lambdaContext, [&usageReportController]()
-  {
-    usageReportController.incrementCounter( QStringLiteral( "captured_images" ) );
-  } );
-  QObject::connect( &iosUtils, &IosUtils::photoFromGallery, &lambdaContext, [&usageReportController]()
-  {
-    usageReportController.incrementCounter( QStringLiteral( "attached_images" ) );
-  } );
-
-  // Workspace switches
-  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&usageReportController]()
-  {
-    usageReportController.incrementCounter( QStringLiteral( "workspace_switches" ) );
+    const int workspaceId = userInfo->activeWorkspaceId();
+    if ( lastWorkspaceId >= 0 && workspaceId >= 0 && workspaceId != lastWorkspaceId )
+      usageReportController.incrementCounter( QStringLiteral( "workspace_switches" ) );
+    lastWorkspaceId = workspaceId;
   } );
 
   // External GPS provider
@@ -866,7 +851,6 @@ int main( int argc, char *argv[] )
   engine.rootContext()->setContextProperty( "__inputProjUtils", &inputProjUtils );
   engine.rootContext()->setContextProperty( "__inputHelp", &help );
   engine.rootContext()->setContextProperty( "__activeProject", &activeProject );
-  engine.rootContext()->setContextProperty( "__usageReportController", &usageReportController );
   engine.rootContext()->setContextProperty( "__syncManager", &syncManager );
   engine.rootContext()->setContextProperty( "__merginApi", ma.get() );
   engine.rootContext()->setContextProperty( "__merginProjectStatusModel", &mpsm );

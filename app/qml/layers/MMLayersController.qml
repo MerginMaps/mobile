@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "../inputs"
@@ -103,7 +104,7 @@ Item {
       }
 
       onSearchBarClicked: function() {
-        __usageReportController.trackFeature( "layers_search" )
+        UsageReportController.trackFeature( "layers_search" )
         let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }

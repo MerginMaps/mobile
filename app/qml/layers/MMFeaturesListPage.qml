@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../inputs"
 import "../components" as MMComponents
@@ -45,7 +46,7 @@ MMComponents.MMPage {
       onSearchTextChanged: {
         // track only when a new search starts, not on every text change
         if ( searchBar.searchText.length > 0 && featuresModel.searchExpression === "" )
-          __usageReportController.trackFeature( "features_search" )
+          UsageReportController.trackFeature( "features_search" )
         featuresModel.searchExpression = searchBar.searchText
       }
     }
