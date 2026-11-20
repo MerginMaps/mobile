@@ -3034,9 +3034,10 @@ void MerginApi::pushInfoReplyFinished()
         }
       }
 
+      // Empty diffName means full upload, since GEODIFF could not create a changeset
       if ( merginFile.diffName.isEmpty() )
       {
-        // full upload
+        // If we fail to create a push snapshot for a diffable file we can't continue
         if ( isFileDiffable( filePath ) && !createPushSnapshot( transaction, merginFile ) )
         {
           finishProjectSync( projectFullName, false );
