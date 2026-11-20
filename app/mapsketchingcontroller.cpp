@@ -124,6 +124,8 @@ void MapSketchingController::finishDigitizing()
     mLayer->beginEditCommand( QStringLiteral( "Add map sketches" ) );
     mLayer->addFeature( feature );
     mLayer->endEditCommand();
+
+    emit sketched();
   }
 }
 

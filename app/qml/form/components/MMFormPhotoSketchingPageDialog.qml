@@ -78,6 +78,9 @@ Dialog {
       bgndColor: __style.grassColor
 
       onClicked: {
+        // canUndo is true only when something was drawn since the last save
+        if ( root.controller.canUndo )
+          UsageReportController.trackFeature( "photo_sketching" )
         root.close()
         root.controller.backupSketches()
       }

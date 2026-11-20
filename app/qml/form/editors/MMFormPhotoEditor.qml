@@ -255,6 +255,8 @@ MMFormPhotoViewer {
 
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
+    property bool cameraRequested: false // whether the last image was requested from the camera or the gallery, for the usage report
+
     //
     // Sets path or url of the assigned photo to the resolvedImageSource.
     //  - resolvedImageSource is the actual path on the device or a remote url,
@@ -289,6 +291,7 @@ MMFormPhotoViewer {
      */
     function capturePhoto() {
       forceActiveFocus()
+      cameraRequested = true
       updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
@@ -320,6 +323,7 @@ MMFormPhotoViewer {
      */
     function chooseFromGallery() {
       forceActiveFocus()
+      cameraRequested = false
       updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldItemId )
@@ -411,6 +415,7 @@ MMFormPhotoViewer {
         const newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
+        UsageReportController.incrementCounter( cameraRequested ? "captured_images" : "attached_images" )
         if ( photoSketchingLoader.active ) {
           sketchingController.prepareController()
         }

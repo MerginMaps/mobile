@@ -1247,3 +1247,132 @@ void TestUtilsFunctions::testIsValidUrl()
   QVERIFY( !InputUtils::isValidUrl( "http://exa mple.com" ) );
   QVERIFY( !InputUtils::isValidUrl( "" ) ); // empty url is considered valid by QUrl but not by us
 }
+
+void TestUtilsFunctions::testExternalProviderBrand()
+{
+  const QString bt = QStringLiteral( "external_bt" );
+  const QString ip = QStringLiteral( "external_ip" );
+
+  // provider types without a brand
+  QCOMPARE( InputUtils::externalProviderBrand( QStringLiteral( "internal" ), QStringLiteral( "Leica GS18" ) ), QStringLiteral( "unknown" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( QString(), QStringLiteral( "Leica GS18" ) ), QStringLiteral( "unknown" ) );
+
+  // trimble provider is always Trimble, whatever the name
+  QCOMPARE( InputUtils::externalProviderBrand( QStringLiteral( "external_trimble" ), QStringLiteral( "My receiver" ) ), QStringLiteral( "Trimble" ) );
+
+  // brand name anywhere in the name, case-insensitive
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "LEICA GS18" ) ), QStringLiteral( "Leica" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Reach RS2" ) ), QStringLiteral( "Emlid" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "emlid rx" ) ), QStringLiteral( "Emlid" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Trimble R12" ) ), QStringLiteral( "Trimble" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Hi-Target V200" ) ), QStringLiteral( "Hi-Target" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "SXBlue II" ) ), QStringLiteral( "SXblue" ) );
+
+  // network provider name is a user alias, it is mapped the same way
+  QCOMPARE( InputUtils::externalProviderBrand( ip, QStringLiteral( "our leica base" ) ), QStringLiteral( "Leica" ) );
+
+  // brand takes precedence over the model pattern of another brand
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Leica RX2" ) ), QStringLiteral( "Leica" ) );
+
+  // model-only names
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "RX2" ) ), QStringLiteral( "Emlid" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "RS4 Pro" ) ), QStringLiteral( "Emlid" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "GS18" ) ), QStringLiteral( "Leica" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "SP80" ) ), QStringLiteral( "Spectra Geospatial" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "i80" ) ), QStringLiteral( "CHC Navigation" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "S800" ) ), QStringLiteral( "Stonex" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Zenith 40" ) ), QStringLiteral( "GeoMax" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Arrow Gold" ) ), QStringLiteral( "Eos Positioning" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "ZED-F9P" ) ), QStringLiteral( "u-blox" ) );
+
+  // brand and model patterns need a border, so they do not match inside other words
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Southampton tracker" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "XRX2" ) ), QStringLiteral( "other" ) );
+
+  // names that collide with phones and headphones are deliberately not mapped
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Galaxy S9" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "M2" ) ), QStringLiteral( "other" ) );
+
+  // unrecognised devices, the name itself is never returned
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "JBL Flip 5" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "AirPods Pro" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QString() ), QStringLiteral( "other" ) );
+}
+
+void TestUtilsFunctions::testExternalProviderBrandHasNoPersonalData()
+{
+  // The provider name can be set by the user (network provider alias, bluetooth device name),
+  // so it can contain personal data. Only a fixed brand value may ever be returned, never a part of the name.
+  const QSet<QString> allowedValues
+  {
+    QStringLiteral( "Emlid" ), QStringLiteral( "Leica" ), QStringLiteral( "Trimble" ), QStringLiteral( "Topcon" ),
+    QStringLiteral( "Stonex" ), QStringLiteral( "Spectra Geospatial" ), QStringLiteral( "CHC Navigation" ),
+    QStringLiteral( "GeoMax" ), QStringLiteral( "Hi-Target" ), QStringLiteral( "South" ), QStringLiteral( "Nordalp" ),
+    QStringLiteral( "Septentrio" ), QStringLiteral( "Hemisphere" ), QStringLiteral( "SXblue" ),
+    QStringLiteral( "Eos Positioning" ), QStringLiteral( "Bad Elf" ), QStringLiteral( "Juniper Systems" ),
+    QStringLiteral( "Garmin" ), QStringLiteral( "ArduSimple" ), QStringLiteral( "SparkFun" ), QStringLiteral( "u-blox" ),
+    QStringLiteral( "Unicore" ), QStringLiteral( "Tersus" ), QStringLiteral( "ComNav" ), QStringLiteral( "UniStrong" ),
+    QStringLiteral( "Javad" ), QStringLiteral( "Carlson" ), QStringLiteral( "Altus" ), QStringLiteral( "FJD" ),
+    QStringLiteral( "other" ), QStringLiteral( "unknown" )
+  };
+
+  const QStringList providerTypes
+  {
+    QStringLiteral( "external_bt" ), QStringLiteral( "external_ip" ), QStringLiteral( "external_trimble" ), QStringLiteral( "internal" )
+  };
+
+  // names with personal data, with and without a recognisable receiver
+  const QStringList names
+  {
+    QStringLiteral( "John Smith's Leica GS18" ),
+    QStringLiteral( "jane.doe@example.com RX2" ),
+    QStringLiteral( "Peter's iPhone" ),
+    QStringLiteral( "Farm Oakwood base 192.168.1.10:9001" ),
+    QStringLiteral( "+44 7700 900123" ),
+    QStringLiteral( "Maria Garcia" ),
+    QStringLiteral( "AA:BB:CC:DD:EE:FF" ),
+    QStringLiteral( "Survey team 3 - Emlid Reach RS2 (Tom)" ),
+    QString()
+  };
+
+  for ( const QString &type : providerTypes )
+  {
+    for ( const QString &name : names )
+    {
+      const QString brand = InputUtils::externalProviderBrand( type, name );
+      if ( !allowedValues.contains( brand ) )
+        QFAIL( qPrintable( QStringLiteral( "Unexpected value \"%1\" for type %2 and name \"%3\"" ).arg( brand, type, name ) ) );
+    }
+  }
+
+  // a recognised receiver gives only the brand, the rest of the name is dropped
+  QCOMPARE( InputUtils::externalProviderBrand( QStringLiteral( "external_bt" ), QStringLiteral( "John Smith's Leica GS18" ) ), QStringLiteral( "Leica" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( QStringLiteral( "external_ip" ), QStringLiteral( "jane.doe@example.com RX2" ) ), QStringLiteral( "Emlid" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( QStringLiteral( "external_bt" ), QStringLiteral( "Peter's iPhone" ) ), QStringLiteral( "other" ) );
+}
+
+void TestUtilsFunctions::testExternalConnectionType()
+{
+  // simulated provider has type "internal", it is detected by id
+  QCOMPARE( InputUtils::externalConnectionType( QStringLiteral( "simulated" ), QStringLiteral( "internal" ) ), QStringLiteral( "mock" ) );
+  QCOMPARE( InputUtils::externalConnectionType( QStringLiteral( "AA:BB:CC:DD:EE:FF" ), QStringLiteral( "external_bt" ) ), QStringLiteral( "bluetooth" ) );
+  QCOMPARE( InputUtils::externalConnectionType( QStringLiteral( "192.168.1.10:9001" ), QStringLiteral( "external_ip" ) ), QStringLiteral( "network" ) );
+  QCOMPARE( InputUtils::externalConnectionType( QStringLiteral( "trimble" ), QStringLiteral( "external_trimble" ) ), QStringLiteral( "trimble" ) );
+
+  // internal provider is not external
+  QVERIFY( InputUtils::externalConnectionType( QStringLiteral( "devicegps" ), QStringLiteral( "internal" ) ).isEmpty() );
+}
+
+void TestUtilsFunctions::testProjectRoleRank()
+{
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "owner" ) ) > InputUtils::projectRoleRank( QStringLiteral( "admin" ) ) );
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "admin" ) ) > InputUtils::projectRoleRank( QStringLiteral( "writer" ) ) );
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "writer" ) ) > InputUtils::projectRoleRank( QStringLiteral( "editor" ) ) );
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "editor" ) ) > InputUtils::projectRoleRank( QStringLiteral( "reader" ) ) );
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "reader" ) ) > InputUtils::projectRoleRank( QStringLiteral( "guest" ) ) );
+  QVERIFY( InputUtils::projectRoleRank( QStringLiteral( "guest" ) ) > 0 );
+
+  // unknown and empty roles rank lowest, so any real role replaces them
+  QCOMPARE( InputUtils::projectRoleRank( QString() ), 0 );
+  QCOMPARE( InputUtils::projectRoleRank( QStringLiteral( "superuser" ) ), 0 );
+}

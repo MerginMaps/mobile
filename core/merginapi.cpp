@@ -40,6 +40,8 @@ const QString MerginApi::sMetadataFolder = QStringLiteral( ".mergin" );
 const QString MerginApi::sMerginConfigFile = QStringLiteral( "mergin-config.json" );
 const QString MerginApi::sDefaultApiRoot = QStringLiteral( "https://app.merginmaps.com" );
 const QString MerginApi::sDefaultReportLogUrl =  QStringLiteral( "https://api.merginmaps.com/logs" );
+const QString MerginApi::USAGE_REPORT_URL = QStringLiteral( "https://api.merginmaps.com/mobile/usage-statistics" );
+const QString MerginApi::CONNECTIVITY_CHECK_URL = QStringLiteral( "https://isonline.merginmaps.com/generate_204" );
 const QSet<QString> MerginApi::sIgnoreExtensions = QSet<QString>() << "gpkg-shm" << "gpkg-wal" << "qgs~" << "qgz~" << "pyc" << "swap";
 const QSet<QString> MerginApi::sIgnoreImageExtensions = QSet<QString>() << "jpg" << "jpeg" << "png";
 const QSet<QString> MerginApi::sIgnoreFiles = QSet<QString>() << "mergin.json" << ".DS_Store";
@@ -170,6 +172,52 @@ MerginWorkspaceInfo *MerginApi::workspaceInfo() const
 MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 {
   return mSubscriptionInfo;
+}
+
+void MerginApi::checkInternetConnection()
+{
+  // not the Mergin server, so no default request: no authorization and no device id
+  QNetworkRequest request{ QUrl( CONNECTIVITY_CHECK_URL ) };
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+  QNetworkReply *reply = mManager->head( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::checkInternetConnectionReplyFinished );
+}
+
+void MerginApi::checkInternetConnectionReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  const int httpCode = r->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt();
+  emit internetConnectionChecked( r->error() == QNetworkReply::NoError && httpCode == 204 );
+
+  r->deleteLater();
+}
+
+void MerginApi::sendUsageReport( const QJsonObject &report )
+{
+  // the report is anonymous, so no default request: no authorization and no device id
+  QNetworkRequest request{ QUrl( USAGE_REPORT_URL ) };
+  request.setHeader( QNetworkRequest::ContentTypeHeader, QStringLiteral( "application/json" ) );
+  request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );
+
+  QNetworkReply *reply = mManager->post( request, QJsonDocument( report ).toJson( QJsonDocument::Compact ) );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::sendUsageReportReplyFinished );
+}
+
+void MerginApi::sendUsageReportReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  if ( r->error() != QNetworkReply::NoError )
+  {
+    CoreUtils::log( "Usage report", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
+  }
+  emit usageReportSent( r->error() == QNetworkReply::NoError );
+
+  r->deleteLater();
 }
 
 QString MerginApi::listProjects( const QString &searchExpression, const QString &flag, const int page )
@@ -1222,6 +1270,59 @@ void MerginApi::getServiceInfoReplyFinished()
     {
       emit networkErrorOccurred( serverMsg, QStringLiteral( "Mergin API error: getServiceInfo" ) );
     }
+  }
+
+  // the plan and industry come from a separate endpoint, requested even when this one failed
+  getWorkspaceServiceDetails();
+
+  r->deleteLater();
+}
+
+void MerginApi::getWorkspaceServiceDetails()
+{
+  // reset, so the plan of the previous workspace is not kept
+  mWorkspaceInfo->setServiceDetailsFromJson( QJsonObject() );
+
+  const int workspaceId = mUserInfo->activeWorkspaceId();
+  if ( mServerType != MerginServerType::SAAS || workspaceId < 0 )
+  {
+    return;
+  }
+
+  if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
+  {
+    return;
+  }
+
+  QNetworkRequest request = getDefaultRequest();
+  QUrl url( mApiRoot + QStringLiteral( "/v2/workspaces/%1/service" ).arg( workspaceId ) );
+  request.setUrl( url );
+  request.setAttribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceId ), workspaceId );
+
+  QNetworkReply *reply = mManager->get( request );
+  connect( reply, &QNetworkReply::finished, this, &MerginApi::getWorkspaceServiceDetailsReplyFinished );
+
+  CoreUtils::log( "Workspace service", QStringLiteral( "Requesting workspace service details: " ) + url.toString() );
+}
+
+void MerginApi::getWorkspaceServiceDetailsReplyFinished()
+{
+  QNetworkReply *r = qobject_cast<QNetworkReply *>( sender() );
+  Q_ASSERT( r );
+
+  // only used for the usage report, so a failure is just logged and the values stay empty
+  if ( r->error() == QNetworkReply::NoError )
+  {
+    // ignore the reply when the workspace was switched in the meantime
+    const int workspaceId = r->request().attribute( static_cast<QNetworkRequest::Attribute>( AttrWorkspaceId ) ).toInt();
+    if ( workspaceId == mUserInfo->activeWorkspaceId() )
+    {
+      mWorkspaceInfo->setServiceDetailsFromJson( QJsonDocument::fromJson( r->readAll() ).object() );
+    }
+  }
+  else
+  {
+    CoreUtils::log( "Workspace service", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
   }
 
   r->deleteLater();
