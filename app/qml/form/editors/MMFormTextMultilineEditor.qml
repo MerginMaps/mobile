@@ -89,6 +89,50 @@ MMPrivateComponents.MMBaseInput {
 
     readOnly: root.editState !== "enabled"
 
+    // same as in MMBaseSingleLineInput, native selection in read-only fields is broken (QTBUG-141929),
+    // so read-only fields don't take focus, have no native selection and copy the whole value on long press instead
+    activeFocusOnPress: !readOnly
+    inputMethodHints: readOnly ? Qt.ImhNoTextHandles : Qt.ImhNone
+
+    // same as in MMBaseSingleLineInput, focus the field before Android's native long press comes,
+    // so it can select the word, and restore the selection that TextArea's held-back press clears on release
+    property bool androidLongPressed: false
+
+    onPressed: androidLongPressed = false
+
+    onReleased: {
+      if ( androidLongPressed && selectedText !== "" ) {
+        const start = selectionStart
+        const end = selectionEnd
+        Qt.callLater( () => select( start, end ) )
+      }
+      androidLongPressed = false
+    }
+
+    TapHandler {
+      enabled: __androidUtils.isAndroid && !textArea.readOnly
+      longPressThreshold: 0.3 // Android's native long press comes after 0.4 s
+
+      onLongPressed: {
+        textArea.forceActiveFocus()
+        textArea.androidLongPressed = true
+      }
+    }
+
+    // TapHandler cancels the long press once the finger moves (e.g. scrolling the form), TextArea's pressAndHold does not
+    TapHandler {
+      enabled: textArea.readOnly
+
+      onLongPressed: {
+        if ( textArea.text.trim() === "" ) return
+
+        textArea.selectAll()
+        textArea.copy()
+        textArea.deselect()
+        __notificationModel.addSuccess( qsTr( "Copied to clipboard" ) )
+      }
+    }
+
     background: Rectangle {
 
       color: {
