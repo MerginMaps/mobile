@@ -58,7 +58,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField {
-    text: _fieldHasMixedValues ? "" : Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ' ' + internal.suffix
+    text: _fieldHasMixedValues ? "" : Number( slider.value ).toFixed( internal.precision ).toLocaleString( root.locale ) + ( internal.suffix ? ' ' + internal.suffix : '' )
     placeholderText: _fieldHasMixedValues ? _fieldValue : ""
     readOnly: true
   }

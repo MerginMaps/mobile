@@ -69,7 +69,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField.readOnly: true
-  textField.activeFocusOnPress: false // taking focus here crashed the app on iOS, see #4561
 
   onTextClicked: root.openCalendar()
   onRightContentClicked: root.newDateSelected( new Date() )

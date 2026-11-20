@@ -46,6 +46,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
   readOnly: _fieldFormIsReadOnly || !_fieldIsEditable
   shouldShowValidation: !_fieldFormIsReadOnly
 
+  textFieldInputMethodHints: Qt.ImhFormattedNumbersOnly
+
   errorMsg: _fieldErrorMessage
   warningMsg: _fieldWarningMessage
 
@@ -85,8 +87,6 @@ MMPrivateComponents.MMBaseSingleLineInput {
 
     // AlignHCenter with optional suffix
     leftPadding: placeholderText !== "" ? 0 : Math.max( 0, ( textField.width / 2 - textField.contentWidth / 2 ) - ( internal.suffix ? suffixText.width / 2 : 0 ) )
-
-    inputMethodHints: Qt.ImhFormattedNumbersOnly
 
     background: Rectangle {
       color: "transparent"

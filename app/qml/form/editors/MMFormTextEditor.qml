@@ -78,12 +78,8 @@ MMPrivateComponents.MMBaseSingleLineInput {
     root.editorValueChanged( val, val === "" )
   }
 
-  Component.onCompleted: {
-    // Use numerical keyboard for number fields configured as texts
-    if ( root._field.isNumeric ) {
-      textField.inputMethodHints |= Qt.ImhFormattedNumbersOnly
-    }
-  }
+  // Use numerical keyboard for number fields configured as texts
+  textFieldInputMethodHints: root._field.isNumeric ? Qt.ImhFormattedNumbersOnly : Qt.ImhNone
 
   QtObject {
     id: internal
