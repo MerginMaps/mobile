@@ -205,16 +205,36 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
     positionDataHasChanged = true;
   }
 
-  const double newHorizontalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) ?
-                                       localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy ) : std::numeric_limits<double>::quiet_NaN();
+  double newHorizontalAccuracy = std::numeric_limits<double>::quiet_NaN();
+#ifdef Q_OS_IOS
+  if ( !transformedPosition.isMock && localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) )
+  {
+    newHorizontalAccuracy = localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy );
+  }
+#else
+  if ( localPosition.hasAttribute( QGeoPositionInfo::HorizontalAccuracy ) )
+  {
+    newHorizontalAccuracy = localPosition.attribute( QGeoPositionInfo::HorizontalAccuracy );
+  }
+#endif
   if ( !qgsDoubleNear( newHorizontalAccuracy, mLastPosition.hacc ) )
   {
     mLastPosition.hacc = newHorizontalAccuracy;
     positionDataHasChanged = true;
   }
 
-  const double newVerticalAccuracy = localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) ?
-                                     localPosition.attribute( QGeoPositionInfo::VerticalAccuracy ) : std::numeric_limits<double>::quiet_NaN();
+  double newVerticalAccuracy = std::numeric_limits<double>::quiet_NaN();;
+#ifdef Q_OS_IOS
+  if ( !transformedPosition.isMock && localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) )
+  {
+    newVerticalAccuracy = localPosition.attribute( QGeoPositionInfo::VerticalAccuracy );
+  }
+#else
+  if ( localPosition.hasAttribute( QGeoPositionInfo::VerticalAccuracy ) )
+  {
+    newVerticalAccuracy = localPosition.attribute( QGeoPositionInfo::VerticalAccuracy );
+  }
+#endif
   if ( !qgsDoubleNear( newVerticalAccuracy, mLastPosition.vacc ) )
   {
     mLastPosition.vacc = newVerticalAccuracy;
@@ -228,7 +248,9 @@ void InternalPositionProvider::parsePositionUpdate( const QGeoPositionInfo &posi
   }
 
   if ( positionDataHasChanged )
+  {
     emit positionChanged( mLastPosition );
+  }
 }
 
 void InternalPositionProvider::parseVisibleSatellitesUpdate( const QList<QGeoSatelliteInfo> &satellites )
