@@ -132,6 +132,8 @@ class TestMerginApi: public QObject
     void testDiffUpdateBasic();
     void testDiffUpdateWithRebase();
     void testDiffUpdateWithRebaseFailed();
+    void testReloadNeededAfterCopyAndApplyDiff();
+    void testReloadNeededAfterRemoteDelete();
     void testUpdateWithDiffs();
     void testUpdateWithMissedVersion();
     void testMigrateProject();
@@ -152,6 +154,13 @@ class TestMerginApi: public QObject
     void testMerginConfigFromFile();
     void testHasLocalChangesWithSelectiveSyncEnabled();
     void testHasLocalProjectChanges();
+    void testSyncWhileReadingFromGpkg();
+    void testSyncWhileWalFilesExist();
+    void testSyncWhileWalFilesExistWithConflict();
+    void testSyncWhileWalFilesExistWithConflictedCopy();
+    void testPushWithChangesOnlyInWal();
+    void testPushAddedGpkgWithChangesOnlyInWal();
+    void testPushFullUploadWithChangesOnlyInWal();
     void testOfflineCache();
     void testRegisterAndDelete();
     void testCreateWorkspace();

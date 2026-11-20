@@ -9,11 +9,14 @@
 
 #include "geodiffutils.h"
 
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTemporaryFile>
 #include <QUuid>
+
+#include <filesystem>
 
 #include <geodiff.h>
 #include "coreutils.h"
@@ -186,4 +189,92 @@ void GeodiffUtils::log( GEODIFF_LoggerLevel level, const char *msg )
     default: break;
   }
   CoreUtils::log( prefix, msg );
+}
+
+/**
+ * SQLite's backup copies page 1 of the source as is, so a copy of a database in WAL mode keeps the WAL marker
+ * (header bytes 18-19 == 2) although the copy itself was written in rollback mode. Mark it back as rollback mode,
+ * the same way "PRAGMA journal_mode = DELETE" does, so it can be opened without creating -wal/-shm files
+ * (e.g. in read-only locations) and is uploaded just like any other gpkg.
+ * Only safe on a file nobody has open and without -wal content, which holds for a freshly made copy.
+ *
+ * This should be removed once GEODIFF_makeCopySqlite is updated to leave the gpkg in rollback mode.
+ */
+static void clearWalMarker( const QString &path )
+{
+  if ( QFile::exists( path + QStringLiteral( "-wal" ) ) || QFile::exists( path + QStringLiteral( "-shm" ) ) )
+    return;
+
+  QFile f( path );
+  if ( !f.open( QIODevice::ReadWrite ) )
+  {
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to open %1 to clear the WAL marker" ).arg( path ) );
+    return;
+  }
+
+  const QByteArray header = f.read( 20 );
+  const QByteArray magic( "SQLite format 3\0", 16 );
+  if ( header.size() != 20 || !header.startsWith( magic ) || header.at( 18 ) != 2 || header.at( 19 ) != 2 )
+    return;  // not a sqlite database marked as WAL - leave it untouched
+
+  if ( !f.seek( 18 ) || f.write( QByteArray( 2, 1 ) ) != 2 )
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to clear the WAL marker of %1" ).arg( path ) );
+}
+
+bool GeodiffUtils::copyWalAware( const QString &src, const QString &dst )
+{
+  if ( src.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+  {
+    const int res = GEODIFF_makeCopySqlite( GeodiffContext::instance().handle(), src.toUtf8().constData(), dst.toUtf8().constData() );
+    if ( res != GEODIFF_SUCCESS )
+      return false;
+
+    clearWalMarker( dst );
+    return true;
+  }
+  else
+  {
+    return QFile::copy( src, dst );
+  }
+}
+
+static bool removeWalFiles( const QString &path )
+{
+  if ( !path.endsWith( QLatin1String( ".gpkg" ), Qt::CaseInsensitive ) )
+    return true;
+
+  for ( const QString &suffix : { QStringLiteral( "-wal" ), QStringLiteral( "-shm" ) } )
+  {
+    const QString sidecar = path + suffix;
+    if ( QFile::exists( sidecar ) && !QFile::remove( sidecar ) )
+    {
+      CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to remove %1" ).arg( sidecar ) );
+      return false;
+    }
+  }
+  return true;
+}
+
+bool GeodiffUtils::removeWalAware( const QString &path )
+{
+  if ( !removeWalFiles( path ) )
+    return false;
+
+  return QFile::remove( path );
+}
+
+bool GeodiffUtils::replaceWalAware( const QString &src, const QString &dst )
+{
+  if ( !removeWalFiles( dst ) )
+    return false;
+
+  // unlike QFile::rename, std::filesystem::rename replaces an existing destination
+  std::error_code ec;
+  std::filesystem::rename( QFileInfo( src ).filesystemAbsoluteFilePath(), QFileInfo( dst ).filesystemAbsoluteFilePath(), ec );
+  if ( ec )
+  {
+    CoreUtils::log( QStringLiteral( "WAL" ), QStringLiteral( "Failed to replace %1: %2" ).arg( dst, QString::fromStdString( ec.message() ) ) );
+    return false;
+  }
+  return true;
 }

@@ -24,6 +24,7 @@ class TestProjectChecksumCache : public QObject
     void cleanup();
 
     void testFilesCheckum();
+    void testGpkgWalChecksum();
 };
 
 #endif // TESTPROJECTCHECKSUMCACHE_H
