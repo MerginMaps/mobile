@@ -32,14 +32,6 @@ import "./filters"
 ApplicationWindow {
   id: window
 
-  // action to run after the draft is discarded, and the layer it applies to
-  QtObject {
-    id: pendingDraftAction
-
-    property string action: "" // "record" or "addFeature"
-    property var layer: null // layer for "addFeature"
-  }
-
   visible: true
   x:  __appwindowx
   y:  __appwindowy
@@ -1341,6 +1333,14 @@ ApplicationWindow {
     interval: 1000
 
     onTriggered: AppSettings.windowPosition = [window.x, window.y, window.width, window.height]
+  }
+
+  // action to run after the draft is discarded, and the layer it applies to
+  QtObject {
+    id: pendingDraftAction
+
+    property string action: "" // "record" or "addFeature"
+    property var layer: null // layer for "addFeature"
   }
 
   function backButtonPressed() {
