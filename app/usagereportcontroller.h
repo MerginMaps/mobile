@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <QElapsedTimer>
+#include <QJsonObject>
 #include <QPointer>
 #include <QTimer>
 #include <QVariantMap>
@@ -42,9 +43,8 @@ class UsageReportController : public QObject
      */
     static UsageReportController *create( QQmlEngine *qmlEngine, QJSEngine *jsEngine );
 
-    Q_INVOKABLE void trackFeature( const QString &key );
-
   public slots:
+    void trackFeature( const QString &key );
     void incrementCounter( const QString &key, int amount = 1 );
 
     //! Tracks external GNSS usage, does nothing for the internal provider
@@ -74,6 +74,13 @@ class UsageReportController : public QObject
     void setData( const QString &key, const QVariant &value );
     void trySubmitSnapshot();
     void submitSnapshot( bool force ); // Temporary: remove force param when removing forceSubmitSnapshot
+
+    /**
+     * Returns the snapshot body to send, creates the telemetry id if it does not exist yet.
+     * \a sentData is filled with the stored data included in the snapshot, to reset it once the snapshot is sent.
+     */
+    QJsonObject buildSnapshot( QVariantMap &sentData );
+
     void checkConnectivity();
     bool isEnabled() const;
 
@@ -91,6 +98,8 @@ class UsageReportController : public QObject
     QVariantMap mSentData; // data of the snapshot in flight, to reset it once the snapshot is sent
 
     inline static UsageReportController *sInstance = nullptr;
+
+    friend class TestUsageReportController;
 };
 
 #endif // USAGEREPORTCONTROLLER_H

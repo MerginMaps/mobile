@@ -19,14 +19,16 @@ const QString AppSettings::USAGE_REPORT_DATA_KEY = QStringLiteral( "data" );
 const QString AppSettings::USAGE_REPORT_TELEMETRY_ID_KEY = QStringLiteral( "telemetry_id" );
 const QString AppSettings::USAGE_REPORT_LAST_REPORTED_KEY = QStringLiteral( "last_reported_at" );
 const QString AppSettings::USAGE_REPORT_PERIOD_STARTED_KEY = QStringLiteral( "period_started_at" );
+const QString AppSettings::USAGE_REPORT_ENABLED_KEY = QStringLiteral( "enabled" );
+const QString AppSettings::USAGE_REPORT_CONSENT_ASKED_KEY = QStringLiteral( "consent_asked" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
   {
     QSettings settings;
     settings.beginGroup( USAGE_REPORT_GROUP );
-    mUsageReportEnabled = settings.value( QStringLiteral( "enabled" ), false ).toBool();
-    mUsageReportConsentAsked = settings.value( QStringLiteral( "consent_asked" ), false ).toBool();
+    mUsageReportEnabled = settings.value( USAGE_REPORT_ENABLED_KEY, false ).toBool();
+    mUsageReportConsentAsked = settings.value( USAGE_REPORT_CONSENT_ASKED_KEY, false ).toBool();
     settings.endGroup();
   }
 
@@ -422,16 +424,16 @@ void AppSettings::setUsageReportEnabled( bool enabled )
   settings.beginGroup( USAGE_REPORT_GROUP );
   if ( !mUsageReportEnabled )
   {
-    // Opt-out: clear accumulated data and identity, preserve consent_asked flag
+    // Opt-out: clear accumulated data and identity, preserve the consent asked flag
     settings.remove( USAGE_REPORT_DATA_KEY );
     settings.remove( USAGE_REPORT_TELEMETRY_ID_KEY );
     settings.remove( USAGE_REPORT_LAST_REPORTED_KEY );
     settings.remove( USAGE_REPORT_PERIOD_STARTED_KEY );
-    settings.setValue( QStringLiteral( "enabled" ), false );
+    settings.setValue( USAGE_REPORT_ENABLED_KEY, false );
   }
   else
   {
-    settings.setValue( QStringLiteral( "enabled" ), true );
+    settings.setValue( USAGE_REPORT_ENABLED_KEY, true );
   }
   settings.endGroup();
 
@@ -452,7 +454,7 @@ void AppSettings::setUsageReportConsentAsked( bool asked )
 
   QSettings settings;
   settings.beginGroup( USAGE_REPORT_GROUP );
-  settings.setValue( QStringLiteral( "consent_asked" ), asked );
+  settings.setValue( USAGE_REPORT_CONSENT_ASKED_KEY, asked );
   settings.endGroup();
 
   emit usageReportConsentAskedChanged( mUsageReportConsentAsked );

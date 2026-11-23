@@ -32,6 +32,7 @@
 #include "testprojectchecksumcache.h"
 #include "testmultieditmanager.h"
 #include "testfiltercontroller.h"
+#include "testusagereportcontroller.h"
 
 InputTests::InputTests() = default;
 
@@ -60,8 +61,9 @@ bool InputTests::testingRequested() const
   return !mTestRequested.isEmpty();
 }
 
-void InputTests::init( MerginApi *api, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings )
+void InputTests::init( MerginApi *api, InputUtils *utils, VariablesManager *varManager, PositionKit *kit, AppSettings *settings, UsageReportController *usageReportController )
 {
+  mUsageReportController = usageReportController;
   mApi = api;
   mInputUtils = utils;
   mVariablesManager = varManager;
@@ -216,6 +218,11 @@ int InputTests::runTest() const
   {
     TestFilterController filterControllerTest;
     nFailed = QTest::qExec( &filterControllerTest, mTestArgs );
+  }
+  else if ( mTestRequested == "--testUsageReportController" )
+  {
+    TestUsageReportController usageReportControllerTest( mUsageReportController, mAppSettings );
+    nFailed = QTest::qExec( &usageReportControllerTest, mTestArgs );
   }
   else
   {

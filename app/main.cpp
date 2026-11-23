@@ -815,7 +815,7 @@ int main( int argc, char *argv[] )
   if ( tests.testingRequested() )
   {
     tests.initTestDeclarative();
-    tests.init( ma.get(), &iu, vm.get(), pk, as );
+    tests.init( ma.get(), &iu, vm.get(), pk, as, &usageReportController );
     return tests.runTest();
   }
 #endif

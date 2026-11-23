@@ -266,6 +266,20 @@ void UsageReportController::submitSnapshot( bool force )
       return;
   }
 
+  QVariantMap sentData;
+  const QJsonObject body = buildSnapshot( sentData );
+
+  mSnapshotInFlight = true;
+  mSentData = sentData;
+  mMerginApi->sendUsageReport( body );
+}
+
+QJsonObject UsageReportController::buildSnapshot( QVariantMap &sentData )
+{
+  QSettings settings;
+  const QDateTime lastReported = settings.value( usageReportKey( AppSettings::USAGE_REPORT_LAST_REPORTED_KEY ) ).toDateTime();
+  const QDateTime now = QDateTime::currentDateTimeUtc();
+
   // Ensure telemetry UUID exists (separate from the device UUID)
   QString telemetryId = settings.value( usageReportKey( AppSettings::USAGE_REPORT_TELEMETRY_ID_KEY ) ).toString();
   if ( telemetryId.isEmpty() )
@@ -285,16 +299,8 @@ void UsageReportController::submitSnapshot( bool force )
   properties.insert( QStringLiteral( "os_version" ), QSysInfo::productVersion() );
   properties.insert( QStringLiteral( "project_count" ), mLocalProjectsManager->projects().count() );
 
-  // External provider count
-  int externalProviderCount = 0;
-  const QVariantList providers = mAppSettings->savedPositionProviders();
-  for ( const QVariant &v : providers )
-  {
-    const QStringList p = v.toStringList();
-    if ( p.size() >= 3 && p[2] != QLatin1String( "internal" ) && p[2] != QLatin1String( "simulated" ) )
-      externalProviderCount++;
-  }
-  properties.insert( QStringLiteral( "num_external_providers" ), externalProviderCount );
+  // Only external providers are saved, the internal ones are always available
+  properties.insert( QStringLiteral( "num_external_providers" ), mAppSettings->savedPositionProviders().count() );
 
   // Server info
   const MerginServerType::ServerType serverType = mMerginApi->serverType();
@@ -322,7 +328,7 @@ void UsageReportController::submitSnapshot( bool force )
   // Merge accumulated dynamic data (overwrites defaults with actual values)
   settings.beginGroup( usageReportKey( AppSettings::USAGE_REPORT_DATA_KEY ) );
   const QStringList keys = settings.childKeys();
-  QVariantMap sentData;
+  sentData.clear();
   for ( const QString &key : keys )
   {
     const QVariant stored = settings.value( key );
@@ -349,16 +355,12 @@ void UsageReportController::submitSnapshot( bool force )
   // Last reported at
   properties.insert( QStringLiteral( "last_reported_at" ), lastReported.isValid() ? lastReported.toString( Qt::ISODate ) : QString() );
 
-  const QJsonObject body
+  return QJsonObject
   {
     { QStringLiteral( "device_id" ), telemetryId },
     { QStringLiteral( "timestamp" ), now.toString( Qt::ISODate ) },
     { QStringLiteral( "properties" ), QJsonObject::fromVariantMap( properties ) }
   };
-
-  mSnapshotInFlight = true;
-  mSentData = sentData;
-  mMerginApi->sendUsageReport( body );
 }
 
 void UsageReportController::onUsageReportSent( bool success )

@@ -118,6 +118,8 @@ class AppSettings: public QObject
     static const QString USAGE_REPORT_TELEMETRY_ID_KEY;
     static const QString USAGE_REPORT_LAST_REPORTED_KEY;
     static const QString USAGE_REPORT_PERIOD_STARTED_KEY;
+    static const QString USAGE_REPORT_ENABLED_KEY;
+    static const QString USAGE_REPORT_CONSENT_ASKED_KEY;
 
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
