@@ -23,6 +23,9 @@ void MerginWorkspaceInfo::clear()
   mDiskUsage = 0;
   mStorageLimit = 0;
   mRole = "";
+  mPlanName.clear();
+  mPlanAlias.clear();
+  mIndustry.clear();
 
   emit workspaceInfoChanged();
 }
@@ -55,4 +58,29 @@ double MerginWorkspaceInfo::storageLimit() const
 QString MerginWorkspaceInfo::role() const
 {
   return mRole;
+}
+
+void MerginWorkspaceInfo::setServiceDetailsFromJson( const QJsonObject &docObj )
+{
+  const QJsonObject planObj = docObj.value( QStringLiteral( "plan" ) ).toObject();
+  mPlanName = planObj.value( QStringLiteral( "name" ) ).toString();
+  mPlanAlias = planObj.value( QStringLiteral( "alias" ) ).toString();
+  mIndustry = docObj.value( QStringLiteral( "industry" ) ).toString(); // can be null
+
+  emit workspaceInfoChanged();
+}
+
+QString MerginWorkspaceInfo::planName() const
+{
+  return mPlanName;
+}
+
+QString MerginWorkspaceInfo::planAlias() const
+{
+  return mPlanAlias;
+}
+
+QString MerginWorkspaceInfo::industry() const
+{
+  return mIndustry;
 }

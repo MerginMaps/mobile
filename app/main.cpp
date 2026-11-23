@@ -103,6 +103,8 @@
 #include "mixedattributevalue.h"
 #include "photosketchingcontroller.h"
 #include "mapsketchingcontroller.h"
+#include "autosynccontroller.h"
+#include "usagereportcontroller.h"
 
 #include "projectsmodel.h"
 #include "projectsproxymodel.h"
@@ -566,6 +568,7 @@ int main( int argc, char *argv[] )
   vm->registerInputExpressionFunctions();
 
   SynchronizationManager syncManager( ma.get() );
+  UsageReportController usageReportController( as, &localProjectsManager, ma.get() );
 
   LayerTreeModelPixmapProvider *layerTreeModelPixmapProvider( new LayerTreeModelPixmapProvider );
   LayerTreeFlatModelPixmapProvider *layerTreeFlatModelPixmapProvider( new LayerTreeFlatModelPixmapProvider );
@@ -677,9 +680,72 @@ int main( int argc, char *argv[] )
     syncManager.syncProject( project, SyncOptions::Authorized, SyncOptions::Retry, requestOrigin );
   } );
 
-  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject]()
+  // Temporary: immediate snapshot trigger from QML test button
+  QObject::connect( as, &AppSettings::immediateUsageSnapshotRequested, &usageReportController, &UsageReportController::forceSubmitSnapshot );
+
+  // Gather dynamic usage data via signal connections
+
+  // Auto-sync: remember when it gets turned on, so it still counts if turned off again before the snapshot.
+  // If it's on at snapshot time, UsageReportController reads the setting itself.
+  QObject::connect( as, &AppSettings::autosyncAllowedChanged, &lambdaContext, [&usageReportController]( bool allowed )
+  {
+    if ( allowed )
+      usageReportController.trackFeature( QStringLiteral( "autosync" ) );
+  } );
+
+  // Created project
+  QObject::connect( &pw, &ProjectWizard::projectCreated, &lambdaContext, [&usageReportController]( const QString &, const QString & )
+  {
+    usageReportController.trackFeature( QStringLiteral( "created_project" ) );
+  } );
+
+  // Workspace switches, only a change from one workspace to another (not login, logout or start-up)
+  QObject::connect( ma->userInfo(), &MerginUserInfo::activeWorkspaceChanged, &lambdaContext, [&usageReportController, userInfo = ma->userInfo(), lastWorkspaceId = ma->userInfo()->activeWorkspaceId()]() mutable
+  {
+    const int workspaceId = userInfo->activeWorkspaceId();
+    if ( lastWorkspaceId >= 0 && workspaceId >= 0 && workspaceId != lastWorkspaceId )
+      usageReportController.incrementCounter( QStringLiteral( "workspace_switches" ) );
+    lastWorkspaceId = workspaceId;
+  } );
+
+  // External GPS provider
+  QObject::connect( pk, &PositionKit::positionProviderChanged, &lambdaContext, [&usageReportController]( AbstractPositionProvider * provider )
+  {
+    if ( !provider ) return;
+
+    usageReportController.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+  } );
+
+  // Highest project role
+  QObject::connect( &activeProject, &ActiveProject::projectRoleChanged, &lambdaContext, [&usageReportController, &activeProject]()
+  {
+    usageReportController.trackProjectRole( activeProject.projectRole() );
+  } );
+
+  // Provider and role describe the current state, not events, and the collected data is reset after each snapshot.
+  // Record them again so a provider or role that stays unchanged is still reported in the next period.
+  auto trackCurrentState = [&usageReportController, pk, &activeProject]()
+  {
+    if ( AbstractPositionProvider *provider = pk->positionProvider() )
+      usageReportController.trackExternalProvider( provider->id(), provider->type(), provider->name() );
+    usageReportController.trackProjectRole( activeProject.projectRole() );
+  };
+  QObject::connect( &usageReportController, &UsageReportController::snapshotSubmitted, &lambdaContext, trackCurrentState );
+  trackCurrentState();
+
+  // Project load time
+  QObject::connect( &activeProject, &ActiveProject::loadingStarted, &lambdaContext, [&usageReportController]()
+  {
+    usageReportController.startLoadTimer();
+  } );
+
+  usageReportController.startPingTimer();
+  usageReportController.startSnapshotTimer();
+
+  QObject::connect( &activeProject, &ActiveProject::projectReloaded, &lambdaContext, [merginApi = ma.get(), &activeProject, &usageReportController]()
   {
     merginApi->reloadProjectRole( activeProject.projectFullName() );
+    usageReportController.recordLoadTime();
   } );
 
   QObject::connect( ma.get(), &MerginApi::authChanged, &lambdaContext, [merginApi = ma.get(), &activeProject]()

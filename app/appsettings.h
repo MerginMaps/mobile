@@ -39,6 +39,8 @@ class AppSettings: public QObject
     Q_PROPERTY( QList<QVariant> windowPosition READ windowPosition WRITE setWindowPosition NOTIFY windowPositionChanged )
     Q_PROPERTY( HapticsType hapticsType READ hapticsType WRITE setHapticsType NOTIFY hapticsTypeChanged )
     Q_PROPERTY( StartupBehavior startupBehavior READ startupBehavior WRITE setStartupBehavior NOTIFY startupBehaviorChanged )
+    Q_PROPERTY( bool usageReportEnabled READ usageReportEnabled WRITE setUsageReportEnabled NOTIFY usageReportEnabledChanged )
+    Q_PROPERTY( bool usageReportConsentAsked READ usageReportConsentAsked WRITE setUsageReportConsentAsked NOTIFY usageReportConsentAskedChanged )
 
   public:
     // enum of haptic modes we support
@@ -109,6 +111,13 @@ class AppSettings: public QObject
     void setIgnoreMigrateVersion( const QString &version );
 
     static const QString POSITION_PROVIDERS_GROUP;
+    //! Settings group of the usage report (inside the app group)
+    static const QString USAGE_REPORT_GROUP;
+    //! Keys inside USAGE_REPORT_GROUP, shared with UsageReportController so the opt-out clears all of them
+    static const QString USAGE_REPORT_DATA_KEY;
+    static const QString USAGE_REPORT_TELEMETRY_ID_KEY;
+    static const QString USAGE_REPORT_LAST_REPORTED_KEY;
+    static const QString USAGE_REPORT_PERIOD_STARTED_KEY;
 
     bool autolockPosition() const;
     void setAutolockPosition( bool autolockPosition );
@@ -121,6 +130,15 @@ class AppSettings: public QObject
 
     StartupBehavior startupBehavior() const;
     void setStartupBehavior( StartupBehavior startupBehavior );
+
+    bool usageReportEnabled() const;
+    void setUsageReportEnabled( bool enabled );
+
+    bool usageReportConsentAsked() const;
+    void setUsageReportConsentAsked( bool asked );
+
+    // Temporary: request an immediate usage snapshot (bypasses interval check)
+    Q_INVOKABLE void requestImmediateUsageSnapshot();
 
   public slots:
     void setReuseLastEnteredValues( bool reuseLastEnteredValues );
@@ -146,6 +164,12 @@ class AppSettings: public QObject
     void ignoreMigrateVersionChanged();
 
     void windowPositionChanged();
+
+    void usageReportEnabledChanged( bool enabled );
+    void usageReportConsentAskedChanged( bool asked );
+
+    // Temporary: emitted when QML requests an immediate snapshot
+    void immediateUsageSnapshotRequested();
 
   private:
     // Projects path
@@ -183,6 +207,8 @@ class AppSettings: public QObject
 
     HapticsType mHapticsType;
     StartupBehavior mStartupBehavior;
+    bool mUsageReportEnabled = false;
+    bool mUsageReportConsentAsked = false;
 };
 
 #endif // APPSETTINGS_H

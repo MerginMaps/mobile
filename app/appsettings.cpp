@@ -14,9 +14,22 @@
 #include <QFileInfo>
 
 const QString AppSettings::POSITION_PROVIDERS_GROUP = QStringLiteral( "inputApp/positionProviders" );
+const QString AppSettings::USAGE_REPORT_GROUP = QStringLiteral( "inputApp/usageReport" );
+const QString AppSettings::USAGE_REPORT_DATA_KEY = QStringLiteral( "data" );
+const QString AppSettings::USAGE_REPORT_TELEMETRY_ID_KEY = QStringLiteral( "telemetry_id" );
+const QString AppSettings::USAGE_REPORT_LAST_REPORTED_KEY = QStringLiteral( "last_reported_at" );
+const QString AppSettings::USAGE_REPORT_PERIOD_STARTED_KEY = QStringLiteral( "period_started_at" );
 
 AppSettings::AppSettings( QObject *parent ): QObject( parent )
 {
+  {
+    QSettings settings;
+    settings.beginGroup( USAGE_REPORT_GROUP );
+    mUsageReportEnabled = settings.value( QStringLiteral( "enabled" ), false ).toBool();
+    mUsageReportConsentAsked = settings.value( QStringLiteral( "consent_asked" ), false ).toBool();
+    settings.endGroup();
+  }
+
   QSettings settings;
   settings.beginGroup( CoreUtils::QSETTINGS_APP_GROUP_NAME );
   const QString path = settings.value( QStringLiteral( "defaultProject" ), "" ).toString();
@@ -391,4 +404,62 @@ void AppSettings::setWindowPosition( const QList<QVariant> &newWindowPosition )
   setValue( QStringLiteral( "windowPosition" ), QVariant::fromValue( newWindowPosition ) );
 
   emit windowPositionChanged();
+}
+
+bool AppSettings::usageReportEnabled() const
+{
+  return mUsageReportEnabled;
+}
+
+void AppSettings::setUsageReportEnabled( bool enabled )
+{
+  if ( mUsageReportEnabled == enabled )
+    return;
+
+  mUsageReportEnabled = enabled;
+
+  QSettings settings;
+  settings.beginGroup( USAGE_REPORT_GROUP );
+  if ( !mUsageReportEnabled )
+  {
+    // Opt-out: clear accumulated data and identity, preserve consent_asked flag
+    settings.remove( USAGE_REPORT_DATA_KEY );
+    settings.remove( USAGE_REPORT_TELEMETRY_ID_KEY );
+    settings.remove( USAGE_REPORT_LAST_REPORTED_KEY );
+    settings.remove( USAGE_REPORT_PERIOD_STARTED_KEY );
+    settings.setValue( QStringLiteral( "enabled" ), false );
+  }
+  else
+  {
+    settings.setValue( QStringLiteral( "enabled" ), true );
+  }
+  settings.endGroup();
+
+  emit usageReportEnabledChanged( mUsageReportEnabled );
+}
+
+bool AppSettings::usageReportConsentAsked() const
+{
+  return mUsageReportConsentAsked;
+}
+
+void AppSettings::setUsageReportConsentAsked( bool asked )
+{
+  if ( mUsageReportConsentAsked == asked )
+    return;
+
+  mUsageReportConsentAsked = asked;
+
+  QSettings settings;
+  settings.beginGroup( USAGE_REPORT_GROUP );
+  settings.setValue( QStringLiteral( "consent_asked" ), asked );
+  settings.endGroup();
+
+  emit usageReportConsentAskedChanged( mUsageReportConsentAsked );
+}
+
+// Temporary: request an immediate usage snapshot for testing
+void AppSettings::requestImmediateUsageSnapshot()
+{
+  emit immediateUsageSnapshotRequested();
 }

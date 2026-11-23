@@ -204,6 +204,8 @@ Item {
       layerIsSpatial: root.layerIsSpatial
 
       onSaved: {
+        if ( featureForm.controller.rememberedValuesApplied() )
+          UsageReportController.trackFeature( "reuse_last_value" )
         root.saveRequested()
         drawer.close()
       }

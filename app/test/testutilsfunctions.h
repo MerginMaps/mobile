@@ -59,6 +59,10 @@ class TestUtilsFunctions: public QObject
     void testIsPositionTrackingLayer();
     void testMapLayerFromName();
     void testIsValidUrl();
+    void testExternalProviderBrand();
+    void testExternalProviderBrandHasNoPersonalData();
+    void testExternalConnectionType();
+    void testProjectRoleRank();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

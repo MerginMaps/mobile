@@ -239,6 +239,18 @@ class MerginApi: public QObject
     MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
+     * Sends a HEAD request to the connectivity check endpoint and emits internetConnectionChecked() with the result.
+     * Only HTTP 204 means online, captive portals answer with a login page.
+     */
+    void checkInternetConnection();
+
+    /**
+     * Posts the anonymous usage report and emits usageReportSent() with the result.
+     * The request has no authorization and no device id headers, so the report can not be linked to the user or device.
+     */
+    void sendUsageReport( const QJsonObject &report );
+
+    /**
      * Returns path of the local directory in which all projects are stored.
      * Each project is one sub-directory.
      * \note returns the directory without a trailing slash
@@ -731,6 +743,8 @@ class MerginApi: public QObject
     void activeWorkspaceChanged();
     void configChanged();
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
+    void internetConnectionChecked( bool isOnline );
+    void usageReportSent( bool success );
     void pullFilesStarted();
     void pushFilesStarted();
     void pushCanceled( const QString &projectFullName, bool result );
@@ -796,6 +810,7 @@ class MerginApi: public QObject
     void getUserInfoFinished();
     void getWorkspaceInfoReplyFinished();
     void getServiceInfoReplyFinished();
+    void getWorkspaceServiceDetailsReplyFinished();
     void saveAuthData();
     void createProjectFinished();
     void deleteProjectFinished( bool informUser = true );
@@ -803,6 +818,8 @@ class MerginApi: public QObject
     void registrationFinished( const QString &login = QStringLiteral(), const QString &password = QStringLiteral() );
     void postRegistrationFinished();
     void pingMerginReplyFinished();
+    void checkInternetConnectionReplyFinished();
+    void sendUsageReportReplyFinished();
     void deleteAccountFinished();
     void updateWorkspaceStorageLimitFinished();
 
@@ -828,6 +845,9 @@ class MerginApi: public QObject
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
     void abortPullItems( const QString &projectFullName );
+
+    //! Requests plan and industry of the active workspace (only on SaaS), called after the service info reply
+    void getWorkspaceServiceDetails();
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).
@@ -954,7 +974,8 @@ class MerginApi: public QObject
       AttrProjectFullName = QNetworkRequest::User,
       AttrTempFileName    = QNetworkRequest::User + 1,
       AttrWorkspaceName   = QNetworkRequest::User + 2,
-      AttrAcceptFlag      = QNetworkRequest::User + 3
+      AttrAcceptFlag      = QNetworkRequest::User + 3,
+      AttrWorkspaceId     = QNetworkRequest::User + 4
     };
 
     Transactions mTransactionalStatus; //projectFullname -> transactionStatus
@@ -978,6 +999,8 @@ class MerginApi: public QObject
 
     MerginServerType::ServerType mServerType = MerginServerType::ServerType::OLD;
     QString mServerDiagnosticLogsUrl = MerginApi::sDefaultReportLogUrl;
+    static const QString USAGE_REPORT_URL;
+    static const QString CONNECTIVITY_CHECK_URL;
 
     QOAuth2AuthorizationCodeFlow mOauth2Flow;
 #ifdef MOBILE_OS

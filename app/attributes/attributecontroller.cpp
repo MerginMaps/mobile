@@ -604,6 +604,7 @@ void AttributeController::updateOnFeatureChange()
   const QgsFeature feature = mFeatureLayerPair.feature();
 
   mClonedExternalResources.clear();
+  mRememberedValuesApplied = false;
 
   QMap<QUuid, std::shared_ptr<FormItem>>::iterator formItemsIterator = mFormItems.begin();
   while ( formItemsIterator != mFormItems.end() )
@@ -642,6 +643,7 @@ void AttributeController::updateOnFeatureChange()
 
           mFeatureLayerPair.featureRef().setAttribute( fieldIndex, valueToUse );
           itemData->setRawValue( valueToUse );
+          mRememberedValuesApplied = true;
         }
       }
     }
@@ -656,6 +658,11 @@ void AttributeController::updateOnFeatureChange()
     formValueChange = mFeatureLayerPair.layer()->editBuffer()->changedGeometries().contains( feature.id() );
   }
   recalculateDerivedItems( formValueChange, isNewFeature() );
+}
+
+bool AttributeController::rememberedValuesApplied() const
+{
+  return mRememberedValuesApplied;
 }
 
 bool AttributeController::isNewFeature() const
@@ -1591,7 +1598,12 @@ void AttributeController::setLinkedRelation( const QgsRelation &newLinkedRelatio
 void AttributeController::onFeatureAdded( QgsFeatureId newFeatureId )
 {
   QgsFeature f = mFeatureLayerPair.layer()->getFeature( newFeatureId );
+
+  // it is the same feature, it only got its permanent id, so keep whether remembered values were applied to it
+  const bool rememberedValuesApplied = mRememberedValuesApplied;
   setFeatureLayerPair( FeatureLayerPair( f, mFeatureLayerPair.layer() ) );
+  mRememberedValuesApplied = rememberedValuesApplied;
+
   emit featureIdChanged();
 }
 

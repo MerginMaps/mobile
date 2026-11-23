@@ -319,6 +319,17 @@ MMPage {
 
       MMLine {}
 
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Send anonymous usage data")
+        description: qsTr("Helps us improve the app. No personal data is collected.")
+        checked: AppSettings.usageReportEnabled
+
+        onClicked: AppSettings.usageReportEnabled = !checked
+      }
+
+      MMLine {}
+
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("Diagnostic log")

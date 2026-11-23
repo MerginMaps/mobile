@@ -12,6 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import mm 1.0 as MM
+import MMInput
 
 import "../inputs"
 import "../components" as MMComponents
@@ -42,7 +43,12 @@ MMComponents.MMPage {
 
       width: parent.width
       delayedSearch: true
-      onSearchTextChanged: featuresModel.searchExpression = searchBar.text
+      onSearchTextChanged: {
+        // track only when a new search starts, not on every text change
+        if ( searchBar.searchText.length > 0 && featuresModel.searchExpression === "" )
+          UsageReportController.trackFeature( "features_search" )
+        featuresModel.searchExpression = searchBar.searchText
+      }
     }
 
     MMFilterComponents.MMFilterBanner {
