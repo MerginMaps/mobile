@@ -176,6 +176,16 @@ MerginSubscriptionInfo *MerginApi::subscriptionInfo() const
 
 void MerginApi::checkInternetConnection()
 {
+  // The system knows when the device has no connection (airplane mode, no Wi-Fi or mobile data), so we don't ping in that case
+  static const bool reachabilityAvailable = QNetworkInformation::loadBackendByFeatures( QNetworkInformation::Feature::Reachability );
+
+  if ( reachabilityAvailable && QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Disconnected )
+  {
+    emit internetConnectionChecked( false );
+    return;
+  }
+
+  // Any other state (Local, Site, Online, Unknown) does not guarantee internet access (e.g. captive portal), so we ping
   // not the Mergin server, so no default request: no authorization and no device id
   QNetworkRequest request{ QUrl( CONNECTIVITY_CHECK_URL ) };
   request.setAttribute( QNetworkRequest::Http2AllowedAttribute, false );

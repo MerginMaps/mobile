@@ -20,7 +20,6 @@
 #include <QJSEngine>
 #include <QQmlEngine>
 #include <QJsonObject>
-#include <QNetworkInformation>
 #include <QSettings>
 #include <QSysInfo>
 #include <QUuid>
@@ -182,17 +181,7 @@ void UsageReportController::checkConnectivity()
 {
   if ( !isEnabled() ) return;
 
-  // The system knows when the device has no connection (airplane mode, no Wi-Fi or mobile data), so we won't ping in that case.
-  static const bool reachabilityAvailable = QNetworkInformation::loadBackendByFeatures( QNetworkInformation::Feature::Reachability );
-
-  if ( reachabilityAvailable && QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Disconnected )
-  {
-    incrementCounter( QStringLiteral( "ping_total_count" ) );
-    incrementCounter( QStringLiteral( "ping_fail_count" ) );
-    return;
-  }
-
-  // Any other state (Local, Site, Online, Unknown) does not guarantee internet access (e.g. captive portal), so we ping
+  // the result is counted in onInternetConnectionChecked()
   mMerginApi->checkInternetConnection();
 }
 

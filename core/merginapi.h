@@ -239,8 +239,10 @@ class MerginApi: public QObject
     MerginSubscriptionInfo *subscriptionInfo() const;
 
     /**
-     * Sends a HEAD request to the connectivity check endpoint and emits internetConnectionChecked() with the result.
-     * Only HTTP 204 means online, captive portals answer with a login page.
+     * Checks the internet connection and emits internetConnectionChecked() with the result.
+     * When the system reports no connection, it emits false right away without a request.
+     * Otherwise it sends a HEAD request to the connectivity check endpoint, only HTTP 204 means online,
+     * captive portals answer with a login page.
      */
     void checkInternetConnection();
 
