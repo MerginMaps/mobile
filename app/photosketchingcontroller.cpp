@@ -120,7 +120,7 @@ void PhotoSketchingController::clear()
   emit pathsReset();
 }
 
-void PhotoSketchingController::backupSketches()
+bool PhotoSketchingController::backupSketches()
 {
   const QString photoFileName = QUrl( mPhotoSource ).fileName();
   const QString photoPath = QString( "%1/%2/%3" ).arg( QDir::tempPath(), mProjectName, photoFileName );
@@ -137,7 +137,7 @@ void PhotoSketchingController::backupSketches()
   {
     CoreUtils::log( "Photo sketching", "Failed to load image from: " + photoPath );
     CoreUtils::log( "Photo sketching", "Error: " + imageReader.errorString() );
-    return;
+    return false;
   }
 
   QPainter painter( &image );
@@ -166,6 +166,7 @@ void PhotoSketchingController::backupSketches()
     painter.drawPath( path );
   }
 
+  bool saved = false;
   if ( !image.save( photoPath ) )
   {
     CoreUtils::log( "Photo sketching", "Failed to save temporary image to: " + photoPath );
@@ -176,6 +177,7 @@ void PhotoSketchingController::backupSketches()
     {
       CoreUtils::log( "Photo sketching", "Temporary image saved to: " + photoPath );
       emit tempPhotoSourceChanged( photoPath );
+      saved = true;
     }
     else
     {
@@ -188,6 +190,8 @@ void PhotoSketchingController::backupSketches()
 
   mActivePaths.clear();
   mCanUndo = false;
+
+  return saved;
 }
 
 void PhotoSketchingController::removeBackupSketches()

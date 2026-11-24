@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Shapes
 
 import mm 1.0 as MM
+import MMInput
 
 import "../components"
 import "./components"
@@ -32,6 +33,12 @@ Item {
 
     mapSettings: root.map.mapSettings
     crosshairPoint: crosshair.screenPoint
+
+    // a distance is measured once there are at least two points
+    onIsValidGeometryChanged: {
+      if ( mapTool.isValidGeometry )
+        UsageReportController.trackFeature( "map_measuring" )
+    }
   }
 
   MM.GuidelineController {

@@ -205,7 +205,9 @@ MMComponents.MMDrawer {
 
       onClicked: {
         __activeProject.filterController.processFilters(internal.filterValues)
-        UsageReportController.trackFeature( "filtering" )
+        // not when the filters were cleared
+        if ( __activeProject.filterController.filteringActivated )
+          UsageReportController.trackFeature( "filtering" )
         root.close()
       }
     }

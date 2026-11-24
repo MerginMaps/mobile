@@ -314,7 +314,6 @@ QJsonObject UsageReportController::buildSnapshot( QVariantMap &sentData )
   }
   properties.insert( QStringLiteral( "server_type" ), serverTypeStr );
   properties.insert( QStringLiteral( "server_version" ), mMerginApi->apiVersion() );
-  properties.insert( QStringLiteral( "plan_name" ), mMerginApi->workspaceInfo()->planName() );
   properties.insert( QStringLiteral( "plan" ), QVariantMap
   {
     { QStringLiteral( "name" ), mMerginApi->workspaceInfo()->planName() },

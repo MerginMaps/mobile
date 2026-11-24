@@ -94,7 +94,7 @@ void TestUsageReportController::testSnapshotHasOnlyExpectedKeys()
   {
     // static data
     "app_language", "system_language", "device_manufacturer", "device_model", "app_version", "platform", "os_version",
-    "project_count", "num_external_providers", "server_type", "server_version", "plan_name", "plan", "last_reported_at",
+    "project_count", "num_external_providers", "server_type", "server_version", "plan", "last_reported_at",
     // feature flags
     "filtering", "map_sketching", "map_measuring", "external_gps", "autosync", "reuse_last_value", "bulk_editing",
     "photo_sketching", "created_project", "stakeout", "layers_search", "features_search",

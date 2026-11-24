@@ -79,10 +79,10 @@ Dialog {
 
       onClicked: {
         // canUndo is true only when something was drawn since the last save
-        if ( root.controller.canUndo )
-          UsageReportController.trackFeature( "photo_sketching" )
+        const sketched = root.controller.canUndo
         root.close()
-        root.controller.backupSketches()
+        if ( root.controller.backupSketches() && sketched )
+          UsageReportController.trackFeature( "photo_sketching" )
       }
     }
   }

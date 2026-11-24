@@ -174,7 +174,6 @@ Item {
       case "measure": {
         root.showInfoTextMessage( qsTr( "Add points to measure distance, close the shape to measure area" ) )
         root.hideHighlight()
-        UsageReportController.trackFeature( "map_measuring" )
         root.measureStarted()
         break
       }

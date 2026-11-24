@@ -206,6 +206,8 @@ Item {
       onSaved: {
         if ( featureForm.controller.rememberedValuesApplied() )
           UsageReportController.trackFeature( "reuse_last_value" )
+        if ( featureForm.state === "multiEdit" )
+          UsageReportController.trackFeature( "bulk_editing" )
         root.saveRequested()
         drawer.close()
       }

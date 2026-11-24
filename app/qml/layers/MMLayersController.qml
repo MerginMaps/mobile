@@ -104,7 +104,6 @@ Item {
       }
 
       onSearchBarClicked: function() {
-        UsageReportController.trackFeature( "layers_search" )
         let item = pagesStackView.push( searchLayersPage, {}, StackView.Immediate )
         item.forceActiveFocus()
       }
@@ -166,6 +165,9 @@ Item {
       }
 
       onSearchTextChanged: function( searchText ) {
+        // track only when a new search starts, not on every text change
+        if ( searchText.length > 0 && layerTreeFlatSortFilterModel.searchExpression === "" )
+          UsageReportController.trackFeature( "layers_search" )
         layerTreeFlatSortFilterModel.searchExpression = searchText
       }
 
