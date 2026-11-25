@@ -671,8 +671,11 @@ endif ()
 
 if (IOS)
   target_link_libraries(
-    MerginMaps PUBLIC AppleFrameworks::CoreLocation AppleFrameworks::CoreHaptics
-                      AppleFrameworks::PhotosUI AppleFrameworks::AVFoundation
+    MerginMaps
+    PUBLIC AppleFrameworks::CoreLocation
+           AppleFrameworks::CoreHaptics
+           AppleFrameworks::PhotosUI
+           AppleFrameworks::AVFoundation
   )
   # TODO is this needed? this change requires cmake 3.28+
   # qt_add_ios_ffmpeg_libraries(MerginMaps) # Qt Multimedia
