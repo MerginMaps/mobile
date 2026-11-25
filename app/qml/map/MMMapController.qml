@@ -256,8 +256,8 @@ Item {
 
     mapSettings.project: __activeProject.qgsProject
 
-    // while following the direction of the device the map is rotated by it, so the fingers can only zoom
-    rotationEnabled: AppSettings.mapRotationEnabled && !root.headingUp
+    // rotating with the fingers ends the follow direction mode, see onRotationStarted
+    rotationEnabled: AppSettings.mapRotationEnabled
     pinchKeepsFollowing: root.headingUp
 
     // Rendered bigger while rotated or about to rotate, so the picture covers the screen between renderings
@@ -298,6 +298,12 @@ Item {
 
     onUserInteractedWithMap: {
       root.centeredToGPS = false
+      mapRotator.active = false
+    }
+
+    onRotationStarted: {
+      // the fingers take over the rotation, the map keeps following the position
+      root.headingUp = false
       mapRotator.active = false
     }
 

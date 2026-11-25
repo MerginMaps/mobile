@@ -36,6 +36,9 @@ Item {
   // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
+  // the fingers started to rotate the map
+  signal rotationStarted()
+
   // when false, the map can not be rotated by the user
   property bool rotationEnabled: true
 
@@ -298,6 +301,7 @@ Item {
         isRotating = true
         fingersRotation = mapRenderer.mapSettings.rotation
         previousPinchRotation = pinch.rotation
+        mapRoot.rotationStarted()
       }
 
       if ( isRotating )
