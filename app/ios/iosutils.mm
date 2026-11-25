@@ -18,12 +18,24 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #include <CoreHaptics/CoreHaptics.h>
+#import <AVFoundation/AVFoundation.h>
 #include <QString>
 #include "iosutils.h"
 
 void IosUtils::setIdleTimerDisabled()
 {
   [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+}
+
+void IosUtils::setAudioSessionMixWithOthers()
+{
+  // The default category (SoloAmbient) interrupts other apps' audio (e.g. Spotify) as soon
+  // as any audio unit starts, which Qt Multimedia's SoundEffect does even without playing.
+  NSError *error = nil;
+  if ( ![[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error] )
+  {
+    NSLog( @"Failed to set audio session category: %@", error );
+  }
 }
 
 QString IosUtils::getManufacturerImpl()

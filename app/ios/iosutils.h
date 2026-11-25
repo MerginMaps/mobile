@@ -66,6 +66,12 @@ class IosUtils: public QObject
      */
     void setIdleTimerDisabled();
 
+    /**
+     * Sets the shared audio session category to Ambient, so the app's audio (haptic sounds,
+     * Qt Multimedia audio units) mixes with other apps' audio instead of interrupting it.
+     */
+    void setAudioSessionMixWithOthers();
+
     static QString getManufacturerImpl();
     static QString getDeviceModelImpl();
     static bool openFileImpl( const QString &filePath );

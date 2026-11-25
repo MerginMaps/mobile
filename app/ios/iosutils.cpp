@@ -13,6 +13,7 @@ IosUtils::IosUtils( QObject *parent ): QObject( parent )
 {
 #ifdef Q_OS_IOS
   setIdleTimerDisabled();
+  setAudioSessionMixWithOthers();
 #endif
   mImagePicker = new IOSImagePicker();
   QObject::connect( mImagePicker, &IOSImagePicker::imageCaptured, this, [this]( const QString & absoluteImagePath )
