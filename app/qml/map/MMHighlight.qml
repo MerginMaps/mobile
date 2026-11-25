@@ -62,14 +62,14 @@ Item {
   // Affine transform from map coordinates to screen coordinates (including map rotation) as [a, b, c, d, e, f]:
   //   x_screen = a * x_map + b * y_map + e
   //   y_screen = c * x_map + d * y_map + f
-  property var mapTransform: __inputUtils.mapSettingsTransform( mapSettings )
+  property list<real> mapTransform: __inputUtils.mapSettingsTransform( mapSettings )
 
   // Reference view settings used for transformation of coordinates (needed for lines and polygons).
   // We convert their coordinates to screen coordinates of the current view, and then as user pans/zooms
   // the map, we use a transform to adjust the shape. The reason is that the transform uses single
   // precision floats, and if we used just map coordinates, we get numerical errors when the map gets
   // zoomed in. This approach is more stable (but does not avoid the issue 100%)
-  property var refTransform: [1, 0, 0, 1, 0, 0]
+  property list<real> refTransform: [1, 0, 0, 1, 0, 0]
 
   QtObject {
     id: internal

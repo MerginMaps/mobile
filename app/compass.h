@@ -27,7 +27,6 @@ class Compass: public QObject
     static constexpr qreal MIN_INVALID_DIRECTION = -180.1;
 
     qreal direction() const;
-    QCompassReading *reading();
 
   signals:
     void directionChanged();

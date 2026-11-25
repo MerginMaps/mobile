@@ -86,7 +86,8 @@ Item {
   {
     rendererPrivate.freeze('jumpTo')
 
-    const oldExtent = mapRenderer.mapSettings.visibleExtent
+    // extent (not visibleExtent) is used as it is not affected by the map rotation
+    const oldExtent = mapRenderer.mapSettings.extent
 
     // Disable animation until initial position is set
     jumpExtentAnimator.enabled = false
@@ -113,18 +114,6 @@ Item {
   function pan( oldPos, newPos )
   {
     mapRenderer.pan( oldPos, newPos )
-  }
-
-  // Rendering of the map is stopped until it is unfrozen, use it during animations.
-  // Every id needs to be unfrozen on its own.
-  function freezeRendering( id )
-  {
-    rendererPrivate.freeze( id )
-  }
-
-  function unfreezeRendering( id )
-  {
-    rendererPrivate.unfreeze( id )
   }
 
   // Rotates the map by angle (in degrees, clockwise) around the center (screen point)
@@ -226,9 +215,14 @@ Item {
         return a
       }
 
+      // the snap to north only vibrates (no sound), when the user allowed the vibration
+      function vibrationEnabled() {
+        return AppSettings.hapticsType === AppSettings.HapticsVibration || AppSettings.hapticsType === AppSettings.HapticsVibrationSound
+      }
+
       // gets the haptic hardware ready, so the tap at north is not delayed
       function prepareVibration() {
-        if ( AppSettings.hapticsType !== AppSettings.HapticsVibration && AppSettings.hapticsType !== AppSettings.HapticsVibrationSound ) return
+        if ( !vibrationEnabled() ) return
 
         if ( __iosUtils.isIos ) {
           __iosUtils.prepareImpactFeedback()
@@ -236,7 +230,7 @@ Item {
       }
 
       function vibrate() {
-        if ( AppSettings.hapticsType !== AppSettings.HapticsVibration && AppSettings.hapticsType !== AppSettings.HapticsVibrationSound ) return
+        if ( !vibrationEnabled() ) return
 
         if ( __androidUtils.isAndroid ) {
           __androidUtils.vibrate()
@@ -257,8 +251,6 @@ Item {
 
     property string freezeId: 'pinch'
 
-    anchors.fill: parent
-
     // rotation (in degrees) the fingers have to travel before the map starts to rotate,
     // so that a regular zoom does not rotate the map by accident
     readonly property real rotationThreshold: 10
@@ -273,6 +265,8 @@ Item {
     property real fingersRotation: 0
     property real previousPinchRotation: 0
     property bool isRotating: false
+
+    anchors.fill: parent
 
     onPinchStarted: {
       if ( !mapRoot.pinchKeepsFollowing ) mapRoot.userInteractedWithMap()
@@ -296,31 +290,16 @@ Item {
 
       if ( !mapRoot.rotationPreparing && Math.abs( pinch.rotation ) > rotationPrepareAngle ) mapRoot.rotationPreparing = true
 
-      if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold )
-      {
+      if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold ) {
         isRotating = true
         fingersRotation = mapRenderer.mapSettings.rotation
         previousPinchRotation = pinch.rotation
         mapRoot.rotationStarted()
       }
 
-      if ( isRotating )
-      {
+      if ( isRotating ) {
         rotateMap( pinch.center, pinch.rotation - previousPinchRotation )
         previousPinchRotation = pinch.rotation
-      }
-    }
-
-    function rotateMap( center, delta ) {
-      fingersRotation = rendererPrivate.normalizeAngle( fingersRotation + delta )
-
-      let wasNorth = Math.abs( mapRenderer.mapSettings.rotation ) < 0.001
-      let target = Math.abs( fingersRotation ) < northSnapAngle ? 0 : fingersRotation
-
-      mapRenderer.rotate( center, rendererPrivate.normalizeAngle( target - mapRenderer.mapSettings.rotation ) )
-
-      if ( target === 0 && !wasNorth ) {
-        rendererPrivate.vibrate()
       }
     }
 
@@ -491,6 +470,20 @@ Item {
         id: dragDifferentiatorTimer
 
         interval: Application.styleHints.startDragTime
+      }
+    }
+
+    function rotateMap( center, delta ) {
+      fingersRotation = rendererPrivate.normalizeAngle( fingersRotation + delta )
+
+      // the map settings snap the rotation noise around north to exactly 0
+      let wasNorth = mapRenderer.mapSettings.rotation === 0
+      let target = Math.abs( fingersRotation ) < northSnapAngle ? 0 : fingersRotation
+
+      mapRenderer.rotate( center, rendererPrivate.normalizeAngle( target - mapRenderer.mapSettings.rotation ) )
+
+      if ( target === 0 && !wasNorth ) {
+        rendererPrivate.vibrate()
       }
     }
   }

@@ -175,6 +175,8 @@ class InputMapCanvasMap : public QQuickItem
 
     //! \copydoc InputMapCanvasMap::rotationRenderThreshold
     void rotationRenderThresholdChanged();
+
+    //! \copydoc InputMapCanvasMap::renderAfterBreak
     void renderAfterBreakChanged();
 
     //! \copydoc InputMapCanvasMap::isRendering
@@ -233,7 +235,6 @@ class InputMapCanvasMap : public QQuickItem
     void onExtentChanged();
     void onLayersChanged();
     void onTemporalStateChanged();
-    void checkRotationRender();
     void onRotationSettled();
     void onRotationBreak();
 
@@ -249,14 +250,27 @@ class InputMapCanvasMap : public QQuickItem
     void zoomToFullExtent();
     void clearTemporalCache();
     void refreshForRotation();
+
+    //! Returns the absolute difference (in degrees) of the rotation of the map and of the rendered picture
     double rotationDifference() const;
+
+    //! Renders the map when the rotation changed since the picture, if the rendering is due (rotationRenderThreshold, pause)
+    void checkRotationRender();
+
+    //! renderAfterBreak: starts a new break when the map turned, the map is rendered when the break ends
     void checkRotationBreak();
 
     //! Returns the absolute difference of two angles (in degrees), in range [0, 180]
     static double angleDistance( double angle1, double angle2 );
+
+    //! Returns whether the picture covers the whole canvas, also when it is rotated
     bool pictureCoversCanvas() const;
+
+    //! Returns whether a rendering started by the rotation can start now (the pause after the last rendering is over)
     bool rotationRenderAllowed() const;
-    qint64 rotationRenderRest() const; // remaining pause before the next rendering started by the rotation (in milliseconds)
+
+    //! Returns the remaining pause (in milliseconds) before the next rendering started by the rotation
+    qint64 rotationRenderRest() const;
 
     //! Returns the remaining pause before the next rotation rendering, all times in milliseconds
     static qint64 rotationRenderRest( qint64 lastRenderDuration, qint64 lastRenderStartDuration, qint64 sinceRenderFinished );

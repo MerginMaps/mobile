@@ -7,6 +7,8 @@
  *                                                                         *
  ***************************************************************************/
 
+pragma ComponentBehavior: Bound
+
 import QtQuick
 
 //
@@ -18,22 +20,18 @@ import QtQuick
 Item {
   id: root
 
+  // length, width and color of one kind of tick
+  component TickStyle: QtObject {
+    property real length
+    property real width
+    property color color
+  }
+
   // size of the button the compass is drawn on
   property real size: __style.mapItemHeight
 
   // rotation of the map in degrees, the north tick is rotated with it
   property real mapRotation: 0
-
-  readonly property color northColor: __style.grapeColor
-  readonly property color mainColor: __style.forestColor
-  readonly property color secondaryColor: __style.mediumGreyColor
-
-  readonly property real tickMargin: size * 0.07 // distance of the ticks from the edge
-  readonly property real mainTickLength: size * 0.12
-  readonly property real secondaryTickLength: size * 0.07
-
-  // bearing of the top of the screen, rounded to the closest cardinal point
-  readonly property int cardinalIndex: Math.round( ( ( 360 - mapRotation ) % 360 + 360 ) % 360 / 90 ) % 4
 
   readonly property var cardinalPoints: [
     //: Short name of the north, shown in the compass on the map
@@ -46,46 +44,59 @@ Item {
     qsTr( "W" )
   ]
 
+  // a tick every 15 degrees, N, E, S and W get the main ticks
+  readonly property int tickCount: 24
+  readonly property int ticksPerCardinal: tickCount / cardinalPoints.length
+
+  // all sizes are relative to the size of the compass
+  readonly property real tickMargin: size * 0.07 // distance of the ticks from the edge
+  readonly property real letterSize: size * 0.34
+
+  readonly property TickStyle northTick: TickStyle { length: root.size * 0.12; width: root.size * 0.045; color: __style.grapeColor }
+  readonly property TickStyle mainTick: TickStyle { length: root.size * 0.12; width: root.size * 0.035; color: __style.forestColor }
+  readonly property TickStyle secondaryTick: TickStyle { length: root.size * 0.07; width: root.size * 0.025; color: __style.mediumGreyColor }
+
+  // cardinal point closest to the top of the screen (the map rotating clockwise turns the top towards the west),
+  // the rotation is within a full turn (the map settings keep it in (-180, 180])
+  readonly property int cardinalIndex: ( Math.round( -mapRotation / 360 * cardinalPoints.length ) + cardinalPoints.length ) % cardinalPoints.length
+
   width: size
   height: size
 
-  // smooth edges of the shapes
-  layer.enabled: true
-  layer.samples: 4
-
-  // full size item, so that the ticks rotate around the center of the compass
+  // the only rotating node: the ticks turn with the map, the letter stays upright
   Item {
+    id: ticks
+
     anchors.fill: parent
     rotation: root.mapRotation
 
     Repeater {
-      model: 24 // a tick every 15 degrees
+      model: root.tickCount
 
-      Item {
+      // each tick is placed at the top of the compass and turned around the compass center
+      Rectangle {
+        id: tick
+
         required property int index
 
-        readonly property bool isMain: index % 6 === 0 // north, east, south, west
-        readonly property bool isNorth: index === 0
+        readonly property TickStyle tickStyle: {
+          if ( index === 0 ) return root.northTick
+          if ( index % root.ticksPerCardinal === 0 ) return root.mainTick
+          return root.secondaryTick
+        }
 
-        anchors.fill: parent
-        rotation: index * 15
+        x: ( root.size - width ) / 2
+        y: root.tickMargin
+        width: tickStyle.width
+        height: tickStyle.length
 
-        Rectangle {
-          x: root.width / 2 - width / 2
-          y: root.tickMargin
-          width: {
-            if ( parent.isNorth ) return root.size * 0.045
-            if ( parent.isMain ) return root.size * 0.035
-            return root.size * 0.025
-          }
-          height: parent.isMain ? root.mainTickLength : root.secondaryTickLength
-          radius: width / 2
-          antialiasing: true
-          color: {
-            if ( parent.isNorth ) return root.northColor
-            if ( parent.isMain ) return root.mainColor
-            return root.secondaryColor
-          }
+        radius: width / 2
+        antialiasing: true
+        color: tickStyle.color
+        transform: Rotation {
+          origin.x: tick.width / 2
+          origin.y: root.size / 2 - root.tickMargin // center of the compass, relative to the tick
+          angle: tick.index * 360 / root.tickCount
         }
       }
     }
@@ -93,10 +104,13 @@ Item {
 
   Text {
     anchors.centerIn: parent
+
     text: root.cardinalPoints[root.cardinalIndex]
-    color: root.mainColor
-    font.family: __style.t1.family
-    font.weight: __style.t1.weight
-    font.pixelSize: root.size * 0.34
+    color: root.mainTick.color
+    font {
+      family: __style.t1.family
+      weight: __style.t1.weight
+      pixelSize: root.letterSize
+    }
   }
 }

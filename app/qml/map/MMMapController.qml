@@ -39,7 +39,8 @@ Item {
   // when true (and centered to GPS), the map is rotated so that the direction of the device points up
   property bool headingUp: false
 
-  readonly property bool isMapRotated: headingUp || Math.abs( mapCanvas.mapSettings.rotation ) > 0.5
+  // the map settings snap the rotation noise around north to exactly 0
+  readonly property bool isMapRotated: headingUp || mapCanvas.mapSettings.rotation !== 0
 
   property var mapToolComponent: {
     measurementToolsLoader.active ? measurementToolsLoader.item.mapTool : null
@@ -258,12 +259,12 @@ Item {
 
     // rotating with the fingers ends the follow direction mode, see onRotationStarted
     rotationEnabled: AppSettings.mapRotationEnabled
-    pinchKeepsFollowing: root.headingUp
+    // in stakeout the zoom follows the distance to the target, so zooming by hand stops following (and the follow direction mode)
+    pinchKeepsFollowing: root.headingUp && root.state !== "stakeout"
 
     // Rendered bigger while rotated or about to rotate, so the picture covers the screen between renderings
-    // (kept while rotated, it is slow to render). It is rendered again after this rotation (in degrees)
+    // (kept while rotated, it is slow to render)
     overscan: AppSettings.mapRotationEnabled && ( root.isMapRotated || mapRotator.active || mapCanvas.rotationPreparing )
-    rotationRenderThreshold: 60
     // following the direction of the device, the map is rendered only when the device is held steady for a moment
     renderAfterBreak: root.headingUp
 
@@ -466,9 +467,11 @@ Item {
     yPos: mapPositionSource.screenPosition.y
     hasDirection: positionDirectionSource.hasDirection
 
-    // direction is relative to the north, but the marker is drawn on the (possibly rotated) screen
-    direction: positionDirectionSource.direction
+    // direction is relative to the north, but the marker is drawn on the (possibly rotated) screen.
+    // Following the direction, the map turns with it (smoothly), so the cone points up and turns with the map
+    direction: root.headingUp ? -mapCanvas.mapSettings.rotation : positionDirectionSource.direction
     mapRotation: mapCanvas.mapSettings.rotation
+    animateDirection: !root.headingUp
     hasPosition: PositionKit.hasPosition
 
     horizontalAccuracy: PositionKit.horizontalAccuracy
@@ -1230,23 +1233,6 @@ Item {
     readonly property real doneAngle: 0.1 // the rotation is finished closer than this to the target (in degrees)
     readonly property real minStepAngle: 0.001 // smaller steps are not worth rotating the map (in degrees)
 
-    function rotateTo( newTarget, newTau = mapRotator.defaultTau, newMaxSpeed = mapRotator.defaultMaxSpeed ) {
-      target = newTarget
-      tau = newTau
-      maxSpeed = newMaxSpeed
-      active = true
-    }
-
-    // nothing is started when the map already points to the north, so the map is not rendered again for no reason
-    function rotateToNorth() {
-      if ( mapCanvas.mapSettings.rotation !== 0 ) {
-        rotateTo( 0 )
-      }
-      else {
-        active = false
-      }
-    }
-
     // The rotation waits for the bigger picture only for a short time. When the rendering is slow (e.g. the map tiles
     // have to be downloaded), the map starts to rotate anyway, with the corners of the canvas empty for a while.
     property bool overscanWaitExpired: false
@@ -1258,9 +1244,6 @@ Item {
       onTriggered: mapRotator.overscanWaitExpired = true
     }
 
-    onActiveChanged: {
-      if ( !active ) overscanWaitExpired = false
-    }
     property FrameAnimation frames: FrameAnimation {
       // the map is rotated when it is rendered big enough, otherwise the corners of the canvas would be empty
       running: mapRotator.active && ( mapCanvas.overscanReady || mapRotator.overscanWaitExpired )
@@ -1282,12 +1265,38 @@ Item {
         // rotate around the position of the device if we are following its heading, otherwise around the center of the map
         // screenPosition is QgsPointXY, rotate() needs a point
         let pivot = root.headingUp ? Qt.point( mapPositionSource.screenPosition.x, mapPositionSource.screenPosition.y ) : Qt.point( mapCanvas.width / 2, mapCanvas.height / 2 )
-        if ( Math.abs( step ) > mapRotator.minStepAngle ) mapCanvas.rotate( pivot, step )
+        // the last step is always applied, so the map ends exactly at the target (e.g. exactly at north)
+        if ( isDone || Math.abs( step ) > mapRotator.minStepAngle ) mapCanvas.rotate( pivot, step )
 
+        // Stopped when done, so nothing runs every frame; a new direction starts it again, see onDirectionChanged.
+        // The slower start of the follow direction mode is over too, the next directions are followed at the
+        // default speed (otherwise the map would lag far behind the direction when the device turns quickly)
         if ( isDone ) {
-          // Heading up mode keeps the rotator active
-          if ( !root.headingUp ) mapRotator.active = false
+          mapRotator.active = false
+          mapRotator.tau = mapRotator.defaultTau
+          mapRotator.maxSpeed = mapRotator.defaultMaxSpeed
         }
+      }
+    }
+
+    onActiveChanged: {
+      if ( !active ) overscanWaitExpired = false
+    }
+
+    function rotateTo( newTarget, newTau = mapRotator.defaultTau, newMaxSpeed = mapRotator.defaultMaxSpeed ) {
+      target = newTarget
+      tau = newTau
+      maxSpeed = newMaxSpeed
+      active = true
+    }
+
+    // nothing is started when the map already points to the north, so the map is not rendered again for no reason
+    function rotateToNorth() {
+      if ( mapCanvas.mapSettings.rotation !== 0 ) {
+        rotateTo( 0 )
+      }
+      else {
+        active = false
       }
     }
   }
@@ -1295,8 +1304,8 @@ Item {
   Connections {
     target: AppSettings
 
-    function onMapRotationEnabledChanged() {
-      if ( !AppSettings.mapRotationEnabled ) {
+    function onMapRotationEnabledChanged( mapRotationEnabled ) {
+      if ( !mapRotationEnabled ) {
         root.headingUp = false
         mapRotator.rotateToNorth()
       }
@@ -1320,6 +1329,7 @@ Item {
       if ( root.headingUp && positionDirectionSource.hasDirection ) {
         // the direction source already ignores small changes (compass is noisy), the easing of the rotator does the rest
         mapRotator.target = -positionDirectionSource.direction
+        mapRotator.active = true
       }
     }
   }
@@ -1651,7 +1661,13 @@ Item {
     }
     else
     {
-      // when identifying by picking from feature list, we zoom to the geometry
+      // When identifying by picking from feature list, we zoom to the geometry. The follow direction mode ends there,
+      // it would keep rotating the map around the position, which can be far outside of the screen. The rotation is kept.
+      if ( root.headingUp ) {
+        root.headingUp = false
+        mapRotator.active = false
+      }
+
       const extent = __inputUtils.drawerCompensatedExtent( identifyHighlight.geometry, mapCanvas.mapSettings, root.mapExtentOffset )
       mapCanvas.jumpToExtent( extent )
     }

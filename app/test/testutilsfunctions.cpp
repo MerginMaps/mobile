@@ -513,6 +513,32 @@ void TestUtilsFunctions::testWhereToPanWhenIdentifying()
     QVERIFY( std::isnan( pan.x() ) );
     QVERIFY( std::isnan( pan.y() ) );
   }
+
+  // rotated map: the visible part is checked on the screen, not in map coordinates
+  const QVector<double> rotations = { 45, 90, 180, -135 };
+  for ( const double rotation : rotations )
+  {
+    InputMapSettings ms;
+    ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+    ms.setOutputSize( QSize( 400, 620 ) );
+    ms.setExtent( QgsRectangle( 0, 0, 40, 62 ) );
+    ms.setRotation( rotation );
+
+    const double bottomOffset = 200; // drawer covers screen y in [420, 620]
+
+    // point well inside the unobstructed area -> no pan needed
+    const QgsPoint visibleOnMap = ms.screenToCoordinate( QPointF( 200, 200 ) );
+    const QgsGeometry visiblePoint = QgsGeometry::fromPointXY( QgsPointXY( visibleOnMap.x(), visibleOnMap.y() ) );
+    QPointF pan = InputUtils::whereToPanWhenIdentifying( visiblePoint, &ms, bottomOffset, 0, QPointF( visibleOnMap.x(), visibleOnMap.y() ) );
+    QVERIFY2( std::isnan( pan.x() ) && std::isnan( pan.y() ), qPrintable( QStringLiteral( "rotation %1" ).arg( rotation ) ) );
+
+    // point hidden under the drawer -> pan so that it is centered in the unobstructed part
+    const QgsPoint hiddenOnMap = ms.screenToCoordinate( QPointF( 200, 520 ) );
+    const QgsGeometry hiddenPoint = QgsGeometry::fromPointXY( QgsPointXY( hiddenOnMap.x(), hiddenOnMap.y() ) );
+    pan = InputUtils::whereToPanWhenIdentifying( hiddenPoint, &ms, bottomOffset, 0, QPointF( hiddenOnMap.x(), hiddenOnMap.y() ) );
+    COMPARENEAR( pan.x(), 200.0, 1e-4 );
+    COMPARENEAR( pan.y(), 620.0, 1e-4 );
+  }
 }
 
 void TestUtilsFunctions::testDrawerCompensatedExtent()
@@ -548,6 +574,56 @@ void TestUtilsFunctions::testDrawerCompensatedExtent()
     COMPARENEAR( extent.height(), 620 * 0.059, 1e-4 );
     COMPARENEAR( extent.center().x(), 20.0, 1e-4 );
     COMPARENEAR( extent.center().y(), 15.0 - bottomOffset / 2.0 * 0.059, 1e-4 );
+  }
+
+  // rotated map: the geometry ends up centered in the unobstructed part of the screen, the scale of a point is kept
+  const QVector<double> rotations = { 30, 90, 180, -135 };
+  for ( const double rotation : rotations )
+  {
+    const QString message = QStringLiteral( "rotation %1" ).arg( rotation );
+
+    InputMapSettings ms;
+    ms.setDestinationCrs( QgsCoordinateReferenceSystem::fromEpsgId( 4326 ) );
+    ms.setOutputSize( QSize( 400, 620 ) );
+    ms.setExtent( QgsRectangle( 0, 0, 40, 62 ) );
+    ms.setRotation( rotation );
+
+    const double bottomOffset = 200; // drawer covers screen y in [420, 620], the unobstructed part is centered at y 210
+
+    const QgsGeometry point = QgsGeometry::fromPointXY( QgsPointXY( 20, 10 ) );
+    QgsRectangle extent = InputUtils::drawerCompensatedExtent( point, &ms, bottomOffset );
+    QVERIFY2( qgsDoubleNear( extent.width(), 40.0, 1e-4 ), qPrintable( message ) ); // not zoomed out
+    QVERIFY2( qgsDoubleNear( extent.height(), 62.0, 1e-4 ), qPrintable( message ) );
+
+    ms.setExtent( extent );
+    QPointF screenPt = ms.coordinateToScreen( QgsPoint( 20, 10 ) );
+    QVERIFY2( qgsDoubleNear( screenPt.x(), 200.0, 1e-3 ), qPrintable( message ) );
+    QVERIFY2( qgsDoubleNear( screenPt.y(), 210.0, 1e-3 ), qPrintable( message ) );
+
+    // the same extent again does not zoom out (it used to grow with every selection)
+    extent = InputUtils::drawerCompensatedExtent( point, &ms, bottomOffset );
+    QVERIFY2( qgsDoubleNear( extent.width(), 40.0, 1e-4 ), qPrintable( message ) );
+
+    // a line fits into the unobstructed part, centered in it
+    const QgsGeometry line = QgsGeometry::fromPolylineXY( { QgsPointXY( 10, 10 ), QgsPointXY( 30, 20 ) } );
+    extent = InputUtils::drawerCompensatedExtent( line, &ms, bottomOffset );
+    ms.setExtent( extent );
+
+    double minX = std::numeric_limits<double>::max();
+    double minY = std::numeric_limits<double>::max();
+    double maxX = std::numeric_limits<double>::lowest();
+    double maxY = std::numeric_limits<double>::lowest();
+    for ( const QgsPoint &corner : { QgsPoint( 10, 10 ), QgsPoint( 10, 20 ), QgsPoint( 30, 10 ), QgsPoint( 30, 20 ) } )
+    {
+      const QPointF pt = ms.coordinateToScreen( corner );
+      minX = std::min( minX, pt.x() );
+      minY = std::min( minY, pt.y() );
+      maxX = std::max( maxX, pt.x() );
+      maxY = std::max( maxY, pt.y() );
+    }
+    QVERIFY2( minX >= -1e-3 && maxX <= 400 + 1e-3 && minY >= -1e-3 && maxY <= 420 + 1e-3, qPrintable( message ) );
+    QVERIFY2( qgsDoubleNear( ( minX + maxX ) / 2, 200.0, 1e-3 ), qPrintable( message ) );
+    QVERIFY2( qgsDoubleNear( ( minY + maxY ) / 2, 210.0, 1e-3 ), qPrintable( message ) );
   }
 }
 
@@ -1561,6 +1637,12 @@ void TestUtilsFunctions::testMapCanvasRotate()
   QCOMPARE( rotationSpy.count(), 1 );
   QCOMPARE( extentSpy.count(), 1 );
   QCOMPARE( visibleExtentSpy.count(), 1 ); // listeners are updated once per rotation step
+
+  // nothing changes, nothing is announced (e.g. the fingers hold the map snapped to north)
+  canvas.rotate( pivot, 0 );
+  QCOMPARE( rotationSpy.count(), 1 );
+  QCOMPARE( extentSpy.count(), 1 );
+  QCOMPARE( visibleExtentSpy.count(), 1 );
 
   QPointF pivotNow = ms->coordinateToScreen( pivotOnMap );
   QVERIFY( qgsDoubleNear( pivotNow.x(), pivot.x(), 1e-6 ) );

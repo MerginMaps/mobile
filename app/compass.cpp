@@ -22,6 +22,18 @@ static constexpr qreal SMOOTHING_TIME_MS = 300;
 static constexpr qreal FULL_CIRCLE_DEG = 360;
 static constexpr qreal HALF_CIRCLE_DEG = 180;
 
+// screen orientations, each a quarter turn from the previous one
+static constexpr Qt::ScreenOrientation QUARTER_TURNS[] = { Qt::PortraitOrientation, Qt::LandscapeOrientation, Qt::InvertedPortraitOrientation, Qt::InvertedLandscapeOrientation };
+static constexpr int QUARTER_TURNS_COUNT = static_cast<int>( std::size( QUARTER_TURNS ) );
+static constexpr int HALF_TURN = QUARTER_TURNS_COUNT / 2;
+static constexpr int THREE_QUARTER_TURNS = QUARTER_TURNS_COUNT - 1;
+
+// user orientations of the compass (in degrees)
+static constexpr int USER_ORIENTATION_NATIVE = 0;
+static constexpr int USER_ORIENTATION_RIGHT_UP = 90;
+static constexpr int USER_ORIENTATION_UPSIDE_DOWN = 180;
+static constexpr int USER_ORIENTATION_LEFT_UP = 270;
+
 Compass::Compass( QObject *parent ) : QObject( parent )
 {
   mOrientationSensor = new QOrientationSensor( this );
@@ -69,15 +81,6 @@ qreal Compass::direction() const
     return MIN_INVALID_DIRECTION;
 
   return azimuth + mCompass->userOrientation();
-}
-
-QCompassReading *Compass::reading()
-{
-  if ( mCompass )
-  {
-    return mCompass->reading();
-  }
-  return nullptr;
 }
 
 void Compass::onReadingChanged()
@@ -128,18 +131,6 @@ void Compass::setUserOrientation()
                                   reading ? reading->orientation() : QOrientationReading::Undefined,
                                   mCompass->userOrientation() ) );
 }
-
-// screen orientations, each a quarter turn from the previous one
-static constexpr Qt::ScreenOrientation QUARTER_TURNS[] = { Qt::PortraitOrientation, Qt::LandscapeOrientation, Qt::InvertedPortraitOrientation, Qt::InvertedLandscapeOrientation };
-static constexpr int QUARTER_TURNS_COUNT = static_cast<int>( std::size( QUARTER_TURNS ) );
-static constexpr int HALF_TURN = QUARTER_TURNS_COUNT / 2;
-static constexpr int THREE_QUARTER_TURNS = QUARTER_TURNS_COUNT - 1;
-
-// user orientations of the compass (in degrees)
-static constexpr int USER_ORIENTATION_NATIVE = 0;
-static constexpr int USER_ORIENTATION_RIGHT_UP = 90;
-static constexpr int USER_ORIENTATION_UPSIDE_DOWN = 180;
-static constexpr int USER_ORIENTATION_LEFT_UP = 270;
 
 // number of quarter turns from portrait
 static int quarterTurns( Qt::ScreenOrientation orientation )

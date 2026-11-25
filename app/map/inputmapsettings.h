@@ -199,7 +199,8 @@ class InputMapSettings : public QObject
     void setRotation( double rotation );
 
     /**
-     * Rotates the map by \a angle (degrees, clockwise) around the \a pivot screen position, emitting each change signal once.
+     * Rotates the map by \a angle (degrees, clockwise) around the \a pivot screen position, emitting each change signal once
+     * (none when the angle is 0).
      * Use InputMapCanvasMap::rotate(), which also paces the rendering.
      */
     void rotate( const QPointF &pivot, double angle );

@@ -18,6 +18,7 @@ Item {
 
   property real direction: 0 // relative to the north
   property real mapRotation: 0 // the marker is drawn on the (possibly rotated) screen
+  property bool animateDirection: true // changes of the direction are animated
   property bool hasDirection: true
   
   property real horizontalAccuracy: 0.5
@@ -65,7 +66,10 @@ Item {
       transformOrigin: Item.Bottom
       smooth: true
 
-      Behavior on rotation { RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }}
+      Behavior on rotation {
+        enabled: root.animateDirection
+        RotationAnimation { properties: "rotation"; direction: RotationAnimation.Shortest; duration: 500 }
+      }
     }
   }
 

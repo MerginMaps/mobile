@@ -312,6 +312,10 @@ void InputMapSettings::setRotation( double rotation )
 
 void InputMapSettings::rotate( const QPointF &pivot, double angle )
 {
+  // e.g. the fingers hold the map snapped to north, nothing changes
+  if ( qgsDoubleNear( angle, 0 ) )
+    return;
+
   const QgsPoint pivotOnMap = screenToCoordinate( pivot );
 
   {
