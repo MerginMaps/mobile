@@ -102,6 +102,12 @@ class InputMapCanvasMap : public QQuickItem
      */
     Q_PROPERTY( qreal rotationRenderThreshold READ rotationRenderThreshold WRITE setRotationRenderThreshold NOTIFY rotationRenderThresholdChanged )
 
+    /**
+     * When set, the rotated map is rendered only after a break: when its rotation stayed within a few degrees for a while.
+     * The rotationRenderThreshold and the render pause are not used. Meant for following the direction of the device.
+     */
+    Q_PROPERTY( bool renderAfterBreak READ renderAfterBreak WRITE setRenderAfterBreak NOTIFY renderAfterBreakChanged )
+
   public:
     //! Create map canvas map
     explicit InputMapCanvasMap( QQuickItem *parent = nullptr );
@@ -120,6 +126,10 @@ class InputMapCanvasMap : public QQuickItem
     //! \copydoc InputMapCanvasMap::rotationRenderThreshold
     qreal rotationRenderThreshold() const;
     void setRotationRenderThreshold( qreal threshold );
+
+    //! \copydoc InputMapCanvasMap::renderAfterBreak
+    bool renderAfterBreak() const;
+    void setRenderAfterBreak( bool renderAfterBreak );
 
     //! \copydoc InputMapCanvasMap::freeze
     bool freeze() const;
@@ -165,6 +175,7 @@ class InputMapCanvasMap : public QQuickItem
 
     //! \copydoc InputMapCanvasMap::rotationRenderThreshold
     void rotationRenderThresholdChanged();
+    void renderAfterBreakChanged();
 
     //! \copydoc InputMapCanvasMap::isRendering
     void isRenderingChanged();
@@ -224,6 +235,7 @@ class InputMapCanvasMap : public QQuickItem
     void onTemporalStateChanged();
     void checkRotationRender();
     void onRotationSettled();
+    void onRotationBreak();
 
   private:
 
@@ -238,6 +250,10 @@ class InputMapCanvasMap : public QQuickItem
     void clearTemporalCache();
     void refreshForRotation();
     double rotationDifference() const;
+    void checkRotationBreak();
+
+    //! Returns the absolute difference of two angles (in degrees), in range [0, 180]
+    static double angleDistance( double angle1, double angle2 );
     bool pictureCoversCanvas() const;
     bool rotationRenderAllowed() const;
     qint64 rotationRenderRest() const; // remaining pause before the next rendering started by the rotation (in milliseconds)
@@ -269,6 +285,9 @@ class InputMapCanvasMap : public QQuickItem
     bool mRotationRender = false; // the current rendering job was started because of the rotation
     bool mRotationRenderRequested = false; // the next rendering job will be started because of the rotation
     QTimer mRotationSettleTimer; // fires when the map stopped rotating
+    bool mRenderAfterBreak = false;
+    QTimer mRotationBreakTimer; // fires when the rotation stayed close to mRotationBreakStart for a while
+    double mRotationBreakStart = 0; // rotation (in degrees) at the start of the current break
     QElapsedTimer mRenderTimer; // measures the running rendering job
     QElapsedTimer mRenderRestTimer; // time since the last rendering job finished
     qint64 mLastRenderDuration = 0; // how long the last finished rendering took (in milliseconds)

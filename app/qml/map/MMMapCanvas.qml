@@ -50,6 +50,7 @@ Item {
   property alias overscan: mapRenderer.overscan
   readonly property alias overscanReady: mapRenderer.overscanReady
   property alias rotationRenderThreshold: mapRenderer.rotationRenderThreshold
+  property alias renderAfterBreak: mapRenderer.renderAfterBreak
 
   // Requests map redraw
   function refresh() {

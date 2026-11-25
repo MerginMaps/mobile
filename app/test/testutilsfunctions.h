@@ -69,6 +69,7 @@ class TestUtilsFunctions: public QObject
     void testMapSettingsTransform();
     void testMapCanvasRotate();
     void testMapCanvasRotationRenderRest();
+    void testMapCanvasRotationBreak();
     void testCompassUserOrientation();
     void testCompassSmoothing();
 
