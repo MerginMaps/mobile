@@ -72,6 +72,7 @@ class TestUtilsFunctions: public QObject
     void testMapCanvasRotationBreak();
     void testCompassUserOrientation();
     void testCompassSmoothing();
+    void testCompassNormalizedDirection();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

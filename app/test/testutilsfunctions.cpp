@@ -1878,3 +1878,31 @@ void TestUtilsFunctions::testCompassSmoothing()
     QVERIFY( qgsDoubleNear( smoothed( compass ), 200, 1e-3 ) );
   }
 }
+
+void TestUtilsFunctions::testCompassNormalizedDirection()
+{
+  // the direction is in range [0, 360) on all platforms, e.g. for @position_direction
+  QCOMPARE( Compass::normalizedDirection( 0 ), 0.0 );
+  QCOMPARE( Compass::normalizedDirection( 90 ), 90.0 );
+  QCOMPARE( Compass::normalizedDirection( -90 ), 270.0 ); // west from the Android sensors
+  QCOMPARE( Compass::normalizedDirection( -179.5 ), 180.5 );
+  QCOMPARE( Compass::normalizedDirection( 180 ), 180.0 );
+  QCOMPARE( Compass::normalizedDirection( 360 ), 0.0 );
+  QCOMPARE( Compass::normalizedDirection( 450 ), 90.0 ); // azimuth with the user orientation added
+  QCOMPARE( Compass::normalizedDirection( -360 ), 0.0 );
+
+  // a tiny negative direction is not 360
+  const qreal tiny = Compass::normalizedDirection( -1e-13 );
+  QVERIFY2( tiny >= 0 && tiny < 360, qPrintable( QString::number( tiny, 'g', 17 ) ) );
+
+  // any azimuth from the sensors plus any user orientation ends in range
+  const int userOrientations[] = { 0, 90, 180, 270 };
+  for ( int rotation = -360; rotation <= 360; rotation += 5 )
+  {
+    for ( const int userOrientation : userOrientations )
+    {
+      const qreal direction = Compass::normalizedDirection( Compass::azimuthFromRotation( rotation ) + userOrientation );
+      QVERIFY2( direction >= 0 && direction < 360, qPrintable( QString::number( direction ) ) );
+    }
+  }
+}

@@ -20,16 +20,29 @@ class QRotationSensor;
 class Compass: public QObject
 {
     Q_OBJECT
+
+    /**
+     * Android only: when TRUE, the direction comes from the fused rotation sensor (gyroscope, magnetometer, accelerometer),
+     * which is smoother but uses more power. Off by default, the smoothed compass is used then. No effect on other platforms.
+     */
+    Q_PROPERTY( bool rotationSensorEnabled READ rotationSensorEnabled WRITE setRotationSensorEnabled NOTIFY rotationSensorEnabledChanged )
+
   public:
     explicit Compass( QObject *parent = nullptr );
 
     //! any direction value in degrees that is < -180 is not valid.
     static constexpr qreal MIN_INVALID_DIRECTION = -180.1;
 
+    //! Returns the direction in degrees in range [0, 360), or MIN_INVALID_DIRECTION when there is no reading
     qreal direction() const;
+
+    //! \copydoc Compass::rotationSensorEnabled
+    bool rotationSensorEnabled() const;
+    void setRotationSensorEnabled( bool enabled );
 
   signals:
     void directionChanged();
+    void rotationSensorEnabledChanged();
   public slots:
     void setUserOrientation();
   private slots:
@@ -52,12 +65,16 @@ class Compass: public QObject
     //! Converts QRotationReading::z (counter-clockwise, 0 at north) to an azimuth in degrees, in range (-180, 180]
     static qreal azimuthFromRotation( qreal rotationZ );
 
+    //! Returns \a direction (in degrees) in range [0, 360)
+    static qreal normalizedDirection( qreal direction );
+
     QOrientationSensor *mOrientationSensor = nullptr;
     QCompass *mCompass = nullptr;
 
     // Android only: fused orientation (gyroscope, magnetometer, accelerometer), preferred to the noisy raw compass.
-    // Null if the device does not have it.
+    // Null when not enabled (see rotationSensorEnabled) or if the device does not have it.
     QRotationSensor *mRotationSensor = nullptr;
+    bool mRotationSensorEnabled = false;
     bool mHasRotationReading = false;
 
     // smoothed azimuth as a vector, so it handles the wrap around +-180

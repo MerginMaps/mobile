@@ -25,7 +25,6 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-#include "inputmaptransform.h"
 #include "coreutils.h"
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"

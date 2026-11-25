@@ -23,7 +23,6 @@ set(MM_SRCS
     layer/layertreesortfiltermodel.cpp
     map/inputmapcanvasmap.cpp
     map/inputmapsettings.cpp
-    map/inputmaptransform.cpp
     maptools/abstractmaptool.cpp
     maptools/recordingmaptool.cpp
     maptools/splittingmaptool.cpp
@@ -120,7 +119,6 @@ set(MM_HDRS
     layer/layertreesortfiltermodel.h
     map/inputmapcanvasmap.h
     map/inputmapsettings.h
-    map/inputmaptransform.h
     maptools/abstractmaptool.h
     maptools/recordingmaptool.h
     maptools/splittingmaptool.h

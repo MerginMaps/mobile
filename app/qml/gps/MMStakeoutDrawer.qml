@@ -221,7 +221,7 @@ MMDrawer {
               id: positionDirection
 
               positionKit: PositionKit
-              compass: MM.Compass { id: ccompass }
+              compass: root.mapCanvas ? root.mapCanvas.compass : null // shares the sensors with the map
             }
 
             MMPositionMarker {

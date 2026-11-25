@@ -1212,7 +1212,12 @@ Item {
     id: splittingFailedDialog
   }
 
-  MM.Compass { id: deviceCompass }
+  MM.Compass {
+    id: deviceCompass
+
+    // Android: the smoother fused rotation sensor (more power) only when the map rotation is used
+    rotationSensorEnabled: AppSettings.mapRotationEnabled
+  }
 
   // Rotates the map towards the target angle with easing (the remaining distance shrinks exponentially),
   // so changes of the target (e.g. device direction updates) result in a smooth movement.

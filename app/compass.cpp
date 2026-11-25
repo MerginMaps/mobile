@@ -45,20 +45,8 @@ Compass::Compass( QObject *parent ) : QObject( parent )
   QObject::connect( mOrientationSensor, &QOrientationSensor::readingChanged, this, &Compass::setUserOrientation );
 
 #ifdef ANDROID
-  // the raw Android azimuth is noisy (iOS filters it), smoothed for when the fused rotation sensor is missing
+  // the raw Android azimuth is noisy (iOS filters it), smoothed for when the fused rotation sensor is not used
   mSmoothing = true;
-
-  mRotationSensor = new QRotationSensor( this );
-  if ( mRotationSensor->connectToBackend() )
-  {
-    QObject::connect( mRotationSensor, &QRotationSensor::readingChanged, this, [this] { mHasRotationReading = true; } );
-    mRotationSensor->start();
-  }
-  else
-  {
-    delete mRotationSensor;
-    mRotationSensor = nullptr;
-  }
 #endif
   QObject::connect( mCompass, &QCompass::readingChanged, this, &Compass::onReadingChanged );
 
@@ -80,7 +68,48 @@ qreal Compass::direction() const
   else
     return MIN_INVALID_DIRECTION;
 
-  return azimuth + mCompass->userOrientation();
+  return normalizedDirection( azimuth + mCompass->userOrientation() );
+}
+
+bool Compass::rotationSensorEnabled() const
+{
+  return mRotationSensorEnabled;
+}
+
+void Compass::setRotationSensorEnabled( bool enabled )
+{
+  if ( mRotationSensorEnabled == enabled )
+    return;
+
+  mRotationSensorEnabled = enabled;
+
+#ifdef ANDROID
+  if ( enabled )
+  {
+    mRotationSensor = new QRotationSensor( this );
+    if ( mRotationSensor->connectToBackend() )
+    {
+      QObject::connect( mRotationSensor, &QRotationSensor::readingChanged, this, [this] { mHasRotationReading = true; } );
+      mRotationSensor->start();
+    }
+    else
+    {
+      delete mRotationSensor;
+      mRotationSensor = nullptr;
+    }
+  }
+  else if ( mRotationSensor )
+  {
+    // back to the smoothed compass, it starts again from its next reading
+    mRotationSensor->stop();
+    delete mRotationSensor;
+    mRotationSensor = nullptr;
+    mHasRotationReading = false;
+    mHasSmoothedAzimuth = false;
+  }
+#endif
+
+  emit rotationSensorEnabledChanged();
 }
 
 void Compass::onReadingChanged()
@@ -118,6 +147,17 @@ qreal Compass::azimuthFromRotation( qreal rotationZ )
   else if ( azimuth <= -HALF_CIRCLE_DEG )
     azimuth += FULL_CIRCLE_DEG;
   return azimuth;
+}
+
+qreal Compass::normalizedDirection( qreal direction )
+{
+  qreal normalized = std::fmod( direction, FULL_CIRCLE_DEG );
+  if ( normalized < 0 )
+    normalized += FULL_CIRCLE_DEG;
+  // a tiny negative direction would become exactly 360
+  if ( normalized >= FULL_CIRCLE_DEG )
+    normalized -= FULL_CIRCLE_DEG;
+  return normalized;
 }
 
 void Compass::setUserOrientation()
