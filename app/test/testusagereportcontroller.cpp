@@ -65,6 +65,8 @@ void TestUsageReportController::cleanupTestCase()
 void TestUsageReportController::init()
 {
   mController->mSnapshotInFlight = false;
+  mController->mFetchingServiceDetails = false;
+  mController->mSnapshotDiscarded = false;
   mController->mSentData.clear();
 
   // opting out clears the data and the telemetry id
@@ -110,6 +112,37 @@ void TestUsageReportController::testSnapshotHasOnlyExpectedKeys()
 
   const QStringList planKeys = body.value( QStringLiteral( "properties" ) ).toObject().value( QStringLiteral( "plan" ) ).toObject().keys();
   QCOMPARE( QSet<QString>( planKeys.cbegin(), planKeys.cend() ), QSet<QString>( { "name", "alias" } ) );
+}
+
+void TestUsageReportController::testSnapshotKeysSorted()
+{
+  mController->trackFeature( QStringLiteral( "filtering" ) );
+  mController->incrementCounter( QStringLiteral( "captured_images" ) );
+
+  QVariantMap sentData;
+  const QJsonObject body = mController->buildSnapshot( sentData );
+
+  // every key has to appear in the serialized JSON after the previous one in alphabetical order
+  const auto verifySerializedInOrder = []( const QJsonObject & object )
+  {
+    QStringList keys = object.keys();
+    keys.sort();
+    const QByteArray json = QJsonDocument( object ).toJson( QJsonDocument::Compact );
+    qsizetype previousPos = -1;
+    for ( const QString &key : std::as_const( keys ) )
+    {
+      const qsizetype pos = json.indexOf( QStringLiteral( "\"%1\":" ).arg( key ).toUtf8(), previousPos + 1 );
+      if ( pos <= previousPos )
+        return false;
+      previousPos = pos;
+    }
+    return true;
+  };
+
+  const QJsonObject properties = body.value( QStringLiteral( "properties" ) ).toObject();
+  QVERIFY( verifySerializedInOrder( body ) );
+  QVERIFY( verifySerializedInOrder( properties ) );
+  QVERIFY( verifySerializedInOrder( properties.value( QStringLiteral( "plan" ) ).toObject() ) );
 }
 
 void TestUsageReportController::testSnapshotHasNoPersonalData()
@@ -209,6 +242,33 @@ void TestUsageReportController::testSentDataKeptAfterFailure()
   QSettings settings;
   QVERIFY( settings.value( usageDataKey( QStringLiteral( "filtering" ) ) ).toBool() );
   QCOMPARE( settings.value( usageDataKey( QStringLiteral( "captured_images" ) ) ).toInt(), 2 );
+  QVERIFY( !settings.contains( usageReportKey( AppSettings::USAGE_REPORT_LAST_REPORTED_KEY ) ) );
+}
+
+void TestUsageReportController::testSnapshotDiscardedAfterOptOut()
+{
+  mController->trackFeature( QStringLiteral( "filtering" ) );
+
+  QVariantMap sentData;
+  mController->buildSnapshot( sentData );
+  mController->mSnapshotInFlight = true;
+  mController->mSentData = sentData;
+
+  // the user opts out and in again while the snapshot is being sent, and uses filtering again
+  mAppSettings->setUsageReportEnabled( false );
+  mAppSettings->setUsageReportEnabled( true );
+  mController->trackFeature( QStringLiteral( "filtering" ) );
+
+  QSignalSpy spy( mController, &UsageReportController::snapshotSubmitted );
+  mController->onUsageReportSent( true );
+
+  QCOMPARE( spy.count(), 0 );
+  QVERIFY( !mController->mSnapshotInFlight );
+  QVERIFY( !mController->mSnapshotDiscarded );
+
+  // the data collected after opting in again belongs to the next snapshot
+  QSettings settings;
+  QVERIFY( settings.value( usageDataKey( QStringLiteral( "filtering" ) ) ).toBool() );
   QVERIFY( !settings.contains( usageReportKey( AppSettings::USAGE_REPORT_LAST_REPORTED_KEY ) ) );
 }
 

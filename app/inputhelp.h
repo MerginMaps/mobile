@@ -36,6 +36,7 @@ class InputHelp: public QObject
     Q_PROPERTY( QString merginTermsLink READ merginTermsLink NOTIFY linkChanged )
     Q_PROPERTY( QString projectLoadingErrorHelpLink READ projectLoadingErrorHelpLink NOTIFY linkChanged )
     Q_PROPERTY( QString whatsNewPostLink READ whatsNewPostLink NOTIFY linkChanged )
+    Q_PROPERTY( QString usageReportHelpLink READ usageReportHelpLink NOTIFY linkChanged )
     Q_PROPERTY( QString migrationGuides READ migrationGuides CONSTANT )
 
     //! When adding new link, make sure you also create unit test for it in TestLinks
@@ -70,6 +71,7 @@ class InputHelp: public QObject
     static QString merginTermsLink() ;
     static QString projectLoadingErrorHelpLink() ;
     static QString whatsNewPostLink() ;
+    static QString usageReportHelpLink() ;
     static QString changelogLink();
     static QString helpdeskMail();
     static QString migrationGuides() ;

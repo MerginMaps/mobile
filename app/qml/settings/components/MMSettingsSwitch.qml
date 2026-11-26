@@ -46,9 +46,12 @@ Item {
       }
 
       Text {
+        id: descriptionText
+
         width: parent.width
 
         text: root.description
+        textFormat: Text.RichText // the description can contain a link, linkAt() needs rich text
         wrapMode: Text.WordWrap
         font: __style.p6
         color: __style.nightColor
@@ -70,7 +73,19 @@ Item {
   }
 
   MouseArea {
+    id: mouseArea
+
     anchors.fill: parent
-    onClicked: root.clicked()
+
+    // the description can contain a link, open it instead of toggling the switch
+    onClicked: function( mouse ) {
+      const point = mouseArea.mapToItem( descriptionText, mouse.x, mouse.y )
+      const link = descriptionText.linkAt( point.x, point.y )
+      if ( link ) {
+        Qt.openUrlExternally( link )
+        return
+      }
+      root.clicked()
+    }
   }
 }

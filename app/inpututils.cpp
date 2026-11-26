@@ -2610,6 +2610,9 @@ QString InputUtils::externalProviderBrand( const QString &providerType, const QS
       { QRegularExpression( QStringLiteral( "carlson" ), i ), QStringLiteral( "Carlson" ) },
       { QRegularExpression( QStringLiteral( "altus" ), i ), QStringLiteral( "Altus" ) },
       { QRegularExpression( QStringLiteral( "(?<![a-z0-9])fjd(?![a-z0-9])" ), i ), QStringLiteral( "FJD" ) },
+      { QRegularExpression( QStringLiteral( "marxact" ), i ), QStringLiteral( "Marxact" ) },
+      { QRegularExpression( QStringLiteral( "happy[ _-]?survey" ), i ), QStringLiteral( "Happy Survey" ) },
+      { QRegularExpression( QStringLiteral( "general[ _-]?laser|geoarend" ), i ), QStringLiteral( "General Laser" ) },
     };
   }();
 
@@ -2634,6 +2637,7 @@ QString InputUtils::externalProviderBrand( const QString &providerType, const QS
       { QRegularExpression( QStringLiteral( "(?<![a-z0-9])glo(?![a-z0-9])" ), i ), QStringLiteral( "Garmin" ) },
       { QRegularExpression( QStringLiteral( "(?<![a-z0-9])(f9p|zed[ _-]?f9)" ), i ), QStringLiteral( "u-blox" ) },
       { QRegularExpression( QStringLiteral( "(?<![a-z0-9])um9\\d{2}" ), i ), QStringLiteral( "Unicore" ) },
+      { QRegularExpression( QStringLiteral( "(?<![a-z0-9])glrm?(?![a-z0-9])" ), i ), QStringLiteral( "General Laser" ) }, // GLR, GLRM (Pro)
     };
   }();
 

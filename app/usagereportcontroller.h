@@ -68,6 +68,7 @@ class UsageReportController : public QObject
 
   private slots:
     void onInternetConnectionChecked( bool isOnline );
+    void onWorkspaceServiceDetailsFinished();
     void onUsageReportSent( bool success );
 
   private:
@@ -94,7 +95,9 @@ class UsageReportController : public QObject
     QTimer mPingTimer;
     QTimer mSnapshotTimer;
     QElapsedTimer mLoadTimer;
-    bool mSnapshotInFlight = false;
+    bool mSnapshotInFlight = false; // from requesting the workspace service details until the snapshot is sent
+    bool mFetchingServiceDetails = false;
+    bool mSnapshotDiscarded = false; // the user opted out while the snapshot was in flight, its result must not touch the new data
     QVariantMap mSentData; // data of the snapshot in flight, to reset it once the snapshot is sent
 
     inline static UsageReportController *sInstance = nullptr;

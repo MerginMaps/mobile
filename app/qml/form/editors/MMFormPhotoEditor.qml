@@ -143,6 +143,7 @@ MMFormPhotoViewer {
 
     function resetValueAndClose() {
       root.editorValueChanged( "", true )
+      internal.resetUsageReportData()
 
       errorMsg = ""
       imagePath = ""
@@ -183,6 +184,10 @@ MMFormPhotoViewer {
     function onSketchesSavingError(){
       __notificationModel.addError( qsTr("Photo sketches could not be saved, please contact support.") )
     }
+
+    function onSketched() {
+      internal.photoSketched = true
+    }
   }
 
   Connections {
@@ -212,10 +217,18 @@ MMFormPhotoViewer {
       __inputUtils.removeFile( internal.imageSourceToDelete )
       internal.imageSourceToDelete = ""
     }
+
+    // usage report counts only images and sketches that were saved with the feature
+    if ( internal.newImageCounterKey )
+      UsageReportController.incrementCounter( internal.newImageCounterKey )
+    if ( internal.photoSketched )
+      UsageReportController.trackFeature( "photo_sketching" )
+    internal.resetUsageReportData()
   }
 
   function callbackOnFormCanceled() {
     internal.imageSourceToDelete = ""
+    internal.resetUsageReportData()
   }
 
   QtObject {
@@ -256,6 +269,15 @@ MMFormPhotoViewer {
     property string imageSourceToDelete // used to postpone image deletion to when the form is saved
 
     property bool cameraRequested: false // whether the last image was requested from the camera or the gallery, for the usage report
+
+    // usage report data, sent only when the form is saved
+    property string newImageCounterKey // counter of the new image in the field, empty when there is none
+    property bool photoSketched: false
+
+    function resetUsageReportData() {
+      internal.newImageCounterKey = ""
+      internal.photoSketched = false
+    }
 
     //
     // Sets path or url of the assigned photo to the resolvedImageSource.
@@ -415,7 +437,7 @@ MMFormPhotoViewer {
         const newImgPath = __inputUtils.getRelativePath( imgPath, prefixToRelativePath )
 
         root.editorValueChanged( newImgPath, newImgPath === "" || newImgPath === null )
-        UsageReportController.incrementCounter( cameraRequested ? "captured_images" : "attached_images" )
+        internal.newImageCounterKey = internal.cameraRequested ? "captured_images" : "attached_images"
         if ( photoSketchingLoader.active ) {
           sketchingController.prepareController()
         }

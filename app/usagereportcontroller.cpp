@@ -56,6 +56,7 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
   connect( &mPingTimer, &QTimer::timeout, this, &UsageReportController::checkConnectivity );
   connect( mMerginApi, &MerginApi::internetConnectionChecked, this, &UsageReportController::onInternetConnectionChecked );
   connect( mMerginApi, &MerginApi::usageReportSent, this, &UsageReportController::onUsageReportSent );
+  connect( mMerginApi, &MerginApi::workspaceServiceDetailsFinished, this, &UsageReportController::onWorkspaceServiceDetailsFinished );
   connect( &mSnapshotTimer, &QTimer::timeout, this, &UsageReportController::trySubmitSnapshot );
 
   connect( mAppSettings, &AppSettings::usageReportEnabledChanged, this, [this]( bool enabled )
@@ -64,6 +65,11 @@ UsageReportController::UsageReportController( AppSettings *appSettings,
     {
       mPingTimer.stop();
       mSnapshotTimer.stop();
+
+      // opt-out cleared the data, the result of a snapshot in flight must not reset data collected after opting in again
+      if ( mSnapshotInFlight )
+        mSnapshotDiscarded = true;
+      mSentData.clear();
     }
     else
     {
@@ -266,10 +272,29 @@ void UsageReportController::submitSnapshot( bool force )
       return;
   }
 
+  // plan and industry are fetched only for the snapshot, the snapshot is sent in onWorkspaceServiceDetailsFinished()
+  mSnapshotInFlight = true;
+  mFetchingServiceDetails = true;
+  mMerginApi->getWorkspaceServiceDetails();
+}
+
+void UsageReportController::onWorkspaceServiceDetailsFinished()
+{
+  if ( !mFetchingServiceDetails )
+    return;
+
+  mFetchingServiceDetails = false;
+
+  if ( mSnapshotDiscarded || !isEnabled() )
+  {
+    mSnapshotInFlight = false;
+    mSnapshotDiscarded = false;
+    return;
+  }
+
   QVariantMap sentData;
   const QJsonObject body = buildSnapshot( sentData );
 
-  mSnapshotInFlight = true;
   mSentData = sentData;
   mMerginApi->sendUsageReport( body );
 }
@@ -354,6 +379,7 @@ QJsonObject UsageReportController::buildSnapshot( QVariantMap &sentData )
   // Last reported at
   properties.insert( QStringLiteral( "last_reported_at" ), lastReported.isValid() ? lastReported.toString( Qt::ISODate ) : QString() );
 
+  // QJsonObject keeps its keys sorted, so the snapshot is serialized in alphabetical order on every level
   return QJsonObject
   {
     { QStringLiteral( "device_id" ), telemetryId },
@@ -364,16 +390,18 @@ QJsonObject UsageReportController::buildSnapshot( QVariantMap &sentData )
 
 void UsageReportController::onUsageReportSent( bool success )
 {
-  if ( !mSnapshotInFlight )
+  if ( !mSnapshotInFlight || mFetchingServiceDetails )
     return;
 
   mSnapshotInFlight = false;
   const QVariantMap sentData = mSentData;
   mSentData.clear();
+  const bool discarded = mSnapshotDiscarded;
+  mSnapshotDiscarded = false;
 
   // On failure the data is kept for the next attempt
-  // Skip if the user opted out meanwhile, opt-out already cleared the data
-  if ( !success || !isEnabled() )
+  // Skip if the user opted out meanwhile, opt-out already cleared the data (even if they opted in again since)
+  if ( !success || discarded || !isEnabled() )
     return;
 
   QSettings s;

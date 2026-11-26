@@ -1267,6 +1267,11 @@ void TestUtilsFunctions::testExternalProviderBrand()
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Trimble R12" ) ), QStringLiteral( "Trimble" ) );
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Hi-Target V200" ) ), QStringLiteral( "Hi-Target" ) );
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "SXBlue II" ) ), QStringLiteral( "SXblue" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "MARXACT Rover" ) ), QStringLiteral( "Marxact" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "HappySurvey RTK" ) ), QStringLiteral( "Happy Survey" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Happy Survey RTK" ) ), QStringLiteral( "Happy Survey" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "General Laser GLRM" ) ), QStringLiteral( "General Laser" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Geoarend base" ) ), QStringLiteral( "General Laser" ) );
 
   // network provider name is a user alias, it is mapped the same way
   QCOMPARE( InputUtils::externalProviderBrand( ip, QStringLiteral( "our leica base" ) ), QStringLiteral( "Leica" ) );
@@ -1284,10 +1289,15 @@ void TestUtilsFunctions::testExternalProviderBrand()
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Zenith 40" ) ), QStringLiteral( "GeoMax" ) );
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Arrow Gold" ) ), QStringLiteral( "Eos Positioning" ) );
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "ZED-F9P" ) ), QStringLiteral( "u-blox" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "GLRM" ) ), QStringLiteral( "General Laser" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "GLRM Pro" ) ), QStringLiteral( "General Laser" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "GLR" ) ), QStringLiteral( "General Laser" ) );
 
   // brand and model patterns need a border, so they do not match inside other words
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Southampton tracker" ) ), QStringLiteral( "other" ) );
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "XRX2" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "GLRMX" ) ), QStringLiteral( "other" ) );
+  QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "General Motors" ) ), QStringLiteral( "other" ) );
 
   // names that collide with phones and headphones are deliberately not mapped
   QCOMPARE( InputUtils::externalProviderBrand( bt, QStringLiteral( "Galaxy S9" ) ), QStringLiteral( "other" ) );
@@ -1313,6 +1323,7 @@ void TestUtilsFunctions::testExternalProviderBrandHasNoPersonalData()
     QStringLiteral( "Garmin" ), QStringLiteral( "ArduSimple" ), QStringLiteral( "SparkFun" ), QStringLiteral( "u-blox" ),
     QStringLiteral( "Unicore" ), QStringLiteral( "Tersus" ), QStringLiteral( "ComNav" ), QStringLiteral( "UniStrong" ),
     QStringLiteral( "Javad" ), QStringLiteral( "Carlson" ), QStringLiteral( "Altus" ), QStringLiteral( "FJD" ),
+    QStringLiteral( "Marxact" ), QStringLiteral( "Happy Survey" ), QStringLiteral( "General Laser" ),
     QStringLiteral( "other" ), QStringLiteral( "unknown" )
   };
 

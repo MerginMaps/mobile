@@ -253,6 +253,12 @@ class MerginApi: public QObject
     void sendUsageReport( const QJsonObject &report );
 
     /**
+     * Requests plan and industry of the active workspace (only on SaaS), they are only used by the usage report.
+     * Always emits workspaceServiceDetailsFinished(), also when nothing was requested or the request failed.
+     */
+    void getWorkspaceServiceDetails();
+
+    /**
      * Returns path of the local directory in which all projects are stored.
      * Each project is one sub-directory.
      * \note returns the directory without a trailing slash
@@ -747,6 +753,7 @@ class MerginApi: public QObject
     void pingMerginFinished( const QString &apiVersion, bool serverSupportsSubscriptions, const QString &msg );
     void internetConnectionChecked( bool isOnline );
     void usageReportSent( bool success );
+    void workspaceServiceDetailsFinished();
     void pullFilesStarted();
     void pushFilesStarted();
     void pushCanceled( const QString &projectFullName, bool result );
@@ -847,9 +854,6 @@ class MerginApi: public QObject
     QJsonArray prepareUploadChangesJSON( const QList<MerginFile> &files );
     static QString getApiKey( const QString &serverName );
     void abortPullItems( const QString &projectFullName );
-
-    //! Requests plan and industry of the active workspace (only on SaaS), called after the service info reply
-    void getWorkspaceServiceDetails();
 
     /**
      * Sends non-blocking POST request to the server to upload a file (chunk).

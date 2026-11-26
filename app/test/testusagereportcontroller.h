@@ -30,9 +30,11 @@ class TestUsageReportController : public QObject
 
     void testSnapshotHasOnlyExpectedKeys();
     void testSnapshotHasNoPersonalData();
+    void testSnapshotKeysSorted();
     void testSnapshotValues();
     void testSentDataResetAfterSuccess();
     void testSentDataKeptAfterFailure();
+    void testSnapshotDiscardedAfterOptOut();
     void testOptOutClearsData();
 
   private:

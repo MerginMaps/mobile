@@ -322,7 +322,14 @@ MMPage {
       MMSettingsComponents.MMSettingsSwitch {
         width: parent.width
         title: qsTr("Send anonymous usage data")
-        description: qsTr("Helps us improve the app. No personal data is collected.")
+        description: __inputUtils.htmlLink(
+                       qsTr("Helps us improve the app. No personal data is collected. %1Learn more%2"),
+                       __style.nightColor,
+                       __inputHelp.usageReportHelpLink,
+                       "",
+                       true,
+                       false
+                     )
         checked: AppSettings.usageReportEnabled
 
         onClicked: AppSettings.usageReportEnabled = !checked

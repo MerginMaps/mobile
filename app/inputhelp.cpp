@@ -153,6 +153,11 @@ QString InputHelp::whatsNewPostLink()
   return mmWeb + "/blog/introducing-workspaces-simplified-collaboration" + utmTagOther;
 }
 
+QString InputHelp::usageReportHelpLink()
+{
+  return helpRoot + "/misc/telemetry/" + utmTagHelp;
+}
+
 QString InputHelp::changelogLink()
 {
   return changelogRss;

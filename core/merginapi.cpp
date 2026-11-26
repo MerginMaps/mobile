@@ -1282,9 +1282,6 @@ void MerginApi::getServiceInfoReplyFinished()
     }
   }
 
-  // the plan and industry come from a separate endpoint, requested even when this one failed
-  getWorkspaceServiceDetails();
-
   r->deleteLater();
 }
 
@@ -1296,11 +1293,13 @@ void MerginApi::getWorkspaceServiceDetails()
   const int workspaceId = mUserInfo->activeWorkspaceId();
   if ( mServerType != MerginServerType::SAAS || workspaceId < 0 )
   {
+    emit workspaceServiceDetailsFinished();
     return;
   }
 
   if ( !validateAuth() || mApiVersionStatus != MerginApiStatus::OK )
   {
+    emit workspaceServiceDetailsFinished();
     return;
   }
 
@@ -1335,6 +1334,7 @@ void MerginApi::getWorkspaceServiceDetailsReplyFinished()
     CoreUtils::log( "Workspace service", QStringLiteral( "FAILED - %1" ).arg( r->errorString() ) );
   }
 
+  emit workspaceServiceDetailsFinished();
   r->deleteLater();
 }
 
