@@ -89,37 +89,32 @@ MMPrivateComponents.MMBaseInput {
 
     readOnly: root.editState !== "enabled"
 
-    // same as in MMBaseSingleLineInput, native selection in read-only fields is broken (QTBUG-141929),
-    // so read-only fields don't take focus, have no native selection and copy the whole value on long press instead
-    activeFocusOnPress: !readOnly
-    inputMethodHints: readOnly ? Qt.ImhNoTextHandles : Qt.ImhNone
+    // Read-only text area doesn't take focus, so it has no native selection, which is broken in read-only fields
+    // (QTBUG-141929). Read-only fields copy the whole value on long press instead
+    activeFocusOnPress: !readOnly // Important due to crashes on iOS, see https://github.com/MerginMaps/mobile/pull/4561
 
-    // same as in MMBaseSingleLineInput, focus the field before Android's native long press comes,
-    // so it can select the word, and restore the selection that TextArea's held-back press clears on release
-    property bool androidLongPressed: false
-
-    onPressed: androidLongPressed = false
-
-    onReleased: {
-      if ( androidLongPressed && selectedText !== "" ) {
-        const start = selectionStart
-        const end = selectionEnd
-        Qt.callLater( () => select( start, end ) )
-      }
-      androidLongPressed = false
-    }
-
+    // Android long press selects a word in a focused field, but TextArea holds the press back and delivers it
+    // on release, where Qt takes it as a tap on the selection and clears it (QTBUG-128808). So restore the selection.
     TapHandler {
-      enabled: __androidUtils.isAndroid && !textArea.readOnly
-      longPressThreshold: 0.3 // Android's native long press comes after 0.4 s
+      property bool longPressedHere: false
 
-      onLongPressed: {
-        textArea.forceActiveFocus()
-        textArea.androidLongPressed = true
+      enabled: __androidUtils.isAndroid && textArea.activeFocus && !textArea.readOnly
+      longPressThreshold: 0.3 // not later than Android's own long press (0.4 s)
+
+      onLongPressed: longPressedHere = true
+
+      onPressedChanged: {
+        if ( pressed || !longPressedHere ) return
+
+        longPressedHere = false
+        const start = textArea.selectionStart
+        const end = textArea.selectionEnd
+        Qt.callLater( () => textArea.select( start, end ) ) // after TextArea handles the held-back press
       }
     }
 
-    // TapHandler cancels the long press once the finger moves (e.g. scrolling the form), TextArea's pressAndHold does not
+    // Long press copies the whole value. TapHandler, as it cancels the long press once the finger moves
+    // (e.g. scrolling the form), TextArea's pressAndHold does not
     TapHandler {
       enabled: textArea.readOnly
 

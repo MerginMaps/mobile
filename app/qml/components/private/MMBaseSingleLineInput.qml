@@ -39,9 +39,6 @@ MMBaseInput {
   property bool rightContentVisible: rightContentGroup.children.length > 0
   property bool leftContentVisible: leftContentGroup.children.length > 0
 
-  // Use instead of textField.inputMethodHints in inputs that can be read-only, overriding it drops the read-only hint
-  property int textFieldInputMethodHints: Qt.ImhNone
-
   // Long press copies the whole value of fields the user can't edit
   property bool copyOnLongPress: root.editState !== "enabled"
 
@@ -153,10 +150,6 @@ MMBaseInput {
         readOnly: root.editState === "readOnly" || root.editState === "disabled"
         activeFocusOnPress: !readOnly // Important due to crashes on iOS, see https://github.com/MerginMaps/mobile/pull/4561
 
-        // Native selection in read-only fields is broken (QTBUG-141929), e.g. iOS double tap opens Select / Select All
-        // with nothing selected, so turn it off completely and copy the whole value on long press instead
-        inputMethodHints: root.textFieldInputMethodHints | ( readOnly ? Qt.ImhNoTextHandles : Qt.ImhNone )
-
         // Ensure the text is scrolled to the beginning
         Component.onCompleted: ensureVisible( 0 )
 
@@ -182,37 +175,14 @@ MMBaseInput {
 
         onPreeditTextChanged: if( __androidUtils.isAndroid ) Qt.inputMethod.commit() // to avoid Android's unconfirmed text
 
-        // Android's native long press only selects a word in the focused field, but TextField holds the press back
-        // and gives the focus only on release. Then the held-back press arrives, Qt takes it as a tap on the selection
-        // and clears it. So focus the field before Android's long press comes and restore the selection on release.
-        property bool androidLongPressed: false
-
-        onPressed: androidLongPressed = false
-
         onReleased: {
           if ( root.editState !== "readOnly" ) {
             root.textClicked()
           }
-
-          if ( androidLongPressed && selectedText !== "" ) {
-            const start = selectionStart
-            const end = selectionEnd
-            Qt.callLater( () => select( start, end ) )
-          }
-          androidLongPressed = false
         }
 
-        TapHandler {
-          enabled: __androidUtils.isAndroid && !textFieldControl.readOnly
-          longPressThreshold: 0.3 // Android's native long press comes after 0.4 s
-
-          onLongPressed: {
-            textFieldControl.forceActiveFocus()
-            textFieldControl.androidLongPressed = true
-          }
-        }
-
-        // TapHandler cancels the long press once the finger moves (e.g. scrolling the form), TextField's pressAndHold does not
+        // Long press copies the whole value. TapHandler, as it cancels the long press once the finger moves
+        // (e.g. scrolling the form), TextField's pressAndHold does not
         TapHandler {
           enabled: root.copyOnLongPress
 
