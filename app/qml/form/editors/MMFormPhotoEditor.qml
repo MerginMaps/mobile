@@ -64,6 +64,7 @@ MMFormPhotoViewer {
   property string _fieldHomePath: parent.fieldHomePath
   property var _fieldActiveProject: parent.fieldActiveProject
   property MM.AttributeController _fieldController: parent.fieldController
+  property AudioRecorderController _fieldAudioRecorder: parent.fieldAudioRecorder ?? null
 
   property bool _fieldShouldShowTitle: parent.fieldShouldShowTitle
   property bool _fieldFormIsReadOnly: parent.fieldFormIsReadOnly
@@ -291,6 +292,11 @@ MMFormPhotoViewer {
      */
     function capturePhoto() {
       forceActiveFocus()
+
+      // the camera would stop a running audio recording on Android
+      if ( root._fieldAudioRecorder?.blockExternalActivity() ) {
+        return
+      }
       updateTargetDir()
       if ( !__inputUtils.createDirectory( targetDir ) )
       {
@@ -322,6 +328,11 @@ MMFormPhotoViewer {
      */
     function chooseFromGallery() {
       forceActiveFocus()
+
+      // the gallery would stop a running audio recording on Android
+      if ( root._fieldAudioRecorder?.blockExternalActivity() ) {
+        return
+      }
       updateTargetDir()
       if ( __androidUtils.isAndroid ) {
         __androidUtils.callImagePicker( targetDir, root._fieldItemId )

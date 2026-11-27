@@ -25,6 +25,7 @@
 #include <QPair>
 #include <QVector>
 #include <QUuid>
+#include <QSet>
 
 #include "featurelayerpair.h"
 #include "attributedata.h"
@@ -120,6 +121,23 @@ class  AttributeController : public QObject
     Q_INVOKABLE bool rollback();
     Q_INVOKABLE bool save();
     Q_INVOKABLE void acquireId();
+
+    /**
+     * Registers an audio file kept in a temporary location (a finished recording or a copy of a file chosen from the device)
+     * for the field. The field value is set to the path the file will have in the target folder. The file is moved there
+     * when the feature is saved and removed when the changes are rolled back or the value is replaced.
+     * \param preferredName file name to use in the target folder, a timestamp based name is used if empty
+     */
+    Q_INVOKABLE bool addPendingAudio( const QString &formItemId, const QString &tempFilePath, const QString &preferredName = QString() );
+
+    // returns the file of the field's pending audio, empty if the field has none
+    Q_INVOKABLE QString pendingAudioPath( const QString &formItemId ) const;
+
+    // removes the file of the field's pending audio
+    Q_INVOKABLE void discardPendingAudio( const QString &formItemId );
+
+    // removes the file once the feature is saved, the file is kept if the changes are rolled back
+    Q_INVOKABLE void scheduleFileRemoval( const QString &absolutePath );
 
     int tabCount() const;
 
@@ -234,6 +252,14 @@ class  AttributeController : public QObject
     bool cloneExternalResource( const FormItem &item, const QString &rememberedPath, QString &newRelativePath, QString &newAbsolutePath ) const;
     //! moves files copied by cloneExternalResource() to the folder resolved from the feature's final values
     void moveClonedExternalResources();
+    /**
+     * Moves temporary audio files registered by addPendingAudio() to the folder resolved from the feature's final values.
+     * The files stay registered until the feature is committed, so a failed save does not leave them in the project.
+     * Returns false if a file could not be moved, it is kept where it is and the feature must not be saved.
+     */
+    bool movePendingAudio();
+    //! removes all temporary audio files registered by addPendingAudio()
+    void discardAllPendingAudio();
     //! renames photos if necessary
     void renamePhotos();
     //! save temporary sketched image to original image
@@ -261,5 +287,10 @@ class  AttributeController : public QObject
 
     //! files copied from remembered values for the current feature, per form item: field value and absolute path
     QHash<QUuid, QPair<QString, QString>> mClonedExternalResources;
+    //! audio files of the feature that are not committed yet, per form item: field value and absolute path of the file,
+    //! which is in the temporary folder, or already in the target folder if the save failed after moving it
+    QHash<QUuid, QPair<QString, QString>> mPendingAudio;
+    //! files removed by the user in the form, deleted once the feature is saved
+    QSet<QString> mFilesToRemove;
 };
 #endif // ATTRIBUTECONTROLLER_H

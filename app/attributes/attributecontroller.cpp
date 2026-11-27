@@ -19,6 +19,7 @@
 #include "fieldvalidator.h"
 
 #include <QDateTime>
+#include <QFileInfo>
 #include <QDebug>
 #include <QSet>
 
@@ -47,10 +48,15 @@ AttributeController::AttributeController( QObject *parent )
 
 void AttributeController::reset()
 {
+  discardAllPendingAudio();
+  mFilesToRemove.clear();
   setFeatureLayerPair( FeatureLayerPair() );
 }
 
-AttributeController::~AttributeController() = default;
+AttributeController::~AttributeController()
+{
+  discardAllPendingAudio();
+}
 
 
 FeatureLayerPair AttributeController::featureLayerPair() const
@@ -623,6 +629,12 @@ void AttributeController::updateOnFeatureChange()
                                           fieldIndex,
                                           rememberedValue
                                         );
+        // audio is never reused, each feature gets its own recording
+        if ( shouldUseRememberedValue && itemData->editorWidgetType() == QStringLiteral( "ExternalResource" ) && InputUtils::isAudioExternalResource( itemData->editorWidgetConfig() ) )
+        {
+          shouldUseRememberedValue = false;
+        }
+
         if ( shouldUseRememberedValue )
         {
           QVariant valueToUse = rememberedValue;
@@ -1229,6 +1241,10 @@ bool AttributeController::deleteFeature()
 
 bool AttributeController::rollback()
 {
+  // files recorded in this form are not kept and files the user removed stay in the project
+  discardAllPendingAudio();
+  mFilesToRemove.clear();
+
   if ( !mFeatureLayerPair.layer() )
     return false;
 
@@ -1252,6 +1268,14 @@ bool AttributeController::save()
     return false;
 
   moveClonedExternalResources();
+
+  // the feature is not saved with a path to a recording that is not there
+  if ( !movePendingAudio() )
+  {
+    emit commitFailed();
+    return false;
+  }
+
   saveSketches();
   renamePhotos();
 
@@ -1300,6 +1324,15 @@ bool AttributeController::save()
 
   if ( rv )
   {
+    // the audio files are part of the saved feature now
+    mPendingAudio.clear();
+
+    for ( const QString &path : std::as_const( mFilesToRemove ) )
+    {
+      InputUtils::removeFile( path );
+    }
+    mFilesToRemove.clear();
+
     emit changesCommited();
   }
   else
@@ -1673,6 +1706,171 @@ void AttributeController::moveClonedExternalResources()
   }
 }
 
+bool AttributeController::addPendingAudio( const QString &formItemId, const QString &tempFilePath, const QString &preferredName )
+{
+  const QUuid id = QUuid::fromString( formItemId );
+  const std::shared_ptr<FormItem> item = mFormItems.value( id );
+  if ( !item || item->type() != FormItem::Field )
+  {
+    CoreUtils::log( QStringLiteral( "Audio" ), QStringLiteral( "Could not find the field %1 for the audio file" ).arg( formItemId ) );
+    return false;
+  }
+
+  const QFileInfo tempFile( tempFilePath );
+  if ( !tempFile.isFile() )
+  {
+    CoreUtils::log( QStringLiteral( "Audio" ), QStringLiteral( "Audio file %1 does not exist" ).arg( tempFilePath ) );
+    return false;
+  }
+
+  QString targetDir, prefix;
+  resolveExternalResourcePaths( item->editorWidgetConfig(), targetDir, prefix );
+
+  // the folder can depend on values not filled in yet, it is resolved again at save
+  if ( targetDir.isEmpty() )
+  {
+    targetDir = QgsProject::instance()->homePath();
+    prefix = InputUtils::resolvePrefixForRelativePath( item->editorWidgetConfig().value( QStringLiteral( "RelativeStorage" ) ).toInt(), QgsProject::instance()->homePath(), targetDir );
+  }
+
+  QString fileName = InputUtils::sanitizeNode( preferredName );
+  if ( fileName.trimmed().isEmpty() )
+  {
+    fileName = QStringLiteral( "audio_%1" ).arg( QDateTime::currentDateTime().toString( QStringLiteral( "yyyyMMdd_HHmmss" ) ) );
+    if ( !tempFile.suffix().isEmpty() )
+      fileName += QStringLiteral( "." ) + tempFile.suffix();
+  }
+
+  const QString dst = CoreUtils::findUniquePath( InputUtils::getAbsolutePath( fileName, targetDir ) );
+  const QString value = InputUtils::getRelativePath( dst, prefix );
+
+  // e.g. paths are stored relative to the project and the default path is outside of it
+  if ( value.isEmpty() )
+  {
+    CoreUtils::log( QStringLiteral( "Audio" ), QStringLiteral( "Could not make the path of %1 relative to %2" ).arg( dst, prefix ) );
+    return false;
+  }
+
+  // a new recording replaces the previous one that was not saved yet
+  const auto existing = mPendingAudio.constFind( id );
+  if ( existing != mPendingAudio.constEnd() && existing.value().second != tempFile.absoluteFilePath() )
+  {
+    discardPendingAudio( formItemId );
+  }
+
+  mPendingAudio.insert( id, { value, tempFile.absoluteFilePath() } );
+  setFormValue( id, value );
+  return true;
+}
+
+QString AttributeController::pendingAudioPath( const QString &formItemId ) const
+{
+  const QUuid id = QUuid::fromString( formItemId );
+  const auto it = mPendingAudio.constFind( id );
+  if ( it == mPendingAudio.constEnd() )
+    return QString();
+
+  const std::shared_ptr<FormItem> item = mFormItems.value( id );
+  if ( !item || item->rawValue().toString() != it.value().first )
+    return QString();
+
+  return it.value().second;
+}
+
+void AttributeController::discardPendingAudio( const QString &formItemId )
+{
+  const QUuid id = QUuid::fromString( formItemId );
+  const auto it = mPendingAudio.find( id );
+  if ( it == mPendingAudio.end() )
+    return;
+
+  InputUtils::removeFile( it.value().second );
+  mPendingAudio.erase( it );
+}
+
+void AttributeController::scheduleFileRemoval( const QString &absolutePath )
+{
+  if ( !absolutePath.isEmpty() )
+  {
+    mFilesToRemove.insert( absolutePath );
+  }
+}
+
+bool AttributeController::movePendingAudio()
+{
+  bool allMoved = true;
+  QVector<QPair<QUuid, QString>> changedValues;
+
+  auto it = mPendingAudio.begin();
+  while ( it != mPendingAudio.end() )
+  {
+    const QString currentPath = it.value().second;
+    const std::shared_ptr<FormItem> item = mFormItems.value( it.key() );
+
+    // the user removed or replaced the recording
+    if ( !item || mFeatureLayerPair.feature().attribute( item->fieldIndex() ).toString() != it.value().first )
+    {
+      InputUtils::removeFile( currentPath );
+      it = mPendingAudio.erase( it );
+      continue;
+    }
+
+    QString targetDir, prefix;
+    resolveExternalResourcePaths( item->editorWidgetConfig(), targetDir, prefix );
+    if ( targetDir.isEmpty() )
+    {
+      targetDir = QgsProject::instance()->homePath();
+      prefix = InputUtils::resolvePrefixForRelativePath( item->editorWidgetConfig().value( QStringLiteral( "RelativeStorage" ) ).toInt(), QgsProject::instance()->homePath(), targetDir );
+    }
+
+    const QString fileName = QFileInfo( it.value().first ).fileName();
+    QString dst = QDir::cleanPath( InputUtils::getAbsolutePath( fileName, targetDir ) );
+
+    // the file is already in place when a previous save moved it and then failed
+    if ( dst != QDir::cleanPath( currentPath ) )
+    {
+      dst = CoreUtils::findUniquePath( dst );
+
+      // QFile::rename falls back to copy and remove when the temporary folder is on another volume
+      if ( !InputUtils::renameFile( currentPath, dst ) )
+      {
+        // the file stays registered where it is, so nothing is lost and the save can be repeated
+        CoreUtils::log( QStringLiteral( "Audio" ), QStringLiteral( "Could not move audio file from %1 to %2" ).arg( currentPath, dst ) );
+        allMoved = false;
+        ++it;
+        continue;
+      }
+    }
+
+    // the file stays registered until the feature is committed,
+    // so a failed save followed by a rollback does not leave it in the project
+    const QString newValue = InputUtils::getRelativePath( dst, prefix );
+    if ( newValue != it.value().first )
+    {
+      changedValues.append( { it.key(), newValue } );
+    }
+    it.value() = { newValue, dst };
+    ++it;
+  }
+
+  // set once the iteration is over, the form reacts to the new values
+  for ( const QPair<QUuid, QString> &changedValue : std::as_const( changedValues ) )
+  {
+    setFormValue( changedValue.first, changedValue.second );
+  }
+
+  return allMoved;
+}
+
+void AttributeController::discardAllPendingAudio()
+{
+  for ( auto it = mPendingAudio.constBegin(); it != mPendingAudio.constEnd(); ++it )
+  {
+    InputUtils::removeFile( it.value().second );
+  }
+  mPendingAudio.clear();
+}
+
 void AttributeController::renamePhotos()
 {
   const QStringList photoNameFormat = QgsProject::instance()->entryList( QStringLiteral( "Mergin" ), QStringLiteral( "PhotoNaming/%1" ).arg( mFeatureLayerPair.layer()->id() ) );
@@ -1761,6 +1959,13 @@ void AttributeController::renamePhotos()
           setFormValue( item->id(), newValue );
           // avoids renaming it again on the next save
           item->setOriginalValue( newValue );
+
+          // a renamed audio file stays registered under its new name until the feature is committed
+          const auto pendingAudio = mPendingAudio.find( item->id() );
+          if ( pendingAudio != mPendingAudio.end() )
+          {
+            pendingAudio.value() = { newValue, dst };
+          }
           expressionContext.setFeature( featureLayerPair().featureRef() );
         }
         else
