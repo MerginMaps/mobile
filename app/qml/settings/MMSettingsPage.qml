@@ -269,6 +269,17 @@ MMPage {
 
       MMLine {}
 
+      MMSettingsComponents.MMSettingsSwitch {
+        width: parent.width
+        title: qsTr("Map rotation (experimental)")
+        description: qsTr("Rotate the map with two fingers and follow the direction of your device. This feature is experimental and may change")
+        checked: AppSettings.mapRotationEnabled
+
+        onClicked: AppSettings.mapRotationEnabled = !checked
+      }
+
+      MMLine {}
+
       MMSettingsComponents.MMSettingsItem {
         width: parent.width
         title: qsTr("About")

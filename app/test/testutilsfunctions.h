@@ -64,6 +64,15 @@ class TestUtilsFunctions: public QObject
     void testTranslationFilePath();
     void testTranslationFilePathWithoutEnglish();
     void testTranslationFromResources();
+    void testMapRotation();
+    void testSetExtentToGeomRotated();
+    void testMapSettingsTransform();
+    void testMapCanvasRotate();
+    void testMapCanvasRotationRenderRest();
+    void testMapCanvasRotationBreak();
+    void testCompassUserOrientation();
+    void testCompassSmoothing();
+    void testCompassNormalizedDirection();
 
   private:
     void testFormatDuration( const QDateTime &t0, qint64 diffSecs, const QString &expectedResult );

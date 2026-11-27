@@ -25,7 +25,6 @@
 #include "qgslinestring.h"
 #include "qgspolygon.h"
 #include "qgsvectorlayer.h"
-#include "inputmaptransform.h"
 #include "coreutils.h"
 #include "qgis.h"
 #include "qgscoordinatereferencesystem.h"
@@ -302,7 +301,8 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
     return;
 
   const QgsRectangle bbox = geom.boundingBox();
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  // extent (not visibleExtent) is used as it is not affected by the map rotation
+  QgsRectangle currentExtent = mapSettings->extent();
 
   if ( bbox.isEmpty() ) // Deal with an empty boudning box e.g : a point
   {
@@ -313,6 +313,16 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   {
     currentExtent = bbox;
 
+    if ( !qgsDoubleNear( mapSettings->rotation(), 0 ) )
+    {
+      // extent is defined in the rotated frame, so we need to fit the bbox as it appears on the rotated map
+      const double angle = qDegreesToRadians( mapSettings->rotation() );
+      const double halfWidth = std::fabs( bbox.width() / 2 * std::cos( angle ) ) + std::fabs( bbox.height() / 2 * std::sin( angle ) );
+      const double halfHeight = std::fabs( bbox.width() / 2 * std::sin( angle ) ) + std::fabs( bbox.height() / 2 * std::cos( angle ) );
+      const QgsPointXY center = bbox.center();
+      currentExtent = QgsRectangle( center.x() - halfWidth, center.y() - halfHeight, center.x() + halfWidth, center.y() + halfHeight );
+    }
+
     // Add a offset to encompass handles etc..
     // This number is based on what feel confortable for the user
     constexpr double SCALE_FACTOR = 1.18;
@@ -322,42 +332,61 @@ void InputUtils::setExtentToGeom( const QgsGeometry &geom, InputMapSettings *map
   mapSettings->setExtent( currentExtent );
 }
 
+// unit vector (in map units) pointing to the bottom of the screen, also when the map is rotated
+static QgsVector screenDownVector( const InputMapSettings *mapSettings )
+{
+  const QgsPoint top = mapSettings->screenToCoordinate( QPointF( 0, 0 ) );
+  const QgsPoint bottom = mapSettings->screenToCoordinate( QPointF( 0, 1 ) );
+  const QgsVector down( bottom.x() - top.x(), bottom.y() - top.y() );
+  if ( qgsDoubleNear( down.length(), 0 ) )
+    return QgsVector( 0, -1 );
+  return down.normalized();
+}
+
 QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const InputMapSettings *mapSettings, double bottomOffset, double topOffset, const QPointF &identifyLocation )
 {
   if ( !mapSettings || geom.isNull() || !geom.constGet() )
     return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
 
-  QgsRectangle effectiveExtent( mapSettings->visibleExtent() );
-
-  // canvas size in logical pixels; bottomOffset/topOffset is in logical pixels too and
-  // screenToCoordinate() expects logical pixel coordinates
+  // Everything is compared on the screen, so it works also when the map is rotated.
+  // Canvas size in logical pixels; bottomOffset/topOffset is in logical pixels too
   const double canvasWidth = mapSettings->outputSize().width() / mapSettings->devicePixelRatio();
   const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
-  const QPointF bottomPoint( canvasWidth / 2.0, canvasHeight - bottomOffset );
-  const QPointF topPoint( canvasWidth / 2.0, topOffset );
 
-  const QgsPoint bottomPointMap = mapSettings->screenToCoordinate( bottomPoint );
-  const QgsPoint topPointMap = mapSettings->screenToCoordinate( topPoint );
+  // the part of the canvas not covered by other components (e.g. preview drawer)
+  const QRectF effectiveRect( 0, topOffset, canvasWidth, canvasHeight - bottomOffset - topOffset );
 
-  effectiveExtent.setYMinimum( bottomPointMap.y() );
-  effectiveExtent.setYMaximum( topPointMap.y() );
-
-  // Now we calculate a safeEffectiveExtent, slightly smaller, so that we don't allow geometries too close to the screen borders
+  // Now we calculate a safeEffectiveRect, slightly smaller, so that we don't allow geometries too close to the screen borders
   constexpr double EXTENT_BUFFER_SCALE = 0.82;
-  const QgsRectangle safeEffectiveExtent( effectiveExtent.scaled( EXTENT_BUFFER_SCALE ) );
+  const double marginX = effectiveRect.width() * ( 1 - EXTENT_BUFFER_SCALE ) / 2;
+  const double marginY = effectiveRect.height() * ( 1 - EXTENT_BUFFER_SCALE ) / 2;
+  const QRectF safeEffectiveRect = effectiveRect.adjusted( marginX, marginY, -marginX, -marginY );
 
-  QPointF screenPoint;
+  // bounding box of the geometry as it appears on the screen
+  const QgsRectangle bbox = geom.boundingBox();
+  double minX = std::numeric_limits<double>::max();
+  double minY = std::numeric_limits<double>::max();
+  double maxX = std::numeric_limits<double>::lowest();
+  double maxY = std::numeric_limits<double>::lowest();
+  for ( const QgsPointXY &corner : { QgsPointXY( bbox.xMinimum(), bbox.yMinimum() ), QgsPointXY( bbox.xMinimum(), bbox.yMaximum() ), QgsPointXY( bbox.xMaximum(), bbox.yMinimum() ), QgsPointXY( bbox.xMaximum(), bbox.yMaximum() ) } )
+  {
+    const QPointF pt = mapSettings->coordinateToScreen( QgsPoint( corner ) );
+    minX = std::min( minX, pt.x() );
+    minY = std::min( minY, pt.y() );
+    maxX = std::max( maxX, pt.x() );
+    maxY = std::max( maxY, pt.y() );
+  }
+
   QgsPoint target;
-  if ( safeEffectiveExtent.contains( geom.boundingBox() ) )
+  if ( minX >= safeEffectiveRect.left() && maxX <= safeEffectiveRect.right() && minY >= safeEffectiveRect.top() && maxY <= safeEffectiveRect.bottom() )
   {
     // If the whole geometry is visible, don't move map
     return { std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN() };
   }
-  else if ( effectiveExtent.width() >= geom.boundingBox().width() &&
-            effectiveExtent.height() >= geom.boundingBox().height() )
+  else if ( effectiveRect.width() >= maxX - minX && effectiveRect.height() >= maxY - minY )
   {
     // if the whole geometry would fit without changing scale, center it
-    target = QgsPoint( geom.boundingBox().center() );
+    target = QgsPoint( bbox.center() );
   }
   else
   {
@@ -365,7 +394,7 @@ QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const In
     target = QgsPoint( identifyLocation );
   }
 
-  screenPoint = mapSettings->coordinateToScreen( target );
+  QPointF screenPoint = mapSettings->coordinateToScreen( target );
   screenPoint.ry() += bottomOffset / 2;
 
   return screenPoint;
@@ -374,7 +403,8 @@ QPointF InputUtils::whereToPanWhenIdentifying( const QgsGeometry &geom, const In
 QgsRectangle InputUtils::drawerCompensatedExtent( const QgsGeometry &geom, InputMapSettings *mapSettings, double bottomOffset )
 {
   const QgsRectangle bbox = geom.boundingBox();
-  QgsRectangle currentExtent = mapSettings->mapSettings().visibleExtent();
+  // extent (not visibleExtent) is used as it is not affected by the map rotation
+  QgsRectangle currentExtent = mapSettings->extent();
 
   // canvas size in logical pixels; the bottom bottomOffset of the canvas is covered by another
   // component (e.g. preview drawer), so we center the geometry in the remaining visible part
@@ -382,26 +412,32 @@ QgsRectangle InputUtils::drawerCompensatedExtent( const QgsGeometry &geom, Input
   const double canvasHeight = mapSettings->outputSize().height() / mapSettings->devicePixelRatio();
   const double visibleHeight = std::max( canvasHeight - bottomOffset, 1.0 );
 
+  // the center of the map is moved down on the screen (also when the map is rotated)
+  const QgsVector down = screenDownVector( mapSettings );
+
   if ( bbox.isEmpty() ) // Deal with an empty bouding box e.g : a point
   {
-    const QgsPointXY center( bbox.center().x(), bbox.center().y() - bottomOffset / 2.0 * mapSettings->mapUnitsPerPoint() );
+    const QgsPointXY center = bbox.center() + down * ( bottomOffset / 2.0 * mapSettings->mapUnitsPerPoint() );
     const QgsVector offset = currentExtent.center() - center;
     currentExtent -= offset;
   }
   else
   {
-    QgsRectangle paddedBbox = bbox;
+    // size of the bounding box as it appears on the (possibly rotated) map
+    const double angle = qDegreesToRadians( mapSettings->rotation() );
+    double width = std::fabs( bbox.width() * std::cos( angle ) ) + std::fabs( bbox.height() * std::sin( angle ) );
+    double height = std::fabs( bbox.width() * std::sin( angle ) ) + std::fabs( bbox.height() * std::cos( angle ) );
 
     // Add an offset to encompass handles etc..
     // This number is based on what feels comfortable for the user
     constexpr double SCALE_FACTOR = 1.18;
-    paddedBbox.scale( SCALE_FACTOR );
+    width *= SCALE_FACTOR;
+    height *= SCALE_FACTOR;
 
-    const double mapUnitsPerPoint = std::max( paddedBbox.width() / canvasWidth, paddedBbox.height() / visibleHeight );
-    const double cx = bbox.center().x();
-    const double cy = bbox.center().y() - bottomOffset / 2.0 * mapUnitsPerPoint;
-    currentExtent = QgsRectangle( cx - canvasWidth * mapUnitsPerPoint / 2, cy - canvasHeight * mapUnitsPerPoint / 2,
-                                  cx + canvasWidth * mapUnitsPerPoint / 2, cy + canvasHeight * mapUnitsPerPoint / 2 );
+    const double mapUnitsPerPoint = std::max( width / canvasWidth, height / visibleHeight );
+    const QgsPointXY center = bbox.center() + down * ( bottomOffset / 2.0 * mapUnitsPerPoint );
+    currentExtent = QgsRectangle( center.x() - canvasWidth * mapUnitsPerPoint / 2, center.y() - canvasHeight * mapUnitsPerPoint / 2,
+                                  center.x() + canvasWidth * mapUnitsPerPoint / 2, center.y() + canvasHeight * mapUnitsPerPoint / 2 );
   }
   return currentExtent;
 }
@@ -448,28 +484,28 @@ double InputUtils::convertRationalNumber( const QString &rationalValue )
   return numerator / denominator;
 }
 
-double InputUtils::mapSettingsScale( InputMapSettings *ms )
+QVariantList InputUtils::mapSettingsTransform( InputMapSettings *ms )
 {
-  if ( !ms ) return 1;
-  return 1 / ms->mapUnitsPerPixel();
-}
+  // a, b, c, d, tx, ty of the affine transform that changes nothing
+  const QVariantList identity = { 1, 0, 0, 1, 0, 0 };
 
-double InputUtils::mapSettingsOffsetX( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().xMinimum();
-}
+  if ( !ms ) return identity;
 
-double InputUtils::mapSettingsOffsetY( InputMapSettings *ms )
-{
-  if ( !ms ) return 0;
-  return -ms->visibleExtent().yMaximum();
-}
+  const double mapUnitsPerPoint = ms->mapUnitsPerPixel() * ms->devicePixelRatio();
+  if ( !std::isfinite( mapUnitsPerPoint ) || mapUnitsPerPoint <= 0 ) return identity;
 
-double InputUtils::mapSettingsDPR( InputMapSettings *ms )
-{
-  if ( !ms ) return 1;
-  return ms->devicePixelRatio();
+  // The scale and the rotation are computed directly and only the offset is taken from a transformed point
+  // computing everything from transformed points far away, like the origin would lose precision when the map is zoomed in.
+  const double angle = qDegreesToRadians( ms->rotation() );
+  const double a = std::cos( angle ) / mapUnitsPerPoint;
+  const double b = std::sin( angle ) / mapUnitsPerPoint;
+  const double c = b;
+  const double d = -a;
+
+  const QgsPoint center = ms->center();
+  const QPointF centerOnScreen = ms->coordinateToScreen( center );
+
+  return { a, b, c, d, centerOnScreen.x() - a * center.x() - b * center.y(), centerOnScreen.y() - c * center.x() - d * center.y() };
 }
 
 QgsGeometry InputUtils::transformGeometry( const QgsGeometry &geometry, const QgsCoordinateReferenceSystem &sourceCRS, const QgsCoordinateReferenceSystem &destinationCRS, const QgsCoordinateTransformContext &context )

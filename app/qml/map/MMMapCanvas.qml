@@ -36,8 +36,24 @@ Item {
   // userInteractedWithMap signal is sent each time user pans/zooms the map
   signal userInteractedWithMap()
 
+  // the fingers started to rotate the map
+  signal rotationStarted()
+
+  // when false, the map can not be rotated by the user
+  property bool rotationEnabled: true
+
+  // pinch gesture (zoom) does not end following of the position when this is set
+  property bool pinchKeepsFollowing: false
+
+  // the fingers started to rotate the map, but not enough to rotate it yet. It is time to prepare the rendering.
+  property bool rotationPreparing: false
+
   property alias mapSettings: mapRenderer.mapSettings
   property alias isRendering: mapRenderer.isRendering
+  property alias overscan: mapRenderer.overscan
+  readonly property alias overscanReady: mapRenderer.overscanReady
+  property alias rotationRenderThreshold: mapRenderer.rotationRenderThreshold
+  property alias renderAfterBreak: mapRenderer.renderAfterBreak
 
   // Requests map redraw
   function refresh() {
@@ -70,7 +86,8 @@ Item {
   {
     rendererPrivate.freeze('jumpTo')
 
-    const oldExtent = mapRenderer.mapSettings.visibleExtent
+    // extent (not visibleExtent) is used as it is not affected by the map rotation
+    const oldExtent = mapRenderer.mapSettings.extent
 
     // Disable animation until initial position is set
     jumpExtentAnimator.enabled = false
@@ -97,6 +114,12 @@ Item {
   function pan( oldPos, newPos )
   {
     mapRenderer.pan( oldPos, newPos )
+  }
+
+  // Rotates the map by angle (in degrees, clockwise) around the center (screen point)
+  function rotate( center, angle )
+  {
+    mapRenderer.rotate( center, angle )
   }
 
   Item {
@@ -184,6 +207,39 @@ Item {
         mapRenderer.freeze = Object.keys( _freezeMap ).length !== 0
       }
 
+      // normalizes angle (in degrees) to (-180, 180]
+      function normalizeAngle( angle ) {
+        let a = angle % 360
+        if ( a > 180 ) return a - 360
+        if ( a <= -180 ) return a + 360
+        return a
+      }
+
+      // the snap to north only vibrates (no sound), when the user allowed the vibration
+      function vibrationEnabled() {
+        return AppSettings.hapticsType === AppSettings.HapticsVibration || AppSettings.hapticsType === AppSettings.HapticsVibrationSound
+      }
+
+      // gets the haptic hardware ready, so the tap at north is not delayed
+      function prepareVibration() {
+        if ( !vibrationEnabled() ) return
+
+        if ( __iosUtils.isIos ) {
+          __iosUtils.prepareImpactFeedback()
+        }
+      }
+
+      function vibrate() {
+        if ( !vibrationEnabled() ) return
+
+        if ( __androidUtils.isAndroid ) {
+          __androidUtils.vibrate()
+        }
+        else if ( __iosUtils.isIos ) {
+          __iosUtils.impactFeedback()
+        }
+      }
+
       function vectorDistance( a, b ) {
         return Math.sqrt( Math.pow( b.x - a.x, 2 ) + Math.pow( b.y - a.y, 2 ) )
       }
@@ -195,20 +251,56 @@ Item {
 
     property string freezeId: 'pinch'
 
+    // rotation (in degrees) the fingers have to travel before the map starts to rotate,
+    // so that a regular zoom does not rotate the map by accident
+    readonly property real rotationThreshold: 10
+
+    // when the map rotation gets this close to north (in degrees), it snaps to it
+    readonly property real northSnapAngle: 4
+
+    // when the fingers rotate this much (in degrees), the map is rendered bigger for the rotation (it takes some time)
+    readonly property real rotationPrepareAngle: 3
+
+    // rotation as requested by the fingers, i.e. not affected by the snapping to north
+    property real fingersRotation: 0
+    property real previousPinchRotation: 0
+    property bool isRotating: false
+
     anchors.fill: parent
 
     onPinchStarted: {
-      mapRoot.userInteractedWithMap()
+      if ( !mapRoot.pinchKeepsFollowing ) mapRoot.userInteractedWithMap()
       rendererPrivate.freeze( freezeId )
+      if ( mapRoot.rotationEnabled ) rendererPrivate.prepareVibration()
+
+      isRotating = false
+      mapRoot.rotationPreparing = false
     }
 
     onPinchFinished: {
       rendererPrivate.unfreeze( freezeId )
+      mapRoot.rotationPreparing = false
     }
 
     onPinchUpdated: function ( pinch ) {
       mapRenderer.pan( pinch.center, pinch.previousCenter )
       mapRenderer.zoom( pinch.center, pinch.previousScale / pinch.scale )
+
+      if ( !mapRoot.rotationEnabled ) return
+
+      if ( !mapRoot.rotationPreparing && Math.abs( pinch.rotation ) > rotationPrepareAngle ) mapRoot.rotationPreparing = true
+
+      if ( !isRotating && Math.abs( pinch.rotation ) > rotationThreshold ) {
+        isRotating = true
+        fingersRotation = mapRenderer.mapSettings.rotation
+        previousPinchRotation = pinch.rotation
+        mapRoot.rotationStarted()
+      }
+
+      if ( isRotating ) {
+        rotateMap( pinch.center, pinch.rotation - previousPinchRotation )
+        previousPinchRotation = pinch.rotation
+      }
     }
 
     MouseArea {
@@ -378,6 +470,20 @@ Item {
         id: dragDifferentiatorTimer
 
         interval: Application.styleHints.startDragTime
+      }
+    }
+
+    function rotateMap( center, delta ) {
+      fingersRotation = rendererPrivate.normalizeAngle( fingersRotation + delta )
+
+      // the map settings snap the rotation noise around north to exactly 0
+      let wasNorth = mapRenderer.mapSettings.rotation === 0
+      let target = Math.abs( fingersRotation ) < northSnapAngle ? 0 : fingersRotation
+
+      mapRenderer.rotate( center, rendererPrivate.normalizeAngle( target - mapRenderer.mapSettings.rotation ) )
+
+      if ( target === 0 && !wasNorth ) {
+        rendererPrivate.vibrate()
       }
     }
   }
