@@ -39,6 +39,9 @@ MMBaseInput {
   property bool rightContentVisible: rightContentGroup.children.length > 0
   property bool leftContentVisible: leftContentGroup.children.length > 0
 
+  // Long press copies the whole value of fields the user can't edit
+  property bool copyOnLongPress: root.editState !== "enabled"
+
   // IconColor is not used in this file directly, but derived components can use it
   // as precalculated color for icons to avoid repeating the same text over and over.
   property color iconColor: {
@@ -175,6 +178,21 @@ MMBaseInput {
         onReleased: {
           if ( root.editState !== "readOnly" ) {
             root.textClicked()
+          }
+        }
+
+        // Long press copies the whole value. TapHandler, as it cancels the long press once the finger moves
+        // (e.g. scrolling the form), TextField's pressAndHold does not
+        TapHandler {
+          enabled: root.copyOnLongPress
+
+          onLongPressed: {
+            if ( textFieldControl.text.trim() === "" ) return
+
+            textFieldControl.selectAll()
+            textFieldControl.copy()
+            textFieldControl.deselect()
+            __notificationModel.addSuccess( qsTr( "Copied to clipboard" ) )
           }
         }
       }

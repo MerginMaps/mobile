@@ -89,6 +89,45 @@ MMPrivateComponents.MMBaseInput {
 
     readOnly: root.editState !== "enabled"
 
+    // Read-only text area doesn't take focus, so it has no native selection, which is broken in read-only fields
+    // (QTBUG-141929). Read-only fields copy the whole value on long press instead
+    activeFocusOnPress: !readOnly // Important due to crashes on iOS, see https://github.com/MerginMaps/mobile/pull/4561
+
+    // Android long press selects a word in a focused field, but TextArea holds the press back and delivers it
+    // on release, where Qt takes it as a tap on the selection and clears it (QTBUG-128808). So restore the selection.
+    TapHandler {
+      property bool longPressedHere: false
+
+      enabled: __androidUtils.isAndroid && textArea.activeFocus && !textArea.readOnly
+      longPressThreshold: 0.3 // not later than Android's own long press (0.4 s)
+
+      onLongPressed: longPressedHere = true
+
+      onPressedChanged: {
+        if ( pressed || !longPressedHere ) return
+
+        longPressedHere = false
+        const start = textArea.selectionStart
+        const end = textArea.selectionEnd
+        Qt.callLater( () => textArea.select( start, end ) ) // after TextArea handles the held-back press
+      }
+    }
+
+    // Long press copies the whole value. TapHandler, as it cancels the long press once the finger moves
+    // (e.g. scrolling the form), TextArea's pressAndHold does not
+    TapHandler {
+      enabled: textArea.readOnly
+
+      onLongPressed: {
+        if ( textArea.text.trim() === "" ) return
+
+        textArea.selectAll()
+        textArea.copy()
+        textArea.deselect()
+        __notificationModel.addSuccess( qsTr( "Copied to clipboard" ) )
+      }
+    }
+
     background: Rectangle {
 
       color: {

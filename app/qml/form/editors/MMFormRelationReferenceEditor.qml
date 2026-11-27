@@ -58,6 +58,7 @@ MMPrivateComponents.MMBaseSingleLineInput {
   }
 
   textField.readOnly: true
+  copyOnLongPress: false // release opens the linked feature, even in read-only forms
 
   textField.onReleased: { // can be opened even when the field is readonly
     let featurePair = rModel.attributeFromForeignKey( root._fieldValue, MM.FeaturesModel.FeaturePair )
