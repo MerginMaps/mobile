@@ -29,6 +29,7 @@ Page {
   signal close()
   signal featureClicked( var featurePair )
   signal addFeatureClicked( var targetLayer )
+  signal resumeDraftClicked()
 
   property var layerTreeNode: null
 
@@ -247,6 +248,10 @@ Page {
 
       onAddFeatureClicked: function ( toLayer ) {
         root.addFeatureClicked( toLayer )
+      }
+
+      onResumeDraftClicked: () => {
+        root.resumeDraftClicked()
       }
 
       onBackClicked: function() {

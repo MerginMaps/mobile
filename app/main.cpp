@@ -72,6 +72,7 @@
 #include "qgsunittypes.h"
 #include "mmstyle.h"
 #include "notificationmodel.h"
+#include "drafts/featuredraftcontroller.h"
 
 #include "rememberattributescontroller.h"
 #include "attributecontroller.h"

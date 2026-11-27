@@ -194,6 +194,22 @@ Page {
           welcomeToNewDesignDialog.open()
         }
       }
+
+      Button {
+        text: "discardDraftDialog"
+
+        onClicked: {
+          discardDraftDialog.open()
+        }
+      }
+
+      Button {
+        text: "resumeDraftDialog"
+
+        onClicked: {
+          resumeDraftDialog.open()
+        }
+      }
     }
   }
 
@@ -367,5 +383,23 @@ Page {
 
   MMWelcomeToNewDesignDialog {
     id: welcomeToNewDesignDialog
+  }
+
+  MMDiscardDraftDialog {
+    id: discardDraftDialog
+
+    layerName: "Trees"
+
+    onDiscardDraft: console.log("on discard draft clicked")
+  }
+
+  MMResumeDraftDialog {
+    id: resumeDraftDialog
+
+    featureTitle: "Oak #42"
+    layerName: "Trees"
+
+    onResumeClicked: console.log("on resume clicked")
+    onDiscardClicked: console.log("on discard clicked")
   }
 }
