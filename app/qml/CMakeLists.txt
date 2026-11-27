@@ -96,6 +96,7 @@ set(MM_QML
     dialogs/MMDiscardGeometryChangesDialog.qml
     dialogs/MMProjectLoadErrorDialog.qml
     dialogs/MMProviderRemoveReceiverDialog.qml
+    dialogs/MMSessionExpiredDialog.qml
     dialogs/MMSsoExpiredTokenDialog.qml
     dialogs/components/MMDialogAdditionalText.qml
     form/MMFormPage.qml

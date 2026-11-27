@@ -27,6 +27,8 @@ struct SyncProcess
 
   bool awaitsRetry; // not currently being synced, but awaits to be synced
   int retriesCount = 0;
+  bool awaitsSessionCheck = false; // sync was refused, waits for MerginApi::verifySession()
+  bool sessionChecked = false; // the session was already checked during this sync
   SyncOptions::Strategy strategy = SyncOptions::Singleshot;
   SyncOptions::RequestOrigin requestOrigin;
   // In future: current state (push/pull)
@@ -92,6 +94,7 @@ class SynchronizationManager : public QObject
     void onProjectAttachedToMergin( const QString &projectFullName, const QString &previousName );
     void onProjectReloadNeededAfterSync( const QString &projectFullName );
     void onProjectCreated( const QString &projectName, bool result );
+    void onSessionCheckFinished( bool sessionExpired );
 
   private:
 
