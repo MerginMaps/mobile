@@ -1281,6 +1281,7 @@ void TestMerginApi::testDiffUpdateWithRebase()
   QCOMPARE( summary, expectedSummary );
 
   // update our local version now
+  const QSignalSpy spyRemapped( mApi, &MerginApi::projectFeatureIdsRemapped );
   downloadRemoteProject( mApi, mWorkspaceName, projectName );
 
   //
@@ -1290,6 +1291,13 @@ void TestMerginApi::testDiffUpdateWithRebase()
   QgsVectorLayer *vl = new QgsVectorLayer( projectDir + "/base.gpkg|layername=simple", "base", "ogr" );
   QVERIFY( vl->isValid() );
   QCOMPARE( vl->featureCount(), static_cast<long>( 5 ) );
+
+  QCOMPARE( spyRemapped.count(), 1 );
+  QCOMPARE( spyRemapped.at( 0 ).at( 1 ).toString(), projectDir + "/base.gpkg" );
+  const GeodiffUtils::FeatureIdMapping mapping = spyRemapped.at( 0 ).at( 2 ).value<GeodiffUtils::FeatureIdMapping>();
+  QCOMPARE( mapping.size(), 1 );
+  QCOMPARE( mapping["simple"].size(), 1 );
+  QCOMPARE( vl->getFeature( mapping["simple"].first().second ).attribute( "name" ).toString(), QStringLiteral( "def" ) );
   delete vl;
 
   // like before the update - there should be locally modified base.gpkg with the changes we did
@@ -1349,6 +1357,7 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   QCOMPARE( changes, QString( "ERROR" ) );  // local diff should fail
 
   QSignalSpy spy( mApi, &MerginApi::projectReloadNeededAfterSync );
+  const QSignalSpy spyRemapped( mApi, &MerginApi::projectFeatureIdsRemapped );
 
   // update our local version now
   downloadRemoteProject( mApi, mWorkspaceName, projectName );
@@ -1356,6 +1365,8 @@ void TestMerginApi::testDiffUpdateWithRebaseFailed()
   // check that projectReloadNeededAfterSync is emited and has correct argument
   QCOMPARE( spy.count(), 1 );
   QCOMPARE( spy.takeFirst().at( 0 ).toString(), mWorkspaceName + "/"  + projectName );
+
+  QCOMPARE( spyRemapped.count(), 0 );
 
   //
   // check the result
