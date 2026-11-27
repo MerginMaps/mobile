@@ -136,3 +136,81 @@ void TestProjectChecksumCache::testFilesCheckum()
   QDateTime cacheModifiedTime3 = QFileInfo( cacheFilePath ).lastModified();
   QCOMPARE( cacheModifiedTime2, cacheModifiedTime3 );
 }
+
+void TestProjectChecksumCache::testGpkgWalChecksum()
+{
+  // changes that only live in the -wal file of a gpkg must change its checksum,
+  // otherwise they would not be detected as local changes
+
+  QString projectName = QStringLiteral( "testGpkgWalChecksum" );
+  QString projectDir = QDir::tempPath() + "/" + projectName;
+  QDir( projectDir ).removeRecursively();
+
+  InputUtils::cpDir( TestUtils::testDataDir() + "/planes", projectDir );
+
+  const QString gpkgPath = projectDir + "/constraint-layers.gpkg";
+  const QString walPath = gpkgPath + "-wal";
+  const QString checksumMain = CoreUtils::calculateChecksum( gpkgPath );
+  QVERIFY( !checksumMain.isEmpty() );
+
+  auto writeWal = [&walPath]( const QByteArray & content )
+  {
+    QFile wal( walPath );
+    QVERIFY( wal.open( QIODevice::WriteOnly ) ); // implies Truncate
+    wal.write( content );
+    wal.close();
+  };
+
+  QString checksumWithWal;
+  {
+    ProjectChecksumCache cache( projectDir );
+
+    // no -wal file - only the main file counts
+    QCOMPARE( cache.get( "constraint-layers.gpkg" ), checksumMain );
+
+    // non-empty -wal file - it is taken into account
+    writeWal( "some wal frames" );
+    checksumWithWal = cache.get( "constraint-layers.gpkg" );
+    QVERIFY( checksumWithWal != checksumMain );
+
+    // -wal file changes while the main file does not - checksum changes too
+    writeWal( "some other wal frames" );
+    const QString checksumWithOtherWal = cache.get( "constraint-layers.gpkg" );
+    QVERIFY( checksumWithOtherWal != checksumWithWal );
+    QVERIFY( checksumWithOtherWal != checksumMain );
+
+    // same -wal content - same checksum
+    writeWal( "some wal frames" );
+    QCOMPARE( cache.get( "constraint-layers.gpkg" ), checksumWithWal );
+
+    // only the main file checksum is cached
+    QCOMPARE( cache.mCache.value( "constraint-layers.gpkg" ).checksum, checksumMain );
+  }
+
+  // the saved cache still gives the same results
+  {
+    ProjectChecksumCache cache( projectDir );
+    QCOMPARE( cache.mCache.value( "constraint-layers.gpkg" ).checksum, checksumMain );
+    QCOMPARE( cache.get( "constraint-layers.gpkg" ), checksumWithWal );
+  }
+
+  // empty -wal file (e.g. after a checkpoint with truncate) - only the main file counts
+  writeWal( QByteArray() );
+  {
+    ProjectChecksumCache cache( projectDir );
+    QCOMPARE( cache.get( "constraint-layers.gpkg" ), checksumMain );
+  }
+
+  // non-gpkg files never take a -wal file into account
+  const QString qmlChecksum = CoreUtils::calculateChecksum( projectDir + "/lines.qml" );
+  QFile qmlWal( projectDir + "/lines.qml-wal" );
+  QVERIFY( qmlWal.open( QIODevice::WriteOnly ) );
+  qmlWal.write( "not a wal" );
+  qmlWal.close();
+  {
+    ProjectChecksumCache cache( projectDir );
+    QCOMPARE( cache.get( "lines.qml" ), qmlChecksum );
+  }
+
+  QDir( projectDir ).removeRecursively();
+}
